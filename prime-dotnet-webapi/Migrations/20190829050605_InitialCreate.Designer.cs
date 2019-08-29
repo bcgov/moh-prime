@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using prime.Models;
 
-namespace dotnetcore_rest_webapi.Migrations
+namespace prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
     [Migration("20190829050605_InitialCreate")]

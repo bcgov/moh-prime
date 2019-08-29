@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using prime.Models;
@@ -9,9 +10,10 @@ using prime.Models;
 namespace prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190829183030_AddApplicationTables")]
+    partial class AddApplicationTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +24,7 @@ namespace prime.Migrations
 
             modelBuilder.Entity("prime.Models.Application", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("ApplicantId")
@@ -47,7 +49,7 @@ namespace prime.Migrations
 
             modelBuilder.Entity("prime.Models.PharmacistRegistrationNumber", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Number")
@@ -56,28 +58,6 @@ namespace prime.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PharmacistRegistrationNumber");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Number = "A0000"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Number = "A0001"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Number = "B0000"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Number = "B0001"
-                        });
                 });
 #pragma warning restore 612, 618
         }
