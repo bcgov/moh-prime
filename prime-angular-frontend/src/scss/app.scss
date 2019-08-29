@@ -1,0 +1,40 @@
+// Load the applications palette and theme
+@import './palette';
+@import './font';
+
+// ---
+// MATERIAL
+// ---
+
+// Material provides a API and default theming for typography and associated
+// material components, which are used throughout the application. Material
+// represents the backbone of application theming.
+@import './material/material';
+
+// TODO: add to the material theme, but for now needs to get out into production
+.mat-progress-bar {
+  .mat-progress-bar-buffer {
+    background-color: theme-palette(blue, dark) !important;
+  }
+
+  .mat-progress-bar-fill::after {
+    background-color: theme-palette(yellow) !important;
+  }
+}
+
+// ---
+// BOOTSTRAP
+// ---
+
+// Bootstrap is used to apply structure to native HTML elements and associated
+// components, which include responsive images, grids, and tables, as well as
+// including normalize, and utilities. Nav, and navbar for components are
+// included for prototyping, but will be removed.
+@import './bootstrap/bootstrap';
+
+// ---
+// VENDORS
+// ---
+
+// Vendors is used to include customized vendor styles into the application.
+@import './vendors/vendors';
