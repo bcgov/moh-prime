@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace dotnetcore_rest_webapi.Migrations
+namespace prime.Migrations
 {
     public partial class InitialCreate : Migration
     {
