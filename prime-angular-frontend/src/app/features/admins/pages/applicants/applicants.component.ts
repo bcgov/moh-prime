@@ -17,6 +17,6 @@ export class ApplicantsComponent implements OnInit {
   }
 
   ngOnInit() {
-  }
 
+  }
 }

@@ -58,7 +58,7 @@ export class DashboardComponent implements OnInit {
   }
 
   public logout() {
-
+    this.router.navigate(['/login']);
   }
 
   public ngOnInit() {
@@ -73,14 +73,14 @@ export class DashboardComponent implements OnInit {
   private getSideNavSections() {
     return (this.isAdmin)
       ? this.getAdminSideNavSections()
-      : this.getMemberSideNavSections();
+      : this.getApplicantSideNavSections();
   }
 
-  private getMemberSideNavSections() {
+  private getApplicantSideNavSections() {
     return [
       {
         header: 'Applicant',
-        showHeader: true,
+        showHeader: false,
         items: [
           {
             name: 'Enrollment',
@@ -105,12 +105,6 @@ export class DashboardComponent implements OnInit {
             icon: 'highlight_off',
             route: '/dashboard/applicant/complete',
             showItem: true
-          },
-          {
-            name: 'Denied',
-            icon: 'highlight_off',
-            route: '/dashboard/applicant/denied',
-            showItem: true
           }
         ]
       },
@@ -121,13 +115,13 @@ export class DashboardComponent implements OnInit {
           {
             name: 'Profile',
             icon: 'person',
-            route: '/dashboard/member/profile',
+            route: '/dashboard/applicant/profile',
             showItem: false
           },
           {
             name: 'Change Password',
             icon: 'lock',
-            route: '/dashboard/member/password',
+            route: '/dashboard/applicant/password',
             showItem: false
           }
         ]
@@ -146,24 +140,6 @@ export class DashboardComponent implements OnInit {
             icon: 'vpn_key',
             route: '/dashboard/applicant/enrollment',
             showItem: true
-          },
-          {
-            name: 'Alerts',
-            icon: 'notifications_active',
-            route: '/dashboard/admin/alerts',
-            showItem: false
-          },
-          {
-            name: 'Service Calls',
-            icon: 'call',
-            route: '/dashboard/admin/calls',
-            showItem: false
-          },
-          {
-            name: 'Members',
-            icon: 'card_membership',
-            route: '/dashboard/admin/members',
-            showItem: false
           }
         ]
       },
@@ -172,21 +148,15 @@ export class DashboardComponent implements OnInit {
         showHeader: false,
         items: [
           {
-            name: 'Operators',
-            icon: 'directions_boat',
-            route: '/dashboard/admin/operators',
-            showItem: false
-          },
-          {
             name: 'Profile',
             icon: 'person',
-            route: '/dashboard/admin/profile',
+            route: '/dashboard/applicant/profile',
             showItem: false
           },
           {
             name: 'Change Password',
             icon: 'lock',
-            route: '/dashboard/admin/password',
+            route: '/dashboard/applicant/password',
             showItem: true
           }
         ]
