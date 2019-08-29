@@ -45,10 +45,32 @@ namespace prime.Controllers
         [HttpPost]
         public async Task<ActionResult<IEnumerable<Application>>> Post([FromBody] Application application)
         {
+            application.AppliedDate = DateTime.Now;
+
             _context.Application.Add(application);
             await _context.SaveChangesAsync();
             
             return CreatedAtAction(nameof(Get), new {id = application.Id}, application);
+        }        
+
+        // PUT: api/v1/application/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, Application application)
+        {
+            if (id != application.Id)
+            {
+                return BadRequest();
+            }
+
+            if(application.Approved == true)
+            {
+                application.ApprovedDate = DateTime.Now;
+            }
+
+            _context.Entry(application).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }        
     }
 }
