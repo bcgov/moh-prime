@@ -1,0 +1,13 @@
+# base image
+FROM node:10.5
+
+ENV NODE_ROOT /usr/src/app
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+COPY . .
+
+RUN npm install @angular/cli -g --silent
+RUN npm install
+
+EXPOSE 4200 49153

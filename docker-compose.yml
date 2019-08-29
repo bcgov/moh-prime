@@ -1,0 +1,51 @@
+version: "3"
+
+services:
+  nginx-angular:
+    container_name: primeweb
+    build:
+        context: prime-angular-frontend/
+    command: "nginx -g 'daemon off;'"
+    restart: always
+    ports:
+      - "80:80"
+    expose:
+      - "80"
+    networks:
+      - primenet
+  dotnet-webapi:
+    container_name: primeapi
+    restart: always
+    build:
+      context: prime-dotnet-webapi/
+    environment:
+      DB_CONNECTION_STRING: "host=postgres;port=5432;database=postgres;username=postgres;password=postgres"      
+      ASPNETCORE_HTTPS_PORT: "5001"
+    ports:
+      - "5000:80"
+      - "5001:5001"
+    networks:
+      - primenet
+    depends_on:
+      - postgres
+  postgres:
+    restart: always
+    container_name: primedb
+    image: postgres:11.4
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USERNAME: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - local_postgres_data:/var/lib/postgresql/data
+    networks:
+      - primenet
+
+volumes:
+  local_postgres_data: 
+
+networks:
+  primenet:
+    driver: bridge
