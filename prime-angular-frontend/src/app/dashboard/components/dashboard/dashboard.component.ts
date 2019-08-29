@@ -89,6 +89,12 @@ export class DashboardComponent implements OnInit {
             showItem: true
           },
           {
+            name: 'Applicants',
+            icon: 'assignment',
+            route: '/dashboard/admin/applicants',
+            showItem: true
+          },
+          {
             name: 'In Progress',
             icon: 'highlight_off',
             route: '/dashboard/applicant/inprogress',
