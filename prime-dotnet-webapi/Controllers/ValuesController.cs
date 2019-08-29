@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 using prime.Models;
 
@@ -23,7 +24,7 @@ namespace prime.Controllers
         public ActionResult<IEnumerable<string>> Get()
         {
             //return new string[] { "value1", "value2" };
-            return new string[] { _context.Blogs.FirstOrDefault().Title };
+            return new string[] { JsonConvert.SerializeObject(_context.Blogs.FirstOrDefault()) };
         }
 
         // GET api/values/5
