@@ -6,6 +6,7 @@ export const environment = {
   production: false,
   version: '1.0.0',
   apiEndpoint: 'http://localhost:8000/api/v1',
+  whiteListedDomain: ['localhost:8000']
 };
 
 /*
