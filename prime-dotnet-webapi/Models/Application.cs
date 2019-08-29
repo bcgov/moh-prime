@@ -18,7 +18,7 @@ namespace prime.Models
         public DateTime AppliedDate { get; set; }
         public bool? Approved { get; set; }
         public string ApprovedReason { get; set; }
-        public DateTime ApprovedDate { get; set; }
+        public DateTime? ApprovedDate { get; set; }
         public string PharmacistRegistrationNumber { get; set; }
 
     }

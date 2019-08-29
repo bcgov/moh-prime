@@ -14,11 +14,11 @@
       </thead>
       <tbody>
         <tr *ngFor="let application of applications">
-          <td>{{ application.AppliedDate }}</td>
-          <td>{{ application.ApplicantName }}</td>
-          <td>{{ application.PharmacistRegistrationNumber }}</td>
-          <td>{{ application.Approved }}</td>
-          <td>{{ application.ApprovedReason }}</td>
+          <td>{{ application.appliedDate | date: "short" }}</td>
+          <td>{{ application.applicantName }}</td>
+          <td>{{ application.pharmacistRegistrationNumber }}</td>
+          <td>{{ application.approved }}</td>
+          <td>{{ application.approvedDate | date: "short" }}</td>
           <th>
             <button
               type="button"
