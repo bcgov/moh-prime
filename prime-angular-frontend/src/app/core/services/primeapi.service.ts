@@ -6,8 +6,8 @@ import { HttpClient } from "@angular/common/http";
 })
 export class PrimeAPIService {
   constructor(private http: HttpClient) {}
-  url = "http://localhost:5000/api";
-  getValues() {
-    return this.http.get(`${this.url}/values`);
+  url = "http://localhost:5000/api/v1";
+  getApplications() {
+    return this.http.get(`${this.url}/application`);
   }
 }

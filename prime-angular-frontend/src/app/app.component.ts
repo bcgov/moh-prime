@@ -1,20 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { PrimeAPIService } from './primeapi.service';
+import { Component, OnInit } from "@angular/core";
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  selector: "app-root",
+  templateUrl: "./app.component.html",
+  styleUrls: ["./app.component.scss"]
 })
 export class AppComponent implements OnInit {
-  public title = 'angular-frontend';
-  values;
+  public title = "angular-frontend";
 
-  constructor(private primeAPIService: PrimeAPIService) { }
-  ngOnInit() {
-    this.primeAPIService.getValues().subscribe(data => {
-      console.log(data);
-      this.values = data;
-    });
-  }
+  ngOnInit() {}
 }
