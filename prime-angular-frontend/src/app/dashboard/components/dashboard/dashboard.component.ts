@@ -57,6 +57,10 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  public logout() {
+
+  }
+
   public ngOnInit() {
     this.sideNavSections = this.getSideNavSections();
     // Initialize the sidenav with properties based on current viewport

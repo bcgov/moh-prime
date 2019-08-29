@@ -11,6 +11,13 @@ const routes: Routes = [
     pathMatch: 'full',
   },
   {
+    path: 'login',
+    // TODO: Guard module from being accessed without the proper
+    // authorization based on the user role permissions, and
+    // attempt to redirect admins
+    loadChildren: () => import(`./auth/auth.module`).then(m => m.AuthModule),
+  },
+  {
     path: 'denied',
     component: AccessDeniedComponent,
     data: {
