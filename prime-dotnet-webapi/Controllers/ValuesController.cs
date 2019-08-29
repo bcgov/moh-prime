@@ -23,8 +23,8 @@ namespace prime.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            //return new string[] { "value1", "value2" };
-            return new string[] { JsonConvert.SerializeObject(_context.Blogs.FirstOrDefault()) };
+            return new string[] { "value1", "value2" };
+            //return new string[] { JsonConvert.SerializeObject(_context.Blogs.FirstOrDefault()) };
         }
 
         // GET api/values/5
