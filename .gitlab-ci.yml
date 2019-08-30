@@ -1,8 +1,5 @@
 
-image: docker
-
-services:
-  - docker:dind
+image: ubuntu:18.04
 
 stages:
   - build
@@ -17,10 +14,14 @@ variables:
 before_script:
   - apt-get update -qq
   - apt install -y apt-transport-https ca-certificates curl software-properties-common
-  - curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /tmp/docker-compose
-  - chmod +x /tmp/docker-compose
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+  - add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+  - apt update
+  - apt install -y docker docker-compose git
+#  - curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /tmp/docker-compose
+#  - chmod +x /tmp/docker-compose
 #  - ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
-  - /tmp/docker-compose --version
+#  - /tmp/docker-compose --version
 #  - cat /etc/*elease
 #  - apt-get update -qq
 #  - apt install -y apt-transport-https ca-certificates curl software-properties-common
