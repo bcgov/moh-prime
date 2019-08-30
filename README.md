@@ -1,5 +1,11 @@
 # optimize-prime
 
+TABLE OF CONTENTS
+
+
+DESCRIPTION
+
+
 HOW TO USE
 
 The client web front end can be accessed through the root URL it is 
@@ -18,7 +24,11 @@ Docker command:
 
 	docker-compose up --build
 	
-For full developement, developer dependancies are the following:
+Here are the environment variables for the docker-compose and their uses:
+
+	env-variables...
+	
+For full development, developer dependencies are the following:
 
 	.NET Core SDK
 	Visual Studio Code
@@ -32,6 +42,8 @@ The following technologies are used in this project:
 	PostgreSQL
 	
 To update the database schema...
+
+Linting...
 
 To create a database migration, after updating any entities, 
 run the following command:
@@ -48,6 +60,12 @@ HOW TO DEPLOY
 prime-dotnet-webapi:
 
 - dotnet ef database update
+
+LINK TO ARCHITECHTURE 
+
+
+LINK TO TEST PLAN
+
 
 
 APACHE 2.0 LICENSE
