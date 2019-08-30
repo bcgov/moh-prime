@@ -1,12 +1,12 @@
 # Validate with https://gitlab.com/sierrasystems/optimize-prime/-/ci/lint
-image: docker
-  
-services:
-    - docker:dind
+image: tmaier/docker-compose:latest
 
-stages:
-  - build
-  - push
+services:
+  - docker:dind
+
+before_script:
+  - docker info
+  - docker-compose --version
 
 variables:
   DOCKER_HOST: "primeswu.azurecr.io:80"
@@ -14,19 +14,10 @@ variables:
   DOCKER_REPO_PASS: "POKaaZfvf8AhsgQNmUvjJLj+XbZQoIQJ"
   IMAGE_TAG: "optimize-prime"
 
-before_script:
-  - apk add docker-compose --update-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted
-  - docker-compose -v
-  - docker version
-
-build:
+build image:
   stage: build
   script:
     - docker-compose build
-
-push:
-  stage: push
-  script:
     - docker login https://primeswu.azurecr.io:443
     - docker tag optimizeprime_dotnet-webapi primeswu.azurecr.io:443/optimizeprime_dotnet-webapi:latest
     - docker push primeswu.azurecr.io:443/optimize-prime:latest
@@ -34,4 +25,5 @@ push:
     - docker push primeswu.azurecr.io:443/optimizeprime_nginx-angular:latest
     - docker tag postgres:11.4 primeswu.azurecr.io:443/optimizeprime_postgres:latest
     - docker push primeswu.azurecr.io:443/optimizeprime_postgres:latest
+
 # Credentials are in .docker/config.json
