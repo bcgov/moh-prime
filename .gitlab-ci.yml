@@ -21,11 +21,17 @@ before_script:
 build:
   stage: build
   script:
-    - echo "Running docker-compose build -t optimize-prime"
-    - docker-compose up --build -t optimize-prime
+    - docker-compose build --no-cache --force-rm
 
 push:
   stage: push
   script:
-    - echo "Running docker push primeswu.azurecr.io:80/optimize-prime"
-    - docker push optimize-prime primeswu.azurecr.io/optimize-prime
+    - docker login -u PrimeSWU -p POKaaZfvf8AhsgQNmUvjJLj+XbZQoIQJ primeswu.azurecr.io
+    #    - cat dockerPassword.txt | docker login --username="PrimeSWU" --password-stdin
+#    - docker login --usecho 'POKaaZfvf8AhsgQNmUvjJLj+XbZQoIQJ' | docker login --username="PrimeSWU" --password-stdinername="PrimeSWU" -p "POKaaZfvf8AhsgQNmUvjJLj+XbZQoIQJ" https://primeswu.azurecr.io
+    - docker tag optimizeprime_dotnet-webapi primeswu.azurecr.io/optimizeprime_dotnet-webapi:latest
+    - docker push primeswu.azurecr.io/optimize-prime:latest
+    - docker tag optimizeprime_nginx-angular primeswu.azurecr.io/optimizeprime_nginx-angular:latest
+    - docker push primeswu.azurecr.io/optimizeprime_nginx-angular:latest
+    - docker tag optimizeprime_postgres primeswu.azurecr.io/optimizeprime_postgres:latest
+    - docker push primeswu.azurecr.io/optimizeprime_postgres:latest
