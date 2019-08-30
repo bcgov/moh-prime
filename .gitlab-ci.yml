@@ -42,8 +42,8 @@ before_script:
 build:
   stage: build
   script:
-#    - docker-compose build
-    - docker-compose up --build -d
+    - docker-compose build
+#    - docker-compose up --build -d
 
 push:
   stage: push
