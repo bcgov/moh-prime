@@ -8,7 +8,7 @@
           <th scope="col">Application Date</th>
           <th scope="col">Pharmacist Name</th>
           <th scope="col">PRN</th>
-          <th scope="col">Status</th>
+          <th scope="col">Approved</th>
           <th scope="col">Approval Date</th>
           <th scope="col"></th>
         </tr>
@@ -21,9 +21,11 @@
           <td>{{ application.approved }}</td>
           <td>{{ application.approvedDate | date: "short" }}</td>
           <th>
-            <button type="button"
-                    class="btn btn-light"
-                    (click)="authenticate()">
+            <button
+              type="button"
+              class="btn btn-light"
+              (click)="authenticate()"
+            >
               Authenticate
             </button>
           </th>
