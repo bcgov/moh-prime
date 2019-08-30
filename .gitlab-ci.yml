@@ -26,7 +26,7 @@ build:
 push:
   stage: push
   script:
-    - docker login -u PrimeSWU -p POKaaZfvf8AhsgQNmUvjJLj+XbZQoIQJ primeswu.azurecr.io:80
+    - docker login primeswu.azurecr.io:443
     #    - cat dockerPassword.txt | docker login --username="PrimeSWU" --password-stdin
 #    - docker login --usecho 'POKaaZfvf8AhsgQNmUvjJLj+XbZQoIQJ' | docker login --username="PrimeSWU" --password-stdinername="PrimeSWU" -p "POKaaZfvf8AhsgQNmUvjJLj+XbZQoIQJ" https://primeswu.azurecr.io
     - docker tag optimizeprime_dotnet-webapi primeswu.azurecr.io:80/optimizeprime_dotnet-webapi:latest
