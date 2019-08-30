@@ -1,10 +1,16 @@
 # Validate with https://gitlab.com/sierrasystems/optimize-prime/-/ci/lint
-image: docker/compose:1.17.1
+# image: docker/compose:1.17.1
+image: docker
 
 services:
   - docker:dind
 
 before_script:
+  - apt update
+  - apt install -y curl
+  - curl -L "https://github.com/docker/compose/releases/download/1.17.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  - ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+  - chmod +x /usr/local/bin/docker-compose
   - docker info
   - docker-compose --version
 
