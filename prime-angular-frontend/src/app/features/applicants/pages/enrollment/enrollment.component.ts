@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { PrimeAPIService } from 'src/app/core/services/primeapi.service';
 import { AuthTokenService } from 'src/app/core/services/auth-token.service';
@@ -9,6 +9,7 @@ import { AuthTokenService } from 'src/app/core/services/auth-token.service';
   styleUrls: ['./enrollment.component.scss']
 })
 export class EnrollmentComponent implements OnInit {
+  @ViewChild('pharmacist', { static: true }) pharmacistInput: ElementRef<HTMLInputElement>;
   public pharmacist_prn: string;
 
   constructor(
@@ -36,5 +37,8 @@ export class EnrollmentComponent implements OnInit {
       });
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    const user = this.authTokenService.decodeToken() as any;
+    this.pharmacistInput.nativeElement.value = `${user.given_name} ${user.family_name}`;
+  }
 }
