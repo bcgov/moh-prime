@@ -1,6 +1,6 @@
 # Optimize Prime Architecture
 
-![Architecture Diagream](images/architecture.png)
+![Architecture Diagram](images/architecture.png)
 
 ## Azure
 
