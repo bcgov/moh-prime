@@ -33,7 +33,7 @@ before_script:
 build:
   stage: build
   script:
-    - /tmp/docker-compose build 
+    - docker-compose build 
 
 push:
   stage: push
