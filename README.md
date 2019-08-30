@@ -9,13 +9,21 @@
 ## HOW TO USE
 
 The client web front end can be accessed through the root URL it is 
-deployed at, e.g. localhost for a local deployment. The client page
-requires authentication through Google to access. The administrator 
-interface for applicant viewing can be accessed at 
-/dashboard/admin/applicants. 
+deployed at, http://www.optimizeprime.live. The client page
+requires authentication through Google to access. 
+
+The administrator interface for applicant viewing can be accessed at 
+http://www.optimizeprime.live/dashboard/admin/applicants. 
 
 Accessing the database can be done by creating a connection to port 
 5432 using a database tool such as DBeaver.
+
+## HOW TO DEPLOY
+
+prime-dotnet-webapi:
+
+- dotnet ef database update
+
 
 ## HOW TO DEVELOP
 
@@ -54,19 +62,11 @@ Your changes will be deployed automatically next time the app starts.
 
 ## PROJECT STRUCTURE OVERVIEW
 
-
-## HOW TO DEPLOY
-
-prime-dotnet-webapi:
-
-- dotnet ef database update
-
-[Link to Architecture](documentation/Architecture.md)
-
+[Link to architecture](documentation/Architecture.md)
 
 [Link to test plan](documentation/TestPlan.md)
 
-
+[Link to build pipeline](documentation/BuildPipeline.md)
 
 ## APACHE 2.0 LICENSE
 
