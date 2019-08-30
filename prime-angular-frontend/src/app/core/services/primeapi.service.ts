@@ -22,7 +22,7 @@ export class PrimeAPIService {
 
   updateApplication(application) {
     return this.http.put(
-      `${this.url}/application/${application.Id}`,
+      `${this.url}/application/${application.id}`,
       application
     );
   }
