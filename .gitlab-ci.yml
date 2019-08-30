@@ -1,5 +1,3 @@
-image: ubuntu/ubuntu:18.04
-
 stages:
   - build
   - push
@@ -11,6 +9,7 @@ variables:
   IMAGE_TAG: "optimize-prime"
 
 before_script:
+  - cat /etc/*elease
   - apt-get update -qq
   - apt install -y apt-transport-https ca-certificates curl software-properties-common
   - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
