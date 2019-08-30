@@ -18,7 +18,11 @@ export class LoginComponent implements OnInit {
   }
 
   onSuccess(googleUser) {
+    var id_token = googleUser.getAuthResponse().id_token;
 
+    // send token to backend
+    // get new token
+    // save token
 
     // redirect to success page
   }
