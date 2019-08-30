@@ -1,5 +1,6 @@
 # Overview
 This is to outline and explain the technologies, methodology and logic behind the project's pipeline selection and design.
+![Pipeline Diagram](images/pipeline.png)
 
 ## Workflow
 Developer > GitLab > GitLab CI/CD > Azure Docker Repository > Azure VM > Docker Containers > Applications
@@ -14,7 +15,7 @@ We chose to use GitLab as our repository for a few reasons:
 As mentioned before, we selected GitLab CI/CD to handle the code. 
 * Having this right next to the code eliminated the need for extra overhead with another deployment mechanism like Jenkins
 * Simple YAML configuration that runs container in a container that allows for public images
-* Run remote docker update from the CI/CD pipleine to all hosts
+* Run remote docker update from the CI/CD pipeline to all hosts
 
 Azure Container Registry was our choice for the Docker image repo because it was in the same sphere as the application hosting.
 

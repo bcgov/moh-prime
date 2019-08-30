@@ -1,7 +1,8 @@
-import { Component, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnInit, SimpleChanges, Inject } from '@angular/core';
 
 import { PrimeAPIService } from 'src/app/core/services/primeapi.service';
 import { ToastService } from 'src/app/core/services/toast.service';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-applicants',
@@ -12,28 +13,27 @@ export class ApplicantsComponent implements OnInit {
   // TODO: add models
   public applications;
   public sortedApplications;
-  public isPending: boolean;
+  public showPending: boolean;
 
   constructor(
     private toastService: ToastService,
-    private primeAPIService: PrimeAPIService
-  ) { }
-
-  public showLabel() {
-    return (this.isPending) ? 'Review Pending' : 'Review All';
+    private primeAPIService: PrimeAPIService,
+    public dialog: MatDialog
+  ) {
+    this.showPending = true;
   }
 
-  public showPending(show: SimpleChanges) {
+  public showApplications(show: SimpleChanges) {
     (show.checked) ? this.getPending() : this.getAll();
   }
 
   private getAll() {
-    this.isPending = false;
+    this.showPending = false;
     this.sortedApplications = [...this.applications];
   }
 
   private getPending() {
-    this.isPending = true;
+    this.showPending = true;
     this.sortedApplications = this.applications.filter((app: any) => !app.approved);
   }
 
@@ -50,13 +50,26 @@ export class ApplicantsComponent implements OnInit {
 
   public removeApplication(applicationId: number) {
     // TODO: setup API endpoint to remove an application
+    this.openDialog(applicationId);
+  }
+
+  public openDialog(applicationId: number): void {
+    const dialogRef = this.dialog.open(DialogDeleteEnrolment, {
+      width: '450px'
+    });
+
+    dialogRef.afterClosed()
+      .subscribe((result: boolean) => {
+        if (result) {
+          this.sortedApplications = this.sortedApplications
+            .filter((app: any) => app.id !== applicationId);
+        }
+      });
   }
 
   public ngOnInit() {
     this.primeAPIService.getApplications()
       .subscribe((data: any[]) => {
-        console.log('APPLICATIONS', this.applications);
-
         this.applications = data.sort((a: any, b: any) => {
 
           if (a.approved < b.approved) {
@@ -68,9 +81,22 @@ export class ApplicantsComponent implements OnInit {
           return 0;
         });
 
-        console.log('APPLICATIONS', this.applications);
-
         this.getPending();
       });
+  }
+}
+
+@Component({
+  selector: 'app-modal-delete',
+  templateUrl: 'modal-delete.html',
+})
+export class DialogDeleteEnrolment {
+
+  constructor(
+    public dialogRef: MatDialogRef<DialogDeleteEnrolment>
+  ) { }
+
+  public delete(shouldDelete: boolean): void {
+    this.dialogRef.close(shouldDelete);
   }
 }
