@@ -1,15 +1,16 @@
 stages:
   - build
   - push
-before_script:
-  - apt-get update -qq
-  - apt-get install -yqq docker.io
-  
+
 variables:
   DOCKER_HOST: "primeswu.azurecr.io"
   DOCKER_REPO_USER: "PrimeSWU"
   DOCKER_REPO_PASS: "POKaaZfvf8AhsgQNmUvjJLj+XbZQoIQJ"
-  IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+  IMAGE_TAG: optimize-prime
+
+before_script:
+  - apt-get update -qq
+  - apt-get install -yqq docker.io
 
 build:
   stage: build
