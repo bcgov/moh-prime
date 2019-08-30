@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+// import { ReactiveFormsModule } from '@angular/forms';
 
 import { NgxMaterialModule } from './modules/ngx-material/ngx-material.module';
 
@@ -7,11 +8,13 @@ import { NgxMaterialModule } from './modules/ngx-material/ngx-material.module';
   declarations: [],
   imports: [
     CommonModule,
-    NgxMaterialModule
+    NgxMaterialModule,
+    // ReactiveFormsModule
   ],
   exports: [
     CommonModule,
-    NgxMaterialModule
+    NgxMaterialModule,
+    // ReactiveFormsModule
   ]
 })
 export class SharedModule { }

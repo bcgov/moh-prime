@@ -12,27 +12,59 @@
           <th scope="col">Note</th>
           <th scope="col">Approval Date</th>
           <th scope="col"></th>
+          <th scope="col"></th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let application of applications">
-          <td>{{ application.appliedDate | date: "short" }}</td>
+          <td>{{ application.appliedDate | date: 'MMM d, y' }}</td>
           <td>{{ application.applicantName }}</td>
           <td>{{ application.pharmacistRegistrationNumber }}</td>
-          <td>{{ application.approved }}</td>
+          <td>
+
+            <mat-chip-list>
+              <mat-chip>{{ application.approved }}</mat-chip>
+            </mat-chip-list>
+
+          </td>
           <td>{{ application.approvedReason }}</td>
-          <td>{{ application.approvedDate | date: "short" }}</td>
+          <td>{{ application.approvedDate | date: 'MMM d, y' }}</td>
           <td *ngIf="!application.approved">
-            <button
-              type="button"
-              class="btn btn-light"
-              (click)="approveApplication(application)"
-            >
+            <button type="button"
+                    class="btn btn-light"
+                    (click)="approveApplication(application)">
               Approve
             </button>
+          </td>
+          <td>
+            <ng-container [ngTemplateOutlet]="menu"
+                          [ngTemplateOutletContext]="{application:application}"></ng-container>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
 </div>
+
+<ng-template #menu
+             let-application="application">
+
+  <button mat-icon-button
+          [matMenuTriggerFor]="menu">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item
+            (click)="approveApplication(application)">
+      <mat-icon>thumb_up_alt</mat-icon>
+      <span>Approve Application</span>
+    </button>
+    <button mat-menu-item
+            (click)="removeApplication(application.id)">
+      <mat-icon>delete</mat-icon>
+      <span>Delete Application</span>
+    </button>
+  </mat-menu>
+
+</ng-template>
