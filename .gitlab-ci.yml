@@ -1,7 +1,7 @@
 
 #image: ubuntu:18.04
 #image: docker/compose
-image: docker
+image: docker/compose:1.22.0 
 services:
   - docker:dind    
 
@@ -26,9 +26,8 @@ before_script:
 #  - curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 #  - chmod +x /usr/local/bin/docker-compose
 #  - ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
-  - apk add --no-cache py-pip python-dev libffi-dev openssl-dev gcc libc-dev make
-  - pip install docker-compose
-  - docker-compose up -d
+#  - apk add --no-cache py-pip python-dev libffi-dev openssl-dev gcc libc-dev make
+#  - pip install docker-compose
   - docker-compose version
   - docker version
 
