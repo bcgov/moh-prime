@@ -33,12 +33,21 @@ Implement the following user stories:
 **Evaluation Criteria**
 
 Meets requirements 	7 - **Suggested score: 7**
+
 Architecture and technical design 	3 **Suggested score: 3**
+
 Code quality 	3 **Suggested score: 3**
+
 Code maintainability 	3 **Suggested score: 3**
+
 Technology choice 	3 **Suggested score: 3**
+
 Deployment artifacts 	2 **Suggested score: 2**
+
 Other artifacts 	2 **Suggested score: 2**
+
 Total 	23 **Suggested total score: 23**
+
 **Suggested bonus points for awesomeness: 2**
+
 **Suggested revised total: 25**
