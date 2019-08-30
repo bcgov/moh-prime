@@ -65,7 +65,7 @@
       <mat-divider *ngIf="sideNavSection.showHeader"></mat-divider>
     </mat-nav-list>
 
-    <mat-nav-list>
+    <mat-nav-list [ngClass]="{ 'hide': this.isAdmin }">
       <mat-list-item (click)="logout()">
         <mat-icon mat-list-icon
                   [ngClass]="{ 'center-sidenav-icon': !isDesktop }"
