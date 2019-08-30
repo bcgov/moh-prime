@@ -1,0 +1,33 @@
+@import 'palette';
+
+.container {
+  padding-top: 5rem;
+  text-align: center;
+
+  h1 {
+    color: theme-palette(grey, lighter);
+    padding: 2rem 0 1rem;
+  }
+
+  .display-message {
+    font-size: 1.5rem;
+  }
+}
+
+.logo {
+  width: 8em;
+  height: 8em;
+
+  margin: 0 auto;
+  display: block;
+}
+
+.st0 {
+  fill-rule: evenodd;
+  clip-rule: evenodd;
+  fill: theme-palette(grey);
+}
+
+.st1 {
+  fill:none;
+}
