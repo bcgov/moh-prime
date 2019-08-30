@@ -21,7 +21,7 @@ const routes: Routes = [
       {
         path: "inprogress",
         component: AuthenticateInProgressComponent,
-        data: { title: "Optimize PRIME - Enrollment In Progress" }
+        data: { title: "Optimize PRIME - Enrolment In Progress" }
       },
       {
         path: "complete",
