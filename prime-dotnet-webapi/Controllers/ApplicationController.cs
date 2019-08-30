@@ -47,6 +47,13 @@ namespace prime.Controllers
         {
             application.AppliedDate = DateTime.Now;
 
+            if(application.PharmacistRegistrationNumber != null)
+            {
+                application.Approved = true;
+                application.ApprovedDate = DateTime.Now;
+                application.ApprovedReason = "Valid registration number provided.";
+            }
+
             _context.Application.Add(application);
             await _context.SaveChangesAsync();
             
@@ -65,6 +72,7 @@ namespace prime.Controllers
             if(application.Approved == true)
             {
                 application.ApprovedDate = DateTime.Now;
+                application.ApprovedReason = "Approved by system administrator.";
             }
 
             _context.Entry(application).State = EntityState.Modified;
