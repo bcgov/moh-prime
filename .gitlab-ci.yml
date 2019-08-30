@@ -1,3 +1,5 @@
+image: ubuntu/ubuntu:18.04
+
 stages:
   - build
   - push
