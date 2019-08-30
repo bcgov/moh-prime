@@ -1,3 +1,4 @@
 export interface Token {
-  example: boolean;
+  name: string;
+  at_hash: string;
 }

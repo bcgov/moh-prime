@@ -35,7 +35,7 @@ export class DashboardComponent implements OnInit {
     private tokenService: AuthTokenService,
     private logger: LoggerService,
     private windowRef: WindowRefService
-  ) {}
+  ) { }
 
   public get isAdmin(): boolean {
     // TODO: don't do this if time permits
@@ -67,7 +67,7 @@ export class DashboardComponent implements OnInit {
     // gapi.signOut();
 
     this.tokenService.removeToken();
-    this.router.navigate(["/login"]);
+    this.router.navigate(['/login']);
   }
 
   public ngOnInit() {
