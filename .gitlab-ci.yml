@@ -1,5 +1,4 @@
 stages:
-  - prepare
   - build
   - push
 
@@ -12,8 +11,6 @@ variables:
 before_script:
   - apt-get update -qq
   - apt-get install -yqq docker.io docker-compose
-
-prepare:
   - docker --version
   - docker-compose --version
   - echo "Container Registry/Image Tag = $CONTAINER_REGISTRY/$IMAGE_TAG"
