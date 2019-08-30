@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Cors;
 
-using prime.Models;
+using Prime.Models;
 
-namespace prime.Controllers
+namespace Prime.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
@@ -47,7 +47,6 @@ namespace prime.Controllers
 
         public async Task<ActionResult<IEnumerable<Application>>> Post([FromBody] Application application)
         {
-            Console.Out.WriteLine("POST!");
             application.AppliedDate = DateTime.Now;
 
             if (application.PharmacistRegistrationNumber != null)
@@ -67,7 +66,6 @@ namespace prime.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, Application application)
         {
-            Console.Out.WriteLine("PUT!");
             if (id != application.Id)
             {
                 return BadRequest();

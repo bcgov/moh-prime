@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 
-import { EnrollmentComponent } from "./pages/enrollment/enrollment.component";
+import { EnrolmentComponent } from "./pages/enrolment/enrolment.component";
 import { AuthenticateInProgressComponent } from "./pages/authenticate-in-progress/authenticate-in-progress.component";
 import { AuthenticateCompleteComponent } from "./pages/authenticate-complete/authenticate-complete.component";
 import { AuthenticateDeniedComponent } from "./pages/authenticate-denied/authenticate-denied.component";
@@ -14,9 +14,9 @@ const routes: Routes = [
     canActivateChild: [],
     children: [
       {
-        path: "enrollment",
-        component: EnrollmentComponent,
-        data: { title: "Optimize PRIME - Auto-bot, enroll out!" }
+        path: "enrolment",
+        component: EnrolmentComponent,
+        data: { title: "Optimize PRIME - Auto-bot, enrol out!" }
       },
       {
         path: "inprogress",
@@ -35,7 +35,7 @@ const routes: Routes = [
       },
       {
         path: "", // Equivalent to `/` and alias for `overview`
-        redirectTo: "enrollment",
+        redirectTo: "enrolment",
         pathMatch: "full"
       }
     ]

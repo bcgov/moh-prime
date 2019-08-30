@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace prime.Migrations
+namespace Prime.Migrations
 {
     public partial class UpdateApplicationsAllowNullDate : Migration
     {

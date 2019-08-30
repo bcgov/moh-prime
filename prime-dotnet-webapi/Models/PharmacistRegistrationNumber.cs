@@ -1,7 +1,7 @@
 //using System.ComponentModel.DataAnnotations;
 //using System.ComponentModel.DataAnnotations.Schema;
 
-////namespace prime.Models
+////namespace Prime.Models
 //{
 //    public class PharmacistRegistrationNumber
 //    {

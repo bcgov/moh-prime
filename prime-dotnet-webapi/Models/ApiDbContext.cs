@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace prime.Models
+namespace Prime.Models
 {
     public class ApiDbContext : DbContext
     {
@@ -9,8 +9,8 @@ namespace prime.Models
         {
         }
 
-        public DbSet<Application> Application { get; set; }
-        //public DbSet<PharmacistRegistrationNumber> PharmacistRegistrationNumber { get; set; }
+        public virtual DbSet<Application> Application { get; set; }
+        //public virtual DbSet<PharmacistRegistrationNumber> PharmacistRegistrationNumber { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
