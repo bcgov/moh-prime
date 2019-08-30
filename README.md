@@ -45,7 +45,7 @@ Docker command:
 	
 Here are the environment variables for the docker-compose and their uses:
 
-	DB_CONNECTION_STRING - Contains the connection string the database.
+	DB_CONNECTION_STRING - Contains the connection string for the database.
 	JWT_SIGNING_KEY - Private key for signing Json web token.
 	ASPNETCORE_HTTPS_PORT - Port for redirecting insecure requests to HTTPS.
 	
