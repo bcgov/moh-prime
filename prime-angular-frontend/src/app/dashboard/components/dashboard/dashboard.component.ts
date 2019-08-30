@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Inject } from "@angular/core";
+import { Component, OnInit, ViewChild, Inject, NgZone } from "@angular/core";
 import { MatSidenav } from "@angular/material";
 import { Router } from "@angular/router";
 
@@ -34,8 +34,9 @@ export class DashboardComponent implements OnInit {
     private viewportService: ViewportService,
     private tokenService: AuthTokenService,
     private logger: LoggerService,
-    private windowRef: WindowRefService
-  ) { }
+    private windowRef: WindowRefService,
+    private ngZone: NgZone
+  ) {}
 
   public get isAdmin(): boolean {
     // TODO: don't do this if time permits
@@ -63,11 +64,17 @@ export class DashboardComponent implements OnInit {
   }
 
   public logout() {
-    // gapi.setToken(null);
-    // gapi.signOut();
-
-    this.tokenService.removeToken();
-    this.router.navigate(['/login']);
+    gapi.load("auth2", () => {
+      gapi.auth2.init().then(() => {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(() => {
+          this.ngZone.run(() => {
+            this.tokenService.removeToken();
+            this.router.navigate(["/login"]);
+          });
+        });
+      });
+    });
   }
 
   public ngOnInit() {
