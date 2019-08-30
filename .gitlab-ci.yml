@@ -15,7 +15,7 @@ before_script:
 build:
   stage: build
   script:
-    - docker build -t $IMAGE_TAG 
+    - docker-compose build -t $IMAGE_TAG 
 
 push:
   stage: push
