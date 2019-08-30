@@ -28,11 +28,6 @@ export class AppComponent implements OnInit {
     this.window = windowRef.nativeWindow;
   }
 
-  /**
-   * OnInit lifecycle hook.
-   *
-   * @memberof AppComponent
-   */
   public ngOnInit(): void {
     const onNavStart = this.routeStateService.onNavigationStart();
     const onNavStop = this.routeStateService.onNavigationStop();
@@ -42,13 +37,6 @@ export class AppComponent implements OnInit {
     this.setPageTitle(onNavEnd);
   }
 
-  /**
-   * Scroll the view to the top.
-   *
-   * @private
-   * @param {any} routeEvent
-   * @memberof AppComponent
-   */
   private scrollTop(routeEvent: any) {
     routeEvent.subscribe(() => {
       const contentContainer = this.document.querySelector('.mat-sidenav-content') || this.window;
@@ -56,13 +44,6 @@ export class AppComponent implements OnInit {
     });
   }
 
-  /**
-   * Set the page title based on the routes title data.
-   *
-   * @private
-   * @param {any} routeEvent
-   * @memberof AppComponent
-   */
   private setPageTitle(routeEvent: any) {
     routeEvent
       .pipe(

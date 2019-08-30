@@ -20,21 +20,10 @@ export class PageNotFoundComponent implements OnInit {
     ];
   }
 
-  /**
-   * OnInit lifecycle hook.
-   *
-   * @memberof PageNotFoundComponent
-   */
   public ngOnInit() {
     this.setErrorPhrase();
   }
 
-  /**
-   * Sets the error phrase.
-   *
-   * @private
-   * @memberof PageNotFoundComponent
-   */
   private setErrorPhrase() {
     const max = Math.floor(this.phrases.length - 1);
     const ndx = Math.floor(Math.random() * (max + 1));
