@@ -60,7 +60,11 @@
   </button>
 
   <mat-menu #menu="matMenu">
-    <button mat-menu-item (click)="approveApplication(application)">
+    <button
+      mat-menu-item
+      (click)="approveApplication(application)"
+      *ngIf="!application.approved"
+    >
       <mat-icon>thumb_up_alt</mat-icon>
       <span>Approve Application</span>
     </button>
