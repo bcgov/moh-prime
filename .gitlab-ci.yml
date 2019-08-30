@@ -3,7 +3,7 @@ image: docker
 
 services:
   - docker:dind
-  
+
 stages:
   - build
   - push
@@ -15,6 +15,8 @@ variables:
   IMAGE_TAG: "optimize-prime"
 
 before_script:
+  - apt-get update -qq
+  - apt install -y apt-transport-https ca-certificates curl software-properties-common
   - curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /tmp/docker-compose
   - chmod +x /tmp/docker-compose
 #  - ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
