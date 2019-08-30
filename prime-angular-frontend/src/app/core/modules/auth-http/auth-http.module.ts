@@ -1,11 +1,11 @@
-import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-import { JwtModule } from '@auth0/angular-jwt';
+import { NgModule } from "@angular/core";
+import { HttpClientModule } from "@angular/common/http";
+import { JwtModule } from "@auth0/angular-jwt";
 
-import { environment } from '../../../../environments/environment';
+import { environment } from "../../../../environments/environment";
 
 export function tokenGetter() {
-  return localStorage.getItem('token');
+  return localStorage.getItem("token");
 }
 
 @NgModule({
@@ -14,10 +14,9 @@ export function tokenGetter() {
     JwtModule.forRoot({
       config: {
         tokenGetter,
-        whitelistedDomains: environment.whiteListedDomain,
-        // blacklistedRoutes: environment.blacklistedRoutes
+        whitelistedDomains: environment.whiteListedDomain
       }
     })
   ]
 })
-export class AuthHttpModule { }
+export class AuthHttpModule {}
