@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AuthResource } from 'src/app/core/resources/auth-resource.service';
+import { AuthTokenService } from 'src/app/core/services/auth-token.service';
+import { LoggerService } from 'src/app/core/services/logger.service';
+import { WindowRefService } from 'src/app/core/services/window-ref.service';
 
 declare const gapi: any;
 
@@ -12,29 +14,27 @@ declare const gapi: any;
 })
 export class LoginComponent implements OnInit {
   constructor(
-    private authResource: AuthResource,
+    private tokenService: AuthTokenService,
+    private windowRef: WindowRefService,
+    private logger: LoggerService,
     private router: Router
   ) { }
 
-  ngOnInit() {
+  public ngOnInit() {
     gapi.signin2.render('google-login-button', {
       scope: 'profile email',
-      onsuccess: this.onSuccess,
-      onfailure: this.onFailure
+      onsuccess: (googleUser) => this.onSuccess(googleUser),
+      onfailure: (googleUser) => this.onFailure(googleUser)
     });
   }
 
-  onSuccess(googleUser) {
+  private onSuccess(googleUser) {
     const token = googleUser.getAuthResponse().id_token;
-    this.authResource.login({ token })
-      .subscribe(() => {
-        // NOTE: intentionally set role based on route for the purpose
-        // of the MVP requirements not requiring admin authentication
-        // TODO: use configuration for routes
-        this.router.navigate(['/dashboard/applicants/enrollment']);
-      });
+    this.tokenService.setToken(token);
+    this.router.navigate(['/dashboard/applicant/enrollment']);
   }
-  onFailure(error) {
-    alert(JSON.stringify(error, undefined, 2));
+
+  private onFailure(error) {
+    this.logger.error(error);
   }
 }

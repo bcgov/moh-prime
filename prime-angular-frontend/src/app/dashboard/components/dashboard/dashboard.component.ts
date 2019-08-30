@@ -4,11 +4,14 @@ import { Router } from '@angular/router';
 
 import { APP_CONFIG, AppConfig } from 'src/app/app-config.module';
 
-import { LoggerService } from '../../../core/services/logger.service';
-import { ViewportService } from '../../../core/services/viewport.service';
-
-import { DeviceResolution } from '../../../shared/enums/device-resolutions.enum';
+import { AuthTokenService } from 'src/app/core/services/auth-token.service';
+import { LoggerService } from 'src/app/core/services/logger.service';
+import { ViewportService } from 'src/app/core/services/viewport.service';
 import { WindowRefService } from 'src/app/core/services/window-ref.service';
+
+import { DeviceResolution } from 'src/app/shared/enums/device-resolutions.enum';
+
+declare const gapi: any;
 
 @Component({
   selector: 'app-dashboard',
@@ -29,6 +32,7 @@ export class DashboardComponent implements OnInit {
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router,
     private viewportService: ViewportService,
+    private tokenService: AuthTokenService,
     private logger: LoggerService,
     private windowRef: WindowRefService
   ) { }
@@ -59,6 +63,9 @@ export class DashboardComponent implements OnInit {
   }
 
   public logout() {
+    console.log(this.windowRef.nativeWindow.localStorage);
+
+    this.tokenService.removeToken();
     this.router.navigate(['/login']);
   }
 

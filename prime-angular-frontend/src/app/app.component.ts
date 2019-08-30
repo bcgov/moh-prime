@@ -80,8 +80,6 @@ export class AppComponent implements OnInit {
       )
       .subscribe((route: ActivatedRoute) => {
         this.titleService.setTitle(route['title']);
-
-        console.log(this.router.getCurrentNavigation().extras.state);
       });
   }
 }
