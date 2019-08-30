@@ -6,7 +6,6 @@ import { BehaviorSubject } from "rxjs";
 import { AuthTokenService } from "src/app/core/services/auth-token.service";
 import { LoggerService } from "src/app/core/services/logger.service";
 import { WindowRefService } from "src/app/core/services/window-ref.service";
-import { ThrowStmt } from "@angular/compiler";
 
 declare const gapi: any;
 

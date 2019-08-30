@@ -1,15 +1,16 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class PrimeAPIService {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
+  //url = `${location.origin}/api/v1`;
   url =
-    location.hostname.indexOf('localhost') > -1
-      ? 'http://localhost:5000/api/v1'
-      : 'http://api.optimizeprime.live/api/v1';
+    location.hostname.indexOf("localhost") > -1
+      ? "http://localhost:5000/api/v1"
+      : "http://api.optimizeprime.live/api/v1";
 
   getApplications() {
     return this.http.get(`${this.url}/application`);
@@ -21,7 +22,7 @@ export class PrimeAPIService {
 
   updateApplication(application) {
     return this.http.put(
-      `${this.url}/application/${application.id}`,
+      `${this.url}/application/${application.Id}`,
       application
     );
   }
