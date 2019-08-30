@@ -59,7 +59,7 @@ For full development, developer dependencies are the following:
 The following technologies are used in this project:
 	
 	Node.js
-	Angular.js
+	Angular
 	PostgreSQL
 	
 To update the database schema, first update the model file in the
