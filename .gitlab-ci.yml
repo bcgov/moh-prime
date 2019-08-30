@@ -1,6 +1,6 @@
 
 image: ubuntu:18.04
-
+#image: redis:alpine
 stages:
   - build
   - push
@@ -13,9 +13,9 @@ variables:
 
 before_script:
   - apt-get update -qq
-  - apt-get install -yqq apt-transport-https ca-certificates curl 
-  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-  - add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+  - apt-get install -yqq apt-transport-https ca-certificates curl gnupg #software-properties-common
+  - #curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+  - #add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
   - apt-get update -qq
   - apt-get install -yqq docker git
   - curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
