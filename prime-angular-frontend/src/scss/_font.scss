@@ -5,31 +5,13 @@
 // TODO: Update portal to use the same font as the site
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400|Roboto');
 
-@font-face {
-  font-family: "Raleway";
-  src: url('https://portal.c-tow.ca/assets/site/fonts/RalewayRegular.ttf') format("truetype");
-}
-
-@font-face {
-  font-family: "Raleway Bold";
-  src: url('https://portal.c-tow.ca/assets/site/fonts/RalewayBold.ttf') format("truetype");
-}
-
-// NOTE: Not used within the header, sub-footer, or footer of the site
-// @font-face {
-//   font-family: "Georgia Italic";
-//   src: url('https://portal.c-tow.ca/assets/site/fonts/GeorgiaItalic.ttf');
-// }
-
 //
 // Fonts Palettes
 //
 
 $fonts: (
-  site_header: #{"'Raleway Bold'"},
-  site_body: #{"'Raleway', 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif"},
-  header: #{"'Open Sans', sans-serif"},
-  body: #{"'Open Sans', sans-serif"}
+  header: #{"Roboto, sans-serif"},
+  body: #{"Roboto, sans-serif"}
 );
 
 //

@@ -8,6 +8,7 @@ import { LoggerService } from '../../../core/services/logger.service';
 import { ViewportService } from '../../../core/services/viewport.service';
 
 import { DeviceResolution } from '../../../shared/enums/device-resolutions.enum';
+import { WindowRefService } from 'src/app/core/services/window-ref.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -28,15 +29,15 @@ export class DashboardComponent implements OnInit {
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router,
     private viewportService: ViewportService,
-    private logger: LoggerService
+    private logger: LoggerService,
+    private windowRef: WindowRefService
   ) { }
 
-  public get isApplicant(): boolean {
-    return true;
-  }
-
   public get isAdmin(): boolean {
-    return false;
+    // TODO: don't do this if time permits
+    // NOTE: using the path to indicate the user role as the requirements don't require
+    // admins to authenticate, which would provide a authentication token and claim
+    return this.windowRef.nativeWindow.location.href.indexOf('admin') > -1;
   }
 
   public get isDesktop(): boolean {
@@ -89,12 +90,6 @@ export class DashboardComponent implements OnInit {
             showItem: true
           },
           {
-            name: 'Applicants',
-            icon: 'assignment',
-            route: '/dashboard/admin/applicants',
-            showItem: true
-          },
-          {
             name: 'In Progress',
             icon: 'highlight_off',
             route: '/dashboard/applicant/inprogress',
@@ -136,9 +131,9 @@ export class DashboardComponent implements OnInit {
         showHeader: false,
         items: [
           {
-            name: 'Enrollment',
-            icon: 'vpn_key',
-            route: '/dashboard/applicant/enrollment',
+            name: 'Applicants',
+            icon: 'assignment',
+            route: '/dashboard/admin/applicants',
             showItem: true
           }
         ]
@@ -157,7 +152,7 @@ export class DashboardComponent implements OnInit {
             name: 'Change Password',
             icon: 'lock',
             route: '/dashboard/applicant/password',
-            showItem: true
+            showItem: false
           }
         ]
       }
