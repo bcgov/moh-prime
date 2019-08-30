@@ -127,5 +127,57 @@ namespace PrimeTests
                 Assert.True(resApplications.Count() >= 2);
             }
         }
+
+        [Fact]
+        public void updateSingleApplication()
+        {
+            var options = new DbContextOptionsBuilder<ApiDbContext>()
+                .UseInMemoryDatabase(databaseName: "TestApplicationController")
+                .Options;
+
+            // Add application.
+            using (var context = new ApiDbContext(options))
+            {
+                var service = new ApplicationController(context);
+                var reqApplication = new Application()
+                {
+                    ApplicantName = "Test Applicant",
+                    ApplicantId = "UPDATE_SINGLE_APPLICATION",
+                    PharmacistRegistrationNumber = "1234",
+                    AppliedDate = DateTime.Now
+                };
+
+                service.Post(reqApplication);
+                context.SaveChanges();
+            }
+
+            Application application;
+
+            // Get application 
+            using (var context = new ApiDbContext(options))
+            {
+                var service = new ApplicationController(context);
+                var resApplicationResult = service.Get();
+                application = (Application)resApplicationResult.Result.Value.Where(x => x.ApplicantId == "UPDATE_SINGLE_APPLICATION").First();
+            }
+
+            // Update application by Id
+            using (var context = new ApiDbContext(options))
+            {
+                var service = new ApplicationController(context);
+                application.PharmacistRegistrationNumber = "9999";
+                service.Put((int)application.Id, application);
+            }
+
+            // Get application by Id
+            using (var context = new ApiDbContext(options))
+            {
+                var service = new ApplicationController(context);
+                var resApplicationResult = service.Get((int)application.Id);
+                var resApplication = resApplicationResult.Result.Value;
+
+                Assert.Equal("9999", resApplication.PharmacistRegistrationNumber);
+            }
+        }
     }
 }
