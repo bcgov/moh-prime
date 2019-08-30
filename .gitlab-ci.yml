@@ -15,9 +15,11 @@ before_script:
 build:
   stage: build
   script:
+    - echo "Running docker-compose build -t $IMAGE_TAG ."
     - docker-compose build -t $IMAGE_TAG .
 
 push:
   stage: push
   script:
+    - echo "Running docker push $CONTAINER_REGISTRY/$IMAGE_TAG"
     - docker push $CONTAINER_REGISTRY/$IMAGE_TAG 
