@@ -12,30 +12,12 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 export class ApplicantsComponent implements OnInit {
   // TODO: add models
   public applications;
-  public sortedApplications;
-  public showPending: boolean;
 
   constructor(
     private toastService: ToastService,
     private primeAPIService: PrimeAPIService,
     public dialog: MatDialog
-  ) {
-    this.showPending = true;
-  }
-
-  public showApplications(show: SimpleChanges) {
-    (show.checked) ? this.getPending() : this.getAll();
-  }
-
-  private getAll() {
-    this.showPending = false;
-    this.sortedApplications = [...this.applications];
-  }
-
-  private getPending() {
-    this.showPending = true;
-    this.sortedApplications = this.applications.filter((app: any) => !app.approved);
-  }
+  ) { }
 
   public approveApplication(application) {
     application.approved = true;
@@ -61,7 +43,7 @@ export class ApplicantsComponent implements OnInit {
     dialogRef.afterClosed()
       .subscribe((result: boolean) => {
         if (result) {
-          this.sortedApplications = this.sortedApplications
+          this.applications = this.applications
             .filter((app: any) => app.id !== applicationId);
         }
       });
@@ -80,8 +62,6 @@ export class ApplicantsComponent implements OnInit {
 
           return 0;
         });
-
-        this.getPending();
       });
   }
 }

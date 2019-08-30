@@ -2,13 +2,6 @@
   <div class="col-12">
     <h1 class="h2 mb-4">Pharmacist Enrolments</h1>
 
-    <div class="text-right pb-2">
-      <mat-slide-toggle [checked]="showPending"
-                        (change)="showApplications($event)">
-        Review Pending
-      </mat-slide-toggle>
-    </div>
-
     <table class="table">
       <thead>
         <tr>
@@ -16,15 +9,13 @@
           <th scope="col">Pharmacist Name</th>
           <th scope="col">PRN</th>
           <th scope="col">Status</th>
-          <th scope="col"
-              *ngIf="!isPending">Note</th>
-          <th scope="col"
-              *ngIf="!isPending">Approval Date</th>
+          <th scope="col">Note</th>
+          <th scope="col">Approval Date</th>
           <th scope="col">Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let application of sortedApplications">
+        <tr *ngFor="let application of applications">
           <td>{{ application.appliedDate | date: "MMM d, y" }}</td>
           <td class="applicant">{{ application.applicantName }}</td>
           <td>{{ application.pharmacistRegistrationNumber }}</td>
@@ -32,8 +23,8 @@
             <ng-container *ngIf="application.approved">Approved</ng-container>
             <ng-container *ngIf="!application.approved">Pending</ng-container>
           </td>
-          <td *ngIf="!isPending">{{ application.approvedReason }}</td>
-          <td *ngIf="!isPending">{{ application.approvedDate | date: "MMM d, y" }}</td>
+          <td>{{ application.approvedReason }}</td>
+          <td>{{ application.approvedDate | date: "MMM d, y" }}</td>
           <td class="text-right">
             <ng-container [ngTemplateOutlet]="menu"
                           [ngTemplateOutletContext]="{ application: application }"></ng-container>
