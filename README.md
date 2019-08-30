@@ -1,7 +1,17 @@
 # optimize-prime
 
 ## TABLE OF CONTENTS
+[Description](#description)
 
+[How to Use](#how-to-use)
+
+[How to Deploy](#how-to-deploy)
+
+[How to Develop](#how-to-develop)
+
+[Project Structure Overview](#project-structure-overview)
+
+[Apache 2.0 License](#apache-20-license)
 
 ## DESCRIPTION
 In this repository is a web application for submitting, reviewing, 
