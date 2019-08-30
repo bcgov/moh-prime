@@ -19,11 +19,12 @@
 
           <div class="form-group">
             <label for="pharmacist_prn">Pharmacist Registration Number (Optional)</label>
-            <input (input)="pharmacistPrn = $event.target.value"
+            <input (input)="updateInput($event.target.value)"
                    type="number"
                    class="form-control pharmacist-prn"
                    placeholder="####"
-                   aria-describedby="prnHelp">
+                   aria-describedby="prnHelp"
+                   #prn>
             <small id="prnHelp" class="form-text text-muted">
               If you have a 4-digit Pharmacist Registration Number, enter it here to prove your credentials and your enrolment will be automatically approved.
             </small>

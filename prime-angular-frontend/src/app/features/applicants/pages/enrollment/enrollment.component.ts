@@ -9,6 +9,7 @@ import { AuthTokenService } from 'src/app/core/services/auth-token.service';
   styleUrls: ['./enrollment.component.scss']
 })
 export class EnrollmentComponent implements OnInit {
+  @ViewChild('prn', { static: true }) prnInput: ElementRef<HTMLInputElement>;
   @ViewChild('pharmacist', { static: true }) pharmacistInput: ElementRef<HTMLInputElement>;
   public pharmacistPrn: string;
 
@@ -17,6 +18,14 @@ export class EnrollmentComponent implements OnInit {
     private primeAPIService: PrimeAPIService,
     private authTokenService: AuthTokenService
   ) { }
+
+  updateInput(value: string) {
+    this.pharmacistPrn = (value.length < 5) ? value : this.pharmacistPrn;
+
+    if (this.pharmacistPrn.length < 5) {
+      this.prnInput.nativeElement.value = this.pharmacistPrn;
+    }
+  }
 
   submitApplication() {
     const decodedToken = this.authTokenService.decodeToken();
