@@ -9,6 +9,9 @@ import { AccessDeniedComponent } from './components/access-denied/access-denied.
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
 import { LoggerService } from './services/logger.service';
+import { RouteStateService } from './services/route-state.service';
+import { ToastService } from './services/toast.service';
+import { UtilsService } from './services/utils.service';
 import { ViewportService } from './services/viewport.service';
 
 @NgModule({
@@ -19,7 +22,10 @@ import { ViewportService } from './services/viewport.service';
   ],
   providers: [
     LoggerService,
-    ViewportService
+    RouteStateService,
+    ToastService,
+    UtilsService,
+    ViewportService,
   ],
   declarations: [
     AccessDeniedComponent,

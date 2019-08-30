@@ -24,13 +24,11 @@ $ctow-dark-app-theme: mat-dark-theme($ctow-app-primary, $ctow-app-accent, $ctow-
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
-// TODO: figure out how to use new theming
 // @include mat-sidenav-theme($ctow-dark-app-theme);
 .mat-sidenav {
   @include angular-material-theme($ctow-dark-app-theme);
 }
 
-// TODO: hack until ticket is resolved regarding precedence in cascade
 // for production builds only
 .mat-drawer {
   background-color: #073368 !important;

@@ -10,6 +10,7 @@ const routes: Routes = [
     redirectTo: 'dashboard',
     pathMatch: 'full',
   },
+  // TODO: placed for ease of access to login
   {
     path: 'login',
     // TODO: Guard module from being accessed without the proper

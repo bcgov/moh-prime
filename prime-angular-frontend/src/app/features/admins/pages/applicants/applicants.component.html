@@ -21,11 +21,9 @@
           <td>{{ application.approved }}</td>
           <td>{{ application.approvedDate | date: "short" }}</td>
           <th>
-            <button
-              type="button"
-              class="btn btn-light"
-              (click)="authenticate()"
-            >
+            <button type="button"
+                    class="btn btn-light"
+                    (click)="authenticate()">
               Authenticate
             </button>
           </th>
