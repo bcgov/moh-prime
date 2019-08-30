@@ -1,25 +1,25 @@
-import { Component, OnInit, ViewChild, Inject, NgZone } from "@angular/core";
-import { MatSidenav } from "@angular/material";
-import { Router } from "@angular/router";
+import { Component, OnInit, ViewChild, Inject, NgZone } from '@angular/core';
+import { MatSidenav } from '@angular/material';
+import { Router } from '@angular/router';
 
-import { APP_CONFIG, AppConfig } from "src/app/app-config.module";
+import { APP_CONFIG, AppConfig } from 'src/app/app-config.module';
 
-import { AuthTokenService } from "src/app/core/services/auth-token.service";
-import { LoggerService } from "src/app/core/services/logger.service";
-import { ViewportService } from "src/app/core/services/viewport.service";
-import { WindowRefService } from "src/app/core/services/window-ref.service";
+import { AuthTokenService } from 'src/app/core/services/auth-token.service';
+import { LoggerService } from 'src/app/core/services/logger.service';
+import { ViewportService } from 'src/app/core/services/viewport.service';
+import { WindowRefService } from 'src/app/core/services/window-ref.service';
 
-import { DeviceResolution } from "src/app/shared/enums/device-resolutions.enum";
+import { DeviceResolution } from 'src/app/shared/enums/device-resolutions.enum';
 
 declare const gapi: any;
 
 @Component({
-  selector: "app-dashboard",
-  templateUrl: "./dashboard.component.html",
-  styleUrls: ["./dashboard.component.scss"]
+  selector: 'app-dashboard',
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-  @ViewChild("sidenav", { static: true }) public sideNav: MatSidenav;
+  @ViewChild('sidenav', { static: true }) public sideNav: MatSidenav;
 
   public sideNavSections: {};
   public sideNavProps: {
@@ -36,13 +36,13 @@ export class DashboardComponent implements OnInit {
     private logger: LoggerService,
     private windowRef: WindowRefService,
     private ngZone: NgZone
-  ) {}
+  ) { }
 
   public get isAdmin(): boolean {
     // TODO: don't do this if time permits
     // NOTE: using the path to indicate the user role as the requirements don't require
     // admins to authenticate, which would provide a authentication token and claim
-    return this.windowRef.nativeWindow.location.href.indexOf("admin") > -1;
+    return this.windowRef.nativeWindow.location.href.indexOf('admin') > -1;
   }
 
   public get isDesktop(): boolean {
@@ -64,13 +64,13 @@ export class DashboardComponent implements OnInit {
   }
 
   public logout() {
-    gapi.load("auth2", () => {
+    gapi.load('auth2', () => {
       gapi.auth2.init().then(() => {
-        var auth2 = gapi.auth2.getAuthInstance();
+        const auth2 = gapi.auth2.getAuthInstance();
         auth2.signOut().then(() => {
           this.ngZone.run(() => {
             this.tokenService.removeToken();
-            this.router.navigate(["/login"]);
+            this.router.navigate(['/login']);
           });
         });
       });
@@ -96,43 +96,43 @@ export class DashboardComponent implements OnInit {
   private getApplicantSideNavSections() {
     return [
       {
-        header: "Applicant",
+        header: 'Applicant',
         showHeader: false,
         items: [
           {
-            name: "Enrollment",
-            icon: "vpn_key",
-            route: "/dashboard/applicant/enrollment",
+            name: 'Enrollment',
+            icon: 'vpn_key',
+            route: '/dashboard/applicant/enrollment',
             showItem: true
           },
           {
-            name: "In Progress",
-            icon: "highlight_off",
-            route: "/dashboard/applicant/inprogress",
+            name: 'In Progress',
+            icon: 'highlight_off',
+            route: '/dashboard/applicant/inprogress',
             showItem: false
           },
           {
-            name: "Complete",
-            icon: "highlight_off",
-            route: "/dashboard/applicant/complete",
+            name: 'Complete',
+            icon: 'highlight_off',
+            route: '/dashboard/applicant/complete',
             showItem: false
           }
         ]
       },
       {
-        header: "Manage",
+        header: 'Manage',
         showHeader: false,
         items: [
           {
-            name: "Profile",
-            icon: "person",
-            route: "/dashboard/applicant/profile",
+            name: 'Profile',
+            icon: 'person',
+            route: '/dashboard/applicant/profile',
             showItem: false
           },
           {
-            name: "Change Password",
-            icon: "lock",
-            route: "/dashboard/applicant/password",
+            name: 'Change Password',
+            icon: 'lock',
+            route: '/dashboard/applicant/password',
             showItem: false
           }
         ]
@@ -143,31 +143,31 @@ export class DashboardComponent implements OnInit {
   private getAdminSideNavSections() {
     return [
       {
-        header: "Admin",
+        header: 'Admin',
         showHeader: false,
         items: [
           {
-            name: "Applicants",
-            icon: "assignment",
-            route: "/dashboard/admin/applicants",
+            name: 'Applicants',
+            icon: 'assignment',
+            route: '/dashboard/admin/applicants',
             showItem: true
           }
         ]
       },
       {
-        header: "Manage",
+        header: 'Manage',
         showHeader: false,
         items: [
           {
-            name: "Profile",
-            icon: "person",
-            route: "/dashboard/applicant/profile",
+            name: 'Profile',
+            icon: 'person',
+            route: '/dashboard/applicant/profile',
             showItem: false
           },
           {
-            name: "Change Password",
-            icon: "lock",
-            route: "/dashboard/applicant/password",
+            name: 'Change Password',
+            icon: 'lock',
+            route: '/dashboard/applicant/password',
             showItem: false
           }
         ]
@@ -179,19 +179,19 @@ export class DashboardComponent implements OnInit {
     if (device === DeviceResolution.MOBILE) {
       this.sideNavProps = {
         opened: false,
-        mode: "over",
+        mode: 'over',
         showText: false
       };
     } else if (device === DeviceResolution.TABLET) {
       this.sideNavProps = {
         opened: true,
-        mode: "side",
+        mode: 'side',
         showText: false
       };
     } else {
       this.sideNavProps = {
         opened: true,
-        mode: "side",
+        mode: 'side',
         showText: true
       };
     }

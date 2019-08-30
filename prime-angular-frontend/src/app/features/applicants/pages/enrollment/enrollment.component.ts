@@ -10,7 +10,7 @@ import { AuthTokenService } from 'src/app/core/services/auth-token.service';
 })
 export class EnrollmentComponent implements OnInit {
   @ViewChild('pharmacist', { static: true }) pharmacistInput: ElementRef<HTMLInputElement>;
-  public pharmacist_prn: string;
+  public pharmacistPrn: string;
 
   constructor(
     private router: Router,
@@ -26,10 +26,10 @@ export class EnrollmentComponent implements OnInit {
         Content: '',
         ApplicantName: decodedToken.name,
         ApplicantId: decodedToken.at_hash,
-        PharmacistRegistrationNumber: this.pharmacist_prn
+        PharmacistRegistrationNumber: this.pharmacistPrn
       })
       .subscribe(res => {
-        if (this.pharmacist_prn) {
+        if (this.pharmacistPrn) {
           this.router.navigate(['dashboard', 'applicant', 'complete']);
         } else {
           this.router.navigate(['dashboard', 'applicant', 'inprogress']);
