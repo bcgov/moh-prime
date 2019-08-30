@@ -27,5 +27,5 @@ build:
 push:
   stage: push
   script:
-    - echo "Running docker push primeswu.azurecr.io/optimize-prime"
-    - docker push primeswu.azurecr.io/optimize-prime
+    - echo "Running docker push primeswu.azurecr.io:80/optimize-prime"
+    - docker push optimize-prime primeswu.azurecr.io/optimize-prime
