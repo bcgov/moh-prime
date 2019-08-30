@@ -5,9 +5,11 @@ import { HttpClient } from "@angular/common/http";
   providedIn: "root"
 })
 export class PrimeAPIService {
-  constructor(private http: HttpClient) {}
-  url = "http://localhost:5000/api/v1";
-
+  constructor(private http: HttpClient) {}  
+  url = "http://api.optimizeprime.live/api/v1";
+  if (window.location.hostname.indexOf('localhost') > 0) {
+    url = "http://localhost:5000/api/v1";      
+  }
   getApplications() {
     this.createApplication();
     return this.http.get(`${this.url}/application`);
