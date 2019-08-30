@@ -1,96 +1,61 @@
-<mat-sidenav-container fullscreen autosize>
-  <mat-sidenav
-    #sidenav
-    [opened]="sideNavProps.opened"
-    [mode]="sideNavProps.mode"
-  >
-    <!-- TODO: <mat-list class="brand-container">
+<mat-sidenav-container fullscreen
+                       autosize>
+  <mat-sidenav #sidenav
+               [opened]="sideNavProps.opened"
+               [mode]="sideNavProps.mode"
+               class="bg">
 
-      <mat-list-item routerLink="/dashboard"> -->
-
-    <svg
-      version="1.1"
-      id="Layer_1"
-      xmlns="http://www.w3.org/2000/svg"
-      xmlns:xlink="http://www.w3.org/1999/xlink"
-      x="0px"
-      y="0px"
-      viewBox="0 0 120.58 159.02"
-      style="enable-background:new 0 0 120.58 159.02;"
-      xml:space="preserve"
-      class="logo"
-    >
+    <svg version="1.1"
+         id="Layer_1"
+         xmlns="http://www.w3.org/2000/svg"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         x="0px"
+         y="0px"
+         viewBox="0 0 120.58 159.02"
+         style="enable-background:new 0 0 120.58 159.02;"
+         xml:space="preserve"
+         class="logo">
       <g>
-        <path
-          class="st0"
-          d="M43.64,65.4L18.95,52.65l-3.19-15.94H0l7.36,42.02l16.38,11.34h24.5L43.64,65.4L43.64,65.4z M38.67,67.8 l0.22,4.38L11.23,59.72l-0.36-4.49L38.67,67.8L38.67,67.8z M41.42,79.93v4.17L12.97,71.45l-0.43-3.66L41.42,79.93L41.42,79.93z"
-        />
-        <path
-          class="st0"
-          d="M97.45,50.23l2.21-10.32c-26.96-9.53-53.38-9.89-79.3-1.01l1.78,10.58L58.6,67.98L97.45,50.23L97.45,50.23z M59.62,55.62L44.07,44.86h31.28L59.62,55.62L59.62,55.62z"
-        />
-        <path
-          class="st0"
-          d="M120.58,38.09h-16.13l-3.81,15.32L74.73,65.98l-4.57,24.49h26.31l16.13-10.14L120.58,38.09L120.58,38.09z M108.8,58.2v4.2L80.93,73.34v-4.17L108.8,58.2L108.8,58.2z M105.83,70.19v3.77L77.3,85.69v-4.56L105.83,70.19L105.83,70.19z"
-        />
-        <polygon
-          class="st0"
-          points="18.56,100.26 17.32,90.51 8.19,84.71 11.74,140.68 33.49,152.02 33.7,109.82 18.56,100.26"
-        />
-        <polygon
-          class="st0"
-          points="38.05,153.44 42.26,156.41 47.84,137.89 69.55,137.89 75.31,156.19 80.09,153.62 80.09,109.82 70.35,100.83 70.35,130.9 48.24,130.9 47.84,100.83 38.05,109.82 38.05,153.44 	"
-        />
-        <polygon
-          class="st0"
-          points="49.04,68.38 52.41,88.88 52.41,127.14 65.78,127.14 65.78,88.48 69.55,68.38 58.6,72.98 49.04,68.38"
-        />
-        <polygon
-          class="st0"
-          points="50.63,141.88 46.24,159.02 71.36,159.02 66.36,141.88 50.63,141.88 	"
-        />
-        <polygon
-          class="st0"
-          points="111.19,85.91 100.82,93.08 100.43,100.65 84.3,110.4 84.3,152.82 106.84,142.89 111.19,85.91 	"
-        />
-        <path
-          class="st1"
-          d="M17.32,90.51l-9.13-5.8l3.55,55.97l21.74,11.34l0.22-42.2l-15.15-9.56L17.32,90.51L17.32,90.51z M104.45,38.09 l-3.81,15.32L74.73,65.98l-4.57,24.49h26.31l16.13-10.14l7.97-42.24H104.45L104.45,38.09z M105.83,73.95L77.3,85.69v-4.56 l28.52-10.94V73.95L105.83,73.95z M108.8,62.4L80.93,73.34v-4.17L108.8,58.2V62.4L108.8,62.4z M100.82,93.08l-0.4,7.57L84.3,110.4 v42.42l22.54-9.93l4.35-56.98L100.82,93.08L100.82,93.08z M38.67,67.8l-27.8-12.57l0.36,4.49l27.65,12.46L38.67,67.8L38.67,67.8z M97.45,50.23L58.6,67.98L22.14,49.46l-1.78-10.58c25.91-8.88,52.33-8.51,79.3,1.01L97.45,50.23L97.45,50.23z M41.42,79.93 L12.54,67.8l0.43,3.66L41.42,84.1V79.93L41.42,79.93z M52.41,88.88v38.26h13.37V88.48l3.77-20.11l-10.95,4.6l-9.57-4.6L52.41,88.88 L52.41,88.88z M43.64,65.4l4.6,24.71h-24.5L7.36,78.74L0,36.71h15.76l3.19,15.94L43.64,65.4L43.64,65.4z M59.62,55.62l15.73-10.76 H44.07L59.62,55.62L59.62,55.62z M38.05,153.44v-43.62l9.79-8.98l0.4,30.07h22.11v-30.07l9.75,8.98v43.8l-4.78,2.57l-5.76-18.29 H47.84l-5.58,18.51L38.05,153.44L38.05,153.44z M46.24,159.02h25.12l-5-17.14H50.63L46.24,159.02L46.24,159.02z"
-        />
-        <path
-          class="st0"
-          d="M90.05,4.17c-19.39-5.52-40.09-5.57-59.5-0.12l-18,4.89l8.12,25.37l9.33-2.66c19.39-5.52,40.09-5.57,59.5-0.12 l9.89,2.77l6.45-25.6L90.05,4.17z M70.22,17.6h-6.7v6.7h-7v-6.7h-6.7v-7h6.7V3.9h7v6.7h6.7V17.6z"
-        />
+        <path class="st0"
+              d="M43.64,65.4L18.95,52.65l-3.19-15.94H0l7.36,42.02l16.38,11.34h24.5L43.64,65.4L43.64,65.4z M38.67,67.8 l0.22,4.38L11.23,59.72l-0.36-4.49L38.67,67.8L38.67,67.8z M41.42,79.93v4.17L12.97,71.45l-0.43-3.66L41.42,79.93L41.42,79.93z" />
+        <path class="st0"
+              d="M97.45,50.23l2.21-10.32c-26.96-9.53-53.38-9.89-79.3-1.01l1.78,10.58L58.6,67.98L97.45,50.23L97.45,50.23z M59.62,55.62L44.07,44.86h31.28L59.62,55.62L59.62,55.62z" />
+        <path class="st0"
+              d="M120.58,38.09h-16.13l-3.81,15.32L74.73,65.98l-4.57,24.49h26.31l16.13-10.14L120.58,38.09L120.58,38.09z M108.8,58.2v4.2L80.93,73.34v-4.17L108.8,58.2L108.8,58.2z M105.83,70.19v3.77L77.3,85.69v-4.56L105.83,70.19L105.83,70.19z" />
+        <polygon class="st0"
+                 points="18.56,100.26 17.32,90.51 8.19,84.71 11.74,140.68 33.49,152.02 33.7,109.82 18.56,100.26" />
+        <polygon class="st0"
+                 points="38.05,153.44 42.26,156.41 47.84,137.89 69.55,137.89 75.31,156.19 80.09,153.62 80.09,109.82 70.35,100.83 70.35,130.9 48.24,130.9 47.84,100.83 38.05,109.82 38.05,153.44 	" />
+        <polygon class="st0"
+                 points="49.04,68.38 52.41,88.88 52.41,127.14 65.78,127.14 65.78,88.48 69.55,68.38 58.6,72.98 49.04,68.38" />
+        <polygon class="st0"
+                 points="50.63,141.88 46.24,159.02 71.36,159.02 66.36,141.88 50.63,141.88 	" />
+        <polygon class="st0"
+                 points="111.19,85.91 100.82,93.08 100.43,100.65 84.3,110.4 84.3,152.82 106.84,142.89 111.19,85.91 	" />
+        <path class="st1"
+              d="M17.32,90.51l-9.13-5.8l3.55,55.97l21.74,11.34l0.22-42.2l-15.15-9.56L17.32,90.51L17.32,90.51z M104.45,38.09 l-3.81,15.32L74.73,65.98l-4.57,24.49h26.31l16.13-10.14l7.97-42.24H104.45L104.45,38.09z M105.83,73.95L77.3,85.69v-4.56 l28.52-10.94V73.95L105.83,73.95z M108.8,62.4L80.93,73.34v-4.17L108.8,58.2V62.4L108.8,62.4z M100.82,93.08l-0.4,7.57L84.3,110.4 v42.42l22.54-9.93l4.35-56.98L100.82,93.08L100.82,93.08z M38.67,67.8l-27.8-12.57l0.36,4.49l27.65,12.46L38.67,67.8L38.67,67.8z M97.45,50.23L58.6,67.98L22.14,49.46l-1.78-10.58c25.91-8.88,52.33-8.51,79.3,1.01L97.45,50.23L97.45,50.23z M41.42,79.93 L12.54,67.8l0.43,3.66L41.42,84.1V79.93L41.42,79.93z M52.41,88.88v38.26h13.37V88.48l3.77-20.11l-10.95,4.6l-9.57-4.6L52.41,88.88 L52.41,88.88z M43.64,65.4l4.6,24.71h-24.5L7.36,78.74L0,36.71h15.76l3.19,15.94L43.64,65.4L43.64,65.4z M59.62,55.62l15.73-10.76 H44.07L59.62,55.62L59.62,55.62z M38.05,153.44v-43.62l9.79-8.98l0.4,30.07h22.11v-30.07l9.75,8.98v43.8l-4.78,2.57l-5.76-18.29 H47.84l-5.58,18.51L38.05,153.44L38.05,153.44z M46.24,159.02h25.12l-5-17.14H50.63L46.24,159.02L46.24,159.02z" />
+        <path class="st0"
+              d="M90.05,4.17c-19.39-5.52-40.09-5.57-59.5-0.12l-18,4.89l8.12,25.37l9.33-2.66c19.39-5.52,40.09-5.57,59.5-0.12 l9.89,2.77l6.45-25.6L90.05,4.17z M70.22,17.6h-6.7v6.7h-7v-6.7h-6.7v-7h6.7V3.9h7v6.7h6.7V17.6z" />
       </g>
     </svg>
 
-    <!-- </mat-list-item>
-
-    </mat-list> -->
-
     <mat-nav-list *ngFor="let sideNavSection of sideNavSections">
-      <h3
-        mat-subheader
-        *ngIf="sideNavSection.showHeader && sideNavProps.showText"
-      >
+      <h3 mat-subheader
+          *ngIf="sideNavSection.showHeader && sideNavProps.showText">
         {{ sideNavSection.header }}
       </h3>
 
       <div *ngFor="let item of sideNavSection.items">
-        <mat-list-item
-          *ngIf="item.showItem"
-          [routerLink]="item.route"
-          routerLinkActive="active"
-          (click)="onRoute()"
-        >
-          <mat-icon
-            mat-list-icon
-            [ngClass]="{ 'center-sidenav-icon': !isDesktop }"
-            >{{ item.icon }}</mat-icon
-          >
+        <mat-list-item *ngIf="item.showItem"
+                       [routerLink]="item.route"
+                       routerLinkActive="active"
+                       (click)="onRoute()">
+          <mat-icon mat-list-icon
+                    [ngClass]="{ 'center-sidenav-icon': !isDesktop }"
+                    class="text-blue">{{ item.icon }}</mat-icon>
 
           <a matLine [ngClass]="{ 'extend-content-width': isDesktop }">
-            <span *ngIf="sideNavProps.showText">
+            <span *ngIf="sideNavProps.showText" class="text-blue">
               {{ item.name }}
             </span>
           </a>
@@ -102,20 +67,20 @@
 
     <mat-nav-list>
       <mat-list-item (click)="logout()">
-        <mat-icon
-          mat-list-icon
-          [ngClass]="{ 'center-sidenav-icon': !isDesktop }"
-          >exit_to_app</mat-icon
-        >
+        <mat-icon mat-list-icon
+                  [ngClass]="{ 'center-sidenav-icon': !isDesktop }"
+                  class="text-black">exit_to_app</mat-icon>
 
         <a matLine>
-          <span *ngIf="sideNavProps.showText">
+          <span *ngIf="sideNavProps.showText" class="text-black">
             Logout
           </span>
         </a>
-        <button mat-icon-button *ngIf="sideNavProps.showText"></button>
+        <button mat-icon-button
+                *ngIf="sideNavProps.showText"></button>
       </mat-list-item>
     </mat-nav-list>
+
   </mat-sidenav>
 
   <mat-sidenav-content>

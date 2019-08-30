@@ -19,14 +19,14 @@
   padding-left: 1.65rem;
 }
 
-.mat-nav-list .active {
-  color: theme-palette(yellow);
-}
+// .mat-nav-list .active {
+//   color: theme-palette(green);
+// }
 
 .st0 {
   fill-rule:evenodd;
   clip-rule:evenodd;
-  fill: white;
+  fill: theme-palette(blue);
 }
 
 .st1 {
@@ -39,4 +39,28 @@
 
   margin: 1.2em auto 1.5em;
   display: block;
+}
+
+.mat-drawer {
+  background-color: #eeeeee !important;
+}
+
+.bg::after {
+  content: "";
+  background: url("../../../../assets/pharmacy-background.jpg");
+  opacity: 0.3;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
+}
+
+.text-blue {
+  color: theme-palette(blue, lighter) !important;
+}
+
+.text-black {
+  color: theme-palette(blue) !important;
 }
