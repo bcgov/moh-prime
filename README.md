@@ -1,12 +1,12 @@
 # optimize-prime
 
-TABLE OF CONTENTS
+## TABLE OF CONTENTS
 
 
-DESCRIPTION
+## DESCRIPTION
 
 
-HOW TO USE
+## HOW TO USE
 
 The client web front end can be accessed through the root URL it is 
 deployed at, e.g. localhost for a local deployment. The client page
@@ -17,7 +17,7 @@ interface for applicant viewing can be accessed at
 Accessing the database can be done by creating a connection to port 
 5432 using a database tool such as DBeaver.
 
-HOW TO DEVELOP
+## HOW TO DEVELOP
 
 To get the project up and running, install Docker and run the following
 Docker command:
@@ -52,23 +52,23 @@ run the following command:
 	
 Your changes will be deployed automatically next time the app starts.
 
-PROJECT STRUCTURE OVERVIEW
+## PROJECT STRUCTURE OVERVIEW
 
 
-HOW TO DEPLOY
+## HOW TO DEPLOY
 
 prime-dotnet-webapi:
 
 - dotnet ef database update
 
-[LINK TO ARCHITECHTURE](.documentation/Architecture.MD)
+[Link to Architecture](documentation/Architecture.md)
 
 
-[LINK TO TEST PLAN](.documentation/TestPlan.MD)
+[Link to test plan](documentation/TestPlan.md)
 
 
 
-APACHE 2.0 LICENSE
+## APACHE 2.0 LICENSE
 
 Copyright 2019 Sierra Systems Group Inc.
 
