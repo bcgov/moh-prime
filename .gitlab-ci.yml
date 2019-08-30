@@ -2,6 +2,8 @@
 #image: ubuntu:18.04
 #image: docker/compose
 image: docker/compose:1.22.0 
+entrypoint: ["/bin/sh", "-c"]
+
 services:
   - docker:dind    
 
