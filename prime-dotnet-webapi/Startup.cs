@@ -35,17 +35,25 @@ namespace prime
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            services.AddCors(c =>
+            services.AddCors(options =>
             {
-                c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
+                options.AddPolicy("AllowAll",
+                    builder =>
+                    {
+                        builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials();
+                    });
             });
-			
+
             // Connect to database
             var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
-			if (connectionString == null)
-			{
-				connectionString = Configuration.GetConnectionString("PrimeDatabase");
-			}
+            if (connectionString == null)
+            {
+                connectionString = Configuration.GetConnectionString("PrimeDatabase");
+            }
             services.AddDbContext<ApiDbContext>(options =>
                 options.UseNpgsql(connectionString)
             );
@@ -72,22 +80,22 @@ namespace prime
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            app.UseCors(options => options.AllowAnyOrigin());
+            UpdateDatabase(app);
+            app.UseCors("AllowAll");
             app.UseMvc();
-			UpdateDatabase(app);
         }
-			
-		private static void UpdateDatabase(IApplicationBuilder app)
-		{
-			using (var serviceScope = app.ApplicationServices
-				.GetRequiredService<IServiceScopeFactory>()
-				.CreateScope())
-			{
-				using (var context = serviceScope.ServiceProvider.GetService<ApiDbContext>())
-				{
-					context.Database.Migrate();
-				}
-			}
-		}
+
+        private static void UpdateDatabase(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices
+                .GetRequiredService<IServiceScopeFactory>()
+                .CreateScope())
+            {
+                using (var context = serviceScope.ServiceProvider.GetService<ApiDbContext>())
+                {
+                    context.Database.Migrate();
+                }
+            }
+        }
     }
 }

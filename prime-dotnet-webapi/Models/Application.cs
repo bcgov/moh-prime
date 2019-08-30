@@ -7,7 +7,6 @@ namespace prime.Models
     public class Application
     {
         [Key]
-        [Required]
         public int? Id { get; set; }
         [Required]
         public string Content { get; set; }

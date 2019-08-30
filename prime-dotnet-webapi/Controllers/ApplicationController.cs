@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
+using Microsoft.AspNetCore.Cors;
 
 using prime.Models;
 
@@ -33,7 +33,7 @@ namespace prime.Controllers
         {
             var application = await _context.Application.FindAsync(id);
 
-            if(application == null)
+            if (application == null)
             {
                 return NotFound();
             }
@@ -43,8 +43,11 @@ namespace prime.Controllers
 
         // POST api/v1/application/
         [HttpPost]
+        [EnableCors("AllowAll")]
+
         public async Task<ActionResult<IEnumerable<Application>>> Post([FromBody] Application application)
         {
+            Console.Out.WriteLine("POST!");
             application.AppliedDate = DateTime.Now;
 
             if(application.PharmacistRegistrationNumber != null)
@@ -56,9 +59,9 @@ namespace prime.Controllers
 
             _context.Application.Add(application);
             await _context.SaveChangesAsync();
-            
-            return CreatedAtAction(nameof(Get), new {id = application.Id}, application);
-        }        
+
+            return CreatedAtAction(nameof(Get), new { id = application.Id }, application);
+        }
 
         // PUT: api/v1/application/5
         [HttpPut("{id}")]
@@ -69,7 +72,7 @@ namespace prime.Controllers
                 return BadRequest();
             }
 
-            if(application.Approved == true)
+            if (application.Approved == true)
             {
                 application.ApprovedDate = DateTime.Now;
                 application.ApprovedReason = "Approved by system administrator.";
@@ -79,6 +82,6 @@ namespace prime.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
-        }        
+        }
     }
 }
