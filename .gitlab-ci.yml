@@ -16,17 +16,16 @@ before_script:
   - add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
   - apt update
   - apt install -y docker docker-compose git
-  - usermod -aG docker $USER
-  - echo "Container Registry/Image Tag = $CONTAINER_REGISTRY/$IMAGE_TAG"
+  - echo "Container Registry/Image Tag = primeswu.azurecr.io/optimize-prime"
 
 build:
   stage: build
   script:
-    - echo "Running docker-compose build -t $IMAGE_TAG"
-    - docker-compose build -t $IMAGE_TAG
+    - echo "Running docker-compose build -t optimize-prime"
+    - docker-compose up --build -t optimize-prime
 
 push:
   stage: push
   script:
-    - echo "Running docker push $DOCKER_HOST/$IMAGE_TAG"
-    - docker push $DOCKER_HOST/$IMAGE_TAG 
+    - echo "Running docker push primeswu.azurecr.io:80/optimize-prime"
+    - docker push optimize-prime primeswu.azurecr.io/optimize-prime
