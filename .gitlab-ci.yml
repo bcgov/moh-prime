@@ -1,6 +1,6 @@
 
 #image: ubuntu:18.04
-image: redis:alpine
+image: docker/compose:latest
 stages:
   - build
   - push
@@ -12,8 +12,8 @@ variables:
   IMAGE_TAG: "optimize-prime"
 
 before_script:
-  - apt update -qq
-  - apt install -yqq apt-transport-https ca-certificates curl gnupg python3 docker docker-compose
+#  - apt update -qq
+#  - apt install -yqq apt-transport-https ca-certificates curl gnupg python3 docker docker-compose
 #software-properties-common
 #curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 #add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
