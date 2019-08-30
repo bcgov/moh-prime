@@ -1,18 +1,21 @@
 # Validate with https://gitlab.com/sierrasystems/optimize-prime/-/ci/lint
-image: tmaier/docker-compose:latest
+image: docker:latest
 
 services:
   - docker:dind
 
 before_script:
+  - apk add py-pip
+  - apk add python-dev libffi-dev openssl-dev gcc libc-dev make
+  - pip install docker-compose
   - docker info
   - docker-compose --version
 
-variables:
-  DOCKER_HOST: "primeswu.azurecr.io:80"
-  DOCKER_REPO_USER: "PrimeSWU"
-  DOCKER_REPO_PASS: "POKaaZfvf8AhsgQNmUvjJLj+XbZQoIQJ"
-  IMAGE_TAG: "optimize-prime"
+#variables:
+#  DOCKER_HOST: "primeswu.azurecr.io:80"
+#  DOCKER_REPO_USER: "PrimeSWU"
+#  DOCKER_REPO_PASS: "POKaaZfvf8AhsgQNmUvjJLj+XbZQoIQJ"
+#  IMAGE_TAG: "optimize-prime"
 
 build image:
   stage: build
