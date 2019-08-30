@@ -1,23 +1,32 @@
 # optimize-prime
 
-TABLE OF CONTENTS
+## TABLE OF CONTENTS
 
 
-DESCRIPTION
+## DESCRIPTION
+In this repository is a web application for submitting, reviewing, 
+and approving pharmacist application information.
 
-
-HOW TO USE
+## HOW TO USE
 
 The client web front end can be accessed through the root URL it is 
-deployed at, e.g. localhost for a local deployment. The client page
-requires authentication through Google to access. The administrator 
-interface for applicant viewing can be accessed at 
-/dashboard/admin/applicants. 
+deployed at, http://www.optimizeprime.live. The client page
+requires authentication through Google to access. 
+
+The administrator interface for applicant viewing can be accessed at 
+http://www.optimizeprime.live/dashboard/admin/applicants. 
 
 Accessing the database can be done by creating a connection to port 
 5432 using a database tool such as DBeaver.
 
-HOW TO DEVELOP
+## HOW TO DEPLOY
+
+prime-dotnet-webapi:
+
+- dotnet ef database update
+
+
+## HOW TO DEVELOP
 
 To get the project up and running, install Docker and run the following
 Docker command:
@@ -26,7 +35,9 @@ Docker command:
 	
 Here are the environment variables for the docker-compose and their uses:
 
-	env-variables...
+	DB_CONNECTION_STRING - Contains the information needed for connecting to the database.
+	JWT_SIGNING_KEY - Private key for signing Json web token.
+	ASPNETCORE_HTTPS_PORT - Port for redirecting insecure requests to HTTPS.
 	
 For full development, developer dependencies are the following:
 
@@ -41,34 +52,28 @@ The following technologies are used in this project:
 	Angular.js
 	PostgreSQL
 	
-To update the database schema...
+To update the database schema
 
 Linting...
 
-To create a database migration, after updating any entities, 
-run the following command:
+To update the database schema, first update the model file in the
+[Models](prime-dotnet-webapi/Models) folder, and rebuild with a docker-compose up --build
+command. Then, to migrate the new model schema over to the database, run the
+following command:
 
 	dotnet ef migrations add InitialCreate
 	
 Your changes will be deployed automatically next time the app starts.
 
-PROJECT STRUCTURE OVERVIEW
+## PROJECT STRUCTURE OVERVIEW
 
+[Link to architecture](documentation/Architecture.md)
 
-HOW TO DEPLOY
+[Link to test plan](documentation/TestPlan.md)
 
-prime-dotnet-webapi:
+[Link to build pipeline](documentation/BuildPipeline.md)
 
-- dotnet ef database update
-
-LINK TO ARCHITECHTURE 
-
-
-LINK TO TEST PLAN
-
-
-
-APACHE 2.0 LICENSE
+## APACHE 2.0 LICENSE
 
 Copyright 2019 Sierra Systems Group Inc.
 

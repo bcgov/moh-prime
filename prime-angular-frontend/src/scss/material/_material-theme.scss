@@ -35,6 +35,14 @@ $ctow-dark-app-theme: mat-dark-theme($ctow-app-primary, $ctow-app-accent, $ctow-
   color: white !important;
 }
 
+.mat-chip.mat-standard-chip.mat-chip-selected.mat-primary {
+  background: theme-palette(blue) !important;
+}
+
+.mat-chip.mat-standard-chip.mat-chip-selected.mat-accent {
+  background: theme-palette(yellow) !important;
+}
+
 .mat-tabs {
   @include angular-material-theme($ctow-dark-app-theme);
 }

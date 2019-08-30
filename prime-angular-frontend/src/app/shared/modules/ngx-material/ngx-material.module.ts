@@ -3,7 +3,7 @@ import {
   MatSidenavModule, MatDialogModule, MatButtonModule, MatSnackBarModule,
   MatToolbarModule, MatIconModule, MatListModule, MatDividerModule,
   MatChipsModule, MatMenuModule, MatCardModule, MatDatepickerModule,
-  MatProgressSpinnerModule, MatProgressBarModule, MAT_DIALOG_DEFAULT_OPTIONS, MAT_DATE_FORMATS,
+  MatProgressSpinnerModule, MatProgressBarModule, MAT_DIALOG_DEFAULT_OPTIONS, MAT_DATE_FORMATS, MatSlideToggleModule,
 } from '@angular/material';
 // import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { CdkTableModule } from '@angular/cdk/table';
@@ -35,6 +35,7 @@ export const APP_DATE_FORMATS = {
     MatChipsModule,
     MatMenuModule,
     MatCardModule,
+    MatSlideToggleModule,
     // MatMomentDateModule,
     MatProgressSpinnerModule,
     MatProgressBarModule,
@@ -54,6 +55,7 @@ export const APP_DATE_FORMATS = {
     MatChipsModule,
     MatMenuModule,
     MatCardModule,
+    MatSlideToggleModule,
     // MatMomentDateModule,
     MatProgressSpinnerModule,
     MatProgressBarModule,
