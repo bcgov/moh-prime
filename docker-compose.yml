@@ -20,6 +20,7 @@ services:
       context: prime-dotnet-webapi/
     environment:
       DB_CONNECTION_STRING: "host=postgres;port=5432;database=postgres;username=postgres;password=postgres"      
+      JWT_SIGNING_KEY: "SdqlA0Y5e6HMAK1wm6iHHHz2u37XGtlo"      
       ASPNETCORE_HTTPS_PORT: "5001"
     ports:
       - "5000:80"
