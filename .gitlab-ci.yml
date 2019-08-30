@@ -1,5 +1,5 @@
 # Validate with https://gitlab.com/sierrasystems/optimize-prime/-/ci/lint
-image: tmaier/docker-compose:latest
+image: docker/compose:1.17.1
 
 services:
   - docker:dind
