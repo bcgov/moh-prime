@@ -2,23 +2,51 @@
 
 HOW TO USE
 
-The web front end can be accessed through the root URL it is deployed
-at, e.g. localhost for a local deployment.
+The client web front end can be accessed through the root URL it is 
+deployed at, e.g. localhost for a local deployment. The client page
+requires authentication through Google to access. The administrator 
+interface for applicant viewing can be accessed at 
+/dashboard/admin/applicants. 
 
 Accessing the database can be done by creating a connection to port 
 5432 using a database tool such as DBeaver.
 
 HOW TO DEVELOP
 
+To get the project up and running, install Docker and run the following
+Docker command:
+
+	docker-compose up --build
+	
+For full developement, developer dependancies are the following:
+
+	.NET Core SDK
+	Visual Studio Code
+	Gitlab
+	Postman
+
+The following technologies are used in this project:
+	
+	Node.js
+	Angular.js
+	PostgreSQL
+	
+To update the database schema...
+
+To create a database migration, after updating any entities, 
+run the following command:
+
+	dotnet ef migrations add InitialCreate
+	
+Your changes will be deployed automatically next time the app starts.
+
+PROJECT STRUCTURE OVERVIEW
+
 
 HOW TO DEPLOY
 
-To run the project, run the following command:
-
-	docker-compose up --build to run
-
 prime-dotnet-webapi:
-- dotnet ef migrations add InitialCreate
+
 - dotnet ef database update
 
 
