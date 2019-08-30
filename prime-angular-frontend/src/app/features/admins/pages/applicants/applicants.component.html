@@ -3,9 +3,9 @@
     <h1 class="h2 mb-4">Pharmacist Enrolments</h1>
 
     <div class="text-right pb-2">
-      <mat-slide-toggle [checked]="isPending"
-                        (change)="showPending($event)">
-        {{ showLabel() }}
+      <mat-slide-toggle [checked]="showPending"
+                        (change)="showApplications($event)">
+        Review Pending
       </mat-slide-toggle>
     </div>
 
@@ -29,14 +29,8 @@
           <td class="applicant">{{ application.applicantName }}</td>
           <td>{{ application.pharmacistRegistrationNumber }}</td>
           <td>
-            <mat-chip-list>
-              <mat-chip *ngIf="application.approved"
-                        color="primary"
-                        selected>Approved</mat-chip>
-              <mat-chip *ngIf="!application.approved"
-                        color="accent"
-                        selected>Pending</mat-chip>
-            </mat-chip-list>
+            <ng-container *ngIf="application.approved">Approved</ng-container>
+            <ng-container *ngIf="!application.approved">Pending</ng-container>
           </td>
           <td *ngIf="!isPending">{{ application.approvedReason }}</td>
           <td *ngIf="!isPending">{{ application.approvedDate | date: "MMM d, y" }}</td>

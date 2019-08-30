@@ -20,3 +20,15 @@ The user story for the admin application page excludes any role based access con
 ## SSL
 
 SSL encryption using Let's Encrypt or another CA Root authority should be added to any production based application. This was item was at the top of the list and in the remaining minutes was almost completed.
+
+## Swagger
+
+When publishing a REST based API it is a good idea to also generate swagger based specifications for easy consumption of the API.
+
+## Database Normalization
+
+Our database only contains a single table with multiple columns. We do store a status based column and have a task on the backlog to normalize this column into a code based table.
+
+## Schema Spy
+
+Schema spy is a great to to visualize the database schema. This tool brings immense value to any project with a database and assists in automating the creation of a data dictionary.

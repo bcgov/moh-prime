@@ -52,8 +52,6 @@ The following technologies are used in this project:
 	Angular.js
 	PostgreSQL
 	
-To update the database schema
-
 Linting...
 
 To update the database schema, first update the model file in the
