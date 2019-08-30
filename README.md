@@ -2,6 +2,14 @@
 
 docker-compose up --build to run
 
+The web front end can be accessed through the root URL it is deployed
+at, e.g. localhost for a local deployment.
+
+Accessing the database can be done by creating a connection to port 
+5432 using a database tool such as DBeaver.
+
+
+
 prime-dotnet-webapi:
 - dotnet ef migrations add InitialCreate
 - dotnet ef database update
