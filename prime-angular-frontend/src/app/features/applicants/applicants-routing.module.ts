@@ -1,42 +1,42 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { NgModule } from "@angular/core";
+import { Routes, RouterModule } from "@angular/router";
 
-import { EnrollmentComponent } from './pages/enrollment/enrollment.component';
-import { AuthenticateInProgressComponent } from './pages/authenticate-in-progress/authenticate-in-progress.component';
-import { AuthenticateCompleteComponent } from './pages/authenticate-complete/authenticate-complete.component';
-import { AuthenticateDeniedComponent } from './pages/authenticate-denied/authenticate-denied.component';
+import { EnrollmentComponent } from "./pages/enrollment/enrollment.component";
+import { AuthenticateInProgressComponent } from "./pages/authenticate-in-progress/authenticate-in-progress.component";
+import { AuthenticateCompleteComponent } from "./pages/authenticate-complete/authenticate-complete.component";
+import { AuthenticateDeniedComponent } from "./pages/authenticate-denied/authenticate-denied.component";
 
 const routes: Routes = [
   {
-    path: '',
+    path: "",
     // Check authentication and authorization each time
     // the router navigates to the next route
     canActivateChild: [],
     children: [
       {
-        path: 'enrollment',
+        path: "enrollment",
         component: EnrollmentComponent,
-        data: { title: 'Enrollment' }
+        data: { title: "Optimize PRIME - Auto-bot, enroll out!" }
       },
       {
-        path: 'inprogress',
+        path: "inprogress",
         component: AuthenticateInProgressComponent,
-        data: { title: 'Authentication In Progress' }
+        data: { title: "Optimize PRIME - Enrollment In Progress" }
       },
       {
-        path: 'complete',
+        path: "complete",
         component: AuthenticateCompleteComponent,
-        data: { title: 'Authentication Complete' }
+        data: { title: "Optimize PRIME - Enrolment Complete" }
       },
       {
-        path: 'denied',
+        path: "denied",
         component: AuthenticateDeniedComponent,
-        data: { title: 'Authentication Denied' }
+        data: { title: "Optimize PRIME - Enrolment Denied" }
       },
       {
-        path: '', // Equivalent to `/` and alias for `overview`
-        redirectTo: 'enrollment',
-        pathMatch: 'full',
+        path: "", // Equivalent to `/` and alias for `overview`
+        redirectTo: "enrollment",
+        pathMatch: "full"
       }
     ]
   }
@@ -46,4 +46,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class ApplicantsRoutingModule { }
+export class ApplicantsRoutingModule {}
