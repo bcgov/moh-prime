@@ -63,7 +63,8 @@ export class DashboardComponent implements OnInit {
   }
 
   public logout() {
-    console.log(this.windowRef.nativeWindow.localStorage);
+    // gapi.setToken(null);
+    // gapi.signOut();
 
     this.tokenService.removeToken();
     this.router.navigate(['/login']);
