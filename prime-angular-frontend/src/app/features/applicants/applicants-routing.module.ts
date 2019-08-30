@@ -14,7 +14,7 @@ const routes: Routes = [
     canActivateChild: [],
     children: [
       {
-        path: 'enrollment',
+        path: 'enrolment',
         component: EnrollmentComponent,
         data: { title: 'Optimize PRIME - Auto-bot, enroll out!' }
       },
@@ -35,7 +35,7 @@ const routes: Routes = [
       },
       {
         path: '', // Equivalent to `/` and alias for `overview`
-        redirectTo: 'enrollment',
+        redirectTo: 'enrolment',
         pathMatch: 'full'
       }
     ]

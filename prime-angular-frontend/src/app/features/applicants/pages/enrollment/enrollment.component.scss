@@ -1,0 +1,32 @@
+@import './palette';
+
+.st0 {
+  fill-rule:evenodd;
+  clip-rule:evenodd;
+  fill: white;
+}
+
+.st1 {
+  fill:none;
+}
+
+.logo {
+  width: 4em;
+  height: 4em;
+
+  margin: 1.2em auto 1.5em;
+  display: block;
+}
+
+.pharmacist-prn {
+  width: 6em;
+}
+
+.text-muted {
+  width: 25em;
+}
+
+.pharmacist-name:disabled {
+  background: white;
+  border-color: #eee;
+}
