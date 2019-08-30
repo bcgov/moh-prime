@@ -10,12 +10,12 @@ variables:
 
 before_script:
   - apt-get update -qq
-  - apt-get install -yqq docker.io
+  - apt-get install -yqq docker.io docker-compose
 
 build:
   stage: build
   script:
-    - docker-compose build -t $IMAGE_TAG 
+    - docker-compose build -t $IMAGE_TAG .
 
 push:
   stage: push
