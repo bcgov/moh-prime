@@ -10,9 +10,9 @@ using Newtonsoft.Json;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
-using prime.Models;
+using Prime.Models;
 
-namespace prime.Controllers
+namespace Prime.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -28,15 +28,12 @@ namespace prime.Controllers
         [HttpPost]
         public ActionResult<object> Post(string token)
         {
-            // TODO: verify google token
-
             var jwtToken = new JwtToken();
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("JWT_SIGNING_KEY"));
 
             var subject = new ClaimsIdentity(new Claim[]
             {
-                    // TODO: add claims to our token.
             });
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -48,8 +45,7 @@ namespace prime.Controllers
             var newToken = tokenHandler.CreateToken(tokenDescriptor);
             jwtToken.Token = tokenHandler.WriteToken(newToken);
 
-            // TODO: return the token.
-            return "this is a token";
+            return newToken;
         }
     }
 

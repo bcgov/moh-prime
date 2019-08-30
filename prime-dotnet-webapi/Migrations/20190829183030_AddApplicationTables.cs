@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace prime.Migrations
+namespace Prime.Migrations
 {
     public partial class AddApplicationTables : Migration
     {

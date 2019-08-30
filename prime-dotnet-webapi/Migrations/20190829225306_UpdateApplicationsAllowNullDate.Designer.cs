@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using prime.Models;
+using Prime.Models;
 
-namespace prime.Migrations
+namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
     [Migration("20190829225306_UpdateApplicationsAllowNullDate")]
@@ -22,7 +22,7 @@ namespace prime.Migrations
                 .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            modelBuilder.Entity("prime.Models.Application", b =>
+            modelBuilder.Entity("Prime.Models.Application", b =>
                 {
                     b.Property<int?>("Id")
                         .ValueGeneratedOnAdd();
@@ -51,7 +51,7 @@ namespace prime.Migrations
                     b.ToTable("Application");
                 });
 
-            modelBuilder.Entity("prime.Models.PharmacistRegistrationNumber", b =>
+            modelBuilder.Entity("Prime.Models.PharmacistRegistrationNumber", b =>
                 {
                     b.Property<int?>("Id")
                         .ValueGeneratedOnAdd();
