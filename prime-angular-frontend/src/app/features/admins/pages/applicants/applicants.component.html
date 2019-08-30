@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="offset-1 col-10">
+  <div class="col-12">
     <h1 class="h2 mb-4">Pharmacist Enrolments</h1>
 
     <table class="table">
@@ -8,11 +8,10 @@
           <th scope="col">Application Date</th>
           <th scope="col">Pharmacist Name</th>
           <th scope="col">PRN</th>
-          <th scope="col">Approved</th>
+          <th scope="col">Status</th>
           <th scope="col">Note</th>
           <th scope="col">Approval Date</th>
-          <th scope="col"></th>
-          <th scope="col"></th>
+          <th scope="col">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -22,31 +21,17 @@
           <td>{{ application.pharmacistRegistrationNumber }}</td>
           <td>
             <mat-chip-list>
-              <mat-chip *ngIf="application.approved" color="primary" selected
-                >Approved</mat-chip
-              >
-              <mat-chip *ngIf="!application.approved" color="warn" selected
-                >Pending</mat-chip
-              >
+              <mat-chip *ngIf="application.approved"
+                        selected>Approved</mat-chip>
+              <mat-chip *ngIf="!application.approved"
+                        selected>Pending</mat-chip>
             </mat-chip-list>
           </td>
           <td>{{ application.approvedReason }}</td>
           <td>{{ application.approvedDate | date: "MMM d, y" }}</td>
-          <td>
-            <button
-              *ngIf="!application.approved"
-              type="button"
-              class="btn btn-light"
-              (click)="approveApplication(application)"
-            >
-              Approve
-            </button>
-          </td>
-          <td>
-            <ng-container
-              [ngTemplateOutlet]="menu"
-              [ngTemplateOutletContext]="{ application: application }"
-            ></ng-container>
+          <td class="text-right">
+            <ng-container [ngTemplateOutlet]="menu"
+                          [ngTemplateOutletContext]="{ application: application }"></ng-container>
           </td>
         </tr>
       </tbody>
@@ -54,21 +39,22 @@
   </div>
 </div>
 
-<ng-template #menu let-application="application">
-  <button mat-icon-button [matMenuTriggerFor]="menu">
+<ng-template #menu
+             let-application="application">
+  <button mat-icon-button
+          [matMenuTriggerFor]="menu">
     <mat-icon>more_vert</mat-icon>
   </button>
 
   <mat-menu #menu="matMenu">
-    <button
-      mat-menu-item
-      (click)="approveApplication(application)"
-      *ngIf="!application.approved"
-    >
+    <button mat-menu-item
+            (click)="approveApplication(application)"
+            *ngIf="!application.approved">
       <mat-icon>thumb_up_alt</mat-icon>
       <span>Approve Application</span>
     </button>
-    <button mat-menu-item (click)="removeApplication(application.id)">
+    <button mat-menu-item
+            (click)="removeApplication(application.id)">
       <mat-icon>delete</mat-icon>
       <span>Delete Application</span>
     </button>

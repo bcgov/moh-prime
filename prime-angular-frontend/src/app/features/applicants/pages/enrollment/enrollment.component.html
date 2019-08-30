@@ -1,32 +1,29 @@
 <div class="row">
-  <div class="offset-1 col-10">
+  <div class="col-12">
     <h1 class="h2">Submit my application for enrollment</h1>
 
     <p class="lead">
-      If you have you pharmacist registration number enter it below to prove
-      your credentials and you will be automatically approved.
+      Lorem ipsum dolor sit amet consectetur, adipisicing elit. Officiis, eos? Maxime aspernatur voluptatum unde
+      pariatur debitis aliquam aperiam placeat, dolorem quisquam dignissimos architecto commodi magni odit nobis aliquid
+      possimus ab!
     </p>
 
     <form>
       <div class="row">
         <div class="col-sm-12 col-md-6">
-          <br />
           <div class="form-group">
-            <label for="pharmacist_prn"
-              >Pharmacist Registration Number (optional)</label
-            >
-            <input
-              (input)="pharmacist_prn = $event.target.value"
-              type="text"
-              class="form-control"
-            />
+            <label for="pharmacist_prn">Pharmacist Registration Number (optional)</label>
+            <input (input)="pharmacist_prn = $event.target.value"
+                   type="text"
+                   class="form-control"
+                   aria-describedby="prnHelp">
+            <small id="prnHelp" class="form-text text-muted">
+              If you have you pharmacist registration number enter it below to prove your credentials and you will be automatically approved.
+            </small>
           </div>
-          <br />
-          <button
-            type="button"
-            class="btn btn-primary d-block mb-2"
-            (click)="submitApplication()"
-          >
+          <button type="button"
+                  class="btn btn-primary d-block mb-2"
+                  (click)="submitApplication()">
             Submit Application
           </button>
         </div>
