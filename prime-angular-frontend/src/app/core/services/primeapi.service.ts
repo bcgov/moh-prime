@@ -18,4 +18,11 @@ export class PrimeAPIService {
   createApplication(application) {
     return this.http.post(`${this.url}/application`, application);
   }
+
+  updateApplication(application) {
+    return this.http.put(
+      `${this.url}/application/${application.id}`,
+      application
+    );
+  }
 }

@@ -50,7 +50,7 @@ namespace prime.Controllers
             Console.Out.WriteLine("POST!");
             application.AppliedDate = DateTime.Now;
 
-            if(application.PharmacistRegistrationNumber != null)
+            if (application.PharmacistRegistrationNumber != null)
             {
                 application.Approved = true;
                 application.ApprovedDate = DateTime.Now;
@@ -67,6 +67,7 @@ namespace prime.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, Application application)
         {
+            Console.Out.WriteLine("PUT!");
             if (id != application.Id)
             {
                 return BadRequest();
