@@ -19,11 +19,11 @@ and approving pharmacist application information.
 
 ## HOW TO USE
 
-The client web front end can be accessed through the root URL it is 
-deployed at, http://www.optimizeprime.live. The client page
+The applicant client web front end can be accessed through the root URL which is 
+deployed at http://www.optimizeprime.live. The client page
 requires authentication through Google to access. 
 
-The administrator interface for applicant viewing can be accessed at 
+The administrator interface for viewing applicants can be accessed at 
 http://www.optimizeprime.live/dashboard/admin/applicants. 
 
 Accessing the database can be done by creating a connection to port 
