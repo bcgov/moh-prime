@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthResource } from 'src/app/core/resources/auth-resource.service';
 import { Router } from '@angular/router';
+
+import { AuthResource } from 'src/app/core/resources/auth-resource.service';
+
 declare const gapi: any;
 
 @Component({
@@ -24,14 +26,15 @@ export class LoginComponent implements OnInit {
 
   onSuccess(googleUser) {
     const token = googleUser.getAuthResponse().id_token;
-    this.authResource.login({ token }).subscribe(() => {
-      // NOTE: intentionally set role based on route for the purpose
-      // of the MVP requirements not requiring admin authentication
-      // TODO: use configuration for routes
-      this.router.navigate(['/dashboard/applicants/enrollment'], {
-        state: { isApplicant: true }
+    this.authResource.login({ token })
+      .subscribe(() => {
+        // NOTE: intentionally set role based on route for the purpose
+        // of the MVP requirements not requiring admin authentication
+        // TODO: use configuration for routes
+        this.router.navigate(['/dashboard/applicants/enrollment'], {
+          state: { isApplicant: true }
+        });
       });
-    });
   }
   onFailure(error) {
     alert(JSON.stringify(error, undefined, 2));

@@ -13,6 +13,9 @@ import { RouteStateService } from './services/route-state.service';
 import { ToastService } from './services/toast.service';
 import { UtilsService } from './services/utils.service';
 import { ViewportService } from './services/viewport.service';
+import { AuthResource } from './resources/auth-resource.service';
+import { AuthTokenService } from './services/auth-token.service';
+import { AuthService } from './services/auth.service';
 
 @NgModule({
   imports: [
@@ -26,6 +29,9 @@ import { ViewportService } from './services/viewport.service';
     ToastService,
     UtilsService,
     ViewportService,
+    AuthResource,
+    AuthTokenService,
+    AuthService
   ],
   declarations: [
     AccessDeniedComponent,
