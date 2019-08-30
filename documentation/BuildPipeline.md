@@ -56,7 +56,3 @@ build image:
 ```
 ## Application Hosting
 Because it wasn't a coding requirement to have all technology in containers _and_ because databases should persist, we chose to use an Azure VM to host the Docker containers.  This simplified our hosting topography and gave us more control over the hosting environment.
-
-## TODO
-* Mount database volume from an Azure storage volume for static data across multiple Azure VMs _or_
-* Mount database volume from an Azure storage volume for static data across multiple Azure Kubernetes database containers 

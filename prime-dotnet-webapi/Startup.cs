@@ -18,9 +18,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
 
-using prime.Models;
+using Prime.Models;
 
-namespace prime
+namespace Prime
 {
     public class Startup
     {

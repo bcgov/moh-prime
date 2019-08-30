@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using prime.Models;
+using Prime.Models;
 
-namespace prime.Migrations
+namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
     [Migration("20190829050605_InitialCreate")]
@@ -21,7 +21,7 @@ namespace prime.Migrations
                 .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            modelBuilder.Entity("prime.Models.Blog", b =>
+            modelBuilder.Entity("Prime.Models.Blog", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
