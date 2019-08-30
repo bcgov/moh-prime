@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthResource } from 'src/app/core/resources/auth-resource.service';
 declare const gapi: any;
 
 @Component({
@@ -7,7 +8,8 @@ declare const gapi: any;
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  constructor() { }
+  constructor(private authResource: AuthResource) {
+  }
 
   ngOnInit() {
     gapi.signin2.render('google-login-button', {
@@ -19,12 +21,9 @@ export class LoginComponent implements OnInit {
 
   onSuccess(googleUser) {
     var id_token = googleUser.getAuthResponse().id_token;
-
-    // send token to backend
-    // get new token
-    // save token
-
-    // redirect to success page
+    this.authResource.login({ token: id_token }).subscribe(() => {
+      // TODO: redirect to success page
+    });
   }
   onFailure(error) {
     alert(JSON.stringify(error, undefined, 2));

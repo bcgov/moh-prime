@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
-import { environment } from 'src/environments/environment.prod';
+import { environment } from '../../../environments/environment.prod';
 
 import { APP_CONFIG, AppConfig } from 'src/app/app-config.module';
 
@@ -29,8 +29,8 @@ export class AuthResource {
    * @returns {Observable<boolean>}
    * @memberof AuthResource
    */
-  public login(payload: { email: string, password: string }): Observable<boolean> {
-    const resourceUri = `${environment.apiEndpoint}/login`;
+  public login(payload: { token: string }): Observable<boolean> {
+    const resourceUri = `${environment.apiEndpoint}/token`;
     return this.http.post(resourceUri, payload)
       .pipe(
         map((response: { token: string }) => {
