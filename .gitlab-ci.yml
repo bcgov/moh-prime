@@ -18,12 +18,12 @@ build image:
 #    - docker login https://primeswu.azurecr.io:443
 #    - cat dockerPassword.txt | docker login https://primeswu.azurecr.io:443 --username PrimeSWU --password-stdin
     - docker login https://primeswu.azurecr.io:443 --username PrimeSWU --password POKaaZfvf8AhsgQNmUvjJLj+XbZQoIQJ
-    - docker tag optimizeprime_dotnet-webapi primeswu.azurecr.io:443/optimizeprime_dotnet-webapi:latest
+    - docker tag optimize-prime_dotnet-webapi primeswu.azurecr.io:443/optimize-prime_dotnet-webapi:latest
     - docker push primeswu.azurecr.io:443/optimize-prime:latest
-    - docker tag optimizeprime_nginx-angular primeswu.azurecr.io:443/optimizeprime_nginx-angular:latest
-    - docker push primeswu.azurecr.io:443/optimizeprime_nginx-angular:latest
-    - docker tag postgres:11.4 primeswu.azurecr.io:443/optimizeprime_postgres:latest
-    - docker push primeswu.azurecr.io:443/optimizeprime_postgres:latest
+    - docker tag optimize-prime_nginx-angular primeswu.azurecr.io:443/optimize-prime_nginx-angular:latest
+    - docker push primeswu.azurecr.io:443/optimize-prime_nginx-angular:latest
+    - docker tag postgres:11.4 primeswu.azurecr.io:443/optimize-prime_postgres:latest
+    - docker push primeswu.azurecr.io:443/optimize-prime_postgres:latest
     - export DOCKER_HOST=40.122.108.127:2375
     - docker-compose up
 
