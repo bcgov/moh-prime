@@ -31,4 +31,4 @@ Our database only contains a single table with multiple columns. We do store a s
 
 ## Schema Spy
 
-Schema spy is a great to to visualize the database schema. This tool brings immense value to any project with a database and assists in automating the creation of a data dictionary.
+Schema spy is a great tool to visualize the database schema. This tool brings immense value to any project with a database and assists in automating the creation of a data dictionary.
