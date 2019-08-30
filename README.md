@@ -4,7 +4,8 @@
 
 
 ## DESCRIPTION
-
+In this repository is a web application for submitting, reviewing, 
+and approving pharmacist application information.
 
 ## HOW TO USE
 
@@ -34,7 +35,9 @@ Docker command:
 	
 Here are the environment variables for the docker-compose and their uses:
 
-	env-variables...
+	DB_CONNECTION_STRING - Contains the information needed for connecting to the database.
+	JWT_SIGNING_KEY - Private key for signing Json web token.
+	ASPNETCORE_HTTPS_PORT - Port for redirecting insecure requests to HTTPS.
 	
 For full development, developer dependencies are the following:
 
@@ -49,12 +52,14 @@ The following technologies are used in this project:
 	Angular.js
 	PostgreSQL
 	
-To update the database schema...
+To update the database schema
 
 Linting...
 
-To create a database migration, after updating any entities, 
-run the following command:
+To update the database schema, first update the model file in the
+[Models](prime-dotnet-webapi/Models) folder, and rebuild with a docker-compose up --build
+command. Then, to migrate the new model schema over to the database, run the
+following command:
 
 	dotnet ef migrations add InitialCreate
 	
