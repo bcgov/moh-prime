@@ -1,6 +1,6 @@
 
-image: ubuntu:18.04
-#image: redis:alpine
+#image: ubuntu:18.04
+image: redis:alpine
 stages:
   - build
   - push
