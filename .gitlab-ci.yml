@@ -17,8 +17,6 @@ before_script:
   - apt update
   - apt install -y docker docker-compose git
   - usermod -aG docker $USER
-  - docker version
-  - docker-compose version
   - echo "Container Registry/Image Tag = $CONTAINER_REGISTRY/$IMAGE_TAG"
 
 build:
