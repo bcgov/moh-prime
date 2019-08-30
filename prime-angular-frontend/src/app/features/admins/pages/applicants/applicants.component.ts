@@ -1,13 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog, MAT_DIALOG_DATA } from '@angular/material';
+import { Component, OnInit } from "@angular/core";
+import { MatDialog, MAT_DIALOG_DATA } from "@angular/material";
 
-import { PrimeAPIService } from 'src/app/core/services/primeapi.service';
-import { ToastService } from 'src/app/core/services/toast.service';
+import { PrimeAPIService } from "src/app/core/services/primeapi.service";
+import { ToastService } from "src/app/core/services/toast.service";
 
 @Component({
-  selector: 'app-applicants',
-  templateUrl: './applicants.component.html',
-  styleUrls: ['./applicants.component.scss']
+  selector: "app-applicants",
+  templateUrl: "./applicants.component.html",
+  styleUrls: ["./applicants.component.scss"]
 })
 export class ApplicantsComponent implements OnInit {
   // TODO: add models
@@ -16,16 +16,22 @@ export class ApplicantsComponent implements OnInit {
   constructor(
     private toastService: ToastService,
     private primeAPIService: PrimeAPIService
-  ) { }
+  ) {}
 
-  public authenticate() {
-    this.toastService.openSuccessToast('Pharmacist has been authenticated.');
+  public approveApplication(application) {
+    application.approved = true;
+    application.approvedDate = new Date();
+    application.approvedReason = "Approved by administrator.";
+    this.primeAPIService.updateApplication(application).subscribe(() => {
+      this.toastService.openSuccessToast(
+        "Pharmacist application has been approved."
+      );
+    });
   }
 
   public ngOnInit() {
-    this.primeAPIService.getApplications()
-      .subscribe(data => {
-        this.applications = data;
-      });
+    this.primeAPIService.getApplications().subscribe(data => {
+      this.applications = data;
+    });
   }
 }

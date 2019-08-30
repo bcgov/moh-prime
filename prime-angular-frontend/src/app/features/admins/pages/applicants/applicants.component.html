@@ -9,6 +9,7 @@
           <th scope="col">Pharmacist Name</th>
           <th scope="col">PRN</th>
           <th scope="col">Approved</th>
+          <th scope="col">Note</th>
           <th scope="col">Approval Date</th>
           <th scope="col"></th>
         </tr>
@@ -19,16 +20,17 @@
           <td>{{ application.applicantName }}</td>
           <td>{{ application.pharmacistRegistrationNumber }}</td>
           <td>{{ application.approved }}</td>
+          <td>{{ application.approvedReason }}</td>
           <td>{{ application.approvedDate | date: "short" }}</td>
-          <th>
+          <td *ngIf="!application.approved">
             <button
               type="button"
               class="btn btn-light"
-              (click)="authenticate()"
+              (click)="approveApplication(application)"
             >
-              Authenticate
+              Approve
             </button>
-          </th>
+          </td>
         </tr>
       </tbody>
     </table>
