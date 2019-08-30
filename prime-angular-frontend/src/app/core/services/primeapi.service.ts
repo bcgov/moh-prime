@@ -12,7 +12,6 @@ export class PrimeAPIService {
       : "http://api.optimizeprime.live/api/v1";
 
   getApplications() {
-    alert(this.url);
     return this.http.get(`${this.url}/application`);
   }
 
