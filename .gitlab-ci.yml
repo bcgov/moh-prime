@@ -1,14 +1,14 @@
 
-#image: ubuntu:18.04
+image: ubuntu:18.04
 #image: docker/compose
 #image: docker/compose:1.24.0 
-image: docker
+#image: docker
 
 # image: tmaier/docker-compose:latest
 # entrypoint: ["/bin/sh", "-c"]
 
-services:
-  - docker:dind    
+#services:
+#  - docker:dind    
 
 stages:
   - build
@@ -26,14 +26,14 @@ before_script:
 #software-properties-common
 #curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 #add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
-#  - apt update -qq
-#  - apt install -yqq docker git
+  - apt update -qq
+  - apt install -yqq docker pip
 #  - curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 #  - chmod +x /usr/local/bin/docker-compose
 #  - ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 #  - apk add --no-cache py-pip python-dev libffi-dev openssl-dev gcc libc-dev make
-#  - pip install docker-compose
-  - apk add docker-compose --update-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted
+  - pip install docker-compose
+ # - apk add docker-compose --update-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted
   - docker-compose -v
   - docker-compose version
 #  - docker version
