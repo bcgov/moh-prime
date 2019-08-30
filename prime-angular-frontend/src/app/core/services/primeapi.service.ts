@@ -10,7 +10,7 @@ export class PrimeAPIService {
   url =
     location.hostname.indexOf("localhost") > -1
       ? "http://localhost:5000/api/v1"
-      : "http://api.optimizeprime.live/api/v1";
+      : `${location.origin}/api/v1`;
 
   getApplications() {
     return this.http.get(`${this.url}/application`);
