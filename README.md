@@ -31,10 +31,10 @@ Accessing the database can be done by creating a connection to port
 
 ## HOW TO DEPLOY
 
-prime-dotnet-webapi:
+Clone a copy of the code from this repository, then deploy the code using the 
+following docker command in the optimize-prime folder:
 
-- dotnet ef database update
-
+	docker-compose up --build
 
 ## HOW TO DEVELOP
 
@@ -66,6 +66,10 @@ To update the database schema, first update the model file in the
 [Models](prime-dotnet-webapi/Models) folder, and rebuild using:
 
 	docker-compose up --build
+
+To generate a new migration file, run this command:
+
+	dotnet ef database update
 
 Then, to migrate the new model schema over to the database, run the
 following command:

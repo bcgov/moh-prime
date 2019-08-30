@@ -5,6 +5,22 @@ import { ToastService } from 'src/app/core/services/toast.service';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 
 @Component({
+  selector: 'app-modal-delete',
+  templateUrl: 'modal-delete.html',
+})
+export class DialogDeleteEnrolmentComponent {
+
+  constructor(
+    public dialogRef: MatDialogRef<DialogDeleteEnrolmentComponent>
+  ) { }
+
+  public delete(shouldDelete: boolean): void {
+    this.dialogRef.close(shouldDelete);
+  }
+}
+
+
+@Component({
   selector: 'app-applicants',
   templateUrl: './applicants.component.html',
   styleUrls: ['./applicants.component.scss']
@@ -36,7 +52,7 @@ export class ApplicantsComponent implements OnInit {
   }
 
   public openDialog(applicationId: number): void {
-    const dialogRef = this.dialog.open(DialogDeleteEnrolment, {
+    const dialogRef = this.dialog.open(DialogDeleteEnrolmentComponent, {
       width: '450px'
     });
 
@@ -63,20 +79,5 @@ export class ApplicantsComponent implements OnInit {
           return 0;
         });
       });
-  }
-}
-
-@Component({
-  selector: 'app-modal-delete',
-  templateUrl: 'modal-delete.html',
-})
-export class DialogDeleteEnrolment {
-
-  constructor(
-    public dialogRef: MatDialogRef<DialogDeleteEnrolment>
-  ) { }
-
-  public delete(shouldDelete: boolean): void {
-    this.dialogRef.close(shouldDelete);
   }
 }

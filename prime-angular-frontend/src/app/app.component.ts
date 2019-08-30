@@ -59,8 +59,9 @@ export class AppComponent implements OnInit {
         // filter(route => route.outlet === 'primary'),
         mergeMap((route: ActivatedRoute) => route.data)
       )
-      .subscribe((route: ActivatedRoute) => {
-        this.titleService.setTitle(route['title']);
+      .subscribe((routeData: any) => {
+        const title = routeData.title;
+        this.titleService.setTitle(title);
       });
   }
 }
