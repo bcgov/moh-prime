@@ -1,3 +1,9 @@
+
+image: docker
+
+services:
+  - docker:dind
+  
 stages:
   - build
   - push
@@ -9,10 +15,10 @@ variables:
   IMAGE_TAG: "optimize-prime"
 
 before_script:
-  - curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-  - chmod +x /usr/local/bin/docker-compose
-  - ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
-  - docker-compose --version
+  - curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /tmp/docker-compose
+  - chmod +x /tmp/docker-compose
+#  - ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+  - /tmp/docker-compose --version
 #  - cat /etc/*elease
 #  - apt-get update -qq
 #  - apt install -y apt-transport-https ca-certificates curl software-properties-common
@@ -24,7 +30,7 @@ before_script:
 build:
   stage: build
   script:
-    - docker-compose build 
+    - /tmp/docker-compose build 
 
 push:
   stage: push
@@ -38,4 +44,3 @@ push:
     - docker push primeswu.azurecr.io:443/optimizeprime_nginx-angular:latest
     - docker tag postgres:11.4 primeswu.azurecr.io:443/optimizeprime_postgres:latest
     - docker push primeswu.azurecr.io:443/optimizeprime_postgres:latest
-    - 
