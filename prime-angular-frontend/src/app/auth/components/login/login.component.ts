@@ -31,9 +31,7 @@ export class LoginComponent implements OnInit {
         // NOTE: intentionally set role based on route for the purpose
         // of the MVP requirements not requiring admin authentication
         // TODO: use configuration for routes
-        this.router.navigate(['/dashboard/applicants/enrollment'], {
-          state: { isApplicant: true }
-        });
+        this.router.navigate(['/dashboard/applicants/enrollment']);
       });
   }
   onFailure(error) {
