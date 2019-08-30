@@ -100,9 +100,9 @@ export class DashboardComponent implements OnInit {
         showHeader: false,
         items: [
           {
-            name: "Enrolment",
-            icon: "vpn_key",
-            route: "/dashboard/applicant/enrolment",
+            name: 'Enrolment',
+            icon: 'vpn_key',
+            route: '/dashboard/applicant/enrolment',
             showItem: true
           },
           {
