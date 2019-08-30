@@ -14,11 +14,14 @@ namespace Prime.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Set default schema
             modelBuilder.HasDefaultSchema("public");
 
+            // Set Application Id column to auto-increment
             modelBuilder.Entity<Application>()
                 .Property(p => p.Id)
                 .ValueGeneratedOnAdd();
+
             //modelBuilder.Entity<PharmacistRegistrationNumber>()
             //    .Property(p => p.Id)
             //    .ValueGeneratedOnAdd();
