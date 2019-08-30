@@ -1,7 +1,8 @@
-image: docker/compose:1.17.1 
-
+# Validate with https://gitlab.com/sierrasystems/optimize-prime/-/ci/lint
+image: docker
+  
 services:
-  - docker:dind    
+    - docker:dind
 
 stages:
   - build
@@ -14,6 +15,7 @@ variables:
   IMAGE_TAG: "optimize-prime"
 
 before_script:
+  - apk add docker-compose --update-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted
   - docker-compose -v
   - docker version
 
