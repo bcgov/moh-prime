@@ -22,7 +22,7 @@ build:
   stage: build
   script:
     - echo "Running docker-compose build -t optimize-prime"
-    - docker-compose build -t optimize-prime
+    - docker-compose up --build -t optimize-prime
 
 push:
   stage: push
