@@ -13,4 +13,7 @@ Unit tests are contained in their own project under (prime-dotnet-webapi-tests).
 To run the tests:
 ```dotnet test```
 
+Unit test results
+![UnitTests](images/unittests.png)
+
 
