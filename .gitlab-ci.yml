@@ -1,3 +1,10 @@
+image:
+  name: docker/compose:latest # update tag to whatever version you want to use.
+  entrypoint: ["/bin/sh", "-c"]
+
+services:
+  - docker:dind
+
 stages:
   - build
   - push
@@ -9,17 +16,15 @@ variables:
   IMAGE_TAG: "optimize-prime"
 
 before_script:
-  - apt-get update -qq
-  - apt-get install -yqq docker.io docker-compose
-  - docker --version
-  - docker-compose --version
+  - docker version
+  - docker-compose version
   - echo "Container Registry/Image Tag = $CONTAINER_REGISTRY/$IMAGE_TAG"
 
 build:
   stage: build
   script:
     - echo "Running docker-compose build -t $IMAGE_TAG"
-    - docker-compose build -t $IMAGE_TAG"
+    - docker-compose build -t $IMAGE_TAG
 
 push:
   stage: push
