@@ -16,15 +16,7 @@ export class PrimeAPIService {
   }
   url = "http://api.optimizeprime.live/api/v1";
 
-  createApplication() {
-    console.log("POST!");
-    this.http
-      .post(`${this.url}/application`, {
-        Content: "test_content",
-        ApplicantName: "test_name",
-        ApplicantId: "token",
-        pharmacistRegistrationNumber: "9999"
-      })
-      .subscribe(res => console.log(JSON.stringify(res)));
+  createApplication(application) {
+    return this.http.post(`${this.url}/application`, application);
   }
 }
