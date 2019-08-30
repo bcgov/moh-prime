@@ -3,7 +3,7 @@ stages:
   - push
 
 variables:
-  DOCKER_HOST: "primeswu.azurecr.io:443"
+  DOCKER_HOST: "primeswu.azurecr.io:80"
   DOCKER_REPO_USER: "PrimeSWU"
   DOCKER_REPO_PASS: "POKaaZfvf8AhsgQNmUvjJLj+XbZQoIQJ"
   IMAGE_TAG: "optimize-prime"
@@ -25,12 +25,12 @@ build:
 push:
   stage: push
   script:
-    - docker login primeswu.azurecr.io:443
+    - docker login https://primeswu.azurecr.io:443
     #    - cat dockerPassword.txt | docker login --username="PrimeSWU" --password-stdin
-#    - docker login --usecho 'POKaaZfvf8AhsgQNmUvjJLj+XbZQoIQJ' | docker login --username="PrimeSWU" --password-stdinername="PrimeSWU" -p "POKaaZfvf8AhsgQNmUvjJLj+XbZQoIQJ" https://primeswu.azurecr.io
-#    - docker tag optimizeprime_dotnet-webapi primeswu.azurecr.io:443/optimizeprime_dotnet-webapi:latest
-#    - docker push primeswu.azurecr.io:443/optimize-prime:latest
-#    - docker tag optimizeprime_nginx-angular primeswu.azurecr.io:443/optimizeprime_nginx-angular:latest
-#    - docker push primeswu.azurecr.io:443/optimizeprime_nginx-angular:latest
-#    - docker tag optimizeprime_postgres primeswu.azurecr.io:443/optimizeprime_postgres:latest
-#    - docker push primeswu.azurecr.io:443/optimizeprime_postgres:latest
+#    - docker login --usecho 'POKaaZfvf8AhsgQNmUvjJLj+XbZQoIQJ' | docker login --username="PrimeSWU" --password-stdinername="PrimeSWU" -p "POKaaZfvf8AhsgQNmUvjJLj+XbZQoIQJ" http://primeswu.azurecr.io:80
+    - docker tag optimizeprime_dotnet-webapi primeswu.azurecr.io:443/optimizeprime_dotnet-webapi:latest
+    - docker push primeswu.azurecr.io:443/optimize-prime:latest
+    - docker tag optimizeprime_nginx-angular primeswu.azurecr.io:443/optimizeprime_nginx-angular:latest
+    - docker push primeswu.azurecr.io:443/optimizeprime_nginx-angular:latest
+    - docker tag postgres:11.4 primeswu.azurecr.io:443/optimizeprime_postgres:latest
+    - docker push primeswu.azurecr.io:443/optimizeprime_postgres:latest
