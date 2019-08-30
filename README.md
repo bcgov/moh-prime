@@ -63,8 +63,11 @@ The following technologies are used in this project:
 	PostgreSQL
 	
 To update the database schema, first update the model file in the
-[Models](prime-dotnet-webapi/Models) folder, and rebuild with a docker-compose up --build
-command. Then, to migrate the new model schema over to the database, run the
+[Models](prime-dotnet-webapi/Models) folder, and rebuild using:
+
+	docker-compose up --build
+
+Then, to migrate the new model schema over to the database, run the
 following command:
 
 	dotnet ef migrations add InitialCreate
