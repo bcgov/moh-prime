@@ -1,7 +1,8 @@
 
 #image: ubuntu:18.04
 #image: docker/compose
-image: docker/compose:1.22.0 
+#image: docker/compose:1.24.0 
+image: tmaier/docker-compose:latest
 # entrypoint: ["/bin/sh", "-c"]
 
 services:
@@ -37,7 +38,7 @@ before_script:
 build:
   stage: build
   script:
-    - docker-compose build 
+    - docker-compose up -d --build 
 
 push:
   stage: push
