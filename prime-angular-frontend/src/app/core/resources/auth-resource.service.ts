@@ -22,13 +22,6 @@ export class AuthResource {
     private tokenService: AuthTokenService
   ) { }
 
-  /**
-   * Authenticate a user.
-   *
-   * @param {{ email: string, password: string }} payload
-   * @returns {Observable<boolean>}
-   * @memberof AuthResource
-   */
   public login(payload: { token: string }): Observable<boolean> {
     const resourceUri = `${environment.apiEndpoint}/token`;
     return this.http.post(resourceUri, payload)
