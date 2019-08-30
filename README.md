@@ -1,6 +1,6 @@
 # optimize-prime
 
-docker-compose up --build to run
+HOW TO USE
 
 The web front end can be accessed through the root URL it is deployed
 at, e.g. localhost for a local deployment.
@@ -8,7 +8,14 @@ at, e.g. localhost for a local deployment.
 Accessing the database can be done by creating a connection to port 
 5432 using a database tool such as DBeaver.
 
+HOW TO DEVELOP
 
+
+HOW TO DEPLOY
+
+To run the project, run the following command:
+
+	docker-compose up --build to run
 
 prime-dotnet-webapi:
 - dotnet ef migrations add InitialCreate
