@@ -52,8 +52,6 @@ The following technologies are used in this project:
 	Angular.js
 	PostgreSQL
 	
-Linting...
-
 To update the database schema, first update the model file in the
 [Models](prime-dotnet-webapi/Models) folder, and rebuild with a docker-compose up --build
 command. Then, to migrate the new model schema over to the database, run the

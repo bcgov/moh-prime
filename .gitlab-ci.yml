@@ -11,17 +11,13 @@ before_script:
   - docker info
   - docker-compose --version
 
-#variables:
-#  DOCKER_HOST: "primeswu.azurecr.io:80"
-#  DOCKER_REPO_USER: "PrimeSWU"
-#  DOCKER_REPO_PASS: "POKaaZfvf8AhsgQNmUvjJLj+XbZQoIQJ"
-#  IMAGE_TAG: "optimize-prime"
-
 build image:
   stage: build
   script:
     - docker-compose build
-    - docker login https://primeswu.azurecr.io:443
+#    - docker login https://primeswu.azurecr.io:443
+#    - cat dockerPassword.txt | docker login https://primeswu.azurecr.io:443 --username PrimeSWU --password-stdin
+    - docker login https://primeswu.azurecr.io:443 --username PrimeSWU --password POKaaZfvf8AhsgQNmUvjJLj+XbZQoIQJ
     - docker tag optimizeprime_dotnet-webapi primeswu.azurecr.io:443/optimizeprime_dotnet-webapi:latest
     - docker push primeswu.azurecr.io:443/optimize-prime:latest
     - docker tag optimizeprime_nginx-angular primeswu.azurecr.io:443/optimizeprime_nginx-angular:latest
