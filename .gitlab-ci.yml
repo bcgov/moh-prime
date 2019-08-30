@@ -1,5 +1,4 @@
 image: docker/compose:1.17.1 
-entrypoint: ["/bin/sh", "-c"]
 
 services:
   - docker:dind    
