@@ -2,7 +2,10 @@
 #image: ubuntu:18.04
 #image: docker/compose
 #image: docker/compose:1.24.0 
-image: tmaier/docker-compose:latest
+image: docker
+  script:
+
+# image: tmaier/docker-compose:latest
 # entrypoint: ["/bin/sh", "-c"]
 
 services:
@@ -31,8 +34,10 @@ before_script:
 #  - ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 #  - apk add --no-cache py-pip python-dev libffi-dev openssl-dev gcc libc-dev make
 #  - pip install docker-compose
+  - apk add docker-compose --update-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted
+  - docker-compose -v
   - docker-compose version
-  - docker version
+#  - docker version
 
 
 build:
