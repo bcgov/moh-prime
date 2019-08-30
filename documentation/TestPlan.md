@@ -7,3 +7,12 @@
 # Code Review by SonarQube
 
 ![SonarQube](images/CodeReview_by_SonarQube.png)
+
+# Unit Testing
+
+Unit tests are contained in their own project under (prime-dotnet-webapi-tests). Unit tests are developed using the Xunit and Moq frameworks.
+
+To run the tests:
+```dotnet test```
+
+
