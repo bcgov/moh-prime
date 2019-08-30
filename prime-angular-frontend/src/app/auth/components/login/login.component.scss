@@ -18,23 +18,37 @@
 .st0 {
   fill-rule: evenodd;
   clip-rule: evenodd;
-  fill: theme-palette(grey);
+  fill: white;
 }
 
 .st1 {
   fill:none;
 }
 
-.logo {
-  width: 2em;
-  height: 2em;
+.logo-container {
+  background: theme-palette(blue);
+}
 
-  margin: 0em;
+
+.logo {
+  width: 5em;
+  height: 5em;
+
+  margin: 0 auto;
+}
+
+.title {
+  width: 5em;
+  height: 5em;
+
+  margin: 0 auto;
 }
 
 .card {
   width: 18em;
   margin-top: 20%;
+  border-radius: 0;
+  border: 0;
 }
 
 .card-header {
@@ -46,4 +60,9 @@
   div {
     text-align: center;
   }
+}
+
+.card-body {
+  margin: 0;
+  padding: 0;
 }
