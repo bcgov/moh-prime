@@ -1,7 +1,17 @@
 # optimize-prime
 
 ## TABLE OF CONTENTS
+[Description](#description)
 
+[How to Use](#how-to-use)
+
+[How to Deploy](#how-to-deploy)
+
+[How to Develop](#how-to-develop)
+
+[Project Structure Overview](#project-structure-overview)
+
+[Apache 2.0 License](#apache-20-license)
 
 ## DESCRIPTION
 In this repository is a web application for submitting, reviewing, 
@@ -9,11 +19,11 @@ and approving pharmacist application information.
 
 ## HOW TO USE
 
-The client web front end can be accessed through the root URL it is 
-deployed at, http://www.optimizeprime.live. The client page
+The applicant client web front end can be accessed through the root URL which is 
+deployed at http://www.optimizeprime.live. The client page
 requires authentication through Google to access. 
 
-The administrator interface for applicant viewing can be accessed at 
+The administrator interface for viewing applicants can be accessed at 
 http://www.optimizeprime.live/dashboard/admin/applicants. 
 
 Accessing the database can be done by creating a connection to port 
@@ -49,12 +59,15 @@ For full development, developer dependencies are the following:
 The following technologies are used in this project:
 	
 	Node.js
-	Angular.js
+	Angular
 	PostgreSQL
 	
 To update the database schema, first update the model file in the
-[Models](prime-dotnet-webapi/Models) folder, and rebuild with a docker-compose up --build
-command. Then, to migrate the new model schema over to the database, run the
+[Models](prime-dotnet-webapi/Models) folder, and rebuild using:
+
+	docker-compose up --build
+
+Then, to migrate the new model schema over to the database, run the
 following command:
 
 	dotnet ef migrations add InitialCreate

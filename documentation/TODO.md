@@ -1,6 +1,10 @@
 # TODO
 This is a section to document technical backlog items, that due to our time constraints, were prioritized lower than other business driven value.
 
+## CI/CD Pipeline
+* Mount database volume from an Azure storage volume for static data across multiple Azure VMs _or_
+* Mount database volume from an Azure storage volume for static data across multiple Azure Kubernetes database containers 
+
 ## Container Runtime
 
 Most major cloud vendors now have managed Kubernetes as a service. Azure has AKS and Openshift, AWS has EKS and OpenShift, and google has GKE. Any of these would have been preferable to a single Virtual Machine running docker. Our MVP approach was to have the application up and running and our VM Docker image accomplished this, but we recognize the value of Kubernetes with it's scaling, networking, security and other features out of the box.
@@ -31,4 +35,4 @@ Our database only contains a single table with multiple columns. We do store a s
 
 ## Schema Spy
 
-Schema spy is a great to to visualize the database schema. This tool brings immense value to any project with a database and assists in automating the creation of a data dictionary.
+Schema spy is a great tool to visualize the database schema. This tool brings immense value to any project with a database and assists in automating the creation of a data dictionary.
