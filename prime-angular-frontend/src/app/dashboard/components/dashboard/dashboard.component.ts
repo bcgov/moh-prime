@@ -1,31 +1,31 @@
-import { Component, OnInit, ViewChild, Inject } from '@angular/core';
-import { MatSidenav } from '@angular/material';
-import { Router } from '@angular/router';
+import { Component, OnInit, ViewChild, Inject } from "@angular/core";
+import { MatSidenav } from "@angular/material";
+import { Router } from "@angular/router";
 
-import { APP_CONFIG, AppConfig } from 'src/app/app-config.module';
+import { APP_CONFIG, AppConfig } from "src/app/app-config.module";
 
-import { AuthTokenService } from 'src/app/core/services/auth-token.service';
-import { LoggerService } from 'src/app/core/services/logger.service';
-import { ViewportService } from 'src/app/core/services/viewport.service';
-import { WindowRefService } from 'src/app/core/services/window-ref.service';
+import { AuthTokenService } from "src/app/core/services/auth-token.service";
+import { LoggerService } from "src/app/core/services/logger.service";
+import { ViewportService } from "src/app/core/services/viewport.service";
+import { WindowRefService } from "src/app/core/services/window-ref.service";
 
-import { DeviceResolution } from 'src/app/shared/enums/device-resolutions.enum';
+import { DeviceResolution } from "src/app/shared/enums/device-resolutions.enum";
 
 declare const gapi: any;
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  selector: "app-dashboard",
+  templateUrl: "./dashboard.component.html",
+  styleUrls: ["./dashboard.component.scss"]
 })
 export class DashboardComponent implements OnInit {
-  @ViewChild('sidenav', { static: true }) public sideNav: MatSidenav;
+  @ViewChild("sidenav", { static: true }) public sideNav: MatSidenav;
 
   public sideNavSections: {};
   public sideNavProps: {
-    opened: boolean,
-    mode: string,
-    showText: boolean
+    opened: boolean;
+    mode: string;
+    showText: boolean;
   };
 
   constructor(
@@ -35,13 +35,13 @@ export class DashboardComponent implements OnInit {
     private tokenService: AuthTokenService,
     private logger: LoggerService,
     private windowRef: WindowRefService
-  ) { }
+  ) {}
 
   public get isAdmin(): boolean {
     // TODO: don't do this if time permits
     // NOTE: using the path to indicate the user role as the requirements don't require
     // admins to authenticate, which would provide a authentication token and claim
-    return this.windowRef.nativeWindow.location.href.indexOf('admin') > -1;
+    return this.windowRef.nativeWindow.location.href.indexOf("admin") > -1;
   }
 
   public get isDesktop(): boolean {
@@ -66,7 +66,7 @@ export class DashboardComponent implements OnInit {
     console.log(this.windowRef.nativeWindow.localStorage);
 
     this.tokenService.removeToken();
-    this.router.navigate(['/login']);
+    this.router.navigate(["/login"]);
   }
 
   public ngOnInit() {
@@ -74,12 +74,13 @@ export class DashboardComponent implements OnInit {
     // Initialize the sidenav with properties based on current viewport
     this.setSideNavProps(this.viewportService.device);
     // Subscribe to viewport onresize changes
-    this.viewportService.onResize()
+    this.viewportService
+      .onResize()
       .subscribe((device: string) => this.setSideNavProps(device));
   }
 
   private getSideNavSections() {
-    return (this.isAdmin)
+    return this.isAdmin
       ? this.getAdminSideNavSections()
       : this.getApplicantSideNavSections();
   }
@@ -87,43 +88,43 @@ export class DashboardComponent implements OnInit {
   private getApplicantSideNavSections() {
     return [
       {
-        header: 'Applicant',
+        header: "Applicant",
         showHeader: false,
         items: [
           {
-            name: 'Enrollment',
-            icon: 'vpn_key',
-            route: '/dashboard/applicant/enrollment',
+            name: "Enrollment",
+            icon: "vpn_key",
+            route: "/dashboard/applicant/enrollment",
             showItem: true
           },
           {
-            name: 'In Progress',
-            icon: 'highlight_off',
-            route: '/dashboard/applicant/inprogress',
-            showItem: true
+            name: "In Progress",
+            icon: "highlight_off",
+            route: "/dashboard/applicant/inprogress",
+            showItem: false
           },
           {
-            name: 'Complete',
-            icon: 'highlight_off',
-            route: '/dashboard/applicant/complete',
-            showItem: true
+            name: "Complete",
+            icon: "highlight_off",
+            route: "/dashboard/applicant/complete",
+            showItem: false
           }
         ]
       },
       {
-        header: 'Manage',
+        header: "Manage",
         showHeader: false,
         items: [
           {
-            name: 'Profile',
-            icon: 'person',
-            route: '/dashboard/applicant/profile',
+            name: "Profile",
+            icon: "person",
+            route: "/dashboard/applicant/profile",
             showItem: false
           },
           {
-            name: 'Change Password',
-            icon: 'lock',
-            route: '/dashboard/applicant/password',
+            name: "Change Password",
+            icon: "lock",
+            route: "/dashboard/applicant/password",
             showItem: false
           }
         ]
@@ -134,31 +135,31 @@ export class DashboardComponent implements OnInit {
   private getAdminSideNavSections() {
     return [
       {
-        header: 'Admin',
+        header: "Admin",
         showHeader: false,
         items: [
           {
-            name: 'Applicants',
-            icon: 'assignment',
-            route: '/dashboard/admin/applicants',
+            name: "Applicants",
+            icon: "assignment",
+            route: "/dashboard/admin/applicants",
             showItem: true
           }
         ]
       },
       {
-        header: 'Manage',
+        header: "Manage",
         showHeader: false,
         items: [
           {
-            name: 'Profile',
-            icon: 'person',
-            route: '/dashboard/applicant/profile',
+            name: "Profile",
+            icon: "person",
+            route: "/dashboard/applicant/profile",
             showItem: false
           },
           {
-            name: 'Change Password',
-            icon: 'lock',
-            route: '/dashboard/applicant/password',
+            name: "Change Password",
+            icon: "lock",
+            route: "/dashboard/applicant/password",
             showItem: false
           }
         ]
@@ -170,19 +171,19 @@ export class DashboardComponent implements OnInit {
     if (device === DeviceResolution.MOBILE) {
       this.sideNavProps = {
         opened: false,
-        mode: 'over',
+        mode: "over",
         showText: false
       };
     } else if (device === DeviceResolution.TABLET) {
       this.sideNavProps = {
         opened: true,
-        mode: 'side',
+        mode: "side",
         showText: false
       };
     } else {
       this.sideNavProps = {
         opened: true,
-        mode: 'side',
+        mode: "side",
         showText: true
       };
     }
