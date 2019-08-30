@@ -1,6 +1,6 @@
 
 #image: ubuntu:18.04
-image: docker/compose:latest
+image: docker/compose
 stages:
   - build
   - push
