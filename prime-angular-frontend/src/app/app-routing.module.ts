@@ -7,16 +7,8 @@ import { PageNotFoundComponent } from './core/components/page-not-found/page-not
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'login',
     pathMatch: 'full',
-  },
-  // TODO: placed for ease of access to login
-  {
-    path: 'login',
-    // TODO: Guard module from being accessed without the proper
-    // authorization based on the user role permissions, and
-    // attempt to redirect admins
-    loadChildren: () => import(`./auth/auth.module`).then(m => m.AuthModule),
   },
   {
     path: 'denied',
