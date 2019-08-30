@@ -61,10 +61,10 @@ prime-dotnet-webapi:
 
 - dotnet ef database update
 
-LINK TO ARCHITECHTURE 
+[LINK TO ARCHITECHTURE](documentation/Architecture.MD)
 
 
-LINK TO TEST PLAN
+[LINK TO TEST PLAN](documentation/TestPlan.MD)
 
 
 
