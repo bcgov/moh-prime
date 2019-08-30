@@ -1,4 +1,5 @@
 stages:
+  - prepare
   - build
   - push
 
@@ -6,17 +7,22 @@ variables:
   DOCKER_HOST: "primeswu.azurecr.io"
   DOCKER_REPO_USER: "PrimeSWU"
   DOCKER_REPO_PASS: "POKaaZfvf8AhsgQNmUvjJLj+XbZQoIQJ"
-  IMAGE_TAG: optimize-prime
+  IMAGE_TAG: "optimize-prime"
 
 before_script:
   - apt-get update -qq
   - apt-get install -yqq docker.io docker-compose
 
+prepare:
+  - docker --version
+  - docker-compose --version
+  - echo "Container Registry/Image Tag = $CONTAINER_REGISTRY/$IMAGE_TAG"
+
 build:
   stage: build
   script:
-    - echo "Running docker-compose build -t $IMAGE_TAG ."
-    - docker-compose build -t $IMAGE_TAG .
+    - echo "Running docker-compose build -t $IMAGE_TAG"
+    - docker-compose build -t $IMAGE_TAG"
 
 push:
   stage: push
