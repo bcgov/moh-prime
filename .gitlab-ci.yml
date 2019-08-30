@@ -1,0 +1,19 @@
+stages:
+  - build
+  - push
+
+variables:
+  DOCKER_HOST: "primeswu.azurecr.io"
+  DOCKER_REPO_USER: "PrimeSWU"
+  DOCKER_REPO_PASS: "POKaaZfvf8AhsgQNmUvjJLj+XbZQoIQJ"
+  IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+
+build:
+  stage: build
+  script:
+    - docker build -t $IMAGE_TAG 
+
+push:
+  stage: push
+  script:
+    - docker push $CONTAINER_REGISTRY/$IMAGE_TAG 
