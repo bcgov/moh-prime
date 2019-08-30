@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
-import { PrimeAPIService } from "src/app//core/services/primeapi.service";
+import { PrimeAPIService } from "src/app/core/services/primeapi.service";
+import { AuthTokenService } from "src/app/core/services/auth-token.service";
 
 @Component({
   selector: "app-enrollment",
@@ -10,16 +11,19 @@ import { PrimeAPIService } from "src/app//core/services/primeapi.service";
 export class EnrollmentComponent implements OnInit {
   constructor(
     private router: Router,
-    private primeAPIService: PrimeAPIService
+    private primeAPIService: PrimeAPIService,
+    private authTokenService: AuthTokenService
   ) {}
   pharmacist_prn: string;
 
   submitApplication() {
+    const decodedToken = this.authTokenService.decodeToken();
+
     this.primeAPIService
       .createApplication({
         Content: "",
-        ApplicantName: "coolest name",
-        ApplicantId: "token",
+        ApplicantName: decodedToken.name,
+        ApplicantId: decodedToken.at_hash,
         PharmacistRegistrationNumber: this.pharmacist_prn
       })
       .subscribe(res => {
