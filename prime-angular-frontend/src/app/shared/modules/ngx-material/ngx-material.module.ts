@@ -9,6 +9,7 @@ import {
 import { CdkTableModule } from '@angular/cdk/table';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 
+// TODO: remove date formats if not used
 export const APP_DATE_FORMATS = {
   parse: {
     dateInput: 'LL',
@@ -23,52 +24,54 @@ export const APP_DATE_FORMATS = {
 
 @NgModule({
   imports: [
-    MatSidenavModule,
-    MatDialogModule,
-    MatButtonModule,
+    // MatSidenavModule,
+    // MatDialogModule,
+    // MatButtonModule,
     MatSnackBarModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatListModule,
-    MatDatepickerModule,
-    MatDividerModule,
-    MatChipsModule,
-    MatMenuModule,
-    MatCardModule,
-    MatSlideToggleModule,
+    // MatToolbarModule,
+    // MatIconModule,
+    // MatListModule,
+    // MatDatepickerModule,
+    // MatDividerModule,
+    // MatChipsModule,
+    // MatMenuModule,
+    // MatCardModule,
+    // MatSlideToggleModule,
     // MatMomentDateModule,
-    MatProgressSpinnerModule,
-    MatProgressBarModule,
-    CdkTableModule,
-    CdkStepperModule
+    // MatProgressSpinnerModule,
+    // MatProgressBarModule,
+    // CdkTableModule,
+    // CdkStepperModule
   ],
   exports: [
-    MatSidenavModule,
-    MatDialogModule,
-    MatButtonModule,
+    // MatSidenavModule,
+    // MatDialogModule,
+    // MatButtonModule,
     MatSnackBarModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatListModule,
-    MatDatepickerModule,
-    MatDividerModule,
-    MatChipsModule,
-    MatMenuModule,
-    MatCardModule,
-    MatSlideToggleModule,
+    // MatToolbarModule,
+    // MatIconModule,
+    // MatListModule,
+    // MatDatepickerModule,
+    // MatDividerModule,
+    // MatChipsModule,
+    // MatMenuModule,
+    // MatCardModule,
+    // MatSlideToggleModule,
     // MatMomentDateModule,
-    MatProgressSpinnerModule,
-    MatProgressBarModule,
-    CdkTableModule,
-    CdkStepperModule
+    // MatProgressSpinnerModule,
+    // MatProgressBarModule,
+    // CdkTableModule,
+    // CdkStepperModule
   ],
   providers: [
+    // TODO: update material dialog default options
     {
       provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {
         width: '500px',
         hasBackdrop: true
       }
     },
+    // TODO: remove date formats if not used
     {
       provide: MAT_DATE_FORMATS, useValue: APP_DATE_FORMATS
     }
