@@ -1,12 +1,12 @@
 import { Component, OnInit, Inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
 
 import { map, mergeMap } from 'rxjs/operators';
 
-import { RouteStateService } from 'src/app/core/services/route-state.service';
-import { WindowRefService } from 'src/app/core/services/window-ref.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { RouteStateService } from '@core/services/route-state.service';
+import { WindowRefService } from '@core/services/window-ref.service';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +14,6 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  public title = 'Optimize PRIME: Transforming your services';
   private window: Window;
 
   constructor(
@@ -22,8 +21,7 @@ export class AppComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private titleService: Title,
     private routeStateService: RouteStateService,
-    private windowRef: WindowRefService,
-    private router: Router
+    private windowRef: WindowRefService
   ) {
     this.window = windowRef.nativeWindow;
   }
@@ -37,6 +35,14 @@ export class AppComponent implements OnInit {
     this.setPageTitle(onNavEnd);
   }
 
+  /**
+   * Scroll the page to the top on route event.
+   *
+   * @private
+   * @param {*} routeEvent
+   * @memberof AppComponent
+   */
+  // TODO: checkout the new CDK scroll
   private scrollTop(routeEvent: any) {
     routeEvent.subscribe(() => {
       const contentContainer = this.document.querySelector('.mat-sidenav-content') || this.window;
@@ -44,6 +50,13 @@ export class AppComponent implements OnInit {
     });
   }
 
+  /**
+   * Set the HTML page <title> on route event.
+   *
+   * @private
+   * @param {*} routeEvent
+   * @memberof AppComponent
+   */
   private setPageTitle(routeEvent: any) {
     routeEvent
       .pipe(
@@ -60,8 +73,7 @@ export class AppComponent implements OnInit {
         mergeMap((route: ActivatedRoute) => route.data)
       )
       .subscribe((routeData: any) => {
-        const title = routeData.title;
-        this.titleService.setTitle(title);
+        this.titleService.setTitle(routeData.title);
       });
   }
 }
