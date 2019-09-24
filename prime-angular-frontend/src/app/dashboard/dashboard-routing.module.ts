@@ -1,30 +1,36 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { AuthGuard } from '@auth/shared/guards/auth.guard';
+import { AdminGuard } from '@admins/shared/guards/admin.guard';
+import { ApplicantGuard } from '@applicants/shared/guards/applicant.guard';
 
-import { ApplicantsModule } from '../features/applicants/applicants.module';
-import { AdminsModule } from '../features/admins/admins.module';
+// TODO: add redirect for admins, but has circlar dependency
+// import { RedirectGuard } from '@dashboard/shared/guards/redirect.guard';
+import { DashboardComponent } from '@dashboard/shared/components/dashboard/dashboard.component';
 
 const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
-    canActivate: [],
+    canActivate: [AuthGuard],
     children: [
       {
         path: 'applicant',
-        // Guard module from being accessed without the proper
+        // Guard modules from being accessed without the proper
         // authorization based on the user role permissions, and
         // attempt to redirect admins
+        canActivate: [ApplicantGuard],
+        // TODO: issue with new import syntax when built for production
         // loadChildren: () => import(`../features/applicants/applicants.module`).then(m => m.ApplicantsModule),
         loadChildren: '../features/applicants/applicants.module#ApplicantsModule'
       },
       {
         path: 'admin',
         // Guard module from being accessed without the proper
-        // authorization based on the user role permissions, and
-        // attempt to redirect admins
+        // authorization based on the user role permissions
+        canLoad: [AdminGuard],
+        // TODO: issue with new import syntax when built for production
         // loadChildren: () => import(`../features/admins/admins.module`).then(m => m.AdminsModule),
         loadChildren: '../features/admins/admins.module#AdminsModule'
       },

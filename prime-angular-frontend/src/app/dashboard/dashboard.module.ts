@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 
-import { SharedModule } from '../shared/shared.module';
+import { SharedModule } from '@shared/shared.module';
 
-import { DashboardRoutingModule } from './dashboard-routing.module';
-import { DashboardComponent } from '../dashboard/components/dashboard/dashboard.component';
+import { DashboardRoutingModule } from '@dashboard/dashboard-routing.module';
+import { DashboardComponent } from '@dashboard/shared/components/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
