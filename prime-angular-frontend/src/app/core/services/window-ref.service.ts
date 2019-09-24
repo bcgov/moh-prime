@@ -10,6 +10,13 @@ function getWindow(): any {
 export class WindowRefService {
   constructor() { }
 
+  /**
+   * Get a reference to the native window object.
+   *
+   * @readonly
+   * @type {*}
+   * @memberof WindowRefService
+   */
   get nativeWindow(): Window {
     return getWindow();
   }
