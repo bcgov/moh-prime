@@ -8,7 +8,8 @@ import { NgxBootstrapModule } from '@shared/modules/ngx-bootstrap/ngx-bootstrap.
 import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 import { PhonePipe } from '@shared/pipes/phone.pipe';
 import { ReplacePipe } from '@shared/pipes/replace.pipe';
-import { FirstKeyPipe } from './pipes/first-key.pipe';
+import { FirstKeyPipe } from '@shared/pipes/first-key.pipe';
+import { FormControlValidityDirective } from '@shared/directives/form-control-validity.directive';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,7 @@ import { FirstKeyPipe } from './pipes/first-key.pipe';
     PhonePipe,
     ReplacePipe,
     FirstKeyPipe,
-    FormFieldValidityDirective
+    FormControlValidityDirective
   ],
   imports: [
     BusyModule,
@@ -35,6 +36,7 @@ import { FirstKeyPipe } from './pipes/first-key.pipe';
     PhonePipe,
     ReplacePipe,
     FirstKeyPipe,
+    FormControlValidityDirective
   ]
 })
 export class SharedModule { }

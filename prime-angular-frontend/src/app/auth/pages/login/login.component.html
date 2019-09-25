@@ -17,7 +17,7 @@
                class="form-control"
                id="username"
                formControlName="username"
-               appFormFieldValidity>
+               appFormControlValidity>
         <div class="invalid-feedback">
           <div
                *ngIf="form.get('username').hasError('required') && (form.get('username').errors | firstKey) === 'required'">
@@ -34,7 +34,7 @@
                class="form-control"
                id="password"
                formControlName="password"
-               appFormFieldValidity>
+               appFormControlValidity>
         <div class="invalid-feedback">
           <div
                *ngIf="form.get('password').hasError('required') && (form.get('password').errors | firstKey) === 'required'">
