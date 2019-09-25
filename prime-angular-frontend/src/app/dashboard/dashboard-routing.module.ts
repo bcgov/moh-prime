@@ -6,7 +6,7 @@ import { AdminGuard } from '@admins/shared/guards/admin.guard';
 import { ApplicantGuard } from '@applicants/shared/guards/applicant.guard';
 
 // TODO: add redirect for admins, but has circlar dependency
-// import { RedirectGuard } from '@dashboard/shared/guards/redirect.guard';
+import { RedirectGuard } from '@dashboard/shared/guards/redirect.guard';
 import { DashboardComponent } from '@dashboard/shared/components/dashboard/dashboard.component';
 
 const routes: Routes = [
@@ -20,7 +20,7 @@ const routes: Routes = [
         // Guard modules from being accessed without the proper
         // authorization based on the user role permissions, and
         // attempt to redirect admins
-        canActivate: [ApplicantGuard],
+        canActivate: [RedirectGuard, ApplicantGuard],
         // TODO: issue with new import syntax when built for production
         // loadChildren: () => import(`../features/applicants/applicants.module`).then(m => m.ApplicantsModule),
         loadChildren: '../features/applicants/applicants.module#ApplicantsModule'
