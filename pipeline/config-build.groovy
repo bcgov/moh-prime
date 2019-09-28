@@ -1,9 +1,9 @@
 app {
-    name = 'mds'
+    name = 'moh-prime'
     version = 'snapshot'
         namespaces {
         'build'{
-            namespace = 'empr-mds-tools'
+            namespace = 'empr-moh-prime-tools'
             disposable = true
         }
     }
@@ -30,13 +30,13 @@ app {
         version = "${app.build.env.name}-${app.build.env.id}"
 
         suffix = "-${app.git.changeId}"
-        namespace = 'empr-mds-tools'
+        namespace = 'empr-moh-prime-tools'
         timeoutInSeconds = 60*40 // 40 minutes
         templates = [
                 [
                     'file':'openshift/_python36.bc.json',
                     'params':[
-                            'NAME':"mds-python-backend",
+                            'NAME':"moh-prime-python-backend",
                             'SUFFIX': "${app.build.suffix}",
                             'VERSION':"${app.build.version}",
                             'SOURCE_CONTEXT_DIR': "python-backend",
@@ -46,7 +46,7 @@ app {
                 [
                     'file':'microservices/document_manager/openshift/_python36_docman.bc.json',
                     'params':[
-                            'NAME':"mds-docman-backend",
+                            'NAME':"moh-prime-docman-backend",
                             'SUFFIX': "${app.build.suffix}",
                             'VERSION':"${app.build.version}",
                             'SOURCE_CONTEXT_DIR': "microservices/document_manager/backend",
@@ -56,7 +56,7 @@ app {
                 [
                     'file':'microservices/now_etls/python36.bc.json',
                     'params':[
-                            'NAME':"mds-now-etl",
+                            'NAME':"moh-prime-now-etl",
                             'SUFFIX': "${app.build.suffix}",
                             'VERSION':"${app.build.version}",
                             'SOURCE_CONTEXT_DIR': "microservices/now_etls",
@@ -66,7 +66,7 @@ app {
                 [
                     'file':'microservices/nris_api/openshift/_python36_oracle.bc.json',
                     'params':[
-                            'NAME':"mds-nris-backend",
+                            'NAME':"moh-prime-nris-backend",
                             'SUFFIX': "${app.build.suffix}",
                             'VERSION':"${app.build.version}",
                             'SOURCE_CONTEXT_DIR': "microservices/nris_api/backend",
@@ -76,7 +76,7 @@ app {
                 [
                     'file':'openshift/_nginx.bc.json',
                     'params':[
-                            'NAME':"mds-nginx",
+                            'NAME':"moh-prime-nginx",
                             'SUFFIX': "${app.build.suffix}",
                             'VERSION':"${app.build.version}",
                             'SOURCE_CONTEXT_DIR': "nginx",
@@ -96,7 +96,7 @@ app {
                 [
                         'file':'openshift/_nodejs.bc.json',
                         'params':[
-                            'NAME':"mds-frontend",
+                            'NAME':"moh-prime-frontend",
                             'SUFFIX': "${app.build.suffix}",
                             'APPLICATION_SUFFIX': "-${app.build.env.id}",
                             'BASE_PATH': "/${app.git.changeId}",
@@ -110,7 +110,7 @@ app {
                 [
                         'file':'openshift/_nodejs.bc.json',
                         'params':[
-                            'NAME':"mds-frontend-public",
+                            'NAME':"moh-prime-frontend-public",
                             'SUFFIX': "${app.build.suffix}",
                             'APPLICATION_SUFFIX': "-${app.build.env.id}",
                             'BASE_PATH': "/${app.git.changeId}",
@@ -124,7 +124,7 @@ app {
                 [
                     'file':'openshift/postgresql.bc.json',
                     'params':[
-                        'NAME':"mds-postgresql",
+                        'NAME':"moh-prime-postgresql",
                         'SUFFIX': "${app.build.suffix}",
                         'TAG_NAME':"${app.build.version}"
                     ]
@@ -132,7 +132,7 @@ app {
                 [
                     'file':'openshift/dbbackup.bc.json',
                     'params':[
-                        'NAME':"mds-database-backup",
+                        'NAME':"moh-prime-database-backup",
                         'SUFFIX': "${app.build.suffix}",
                         'VERSION':"${app.build.version}"
                     ]
@@ -140,7 +140,7 @@ app {
                 [
                     'file':'openshift/flyway.bc.json',
                     'params':[
-                            'NAME':"mds-flyway-migration",
+                            'NAME':"moh-prime-flyway-migration",
                             'SUFFIX': "${app.build.suffix}",
                             'VERSION':"${app.build.version}",
                             'SOURCE_CONTEXT_DIR': "migrations",
@@ -180,7 +180,7 @@ app {
                 [
                     'file':'openshift/tools/logstash.bc.json',
                     'params':[
-                            'NAME':"mds-logstash",
+                            'NAME':"moh-prime-logstash",
                             'SUFFIX': "${app.build.suffix}",
                             'VERSION':"${app.build.version}",
                             'SOURCE_CONTEXT_DIR': "elastic/logstash",

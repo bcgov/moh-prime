@@ -1,6 +1,7 @@
 version: "3"
 
 services:
+######################################################### Sign-in #
   dotnet-webapi:
     container_name: primeapi
     restart: always
@@ -17,10 +18,11 @@ services:
       - primenet
     depends_on:
       - postgres
+######################################################### Database #  
   postgres:
     restart: always
     container_name: primedb
-    image: postgres:11.4
+    image: postgres:9.6
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USERNAME: postgres
@@ -31,7 +33,8 @@ services:
       - local_postgres_data:/var/lib/postgresql/data
     networks:
       - primenet
-  nginx-angular:
+###################################################### Web Frontend #  
+      nginx-angular:
     container_name: primeweb
     build:
         context: prime-angular-frontend/
