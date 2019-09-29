@@ -28,7 +28,6 @@ pipeline {
                 sh 'unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-build -Pargs.--config=pipeline/config-build.groovy -Pargs.--pr=${CHANGE_ID}'
             }
         }
-        /* Removing for testing
         stage('Deploy (DEV)') {
             agent { label 'master' }
             steps {
@@ -36,6 +35,7 @@ pipeline {
                 sh 'unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-deploy -Pargs.--config=pipeline/config-dev.groovy -Pargs.--pr=${CHANGE_ID} -Pargs.--env=dev'
             }
         }
+        /* Removing for testing
         stage('Unit Tests and SonarQube Reporting (DEV)') {
             agent { label 'master' }
             steps {
