@@ -1,10 +1,10 @@
 //sample provided by redhat
-def templatePath = 'pipeline/postgresql.bc.json' 
-def templateName = 'prime-postgres' 
+def templatePath = 'pipeline/node.json' 
+def templateName = 'node' 
 pipeline {
   agent {
-    none {
-      label 'postgresql' 
+    node {
+      label 'node' 
     }
   }
   options {
