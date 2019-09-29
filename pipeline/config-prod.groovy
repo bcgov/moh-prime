@@ -67,23 +67,6 @@ app {
                             'VOLUME_CAPACITY':"${vars.DB_PVC_SIZE}"
                     ]
                 ],
-                [
-                    'file':'openshift/dbbackup.dc.json',
-                    'params':[
-                            'NAME':"prime-database-backup",
-                            'SUFFIX': "${vars.deployment.suffix}",
-                            'VERSION':"${app.deployment.version}",
-                            'ENVIRONMENT_NAME':"${vars.deployment.namespace}",
-                            'ENVIRONMENT_FRIENDLY_NAME':"BC prime Digital Services (PROD)",
-                            'DATABASE_SERVICE_NAME':"prime-postgresql${vars.deployment.suffix}",
-                            'NFS_VOLUME_IDENTIFIER':"bk-dqszvc-prod-x7ux0bwhqnsa",
-                            'CPU_REQUEST':"${vars.resources.backup.cpu_request}",
-                            'CPU_LIMIT':"${vars.resources.backup.cpu_limit}",
-                            'MEMORY_REQUEST':"${vars.resources.backup.memory_request}",
-                            'MEMORY_LIMIT':"${vars.resources.backup.memory_limit}",
-                            'VERIFICATION_VOLUME_SIZE':"${vars.BACKUP_VERIFICATION_PVC_SIZE}"
-                    ]
-                ],
         ]
     }
 }
@@ -106,12 +89,6 @@ environments {
                     cpu_limit = "1"
                     memory_request = "1.5Gi"
                     memory_limit = "4Gi"
-                }
-                backup {
-                    cpu_request = "0"
-                    cpu_limit = "0"
-                    memory_request = "0"
-                    memory_limit = "0"
                 }
             }
             keycloak {

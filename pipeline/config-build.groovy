@@ -41,14 +41,6 @@ app {
                         'TAG_NAME':"${app.build.version}"
                     ]
                 ],
-                [
-                    'file':'pipeline/dbbackup.bc.json',
-                    'params':[
-                        'NAME':"prime-database-backup",
-                        'SUFFIX': "${app.build.suffix}",
-                        'VERSION':"${app.build.version}"
-                    ]
-                ],
         ]
     }
 }
