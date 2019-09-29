@@ -10,7 +10,7 @@ pipeline {
                 echo "Aborting all running jobs ..."
                 script {
                     // Kill any running jobs
-                    abortAllPreviousBuildInProgress(currentBuild)
+                    //abortAllPreviousBuildInProgress(currentBuild)
 
                     // Grab any files under the pipeline directory
                     // Verify they match the trusted version
