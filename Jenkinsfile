@@ -1,10 +1,10 @@
 //sample provided by redhat
-def templatePath = 'https://raw.githubusercontent.com/openshift/nodejs-ex/master/openshift/templates/nodejs-mongodb.json' 
-def templateName = 'nodejs-mongodb-example' 
+def templatePath = 'pipeline/postgresql.bc.json' 
+def templateName = 'prime-postgres' 
 pipeline {
   agent {
-    node {
-      label 'nodejs' 
+    none {
+      label 'postgresql' 
     }
   }
   options {
