@@ -32,7 +32,7 @@ if (opt?.h) {
 }
 
 def config = OpenShiftHelper.loadDeploymentConfig(opt)
-def devNamespace = "empr-mds-dev"
+def devNamespace = "dqszvc-dev"
 def dbConfig = "${config.app.name}-postgresql-${config.app.build.env.id}"
 def idirConfig = "bdd-test-user"
 
