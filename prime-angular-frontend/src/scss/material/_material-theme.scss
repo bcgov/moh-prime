@@ -1,10 +1,11 @@
+@import './material-palette';
 @import '~@angular/material/theming';
 
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default (500), lighter (100),
-// and darker (700) hue.
-$prime-app-primary: mat-palette($mat-blue, 900);
-$prime-app-accent: mat-palette($mat-blue, 900);
+// Define the palettes for your theme using the Material Design palettes available in the material
+// palette.scss (imported above). For each palette, you can optionally specify a default (500),
+// lighter (100), and darker (700) hue.
+$prime-app-primary: mat-palette($prime-blue, 900);
+$prime-app-accent: mat-palette($prime-yellow, 900);
 
 // The warn palette is optional (defaults to red).
 $prime-app-warn: mat-palette($mat-red);
@@ -21,39 +22,16 @@ $prime-app-theme: mat-light-theme($prime-app-primary, $prime-app-accent, $prime-
 // Create the dark theme object (a Sass map containing all of the palettes).
 $prime-dark-app-theme: mat-dark-theme($prime-app-primary, $prime-app-accent, $prime-app-warn);
 
-// // Include theme styles for core and each component used in your app.
-// // Alternatively, you can import and @include the theme mixins for each component
-// // that you are using.
-// // @include mat-sidenav-theme($prime-dark-app-theme);
+// body.dark {
+//   @include angular-material-theme($prime-dark-app-theme);
+// }
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+//
+// Example:
+// @include mat-sidenav-theme($prime-dark-app-theme);
 // .mat-sidenav {
 //   @include angular-material-theme($prime-dark-app-theme);
-// }
-
-// // for production builds only
-// .mat-drawer {
-//   background-color: #073368 !important;
-//   color: white !important;
-// }
-
-// .mat-chip.mat-standard-chip.mat-chip-selected.mat-primary {
-//   background: theme-palette(blue) !important;
-// }
-
-// .mat-chip.mat-standard-chip.mat-chip-selected.mat-accent {
-//   background: theme-palette(yellow) !important;
-// }
-
-// .mat-tabs {
-//   @include angular-material-theme($prime-dark-app-theme);
-// }
-
-// // TODO: add to the material theme, but for now needs to get out into production
-// .mat-progress-bar {
-//   .mat-progress-bar-buffer {
-//     background-color: theme-palette(blue, dark) !important;
-//   }
-
-//   .mat-progress-bar-fill::after {
-//     background-color: theme-palette(yellow) !important;
-//   }
 // }
