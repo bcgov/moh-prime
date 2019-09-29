@@ -7,7 +7,7 @@ pipeline {
         stage('Verify-Files') {
             agent { label 'master' }
             steps {
-                echo "Aborting all running jobs ..."
+                // echo "Aborting all running jobs ..."
                 script {
                     // Kill any running jobs
                     // abortAllPreviousBuildInProgress(currentBuild)
@@ -57,7 +57,6 @@ pipeline {
                 sh 'unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-zap -Pargs.--config=pipeline/config-dev.groovy -Pargs.--pr=${CHANGE_ID} -Pargs.--env=dev'
             }
         }
-        */
         stage('Deploy (TEST)') {
             agent { label 'master' }
             when {
@@ -68,7 +67,6 @@ pipeline {
                 sh 'unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-deploy -Pargs.--config=pipeline/config-test.groovy -Pargs.--pr=${CHANGE_ID} -Pargs.--env=test'
             }
         }
-        /* Removing for testing
         stage('Deploy (PROD)') {
             agent { label 'master' }
             when {
