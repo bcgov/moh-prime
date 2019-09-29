@@ -4,7 +4,7 @@ def templateName = 'postgresql'
 pipeline {
   agent {
     node {
-      label 'postgresql' 
+      label 'node' 
     }
   }
   options {
