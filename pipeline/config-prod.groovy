@@ -60,7 +60,7 @@ app {
                             'CPU_LIMIT':"${vars.resources.postgres.cpu_limit}",
                             'MEMORY_REQUEST':"${vars.resources.postgres.memory_request}",
                             'MEMORY_LIMIT':"${vars.resources.postgres.memory_limit}",
-                            'IMAGE_STREAM_NAMESPACE':'',
+                            'IMAGE_STREAM_NAMESPACE':'dqszvc-prod',
                             'IMAGE_STREAM_NAME':"prime-postgresql",
                             'IMAGE_STREAM_VERSION':"${app.deployment.version}",
                             'POSTGRESQL_DATABASE':'prime',
