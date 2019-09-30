@@ -37,8 +37,8 @@ def dbConfig = "${config.app.name}-postgresql-${config.app.build.env.id}"
 def idirConfig = "bdd-test-user"
 
 def appLabel="${config.app.deployment.id}"
-def routes = ocGet(['routes','-l', "app=${appLabel},component=mds-nginx,route=core", "--namespace=${config.app.deployment.namespace}"])
-def minespaceRoutes = ocGet(['routes','-l', "app=${appLabel},component=mds-nginx,route=minespace", "--namespace=${config.app.deployment.namespace}"])
+def routes = ocGet(['routes','-l', "app=${appLabel},component=prime-nginx,route=core", "--namespace=${config.app.deployment.namespace}"])
+def minespaceRoutes = ocGet(['routes','-l', "app=${appLabel},component=prime-nginx,route=minespace", "--namespace=${config.app.deployment.namespace}"])
 
 routes.items.each {Map route ->
     String routeProtocol = ((route.spec?.tls!=null)?'https':'http')
