@@ -81,16 +81,18 @@ environments {
             git {
                 changeId = "${opt.'pr'}"
             }
+            /*
             keycloak {
-                clientId_core = "mines-application-dev"
-                clientId_minespace = "minespace-dev"
-                resource = "mines-application-dev"
+                clientId_core = "prime-application-dev"
+                clientId_primespace = "primespace-dev"
+                resource = "prime-application-dev"
                 idpHint_core = "dev"
-                idpHint_minespace = "dev"
+                idpHint_primespace = "dev"
                 url = "https://sso-test.pathfinder.gov.bc.ca/auth"
                 known_config_url = "https://sso-test.pathfinder.gov.bc.ca/auth/realms/prime/.well-known/openid-configuration"
                 siteminder_url = "https://logontest.gov.bc.ca"
             }
+            */
             resources {
                 postgres {
                     cpu_request = "50m"
@@ -111,7 +113,7 @@ environments {
                 map_portal_id = "e926583cd0114cd19ebc591f344e30dc"
                 elastic_enabled_core = 0
                 elastic_enabled_nris = 0
-                elastic_service_name = "prime Dev"
+                elastic_service_name = "Prime Dev"
                 elastic_service_name_nris = "NRIS API Dev"
                 elastic_service_name_docman = 'DocMan Dev'
             }

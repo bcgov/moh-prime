@@ -20,6 +20,3 @@ spec:
         - generic:
             secret: secret
           type: Generic
-        - bitbucket:
-            secret: secret
-          type: Bitbucket

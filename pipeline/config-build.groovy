@@ -34,7 +34,7 @@ app {
         timeoutInSeconds = 60*40 // 40 minutes
         templates = [
                 [
-                    'file':'pipeline/postgresql.bc.json',
+                    'file':'openshift/postgresql.bc.json',
                     'params':[
                         'NAME':"prime-postgresql",
                         'SUFFIX': "${app.build.suffix}",

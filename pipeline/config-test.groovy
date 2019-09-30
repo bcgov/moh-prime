@@ -84,9 +84,9 @@ environments {
                 changeId = "${opt.'pr'}"
             }
             keycloak {
-                clientId_core = "mines-application-test"
-                clientId_minespace = "minespace-test"
-                resource = "mines-application-test"
+                clientId_core = "prime-application-test"
+                clientId_minespace = "primespace-test"
+                resource = "prime-application-test"
                 idpHint_core = "idir"
                 idpHint_minespace = "bceid"
                 url = "https://sso-test.pathfinder.gov.bc.ca/auth"
@@ -113,7 +113,7 @@ environments {
                 map_portal_id = "e926583cd0114cd19ebc591f344e30dc"
                 elastic_enabled_core = 1
                 elastic_enabled_nris = 1
-                elastic_service_name = "prime Test"
+                elastic_service_name = "Prime Test"
                 elastic_service_name_nris = "NRIS API Test"
                 elastic_service_name_docman = 'DocMan Test'
             }
