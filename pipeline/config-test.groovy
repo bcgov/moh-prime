@@ -1,5 +1,5 @@
 app {
-    name = 'prime'
+    name = 'moh-prime'
     version = 'snapshot'
         namespaces {
         'build'{
