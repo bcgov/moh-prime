@@ -1,0 +1,11 @@
+node('') {
+stage ('buildInDevelopment')
+  {openshiftBuild(namespace: 'dqszvc-dev', buildConfig: 'prime', showBuildLogs: 'true')}
+stage ('deployInDevelopment')
+  {openshiftDeploy(namespace: 'dqszvc-dev', deploymentConfig: 'prime')
+   openshiftScale(namespace: 'dqszvc-dev', deploymentConfig: 'prime',replicaCount: '2')}
+stage ('deployInTest')
+  {openshiftTag(namespace: 'dqszvc-dev', sourceStream: 'prime',  sourceTag: 'latest', destinationStream: 'prime', destinationTag: 'promoteToQA')
+   openshiftDeploy(namespace: 'dqszvc-test', deploymentConfig: 'prime', )
+   openshiftScale(namespace: 'dqszvc-test', deploymentConfig: 'prime',replicaCount: '3')}
+}

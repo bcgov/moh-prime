@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: BuildConfig
+metadata:
+    labels:
+        app: postgresql-pipeline
+    name: postgresql-pipeline
+spec:
+    source:
+        git:
+            ref: master
+            uri: https://github.com/bcgov/moh-prime.git
+    strategy:
+        jenkinsPipelineStrategy:
+            jenkinsfilePath: pipeline/Jenkinsfile
+        type: JenkinsPipeline
+    triggers:
+        - github:
+            secret: 76eb06beffcf4f82946743ca20e254f5af4d5704
+          type: GitHub
