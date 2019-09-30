@@ -51,7 +51,7 @@ app {
         timeoutInSeconds = 60*20 // 20 minutes
         templates = [
                 [
-                    'file':'pipeline/postgresql.dc.json',
+                    'file':'openshift/postgresql.dc.json',
                     'params':[
                             'NAME':"prime-postgresql",
                             'SUFFIX':"${vars.deployment.suffix}",
