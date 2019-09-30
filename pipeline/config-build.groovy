@@ -12,7 +12,10 @@ app {
         workDir = ['git', 'rev-parse', '--show-toplevel'].execute().text.trim()
         uri = ['git', 'config', '--get', 'remote.origin.url'].execute().text.trim()
         commit = ['git', 'rev-parse', 'HEAD'].execute().text.trim()
+        changeId = "$GIT_PR_NUMBER"
+        /* 
         changeId = "${opt.'pr'}"
+        */
         ref = opt.'branch'?:"refs/pull/${git.changeId}/head"
         github {
             owner = app.git.uri.tokenize('/')[2]
