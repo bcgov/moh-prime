@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: BuildConfig
+metadata:
+    labels:
+        app: python-nginx-pipeline
+    name: python-nginx-pipeline
+spec:
+    source:
+        git:
+            ref: master
+            uri: https://github.com/ruddra/openshift-python-nginx.git
+    strategy:
+        jenkinsPipelineStrategy:
+            jenkinsfilePath: openshift/pipelines/Jenkinsfile
+        type: JenkinsPipeline
+    triggers:
+        - github:
+            secret: secret
+          type: GitHub
+        - generic:
+            secret: secret
+          type: Generic
+        - bitbucket:
+            secret: secret
+          type: Bitbucket
