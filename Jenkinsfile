@@ -1,6 +1,6 @@
 //Based on sample provided by redhat
-def templatePath = 'pipeline/postgresql-persistent-template.yaml' 
-def templateName = 'postgresql-persistent-template' 
+def templatePath = 'postgresql.json' 
+def templateName = 'postgresql' 
 pipeline {
   agent  none
   options {
