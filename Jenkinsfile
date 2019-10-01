@@ -11,11 +11,10 @@ pipeline {
                 script {
                     // Kill any running jobs
                     // abortAllPreviousBuildInProgress(currentBuild)
-                    if (env.CHANGE_ID) {
-                        pullRequest.comment("🌞 Job completed successfully")
-                        echo "Current Pull Request ID: ${pullRequest.id}"
-                        echo "ChangeID/PR = ${CHANGE_ID}"
-                    }
+                    pullRequest.comment("🌞 Job completed successfully")
+                    echo "Current Pull Request ID: ${pullRequest.id}"
+                    echo "ChangeID/PR = ${CHANGE_ID}"
+                    
                     // Grab any files under the pipeline directory
                     // Verify they match the trusted version
                     files = findFiles(glob: 'pipeline/**')
