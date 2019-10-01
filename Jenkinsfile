@@ -7,11 +7,11 @@ pipeline {
         stage('Verify-Files') {
             agent { label 'master' }
             steps {
-                echo "Aborting all running jobs ..."
+                // echo "Aborting all running jobs ..."
                 script {
                     // Kill any running jobs
                     // abortAllPreviousBuildInProgress(currentBuild)
-
+                    echo "ChangeID/PR = ${CHANGE_ID}"
                     // Grab any files under the pipeline directory
                     // Verify they match the trusted version
                     files = findFiles(glob: 'pipeline/**')
