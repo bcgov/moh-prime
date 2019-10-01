@@ -12,9 +12,6 @@ pipeline {
                 script {
                     // Kill any running jobs
                     // abortAllPreviousBuildInProgress(currentBuild)
-                    echo "Current Pull Request ID: ${env.CHANGE_ID}"
-                    echo "Current Pull Request ID: ${CHANGE_ID}"
-                    echo "Current Pull Request ID: ${pullRequest.id}"
                     // Grab any files under the pipeline directory
                     // Verify they match the trusted version
                     files = findFiles(glob: 'pipeline/**')
@@ -28,35 +25,35 @@ pipeline {
             agent { label 'master' }
             steps {
                 echo "Building ..."
-                sh 'unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-build -Pargs.--config=pipeline/config-build.groovy -Pargs.--pr=${CHANGE_ID}'
+                sh 'unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-build -Pargs.--config=pipeline/config-build.groovy -Pargs.--pr=${pullRequest.id}'
             }
         }
         stage('Deploy (DEV)') {
             agent { label 'master' }
             steps {
                 echo "Deploy (DEV) ..."
-                sh 'unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-deploy -Pargs.--config=pipeline/config-dev.groovy -Pargs.--pr=${CHANGE_ID} -Pargs.--env=dev'
+                sh 'unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-deploy -Pargs.--config=pipeline/config-dev.groovy -Pargs.--pr=${pullRequest.id} -Pargs.--env=dev'
             }
         }
         stage('Unit Tests and SonarQube Reporting (DEV)') {
             agent { label 'master' }
             steps {
                 echo "Running unit tests and reporting them to SonarQube ..."
-                sh 'unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-unit-test -Pargs.--config=pipeline/config-dev.groovy -Pargs.--pr=${CHANGE_ID} -Pargs.--env=dev -Pargs.--branch=${CHANGE_BRANCH}'
+                sh 'unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-unit-test -Pargs.--config=pipeline/config-dev.groovy -Pargs.--pr=${pullRequest.id} -Pargs.--env=dev -Pargs.--branch=${CHANGE_BRANCH}'
             }
         }
         stage('Functional Test (DEV)') {
             agent { label 'master' }
             steps {
                 echo "Functional Test (DEV) ..."
-                sh 'unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-functional-test -Pargs.--config=pipeline/config-dev.groovy -Pargs.--pr=${CHANGE_ID} -Pargs.--env=dev'
+                sh 'unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-functional-test -Pargs.--config=pipeline/config-dev.groovy -Pargs.--pr=${pullRequest.id} -Pargs.--env=dev'
             }
         }
         stage ('ZAP (DEV)'){
             agent { label 'master' }
             steps {
                 echo "ZAP (DEV)"
-                sh 'unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-zap -Pargs.--config=pipeline/config-dev.groovy -Pargs.--pr=${CHANGE_ID} -Pargs.--env=dev'
+                sh 'unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-zap -Pargs.--config=pipeline/config-dev.groovy -Pargs.--pr=${pullRequest.id} -Pargs.--env=dev'
             }
         }
         stage('Deploy (TEST)') {
@@ -66,7 +63,7 @@ pipeline {
             }
             steps {
                 echo "Deploy (TEST)"
-                sh 'unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-deploy -Pargs.--config=pipeline/config-test.groovy -Pargs.--pr=${CHANGE_ID} -Pargs.--env=test'
+                sh 'unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-deploy -Pargs.--config=pipeline/config-test.groovy -Pargs.--pr=${pullRequest.id} -Pargs.--env=test'
             }
         }
         stage('Deploy (PROD)') {
@@ -82,7 +79,7 @@ pipeline {
                         error "User cancelled"
                     }
                     echo "Deploy (PROD)"
-                    sh 'unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-deploy -Pargs.--config=pipeline/config-prod.groovy -Pargs.--pr=${CHANGE_ID} -Pargs.--env=prod'
+                    sh 'unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-deploy -Pargs.--config=pipeline/config-prod.groovy -Pargs.--pr=${pullRequest.id} -Pargs.--env=prod'
                 }
             }
         }
@@ -126,7 +123,7 @@ pipeline {
             }
             steps {
                 echo "Acceptance ..."
-                sh 'unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-clean -Pargs.--config=pipeline/config-dev.groovy -Pargs.--pr=${CHANGE_ID}'
+                sh 'unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-clean -Pargs.--config=pipeline/config-dev.groovy -Pargs.--pr=${pullRequest.id}'
             }
         }
     }
