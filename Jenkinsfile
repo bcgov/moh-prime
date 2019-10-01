@@ -8,12 +8,15 @@ pipeline {
             agent { label 'master' }
             steps {
                 // echo "Aborting all running jobs ..."
+                echo "Pull Request ID : ${pullRequest.id}"
+                echo "GITHUB_PR_NUMBER = ${GITHUB_PR_NUMBER}"
+                pullRequest.comment("🌞 Job completed successfully")
+                echo "Current Pull Request ID: ${pullRequest.id}"
+                echo "Environmental ChangeID = ${CHANGE_ID}"
+                echo "ChangeID/PR = ${CHANGE_ID}"
                 script {
                     // Kill any running jobs
                     // abortAllPreviousBuildInProgress(currentBuild)
-                    pullRequest.comment("🌞 Job completed successfully")
-                    echo "Current Pull Request ID: ${pullRequest.id}"
-                    echo "ChangeID/PR = ${CHANGE_ID}"
                     
                     // Grab any files under the pipeline directory
                     // Verify they match the trusted version
