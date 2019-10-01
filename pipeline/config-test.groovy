@@ -16,7 +16,7 @@ app {
         workDir = ['git', 'rev-parse', '--show-toplevel'].execute().text.trim()
         uri = ['git', 'config', '--get', 'remote.origin.url'].execute().text.trim()
         commit = ['git', 'rev-parse', 'HEAD'].execute().text.trim()
-        changeId = "3"
+        changeId = "${opt.'pr'}"
         ref = opt.'branch'?:"refs/pull/${git.changeId}/head"
         github {
             owner = app.git.uri.tokenize('/')[2]
@@ -81,7 +81,7 @@ environments {
             METABASE_PVC_SIZE = '10Gi'
             SCHEDULER_PVC_SIZE = '10Gi'
             git {
-                changeId = "3"
+                changeId = "${opt.'pr'}"
             }
             keycloak {
                 clientId_core = "prime-application-test"
