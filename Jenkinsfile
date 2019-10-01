@@ -1,4 +1,4 @@
-
+def CHANGE_ID=0
 pipeline {
     agent none
     options {
@@ -11,11 +11,6 @@ pipeline {
                 // echo "Aborting all running jobs ..."
 
                 script {
-                    def pr = env.CHANGE_ID
-                    if (!pr){
-                        echo  "no pull request number found so cannot comment on PR"
-                        def CHANGE_ID=0
-                    }
                     // Kill any running jobs
                     // abortAllPreviousBuildInProgress(currentBuild)
                     // Grab any files under the pipeline directory
