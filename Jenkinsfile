@@ -12,7 +12,7 @@ pipeline {
                 script {
                     // Kill any running jobs
                     // abortAllPreviousBuildInProgress(currentBuild)
-                    echo "ChangeID/PR = ${CHANGE_ID}"
+                    
                     // Grab any files under the pipeline directory
                     // Verify they match the trusted version
                     files = findFiles(glob: 'pipeline/**')
