@@ -13,7 +13,8 @@ pipeline {
                     // Kill any running jobs
                     // abortAllPreviousBuildInProgress(currentBuild)
                     echo "Current Pull Request ID: ${env.CHANGE_ID}"
-                    echo "Current Pull Request ID: ${GITHUB_PR_NUMBER}"
+                    echo "Current Pull Request ID: ${CHANGE_ID}"
+                    echo "Current Pull Request ID: ${pullRequest.id}"
                     // Grab any files under the pipeline directory
                     // Verify they match the trusted version
                     files = findFiles(glob: 'pipeline/**')
