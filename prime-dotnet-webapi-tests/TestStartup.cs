@@ -13,7 +13,7 @@ namespace PrimeTests
 {
     public class TestStartup : Startup
     {
-        public TestStartup(IWebHostEnvironment env, IConfiguration configuration) 
+        public TestStartup(IHostingEnvironment env, IConfiguration configuration) 
             : base(env, TestHelper.GetIConfigurationRoot(Directory.GetCurrentDirectory()))
         {}
 

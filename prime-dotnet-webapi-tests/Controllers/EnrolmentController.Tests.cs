@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 using Bogus;
 using Prime;
 using PrimeTests.Utils;
+
 using System.Net.Http;
 using System.Net.Http.Headers;
 
@@ -162,7 +163,6 @@ namespace PrimeTests.Controllers
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
 
             Enrolment updatedEnrolment = testContext.GetEnrolmentById(enrolmentId);
-            Enrolment ee = TestUtils.GetEnrolmentById(testContext.ApiDbContext, enrolmentId);
             Assert.Equal(expectedFirstName, updatedEnrolment.Enrollee.FirstName);
         }
     }

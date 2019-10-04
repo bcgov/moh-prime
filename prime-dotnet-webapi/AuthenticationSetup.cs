@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 
 namespace Prime
@@ -17,7 +16,7 @@ namespace Prime
     {
         public static void Initialize(IServiceCollection services,
             IConfiguration configuration,
-            IWebHostEnvironment environment)
+            IHostingEnvironment environment)
         {
             if (services is null)
             {
@@ -76,7 +75,7 @@ namespace Prime
                 });
         }
 
-        private static Task OnTokenValidated(TokenValidatedContext context, IWebHostEnvironment environment)
+        private static Task OnTokenValidated(TokenValidatedContext context, IHostingEnvironment environment)
         {
             if (context.SecurityToken is JwtSecurityToken accessToken)
             {

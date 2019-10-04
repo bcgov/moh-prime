@@ -16,37 +16,28 @@ namespace Prime.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
-                .HasAnnotation("ProductVersion", "3.0.0")
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("Prime.Models.Address", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<int>("AddressType")
-                        .HasColumnType("integer");
+                    b.Property<int>("AddressType");
 
-                    b.Property<string>("City")
-                        .HasColumnType("text");
+                    b.Property<string>("City");
 
-                    b.Property<string>("Country")
-                        .HasColumnType("text");
+                    b.Property<string>("Country");
 
-                    b.Property<int>("EnrolleeId")
-                        .HasColumnType("integer");
+                    b.Property<int>("EnrolleeId");
 
-                    b.Property<string>("Postal")
-                        .HasColumnType("text");
+                    b.Property<string>("Postal");
 
-                    b.Property<string>("Province")
-                        .HasColumnType("text");
+                    b.Property<string>("Province");
 
-                    b.Property<string>("Street")
-                        .HasColumnType("text");
+                    b.Property<string>("Street");
 
                     b.HasKey("Id");
 
@@ -62,28 +53,20 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.Certification", b =>
                 {
                     b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<short>("CollegeCode")
-                        .HasColumnType("smallint");
+                    b.Property<short>("CollegeCode");
 
-                    b.Property<int>("EnrolmentId")
-                        .HasColumnType("integer");
+                    b.Property<int>("EnrolmentId");
 
-                    b.Property<short>("LicenseCode")
-                        .HasColumnType("smallint");
+                    b.Property<short>("LicenseCode");
 
                     b.Property<string>("LicenseNumber")
-                        .IsRequired()
-                        .HasColumnType("text");
+                        .IsRequired();
 
-                    b.Property<short?>("PracticeCode")
-                        .HasColumnType("smallint");
+                    b.Property<short?>("PracticeCode");
 
-                    b.Property<DateTime>("RenewalDate")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<DateTime>("RenewalDate");
 
                     b.HasKey("Id");
 
@@ -101,13 +84,10 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.College", b =>
                 {
                     b.Property<short>("Code")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("smallint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
+                        .IsRequired();
 
                     b.HasKey("Code");
 
@@ -139,48 +119,34 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.Enrollee", b =>
                 {
                     b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ContactEmail")
-                        .HasColumnType("text");
+                    b.Property<string>("ContactEmail");
 
-                    b.Property<string>("ContactPhone")
-                        .HasColumnType("text");
+                    b.Property<string>("ContactPhone");
 
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<DateTime>("DateOfBirth");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("text");
+                        .IsRequired();
 
                     b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("text");
+                        .IsRequired();
 
-                    b.Property<string>("MiddleName")
-                        .HasColumnType("text");
+                    b.Property<string>("MiddleName");
 
-                    b.Property<string>("PreferredFirstName")
-                        .HasColumnType("text");
+                    b.Property<string>("PreferredFirstName");
 
-                    b.Property<string>("PreferredLastName")
-                        .HasColumnType("text");
+                    b.Property<string>("PreferredLastName");
 
-                    b.Property<string>("PreferredMiddleName")
-                        .HasColumnType("text");
+                    b.Property<string>("PreferredMiddleName");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
+                        .IsRequired();
 
-                    b.Property<string>("VoiceExtension")
-                        .HasColumnType("text");
+                    b.Property<string>("VoiceExtension");
 
-                    b.Property<string>("VoicePhone")
-                        .HasColumnType("text");
+                    b.Property<string>("VoicePhone");
 
                     b.HasKey("Id");
 
@@ -190,51 +156,35 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.Enrolment", b =>
                 {
                     b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("AppliedDate")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<DateTime>("AppliedDate");
 
-                    b.Property<bool?>("Approved")
-                        .HasColumnType("boolean");
+                    b.Property<bool?>("Approved");
 
-                    b.Property<DateTime?>("ApprovedDate")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<DateTime?>("ApprovedDate");
 
-                    b.Property<string>("ApprovedReason")
-                        .HasColumnType("text");
+                    b.Property<string>("ApprovedReason");
 
-                    b.Property<string>("DeviceProviderNumber")
-                        .HasColumnType("text");
+                    b.Property<string>("DeviceProviderNumber");
 
-                    b.Property<int>("EnrolleeId")
-                        .HasColumnType("integer");
+                    b.Property<int>("EnrolleeId");
 
-                    b.Property<bool?>("HasCertification")
-                        .HasColumnType("boolean");
+                    b.Property<bool?>("HasCertification");
 
-                    b.Property<bool?>("HasConviction")
-                        .HasColumnType("boolean");
+                    b.Property<bool?>("HasConviction");
 
-                    b.Property<bool?>("HasDisciplinaryAction")
-                        .HasColumnType("boolean");
+                    b.Property<bool?>("HasDisciplinaryAction");
 
-                    b.Property<bool?>("HasPharmaNetSuspended")
-                        .HasColumnType("boolean");
+                    b.Property<bool?>("HasPharmaNetSuspended");
 
-                    b.Property<bool?>("HasRegistrationSuspended")
-                        .HasColumnType("boolean");
+                    b.Property<bool?>("HasRegistrationSuspended");
 
-                    b.Property<bool?>("IsAccessingPharmaNetOnBehalfOf")
-                        .HasColumnType("boolean");
+                    b.Property<bool?>("IsAccessingPharmaNetOnBehalfOf");
 
-                    b.Property<bool?>("IsDeviceProvider")
-                        .HasColumnType("boolean");
+                    b.Property<bool?>("IsDeviceProvider");
 
-                    b.Property<bool?>("IsInsulinPumpProvider")
-                        .HasColumnType("boolean");
+                    b.Property<bool?>("IsInsulinPumpProvider");
 
                     b.HasKey("Id");
 
@@ -246,16 +196,12 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.Job", b =>
                 {
                     b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<int>("EnrolmentId")
-                        .HasColumnType("integer");
+                    b.Property<int>("EnrolmentId");
 
                     b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("text");
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -267,13 +213,10 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.JobName", b =>
                 {
                     b.Property<short>("Code")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("smallint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
+                        .IsRequired();
 
                     b.HasKey("Code");
 
@@ -325,13 +268,10 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.License", b =>
                 {
                     b.Property<short>("Code")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("smallint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
+                        .IsRequired();
 
                     b.HasKey("Code");
 
@@ -368,28 +308,20 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.Organization", b =>
                 {
                     b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<string>("City")
-                        .HasColumnType("text");
+                    b.Property<string>("City");
 
-                    b.Property<DateTime?>("EndDate")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<DateTime?>("EndDate");
 
-                    b.Property<int>("EnrolmentId")
-                        .HasColumnType("integer");
+                    b.Property<int>("EnrolmentId");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
+                        .IsRequired();
 
-                    b.Property<short>("OrganizationTypeCode")
-                        .HasColumnType("smallint");
+                    b.Property<short>("OrganizationTypeCode");
 
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<DateTime>("StartDate");
 
                     b.HasKey("Id");
 
@@ -403,13 +335,10 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.OrganizationName", b =>
                 {
                     b.Property<short>("Code")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("smallint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
+                        .IsRequired();
 
                     b.HasKey("Code");
 
@@ -431,13 +360,10 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.OrganizationType", b =>
                 {
                     b.Property<short>("Code")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("smallint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
+                        .IsRequired();
 
                     b.HasKey("Code");
 
@@ -459,13 +385,10 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.Practice", b =>
                 {
                     b.Property<short>("Code")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("smallint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
+                        .IsRequired();
 
                     b.HasKey("Code");
 
@@ -523,20 +446,17 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.College", "College")
                         .WithMany("Certifications")
                         .HasForeignKey("CollegeCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Prime.Models.Enrolment", "Enrolment")
                         .WithMany("Certifications")
                         .HasForeignKey("EnrolmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Prime.Models.License", "License")
                         .WithMany("Certifications")
                         .HasForeignKey("LicenseCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Prime.Models.Practice", "Practice")
                         .WithMany("Certifications")
@@ -548,8 +468,7 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany("Enrolments")
                         .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Prime.Models.Job", b =>
@@ -557,8 +476,7 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrolment", "Enrolment")
                         .WithMany("Jobs")
                         .HasForeignKey("EnrolmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Prime.Models.Organization", b =>
@@ -566,14 +484,12 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrolment", "Enrolment")
                         .WithMany("Organizations")
                         .HasForeignKey("EnrolmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Prime.Models.OrganizationType", "OrganizationType")
                         .WithMany("Organizations")
                         .HasForeignKey("OrganizationTypeCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Prime.Models.MailingAddress", b =>
@@ -581,8 +497,7 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithOne("MailingAddress")
                         .HasForeignKey("Prime.Models.MailingAddress", "EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Prime.Models.PhysicalAddress", b =>
@@ -591,8 +506,7 @@ namespace Prime.Migrations
                         .WithOne("PhysicalAddress")
                         .HasForeignKey("Prime.Models.PhysicalAddress", "EnrolleeId")
                         .HasConstraintName("FK_Address_Enrollee_EnrolleeId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }
