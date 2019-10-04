@@ -6,7 +6,7 @@ export interface ProfessionalInfo {
   is_insulin_pump_provider: boolean;
 }
 
-interface CollegeCertification {
+export interface CollegeCertification {
   college_certifications: string;
   license_number: string;
   license_class: string;

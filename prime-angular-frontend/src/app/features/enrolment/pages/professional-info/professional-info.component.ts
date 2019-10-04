@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
@@ -22,6 +22,7 @@ export class ProfessionalInfoComponent implements OnInit, OnDestroy {
   ];
   public colleges: ConfigKeyValue[];
   public licenses: ConfigKeyValue[];
+  public advancedPractices: ConfigKeyValue[];
   public defaultJobs: ConfigKeyValue[];
 
   constructor(
@@ -33,11 +34,16 @@ export class ProfessionalInfoComponent implements OnInit, OnDestroy {
   ) {
     this.colleges = this.configService.colleges;
     this.licenses = this.configService.licenses;
+    this.advancedPractices = this.configService.advancedPractices;
     this.defaultJobs = this.configService.jobs;
   }
 
   public get hasCertification(): FormGroup {
     return this.form.get('hasCertification') as FormGroup;
+  }
+
+  public get certifications(): FormArray {
+    return this.form.get('certifications') as FormArray;
   }
 
   public get isDeviceProvider(): FormGroup {
@@ -65,6 +71,22 @@ export class ProfessionalInfoComponent implements OnInit, OnDestroy {
     }
   }
 
+  private addCertification() {
+    const certification = this.fb.group({
+      collegeCode: [null, [Validators.required]],
+      licenseNumber: [null, [Validators.required]],
+      licenseCode: [null, [Validators.required]],
+      renewalDate: [null, [Validators.required]],
+      practiceCode: [null, []]
+    });
+
+    this.certifications.push(certification);
+  }
+
+  private removeCertification(index: number) {
+    this.certifications.removeAt(index);
+  }
+
   public canDeactivate(): Observable<boolean> | boolean {
     return (this.form.dirty)
       ? this.dialog.open(ConfirmDiscardChangesDialogComponent).afterClosed()
@@ -89,15 +111,5 @@ export class ProfessionalInfoComponent implements OnInit, OnDestroy {
       isAccessingPharmaNetOnBehalfOf: [null, [FormControlValidators.requiredBoolean]],
       jobs: [[], []],
     });
-  }
-
-  private addCertificationFormGroup() {
-    // this.fb.group({
-    //   collegeCode: ['', []],
-    //   licenseNumber: ['', []],
-    //   licenseCode: ['', []],
-    //   renewalDate: ['', []],
-    //   practiceCode: ['', []]
-    // });
   }
 }

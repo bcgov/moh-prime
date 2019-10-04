@@ -27,9 +27,98 @@
         <div class="row"
              *ngIf="hasCertification.value"
              formArrayName="certifications">
-          <div class="col-sm-12 col-md-6 col-lg-4">
+          <div class="col-sm-12 col-md-6 col-lg-4 py-3">
 
+            <ng-container *ngFor="let certificate of certifications.controls; let i = index, let first = first"
+                          [formGroupName]="i">
 
+              <hr *ngIf="!first">
+
+              <div class="row">
+                <div class="col-sm-12">
+
+                  <mat-form-field class="w-100">
+                    <mat-label>College</mat-label>
+                    <mat-select formControlName="collegeCode">
+                      <mat-option *ngFor="let college of colleges"
+                                  [value]="college.code">
+                        {{ college.name }}
+                      </mat-option>
+                    </mat-select>
+                    <!-- <mat-error *ngIf="renewalDate.hasError('required')">Required</mat-error> -->
+                  </mat-form-field>
+
+                </div>
+                <div class="col-sm-12">
+
+                  <mat-form-field class="w-100">
+                    <input matInput
+                           placeholder="License Number"
+                           formControlName="licenseNumber">
+                    <!-- <mat-error *ngIf="renewalDate.hasError('required')">Required</mat-error> -->
+                  </mat-form-field>
+
+                </div>
+                <div class="col-sm-12">
+
+                  <mat-form-field class="w-100">
+                    <mat-label>License Class</mat-label>
+                    <mat-select formControlName="licenseCode">
+                      <mat-option *ngFor="let license of licenses"
+                                  [value]="license.code">
+                        {{ license.name }}
+                      </mat-option>
+                    </mat-select>
+                    <!-- <mat-error *ngIf="renewalDate.hasError('required')">Required</mat-error> -->
+                  </mat-form-field>
+
+                </div>
+                <div class="col-sm-12">
+
+                  <mat-form-field class="w-100">
+                    <input matInput
+                           placeholder="Renewal Date"
+                           [matDatepicker]="picker"
+                           formControlName="renewalDate"
+                           (click)="picker.open()">
+                    <mat-datepicker-toggle matSuffix
+                                           [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker
+                                    startView="multi-year"
+                                    [touchUi]="isMobile"></mat-datepicker>
+                    <!-- <mat-error *ngIf="renewalDate.hasError('required')">Required</mat-error> -->
+                  </mat-form-field>
+
+                </div>
+                <div class="col-sm-12">
+
+                  <mat-form-field class="w-100">
+                    <mat-label>Advanced Practices</mat-label>
+                    <mat-select formControlName="practiceCode">
+                      <mat-option *ngFor="let practice of advancedPractices"
+                                  [value]="practice.code">
+                        {{ practice.name }}
+                      </mat-option>
+                    </mat-select>
+                    <!-- <mat-error *ngIf="renewalDate.hasError('required')">Required</mat-error> -->
+                  </mat-form-field>
+
+                </div>
+                <div class="col-sm-12 text-right">
+
+                  <button mat-raised-button
+                          color="warn"
+                          (click)="removeCertification(i)">Remove Certification</button>
+
+                </div>
+              </div>
+
+            </ng-container>
+
+            <button mat-raised-button
+                    color="primary"
+                    (click)="addCertification()"
+                    [disabled]="certifications.invalid">Add Certification</button>
 
           </div>
         </div>

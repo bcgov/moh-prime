@@ -28,7 +28,7 @@ export class ConfigService {
   }
 
   public get licenses() {
-    return [...this.configuration.jobNames];
+    return [...this.configuration.licenses];
   }
 
   public get organization() {
@@ -48,10 +48,12 @@ export class ConfigService {
   public async load(): Promise<Config> {
     return this.getConfiguration()
       .toPromise()
-      .then(this.addColleges)
-      .then(this.addJobNames)
       .then(this.addProvinces)
       .then(this.addCountries)
+      .then(this.addColleges)
+      .then(this.addLicenses)
+      .then(this.addAdvancedPractices)
+      .then(this.addJobNames)
       .then((config) => this.configuration = config);
   }
 
@@ -72,10 +74,24 @@ export class ConfigService {
   private addColleges(config: Config) {
     return {
       colleges: [
-        { code: 'CRNBC', name: 'College of Registered Nurses of BC (CRNBC)' },
-        { code: 'CPSBC', name: 'College of Physicians and Surgeons of BC (CPSBC)' },
-        { code: 'CPBC', name: 'College of Pharmacists of BC (CPBC)' },
-        { code: 'NONE', name: 'None' },
+        { code: 'CPSBC', name: 'College of Physicians and Surgeons of BC (CPSBC)', prefix: '91' },
+        { code: 'CPBC', name: 'College of Pharmacists of BC (CPBC)', prefix: 'P1' },
+        { code: 'CRNBC', name: 'College of Registered Nurses of BC (CRNBC)', prefix: '96' },
+        { code: 'NONE', name: 'None', prefix: null },
+      ],
+      ...config
+    };
+  }
+
+  private addLicenses(config: Config) {
+    return {
+      licenses: [
+        { code: 'FULGENERAL', name: 'Full - General', college: 'CRNBC' },
+        { code: 'TEMPREGNUR', name: 'Temporary Registered Nurse', college: 'CRNBC' },
+        { code: 'FULPHARMA', name: 'Full Pharmacist', college: 'CPSBC' },
+        { code: 'FULSEPCLTY', name: 'Full - Specialty', college: 'CPSBC' },
+        { code: 'REGINURSE', name: 'Registered Nurse', college: 'CPBC' },
+        { code: 'TEMPNURSE', name: 'Temporary Registered Nurse', college: 'CPBC' },
       ],
       ...config
     };
@@ -92,6 +108,18 @@ export class ConfigService {
         { code: 'REGICLERK', name: 'Registration Clerk' },
         { code: 'WARDCLERK', name: 'Ward Clerk' },
         { code: 'OTHER', name: 'Other' }
+      ],
+      ...config
+    };
+  }
+
+  private addAdvancedPractices(config: Config) {
+    return {
+      advancedPractices: [
+        { code: 'REMOTEPRAC', name: 'Remote Practice' },
+        { code: 'REPRODCARE', name: 'Reproductive Care' },
+        { code: 'SXTRANSINF', name: 'Sexually Transmitted Infections (STI)' },
+        { code: 'NONE', name: 'None' }
       ],
       ...config
     };
