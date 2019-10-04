@@ -1,0 +1,155 @@
+<div class="container">
+  <div class="row">
+    <div class="col py-4">
+
+      <form (ngSubmit)="onSubmit()"
+            [formGroup]="form"
+            novalidate>
+
+        <h1 class="h2 mb-4">Application Enrolment</h1>
+
+        <app-sub-header subheader="Professional Information"
+                        help="Lorem ipsum dolor, sit amet consectetur adipisicing elit."></app-sub-header>
+
+        <p>Do you have a college certification?</p>
+
+        <mat-radio-group aria-labelledby="example-radio-group-label"
+                         class="example-radio-group"
+                         formControlName="hasCertification">
+          <mat-radio-button class="mr-4"
+                            *ngFor="let decision of decisions"
+                            [value]="decision.code">
+            {{ decision.name }}
+          </mat-radio-button>
+          <!-- <mat-error *ngIf="hasCertification.hasError('required')">Required</mat-error> -->
+        </mat-radio-group>
+
+        <div class="row"
+             *ngIf="hasCertification.value"
+             formArrayName="certifications">
+          <div class="col-sm-12 col-md-6 col-lg-4">
+
+
+
+          </div>
+        </div>
+
+        <p>Are you a device provider?</p>
+
+        <mat-radio-group aria-labelledby="example-radio-group-label"
+                         class="example-radio-group"
+                         formControlName="isDeviceProvider">
+          <mat-radio-button class="mr-4"
+                            *ngFor="let decision of decisions"
+                            [value]="decision.code">
+            {{ decision.name }}
+          </mat-radio-button>
+          <!-- <mat-error *ngIf="isDeviceProvider.hasError('required')">Required</mat-error> -->
+        </mat-radio-group>
+
+        <div class="row"
+             *ngIf="isDeviceProvider.value">
+          <div class="col-sm-12 col-md-6 col-lg-4">
+
+            <mat-form-field class="w-100">
+              <input matInput
+                     placeholder="Device Provider Number"
+                     formControlName="deviceProviderNumber">
+            </mat-form-field>
+
+          </div>
+        </div>
+
+        <p>Are you an insulin pump provider?</p>
+
+        <mat-radio-group aria-labelledby="example-radio-group-label"
+                         class="example-radio-group"
+                         formControlName="isInsulinPumpProvider">
+          <mat-radio-button class="mr-4"
+                            *ngFor="let decision of decisions"
+                            [value]="decision.code">
+            {{ decision.name }}
+          </mat-radio-button>
+          <!-- <mat-error *ngIf="isInsulinPumpProvider.hasError('required')">Required</mat-error> -->
+        </mat-radio-group>
+
+        <p>Are you accessing PharmNet on behalf of someone else?</p>
+
+        <mat-radio-group aria-labelledby="example-radio-group-label"
+                         class="example-radio-group"
+                         formControlName="isAccessingPharmaNetOnBehalfOf">
+          <mat-radio-button class="mr-4"
+                            *ngFor="let decision of decisions"
+                            [value]="decision.code">
+            {{ decision.name }}
+          </mat-radio-button>
+          <!-- <mat-error *ngIf="isAccessingPharmaNetOnBehalfOf.hasError('required')">Required</mat-error> -->
+        </mat-radio-group>
+
+        <div class="row"
+             *ngIf="isAccessingPharmaNetOnBehalfOf.value">
+          <div class="col-sm-12 col-md-6 col-lg-4">
+
+            <!-- <mat-form-field class="w-100">
+              <mat-label>Jobs</mat-label>
+              <mat-select formControlName="jobs"
+                          multiple>
+                <mat-option *ngFor="let job of defaultJobs"
+                            [value]="job.name">{{ job.name }}</mat-option>
+              </mat-select>
+            </mat-form-field> -->
+
+            <!-- <mat-form-field class="w-100">
+              <mat-chip-list #chipList
+                             aria-label="Job selection">
+                <mat-chip *ngFor="let job of jobs; let i = index"
+                          [selectable]="selectable"
+                          [removable]="removable"
+                          (removed)="remove(i)">
+                  {{ job.name }}
+                  <mat-icon matChipRemove
+                            *ngIf="removable">cancel</mat-icon>
+                </mat-chip>
+                <input placeholder="Job Title"
+                       #jobInput
+                       formControlName="jobs"
+                       [matAutocomplete]="auto"
+                       [matChipInputFor]="chipList"
+                       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                       [matChipInputAddOnBlur]="addOnBlur"
+                       (matChipInputTokenEnd)="add($event)">
+              </mat-chip-list>
+              <mat-autocomplete #auto="matAutocomplete"
+                                (optionSelected)="selected($event)">
+                <mat-option *ngFor="let job of defaultJobs"
+                            [value]="job.name">
+                  {{ job.name }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field> -->
+
+          </div>
+        </div>
+
+        <div class="row justify-content-between">
+          <div class="col pt-2">
+
+            <button mat-raised-button
+                    color="primary"
+                    routerLink="../contact">Back</button>
+
+          </div>
+          <div class="col">
+
+            <button mat-raised-button
+                    color="primary"
+                    class="float-right">Next</button>
+
+          </div>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,140 @@
+<div class="container">
+  <div class="row">
+    <div class="col py-4">
+
+      <form (ngSubmit)="onSubmit()"
+            [formGroup]="form"
+            novalidate>
+
+        <h1 class="h2 mb-4">Application Enrolment</h1>
+
+        <app-sub-header subheader="Self Declaration"
+                        help="Lorem ipsum dolor, sit amet consectetur adipisicing elit."></app-sub-header>
+
+        <p>Have you ever been the subject of an order or a conviction for an information contravention?</p>
+
+        <mat-radio-group aria-labelledby="example-radio-group-label"
+                         class="example-radio-group"
+                         formControlName="hasConviction">
+          <mat-radio-button class="mr-4"
+                            *ngFor="let decision of decisions"
+                            [value]="decision.code">
+            {{ decision.name }}
+          </mat-radio-button>
+          <!-- <mat-error *ngIf="hasConviction.hasError('required')">Required</mat-error> -->
+        </mat-radio-group>
+
+        <div class="row"
+             *ngIf="hasConviction.value">
+          <div class="col-sm-12 col-md-6 col-lg-4">
+
+            <mat-form-field class="w-100">
+              <textarea matInput
+                        placeholder="Please provide details"
+                        rows="5"></textarea>
+            </mat-form-field>
+
+          </div>
+        </div>
+
+        <p>Have you ever had your registration with a governing body of a health profession suspended or cancelled?</p>
+
+        <mat-radio-group aria-labelledby="example-radio-group-label"
+                         class="example-radio-group"
+                         formControlName="hasRegistrationSuspended">
+          <mat-radio-button class="mr-4"
+                            *ngFor="let decision of decisions"
+                            [value]="decision.code">
+            {{ decision.name }}
+          </mat-radio-button>
+          <!-- <mat-error *ngIf="hasRegistrationSuspended.hasError('required')">Required</mat-error> -->
+        </mat-radio-group>
+
+        <div class="row"
+             *ngIf="hasRegistrationSuspended.value">
+          <div class="col-sm-12 col-md-6 col-lg-4">
+
+            <mat-form-field class="w-100">
+              <textarea matInput
+                        placeholder="Please provide details"
+                        rows="5"></textarea>
+            </mat-form-field>
+
+          </div>
+        </div>
+
+        <p>Have you ever had Terms and Conditions imposed on your license as a result of disciplinary actions taken by a
+          governing body?</p>
+
+        <mat-radio-group aria-labelledby="example-radio-group-label"
+                         class="example-radio-group"
+                         formControlName="hasDisciplinaryAction">
+          <mat-radio-button class="mr-4"
+                            *ngFor="let decision of decisions"
+                            [value]="decision.code">
+            {{ decision.name }}
+          </mat-radio-button>
+          <!-- <mat-error *ngIf="hasDisciplinaryAction.hasError('required')">Required</mat-error> -->
+        </mat-radio-group>
+
+        <div class="row"
+             *ngIf="hasDisciplinaryAction.value">
+          <div class="col-sm-12 col-md-6 col-lg-4">
+
+            <mat-form-field class="w-100">
+              <textarea matInput
+                        placeholder="Please provide details"
+                        rows="5"></textarea>
+            </mat-form-field>
+
+          </div>
+        </div>
+
+        <p>Have you ever had your access to PharmaNet suspended or revoked?</p>
+
+        <mat-radio-group aria-labelledby="example-radio-group-label"
+                         class="example-radio-group"
+                         formControlName="hasPharmaNetSuspended">
+          <mat-radio-button class="mr-4"
+                            *ngFor="let decision of decisions"
+                            [value]="decision.code">
+            {{ decision.name }}
+          </mat-radio-button>
+          <!-- <mat-error *ngIf="hasPharmaNetSuspended.hasError('required')">Required</mat-error> -->
+        </mat-radio-group>
+
+        <div class="row"
+             *ngIf="hasPharmaNetSuspended.value">
+          <div class="col-sm-12 col-md-6 col-lg-4">
+
+            <mat-form-field class="w-100">
+              <textarea matInput
+                        placeholder="Please provide details"
+                        rows="5"></textarea>
+            </mat-form-field>
+
+          </div>
+        </div>
+
+        <div class="row justify-content-between">
+          <div class="col pt-2">
+
+            <button mat-raised-button
+                    color="primary"
+                    routerLink="../professional">Back</button>
+
+          </div>
+          <div class="col">
+
+            <button mat-raised-button
+                    color="primary"
+                    class="float-right">Next</button>
+
+          </div>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>

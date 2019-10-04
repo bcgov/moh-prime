@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 
 import { Subscription } from 'rxjs';
@@ -17,19 +17,17 @@ import { AuthResource } from '@auth/shared/services/auth-resource.service';
 export class LoginComponent implements OnInit {
   public form: FormGroup;
   public busy: Subscription;
+  public submitted = false;
   private redirectUrl: string;
 
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private route: ActivatedRoute,
     private router: Router,
-    private formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private authResource: AuthResource,
-    private loggerService: LoggerService
-  ) {
-    // TODO: inherit from form base class
-    // super();
-  }
+    private logger: LoggerService
+  ) { }
 
   /**
    * Handle form submission.
@@ -38,16 +36,26 @@ export class LoginComponent implements OnInit {
    * @memberof LoginComponent
    */
   public onSubmit(event: Event): void {
+    this.router.navigate(['enrolment/profile']);
+
+    this.submitted = true;
+
     if (this.form.valid) {
-      const payload = { ...this.form.value };
-      this.busy = this.authResource.login(payload)
-        .subscribe(
-          () => this.onLoginComplete(),
-          (error: any) => this.onLoginError(error)
-        );
+      this.logger.info('VALID', this.form.value);
+      // const payload = { ...this.form.value };
+      // this.busy = this.authResource.login(payload)
+      //   .subscribe(
+      //     () => this.onLoginComplete(),
+      //     (error: any) => this.onLoginError(error)
+      //   );
     } else {
-      // TODO: inherit form base class
-      // this.formMarkAsTouched();
+      this.logger.info('INVALID', this.form.value);
+      // TODO: can't use instanceOf FormGroup FormControl, FormArray
+      Object.keys(this.form.controls).forEach((controlName) => {
+        const control = this.form.get(controlName) as FormGroup;
+        control.markAllAsTouched();
+        control.updateValueAndValidity();
+      });
     }
   }
 
@@ -68,15 +76,8 @@ export class LoginComponent implements OnInit {
    * @memberof LoginComponent
    */
   private createFormInstance() {
-    this.form = this.formBuilder.group({
-      username: [
-        '',
-        [Validators.required]
-      ],
-      password: [
-        '',
-        [Validators.required]
-      ]
+    this.form = this.fb.group({
+      login: []
     });
   }
 

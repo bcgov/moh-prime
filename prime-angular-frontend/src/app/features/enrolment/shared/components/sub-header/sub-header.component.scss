@@ -1,0 +1,19 @@
+@import 'palette';
+
+.sub-header {
+  border-bottom: 2px solid #efefef;
+  margin-bottom: 1rem;
+  padding-bottom: 0.25rem;
+
+  h2 {
+    color: theme-palette(blue);
+  }
+
+  p {
+    color: lighten(black, 40%);
+  }
+
+  h2, p {
+    margin-bottom: 0;
+  }
+}

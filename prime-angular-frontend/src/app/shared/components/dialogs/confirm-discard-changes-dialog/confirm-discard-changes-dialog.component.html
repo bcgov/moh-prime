@@ -1,0 +1,17 @@
+<h2 mat-dialog-title>
+  Unsaved Changes Found
+</h2>
+<mat-dialog-content>
+  Changes are pending that have not been saved. Would you like to remain on this page until it has been completed and
+  saved, or discard your changes?
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-raised-button
+          [mat-dialog-close]="false"
+          cdkFocusInitial
+          class="my-2 mr-3">Keep Changes</button>
+  <button mat-raised-button
+          color="primary"
+          [mat-dialog-close]="true"
+          class="my-2 mr-3">Discard Changes</button>
+</mat-dialog-actions>

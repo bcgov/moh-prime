@@ -148,4 +148,19 @@ export class FormControlValidators {
       ? Validators.requiredTrue(control)
       : Validators.required(control);
   }
+
+  /**
+   * Checks a form control is a boolean.
+   *
+   * @static
+   * @param {AbstractControl} control
+   * @returns {(ValidationErrors | null)}
+   * @memberof FormControlValidators
+   */
+  static requiredBoolean(control: AbstractControl): ValidationErrors | null {
+    // Not checking the control value on purpose!
+    return (typeof control.value === 'boolean')
+      ? null
+      : { boolean: true };
+  }
 }

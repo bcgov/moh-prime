@@ -1,15 +1,11 @@
 import { NgModule } from '@angular/core';
 import {
-  MatSidenavModule, MatDialogModule, MatButtonModule, MatSnackBarModule,
-  MatToolbarModule, MatIconModule, MatListModule, MatDividerModule,
-  MatChipsModule, MatMenuModule, MatCardModule, MatDatepickerModule,
-  MatProgressSpinnerModule, MatProgressBarModule, MAT_DIALOG_DEFAULT_OPTIONS, MAT_DATE_FORMATS, MatSlideToggleModule,
+  MatInputModule, MatSelectModule, MatCheckboxModule, MatRadioModule,
+  MatButtonModule, MatSnackBarModule, MatIconModule, MatDialogModule,
+  MatSidenavModule, MatDatepickerModule, DateAdapter, MAT_DATE_LOCALE, MatChipsModule, MatAutocompleteModule, MatSlideToggleModule, MAT_DIALOG_DEFAULT_OPTIONS, MatToolbarModule
 } from '@angular/material';
-// import { MatMomentDateModule } from '@angular/material-moment-adapter';
-import { CdkTableModule } from '@angular/cdk/table';
-import { CdkStepperModule } from '@angular/cdk/stepper';
+import { MatMomentDateModule, MomentDateAdapter } from '@angular/material-moment-adapter';
 
-// TODO: remove date formats if not used
 export const APP_DATE_FORMATS = {
   parse: {
     dateInput: 'LL',
@@ -24,57 +20,51 @@ export const APP_DATE_FORMATS = {
 
 @NgModule({
   imports: [
-    // MatSidenavModule,
-    // MatDialogModule,
-    // MatButtonModule,
+    MatAutocompleteModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatChipsModule,
+    MatDatepickerModule,
+    MatDialogModule,
+    MatIconModule,
+    MatInputModule,
+    MatMomentDateModule,
+    MatSelectModule,
+    MatSidenavModule,
+    MatSlideToggleModule,
     MatSnackBarModule,
-    // MatToolbarModule,
-    // MatIconModule,
-    // MatListModule,
-    // MatDatepickerModule,
-    // MatDividerModule,
-    // MatChipsModule,
-    // MatMenuModule,
-    // MatCardModule,
-    // MatSlideToggleModule,
-    // MatMomentDateModule,
-    // MatProgressSpinnerModule,
-    // MatProgressBarModule,
-    // CdkTableModule,
-    // CdkStepperModule
+    MatToolbarModule,
+    MatRadioModule
   ],
   exports: [
-    // MatSidenavModule,
-    // MatDialogModule,
-    // MatButtonModule,
+    MatAutocompleteModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatChipsModule,
+    MatDatepickerModule,
+    MatDialogModule,
+    MatIconModule,
+    MatInputModule,
+    MatMomentDateModule,
+    MatSelectModule,
+    MatSidenavModule,
+    MatSlideToggleModule,
     MatSnackBarModule,
-    // MatToolbarModule,
-    // MatIconModule,
-    // MatListModule,
-    // MatDatepickerModule,
-    // MatDividerModule,
-    // MatChipsModule,
-    // MatMenuModule,
-    // MatCardModule,
-    // MatSlideToggleModule,
-    // MatMomentDateModule,
-    // MatProgressSpinnerModule,
-    // MatProgressBarModule,
-    // CdkTableModule,
-    // CdkStepperModule
+    MatToolbarModule,
+    MatRadioModule
   ],
   providers: [
-    // TODO: update material dialog default options
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE]
+    },
     {
       provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {
         width: '500px',
         hasBackdrop: true
       }
     },
-    // TODO: remove date formats if not used
-    {
-      provide: MAT_DATE_FORMATS, useValue: APP_DATE_FORMATS
-    }
   ]
 })
 export class NgxMaterialModule { }

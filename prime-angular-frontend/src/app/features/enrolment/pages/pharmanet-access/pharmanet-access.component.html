@@ -1,0 +1,84 @@
+<div class="container">
+  <div class="row">
+    <div class="col py-4">
+
+      <form (ngSubmit)="onSubmit()"
+            [formGroup]="form"
+            novalidate>
+
+        <h1 class="h2 mb-4">Application Enrolment</h1>
+
+        <app-sub-header subheader="PharmaNet Access"
+                        help="Lorem ipsum dolor, sit amet consectetur adipisicing elit."></app-sub-header>
+
+        <div class="row">
+          <div class="col text-right">
+
+            <button mat-raised-button
+                    type="button"
+                    color="primary"
+                    class="mb-3">Add Organization</button>
+
+          </div>
+        </div>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Organization Name</th>
+              <th scope="col">Organization Type</th>
+              <th scope="col">City</th>
+              <th scope="col">Start Date</th>
+              <th scope="col">End Date</th>
+              <th>&nbsp;</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td scope="row">Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+              <td>@mdo</td>
+              <td>@mdo</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td scope="row">Jacob</td>
+              <td>Thornton</td>
+              <td>@fat</td>
+              <td>@fat</td>
+              <td>@fat</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td scope="row">Larry</td>
+              <td>the Bird</td>
+              <td>@twitter</td>
+              <td>@twitter</td>
+              <td>@twitter</td>
+              <td>&nbsp;</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="row justify-content-between">
+          <div class="col pt-2">
+
+            <button mat-raised-button
+                    color="primary"
+                    routerLink="../declaration">Back</button>
+
+          </div>
+          <div class="col text-right">
+
+            <button mat-raised-button
+                    color="primary">Next</button>
+
+          </div>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>

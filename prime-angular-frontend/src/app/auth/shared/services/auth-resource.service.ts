@@ -12,6 +12,7 @@ import { AuthTokenService } from '@auth/shared/services/auth-token.service';
   providedIn: 'root'
 })
 export class AuthResource {
+
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private http: HttpClient,

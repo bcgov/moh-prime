@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { AuthComponent } from '@auth/shared/components/auth/auth.component';
-import { AuthRedirectGuard } from '@auth/shared/guards/auth-redirect.guard';
-import { LoginComponent } from '@auth/pages/login/login.component';
+import { AuthComponent } from './shared/components/auth/auth.component';
+import { AuthRedirectGuard } from './shared/guards/auth-redirect.guard';
+
+import { InfoComponent } from './pages/info/info.component';
+import { LoginComponent } from './pages/login/login.component';
 
 const routes: Routes = [
   {
@@ -12,13 +14,18 @@ const routes: Routes = [
     canActivate: [AuthRedirectGuard],
     children: [
       {
+        path: 'info',
+        component: InfoComponent,
+        data: { title: 'Welcome - PRIME' }
+      },
+      {
         path: 'login',
         component: LoginComponent,
         data: { title: 'Sign In - PRIME' }
       },
       {
         path: '', // Equivalent to `/` and alias for `login`
-        redirectTo: 'login',
+        redirectTo: 'info',
         pathMatch: 'full'
       }
     ]

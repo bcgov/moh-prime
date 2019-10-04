@@ -1,57 +1,19 @@
-<!-- <app-busy-overlay [busy]="busy"> -->
-
 <div class="row justify-content-center">
   <div class="col">
 
     <h1 class="h4 title">Sign In</h1>
 
-    <form (ngSubmit)="onSubmit($event)"
+    <form (ngSubmit)="onSubmit()"
           [formGroup]="form"
           novalidate>
 
-      <div class="form-group">
-        <label for="username">
-          Username<em>*</em>
-        </label>
-        <input type="text"
-               class="form-control"
-               id="username"
-               formControlName="username"
-               appFormControlValidity>
-        <div class="invalid-feedback">
-          <div
-               *ngIf="form.get('username').hasError('required') && (form.get('username').errors | firstKey) === 'required'">
-            Required.
-          </div>
-        </div>
-      </div>
+      <app-login-form formControlName="login"
+                      [submitted]="submitted"></app-login-form>
 
-      <div class="form-group">
-        <label for="password">
-          Password<em>*</em>
-        </label>
-        <input type="password"
-               class="form-control"
-               id="password"
-               formControlName="password"
-               appFormControlValidity>
-        <div class="invalid-feedback">
-          <div
-               *ngIf="form.get('password').hasError('required') && (form.get('password').errors | firstKey) === 'required'">
-            Required.
-          </div>
-        </div>
-      </div>
-
-      <button type="submit"
-              class="btn btn-primary float-right"
-              [disabled]="this.busy && !this.busy.closed">
-        Sign In
-      </button>
+      <button mat-raised-button
+              color="primary">Sign In</button>
 
     </form>
 
   </div>
 </div>
-
-<!-- </app-busy-overlay> -->

@@ -8,7 +8,7 @@ const routes: Routes = [
     // Check authentication and authorization each time
     // the router navigates to the next route
     // TODO: add applicant route guard
-    canActivateChild: [],
+    // canActivateChild: [],
     children: [
       {
         path: 'enrolment',
