@@ -7,7 +7,7 @@ import { PharmanetAccess } from '../../pages/pharmanet-access/pharmanet-access.m
 export interface Enrolment {
   profile: Profile;
   contact: Contact;
-  professional_info: ProfessionalInfo;
-  self_declaration: SelfDeclaration;
-  pharmanet_access: PharmanetAccess;
+  professionalInfo: ProfessionalInfo;
+  selfDeclaration: SelfDeclaration;
+  pharmanetAccess: PharmanetAccess;
 }

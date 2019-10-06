@@ -21,17 +21,20 @@
                             [value]="decision.code">
             {{ decision.name }}
           </mat-radio-button>
-          <!-- <mat-error *ngIf="hasConviction.hasError('required')">Required</mat-error> -->
         </mat-radio-group>
 
-        <div class="row"
+        <div class="row mb-3"
              *ngIf="hasConviction.value">
           <div class="col-sm-12 col-md-6 col-lg-4">
 
-            <mat-form-field class="w-100">
+            <mat-form-field class="w-100"
+                            hintLabel="Max 200 Characters">
               <textarea matInput
                         placeholder="Please provide details"
-                        rows="5"></textarea>
+                        rows="5"
+                        maxlength="200"
+                        #hasConvictionInput></textarea>
+              <mat-hint align="end">{{ hasConvictionInput.value?.length || 0 }}/200</mat-hint>
             </mat-form-field>
 
           </div>
@@ -47,17 +50,20 @@
                             [value]="decision.code">
             {{ decision.name }}
           </mat-radio-button>
-          <!-- <mat-error *ngIf="hasRegistrationSuspended.hasError('required')">Required</mat-error> -->
         </mat-radio-group>
 
-        <div class="row"
+        <div class="row mb-3"
              *ngIf="hasRegistrationSuspended.value">
           <div class="col-sm-12 col-md-6 col-lg-4">
 
-            <mat-form-field class="w-100">
+            <mat-form-field class="w-100"
+                            hintLabel="Max 200 Characters">
               <textarea matInput
                         placeholder="Please provide details"
-                        rows="5"></textarea>
+                        rows="5"
+                        maxlength="200"
+                        #hasRegistrationSuspended></textarea>
+              <mat-hint align="end">{{ hasRegistrationSuspended.value?.length || 0 }}/200</mat-hint>
             </mat-form-field>
 
           </div>
@@ -74,17 +80,20 @@
                             [value]="decision.code">
             {{ decision.name }}
           </mat-radio-button>
-          <!-- <mat-error *ngIf="hasDisciplinaryAction.hasError('required')">Required</mat-error> -->
         </mat-radio-group>
 
-        <div class="row"
+        <div class="row mb-3"
              *ngIf="hasDisciplinaryAction.value">
           <div class="col-sm-12 col-md-6 col-lg-4">
 
-            <mat-form-field class="w-100">
+            <mat-form-field class="w-100"
+                            hintLabel="Max 200 Characters">
               <textarea matInput
                         placeholder="Please provide details"
-                        rows="5"></textarea>
+                        rows="5"
+                        maxlength="200"
+                        #hasDisciplinaryAction></textarea>
+              <mat-hint align="end">{{ hasDisciplinaryAction.value?.length || 0 }}/200</mat-hint>
             </mat-form-field>
 
           </div>
@@ -100,17 +109,20 @@
                             [value]="decision.code">
             {{ decision.name }}
           </mat-radio-button>
-          <!-- <mat-error *ngIf="hasPharmaNetSuspended.hasError('required')">Required</mat-error> -->
         </mat-radio-group>
 
-        <div class="row"
+        <div class="row mb-3"
              *ngIf="hasPharmaNetSuspended.value">
           <div class="col-sm-12 col-md-6 col-lg-4">
 
-            <mat-form-field class="w-100">
+            <mat-form-field class="w-100"
+                            hintLabel="Max 200 Characters">
               <textarea matInput
                         placeholder="Please provide details"
-                        rows="5"></textarea>
+                        rows="5"
+                        maxlength="200"
+                        #hasPharmaNetSuspended></textarea>
+              <mat-hint align="end">{{ hasPharmaNetSuspended.value?.length || 0 }}/200</mat-hint>
             </mat-form-field>
 
           </div>
@@ -120,15 +132,15 @@
           <div class="col pt-2">
 
             <button mat-raised-button
+                    type="button"
                     color="primary"
                     routerLink="../professional">Back</button>
 
           </div>
-          <div class="col">
+          <div class="col pt-2 text-right">
 
             <button mat-raised-button
-                    color="primary"
-                    class="float-right">Next</button>
+                    color="primary">Save and Continue</button>
 
           </div>
         </div>

@@ -3,9 +3,10 @@ export interface PharmanetAccess {
 }
 
 interface Organizations {
+  id: number;
   name: string;
-  type: string;
+  organizationTypeCode: string;
   city: string;
-  start_date: string;
-  end_date: string;
+  startDate: Date;
+  endDate: string;
 }

@@ -1,15 +1,23 @@
 export interface ProfessionalInfo {
-  is_college_certified: boolean;
-  college_certifications: CollegeCertification[];
-  is_device_provider: boolean;
-  device_provider_number: string;
-  is_insulin_pump_provider: boolean;
+  hasCertification: boolean;
+  certifications: CollegeCertification[];
+  isDeviceProvider: boolean;
+  deviceProviderNumber: string;
+  isInsulinPumpProvider: boolean;
+  isAccessingPharmaNetOnBehalfOf: boolean;
+  jobs: Job[];
 }
 
 export interface CollegeCertification {
-  college_certifications: string;
-  license_number: string;
-  license_class: string;
-  renewal_date: string;
-  advanced_practice?: string;
+  id: number;
+  collegeCode: number;
+  licenseNumber: string;
+  licenseCode: number;
+  renewalDate: Date;
+  practiceCode?: number;
+}
+
+export interface Job {
+  id: number;
+  title: string;
 }

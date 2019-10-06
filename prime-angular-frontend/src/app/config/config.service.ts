@@ -23,7 +23,7 @@ export class ConfigService {
     return [...this.configuration.countries];
   }
 
-  public get jobs() {
+  public get jobNames() {
     return [...this.configuration.jobNames];
   }
 
@@ -31,7 +31,7 @@ export class ConfigService {
     return [...this.configuration.licenses];
   }
 
-  public get organization() {
+  public get organizationNames() {
     return [...this.configuration.organizationNames];
   }
 
@@ -54,6 +54,7 @@ export class ConfigService {
       .then(this.addLicenses)
       .then(this.addAdvancedPractices)
       .then(this.addJobNames)
+      .then(this.addOrganizationNames)
       .then((config) => this.configuration = config);
   }
 
@@ -71,6 +72,36 @@ export class ConfigService {
     });
   }
 
+  private addProvinces(config: Config) {
+    return {
+      provinces: [
+        { code: 'AB', name: 'Alberta' },
+        { code: 'BC', name: 'British Columbia' },
+        { code: 'MB', name: 'Manitoba' },
+        { code: 'NB', name: 'New Brunswick' },
+        { code: 'NL', name: 'Newfoundland and Labrador' },
+        { code: 'NS', name: 'Nova Scotia' },
+        { code: 'ON', name: 'Ontario' },
+        { code: 'PE', name: 'Prince Edward Island' },
+        { code: 'QC', name: 'Quebec' },
+        { code: 'SK', name: 'Saskatchewan' },
+        { code: 'NT', name: 'Northwest Territories' },
+        { code: 'NU', name: 'Nunavut' },
+        { code: 'YT', name: 'Yukon' }
+      ],
+      ...config
+    };
+  }
+
+  private addCountries(config: Config) {
+    return {
+      countries: [
+        { code: 'CA', name: 'Canada' }
+      ],
+      ...config,
+    };
+  }
+
   private addColleges(config: Config) {
     return {
       colleges: [
@@ -86,12 +117,12 @@ export class ConfigService {
   private addLicenses(config: Config) {
     return {
       licenses: [
-        { code: 'FULGENERAL', name: 'Full - General', college: 'CRNBC' },
-        { code: 'TEMPREGNUR', name: 'Temporary Registered Nurse', college: 'CRNBC' },
-        { code: 'FULPHARMA', name: 'Full Pharmacist', college: 'CPSBC' },
-        { code: 'FULSEPCLTY', name: 'Full - Specialty', college: 'CPSBC' },
-        { code: 'REGINURSE', name: 'Registered Nurse', college: 'CPBC' },
-        { code: 'TEMPNURSE', name: 'Temporary Registered Nurse', college: 'CPBC' },
+        { code: 'FULGENERAL', name: 'Full - General', collegeCode: 'CRNBC' },
+        { code: 'TEMPREGNUR', name: 'Temporary Registered Nurse', collegeCode: 'CRNBC' },
+        { code: 'FULPHARMA', name: 'Full Pharmacist', collegeCode: 'CPSBC' },
+        { code: 'FULSEPCLTY', name: 'Full - Specialty', collegeCode: 'CPSBC' },
+        { code: 'REGINURSE', name: 'Registered Nurse', collegeCode: 'CPBC' },
+        { code: 'TEMPNURSE', name: 'Temporary Registered Nurse', collegeCode: 'CPBC' },
       ],
       ...config
     };
@@ -125,33 +156,13 @@ export class ConfigService {
     };
   }
 
-  private addProvinces(config: Config) {
+  private addOrganizationNames(config: Config) {
     return {
-      provinces: [
-        { code: 'AB', name: 'Alberta' },
-        { code: 'BC', name: 'British Columbia' },
-        { code: 'MB', name: 'Manitoba' },
-        { code: 'NB', name: 'New Brunswick' },
-        { code: 'NL', name: 'Newfoundland and Labrador' },
-        { code: 'NS', name: 'Nova Scotia' },
-        { code: 'ON', name: 'Ontario' },
-        { code: 'PE', name: 'Prince Edward Island' },
-        { code: 'QC', name: 'Quebec' },
-        { code: 'SK', name: 'Saskatchewan' },
-        { code: 'NT', name: 'Northwest Territories' },
-        { code: 'NU', name: 'Nunavut' },
-        { code: 'YT', name: 'Yukon' }
+      organizationNames: [
+        { code: 'HEALTHAUTH', name: 'Health Authority' },
+        { code: 'PHARMACY', name: 'Pharmacy' }
       ],
       ...config
-    };
-  }
-
-  private addCountries(config: Config) {
-    return {
-      countries: [
-        { code: 'CA', name: 'Canada' }
-      ],
-      ...config,
     };
   }
 }

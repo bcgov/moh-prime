@@ -4,7 +4,7 @@ export interface Profile {
   firstName: string;
   middleName?: string;
   lastName: string;
-  dateOfBirth: string;
+  dateOfBirth: Date;
   preferredFirstName?: string;
   preferredMiddleName?: string;
   preferredLastName?: string;

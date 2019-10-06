@@ -1,7 +1,7 @@
 export interface Config {
   advancedPractices: ConfigKeyValue[];
-  colleges: ConfigKeyValue[];
   countries: ConfigKeyValue[];
+  colleges: ConfigKeyValue[];
   jobNames: ConfigKeyValue[];
   licenses: ConfigKeyValue[];
   organizationNames: ConfigKeyValue[];
@@ -13,4 +13,5 @@ export interface Config {
 export interface ConfigKeyValue {
   code: string;
   name: string;
+  [key: string]: any;
 }

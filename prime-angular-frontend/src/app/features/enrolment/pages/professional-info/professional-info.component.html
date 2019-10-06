@@ -21,7 +21,6 @@
                             [value]="decision.code">
             {{ decision.name }}
           </mat-radio-button>
-          <!-- <mat-error *ngIf="hasCertification.hasError('required')">Required</mat-error> -->
         </mat-radio-group>
 
         <div class="row"
@@ -34,84 +33,8 @@
 
               <hr *ngIf="!first">
 
-              <div class="row">
-                <div class="col-sm-12">
-
-                  <mat-form-field class="w-100">
-                    <mat-label>College</mat-label>
-                    <mat-select formControlName="collegeCode">
-                      <mat-option *ngFor="let college of colleges"
-                                  [value]="college.code">
-                        {{ college.name }}
-                      </mat-option>
-                    </mat-select>
-                    <!-- <mat-error *ngIf="renewalDate.hasError('required')">Required</mat-error> -->
-                  </mat-form-field>
-
-                </div>
-                <div class="col-sm-12">
-
-                  <mat-form-field class="w-100">
-                    <input matInput
-                           placeholder="License Number"
-                           formControlName="licenseNumber">
-                    <!-- <mat-error *ngIf="renewalDate.hasError('required')">Required</mat-error> -->
-                  </mat-form-field>
-
-                </div>
-                <div class="col-sm-12">
-
-                  <mat-form-field class="w-100">
-                    <mat-label>License Class</mat-label>
-                    <mat-select formControlName="licenseCode">
-                      <mat-option *ngFor="let license of licenses"
-                                  [value]="license.code">
-                        {{ license.name }}
-                      </mat-option>
-                    </mat-select>
-                    <!-- <mat-error *ngIf="renewalDate.hasError('required')">Required</mat-error> -->
-                  </mat-form-field>
-
-                </div>
-                <div class="col-sm-12">
-
-                  <mat-form-field class="w-100">
-                    <input matInput
-                           placeholder="Renewal Date"
-                           [matDatepicker]="picker"
-                           formControlName="renewalDate"
-                           (click)="picker.open()">
-                    <mat-datepicker-toggle matSuffix
-                                           [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker
-                                    startView="multi-year"
-                                    [touchUi]="isMobile"></mat-datepicker>
-                    <!-- <mat-error *ngIf="renewalDate.hasError('required')">Required</mat-error> -->
-                  </mat-form-field>
-
-                </div>
-                <div class="col-sm-12">
-
-                  <mat-form-field class="w-100">
-                    <mat-label>Advanced Practices</mat-label>
-                    <mat-select formControlName="practiceCode">
-                      <mat-option *ngFor="let practice of advancedPractices"
-                                  [value]="practice.code">
-                        {{ practice.name }}
-                      </mat-option>
-                    </mat-select>
-                    <!-- <mat-error *ngIf="renewalDate.hasError('required')">Required</mat-error> -->
-                  </mat-form-field>
-
-                </div>
-                <div class="col-sm-12 text-right">
-
-                  <button mat-raised-button
-                          color="warn"
-                          (click)="removeCertification(i)">Remove Certification</button>
-
-                </div>
-              </div>
+              <app-college-certifications [form]="certificate"
+                                          (remove)="removeCertification(i)"></app-college-certifications>
 
             </ng-container>
 
@@ -127,13 +50,13 @@
 
         <mat-radio-group aria-labelledby="example-radio-group-label"
                          class="example-radio-group"
-                         formControlName="isDeviceProvider">
+                         formControlName="isDeviceProvider"
+                         #rb>
           <mat-radio-button class="mr-4"
                             *ngFor="let decision of decisions"
                             [value]="decision.code">
             {{ decision.name }}
           </mat-radio-button>
-          <!-- <mat-error *ngIf="isDeviceProvider.hasError('required')">Required</mat-error> -->
         </mat-radio-group>
 
         <div class="row"
@@ -159,7 +82,6 @@
                             [value]="decision.code">
             {{ decision.name }}
           </mat-radio-button>
-          <!-- <mat-error *ngIf="isInsulinPumpProvider.hasError('required')">Required</mat-error> -->
         </mat-radio-group>
 
         <p>Are you accessing PharmNet on behalf of someone else?</p>
@@ -172,50 +94,37 @@
                             [value]="decision.code">
             {{ decision.name }}
           </mat-radio-button>
-          <!-- <mat-error *ngIf="isAccessingPharmaNetOnBehalfOf.hasError('required')">Required</mat-error> -->
         </mat-radio-group>
 
         <div class="row"
              *ngIf="isAccessingPharmaNetOnBehalfOf.value">
           <div class="col-sm-12 col-md-6 col-lg-4">
 
-            <!-- <mat-form-field class="w-100">
-              <mat-label>Jobs</mat-label>
-              <mat-select formControlName="jobs"
-                          multiple>
-                <mat-option *ngFor="let job of defaultJobs"
-                            [value]="job.name">{{ job.name }}</mat-option>
-              </mat-select>
-            </mat-form-field> -->
-
-            <!-- <mat-form-field class="w-100">
-              <mat-chip-list #chipList
-                             aria-label="Job selection">
-                <mat-chip *ngFor="let job of jobs; let i = index"
-                          [selectable]="selectable"
-                          [removable]="removable"
-                          (removed)="remove(i)">
-                  {{ job.name }}
-                  <mat-icon matChipRemove
-                            *ngIf="removable">cancel</mat-icon>
+            <mat-form-field class="w-100">
+              <mat-chip-list #chipList>
+                <mat-chip *ngFor="let job of jobs.controls; let i = index"
+                          [selectable]="true"
+                          [removable]="true"
+                          (removed)="removeJob(i)">
+                  {{ job.value }}
+                  <mat-icon matChipRemove>cancel</mat-icon>
                 </mat-chip>
                 <input placeholder="Job Title"
                        #jobInput
-                       formControlName="jobs"
                        [matAutocomplete]="auto"
                        [matChipInputFor]="chipList"
-                       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                       [matChipInputAddOnBlur]="addOnBlur"
-                       (matChipInputTokenEnd)="add($event)">
+                       [matChipInputAddOnBlur]="true"
+                       (matChipInputTokenEnd)="addJob($event)"
+                       [formControl]="jobCtrl">
               </mat-chip-list>
               <mat-autocomplete #auto="matAutocomplete"
-                                (optionSelected)="selected($event)">
-                <mat-option *ngFor="let job of defaultJobs"
+                                (optionSelected)="selectedJob($event)">
+                <mat-option *ngFor="let job of filteredJobNames | async"
                             [value]="job.name">
                   {{ job.name }}
                 </mat-option>
               </mat-autocomplete>
-            </mat-form-field> -->
+            </mat-form-field>
 
           </div>
         </div>
@@ -224,15 +133,15 @@
           <div class="col pt-2">
 
             <button mat-raised-button
+                    type="button"
                     color="primary"
                     routerLink="../contact">Back</button>
 
           </div>
-          <div class="col">
+          <div class="col pt-2 text-right">
 
             <button mat-raised-button
-                    color="primary"
-                    class="float-right">Next</button>
+                    color="primary">Save and Continue</button>
 
           </div>
         </div>

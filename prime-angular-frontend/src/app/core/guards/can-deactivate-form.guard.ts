@@ -18,5 +18,4 @@ export class CanDeactivateFormGuard implements CanDeactivate<any> {
       ? component.canDeactivate()
       : true;
   }
-
 }

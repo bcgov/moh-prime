@@ -13,6 +13,7 @@ import { ReviewComponent } from './pages/review/review.component';
 import { SubHeaderComponent } from './shared/components/sub-header/sub-header.component';
 import { DashboardComponent } from './shared/components/dashboard/dashboard.component';
 import { PageTitleComponent } from './shared/components/page-title/page-title.component';
+import { CollegeCertificationsComponent } from './shared/components/college-certifications/college-certifications.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { PageTitleComponent } from './shared/components/page-title/page-title.co
     ReviewComponent,
     SubHeaderComponent,
     DashboardComponent,
-    PageTitleComponent
+    PageTitleComponent,
+    CollegeCertificationsComponent
   ],
   imports: [
     SharedModule,
