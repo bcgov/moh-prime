@@ -1,173 +1,165 @@
-<div class="container">
+<form (ngSubmit)="onSubmit()"
+      [formGroup]="form"
+      novalidate>
+
+  <h1 class="h2 mb-4">Application Enrolment</h1>
+
+  <app-sub-header subheader="PharmaNet Access"
+                  help="Lorem ipsum dolor, sit amet consectetur adipisicing elit."></app-sub-header>
+
   <div class="row">
-    <div class="col py-4">
+    <div class="col text-right">
 
-      <form (ngSubmit)="onSubmit()"
-            [formGroup]="form"
-            novalidate>
-
-        <h1 class="h2 mb-4">Application Enrolment</h1>
-
-        <app-sub-header subheader="PharmaNet Access"
-                        help="Lorem ipsum dolor, sit amet consectetur adipisicing elit."></app-sub-header>
-
-        <div class="row">
-          <div class="col text-right">
-
-            <button mat-raised-button
-                    type="button"
-                    class="mb-3"
-                    color="primary"
-                    (click)="addOrganization()"
-                    [disabled]="organizations.invalid">Add Organization</button>
-
-          </div>
-        </div>
-
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">Organization Type</th>
-              <th scope="col">Organization Name</th>
-              <th scope="col">City</th>
-              <th scope="col">Start Date</th>
-              <th scope="col">End Date</th>
-              <th>&nbsp;</th>
-            </tr>
-          </thead>
-          <tbody formArrayName="organizations">
-
-            <ng-container *ngIf="organizations.controls.length; else noOrganization">
-              <ng-container *ngFor="let organization of organizations.controls; let i = index; let first = first"
-                            [formGroupName]="i">
-
-                <tr>
-                  <td>
-
-                    <mat-form-field class="w-100">
-                      <mat-label>Organization Type</mat-label>
-                      <mat-select formControlName="organizationTypeCode">
-                        <mat-option *ngFor="let organizationName of organizationNames"
-                                    [value]="organizationName.code">{{ organizationName.name }}</mat-option>
-                      </mat-select>
-                      <mat-error *ngIf="organizations.at(i).get('organizationTypeCode').hasError('required')">Required
-                      </mat-error>
-                    </mat-form-field>
-
-                  </td>
-                  <td>
-
-                    <mat-form-field class="w-100">
-                      <mat-label>Organization Name</mat-label>
-                      <mat-select formControlName="name">
-                        <mat-option *ngFor="let organizationName of organizationNames"
-                                    [value]="organizationName.code">{{ organizationName.name }}</mat-option>
-                      </mat-select>
-                      <mat-error *ngIf="organizations.at(i).get('name').hasError('required')">Required</mat-error>
-                    </mat-form-field>
-
-                  </td>
-                  <td>
-
-                    <mat-form-field class="w-100">
-                      <input matInput
-                             placeholder="City"
-                             formControlName="city">
-                      <mat-error *ngIf="organizations.at(i).get('city').hasError('required')">Required</mat-error>
-                    </mat-form-field>
-
-                  </td>
-                  <td>
-
-                    <mat-form-field class="w-100">
-                      <input matInput
-                             placeholder="Renewal Date"
-                             [matDatepicker]="startDatePicker"
-                             formControlName="startDate"
-                             (click)="startDatePicker.open()">
-                      <mat-datepicker-toggle matSuffix
-                                             [for]="startDatePicker"></mat-datepicker-toggle>
-                      <mat-datepicker #startDatePicker
-                                      startView="multi-year"
-                                      [touchUi]="isMobile"></mat-datepicker>
-                      <mat-error *ngIf="organizations.at(i).get('startDate').hasError('required')">Required</mat-error>
-                    </mat-form-field>
-
-                  </td>
-                  <td>
-
-                    <mat-form-field class="w-100">
-                      <input matInput
-                             placeholder="Renewal Date"
-                             [matDatepicker]="endDatePicker"
-                             formControlName="endDate"
-                             (click)="endDatePicker.open()">
-                      <mat-datepicker-toggle matSuffix
-                                             [for]="endDatePicker"></mat-datepicker-toggle>
-                      <mat-datepicker #endDatePicker
-                                      startView="multi-year"
-                                      [touchUi]="isMobile"></mat-datepicker>
-                    </mat-form-field>
-
-                  </td>
-                  <td>
-
-                    <ng-template [ngTemplateOutlet]="menu"
-                                 [ngTemplateOutletContext]="{index:i}"></ng-template>
-
-                  </td>
-                </tr>
-
-              </ng-container>
-            </ng-container>
-
-          </tbody>
-        </table>
-
-        <div class="row justify-content-between">
-          <div class="col pt-2">
-
-            <button mat-raised-button
-                    type="button"
-                    color="primary"
-                    routerLink="../declaration">Back</button>
-
-          </div>
-          <div class="col pt-2 text-right">
-
-            <button mat-raised-button
-                    color="primary">Save and Continue</button>
-
-          </div>
-        </div>
-
-      </form>
-
-      <ng-template #menu
-                   let-index="index">
-
-        <button mat-icon-button
-                [matMenuTriggerFor]="menu">
-          <mat-icon>more_vert</mat-icon>
-        </button>
-
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item
-                  type="button"
-                  (click)="removeOrganization(i)">
-            <mat-icon>delete</mat-icon>
-            <span>Remove</span>
-          </button>
-        </mat-menu>
-
-      </ng-template>
-
-      <ng-template #noOrganization>
-
-        <div class="lead text-muted p-2">No Organizations</div>
-
-      </ng-template>
+      <button mat-raised-button
+              type="button"
+              class="mb-3"
+              color="primary"
+              (click)="addOrganization()"
+              [disabled]="organizations.invalid">Add Organization</button>
 
     </div>
   </div>
-</div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Organization Type</th>
+        <th scope="col">Organization Name</th>
+        <th scope="col">City</th>
+        <th scope="col">Start Date</th>
+        <th scope="col">End Date</th>
+        <th>&nbsp;</th>
+      </tr>
+    </thead>
+    <tbody formArrayName="organizations">
+
+      <ng-container *ngIf="organizations.controls.length; else noOrganization">
+        <ng-container *ngFor="let organization of organizations.controls; let i = index; let first = first"
+                      [formGroupName]="i">
+
+          <tr>
+            <td>
+
+              <mat-form-field class="w-100">
+                <mat-label>Organization Type</mat-label>
+                <mat-select formControlName="organizationTypeCode">
+                  <mat-option *ngFor="let organizationName of organizationNames"
+                              [value]="organizationName.code">{{ organizationName.name }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="organizations.at(i).get('organizationTypeCode').hasError('required')">Required
+                </mat-error>
+              </mat-form-field>
+
+            </td>
+            <td>
+
+              <mat-form-field class="w-100">
+                <mat-label>Organization Name</mat-label>
+                <mat-select formControlName="name">
+                  <mat-option *ngFor="let organizationName of organizationNames"
+                              [value]="organizationName.code">{{ organizationName.name }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="organizations.at(i).get('name').hasError('required')">Required</mat-error>
+              </mat-form-field>
+
+            </td>
+            <td>
+
+              <mat-form-field class="w-100">
+                <input matInput
+                       placeholder="City"
+                       formControlName="city">
+                <mat-error *ngIf="organizations.at(i).get('city').hasError('required')">Required</mat-error>
+              </mat-form-field>
+
+            </td>
+            <td>
+
+              <mat-form-field class="w-100">
+                <input matInput
+                       placeholder="Renewal Date"
+                       [matDatepicker]="startDatePicker"
+                       formControlName="startDate"
+                       (click)="startDatePicker.open()">
+                <mat-datepicker-toggle matSuffix
+                                       [for]="startDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #startDatePicker
+                                startView="multi-year"
+                                [touchUi]="isMobile"></mat-datepicker>
+                <mat-error *ngIf="organizations.at(i).get('startDate').hasError('required')">Required</mat-error>
+              </mat-form-field>
+
+            </td>
+            <td>
+
+              <mat-form-field class="w-100">
+                <input matInput
+                       placeholder="Renewal Date"
+                       [matDatepicker]="endDatePicker"
+                       formControlName="endDate"
+                       (click)="endDatePicker.open()">
+                <mat-datepicker-toggle matSuffix
+                                       [for]="endDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #endDatePicker
+                                startView="multi-year"
+                                [touchUi]="isMobile"></mat-datepicker>
+              </mat-form-field>
+
+            </td>
+            <td>
+
+              <ng-template [ngTemplateOutlet]="menu"
+                           [ngTemplateOutletContext]="{index:i}"></ng-template>
+
+            </td>
+          </tr>
+
+        </ng-container>
+      </ng-container>
+
+    </tbody>
+  </table>
+
+  <div class="row justify-content-between">
+    <div class="col pt-2">
+
+      <button mat-raised-button
+              type="button"
+              color="primary"
+              routerLink="../declaration">Back</button>
+
+    </div>
+    <div class="col pt-2 text-right">
+
+      <button mat-raised-button
+              color="primary">Save and Continue</button>
+
+    </div>
+  </div>
+
+  <ng-template #menu
+               let-index="index">
+
+    <button mat-icon-button
+            [matMenuTriggerFor]="menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item
+              type="button"
+              (click)="removeOrganization(i)">
+        <mat-icon>delete</mat-icon>
+        <span>Remove</span>
+      </button>
+    </mat-menu>
+
+  </ng-template>
+
+  <ng-template #noOrganization>
+
+    <div class="lead text-muted p-2">No Organizations</div>
+
+  </ng-template>
+
+</form>
