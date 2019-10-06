@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-review',
@@ -7,7 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ReviewComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private router: Router
+  ) { }
+
+  public route(route: string) {
+    this.router.navigate(['enrolment', route]);
+  }
 
   public ngOnInit() { }
 }
