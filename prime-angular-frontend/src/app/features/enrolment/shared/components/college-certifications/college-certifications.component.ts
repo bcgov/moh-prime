@@ -36,6 +36,8 @@ export class CollegeCertificationsComponent implements OnInit {
     this.form.get('collegeCode').valueChanges.subscribe((collegeCode) => {
       this.filteredLicenses = this.licenses.filter(l => l.collegeCode === collegeCode);
       this.licensePrefix = this.colleges.filter(c => c.code === collegeCode).shift().prefix;
+
+      this.form.get('licenseCode').patchValue(null);
     });
   }
 }

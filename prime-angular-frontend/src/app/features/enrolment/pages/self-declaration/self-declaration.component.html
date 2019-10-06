@@ -33,8 +33,10 @@
                         placeholder="Please provide details"
                         rows="5"
                         maxlength="200"
-                        #hasConvictionInput></textarea>
+                        #hasConvictionInput
+                        formControlName="convictionDetails"></textarea>
               <mat-hint align="end">{{ hasConvictionInput.value?.length || 0 }}/200</mat-hint>
+              <mat-error *ngIf="form.get('convictionDetails').hasError('required')">Required</mat-error>
             </mat-form-field>
 
           </div>
@@ -62,7 +64,8 @@
                         placeholder="Please provide details"
                         rows="5"
                         maxlength="200"
-                        #hasRegistrationSuspended></textarea>
+                        #hasRegistrationSuspended
+                        formControlName="registrationSuspendedDetails"></textarea>
               <mat-hint align="end">{{ hasRegistrationSuspended.value?.length || 0 }}/200</mat-hint>
             </mat-form-field>
 
@@ -92,7 +95,8 @@
                         placeholder="Please provide details"
                         rows="5"
                         maxlength="200"
-                        #hasDisciplinaryAction></textarea>
+                        #hasDisciplinaryAction
+                        formControlName="disciplinaryActionDetails"></textarea>
               <mat-hint align="end">{{ hasDisciplinaryAction.value?.length || 0 }}/200</mat-hint>
             </mat-form-field>
 
@@ -121,7 +125,8 @@
                         placeholder="Please provide details"
                         rows="5"
                         maxlength="200"
-                        #hasPharmaNetSuspended></textarea>
+                        #hasPharmaNetSuspended
+                        formControlName="pharmaNetSuspendedDetails"></textarea>
               <mat-hint align="end">{{ hasPharmaNetSuspended.value?.length || 0 }}/200</mat-hint>
             </mat-form-field>
 

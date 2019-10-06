@@ -64,6 +64,17 @@ export class ContactComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.createFormInstance();
+
+    this.hasContactEmail.valueChanges.subscribe((value: boolean) => {
+      if (!value) {
+        this.contactEmail.reset();
+      }
+    });
+    this.hasContactPhone.valueChanges.subscribe((value: boolean) => {
+      if (!value) {
+        this.contactPhone.reset();
+      }
+    });
   }
 
   public ngOnDestroy() {

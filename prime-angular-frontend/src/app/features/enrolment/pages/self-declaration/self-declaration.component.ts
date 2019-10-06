@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
@@ -68,9 +68,38 @@ export class SelfDeclarationComponent implements OnInit, OnDestroy {
   private createFormInstance() {
     this.form = this.fb.group({
       hasConviction: [null, [FormControlValidators.requiredBoolean]],
+      convictionDetails: [null, []],
       hasRegistrationSuspended: [null, [FormControlValidators.requiredBoolean]],
+      registrationSuspendedDetails: [null, []],
       hasDisciplinaryAction: [null, [FormControlValidators.requiredBoolean]],
+      disciplinaryActionDetails: [null, []],
       hasPharmaNetSuspended: [null, [FormControlValidators.requiredBoolean]],
+      pharmaNetSuspendedDetails: [null, []]
     });
+
+    // TODO: make YES/NO into own component to encapsulate toggling
+    this.hasConviction.valueChanges.subscribe((value) => {
+      this.toggleValidators(value, 'convictionDetails');
+    });
+    this.hasRegistrationSuspended.valueChanges.subscribe((value) => {
+      this.toggleValidators(value, 'registrationSuspendedDetails');
+    });
+    this.hasDisciplinaryAction.valueChanges.subscribe((value) => {
+      this.toggleValidators(value, 'disciplinaryActionDetails');
+    });
+    this.hasPharmaNetSuspended.valueChanges.subscribe((value) => {
+      this.toggleValidators(value, 'pharmaNetSuspendedDetails');
+    });
+  }
+
+  private toggleValidators(value: boolean, controlName: string) {
+    if (!value) {
+      this.form.get(controlName).clearValidators();
+      this.form.get(controlName).updateValueAndValidity();
+      this.form.get(controlName).reset();
+    } else {
+      this.form.get(controlName).setValidators([Validators.required]);
+      this.form.get(controlName).updateValueAndValidity();
+    }
   }
 }

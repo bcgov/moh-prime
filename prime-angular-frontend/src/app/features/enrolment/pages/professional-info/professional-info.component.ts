@@ -161,6 +161,22 @@ export class ProfessionalInfoComponent implements OnInit, OnDestroy {
             : jobs.filter(({ name }: ConfigKeyValue) => !selectedJobs.includes(name.toLowerCase()));
         })
       );
+
+    this.hasCertification.valueChanges.subscribe((value) => {
+      if (!value) {
+        this.certifications.clear();
+      }
+    });
+    this.isDeviceProvider.valueChanges.subscribe((value) => {
+      if (!value) {
+        this.form.get('deviceProviderNumber').reset();
+      }
+    });
+    this.isAccessingPharmaNetOnBehalfOf.valueChanges.subscribe((value) => {
+      if (!value) {
+        this.jobs.clear();
+      }
+    });
   }
 
   private filterJobNames(job: string): ConfigKeyValue[] {
