@@ -1,12 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
 import { Observable } from 'rxjs';
 
-import { FormControlValidators } from '@shared/validators/form-control.validators';
 import { ConfirmDiscardChangesDialogComponent } from '@shared/components/dialogs/confirm-discard-changes-dialog/confirm-discard-changes-dialog.component';
+import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
 
 @Component({
   selector: 'app-self-declaration',
@@ -20,10 +20,10 @@ export class SelfDeclarationComponent implements OnInit, OnDestroy {
   ];
 
   constructor(
-    private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private enrolmentStateService: EnrolmentStateService
   ) { }
 
   public get hasConviction(): FormGroup {
@@ -66,16 +66,7 @@ export class SelfDeclarationComponent implements OnInit, OnDestroy {
   }
 
   private createFormInstance() {
-    this.form = this.fb.group({
-      hasConviction: [null, [FormControlValidators.requiredBoolean]],
-      convictionDetails: [null, []],
-      hasRegistrationSuspended: [null, [FormControlValidators.requiredBoolean]],
-      registrationSuspendedDetails: [null, []],
-      hasDisciplinaryAction: [null, [FormControlValidators.requiredBoolean]],
-      disciplinaryActionDetails: [null, []],
-      hasPharmaNetSuspended: [null, [FormControlValidators.requiredBoolean]],
-      pharmaNetSuspendedDetails: [null, []]
-    });
+    this.form = this.enrolmentStateService.selfDeclarationForm;
 
     // TODO: make YES/NO into own component to encapsulate toggling
     this.hasConviction.valueChanges.subscribe((value) => {

@@ -1,14 +1,102 @@
 import { Injectable } from '@angular/core';
-import { Enrolment } from '../models/enrolment.model';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+
+import { BehaviorSubject } from 'rxjs';
+
+import * as moment from 'moment';
+import { FormControlValidators } from '@shared/validators/form-control.validators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EnrolmentStateService {
-  private enrolment: Enrolment;
+  // private profileForm$ = new BehaviorSubject<FormGroup>(null);
+  // public profileForm = this.profileForm$.asObservable();
 
-  constructor() {
-    // this.enrolment = this.getEnrolment();
+  public profileForm: FormGroup;
+  public contactForm: FormGroup;
+  public professionalInfoForm: FormGroup;
+  public selfDeclarationForm: FormGroup;
+  public pharmNetAccessForm: FormGroup;
+
+  constructor(
+    private fb: FormBuilder
+  ) {
+    // this.profileForm$.next(this.buildProfileForm());
+    this.profileForm = this.buildProfileForm();
+    this.contactForm = this.buildContactForm();
+    this.professionalInfoForm = this.buildProfessionalInfoForm();
+    this.selfDeclarationForm = this.buildSelfDeclarationForm();
+    this.pharmNetAccessForm = this.buildPharmNetAccessForm();
+  }
+
+  private buildProfileForm(): FormGroup {
+    return this.fb.group({
+      firstName: [{ value: '', disabled: true }, [Validators.required]],
+      middleName: [{ value: '', disabled: true }, []],
+      lastName: [{ value: '', disabled: true }, [Validators.required]],
+      dateOfBirth: [{ value: moment(), disabled: true }, []],
+      preferredFirstName: ['', []],
+      preferredMiddleName: ['', []],
+      preferredLastName: ['', []],
+      physicalAddress: this.fb.group({
+        country: [{ value: '', disabled: true }, []],
+        province: [{ value: '', disabled: true }, []],
+        street: [{ value: '', disabled: true }, []],
+        city: [{ value: '', disabled: true }, []],
+        postal: [{ value: '', disabled: true }, []]
+      }),
+      mailingAddress: this.fb.group({
+        country: ['', []],
+        province: ['', []],
+        street: ['', []],
+        city: ['', []],
+        postal: ['', []]
+      })
+    });
+  }
+
+  private buildContactForm(): FormGroup {
+    return this.fb.group({
+      voicePhone: ['', [FormControlValidators.phone]],
+      voiceExtension: ['', [FormControlValidators.numeric]],
+      hasContactEmail: [false, []],
+      contactEmail: ['', [FormControlValidators.email]],
+      hasContactPhone: [false, []],
+      contactPhone: ['', [FormControlValidators.phone]]
+    });
+  }
+
+  private buildProfessionalInfoForm(): FormGroup {
+    return this.fb.group({
+      id: [null, []],
+      hasCertification: [null, [FormControlValidators.requiredBoolean]],
+      certifications: this.fb.array([]),
+      isDeviceProvider: [null, [FormControlValidators.requiredBoolean]],
+      deviceProviderNumber: ['', []],
+      isInsulinPumpProvider: [null, [FormControlValidators.requiredBoolean]],
+      isAccessingPharmaNetOnBehalfOf: [null, [FormControlValidators.requiredBoolean]],
+      jobs: this.fb.array([]),
+    });
+  }
+
+  private buildSelfDeclarationForm(): FormGroup {
+    return this.fb.group({
+      hasConviction: [null, [FormControlValidators.requiredBoolean]],
+      convictionDetails: [null, []],
+      hasRegistrationSuspended: [null, [FormControlValidators.requiredBoolean]],
+      registrationSuspendedDetails: [null, []],
+      hasDisciplinaryAction: [null, [FormControlValidators.requiredBoolean]],
+      disciplinaryActionDetails: [null, []],
+      hasPharmaNetSuspended: [null, [FormControlValidators.requiredBoolean]],
+      pharmaNetSuspendedDetails: [null, []]
+    });
+  }
+
+  private buildPharmNetAccessForm(): FormGroup {
+    return this.fb.group({
+      organizations: this.fb.array([])
+    });
   }
 
   private getEnrolment() {
@@ -41,14 +129,10 @@ export class EnrolmentStateService {
         voicePhone: '555-555-5555',
         voiceExtension: '555'
       },
-
-
       appliedDate: '2019-10-02T14:14:41.57099',
       approved: null,
       approvedReason: null,
       approvedDate: null,
-
-
       hasCertification: true,
       certifications: [
         {

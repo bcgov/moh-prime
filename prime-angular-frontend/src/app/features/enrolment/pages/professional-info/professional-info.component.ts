@@ -1,16 +1,15 @@
-import { Component, OnInit, OnDestroy, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog, MatChipInputEvent, MatAutocompleteSelectedEvent } from '@angular/material';
 
 import { Observable } from 'rxjs';
+import { startWith, map } from 'rxjs/operators';
 
 import { ConfigKeyValue } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
-import { FormControlValidators } from '@shared/validators/form-control.validators';
 import { ConfirmDiscardChangesDialogComponent } from '@shared/components/dialogs/confirm-discard-changes-dialog/confirm-discard-changes-dialog.component';
-import { startWith, map } from 'rxjs/operators';
-import { filter } from 'minimatch';
+import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
 
 @Component({
   selector: 'app-professional-info',
@@ -35,7 +34,8 @@ export class ProfessionalInfoComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private enrolmentStateService: EnrolmentStateService
   ) {
     this.colleges = this.configService.colleges;
     this.licenses = this.configService.licenses;
@@ -137,16 +137,7 @@ export class ProfessionalInfoComponent implements OnInit, OnDestroy {
   }
 
   private createFormInstance() {
-    this.form = this.fb.group({
-      id: [null, []],
-      hasCertification: [null, [FormControlValidators.requiredBoolean]],
-      certifications: this.fb.array([]),
-      isDeviceProvider: [null, [FormControlValidators.requiredBoolean]],
-      deviceProviderNumber: ['', []],
-      isInsulinPumpProvider: [null, [FormControlValidators.requiredBoolean]],
-      isAccessingPharmaNetOnBehalfOf: [null, [FormControlValidators.requiredBoolean]],
-      jobs: this.fb.array([]),
-    });
+    this.form = this.enrolmentStateService.professionalInfoForm;
 
     this.jobCtrl = new FormControl();
     this.filteredJobNames = this.jobCtrl.valueChanges

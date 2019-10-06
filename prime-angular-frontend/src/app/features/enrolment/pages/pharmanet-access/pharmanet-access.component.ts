@@ -5,9 +5,10 @@ import { MatDialog } from '@angular/material';
 
 import { Observable } from 'rxjs';
 
-import { ConfirmDiscardChangesDialogComponent } from '@shared/components/dialogs/confirm-discard-changes-dialog/confirm-discard-changes-dialog.component';
 import { ConfigKeyValue } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
+import { ConfirmDiscardChangesDialogComponent } from '@shared/components/dialogs/confirm-discard-changes-dialog/confirm-discard-changes-dialog.component';
+import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
 
 @Component({
   selector: 'app-pharmanet-access',
@@ -23,7 +24,8 @@ export class PharmanetAccessComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private enrolmentStateService: EnrolmentStateService
   ) {
     this.organizationNames = this.configService.organizationNames;
   }
@@ -73,8 +75,6 @@ export class PharmanetAccessComponent implements OnInit, OnDestroy {
   }
 
   private createFormInstance() {
-    this.form = this.fb.group({
-      organizations: this.fb.array([])
-    });
+    this.form = this.enrolmentStateService.pharmNetAccessForm;
   }
 }

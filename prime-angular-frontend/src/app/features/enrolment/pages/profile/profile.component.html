@@ -185,12 +185,12 @@
 
         <mat-slide-toggle class="mb-3"
                           color="primary"
-                          (change)="hasSameMailingAddress = !hasSameMailingAddress"
-                          [checked]="hasSameMailingAddress">
+                          (change)="hasMailingAddress = !hasMailingAddress"
+                          [checked]="hasMailingAddress">
           Mailing address is the same
         </mat-slide-toggle>
 
-        <ng-container *ngIf="!hasSameMailingAddress">
+        <ng-container *ngIf="hasMailingAddress">
 
           <app-sub-header subheader="Mailing Address"></app-sub-header>
 

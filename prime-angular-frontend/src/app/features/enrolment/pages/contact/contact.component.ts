@@ -5,8 +5,8 @@ import { MatDialog } from '@angular/material';
 
 import { Observable } from 'rxjs';
 
-import { FormControlValidators } from '@shared/validators/form-control.validators';
 import { ConfirmDiscardChangesDialogComponent } from '@shared/components/dialogs/confirm-discard-changes-dialog/confirm-discard-changes-dialog.component';
+import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
 
 @Component({
   selector: 'app-contact',
@@ -17,10 +17,10 @@ export class ContactComponent implements OnInit, OnDestroy {
   public form: FormGroup;
 
   constructor(
-    private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private enrolmentStateService: EnrolmentStateService
   ) { }
 
   public get voicePhone(): FormGroup {
@@ -82,13 +82,6 @@ export class ContactComponent implements OnInit, OnDestroy {
   }
 
   private createFormInstance() {
-    this.form = this.fb.group({
-      voicePhone: ['', [FormControlValidators.phone]],
-      voiceExtension: ['', [FormControlValidators.numeric]],
-      hasContactEmail: [false, []],
-      contactEmail: ['', [FormControlValidators.email]],
-      hasContactPhone: [false, []],
-      contactPhone: ['', [FormControlValidators.phone]]
-    });
+    this.form = this.enrolmentStateService.contactForm;
   }
 }

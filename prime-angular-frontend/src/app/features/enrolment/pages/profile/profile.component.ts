@@ -1,16 +1,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
-import * as moment from 'moment';
+import { Observable } from 'rxjs';
 
 import { ConfigService } from '@config/config.service';
 import { ViewportService } from '@core/services/viewport.service';
 import { ConfigKeyValue } from '@config/config.model';
-
 import { ConfirmDiscardChangesDialogComponent } from '@shared/components/dialogs/confirm-discard-changes-dialog/confirm-discard-changes-dialog.component';
-import { Observable } from 'rxjs';
+import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
 
 @Component({
   selector: 'app-profile',
@@ -19,21 +18,19 @@ import { Observable } from 'rxjs';
 })
 export class ProfileComponent implements OnInit, OnDestroy {
   public form: FormGroup;
-  public hasSameMailingAddress: boolean;
   public hasPreferredName: boolean;
+  public hasMailingAddress: boolean;
   public provinces: ConfigKeyValue[];
   public subheadings: { [key: string]: { subheader: string, help: string } };
 
   constructor(
-    private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
     private viewportService: ViewportService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private enrolmentStateService: EnrolmentStateService
   ) {
-    this.hasSameMailingAddress = true;
-    this.hasPreferredName = false;
     this.provinces = this.configService.provinces;
   }
 
@@ -70,6 +67,24 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.createFormInstance();
+
+    // Show preferred name if it exists
+    this.hasPreferredName = !!(
+      this.form.get('preferredFirstName').value ||
+      this.form.get('preferredMiddleName').value ||
+      this.form.get('preferredLastName').value
+    );
+
+    const mailingAddress = this.form.get('mailingAddress');
+
+    // Show mailing address if it exists
+    this.hasMailingAddress = !!(
+      mailingAddress.get('country').value ||
+      mailingAddress.get('province').value ||
+      mailingAddress.get('street').value ||
+      mailingAddress.get('city').value ||
+      mailingAddress.get('postal').value
+    );
   }
 
   public ngOnDestroy() {
@@ -77,28 +92,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   private createFormInstance() {
-    this.form = this.fb.group({
-      firstName: [{ value: '', disabled: true }, [Validators.required]],
-      middleName: [{ value: '', disabled: true }, []],
-      lastName: [{ value: '', disabled: true }, [Validators.required]],
-      dateOfBirth: [{ value: moment(), disabled: true }, []],
-      preferredFirstName: ['', []],
-      preferredMiddleName: ['', []],
-      preferredLastName: ['', []],
-      physicalAddress: this.fb.group({
-        country: [{ value: '', disabled: true }, []],
-        province: [{ value: '', disabled: true }, []],
-        street: [{ value: '', disabled: true }, []],
-        city: [{ value: '', disabled: true }, []],
-        postal: [{ value: '', disabled: true }, []]
-      }),
-      mailingAddress: this.fb.group({
-        country: ['', []],
-        province: ['', []],
-        street: ['', []],
-        city: ['', []],
-        postal: ['', []]
-      })
-    });
+    this.form = this.enrolmentStateService.profileForm;
   }
 }
