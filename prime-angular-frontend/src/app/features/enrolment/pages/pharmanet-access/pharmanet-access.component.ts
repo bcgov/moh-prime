@@ -35,6 +35,8 @@ export class PharmanetAccessComponent implements OnInit, OnDestroy {
   }
 
   public onSubmit() {
+    console.log('SUBMIT');
+
     if (this.form.valid) {
       this.form.markAsPristine();
       this.router.navigate(['review'], { relativeTo: this.route.parent });

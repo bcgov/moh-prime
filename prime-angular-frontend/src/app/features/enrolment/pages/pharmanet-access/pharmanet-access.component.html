@@ -106,8 +106,8 @@
             </td>
             <td>
 
-              <ng-template [ngTemplateOutlet]="menu"
-                           [ngTemplateOutletContext]="{index:i}"></ng-template>
+              <mat-icon class="remove-organization"
+                        (click)="removeOrganization(i)">close</mat-icon>
 
             </td>
           </tr>
@@ -117,6 +117,13 @@
 
     </tbody>
   </table>
+
+  <ng-template #noOrganization>
+
+    <div class="lead text-muted p-2">No Organizations</div>
+
+  </ng-template>
+
 
   <div class="row justify-content-between">
     <div class="col pt-2">
@@ -130,34 +137,10 @@
     <div class="col pt-2 text-right">
 
       <button mat-raised-button
+              type="submit"
               color="primary">Save and Continue</button>
 
     </div>
   </div>
-
-  <ng-template #menu
-               let-index="index">
-
-    <button mat-icon-button
-            [matMenuTriggerFor]="menu">
-      <mat-icon>more_vert</mat-icon>
-    </button>
-
-    <mat-menu #menu="matMenu">
-      <button mat-menu-item
-              type="button"
-              (click)="removeOrganization(i)">
-        <mat-icon>delete</mat-icon>
-        <span>Remove</span>
-      </button>
-    </mat-menu>
-
-  </ng-template>
-
-  <ng-template #noOrganization>
-
-    <div class="lead text-muted p-2">No Organizations</div>
-
-  </ng-template>
 
 </form>

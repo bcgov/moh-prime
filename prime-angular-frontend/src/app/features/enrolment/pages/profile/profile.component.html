@@ -63,7 +63,7 @@
 
   <mat-slide-toggle class="mb-3"
                     color="primary"
-                    (change)="hasPreferredName = !hasPreferredName"
+                    (change)="onPreferredNameChange()"
                     [checked]="hasPreferredName">
     Have a preferred name that is different than your legal name
   </mat-slide-toggle>
@@ -181,7 +181,7 @@
 
   <mat-slide-toggle class="mb-3"
                     color="primary"
-                    (change)="hasMailingAddress = !hasMailingAddress"
+                    (change)="onMailingAddressChange()"
                     [checked]="hasMailingAddress">
     Mailing address is the same
   </mat-slide-toggle>

@@ -59,7 +59,32 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
   }
 
+  public onPreferredNameChange() {
+    this.hasPreferredName = !this.hasPreferredName;
+
+    if (!this.hasPreferredName) {
+      this.form.get('preferredFirstName').reset();
+      this.form.get('preferredMiddleName').reset();
+      this.form.get('preferredLastName').reset();
+    }
+  }
+
+  public onMailingAddressChange() {
+    this.hasMailingAddress = !this.hasMailingAddress;
+
+    if (!this.hasMailingAddress) {
+      const mailingAddress = this.form.get('mailingAddress');
+      mailingAddress.get('country').reset();
+      mailingAddress.get('province').reset();
+      mailingAddress.get('street').reset();
+      mailingAddress.get('city').reset();
+      mailingAddress.get('postal').reset();
+    }
+  }
+
   public canDeactivate(): Observable<boolean> | boolean {
+    console.log(this.form.dirty);
+
     return (this.form.dirty)
       ? this.dialog.open(ConfirmDiscardChangesDialogComponent).afterClosed()
       : true;
