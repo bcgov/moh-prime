@@ -29,7 +29,7 @@ namespace PrimeTests.Utils
                                 .RuleFor(a => a.Postal, f => f.Address.ZipCode())
                                 ;
 
-        public static Faker<Enrollee> EnroleeFaker = new Faker<Enrollee>()
+        public static Faker<Enrollee> EnrolleeFaker = new Faker<Enrollee>()
                                 .RuleFor(e => e.UserId, f => f.Random.Word())
                                 .RuleFor(e => e.FirstName, f => f.Name.FirstName())
                                 .RuleFor(e => e.MiddleName, f => f.Name.FirstName())
@@ -40,7 +40,7 @@ namespace PrimeTests.Utils
                                 ;
 
         public static Faker<Enrolment> EnrolmentFaker = new Faker<Enrolment>()
-                                    .RuleFor(e => e.Enrollee, EnroleeFaker.Generate())
+                                    .RuleFor(e => e.Enrollee, EnrolleeFaker.Generate())
                                     .RuleFor(e => e.HasCertification, f => f.Random.Bool())
                                     .RuleFor(e => e.IsDeviceProvider, f => f.Random.Bool())
                                     .RuleFor(e => e.IsInsulinPumpProvider, f => f.Random.Bool())

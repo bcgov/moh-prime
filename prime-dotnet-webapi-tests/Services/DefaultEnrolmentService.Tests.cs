@@ -112,6 +112,8 @@ namespace PrimeTests.Services
             await _dbContext.SaveChangesAsync();
 
             // create some enrolments directly to the context
+            // Enrolment testEnrolment = TestUtils.EnrolmentFaker.Generate();
+            // _dbContext.Enrolments.Add(testEnrolment);
             _dbContext.Enrolments.Add(TestUtils.EnrolmentFaker.Generate());
             _dbContext.Enrolments.Add(TestUtils.EnrolmentFaker.Generate());
             _dbContext.Enrolments.Add(TestUtils.EnrolmentFaker.Generate());
