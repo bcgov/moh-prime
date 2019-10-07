@@ -9,7 +9,8 @@
     <div class="col-sm-6">
 
       <app-sub-header subheader="Enrollee">
-        <mat-icon (click)="route('profile')">edit</mat-icon>
+        <mat-icon (click)="route('profile')"
+                  matTooltip="Edit Enrollee">edit</mat-icon>
       </app-sub-header>
 
       <dl class="row mb-4">
@@ -57,7 +58,8 @@
       </dl>
 
       <app-sub-header subheader="Contact">
-        <mat-icon (click)="route('contact')">edit</mat-icon>
+        <mat-icon (click)="route('contact')"
+                  matTooltip="Edit Contact">edit</mat-icon>
       </app-sub-header>
 
       <h3 class="lead">Voice Contact</h3>
@@ -79,7 +81,8 @@
       </dl>
 
       <app-sub-header subheader="Self Declaration">
-        <mat-icon (click)="route('declaration')">edit</mat-icon>
+        <mat-icon (click)="route('declaration')"
+                  matTooltip="Edit Self Declaration">edit</mat-icon>
       </app-sub-header>
 
       <dl class="row mb-4">
@@ -140,7 +143,8 @@
     <div class="col-sm-6">
 
       <app-sub-header subheader="Professional Information">
-        <mat-icon (click)="route('professional')">edit</mat-icon>
+        <mat-icon (click)="route('professional')"
+                  matTooltip="Edit Professional Information">edit</mat-icon>
       </app-sub-header>
 
       <dl class="row mb-4">
@@ -185,7 +189,8 @@
       </dl>
 
       <app-sub-header subheader="PharmaNet Access">
-        <mat-icon (click)="route('access')">edit</mat-icon>
+        <mat-icon (click)="route('access')"
+                  matTooltip="Edit PharmaNet Access">edit</mat-icon>
       </app-sub-header>
 
       <ng-container *ngIf="enrolment?.organizations.length">

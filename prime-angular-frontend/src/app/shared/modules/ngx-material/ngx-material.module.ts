@@ -4,7 +4,7 @@ import {
   MatButtonModule, MatSnackBarModule, MatIconModule, MatDialogModule,
   MatSidenavModule, MatDatepickerModule, DateAdapter, MAT_DATE_LOCALE,
   MatChipsModule, MatAutocompleteModule, MatSlideToggleModule,
-  MAT_DIALOG_DEFAULT_OPTIONS, MatToolbarModule, MatMenuModule, MatListModule
+  MAT_DIALOG_DEFAULT_OPTIONS, MatToolbarModule, MatMenuModule, MatListModule, MatTooltipModule
 } from '@angular/material';
 import { MatMomentDateModule, MomentDateAdapter } from '@angular/material-moment-adapter';
 
@@ -38,6 +38,7 @@ export const APP_DATE_FORMATS = {
     MatSlideToggleModule,
     MatSnackBarModule,
     MatToolbarModule,
+    MatTooltipModule,
     MatRadioModule
   ],
   exports: [
@@ -57,6 +58,7 @@ export const APP_DATE_FORMATS = {
     MatSlideToggleModule,
     MatSnackBarModule,
     MatToolbarModule,
+    MatTooltipModule,
     MatRadioModule
   ],
   providers: [
