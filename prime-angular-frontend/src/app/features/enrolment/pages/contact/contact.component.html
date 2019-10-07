@@ -8,10 +8,12 @@
                   help="Lorem ipsum dolor, sit amet consectetur adipisicing elit."></app-sub-header>
 
   <app-sub-header subheader="Voice Contact"
-                  help="Used for voice calls. ie. Business Phone"></app-sub-header>
+                  help="Used for voice calls. ie. Business Phone">
+    <!-- <mat-icon (click)="route('profile')">info</mat-icon> -->
+  </app-sub-header>
 
   <div class="row">
-    <div class="col-sm-12 col-md-6 col-lg-4">
+    <div class="col-sm-12 col-md-6 col-xl-4">
 
       <mat-form-field class="w-100">
         <input matInput
@@ -25,7 +27,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-sm-12 col-md-6 col-lg-4">
+    <div class="col-sm-12 col-md-6 col-xl-4">
 
       <mat-form-field class="w-100">
         <input matInput
@@ -46,7 +48,7 @@
                 formControlName="hasContactPhone">Mobile Phone</mat-checkbox>
 
   <div class="row">
-    <div class="col-sm-12 col-md-6 col-lg-4"
+    <div class="col-sm-12 col-md-6 col-xl45"
          *ngIf="contactEmail.value || hasContactEmail.value">
 
       <mat-form-field class="w-100">
@@ -59,7 +61,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-sm-12 col-md-6 col-lg-4"
+    <div class="col-sm-12 col-md-6 col-xl45"
          *ngIf="contactPhone.value || hasContactPhone.value">
 
       <mat-form-field class="w-100">

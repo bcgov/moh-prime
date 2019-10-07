@@ -65,6 +65,20 @@ export class ContactComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this.createFormInstance();
 
+    const enrolment = this.enrolmentStateService.getRawEnrolment();
+    this.form.patchValue(enrolment.enrollee);
+
+    // TODO: update to eliminate controls in form
+    if (enrolment.enrollee.contactEmail) {
+      this.form.get('hasContactEmail').patchValue(true);
+    }
+
+    if (enrolment.enrollee.contactPhone) {
+      this.form.get('hasContactPhone').patchValue(true);
+    }
+
+    this.form.markAsPristine();
+
     this.hasContactEmail.valueChanges.subscribe((value: boolean) => {
       if (!value) {
         this.contactEmail.reset();

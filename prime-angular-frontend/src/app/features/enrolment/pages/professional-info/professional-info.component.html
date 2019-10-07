@@ -22,7 +22,7 @@
   <div class="row"
        *ngIf="hasCertification.value"
        formArrayName="certifications">
-    <div class="col-sm-12 col-md-6 col-lg-4 py-3">
+    <div class="col-sm-12 col-md-6 col-xl-4 py-3">
 
       <ng-container *ngFor="let certificate of certifications.controls; let i = index, let first = first"
                     [formGroupName]="i">
@@ -57,7 +57,7 @@
 
   <div class="row"
        *ngIf="isDeviceProvider.value">
-    <div class="col-sm-12 col-md-6 col-lg-4">
+    <div class="col-sm-12 col-md-6 col-xl-4">
 
       <mat-form-field class="w-100">
         <input matInput
@@ -94,7 +94,7 @@
 
   <div class="row"
        *ngIf="isAccessingPharmaNetOnBehalfOf.value">
-    <div class="col-sm-12 col-md-6 col-lg-4">
+    <div class="col-sm-12 col-md-6 col-xl-4">
 
       <mat-form-field class="w-100">
         <mat-chip-list #chipList>

@@ -54,11 +54,9 @@
             <td>
 
               <mat-form-field class="w-100">
-                <mat-label>Organization Name</mat-label>
-                <mat-select formControlName="name">
-                  <mat-option *ngFor="let organizationName of organizationNames"
-                              [value]="organizationName.code">{{ organizationName.name }}</mat-option>
-                </mat-select>
+                <input matInput
+                       placeholder="Organization Name"
+                       formControlName="name">
                 <mat-error *ngIf="organizations.at(i).get('name').hasError('required')">Required</mat-error>
               </mat-form-field>
 

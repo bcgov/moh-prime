@@ -68,6 +68,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this.createFormInstance();
 
+    const enrolment = this.enrolmentStateService.getRawEnrolment();
+    this.form.patchValue(enrolment.enrollee);
+
     // Show preferred name if it exists
     this.hasPreferredName = !!(
       this.form.get('preferredFirstName').value ||
