@@ -18,7 +18,7 @@
             type="button"
             (click)="maskPassword = !maskPassword"
             [attr.aria-label]="'Hide password'"
-            [attr.aria-pressed]="hide">
+            [attr.aria-pressed]="true">
       <mat-icon>{{ (maskPassword) ? 'visibility_off' : 'visibility' }}</mat-icon>
     </button>
     <mat-error *ngIf="password.hasError('required')">Required</mat-error>

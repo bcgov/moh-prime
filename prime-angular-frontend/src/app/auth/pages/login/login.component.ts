@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
    * @param {Event} event
    * @memberof LoginComponent
    */
-  public onSubmit(event: Event): void {
+  public onSubmit(): void {
     this.router.navigate(['enrolment/profile']);
 
     this.submitted = true;

@@ -9,6 +9,7 @@ import { ConfigKeyValue } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { ConfirmDiscardChangesDialogComponent } from '@shared/components/dialogs/confirm-discard-changes-dialog/confirm-discard-changes-dialog.component';
 import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
+import { ViewportService } from '@core/services/viewport.service';
 
 @Component({
   selector: 'app-pharmanet-access',
@@ -25,6 +26,7 @@ export class PharmanetAccessComponent implements OnInit, OnDestroy {
     private router: Router,
     private dialog: MatDialog,
     private configService: ConfigService,
+    private viewportService: ViewportService,
     private enrolmentStateService: EnrolmentStateService
   ) {
     this.organizationNames = this.configService.organizationNames;
@@ -34,9 +36,11 @@ export class PharmanetAccessComponent implements OnInit, OnDestroy {
     return this.form.get('organizations') as FormArray;
   }
 
-  public onSubmit() {
-    console.log('SUBMIT');
+  public get isMobile() {
+    return this.viewportService.isMobile;
+  }
 
+  public onSubmit() {
     if (this.form.valid) {
       this.form.markAsPristine();
       this.router.navigate(['review'], { relativeTo: this.route.parent });

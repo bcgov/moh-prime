@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 
 import { ConfigKeyValue } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
+import { ViewportService } from '@core/services/viewport.service';
 
 @Component({
   selector: 'app-college-certifications',
@@ -20,12 +21,17 @@ export class CollegeCertificationsComponent implements OnInit {
   public advancedPractices: ConfigKeyValue[];
 
   constructor(
-    private configService: ConfigService
+    private configService: ConfigService,
+    private viewportService: ViewportService
   ) {
     this.remove = new EventEmitter<number>();
     this.colleges = this.configService.colleges;
     this.licenses = this.configService.licenses;
     this.advancedPractices = this.configService.advancedPractices;
+  }
+
+  public get isMobile() {
+    return this.viewportService.isMobile;
   }
 
   public onRemove() {

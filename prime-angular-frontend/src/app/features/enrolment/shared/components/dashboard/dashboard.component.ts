@@ -66,21 +66,21 @@ export class DashboardComponent implements OnInit {
    *
    * @memberof DashboardComponent
    */
-  // public logout() {
-  //   this.authResource.logout()
-  //     .subscribe(
-  //       () => { this.logger.error('Logout response should never be 200.'); },
-  //       (error) => {
-  //         this.routeMessengerService.set(error.message);
-  //         // Indicate the route is associated to logging out for
-  //         // deactivation guards
-  //         const navigationExtras: NavigationExtras = {
-  //           queryParams: { logout: true }
-  //         };
-  //         this.router.navigate([this.config.routes.auth], navigationExtras);
-  //       }
-  //     );
-  // }
+  public logout() {
+    //   this.authResource.logout()
+    //     .subscribe(
+    //       () => { this.logger.error('Logout response should never be 200.'); },
+    //       (error) => {
+    //         this.routeMessengerService.set(error.message);
+    //         // Indicate the route is associated to logging out for
+    //         // deactivation guards
+    //         const navigationExtras: NavigationExtras = {
+    //           queryParams: { logout: true }
+    //         };
+    //         this.router.navigate([this.config.routes.auth], navigationExtras);
+    //       }
+    //     );
+  }
 
   public ngOnInit() {
     this.sideNavSections = this.getSideNavSections();
