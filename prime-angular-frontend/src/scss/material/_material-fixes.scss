@@ -40,7 +40,7 @@
   .active a,
   .active .mat-icon {
     // Highlight the active router link
-    color: theme-palette(blue, lighter) !important;
+    color: theme-palette(blue) !important;
   }
 
   // Force the mat-icon to be centered in the sidenav
