@@ -10,9 +10,6 @@ import { FormControlValidators } from '@shared/validators/form-control.validator
   providedIn: 'root'
 })
 export class EnrolmentStateService {
-  // private profileForm$ = new BehaviorSubject<FormGroup>(null);
-  // public profileForm = this.profileForm$.asObservable();
-
   public profileForm: FormGroup;
   public contactForm: FormGroup;
   public professionalInfoForm: FormGroup;
@@ -22,7 +19,6 @@ export class EnrolmentStateService {
   constructor(
     private fb: FormBuilder
   ) {
-    // this.profileForm$.next(this.buildProfileForm());
     this.profileForm = this.buildProfileForm();
     this.contactForm = this.buildContactForm();
     this.professionalInfoForm = this.buildProfessionalInfoForm();
@@ -30,12 +26,30 @@ export class EnrolmentStateService {
     this.pharmNetAccessForm = this.buildPharmNetAccessForm();
   }
 
+  public getEnrolment() {
+    const profile = this.profileForm.getRawValue();
+    const contact = this.contactForm.getRawValue();
+    const professionalInfo = this.professionalInfoForm.getRawValue();
+    const selfDeclaration = this.selfDeclarationForm.getRawValue();
+    const pharmNetAccess = this.pharmNetAccessForm.getRawValue();
+
+    return {
+      enrollee: {
+        ...profile,
+        ...contact
+      },
+      ...professionalInfo,
+      ...selfDeclaration,
+      ...pharmNetAccess
+    };
+  }
+
   private buildProfileForm(): FormGroup {
     return this.fb.group({
       firstName: [{ value: '', disabled: true }, [Validators.required]],
       middleName: [{ value: '', disabled: true }, []],
       lastName: [{ value: '', disabled: true }, [Validators.required]],
-      dateOfBirth: [{ value: moment(), disabled: true }, []],
+      dateOfBirth: [{ value: null, disabled: true }, []],
       preferredFirstName: ['', []],
       preferredMiddleName: ['', []],
       preferredLastName: ['', []],
@@ -69,7 +83,6 @@ export class EnrolmentStateService {
 
   private buildProfessionalInfoForm(): FormGroup {
     return this.fb.group({
-      id: [null, []],
       hasCertification: [null, [FormControlValidators.requiredBoolean]],
       certifications: this.fb.array([]),
       isDeviceProvider: [null, [FormControlValidators.requiredBoolean]],
@@ -99,61 +112,62 @@ export class EnrolmentStateService {
     });
   }
 
-  private getEnrolment() {
+  public getRawEnrolment() {
     return {
       enrollee: {
-        userId: '1234567890',
-        firstName: 'Joe',
-        middleName: 'Bob',
-        lastName: 'Blow',
-        preferredFirstName: 'Joey',
-        preferredMiddleName: 'May',
-        preferredLastName: 'Blue',
-        dateOfBirth: '2000-10-01T00:00:00',
+        firstName: 'Martin',
+        middleName: 'Tudor',
+        lastName: 'Pultz',
+        preferredFirstName: 'Nitram',
+        preferredMiddleName: 'Rodut',
+        preferredLastName: 'Ztlup',
+        dateOfBirth: '1977-09-22T00:00:00',
         physicalAddress: {
           country: 'Canada',
-          province: 'BC',
-          street: '123 Easy St',
+          province: 'British Columbia',
+          street: '1502 Fairfield',
           city: 'Victoria',
-          postal: 'V0V0V0'
+          postal: 'M4E 2B6'
         },
         mailingAddress: {
           country: 'Canada',
-          province: 'BC',
-          street: '321 Easy St',
+          province: 'British Columbia',
+          street: '1394 Oak Bay Ave.',
           city: 'Victoria',
-          postal: 'V0V0V0'
+          postal: 'M4E 2B6'
         },
-        contactEmail: 'test@email.com',
-        contactPhone: '555-555-5555',
-        voicePhone: '555-555-5555',
-        voiceExtension: '555'
+        contactEmail: 'mtpultz@gmail.com',
+        contactPhone: '2507782367',
+        voicePhone: '2507782367',
+        voiceExtension: '836'
       },
-      appliedDate: '2019-10-02T14:14:41.57099',
-      approved: null,
-      approvedReason: null,
-      approvedDate: null,
       hasCertification: true,
       certifications: [
         {
           id: 1,
-          enrolmentId: 1,
-          collegeCode: 1,
-          licenseNumber: '9100000',
-          licenseCode: 1,
+          collegeCode: 'CPSBC',
+          licenseNumber: '41234445',
+          licenseCode: 'FULGENERAL',
           renewalDate: '2020-10-01T00:00:00',
-          practiceCode: 1
+          practiceCode: 'REMOTEPRAC'
+        },
+        {
+          id: 2,
+          collegeCode: 'CRNBC',
+          licenseNumber: '54325277',
+          licenseCode: 'FULSEPCLTY',
+          renewalDate: '2020-10-01T00:00:00',
+          practiceCode: 'NONE'
         }
       ],
-      isDeviceProvider: null,
-      deviceProviderNumber: 'string',
+      isDeviceProvider: true,
+      deviceProviderNumber: '37938227',
       isInsulinPumpProvider: true,
       isAccessingPharmaNetOnBehalfOf: true,
       jobs: [
         {
           id: 1,
-          enrolmentId: 1,
-          title: 'Some Job'
+          title: 'Midwife'
         }
       ],
       hasConviction: true,
@@ -163,14 +177,21 @@ export class EnrolmentStateService {
       organizations: [
         {
           id: 1,
-          enrolmentId: 1,
-          name: 'Some Organization',
-          organizationTypeCode: 1,
+          name: 'Vancouver Island',
+          organizationTypeCode: 'HEALTHAUTH',
           city: 'Victoria',
           startDate: '2010-10-01T00:00:00',
-          endDate: null
-        }
+          endDate: '2021-10-01T00:00:00'
+        },
+        {
+          id: 2,
+          name: 'Shopper\'s Drug Mart',
+          organizationTypeCode: 'PHARMACY',
+          city: 'Victoria',
+          startDate: '2010-10-01T00:00:00',
+          endDate: '2021-10-01T00:00:00'
+        },
       ]
-    }
+    };
   }
 }
