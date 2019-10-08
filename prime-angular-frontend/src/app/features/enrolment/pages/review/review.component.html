@@ -89,7 +89,7 @@
         <dt class="col-sm-12 col-md-6 py-1">
           Have you ever been the subject of an order or a conviction for an information contravention?
         </dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ declarationYesNo(enrolment.hasConviction) }}&nbsp;</dd>
+        <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.hasConviction) }}&nbsp;</dd>
         <ng-container *ngIf="enrolment.hasConviction">
           <dt class="col-sm-12 col-md-6 py-1">Details</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ 1 }}&nbsp;</dd>
@@ -102,7 +102,7 @@
         <dt class="col-sm-12 col-md-6 py-1">
           Have you ever been the subject of an order or a conviction for an information contravention?
         </dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ declarationYesNo(enrolment.hasRegistrationSuspended) }}&nbsp;</dd>
+        <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.hasRegistrationSuspended) }}&nbsp;</dd>
         <ng-container *ngIf="enrolment.hasRegistrationSuspended">
           <dt class="col-sm-12 col-md-6 py-1">Details</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ 1 }}&nbsp;</dd>
@@ -116,7 +116,7 @@
           Have you ever had Terms and Conditions imposed on your license as a result of disciplinary actions taken
           by a governing body?
         </dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ declarationYesNo(enrolment.hasDisciplinaryAction) }}&nbsp;</dd>
+        <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.hasDisciplinaryAction) }}&nbsp;</dd>
         <ng-container *ngIf="enrolment.hasDisciplinaryAction">
           <dt class="col-sm-12 col-md-6 py-1">Details</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ 1 }}&nbsp;</dd>
@@ -130,7 +130,7 @@
           Have you ever had Terms and Conditions imposed on your license as a result of disciplinary actions taken
           by a governing body?
         </dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ declarationYesNo(enrolment.hasPharmaNetSuspended) }}&nbsp;</dd>
+        <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.hasPharmaNetSuspended) }}&nbsp;</dd>
         <ng-container *ngIf="enrolment.hasPharmaNetSuspended">
           <dt class="col-sm-12 col-md-6 py-1">Details</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ 1 }}&nbsp;</dd>
@@ -149,7 +149,7 @@
 
       <dl class="row mb-4">
         <dt class="col-sm-12 col-md-6 py-1">Do you have a college certification?</dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ declarationYesNo(enrolment.hasCertification) }}&nbsp;</dd>
+        <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.hasCertification) }}&nbsp;</dd>
         <ng-container *ngIf="enrolment.hasCertification">
           <dt class="col-sm-12 col-md-6 py-1">Certifications</dt>
           <dd class="col-sm-12 col-md-6 py-1">
@@ -163,7 +163,7 @@
 
       <dl class="row mb-4">
         <dt class="col-sm-12 col-md-6 py-1">Are you a device provider?</dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ declarationYesNo(enrolment.isDeviceProvider) }}&nbsp;</dd>
+        <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.isDeviceProvider) }}&nbsp;</dd>
         <ng-container *ngIf="enrolment.isDeviceProvider">
           <dt class="col-sm-12 col-md-6 py-1">Device Provider Number</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.deviceProviderNumber }}&nbsp;</dd>
@@ -172,12 +172,12 @@
 
       <dl class="row mb-4">
         <dt class="col-sm-12 col-md-6 py-1">Are you an insulin pump provider?</dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ declarationYesNo(enrolment.isInsulinPumpProvider) }}&nbsp;</dd>
+        <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.isInsulinPumpProvider) }}&nbsp;</dd>
       </dl>
 
       <dl class="row mb-4">
-        <dt class="col-sm-12 col-md-6 py-1">Are you accessing PharmNet on behalf of someone else?</dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ declarationYesNo(enrolment.isAccessingPharmaNetOnBehalfOf) }}&nbsp;</dd>
+        <dt class="col-sm-12 col-md-6 py-1">Are you accessing PharmaNet on behalf of someone else?</dt>
+        <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.isAccessingPharmaNetOnBehalfOf) }}&nbsp;</dd>
         <ng-container *ngIf="enrolment.isAccessingPharmaNetOnBehalfOf">
           <dt class="col-sm-12 col-md-6 py-1">Job Title</dt>
           <dd class="col-sm-12 col-md-6 py-1">

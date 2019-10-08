@@ -5,9 +5,14 @@ import { MatDialog } from '@angular/material';
 
 import { Observable } from 'rxjs';
 
+import { ToastService } from '@core/services/toast.service';
+import { LoggerService } from '@core/services/logger.service';
 import { ConfirmDiscardChangesDialogComponent } from '@shared/components/dialogs/confirm-discard-changes-dialog/confirm-discard-changes-dialog.component';
+import { Enrolment } from '../../shared/models/enrolment.model';
 import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
+import { EnrolmentResourceService } from '../../shared/services/enrolment-resource.service';
 
+// TODO: make YesNo into a component and use projection for content
 @Component({
   selector: 'app-self-declaration',
   templateUrl: './self-declaration.component.html',
@@ -23,7 +28,10 @@ export class SelfDeclarationComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
-    private enrolmentStateService: EnrolmentStateService
+    private enrolmentStateService: EnrolmentStateService,
+    private enrolmentResource: EnrolmentResourceService,
+    private toastService: ToastService,
+    private logger: LoggerService
   ) { }
 
   public get hasConviction(): FormGroup {
@@ -44,8 +52,19 @@ export class SelfDeclarationComponent implements OnInit, OnDestroy {
 
   public onSubmit() {
     if (this.form.valid) {
-      this.form.markAsPristine();
-      this.router.navigate(['access'], { relativeTo: this.route.parent });
+      const payload = this.enrolmentStateService.getEnrolment();
+      this.enrolmentResource.updateEnrolment(payload)
+        .subscribe(
+          (enrolment: Enrolment) => {
+            // TODO: patch the form with updated identifiers
+            this.toastService.openSuccessToast('Self declaration has been saved');
+            this.form.markAsPristine();
+            this.router.navigate(['access'], { relativeTo: this.route.parent });
+          },
+          (error: any) => {
+            this.toastService.openSuccessToast('Self declaration could not be saved');
+            this.logger.error('[Enrolment] SelfDeclaration::onSubmit error has occurred: ', error);
+          });
     } else {
       this.form.markAllAsTouched();
     }

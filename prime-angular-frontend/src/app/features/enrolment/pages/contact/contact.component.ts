@@ -1,26 +1,33 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
 import { Observable } from 'rxjs';
 
+import { ToastService } from '@core/services/toast.service';
+import { LoggerService } from '@core/services/logger.service';
 import { ConfirmDiscardChangesDialogComponent } from '@shared/components/dialogs/confirm-discard-changes-dialog/confirm-discard-changes-dialog.component';
+import { Enrolment } from '../../shared/models/enrolment.model';
 import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
+import { EnrolmentResourceService } from '../../shared/services/enrolment-resource.service';
 
 @Component({
   selector: 'app-contact',
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.scss']
 })
-export class ContactComponent implements OnInit, OnDestroy {
+export class ContactComponent implements OnInit {
   public form: FormGroup;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
-    private enrolmentStateService: EnrolmentStateService
+    private enrolmentStateService: EnrolmentStateService,
+    private enrolmentResource: EnrolmentResourceService,
+    private toastService: ToastService,
+    private logger: LoggerService
   ) { }
 
   public get voicePhone(): FormGroup {
@@ -49,8 +56,19 @@ export class ContactComponent implements OnInit, OnDestroy {
 
   public onSubmit() {
     if (this.form.valid) {
-      this.form.markAsPristine();
-      this.router.navigate(['professional'], { relativeTo: this.route.parent });
+      const payload = this.enrolmentStateService.getEnrolment();
+      this.enrolmentResource.updateEnrolment(payload)
+        .subscribe(
+          (enrolment: Enrolment) => {
+            // TODO: patch the form with updated identifiers
+            this.toastService.openSuccessToast('Contact information has been saved');
+            this.form.markAsPristine();
+            this.router.navigate(['professional'], { relativeTo: this.route.parent });
+          },
+          (error: any) => {
+            this.toastService.openSuccessToast('Contact information could not be saved');
+            this.logger.error('[Enrolment] Contact::onSubmit error has occurred: ', error);
+          });
     } else {
       this.form.markAllAsTouched();
     }
@@ -89,10 +107,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.contactPhone.reset();
       }
     });
-  }
-
-  public ngOnDestroy() {
-
   }
 
   private createFormInstance() {

@@ -39,6 +39,7 @@ export class CollegeCertificationsComponent implements OnInit {
   }
 
   public ngOnInit() {
+    // TODO: add a test checking that the
     this.form.get('collegeCode').valueChanges.subscribe((collegeCode) => {
       this.filteredLicenses = this.licenses.filter(l => l.collegeCode === collegeCode);
       this.licensePrefix = this.colleges.filter(c => c.code === collegeCode).shift().prefix;

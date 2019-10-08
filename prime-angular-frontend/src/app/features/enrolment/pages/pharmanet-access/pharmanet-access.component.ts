@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
@@ -7,16 +7,20 @@ import { Observable } from 'rxjs';
 
 import { ConfigKeyValue } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
-import { ConfirmDiscardChangesDialogComponent } from '@shared/components/dialogs/confirm-discard-changes-dialog/confirm-discard-changes-dialog.component';
-import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
+import { ToastService } from '@core/services/toast.service';
+import { LoggerService } from '@core/services/logger.service';
 import { ViewportService } from '@core/services/viewport.service';
+import { ConfirmDiscardChangesDialogComponent } from '@shared/components/dialogs/confirm-discard-changes-dialog/confirm-discard-changes-dialog.component';
+import { Enrolment } from '../../shared/models/enrolment.model';
+import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
+import { EnrolmentResourceService } from '../../shared/services/enrolment-resource.service';
 
 @Component({
   selector: 'app-pharmanet-access',
   templateUrl: './pharmanet-access.component.html',
   styleUrls: ['./pharmanet-access.component.scss']
 })
-export class PharmanetAccessComponent implements OnInit, OnDestroy {
+export class PharmanetAccessComponent implements OnInit {
   public form: FormGroup;
   public organizationNames: ConfigKeyValue[];
 
@@ -27,7 +31,10 @@ export class PharmanetAccessComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private configService: ConfigService,
     private viewportService: ViewportService,
-    private enrolmentStateService: EnrolmentStateService
+    private enrolmentStateService: EnrolmentStateService,
+    private enrolmentResource: EnrolmentResourceService,
+    private toastService: ToastService,
+    private logger: LoggerService
   ) {
     this.organizationNames = this.configService.organizationNames;
   }
@@ -42,8 +49,19 @@ export class PharmanetAccessComponent implements OnInit, OnDestroy {
 
   public onSubmit() {
     if (this.form.valid) {
-      this.form.markAsPristine();
-      this.router.navigate(['review'], { relativeTo: this.route.parent });
+      const payload = this.enrolmentStateService.getEnrolment();
+      this.enrolmentResource.updateEnrolment(payload)
+        .subscribe(
+          (enrolment: Enrolment) => {
+            // TODO: patch the form with updated identifiers
+            this.toastService.openSuccessToast('PharmaNet access has been saved');
+            this.form.markAsPristine();
+            this.router.navigate(['review'], { relativeTo: this.route.parent });
+          },
+          (error: any) => {
+            this.toastService.openSuccessToast('PharmaNet access could not be saved');
+            this.logger.error('[Enrolment] PharmanetAccess::onSubmit error has occurred: ', error);
+          });
     } else {
       this.form.markAllAsTouched();
     }
@@ -76,11 +94,7 @@ export class PharmanetAccessComponent implements OnInit, OnDestroy {
     this.createFormInstance();
   }
 
-  public ngOnDestroy() {
-
-  }
-
   private createFormInstance() {
-    this.form = this.enrolmentStateService.pharmNetAccessForm;
+    this.form = this.enrolmentStateService.pharmaNetAccessForm;
   }
 }
