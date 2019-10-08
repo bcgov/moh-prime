@@ -109,7 +109,6 @@ namespace Prime.Services
 
         public async Task<int> UpdateEnrolmentAsync(Enrolment enrolment)
         {
-            //enrolment.EnrolleeId = enrolment.Enrollee.Id;
             _context.Entry(enrolment).State = EntityState.Modified;
             foreach (var certification in enrolment.Certifications)
             {

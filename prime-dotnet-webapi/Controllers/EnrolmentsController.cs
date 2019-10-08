@@ -12,16 +12,16 @@ using Prime.Services;
 namespace Prime.Controllers
 {
     [Produces("application/json")]
-    [Route("api/v1/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     //User needs at least the ADMIN or ENROLMENT role to use this controller
     //FIXME - add this back once there are OAuth tokens
     // [Authorize(Roles = PrimeConstants.PRIME_ADMIN_ROLE + "," + PrimeConstants.PRIME_ENROLMENT_ROLE)]
-    public class EnrolmentController : ControllerBase
+    public class EnrolmentsController : ControllerBase
     {
         private readonly IEnrolmentService _enrolmentService;
 
-        public EnrolmentController(IEnrolmentService enrolmentService)
+        public EnrolmentsController(IEnrolmentService enrolmentService)
         {
             _enrolmentService = enrolmentService;
         }

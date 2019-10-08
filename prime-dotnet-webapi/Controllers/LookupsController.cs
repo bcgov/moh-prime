@@ -12,15 +12,15 @@ using Prime.Services;
 namespace Prime.Controllers
 {
     [Produces("application/json")]
-    [Route("api/v1/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     //User needs at least the ADMIN or ENROLMENT role to use this controller
     //[Authorize(Roles = PrimeConstants.PRIME_ADMIN_ROLE + "," + PrimeConstants.PRIME_ENROLMENT_ROLE)]
-    public class LookupController : ControllerBase
+    public class LookupsController : ControllerBase
     {
         private readonly ILookupService _lookupService;
 
-        public LookupController(ILookupService lookupService)
+        public LookupsController(ILookupService lookupService)
         {
             _lookupService = lookupService;
         }

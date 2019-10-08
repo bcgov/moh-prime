@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace Prime.Models
 {
-    public enum AddressType : int
+    public enum AddressType
     {
         Physical = 1,
         Mailing = 2
