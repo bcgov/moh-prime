@@ -39,3 +39,4 @@ msbuild.wrn
 
 # SonarQube
 .sonarqube/
+coverage.opencover.xml
