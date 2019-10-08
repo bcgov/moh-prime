@@ -24,7 +24,7 @@
           {{ enrolment.enrollee.preferredLastName }}&nbsp;
         </dd>
         <dt class="col-sm-12 col-md-6 py-1">Date of Birth</dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.dateOfBirth }}&nbsp;</dd>
+        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.dateOfBirth | date }}&nbsp;</dd>
       </dl>
 
       <h3 class="lead">Address</h3>
@@ -93,8 +93,8 @@
         <ng-container *ngIf="enrolment.hasConviction">
           <dt class="col-sm-12 col-md-6 py-1">Details</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ 1 }}&nbsp;</dd>
-          <dt class="col-sm-12 col-md-6 py-1">Documents</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ 1 }}&nbsp;</dd>
+          <!-- <dt class="col-sm-12 col-md-6 py-1">Documents</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{  }}&nbsp;</dd> -->
         </ng-container>
       </dl>
 
@@ -106,8 +106,8 @@
         <ng-container *ngIf="enrolment.hasRegistrationSuspended">
           <dt class="col-sm-12 col-md-6 py-1">Details</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ 1 }}&nbsp;</dd>
-          <dt class="col-sm-12 col-md-6 py-1">Documents</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ 1 }}&nbsp;</dd>
+          <!-- <dt class="col-sm-12 col-md-6 py-1">Documents</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{  }}&nbsp;</dd> -->
         </ng-container>
       </dl>
 
@@ -120,8 +120,8 @@
         <ng-container *ngIf="enrolment.hasDisciplinaryAction">
           <dt class="col-sm-12 col-md-6 py-1">Details</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ 1 }}&nbsp;</dd>
-          <dt class="col-sm-12 col-md-6 py-1">Documents</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ 1 }}&nbsp;</dd>
+          <!-- <dt class="col-sm-12 col-md-6 py-1">Documents</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{  }}&nbsp;</dd> -->
         </ng-container>
       </dl>
 
@@ -134,8 +134,8 @@
         <ng-container *ngIf="enrolment.hasPharmaNetSuspended">
           <dt class="col-sm-12 col-md-6 py-1">Details</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ 1 }}&nbsp;</dd>
-          <dt class="col-sm-12 col-md-6 py-1">Documents</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ 1 }}&nbsp;</dd>
+          <!-- <dt class="col-sm-12 col-md-6 py-1">Documents</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{  }}&nbsp;</dd> -->
         </ng-container>
       </dl>
 
@@ -150,16 +150,27 @@
       <dl class="row mb-4">
         <dt class="col-sm-12 col-md-6 py-1">Do you have a college certification?</dt>
         <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.hasCertification) }}&nbsp;</dd>
-        <ng-container *ngIf="enrolment.hasCertification">
-          <dt class="col-sm-12 col-md-6 py-1">Certifications</dt>
-          <dd class="col-sm-12 col-md-6 py-1">
-            <ul class="list-unstyled">
-              <li>{{ 1 }}</li>
-            </ul>
-            &nbsp;
-          </dd>
-        </ng-container>
       </dl>
+
+      <ng-container *ngIf="enrolment.hasCertification">
+
+        <h3 class="lead">Certifications</h3>
+
+        <dl class="row mb-4"
+            *ngFor="let certification of enrolment.certifications; let i = index">
+          <dt class="col-sm-12 col-md-6 py-1">College Certification</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ certification.collegeCode }}&nbsp;</dd>
+          <dt class="col-sm-12 col-md-6 py-1">License Number</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ certification.licenseNumber }}&nbsp;</dd>
+          <dt class="col-sm-12 col-md-6 py-1">License Class</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ certification.licenseCode }}&nbsp;</dd>
+          <dt class="col-sm-12 col-md-6 py-1">Renewal Date</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ certification.renewalDate | date }}&nbsp;</dd>
+          <dt class="col-sm-12 col-md-6 py-1">Advanced Practices</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ certification.practiceCode }}&nbsp;</dd>
+        </dl>
+
+      </ng-container>
 
       <dl class="row mb-4">
         <dt class="col-sm-12 col-md-6 py-1">Are you a device provider?</dt>
@@ -195,6 +206,8 @@
 
       <ng-container *ngIf="enrolment?.organizations.length">
 
+        <h3 class="lead">Organizations</h3>
+
         <dl class="row mb-4"
             *ngFor="let organization of enrolment.organizations; let i = index">
           <dt class="col-sm-12 col-md-6 py-1">Organization Name</dt>
@@ -204,9 +217,9 @@
           <dt class="col-sm-12 col-md-6 py-1">City</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ organization.city }}&nbsp;</dd>
           <dt class="col-sm-12 col-md-6 py-1">Start Date</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ organization.startDate }}&nbsp;</dd>
+          <dd class="col-sm-12 col-md-6 py-1">{{ organization.startDate | date }}&nbsp;</dd>
           <dt class="col-sm-12 col-md-6 py-1">End Date</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ organization.endDate }}&nbsp;</dd>
+          <dd class="col-sm-12 col-md-6 py-1">{{ organization.endDate | date }}&nbsp;</dd>
         </dl>
 
       </ng-container>
@@ -226,7 +239,8 @@
     <div class="col pt-2 text-right">
 
       <button mat-raised-button
-              color="primary">Submit</button>
+              color="primary"
+              (click)="onSubmit()">Submit</button>
 
     </div>
   </div>

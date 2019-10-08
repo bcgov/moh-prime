@@ -25,24 +25,52 @@ export class ReviewComponent implements OnInit {
   ) { }
 
   public onSubmit() {
-    // TODO: perform validation on the entire application
-    // TODO: indicate where validation failed in the review to prompt user
-    // if (this.form.valid) {
-    //   const payload = this.enrolmentStateService.getEnrolment();
-    //   this.enrolmentResource.submitEnrolment(payload)
-    //     .subscribe(
-    //       (enrolment: Enrolment) => {
-    //         this.toastService.openSuccessToast('Enrolment has been submitted');
-    //         this.form.markAsPristine();
-    //         this.router.navigate(['professional'], { relativeTo: this.route.parent });
-    //       },
-    //       (error: any) => {
-    //         this.toastService.openSuccessToast('Enrolment could not be submitted');
-    //         this.logger.error('[Enrolment] Review::onSubmit error has occurred: ', error);
-    //       });
-    // } else {
-    //   this.form.markAllAsTouched();
-    // }
+    if (this.isEnrolmentValid()) {
+      const payload = this.enrolmentStateService.getEnrolment();
+      //   this.enrolmentResource.submitEnrolment(payload)
+      //     .subscribe(
+      //       (enrolment: Enrolment) => {
+      //         this.toastService.openSuccessToast('Enrolment has been submitted');
+      //         this.form.markAsPristine();
+      //         this.router.navigate(['professional'], { relativeTo: this.route.parent });
+      //       },
+      //       (error: any) => {
+      //         this.toastService.openSuccessToast('Enrolment could not be submitted');
+      //         this.logger.error('[Enrolment] Review::onSubmit error has occurred: ', error);
+      //       });
+    } else {
+      // TODO: indicate where validation failed in the review to prompt user
+    }
+  }
+
+  public isEnrolmentValid(): boolean {
+    return (
+      this.isProfileInfoValid() &&
+      this.isContactInfoValid() &&
+      this.isProfessionalInfoValid() &&
+      this.isSelfDeclarationValid() &&
+      this.isPharmaNetAccessValid()
+    );
+  }
+
+  public isProfileInfoValid(): boolean {
+    return this.enrolmentStateService.profileForm.valid;
+  }
+
+  public isContactInfoValid(): boolean {
+    return this.enrolmentStateService.contactForm.valid;
+  }
+
+  public isProfessionalInfoValid(): boolean {
+    return this.enrolmentStateService.professionalInfoForm.valid;
+  }
+
+  public isSelfDeclarationValid(): boolean {
+    return this.enrolmentStateService.selfDeclarationForm.valid;
+  }
+
+  public isPharmaNetAccessValid(): boolean {
+    return this.enrolmentStateService.pharmaNetAccessForm.valid;
   }
 
   public showYesNo(declared: boolean) {
@@ -55,5 +83,12 @@ export class ReviewComponent implements OnInit {
 
   public ngOnInit() {
     this.enrolment = this.enrolmentStateService.getEnrolment();
+
+    // TODO: indicate where validation failed in the review to prompt user
+    console.log('PROFILE_VALID', this.enrolmentStateService.profileForm.valid);
+    console.log('CONTACT_VALID', this.enrolmentStateService.contactForm.valid);
+    console.log('PROFESSIONAL_VALID', this.enrolmentStateService.professionalInfoForm.valid);
+    console.log('DECLARATION_VALID', this.enrolmentStateService.selfDeclarationForm.valid);
+    console.log('ACCESS_VALID', this.enrolmentStateService.pharmaNetAccessForm.valid);
   }
 }
