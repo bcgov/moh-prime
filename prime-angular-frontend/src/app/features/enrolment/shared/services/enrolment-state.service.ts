@@ -40,6 +40,7 @@ export class EnrolmentStateService {
     const pharmaNetAccess = this.pharmaNetAccessForm.getRawValue();
 
     return {
+      userId: '99999999',
       enrollee: {
         ...profile,
         ...contact
