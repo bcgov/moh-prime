@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
@@ -18,7 +18,7 @@ import { EnrolmentResourceService } from '../../shared/services/enrolment-resour
   templateUrl: './self-declaration.component.html',
   styleUrls: ['./self-declaration.component.scss']
 })
-export class SelfDeclarationComponent implements OnInit, OnDestroy {
+export class SelfDeclarationComponent implements OnInit {
   public form: FormGroup;
   public decisions: { code: boolean, name: string }[] = [
     { code: false, name: 'No' }, { code: true, name: 'Yes' }
@@ -52,11 +52,10 @@ export class SelfDeclarationComponent implements OnInit, OnDestroy {
 
   public onSubmit() {
     if (this.form.valid) {
-      const payload = this.enrolmentStateService.getEnrolment();
+      const payload = this.enrolmentStateService.enrolment;
       this.enrolmentResource.updateEnrolment(payload)
         .subscribe(
-          (enrolment: Enrolment) => {
-            // TODO: patch the form with updated identifiers
+          () => {
             this.toastService.openSuccessToast('Self declaration has been saved');
             this.form.markAsPristine();
             this.router.navigate(['access'], { relativeTo: this.route.parent });
@@ -78,15 +77,24 @@ export class SelfDeclarationComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.createFormInstance();
-  }
 
-  public ngOnDestroy() {
+    // TODO: detect enrolment already exists and don't reload
+    // TODO: apply guard if not enrolment is found to redirect to profile
+    this.enrolmentResource.enrolments()
+      .subscribe((enrolment: Enrolment) => {
+        if (enrolment) {
+          this.enrolmentStateService.enrolment = enrolment;
+        }
 
+        this.initForm();
+      });
   }
 
   private createFormInstance() {
     this.form = this.enrolmentStateService.selfDeclarationForm;
+  }
 
+  private initForm() {
     // TODO: make YES/NO into own component to encapsulate toggling
     this.hasConviction.valueChanges.subscribe((value) => {
       this.toggleValidators(value, 'convictionDetails');

@@ -82,11 +82,10 @@ export class ProfessionalInfoComponent implements OnInit {
 
   public onSubmit() {
     if (this.form.valid) {
-      const payload = this.enrolmentStateService.getEnrolment();
+      const payload = this.enrolmentStateService.enrolment;
       this.enrolmentResource.updateEnrolment(payload)
         .subscribe(
-          (enrolment: Enrolment) => {
-            // TODO: patch the form with updated identifiers
+          () => {
             this.toastService.openSuccessToast('Professional information has been saved');
             this.form.markAsPristine();
             this.router.navigate(['declaration'], { relativeTo: this.route.parent });
@@ -157,11 +156,24 @@ export class ProfessionalInfoComponent implements OnInit {
 
   public ngOnInit() {
     this.createFormInstance();
+
+    // TODO: detect enrolment already exists and don't reload
+    // TODO: apply guard if not enrolment is found to redirect to profile
+    this.enrolmentResource.enrolments()
+      .subscribe((enrolment: Enrolment) => {
+        if (enrolment) {
+          this.enrolmentStateService.enrolment = enrolment;
+        }
+
+        this.initForm();
+      });
   }
 
   private createFormInstance() {
     this.form = this.enrolmentStateService.professionalInfoForm;
+  }
 
+  private initForm() {
     // TODO: revisit when actual data is available
     if (!this.isDeviceProvider.value) {
       this.isInsulinPumpProvider.disable({ emitEvent: false });

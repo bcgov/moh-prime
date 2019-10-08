@@ -49,11 +49,10 @@ export class PharmanetAccessComponent implements OnInit {
 
   public onSubmit() {
     if (this.form.valid) {
-      const payload = this.enrolmentStateService.getEnrolment();
+      const payload = this.enrolmentStateService.enrolment;
       this.enrolmentResource.updateEnrolment(payload)
         .subscribe(
-          (enrolment: Enrolment) => {
-            // TODO: patch the form with updated identifiers
+          () => {
             this.toastService.openSuccessToast('PharmaNet access has been saved');
             this.form.markAsPristine();
             this.router.navigate(['review'], { relativeTo: this.route.parent });
@@ -92,9 +91,24 @@ export class PharmanetAccessComponent implements OnInit {
 
   public ngOnInit() {
     this.createFormInstance();
+
+    // TODO: detect enrolment already exists and don't reload
+    // TODO: apply guard if not enrolment is found to redirect to profile
+    this.enrolmentResource.enrolments()
+      .subscribe((enrolment: Enrolment) => {
+        if (enrolment) {
+          this.enrolmentStateService.enrolment = enrolment;
+        }
+
+        this.initForm();
+      });
   }
 
   private createFormInstance() {
     this.form = this.enrolmentStateService.pharmaNetAccessForm;
+  }
+
+  private initForm() {
+
   }
 }
