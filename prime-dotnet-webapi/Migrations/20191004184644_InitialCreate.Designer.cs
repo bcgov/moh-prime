@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -10,9 +11,10 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191004184644_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -174,19 +176,11 @@ namespace Prime.Migrations
 
                     b.Property<bool?>("HasConviction");
 
-                    b.Property<string>("HasConvictionDetails");
-
                     b.Property<bool?>("HasDisciplinaryAction");
-
-                    b.Property<string>("HasDisciplinaryActionDetails");
 
                     b.Property<bool?>("HasPharmaNetSuspended");
 
-                    b.Property<string>("HasPharmaNetSuspendedDetails");
-
                     b.Property<bool?>("HasRegistrationSuspended");
-
-                    b.Property<string>("HasRegistrationSuspendedDetails");
 
                     b.Property<bool?>("IsAccessingPharmaNetOnBehalfOf");
 

@@ -11,6 +11,7 @@ services:
       DB_CONNECTION_STRING: "host=postgres;port=5432;database=postgres;username=postgres;password=postgres"      
       JWT_SIGNING_KEY: "SdqlA0Y5e6HMAK1wm6iHHHz2u37XGtlo"      
       ASPNETCORE_HTTPS_PORT: "5001"
+      ASPNETCORE_ENVIRONMENT: "Development"
     ports:
       - "5000:80"
       - "5001:5001"
@@ -18,7 +19,7 @@ services:
       - primenet
     depends_on:
       - postgres
-######################################################### Database #  
+######################################################### Database #
   postgres:
     restart: always
     container_name: primedb
@@ -33,8 +34,8 @@ services:
       - local_postgres_data:/var/lib/postgresql/data
     networks:
       - primenet
-###################################################### Web Frontend #  
-      nginx-angular:
+###################################################### Web Frontend #
+  nginx-angular:
     container_name: primeweb
     build:
         context: prime-angular-frontend/
