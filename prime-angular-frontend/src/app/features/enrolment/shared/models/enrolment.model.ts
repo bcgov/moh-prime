@@ -4,7 +4,9 @@ import { Job } from './job.model';
 import { Organization } from './organization.model';
 
 export interface Enrolment {
+  id?: number;
   enrollee: {
+    id?: number;
     userId: string;
     firstName: string;
     middleName: string;
@@ -14,7 +16,7 @@ export interface Enrolment {
     preferredLastName: string;
     dateOfBirth: string;
     physicalAddress: Address,
-    mailingAddress: Address,
+    mailingAddress?: Address,
     contactEmail: string;
     contactPhone: string;
     voicePhone: string;
