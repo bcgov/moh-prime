@@ -185,6 +185,7 @@ export class ProfessionalInfoComponent implements OnInit {
     this.hasCertification.valueChanges.subscribe((value) => {
       if (!value) {
         this.certifications.clear();
+
         this.isAccessingPharmaNetOnBehalfOf.enable({ emitEvent: false });
       } else {
         this.isAccessingPharmaNetOnBehalfOf.reset(null, { emitEvent: false });
@@ -194,6 +195,7 @@ export class ProfessionalInfoComponent implements OnInit {
     this.isDeviceProvider.valueChanges.subscribe((value) => {
       if (!value) {
         this.deviceProviderNumber.reset();
+
         this.isInsulinPumpProvider.reset(null, { emitEvent: false });
         this.isInsulinPumpProvider.disable({ emitEvent: false });
       } else {
@@ -203,6 +205,7 @@ export class ProfessionalInfoComponent implements OnInit {
     this.isAccessingPharmaNetOnBehalfOf.valueChanges.subscribe((value) => {
       if (!value) {
         this.jobs.clear();
+
         this.hasCertification.enable({ emitEvent: false });
       } else {
         this.hasCertification.reset(null, { emitEvent: false });

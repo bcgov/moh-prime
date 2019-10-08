@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   version: '1.0.0',
-  apiEndpoint: 'http://openshift-dotnet-dqszvc-dev.pathfinder.gov.bc.ca/api/v1',
+  apiEndpoint: 'http://openshift-dotnet-dqszvc-dev.pathfinder.gov.bc.ca/api',
   whiteListedDomain: ['http://openshift-dotnet-dqszvc-dev.pathfinder.gov.bc.ca']
 };
 
