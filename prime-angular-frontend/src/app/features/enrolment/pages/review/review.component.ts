@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '../../shared/models/enrolment.model';
 import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
-import { EnrolmentResourceService } from '../../shared/services/enrolment-resource.service';
+import { EnrolmentResource } from '../../shared/services/enrolment-resource.service';
 import { ToastService } from '@core/services/toast.service';
 
 @Component({
@@ -20,7 +20,7 @@ export class ReviewComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private enrolmentStateService: EnrolmentStateService,
-    private enrolmentResource: EnrolmentResourceService,
+    private enrolmentResource: EnrolmentResource,
     private toastService: ToastService,
     private logger: LoggerService
   ) { }

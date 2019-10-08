@@ -10,7 +10,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { ConfirmDiscardChangesDialogComponent } from '@shared/components/dialogs/confirm-discard-changes-dialog/confirm-discard-changes-dialog.component';
 import { Enrolment } from '../../shared/models/enrolment.model';
 import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
-import { EnrolmentResourceService } from '../../shared/services/enrolment-resource.service';
+import { EnrolmentResource } from '../../shared/services/enrolment-resource.service';
 
 // TODO: make YesNo into a component and use projection for content
 @Component({
@@ -29,7 +29,7 @@ export class SelfDeclarationComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private enrolmentStateService: EnrolmentStateService,
-    private enrolmentResource: EnrolmentResourceService,
+    private enrolmentResource: EnrolmentResource,
     private toastService: ToastService,
     private logger: LoggerService
   ) { }

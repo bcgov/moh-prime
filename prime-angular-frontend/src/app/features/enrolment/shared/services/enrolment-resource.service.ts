@@ -16,7 +16,7 @@ import { EnrolmentStateService } from './enrolment-state.service';
 @Injectable({
   providedIn: 'root'
 })
-export class EnrolmentResourceService {
+export class EnrolmentResource {
 
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
