@@ -1,4 +1,3 @@
-import { Moment } from 'moment';
 import { Address } from './address.model';
 import { CollegeCertification } from './college-certification.model';
 import { Job } from './job.model';
@@ -13,7 +12,7 @@ export interface Enrolment {
     preferredFirstName: string;
     preferredMiddleName: string;
     preferredLastName: string;
-    dateOfBirth: Moment;
+    dateOfBirth: string;
     physicalAddress: Address,
     mailingAddress: Address,
     contactEmail: string;
@@ -29,13 +28,12 @@ export interface Enrolment {
   isAccessingPharmaNetOnBehalfOf: boolean;
   jobs: Job[];
   hasConviction: boolean;
+  hasConvictionDetails: string;
   hasRegistrationSuspended: boolean;
+  hasRegistrationSuspendedDetails: boolean;
   hasDisciplinaryAction: boolean;
+  hasDisciplinaryActionDetails: boolean;
   hasPharmaNetSuspended: boolean;
+  hasPharmaNetSuspendedDetails: boolean;
   organizations: Organization[];
-}
-
-export interface SelfDeclarationIncident {
-  details: string;
-  documents: any[];
 }
