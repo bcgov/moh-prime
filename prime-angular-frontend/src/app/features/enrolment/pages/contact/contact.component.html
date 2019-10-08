@@ -1,0 +1,96 @@
+<form (ngSubmit)="onSubmit()"
+      [formGroup]="form"
+      novalidate>
+
+  <h1 class="h2 mb-4">Application Enrolment</h1>
+
+  <app-sub-header subheader="Contact Information"
+                  help="Lorem ipsum dolor, sit amet consectetur adipisicing elit."></app-sub-header>
+
+  <app-sub-header subheader="Voice Contact"
+                  help="Used for voice calls. ie. Business Phone">
+    <!-- <mat-icon (click)="route('profile')">info</mat-icon> -->
+  </app-sub-header>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-6 col-xl-4">
+
+      <mat-form-field class="w-100">
+        <input matInput
+               placeholder="Phone Number for Voice Contact"
+               formControlName="voicePhone"
+               mask="(000) 000-0000"
+               [showMaskTyped]="false">
+        <mat-error *ngIf="voicePhone.hasError('phone')">Must be a valid phone number</mat-error>
+      </mat-form-field>
+
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12 col-md-6 col-xl-4">
+
+      <mat-form-field class="w-100">
+        <input matInput
+               placeholder="Extension Number"
+               formControlName="voiceExtension">
+        <mat-error *ngIf="voiceExtension.hasError('numeric')">Must contain only numbers</mat-error>
+      </mat-form-field>
+
+    </div>
+  </div>
+
+  <app-sub-header subheader="Preferred Contact Method"
+                  help="Used for email and/or text message communication"></app-sub-header>
+
+  <mat-checkbox class="mr-4"
+                formControlName="hasContactEmail">Email</mat-checkbox>
+  <mat-checkbox class="mr-4"
+                formControlName="hasContactPhone">Mobile Phone</mat-checkbox>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-6 col-xl45"
+         *ngIf="contactEmail.value || hasContactEmail.value">
+
+      <mat-form-field class="w-100">
+        <input matInput
+               placeholder="Email"
+               formControlName="contactEmail">
+        <mat-error *ngIf="contactEmail.hasError('email')">Must be a valid email address</mat-error>
+      </mat-form-field>
+
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12 col-md-6 col-xl45"
+         *ngIf="contactPhone.value || hasContactPhone.value">
+
+      <mat-form-field class="w-100">
+        <input matInput
+               placeholder="Phone"
+               formControlName="contactPhone"
+               mask="(000) 000-0000"
+               [showMaskTyped]="false">
+        <mat-error *ngIf="contactPhone.hasError('phone')">Must be a valid phone number</mat-error>
+      </mat-form-field>
+
+    </div>
+  </div>
+
+  <div class="row justify-content-between">
+    <div class="col pt-2">
+
+      <button mat-raised-button
+              type="button"
+              color="primary"
+              routerLink="../profile">Back</button>
+
+    </div>
+    <div class="col pt-2 text-right">
+
+      <button mat-raised-button
+              color="primary">Save and Continue</button>
+
+    </div>
+  </div>
+
+</form>
