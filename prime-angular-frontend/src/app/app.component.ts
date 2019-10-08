@@ -42,7 +42,6 @@ export class AppComponent implements OnInit {
    * @param {*} routeEvent
    * @memberof AppComponent
    */
-  // TODO: checkout the new CDK scroll
   private scrollTop(routeEvent: any) {
     routeEvent.subscribe(() => {
       const contentContainer = this.document.querySelector('.mat-sidenav-content') || this.window;

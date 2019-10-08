@@ -5,6 +5,7 @@ import { MatSidenav } from '@angular/material';
 import { ViewportService } from '@core/services/viewport.service';
 import { DeviceResolution } from '@shared/enums/device-resolution.enum';
 
+// TODO: revisit the dashboard component for reuse when used in admin and provisioning
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -109,6 +110,7 @@ export class DashboardComponent implements OnInit {
    * @returns
    * @memberof DashboardComponent
    */
+  // TODO: prevent routing to beyond enrollee when application has not been created
   private getEnroleeSideNavSections() {
     return [
       {

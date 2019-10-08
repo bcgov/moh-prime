@@ -14,7 +14,7 @@ export class EnrolmentStateService {
   public contactForm: FormGroup;
   public professionalInfoForm: FormGroup;
   public selfDeclarationForm: FormGroup;
-  public pharmNetAccessForm: FormGroup;
+  public pharmaNetAccessForm: FormGroup;
 
   constructor(
     private fb: FormBuilder
@@ -23,7 +23,7 @@ export class EnrolmentStateService {
     this.contactForm = this.buildContactForm();
     this.professionalInfoForm = this.buildProfessionalInfoForm();
     this.selfDeclarationForm = this.buildSelfDeclarationForm();
-    this.pharmNetAccessForm = this.buildPharmNetAccessForm();
+    this.pharmaNetAccessForm = this.buildPharmaNetAccessForm();
   }
 
   public getEnrolment() {
@@ -31,7 +31,7 @@ export class EnrolmentStateService {
     const contact = this.contactForm.getRawValue();
     const professionalInfo = this.professionalInfoForm.getRawValue();
     const selfDeclaration = this.selfDeclarationForm.getRawValue();
-    const pharmNetAccess = this.pharmNetAccessForm.getRawValue();
+    const pharmaNetAccess = this.pharmaNetAccessForm.getRawValue();
 
     return {
       enrollee: {
@@ -40,7 +40,7 @@ export class EnrolmentStateService {
       },
       ...professionalInfo,
       ...selfDeclaration,
-      ...pharmNetAccess
+      ...pharmaNetAccess
     };
   }
 
@@ -106,7 +106,7 @@ export class EnrolmentStateService {
     });
   }
 
-  private buildPharmNetAccessForm(): FormGroup {
+  private buildPharmaNetAccessForm(): FormGroup {
     return this.fb.group({
       organizations: this.fb.array([])
     });
