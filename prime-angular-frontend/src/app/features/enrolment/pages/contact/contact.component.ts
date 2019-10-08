@@ -83,15 +83,15 @@ export class ContactComponent implements OnInit {
   public ngOnInit() {
     this.createFormInstance();
 
-    const enrolment = this.enrolmentStateService.getRawEnrolment();
-    this.form.patchValue(enrolment.enrollee);
+    console.log(this.hasContactEmail.value);
+
 
     // TODO: update to eliminate controls in form
-    if (enrolment.enrollee.contactEmail) {
+    if (this.contactEmail.value) {
       this.form.get('hasContactEmail').patchValue(true);
     }
 
-    if (enrolment.enrollee.contactPhone) {
+    if (this.contactPhone.value) {
       this.form.get('hasContactPhone').patchValue(true);
     }
 

@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
-import { BehaviorSubject } from 'rxjs';
-
-import * as moment from 'moment';
 import { FormControlValidators } from '@shared/validators/form-control.validators';
 
+// TODO: pass in enrolment and build out form groups and arrays within state service
 @Injectable({
   providedIn: 'root'
 })
@@ -24,6 +22,14 @@ export class EnrolmentStateService {
     this.professionalInfoForm = this.buildProfessionalInfoForm();
     this.selfDeclarationForm = this.buildSelfDeclarationForm();
     this.pharmaNetAccessForm = this.buildPharmaNetAccessForm();
+
+    // TODO: patch enrolment with test data
+    this.profileForm.patchValue(this.getRawEnrolment().enrollee);
+    this.contactForm.patchValue(this.getRawEnrolment().enrollee);
+    // TODO: working to populate the forms of an existing enrolment
+    // this.professionalInfoForm.patchValue(this.getRawEnrolment());
+    // this.selfDeclarationForm.patchValue(this.getRawEnrolment());
+    // this.pharmaNetAccessForm.patchValue(this.getRawEnrolment());
   }
 
   public getEnrolment() {

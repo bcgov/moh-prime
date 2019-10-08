@@ -109,10 +109,6 @@ export class ProfileComponent implements OnInit {
 
   public ngOnInit() {
     this.createFormInstance();
-
-    const enrolment = this.enrolmentStateService.getRawEnrolment();
-    this.form.patchValue(enrolment.enrollee);
-
     this.initForm();
   }
 
