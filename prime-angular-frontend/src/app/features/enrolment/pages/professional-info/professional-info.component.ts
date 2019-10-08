@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog, MatChipInputEvent, MatAutocompleteSelectedEvent } from '@angular/material';
@@ -8,15 +8,21 @@ import { startWith, map } from 'rxjs/operators';
 
 import { ConfigKeyValue } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
+import { ToastService } from '@core/services/toast.service';
+import { LoggerService } from '@core/services/logger.service';
 import { ConfirmDiscardChangesDialogComponent } from '@shared/components/dialogs/confirm-discard-changes-dialog/confirm-discard-changes-dialog.component';
+import { Enrolment } from '../../shared/models/enrolment.model';
 import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
+import { EnrolmentResourceService } from '../../shared/services/enrolment-resource.service';
 
+// TODO: make YesNo into a component and use projection for content
+// TODO: how much do validations need to be locked down?
 @Component({
   selector: 'app-professional-info',
   templateUrl: './professional-info.component.html',
   styleUrls: ['./professional-info.component.scss']
 })
-export class ProfessionalInfoComponent implements OnInit, OnDestroy {
+export class ProfessionalInfoComponent implements OnInit {
   public form: FormGroup;
   public jobCtrl: FormControl;
   @ViewChild('jobInput', { static: false }) jobInput: ElementRef<HTMLInputElement>;
@@ -35,7 +41,10 @@ export class ProfessionalInfoComponent implements OnInit, OnDestroy {
     private router: Router,
     private dialog: MatDialog,
     private configService: ConfigService,
-    private enrolmentStateService: EnrolmentStateService
+    private enrolmentStateService: EnrolmentStateService,
+    private enrolmentResource: EnrolmentResourceService,
+    private toastService: ToastService,
+    private logger: LoggerService
   ) {
     this.colleges = this.configService.colleges;
     this.licenses = this.configService.licenses;
@@ -55,6 +64,10 @@ export class ProfessionalInfoComponent implements OnInit, OnDestroy {
     return this.form.get('isDeviceProvider') as FormGroup;
   }
 
+  public get deviceProviderNumber(): FormGroup {
+    return this.form.get('deviceProviderNumber') as FormGroup;
+  }
+
   public get isInsulinPumpProvider(): FormGroup {
     return this.form.get('isInsulinPumpProvider') as FormGroup;
   }
@@ -69,13 +82,26 @@ export class ProfessionalInfoComponent implements OnInit, OnDestroy {
 
   public onSubmit() {
     if (this.form.valid) {
+      const payload = this.enrolmentStateService.getEnrolment();
+      this.enrolmentResource.updateEnrolment(payload)
+        .subscribe(
+          (enrolment: Enrolment) => {
+            // TODO: patch the form with updated identifiers
+            this.toastService.openSuccessToast('Professional information has been saved');
+            this.form.markAsPristine();
+            this.router.navigate(['declaration'], { relativeTo: this.route.parent });
+          },
+          (error: any) => {
+            this.toastService.openSuccessToast('Professional information could not be saved');
+            this.logger.error('[Enrolment] Professional::onSubmit error has occurred: ', error);
+          });
       this.form.markAsPristine();
-      this.router.navigate(['declaration'], { relativeTo: this.route.parent });
     } else {
       this.form.markAllAsTouched();
     }
   }
 
+  // TODO: move into enrolment state service
   public addCertification() {
     const certification = this.fb.group({
       id: [null, []],
@@ -102,6 +128,7 @@ export class ProfessionalInfoComponent implements OnInit, OnDestroy {
       this.jobs.push(this.fb.control(value.trim()));
     }
 
+    // Remove input value after custom value added
     this.clearInputValue();
   }
 
@@ -114,7 +141,7 @@ export class ProfessionalInfoComponent implements OnInit, OnDestroy {
   public selectedJob(event: MatAutocompleteSelectedEvent) {
     this.jobs.push(this.fb.control(event.option.viewValue));
 
-    // Remove input values when selected from auto-complete
+    // Remove input value when selected from auto-complete
     this.clearInputValue();
 
     // Blur when selected so double click isn't required
@@ -132,13 +159,15 @@ export class ProfessionalInfoComponent implements OnInit, OnDestroy {
     this.createFormInstance();
   }
 
-  public ngOnDestroy() {
-
-  }
-
   private createFormInstance() {
     this.form = this.enrolmentStateService.professionalInfoForm;
 
+    // TODO: revisit when actual data is available
+    if (!this.isDeviceProvider.value) {
+      this.isInsulinPumpProvider.disable({ emitEvent: false });
+    }
+
+    // TODO: make auto-complete chip list with filtering into a component
     this.jobCtrl = new FormControl();
     this.filteredJobNames = this.jobCtrl.valueChanges
       .pipe(
@@ -156,16 +185,28 @@ export class ProfessionalInfoComponent implements OnInit, OnDestroy {
     this.hasCertification.valueChanges.subscribe((value) => {
       if (!value) {
         this.certifications.clear();
+        this.isAccessingPharmaNetOnBehalfOf.enable({ emitEvent: false });
+      } else {
+        this.isAccessingPharmaNetOnBehalfOf.reset(null, { emitEvent: false });
+        this.isAccessingPharmaNetOnBehalfOf.disable({ emitEvent: false });
       }
     });
     this.isDeviceProvider.valueChanges.subscribe((value) => {
       if (!value) {
-        this.form.get('deviceProviderNumber').reset();
+        this.deviceProviderNumber.reset();
+        this.isInsulinPumpProvider.reset(null, { emitEvent: false });
+        this.isInsulinPumpProvider.disable({ emitEvent: false });
+      } else {
+        this.isInsulinPumpProvider.enable({ emitEvent: false });
       }
     });
     this.isAccessingPharmaNetOnBehalfOf.valueChanges.subscribe((value) => {
       if (!value) {
         this.jobs.clear();
+        this.hasCertification.enable({ emitEvent: false });
+      } else {
+        this.hasCertification.reset(null, { emitEvent: false });
+        this.hasCertification.disable({ emitEvent: false });
       }
     });
   }
@@ -176,7 +217,7 @@ export class ProfessionalInfoComponent implements OnInit, OnDestroy {
     return this.jobNames
       // Remove selected jobs from the list of available jobs
       .filter(({ name }: ConfigKeyValue) => !jobsFilter.includes(name.toLowerCase()))
-      // Perform type ahead filtering of auto-complete
+      // Perform type ahead filtering for auto-complete
       .filter(({ name }: ConfigKeyValue) => name.toLowerCase().indexOf(job.toLowerCase()) === 0);
   }
 
