@@ -2,17 +2,24 @@ import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 import { FormControlValidators } from '@shared/validators/form-control.validators';
+import { Enrolment } from '../models/enrolment.model';
 
-// TODO: pass in enrolment and build out form groups and arrays within state service
+// TODO: revisit state service when API is flushed out more in next sprint
 @Injectable({
   providedIn: 'root'
 })
 export class EnrolmentStateService {
+  // TODO: revisit access to form groups as service is refined, but for now public
+  // TODO: make into BehaviourSubject or asObservable, which would possibly make it immutable
   public profileForm: FormGroup;
   public contactForm: FormGroup;
   public professionalInfoForm: FormGroup;
   public selfDeclarationForm: FormGroup;
   public pharmaNetAccessForm: FormGroup;
+
+  private enrolmentId: number;
+  private enrolleeId: number;
+  private userId: string;
 
   constructor(
     private fb: FormBuilder
@@ -22,17 +29,26 @@ export class EnrolmentStateService {
     this.professionalInfoForm = this.buildProfessionalInfoForm();
     this.selfDeclarationForm = this.buildSelfDeclarationForm();
     this.pharmaNetAccessForm = this.buildPharmaNetAccessForm();
-
-    // TODO: patch enrolment with test data
-    this.profileForm.patchValue(this.getRawEnrolment().enrollee);
-    this.contactForm.patchValue(this.getRawEnrolment().enrollee);
-    // TODO: working to populate the forms of an existing enrolment
-    // this.professionalInfoForm.patchValue(this.getRawEnrolment());
-    // this.selfDeclarationForm.patchValue(this.getRawEnrolment());
-    // this.pharmaNetAccessForm.patchValue(this.getRawEnrolment());
   }
 
-  public getEnrolment() {
+  /**
+   * Store the enrolment JSON and populate the enrolment form.
+   */
+  public set enrolment(enrolment: Enrolment) {
+    this.enrolmentId = enrolment.id;
+    this.userId = enrolment.enrollee.userId;
+
+    this.patchEnrolment(enrolment);
+  }
+
+  /**
+   * Get the enrolment as JSON for submission.
+   */
+  public get enrolment() {
+    const id = this.enrolmentId;
+    const enrolleeId = this.enrolleeId;
+    const userId = this.userId;
+
     const profile = this.profileForm.getRawValue();
     const contact = this.contactForm.getRawValue();
     const professionalInfo = this.professionalInfoForm.getRawValue();
@@ -40,8 +56,10 @@ export class EnrolmentStateService {
     const pharmaNetAccess = this.pharmaNetAccessForm.getRawValue();
 
     return {
-      userId: '99999999',
+      id,
       enrollee: {
+        id: enrolleeId,
+        userId,
         ...profile,
         ...contact
       },
@@ -49,6 +67,53 @@ export class EnrolmentStateService {
       ...selfDeclaration,
       ...pharmaNetAccess
     };
+  }
+
+  public isEnrolmentValid(): boolean {
+    return (
+      this.isProfileInfoValid() &&
+      this.isContactInfoValid() &&
+      this.isProfessionalInfoValid() &&
+      this.isSelfDeclarationValid() &&
+      this.isPharmaNetAccessValid()
+    );
+  }
+
+  public isProfileInfoValid(): boolean {
+    return this.profileForm.valid;
+  }
+
+  public isContactInfoValid(): boolean {
+    return this.contactForm.valid;
+  }
+
+  public isProfessionalInfoValid(): boolean {
+    return this.professionalInfoForm.valid;
+  }
+
+  public isSelfDeclarationValid(): boolean {
+    return this.selfDeclarationForm.valid;
+  }
+
+  public isPharmaNetAccessValid(): boolean {
+    return this.pharmaNetAccessForm.valid;
+  }
+
+  /**
+   * Patch the enrolment forms with the enrolment JSON.
+   *
+   * @param enrolment JSON for patching
+   */
+  private patchEnrolment(enrolment: Enrolment) {
+    if (enrolment) {
+      // TODO: patch form arrays properly within service, and pull out of components for reuse
+      // TODO: create separate service for reuseable form create methods
+      this.profileForm.patchValue(enrolment.enrollee);
+      this.contactForm.patchValue(enrolment.enrollee);
+      this.professionalInfoForm.patchValue(enrolment);
+      this.selfDeclarationForm.patchValue(enrolment);
+      this.pharmaNetAccessForm.patchValue(enrolment);
+    }
   }
 
   private buildProfileForm(): FormGroup {
@@ -119,15 +184,19 @@ export class EnrolmentStateService {
     });
   }
 
-  public getRawEnrolment() {
+  // TODO: temporary test data for filling out an enrolment
+  public getRawEnrolment(): Enrolment {
     return {
+      id: 2,
       enrollee: {
-        firstName: 'Martin',
+        id: 2,
+        userId: '99999999',
+        firstName: 'Marty',
         middleName: 'Tudor',
         lastName: 'Pultz',
-        preferredFirstName: 'Nitram',
-        preferredMiddleName: 'Rodut',
-        preferredLastName: 'Ztlup',
+        preferredFirstName: null,
+        preferredMiddleName: null,
+        preferredLastName: null,
         dateOfBirth: '1977-09-22T00:00:00',
         physicalAddress: {
           country: 'Canada',
@@ -136,69 +205,28 @@ export class EnrolmentStateService {
           city: 'Victoria',
           postal: 'M4E 2B6'
         },
-        mailingAddress: {
-          country: 'Canada',
-          province: 'British Columbia',
-          street: '1394 Oak Bay Ave.',
-          city: 'Victoria',
-          postal: 'M4E 2B6'
-        },
-        contactEmail: 'mtpultz@gmail.com',
-        contactPhone: '2507782367',
-        voicePhone: '2507782367',
-        voiceExtension: '836'
+        mailingAddress: null,
+        contactEmail: null,
+        contactPhone: null,
+        voicePhone: null,
+        voiceExtension: null
       },
-      hasCertification: true,
-      certifications: [
-        {
-          id: 1,
-          collegeCode: 'CPSBC',
-          licenseNumber: '41234445',
-          licenseCode: 'FULGENERAL',
-          renewalDate: '2020-10-01T00:00:00',
-          practiceCode: 'REMOTEPRAC'
-        },
-        {
-          id: 2,
-          collegeCode: 'CRNBC',
-          licenseNumber: '54325277',
-          licenseCode: 'FULSEPCLTY',
-          renewalDate: '2020-10-01T00:00:00',
-          practiceCode: 'NONE'
-        }
-      ],
-      isDeviceProvider: true,
-      deviceProviderNumber: '37938227',
-      isInsulinPumpProvider: true,
-      isAccessingPharmaNetOnBehalfOf: true,
-      jobs: [
-        {
-          id: 1,
-          title: 'Midwife'
-        }
-      ],
-      hasConviction: true,
-      hasRegistrationSuspended: true,
-      hasDisciplinaryAction: true,
-      hasPharmaNetSuspended: true,
-      organizations: [
-        {
-          id: 1,
-          name: 'Vancouver Island',
-          organizationTypeCode: 'HEALTHAUTH',
-          city: 'Victoria',
-          startDate: '2010-10-01T00:00:00',
-          endDate: '2021-10-01T00:00:00'
-        },
-        {
-          id: 2,
-          name: 'Shopper\'s Drug Mart',
-          organizationTypeCode: 'PHARMACY',
-          city: 'Victoria',
-          startDate: '2010-10-01T00:00:00',
-          endDate: '2021-10-01T00:00:00'
-        },
-      ]
+      hasCertification: null,
+      certifications: [],
+      isDeviceProvider: null,
+      deviceProviderNumber: null,
+      isInsulinPumpProvider: null,
+      isAccessingPharmaNetOnBehalfOf: null,
+      jobs: [],
+      hasConviction: null,
+      hasConvictionDetails: null,
+      hasRegistrationSuspended: null,
+      hasRegistrationSuspendedDetails: null,
+      hasDisciplinaryAction: null,
+      hasDisciplinaryActionDetails: null,
+      hasPharmaNetSuspended: null,
+      hasPharmaNetSuspendedDetails: null,
+      organizations: []
     };
   }
 }
