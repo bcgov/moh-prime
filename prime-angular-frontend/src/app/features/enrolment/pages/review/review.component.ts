@@ -52,6 +52,13 @@ export class ReviewComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.enrolment = this.enrolmentStateService.enrolment;
+    // TODO: detect enrolment already exists and don't reload
+    // TODO: apply guard if not enrolment is found to redirect to profile
+    this.enrolmentResource.enrolments()
+      .subscribe((enrolment: Enrolment) => {
+        if (enrolment) {
+          this.enrolmentStateService.enrolment = enrolment;
+        }
+      });
   }
 }

@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
 
 import { FormControlValidators } from '@shared/validators/form-control.validators';
+import { Job } from '../models/job.model';
 import { Enrolment } from '../models/enrolment.model';
+import { Organization } from '../models/organization.model';
+import { CollegeCertification } from '../models/college-certification.model';
 
 // TODO: revisit state service when API is flushed out more in next sprint
 @Injectable({
@@ -36,6 +39,7 @@ export class EnrolmentStateService {
    */
   public set enrolment(enrolment: Enrolment) {
     this.enrolmentId = enrolment.id;
+    this.enrolleeId = enrolment.enrollee.id;
     this.userId = enrolment.enrollee.userId;
 
     this.patchEnrolment(enrolment);
@@ -106,13 +110,40 @@ export class EnrolmentStateService {
    */
   private patchEnrolment(enrolment: Enrolment) {
     if (enrolment) {
-      // TODO: patch form arrays properly within service, and pull out of components for reuse
       // TODO: create separate service for reuseable form create methods
       this.profileForm.patchValue(enrolment.enrollee);
       this.contactForm.patchValue(enrolment.enrollee);
       this.professionalInfoForm.patchValue(enrolment);
+
+      if (enrolment.certifications.length) {
+        enrolment.certifications.forEach((c: CollegeCertification) => {
+          const certifications = this.professionalInfoForm.get('certifications') as FormArray;
+          const certification = this.buildCollegeCertificationForm();
+          certification.patchValue(c);
+          certifications.push(certification);
+        });
+      }
+
+      if (enrolment.jobs.length) {
+        enrolment.jobs.forEach((j: Job) => {
+          const jobs = this.professionalInfoForm.get('jobs') as FormArray;
+          const job = this.buildCollegeCertificationForm();
+          job.patchValue(j);
+          jobs.push(job);
+        });
+      }
+
       this.selfDeclarationForm.patchValue(enrolment);
       this.pharmaNetAccessForm.patchValue(enrolment);
+
+      if (enrolment.organizations.length) {
+        this.enrolment.organizations.forEach((o: Organization) => {
+          const organizations = this.professionalInfoForm.get('organizations') as FormArray;
+          const organization = this.buildOrganizationForm();
+          organization.patchValue(o);
+          organizations.push(organization);
+        });
+      }
     }
   }
 
@@ -165,6 +196,17 @@ export class EnrolmentStateService {
     });
   }
 
+  public buildCollegeCertificationForm(): FormGroup {
+    return this.fb.group({
+      id: [null, []],
+      collegeCode: [null, [Validators.required]],
+      licenseNumber: [null, [Validators.required]],
+      licenseCode: [null, [Validators.required]],
+      renewalDate: [null, [Validators.required]],
+      practiceCode: [null, []]
+    });
+  }
+
   private buildSelfDeclarationForm(): FormGroup {
     return this.fb.group({
       hasConviction: [null, [FormControlValidators.requiredBoolean]],
@@ -184,12 +226,16 @@ export class EnrolmentStateService {
     });
   }
 
+  public buildOrganizationForm(): FormGroup {
+    return this.fb.group({});
+  }
+
   // TODO: temporary test data for filling out an enrolment
   public getRawEnrolment(): Enrolment {
     return {
-      id: 2,
+      // id: 1,
       enrollee: {
-        id: 2,
+        // id: 1,
         userId: '99999999',
         firstName: 'Marty',
         middleName: 'Tudor',

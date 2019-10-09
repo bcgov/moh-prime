@@ -36,12 +36,13 @@ export class EnrolmentResource {
           const enrolment = (enrolments.length)
             ? this.enrolmentAdapterResponse(enrolments.shift())
             : null;
+
           return enrolment;
         })
       );
   }
 
-  public createEnrolment(payload: any): Observable<Enrolment> {
+  public createEnrolment(payload: Enrolment): Observable<Enrolment> {
     return this.http.post(`${this.config.apiEndpoint}/enrolments`, this.enrolmentAdapterRequest(payload))
       .pipe(
         map((enrolment: Enrolment) => {
@@ -66,6 +67,7 @@ export class EnrolmentResource {
   }
 
   private enrolmentAdapterRequest(enrolment: Enrolment): Enrolment {
+    // TODO: set postal code to be uppercase
     // TODO: temporary placeholder for birthdate until JWT authorization in place
     if (!enrolment.enrollee.dateOfBirth) {
       enrolment.enrollee.dateOfBirth = moment().toISOString();

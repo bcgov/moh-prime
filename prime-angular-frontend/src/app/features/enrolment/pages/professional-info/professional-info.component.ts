@@ -101,16 +101,8 @@ export class ProfessionalInfoComponent implements OnInit {
     }
   }
 
-  // TODO: move into enrolment state service
   public addCertification() {
-    const certification = this.fb.group({
-      id: [null, []],
-      collegeCode: [null, [Validators.required]],
-      licenseNumber: [null, [Validators.required]],
-      licenseCode: [null, [Validators.required]],
-      renewalDate: [null, [Validators.required]],
-      practiceCode: [null, []]
-    });
+    const certification = this.enrolmentStateService.buildCollegeCertificationForm();
 
     this.certifications.push(certification);
   }
@@ -201,26 +193,31 @@ export class ProfessionalInfoComponent implements OnInit {
 
         this.isAccessingPharmaNetOnBehalfOf.enable({ emitEvent: false });
       } else {
+        // College certification indicates not being accessed on behalf of
         this.isAccessingPharmaNetOnBehalfOf.reset(null, { emitEvent: false });
         this.isAccessingPharmaNetOnBehalfOf.disable({ emitEvent: false });
       }
     });
+
     this.isDeviceProvider.valueChanges.subscribe((value) => {
       if (!value) {
         this.deviceProviderNumber.reset();
 
+        // Device providers can be an insulin providers, otherwise disabled
         this.isInsulinPumpProvider.reset(null, { emitEvent: false });
         this.isInsulinPumpProvider.disable({ emitEvent: false });
       } else {
         this.isInsulinPumpProvider.enable({ emitEvent: false });
       }
     });
+
     this.isAccessingPharmaNetOnBehalfOf.valueChanges.subscribe((value) => {
       if (!value) {
         this.jobs.clear();
 
         this.hasCertification.enable({ emitEvent: false });
       } else {
+        // Accessing on behalf of indicates no college certification
         this.hasCertification.reset(null, { emitEvent: false });
         this.hasCertification.disable({ emitEvent: false });
       }
@@ -236,9 +233,6 @@ export class ProfessionalInfoComponent implements OnInit {
       // Perform type ahead filtering for auto-complete
       .filter(({ name }: ConfigKeyValue) => name.toLowerCase().indexOf(job.toLowerCase()) === 0);
   }
-
-
-
 
   private clearInputValue() {
     this.jobInput.nativeElement.value = '';

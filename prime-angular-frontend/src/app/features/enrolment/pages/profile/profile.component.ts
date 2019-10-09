@@ -65,7 +65,8 @@ export class ProfileComponent implements OnInit {
     if (this.form.valid) {
       const payload = this.enrolmentStateService.enrolment;
       const request$ = (this.isNewEnrolment)
-        ? this.enrolmentResource.createEnrolment(payload)
+        // TODO: temporarily use raw enrolment for creation
+        ? this.enrolmentResource.createEnrolment(this.enrolmentStateService.getRawEnrolment())
           .pipe(map((enrolment: Enrolment) => this.enrolmentStateService.enrolment = enrolment))
         : this.enrolmentResource.updateEnrolment(payload);
 
@@ -124,6 +125,9 @@ export class ProfileComponent implements OnInit {
           this.isNewEnrolment = false;
           this.enrolmentStateService.enrolment = enrolment;
         }
+
+        // TODO: temporary to test creation of an enrolment
+        // this.enrolmentStateService.enrolment = this.enrolmentStateService.getRawEnrolment();
 
         this.initForm();
       });
