@@ -48,6 +48,7 @@ export class ConfigService {
   public async load(): Promise<Config> {
     return this.getConfiguration()
       .toPromise()
+      // TODO: temporary until config service is available in proper format
       .then(this.addProvinces)
       .then(this.addCountries)
       .then(this.addColleges)

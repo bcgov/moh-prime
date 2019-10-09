@@ -11,6 +11,7 @@ import { ConfigService } from '@config/config.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { ConfirmDiscardChangesDialogComponent } from '@shared/components/dialogs/confirm-discard-changes-dialog/confirm-discard-changes-dialog.component';
+import { Job } from '../../shared/models/job.model';
 import { Enrolment } from '../../shared/models/enrolment.model';
 import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
 import { EnrolmentResource } from '../../shared/services/enrolment-resource.service';
@@ -124,7 +125,7 @@ export class ProfessionalInfoComponent implements OnInit {
     const value = event.value;
 
     if ((value || '').trim()) {
-      this.jobs.push(this.fb.control(value.trim()));
+      this.jobs.push(this.fb.group({ title: value.trim() }));
     }
 
     // Remove input value after custom value added
@@ -138,7 +139,7 @@ export class ProfessionalInfoComponent implements OnInit {
   }
 
   public selectedJob(event: MatAutocompleteSelectedEvent) {
-    this.jobs.push(this.fb.control(event.option.viewValue));
+    this.jobs.push(this.fb.group({ title: event.option.viewValue }));
 
     // Remove input value when selected from auto-complete
     this.clearInputValue();
@@ -186,7 +187,7 @@ export class ProfessionalInfoComponent implements OnInit {
         startWith(null),
         map((jobName: string | null) => {
           const jobs = [...this.jobNames];
-          const selectedJobs = this.jobs.value.map((j: string) => j.toLowerCase());
+          const selectedJobs = this.jobs.value.map((j: Job) => j.title.toLowerCase());
 
           return (jobName)
             ? this.filterJobNames(jobName)
@@ -227,7 +228,7 @@ export class ProfessionalInfoComponent implements OnInit {
   }
 
   private filterJobNames(job: string): ConfigKeyValue[] {
-    const jobsFilter = [...this.jobs.value.map((j: string) => j.toLowerCase()), job.toLowerCase()];
+    const jobsFilter = [...this.jobs.value.map((j: Job) => j.title.toLowerCase()), job.toLowerCase()];
 
     return this.jobNames
       // Remove selected jobs from the list of available jobs
@@ -235,6 +236,9 @@ export class ProfessionalInfoComponent implements OnInit {
       // Perform type ahead filtering for auto-complete
       .filter(({ name }: ConfigKeyValue) => name.toLowerCase().indexOf(job.toLowerCase()) === 0);
   }
+
+
+
 
   private clearInputValue() {
     this.jobInput.nativeElement.value = '';
