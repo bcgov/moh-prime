@@ -167,10 +167,9 @@ export class ProfessionalInfoComponent implements OnInit {
   }
 
   private initForm() {
-    // TODO: revisit when actual data is available
-    if (!this.isDeviceProvider.value) {
-      this.isInsulinPumpProvider.disable({ emitEvent: false });
-    }
+    this.toggleYesNo(this.hasCertification.value, this.isAccessingPharmaNetOnBehalfOf);
+    this.toggleYesNo(this.isDeviceProvider.value, this.isInsulinPumpProvider);
+    this.toggleYesNo(this.isAccessingPharmaNetOnBehalfOf.value, this.hasCertification);
 
     // TODO: make auto-complete chip list with filtering into a component
     this.jobCtrl = new FormControl();
@@ -187,41 +186,41 @@ export class ProfessionalInfoComponent implements OnInit {
         })
       );
 
-    this.hasCertification.valueChanges.subscribe((value) => {
+    // College certification indicates not being accessed on behalf of
+    this.hasCertification.valueChanges.subscribe((value: boolean) => {
       if (!value) {
         this.certifications.clear();
-
-        this.isAccessingPharmaNetOnBehalfOf.enable({ emitEvent: false });
-      } else {
-        // College certification indicates not being accessed on behalf of
-        this.isAccessingPharmaNetOnBehalfOf.reset(null, { emitEvent: false });
-        this.isAccessingPharmaNetOnBehalfOf.disable({ emitEvent: false });
       }
+
+      this.toggleYesNo(value, this.isAccessingPharmaNetOnBehalfOf);
     });
 
-    this.isDeviceProvider.valueChanges.subscribe((value) => {
+    // Device providers can be an insulin providers, otherwise disabled
+    this.isDeviceProvider.valueChanges.subscribe((value: boolean) => {
       if (!value) {
         this.deviceProviderNumber.reset();
-
-        // Device providers can be an insulin providers, otherwise disabled
-        this.isInsulinPumpProvider.reset(null, { emitEvent: false });
-        this.isInsulinPumpProvider.disable({ emitEvent: false });
-      } else {
-        this.isInsulinPumpProvider.enable({ emitEvent: false });
       }
+
+      this.toggleYesNo(value, this.isInsulinPumpProvider);
     });
 
-    this.isAccessingPharmaNetOnBehalfOf.valueChanges.subscribe((value) => {
+    // Accessing on behalf of indicates no college certification
+    this.isAccessingPharmaNetOnBehalfOf.valueChanges.subscribe((value: boolean) => {
       if (!value) {
         this.jobs.clear();
-
-        this.hasCertification.enable({ emitEvent: false });
-      } else {
-        // Accessing on behalf of indicates no college certification
-        this.hasCertification.reset(null, { emitEvent: false });
-        this.hasCertification.disable({ emitEvent: false });
       }
+
+      this.toggleYesNo(value, this.hasCertification);
     });
+  }
+
+  private toggleYesNo(value: boolean, control: FormGroup) {
+    if (!value) {
+      control.enable({ emitEvent: false });
+    } else {
+      control.reset(null, { emitEvent: false });
+      control.disable({ emitEvent: false });
+    }
   }
 
   private filterJobNames(job: string): ConfigKeyValue[] {
