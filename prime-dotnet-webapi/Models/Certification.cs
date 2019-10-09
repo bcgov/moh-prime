@@ -12,9 +12,10 @@ namespace Prime.Models
         [Key]
         public int? Id { get; set; }
 
+        [JsonIgnore]
         public int EnrolmentId { get; set; }
 
-        [JsonIgnore()]
+        [JsonIgnore]
         public Enrolment Enrolment { get; set; }
 
         public short CollegeCode { get; set; }
