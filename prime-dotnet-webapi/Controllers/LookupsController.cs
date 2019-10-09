@@ -30,6 +30,7 @@ namespace Prime.Controllers
         /// Gets all the lookup code values.
         /// </summary>
         [HttpGet]
+        [ProducesResponseType(typeof(ApiOkResponse<LookupEntity>), StatusCodes.Status200OK)]
         public async Task<ActionResult<LookupEntity>> GetLookups()
         {
             LookupEntity lookupEntity = new LookupEntity();
@@ -41,7 +42,7 @@ namespace Prime.Controllers
             lookupEntity.OrganizationTypes = await _lookupService.GetLookupsAsync<OrganizationType>();
             lookupEntity.Practices = await _lookupService.GetLookupsAsync<Practice>();
 
-            return lookupEntity;
+            return Ok(new ApiOkResponse<LookupEntity>(lookupEntity));
         }
     }
 }
