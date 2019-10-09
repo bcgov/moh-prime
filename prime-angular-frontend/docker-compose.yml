@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  nginx-angular:
+    container_name: primeweb
+    build:
+        context: .
+    command: "nginx -g 'daemon off;'"
+    restart: always
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
