@@ -1,0 +1,11 @@
+@import 'palette';
+
+.mat-toolbar {
+  border-bottom: 3px solid theme-palette(yellow);
+  height: 70px;
+
+  img {
+    margin-left: 15px;
+    margin-top: -15px;
+  }
+}

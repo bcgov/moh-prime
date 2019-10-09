@@ -10,6 +10,7 @@ namespace Prime.Models
         [Key]
         public int? Id { get; set; }
 
+        [JsonIgnore]
         public int EnrolmentId { get; set; }
 
         [JsonIgnore]

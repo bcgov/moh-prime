@@ -1,0 +1,9 @@
+<div class="sub-header d-flex">
+  <div class="w-100">
+    <h2 class="h4">{{ subheader }}</h2>
+    <p *ngIf="help">{{ help }}</p>
+  </div>
+  <div class="flex-shrink-1">
+    <ng-content></ng-content>
+  </div>
+</div>

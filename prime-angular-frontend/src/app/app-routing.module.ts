@@ -1,13 +1,16 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { AccessDeniedComponent } from './core/components/access-denied/access-denied.component';
-import { PageNotFoundComponent } from './core/components/page-not-found/page-not-found.component';
+import { AccessDeniedComponent } from '@core/components/access-denied/access-denied.component';
+import { PageNotFoundComponent } from '@core/components/page-not-found/page-not-found.component';
 
+// Provides the redirect route to the dashboard, which is the default
+// entry point for users, otherwise the application-level routing
+// should not be used for features
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'dashboard',
     pathMatch: 'full',
   },
   {
@@ -27,7 +30,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { enableTracing: false })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

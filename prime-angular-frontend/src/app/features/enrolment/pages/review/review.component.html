@@ -1,0 +1,245 @@
+<div>
+
+  <h1 class="h2 mb-4">Application Enrolment</h1>
+
+  <app-sub-header subheader="Application Review"
+                  help="Lorem ipsum dolor, sit amet consectetur adipisicing elit."></app-sub-header>
+
+  <div class="row"
+       *ngIf="enrolment">
+    <div class="col-sm-6">
+
+      <app-sub-header subheader="Enrollee">
+        <mat-icon (click)="redirect('profile')"
+                  matTooltip="Edit Enrollee">edit</mat-icon>
+      </app-sub-header>
+
+      <dl class="row mb-4">
+        <dt class="col-sm-12 col-md-6 py-1">Name</dt>
+        <dd class="col-sm-12 col-md-6 py-1">
+          {{ enrolment.enrollee.firstName }} {{ enrolment.enrollee.middleName }} {{ enrolment.enrollee.lastName }}&nbsp;
+        </dd>
+        <dt class="col-sm-12 col-md-6 py-1">Preferred Name</dt>
+        <dd class="col-sm-12 col-md-6 py-1">
+          {{ enrolment.enrollee.preferredFirstName }} {{ enrolment.enrollee.preferredMiddleName }}
+          {{ enrolment.enrollee.preferredLastName }}&nbsp;
+        </dd>
+        <dt class="col-sm-12 col-md-6 py-1">Date of Birth</dt>
+        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.dateOfBirth | date }}&nbsp;</dd>
+      </dl>
+
+      <h3 class="lead">Address</h3>
+
+      <dl class="row mb-4">
+        <dt class="col-sm-12 col-md-6 py-1">Country</dt>
+        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.country }}&nbsp;</dd>
+        <dt class="col-sm-12 col-md-6 py-1">Province</dt>
+        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.province }}&nbsp;</dd>
+        <dt class="col-sm-12 col-md-6 py-1">Street Address</dt>
+        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.street }}&nbsp;</dd>
+        <dt class="col-sm-12 col-md-6 py-1">City</dt>
+        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.city }}&nbsp;</dd>
+        <dt class="col-sm-12 col-md-6 py-1">Postal Code</dt>
+        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.postal }}&nbsp;</dd>
+      </dl>
+
+      <ng-container *ngIf="enrolment.enrollee.mailingAddress">
+
+        <h3 class="lead">Mailing Address</h3>
+
+        <dl class="row mb-4">
+          <dt class="col-sm-12 col-md-6 py-1">Country</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.mailingAddress.country }}&nbsp;</dd>
+          <dt class="col-sm-12 col-md-6 py-1">Province</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.mailingAddress.province }}&nbsp;</dd>
+          <dt class="col-sm-12 col-md-6 py-1">Street Address</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.mailingAddress.street }}&nbsp;</dd>
+          <dt class="col-sm-12 col-md-6 py-1">City</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.mailingAddress.city }}&nbsp;</dd>
+          <dt class="col-sm-12 col-md-6 py-1">Postal Code</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.mailingAddress.postal }}&nbsp;</dd>
+        </dl>
+
+      </ng-container>
+
+      <app-sub-header subheader="Contact">
+        <mat-icon (click)="redirect('contact')"
+                  matTooltip="Edit Contact">edit</mat-icon>
+      </app-sub-header>
+
+      <h3 class="lead">Voice Contact</h3>
+
+      <dl class="row mb-4">
+        <dt class="col-sm-12 col-md-6 py-1">Voice Phone</dt>
+        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.voicePhone }}&nbsp;</dd>
+        <dt class="col-sm-12 col-md-6 py-1">Extension</dt>
+        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.voiceExtension }}&nbsp;</dd>
+      </dl>
+
+      <h3 class="lead">Preferred Contact</h3>
+
+      <dl class="row mb-4">
+        <dt class="col-sm-12 col-md-6 py-1">Phone</dt>
+        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.contactEmail }}&nbsp;</dd>
+        <dt class="col-sm-12 col-md-6 py-1">Email</dt>
+        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.contactPhone }}&nbsp;</dd>
+      </dl>
+
+      <app-sub-header subheader="Self Declaration">
+        <mat-icon (click)="redirect('declaration')"
+                  matTooltip="Edit Self Declaration">edit</mat-icon>
+      </app-sub-header>
+
+      <dl class="row mb-4">
+        <dt class="col-sm-12 col-md-6 py-1">
+          Have you ever been the subject of an order or a conviction for an information contravention?
+        </dt>
+        <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.hasConviction) }}&nbsp;</dd>
+        <ng-container *ngIf="enrolment.hasConviction">
+          <dt class="col-sm-12 col-md-6 py-1">Details</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.hasConvictionDetails }}&nbsp;</dd>
+        </ng-container>
+      </dl>
+
+      <dl class="row mb-4">
+        <dt class="col-sm-12 col-md-6 py-1">
+          Have you ever been the subject of an order or a conviction for an information contravention?
+        </dt>
+        <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.hasRegistrationSuspended) }}&nbsp;</dd>
+        <ng-container *ngIf="enrolment.hasRegistrationSuspended">
+          <dt class="col-sm-12 col-md-6 py-1">Details</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.hasRegistrationSuspendedDetails }}&nbsp;</dd>
+        </ng-container>
+      </dl>
+
+      <dl class="row mb-4">
+        <dt class="col-sm-12 col-md-6 py-1">
+          Have you ever had Terms and Conditions imposed on your license as a result of disciplinary actions taken
+          by a governing body?
+        </dt>
+        <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.hasDisciplinaryAction) }}&nbsp;</dd>
+        <ng-container *ngIf="enrolment.hasDisciplinaryAction">
+          <dt class="col-sm-12 col-md-6 py-1">Details</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.hasDisciplinaryActionDetails }}&nbsp;</dd>
+        </ng-container>
+      </dl>
+
+      <dl class="row mb-4">
+        <dt class="col-sm-12 col-md-6 py-1">
+          Have you ever had Terms and Conditions imposed on your license as a result of disciplinary actions taken
+          by a governing body?
+        </dt>
+        <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.hasPharmaNetSuspended) }}&nbsp;</dd>
+        <ng-container *ngIf="enrolment.hasPharmaNetSuspended">
+          <dt class="col-sm-12 col-md-6 py-1">Details</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.hasPharmaNetSuspendedDetails }}&nbsp;</dd>
+        </ng-container>
+      </dl>
+
+    </div>
+    <div class="col-sm-6">
+
+      <app-sub-header subheader="Professional Information">
+        <mat-icon (click)="redirect('professional')"
+                  matTooltip="Edit Professional Information">edit</mat-icon>
+      </app-sub-header>
+
+      <dl class="row mb-4">
+        <dt class="col-sm-12 col-md-6 py-1">Do you have a college certification?</dt>
+        <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.hasCertification) }}&nbsp;</dd>
+      </dl>
+
+      <ng-container *ngIf="enrolment.hasCertification">
+
+        <h3 class="lead">Certifications</h3>
+
+        <dl class="row mb-4"
+            *ngFor="let certification of enrolment.certifications; let i = index">
+          <dt class="col-sm-12 col-md-6 py-1">College Certification</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ certification.collegeCode }}&nbsp;</dd>
+          <dt class="col-sm-12 col-md-6 py-1">License Number</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ certification.licenseNumber }}&nbsp;</dd>
+          <dt class="col-sm-12 col-md-6 py-1">License Class</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ certification.licenseCode }}&nbsp;</dd>
+          <dt class="col-sm-12 col-md-6 py-1">Renewal Date</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ certification.renewalDate | date }}&nbsp;</dd>
+          <dt class="col-sm-12 col-md-6 py-1">Advanced Practices</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ certification.practiceCode }}&nbsp;</dd>
+        </dl>
+
+      </ng-container>
+
+      <dl class="row mb-4">
+        <dt class="col-sm-12 col-md-6 py-1">Are you a device provider?</dt>
+        <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.isDeviceProvider) }}&nbsp;</dd>
+        <ng-container *ngIf="enrolment.isDeviceProvider">
+          <dt class="col-sm-12 col-md-6 py-1">Device Provider Number</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.deviceProviderNumber }}&nbsp;</dd>
+        </ng-container>
+      </dl>
+
+      <dl class="row mb-4">
+        <dt class="col-sm-12 col-md-6 py-1">Are you an insulin pump provider?</dt>
+        <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.isInsulinPumpProvider) }}&nbsp;</dd>
+      </dl>
+
+      <dl class="row mb-4">
+        <dt class="col-sm-12 col-md-6 py-1">Are you accessing PharmaNet on behalf of someone else?</dt>
+        <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.isAccessingPharmaNetOnBehalfOf) }}&nbsp;</dd>
+        <ng-container *ngIf="enrolment.isAccessingPharmaNetOnBehalfOf">
+          <dt class="col-sm-12 col-md-6 py-1">Job Title</dt>
+          <dd class="col-sm-12 col-md-6 py-1">
+            <ul class="list-unstyled">
+              <li *ngFor="let job of enrolment.jobs; let i = index">{{ job }}</li>
+            </ul>
+          </dd>
+        </ng-container>
+      </dl>
+
+      <app-sub-header subheader="PharmaNet Access">
+        <mat-icon (click)="redirect('access')"
+                  matTooltip="Edit PharmaNet Access">edit</mat-icon>
+      </app-sub-header>
+
+      <ng-container *ngIf="enrolment?.organizations.length">
+
+        <h3 class="lead">Organizations</h3>
+
+        <dl class="row mb-4"
+            *ngFor="let organization of enrolment.organizations; let i = index">
+          <dt class="col-sm-12 col-md-6 py-1">Organization Name</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ organization.name }}&nbsp;</dd>
+          <dt class="col-sm-12 col-md-6 py-1">Organization Type</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ organization.organizationTypeCode }}&nbsp;</dd>
+          <dt class="col-sm-12 col-md-6 py-1">City</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ organization.city }}&nbsp;</dd>
+          <dt class="col-sm-12 col-md-6 py-1">Start Date</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ organization.startDate | date }}&nbsp;</dd>
+          <dt class="col-sm-12 col-md-6 py-1">End Date</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ organization.endDate | date }}&nbsp;</dd>
+        </dl>
+
+      </ng-container>
+
+    </div>
+  </div>
+
+  <div class="row justify-content-between">
+    <div class="col pt-2">
+
+      <button mat-raised-button
+              type="button"
+              color="primary"
+              routerLink="../access">Back</button>
+
+    </div>
+    <div class="col pt-2 text-right">
+
+      <button mat-raised-button
+              color="primary"
+              (click)="onSubmit()">Submit</button>
+
+    </div>
+  </div>
+
+</div>

@@ -64,7 +64,7 @@ namespace Prime
                             }
                             return c.Response.WriteAsync("An error occured processing your authentication.");
                         },
-                        OnTokenValidated = async context => await OnTokenValidated(context, environment)
+                        OnTokenValidated = async context => await OnTokenValidated(context)
                     };
                 });
 
@@ -75,43 +75,30 @@ namespace Prime
                 });
         }
 
-        private static Task OnTokenValidated(TokenValidatedContext context, IHostingEnvironment environment)
+        private static Task OnTokenValidated(TokenValidatedContext context)
         {
-            if (context.SecurityToken is JwtSecurityToken accessToken)
+            if (context.SecurityToken is JwtSecurityToken accessToken
+                    && context.Principal.Identity is ClaimsIdentity identity)
             {
-                if (context.Principal.Identity is ClaimsIdentity identity)
+                //add the access token to the identity claims in case it is needed later
+                identity.AddClaim(new Claim("access_token", accessToken.RawData));
+                identity.AddClaim(new Claim(PrimeConstants.PRIME_USER_ID_KEY, accessToken.Subject));
+
+                //We could get the user roles from the resource_access claim, but it is a nested array of roles for each client
+                //var resource_access = identity.Claims.FirstOrDefault(x => x.Type == "resource_access");
+
+                //NOTE: these claims ('user_realm_roles' and 'user_roles') are being added to the token by a custom mapper in keycloak
+                var realm_roles = identity.Claims.Where(x => x.Type == "user_realm_roles").Select(v => v.Value).ToList();
+                foreach (var role in realm_roles)
                 {
-                    //add the access token to the identity claims in case it is needed later
-                    identity.AddClaim(new Claim("access_token", accessToken.RawData));
-                    identity.AddClaim(new Claim(PrimeConstants.PRIME_USER_ID_KEY, accessToken.Subject));
-
-                    // //TODO - change this back once we have real user identity tokens
-                    // //TODO - remove this temp adding of a PRIME_ENROLMENT_ROLE
-                    // if (environment.IsDevelopment())
-                    // {
-                    //     if (PrimeUtils.PrimeUserId(context.Principal) == null)
-                    //     {
-                    //         identity.AddClaim(new Claim(PrimeConstants.PRIME_USER_ID_KEY, "1234567890"));
-                    //     }
-                    //     identity.AddClaim(new Claim(ClaimTypes.Role, PrimeConstants.PRIME_ENROLMENT_ROLE));
-                    // }
-
-                    //We could get the user roles from the resource_access claim, but it is a nested array of roles for each client
-                    //var resource_access = identity.Claims.FirstOrDefault(x => x.Type == "resource_access");
-
-                    //NOTE: these claims ('user_realm_roles' and 'user_roles') are being added to the token by a custom mapper in keycloak
-                    var realm_roles = identity.Claims.Where(x => x.Type == "user_realm_roles").Select(v => v.Value).ToList();
-                    foreach (var role in realm_roles)
-                    {
-                        identity.AddClaim(new Claim(PrimeConstants.PRIME_USER_ROLES_KEY, role));
-                        identity.AddClaim(new Claim(ClaimTypes.Role, role));
-                    }
-                    var client_roles = identity.Claims.Where(x => x.Type == "user_roles").Select(v => v.Value).ToList();
-                    foreach (var role in client_roles)
-                    {
-                        identity.AddClaim(new Claim(PrimeConstants.PRIME_USER_ROLES_KEY, role));
-                        identity.AddClaim(new Claim(ClaimTypes.Role, role));
-                    }
+                    identity.AddClaim(new Claim(PrimeConstants.PRIME_USER_ROLES_KEY, role));
+                    identity.AddClaim(new Claim(ClaimTypes.Role, role));
+                }
+                var client_roles = identity.Claims.Where(x => x.Type == "user_roles").Select(v => v.Value).ToList();
+                foreach (var role in client_roles)
+                {
+                    identity.AddClaim(new Claim(PrimeConstants.PRIME_USER_ROLES_KEY, role));
+                    identity.AddClaim(new Claim(ClaimTypes.Role, role));
                 }
             }
 

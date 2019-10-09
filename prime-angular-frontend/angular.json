@@ -28,18 +28,14 @@
               "src/assets"
             ],
             "styles": [
-              "src/scss/app.scss",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css"
+              "src/scss/app.scss"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
                 "src/scss"
               ]
             },
-            "scripts": [
-              "node_modules/jquery/dist/jquery.min.js",
-              "node_modules/bootstrap/dist/js/bootstrap.min.js"
-            ]
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -102,8 +98,13 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/scss/app.scss"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/scss"
+              ]
+            },
             "scripts": []
           }
         },

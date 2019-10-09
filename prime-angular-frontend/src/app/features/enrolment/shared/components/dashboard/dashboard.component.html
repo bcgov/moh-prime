@@ -1,0 +1,75 @@
+<app-header></app-header>
+
+<mat-sidenav-container class="prime-sidenav-container">
+  <mat-sidenav #sidenav
+               [mode]="sideNavProps.mode"
+               [opened]="sideNavProps.opened"
+               [fixedInViewport]="sideNavProps.fixedInViewport"
+               [fixedTopGap]="0"
+               [fixedBottomGap]="0"
+               class="prime-sidenav">
+
+    <mat-nav-list *ngFor="let sideNavSection of sideNavSections">
+      <h3 mat-subheader
+          *ngIf="sideNavSection.showHeader && sideNavProps.showText">
+        {{ sideNavSection.header }}
+      </h3>
+
+      <div *ngFor="let item of sideNavSection.items">
+
+        <mat-list-item *ngIf="item.showItem"
+                       [routerLink]="item.route"
+                       routerLinkActive="active"
+                       (click)="onRoute()">
+          <mat-icon mat-list-icon
+                    [ngClass]="{ 'center-sidenav-icon': !isDesktop }">{{ item.icon }}</mat-icon>
+
+          <a matLine
+             [ngClass]="{ 'extend-content-width': isDesktop }">
+            <span *ngIf="sideNavProps.showText">
+              {{ item.name }}
+            </span>
+          </a>
+        </mat-list-item>
+
+      </div>
+
+      <mat-divider *ngIf="sideNavSection.showHeader"></mat-divider>
+    </mat-nav-list>
+
+    <mat-nav-list>
+
+      <mat-list-item (click)="logout()">
+        <mat-icon mat-list-icon
+                  [ngClass]="{ 'center-sidenav-icon': !isDesktop }">exit_to_app</mat-icon>
+
+        <a matLine>
+          <span *ngIf="sideNavProps.showText">
+            Logout
+          </span>
+        </a>
+        <button mat-icon-button
+                *ngIf="sideNavProps.showText">
+        </button>
+      </mat-list-item>
+
+    </mat-nav-list>
+
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+
+    <div class="container">
+
+      <div class="row">
+        <div class="col py-4">
+
+          <router-outlet></router-outlet>
+
+        </div>
+      </div>
+
+    </div>
+
+  </mat-sidenav-content>
+</mat-sidenav-container>

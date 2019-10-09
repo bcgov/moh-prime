@@ -1,0 +1,274 @@
+<form (ngSubmit)="onSubmit()"
+      [formGroup]="form"
+      novalidate>
+
+  <h1 class="h2 my-4">Application Enrolment</h1>
+
+  <app-sub-header subheader="Enrolee Information"
+                  help="Lorem ipsum dolor, sit amet consectetur adipisicing elit."></app-sub-header>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-6 col-xl-4">
+
+      <mat-form-field class="w-100">
+        <input matInput
+               placeholder="First Name"
+               formControlName="firstName">
+        <mat-error *ngIf="firstName.hasError('required')">Required</mat-error>
+      </mat-form-field>
+
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12 col-md-6 col-xl-4">
+
+      <mat-form-field class="w-100">
+        <input matInput
+               placeholder="Middle Name"
+               formControlName="middleName">
+      </mat-form-field>
+
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12 col-md-6 col-xl-4">
+
+      <mat-form-field class="w-100">
+        <input matInput
+               placeholder="Last Name"
+               formControlName="lastName">
+        <mat-error *ngIf="lastName.hasError('required')">Required</mat-error>
+      </mat-form-field>
+
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12 col-md-6 col-xl-4">
+
+      <mat-form-field class="w-100">
+        <input matInput
+               placeholder="Date of Birth"
+               [matDatepicker]="picker"
+               formControlName="dateOfBirth">
+        <mat-datepicker-toggle matSuffix
+                               [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker
+                        startView="multi-year"
+                        [touchUi]="isMobile"></mat-datepicker>
+        <mat-error *ngIf="dateOfBirth.hasError('required')">Required</mat-error>
+      </mat-form-field>
+
+    </div>
+  </div>
+
+  <mat-slide-toggle class="mb-3"
+                    color="primary"
+                    (change)="onPreferredNameChange()"
+                    [checked]="hasPreferredName">
+    Have a preferred name that is different than your legal name
+  </mat-slide-toggle>
+
+  <ng-container *ngIf="hasPreferredName">
+
+    <app-sub-header subheader="Preferred Name"
+                    help="If you have a name that is different than your legal name that people know you by, enter your full preferred name.">
+    </app-sub-header>
+
+    <div class="row">
+      <div class="col-sm-12 col-md-6 col-xl-4">
+
+        <mat-form-field class="w-100">
+          <input matInput
+                 placeholder="Preferred First Name"
+                 formControlName="preferredFirstName">
+        </mat-form-field>
+
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 col-md-6 col-xl-4">
+
+        <mat-form-field class="w-100">
+          <input matInput
+                 placeholder="Preferred Middle Name"
+                 formControlName="preferredMiddleName">
+        </mat-form-field>
+
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 col-md-6 col-xl-4">
+
+        <mat-form-field class="w-100">
+          <input matInput
+                 placeholder="Preferred Last Name"
+                 formControlName="preferredLastName">
+        </mat-form-field>
+
+      </div>
+    </div>
+
+  </ng-container>
+
+  <app-sub-header subheader="Address"></app-sub-header>
+
+  <div class="row">
+    <div class="col-sm-12"
+         formGroupName="physicalAddress">
+
+      <div class="row">
+        <div class="col-sm-12 col-md-6 col-xl-4">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="Country"
+                   formControlName="country">
+          </mat-form-field>
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-6 col-xl-4">
+
+          <mat-form-field class="w-100">
+            <mat-label>Province</mat-label>
+            <mat-select formControlName="province">
+              <mat-option *ngFor="let province of provinces"
+                          [value]="province.name">
+                {{ province.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-6 col-xl-4">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="Street Address"
+                   formControlName="street">
+          </mat-form-field>
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-6 col-xl-4">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="City"
+                   formControlName="city">
+          </mat-form-field>
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-6 col-xl-4">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="Postal Code"
+                   mask="S0S 0S0"
+                   formControlName="postal">
+          </mat-form-field>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <mat-slide-toggle class="mb-3"
+                    color="primary"
+                    (change)="onMailingAddressChange()"
+                    [checked]="hasMailingAddress">
+    Mailing address is different
+  </mat-slide-toggle>
+
+  <ng-container *ngIf="hasMailingAddress">
+
+    <app-sub-header subheader="Mailing Address"></app-sub-header>
+
+    <div class="row">
+      <div class="col-sm-12"
+           formGroupName="mailingAddress">
+
+        <div class="row">
+          <div class="col-sm-12 col-md-6 col-xl-4">
+
+            <mat-form-field class="w-100">
+              <input matInput
+                     placeholder="Country"
+                     formControlName="country">
+            </mat-form-field>
+
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-6 col-xl-4">
+
+            <mat-form-field class="w-100">
+              <mat-label>Province</mat-label>
+              <mat-select formControlName="province">
+                <mat-option *ngFor="let province of provinces"
+                            [value]="province.name">
+                  {{ province.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-6 col-xl-4">
+
+            <mat-form-field class="w-100">
+              <input matInput
+                     placeholder="Street Address"
+                     formControlName="street">
+            </mat-form-field>
+
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-6 col-xl-4">
+
+            <mat-form-field class="w-100">
+              <input matInput
+                     placeholder="City"
+                     formControlName="city">
+            </mat-form-field>
+
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-6 col-xl-4">
+
+            <mat-form-field class="w-100">
+              <input matInput
+                     placeholder="Postal Code"
+                     mask="S0S 0S0"
+                     formControlName="postal">
+            </mat-form-field>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </ng-container>
+
+  <div class="row justify-content-end">
+    <div class="col pt-2 text-right">
+
+      <button mat-raised-button
+              type="submit"
+              color="primary">Save and Continue</button>
+
+    </div>
+  </div>
+
+</form>

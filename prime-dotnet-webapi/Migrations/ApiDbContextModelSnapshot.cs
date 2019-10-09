@@ -22,7 +22,7 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.Address", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int?>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("AddressType");
@@ -89,6 +89,8 @@ namespace Prime.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
+                    b.Property<string>("Prefix");
+
                     b.HasKey("Code");
 
                     b.ToTable("CollegeLookup");
@@ -97,22 +99,70 @@ namespace Prime.Migrations
                         new
                         {
                             Code = (short)1,
-                            Name = "College of Physicians and Surgeons of BC (CPSBC)"
+                            Name = "College of Physicians and Surgeons of BC (CPSBC)",
+                            Prefix = "91"
                         },
                         new
                         {
                             Code = (short)2,
-                            Name = "College of Pharmacists of BC (CPBC)"
+                            Name = "College of Pharmacists of BC (CPBC)",
+                            Prefix = "P1"
                         },
                         new
                         {
                             Code = (short)3,
-                            Name = "College of Registered Nurses of BC (CRNBC)"
+                            Name = "College of Registered Nurses of BC (CRNBC)",
+                            Prefix = "96"
                         },
                         new
                         {
                             Code = (short)4,
                             Name = "None"
+                        });
+                });
+
+            modelBuilder.Entity("Prime.Models.CollegeLicense", b =>
+                {
+                    b.Property<short>("CollegeCode");
+
+                    b.Property<short>("LicenseCode");
+
+                    b.HasKey("CollegeCode", "LicenseCode");
+
+                    b.HasIndex("LicenseCode");
+
+                    b.ToTable("CollegeLicense");
+
+                    b.HasData(
+                        new
+                        {
+                            CollegeCode = (short)1,
+                            LicenseCode = (short)2
+                        },
+                        new
+                        {
+                            CollegeCode = (short)1,
+                            LicenseCode = (short)3
+                        },
+                        new
+                        {
+                            CollegeCode = (short)2,
+                            LicenseCode = (short)4
+                        },
+                        new
+                        {
+                            CollegeCode = (short)2,
+                            LicenseCode = (short)5
+                        },
+                        new
+                        {
+                            CollegeCode = (short)3,
+                            LicenseCode = (short)1
+                        },
+                        new
+                        {
+                            CollegeCode = (short)3,
+                            LicenseCode = (short)5
                         });
                 });
 
@@ -469,6 +519,19 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Practice", "Practice")
                         .WithMany("Certifications")
                         .HasForeignKey("PracticeCode");
+                });
+
+            modelBuilder.Entity("Prime.Models.CollegeLicense", b =>
+                {
+                    b.HasOne("Prime.Models.College", "College")
+                        .WithMany("CollegeLicenses")
+                        .HasForeignKey("CollegeCode")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Prime.Models.License", "License")
+                        .WithMany("CollegeLicenses")
+                        .HasForeignKey("LicenseCode")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Prime.Models.Enrolment", b =>

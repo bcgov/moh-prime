@@ -30,14 +30,37 @@ using PrimeTests.Utils.Auth;
 
 namespace PrimeTests.Controllers
 {
-    public class EnrolmentControllerTests
+    public class EnrolmentControllerTests : IDisposable
     {
+        private string _databaseName;
+        private ApiDbContext _dbContext;
+        private TestAuthenticationContext _context;
+
+        public EnrolmentControllerTests()
+        {
+            _databaseName = Guid.NewGuid().ToString();
+
+            // var options = new DbContextOptionsBuilder<ApiDbContext>()
+            //             .UseInMemoryDatabase(databaseName: _databaseName)
+            //           .Options;
+
+            // _dbContext = new ApiDbContext(options);
+
+            _context = new TestAuthenticationContext(_databaseName);
+
+            _dbContext = _context.ApiDbContext;
+        }
+
+        public void Dispose()
+        {
+            _dbContext.Database.EnsureDeleted();
+            _dbContext.Dispose();
+        }
+
         [Fact]
         public async Task testGetEnrolments()
         {
-            TestAuthenticationContext testContext = new TestAuthenticationContext();
-
-            var response = await testContext.Client.GetAsync("/api/v1/Enrolment");
+            var response = await _context.Client.GetAsync("/api/enrolments");
             var body = await response.Content.ReadAsStringAsync();
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -46,10 +69,10 @@ namespace PrimeTests.Controllers
         [Fact]
         public async Task testGetEnrolments2()
         {
-            TestAuthenticationContext testContext = new TestAuthenticationContext();
-            var testEnrolment = testContext.CreateEnrolment();
+            // TestAuthenticationContext testContext = new TestAuthenticationContext();
+            var testEnrolment = _context.CreateEnrolment();
 
-            var response = await testContext.Client.GetAsync("/api/v1/Enrolment");
+            var response = await _context.Client.GetAsync("/api/enrolments");
             var body = await response.Content.ReadAsStringAsync();
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -58,26 +81,26 @@ namespace PrimeTests.Controllers
         [Fact]
         public async Task testGetEnrolments3()
         {
-            TestAuthenticationContext testContext = new TestAuthenticationContext();
-            var request = new HttpRequestMessage(HttpMethod.Get, "/api/v1/Enrolment");
-            var _token = testContext.TokenBuilder
+            // TestAuthenticationContext testContext = new TestAuthenticationContext();
+            var request = new HttpRequestMessage(HttpMethod.Get, "/api/enrolements");
+            var _token = _context.TokenBuilder
                 .ForAudience("prime-web-api")
                 .ForSubject("1234567890")
                 .BuildToken();
 
             request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);
 
-            var _response = await testContext.Client.SendAsync(request);
+            var _response = await _context.Client.SendAsync(request);
             Assert.Equal(HttpStatusCode.OK, _response.StatusCode);
         }
 
         [Fact]
         public async Task<Enrolment> createEnrolment()
         {
-            TestAuthenticationContext testContext = new TestAuthenticationContext();
+            // TestAuthenticationContext testContext = new TestAuthenticationContext();
             var testEnrolment = TestUtils.EnrolmentFaker.Generate();
 
-            var response = await testContext.Client.PostAsJsonAsync("/api/v1/Enrolment", testEnrolment);
+            var response = await _context.Client.PostAsJsonAsync("/api/enrolements", testEnrolment);
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
             var body = await response.Content.ReadAsStringAsync();
@@ -96,13 +119,13 @@ namespace PrimeTests.Controllers
         [Fact]
         public async Task getSingleEnrolment()
         {
-            TestAuthenticationContext testContext = new TestAuthenticationContext();
+            // TestAuthenticationContext testContext = new TestAuthenticationContext();
 
-            Enrolment enrolment = testContext.CreateEnrolment();
+            Enrolment enrolment = _context.CreateEnrolment();
             string expectedUserId = enrolment.Enrollee.UserId;
 
-            var request = new HttpRequestMessage(HttpMethod.Get, "/api/v1/Enrolment/" + enrolment.Id);
-            var _token = testContext.TokenBuilder
+            var request = new HttpRequestMessage(HttpMethod.Get, "/api/enrolements/" + enrolment.Id);
+            var _token = _context.TokenBuilder
                 .ForAudience("prime-web-api")
                 .ForSubject(expectedUserId)
                 .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_ENROLMENT_ROLE)
@@ -111,7 +134,7 @@ namespace PrimeTests.Controllers
             request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);
 
             // Get enrolment by Id
-            var response = await testContext.Client.SendAsync(request);
+            var response = await _context.Client.SendAsync(request);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             var body = await response.Content.ReadAsStringAsync();
@@ -122,14 +145,14 @@ namespace PrimeTests.Controllers
         [Fact]
         public async void getAllEnrolments()
         {
-            TestAuthenticationContext testContext = new TestAuthenticationContext();
+            // TestAuthenticationContext testContext = new TestAuthenticationContext();
 
-            testContext.CreateEnrolment();
-            testContext.CreateEnrolment();
-            testContext.CreateEnrolment();
+            _context.CreateEnrolment();
+            _context.CreateEnrolment();
+            _context.CreateEnrolment();
 
-            var request = new HttpRequestMessage(HttpMethod.Get, "/api/v1/Enrolment");
-            var _token = testContext.TokenBuilder
+            var request = new HttpRequestMessage(HttpMethod.Get, "/api/enrolements");
+            var _token = _context.TokenBuilder
                 .ForAudience("prime-web-api")
                 .ForSubject("admin")
                 .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_ADMIN_ROLE)
@@ -138,7 +161,7 @@ namespace PrimeTests.Controllers
             request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);
 
             // Get all enrolments for ADMIN user
-            var response = await testContext.Client.SendAsync(request);
+            var response = await _context.Client.SendAsync(request);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             var body = await response.Content.ReadAsStringAsync();
@@ -149,8 +172,8 @@ namespace PrimeTests.Controllers
         [Fact]
         public async void updateSingleEnrolment()
         {
-            TestAuthenticationContext testContext = new TestAuthenticationContext();
-            Enrolment enrolment = testContext.CreateEnrolment();
+            // TestAuthenticationContext testContext = new TestAuthenticationContext();
+            Enrolment enrolment = _context.CreateEnrolment();
             string expectedFirstName = "NewFirstName";
             int enrolmentId = (int)enrolment.Id;
 
@@ -159,10 +182,10 @@ namespace PrimeTests.Controllers
             //update the first name
             enrolment.Enrollee.FirstName = expectedFirstName;
 
-            var response = await testContext.Client.PutAsJsonAsync("/api/v1/Enrolment/" + enrolmentId, enrolment);
+            var response = await _context.Client.PutAsJsonAsync("/api/enrolements/" + enrolmentId, enrolment);
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
 
-            Enrolment updatedEnrolment = testContext.GetEnrolmentById(enrolmentId);
+            Enrolment updatedEnrolment = _context.GetEnrolmentById(enrolmentId);
             Assert.Equal(expectedFirstName, updatedEnrolment.Enrollee.FirstName);
         }
     }

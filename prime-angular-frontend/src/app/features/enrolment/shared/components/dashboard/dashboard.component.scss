@@ -1,0 +1,10 @@
+@import 'palette';
+
+.prime-sidenav-container {
+  position: absolute;
+  // Compensate for the application header
+  top: 70px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}

@@ -61,5 +61,17 @@ namespace PrimeTests.Utils
         {
             return new DefaultEnrolmentService(apiDbContext).GetEnrolmentAsync(enrolmentId).Result;
         }
+
+        public static void InitializeDbForTests(ApiDbContext db)
+        {
+            //db.Enrolments.AddRange();
+            db.SaveChanges();
+        }
+
+        public static void ReinitializeDbForTests(ApiDbContext db)
+        {
+            db.Enrolments.RemoveRange(db.Enrolments);
+            InitializeDbForTests(db);
+        }
     }
 }
