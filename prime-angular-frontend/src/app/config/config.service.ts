@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { Configuration } from './config.model';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { map } from 'rxjs/operators';
+import { PrimeHttpResponse } from '@core/models/prime-http-response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -62,7 +63,7 @@ export class ConfigService {
         // TODO: temporary until provided by config service
         map(this.addProvinces),
         map(this.addCountries),
-        map((config: Configuration) => this.configuration = config)
+        map((config: Configuration) => this.configuration = config),
       )
       .toPromise();
   }
@@ -75,7 +76,10 @@ export class ConfigService {
    * @memberof ConfigService
    */
   private getConfiguration(): Observable<Configuration> {
-    return this.http.get<Configuration>(`${this.config.apiEndpoint}/lookups`);
+    return this.http.get<PrimeHttpResponse>(`${this.config.apiEndpoint}/lookups`)
+      .pipe(
+        map((response: PrimeHttpResponse) => response.result)
+      );
   }
 
   private addProvinces(config: Configuration) {
