@@ -32,7 +32,7 @@
                   #hasConvictionInput
                   formControlName="convictionDetails"></textarea>
         <mat-hint align="end">{{ hasConvictionInput.value?.length || 0 }}/200</mat-hint>
-        <mat-error *ngIf="form.get('convictionDetails').hasError('required')">Required</mat-error>
+        <mat-error *ngIf="form.get('hasConvictionDetails').hasError('required')">Required</mat-error>
       </mat-form-field>
 
     </div>
@@ -61,7 +61,7 @@
                   rows="5"
                   maxlength="200"
                   #hasRegistrationSuspended
-                  formControlName="registrationSuspendedDetails"></textarea>
+                  formControlName="hasRegistrationSuspendedDetails"></textarea>
         <mat-hint align="end">{{ hasRegistrationSuspended.value?.length || 0 }}/200</mat-hint>
       </mat-form-field>
 
@@ -92,7 +92,7 @@
                   rows="5"
                   maxlength="200"
                   #hasDisciplinaryAction
-                  formControlName="disciplinaryActionDetails"></textarea>
+                  formControlName="hasDisciplinaryActionDetails"></textarea>
         <mat-hint align="end">{{ hasDisciplinaryAction.value?.length || 0 }}/200</mat-hint>
       </mat-form-field>
 
@@ -122,7 +122,7 @@
                   rows="5"
                   maxlength="200"
                   #hasPharmaNetSuspended
-                  formControlName="pharmaNetSuspendedDetails"></textarea>
+                  formControlName="hasPharmaNetSuspendedDetails"></textarea>
         <mat-hint align="end">{{ hasPharmaNetSuspended.value?.length || 0 }}/200</mat-hint>
       </mat-form-field>
 
