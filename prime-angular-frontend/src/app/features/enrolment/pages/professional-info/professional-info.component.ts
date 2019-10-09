@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
+import { FormGroup, FormArray, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog, MatChipInputEvent, MatAutocompleteSelectedEvent } from '@angular/material';
 
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 
-import { ConfigKeyValue } from '@config/config.model';
+import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
@@ -30,14 +30,13 @@ export class ProfessionalInfoComponent implements OnInit {
   public decisions: { code: boolean, name: string }[] = [
     { code: false, name: 'No' }, { code: true, name: 'Yes' }
   ];
-  public colleges: ConfigKeyValue[];
-  public licenses: ConfigKeyValue[];
-  public advancedPractices: ConfigKeyValue[];
-  public jobNames: ConfigKeyValue[];
-  public filteredJobNames: Observable<ConfigKeyValue[]>;
+  public colleges: Config[];
+  public licenses: Config[];
+  public practices: Config[];
+  public jobNames: Config[];
+  public filteredJobNames: Observable<Config[]>;
 
   constructor(
-    private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
@@ -49,7 +48,7 @@ export class ProfessionalInfoComponent implements OnInit {
   ) {
     this.colleges = this.configService.colleges;
     this.licenses = this.configService.licenses;
-    this.advancedPractices = this.configService.advancedPractices;
+    this.practices = this.configService.practices;
     this.jobNames = this.configService.jobNames;
   }
 
@@ -117,7 +116,7 @@ export class ProfessionalInfoComponent implements OnInit {
     const value = event.value;
 
     if ((value || '').trim()) {
-      this.jobs.push(this.fb.group({ title: value.trim() }));
+      this.jobs.push(this.enrolmentStateService.buildJobForm(value.trim()));
     }
 
     // Remove input value after custom value added
@@ -131,7 +130,7 @@ export class ProfessionalInfoComponent implements OnInit {
   }
 
   public selectedJob(event: MatAutocompleteSelectedEvent) {
-    this.jobs.push(this.fb.group({ title: event.option.viewValue }));
+    this.jobs.push(this.enrolmentStateService.buildJobForm(event.option.viewValue));
 
     // Remove input value when selected from auto-complete
     this.clearInputValue();
@@ -218,19 +217,19 @@ export class ProfessionalInfoComponent implements OnInit {
 
           return (jobName)
             ? this.filterJobNames(jobName)
-            : availableJobs.filter(({ name }: ConfigKeyValue) => !selectedJobs.includes(name.toLowerCase()));
+            : availableJobs.filter(({ name }: Config) => !selectedJobs.includes(name.toLowerCase()));
         })
       );
   }
 
-  private filterJobNames(jobName: string): ConfigKeyValue[] {
+  private filterJobNames(jobName: string): Config[] {
     const jobsFilter = [...this.jobs.value.map((j: Job) => j.title.toLowerCase()), jobName.toLowerCase()];
 
     return this.jobNames
       // Remove selected jobs from the list of available jobs
-      .filter(({ name }: ConfigKeyValue) => !jobsFilter.includes(name.toLowerCase()))
+      .filter(({ name }: Config) => !jobsFilter.includes(name.toLowerCase()))
       // Perform type ahead filtering for auto-complete
-      .filter(({ name }: ConfigKeyValue) => name.toLowerCase().indexOf(jobName.toLowerCase()) === 0);
+      .filter(({ name }: Config) => name.toLowerCase().indexOf(jobName.toLowerCase()) === 0);
   }
 
   private clearInputValue() {

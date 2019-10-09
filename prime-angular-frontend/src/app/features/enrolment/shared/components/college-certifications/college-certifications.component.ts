@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
-import { ConfigKeyValue } from '@config/config.model';
+import { Config, CollegeConfig, LicenseConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { ViewportService } from '@core/services/viewport.service';
 
@@ -14,11 +14,11 @@ export class CollegeCertificationsComponent implements OnInit {
   @Input() public form: FormGroup;
   @Output() public remove: EventEmitter<number>;
 
-  public colleges: ConfigKeyValue[];
-  public licenses: ConfigKeyValue[];
-  public filteredLicenses: ConfigKeyValue[];
-  public licensePrefix: number;
-  public advancedPractices: ConfigKeyValue[];
+  public colleges: CollegeConfig[];
+  public licenses: LicenseConfig[];
+  public filteredLicenses: Config[];
+  public licensePrefix: string;
+  public practices: Config[];
 
   constructor(
     private configService: ConfigService,
@@ -27,7 +27,7 @@ export class CollegeCertificationsComponent implements OnInit {
     this.remove = new EventEmitter<number>();
     this.colleges = this.configService.colleges;
     this.licenses = this.configService.licenses;
-    this.advancedPractices = this.configService.advancedPractices;
+    this.practices = this.configService.practices;
   }
 
   public get isMobile() {
@@ -41,7 +41,7 @@ export class CollegeCertificationsComponent implements OnInit {
   public ngOnInit() {
     // TODO: add a test to check that prefix and licenses for a college are correct
     this.form.get('collegeCode').valueChanges.subscribe((collegeCode) => {
-      this.filteredLicenses = this.licenses.filter(l => l.collegeCode === collegeCode);
+      this.filteredLicenses = this.licenses.filter(l => l.collegeLicenses.map(cl => cl.collegeCode).includes(collegeCode));
       this.licensePrefix = this.colleges.filter(c => c.code === collegeCode).shift().prefix;
 
       this.form.get('licenseCode').patchValue(null);
