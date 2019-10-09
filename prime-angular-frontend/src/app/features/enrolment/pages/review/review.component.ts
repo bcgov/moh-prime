@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
+import { map } from 'rxjs/operators';
+
+import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '../../shared/models/enrolment.model';
 import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
 import { EnrolmentResource } from '../../shared/services/enrolment-resource.service';
-import { ToastService } from '@core/services/toast.service';
 
 @Component({
   selector: 'app-review',
@@ -55,6 +57,9 @@ export class ReviewComponent implements OnInit {
     // TODO: detect enrolment already exists and don't reload
     // TODO: apply guard if not enrolment is found to redirect to profile
     this.enrolmentResource.enrolments()
+      .pipe(
+        map((enrolment: Enrolment) => this.enrolment = enrolment)
+      )
       .subscribe((enrolment: Enrolment) => {
         if (enrolment) {
           this.enrolmentStateService.enrolment = enrolment;

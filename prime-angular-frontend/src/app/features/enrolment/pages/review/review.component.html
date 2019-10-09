@@ -5,7 +5,8 @@
   <app-sub-header subheader="Application Review"
                   help="Lorem ipsum dolor, sit amet consectetur adipisicing elit."></app-sub-header>
 
-  <div class="row">
+  <div class="row"
+       *ngIf="enrolment">
     <div class="col-sm-6">
 
       <app-sub-header subheader="Enrollee">
@@ -42,7 +43,7 @@
         <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.postal }}&nbsp;</dd>
       </dl>
 
-      <ng-container *ngIf="enrolment?.enrollee.mailingAddress">
+      <ng-container *ngIf="enrolment.enrollee.mailingAddress">
 
         <h3 class="lead">Mailing Address</h3>
 
@@ -97,8 +98,6 @@
         <ng-container *ngIf="enrolment.hasConviction">
           <dt class="col-sm-12 col-md-6 py-1">Details</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.hasConvictionDetails }}&nbsp;</dd>
-          <!-- <dt class="col-sm-12 col-md-6 py-1">Documents</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{  }}&nbsp;</dd> -->
         </ng-container>
       </dl>
 
@@ -110,8 +109,6 @@
         <ng-container *ngIf="enrolment.hasRegistrationSuspended">
           <dt class="col-sm-12 col-md-6 py-1">Details</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.hasRegistrationSuspendedDetails }}&nbsp;</dd>
-          <!-- <dt class="col-sm-12 col-md-6 py-1">Documents</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{  }}&nbsp;</dd> -->
         </ng-container>
       </dl>
 
@@ -124,8 +121,6 @@
         <ng-container *ngIf="enrolment.hasDisciplinaryAction">
           <dt class="col-sm-12 col-md-6 py-1">Details</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.hasDisciplinaryActionDetails }}&nbsp;</dd>
-          <!-- <dt class="col-sm-12 col-md-6 py-1">Documents</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{  }}&nbsp;</dd> -->
         </ng-container>
       </dl>
 
@@ -138,8 +133,6 @@
         <ng-container *ngIf="enrolment.hasPharmaNetSuspended">
           <dt class="col-sm-12 col-md-6 py-1">Details</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.hasPharmaNetSuspendedDetails }}&nbsp;</dd>
-          <!-- <dt class="col-sm-12 col-md-6 py-1">Documents</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{  }}&nbsp;</dd> -->
         </ng-container>
       </dl>
 
