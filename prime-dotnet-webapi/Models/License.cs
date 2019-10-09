@@ -16,5 +16,7 @@ namespace Prime.Models
 
         [JsonIgnore]
         public ICollection<Certification> Certifications { get; set; }
+
+        public ICollection<CollegeLicense> CollegeLicenses { get; set; }
     }
 }
