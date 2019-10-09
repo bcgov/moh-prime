@@ -67,14 +67,7 @@ export class PharmanetAccessComponent implements OnInit {
   }
 
   public addOrganization() {
-    const organization = this.fb.group({
-      id: [null, []],
-      organizationTypeCode: [null, [Validators.required]],
-      name: [null, [Validators.required]],
-      city: [null, [Validators.required]],
-      startDate: [null, [Validators.required]],
-      endDate: [null, []]
-    });
+    const organization = this.enrolmentStateService.buildOrganizationForm();
 
     this.organizations.push(organization);
   }

@@ -141,7 +141,7 @@ export class EnrolmentStateService {
       if (enrolment.organizations.length) {
         const organizations = this.pharmaNetAccessForm.get('organizations') as FormArray;
         organizations.clear();
-        this.enrolment.organizations.forEach((o: Organization) => {
+        enrolment.organizations.forEach((o: Organization) => {
           const organization = this.buildOrganizationForm();
           organization.patchValue(o);
           organizations.push(organization);
@@ -237,7 +237,14 @@ export class EnrolmentStateService {
   }
 
   public buildOrganizationForm(): FormGroup {
-    return this.fb.group({});
+    return this.fb.group({
+      id: [null, []],
+      organizationTypeCode: [null, [Validators.required]],
+      name: [null, [Validators.required]],
+      city: [null, [Validators.required]],
+      startDate: [null, [Validators.required]],
+      endDate: [null, []]
+    });
   }
 
   // TODO: temporary test data for filling out an enrolment
