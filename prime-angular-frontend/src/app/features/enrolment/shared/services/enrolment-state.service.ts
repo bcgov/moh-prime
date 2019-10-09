@@ -116,10 +116,9 @@ export class EnrolmentStateService {
       this.professionalInfoForm.patchValue(enrolment);
 
       if (enrolment.certifications.length) {
-        const certs = this.professionalInfoForm.get('certifications') as FormArray;
-        certs.clear();
+        const certifications = this.professionalInfoForm.get('certifications') as FormArray;
+        certifications.clear();
         enrolment.certifications.forEach((c: CollegeCertification) => {
-          const certifications = this.professionalInfoForm.get('certifications') as FormArray;
           const certification = this.buildCollegeCertificationForm();
           certification.patchValue(c);
           certifications.push(certification);
@@ -127,11 +126,10 @@ export class EnrolmentStateService {
       }
 
       if (enrolment.jobs.length) {
-        const certs = this.professionalInfoForm.get('jobs') as FormArray;
-        certs.clear();
+        const jobs = this.professionalInfoForm.get('jobs') as FormArray;
+        jobs.clear();
         enrolment.jobs.forEach((j: Job) => {
-          const jobs = this.professionalInfoForm.get('jobs') as FormArray;
-          const job = this.buildCollegeCertificationForm();
+          const job = this.buildJobForm();
           job.patchValue(j);
           jobs.push(job);
         });
@@ -141,10 +139,9 @@ export class EnrolmentStateService {
       this.pharmaNetAccessForm.patchValue(enrolment);
 
       if (enrolment.organizations.length) {
-        const certs = this.pharmaNetAccessForm.get('organizations') as FormArray;
-        certs.clear();
+        const organizations = this.pharmaNetAccessForm.get('organizations') as FormArray;
+        organizations.clear();
         this.enrolment.organizations.forEach((o: Organization) => {
-          const organizations = this.pharmaNetAccessForm.get('organizations') as FormArray;
           const organization = this.buildOrganizationForm();
           organization.patchValue(o);
           organizations.push(organization);
@@ -210,6 +207,13 @@ export class EnrolmentStateService {
       licenseCode: [null, [Validators.required]],
       renewalDate: [null, [Validators.required]],
       practiceCode: [null, []]
+    });
+  }
+
+  public buildJobForm(): FormGroup {
+    return this.fb.group({
+      id: [null, []],
+      title: [null, [Validators.required]]
     });
   }
 

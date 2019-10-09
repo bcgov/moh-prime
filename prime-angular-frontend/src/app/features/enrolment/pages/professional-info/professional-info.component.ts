@@ -160,6 +160,9 @@ export class ProfessionalInfoComponent implements OnInit {
           this.enrolmentStateService.enrolment = enrolment;
         }
       });
+
+    // Initialize multi-select after patching
+    this.initMultiSelect();
   }
 
   private createFormInstance() {
@@ -167,20 +170,6 @@ export class ProfessionalInfoComponent implements OnInit {
   }
 
   private initForm() {
-    this.jobCtrl = new FormControl();
-    this.filteredJobNames = this.jobCtrl.valueChanges
-      .pipe(
-        startWith(null),
-        map((jobName: string | null) => {
-          const jobs = [...this.jobNames];
-          const selectedJobs = this.jobs.value.map((j: Job) => j.title.toLowerCase());
-
-          return (jobName)
-            ? this.filterJobNames(jobName)
-            : jobs.filter(({ name }: ConfigKeyValue) => !selectedJobs.includes(name.toLowerCase()));
-        })
-      );
-
     this.hasCertification.valueChanges.subscribe((value) => {
       if (!value) {
         this.certifications.clear();
@@ -218,14 +207,30 @@ export class ProfessionalInfoComponent implements OnInit {
     });
   }
 
-  private filterJobNames(job: string): ConfigKeyValue[] {
-    const jobsFilter = [...this.jobs.value.map((j: Job) => j.title.toLowerCase()), job.toLowerCase()];
+  private initMultiSelect() {
+    this.jobCtrl = new FormControl();
+    this.filteredJobNames = this.jobCtrl.valueChanges
+      .pipe(
+        startWith(null),
+        map((jobName: string | null) => {
+          const availableJobs = [...this.jobNames];
+          const selectedJobs = this.jobs.value.map((j: Job) => j.title.toLowerCase());
+
+          return (jobName)
+            ? this.filterJobNames(jobName)
+            : availableJobs.filter(({ name }: ConfigKeyValue) => !selectedJobs.includes(name.toLowerCase()));
+        })
+      );
+  }
+
+  private filterJobNames(jobName: string): ConfigKeyValue[] {
+    const jobsFilter = [...this.jobs.value.map((j: Job) => j.title.toLowerCase()), jobName.toLowerCase()];
 
     return this.jobNames
       // Remove selected jobs from the list of available jobs
       .filter(({ name }: ConfigKeyValue) => !jobsFilter.includes(name.toLowerCase()))
       // Perform type ahead filtering for auto-complete
-      .filter(({ name }: ConfigKeyValue) => name.toLowerCase().indexOf(job.toLowerCase()) === 0);
+      .filter(({ name }: ConfigKeyValue) => name.toLowerCase().indexOf(jobName.toLowerCase()) === 0);
   }
 
   private clearInputValue() {
