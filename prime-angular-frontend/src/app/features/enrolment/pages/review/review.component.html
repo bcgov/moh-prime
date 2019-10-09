@@ -96,7 +96,7 @@
         <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.hasConviction) }}&nbsp;</dd>
         <ng-container *ngIf="enrolment.hasConviction">
           <dt class="col-sm-12 col-md-6 py-1">Details</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.convictionDetails }}&nbsp;</dd>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.hasConvictionDetails }}&nbsp;</dd>
           <!-- <dt class="col-sm-12 col-md-6 py-1">Documents</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{  }}&nbsp;</dd> -->
         </ng-container>
@@ -109,7 +109,7 @@
         <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.hasRegistrationSuspended) }}&nbsp;</dd>
         <ng-container *ngIf="enrolment.hasRegistrationSuspended">
           <dt class="col-sm-12 col-md-6 py-1">Details</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.registrationSuspendedDetails }}&nbsp;</dd>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.hasRegistrationSuspendedDetails }}&nbsp;</dd>
           <!-- <dt class="col-sm-12 col-md-6 py-1">Documents</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{  }}&nbsp;</dd> -->
         </ng-container>
@@ -123,7 +123,7 @@
         <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.hasDisciplinaryAction) }}&nbsp;</dd>
         <ng-container *ngIf="enrolment.hasDisciplinaryAction">
           <dt class="col-sm-12 col-md-6 py-1">Details</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.disciplinaryActionDetails }}&nbsp;</dd>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.hasDisciplinaryActionDetails }}&nbsp;</dd>
           <!-- <dt class="col-sm-12 col-md-6 py-1">Documents</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{  }}&nbsp;</dd> -->
         </ng-container>
@@ -137,7 +137,7 @@
         <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.hasPharmaNetSuspended) }}&nbsp;</dd>
         <ng-container *ngIf="enrolment.hasPharmaNetSuspended">
           <dt class="col-sm-12 col-md-6 py-1">Details</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.pharmaNetSuspendedDetails }}&nbsp;</dd>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.hasPharmaNetSuspendedDetails }}&nbsp;</dd>
           <!-- <dt class="col-sm-12 col-md-6 py-1">Documents</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{  }}&nbsp;</dd> -->
         </ng-container>

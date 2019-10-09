@@ -212,11 +212,11 @@ export class EnrolmentStateService {
       hasConviction: [null, [FormControlValidators.requiredBoolean]],
       convictionDetails: [null, []],
       hasRegistrationSuspended: [null, [FormControlValidators.requiredBoolean]],
-      registrationSuspendedDetails: [null, []],
+      hasRegistrationSuspendedDetails: [null, []],
       hasDisciplinaryAction: [null, [FormControlValidators.requiredBoolean]],
-      disciplinaryActionDetails: [null, []],
+      hasDisciplinaryActionDetails: [null, []],
       hasPharmaNetSuspended: [null, [FormControlValidators.requiredBoolean]],
-      pharmaNetSuspendedDetails: [null, []]
+      hasPharmaNetSuspendedDetails: [null, []]
     });
   }
 
