@@ -116,6 +116,8 @@ export class EnrolmentStateService {
       this.professionalInfoForm.patchValue(enrolment);
 
       if (enrolment.certifications.length) {
+        const certs = this.professionalInfoForm.get('certifications') as FormArray;
+        certs.clear();
         enrolment.certifications.forEach((c: CollegeCertification) => {
           const certifications = this.professionalInfoForm.get('certifications') as FormArray;
           const certification = this.buildCollegeCertificationForm();
@@ -125,6 +127,8 @@ export class EnrolmentStateService {
       }
 
       if (enrolment.jobs.length) {
+        const certs = this.professionalInfoForm.get('jobs') as FormArray;
+        certs.clear();
         enrolment.jobs.forEach((j: Job) => {
           const jobs = this.professionalInfoForm.get('jobs') as FormArray;
           const job = this.buildCollegeCertificationForm();
@@ -137,8 +141,10 @@ export class EnrolmentStateService {
       this.pharmaNetAccessForm.patchValue(enrolment);
 
       if (enrolment.organizations.length) {
+        const certs = this.pharmaNetAccessForm.get('organizations') as FormArray;
+        certs.clear();
         this.enrolment.organizations.forEach((o: Organization) => {
-          const organizations = this.professionalInfoForm.get('organizations') as FormArray;
+          const organizations = this.pharmaNetAccessForm.get('organizations') as FormArray;
           const organization = this.buildOrganizationForm();
           organization.patchValue(o);
           organizations.push(organization);
