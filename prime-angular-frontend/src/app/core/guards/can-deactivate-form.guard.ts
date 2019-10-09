@@ -12,10 +12,12 @@ export class CanDeactivateFormGuard implements CanDeactivate<any> {
     currentState: RouterStateSnapshot,
     nextState?: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
+    // TODO: temporarily turned off until needed
     // Pass control to the component to determine if deactivation
     // can occur, otherwise, allow route request to occur
-    return (component.canDeactivate)
-      ? component.canDeactivate()
-      : true;
+    // return (component.canDeactivate)
+    //   ? component.canDeactivate()
+    //   : true;
+    return true;
   }
 }

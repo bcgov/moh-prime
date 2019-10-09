@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
+import { map } from 'rxjs/operators';
+
+import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '../../shared/models/enrolment.model';
 import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
-import { EnrolmentResourceService } from '../../shared/services/enrolment-resource.service';
-import { ToastService } from '@core/services/toast.service';
+import { EnrolmentResource } from '../../shared/services/enrolment-resource.service';
 
 @Component({
   selector: 'app-review',
@@ -17,78 +19,51 @@ export class ReviewComponent implements OnInit {
   public enrolment: Enrolment;
 
   constructor(
+    private route: ActivatedRoute,
     private router: Router,
     private enrolmentStateService: EnrolmentStateService,
-    private enrolmentResource: EnrolmentResourceService,
+    private enrolmentResource: EnrolmentResource,
     private toastService: ToastService,
     private logger: LoggerService
   ) { }
 
   public onSubmit() {
-    if (this.isEnrolmentValid()) {
-      const payload = this.enrolmentStateService.getEnrolment();
-      //   this.enrolmentResource.submitEnrolment(payload)
-      //     .subscribe(
-      //       (enrolment: Enrolment) => {
-      //         this.toastService.openSuccessToast('Enrolment has been submitted');
-      //         this.form.markAsPristine();
-      //         this.router.navigate(['professional'], { relativeTo: this.route.parent });
-      //       },
-      //       (error: any) => {
-      //         this.toastService.openSuccessToast('Enrolment could not be submitted');
-      //         this.logger.error('[Enrolment] Review::onSubmit error has occurred: ', error);
-      //       });
+    if (this.enrolmentStateService.isEnrolmentValid()) {
+      const payload = this.enrolmentStateService.enrolment;
+      this.enrolmentResource.updateEnrolment(payload)
+        .subscribe(
+          () => {
+            this.toastService.openSuccessToast('Enrolment has been submitted');
+            this.router.navigate(['/login'], { relativeTo: this.route.parent });
+          },
+          (error: any) => {
+            this.toastService.openSuccessToast('Enrolment could not be submitted');
+            this.logger.error('[Enrolment] Review::onSubmit error has occurred: ', error);
+          });
     } else {
-      // TODO: indicate where validation failed in the review to prompt user
+      // TODO: indicate where validation failed in the review to prompt user edits
     }
-  }
-
-  public isEnrolmentValid(): boolean {
-    return (
-      this.isProfileInfoValid() &&
-      this.isContactInfoValid() &&
-      this.isProfessionalInfoValid() &&
-      this.isSelfDeclarationValid() &&
-      this.isPharmaNetAccessValid()
-    );
-  }
-
-  public isProfileInfoValid(): boolean {
-    return this.enrolmentStateService.profileForm.valid;
-  }
-
-  public isContactInfoValid(): boolean {
-    return this.enrolmentStateService.contactForm.valid;
-  }
-
-  public isProfessionalInfoValid(): boolean {
-    return this.enrolmentStateService.professionalInfoForm.valid;
-  }
-
-  public isSelfDeclarationValid(): boolean {
-    return this.enrolmentStateService.selfDeclarationForm.valid;
-  }
-
-  public isPharmaNetAccessValid(): boolean {
-    return this.enrolmentStateService.pharmaNetAccessForm.valid;
   }
 
   public showYesNo(declared: boolean) {
     return (declared) ? 'Yes' : 'No';
   }
 
-  public route(route: string) {
+  public redirect(route: string) {
     this.router.navigate(['enrolment', route]);
   }
 
   public ngOnInit() {
-    this.enrolment = this.enrolmentStateService.getEnrolment();
-
-    // TODO: indicate where validation failed in the review to prompt user
-    console.log('PROFILE_VALID', this.enrolmentStateService.profileForm.valid);
-    console.log('CONTACT_VALID', this.enrolmentStateService.contactForm.valid);
-    console.log('PROFESSIONAL_VALID', this.enrolmentStateService.professionalInfoForm.valid);
-    console.log('DECLARATION_VALID', this.enrolmentStateService.selfDeclarationForm.valid);
-    console.log('ACCESS_VALID', this.enrolmentStateService.pharmaNetAccessForm.valid);
+    // TODO: detect enrolment already exists and don't reload
+    // TODO: apply guard if not enrolment is found to redirect to profile
+    this.enrolmentResource.enrolments()
+      .pipe(
+        map((enrolment: Enrolment) => this.enrolment = enrolment)
+      )
+      .subscribe((enrolment: Enrolment) => {
+        if (enrolment) {
+          this.enrolmentStateService.enrolment = enrolment;
+        }
+      });
   }
 }

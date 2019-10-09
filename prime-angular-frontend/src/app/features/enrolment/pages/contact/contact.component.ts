@@ -10,7 +10,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { ConfirmDiscardChangesDialogComponent } from '@shared/components/dialogs/confirm-discard-changes-dialog/confirm-discard-changes-dialog.component';
 import { Enrolment } from '../../shared/models/enrolment.model';
 import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
-import { EnrolmentResourceService } from '../../shared/services/enrolment-resource.service';
+import { EnrolmentResource } from '../../shared/services/enrolment-resource.service';
 
 @Component({
   selector: 'app-contact',
@@ -25,7 +25,7 @@ export class ContactComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private enrolmentStateService: EnrolmentStateService,
-    private enrolmentResource: EnrolmentResourceService,
+    private enrolmentResource: EnrolmentResource,
     private toastService: ToastService,
     private logger: LoggerService
   ) { }
@@ -56,11 +56,10 @@ export class ContactComponent implements OnInit {
 
   public onSubmit() {
     if (this.form.valid) {
-      const payload = this.enrolmentStateService.getEnrolment();
+      const payload = this.enrolmentStateService.enrolment;
       this.enrolmentResource.updateEnrolment(payload)
         .subscribe(
-          (enrolment: Enrolment) => {
-            // TODO: patch the form with updated identifiers
+          () => {
             this.toastService.openSuccessToast('Contact information has been saved');
             this.form.markAsPristine();
             this.router.navigate(['professional'], { relativeTo: this.route.parent });
@@ -83,9 +82,23 @@ export class ContactComponent implements OnInit {
   public ngOnInit() {
     this.createFormInstance();
 
-    console.log(this.hasContactEmail.value);
+    // TODO: detect enrolment already exists and don't reload
+    // TODO: apply guard if not enrolment is found to redirect to profile
+    this.enrolmentResource.enrolments()
+      .subscribe((enrolment: Enrolment) => {
+        if (enrolment) {
+          this.enrolmentStateService.enrolment = enrolment;
+        }
 
+        this.initForm();
+      });
+  }
 
+  private createFormInstance() {
+    this.form = this.enrolmentStateService.contactForm;
+  }
+
+  private initForm() {
     // TODO: update to eliminate controls in form
     if (this.contactEmail.value) {
       this.form.get('hasContactEmail').patchValue(true);
@@ -107,9 +120,5 @@ export class ContactComponent implements OnInit {
         this.contactPhone.reset();
       }
     });
-  }
-
-  private createFormInstance() {
-    this.form = this.enrolmentStateService.contactForm;
   }
 }

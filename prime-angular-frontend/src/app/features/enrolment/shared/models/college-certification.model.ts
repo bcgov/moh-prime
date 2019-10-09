@@ -3,6 +3,6 @@ export interface CollegeCertification {
   collegeCode: number;
   licenseNumber: string;
   licenseCode: number;
-  renewalDate: Date;
+  renewalDate: string;
   practiceCode?: number;
 }

@@ -30,9 +30,9 @@
                   rows="5"
                   maxlength="200"
                   #hasConvictionInput
-                  formControlName="convictionDetails"></textarea>
-        <mat-hint align="end">{{ hasConvictionInput.value?.length || 0 }}/200</mat-hint>
-        <mat-error *ngIf="form.get('convictionDetails').hasError('required')">Required</mat-error>
+                  formControlName="hasConvictionDetails"></textarea>
+        <mat-hint align="end">{{ hasConvictionDetails.value?.length || 0 }}/200</mat-hint>
+        <mat-error *ngIf="hasConvictionDetails.hasError('required')">Required</mat-error>
       </mat-form-field>
 
     </div>
@@ -61,8 +61,9 @@
                   rows="5"
                   maxlength="200"
                   #hasRegistrationSuspended
-                  formControlName="registrationSuspendedDetails"></textarea>
-        <mat-hint align="end">{{ hasRegistrationSuspended.value?.length || 0 }}/200</mat-hint>
+                  formControlName="hasRegistrationSuspendedDetails"></textarea>
+        <mat-hint align="end">{{ hasRegistrationSuspendedDetails.value?.length || 0 }}/200</mat-hint>
+        <mat-error *ngIf="hasRegistrationSuspendedDetails.hasError('required')">Required</mat-error>
       </mat-form-field>
 
     </div>
@@ -92,8 +93,9 @@
                   rows="5"
                   maxlength="200"
                   #hasDisciplinaryAction
-                  formControlName="disciplinaryActionDetails"></textarea>
-        <mat-hint align="end">{{ hasDisciplinaryAction.value?.length || 0 }}/200</mat-hint>
+                  formControlName="hasDisciplinaryActionDetails"></textarea>
+        <mat-hint align="end">{{ hasDisciplinaryActionDetails.value?.length || 0 }}/200</mat-hint>
+        <mat-error *ngIf="hasDisciplinaryActionDetails.hasError('required')">Required</mat-error>
       </mat-form-field>
 
     </div>
@@ -122,8 +124,9 @@
                   rows="5"
                   maxlength="200"
                   #hasPharmaNetSuspended
-                  formControlName="pharmaNetSuspendedDetails"></textarea>
-        <mat-hint align="end">{{ hasPharmaNetSuspended.value?.length || 0 }}/200</mat-hint>
+                  formControlName="hasPharmaNetSuspendedDetails"></textarea>
+        <mat-hint align="end">{{ hasPharmaNetSuspendedDetails.value?.length || 0 }}/200</mat-hint>
+        <mat-error *ngIf="hasPharmaNetSuspendedDetails.hasError('required')">Required</mat-error>
       </mat-form-field>
 
     </div>

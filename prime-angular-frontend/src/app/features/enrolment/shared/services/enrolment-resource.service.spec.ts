@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { EnrolmentResourceService } from './enrolment-resource.service';
+import { EnrolmentResource } from './enrolment-resource.service';
 
-describe('EnrolmentResourceService', () => {
+describe('EnrolmentResource', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: EnrolmentResourceService = TestBed.get(EnrolmentResourceService);
+    const service: EnrolmentResource = TestBed.get(EnrolmentResource);
     expect(service).toBeTruthy();
   });
 });

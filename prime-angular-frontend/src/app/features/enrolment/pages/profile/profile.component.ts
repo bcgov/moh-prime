@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { ConfigKeyValue } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
@@ -13,7 +14,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { ConfirmDiscardChangesDialogComponent } from '@shared/components/dialogs/confirm-discard-changes-dialog/confirm-discard-changes-dialog.component';
 import { Enrolment } from '../../shared/models/enrolment.model';
 import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
-import { EnrolmentResourceService } from '../../shared/services/enrolment-resource.service';
+import { EnrolmentResource } from '../../shared/services/enrolment-resource.service';
 
 @Component({
   selector: 'app-profile',
@@ -27,6 +28,8 @@ export class ProfileComponent implements OnInit {
   public provinces: ConfigKeyValue[];
   public subheadings: { [key: string]: { subheader: string, help: string } };
 
+  private isNewEnrolment: boolean;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -34,11 +37,12 @@ export class ProfileComponent implements OnInit {
     private viewportService: ViewportService,
     private configService: ConfigService,
     private enrolmentStateService: EnrolmentStateService,
-    private enrolmentResource: EnrolmentResourceService,
+    private enrolmentResource: EnrolmentResource,
     private toastService: ToastService,
     private logger: LoggerService
   ) {
     this.provinces = this.configService.provinces;
+    this.isNewEnrolment = true;
   }
 
   public get firstName(): FormGroup {
@@ -59,12 +63,16 @@ export class ProfileComponent implements OnInit {
 
   public onSubmit() {
     if (this.form.valid) {
-      // TODO: needs to toggle between a create or update
-      const payload = this.enrolmentStateService.getEnrolment();
-      this.enrolmentResource.createEnrolment(payload)
+      const payload = this.enrolmentStateService.enrolment;
+      const request$ = (this.isNewEnrolment)
+        // TODO: temporarily use raw enrolment for creation
+        ? this.enrolmentResource.createEnrolment(this.enrolmentStateService.getRawEnrolment())
+          .pipe(map((enrolment: Enrolment) => this.enrolmentStateService.enrolment = enrolment))
+        : this.enrolmentResource.updateEnrolment(payload);
+
+      request$
         .subscribe(
-          (enrolment: Enrolment) => {
-            // TODO: patch the form with updated identifiers
+          () => {
             this.toastService.openSuccessToast('Profile information has been saved');
             this.form.markAsPristine();
             this.router.navigate(['contact'], { relativeTo: this.route.parent });
@@ -72,7 +80,8 @@ export class ProfileComponent implements OnInit {
           (error: any) => {
             this.toastService.openSuccessToast('Profile information could not be saved');
             this.logger.error('[Enrolment] Profile::onSubmit error has occurred: ', error);
-          });
+          }
+        );
     } else {
       this.form.markAllAsTouched();
     }
@@ -109,7 +118,19 @@ export class ProfileComponent implements OnInit {
 
   public ngOnInit() {
     this.createFormInstance();
-    this.initForm();
+
+    this.enrolmentResource.enrolments()
+      .subscribe((enrolment: Enrolment) => {
+        if (enrolment) {
+          this.isNewEnrolment = false;
+          this.enrolmentStateService.enrolment = enrolment;
+        }
+
+        // TODO: temporary to test creation of an enrolment
+        // this.enrolmentStateService.enrolment = this.enrolmentStateService.getRawEnrolment();
+
+        this.initForm();
+      });
   }
 
   private createFormInstance() {

@@ -13,7 +13,7 @@ import { ViewportService } from '@core/services/viewport.service';
 import { ConfirmDiscardChangesDialogComponent } from '@shared/components/dialogs/confirm-discard-changes-dialog/confirm-discard-changes-dialog.component';
 import { Enrolment } from '../../shared/models/enrolment.model';
 import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
-import { EnrolmentResourceService } from '../../shared/services/enrolment-resource.service';
+import { EnrolmentResource } from '../../shared/services/enrolment-resource.service';
 
 @Component({
   selector: 'app-pharmanet-access',
@@ -32,7 +32,7 @@ export class PharmanetAccessComponent implements OnInit {
     private configService: ConfigService,
     private viewportService: ViewportService,
     private enrolmentStateService: EnrolmentStateService,
-    private enrolmentResource: EnrolmentResourceService,
+    private enrolmentResource: EnrolmentResource,
     private toastService: ToastService,
     private logger: LoggerService
   ) {
@@ -49,11 +49,10 @@ export class PharmanetAccessComponent implements OnInit {
 
   public onSubmit() {
     if (this.form.valid) {
-      const payload = this.enrolmentStateService.getEnrolment();
+      const payload = this.enrolmentStateService.enrolment;
       this.enrolmentResource.updateEnrolment(payload)
         .subscribe(
-          (enrolment: Enrolment) => {
-            // TODO: patch the form with updated identifiers
+          () => {
             this.toastService.openSuccessToast('PharmaNet access has been saved');
             this.form.markAsPristine();
             this.router.navigate(['review'], { relativeTo: this.route.parent });
@@ -68,14 +67,7 @@ export class PharmanetAccessComponent implements OnInit {
   }
 
   public addOrganization() {
-    const organization = this.fb.group({
-      id: [null, []],
-      organizationTypeCode: [null, [Validators.required]],
-      name: [null, [Validators.required]],
-      city: [null, [Validators.required]],
-      startDate: [null, [Validators.required]],
-      endDate: [null, []]
-    });
+    const organization = this.enrolmentStateService.buildOrganizationForm();
 
     this.organizations.push(organization);
   }
@@ -92,9 +84,24 @@ export class PharmanetAccessComponent implements OnInit {
 
   public ngOnInit() {
     this.createFormInstance();
+
+    // TODO: detect enrolment already exists and don't reload
+    // TODO: apply guard if not enrolment is found to redirect to profile
+    this.enrolmentResource.enrolments()
+      .subscribe((enrolment: Enrolment) => {
+        if (enrolment) {
+          this.enrolmentStateService.enrolment = enrolment;
+        }
+
+        this.initForm();
+      });
   }
 
   private createFormInstance() {
     this.form = this.enrolmentStateService.pharmaNetAccessForm;
+  }
+
+  private initForm() {
+
   }
 }

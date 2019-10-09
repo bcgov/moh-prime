@@ -102,7 +102,7 @@
                     [selectable]="true"
                     [removable]="true"
                     (removed)="removeJob(i)">
-            {{ job.value }}
+            {{ job.value.title }}
             <mat-icon matChipRemove>cancel</mat-icon>
           </mat-chip>
           <input placeholder="Job Title"
