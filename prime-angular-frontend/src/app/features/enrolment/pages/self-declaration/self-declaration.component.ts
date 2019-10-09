@@ -38,16 +38,32 @@ export class SelfDeclarationComponent implements OnInit {
     return this.form.get('hasConviction') as FormGroup;
   }
 
+  public get hasConvictionDetails(): FormGroup {
+    return this.form.get('hasConvictionDetails') as FormGroup;
+  }
+
   public get hasRegistrationSuspended(): FormGroup {
     return this.form.get('hasRegistrationSuspended') as FormGroup;
+  }
+
+  public get hasRegistrationSuspendedDetails(): FormGroup {
+    return this.form.get('hasRegistrationSuspendedDetails') as FormGroup;
   }
 
   public get hasDisciplinaryAction(): FormGroup {
     return this.form.get('hasDisciplinaryAction') as FormGroup;
   }
 
+  public get hasDisciplinaryActionDetails(): FormGroup {
+    return this.form.get('hasDisciplinaryActionDetails') as FormGroup;
+  }
+
   public get hasPharmaNetSuspended(): FormGroup {
     return this.form.get('hasPharmaNetSuspended') as FormGroup;
+  }
+
+  public get hasPharmaNetSuspendedDetails(): FormGroup {
+    return this.form.get('hasPharmaNetSuspendedDetails') as FormGroup;
   }
 
   public onSubmit() {
