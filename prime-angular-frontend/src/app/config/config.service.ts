@@ -106,10 +106,10 @@ export class ConfigService {
   private addColleges(config: Config) {
     return {
       colleges: [
-        { code: 'CPSBC', name: 'College of Physicians and Surgeons of BC (CPSBC)', prefix: '91' },
-        { code: 'CPBC', name: 'College of Pharmacists of BC (CPBC)', prefix: 'P1' },
-        { code: 'CRNBC', name: 'College of Registered Nurses of BC (CRNBC)', prefix: '96' },
-        { code: 'NONE', name: 'None', prefix: null },
+        { code: 1, name: 'College of Physicians and Surgeons of BC (CPSBC)', prefix: '91' },
+        { code: 2, name: 'College of Pharmacists of BC (CPBC)', prefix: 'P1' },
+        { code: 3, name: 'College of Registered Nurses of BC (CRNBC)', prefix: '96' },
+        { code: 4, name: 'None', prefix: null },
       ],
       ...config
     };
@@ -118,12 +118,12 @@ export class ConfigService {
   private addLicenses(config: Config) {
     return {
       licenses: [
-        { code: 'FULGENERAL', name: 'Full - General', collegeCode: 'CRNBC' },
-        { code: 'TEMPREGNUR', name: 'Temporary Registered Nurse', collegeCode: 'CRNBC' },
-        { code: 'FULPHARMA', name: 'Full Pharmacist', collegeCode: 'CPSBC' },
-        { code: 'FULSEPCLTY', name: 'Full - Specialty', collegeCode: 'CPSBC' },
-        { code: 'REGINURSE', name: 'Registered Nurse', collegeCode: 'CPBC' },
-        { code: 'TEMPNURSE', name: 'Temporary Registered Nurse', collegeCode: 'CPBC' },
+        { code: 1, name: 'Full - General', collegeCode: 3 },
+        { code: 5, name: 'Temporary Registered Nurse', collegeCode: 3 },
+        { code: 2, name: 'Full Pharmacist', collegeCode: 1 },
+        { code: 3, name: 'Full - Specialty', collegeCode: 1 },
+        { code: 4, name: 'Registered Nurse', collegeCode: 2 },
+        { code: 5, name: 'Temporary Registered Nurse', collegeCode: 2 },
       ],
       ...config
     };
@@ -132,14 +132,14 @@ export class ConfigService {
   private addJobNames(config: Config) {
     return {
       jobNames: [
-        { code: 'MEDOFFASS', name: 'Medical Office Assistant' },
-        { code: 'MIDWIFE', name: 'Midwife' },
-        { code: 'NURSE', name: 'Nurse (not Nurse Practitioner)' },
-        { code: 'PHARMASST', name: 'Pharmacy Assistant' },
-        { code: 'PHARMTECH', name: 'Pharmacy Technician' },
-        { code: 'REGICLERK', name: 'Registration Clerk' },
-        { code: 'WARDCLERK', name: 'Ward Clerk' },
-        { code: 'OTHER', name: 'Other' }
+        { code: 1, name: 'Medical Office Assistant' },
+        { code: 2, name: 'Midwife' },
+        { code: 3, name: 'Nurse (not Nurse Practitioner)' },
+        { code: 4, name: 'Pharmacy Assistant' },
+        { code: 5, name: 'Pharmacy Technician' },
+        { code: 6, name: 'Registration Clerk' },
+        { code: 7, name: 'Ward Clerk' },
+        { code: 8, name: 'Other' }
       ],
       ...config
     };
@@ -148,10 +148,10 @@ export class ConfigService {
   private addAdvancedPractices(config: Config) {
     return {
       advancedPractices: [
-        { code: 'REMOTEPRAC', name: 'Remote Practice' },
-        { code: 'REPRODCARE', name: 'Reproductive Care' },
-        { code: 'SXTRANSINF', name: 'Sexually Transmitted Infections (STI)' },
-        { code: 'NONE', name: 'None' }
+        { code: 1, name: 'Remote Practice' },
+        { code: 2, name: 'Reproductive Care' },
+        { code: 3, name: 'Sexually Transmitted Infections (STI)' },
+        { code: 4, name: 'None' }
       ],
       ...config
     };
@@ -160,8 +160,8 @@ export class ConfigService {
   private addOrganizationNames(config: Config) {
     return {
       organizationNames: [
-        { code: 'HEALTHAUTH', name: 'Health Authority' },
-        { code: 'PHARMACY', name: 'Pharmacy' }
+        { code: 1, name: 'Health Authority' },
+        { code: 2, name: 'Pharmacy' }
       ],
       ...config
     };
