@@ -17,7 +17,8 @@ RUN dotnet publish -c Release -o out
 FROM mcr.microsoft.com/dotnet/core/aspnet:2.2 AS runtime
 COPY --from=build $WORKDIR .
 
-EXPOSE 8080
+EXPOSE 8080 5001
+
 USER 1001
 ENV ASPNETCORE_ENVIRONMENT Development
 
