@@ -149,6 +149,8 @@ export class ProfessionalInfoComponent implements OnInit {
 
   public ngOnInit() {
     this.createFormInstance();
+    // Initialize form changes before patching
+    this.initForm();
 
     // TODO: detect enrolment already exists and don't reload
     // TODO: apply guard if not enrolment is found to redirect to profile
@@ -157,8 +159,6 @@ export class ProfessionalInfoComponent implements OnInit {
         if (enrolment) {
           this.enrolmentStateService.enrolment = enrolment;
         }
-
-        this.initForm();
       });
   }
 
@@ -167,11 +167,6 @@ export class ProfessionalInfoComponent implements OnInit {
   }
 
   private initForm() {
-    this.toggleYesNo(this.hasCertification.value, this.isAccessingPharmaNetOnBehalfOf);
-    this.toggleYesNo(this.isDeviceProvider.value, this.isInsulinPumpProvider);
-    this.toggleYesNo(this.isAccessingPharmaNetOnBehalfOf.value, this.hasCertification);
-
-    // TODO: make auto-complete chip list with filtering into a component
     this.jobCtrl = new FormControl();
     this.filteredJobNames = this.jobCtrl.valueChanges
       .pipe(
@@ -186,41 +181,41 @@ export class ProfessionalInfoComponent implements OnInit {
         })
       );
 
-    // College certification indicates not being accessed on behalf of
-    this.hasCertification.valueChanges.subscribe((value: boolean) => {
+    this.hasCertification.valueChanges.subscribe((value) => {
       if (!value) {
         this.certifications.clear();
-      }
 
-      this.toggleYesNo(value, this.isAccessingPharmaNetOnBehalfOf);
+        this.isAccessingPharmaNetOnBehalfOf.enable({ emitEvent: false });
+      } else {
+        // College certification indicates not being accessed on behalf of
+        this.isAccessingPharmaNetOnBehalfOf.reset(null, { emitEvent: false });
+        this.isAccessingPharmaNetOnBehalfOf.disable({ emitEvent: false });
+      }
     });
 
-    // Device providers can be an insulin providers, otherwise disabled
-    this.isDeviceProvider.valueChanges.subscribe((value: boolean) => {
+    this.isDeviceProvider.valueChanges.subscribe((value) => {
       if (!value) {
         this.deviceProviderNumber.reset();
-      }
 
-      this.toggleYesNo(value, this.isInsulinPumpProvider);
+        // Device providers can be an insulin providers, otherwise disabled
+        this.isInsulinPumpProvider.reset(null, { emitEvent: false });
+        this.isInsulinPumpProvider.disable({ emitEvent: false });
+      } else {
+        this.isInsulinPumpProvider.enable({ emitEvent: false });
+      }
     });
 
-    // Accessing on behalf of indicates no college certification
-    this.isAccessingPharmaNetOnBehalfOf.valueChanges.subscribe((value: boolean) => {
+    this.isAccessingPharmaNetOnBehalfOf.valueChanges.subscribe((value) => {
       if (!value) {
         this.jobs.clear();
+
+        this.hasCertification.enable({ emitEvent: false });
+      } else {
+        // Accessing on behalf of indicates no college certification
+        this.hasCertification.reset(null, { emitEvent: false });
+        this.hasCertification.disable({ emitEvent: false });
       }
-
-      this.toggleYesNo(value, this.hasCertification);
     });
-  }
-
-  private toggleYesNo(value: boolean, control: FormGroup) {
-    if (!value) {
-      control.enable({ emitEvent: false });
-    } else {
-      control.reset(null, { emitEvent: false });
-      control.disable({ emitEvent: false });
-    }
   }
 
   private filterJobNames(job: string): ConfigKeyValue[] {
