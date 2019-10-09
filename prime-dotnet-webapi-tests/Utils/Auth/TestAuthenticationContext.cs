@@ -1,5 +1,6 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Net.Http;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -30,7 +31,12 @@ namespace PrimeTests.Utils.Auth
 
         private const string CertificatePassword = "prime-api";
 
-        public TestAuthenticationContext()
+        // public TestAuthenticationContext() : this(Server.Host.Services.GetService(typeof(ApiDbContext)) as ApiDbContext)
+        // {
+        //     // TestAuthenticationContext(Server.Host.Services.GetService(typeof(ApiDbContext)) as ApiDbContext);
+        // }
+
+        public TestAuthenticationContext(string _databaseName)
         {
             var builder = new WebHostBuilder()
                 .UseStartup<TestStartup>()
@@ -48,6 +54,11 @@ namespace PrimeTests.Utils.Auth
                         options.BackchannelHttpHandler = new MockBackchannel();
                         options.MetadataAddress = "https://inmemory.microsoft.com/common/.well-known/openid-configuration";
                     });
+                    var serviceDescriptor = services.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(ApiDbContext));
+                    services.Remove(serviceDescriptor);
+                    services.AddDbContext<ApiDbContext>(options =>
+                        options.UseInMemoryDatabase(databaseName: _databaseName)
+                    );
                 });
 
             Server = new TestServer(builder);

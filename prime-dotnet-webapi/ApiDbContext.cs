@@ -15,6 +15,11 @@ namespace Prime
         }
 
         public DbSet<Enrolment> Enrolments { get; set; }
+        public DbSet<Certification> Certifications { get; set; }
+        public DbSet<Job> Jobs { get; set; }
+        public DbSet<Organization> Organizations { get; set; }
+        public DbSet<Enrollee> Enrollees { get; set; }
+        public DbSet<Address> Addresses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

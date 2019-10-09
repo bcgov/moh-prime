@@ -14,8 +14,9 @@ namespace Prime.Models
     public abstract class Address
     {
         [Key]
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
+        [JsonIgnore]
         public int EnrolleeId { get; set; }
 
         [JsonIgnore]

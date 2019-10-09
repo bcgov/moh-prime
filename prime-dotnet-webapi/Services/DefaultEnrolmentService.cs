@@ -37,8 +37,6 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(e => e.Id == enrolmentId)
                 ;
 
-            if (entity == null) return null;
-
             return entity;
         }
 
@@ -54,8 +52,6 @@ namespace Prime.Services
                 .Include(e => e.Organizations)
                 .SingleOrDefaultAsync(e => e.Enrollee.UserId == userId)
                 ;
-
-            if (entity == null) return null;
 
             return entity;
         }
@@ -109,18 +105,90 @@ namespace Prime.Services
 
         public async Task<int> UpdateEnrolmentAsync(Enrolment enrolment)
         {
-            _context.Entry(enrolment).State = EntityState.Modified;
-            foreach (var certification in enrolment.Certifications)
+            //get the enrollee from the enrolment
+            Enrollee _enrollee = enrolment.Enrollee;
+            var _enrolleeDb = _context.Enrollees.Include(e => e.PhysicalAddress).Include(e => e.MailingAddress).AsNoTracking().Where(e => e.Id == _enrollee.Id).FirstOrDefault();
+            var _enrolmentDb = _context.Enrolments.Include(e => e.Certifications).Include(e => e.Jobs).Include(e => e.Organizations).AsNoTracking().Where(e => e.Id == enrolment.Id).FirstOrDefault();
+
+            // remove existing addresses
+            if (_enrolleeDb.PhysicalAddress != null)
             {
-                if (certification.Id == null)
+                _enrolleeDb.PhysicalAddress.Enrollee = null;
+                _context.Addresses.Remove(_enrolleeDb.PhysicalAddress);
+            }
+            if (_enrolleeDb.MailingAddress != null)
+            {
+                _enrolleeDb.MailingAddress.Enrollee = null;
+                _context.Addresses.Remove(_enrolleeDb.MailingAddress);
+            }
+
+            // create the new addresses, if they exist
+            PhysicalAddress _physicalAddress = _enrollee.PhysicalAddress;
+            if (_physicalAddress != null)
+            {
+                _physicalAddress.EnrolleeId = (int)_enrollee.Id;
+                _context.Entry(_physicalAddress).State = EntityState.Added;
+            }
+            MailingAddress _mailingAddress = _enrollee.MailingAddress;
+            if (_mailingAddress != null)
+            {
+                _mailingAddress.EnrolleeId = (int)_enrollee.Id;
+                _context.Entry(_mailingAddress).State = EntityState.Added;
+            }
+
+            // remove existing certifications
+            foreach (var certification in _enrolmentDb.Certifications)
+            {
+                certification.Enrolment = null;
+                _context.Certifications.Remove(certification);
+            }
+            // create new certifications
+            if (enrolment.Certifications != null)
+            {
+                foreach (var certification in enrolment.Certifications)
                 {
+                    certification.EnrolmentId = (int)enrolment.Id;
                     _context.Entry(certification).State = EntityState.Added;
                 }
-                else
+            }
+
+            // remove existing jobs
+            foreach (var job in _enrolmentDb.Jobs)
+            {
+                job.Enrolment = null;
+                _context.Jobs.Remove(job);
+            }
+            // create new jobs
+            if (enrolment.Jobs != null)
+            {
+                foreach (var job in enrolment.Jobs)
                 {
-                    _context.Entry(certification).State = EntityState.Modified;
+                    job.EnrolmentId = (int)enrolment.Id;
+                    _context.Entry(job).State = EntityState.Added;
                 }
             }
+
+            // remove existing organizations
+            foreach (var organization in _enrolmentDb.Organizations)
+            {
+                organization.Enrolment = null;
+                _context.Organizations.Remove(organization);
+            }
+            if (enrolment.Organizations != null)
+            {
+                // create new organizations
+                foreach (var organization in enrolment.Organizations)
+                {
+                    organization.EnrolmentId = (int)enrolment.Id;
+                    _context.Entry(organization).State = EntityState.Added;
+                }
+            }
+
+            //update the enrolment to include the enrolleeId
+            enrolment.EnrolleeId = (int)_enrollee.Id;
+            _context.Entry(enrolment).State = EntityState.Modified;
+
+            _context.Entry(_enrollee).State = EntityState.Modified;
 
             try
             {
