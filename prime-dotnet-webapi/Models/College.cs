@@ -14,7 +14,11 @@ namespace Prime.Models
         [Required]
         public string Name { get; set; }
 
+        public string Prefix { get; set; }
+
         [JsonIgnore]
         public ICollection<Certification> Certifications { get; set; }
+
+        public ICollection<CollegeLicense> CollegeLicenses { get; set; }
     }
 }
