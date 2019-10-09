@@ -113,16 +113,16 @@ export class SelfDeclarationComponent implements OnInit {
   private initForm() {
     // TODO: make YES/NO into own component to encapsulate toggling
     this.hasConviction.valueChanges.subscribe((value) => {
-      this.toggleValidators(value, 'convictionDetails');
+      this.toggleValidators(value, 'hasConvictionDetails');
     });
     this.hasRegistrationSuspended.valueChanges.subscribe((value) => {
-      this.toggleValidators(value, 'registrationSuspendedDetails');
+      this.toggleValidators(value, 'hasRegistrationSuspendedDetails');
     });
     this.hasDisciplinaryAction.valueChanges.subscribe((value) => {
-      this.toggleValidators(value, 'disciplinaryActionDetails');
+      this.toggleValidators(value, 'hasDisciplinaryActionDetails');
     });
     this.hasPharmaNetSuspended.valueChanges.subscribe((value) => {
-      this.toggleValidators(value, 'pharmaNetSuspendedDetails');
+      this.toggleValidators(value, 'hasPharmaNetSuspendedDetails');
     });
   }
 
