@@ -1,18 +1,25 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
 import { Observable } from 'rxjs';
 
-import { Config } from './config.model';
+import { Configuration } from './config.model';
+import { APP_CONFIG, AppConfig } from 'app/app-config.module';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConfigService {
-  private configuration: Config;
+  private configuration: Configuration;
 
-  constructor() { }
+  constructor(
+    @Inject(APP_CONFIG) private config: AppConfig,
+    private http: HttpClient
+  ) { }
 
-  public get advancedPractices() {
-    return [...this.configuration.advancedPractices];
+  public get practices() {
+    return [...this.configuration.practices];
   }
 
   public get colleges() {
@@ -35,6 +42,10 @@ export class ConfigService {
     return [...this.configuration.organizationNames];
   }
 
+  public get organizationTypes() {
+    return [...this.configuration.organizationTypes];
+  }
+
   public get provinces() {
     return [...this.configuration.provinces];
   }
@@ -42,38 +53,32 @@ export class ConfigService {
   /**
    * Load runtime configuration.
    *
-   * @returns {Promise<Config>}
+   * @returns {Promise<Configuration>}
    * @memberof ConfigService
    */
-  public async load(): Promise<Config> {
+  public async load(): Promise<Configuration> {
     return this.getConfiguration()
-      .toPromise()
-      // TODO: temporary until config service is available in proper format
-      .then(this.addProvinces)
-      .then(this.addCountries)
-      .then(this.addColleges)
-      .then(this.addLicenses)
-      .then(this.addAdvancedPractices)
-      .then(this.addJobNames)
-      .then(this.addOrganizationNames)
-      .then((config) => this.configuration = config);
+      .pipe(
+        // TODO: temporary until provided by config service
+        map(this.addProvinces),
+        map(this.addCountries),
+        map((config: Configuration) => this.configuration = config)
+      )
+      .toPromise();
   }
 
   /**
    * Get the configuration for bootstrapping the application.
    *
    * @private
-   * @returns {Observable<Config>}
+   * @returns {Observable<Configuration>}
    * @memberof ConfigService
    */
-  private getConfiguration(): Observable<Config> {
-    // TODO: add configuration endpoint /api/v1/Lookup
-    return new Observable((subscriber) => {
-      subscriber.complete();
-    });
+  private getConfiguration(): Observable<Configuration> {
+    return this.http.get<Configuration>(`${this.config.apiEndpoint}/lookups`);
   }
 
-  private addProvinces(config: Config) {
+  private addProvinces(config: Configuration) {
     return {
       provinces: [
         { code: 'AB', name: 'Alberta' },
@@ -94,76 +99,12 @@ export class ConfigService {
     };
   }
 
-  private addCountries(config: Config) {
+  private addCountries(config: Configuration) {
     return {
       countries: [
         { code: 'CA', name: 'Canada' }
       ],
       ...config,
-    };
-  }
-
-  private addColleges(config: Config) {
-    return {
-      colleges: [
-        { code: 1, name: 'College of Physicians and Surgeons of BC (CPSBC)', prefix: '91' },
-        { code: 2, name: 'College of Pharmacists of BC (CPBC)', prefix: 'P1' },
-        { code: 3, name: 'College of Registered Nurses of BC (CRNBC)', prefix: '96' },
-        { code: 4, name: 'None', prefix: null },
-      ],
-      ...config
-    };
-  }
-
-  private addLicenses(config: Config) {
-    return {
-      licenses: [
-        { code: 1, name: 'Full - General', collegeCode: 3 },
-        { code: 5, name: 'Temporary Registered Nurse', collegeCode: 3 },
-        { code: 2, name: 'Full Pharmacist', collegeCode: 1 },
-        { code: 3, name: 'Full - Specialty', collegeCode: 1 },
-        { code: 4, name: 'Registered Nurse', collegeCode: 2 },
-        { code: 5, name: 'Temporary Registered Nurse', collegeCode: 2 },
-      ],
-      ...config
-    };
-  }
-
-  private addJobNames(config: Config) {
-    return {
-      jobNames: [
-        { code: 1, name: 'Medical Office Assistant' },
-        { code: 2, name: 'Midwife' },
-        { code: 3, name: 'Nurse (not Nurse Practitioner)' },
-        { code: 4, name: 'Pharmacy Assistant' },
-        { code: 5, name: 'Pharmacy Technician' },
-        { code: 6, name: 'Registration Clerk' },
-        { code: 7, name: 'Ward Clerk' },
-        { code: 8, name: 'Other' }
-      ],
-      ...config
-    };
-  }
-
-  private addAdvancedPractices(config: Config) {
-    return {
-      advancedPractices: [
-        { code: 1, name: 'Remote Practice' },
-        { code: 2, name: 'Reproductive Care' },
-        { code: 3, name: 'Sexually Transmitted Infections (STI)' },
-        { code: 4, name: 'None' }
-      ],
-      ...config
-    };
-  }
-
-  private addOrganizationNames(config: Config) {
-    return {
-      organizationNames: [
-        { code: 1, name: 'Health Authority' },
-        { code: 2, name: 'Pharmacy' }
-      ],
-      ...config
     };
   }
 }

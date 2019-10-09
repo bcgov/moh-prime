@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+######################################################### Sign-in #
+  dotnet-webapi:
+    container_name: primeapi
+    restart: always
+    build:
+      context: .
+    environment:
+      DB_CONNECTION_STRING: "host=postgres;port=5432;database=postgres;username=postgres;password=postgres"      
+      JWT_SIGNING_KEY: "SdqlA0Y5e6HMAK1wm6iHHHz2u37XGtlo"      
+      ASPNETCORE_HTTPS_PORT: "5001"
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_URLS: "http://+:8080"
+    ports:
+      - "5000:8080"
+      - "5001:5001"

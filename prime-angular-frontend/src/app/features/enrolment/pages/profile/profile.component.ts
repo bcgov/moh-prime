@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { ConfigKeyValue } from '@config/config.model';
+import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { ViewportService } from '@core/services/viewport.service';
 import { ToastService } from '@core/services/toast.service';
@@ -25,7 +25,7 @@ export class ProfileComponent implements OnInit {
   public form: FormGroup;
   public hasPreferredName: boolean;
   public hasMailingAddress: boolean;
-  public provinces: ConfigKeyValue[];
+  public provinces: Config[];
   public subheadings: { [key: string]: { subheader: string, help: string } };
 
   private isNewEnrolment: boolean;
