@@ -9,6 +9,7 @@ import { ProfessionalInfoComponent } from './pages/professional-info/professiona
 import { SelfDeclarationComponent } from './pages/self-declaration/self-declaration.component';
 import { PharmanetAccessComponent } from './pages/pharmanet-access/pharmanet-access.component';
 import { ReviewComponent } from './pages/review/review.component';
+import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 
 import { DashboardComponent } from './shared/components/dashboard/dashboard.component';
 
@@ -48,6 +49,10 @@ const routes: Routes = [
       {
         path: 'review',
         component: ReviewComponent
+      },
+      {
+        path: 'confirmation',
+        component: ConfirmationComponent
       }
     ]
   }
