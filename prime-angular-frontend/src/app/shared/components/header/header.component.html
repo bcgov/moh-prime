@@ -1,4 +1,7 @@
 <mat-toolbar color="primary">
+  <span *ngIf="isMobile">
+    <mat-icon (click)="toggleSidenav()">menu</mat-icon>
+  </span>
   <span>
     <img src="/assets/gov_bc_logo.png">
   </span>

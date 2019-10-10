@@ -1,4 +1,5 @@
-<app-header></app-header>
+<app-header [isMobile]="isMobile"
+            (toggle)="sidenav.toggle()"></app-header>
 
 <mat-sidenav-container class="prime-sidenav-container">
   <mat-sidenav #sidenav
