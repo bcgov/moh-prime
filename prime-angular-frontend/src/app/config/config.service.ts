@@ -63,7 +63,7 @@ export class ConfigService {
         // TODO: temporary until provided by config service
         map(this.addProvinces),
         map(this.addCountries),
-        map((config: Configuration) => this.configuration = config),
+        map((config: Configuration) => this.configuration = config)
       )
       .toPromise();
   }

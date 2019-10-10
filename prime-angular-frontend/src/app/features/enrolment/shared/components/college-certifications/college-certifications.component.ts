@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { FormGroup, FormControl } from '@angular/forms';
 
 import { Config, CollegeConfig, LicenseConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
@@ -8,7 +8,8 @@ import { ViewportService } from '@core/services/viewport.service';
 @Component({
   selector: 'app-college-certifications',
   templateUrl: './college-certifications.component.html',
-  styleUrls: ['./college-certifications.component.scss']
+  styleUrls: ['./college-certifications.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CollegeCertificationsComponent implements OnInit {
   @Input() public form: FormGroup;
@@ -30,6 +31,10 @@ export class CollegeCertificationsComponent implements OnInit {
     this.practices = this.configService.practices;
   }
 
+  public get collegeCode(): FormControl {
+    return this.form.get('collegeCode') as FormControl;
+  }
+
   public get isMobile() {
     return this.viewportService.isMobile;
   }
@@ -39,12 +44,17 @@ export class CollegeCertificationsComponent implements OnInit {
   }
 
   public ngOnInit() {
-    // TODO: add a test to check that prefix and licenses for a college are correct
-    this.form.get('collegeCode').valueChanges.subscribe((collegeCode) => {
-      this.filteredLicenses = this.licenses.filter(l => l.collegeLicenses.map(cl => cl.collegeCode).includes(collegeCode));
+    this.filteredLicenses = this.filterLicenses(this.collegeCode.value);
+
+    this.collegeCode.valueChanges.subscribe((collegeCode: number) => {
+      this.filteredLicenses = this.filterLicenses(collegeCode);
       this.licensePrefix = this.colleges.filter(c => c.code === collegeCode).shift().prefix;
 
       this.form.get('licenseCode').patchValue(null);
     });
+  }
+
+  private filterLicenses(collegeCode: number): LicenseConfig[] {
+    return this.licenses.filter(l => l.collegeLicenses.map(cl => cl.collegeCode).includes(collegeCode));
   }
 }
