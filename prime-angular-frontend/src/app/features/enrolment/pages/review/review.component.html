@@ -201,7 +201,7 @@
                   matTooltip="Edit PharmaNet Access">edit</mat-icon>
       </app-sub-header>
 
-      <ng-container *ngIf="enrolment.organizations.length">
+      <ng-container *ngIf="enrolment.organizations.length; else noOrganization">
 
         <h3 class="lead">Organizations</h3>
 
@@ -220,6 +220,10 @@
         </dl>
 
       </ng-container>
+
+      <ng-template #noOrganization>
+        Not associated with an organization
+      </ng-template>
 
     </div>
   </div>
