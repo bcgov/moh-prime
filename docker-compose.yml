@@ -7,7 +7,6 @@ services:
     restart: always
     build:
       context: prime-dotnet-webapi/
-      dockerfile: primeapi.Dockerfile
     environment:
       DB_CONNECTION_STRING: "host=postgres;port=5432;database=postgres;username=postgres;password=postgres"      
       JWT_SIGNING_KEY: "SdqlA0Y5e6HMAK1wm6iHHHz2u37XGtlo"      
@@ -41,7 +40,6 @@ services:
     container_name: primeweb
     build:
         context: prime-angular-frontend/
-        dockerfile: primeweb.Dockerfile
     command: "nginx -g 'daemon off;'"
     restart: always
     ports:
