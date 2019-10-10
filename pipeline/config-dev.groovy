@@ -4,19 +4,11 @@ app {
 
     namespaces {
         'build'{
-<<<<<<< HEAD
             namespace = 'dqszvc-tools'
             disposable = true
         }
         'dev' {
             namespace = 'dqszvc-dev'
-=======
-            namespace = 'empr-moh-prime-tools'
-            disposable = true
-        }
-        'dev' {
-            namespace = 'empr-moh-prime-dev'
->>>>>>> develop
             disposable = true
         }
     }
