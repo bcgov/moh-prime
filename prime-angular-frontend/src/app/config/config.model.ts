@@ -11,7 +11,7 @@ export interface Configuration {
 }
 
 export interface Config {
-  code: string;
+  code: number;
   name: string;
 }
 
