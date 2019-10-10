@@ -53,10 +53,7 @@ export class EnrolmentResource {
   // TODO: revisit response for an enrolment update if applicable
   public updateEnrolment(enrolment: Enrolment): Observable<any> {
     const { id } = enrolment;
-    return this.http.put(`${this.config.apiEndpoint}/enrolments/${id}`, this.enrolmentAdapterRequest(enrolment))
-      .pipe(
-        map((response: PrimeHttpResponse) => response.result)
-      );
+    return this.http.put(`${this.config.apiEndpoint}/enrolments/${id}`, this.enrolmentAdapterRequest(enrolment));
   }
 
   private enrolmentAdapterResponse(enrolment: Enrolment): Enrolment {
