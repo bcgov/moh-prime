@@ -1,4 +1,4 @@
-FROM dotnet-22-runtime-rhel7:latest AS build
+FROM registry.redhat.io/dotnet/dotnet-22-rhel7 AS build
 USER 0
 WORKDIR /opt/app-root/app-root/app
 ENV WORKDIR /opt/app-root/app
@@ -12,7 +12,7 @@ RUN dotnet restore
 COPY . /opt/app-root/app
 RUN dotnet publish -c Release -o out
 # Build runtime image
-FROM dotnet-22-runtime-rhel7:latest AS runtime
+FROM registry.redhat.io/dotnet/dotnet-22-runtime-rhel7 AS runtime
 COPY --from=build /opt/app-root/app .
 EXPOSE 8080 5001
 #USER 1001
