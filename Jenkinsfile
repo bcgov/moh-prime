@@ -4,7 +4,7 @@ pipeline {
         disableResume()
     }
     stages {
-        stage('Verify-Files') {
+        /*stage('Verify-Files') {
             agent { label 'master' }
             steps {
                 // echo "Aborting all running jobs ..."
@@ -20,7 +20,7 @@ pipeline {
                     }
                 }
             }
-        }
+        }*/
         stage('Build') {
             agent { label 'master' }
             steps {
