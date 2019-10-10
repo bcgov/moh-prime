@@ -126,9 +126,6 @@ export class ProfileComponent implements OnInit {
           this.enrolmentStateService.enrolment = enrolment;
         }
 
-        // TODO: temporary to test creation of an enrolment
-        // this.enrolmentStateService.enrolment = this.enrolmentStateService.getRawEnrolment();
-
         this.initForm();
       });
   }
@@ -155,5 +152,8 @@ export class ProfileComponent implements OnInit {
       mailingAddress.get('city').value ||
       mailingAddress.get('postal').value
     );
+
+    // TODO: when preferred name(s) is on should anything be required?
+    // TODO: when mailing address is toggled then validation should be applied or removed
   }
 }
