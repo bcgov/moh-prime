@@ -1,12 +1,3 @@
-def PULL_REQUEST = env.CHANGE_ID
-if (env.CHANGE_ID < 0 ) {
-    CHANGE_ID= "0"
-    } else {
-    CHANGE_ID = env.CHANGE_ID
-    }
-echo "ChangeID: ${CHANGE_ID}"
-echo "PR: ${PULL_REQUEST}"
-
 pipeline {
     agent none
     options {
