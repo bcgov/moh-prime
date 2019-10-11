@@ -47,7 +47,7 @@ app {
                             'NAME':"dotnet",
                             'SUFFIX': "${app.build.suffix}",
                             'VERSION':"${app.build.version}",
-                            'SOURCE_CONTEXT_DIR': "priome-dotnet-webapi",
+                            'SOURCE_CONTEXT_DIR': "prime-dotnet-webapi",
                             'SOURCE_REPOSITORY_URL': "${app.git.uri}"
                     ]
                 ]
