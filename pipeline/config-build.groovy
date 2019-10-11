@@ -44,10 +44,10 @@ app {
                 [
                     'file':'openshift/dotnet-webapi-bc.json',
                     'params':[
-                            'NAME':"prime-nginx",
+                            'NAME':"dotnet",
                             'SUFFIX': "${app.build.suffix}",
                             'VERSION':"${app.build.version}",
-                            'SOURCE_CONTEXT_DIR': "nginx",
+                            'SOURCE_CONTEXT_DIR': "priome-dotnet-webapi",
                             'SOURCE_REPOSITORY_URL': "${app.git.uri}"
                     ]
                 ]
