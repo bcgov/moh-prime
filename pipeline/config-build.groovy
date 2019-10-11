@@ -3,7 +3,7 @@ app {
     version = 'snapshot'
         namespaces {
         'build'{
-            namespace = 'dqszvc-dev'
+            namespace = 'dqszvc-tools'
             disposable = true
         }
     }
@@ -30,7 +30,7 @@ app {
         version = "${app.build.env.name}-${app.build.env.id}"
 
         suffix = "-${app.git.changeId}"
-        namespace = 'dqszvc-dev'
+        namespace = 'dqszvc-tools'
         timeoutInSeconds = 60*40 // 40 minutes
         templates = [
                 /*[
