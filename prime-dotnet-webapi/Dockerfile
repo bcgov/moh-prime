@@ -1,5 +1,6 @@
 FROM docker-registry.default.svc:5000/dqszvc-dev/dotnet-30-rhel7 AS build
 USER 0
+SHELL [ "/bin/bash" , "-c" ]
 WORKDIR /opt/app-root/app
 ENV WORKDIR /opt/app-root/app
 ENV ASPNETCORE_ENVIRONMENT Development
