@@ -31,9 +31,9 @@ namespace Prime.Controllers
         /// Gets all of the enrolments for the user, or all enrolments if user has ADMIN role.
         /// </summary>
         [HttpGet(Name = nameof(GetEnrolments))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiOkResponse<IEnumerable<Enrolment>>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Enrolment>>> GetEnrolments()
         {
             IEnumerable<Enrolment> enrolments = null;
@@ -50,7 +50,7 @@ namespace Prime.Controllers
                                         PrimeUtils.PrimeUserId(User));
             }
 
-            return enrolments.ToList();
+            return Ok(new ApiOkResponse<IEnumerable<Enrolment>>(enrolments.ToList()));
         }
 
         // GET: api/Enrolment/5
@@ -59,16 +59,18 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolmentId"></param> 
         [HttpGet("{enrolmentId}", Name = nameof(GetEnrolmentById))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiOkResponse<Enrolment>), StatusCodes.Status200OK)]
         public async Task<ActionResult<Enrolment>> GetEnrolmentById(int enrolmentId)
         {
             var enrolment = await _enrolmentService.GetEnrolmentAsync(enrolmentId);
 
             if (enrolment == null)
             {
-                return NotFound();
+                return NotFound(new ApiResponse(404, $"Enrolment not found with id {enrolmentId}"));
             }
 
             //if the user is not an ADMIN, make sure the enrolment matches the enrollee, otherwise return not authorized
@@ -77,7 +79,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            return enrolment;
+            return Ok(new ApiOkResponse<Enrolment>(enrolment));
         }
 
         // POST: api/Enrolment
@@ -102,21 +104,27 @@ namespace Prime.Controllers
         /// <param name="enrolmentId"></param>
         /// <param name="enrolment"></param> 
         [HttpPut("{enrolmentId}", Name = nameof(UpdateEnrolment))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> UpdateEnrolment(int enrolmentId, Enrolment enrolment)
         {
             if (enrolmentId != enrolment.Id)
             {
-                return BadRequest();
+                return BadRequest(new ApiResponse(400, "Enrolment Id does not match with the payload."));
+            }
+
+            if (enrolment.Enrollee == null
+                    || enrolment.Enrollee.Id == null)
+            {
+                return BadRequest(new ApiResponse(400, "Enrollee Id is required to make updates."));
             }
 
             if (!_enrolmentService.EnrolmentExists(enrolmentId))
             {
-                return NotFound();
+                return NotFound(new ApiResponse(404, $"Enrolment not found with id {enrolmentId}"));
             }
 
             //if the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
@@ -138,13 +146,14 @@ namespace Prime.Controllers
         [HttpDelete("{enrolmentId}", Name = nameof(DeleteEnrolment))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiOkResponse<Enrolment>), StatusCodes.Status200OK)]
         public async Task<ActionResult<Enrolment>> DeleteEnrolment(int enrolmentId)
         {
             var enrolment = await _enrolmentService.GetEnrolmentAsync(enrolmentId);
             if (enrolment == null)
             {
-                return NotFound();
+                return NotFound(new ApiResponse(404, $"Enrolment not found with id {enrolmentId}"));
             }
 
             //if the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
@@ -155,7 +164,7 @@ namespace Prime.Controllers
 
             await _enrolmentService.DeleteEnrolmentAsync(enrolmentId);
 
-            return enrolment;
+            return Ok(new ApiOkResponse<Enrolment>(enrolment));
         }
 
         private bool BelongsToEnrollee(Enrolment enrolment)

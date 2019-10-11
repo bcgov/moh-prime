@@ -63,7 +63,7 @@
       <mat-form-field class="w-100">
         <mat-label>Advanced Practices</mat-label>
         <mat-select formControlName="practiceCode">
-          <mat-option *ngFor="let practice of advancedPractices"
+          <mat-option *ngFor="let practice of practices"
                       [value]="practice.code">
             {{ practice.name }}
           </mat-option>

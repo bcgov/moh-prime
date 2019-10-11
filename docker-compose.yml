@@ -13,6 +13,7 @@ services:
       ASPNETCORE_HTTPS_PORT: "5001"
       ASPNETCORE_ENVIRONMENT: "Development"
       ASPNETCORE_URLS: "http://+:8080"
+      DOTNET_CLI_HOME: "/tmp/DOTNET_CLI_HOME"
     ports:
       - "5000:8080"
       - "5001:5001"

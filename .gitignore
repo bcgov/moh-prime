@@ -3,3 +3,6 @@ documentation/~$PRIME Test Cases and Results.xlsx
 
 # SonarQube
 .sonarqube/
+
+# Visual Studio Code
+.vscode

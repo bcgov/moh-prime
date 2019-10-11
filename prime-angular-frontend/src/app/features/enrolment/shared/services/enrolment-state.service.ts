@@ -210,10 +210,10 @@ export class EnrolmentStateService {
     });
   }
 
-  public buildJobForm(): FormGroup {
+  public buildJobForm(value: string = null): FormGroup {
     return this.fb.group({
       id: [null, []],
-      title: [null, [Validators.required]]
+      title: [value, [Validators.required]]
     });
   }
 

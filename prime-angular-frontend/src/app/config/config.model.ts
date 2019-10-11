@@ -1,17 +1,29 @@
-export interface Config {
-  advancedPractices: ConfigKeyValue[];
-  countries: ConfigKeyValue[];
-  colleges: ConfigKeyValue[];
-  jobNames: ConfigKeyValue[];
-  licenses: ConfigKeyValue[];
-  organizationNames: ConfigKeyValue[];
-  organizationTypes: ConfigKeyValue[];
-  practices: ConfigKeyValue[];
-  provinces: ConfigKeyValue[];
+// TODO: revisit types, naming, etc; when configuration is more mature
+export interface Configuration {
+  countries: Config[];
+  colleges: CollegeConfig[];
+  jobNames: Config[];
+  licenses: LicenseConfig[];
+  organizationNames: Config[];
+  organizationTypes: Config[];
+  practices: Config[];
+  provinces: Config[];
 }
 
-export interface ConfigKeyValue {
-  code: string;
+export interface Config {
+  code: number;
   name: string;
-  [key: string]: any;
+}
+
+export interface CollegeLicenseConfig {
+  collegeCode: number;
+  licenseCode: number;
+}
+
+export interface LicenseConfig extends Config {
+  collegeLicenses: CollegeLicenseConfig[];
+}
+
+export interface CollegeConfig extends LicenseConfig {
+  prefix: string;
 }

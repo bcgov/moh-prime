@@ -7,10 +7,10 @@ import { map } from 'rxjs/operators';
 import * as moment from 'moment';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
+import { PrimeHttpResponse } from '@core/models/prime-http-response.model';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '../models/enrolment.model';
 import { Address } from '../models/address.model';
-import { EnrolmentStateService } from './enrolment-state.service';
 
 
 @Injectable({
@@ -21,16 +21,13 @@ export class EnrolmentResource {
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private http: HttpClient,
-    private logger: LoggerService,
-    // TODO: temporary enrolment data provided until JWT authentication is in place
-    private enrolmentStateService: EnrolmentStateService
+    private logger: LoggerService
   ) { }
 
   public enrolments(): Observable<Enrolment> {
     return this.http.get(`${this.config.apiEndpoint}/enrolments`)
       .pipe(
-        // TODO: temporary enrolment data provided until JWT authentication is in place
-        // map((enrolments: Enrolment[]) => [this.enrolmentStateService.getRawEnrolment()]),
+        map((response: PrimeHttpResponse) => response.result),
         map((enrolments: Enrolment[]) => {
           this.logger.info('ENROLMENTS', enrolments);
           const enrolment = (enrolments.length)
@@ -45,6 +42,7 @@ export class EnrolmentResource {
   public createEnrolment(payload: Enrolment): Observable<Enrolment> {
     return this.http.post(`${this.config.apiEndpoint}/enrolments`, this.enrolmentAdapterRequest(payload))
       .pipe(
+        map((response: PrimeHttpResponse) => response.result),
         map((enrolment: Enrolment) => {
           this.logger.info('ENROLMENT', enrolment);
           return this.enrolmentAdapterResponse(this.enrolmentAdapterResponse(enrolment));

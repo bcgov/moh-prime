@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
+import { FormGroup, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
 import { Observable } from 'rxjs';
 
-import { ConfigKeyValue } from '@config/config.model';
+import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
@@ -22,10 +22,10 @@ import { EnrolmentResource } from '../../shared/services/enrolment-resource.serv
 })
 export class PharmanetAccessComponent implements OnInit {
   public form: FormGroup;
-  public organizationNames: ConfigKeyValue[];
+  public organizationNames: Config[];
+  public organizationTypes: Config[];
 
   constructor(
-    private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
@@ -37,6 +37,8 @@ export class PharmanetAccessComponent implements OnInit {
     private logger: LoggerService
   ) {
     this.organizationNames = this.configService.organizationNames;
+    // TODO: not used until requirements flushed out
+    this.organizationTypes = this.configService.organizationTypes;
   }
 
   public get organizations(): FormArray {
