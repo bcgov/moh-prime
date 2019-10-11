@@ -1,0 +1,50 @@
+// from https://github.com/bcgov/nr-showcase-devops-tools/blob/master/tools/jenkins/Jenkinsfile
+
+pipeline {
+  agent none
+  options {
+    disableResume()
+  }
+  stages {
+    stage('Build') {
+      agent { label 'build' }
+      steps {
+        script {
+          def filesInThisCommitAsString = sh(script:"git diff --name-only HEAD~1..HEAD | grep '^tools/jenkins/' || echo -n ''", returnStatus: false, returnStdout: true).trim()
+          def hasChangesInPath = (filesInThisCommitAsString.length() > 0)
+          echo "${filesInThisCommitAsString}"
+          if (!currentBuild.rawBuild.getCauses()[0].toString().contains('UserIdCause') && !hasChangesInPath){
+            currentBuild.rawBuild.delete()
+            error("No changes detected in the path ('^tools/jenkins/')")
+          }
+        }
+      }
+    }
+    stage('Deploy (DEV)') {
+      agent { label 'deploy' }
+      steps {
+        echo "Deploying ..."
+      }
+    }
+    stage('Deploy (PROD)') {
+      agent { label 'deploy' }
+      input {
+        message "Should we continue with deployment to PROD?"
+        ok "Yes!"
+      }
+      steps {
+        echo "Deploying ..."
+      }
+    }
+    stage('Acceptance') {
+      agent { label 'deploy' }
+      input {
+        message "Should we continue with cleanup?"
+        ok "Yes!"
+      }
+      steps {
+        echo "Cleaning ..."
+      }
+    }
+  }
+}

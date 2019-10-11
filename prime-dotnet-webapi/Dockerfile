@@ -14,7 +14,7 @@ RUN dotnet restore
 COPY . /opt/app-root/app
 RUN dotnet publish -c Release -o out
 # Build runtime image
-FROM docker-registry.default.svc:5000/dqszvc-dev/dotnet-30-rhel7 AS runtime
+FROM docker-registry.default.svc:5000/dqszvc-dev/dotnet-30-runtime-rhel7 AS runtime
 COPY --from=build /opt/app-root/app .
 EXPOSE 8080 5001
 USER 1001
