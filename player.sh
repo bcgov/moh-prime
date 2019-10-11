@@ -9,7 +9,8 @@ function ocPush(){
     do oc apply --namespace="$licensePlate-$1" -f $file
     done
 }
-function dryRun()
+function dryRun(){
     for file in `find $yamlLocation -type f -name *.yaml`
     do oc create -f $file --dry-run -o json
-    
+    done;
+}
