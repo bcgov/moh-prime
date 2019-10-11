@@ -54,6 +54,7 @@
               "name": "dotnet-webapi"
             },
             "spec": {
+              "completionDeadlineSeconds": 1200,
               "replicas": 1,
               "selector": {
                 "io.kompose.service": "dotnet-webapi"
