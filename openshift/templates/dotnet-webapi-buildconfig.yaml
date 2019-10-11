@@ -8,6 +8,7 @@ metadata:
   labels:
     io.kompose.service: dotnet-webapi
   name: dotnet-webapi
+  namespace: dqszvc-dev
 spec:
   nodeSelector: null
   output:
