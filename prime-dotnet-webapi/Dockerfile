@@ -3,7 +3,8 @@ USER 0
 WORKDIR /opt/app-root/app
 ENV WORKDIR /opt/app-root/app
 ENV ASPNETCORE_ENVIRONMENT Development
-RUN find / -type f -name dotnet
+ENV PATH $PATH:/opt/rh/rh-dotnet30/root/usr/lib64/dotnet
+#RUN find / -type f -name dotnet
 # Copy csproj and restore as distinct layers
 #RUN echo `pwd`
 #RUN mkdir -p /opt/app-root/app
@@ -18,4 +19,4 @@ COPY --from=build /opt/app-root/app .
 EXPOSE 8080 5001
 #USER 1001
 ENV ASPNETCORE_ENVIRONMENT Development
-ENTRYPOINT ["/usr/bin/dotnet", "prime.dll"]
+ENTRYPOINT ["dotnet", "prime.dll"]
