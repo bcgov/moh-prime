@@ -82,14 +82,6 @@
             },
             "spec": {
                 "completionDeadlineSeconds": 600,
-                "triggers": [
-                  {
-                    "type": "ImageChange"
-                  },
-                  {
-                    "type": "ConfigChange"
-                  }
-                ],
               "nodeSelector": null,
               "output": {
                 "to": {
