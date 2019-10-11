@@ -83,6 +83,7 @@
            "name": "dotnet-webapi"
          },
          "spec": {
+           "completionDeadlineSeconds": 1200,
            "nodeSelector": null,
            "output": {
              "to": {
