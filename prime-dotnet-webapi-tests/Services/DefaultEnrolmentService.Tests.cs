@@ -1,6 +1,4 @@
-using System;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
@@ -14,7 +12,7 @@ namespace PrimeTests.Services
     public class DefaultEnrolmentServiceTests :  BaseServiceTests<DefaultEnrolmentService>
     {
         [Fact]
-        public async Task testEnrolmentExists()
+        public async void testEnrolmentExists()
         {
             //make sure there are no enrolments
             Assert.False(_dbContext.Enrolments.Any());
@@ -40,7 +38,7 @@ namespace PrimeTests.Services
         }
 
         [Fact]
-        public async Task testCreateEnrolment()
+        public async void testCreateEnrolment()
         {
             var testEnrolment = TestUtils.EnrolmentFaker.Generate();
             string expectedUserId = testEnrolment.Enrollee.UserId;
@@ -56,7 +54,7 @@ namespace PrimeTests.Services
         }
 
         [Fact]
-        public async Task testGetEnrolment()
+        public async void testGetEnrolment()
         {
             var testEnrolment = TestUtils.EnrolmentFaker.Generate();
             string expectedUserId = testEnrolment.Enrollee.UserId;
@@ -74,7 +72,7 @@ namespace PrimeTests.Services
         }
 
         [Fact]
-        public async Task testGetEnrolmentForUserId()
+        public async void testGetEnrolmentForUserId()
         {
             var testEnrolment = TestUtils.EnrolmentFaker.Generate();
             string expectedUserId = testEnrolment.Enrollee.UserId;
@@ -92,7 +90,7 @@ namespace PrimeTests.Services
         }
 
         [Fact]
-        public async Task testGetEnrolments()
+        public async void testGetEnrolments()
         {
             //make sure there are no enrolments
             Assert.False(_dbContext.Enrolments.Any());
@@ -112,7 +110,7 @@ namespace PrimeTests.Services
         }
 
         [Fact]
-        public async Task testGetEnrolmentsForUserId()
+        public async void testGetEnrolmentsForUserId()
         {
             //make sure there are no enrolments
             Assert.False(_dbContext.Enrolments.Any());
@@ -134,7 +132,7 @@ namespace PrimeTests.Services
         }
 
         [Fact]
-        public async Task testUpdateEnrolment()
+        public async void testUpdateEnrolment()
         {
             string expectedName = "ChangedName";
             var testEnrolment = TestUtils.EnrolmentFaker.Generate();
@@ -174,7 +172,7 @@ namespace PrimeTests.Services
         }
 
         [Fact]
-        public async Task testDeleteEnrolment()
+        public async void testDeleteEnrolment()
         {
             var testEnrolment = TestUtils.EnrolmentFaker.Generate();
             string expectedUserId = testEnrolment.Enrollee.UserId;

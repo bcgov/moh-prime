@@ -37,7 +37,7 @@ namespace PrimeTests.Controllers
         }
 
         [Fact]
-        public async Task testGetEnrolments()
+        public async void testGetEnrolments()
         {
             var response = await _client.GetAsync("/api/enrolments");
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -47,7 +47,7 @@ namespace PrimeTests.Controllers
         }
 
         [Fact]
-        public async Task testGetEnrolments4()
+        public async void testGetEnrolments4()
         {
             var request = new HttpRequestMessage(HttpMethod.Get, "/api/enrolments");
 
@@ -70,7 +70,7 @@ namespace PrimeTests.Controllers
         }
 
         [Fact]
-        public async Task testGetEnrolments2()
+        public async void testGetEnrolments2()
         {
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
@@ -86,7 +86,7 @@ namespace PrimeTests.Controllers
         }
 
         [Fact]
-        public async Task testGetEnrolments3()
+        public async void testGetEnrolments3()
         {
             var request = new HttpRequestMessage(HttpMethod.Get, "/api/enrolments");
             var _token = TestUtils.TokenBuilder()

@@ -2,7 +2,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading.Tasks;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -44,7 +43,7 @@ namespace PrimeTests.Integration
         }
 
         [Fact]
-        public async Task testGetEnrolments()
+        public async void testGetEnrolments()
         {
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
@@ -56,7 +55,7 @@ namespace PrimeTests.Integration
         }
 
         [Fact]
-        public async Task testGetEnrolments2()
+        public async void testGetEnrolments2()
         {
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
@@ -70,7 +69,7 @@ namespace PrimeTests.Integration
         }
 
         [Fact]
-        public async Task testGetEnrolments3()
+        public async void testGetEnrolments3()
         {
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
@@ -106,7 +105,7 @@ namespace PrimeTests.Integration
         }
 
         [Fact]
-        public async Task getSingleEnrolment()
+        public async void getSingleEnrolment()
         {
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
