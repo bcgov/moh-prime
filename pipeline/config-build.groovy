@@ -3,7 +3,7 @@ app {
     version = 'snapshot'
         namespaces {
         'build'{
-            namespace = 'dqszvc-tools'
+            namespace = 'dqszvc-dev'
             disposable = true
         }
     }
@@ -30,15 +30,25 @@ app {
         version = "${app.build.env.name}-${app.build.env.id}"
 
         suffix = "-${app.git.changeId}"
-        namespace = 'dqszvc-tools'
+        namespace = 'dqszvc-dev'
         timeoutInSeconds = 60*40 // 40 minutes
         templates = [
-                [
+                /*[
                     'file':'openshift/postgresql.bc.json',
                     'params':[
                         'NAME':"prime-postgresql",
                         'SUFFIX': "${app.build.suffix}",
                         'TAG_NAME':"${app.build.version}"
+                    ]
+                ],*/
+                [
+                    'file':'openshift/_nginx.bc.json',
+                    'params':[
+                            'NAME':"prime-nginx",
+                            'SUFFIX': "${app.build.suffix}",
+                            'VERSION':"${app.build.version}",
+                            'SOURCE_CONTEXT_DIR': "nginx",
+                            'SOURCE_REPOSITORY_URL': "${app.git.uri}"
                     ]
                 ],
         ]

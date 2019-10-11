@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --provider=openshift --build=build-config --build-repo=https://github.com/bcgov/moh-prime.git
+    kompose.version: 1.18.0 (06a2e56)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: nginx-angular
+  name: nginx-angular
+spec:
+  replicas: 1
+  selector:
+    io.kompose.service: nginx-angular
+  strategy:
+    resources: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: nginx-angular
+    spec:
+      containers:
+      - args:
+        - nginx
+        - -g
+        - daemon off;
+        image: ' '
+        name: primeweb
+        ports:
+        - containerPort: 8080
+        resources: {}
+      restartPolicy: Always
+  test: false
+  triggers:
+  - type: ConfigChange
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - primeweb
+      from:
+        kind: ImageStreamTag
+        name: nginx-angular:latest
+    type: ImageChange
+status: {}
