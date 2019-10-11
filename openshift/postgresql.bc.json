@@ -44,7 +44,7 @@
             "annotations": null,
             "from": {
               "kind": "ImageStreamTag",
-              "name": "postgresql-9.6-oracle-fdw:v1-stable",
+              "name": "postgres:11.4",
               "namespace": "bcgov"
             },
             "generation": 1,
