@@ -3,6 +3,7 @@ USER 0
 WORKDIR /opt/app-root/app
 ENV WORKDIR /opt/app-root/app
 ENV ASPNETCORE_ENVIRONMENT Development
+RUN find / -type f -name dotnet
 # Copy csproj and restore as distinct layers
 #RUN echo `pwd`
 #RUN mkdir -p /opt/app-root/app
