@@ -1,129 +1,129 @@
 {
-   "kind": "Template",
-   "apiVersion": "v1",
-   "metadata": {
-      "name": "prime-dotnet-bc",
+    "kind": "Template",
+    "apiVersion": "v1",
+    "metadata": {
+      "name": "dotnet-webapi-bc",
       "creationTimestamp": null
-   },
-   "parameters": [
-    {
-      "name": "NAME",
-      "displayName": "Name",
-      "description": "A suffix appended to all objects",
-      "required": true
     },
-    {
-      "name": "SUFFIX",
-      "displayName": "Name Suffix",
-      "description": "A suffix appended to all objects",
-      "required": true
-    },
-    {
-      "name": "VERSION",
-      "required": true
-    },
-    {
-      "name": "SOURCE_CONTEXT_DIR",
-      "required": true
-    },
-    {
-      "name": "SOURCE_REPOSITORY_URL",
-      "required": true
-    },
-    {
-      "name": "SOURCE_REPOSITORY_REF",
-      "required": false,
-      "value": "master"
-    }
-  ],
-   "objects": [
+    "parameters": [
       {
-         "apiVersion": "v1",
-         "kind": "ImageStream",
-         "metadata": {
-           "creationTimestamp": null,
-           "labels": {
-             "io.kompose.service": "dotnet-webapi"
-           },
-           "name": "dotnet-webapi"
-         },
-         "spec": {
-           "tags": [
-             {
-               "annotations": null,
-               "from": {
-                 "kind": "DockerImage",
-                 "name": "dotnet-webapi"
-               },
-               "generation": null,
-               "importPolicy": {},
-               "name": "latest"
-             }
-           ]
-         },
-         "status": {
-           "dockerImageRepository": ""
-         }
+        "name": "NAME",
+        "displayName": "Name",
+        "description": "A suffix appended to all objects",
+        "required": true
       },
       {
-         "apiVersion": "v1",
-         "kind": "BuildConfig",
-         "metadata": {
-           "annotations": {
-             "kompose.cmd": "kompose convert --provider=openshift --build=build-config --build-repo=https://github.com/bcgov/moh-prime.git",
-             "kompose.version": "1.18.0 (06a2e56)"
-           },
-           "creationTimestamp": null,
-           "labels": {
-             "io.kompose.service": "dotnet-webapi"
-           },
-           "name": "dotnet-webapi"
-         },
-         "spec": {
-           "completionDeadlineSeconds": 1200,
-           "nodeSelector": null,
-           "output": {
-             "to": {
-               "kind": "ImageStreamTag",
-               "name": "dotnet-webapi:latest"
-             }
-           },
-           "postCommit": {},
-           "resources": {
-             "requests": {
-               "cpu": "300m",
-               "memory": "512Mi"
-             },
-             "limits": {
-               "cpu": "1",
-               "memory": "1024Mi"
-             }
-           },
-           "runPolicy": "Serial",
-           "source": {
-             "contextDir": "${SOURCE_CONTEXT_DIR}",
-             "git": {
-               "ref": "develop",
-               "uri": "${SOURCE_REPOSITORY_URL}"
-             },
-             "type": "Git"
-           },
-           "strategy": {
-             "dockerStrategy": {},
-             "type": "Docker"
-           },
-           "triggers": [
-          {
-            "type": "ConfigChange"
+        "name": "SUFFIX",
+        "displayName": "Name Suffix",
+        "description": "A suffix appended to all objects",
+        "required": true
+      },
+      {
+        "name": "VERSION",
+        "required": true
+      },
+      {
+        "name": "SOURCE_CONTEXT_DIR",
+        "required": true
+      },
+      {
+        "name": "SOURCE_REPOSITORY_URL",
+        "required": true
+      },
+      {
+        "name": "SOURCE_REPOSITORY_REF",
+        "required": false,
+        "value": "master"
+      }
+    ],
+    "objects": [
+        {
+            "apiVersion": "v1",
+            "kind": "ImageStream",
+            "metadata": {
+                "name": "${NAME}",
+              "creationTimestamp": null,
+              "labels": {
+                "io.kompose.service": "dotnet-webapi"
+              }
+            },
+            "spec": {
+              "tags": [
+                {
+                  "annotations": null,
+                  "from": {
+                    "kind": "DockerImage",
+                    "name": "dotnet-webapi"
+                  },
+                  "generation": null,
+                  "importPolicy": {
+                  },
+                  "name": "latest"
+                }
+              ]
+            },
+            "status": {
+              "dockerImageRepository": ""
+            }
           },
           {
-            "type": "ImageChange"
+            "apiVersion": "v1",
+            "kind": "BuildConfig",
+            "metadata": {
+              "name": "${NAME}${SUFFIX}",
+              "annotations": {
+                "kompose.cmd": "kompose convert --provider=openshift --build=build-config --build-repo=https://github.com/bcgov/moh-prime.git",
+                "kompose.version": "1.18.0 (06a2e56)"
+              },
+              "creationTimestamp": null,
+              "labels": {
+                "io.kompose.service": "dotnet-webapi"
+              }
+            },
+            "spec": {
+              "nodeSelector": null,
+              "output": {
+                "to": {
+                  "kind": "ImageStreamTag",
+                  "name": "${NAME}:${VERSION}"
+                }
+              },
+              "postCommit": {
+              },
+              "resources": {
+                "requests": {
+                  "cpu": "300m",
+                  "memory": "512Mi"
+                },
+                "limits": {
+                  "cpu": "1",
+                  "memory": "1024Mi"
+                }
+              },
+              "runPolicy": "Serial",
+              "source": {
+                "type": "Git",
+                "git": {
+                  "uri": "${SOURCE_REPOSITORY_URL}",
+                  "ref": "${SOURCE_REPOSITORY_REF}"
+                },
+                "contextDir": "${SOURCE_CONTEXT_DIR}"
+              },
+              "strategy": {
+                "dockerStrategy": {
+                },
+                "type": "Docker"
+              },
+              "triggers": [
+                {
+                  "type": "ConfigChange"
+                }
+              ]
+            },
+            "status": {
+              "lastVersion": 0
+            }
           }
-           ]
-         },
-         "status": {
-           "lastVersion": 0
-         }
-      }
-   ]
-}
+    ]
+  }
+  
