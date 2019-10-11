@@ -42,7 +42,7 @@ app {
                     ]
                 ],*/
                 [
-                    'file':'openshift/_nginx.bc.json',
+                    'file':'openshift/dotnet-webapi-bc.json',
                     'params':[
                             'NAME':"prime-nginx",
                             'SUFFIX': "${app.build.suffix}",
@@ -50,7 +50,7 @@ app {
                             'SOURCE_CONTEXT_DIR': "nginx",
                             'SOURCE_REPOSITORY_URL': "${app.git.uri}"
                     ]
-                ],
+                ]
         ]
     }
 }

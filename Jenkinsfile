@@ -25,8 +25,8 @@ pipeline {
             agent { label 'master' }
             steps {
                 echo "Building ..."
-                //sh "unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-build -Pargs.--config=pipeline/config-build.groovy -Pargs.--pr=${CHANGE_ID}"
-                sh "oc process -f openshift/templates/dotnet-webapi-buildconfig.yaml  | oc apply -f --namespace="
+                sh "unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-build -Pargs.--config=pipeline/config-build.groovy -Pargs.--pr=${CHANGE_ID}"
+                //sh "oc apply --namespace=dqszvc-dev -f openshift/dotnet-webapi-bc.json"
             }
         }
         stage('Deploy (DEV)') {
