@@ -9,6 +9,7 @@ import { PageNotFoundComponent } from '@core/components/page-not-found/page-not-
 import { AuthHttpModule } from '@core/modules/auth-http/auth-http.module';
 import { ErrorHandlerInterceptor } from '@core/interceptors/error-handler.interceptor';
 import { ErrorHandlerService } from '@core/services/error-handler.service';
+import { MaintenanceComponent } from './components/maintenance/maintenance.component';
 
 @NgModule({
   imports: [
@@ -29,11 +30,13 @@ import { ErrorHandlerService } from '@core/services/error-handler.service';
   ],
   declarations: [
     AccessDeniedComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    MaintenanceComponent
   ],
   exports: [
     PageNotFoundComponent,
-    AccessDeniedComponent
+    AccessDeniedComponent,
+    MaintenanceComponent
   ]
 })
 export class CoreModule {

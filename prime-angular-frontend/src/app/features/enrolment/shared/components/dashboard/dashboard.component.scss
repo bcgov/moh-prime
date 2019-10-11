@@ -2,8 +2,9 @@
 
 .prime-sidenav-container {
   position: absolute;
-  // Compensate for the application header
-  top: 70px;
+  // Compensate for the application header, and the
+  // progres indicator for HTTP requests and routing
+  top: 73px;
   bottom: 0;
   left: 0;
   right: 0;
