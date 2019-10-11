@@ -1,5 +1,4 @@
-﻿using System;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -47,7 +46,6 @@ namespace Prime
                         IdentityModelEventSource.ShowPII = true;
                         options.RequireHttpsMetadata = false;
                     }
-                    // options.Authority = configuration["Jwt:Authority"];
                     options.Audience = configuration["Jwt:Audience"];
                     options.MetadataAddress = configuration["Jwt:WellKnown"];
                     options.Events = new JwtBearerEvents()

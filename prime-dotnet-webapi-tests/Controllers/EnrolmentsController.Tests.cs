@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -8,90 +8,110 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using Xunit;
+
 using Prime;
 using Prime.Models;
 using Prime.Services;
 using PrimeTests.Mocks;
 using PrimeTests.Utils;
 using PrimeTests.Utils.Auth;
-using Xunit;
 
 namespace PrimeTests.Controllers
 {
     public class EnrolmentsControllerTests : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {
+        private readonly WebApplicationFactory<TestStartup> _factory;
         private readonly HttpClient _client;
-        private readonly CustomWebApplicationFactory<TestStartup> _factory;
-        // private ApiDbContext _dbContext;
 
         public EnrolmentsControllerTests(CustomWebApplicationFactory<TestStartup> factory)
         {
-            _factory = factory;
-            _client = factory//.CreateClient();
-                .WithWebHostBuilder(builder =>
+            _factory = factory.WithWebHostBuilder(builder =>
                 {
                     builder.ConfigureTestServices(services =>
                     {
-                        services.AddScoped<IEnrolmentService, EnrolmentServiceMock>();
+                        services.AddSingleton<IEnrolmentService, EnrolmentServiceMock>();
                     });
-                }).CreateClient();
-            // _dbContext = _factory.Server.Host.Services.GetService(typeof(ApiDbContext)) as ApiDbContext;
+                });
+            _client = _factory.CreateClient();
         }
 
         [Fact]
         public async Task testGetEnrolments()
         {
             var response = await _client.GetAsync("/api/enrolments");
-            var body = await response.Content.ReadAsStringAsync();
-
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            var enrolments = (await TestUtils.DeserializeResponse<ApiOkResponse<IEnumerable<Enrolment>>>(response)).Result;
+            Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
+        }
+
+        [Fact]
+        public async Task testGetEnrolments4()
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, "/api/enrolments");
+
+            BearerTokenBuilder _tokenBuilder = new BearerTokenBuilder()
+                                    .ForAudience(TestAuthorizationConstants.Audience)
+                                    .IssuedBy(TestAuthorizationConstants.Issuer)
+                                    .WithSigningCertificate(EmbeddedResourceReader.GetCertificate("prime-api"));
+            var _token = _tokenBuilder
+                .ForAudience("prime-web-api")
+                .ForSubject("1234567890")
+                .BuildToken();
+
+            request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);
+
+            var response = await _client.SendAsync(request);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            var enrolments = (await TestUtils.DeserializeResponse<ApiOkResponse<IEnumerable<Enrolment>>>(response)).Result;
+            Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
         }
 
         [Fact]
         public async Task testGetEnrolments2()
         {
-            // TestAuthenticationContext testContext = new TestAuthenticationContext();
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
-                var _dbContext = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
-
-                var testEnrolment = TestUtils.CreateEnrolment(_dbContext);
+                var _service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
+                ((EnrolmentServiceMock)_service).InitializeDb();
 
                 var response = await _client.GetAsync("/api/enrolments");
-                var body = await response.Content.ReadAsStringAsync();
-
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+                var enrolments = (await TestUtils.DeserializeResponse<ApiOkResponse<IEnumerable<Enrolment>>>(response)).Result;
+                Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
             }
         }
 
-        // [Fact]
-        // public async Task testGetEnrolments3()
-        // {
-        //     TestAuthenticationContext testContext = new TestAuthenticationContext(Guid.NewGuid().ToString());
-        //     var request = new HttpRequestMessage(HttpMethod.Get, "/api/enrolements");
-        //     var _token = testContext.TokenBuilder
-        //         .ForAudience("prime-web-api")
-        //         .ForSubject("1234567890")
-        //         .BuildToken();
+        [Fact]
+        public async Task testGetEnrolments3()
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, "/api/enrolments");
+            var _token = TestUtils.TokenBuilder()
+                .ForAudience("prime-web-api")
+                .ForSubject("1234567890")
+                .BuildToken();
 
-        //     request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);
+            request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);
 
-        //     var _response = await _client.SendAsync(request);
-        //     Assert.Equal(HttpStatusCode.OK, _response.StatusCode);
-        // }
+            var _response = await _client.SendAsync(request);
+            Assert.Equal(HttpStatusCode.OK, _response.StatusCode);
+        }
 
         [Fact]
-        public async Task<Enrolment> createEnrolment()
+        public async Task<Enrolment> testCreateEnrolment()
         {
             Enrolment createdEnrolment;
-            // TestAuthenticationContext testContext = new TestAuthenticationContext();
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
                 var _dbContext = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
+                var _service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
 
                 var testEnrolment = TestUtils.EnrolmentFaker.Generate();
 
-                var response = await _client.PostAsJsonAsync("/api/enrolements", testEnrolment);
+                var response = await _client.PostAsJsonAsync("/api/enrolments", testEnrolment);
                 Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
                 var body = await response.Content.ReadAsStringAsync();
