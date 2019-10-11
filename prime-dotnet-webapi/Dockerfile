@@ -17,6 +17,7 @@ RUN dotnet publish -c Release -o out
 FROM docker-registry.default.svc:5000/dqszvc-dev/dotnet-30-runtime-rhel7 AS runtime
 COPY --from=build /opt/app-root/app .
 EXPOSE 8080 5001
-#USER 1001
+USER 1001
+ENV PATH $PATH:/opt/rh/rh-dotnet30/root/usr/lib64/dotnet
 ENV ASPNETCORE_ENVIRONMENT Development
-ENTRYPOINT ["dotnet", "prime.dll"]
+ENTRYPOINT ["/opt/rh/rh-dotnet30/root/usr/lib64/dotnet/dotnet", "prime.dll"]
