@@ -32,7 +32,7 @@
       },
       {
         "name": "SOURCE_REPOSITORY_REF",
-        "required": false
+        "required": true
       }
     ],
     "objects": [
