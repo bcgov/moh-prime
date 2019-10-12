@@ -90,12 +90,12 @@
             "postCommit": {},
             "resources": {
               "requests": {
-                "cpu": "300m",
-                "memory": "1024Mi"
-              },
-              "limits": {
                 "cpu": "1",
                 "memory": "2Gi"
+              },
+              "limits": {
+                "cpu": "2",
+                "memory": "4Gi"
               }
             },
             "runPolicy": "Serial",
