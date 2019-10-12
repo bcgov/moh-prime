@@ -2,7 +2,7 @@
     "kind": "Template",
     "apiVersion": "v1",
     "metadata": {
-      "name": "prime-dotnet-dc",
+      "name": "dotnet-webapi-dc-${SUFFIX}",
       "creationTimestamp": null
     },
     "parameters": [
