@@ -31,7 +31,7 @@ function deploy(){
     -p SOURCE_REPOSITORY_REF="$gitBranch" | oc create -f - --namespace=$licensePlate-dev
     echo "Building..."
     echo "oc start-build $1-$branchName -n $licensePlate-dev"
-    oc rollout latest $1-$branchName -n $licensePlate-dev
+    oc rollout $1-$branchName -n $licensePlate-dev
 }
 
 case "$1" in
