@@ -24,3 +24,19 @@ function build(){
     -p SOURCE_REPOSITORY_URL="${gitUrl}" \
     -p SOURCE_REPOSITORY_REF="${BRANCH_NAME}" | oc apply -f - --namespace=$licensePlate-dev
 }
+case "$1" in
+    build)
+        build
+        ;;
+    deploy)
+        deploy
+        ;;
+    sonar)
+        sonar
+        ;;
+    zap)
+        zap
+        ;;
+    *)
+    echo "Usage: $0 {build|deploy|sonar|zap|promote} <app>"
+esac
