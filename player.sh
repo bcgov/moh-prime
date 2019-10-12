@@ -2,9 +2,9 @@
 licensePlate='dqszvc'
 yamlLocation='openshift/compositions'
 gitUrl='https://github.com/bcgov/moh-prime.git'
-branchName=`echo "$CHANGE_BRANCH" | awk '{print tolower($0)}'`
+gitBranch="$CHANGE_BRANCH"
+branchName=`echo "$BRANCH_NAME" | awk '{print tolower($0)}'`
 
-alias exposeTokens='printenv'
 
 function build(){
     oc process -f openshift/$1.bc.json \
@@ -13,7 +13,7 @@ function build(){
     -p SUFFIX="$branchName" \
     -p SOURCE_CONTEXT_DIR="prime-$1" \
     -p SOURCE_REPOSITORY_URL="$gitUrl" \
-    -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH" | oc apply -f - --namespace=$licensePlate-dev
+    -p SOURCE_REPOSITORY_REF="CHANGE_BRANCH$" | oc apply -f - --namespace=$licensePlate-dev
     echo "Building..."
     echo "oc start-build $1-$branchName -n $licensePlate-dev"
     oc start-build $1-$branchName -n $licensePlate-dev --follow
@@ -26,7 +26,7 @@ function deploy(){
     -p SUFFIX="$branchName" \
     -p SOURCE_CONTEXT_DIR="prime-$1" \
     -p SOURCE_REPOSITORY_URL="$gitUrl" \
-    -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH" | oc apply -f - --namespace=$licensePlate-dev
+    -p SOURCE_REPOSITORY_REF="CHANGE_BRANCH" | oc apply -f - --namespace=$licensePlate-dev
     echo "Building..."
     echo "oc rollout latest dc/$1-$branchName -n $licensePlate-dev"
     oc rollout latest dc/$1-$branchName -n $licensePlate-dev
