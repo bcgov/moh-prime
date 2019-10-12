@@ -11,7 +11,7 @@ function build(){
     -p SOURCE_CONTEXT_DIR="prime-$1" \
     -p SOURCE_REPOSITORY_URL="$gitUrl" \
     -p SOURCE_REPOSITORY_REF="develop" | oc replace -f - --namespace=$licensePlate-dev
-    oc start-build $NAME -n dqszvc-dev
+    oc start-build $1 -n $licensePlate-dev
 }
 
 case "$1" in
