@@ -79,7 +79,7 @@
             "name": "${NAME}-${SUFFIX}"
           },
           "spec": {
-            "completionDeadlineSeconds": 1200,
+            "completionDeadlineSeconds": 6000,
             "nodeSelector": null,
             "output": {
               "to": {
@@ -91,11 +91,11 @@
             "resources": {
               "requests": {
                 "cpu": "300m",
-                "memory": "512Mi"
+                "memory": "1024Mi"
               },
               "limits": {
                 "cpu": "1",
-                "memory": "1024Mi"
+                "memory": "2Gi"
               }
             },
             "runPolicy": "Serial",
