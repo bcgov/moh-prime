@@ -2,7 +2,7 @@
     "kind": "Template",
     "apiVersion": "v1",
     "metadata": {
-      "name": "dotnet-webapi-dc-${SUFFIX}",
+      "name": "dotnet-webapi-dc",
       "creationTimestamp": null
     },
     "parameters": [
