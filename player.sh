@@ -30,7 +30,7 @@ function deploy(){
     -p SOURCE_REPOSITORY_URL="$gitUrl" \
     -p SOURCE_REPOSITORY_REF="$gitBranch" | oc create -f - --namespace=$licensePlate-dev
     echo "Building..."
-    echo "oc start-build $1-$branchName -n $licensePlate-dev"
+    echo "oc rollout $1-$branchName -n $licensePlate-dev"
     oc rollout $1-$branchName -n $licensePlate-dev
 }
 
@@ -39,13 +39,13 @@ case "$1" in
         build $2
         ;;
     deploy)
-        deploy
+        deploy $2
         ;;
     sonar)
-        sonar
+        sonar $2
         ;;
     zap)
-        zap
+        zap $2
         ;;
     *)
     echo "Usage: $0 {build|deploy|sonar|zap|promote} <app> "
