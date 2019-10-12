@@ -9,7 +9,7 @@
       {
         "name": "NAME",
         "displayName": "Name",
-        "description": "A suffix appended to all objects",
+        "description": "A prefix appended to all objects",
         "required": true
       },
       {
@@ -42,9 +42,9 @@
           "metadata": {
             "creationTimestamp": null,
             "labels": {
-              "io.kompose.service": "dotnet-webapi"
+              "io.kompose.service": "${NAME}"
             },
-            "name": "dotnet-webapi"
+            "name": "${NAME}"
           },
           "spec": {
             "tags": [
@@ -52,7 +52,7 @@
                 "annotations": null,
                 "from": {
                   "kind": "DockerImage",
-                  "name": "dotnet-webapi"
+                  "name": "${NAME}"
                 },
                 "generation": null,
                 "importPolicy": {},
@@ -74,9 +74,9 @@
             },
             "creationTimestamp": null,
             "labels": {
-              "io.kompose.service": "dotnet-webapi"
+              "io.kompose.service": "${NAME}"
             },
-            "name": "dotnet-webapi"
+            "name": "${NAME}"
           },
           "spec": {
             "completionDeadlineSeconds": 1200,
@@ -84,7 +84,7 @@
             "output": {
               "to": {
                 "kind": "ImageStreamTag",
-                "name": "dotnet-webapi:latest"
+                "name": "${NAME}:${VERSION}"
               }
             },
             "postCommit": {},

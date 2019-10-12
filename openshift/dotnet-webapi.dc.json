@@ -10,16 +10,13 @@
           "name": "NAME",
           "displayName": "Name",
           "description": "A prefix appended to all objects",
-          "required": true,
-          "value": "prime"
-
+          "required": true
         },
         {
           "name": "SUFFIX",
           "displayName": "Name Suffix",
           "description": "A suffix appended to all objects",
-          "required": true,
-          "value": "dotnet"
+          "required": true
         },
         {
           "name": "SOURCE_CONTEXT_DIR",
@@ -30,12 +27,10 @@
           "name": "SOURCE_REPOSITORY_URL",
           "required": true,
           "value": "https://github.com/bcgov/moh-prime"
-
         },
         {
           "name": "SOURCE_REPOSITORY_REF",
-          "required": false,
-          "value": "develop"
+          "required": false
         }
       ],
       "objects": [
@@ -49,15 +44,15 @@
               },
               "creationTimestamp": null,
               "labels": {
-                "io.kompose.service": "dotnet-webapi"
+                "io.kompose.service": "${NAME}"
               },
-              "name": "dotnet-webapi"
+              "name": "${NAME}"
             },
             "spec": {
               "completionDeadlineSeconds": 1200,
               "replicas": 1,
               "selector": {
-                "io.kompose.service": "dotnet-webapi"
+                "io.kompose.service": "${NAME}"
               },
               "strategy": null,
               "resources": {
@@ -74,7 +69,7 @@
                 "metadata": {
                   "creationTimestamp": null,
                   "labels": {
-                    "io.kompose.service": "dotnet-webapi"
+                    "io.kompose.service": "${NAME}"
                   }
                 },
                 "spec": {
@@ -131,7 +126,7 @@
                     ],
                     "from": {
                       "kind": "ImageStreamTag",
-                      "name": "dotnet-webapi:latest"
+                      "name": "${NAME}:${VERSION}"
                     }
                   },
                   "type": "ImageChange"
@@ -150,9 +145,9 @@
               },
               "creationTimestamp": null,
               "labels": {
-                "io.kompose.service": "dotnet-webapi"
+                "io.kompose.service": "${NAME}"
               },
-              "name": "dotnet-webapi"
+              "name": "${NAME}"
             },
             "spec": {
               "ports": [
@@ -168,7 +163,7 @@
                 }
               ],
               "selector": {
-                "io.kompose.service": "dotnet-webapi"
+                "io.kompose.service": "${NAME}"
               }
             },
             "status": {
