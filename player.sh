@@ -10,7 +10,8 @@ function build(){
     -p SUFFIX="-$BRANCH_NAME" \
     -p SOURCE_CONTEXT_DIR="prime-$1" \
     -p SOURCE_REPOSITORY_URL="$gitUrl" \
-    -p SOURCE_REPOSITORY_REF="develop" | oc apply -f - --namespace=$licensePlate-dev
+    -p SOURCE_REPOSITORY_REF="develop" | oc replace -f - --namespace=$licensePlate-dev
+    oc start-build $NAME -n dqszvc-dev
 }
 
 case "$1" in
