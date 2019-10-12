@@ -7,7 +7,7 @@ branchName=`echo "$BRANCH_NAME" | awk '{print tolower($0)}'`
 
 
 echo "Tokens at play"
-echo "NAME=$1, VERSION/BUILD_NUMBER=$BUILD_NUMBER, branchName=$branchName, gitUrl=$gitUrl, SOURCE_CONTEXT_DIR=prime-$1, GIT_BRANCH=$GIT_BRANCH, BRANCH_NAME=$BRANCH_NAME"
+echo "NAME=$1, VERSION/BUILD_NUMBER=$BUILD_NUMBER, branchName=$branchName, gitUrl=$gitUrl, SOURCE_CONTEXT_DIR=prime-$1, GIT_BRANCH=$GIT_BRANCH, BRANCH_NAME=$BRANCH_NAME, gitBranch=$gitBranch"
 
 function build(){
     echo "Processing..."
@@ -20,7 +20,7 @@ function build(){
     -p SUFFIX="$branchName" \
     -p SOURCE_CONTEXT_DIR="prime-$1" \
     -p SOURCE_REPOSITORY_URL="$gitUrl" \
-    -p SOURCE_REPOSITORY_REF="$GIT_BRANCH" | oc apply -f - --namespace=$licensePlate-dev
+    -p SOURCE_REPOSITORY_REF="$gitBranch" | oc apply -f - --namespace=$licensePlate-dev
     echo "Building..."
     echo "oc start-build $1-$branchName -n $licensePlate-dev"
     oc start-build $1-$branchName -n $licensePlate-dev
