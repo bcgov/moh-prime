@@ -23,7 +23,7 @@ function build(){
     -p SOURCE_REPOSITORY_REF="$gitBranch" | oc apply -f - --namespace=$licensePlate-dev
     echo "Building..."
     echo "oc start-build $1-$branchName -n $licensePlate-dev"
-    oc start-build $1-$branchName -n $licensePlate-dev
+    oc start-build $1-$branchName -n $licensePlate-dev --follow
 }
 function deploy(){
     echo "Processing..."
