@@ -25,6 +25,7 @@ function buildConfig(){
     -p SOURCE_REPOSITORY_URL="${gitUrl}" \
     -p SOURCE_REPOSITORY_REF="${BRANCH_NAME}" | oc apply -f - --namespace=$licensePlate-dev
 }
+alias build=buildConfig
 
 case "$1" in
     build)
