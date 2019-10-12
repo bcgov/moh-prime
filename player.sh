@@ -13,7 +13,7 @@ function build(){
     -p SUFFIX="$BRANCH_NAME" \
     -p SOURCE_CONTEXT_DIR="prime-$1" \
     -p SOURCE_REPOSITORY_URL="$gitUrl" \
-    -p SOURCE_REPOSITORY_REF="$gitBranch" | oc replace -f - --namespace=$licensePlate-dev
+    -p SOURCE_REPOSITORY_REF="$gitBranch" | oc create -f - --namespace=$licensePlate-dev
     echo "Building..."
     echo "oc start-build $1-$BRANCH_NAME -n $licensePlate-dev"
     oc start-build $1-$BRANCH_NAME -n $licensePlate-dev
@@ -27,7 +27,7 @@ function deploy(){
     -p SUFFIX="$BRANCH_NAME" \
     -p SOURCE_CONTEXT_DIR="prime-$1" \
     -p SOURCE_REPOSITORY_URL="$gitUrl" \
-    -p SOURCE_REPOSITORY_REF="$gitBranch" | oc replace -f - --namespace=$licensePlate-dev
+    -p SOURCE_REPOSITORY_REF="$gitBranch" | oc create -f - --namespace=$licensePlate-dev
     echo "Building..."
     echo "oc start-build $1-$BRANCH_NAME -n $licensePlate-dev"
     oc rollout latest $1-$BRANCH_NAME -n $licensePlate-dev
