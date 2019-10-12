@@ -18,6 +18,10 @@ function dryRun(){
 }
 
 function build(){
+    echo "BUILD_NUMBER = $BUILD_NUMBER"
+    echo "pr = $pr"
+    echo "2 = $2"
+    echo "BRANCH_NAME= $BRANCH_NAME"
     oc process -f openshift/$2.bc.json \
     -p NAME="$2" \
     -p VERSION="$BUILD_NUMBER" \
@@ -43,4 +47,5 @@ case "$1" in
     *)
     echo "Usage: $0 {build|deploy|sonar|zap|promote} <app> "
     echo "1=$1 2=$2"
+
 esac
