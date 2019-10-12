@@ -38,5 +38,5 @@ case "$1" in
         zap
         ;;
     *)
-    echo "Usage: $0 {build|deploy|sonar|zap|promote} <app>"
+    echo "Usage: $0 {build|deploy|sonar|zap|promote} <app> "
 esac
