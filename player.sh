@@ -2,7 +2,7 @@
 licensePlate='dqszvc'
 yamlLocation='openshift/compositions'
 gitUrl='https://github.com/bcgov/moh-prime.git'
-gitBranch=`git rev-parse --abbrev-ref HEAD`
+gitBranch=`git branch | sed -n '/\* /s///p'`
 branchName=`echo "$BRANCH_NAME" | awk '{print tolower($0)}'`
 
 function build(){
