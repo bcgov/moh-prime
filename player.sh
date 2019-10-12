@@ -17,7 +17,7 @@ function dryRun(){
 }
 function build(){
     oc process -f openshift/$1.bc.json \
-    -p NAME="dotnet-webapi" \
+    -p NAME="$1" \
     -p VERSION={$BUILD_NUMBER} \
     -p SUFFIX="-PR-$pr" \
 	-p SOURCE_CONTEXT_DIR="prime-dotnet-webapi" \
