@@ -10,7 +10,7 @@ function build(){
     oc process -f openshift/$1.bc.json \
     -p NAME="$1" \
     -p VERSION="$BUILD_NUMBER" \
-    -p SUFFIX="-$BRANCH_NAME" \
+    -p SUFFIX="$BRANCH_NAME" \
     -p SOURCE_CONTEXT_DIR="prime-$1" \
     -p SOURCE_REPOSITORY_URL="$gitUrl" \
     -p SOURCE_REPOSITORY_REF="$gitBranch" | oc replace -f - --namespace=$licensePlate-dev
@@ -24,7 +24,7 @@ function deploy(){
     oc process -f openshift/$1.bc.json \
     -p NAME="$1" \
     -p VERSION="$BUILD_NUMBER" \
-    -p SUFFIX="-$BRANCH_NAME" \
+    -p SUFFIX="$BRANCH_NAME" \
     -p SOURCE_CONTEXT_DIR="prime-$1" \
     -p SOURCE_REPOSITORY_URL="$gitUrl" \
     -p SOURCE_REPOSITORY_REF="$gitBranch" | oc replace -f - --namespace=$licensePlate-dev
