@@ -7,7 +7,7 @@ export gitUrl="https://github.com/bcgov/moh-prime.git"
 
 function ocPush(){
     for file in `find $yamlLocation -type f -name *.yaml`
-    do oc apply --namespace="$licensePlate-$1" -f $file
+    do oc apply --namespace="$licensePlate-$3" -f $file
     done
 }
 function dryRun(){
@@ -15,15 +15,17 @@ function dryRun(){
     do oc create -f $file --dry-run -o json
     done;
 }
-function build(){
-    oc process -f openshift/$1.bc.json \
-    -p NAME="$1" \
+
+function buildConfig(){
+    oc process -f openshift/$2.bc.json \
+    -p NAME="$2" \
     -p VERSION={$BUILD_NUMBER} \
     -p SUFFIX="-PR-$pr" \
 	-p SOURCE_CONTEXT_DIR="prime-dotnet-webapi" \
     -p SOURCE_REPOSITORY_URL="${gitUrl}" \
     -p SOURCE_REPOSITORY_REF="${BRANCH_NAME}" | oc apply -f - --namespace=$licensePlate-dev
 }
+
 case "$1" in
     build)
         build
