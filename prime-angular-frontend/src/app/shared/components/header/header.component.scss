@@ -1,8 +1,13 @@
 @import 'palette';
 
 .mat-toolbar {
-  border-bottom: 3px solid theme-palette(yellow);
   height: 70px;
+
+  .mat-icon {
+    cursor: pointer;
+    margin-top: 0.3em;
+    user-select: none;
+  }
 
   img {
     margin-left: 15px;

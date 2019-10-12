@@ -156,15 +156,15 @@
         <dl class="row mb-4"
             *ngFor="let certification of enrolment.certifications; let i = index">
           <dt class="col-sm-12 col-md-6 py-1">College Certification</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ certification.collegeCode }}&nbsp;</dd>
+          <dd class="col-sm-12 col-md-6 py-1">{{ certification.collegeCode | configCode: 'colleges' }}&nbsp;</dd>
           <dt class="col-sm-12 col-md-6 py-1">License Number</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ certification.licenseNumber }}&nbsp;</dd>
           <dt class="col-sm-12 col-md-6 py-1">License Class</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ certification.licenseCode }}&nbsp;</dd>
+          <dd class="col-sm-12 col-md-6 py-1">{{ certification.licenseCode | configCode: 'licenses' }}&nbsp;</dd>
           <dt class="col-sm-12 col-md-6 py-1">Renewal Date</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ certification.renewalDate | date }}&nbsp;</dd>
           <dt class="col-sm-12 col-md-6 py-1">Advanced Practices</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ certification.practiceCode }}&nbsp;</dd>
+          <dd class="col-sm-12 col-md-6 py-1">{{ certification.practiceCode | configCode: 'practices' }}&nbsp;</dd>
         </dl>
 
       </ng-container>
@@ -201,7 +201,7 @@
                   matTooltip="Edit PharmaNet Access">edit</mat-icon>
       </app-sub-header>
 
-      <ng-container *ngIf="enrolment?.organizations.length">
+      <ng-container *ngIf="enrolment.organizations.length; else noOrganization">
 
         <h3 class="lead">Organizations</h3>
 
@@ -220,6 +220,10 @@
         </dl>
 
       </ng-container>
+
+      <ng-template #noOrganization>
+        Not associated with an organization
+      </ng-template>
 
     </div>
   </div>

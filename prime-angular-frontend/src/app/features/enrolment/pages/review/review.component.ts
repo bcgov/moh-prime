@@ -34,7 +34,7 @@ export class ReviewComponent implements OnInit {
         .subscribe(
           () => {
             this.toastService.openSuccessToast('Enrolment has been submitted');
-            this.router.navigate(['/login'], { relativeTo: this.route.parent });
+            this.router.navigate(['confirmation'], { relativeTo: this.route.parent });
           },
           (error: any) => {
             this.toastService.openSuccessToast('Enrolment could not be submitted');
@@ -42,11 +42,17 @@ export class ReviewComponent implements OnInit {
           });
     } else {
       // TODO: indicate where validation failed in the review to prompt user edits
+      console.log('PROFILE', this.enrolmentStateService.isProfileInfoValid());
+      console.log('CONTACT', this.enrolmentStateService.isContactInfoValid());
+      console.log('PROFESSIONAL', this.enrolmentStateService.isProfessionalInfoValid());
+      console.log('DECLARATION', this.enrolmentStateService.isSelfDeclarationValid());
+      console.log('ACCESS', this.enrolmentStateService.isPharmaNetAccessValid());
     }
   }
 
   public showYesNo(declared: boolean) {
-    return (declared) ? 'Yes' : 'No';
+    return (declared === null) ? ''
+      : (declared) ? 'Yes' : 'No';
   }
 
   public redirect(route: string) {

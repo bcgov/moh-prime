@@ -1,16 +1,18 @@
-
 using System;
-using System.IO;
+using System.IdentityModel.Tokens.Jwt;
+
 using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
+
 using Prime;
-using Prime.Services;
-using PrimeTests.Mocks;
+using PrimeTests.Utils.Auth;
 
 namespace PrimeTests.Utils
 {
@@ -20,14 +22,8 @@ namespace PrimeTests.Utils
         protected override IWebHostBuilder CreateWebHostBuilder()
         {
             return WebHost.CreateDefaultBuilder()
-            .UseContentRoot("prime-dotnet-webapi-tests")
-            .UseStartup<TestStartup>();
-
-            // var builder = new WebHostBuilder()
-            //     .UseContentRoot(Directory.GetCurrentDirectory())
-            //     .UseStartup<TestStartup>();
-
-            // return builder;
+                .UseContentRoot("prime-dotnet-webapi-tests")
+                .UseStartup<TestStartup>();
         }
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -45,9 +41,23 @@ namespace PrimeTests.Utils
                 // database for testing.
                 services.AddDbContext<ApiDbContext>(options =>
                     {
-                        options.UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString());
+                        options.UseInMemoryDatabase(databaseName: "DBInMemoryTest");
                         options.UseInternalServiceProvider(serviceProvider);
                     });
+
+                //configure test auth
+                services.PostConfigure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme, options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        SignatureValidator = (token, parameters) => new JwtSecurityToken(token),
+                        RoleClaimType = System.Security.Claims.ClaimTypes.Role
+                    };
+                    // options.Audience = TestAuthorizationConstants.Audience;
+                    options.Authority = TestAuthorizationConstants.Issuer;
+                    options.BackchannelHttpHandler = new MockBackchannel();
+                    options.MetadataAddress = "https://inmemory.microsoft.com/common/.well-known/openid-configuration";
+                });
 
                 // Build the service provider.
                 var sp = services.BuildServiceProvider();

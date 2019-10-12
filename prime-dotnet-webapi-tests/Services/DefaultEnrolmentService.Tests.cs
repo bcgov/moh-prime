@@ -1,52 +1,18 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Xunit;
 
 using Prime;
 using Prime.Models;
 using Prime.Services;
 using PrimeTests.Utils;
-using Xunit;
 
 namespace PrimeTests.Services
 {
-    public class DefaultEnrolmentServiceTests : IDisposable
+    public class DefaultEnrolmentServiceTests :  BaseServiceTests<DefaultEnrolmentService>
     {
-        private string _databaseName;
-        private ApiDbContext _dbContext;
-        private IEnrolmentService _service;
-
-        /*
-
-        TODO - add tests for these methods:
-
-                Task<Enrolment> GetEnrolmentForUserIdAsync(
-                    string userId);
-
-                Task<IEnumerable<Enrolment>> GetEnrolmentsForUserIdAsync(
-                    string userId);
-         */
-
-        public DefaultEnrolmentServiceTests()
-        {
-            _databaseName = Guid.NewGuid().ToString();
-
-            var options = new DbContextOptionsBuilder<ApiDbContext>()
-                        .UseInMemoryDatabase(databaseName: _databaseName)
-                      .Options;
-
-            _dbContext = new ApiDbContext(options);
-            // cannot migrate the in-memory db
-            // _dbContext.Database.Migrate();
-
-            _service = new DefaultEnrolmentService(_dbContext);
-        }
-
         [Fact]
-        public async Task testEnrolmentExists()
+        public async void testEnrolmentExists()
         {
             //make sure there are no enrolments
             Assert.False(_dbContext.Enrolments.Any());
@@ -59,6 +25,7 @@ namespace PrimeTests.Services
 
             // create the enrolment directly to the context
             var enrolment = TestUtils.EnrolmentFaker.Generate();
+
             _dbContext.Enrolments.Add(enrolment);
             await _dbContext.SaveChangesAsync();
 
@@ -71,7 +38,7 @@ namespace PrimeTests.Services
         }
 
         [Fact]
-        public async Task testCreateEnrolment()
+        public async void testCreateEnrolment()
         {
             var testEnrolment = TestUtils.EnrolmentFaker.Generate();
             string expectedUserId = testEnrolment.Enrollee.UserId;
@@ -87,7 +54,7 @@ namespace PrimeTests.Services
         }
 
         [Fact]
-        public async Task testGetEnrolment()
+        public async void testGetEnrolment()
         {
             var testEnrolment = TestUtils.EnrolmentFaker.Generate();
             string expectedUserId = testEnrolment.Enrollee.UserId;
@@ -105,31 +72,71 @@ namespace PrimeTests.Services
         }
 
         [Fact]
-        public async Task testGetEnrolments()
+        public async void testGetEnrolmentForUserId()
+        {
+            var testEnrolment = TestUtils.EnrolmentFaker.Generate();
+            string expectedUserId = testEnrolment.Enrollee.UserId;
+
+            // create the enrolment directly to the context
+            _dbContext.Enrolments.Add(testEnrolment);
+            await _dbContext.SaveChangesAsync();
+            int expectedEnrolmentId = (int)testEnrolment.Id;
+
+            // get the enrolment through the service layer code
+            Enrolment enrolment = await _service.GetEnrolmentForUserIdAsync(expectedUserId);
+            Assert.NotNull(enrolment);
+            Assert.Equal(expectedEnrolmentId, enrolment.Id);
+            Assert.Equal(expectedUserId, enrolment.Enrollee.UserId);
+        }
+
+        [Fact]
+        public async void testGetEnrolments()
         {
             //make sure there are no enrolments
             Assert.False(_dbContext.Enrolments.Any());
             await _dbContext.SaveChangesAsync();
 
             // create some enrolments directly to the context
-            // Enrolment testEnrolment = TestUtils.EnrolmentFaker.Generate();
-            // _dbContext.Enrolments.Add(testEnrolment);
             _dbContext.Enrolments.Add(TestUtils.EnrolmentFaker.Generate());
             _dbContext.Enrolments.Add(TestUtils.EnrolmentFaker.Generate());
             _dbContext.Enrolments.Add(TestUtils.EnrolmentFaker.Generate());
+
             await _dbContext.SaveChangesAsync();
 
             // get the enrolments through the service layer code
             var enrolments = await _service.GetEnrolmentsAsync();
             Assert.NotNull(enrolments);
-            Assert.Equal(3, enrolments.Count());  //why is this 5 when running all tests at once?
+            Assert.Equal(3, enrolments.Count());
         }
 
         [Fact]
-        public async Task testUpdateEnrolment()
+        public async void testGetEnrolmentsForUserId()
+        {
+            //make sure there are no enrolments
+            Assert.False(_dbContext.Enrolments.Any());
+            await _dbContext.SaveChangesAsync();
+
+            // create some enrolments directly to the context
+            var testEnrolment = TestUtils.EnrolmentFaker.Generate();
+            string expectedUserId = testEnrolment.Enrollee.UserId;
+            _dbContext.Enrolments.Add(testEnrolment);
+            _dbContext.Enrolments.Add(TestUtils.EnrolmentFaker.Generate());
+            _dbContext.Enrolments.Add(TestUtils.EnrolmentFaker.Generate());
+
+            await _dbContext.SaveChangesAsync();
+
+            // get the enrolments through the service layer code
+            var enrolments = await _service.GetEnrolmentsForUserIdAsync(expectedUserId);
+            Assert.NotNull(enrolments);
+            Assert.Single(enrolments);
+        }
+
+        [Fact]
+        public async void testUpdateEnrolment()
         {
             string expectedName = "ChangedName";
             var testEnrolment = TestUtils.EnrolmentFaker.Generate();
+
             testEnrolment.Enrollee.FirstName = "StartingName";
 
             // create the enrolment directly to the context
@@ -138,15 +145,26 @@ namespace PrimeTests.Services
             int enrolmentId = (int)testEnrolment.Id;
 
             // get the enrolment directly from the context
-            Enrolment enrolment = await _dbContext.Enrolments.Include(e => e.Enrollee).Include(e => e.Certifications).Where(e => e.Id == enrolmentId).SingleOrDefaultAsync();
+            Enrolment enrolment = await _dbContext.Enrolments
+                            .Include(e => e.Enrollee).ThenInclude(e => e.PhysicalAddress)
+                            .Include(e => e.Enrollee).ThenInclude(e => e.MailingAddress)
+                            .Include(e => e.Certifications)
+                            .Include(e => e.Jobs)
+                            .Include(e => e.Organizations)
+                            .AsNoTracking()
+                            .Where(e => e.Id == enrolmentId)
+                            .SingleOrDefaultAsync();
             Assert.NotNull(enrolment);
+
+            // make sure we are not tracking anything - i.e. isolate following transaction
+            TestUtils.DetachAllEntities(_dbContext);
 
             // update the enrolment through the service layer code
             enrolment.Enrollee.FirstName = expectedName;
             int updated = await _service.UpdateEnrolmentAsync(enrolment);
             Assert.True(updated > 0);
 
-            // get the updated enrolment through the service layer code
+            // get the updated enrolment directly from the context
             Enrolment updatedEnrolment = await _dbContext.Enrolments.FindAsync(enrolmentId);
             Assert.NotNull(updatedEnrolment);
             Assert.Equal(enrolmentId, updatedEnrolment.Id);
@@ -154,7 +172,7 @@ namespace PrimeTests.Services
         }
 
         [Fact]
-        public async Task testDeleteEnrolment()
+        public async void testDeleteEnrolment()
         {
             var testEnrolment = TestUtils.EnrolmentFaker.Generate();
             string expectedUserId = testEnrolment.Enrollee.UserId;
@@ -176,12 +194,6 @@ namespace PrimeTests.Services
             // get the updated enrolment through the service layer code
             Enrolment deletedEnrolment = await _dbContext.Enrolments.FindAsync(enrolmentId);
             Assert.Null(deletedEnrolment);
-        }
-
-        public void Dispose()
-        {
-            _dbContext.Database.EnsureDeleted();
-            _dbContext.Dispose();
         }
     }
 }

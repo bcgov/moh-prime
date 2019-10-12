@@ -11,8 +11,10 @@ export class AppConfig {
     auth: string;
     dashboard: string;
     admin: string;
-    applicant: string;
+    provision: string;
+    enrolment: string;
     denied: string;
+    maintenance: string;
   };
 }
 
@@ -21,9 +23,11 @@ export const APP_DI_CONFIG: AppConfig = {
   routes: {
     auth: 'auth',
     dashboard: 'dashboard',
-    admin: '/dashboard/admin',
-    applicant: '/dashboard/applicant',
-    denied: 'denied'
+    admin: 'admin',
+    provision: 'provision',
+    enrolment: 'enrolment',
+    denied: 'denied',
+    maintenance: 'maintenance'
   }
 };
 
