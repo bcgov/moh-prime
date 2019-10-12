@@ -27,7 +27,7 @@ pipeline {
                 echo "Building ..."
                 //sh "unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-build -Pargs.--config=pipeline/config-build.groovy -Pargs.--pr=${CHANGE_ID}"
                 //sh "oc apply --namespace=dqszvc-dev -f openshift/dotnet-webapi-bc.json"
-                sh "bash ./player.sh dotnet-webapi"
+                sh "bash ./player.sh build dotnet-webapi"
             }
         }
         stage('Deploy (DEV)') {
