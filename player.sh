@@ -21,8 +21,8 @@ function build(){
 }
 function deploy(){
     echo "Processing..."
-    echo='oc process -f openshift/$1.dc.json -p NAME="$1" -p VERSION="$BUILD_NUMBER" -p SUFFIX="-$BRANCH_NAME" -p SOURCE_CONTEXT_DIR="prime-$1" -p SOURCE_REPOSITORY_URL="$gitUrl" -p SOURCE_REPOSITORY_REF="$gitBranch" | oc replace -f - --namespace=$licensePlate-dev'
-    oc process -f openshift/$1.bc.json \
+    echo='oc process -f openshift/$1.dc.json -p NAME="$1" -p VERSION="$BUILD_NUMBER" -p SUFFIX="$BRANCH_NAME" -p SOURCE_CONTEXT_DIR="prime-$1" -p SOURCE_REPOSITORY_URL="$gitUrl" -p SOURCE_REPOSITORY_REF="$gitBranch" | oc replace -f - --namespace=$licensePlate-dev'
+    oc process -f openshift/$1.dc.json \
     -p NAME="$1" \
     -p VERSION="$BUILD_NUMBER" \
     -p SUFFIX="$branchName" \
@@ -30,8 +30,8 @@ function deploy(){
     -p SOURCE_REPOSITORY_URL="$gitUrl" \
     -p SOURCE_REPOSITORY_REF="$gitBranch" | oc create -f - --namespace=$licensePlate-dev
     echo "Building..."
-    echo "oc rollout $1-$branchName -n $licensePlate-dev"
-    oc rollout $1-$branchName -n $licensePlate-dev
+    echo "oc rollout latest dc/$1-$branchName -n $licensePlate-dev"
+    oc rollout latest dc/$1-$branchName -n $licensePlate-dev
 }
 
 case "$1" in
