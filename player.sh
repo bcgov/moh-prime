@@ -1,6 +1,7 @@
 #!/bin/bash
 # Because I don't know Groovy well enough.
 ###
+
 export licensePlate="dqszvc"
 export yamlLocation="openshift/compositions"
 export gitUrl="https://github.com/bcgov/moh-prime.git"
@@ -19,9 +20,9 @@ function dryRun(){
 function build(){
     oc process -f openshift/$2.bc.json \
     -p NAME="$2" \
-    -p VERSION={$BUILD_NUMBER} \
+    -p VERSION="$BUILD_NUMBER" \
     -p SUFFIX="-PR-$pr" \
-	-p SOURCE_CONTEXT_DIR="prime-dotnet-webapi" \
+    -p SOURCE_CONTEXT_DIR="prime-$2" \
     -p SOURCE_REPOSITORY_URL="${gitUrl}" \
     -p SOURCE_REPOSITORY_REF="${BRANCH_NAME}" | oc apply -f - --namespace=$licensePlate-dev
 }
@@ -41,4 +42,5 @@ case "$1" in
         ;;
     *)
     echo "Usage: $0 {build|deploy|sonar|zap|promote} <app> "
+    echo "1=$1 2=$2"
 esac
