@@ -44,15 +44,15 @@
               },
               "creationTimestamp": null,
               "labels": {
-                "io.kompose.service": "${NAME}"
+                "io.kompose.service": "${NAME}-${SUFFIX}"
               },
-              "name": "${NAME}"
+              "name": "${NAME}-${SUFFIX}"
             },
             "spec": {
               "completionDeadlineSeconds": 1200,
               "replicas": 1,
               "selector": {
-                "io.kompose.service": "${NAME}"
+                "io.kompose.service": "${NAME}-${SUFFIX}"
               },
               "strategy": null,
               "resources": {
@@ -69,7 +69,7 @@
                 "metadata": {
                   "creationTimestamp": null,
                   "labels": {
-                    "io.kompose.service": "${NAME}"
+                    "io.kompose.service": "${NAME}-${SUFFIX}"
                   }
                 },
                 "spec": {
@@ -126,7 +126,7 @@
                     ],
                     "from": {
                       "kind": "ImageStreamTag",
-                      "name": "${NAME}:${VERSION}"
+                      "name": "${NAME}-${SUFFIX}:${VERSION}"
                     }
                   },
                   "type": "ImageChange"
@@ -145,9 +145,9 @@
               },
               "creationTimestamp": null,
               "labels": {
-                "io.kompose.service": "${NAME}"
+                "io.kompose.service": "${NAME}-${SUFFIX}"
               },
-              "name": "${NAME}"
+              "name":"${NAME}-${SUFFIX}"
             },
             "spec": {
               "ports": [
@@ -163,7 +163,7 @@
                 }
               ],
               "selector": {
-                "io.kompose.service": "${NAME}"
+                "io.kompose.service": "${NAME}-${SUFFIX}"
               }
             },
             "status": {
