@@ -19,6 +19,10 @@
           "required": true
         },
         {
+          "name": "VERSION",
+          "required": true
+        },
+        {
           "name": "SOURCE_CONTEXT_DIR",
           "required": true,
           "value": "prime-dotnet-webapi"
