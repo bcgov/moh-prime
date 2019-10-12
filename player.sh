@@ -1,34 +1,18 @@
 #!/bin/bash
-# Because I don't know Groovy well enough.
-###
 
-export licensePlate="dqszvc"
-export yamlLocation="openshift/compositions"
-export gitUrl="https://github.com/bcgov/moh-prime.git"
-
-function ocPush(){
-    for file in `find $yamlLocation -type f -name *.yaml`
-    do oc apply --namespace="$licensePlate-$3" -f $file
-    done
-}
-function dryRun(){
-    for file in `find $yamlLocation -type f -name *.yaml`
-    do oc create -f $file --dry-run -o json
-    done;
-}
+licensePlate='dqszvc'
+yamlLocation='openshift/compositions'
+gitUrl='https://github.com/bcgov/moh-prime.git'
+app=''
 
 function build(){
-    echo "BUILD_NUMBER = $BUILD_NUMBER"
-    echo "pr = $pr"
-    echo "2 = $2"
-    echo "BRANCH_NAME= $BRANCH_NAME"
-    oc process -f openshift/$2.bc.json \
-    -p NAME="$2" \
+    oc process -f openshift/$app.bc.json \
+    -p NAME="$app" \
     -p VERSION="$BUILD_NUMBER" \
-    -p SUFFIX="-PR-$pr" \
-    -p SOURCE_CONTEXT_DIR="prime-$2" \
-    -p SOURCE_REPOSITORY_URL="${gitUrl}" \
-    -p SOURCE_REPOSITORY_REF="${BRANCH_NAME}" | oc apply -f - --namespace=$licensePlate-dev
+    -p SUFFIX="-$BRANCH_NAME" \
+    -p SOURCE_CONTEXT_DIR="prime-$app" \
+    -p SOURCE_REPOSITORY_URL="$gitUrl" \
+    -p SOURCE_REPOSITORY_REF="develop" | oc apply -f - --namespace=$licensePlate-dev
 }
 
 case "$1" in
@@ -46,6 +30,6 @@ case "$1" in
         ;;
     *)
     echo "Usage: $0 {build|deploy|sonar|zap|promote} <app> "
-    echo "1=$1 2=$2"
+
 
 esac
