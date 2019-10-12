@@ -29,7 +29,7 @@ function deploy(){
     -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH" | oc apply -f - --namespace=$licensePlate-dev
     echo "Building..."
     echo "oc rollout latest dc/$1-$branchName -n $licensePlate-dev"
-    oc rollout latest dc/$1-$branchName -n $licensePlate-dev --follow
+    oc rollout latest dc/$1-$branchName -n $licensePlate-dev
 }
 
 case "$1" in
