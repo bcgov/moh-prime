@@ -35,6 +35,7 @@ pipeline {
             steps {
                 echo "Deploy (DEV) ..."
                 //sh "unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-deploy -Pargs.--config=pipeline/config-dev.groovy -Pargs.--pr=${CHANGE_ID} -Pargs.--env=dev"
+                sh "bash ./player.sh deploy dotnet-webapi"
             }
         }
         /*

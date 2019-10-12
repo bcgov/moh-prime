@@ -15,8 +15,22 @@ function build(){
     -p SOURCE_REPOSITORY_URL="$gitUrl" \
     -p SOURCE_REPOSITORY_REF="$gitBranch" | oc replace -f - --namespace=$licensePlate-dev
     echo "Building..."
-    echo "oc start-build $1 -n $licensePlate-dev"
-    oc start-build $1 -n $licensePlate-dev
+    echo "oc start-build $1-$BRANCH_NAME -n $licensePlate-dev"
+    oc start-build $1-$BRANCH_NAME -n $licensePlate-dev
+}
+function deploy(){
+    echo "Processing..."
+    echo='oc process -f openshift/$1.dc.json -p NAME="$1" -p VERSION="$BUILD_NUMBER" -p SUFFIX="-$BRANCH_NAME" -p SOURCE_CONTEXT_DIR="prime-$1" -p SOURCE_REPOSITORY_URL="$gitUrl" -p SOURCE_REPOSITORY_REF="$gitBranch" | oc replace -f - --namespace=$licensePlate-dev'
+    oc process -f openshift/$1.bc.json \
+    -p NAME="$1" \
+    -p VERSION="$BUILD_NUMBER" \
+    -p SUFFIX="-$BRANCH_NAME" \
+    -p SOURCE_CONTEXT_DIR="prime-$1" \
+    -p SOURCE_REPOSITORY_URL="$gitUrl" \
+    -p SOURCE_REPOSITORY_REF="$gitBranch" | oc replace -f - --namespace=$licensePlate-dev
+    echo "Building..."
+    echo "oc start-build $1-$BRANCH_NAME -n $licensePlate-dev"
+    oc rollout latest $1-$BRANCH_NAME -n $licensePlate-dev
 }
 
 case "$1" in
