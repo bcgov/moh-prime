@@ -16,7 +16,7 @@ function dryRun(){
     done;
 }
 
-function buildConfig(){
+function build(){
     oc process -f openshift/$2.bc.json \
     -p NAME="$2" \
     -p VERSION={$BUILD_NUMBER} \
@@ -25,7 +25,6 @@ function buildConfig(){
     -p SOURCE_REPOSITORY_URL="${gitUrl}" \
     -p SOURCE_REPOSITORY_REF="${BRANCH_NAME}" | oc apply -f - --namespace=$licensePlate-dev
 }
-alias build=buildConfig
 
 case "$1" in
     build)
