@@ -100,12 +100,7 @@
             },
             "runPolicy": "Serial",
             "source": {
-              "contextDir": "${SOURCE_CONTEXT_DIR}",
-              "git": {
-                "ref": "${SOURCE_REPOSITORY_REF}",
-                "uri": "${SOURCE_REPOSITORY_URL}"
-              },
-              "type": "Git"
+                "dockerfile": "FROM registry.redhat.io/dotnet/dotnet-22-rhel7 AS build\n ENV ASPNETCORE_ENVIRONMENT Development \n COPY *.csproj . \n RUN dotnet restore \n COPY . . \n RUN dotnet publish -c Release -o out \n FROM registry.redhat.io/dotnet/dotnet-22-runtime-rhel7 AS runtime \n COPY --from=build out . \n EXPOSE 8080 5001 \n ENTRYPOINT [dotnet, prime.dll]"
             },
             "strategy": {
               "dockerStrategy": {},
