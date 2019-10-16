@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 namespace Prime.Models
 {
     [Table("Enrollee")]
-    public class Enrollee : BaseAuditable
+    public class Enrollee : BaseAuditable, IValidatableObject
     {
         [Key]
         public int? Id { get; set; }
@@ -46,5 +46,13 @@ namespace Prime.Models
         public string VoicePhone { get; set; }
 
         public string VoiceExtension { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (Guid.Empty.Equals(this.UserId))
+            {
+                yield return new ValidationResult(String.Format("UserId cannot be the empty value: {0}", this.UserId.ToString()));
+            }
+        }
     }
 }
