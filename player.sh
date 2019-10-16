@@ -16,7 +16,7 @@ function build(){
     -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH" | oc apply -f - --namespace=$licensePlate-dev
     echo "Building..."
     echo "start-build $1-$branchName -n $licensePlate-dev --follow"
-    oc start-build $1-$branchName -n $licensePlate-dev --follow
+    oc start-build $1-$branchName -n $licensePlate-dev --follow | grep "completed"
 }
 
 function deploy(){
