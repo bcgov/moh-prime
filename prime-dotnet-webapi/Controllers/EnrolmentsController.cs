@@ -176,13 +176,13 @@ namespace Prime.Controllers
             //if user is not ADMIN, check that user belongs to the enrolment
             if (!belongsToEnrollee)
             {
-                var PrimeUserId = PrimeUtils.PrimeUserId(User);
-                belongsToEnrollee = PrimeUserId != null
+                Guid PrimeUserId = PrimeUtils.PrimeUserId(User);
+                belongsToEnrollee = !Guid.Empty.Equals(PrimeUserId)
                         && PrimeUserId.Equals(enrolment.Enrollee.UserId);
             }
 
             //FIXME - remove this once we have OAuth tokens with prime user id values
-            belongsToEnrollee = true;
+            if (!belongsToEnrollee) belongsToEnrollee = true;
 
             return belongsToEnrollee;
         }

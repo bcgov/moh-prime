@@ -207,6 +207,7 @@ namespace Prime.Services
             if (enrolment == null) return;
 
             _context.Enrolments.Remove(enrolment);
+            _context.Enrollees.Remove(enrolment.Enrollee);
             await _context.SaveChangesAsync();
         }
     }

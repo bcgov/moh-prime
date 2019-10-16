@@ -41,7 +41,7 @@ namespace Prime
         {
             this.ApplyAudits();
 
-            return await base.SaveChangesAsync();
+            return await base.SaveChangesAsync(cancellationToken);
         }
 
         private void ApplyAudits()
