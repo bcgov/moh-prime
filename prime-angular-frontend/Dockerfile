@@ -31,5 +31,5 @@ RUN mkdir -p /var/cache/nginx && \
     echo "Build completed."
 # Also, we are not allowed to bind to port 80 in NGINX as a non-root user
 
-
-CMD ["nginx", "-g", "daemon off;"]
+CMD nvsubst branchName < nginx.template.conf > nginx.conf && exec nginx -g daemon off;
+#CMD ["nginx", "-g", "daemon off;"]
