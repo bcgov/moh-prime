@@ -1,23 +1,16 @@
-FROM docker-registry.default.svc:5000/dqszvc-dev/aspnet:2.2 AS base
-WORKDIR /app
-EXPOSE 5001 8000
-FROM docker-registry.default.svc:5000/dqszvc-dev/sdk:2.2 AS build
-WORKDIR /src
 
-RUN dotnet restore "prime.csproj"
-WORKDIR "/src/prime"
+#FROM docker-registry.default.svc:5000/dqszvc-dev/sdk:2.2 AS build
+#FROM docker-registry.default.svc:5000/dqszvc-dev/dotnet-30-rhel7 AS build
+FROM docker-registry.default.svc:5000/dqszvc-dev/dotnet-22-rhel7 AS build
+SHELL [ "/bin/bash" , "-c" ]
+ENV ASPNETCORE_ENVIRONMENT Development
+COPY *.csproj .
+RUN dotnet restore 
 COPY . .
-WORKDIR "/src/prime"
-RUN dotnet build "prime.csproj" -c Release -o /app
-
-FROM build AS publish
-RUN dotnet publish "prime.csproj" -c Release -o /app
-
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app .
-
-ENV ASPNETCORE_ENVIRONMENT DevStaging
-ENV ASPNETCORE_URLS=http://+:5001
-
+RUN dotnet publish -c Release -o out /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
+#FROM docker-registry.default.svc:5000/dqszvc-dev/aspnet:2.2 AS runtime
+#FROM docker-registry.default.svc:5000/dqszvc-dev/dotnet-30-runtime-rhel7 AS runtime
+FROM docker-registry.default.svc:5000/dqszvc-dev/dotnet-22-runtime-rhel7 AS runtime
+COPY --from=build out .
+EXPOSE 8080 5001
 ENTRYPOINT ["dotnet", "prime.dll"]
