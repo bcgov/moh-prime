@@ -22,7 +22,7 @@ COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/conf.d/default.conf
 # We need to enforce user 0 to get these following changes done:
 USER 0
 EXPOSE 8080
-RUN 'envsubst branchName < nginx.template.conf > nginx.conf'
+RUN envsubst branchName < nginx.template.conf > nginx.conf
 RUN mkdir -p /var/cache/nginx && \ 
     mkdir -p /var/cache/nginx/client_temp && \ 
     chown -R 1000:1000 /var/cache/nginx && \ 
