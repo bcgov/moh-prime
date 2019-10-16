@@ -1,16 +1,17 @@
-using System.Security.Claims;
-using System.Linq;
-using Bogus;
-using Prime.Models;
-using Prime;
-using Prime.Services;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using System;
-using Microsoft.EntityFrameworkCore.Storage;
-using Newtonsoft.Json;
-using System.Threading.Tasks;
+using System.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+
+using Bogus;
+
+using Prime;
+using Prime.Models;
+using Prime.Services;
+
+
 using PrimeTests.Utils.Auth;
 
 namespace PrimeTests.Utils
@@ -34,7 +35,7 @@ namespace PrimeTests.Utils
                                 ;
 
         public static Faker<Enrollee> EnrolleeFaker = new Faker<Enrollee>()
-                                .RuleFor(e => e.UserId, f => f.Random.Word())
+                                .RuleFor(e => e.UserId, f => Guid.NewGuid())
                                 .RuleFor(e => e.FirstName, f => f.Name.FirstName())
                                 .RuleFor(e => e.MiddleName, f => f.Name.FirstName())
                                 .RuleFor(e => e.LastName, f => f.Name.LastName())

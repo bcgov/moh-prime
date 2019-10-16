@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace Prime.Models
 {
-    public class CollegeLicense
+    public class CollegeLicense : BaseAuditable
     {
         public short CollegeCode { get; set; }
 

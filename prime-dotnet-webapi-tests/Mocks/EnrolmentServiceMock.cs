@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -64,7 +65,7 @@ namespace PrimeTests.Mocks
             return Task.FromResult(enrolment);
         }
 
-        public Task<Enrolment> GetEnrolmentForUserIdAsync(string userId)
+        public Task<Enrolment> GetEnrolmentForUserIdAsync(Guid userId)
         {
             throw new System.NotImplementedException();
         }
@@ -75,7 +76,7 @@ namespace PrimeTests.Mocks
             return Task.FromResult((IEnumerable<Enrolment>)this.GetEnrolmentHolder().Values.ToList());
         }
 
-        public Task<IEnumerable<Enrolment>> GetEnrolmentsForUserIdAsync(string userId)
+        public Task<IEnumerable<Enrolment>> GetEnrolmentsForUserIdAsync(Guid userId)
         {
             throw new System.NotImplementedException();
         }

@@ -2,17 +2,25 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.EntityFrameworkCore.Metadata;
 using Prime.Models;
 
 namespace Prime
 {
     public class ApiDbContext : DbContext
     {
-        public ApiDbContext(DbContextOptions<ApiDbContext> options)
+        private const string SYSTEM_USER = "SYSTEM";
+
+        private readonly IHttpContextAccessor _context;
+
+        public ApiDbContext(DbContextOptions<ApiDbContext> options, IHttpContextAccessor context)
             : base(options)
         {
+            _context = context;
         }
 
         public DbSet<Enrolment> Enrolments { get; set; }
@@ -21,6 +29,50 @@ namespace Prime
         public DbSet<Organization> Organizations { get; set; }
         public DbSet<Enrollee> Enrollees { get; set; }
         public DbSet<Address> Addresses { get; set; }
+
+        public override int SaveChanges()
+        {
+            this.ApplyAudits();
+
+            return base.SaveChanges();
+        }
+
+        public async override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            this.ApplyAudits();
+
+            return await base.SaveChangesAsync();
+        }
+
+        private void ApplyAudits()
+        {
+            ChangeTracker.DetectChanges();
+
+            var created = ChangeTracker.Entries().Where(x => x.State == EntityState.Added);
+            var modified = ChangeTracker.Entries().Where(x => x.State == EntityState.Modified);
+            var currentUser = _context?.HttpContext?.User?.Identity?.Name ?? SYSTEM_USER;
+            var currentDateTime = DateTime.Now;
+
+            foreach (var item in created)
+            {
+                if (item.Entity is IAuditable entity)
+                {
+                    item.CurrentValues[nameof(IAuditable.CreatedUserId)] = currentUser;
+                    item.CurrentValues[nameof(IAuditable.CreatedTimeStamp)] = currentDateTime;
+                    item.CurrentValues[nameof(IAuditable.UpdatedUserId)] = currentUser;
+                    item.CurrentValues[nameof(IAuditable.UpdatedTimeStamp)] = currentDateTime;
+                }
+            }
+
+            foreach (var item in modified)
+            {
+                if (item.Entity is IAuditable entity)
+                {
+                    item.CurrentValues[nameof(IAuditable.UpdatedUserId)] = currentUser;
+                    item.CurrentValues[nameof(IAuditable.UpdatedTimeStamp)] = currentDateTime;
+                }
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -31,69 +83,82 @@ namespace Prime
                 .HasValue<MailingAddress>(AddressType.Mailing);
             #endregion
 
+            #region IAuditable
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                if (typeof(IAuditable).IsAssignableFrom(entityType.ClrType))
+                {
+                    entityType.FindProperty(nameof(IAuditable.CreatedUserId))
+                        .AfterSaveBehavior = PropertySaveBehavior.Ignore;
+                    entityType.FindProperty(nameof(IAuditable.CreatedTimeStamp))
+                        .AfterSaveBehavior = PropertySaveBehavior.Ignore;
+                }
+            }
+            #endregion
+
             #region CollegeSeed
             modelBuilder.Entity<College>().HasData(
-                new College { Code = 1, Name = "College of Physicians and Surgeons of BC (CPSBC)", Prefix = "91" },
-                new College { Code = 2, Name = "College of Pharmacists of BC (CPBC)", Prefix = "P1" },
-                new College { Code = 3, Name = "College of Registered Nurses of BC (CRNBC)", Prefix = "96" },
-                new College { Code = 4, Name = "None", Prefix = null }
+                new College { Code = 1, Name = "College of Physicians and Surgeons of BC (CPSBC)", Prefix = "91", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = DateTime.Now, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = DateTime.Now },
+                new College { Code = 2, Name = "College of Pharmacists of BC (CPBC)", Prefix = "P1", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = DateTime.Now, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = DateTime.Now },
+                new College { Code = 3, Name = "College of Registered Nurses of BC (CRNBC)", Prefix = "96", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = DateTime.Now, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = DateTime.Now },
+                new College { Code = 4, Name = "None", Prefix = null, CreatedUserId = SYSTEM_USER, CreatedTimeStamp = DateTime.Now, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = DateTime.Now }
             );
             #endregion
 
             #region LicenseSeed
             modelBuilder.Entity<License>().HasData(
-                new License { Code = 1, Name = "Full - General" },
-                new License { Code = 2, Name = "Full - Pharmacist" },
-                new License { Code = 3, Name = "Full - Specialty" },
-                new License { Code = 4, Name = "Registered Nurse" },
-                new License { Code = 5, Name = "Temporary Registered Nurse" }
+                new License { Code = 1, Name = "Full - General", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = DateTime.Now, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = DateTime.Now },
+                new License { Code = 2, Name = "Full - Pharmacist", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = DateTime.Now, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = DateTime.Now },
+                new License { Code = 3, Name = "Full - Specialty", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = DateTime.Now, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = DateTime.Now },
+                new License { Code = 4, Name = "Registered Nurse", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = DateTime.Now, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = DateTime.Now },
+                new License { Code = 5, Name = "Temporary Registered Nurse", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = DateTime.Now, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = DateTime.Now }
                 );
             #endregion
 
             #region CollegeLicenseSeed
             modelBuilder.Entity<CollegeLicense>().HasData(
-                new CollegeLicense { CollegeCode = 1, LicenseCode = 2 },
-                new CollegeLicense { CollegeCode = 1, LicenseCode = 3 },
-                new CollegeLicense { CollegeCode = 2, LicenseCode = 4 },
-                new CollegeLicense { CollegeCode = 2, LicenseCode = 5 },
-                new CollegeLicense { CollegeCode = 3, LicenseCode = 1 },
-                new CollegeLicense { CollegeCode = 3, LicenseCode = 5 }
+                new CollegeLicense { CollegeCode = 1, LicenseCode = 2, CreatedUserId = SYSTEM_USER, CreatedTimeStamp = DateTime.Now, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = DateTime.Now },
+                new CollegeLicense { CollegeCode = 1, LicenseCode = 3, CreatedUserId = SYSTEM_USER, CreatedTimeStamp = DateTime.Now, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = DateTime.Now },
+                new CollegeLicense { CollegeCode = 2, LicenseCode = 4, CreatedUserId = SYSTEM_USER, CreatedTimeStamp = DateTime.Now, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = DateTime.Now },
+                new CollegeLicense { CollegeCode = 2, LicenseCode = 5, CreatedUserId = SYSTEM_USER, CreatedTimeStamp = DateTime.Now, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = DateTime.Now },
+                new CollegeLicense { CollegeCode = 3, LicenseCode = 1, CreatedUserId = SYSTEM_USER, CreatedTimeStamp = DateTime.Now, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = DateTime.Now },
+                new CollegeLicense { CollegeCode = 3, LicenseCode = 5, CreatedUserId = SYSTEM_USER, CreatedTimeStamp = DateTime.Now, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = DateTime.Now }
                 );
             #endregion
 
             #region PracticeSeed
             modelBuilder.Entity<Practice>().HasData(
-                new Practice { Code = 1, Name = "Remote Practice" },
-                new Practice { Code = 2, Name = "Reproductive Care" },
-                new Practice { Code = 3, Name = "Sexually Transmitted Infections (STI)" },
-                new Practice { Code = 4, Name = "None" }
+                new Practice { Code = 1, Name = "Remote Practice", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = DateTime.Now, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = DateTime.Now },
+                new Practice { Code = 2, Name = "Reproductive Care", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = DateTime.Now, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = DateTime.Now },
+                new Practice { Code = 3, Name = "Sexually Transmitted Infections (STI)", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = DateTime.Now, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = DateTime.Now },
+                new Practice { Code = 4, Name = "None", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = DateTime.Now, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = DateTime.Now }
                 );
             #endregion
 
             #region JobNameSeed
             modelBuilder.Entity<JobName>().HasData(
-                new JobName { Code = 1, Name = "Medical Office Assistant" },
-                new JobName { Code = 2, Name = "Midwife" },
-                new JobName { Code = 3, Name = "Nurse (not nurse practitioner)" },
-                new JobName { Code = 4, Name = "Pharmacy Assistant" },
-                new JobName { Code = 5, Name = "Pharmacy Technician" },
-                new JobName { Code = 6, Name = "Registration Clerk" },
-                new JobName { Code = 7, Name = "Ward Clerk" },
-                new JobName { Code = 8, Name = "Other" }
+                new JobName { Code = 1, Name = "Medical Office Assistant", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = DateTime.Now, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = DateTime.Now },
+                new JobName { Code = 2, Name = "Midwife", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = DateTime.Now, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = DateTime.Now },
+                new JobName { Code = 3, Name = "Nurse (not nurse practitioner)", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = DateTime.Now, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = DateTime.Now },
+                new JobName { Code = 4, Name = "Pharmacy Assistant", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = DateTime.Now, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = DateTime.Now },
+                new JobName { Code = 5, Name = "Pharmacy Technician", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = DateTime.Now, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = DateTime.Now },
+                new JobName { Code = 6, Name = "Registration Clerk", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = DateTime.Now, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = DateTime.Now },
+                new JobName { Code = 7, Name = "Ward Clerk", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = DateTime.Now, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = DateTime.Now },
+                new JobName { Code = 8, Name = "Other", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = DateTime.Now, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = DateTime.Now }
                 );
             #endregion
 
             #region OrganizationNameSeed
             modelBuilder.Entity<OrganizationName>().HasData(
-                new OrganizationName { Code = 1, Name = "Vancouver Island Health" },
-                new OrganizationName { Code = 2, Name = "Shoppers Drug Mart" }
+                new OrganizationName { Code = 1, Name = "Vancouver Island Health", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = DateTime.Now, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = DateTime.Now },
+                new OrganizationName { Code = 2, Name = "Shoppers Drug Mart", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = DateTime.Now, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = DateTime.Now }
                 );
             #endregion
 
             #region OrganizationTypeSeed
             modelBuilder.Entity<OrganizationType>().HasData(
-                new OrganizationType { Code = 1, Name = "Health Authority" },
-                new OrganizationType { Code = 2, Name = "Pharmacy" }
+                new OrganizationType { Code = 1, Name = "Health Authority", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = DateTime.Now, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = DateTime.Now },
+                new OrganizationType { Code = 2, Name = "Pharmacy", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = DateTime.Now, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = DateTime.Now }
                 );
             #endregion
 

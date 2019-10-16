@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -12,12 +13,12 @@ namespace Prime.Services
         Task<Enrolment> GetEnrolmentAsync(int enrolmentId);
 
         Task<Enrolment> GetEnrolmentForUserIdAsync(
-            string userId);
+            Guid userId);
             
         Task<IEnumerable<Enrolment>> GetEnrolmentsAsync();
 
         Task<IEnumerable<Enrolment>> GetEnrolmentsForUserIdAsync(
-            string userId);
+            Guid userId);
 
         Task<int?> CreateEnrolmentAsync(Enrolment enrolment);
 

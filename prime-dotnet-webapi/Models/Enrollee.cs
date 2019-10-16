@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 namespace Prime.Models
 {
     [Table("Enrollee")]
-    public class Enrollee
+    public class Enrollee : BaseAuditable
     {
         [Key]
         public int? Id { get; set; }
@@ -16,7 +16,7 @@ namespace Prime.Models
         public ICollection<Enrolment> Enrolments { get; set; }
 
         [Required]
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
 
         [Required]
         public string FirstName { get; set; }

@@ -40,7 +40,7 @@ namespace Prime.Services
             return entity;
         }
 
-        public async Task<Enrolment> GetEnrolmentForUserIdAsync(string userId)
+        public async Task<Enrolment> GetEnrolmentForUserIdAsync(Guid userId)
         {
             var entity = await _context.Enrolments
                 .Include(e => e.Enrollee)
@@ -74,7 +74,7 @@ namespace Prime.Services
         }
 
         public async Task<IEnumerable<Enrolment>> GetEnrolmentsForUserIdAsync(
-            string userId)
+            Guid userId)
         {
             IQueryable<Enrolment> query = _context.Enrolments
                 .Include(e => e.Enrollee)

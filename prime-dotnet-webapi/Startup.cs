@@ -31,6 +31,7 @@ namespace Prime
             services.AddScoped<ILookupService, DefaultLookupService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowAll",
@@ -54,6 +55,8 @@ namespace Prime
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
+
+            services.AddHttpContextAccessor();
 
             this.ConfigureDatabase(services);
 
@@ -85,7 +88,7 @@ namespace Prime
             });
 
             app.UseCors("AllowAll");
-            
+
             app.UseAuthentication();
 
             app.UseMvc();

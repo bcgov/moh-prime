@@ -15,8 +15,8 @@ namespace Prime.Controllers
     [Route("api/[controller]")]
     [ApiController]
     //User needs at least the ADMIN or ENROLMENT role to use this controller
-    //FIXME - add this back once there are OAuth tokens
-    // [Authorize(Roles = PrimeConstants.PRIME_ADMIN_ROLE + "," + PrimeConstants.PRIME_ENROLMENT_ROLE)]
+    // FIXME - add this back once there are OAuth tokens
+    // [Authorize(Policy = PrimeConstants.PRIME_USER_POLICY)]
     public class EnrolmentsController : ControllerBase
     {
         private readonly IEnrolmentService _enrolmentService;
