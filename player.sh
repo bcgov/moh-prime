@@ -15,7 +15,7 @@ function build(){
     -p SOURCE_REPOSITORY_URL="$gitUrl" \
     -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH" | oc apply -f - --namespace=$licensePlate-dev
     echo "Building..."
-    echo "oc start-build $1-$branchName -n $licensePlate-dev"
+    echo "start-build $1-$branchName -n $licensePlate-dev --follow"
     oc start-build $1-$branchName -n $licensePlate-dev --follow
 }
 
