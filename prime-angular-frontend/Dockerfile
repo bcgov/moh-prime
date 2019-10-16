@@ -25,8 +25,8 @@ RUN mkdir -p /var/cache/nginx && \
     mkdir -p /var/cache/nginx/client_temp && \ 
     chown -R 1000:1000 /var/cache/nginx && \ 
     chmod -R 777 /var/cache/nginx && \ 
-    chmod -R 777 /var/run && \
-    envsubst branchNmae < nginx.template.conf > nginx.conf 
+    chmod -R 777 /var/run
+RUN 'envsubst branchName < nginx.template.conf > nginx.conf'
 # Also, we are not allowed to bind to port 80 in NGINX as a non-root user
 EXPOSE 8080
 
