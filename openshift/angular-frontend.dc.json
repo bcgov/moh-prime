@@ -24,11 +24,11 @@
       },
       {
         "name": "SOURCE_CONTEXT_DIR",
-        "required": true,
+        "required": true
       },
       {
         "name": "SOURCE_REPOSITORY_URL",
-        "required": true,
+        "required": true
       },
       {
         "name": "SOURCE_REPOSITORY_REF",
