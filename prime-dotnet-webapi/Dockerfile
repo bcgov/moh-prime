@@ -8,8 +8,8 @@ RUN dotnet restore
 COPY . .
 RUN dotnet publish -c Release -o out
 #FROM docker-registry.default.svc:5000/dqszvc-dev/aspnet:2.2 AS runtime
-#FROM docker-registry.default.svc:5000/dqszvc-dev/dotnet-30-runtime-rhel7 AS build
-FROM docker-registry.default.svc:5000/dqszvc-dev/dotnet-22-runtime-rhel7 AS build
+#FROM docker-registry.default.svc:5000/dqszvc-dev/dotnet-30-runtime-rhel7 AS runtime
+FROM docker-registry.default.svc:5000/dqszvc-dev/dotnet-22-runtime-rhel7 AS runtime
 COPY --from=build out .
 EXPOSE 8080 5001
-ENTRYPOINT ["dotnet", "prime.dll"]
+ENTRYPOINT ["dotnet", "Prime.dll"]
