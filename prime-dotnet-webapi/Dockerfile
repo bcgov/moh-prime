@@ -2,12 +2,12 @@
 #FROM docker-registry.default.svc:5000/dqszvc-dev/sdk:2.2 AS build
 #FROM docker-registry.default.svc:5000/dqszvc-dev/dotnet-30-rhel7 AS build
 FROM docker-registry.default.svc:5000/dqszvc-dev/dotnet-22-rhel7 AS build
-WORKDIR /opt/app-root/src
+WORKDIR /opt/app-root/app
 SHELL [ "/bin/bash" , "-c" ]
 ENV ASPNETCORE_ENVIRONMENT Development
-COPY /opt/app-root/src/*.csproj /opt/app-root/app
+COPY *.csproj /opt/app-root/app
 RUN dotnet restore 
-COPY /opt/app-root/src/ /opt/app-root/app/
+COPY . /opt/app-root/app/
 RUN dotnet publish -c Release -o /opt/app-root/app/out /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
 #FROM docker-registry.default.svc:5000/dqszvc-dev/aspnet:2.2 AS runtime
 #FROM docker-registry.default.svc:5000/dqszvc-dev/dotnet-30-runtime-rhel7 AS runtime
