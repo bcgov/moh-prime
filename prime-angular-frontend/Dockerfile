@@ -3,6 +3,7 @@ FROM node:10.16 as build-deps
 
 # set working directory
 ENV NODE_ROOT /usr/src/app
+ENV branchName $branchName
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 RUN echo `pwd`
@@ -24,7 +25,8 @@ RUN mkdir -p /var/cache/nginx && \
     mkdir -p /var/cache/nginx/client_temp && \ 
     chown -R 1000:1000 /var/cache/nginx && \ 
     chmod -R 777 /var/cache/nginx && \ 
-    chmod -R 777 /var/run
+    chmod -R 777 /var/run && \
+    envsubst branchNmae < nginx.template.conf > nginx.conf 
 # Also, we are not allowed to bind to port 80 in NGINX as a non-root user
 EXPOSE 8080
 
