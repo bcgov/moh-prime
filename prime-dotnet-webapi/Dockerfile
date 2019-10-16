@@ -4,7 +4,7 @@
 SHELL [ "/bin/bash" , "-c" ]
 ENV ASPNETCORE_ENVIRONMENT Development
 COPY *.csproj .
-RUN dotnet restore --verbosity diag
+RUN dotnet restore 
 COPY . .
 RUN dotnet publish -c Release -o out
 #FROM docker-registry.default.svc:5000/dqszvc-dev/aspnet:2.2 AS runtime
