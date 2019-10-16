@@ -11,7 +11,6 @@ COPY . .
 
 RUN npm install @angular/cli -g --silent && \ 
     npm install && \
-    npm audit fix && \
     ng build --prod && \
     echo "Build completed..."
 
