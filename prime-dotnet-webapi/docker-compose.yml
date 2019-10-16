@@ -3,7 +3,7 @@ version: "3"
 services:
 ######################################################### Sign-in #
   dotnet-webapi:
-    container_name: primeapi
+    container_name: prime-dotnet-webapi
     restart: always
     build:
       context: .
