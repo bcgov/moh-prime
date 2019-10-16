@@ -1,7 +1,7 @@
-FROM docker-registry.default.svc:5000/dqszvc-tools/aspnet:2.2 AS base
+FROM docker-registry.default.svc:5000/dqszvc-dev/aspnet:2.2 AS base
 WORKDIR /app
 EXPOSE 5001 8000
-FROM docker-registry.default.svc:5000/dqszvc-tools/sdk:2.2 AS build
+FROM docker-registry.default.svc:5000/dqszvc-dev/sdk:2.2 AS build
 WORKDIR /src
 
 RUN dotnet restore "prime.csproj"
