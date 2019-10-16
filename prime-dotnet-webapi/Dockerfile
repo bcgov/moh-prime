@@ -12,4 +12,4 @@ RUN dotnet publish -c Release -o out
 FROM docker-registry.default.svc:5000/dqszvc-dev/dotnet-22-runtime-rhel7 AS runtime
 COPY --from=build out .
 EXPOSE 8080 5001
-ENTRYPOINT ["dotnet", "Prime.dll"]
+ENTRYPOINT ["dotnet", "prime.dll"]
