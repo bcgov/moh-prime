@@ -11,8 +11,9 @@ COPY . .
 
 RUN npm install @angular/cli -g --silent && \ 
     npm install && \
+    npm audit fix && \
     ng build --prod && \
-    npm audit fix
+    echo "Build completed..."
 
 FROM nginx:1.15-alpine
 COPY --from=build-deps /usr/src/app/dist/angular-frontend /usr/share/nginx/html
