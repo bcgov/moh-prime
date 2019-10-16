@@ -7,7 +7,7 @@ namespace Prime
     {
         public static Guid PrimeUserId(ClaimsPrincipal User)
         {
-            string userId = User.Identity?.Name;
+            string userId = User?.Identity?.Name;
             return userId != null ? new Guid(userId) : Guid.Empty;
         }
     }

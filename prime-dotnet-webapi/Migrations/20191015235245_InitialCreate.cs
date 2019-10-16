@@ -16,9 +16,9 @@ namespace Prime.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Name = table.Column<string>(nullable: false),
                     Prefix = table.Column<string>(nullable: true),
-                    CreatedUserId = table.Column<string>(nullable: true),
+                    CreatedUserId = table.Column<Guid>(nullable: true),
                     CreatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    UpdatedUserId = table.Column<string>(nullable: true),
+                    UpdatedUserId = table.Column<Guid>(nullable: true),
                     UpdatedTimeStamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -44,9 +44,9 @@ namespace Prime.Migrations
                     ContactPhone = table.Column<string>(nullable: true),
                     VoicePhone = table.Column<string>(nullable: true),
                     VoiceExtension = table.Column<string>(nullable: true),
-                    CreatedUserId = table.Column<string>(nullable: true),
+                    CreatedUserId = table.Column<Guid>(nullable: true),
                     CreatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    UpdatedUserId = table.Column<string>(nullable: true),
+                    UpdatedUserId = table.Column<Guid>(nullable: true),
                     UpdatedTimeStamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -61,9 +61,9 @@ namespace Prime.Migrations
                     Code = table.Column<short>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Name = table.Column<string>(nullable: false),
-                    CreatedUserId = table.Column<string>(nullable: true),
+                    CreatedUserId = table.Column<Guid>(nullable: true),
                     CreatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    UpdatedUserId = table.Column<string>(nullable: true),
+                    UpdatedUserId = table.Column<Guid>(nullable: true),
                     UpdatedTimeStamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -78,9 +78,9 @@ namespace Prime.Migrations
                     Code = table.Column<short>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Name = table.Column<string>(nullable: false),
-                    CreatedUserId = table.Column<string>(nullable: true),
+                    CreatedUserId = table.Column<Guid>(nullable: true),
                     CreatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    UpdatedUserId = table.Column<string>(nullable: true),
+                    UpdatedUserId = table.Column<Guid>(nullable: true),
                     UpdatedTimeStamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -95,9 +95,9 @@ namespace Prime.Migrations
                     Code = table.Column<short>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Name = table.Column<string>(nullable: false),
-                    CreatedUserId = table.Column<string>(nullable: true),
+                    CreatedUserId = table.Column<Guid>(nullable: true),
                     CreatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    UpdatedUserId = table.Column<string>(nullable: true),
+                    UpdatedUserId = table.Column<Guid>(nullable: true),
                     UpdatedTimeStamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -112,9 +112,9 @@ namespace Prime.Migrations
                     Code = table.Column<short>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Name = table.Column<string>(nullable: false),
-                    CreatedUserId = table.Column<string>(nullable: true),
+                    CreatedUserId = table.Column<Guid>(nullable: true),
                     CreatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    UpdatedUserId = table.Column<string>(nullable: true),
+                    UpdatedUserId = table.Column<Guid>(nullable: true),
                     UpdatedTimeStamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -129,9 +129,9 @@ namespace Prime.Migrations
                     Code = table.Column<short>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Name = table.Column<string>(nullable: false),
-                    CreatedUserId = table.Column<string>(nullable: true),
+                    CreatedUserId = table.Column<Guid>(nullable: true),
                     CreatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    UpdatedUserId = table.Column<string>(nullable: true),
+                    UpdatedUserId = table.Column<Guid>(nullable: true),
                     UpdatedTimeStamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -152,9 +152,9 @@ namespace Prime.Migrations
                     City = table.Column<string>(nullable: true),
                     Postal = table.Column<string>(nullable: true),
                     AddressType = table.Column<int>(nullable: false),
-                    CreatedUserId = table.Column<string>(nullable: true),
+                    CreatedUserId = table.Column<Guid>(nullable: true),
                     CreatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    UpdatedUserId = table.Column<string>(nullable: true),
+                    UpdatedUserId = table.Column<Guid>(nullable: true),
                     UpdatedTimeStamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -198,9 +198,9 @@ namespace Prime.Migrations
                     HasDisciplinaryActionDetails = table.Column<string>(nullable: true),
                     HasPharmaNetSuspended = table.Column<bool>(nullable: true),
                     HasPharmaNetSuspendedDetails = table.Column<string>(nullable: true),
-                    CreatedUserId = table.Column<string>(nullable: true),
+                    CreatedUserId = table.Column<Guid>(nullable: true),
                     CreatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    UpdatedUserId = table.Column<string>(nullable: true),
+                    UpdatedUserId = table.Column<Guid>(nullable: true),
                     UpdatedTimeStamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -220,9 +220,9 @@ namespace Prime.Migrations
                 {
                     CollegeCode = table.Column<short>(nullable: false),
                     LicenseCode = table.Column<short>(nullable: false),
-                    CreatedUserId = table.Column<string>(nullable: true),
+                    CreatedUserId = table.Column<Guid>(nullable: true),
                     CreatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    UpdatedUserId = table.Column<string>(nullable: true),
+                    UpdatedUserId = table.Column<Guid>(nullable: true),
                     UpdatedTimeStamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -254,9 +254,9 @@ namespace Prime.Migrations
                     LicenseCode = table.Column<short>(nullable: false),
                     RenewalDate = table.Column<DateTime>(nullable: false),
                     PracticeCode = table.Column<short>(nullable: true),
-                    CreatedUserId = table.Column<string>(nullable: true),
+                    CreatedUserId = table.Column<Guid>(nullable: true),
                     CreatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    UpdatedUserId = table.Column<string>(nullable: true),
+                    UpdatedUserId = table.Column<Guid>(nullable: true),
                     UpdatedTimeStamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -296,9 +296,9 @@ namespace Prime.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     EnrolmentId = table.Column<int>(nullable: false),
                     Title = table.Column<string>(nullable: false),
-                    CreatedUserId = table.Column<string>(nullable: true),
+                    CreatedUserId = table.Column<Guid>(nullable: true),
                     CreatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    UpdatedUserId = table.Column<string>(nullable: true),
+                    UpdatedUserId = table.Column<Guid>(nullable: true),
                     UpdatedTimeStamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -324,9 +324,9 @@ namespace Prime.Migrations
                     City = table.Column<string>(nullable: true),
                     StartDate = table.Column<DateTime>(nullable: false),
                     EndDate = table.Column<DateTime>(nullable: true),
-                    CreatedUserId = table.Column<string>(nullable: true),
+                    CreatedUserId = table.Column<Guid>(nullable: true),
                     CreatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    UpdatedUserId = table.Column<string>(nullable: true),
+                    UpdatedUserId = table.Column<Guid>(nullable: true),
                     UpdatedTimeStamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -351,10 +351,10 @@ namespace Prime.Migrations
                 columns: new[] { "Code", "CreatedTimeStamp", "CreatedUserId", "Name", "Prefix", "UpdatedTimeStamp", "UpdatedUserId" },
                 values: new object[,]
                 {
-                    { (short)1, new DateTime(2019, 10, 15, 16, 52, 45, 237, DateTimeKind.Local).AddTicks(7626), "SYSTEM", "College of Physicians and Surgeons of BC (CPSBC)", "91", new DateTime(2019, 10, 15, 16, 52, 45, 241, DateTimeKind.Local).AddTicks(9857), "SYSTEM" },
-                    { (short)2, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(200), "SYSTEM", "College of Pharmacists of BC (CPBC)", "P1", new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(213), "SYSTEM" },
-                    { (short)3, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(223), "SYSTEM", "College of Registered Nurses of BC (CRNBC)", "96", new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(226), "SYSTEM" },
-                    { (short)4, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(229), "SYSTEM", "None", null, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(231), "SYSTEM" }
+                    { (short)1, new DateTime(2019, 10, 15, 16, 52, 45, 237, DateTimeKind.Local).AddTicks(7626), Guid.Empty, "College of Physicians and Surgeons of BC (CPSBC)", "91", new DateTime(2019, 10, 15, 16, 52, 45, 241, DateTimeKind.Local).AddTicks(9857), Guid.Empty },
+                    { (short)2, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(200), Guid.Empty, "College of Pharmacists of BC (CPBC)", "P1", new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(213), Guid.Empty },
+                    { (short)3, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(223), Guid.Empty, "College of Registered Nurses of BC (CRNBC)", "96", new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(226), Guid.Empty },
+                    { (short)4, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(229), Guid.Empty, "None", null, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(231), Guid.Empty }
                 });
 
             migrationBuilder.InsertData(
@@ -362,14 +362,14 @@ namespace Prime.Migrations
                 columns: new[] { "Code", "CreatedTimeStamp", "CreatedUserId", "Name", "UpdatedTimeStamp", "UpdatedUserId" },
                 values: new object[,]
                 {
-                    { (short)1, new DateTime(2019, 10, 15, 16, 52, 45, 243, DateTimeKind.Local).AddTicks(9846), "SYSTEM", "Medical Office Assistant", new DateTime(2019, 10, 15, 16, 52, 45, 243, DateTimeKind.Local).AddTicks(9865), "SYSTEM" },
-                    { (short)2, new DateTime(2019, 10, 15, 16, 52, 45, 243, DateTimeKind.Local).AddTicks(9887), "SYSTEM", "Midwife", new DateTime(2019, 10, 15, 16, 52, 45, 243, DateTimeKind.Local).AddTicks(9889), "SYSTEM" },
-                    { (short)3, new DateTime(2019, 10, 15, 16, 52, 45, 243, DateTimeKind.Local).AddTicks(9892), "SYSTEM", "Nurse (not nurse practitioner)", new DateTime(2019, 10, 15, 16, 52, 45, 243, DateTimeKind.Local).AddTicks(9895), "SYSTEM" },
-                    { (short)4, new DateTime(2019, 10, 15, 16, 52, 45, 243, DateTimeKind.Local).AddTicks(9898), "SYSTEM", "Pharmacy Assistant", new DateTime(2019, 10, 15, 16, 52, 45, 243, DateTimeKind.Local).AddTicks(9900), "SYSTEM" },
-                    { (short)5, new DateTime(2019, 10, 15, 16, 52, 45, 243, DateTimeKind.Local).AddTicks(9903), "SYSTEM", "Pharmacy Technician", new DateTime(2019, 10, 15, 16, 52, 45, 243, DateTimeKind.Local).AddTicks(9906), "SYSTEM" },
-                    { (short)6, new DateTime(2019, 10, 15, 16, 52, 45, 243, DateTimeKind.Local).AddTicks(9908), "SYSTEM", "Registration Clerk", new DateTime(2019, 10, 15, 16, 52, 45, 243, DateTimeKind.Local).AddTicks(9911), "SYSTEM" },
-                    { (short)7, new DateTime(2019, 10, 15, 16, 52, 45, 243, DateTimeKind.Local).AddTicks(9913), "SYSTEM", "Ward Clerk", new DateTime(2019, 10, 15, 16, 52, 45, 243, DateTimeKind.Local).AddTicks(9916), "SYSTEM" },
-                    { (short)8, new DateTime(2019, 10, 15, 16, 52, 45, 243, DateTimeKind.Local).AddTicks(9918), "SYSTEM", "Other", new DateTime(2019, 10, 15, 16, 52, 45, 243, DateTimeKind.Local).AddTicks(9921), "SYSTEM" }
+                    { (short)1, new DateTime(2019, 10, 15, 16, 52, 45, 243, DateTimeKind.Local).AddTicks(9846), Guid.Empty, "Medical Office Assistant", new DateTime(2019, 10, 15, 16, 52, 45, 243, DateTimeKind.Local).AddTicks(9865), Guid.Empty },
+                    { (short)2, new DateTime(2019, 10, 15, 16, 52, 45, 243, DateTimeKind.Local).AddTicks(9887), Guid.Empty, "Midwife", new DateTime(2019, 10, 15, 16, 52, 45, 243, DateTimeKind.Local).AddTicks(9889), Guid.Empty },
+                    { (short)3, new DateTime(2019, 10, 15, 16, 52, 45, 243, DateTimeKind.Local).AddTicks(9892), Guid.Empty, "Nurse (not nurse practitioner)", new DateTime(2019, 10, 15, 16, 52, 45, 243, DateTimeKind.Local).AddTicks(9895), Guid.Empty },
+                    { (short)4, new DateTime(2019, 10, 15, 16, 52, 45, 243, DateTimeKind.Local).AddTicks(9898), Guid.Empty, "Pharmacy Assistant", new DateTime(2019, 10, 15, 16, 52, 45, 243, DateTimeKind.Local).AddTicks(9900), Guid.Empty },
+                    { (short)5, new DateTime(2019, 10, 15, 16, 52, 45, 243, DateTimeKind.Local).AddTicks(9903), Guid.Empty, "Pharmacy Technician", new DateTime(2019, 10, 15, 16, 52, 45, 243, DateTimeKind.Local).AddTicks(9906), Guid.Empty },
+                    { (short)6, new DateTime(2019, 10, 15, 16, 52, 45, 243, DateTimeKind.Local).AddTicks(9908), Guid.Empty, "Registration Clerk", new DateTime(2019, 10, 15, 16, 52, 45, 243, DateTimeKind.Local).AddTicks(9911), Guid.Empty },
+                    { (short)7, new DateTime(2019, 10, 15, 16, 52, 45, 243, DateTimeKind.Local).AddTicks(9913), Guid.Empty, "Ward Clerk", new DateTime(2019, 10, 15, 16, 52, 45, 243, DateTimeKind.Local).AddTicks(9916), Guid.Empty },
+                    { (short)8, new DateTime(2019, 10, 15, 16, 52, 45, 243, DateTimeKind.Local).AddTicks(9918), Guid.Empty, "Other", new DateTime(2019, 10, 15, 16, 52, 45, 243, DateTimeKind.Local).AddTicks(9921), Guid.Empty }
                 });
 
             migrationBuilder.InsertData(
@@ -377,11 +377,11 @@ namespace Prime.Migrations
                 columns: new[] { "Code", "CreatedTimeStamp", "CreatedUserId", "Name", "UpdatedTimeStamp", "UpdatedUserId" },
                 values: new object[,]
                 {
-                    { (short)5, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(3042), "SYSTEM", "Temporary Registered Nurse", new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(3044), "SYSTEM" },
-                    { (short)4, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(3036), "SYSTEM", "Registered Nurse", new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(3039), "SYSTEM" },
-                    { (short)1, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(2998), "SYSTEM", "Full - General", new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(3007), "SYSTEM" },
-                    { (short)2, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(3025), "SYSTEM", "Full - Pharmacist", new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(3028), "SYSTEM" },
-                    { (short)3, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(3031), "SYSTEM", "Full - Specialty", new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(3034), "SYSTEM" }
+                    { (short)5, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(3042), Guid.Empty, "Temporary Registered Nurse", new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(3044), Guid.Empty },
+                    { (short)4, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(3036), Guid.Empty, "Registered Nurse", new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(3039), Guid.Empty },
+                    { (short)1, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(2998), Guid.Empty, "Full - General", new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(3007), Guid.Empty },
+                    { (short)2, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(3025), Guid.Empty, "Full - Pharmacist", new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(3028), Guid.Empty },
+                    { (short)3, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(3031), Guid.Empty, "Full - Specialty", new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(3034), Guid.Empty }
                 });
 
             migrationBuilder.InsertData(
@@ -389,8 +389,8 @@ namespace Prime.Migrations
                 columns: new[] { "Code", "CreatedTimeStamp", "CreatedUserId", "Name", "UpdatedTimeStamp", "UpdatedUserId" },
                 values: new object[,]
                 {
-                    { (short)1, new DateTime(2019, 10, 15, 16, 52, 45, 245, DateTimeKind.Local).AddTicks(7223), "SYSTEM", "Vancouver Island Health", new DateTime(2019, 10, 15, 16, 52, 45, 245, DateTimeKind.Local).AddTicks(7261), "SYSTEM" },
-                    { (short)2, new DateTime(2019, 10, 15, 16, 52, 45, 245, DateTimeKind.Local).AddTicks(7298), "SYSTEM", "Shoppers Drug Mart", new DateTime(2019, 10, 15, 16, 52, 45, 245, DateTimeKind.Local).AddTicks(7303), "SYSTEM" }
+                    { (short)1, new DateTime(2019, 10, 15, 16, 52, 45, 245, DateTimeKind.Local).AddTicks(7223), Guid.Empty, "Vancouver Island Health", new DateTime(2019, 10, 15, 16, 52, 45, 245, DateTimeKind.Local).AddTicks(7261), Guid.Empty },
+                    { (short)2, new DateTime(2019, 10, 15, 16, 52, 45, 245, DateTimeKind.Local).AddTicks(7298), Guid.Empty, "Shoppers Drug Mart", new DateTime(2019, 10, 15, 16, 52, 45, 245, DateTimeKind.Local).AddTicks(7303), Guid.Empty }
                 });
 
             migrationBuilder.InsertData(
@@ -398,8 +398,8 @@ namespace Prime.Migrations
                 columns: new[] { "Code", "CreatedTimeStamp", "CreatedUserId", "Name", "UpdatedTimeStamp", "UpdatedUserId" },
                 values: new object[,]
                 {
-                    { (short)1, new DateTime(2019, 10, 15, 16, 52, 45, 245, DateTimeKind.Local).AddTicks(9444), "SYSTEM", "Health Authority", new DateTime(2019, 10, 15, 16, 52, 45, 245, DateTimeKind.Local).AddTicks(9458), "SYSTEM" },
-                    { (short)2, new DateTime(2019, 10, 15, 16, 52, 45, 245, DateTimeKind.Local).AddTicks(9487), "SYSTEM", "Pharmacy", new DateTime(2019, 10, 15, 16, 52, 45, 245, DateTimeKind.Local).AddTicks(9491), "SYSTEM" }
+                    { (short)1, new DateTime(2019, 10, 15, 16, 52, 45, 245, DateTimeKind.Local).AddTicks(9444), Guid.Empty, "Health Authority", new DateTime(2019, 10, 15, 16, 52, 45, 245, DateTimeKind.Local).AddTicks(9458), Guid.Empty },
+                    { (short)2, new DateTime(2019, 10, 15, 16, 52, 45, 245, DateTimeKind.Local).AddTicks(9487), Guid.Empty, "Pharmacy", new DateTime(2019, 10, 15, 16, 52, 45, 245, DateTimeKind.Local).AddTicks(9491), Guid.Empty }
                 });
 
             migrationBuilder.InsertData(
@@ -407,10 +407,10 @@ namespace Prime.Migrations
                 columns: new[] { "Code", "CreatedTimeStamp", "CreatedUserId", "Name", "UpdatedTimeStamp", "UpdatedUserId" },
                 values: new object[,]
                 {
-                    { (short)3, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(6069), "SYSTEM", "Sexually Transmitted Infections (STI)", new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(6071), "SYSTEM" },
-                    { (short)1, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(6034), "SYSTEM", "Remote Practice", new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(6044), "SYSTEM" },
-                    { (short)2, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(6063), "SYSTEM", "Reproductive Care", new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(6066), "SYSTEM" },
-                    { (short)4, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(6074), "SYSTEM", "None", new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(6077), "SYSTEM" }
+                    { (short)3, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(6069), Guid.Empty, "Sexually Transmitted Infections (STI)", new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(6071), Guid.Empty },
+                    { (short)1, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(6034), Guid.Empty, "Remote Practice", new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(6044), Guid.Empty },
+                    { (short)2, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(6063), Guid.Empty, "Reproductive Care", new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(6066), Guid.Empty },
+                    { (short)4, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(6074), Guid.Empty, "None", new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(6077), Guid.Empty }
                 });
 
             migrationBuilder.InsertData(
@@ -418,12 +418,12 @@ namespace Prime.Migrations
                 columns: new[] { "CollegeCode", "LicenseCode", "CreatedTimeStamp", "CreatedUserId", "UpdatedTimeStamp", "UpdatedUserId" },
                 values: new object[,]
                 {
-                    { (short)3, (short)1, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(4086), "SYSTEM", new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(4089), "SYSTEM" },
-                    { (short)1, (short)2, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(4045), "SYSTEM", new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(4052), "SYSTEM" },
-                    { (short)1, (short)3, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(4069), "SYSTEM", new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(4072), "SYSTEM" },
-                    { (short)2, (short)4, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(4075), "SYSTEM", new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(4078), "SYSTEM" },
-                    { (short)2, (short)5, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(4080), "SYSTEM", new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(4083), "SYSTEM" },
-                    { (short)3, (short)5, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(4091), "SYSTEM", new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(4094), "SYSTEM" }
+                    { (short)3, (short)1, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(4086), Guid.Empty, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(4089), Guid.Empty },
+                    { (short)1, (short)2, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(4045), Guid.Empty, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(4052), Guid.Empty },
+                    { (short)1, (short)3, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(4069), Guid.Empty, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(4072), Guid.Empty },
+                    { (short)2, (short)4, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(4075), Guid.Empty, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(4078), Guid.Empty },
+                    { (short)2, (short)5, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(4080), Guid.Empty, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(4083), Guid.Empty },
+                    { (short)3, (short)5, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(4091), Guid.Empty, new DateTime(2019, 10, 15, 16, 52, 45, 242, DateTimeKind.Local).AddTicks(4094), Guid.Empty }
                 });
 
             migrationBuilder.CreateIndex(

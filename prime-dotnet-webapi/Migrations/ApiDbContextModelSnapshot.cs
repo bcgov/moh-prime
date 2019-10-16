@@ -32,7 +32,7 @@ namespace Prime.Migrations
 
                     b.Property<DateTime>("CreatedTimeStamp");
 
-                    b.Property<string>("CreatedUserId");
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.Property<int>("EnrolleeId");
 
@@ -44,7 +44,7 @@ namespace Prime.Migrations
 
                     b.Property<DateTime>("UpdatedTimeStamp");
 
-                    b.Property<string>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.HasKey("Id");
 
@@ -66,7 +66,7 @@ namespace Prime.Migrations
 
                     b.Property<DateTime>("CreatedTimeStamp");
 
-                    b.Property<string>("CreatedUserId");
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.Property<int>("EnrolmentId");
 
@@ -81,7 +81,7 @@ namespace Prime.Migrations
 
                     b.Property<DateTime>("UpdatedTimeStamp");
 
-                    b.Property<string>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.HasKey("Id");
 
@@ -103,7 +103,7 @@ namespace Prime.Migrations
 
                     b.Property<DateTime>("CreatedTimeStamp");
 
-                    b.Property<string>("CreatedUserId");
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.Property<string>("Name")
                         .IsRequired();
@@ -112,7 +112,7 @@ namespace Prime.Migrations
 
                     b.Property<DateTime>("UpdatedTimeStamp");
 
-                    b.Property<string>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.HasKey("Code");
 
@@ -168,11 +168,11 @@ namespace Prime.Migrations
 
                     b.Property<DateTime>("CreatedTimeStamp");
 
-                    b.Property<string>("CreatedUserId");
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.Property<DateTime>("UpdatedTimeStamp");
 
-                    b.Property<string>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.HasKey("CollegeCode", "LicenseCode");
 
@@ -248,7 +248,7 @@ namespace Prime.Migrations
 
                     b.Property<DateTime>("CreatedTimeStamp");
 
-                    b.Property<string>("CreatedUserId");
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.Property<DateTime>("DateOfBirth");
 
@@ -268,7 +268,7 @@ namespace Prime.Migrations
 
                     b.Property<DateTime>("UpdatedTimeStamp");
 
-                    b.Property<string>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.Property<Guid>("UserId");
 
@@ -296,7 +296,7 @@ namespace Prime.Migrations
 
                     b.Property<DateTime>("CreatedTimeStamp");
 
-                    b.Property<string>("CreatedUserId");
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.Property<string>("DeviceProviderNumber");
 
@@ -328,7 +328,7 @@ namespace Prime.Migrations
 
                     b.Property<DateTime>("UpdatedTimeStamp");
 
-                    b.Property<string>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.HasKey("Id");
 
@@ -344,7 +344,7 @@ namespace Prime.Migrations
 
                     b.Property<DateTime>("CreatedTimeStamp");
 
-                    b.Property<string>("CreatedUserId");
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.Property<int>("EnrolmentId");
 
@@ -353,7 +353,7 @@ namespace Prime.Migrations
 
                     b.Property<DateTime>("UpdatedTimeStamp");
 
-                    b.Property<string>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.HasKey("Id");
 
@@ -369,14 +369,14 @@ namespace Prime.Migrations
 
                     b.Property<DateTime>("CreatedTimeStamp");
 
-                    b.Property<string>("CreatedUserId");
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.Property<string>("Name")
                         .IsRequired();
 
                     b.Property<DateTime>("UpdatedTimeStamp");
 
-                    b.Property<string>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.HasKey("Code");
 
@@ -464,14 +464,14 @@ namespace Prime.Migrations
 
                     b.Property<DateTime>("CreatedTimeStamp");
 
-                    b.Property<string>("CreatedUserId");
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.Property<string>("Name")
                         .IsRequired();
 
                     b.Property<DateTime>("UpdatedTimeStamp");
 
-                    b.Property<string>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.HasKey("Code");
 
@@ -534,7 +534,7 @@ namespace Prime.Migrations
 
                     b.Property<DateTime>("CreatedTimeStamp");
 
-                    b.Property<string>("CreatedUserId");
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.Property<DateTime?>("EndDate");
 
@@ -549,7 +549,7 @@ namespace Prime.Migrations
 
                     b.Property<DateTime>("UpdatedTimeStamp");
 
-                    b.Property<string>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.HasKey("Id");
 
@@ -567,14 +567,14 @@ namespace Prime.Migrations
 
                     b.Property<DateTime>("CreatedTimeStamp");
 
-                    b.Property<string>("CreatedUserId");
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.Property<string>("Name")
                         .IsRequired();
 
                     b.Property<DateTime>("UpdatedTimeStamp");
 
-                    b.Property<string>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.HasKey("Code");
 
@@ -608,14 +608,14 @@ namespace Prime.Migrations
 
                     b.Property<DateTime>("CreatedTimeStamp");
 
-                    b.Property<string>("CreatedUserId");
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.Property<string>("Name")
                         .IsRequired();
 
                     b.Property<DateTime>("UpdatedTimeStamp");
 
-                    b.Property<string>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.HasKey("Code");
 
@@ -649,14 +649,14 @@ namespace Prime.Migrations
 
                     b.Property<DateTime>("CreatedTimeStamp");
 
-                    b.Property<string>("CreatedUserId");
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.Property<string>("Name")
                         .IsRequired();
 
                     b.Property<DateTime>("UpdatedTimeStamp");
 
-                    b.Property<string>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.HasKey("Code");
 

@@ -13,7 +13,7 @@ namespace Prime
 {
     public class ApiDbContext : DbContext
     {
-        private const string SYSTEM_USER = "SYSTEM";
+        private readonly Guid SYSTEM_USER = Guid.Empty;
 
         private readonly IHttpContextAccessor _context;
 
@@ -50,7 +50,7 @@ namespace Prime
 
             var created = ChangeTracker.Entries().Where(x => x.State == EntityState.Added);
             var modified = ChangeTracker.Entries().Where(x => x.State == EntityState.Modified);
-            var currentUser = _context?.HttpContext?.User?.Identity?.Name ?? SYSTEM_USER;
+            var currentUser = PrimeUtils.PrimeUserId(_context?.HttpContext?.User);  //note: defaults to Guid.Empty if there is no user
             var currentDateTime = DateTime.Now;
 
             foreach (var item in created)
