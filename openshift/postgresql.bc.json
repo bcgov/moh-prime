@@ -37,22 +37,22 @@
   ],
   "objects": [
     {
-      "apiVersion": "v1",
       "kind": "ImageStream",
+      "apiVersion": "v1",
       "metadata": {
-        "creationTimestamp": null,
+        "name": "${NAME}-${SUFFIX}",
         "labels": {
-          "io.kompose.service": "${NAME}-${SUFFIX}"
+          "shared": "true"
         },
-        "name": "${NAME}-${SUFFIX}"
+        "annotations": {}
       },
       "spec": {
         "lookupPolicy": {
-          "local": true
+          "local": false
         },
         "tags": [
           {
-            "name": "${TAG_NAME}",
+            "name": "${NAME}-${SUFFIX}",
             "annotations": null,
             "from": {
               "kind": "ImageStreamTag",
