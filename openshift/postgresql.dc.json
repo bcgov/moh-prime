@@ -47,7 +47,7 @@
       "description": "The OpenShift ImageStream name.",
       "displayName": "IMAGE_STREAM_NAME",
       "name": "IMAGE_STREAM_NAME",
-      "value": "postgres"
+      "value": "postgres-${SUFFIX}"
     },
     {
       "description": "The OpenShift Namespace where the ImageStream resides.",
