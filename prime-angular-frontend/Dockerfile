@@ -16,7 +16,7 @@ RUN npm install @angular/cli -g --silent && \
 
 FROM nginx:1.15-alpine
 COPY --from=build-deps /usr/src/app/dist/angular-frontend /usr/share/nginx/html
-#RUN rm -f /etc/nginx/conf.d/default.conf
+RUN rm -f /etc/nginx/conf.d/default.conf
 COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/conf.d/default.conf
 RUN envsubst branchName < /etc/nginx/conf.d/default.conf > /etc/nginx/conf.d/default.conf
 # Due to OpenShift not allowing root user at run, 
