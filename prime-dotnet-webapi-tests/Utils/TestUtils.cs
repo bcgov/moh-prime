@@ -1,16 +1,17 @@
-using System.Security.Claims;
-using System.Linq;
-using Bogus;
-using Prime.Models;
-using Prime;
-using Prime.Services;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using System;
-using Microsoft.EntityFrameworkCore.Storage;
-using Newtonsoft.Json;
-using System.Threading.Tasks;
+using System.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+
+using Bogus;
+
+using Prime;
+using Prime.Models;
+using Prime.Services;
+
+
 using PrimeTests.Utils.Auth;
 
 namespace PrimeTests.Utils
@@ -34,7 +35,7 @@ namespace PrimeTests.Utils
                                 ;
 
         public static Faker<Enrollee> EnrolleeFaker = new Faker<Enrollee>()
-                                .RuleFor(e => e.UserId, f => f.Random.Word())
+                                .RuleFor(e => e.UserId, f => Guid.NewGuid())
                                 .RuleFor(e => e.FirstName, f => f.Name.FirstName())
                                 .RuleFor(e => e.MiddleName, f => f.Name.FirstName())
                                 .RuleFor(e => e.LastName, f => f.Name.LastName())
@@ -45,7 +46,7 @@ namespace PrimeTests.Utils
 
         public static Faker<Certification> CertificationFaker = new Faker<Certification>()
                                 .RuleFor(c => c.CollegeCode, f => f.Random.Short(1, 5))
-                                .RuleFor(c => c.LicenseNumber, f => f.Random.Word())
+                                .RuleFor(c => c.LicenseNumber, f => f.Random.Int(100000, 999999).ToString().Substring(1))
                                 .RuleFor(c => c.LicenseCode, f => f.Random.Short(1, 4))
                                 .RuleFor(c => c.RenewalDate, f => f.Date.Past(20))
                                 .RuleFor(c => c.PracticeCode, f => f.Random.Short(1, 4))
@@ -68,7 +69,7 @@ namespace PrimeTests.Utils
                                     .RuleFor(e => e.HasCertification, f => f.Random.Bool())
                                     .RuleFor(e => e.Certifications, f => CertificationFaker.Generate(2))
                                     .RuleFor(e => e.IsDeviceProvider, f => f.Random.Bool())
-                                    .RuleFor(e => e.DeviceProviderNumber, f => f.Random.Word())
+                                    .RuleFor(e => e.DeviceProviderNumber, f => f.Random.Int(100000, 999999).ToString().Substring(1))
                                     .RuleFor(e => e.IsInsulinPumpProvider, f => f.Random.Bool())
                                     .RuleFor(e => e.IsAccessingPharmaNetOnBehalfOf, f => f.Random.Bool())
                                     .RuleFor(e => e.Jobs, f => JobFaker.Generate(2))
@@ -106,7 +107,7 @@ namespace PrimeTests.Utils
             db.AddRange(new License { Code = 2, Name = "Full - Pharmacist" });
             db.AddRange(new License { Code = 3, Name = "Full - Specialty" });
             db.AddRange(new License { Code = 4, Name = "Registered Nurse" });
-            db.AddRange(new License { Code = 5, Name = "Temporary Registered Nurse"});
+            db.AddRange(new License { Code = 5, Name = "Temporary Registered Nurse" });
 
             db.AddRange(new CollegeLicense { CollegeCode = 1, LicenseCode = 2 });
             db.AddRange(new CollegeLicense { CollegeCode = 1, LicenseCode = 3 });
@@ -134,6 +135,12 @@ namespace PrimeTests.Utils
 
             db.AddRange(new OrganizationType { Code = 1, Name = "Health Authority" });
             db.AddRange(new OrganizationType { Code = 2, Name = "Pharmacy" });
+
+            db.AddRange(new Status { Code = 1, Name = "In Progress" });
+            db.AddRange(new Status { Code = 2, Name = "Submitted" });
+            db.AddRange(new Status { Code = 3, Name = "Approved" });
+            db.AddRange(new Status { Code = 4, Name = "Denied" });
+            db.AddRange(new Status { Code = 5, Name = "Accepted" });
 
             db.SaveChanges();
         }

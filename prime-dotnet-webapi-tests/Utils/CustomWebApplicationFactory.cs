@@ -45,6 +45,8 @@ namespace PrimeTests.Utils
                         options.UseInternalServiceProvider(serviceProvider);
                     });
 
+                services.AddHttpContextAccessor();
+
                 //configure test auth
                 services.PostConfigure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme, options =>
                 {

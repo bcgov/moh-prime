@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Prime.Models
 {
     [Table("JobNameLookup")]
-    public class JobName : ILookup
+    public class JobName : BaseAuditable, ILookup
     {
         [Key]
         public short Code { get; set; }

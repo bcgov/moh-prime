@@ -10,5 +10,6 @@ namespace Prime.Models
         public List<OrganizationName> OrganizationNames { get; set; }
         public List<OrganizationType> OrganizationTypes { get; set; }
         public List<Practice> Practices { get; set; }
+        public List<Status> Statuses { get; set; }
     }
 }

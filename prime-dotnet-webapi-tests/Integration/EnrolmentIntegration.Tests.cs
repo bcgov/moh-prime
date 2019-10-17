@@ -11,6 +11,7 @@ using Xunit;
 using Prime;
 using Prime.Models;
 using PrimeTests.Utils;
+using System;
 
 namespace PrimeTests.Integration
 {
@@ -111,12 +112,12 @@ namespace PrimeTests.Integration
             {
                 var enrolment = this.CreateEnrolment(scope);
                 int expectedEnrolmentId = (int)enrolment.Id;
-                string expectedUserId = enrolment.Enrollee.UserId;
+                Guid expectedUserId = enrolment.Enrollee.UserId;
 
                 var request = new HttpRequestMessage(HttpMethod.Get, "/api/enrolments/" + expectedEnrolmentId);
                 var _token = TestUtils.TokenBuilder()
                     .ForAudience("prime-web-api")
-                    .ForSubject(expectedUserId)
+                    .ForSubject(expectedUserId.ToString())
                     .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_ENROLMENT_ROLE)
                     .BuildToken();
 
