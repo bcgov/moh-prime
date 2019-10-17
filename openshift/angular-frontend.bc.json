@@ -79,6 +79,14 @@
             "name": "${NAME}-${SUFFIX}"
           },
           "spec": {
+            "containers": {
+              "env": [
+                {
+                  "name": "branchName",
+                  "value": "${SUFFIX}"
+                }
+              ]
+            },
             "completionDeadlineSeconds": 6000,
             "nodeSelector": null,
             "output": {
