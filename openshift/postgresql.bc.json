@@ -52,7 +52,7 @@
         },
         "tags": [
           {
-            "name": "${NAME}-${SUFFIX}",
+            "name": "${NAME}",
             "annotations": null,
             "from": {
               "kind": "ImageStreamTag",
