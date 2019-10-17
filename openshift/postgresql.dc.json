@@ -17,6 +17,22 @@
       "value": "postgres-${SUFFIX}"
     },
     {
+      "name": "VERSION",
+      "required": true
+    },
+    {
+      "name": "SOURCE_CONTEXT_DIR",
+      "required": true
+    },
+    {
+      "name": "SOURCE_REPOSITORY_URL",
+      "required": true
+    },
+    {
+      "name": "SOURCE_REPOSITORY_REF",
+      "required": true
+    },
+    {
       "name": "SUFFIX",
       "required": true
     },

@@ -39,6 +39,7 @@ pipeline {
                 //sh "unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-deploy -Pargs.--config=pipeline/config-dev.groovy -Pargs.--pr=${CHANGE_ID} -Pargs.--env=dev"
                 sh "bash ./player.sh deploy dotnet-webapi"
                 //sh "bash ./player.sh deploy angular-frontend"
+                sh "bash ./player.sh deploy postgresql"
             }
         }
         /*
