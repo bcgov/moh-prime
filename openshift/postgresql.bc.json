@@ -2,7 +2,7 @@
   "kind": "Template",
   "apiVersion": "v1",
   "metadata": {
-    "name": "angular-frontend-bc",
+    "name": "postgresql-bc",
     "creationTimestamp": null
   },
   "parameters": [
