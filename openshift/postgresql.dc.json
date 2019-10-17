@@ -74,7 +74,7 @@
       "displayName": "PostgreSQL Database Name",
       "name": "POSTGRES_SECRET_NAME",
       "required": true,
-      "value": "${NAME}-secret"
+      "value": "postgres-prime-secret"
     },
     {
       "description": "Volume space available for data, e.g. 512Mi, 2Gi.",
