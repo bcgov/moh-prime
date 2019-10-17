@@ -34,6 +34,7 @@ namespace Prime.Services
                 .Include(e => e.Certifications)
                 .Include(e => e.Jobs)
                 .Include(e => e.Organizations)
+                .Include(e => e.EnrolmentStatuses)
                 .SingleOrDefaultAsync(e => e.Id == enrolmentId)
                 ;
 
@@ -50,6 +51,7 @@ namespace Prime.Services
                 .Include(e => e.Certifications)
                 .Include(e => e.Jobs)
                 .Include(e => e.Organizations)
+                .Include(e => e.EnrolmentStatuses)
                 .SingleOrDefaultAsync(e => e.Enrollee.UserId == userId)
                 ;
 
@@ -66,6 +68,7 @@ namespace Prime.Services
                 .Include(e => e.Certifications)
                 .Include(e => e.Jobs)
                 .Include(e => e.Organizations)
+                .Include(e => e.EnrolmentStatuses)
                 ;
 
             var items = await query.ToArrayAsync();
@@ -84,6 +87,7 @@ namespace Prime.Services
                 .Include(e => e.Certifications)
                 .Include(e => e.Jobs)
                 .Include(e => e.Organizations)
+                .Include(e => e.EnrolmentStatuses)
                 .Where(e => e.Enrollee.UserId == userId)
                 ;
 
@@ -95,6 +99,16 @@ namespace Prime.Services
         public async Task<int?> CreateEnrolmentAsync(Enrolment enrolment)
         {
             enrolment.AppliedDate = DateTime.Now;
+            //create a status history record
+            EnrolmentStatus enrolmentStatus = new EnrolmentStatus();
+            enrolmentStatus.Enrolment = enrolment;
+            enrolmentStatus.StatusCode = 1;
+            enrolmentStatus.IsCurrent = true;
+            enrolmentStatus.StatusDate = DateTime.Now;
+            if (enrolment.EnrolmentStatuses == null) {
+                enrolment.EnrolmentStatuses = new List<EnrolmentStatus>(0);
+            }
+            enrolment.EnrolmentStatuses.Add(enrolmentStatus);
             _context.Enrolments.Add(enrolment);
 
             var created = await _context.SaveChangesAsync();

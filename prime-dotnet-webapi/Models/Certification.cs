@@ -18,14 +18,18 @@ namespace Prime.Models
         [JsonIgnore]
         public Enrolment Enrolment { get; set; }
 
+        [Required]
         public short CollegeCode { get; set; }
 
         [JsonIgnore]
         public College College { get; set; }
 
         [Required]
+        [RegularExpression(@"([0-9]+)", ErrorMessage = "License Number should not contain characters")]
+        [StringLength(5, MinimumLength = 5, ErrorMessage = "License Number must be 5 digits")]
         public string LicenseNumber { get; set; }
 
+        [Required]
         public short LicenseCode { get; set; }
 
         [JsonIgnore]

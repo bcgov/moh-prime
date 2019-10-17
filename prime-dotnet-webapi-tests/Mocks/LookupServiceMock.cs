@@ -24,6 +24,7 @@ namespace PrimeTests.Mocks
         private string ORGANIZATION_NAME_KEY = typeof(OrganizationName).FullName;
         private string ORGANIZATION_TYPE_KEY = typeof(OrganizationType).FullName;
         private string PRACTICE_KEY = typeof(Practice).FullName;
+        private string STATUS_KEY = typeof(Status).FullName;
 
         public LookupServiceMock()
         {
@@ -39,6 +40,7 @@ namespace PrimeTests.Mocks
             _fakeDb.Add(ORGANIZATION_NAME_KEY, new Dictionary<short, object>());
             _fakeDb.Add(ORGANIZATION_TYPE_KEY, new Dictionary<short, object>());
             _fakeDb.Add(PRACTICE_KEY, new Dictionary<short, object>());
+            _fakeDb.Add(STATUS_KEY, new Dictionary<short, object>());
 
             //seed the lookup data
             this.GetHolder<College>(COLLEGE_KEY).Add(1, new College { Code = 1, Name = "College of Physicians and Surgeons of BC (CPSBC)", Prefix = "91" });
@@ -71,6 +73,12 @@ namespace PrimeTests.Mocks
 
             this.GetHolder<OrganizationType>(ORGANIZATION_TYPE_KEY).Add(1, new OrganizationType { Code = 1, Name = "Health Authority" });
             this.GetHolder<OrganizationType>(ORGANIZATION_TYPE_KEY).Add(2, new OrganizationType { Code = 2, Name = "Pharmacy" });
+
+            this.GetHolder<Status>(STATUS_KEY).Add(1, new Status { Code = 1, Name = "In Progress" });
+            this.GetHolder<Status>(STATUS_KEY).Add(2, new Status { Code = 2, Name = "Submitted" });
+            this.GetHolder<Status>(STATUS_KEY).Add(3, new Status { Code = 3, Name = "Approved" });
+            this.GetHolder<Status>(STATUS_KEY).Add(4, new Status { Code = 4, Name = "Denied" });
+            this.GetHolder<Status>(STATUS_KEY).Add(5, new Status { Code = 5, Name = "Accepted" });
         }
 
         private Dictionary<short, object> GetHolder<T>(string key) where T : ILookup

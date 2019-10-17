@@ -33,12 +33,13 @@ namespace Prime.Controllers
         {
             LookupEntity lookupEntity = new LookupEntity();
 
-            lookupEntity.Colleges = await _lookupService.GetLookupsAsync<College>(c => c.CollegeLicenses);
+            lookupEntity.Colleges = await _lookupService.GetLookupsAsync<College>(c => c.CollegeLicenses, c => c.CollegePractices);
             lookupEntity.JobNames = await _lookupService.GetLookupsAsync<JobName>();
             lookupEntity.Licenses = await _lookupService.GetLookupsAsync<License>(l => l.CollegeLicenses);
             lookupEntity.OrganizationNames = await _lookupService.GetLookupsAsync<OrganizationName>();
             lookupEntity.OrganizationTypes = await _lookupService.GetLookupsAsync<OrganizationType>();
-            lookupEntity.Practices = await _lookupService.GetLookupsAsync<Practice>();
+            lookupEntity.Practices = await _lookupService.GetLookupsAsync<Practice>(p => p.CollegePractices);
+            lookupEntity.Statuses = await _lookupService.GetLookupsAsync<Status>();
 
             return Ok(new ApiOkResponse<LookupEntity>(lookupEntity));
         }
