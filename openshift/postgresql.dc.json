@@ -273,7 +273,7 @@
                       "/bin/sh",
                       "-i",
                       "-c",
-                      "psql -h 127.0.0.1 -U $POSTGRES_USER -q -d $POSTGRES_DATABASE -c 'SELECT 1'"
+                      "psql -h 127.0.0.1 -d $POSTGRESQL_DATABASE -U $POSTGRESQL_USER -c 'SELECT 1'"
                     ]
                   },
                   "initialDelaySeconds": 5,
