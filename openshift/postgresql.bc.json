@@ -56,8 +56,7 @@
             "annotations": null,
             "from": {
               "kind": "ImageStreamTag",
-              "name": "postgresql:9.6",
-              "namespace": "bcgov"
+              "name": "postgresql-${SUFFIX}:latest"
             },
             "generation": 1,
             "importPolicy": {},
