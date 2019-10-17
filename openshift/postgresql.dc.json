@@ -14,25 +14,24 @@
       "displayName": "Database Service Name",
       "name": "NAME",
       "required": true,
-      "value": "postgresql"
+      "value": "postgres-${SUFFIX}"
     },
     {
       "name": "SUFFIX",
-      "required": true,
-      "value": "postgresql"
+      "required": true
     },
     {
       "description": "The name of the OpenShift Service exposed for the database.",
       "displayName": "Database Service Name",
       "name": "DATABASE_SERVICE_NAME",
       "required": true,
-      "value": "postgresql"
+      "value": "postgres-${SUFFIX}"
     },
     {
       "description": "The OpenShift ImageStream name.",
       "displayName": "IMAGE_STREAM_NAME",
       "name": "IMAGE_STREAM_NAME",
-      "value": "postgresql"
+      "value": "postgres-${SUFFIX}"
     },
     {
       "description": "The OpenShift Namespace where the ImageStream resides.",
@@ -45,7 +44,7 @@
       "displayName": "Version of PostgreSQL Image",
       "name": "IMAGE_STREAM_VERSION",
       "required": true,
-      "value": "11.4"
+      "value": "9.6"
     },
     {
       "description": "Oracle FDW secret name",
@@ -67,7 +66,7 @@
       "displayName": "PostgreSQL Database Name",
       "name": "POSTGRESQL_DATABASE",
       "required": true,
-      "value": "prime"
+      "value": "postgres"
     },
     {
       "description": "Volume space available for data, e.g. 512Mi, 2Gi.",
