@@ -5,7 +5,7 @@ gitUrl='https://github.com/bcgov/moh-prime.git'
 gitBranch="$CHANGE_BRANCH"
 branchName=`echo "$BRANCH_NAME" | awk '{print tolower($0)}'`
 
-
+envsubst branchName < prime-angular-frontend/nginx.template.conf > prime-angular-frontend/nginx.conf
 function build(){
     oc process -f openshift/$1.bc.json \
     -p NAME="$1" \
