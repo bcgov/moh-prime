@@ -5,6 +5,8 @@ services:
     container_name: prime-angular-frontend
     build:
         context: .
+    environment:
+      branchName: ${SUFFIX}    
     command: "nginx -g 'daemon off;'"
     restart: always
     ports:
