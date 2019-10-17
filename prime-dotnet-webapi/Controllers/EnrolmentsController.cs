@@ -113,13 +113,15 @@ namespace Prime.Controllers
         {
             if (enrolmentId != enrolment.Id)
             {
-                return BadRequest(new ApiResponse(400, "Enrolment Id does not match with the payload."));
+                this.ModelState.AddModelError("Enrolment.Id", "Enrolment Id does not match with the payload.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
             if (enrolment.Enrollee == null
                     || enrolment.Enrollee.Id == null)
             {
-                return BadRequest(new ApiResponse(400, "Enrollee Id is required to make updates."));
+                this.ModelState.AddModelError("Enrollee.Id", "Enrollee Id is required to make updates.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
             if (!_enrolmentService.EnrolmentExists(enrolmentId))
