@@ -116,7 +116,7 @@
         "annotations": {
           "as-copy-of": "${POSTGRES_SECRET_NAME}"
         },
-        "name": "${NAME}${SUFFIX}"
+        "name": "${NAME}-${SUFFIX}"
       },
       "stringData": {}
     },
@@ -127,7 +127,7 @@
         "annotations": {
           "as-copy-of": "${POSTGRES_NRIS_SECRET_NAME}"
         },
-        "name": "${NAME}${SUFFIX}-nris"
+        "name": "${NAME}-${SUFFIX}-nris"
       },
       "stringData": {}
     },
@@ -138,7 +138,7 @@
         "annotations": {
           "template.openshift.io/expose-uri": "postgres://{.spec.clusterIP}:{.spec.ports[?(.name==\"postgresql\")].port}"
         },
-        "name": "${NAME}${SUFFIX}"
+        "name": "${NAME}-${SUFFIX}"
       },
       "spec": {
         "ports": [
@@ -151,7 +151,7 @@
           }
         ],
         "selector": {
-          "name": "${NAME}${SUFFIX}"
+          "name": "${NAME}-${SUFFIX}"
         },
         "sessionAffinity": "None",
         "type": "ClusterIP"
@@ -164,7 +164,7 @@
       "apiVersion": "v1",
       "kind": "PersistentVolumeClaim",
       "metadata": {
-        "name": "${NAME}${SUFFIX}",
+        "name": "${NAME}-${SUFFIX}",
         "annotations": {
           "volume.beta.kubernetes.io/storage-class": "gluster-file-db",
           "volume.beta.kubernetes.io/storage-provisioner": "kubernetes.io/glusterfs"
@@ -203,12 +203,12 @@
         "annotations": {
           "template.alpha.openshift.io/wait-for-ready": "true"
         },
-        "name": "${NAME}${SUFFIX}"
+        "name": "${NAME}-${SUFFIX}"
       },
       "spec": {
         "replicas": 1,
         "selector": {
-          "name": "${NAME}${SUFFIX}"
+          "name": "${NAME}-${SUFFIX}"
         },
         "strategy": {
           "type": "Recreate",
@@ -218,7 +218,7 @@
         "template": {
           "metadata": {
             "labels": {
-              "name": "${NAME}${SUFFIX}"
+              "name": "${NAME}-${SUFFIX}"
             }
           },
           "spec": {
@@ -375,11 +375,11 @@
                 "volumeMounts": [
                   {
                     "mountPath": "/var/lib/pgsql/data",
-                    "name": "${NAME}${SUFFIX}-data"
+                    "name": "${NAME}-${SUFFIX}-data"
                   },
                   {
                     "mountPath": "/var/run/postgresql",
-                    "name": "${NAME}${SUFFIX}-run"
+                    "name": "${NAME}-${SUFFIX}-run"
                   }
                 ]
               }
@@ -388,13 +388,13 @@
             "restartPolicy": "Always",
             "volumes": [
               {
-                "name": "${NAME}${SUFFIX}-data",
+                "name": "${NAME}-${SUFFIX}-data",
                 "persistentVolumeClaim": {
-                  "claimName": "${NAME}${SUFFIX}"
+                  "claimName": "${NAME}-${SUFFIX}"
                 }
               },
               {
-                "name": "${NAME}${SUFFIX}-run",
+                "name": "${NAME}-${SUFFIX}-run",
                 "emptyDir": {}
               }
             ]
