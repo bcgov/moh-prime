@@ -8,13 +8,18 @@ branchName=`echo "$BRANCH_NAME" | awk '{print tolower($0)}'`
 envsubst '$branchName' < prime-angular-frontend/nginx.template.conf > prime-angular-frontend/nginx.conf
 
 function build(){
+    buildPresent=`oc get bc/$1-$branchName --ignore-not-found=true`
+    if [ -z ${buildPresent} ];
+    then MODE="apply"
+    else MODE="create"
+    fi;
     oc process -f openshift/$1.bc.json \
     -p NAME="$1" \
     -p VERSION="$BUILD_NUMBER" \
     -p SUFFIX="$branchName" \
     -p SOURCE_CONTEXT_DIR="prime-$1" \
     -p SOURCE_REPOSITORY_URL="$gitUrl" \
-    -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH" | oc apply -f - --namespace=$licensePlate-dev
+    -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH" | oc $MODE -f - --namespace=$licensePlate-dev
     echo "Building..."
     echo "start-build $1-$branchName -n $licensePlate-dev --follow"
     oc start-build $1-$branchName -n $licensePlate-dev --follow
@@ -22,13 +27,18 @@ function build(){
 }
 
 function deploy(){
+    deployPresent=`oc get bc/$1-$branchName --ignore-not-found=true`
+    if [ -z ${deployPresent} ];
+    then MODE="apply"
+    else MODE="create"
+    fi;
     oc process -f openshift/$1.dc.json \
     -p NAME="$1" \
     -p VERSION="$BUILD_NUMBER" \
     -p SUFFIX="$branchName" \
     -p SOURCE_CONTEXT_DIR="prime-$1" \
     -p SOURCE_REPOSITORY_URL="$gitUrl" \
-    -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH" | oc apply -f - --namespace=$licensePlate-dev
+    -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH" | oc $MODE -f - --namespace=$licensePlate-dev
     echo "Building..."
     echo "oc rollout latest dc/$1-$branchName -n $licensePlate-dev"
     oc rollout latest dc/$1-$branchName -n $licensePlate-dev
