@@ -17,8 +17,9 @@ RUN npm install @angular/cli -g --silent && \
 FROM nginx:1.15-alpine
 COPY --from=build-deps /usr/src/app/dist/angular-frontend /usr/share/nginx/html
 RUN rm -f /etc/nginx/conf.d/default.conf
-COPY --from=build-deps /usr/src/app/nginx.template.conf /etc/nginx/conf.d/nginx.template.conf
-RUN envsubst branchName < /etc/nginx/conf.d/nginx.template.conf > /etc/nginx/conf.d/default.conf
+COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/conf.d/default.conf
+#COPY --from=build-deps /usr/src/app/nginx.template.conf /etc/nginx/conf.d/nginx.template.conf
+# RUN envsubst branchName < /etc/nginx/conf.d/nginx.template.conf > /etc/nginx/conf.d/default.conf
 # Due to OpenShift not allowing root user at run, 
 # We need to enforce user 0 to get these following changes done:
 USER 0
