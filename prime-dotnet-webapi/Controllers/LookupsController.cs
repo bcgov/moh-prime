@@ -12,7 +12,7 @@ namespace Prime.Controllers
     [Route("api/[controller]")]
     [ApiController]
     // User needs at least the ADMIN or ENROLMENT role to use this controller
-    // FIXME - add this back once there are OAuth tokens
+    // TODO - add this back once there are OAuth tokens
     // [Authorize(Policy = PrimeConstants.PRIME_USER_POLICY)]
     public class LookupsController : ControllerBase
     {

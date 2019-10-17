@@ -14,8 +14,8 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    //User needs at least the ADMIN or ENROLMENT role to use this controller
-    // FIXME - add this back once there are OAuth tokens
+    // User needs at least the ADMIN or ENROLMENT role to use this controller
+    // TODO - add this back once there are OAuth tokens
     // [Authorize(Policy = PrimeConstants.PRIME_USER_POLICY)]
     public class EnrolmentsController : ControllerBase
     {
@@ -38,8 +38,8 @@ namespace Prime.Controllers
         {
             IEnumerable<Enrolment> enrolments = null;
 
-            //User must have the ADMIN role to see all enrolments
-            //FIXME - remove this 'always' true once there are OAuth tokens
+            // User must have the ADMIN role to see all enrolments
+            // TODO - remove this 'always' true once there are OAuth tokens
             if (true || User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE))
             {
                 enrolments = await _enrolmentService.GetEnrolmentsAsync();
@@ -73,7 +73,7 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"Enrolment not found with id {enrolmentId}"));
             }
 
-            //if the user is not an ADMIN, make sure the enrolment matches the enrollee, otherwise return not authorized
+            // if the user is not an ADMIN, make sure the enrolment matches the enrollee, otherwise return not authorized
             if (!BelongsToEnrollee(enrolment))
             {
                 return Forbid();
@@ -129,7 +129,7 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"Enrolment not found with id {enrolmentId}"));
             }
 
-            //if the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
+            // if the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
             if (!BelongsToEnrollee(enrolment))
             {
                 return Forbid();
@@ -158,7 +158,7 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"Enrolment not found with id {enrolmentId}"));
             }
 
-            //if the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
+            // if the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
             if (!BelongsToEnrollee(enrolment))
             {
                 return Forbid();
@@ -175,7 +175,7 @@ namespace Prime.Controllers
 
             belongsToEnrollee = User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE);
 
-            //if user is not ADMIN, check that user belongs to the enrolment
+            // if user is not ADMIN, check that user belongs to the enrolment
             if (!belongsToEnrollee)
             {
                 Guid PrimeUserId = PrimeUtils.PrimeUserId(User);
@@ -183,7 +183,7 @@ namespace Prime.Controllers
                         && PrimeUserId.Equals(enrolment.Enrollee.UserId);
             }
 
-            //FIXME - remove this once we have OAuth tokens with prime user id values
+            // TODO - remove this once we have OAuth tokens with prime user id values
             if (!belongsToEnrollee) belongsToEnrollee = true;
 
             return belongsToEnrollee;
