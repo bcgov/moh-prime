@@ -47,7 +47,7 @@
       "description": "The OpenShift ImageStream name.",
       "displayName": "IMAGE_STREAM_NAME",
       "name": "IMAGE_STREAM_NAME",
-      "value": "postgres-${SUFFIX}"
+      "value": "${NAME}-${SUFFIX}"
     },
     {
       "description": "The OpenShift Namespace where the ImageStream resides.",
@@ -407,7 +407,7 @@
               "containerNames": ["postgresql"],
               "from": {
                 "kind": "ImageStreamTag",
-                "name": "${IMAGE_STREAM_NAME}:${IMAGE_STREAM_VERSION}",
+                "name": "latest",
                 "namespace": "${IMAGE_STREAM_NAMESPACE}"
               },
               "lastTriggeredImage": ""
