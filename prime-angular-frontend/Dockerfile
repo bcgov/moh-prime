@@ -4,7 +4,7 @@ SHELL [ "/bin/bash","-c"]
 # set working directory
 ENV NODE_ROOT /usr/src/app
 RUN mkdir -p /usr/src/app && \
-    echo "Branch name: $branchName" && \
+    echo "Branch name: ${branchName}" && \
     echo "Suffix ${SUFFIX}"
 WORKDIR /usr/src/app
 COPY . .
