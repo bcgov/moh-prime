@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace Prime.Models
 {
     [Table("Enrolment")]
-    public class Enrolment
+    public class Enrolment : BaseAuditable
     {
         [Key]
         public int? Id { get; set; }
@@ -31,6 +32,10 @@ namespace Prime.Models
 
         public bool? IsDeviceProvider { get; set; }
 
+        public string DeviceProviderPrefix { get; set; }
+
+        [RegularExpression(@"([0-9]+)", ErrorMessage = "Device Provider Number should not contain characters")]
+        [StringLength(5, MinimumLength = 5, ErrorMessage = "Device Provider Number must be 5 digits")]
         public string DeviceProviderNumber { get; set; }
 
         public bool? IsInsulinPumpProvider { get; set; }
@@ -56,5 +61,10 @@ namespace Prime.Models
         public string HasPharmaNetSuspendedDetails { get; set; }
 
         public ICollection<Organization> Organizations { get; set; }
+
+        public ICollection<EnrolmentStatus> EnrolmentStatuses { get; set; }
+
+        [NotMapped]
+        public EnrolmentStatus CurrentStatus { get { return this.EnrolmentStatuses?.SingleOrDefault(es => es.IsCurrent == true); } }
     }
 }

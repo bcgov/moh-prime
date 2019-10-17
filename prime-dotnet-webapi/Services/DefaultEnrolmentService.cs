@@ -34,13 +34,14 @@ namespace Prime.Services
                 .Include(e => e.Certifications)
                 .Include(e => e.Jobs)
                 .Include(e => e.Organizations)
+                .Include(e => e.EnrolmentStatuses)
                 .SingleOrDefaultAsync(e => e.Id == enrolmentId)
                 ;
 
             return entity;
         }
 
-        public async Task<Enrolment> GetEnrolmentForUserIdAsync(string userId)
+        public async Task<Enrolment> GetEnrolmentForUserIdAsync(Guid userId)
         {
             var entity = await _context.Enrolments
                 .Include(e => e.Enrollee)
@@ -50,6 +51,7 @@ namespace Prime.Services
                 .Include(e => e.Certifications)
                 .Include(e => e.Jobs)
                 .Include(e => e.Organizations)
+                .Include(e => e.EnrolmentStatuses)
                 .SingleOrDefaultAsync(e => e.Enrollee.UserId == userId)
                 ;
 
@@ -66,6 +68,7 @@ namespace Prime.Services
                 .Include(e => e.Certifications)
                 .Include(e => e.Jobs)
                 .Include(e => e.Organizations)
+                .Include(e => e.EnrolmentStatuses)
                 ;
 
             var items = await query.ToArrayAsync();
@@ -74,7 +77,7 @@ namespace Prime.Services
         }
 
         public async Task<IEnumerable<Enrolment>> GetEnrolmentsForUserIdAsync(
-            string userId)
+            Guid userId)
         {
             IQueryable<Enrolment> query = _context.Enrolments
                 .Include(e => e.Enrollee)
@@ -84,6 +87,7 @@ namespace Prime.Services
                 .Include(e => e.Certifications)
                 .Include(e => e.Jobs)
                 .Include(e => e.Organizations)
+                .Include(e => e.EnrolmentStatuses)
                 .Where(e => e.Enrollee.UserId == userId)
                 ;
 
@@ -95,6 +99,16 @@ namespace Prime.Services
         public async Task<int?> CreateEnrolmentAsync(Enrolment enrolment)
         {
             enrolment.AppliedDate = DateTime.Now;
+            //create a status history record
+            EnrolmentStatus enrolmentStatus = new EnrolmentStatus();
+            enrolmentStatus.Enrolment = enrolment;
+            enrolmentStatus.StatusCode = 1;
+            enrolmentStatus.IsCurrent = true;
+            enrolmentStatus.StatusDate = DateTime.Now;
+            if (enrolment.EnrolmentStatuses == null) {
+                enrolment.EnrolmentStatuses = new List<EnrolmentStatus>(0);
+            }
+            enrolment.EnrolmentStatuses.Add(enrolmentStatus);
             _context.Enrolments.Add(enrolment);
 
             var created = await _context.SaveChangesAsync();
@@ -207,6 +221,7 @@ namespace Prime.Services
             if (enrolment == null) return;
 
             _context.Enrolments.Remove(enrolment);
+            _context.Enrollees.Remove(enrolment.Enrollee);
             await _context.SaveChangesAsync();
         }
     }

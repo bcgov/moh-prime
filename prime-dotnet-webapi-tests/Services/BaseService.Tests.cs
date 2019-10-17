@@ -1,4 +1,5 @@
 using System;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Prime;
 using PrimeTests.Utils;
@@ -19,13 +20,14 @@ namespace PrimeTests.Services
                         .UseInMemoryDatabase(databaseName: _databaseName)
                       .Options;
 
-            _dbContext = new ApiDbContext(options);
+            var context = new HttpContextAccessor();
+            context.HttpContext = new DefaultHttpContext();
 
-            // cannot migrate the in-memory db
-            // _dbContext.Database.Migrate();
+            _dbContext = new ApiDbContext(options, context);
+
             TestUtils.InitializeDbForTests(_dbContext);
 
-            _service = (T)Activator.CreateInstance(typeof(T),new object[] { _dbContext, });
+            _service = (T)Activator.CreateInstance(typeof(T), new object[] { _dbContext, });
         }
 
         public void Dispose()

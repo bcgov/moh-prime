@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 namespace Prime.Models
 {
     [Table("OrganizationTypeLookup")]
-    public class OrganizationType : ILookup
+    public class OrganizationType : BaseAuditable, ILookup
     {
         [Key]
         public short Code { get; set; }

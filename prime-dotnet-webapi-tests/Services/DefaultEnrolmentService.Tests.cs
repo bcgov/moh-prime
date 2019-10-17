@@ -1,8 +1,8 @@
+using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
-using Prime;
 using Prime.Models;
 using Prime.Services;
 using PrimeTests.Utils;
@@ -41,7 +41,7 @@ namespace PrimeTests.Services
         public async void testCreateEnrolment()
         {
             var testEnrolment = TestUtils.EnrolmentFaker.Generate();
-            string expectedUserId = testEnrolment.Enrollee.UserId;
+            Guid expectedUserId = testEnrolment.Enrollee.UserId;
 
             // create the enrolment through the service layer code
             int expectedEnrolmentId = (int)await _service.CreateEnrolmentAsync(testEnrolment);
@@ -57,7 +57,7 @@ namespace PrimeTests.Services
         public async void testGetEnrolment()
         {
             var testEnrolment = TestUtils.EnrolmentFaker.Generate();
-            string expectedUserId = testEnrolment.Enrollee.UserId;
+            Guid expectedUserId = testEnrolment.Enrollee.UserId;
 
             // create the enrolment directly to the context
             _dbContext.Enrolments.Add(testEnrolment);
@@ -75,7 +75,7 @@ namespace PrimeTests.Services
         public async void testGetEnrolmentForUserId()
         {
             var testEnrolment = TestUtils.EnrolmentFaker.Generate();
-            string expectedUserId = testEnrolment.Enrollee.UserId;
+            Guid expectedUserId = testEnrolment.Enrollee.UserId;
 
             // create the enrolment directly to the context
             _dbContext.Enrolments.Add(testEnrolment);
@@ -118,7 +118,7 @@ namespace PrimeTests.Services
 
             // create some enrolments directly to the context
             var testEnrolment = TestUtils.EnrolmentFaker.Generate();
-            string expectedUserId = testEnrolment.Enrollee.UserId;
+            Guid expectedUserId = testEnrolment.Enrollee.UserId;
             _dbContext.Enrolments.Add(testEnrolment);
             _dbContext.Enrolments.Add(TestUtils.EnrolmentFaker.Generate());
             _dbContext.Enrolments.Add(TestUtils.EnrolmentFaker.Generate());
@@ -175,7 +175,7 @@ namespace PrimeTests.Services
         public async void testDeleteEnrolment()
         {
             var testEnrolment = TestUtils.EnrolmentFaker.Generate();
-            string expectedUserId = testEnrolment.Enrollee.UserId;
+            Guid expectedUserId = testEnrolment.Enrollee.UserId;
 
             // create the enrolment directly to the context
             _dbContext.Enrolments.Add(testEnrolment);

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,6 +13,10 @@ namespace PrimeTests.Mocks
     public class EnrolmentServiceMock : IEnrolmentService
     {
         public const int DEFAULT_ENROLMENTS_SIZE = 5;
+        public const int MIN_ENROLMENT_ID = 1;
+        public const int MAX_ENROLMENT_ID = 1000000;
+        public const int MIN_ENROLLEE_ID = 1;
+        public const int MAX_ENROLLEE_ID = 1000000;
 
         private Dictionary<string, object> _fakeDb;
 
@@ -41,8 +46,11 @@ namespace PrimeTests.Mocks
 
         public Task<int?> CreateEnrolmentAsync(Enrolment enrolment)
         {
-            int? enrolmentId = new Faker().Random.Int(1, 1000000);
+            //add the ids, as this is just a fake implementation
+            int? enrolmentId = new Faker().Random.Int(MIN_ENROLMENT_ID, MAX_ENROLMENT_ID);
+            int? enrolleeId = new Faker().Random.Int(MIN_ENROLLEE_ID, MAX_ENROLLEE_ID);
             enrolment.Id = enrolmentId;
+            enrolment.Enrollee.Id = enrolleeId;
             this.GetEnrolmentHolder().Add((int)enrolmentId, enrolment);
             return Task.FromResult(enrolmentId);
         }
@@ -60,11 +68,15 @@ namespace PrimeTests.Mocks
 
         public Task<Enrolment> GetEnrolmentAsync(int enrolmentId)
         {
-            Enrolment enrolment = this.GetEnrolmentHolder()[enrolmentId];
+            Enrolment enrolment = null;
+            if (this.GetEnrolmentHolder().ContainsKey(enrolmentId))
+            {
+                enrolment = this.GetEnrolmentHolder()[enrolmentId];
+            }
             return Task.FromResult(enrolment);
         }
 
-        public Task<Enrolment> GetEnrolmentForUserIdAsync(string userId)
+        public Task<Enrolment> GetEnrolmentForUserIdAsync(Guid userId)
         {
             throw new System.NotImplementedException();
         }
@@ -72,10 +84,10 @@ namespace PrimeTests.Mocks
         public Task<IEnumerable<Enrolment>> GetEnrolmentsAsync()
         {
             IEnumerable<Enrolment> enrolments = TestUtils.EnrolmentFaker.Generate(DEFAULT_ENROLMENTS_SIZE);
-            return Task.FromResult((IEnumerable<Enrolment>)this.GetEnrolmentHolder().Values.ToList());
+            return Task.FromResult((IEnumerable<Enrolment>)this.GetEnrolmentHolder().Values?.ToList());
         }
 
-        public Task<IEnumerable<Enrolment>> GetEnrolmentsForUserIdAsync(string userId)
+        public Task<IEnumerable<Enrolment>> GetEnrolmentsForUserIdAsync(Guid userId)
         {
             throw new System.NotImplementedException();
         }
