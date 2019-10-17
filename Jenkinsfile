@@ -28,8 +28,8 @@ pipeline {
                 //sh "unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-build -Pargs.--config=pipeline/config-build.groovy -Pargs.--pr=${CHANGE_ID}"
                 //sh "oc apply --namespace=dqszvc-dev -f openshift/dotnet-webapi-bc.json"
                 sh "bash ./player.sh build postgresql --follow"
-                //sh "bash ./player.sh build dotnet-webapi --follow"
-                //sh "bash ./player.sh build angular-frontend --follow"
+                sh "bash ./player.sh build dotnet-webapi --follow"
+                sh "bash ./player.sh build angular-frontend --follow"
             }
         }
         stage('Deploy (DEV)') {
@@ -38,8 +38,8 @@ pipeline {
                 echo "Deploy (DEV) ..."
                 //sh "unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-deploy -Pargs.--config=pipeline/config-dev.groovy -Pargs.--pr=${CHANGE_ID} -Pargs.--env=dev"
                 sh "bash ./player.sh deploy postgresql"
-                //sh "bash ./player.sh deploy dotnet-webapi"
-                //sh "bash ./player.sh deploy angular-frontend"
+                sh "bash ./player.sh deploy dotnet-webapi"
+                sh "bash ./player.sh deploy angular-frontend"
             }
         }
         /*

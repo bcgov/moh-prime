@@ -40,7 +40,7 @@
       "kind": "ImageStream",
       "apiVersion": "v1",
       "metadata": {
-        "name": "${NAME}-${SUFFIX}",
+        "name": "${NAME}",
         "labels": {
           "shared": "true"
         },
@@ -52,7 +52,7 @@
         },
         "tags": [
           {
-            "name": "${NAME}-${SUFFIX}",
+            "name": "${NAME}",
             "annotations": null,
             "from": {
               "kind": "ImageStreamTag",
