@@ -40,13 +40,13 @@
       "displayName": "Database Service Name",
       "name": "DATABASE_SERVICE_NAME",
       "required": true,
-      "value": "postgres"
+      "value": "postgresql"
     },
     {
       "description": "The OpenShift ImageStream name.",
       "displayName": "IMAGE_STREAM_NAME",
       "name": "IMAGE_STREAM_NAME",
-      "value": "postgres"
+      "value": "postgresql"
     },
     {
       "description": "The OpenShift Namespace where the ImageStream resides.",
@@ -66,14 +66,7 @@
       "displayName": "PostgreSQL Database Name",
       "name": "POSTGRESQL_DATABASE",
       "required": true,
-      "value": "postgres"
-    },
-    {
-      "description": "Name of the PostgreSQL database accessed.",
-      "displayName": "PostgreSQL Database Name",
-      "name": "POSTGRES_SECRET_NAME",
-      "required": true,
-      "value": "postgres-prime-secret"
+      "value": "postgresQL"
     },
     {
       "description": "Volume space available for data, e.g. 512Mi, 2Gi.",
@@ -112,7 +105,7 @@
       "spec": {
         "ports": [
           {
-            "name": "postgres",
+            "name": "postgresql",
             "nodePort": 0,
             "port": 5432,
             "protocol": "TCP",
@@ -152,9 +145,9 @@
       "apiVersion": "v1",
       "data": {
         "database-admin-password": "UHIxbTM=",
-        "database-name": "cHJpbWU=",
-        "database-password": "b3B0aW1pemU=",
-        "database-user": "cHJpbWU="
+        "database-name": "cG9zdGdyZXM=",
+        "database-password": "cG9zdGdyZXM=",
+        "database-user": "cG9zdGdyZXM="
       },
       "kind": "Secret",
       "metadata": {
@@ -219,7 +212,7 @@
                     "valueFrom": {
                       "secretKeyRef": {
                         "key": "database-user",
-                        "name": "${POSTGRES_SECRET_NAME}"
+                        "name": "${NAME}-${SUFFIX}-secret"
                       }
                     }
                   },
@@ -228,7 +221,7 @@
                     "valueFrom": {
                       "secretKeyRef": {
                         "key": "database-password",
-                        "name": "${POSTGRES_SECRET_NAME}"
+                        "name": "${NAME}-${SUFFIX}-secret"
                       }
                     }
                   },
@@ -237,7 +230,7 @@
                     "valueFrom": {
                       "secretKeyRef": {
                         "key": "database-admin-password",
-                        "name": "${POSTGRES_SECRET_NAME}"
+                        "name": "${NAME}-${SUFFIX}-secret"
                       }
                     }
                   },
@@ -246,7 +239,7 @@
                     "valueFrom": {
                       "secretKeyRef": {
                         "key": "database-name",
-                        "name": "${POSTGRES_SECRET_NAME}"
+                        "name": "${NAME}-${SUFFIX}-secret"
                       }
                     }
                   }
@@ -260,7 +253,7 @@
                   },
                   "timeoutSeconds": 1
                 },
-                "name": "postgres",
+                "name": "postgresql",
                 "ports": [
                   {
                     "containerPort": 5432,
@@ -326,7 +319,7 @@
           {
             "imageChangeParams": {
               "automatic": true,
-              "containerNames": ["postgres"],
+              "containerNames": ["postgresql"],
               "from": {
                 "kind": "ImageStreamTag",
                 "name": "postgresql:9.6",
