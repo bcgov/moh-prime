@@ -84,7 +84,7 @@
                 ],
                 "env": [
                   {
-                    "name": "branchName",
+                    "name": "BRANCH_NAME",
                     "value": "${SUFFIX}"
                   }
                 ],
