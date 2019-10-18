@@ -25,8 +25,9 @@ COPY --from=build-deps /usr/src/app/entrypoint.sh /home
 EXPOSE 8080
 RUN mkdir -p /var/cache/nginx && \ 
     mkdir -p /var/cache/nginx/client_temp && \ 
-    chown -R 1000:1000 /var/cache/nginx && \ 
-    chown -R 1000:1000 /etc/nginx/conf.d/ && \
+    chown -R 1001:1001 /var/cache/nginx && \ 
+    touch /etc/nginx/conf.d/default.conf && \
+    chown -R 1001:1001 /etc/nginx/conf.d/ && \
     chmod -R 777 /var/cache/nginx && \ 
     chmod -R 777 /var/run && \
     chmod +x /home/entrypoint.sh && \
