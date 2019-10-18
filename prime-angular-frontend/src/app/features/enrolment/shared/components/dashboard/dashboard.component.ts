@@ -33,6 +33,16 @@ export class DashboardComponent implements OnInit {
    * @returns {boolean}
    * @memberof DashboardComponent
    */
+  public get isMobile(): boolean {
+    return this.viewportService.isMobile;
+  }
+
+  /**
+   * Check viewport size is equivalent to desktop.
+   *
+   * @returns {boolean}
+   * @memberof DashboardComponent
+   */
   public get isDesktop(): boolean {
     return this.viewportService.isDesktop || this.viewportService.isWideDesktop;
   }

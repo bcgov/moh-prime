@@ -31,6 +31,10 @@ namespace Prime.Migrations
 
                     b.Property<string>("Country");
 
+                    b.Property<DateTime>("CreatedTimeStamp");
+
+                    b.Property<Guid>("CreatedUserId");
+
                     b.Property<int>("EnrolleeId");
 
                     b.Property<string>("Postal");
@@ -38,6 +42,10 @@ namespace Prime.Migrations
                     b.Property<string>("Province");
 
                     b.Property<string>("Street");
+
+                    b.Property<DateTime>("UpdatedTimeStamp");
+
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.HasKey("Id");
 
@@ -57,16 +65,25 @@ namespace Prime.Migrations
 
                     b.Property<short>("CollegeCode");
 
+                    b.Property<DateTime>("CreatedTimeStamp");
+
+                    b.Property<Guid>("CreatedUserId");
+
                     b.Property<int>("EnrolmentId");
 
                     b.Property<short>("LicenseCode");
 
                     b.Property<string>("LicenseNumber")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(5);
 
                     b.Property<short?>("PracticeCode");
 
                     b.Property<DateTime>("RenewalDate");
+
+                    b.Property<DateTime>("UpdatedTimeStamp");
+
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.HasKey("Id");
 
@@ -86,10 +103,18 @@ namespace Prime.Migrations
                     b.Property<short>("Code")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("CreatedTimeStamp");
+
+                    b.Property<Guid>("CreatedUserId");
+
                     b.Property<string>("Name")
                         .IsRequired();
 
                     b.Property<string>("Prefix");
+
+                    b.Property<DateTime>("UpdatedTimeStamp");
+
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.HasKey("Code");
 
@@ -99,25 +124,41 @@ namespace Prime.Migrations
                         new
                         {
                             Code = (short)1,
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "College of Physicians and Surgeons of BC (CPSBC)",
-                            Prefix = "91"
+                            Prefix = "91",
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)2,
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "College of Pharmacists of BC (CPBC)",
-                            Prefix = "P1"
+                            Prefix = "P1",
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)3,
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "College of Registered Nurses of BC (CRNBC)",
-                            Prefix = "96"
+                            Prefix = "96",
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)4,
-                            Name = "None"
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "None",
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
 
@@ -126,6 +167,14 @@ namespace Prime.Migrations
                     b.Property<short>("CollegeCode");
 
                     b.Property<short>("LicenseCode");
+
+                    b.Property<DateTime>("CreatedTimeStamp");
+
+                    b.Property<Guid>("CreatedUserId");
+
+                    b.Property<DateTime>("UpdatedTimeStamp");
+
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.HasKey("CollegeCode", "LicenseCode");
 
@@ -137,32 +186,187 @@ namespace Prime.Migrations
                         new
                         {
                             CollegeCode = (short)1,
-                            LicenseCode = (short)2
+                            LicenseCode = (short)2,
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
-                            LicenseCode = (short)3
+                            LicenseCode = (short)3,
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)2,
-                            LicenseCode = (short)4
+                            LicenseCode = (short)4,
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)2,
-                            LicenseCode = (short)5
+                            LicenseCode = (short)5,
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
-                            LicenseCode = (short)1
+                            LicenseCode = (short)1,
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
-                            LicenseCode = (short)5
+                            LicenseCode = (short)5,
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        });
+                });
+
+            modelBuilder.Entity("Prime.Models.CollegePractice", b =>
+                {
+                    b.Property<short>("CollegeCode");
+
+                    b.Property<short>("PracticeCode");
+
+                    b.Property<DateTime>("CreatedTimeStamp");
+
+                    b.Property<Guid>("CreatedUserId");
+
+                    b.Property<DateTime>("UpdatedTimeStamp");
+
+                    b.Property<Guid>("UpdatedUserId");
+
+                    b.HasKey("CollegeCode", "PracticeCode");
+
+                    b.HasIndex("PracticeCode");
+
+                    b.ToTable("CollegePractice");
+
+                    b.HasData(
+                        new
+                        {
+                            CollegeCode = (short)1,
+                            PracticeCode = (short)1,
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            CollegeCode = (short)1,
+                            PracticeCode = (short)2,
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            CollegeCode = (short)1,
+                            PracticeCode = (short)3,
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            CollegeCode = (short)1,
+                            PracticeCode = (short)4,
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            CollegeCode = (short)2,
+                            PracticeCode = (short)1,
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            CollegeCode = (short)2,
+                            PracticeCode = (short)2,
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            CollegeCode = (short)2,
+                            PracticeCode = (short)3,
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            CollegeCode = (short)2,
+                            PracticeCode = (short)4,
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            CollegeCode = (short)3,
+                            PracticeCode = (short)1,
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            CollegeCode = (short)3,
+                            PracticeCode = (short)2,
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            CollegeCode = (short)3,
+                            PracticeCode = (short)3,
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            CollegeCode = (short)3,
+                            PracticeCode = (short)4,
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
 
@@ -174,6 +378,10 @@ namespace Prime.Migrations
                     b.Property<string>("ContactEmail");
 
                     b.Property<string>("ContactPhone");
+
+                    b.Property<DateTime>("CreatedTimeStamp");
+
+                    b.Property<Guid>("CreatedUserId");
 
                     b.Property<DateTime>("DateOfBirth");
 
@@ -191,8 +399,11 @@ namespace Prime.Migrations
 
                     b.Property<string>("PreferredMiddleName");
 
-                    b.Property<string>("UserId")
-                        .IsRequired();
+                    b.Property<DateTime>("UpdatedTimeStamp");
+
+                    b.Property<Guid>("UpdatedUserId");
+
+                    b.Property<Guid>("UserId");
 
                     b.Property<string>("VoiceExtension");
 
@@ -216,7 +427,14 @@ namespace Prime.Migrations
 
                     b.Property<string>("ApprovedReason");
 
-                    b.Property<string>("DeviceProviderNumber");
+                    b.Property<DateTime>("CreatedTimeStamp");
+
+                    b.Property<Guid>("CreatedUserId");
+
+                    b.Property<string>("DeviceProviderNumber")
+                        .HasMaxLength(5);
+
+                    b.Property<string>("DeviceProviderPrefix");
 
                     b.Property<int>("EnrolleeId");
 
@@ -244,6 +462,10 @@ namespace Prime.Migrations
 
                     b.Property<bool?>("IsInsulinPumpProvider");
 
+                    b.Property<DateTime>("UpdatedTimeStamp");
+
+                    b.Property<Guid>("UpdatedUserId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("EnrolleeId");
@@ -251,15 +473,48 @@ namespace Prime.Migrations
                     b.ToTable("Enrolment");
                 });
 
+            modelBuilder.Entity("Prime.Models.EnrolmentStatus", b =>
+                {
+                    b.Property<int>("EnrolmentId");
+
+                    b.Property<short>("StatusCode");
+
+                    b.Property<DateTime>("CreatedTimeStamp");
+
+                    b.Property<Guid>("CreatedUserId");
+
+                    b.Property<bool>("IsCurrent");
+
+                    b.Property<DateTime>("StatusDate");
+
+                    b.Property<DateTime>("UpdatedTimeStamp");
+
+                    b.Property<Guid>("UpdatedUserId");
+
+                    b.HasKey("EnrolmentId", "StatusCode");
+
+                    b.HasIndex("StatusCode");
+
+                    b.ToTable("EnrolmentStatus");
+                });
+
             modelBuilder.Entity("Prime.Models.Job", b =>
                 {
                     b.Property<int?>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("CreatedTimeStamp");
+
+                    b.Property<Guid>("CreatedUserId");
+
                     b.Property<int>("EnrolmentId");
 
                     b.Property<string>("Title")
                         .IsRequired();
+
+                    b.Property<DateTime>("UpdatedTimeStamp");
+
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.HasKey("Id");
 
@@ -273,8 +528,16 @@ namespace Prime.Migrations
                     b.Property<short>("Code")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("CreatedTimeStamp");
+
+                    b.Property<Guid>("CreatedUserId");
+
                     b.Property<string>("Name")
                         .IsRequired();
+
+                    b.Property<DateTime>("UpdatedTimeStamp");
+
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.HasKey("Code");
 
@@ -284,42 +547,74 @@ namespace Prime.Migrations
                         new
                         {
                             Code = (short)1,
-                            Name = "Medical Office Assistant"
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Medical Office Assistant",
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)2,
-                            Name = "Midwife"
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Midwife",
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)3,
-                            Name = "Nurse (not nurse practitioner)"
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Nurse (not nurse practitioner)",
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)4,
-                            Name = "Pharmacy Assistant"
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Pharmacy Assistant",
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)5,
-                            Name = "Pharmacy Technician"
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Pharmacy Technician",
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)6,
-                            Name = "Registration Clerk"
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Registration Clerk",
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)7,
-                            Name = "Ward Clerk"
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Ward Clerk",
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)8,
-                            Name = "Other"
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Other",
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
 
@@ -328,8 +623,16 @@ namespace Prime.Migrations
                     b.Property<short>("Code")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("CreatedTimeStamp");
+
+                    b.Property<Guid>("CreatedUserId");
+
                     b.Property<string>("Name")
                         .IsRequired();
+
+                    b.Property<DateTime>("UpdatedTimeStamp");
+
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.HasKey("Code");
 
@@ -339,27 +642,47 @@ namespace Prime.Migrations
                         new
                         {
                             Code = (short)1,
-                            Name = "Full - General"
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Full - General",
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)2,
-                            Name = "Full - Pharmacist"
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Full - Pharmacist",
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)3,
-                            Name = "Full - Specialty"
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Full - Specialty",
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)4,
-                            Name = "Registered Nurse"
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Registered Nurse",
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)5,
-                            Name = "Temporary Registered Nurse"
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Temporary Registered Nurse",
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
 
@@ -369,6 +692,10 @@ namespace Prime.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("City");
+
+                    b.Property<DateTime>("CreatedTimeStamp");
+
+                    b.Property<Guid>("CreatedUserId");
 
                     b.Property<DateTime?>("EndDate");
 
@@ -380,6 +707,10 @@ namespace Prime.Migrations
                     b.Property<short>("OrganizationTypeCode");
 
                     b.Property<DateTime>("StartDate");
+
+                    b.Property<DateTime>("UpdatedTimeStamp");
+
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.HasKey("Id");
 
@@ -395,8 +726,16 @@ namespace Prime.Migrations
                     b.Property<short>("Code")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("CreatedTimeStamp");
+
+                    b.Property<Guid>("CreatedUserId");
+
                     b.Property<string>("Name")
                         .IsRequired();
+
+                    b.Property<DateTime>("UpdatedTimeStamp");
+
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.HasKey("Code");
 
@@ -406,12 +745,20 @@ namespace Prime.Migrations
                         new
                         {
                             Code = (short)1,
-                            Name = "Vancouver Island Health"
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Vancouver Island Health",
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)2,
-                            Name = "Shoppers Drug Mart"
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Shoppers Drug Mart",
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
 
@@ -420,8 +767,16 @@ namespace Prime.Migrations
                     b.Property<short>("Code")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("CreatedTimeStamp");
+
+                    b.Property<Guid>("CreatedUserId");
+
                     b.Property<string>("Name")
                         .IsRequired();
+
+                    b.Property<DateTime>("UpdatedTimeStamp");
+
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.HasKey("Code");
 
@@ -431,12 +786,20 @@ namespace Prime.Migrations
                         new
                         {
                             Code = (short)1,
-                            Name = "Health Authority"
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Health Authority",
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)2,
-                            Name = "Pharmacy"
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Pharmacy",
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
 
@@ -445,8 +808,16 @@ namespace Prime.Migrations
                     b.Property<short>("Code")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("CreatedTimeStamp");
+
+                    b.Property<Guid>("CreatedUserId");
+
                     b.Property<string>("Name")
                         .IsRequired();
+
+                    b.Property<DateTime>("UpdatedTimeStamp");
+
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.HasKey("Code");
 
@@ -456,22 +827,106 @@ namespace Prime.Migrations
                         new
                         {
                             Code = (short)1,
-                            Name = "Remote Practice"
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Remote Practice",
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)2,
-                            Name = "Reproductive Care"
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Reproductive Care",
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)3,
-                            Name = "Sexually Transmitted Infections (STI)"
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Sexually Transmitted Infections (STI)",
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)4,
-                            Name = "None"
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "None",
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        });
+                });
+
+            modelBuilder.Entity("Prime.Models.Status", b =>
+                {
+                    b.Property<short>("Code")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreatedTimeStamp");
+
+                    b.Property<Guid>("CreatedUserId");
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.Property<DateTime>("UpdatedTimeStamp");
+
+                    b.Property<Guid>("UpdatedUserId");
+
+                    b.HasKey("Code");
+
+                    b.ToTable("StatusLookup");
+
+                    b.HasData(
+                        new
+                        {
+                            Code = (short)1,
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "In Progress",
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = (short)2,
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Submitted",
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = (short)3,
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Approved",
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = (short)4,
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Denied",
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = (short)5,
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Accepted",
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
 
@@ -534,11 +989,37 @@ namespace Prime.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("Prime.Models.CollegePractice", b =>
+                {
+                    b.HasOne("Prime.Models.College", "College")
+                        .WithMany("CollegePractices")
+                        .HasForeignKey("CollegeCode")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Prime.Models.Practice", "Practice")
+                        .WithMany("CollegePractices")
+                        .HasForeignKey("PracticeCode")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Prime.Models.Enrolment", b =>
                 {
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany("Enrolments")
                         .HasForeignKey("EnrolleeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Prime.Models.EnrolmentStatus", b =>
+                {
+                    b.HasOne("Prime.Models.Enrolment", "Enrolment")
+                        .WithMany("EnrolmentStatuses")
+                        .HasForeignKey("EnrolmentId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Prime.Models.Status", "Status")
+                        .WithMany("EnrolmentStatuses")
+                        .HasForeignKey("StatusCode")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

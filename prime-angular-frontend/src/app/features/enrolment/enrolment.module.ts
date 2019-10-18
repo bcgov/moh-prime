@@ -14,6 +14,7 @@ import { SubHeaderComponent } from './shared/components/sub-header/sub-header.co
 import { DashboardComponent } from './shared/components/dashboard/dashboard.component';
 import { PageTitleComponent } from './shared/components/page-title/page-title.component';
 import { CollegeCertificationsComponent } from './shared/components/college-certifications/college-certifications.component';
+import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { CollegeCertificationsComponent } from './shared/components/college-cert
     SubHeaderComponent,
     DashboardComponent,
     PageTitleComponent,
-    CollegeCertificationsComponent
+    CollegeCertificationsComponent,
+    ConfirmationComponent
   ],
   imports: [
     SharedModule,

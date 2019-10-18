@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 namespace Prime.Models
 {
     [Table("Job")]
-    public class Job
+    public class Job : BaseAuditable
     {
         [Key]
         public int? Id { get; set; }

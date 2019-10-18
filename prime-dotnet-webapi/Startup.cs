@@ -31,6 +31,7 @@ namespace Prime
             services.AddScoped<ILookupService, DefaultLookupService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowAll",
@@ -55,6 +56,8 @@ namespace Prime
                 c.IncludeXmlComments(xmlPath);
             });
 
+            services.AddHttpContextAccessor();
+
             this.ConfigureDatabase(services);
 
             AuthenticationSetup.Initialize(services, Configuration, Environment);
@@ -68,10 +71,10 @@ namespace Prime
                 app.UseDeveloperExceptionPage();
             }
 
-            //update the DB if necessary with new migrations
+            // update the DB if necessary with new migrations
             this.UpdateDatabase(app);
 
-            //FIXME - disable always using https - probably want this turned back on though once have actual certs
+            // TODO - disable always using https - probably want this turned back on though once have actual certs
             //app.UseHttpsRedirection();
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
@@ -85,7 +88,7 @@ namespace Prime
             });
 
             app.UseCors("AllowAll");
-            
+
             app.UseAuthentication();
 
             app.UseMvc();

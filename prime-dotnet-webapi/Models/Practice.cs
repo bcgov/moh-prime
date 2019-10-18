@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 namespace Prime.Models
 {
     [Table("PracticeLookup")]
-    public class Practice : ILookup
+    public class Practice : BaseAuditable, ILookup
     {
         [Key]
         public short Code { get; set; }
@@ -16,5 +16,7 @@ namespace Prime.Models
 
         [JsonIgnore]
         public ICollection<Certification> Certifications { get; set; }
+
+        public ICollection<CollegePractice> CollegePractices { get; set; }
     }
 }
