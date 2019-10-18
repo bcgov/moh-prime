@@ -107,7 +107,7 @@
         "annotations": {
           "template.openshift.io/expose-uri": "postgres://{.spec.clusterIP}:{.spec.ports[?(.name==\"postgresql\")].port}"
         },
-        "name": "${NAME}"
+        "name": "${NAME}-${SUFFIX}"
       },
       "spec": {
         "ports": [
@@ -120,7 +120,7 @@
           }
         ],
         "selector": {
-          "name": "${NAME}"
+          "name": "${NAME}-${SUFFIX}"
         },
         "sessionAffinity": "None",
         "type": "ClusterIP"
@@ -133,7 +133,7 @@
       "apiVersion": "v1",
       "kind": "PersistentVolumeClaim",
       "metadata": {
-        "name": "${NAME}",
+        "name": "${NAME}-${SUFFIX}",
         "annotations": {
           "volume.beta.kubernetes.io/storage-class": "gluster-file-db",
           "volume.beta.kubernetes.io/storage-provisioner": "kubernetes.io/glusterfs"
@@ -159,10 +159,10 @@
       "kind": "Secret",
       "metadata": {
         "creationTimestamp": null,
-        "name": "${NAME}-secret",
+        "name": "${NAME}-${SUFFIX}-secret",
         "namespace": "dqszvc-dev",
         "resourceVersion": null,
-        "selfLink": "/api/v1/namespaces/dqszvc-dev/secrets/${NAME}-secret",
+        "selfLink": "/api/v1/namespaces/dqszvc-dev/secrets/${NAME}-${SUFFIX}-secret",
         "uid": null
       },
       "type": "Opaque"
@@ -171,7 +171,7 @@
       "kind": "ImageStream",
       "apiVersion": "v1",
       "metadata": {
-        "name": "${NAME}",
+        "name": "${NAME}-${SUFFIX}",
         "creationTimestamp": null,
         "labels": {
           "shared": "true"
@@ -191,12 +191,12 @@
         "annotations": {
           "template.alpha.openshift.io/wait-for-ready": "true"
         },
-        "name": "${NAME}"
+        "name": "${NAME}-${SUFFIX}"
       },
       "spec": {
         "replicas": 1,
         "selector": {
-          "name": "${NAME}"
+          "name": "${NAME}-${SUFFIX}"
         },
         "strategy": {
           "type": "Recreate",
@@ -206,7 +206,7 @@
         "template": {
           "metadata": {
             "labels": {
-              "name": "${NAME}"
+              "name": "${NAME}-${SUFFIX}"
             }
           },
           "spec": {
@@ -297,11 +297,11 @@
                 "volumeMounts": [
                   {
                     "mountPath": "/var/lib/pgsql/data",
-                    "name": "${NAME}-data"
+                    "name": "${NAME}-${SUFFIX}-data"
                   },
                   {
                     "mountPath": "/var/run/postgresql",
-                    "name": "${NAME}-run"
+                    "name": "${NAME}-${SUFFIX}-run"
                   }
                 ]
               }
@@ -310,13 +310,13 @@
             "restartPolicy": "Always",
             "volumes": [
               {
-                "name": "${NAME}-data",
+                "name": "${NAME}-${SUFFIX}-data",
                 "persistentVolumeClaim": {
-                  "claimName": "${NAME}"
+                  "claimName": "${NAME}-${SUFFIX}"
                 }
               },
               {
-                "name": "${NAME}-run",
+                "name": "${NAME}-${SUFFIX}-run",
                 "emptyDir": {}
               }
             ]
@@ -326,7 +326,7 @@
           {
             "imageChangeParams": {
               "automatic": true,
-              "containerNames": ["postgres"],
+              "containerNames": ["${NAME}-${SUFFIX}"],
               "from": {
                 "kind": "ImageStreamTag",
                 "name": "postgresql:9.6",
