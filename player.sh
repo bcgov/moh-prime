@@ -23,8 +23,8 @@ function build(){
     if [ "$1" != "postgresql" ];
     then
     echo "Building..."
-    echo "start-build $1-$branchName -n $licensePlate-dev --follow"
-    oc start-build $1-$branchName -n $licensePlate-dev --follow
+    echo "start-build $1-$branchName -n $licensePlate-dev --wait --follow"
+    oc start-build $1-$branchName -n $licensePlate-dev --wait --follow
     sleep 2
     else 
     echo "Component $1 does not need to be built, only deployed"
@@ -46,7 +46,7 @@ function deploy(){
     -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH" | oc $MODE -f - --namespace=$licensePlate-dev
     echo "Building..."
     echo "oc rollout latest dc/$1-$branchName -n $licensePlate-dev"
-    oc rollout latest dc/$1-$branchName -n $licensePlate-dev
+    #oc rollout latest dc/$1-$branchName -n $licensePlate-dev 
 }
 
 case "$1" in
