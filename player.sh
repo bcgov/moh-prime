@@ -4,9 +4,9 @@ yamlLocation='openshift/compositions'
 gitUrl='https://github.com/bcgov/moh-prime.git'
 gitBranch="$CHANGE_BRANCH"
 branchName=`echo "$BRANCH_NAME" | awk '{print tolower($0)}'`
-
-envsubst '$branchName' < prime-angular-frontend/nginx.template.conf > prime-angular-frontend/nginx.conf
-
+echo "Substituting environment..."
+envsubst '$branchName' < ./prime-angular-frontend/nginx.template.conf > ./prime-angular-frontend/nginx.conf
+grep "proxy_pass" ./prime-angular-frontend/nginx.conf
 function build(){
     buildPresent=`oc get bc/$1-$branchName --ignore-not-found=true`
     if [ -z ${buildPresent} ];
