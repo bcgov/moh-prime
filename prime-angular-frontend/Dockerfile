@@ -8,7 +8,7 @@ ENV branchName $branchName
 RUN mkdir -p /usr/src/app && \
     echo "branchName: ${branchName}" && \
     echo "BRANCH_NAME=$BRANCH_NAME" && \
-    getenv
+    printenv
 
 WORKDIR /usr/src/app
 COPY . .
