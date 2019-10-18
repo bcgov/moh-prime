@@ -1,6 +1,6 @@
 # base image
-ARG branchName=${branchName}
 FROM node:10.16 as build-deps
+ARG branchName=${branchName}
 SHELL [ "/bin/bash","-c"]
 # set working directory
 ENV NODE_ROOT /usr/src/app
