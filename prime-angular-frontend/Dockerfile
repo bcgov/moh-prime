@@ -9,8 +9,8 @@ COPY . .
 
 RUN npm install @angular/cli -g --silent && \ 
     npm install && \
-    ng build --prod && \
     npm audit fix && \
+    ng build --prod && \
     echo "NPM packages installed..."
 
 FROM nginx:1.15-alpine
