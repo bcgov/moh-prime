@@ -6,14 +6,15 @@ SHELL [ "/bin/bash","-c"]
 ENV NODE_ROOT /usr/src/app
 ENV branchName $branchName
 RUN mkdir -p /usr/src/app && \
-    echo "branchName: ${branchName}"
+    echo "branchName: ${branchName}" && \
+    echo "BRANCH_NAME=$BRANCH_NAME" && \
+    getenv
 
 WORKDIR /usr/src/app
 COPY . .
 
 RUN npm install @angular/cli -g --silent && \ 
     npm install && \
-    npm audit fix && \
     ng build --prod && \
     echo "NPM packages installed..."
 
