@@ -5,7 +5,8 @@ SHELL [ "/bin/bash","-c"]
 # set working directory
 ENV NODE_ROOT /usr/src/app
 ENV branchName $branchName
-RUN mkdir -p /usr/src/app
+RUN mkdir -p /usr/src/app && \
+    find -type f -name branchName.env
 WORKDIR /usr/src/app
 COPY . .
 RUN cat branchName.env && \
