@@ -28,6 +28,7 @@ RUN mkdir -p /var/cache/nginx && \
     chown -R 1001:1001 /var/cache/nginx && \ 
     touch /etc/nginx/conf.d/default.conf && \
     chown -R 1001:1001 /etc/nginx/conf.d/ && \
+    chmod 777 /etc/nginx/conf.d/default.conf && \
     chmod -R 777 /var/cache/nginx && \ 
     chmod -R 777 /var/run && \
     chmod +x /home/entrypoint.sh && \
