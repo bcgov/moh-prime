@@ -1,6 +1,6 @@
 # base image
 FROM node:10.16 as build-deps
-SHELL [ "/bin/bash","-c"]
+#SHELL [ "/bin/bash","-c"]
 # set working directory
 ENV NODE_ROOT /usr/src/app
 RUN mkdir -p /usr/src/app 
@@ -36,4 +36,4 @@ RUN mkdir -p /var/cache/nginx && \
     echo "Build completed."
 
 #CMD ["nginx", "-g", "daemon off;"]
-CMD /home/entrypoint.sh
+ENTRYPOINT /home/entrypoint.sh
