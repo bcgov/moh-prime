@@ -5,7 +5,7 @@ export gitUrl='https://github.com/bcgov/moh-prime.git'
 export gitBranch="$CHANGE_BRANCH"
 export branchName=`echo "$BRANCH_NAME" | awk '{print tolower($0)}'`
 echo "Substituting environment..."
-envsubst '$branchName' < ./prime-angular-frontend/nginx.template.conf > ./prime-angular-frontend/nginx.conf
+envsubst '$branchName' < prime-angular-frontend/nginx.template.conf > prime-angular-frontend/nginx.conf
 grep "proxy_pass" ./prime-angular-frontend/nginx.conf
 function build(){
     buildPresent=`oc get bc/$1-$branchName --ignore-not-found=true`
