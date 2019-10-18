@@ -3,8 +3,7 @@
 FROM docker-registry.default.svc:5000/dqszvc-dev/dotnet-22-rhel7 AS build
 WORKDIR /opt/app-root/app
 SHELL [ "/bin/bash" , "-c" ]
-USER 0
-#RUN mkdir -p /opt/app-root/app
+ENV PATH "$PATH:/opt/rh/rh-dotnet22/root/usr/lib64/dotnet"
 ENV ASPNETCORE_ENVIRONMENT Development
 COPY *.csproj /opt/app-root/app
 RUN find /opt -type f -name dotnet
