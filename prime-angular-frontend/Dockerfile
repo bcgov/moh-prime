@@ -36,5 +36,5 @@ RUN mkdir -p /var/cache/nginx && \
     echo "Build completed."
 
 #CMD ["nginx", "-g", "daemon off;"]
-#ENTRYPOINT envsubst '$branchName' < /etc/nginx/nginx.template.conf > /etc/nginx/conf.d/default.conf && nginx -g "daemon-off;"
-ENTRYPOINT /home/entrypoint.sh
+ENTRYPOINT envsubst '$branchName' < /etc/nginx/nginx.template.conf > /etc/nginx/conf.d/default.conf && "nginx -g daemon-off;"
+#ENTRYPOINT /home/entrypoint.sh
