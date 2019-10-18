@@ -47,6 +47,16 @@
             "name": "${NAME}-${SUFFIX}"
           },
           "spec": {
+            "containers": [
+              {
+                "env": [
+                  {
+                    "name": "branchName",
+                    "value": "${SUFFIX}"
+                  }
+                ]
+              }
+            ],
             "tags": [
               {
                 "annotations": null,

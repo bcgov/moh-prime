@@ -82,6 +82,12 @@
                   "-g",
                   "daemon off;"
                 ],
+                "env": [
+                  {
+                    "name": "branchName",
+                    "value": "${SUFFIX}"
+                  }
+                ],
                 "image": " ",
                 "name": "primeweb",
                 "ports": [
