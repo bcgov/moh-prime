@@ -6,7 +6,9 @@ services:
     build:
         context: .
     environment:
-      branchName: "${SUFFIX}"    
+      branchName: "${branchName}"
+    args:
+      branchName: "${branchName}"
     command: "nginx -g 'daemon off;'"
     restart: always
     ports:

@@ -1,5 +1,5 @@
 # base image
-ARG branchName
+ARG branchName=${branchName}
 FROM node:10.16 as build-deps
 SHELL [ "/bin/bash","-c"]
 # set working directory
