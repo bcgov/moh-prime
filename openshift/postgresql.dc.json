@@ -326,7 +326,7 @@
           {
             "imageChangeParams": {
               "automatic": true,
-              "containerNames": ["${NAME}-${SUFFIX}"],
+              "containerNames": ["postgres"],
               "from": {
                 "kind": "ImageStreamTag",
                 "name": "postgresql:9.6",
