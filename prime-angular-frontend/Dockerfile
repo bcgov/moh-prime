@@ -1,10 +1,12 @@
 # base image
+ARG branchName
 FROM node:10.16 as build-deps
 SHELL [ "/bin/bash","-c"]
 # set working directory
 ENV NODE_ROOT /usr/src/app
+ENV branchName $branchName
 RUN mkdir -p /usr/src/app && \
-    echo "branchName: $branchName"
+    echo "branchName: ${branchName}"
 
 WORKDIR /usr/src/app
 COPY . .
