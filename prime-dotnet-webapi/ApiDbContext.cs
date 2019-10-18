@@ -39,7 +39,7 @@ namespace Prime
             return base.SaveChanges();
         }
 
-        public async override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        public async override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             this.ApplyAudits();
 
