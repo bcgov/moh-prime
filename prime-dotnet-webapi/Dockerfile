@@ -18,4 +18,5 @@ FROM docker-registry.default.svc:5000/dqszvc-dev/dotnet-30-runtime-rhel7 AS runt
 WORKDIR /opt/app-root/app
 COPY --from=build /opt/app-root/app/out /opt/app-root/app
 EXPOSE 8080 5001
-ENTRYPOINT ["dotnet", "prime.dll"]
+RUN find /opt -type f -name dotnet
+ENTRYPOINT ["/opt/rh/rh-dotnet30/root/usr/lib64/dotnet/dotnet", "prime.dll"]
