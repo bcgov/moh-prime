@@ -107,5 +107,30 @@ namespace PrimeTests.Mocks
             }
             return Task.FromResult(updated);
         }
+
+        public Task<IEnumerable<Status>> GetAvailableEnrolmentStatuses(int enrolmentId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<EnrolmentStatus>> GetEnrolmentStatuses(int enrolmentId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<EnrolmentStatus> CreateEnrolmentStatus(int enrolmentId, Status status)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsStatusChangeAllowed(Status startingStatus, Status endingStatus)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsEnrolmentInStatus(int enrolmentId, short statusCodeToCheck)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -129,6 +130,13 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"Enrolment not found with id {enrolmentId}"));
             }
 
+            // if the enrolment is not in the status of 'In Progress', it cannot be updated
+            if (!_enrolmentService.IsEnrolmentInStatus(enrolmentId, Status.IN_PROGRESS_CODE))
+            {
+                this.ModelState.AddModelError("Enrolment.CurrentStatus", "Enrolment can not be updated when the current status is not 'In Progress'.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
+
             // if the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
             if (!BelongsToEnrollee(enrolment))
             {
@@ -191,6 +199,125 @@ namespace Prime.Controllers
             if (!belongsToEnrollee) belongsToEnrollee = true;
 
             return belongsToEnrollee;
+        }
+
+        // GET: api/Enrolment/5/availableStatuses
+        /// <summary>
+        /// Gets a list of the statuses that the enrolment can change to.
+        /// </summary>
+        /// <param name="enrolmentId"></param> 
+        [HttpGet("{enrolmentId}/availableStatuses", Name = nameof(GetAvailableEnrolmentStatuses))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiOkResponse<IEnumerable<Status>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<Status>>> GetAvailableEnrolmentStatuses(int enrolmentId)
+        {
+            //TODO - remove this temp addition of an admin role
+            var claimsIdentity = new ClaimsIdentity();
+            claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, PrimeConstants.PRIME_ADMIN_ROLE));
+            User.AddIdentity(claimsIdentity);
+
+            var enrolment = await _enrolmentService.GetEnrolmentAsync(enrolmentId);
+
+            if (enrolment == null)
+            {
+                return NotFound(new ApiResponse(404, $"Enrolment not found with id {enrolmentId}"));
+            }
+
+            // if the user is not an ADMIN, make sure the enrolment matches the enrollee, otherwise return not authorized
+            if (!BelongsToEnrollee(enrolment))
+            {
+                return Forbid();
+            }
+
+            var availableEnrolmentStatuses = await _enrolmentService.GetAvailableEnrolmentStatuses(enrolmentId);
+
+            return Ok(new ApiOkResponse<IEnumerable<Status>>(availableEnrolmentStatuses));
+        }
+
+        // GET: api/Enrolment/5/statuses
+        /// <summary>
+        /// Gets all of the status changes for a specific Enrolment.
+        /// </summary>
+        /// <param name="enrolmentId"></param> 
+        [HttpGet("{enrolmentId}/statuses", Name = nameof(GetEnrolmentStatuses))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiOkResponse<IEnumerable<Status>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<EnrolmentStatus>>> GetEnrolmentStatuses(int enrolmentId)
+        {
+            var enrolment = await _enrolmentService.GetEnrolmentAsync(enrolmentId);
+
+            if (enrolment == null)
+            {
+                return NotFound(new ApiResponse(404, $"Enrolment not found with id {enrolmentId}"));
+            }
+
+            // if the user is not an ADMIN, make sure the enrolment matches the enrollee, otherwise return not authorized
+            if (!BelongsToEnrollee(enrolment))
+            {
+                return Forbid();
+            }
+
+            var enrolments = await _enrolmentService.GetEnrolmentStatuses(enrolmentId);
+
+            return Ok(new ApiOkResponse<IEnumerable<EnrolmentStatus>>(enrolments));
+
+
+            // enrolment.EnrolmentStatuses
+            // // TODO - find the statuses that this enrolment had been changed to
+            // ICollection<EnrolmentStatus> results = new List<EnrolmentStatus>();
+            // results.Add(new EnrolmentStatus { EnrolmentId = enrolmentId, StatusCode = 1, Status = new Status { Code = 1, Name = "In Progress" }, StatusDate = new DateTime(2019, 10, 1), IsCurrent = false });
+            // results.Add(new EnrolmentStatus { EnrolmentId = enrolmentId, StatusCode = 2, Status = new Status { Code = 2, Name = "Submitted" }, StatusDate = new DateTime(2019, 10, 10), IsCurrent = true });
+
+            // return Ok(new ApiOkResponse<IEnumerable<EnrolmentStatus>>(results.ToList()));
+        }
+
+        // POST: api/Enrolment/5/statuses
+        /// <summary>
+        /// Adds a status change for a specific Enrolment.
+        /// </summary>
+        /// <param name="enrolmentId"></param> 
+        [HttpPost("{enrolmentId}/statuses", Name = nameof(CreateEnrolmentStatus))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiOkResponse<IEnumerable<Status>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<EnrolmentStatus>> CreateEnrolmentStatus(int enrolmentId, Status status)
+        {
+            var enrolment = await _enrolmentService.GetEnrolmentAsync(enrolmentId);
+
+            if (enrolment == null)
+            {
+                return NotFound(new ApiResponse(404, $"Enrolment not found with id {enrolmentId}"));
+            }
+
+            if (status?.Code == null)
+            {
+                this.ModelState.AddModelError("Status.Code", "Status Code is required to create statuses.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
+
+            // if the user is not an ADMIN, make sure the enrolment matches the enrollee, otherwise return not authorized
+            if (!BelongsToEnrollee(enrolment))
+            {
+                return Forbid();
+            }
+
+            if (!_enrolmentService.IsStatusChangeAllowed(enrolment.CurrentStatus?.Status, status))
+            {
+                this.ModelState.AddModelError("Status.Code", $"Cannot change from current Status Code: {enrolment.CurrentStatus?.Status?.Code} to the new Status Code: {status.Code}");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
+
+            var enrolmentStatus = await _enrolmentService.CreateEnrolmentStatus(enrolmentId, status);
+
+            return Ok(new ApiOkResponse<EnrolmentStatus>(enrolmentStatus));
         }
     }
 }

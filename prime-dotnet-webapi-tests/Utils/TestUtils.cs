@@ -13,6 +13,7 @@ using Prime.Services;
 
 
 using PrimeTests.Utils.Auth;
+using Microsoft.AspNetCore.Http;
 
 namespace PrimeTests.Utils
 {
@@ -63,9 +64,15 @@ namespace PrimeTests.Utils
                                 .RuleFor(o => o.StartDate, f => f.Date.Future(2))
                                 ;
 
+                          public static Faker<EnrolmentStatus> EnrolmentStatusFaker = new Faker<EnrolmentStatus>()
+                                .RuleFor(es => es.StatusCode, f => Status.IN_PROGRESS_CODE)
+                                .RuleFor(es => es.StatusDate, f => DateTime.Now)
+                                .RuleFor(es => es.IsCurrent, f => true)
+                                ;              
+
         public static Faker<Enrolment> EnrolmentFaker = new Faker<Enrolment>()
                                     .RuleFor(e => e.Enrollee, f => EnrolleeFaker.Generate())
-                                    .RuleFor(e => e.AppliedDate, f => new DateTime())
+                                    .RuleFor(e => e.AppliedDate, f => DateTime.Now)
                                     .RuleFor(e => e.HasCertification, f => f.Random.Bool())
                                     .RuleFor(e => e.Certifications, f => CertificationFaker.Generate(2))
                                     .RuleFor(e => e.IsDeviceProvider, f => f.Random.Bool())
@@ -84,14 +91,14 @@ namespace PrimeTests.Utils
                                     .RuleFor(e => e.Organizations, f => OrganizationFaker.Generate(2))
                                     ;
 
-        public static int? CreateEnrolment(ApiDbContext apiDbContext)
+        public static int? CreateEnrolment(ApiDbContext apiDbContext, HttpContextAccessor httpContext)
         {
-            return new DefaultEnrolmentService(apiDbContext).CreateEnrolmentAsync(TestUtils.EnrolmentFaker.Generate()).Result;
+            return new DefaultEnrolmentService(apiDbContext, httpContext).CreateEnrolmentAsync(TestUtils.EnrolmentFaker.Generate()).Result;
         }
 
-        public static Enrolment GetEnrolmentById(ApiDbContext apiDbContext, int enrolmentId)
+        public static Enrolment GetEnrolmentById(ApiDbContext apiDbContext, HttpContextAccessor httpContext, int enrolmentId)
         {
-            return new DefaultEnrolmentService(apiDbContext).GetEnrolmentAsync(enrolmentId).Result;
+            return new DefaultEnrolmentService(apiDbContext, httpContext).GetEnrolmentAsync(enrolmentId).Result;
         }
 
         public static void InitializeDbForTests(ApiDbContext db)

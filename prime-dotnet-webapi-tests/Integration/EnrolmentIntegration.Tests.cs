@@ -24,6 +24,7 @@ namespace PrimeTests.Integration
         private Enrolment CreateEnrolment(IServiceScope scope)
         {
             var enrolment = TestUtils.EnrolmentFaker.Generate();
+            enrolment.EnrolmentStatuses = TestUtils.EnrolmentStatusFaker.Generate(1);
             var _dbContext = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
             _dbContext.Enrolments.Add(enrolment);
             _dbContext.SaveChanges();
@@ -40,6 +41,7 @@ namespace PrimeTests.Integration
                         .Include(e => e.Certifications)
                         .Include(e => e.Jobs)
                         .Include(e => e.Organizations)
+                        .Include(e => e.EnrolmentStatuses)
                         .AsNoTracking().Single(e => e.Id == enrolmentId);
         }
 

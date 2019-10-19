@@ -2,21 +2,66 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-
 using Prime.Models;
 
 namespace Prime.Services
 {
-    public class DefaultEnrolmentService : IEnrolmentService
+    public class DefaultEnrolmentService : BaseService, IEnrolmentService
     {
-        private readonly ApiDbContext _context;
+        private class StatusWrapper
+        {
+            public Status Status { get; set; }
+            public bool AdminOnly { get; set; }
+        }
+
+        private Dictionary<Status, StatusWrapper[]> _workflowStateMap;
+
+        private Status NULL_STATUS = new Status { Code = -1, Name = "No Status" };
 
         public DefaultEnrolmentService(
-            ApiDbContext context)
+            ApiDbContext context, IHttpContextAccessor httpContext) 
+            : base(context, httpContext)
+        { }
+
+        private Dictionary<Status, StatusWrapper[]> GetWorkFlowStateMap()
         {
-            _context = context;
+            if (_workflowStateMap == null)
+            {
+                // construct the workflow map
+                Status IN_PROGRESS = _context.Statuses.Single(s => s.Code == Status.IN_PROGRESS_CODE);
+                Status SUBMITTED = _context.Statuses.Single(s => s.Code == Status.SUBMITTED_CODE);
+                Status APPROVED = _context.Statuses.Single(s => s.Code == Status.APPROVED_CODE);
+                Status DECLINED = _context.Statuses.Single(s => s.Code == Status.DECLINED_CODE);
+                Status ACCEPTED_TOS = _context.Statuses.Single(s => s.Code == Status.ACCEPTED_TOS_CODE);
+                Status DECLINED_TOS = _context.Statuses.Single(s => s.Code == Status.DECLINED_TOS_CODE);
+
+                _workflowStateMap = new Dictionary<Status, StatusWrapper[]>();
+                _workflowStateMap.Add(NULL_STATUS, new StatusWrapper[] { new StatusWrapper { Status = IN_PROGRESS, AdminOnly = false } });
+                _workflowStateMap.Add(IN_PROGRESS, new StatusWrapper[] { new StatusWrapper { Status = SUBMITTED, AdminOnly = false } });
+                _workflowStateMap.Add(SUBMITTED, new StatusWrapper[] { new StatusWrapper { Status = APPROVED, AdminOnly = true }, new StatusWrapper { Status = DECLINED, AdminOnly = true } });
+                _workflowStateMap.Add(APPROVED, new StatusWrapper[] { new StatusWrapper { Status = ACCEPTED_TOS, AdminOnly = false }, new StatusWrapper { Status = DECLINED_TOS, AdminOnly = false } });
+                _workflowStateMap.Add(DECLINED, new StatusWrapper[0]);
+                _workflowStateMap.Add(ACCEPTED_TOS, new StatusWrapper[0]);
+                _workflowStateMap.Add(DECLINED_TOS, new StatusWrapper[0]);
+            }
+
+            return _workflowStateMap;
+        }
+
+        private ICollection<Status> GetAvailableStatuses(Status currentStatus)
+        {
+            ICollection<Status> availableStatuses = new List<Status>();
+            var results = this.GetWorkFlowStateMap()[currentStatus ?? NULL_STATUS];
+            var currentUser = _httpContext?.HttpContext?.User;
+            foreach (var item in results)
+            {
+                if (!item.AdminOnly
+                        || currentUser.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE)) availableStatuses.Add(item.Status);
+            }
+
+            return availableStatuses;
         }
 
         public bool EnrolmentExists(int enrolmentId)
@@ -34,7 +79,7 @@ namespace Prime.Services
                 .Include(e => e.Certifications)
                 .Include(e => e.Jobs)
                 .Include(e => e.Organizations)
-                .Include(e => e.EnrolmentStatuses)
+                .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.Status)
                 .SingleOrDefaultAsync(e => e.Id == enrolmentId)
                 ;
 
@@ -51,7 +96,7 @@ namespace Prime.Services
                 .Include(e => e.Certifications)
                 .Include(e => e.Jobs)
                 .Include(e => e.Organizations)
-                .Include(e => e.EnrolmentStatuses)
+                .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.Status)
                 .SingleOrDefaultAsync(e => e.Enrollee.UserId == userId)
                 ;
 
@@ -68,7 +113,7 @@ namespace Prime.Services
                 .Include(e => e.Certifications)
                 .Include(e => e.Jobs)
                 .Include(e => e.Organizations)
-                .Include(e => e.EnrolmentStatuses)
+                .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.Status)
                 ;
 
             var items = await query.ToArrayAsync();
@@ -87,7 +132,7 @@ namespace Prime.Services
                 .Include(e => e.Certifications)
                 .Include(e => e.Jobs)
                 .Include(e => e.Organizations)
-                .Include(e => e.EnrolmentStatuses)
+                .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.Status)
                 .Where(e => e.Enrollee.UserId == userId)
                 ;
 
@@ -100,12 +145,9 @@ namespace Prime.Services
         {
             enrolment.AppliedDate = DateTime.Now;
             //create a status history record
-            EnrolmentStatus enrolmentStatus = new EnrolmentStatus();
-            enrolmentStatus.Enrolment = enrolment;
-            enrolmentStatus.StatusCode = 1;
-            enrolmentStatus.IsCurrent = true;
-            enrolmentStatus.StatusDate = DateTime.Now;
-            if (enrolment.EnrolmentStatuses == null) {
+            EnrolmentStatus enrolmentStatus = new EnrolmentStatus { Enrolment = enrolment, StatusCode = Status.IN_PROGRESS_CODE, StatusDate = DateTime.Now, IsCurrent = true };
+            if (enrolment.EnrolmentStatuses == null)
+            {
                 enrolment.EnrolmentStatuses = new List<EnrolmentStatus>(0);
             }
             enrolment.EnrolmentStatuses.Add(enrolmentStatus);
@@ -223,6 +265,80 @@ namespace Prime.Services
             _context.Enrolments.Remove(enrolment);
             _context.Enrollees.Remove(enrolment.Enrollee);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<Status>> GetAvailableEnrolmentStatuses(int enrolmentId)
+        {
+            var enrolment = await _context.Enrolments
+                .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.Status)
+                .SingleOrDefaultAsync(e => e.Id == enrolmentId);
+            if (enrolment == null) return null;
+
+            return this.GetAvailableStatuses(enrolment.CurrentStatus?.Status);
+        }
+
+        public async Task<IEnumerable<EnrolmentStatus>> GetEnrolmentStatuses(int enrolmentId)
+        {
+            IQueryable<EnrolmentStatus> query = _context.EnrolmentStatuses
+                .Include(es => es.Status)
+                .Where(es => es.EnrolmentId == enrolmentId)
+                ;
+
+            var items = await query.ToArrayAsync();
+
+            return items;
+        }
+
+        public async Task<EnrolmentStatus> CreateEnrolmentStatus(int enrolmentId, Status status)
+        {
+            var enrolment = await _context.Enrolments
+                .AsNoTracking()
+                .Include(e => e.EnrolmentStatuses)
+                .SingleOrDefaultAsync(e => e.Id == enrolmentId);
+            if (enrolment == null) return null;
+
+            var currentStatus = enrolment.CurrentStatus?.Status;
+
+            // make sure the status change is allowed
+            if (IsStatusChangeAllowed(currentStatus ?? NULL_STATUS, status))
+            {
+                // update all of the existing statuses to not be current, and then create a new current status
+                var existingEnrolmentStatuses = await this.GetEnrolmentStatuses(enrolmentId);
+                foreach (var enrolmentStatus in existingEnrolmentStatuses)
+                {
+                    enrolmentStatus.IsCurrent = false;
+                }
+
+                // create a new enrolment status
+                var createdEnrolmentStatus = new EnrolmentStatus { EnrolmentId = enrolmentId, StatusCode = status.Code, StatusDate = DateTime.Now, IsCurrent = true };
+                _context.EnrolmentStatuses.Add(createdEnrolmentStatus);
+
+                var created = await _context.SaveChangesAsync();
+                if (created < 1) throw new InvalidOperationException("Could not create enrolment status.");
+
+                return createdEnrolmentStatus;
+            }
+
+            return null;
+        }
+
+        public bool IsStatusChangeAllowed(Status startingStatus, Status endingStatus)
+        {
+            ICollection<Status> availableStatuses = this.GetAvailableStatuses(startingStatus);
+            return availableStatuses.Contains(endingStatus);
+        }
+
+        public bool IsEnrolmentInStatus(int enrolmentId, short statusCodeToCheck)
+        {
+            var enrolment = _context.Enrolments
+                .AsNoTracking()
+                .Include(e => e.EnrolmentStatuses)
+                .SingleOrDefault(e => e.Id == enrolmentId);
+            if (enrolment == null) return false;
+
+            var currentStatusCode = enrolment.CurrentStatus?.StatusCode;
+
+            return statusCodeToCheck.Equals(currentStatusCode);
         }
     }
 }
