@@ -2,8 +2,10 @@
 export licensePlate='dqszvc'
 export yamlLocation='openshift/compositions'
 export gitUrl='https://github.com/bcgov/moh-prime.git'
+export branchName="$BRANCH_NAME"
 
 function build(){
+    OC_APP=$2
     buildPresent=`oc get bc/$1-$branchName --ignore-not-found=true`
     if [ -z ${buildPresent} ];
     then MODE="apply"
@@ -29,6 +31,7 @@ function build(){
 }
 
 function deploy(){
+    OC_APP=$2
     deployPresent=`oc get bc/$1-$branchName --ignore-not-found=true`
     if [ -z ${deployPresent} ];
     then MODE="apply"
@@ -48,17 +51,17 @@ function deploy(){
 
 case "$1" in
     build)
-        build $2
+        build $2 $3
         ;;
     deploy)
-        deploy $2
+        deploy $2 $3
         ;;
     sonar)
-        sonar $2
+        sonar $2 $3
         ;;
     zap)
-        zap $2
+        zap $2 $3
         ;;
     *)
-    echo "Usage: $0 {build|deploy|sonar|zap|promote} <app> "
+    echo "Usage: $0 {build|deploy|sonar|zap|promote} <app> <dev|test|prod>"
 esac

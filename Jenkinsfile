@@ -10,9 +10,9 @@ pipeline {
                 echo "Building ..."
                 echo "${BRANCH_NAME}"
                 sh "export OC_APP=dev"
-                sh "bash ./player.sh build postgresql"
-                sh "bash ./player.sh build dotnet-webapi"
-                sh "bash ./player.sh build angular-frontend"
+                sh "bash ./player.sh build postgresql dev"
+                sh "bash ./player.sh build dotnet-webapi dev"
+                sh "bash ./player.sh build angular-frontend dev"
             }
         }
         stage('Deploy (DEV)') {
@@ -20,9 +20,9 @@ pipeline {
             steps {
                 echo "Deploy (DEV) ..."
                 sh "export OC_APP=dev"
-                sh "bash ./player.sh deploy postgresql"
-                sh "bash ./player.sh deploy dotnet-webapi"
-                sh "bash ./player.sh deploy angular-frontend"
+                sh "bash ./player.sh deploy postgresql dev"
+                sh "bash ./player.sh deploy dotnet-webapi dev"
+                sh "bash ./player.sh deploy angular-frontend dev"
             }
         }
         /*
