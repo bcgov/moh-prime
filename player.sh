@@ -2,13 +2,7 @@
 export licensePlate='dqszvc'
 export yamlLocation='openshift/compositions'
 export gitUrl='https://github.com/bcgov/moh-prime.git'
-export gitBranch="$CHANGE_BRANCH"
-export branchName=`echo "$BRANCH_NAME" | awk '{print tolower($0)}'`
 
-echo "Substituting environment..."
-echo "export branchName=$branchName" > ./prime-angular-frontend/branchName.env
-envsubst '$branchName' < ./prime-angular-frontend/nginx.template.conf > ./prime-angular-frontend/nginx.conf
-grep "proxy_pass" ./prime-angular-frontend/nginx.conf
 function build(){
     buildPresent=`oc get bc/$1-$branchName --ignore-not-found=true`
     if [ -z ${buildPresent} ];
@@ -21,12 +15,13 @@ function build(){
     -p SUFFIX="$branchName" \
     -p SOURCE_CONTEXT_DIR="prime-$1" \
     -p SOURCE_REPOSITORY_URL="$gitUrl" \
-    -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH" | oc $MODE -f - --namespace=$licensePlate-dev
+    -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH" \
+    -P OC_NAMESPACE="$licensePlate" \
+    -p OC_APP="$OC_APP" | oc $MODE -f - --namespace=$licensePlate-$OC_APP
     if [ "$1" != "postgresql" ];
     then
     echo "Building..."
-    echo "start-build $1-$branchName -n $licensePlate-dev --wait --follow"
-    oc start-build $1-$branchName -n $licensePlate-dev --wait --follow
+    oc start-build $1-$branchName -n $licensePlate-$OC_APP --wait --follow
     sleep 2
     else 
     echo "Component $1 does not need to be built, only deployed"
@@ -45,10 +40,10 @@ function deploy(){
     -p SUFFIX="$branchName" \
     -p SOURCE_CONTEXT_DIR="prime-$1" \
     -p SOURCE_REPOSITORY_URL="$gitUrl" \
-    -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH" | oc $MODE -f - --namespace=$licensePlate-dev
+    -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH" \
+    -P OC_NAMESPACE="$licensePlate" \
+    -p OC_APP="$OC_APP" | oc $MODE -f - --namespace=$licensePlate-$OC_APP
     echo "Building..."
-    echo "oc rollout latest dc/$1-$branchName -n $licensePlate-dev"
-    #oc rollout latest dc/$1-$branchName -n $licensePlate-dev 
 }
 
 case "$1" in

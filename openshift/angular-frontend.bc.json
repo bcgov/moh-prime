@@ -33,6 +33,14 @@
       {
         "name": "SOURCE_REPOSITORY_REF",
         "required": true
+      },
+      {
+        "name": "OC_NAMESPACE",
+        "required": true
+      },
+      {
+        "name": "OC_APP",
+        "required": true
       }
     ],
     "objects": [

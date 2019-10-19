@@ -4,30 +4,12 @@ pipeline {
         disableResume()
     }
     stages {
-        /*stage('Verify-Files') {
-            agent { label 'master' }
-            steps {
-                // echo "Aborting all running jobs ..."
-
-                script {
-                    // Kill any running jobs
-                    // abortAllPreviousBuildInProgress(currentBuild)
-                    // Grab any files under the pipeline directory
-                    // Verify they match the trusted version
-                    files = findFiles(glob: 'pipeline/**')
-                    for (def file : files) {
-                        readTrusted file.path
-                    }
-                }
-            }
-        }*/
         stage('Build') {
             agent { label 'master' }
             steps {
                 echo "Building ..."
-                //sh "unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-build -Pargs.--config=pipeline/config-build.groovy -Pargs.--pr=${CHANGE_ID}"
-                //sh "oc apply --namespace=dqszvc-dev -f openshift/dotnet-webapi-bc.json"
                 echo "${BRANCH_NAME}"
+                sh "export OC_APP=dev"
                 sh "bash ./player.sh build postgresql"
                 sh "bash ./player.sh build dotnet-webapi"
                 sh "bash ./player.sh build angular-frontend"
@@ -37,7 +19,7 @@ pipeline {
             agent { label 'master' }
             steps {
                 echo "Deploy (DEV) ..."
-                //sh "unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-deploy -Pargs.--config=pipeline/config-dev.groovy -Pargs.--pr=${CHANGE_ID} -Pargs.--env=dev"
+                sh "export OC_APP=dev"
                 sh "bash ./player.sh deploy postgresql"
                 sh "bash ./player.sh deploy dotnet-webapi"
                 sh "bash ./player.sh deploy angular-frontend"
