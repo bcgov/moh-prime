@@ -65,6 +65,6 @@ namespace Prime.Models
         public ICollection<EnrolmentStatus> EnrolmentStatuses { get; set; }
 
         [NotMapped]
-        public EnrolmentStatus CurrentStatus { get { return this.EnrolmentStatuses?.SingleOrDefault(es => es.IsCurrent == true); } }
+        public EnrolmentStatus CurrentStatus { get { return this.EnrolmentStatuses?.SingleOrDefault(es => es.IsCurrent); } }
     }
 }

@@ -8,7 +8,7 @@ namespace Prime.Services
 
         protected readonly IHttpContextAccessor _httpContext;
 
-        public BaseService( ApiDbContext context, IHttpContextAccessor httpContext)
+        protected BaseService( ApiDbContext context, IHttpContextAccessor httpContext)
         {
             _context = context;
             _httpContext = httpContext;

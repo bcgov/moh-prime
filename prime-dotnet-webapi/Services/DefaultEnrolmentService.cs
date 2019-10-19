@@ -18,10 +18,10 @@ namespace Prime.Services
 
         private Dictionary<Status, StatusWrapper[]> _workflowStateMap;
 
-        private Status NULL_STATUS = new Status { Code = -1, Name = "No Status" };
+        private static Status NULL_STATUS = new Status { Code = -1, Name = "No Status" };
 
         public DefaultEnrolmentService(
-            ApiDbContext context, IHttpContextAccessor httpContext) 
+            ApiDbContext context, IHttpContextAccessor httpContext)
             : base(context, httpContext)
         { }
 
@@ -58,7 +58,11 @@ namespace Prime.Services
             foreach (var item in results)
             {
                 if (!item.AdminOnly
-                        || currentUser.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE)) availableStatuses.Add(item.Status);
+                        || (currentUser != null
+                                && currentUser.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE)))
+                {
+                    availableStatuses.Add(item.Status);
+                }
             }
 
             return availableStatuses;

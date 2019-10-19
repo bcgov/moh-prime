@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -6,7 +7,7 @@ using Newtonsoft.Json;
 namespace Prime.Models
 {
     [Table("StatusLookup")]
-    public class Status : BaseAuditable, ILookup
+    public sealed class Status : BaseAuditable, ILookup, IEquatable<Status>
     {
         public const short IN_PROGRESS_CODE = 1;
         public const short SUBMITTED_CODE = 2;
