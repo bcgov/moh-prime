@@ -103,6 +103,19 @@
           }
        },
        {
+        "apiVersion": "v1",
+        "kind": "Source",
+        "sourceStrategy": {
+            "from": {
+                "kind": "DockerImage",
+                "name": "registry.redhat.io/dotnet/dotnet-22-rhel7"
+            },
+            "pullSecret": {
+                "name": "redhat-images"
+            }
+          }
+       },
+       {
           "apiVersion": "v1",
           "kind": "BuildConfig",
           "metadata": {
