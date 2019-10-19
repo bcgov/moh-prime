@@ -293,7 +293,7 @@ namespace Prime.Services
         {
             var enrolment = await _context.Enrolments
                 .AsNoTracking()
-                .Include(e => e.EnrolmentStatuses)
+                .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.Status)
                 .SingleOrDefaultAsync(e => e.Id == enrolmentId);
             if (enrolment == null) return null;
 

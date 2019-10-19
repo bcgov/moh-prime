@@ -26,6 +26,30 @@ namespace Prime.Controllers
         {
             _enrolmentService = enrolmentService;
         }
+        
+        private bool BelongsToEnrollee(Enrolment enrolment)
+        {
+            bool belongsToEnrollee = false;
+
+            // check to see if the logged in user is an admin
+            belongsToEnrollee = User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE);
+
+            // if user is not ADMIN, check that user belongs to the enrolment
+            if (!belongsToEnrollee)
+            {
+                // get the prime user id from the logged in user - note: this returns 'Guid.Empty' if there is no logged in user
+                Guid PrimeUserId = PrimeUtils.PrimeUserId(User);
+
+                // check to see if the logged in user id is not 'Guid.Empty', and matches the one in the enrolment
+                belongsToEnrollee = !PrimeUserId.Equals(Guid.Empty)
+                        && PrimeUserId.Equals(enrolment.Enrollee.UserId);
+            }
+
+            // TODO - remove this once we have OAuth tokens with prime user id values
+            if (!belongsToEnrollee) belongsToEnrollee = true;
+
+            return belongsToEnrollee;
+        }
 
         // GET: api/Enrolment
         /// <summary>
@@ -177,30 +201,6 @@ namespace Prime.Controllers
             return Ok(new ApiOkResponse<Enrolment>(enrolment));
         }
 
-        private bool BelongsToEnrollee(Enrolment enrolment)
-        {
-            bool belongsToEnrollee = false;
-
-            // check to see if the logged in user is an admin
-            belongsToEnrollee = User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE);
-
-            // if user is not ADMIN, check that user belongs to the enrolment
-            if (!belongsToEnrollee)
-            {
-                // get the prime user id from the logged in user - note: this returns 'Guid.Empty' if there is no logged in user
-                Guid PrimeUserId = PrimeUtils.PrimeUserId(User);
-
-                // check to see if the logged in user id is not 'Guid.Empty', and matches the one in the enrolment
-                belongsToEnrollee = !PrimeUserId.Equals(Guid.Empty)
-                        && PrimeUserId.Equals(enrolment.Enrollee.UserId);
-            }
-
-            // TODO - remove this once we have OAuth tokens with prime user id values
-            if (!belongsToEnrollee) belongsToEnrollee = true;
-
-            return belongsToEnrollee;
-        }
-
         // GET: api/Enrolment/5/availableStatuses
         /// <summary>
         /// Gets a list of the statuses that the enrolment can change to.
@@ -214,11 +214,6 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiOkResponse<IEnumerable<Status>>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Status>>> GetAvailableEnrolmentStatuses(int enrolmentId)
         {
-            //TODO - remove this temp addition of an admin role
-            var claimsIdentity = new ClaimsIdentity();
-            claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, PrimeConstants.PRIME_ADMIN_ROLE));
-            User.AddIdentity(claimsIdentity);
-
             var enrolment = await _enrolmentService.GetEnrolmentAsync(enrolmentId);
 
             if (enrolment == null)
@@ -266,22 +261,12 @@ namespace Prime.Controllers
             var enrolments = await _enrolmentService.GetEnrolmentStatuses(enrolmentId);
 
             return Ok(new ApiOkResponse<IEnumerable<EnrolmentStatus>>(enrolments));
-
-
-            // enrolment.EnrolmentStatuses
-            // // TODO - find the statuses that this enrolment had been changed to
-            // ICollection<EnrolmentStatus> results = new List<EnrolmentStatus>();
-            // results.Add(new EnrolmentStatus { EnrolmentId = enrolmentId, StatusCode = 1, Status = new Status { Code = 1, Name = "In Progress" }, StatusDate = new DateTime(2019, 10, 1), IsCurrent = false });
-            // results.Add(new EnrolmentStatus { EnrolmentId = enrolmentId, StatusCode = 2, Status = new Status { Code = 2, Name = "Submitted" }, StatusDate = new DateTime(2019, 10, 10), IsCurrent = true });
-
-            // return Ok(new ApiOkResponse<IEnumerable<EnrolmentStatus>>(results.ToList()));
         }
 
         // POST: api/Enrolment/5/statuses
         /// <summary>
         /// Adds a status change for a specific Enrolment.
         /// </summary>
-        /// <param name="enrolmentId"></param> 
         [HttpPost("{enrolmentId}/statuses", Name = nameof(CreateEnrolmentStatus))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
