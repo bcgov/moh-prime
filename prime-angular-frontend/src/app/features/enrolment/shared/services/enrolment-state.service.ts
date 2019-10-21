@@ -192,7 +192,7 @@ export class EnrolmentStateService {
       hasCertification: [null, [FormControlValidators.requiredBoolean]],
       certifications: this.fb.array([]),
       isDeviceProvider: [null, [FormControlValidators.requiredBoolean]],
-      deviceProviderNumber: ['', [Validators.pattern('[0-9]+'), Validators.minLength(5), Validators.maxLength(5)]],
+      deviceProviderNumber: ['', [FormControlValidators.numeric, FormControlValidators.requiredLength(5)]],
       isInsulinPumpProvider: [null, [FormControlValidators.requiredBoolean]],
       isAccessingPharmaNetOnBehalfOf: [null, [FormControlValidators.requiredBoolean]],
       jobs: this.fb.array([]),
@@ -203,7 +203,8 @@ export class EnrolmentStateService {
     return this.fb.group({
       id: [null, []],
       collegeCode: [null, [Validators.required]],
-      licenseNumber: [null, [Validators.required, Validators.pattern('[0-9]+'), Validators.minLength(5), Validators.maxLength(5)]],
+      licenseNumber: [null, [Validators.required, FormControlValidators.numeric,
+         FormControlValidators.requiredLength(5)]],
       licenseCode: [null, [Validators.required]],
       renewalDate: [null, [Validators.required]],
       practiceCode: [null, []]
