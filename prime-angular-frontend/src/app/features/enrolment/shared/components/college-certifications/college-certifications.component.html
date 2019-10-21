@@ -24,6 +24,7 @@
                formControlName="licenseNumber">
         <mat-error *ngIf="form.get('licenseNumber').hasError('required')">Required
         </mat-error>
+        <mat-error *ngIf="form.get('licenseNumber').hasError('length')">Must be a 5 digit number</mat-error>
       </mat-form-field>
 
     </div>
