@@ -1,28 +1,17 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build
-USER 0
-
-ENV WORKDIR /opt/app
-WORKDIR /opt/app
+FROM docker-registry.default.svc:5000/dqszvc-dev/dotnet-22-rhel7 AS build
+WORKDIR /opt/app-root/app
+SHELL [ "/bin/bash" , "-c" ]
+ENV PATH "$PATH:/opt/rh/rh-dotnet22/root/usr/lib64/dotnet"
 ENV ASPNETCORE_ENVIRONMENT Development
-
-# Copy csproj and restore as distinct layers
-RUN mkdir -p $WORKDIR
-COPY *.csproj $WORKDIR
-RUN dotnet restore
-
-# Copy everything else and build
-COPY . $WORKDIR
-RUN dotnet publish -c Release -o out
-# Build runtime image
-FROM mcr.microsoft.com/dotnet/core/aspnet:2.2 AS runtime
-ENV WORKDIR /opt/app
-RUN mkdir -p $WORKDIR
-WORKDIR /opt/app
-COPY --from=build $WORKDIR/out .
-
+COPY *.csproj /opt/app-root/app
+RUN find /opt -type f -name dotnet
+RUN dotnet restore 
+COPY . /opt/app-root/app/
+RUN dotnet publish -c Release -o /opt/app-root/app/out /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
+FROM docker-registry.default.svc:5000/dqszvc-dev/dotnet-22-runtime-rhel7 AS runtime
+WORKDIR /opt/app-root/app
+ENV PATH "$PATH:/opt/rh/rh-dotnet22/root/usr/lib64/dotnet"
+COPY --from=build /opt/app-root/app/out /opt/app-root/app
 EXPOSE 8080 5001
-
-USER 1001
-ENV ASPNETCORE_ENVIRONMENT Development
-
-ENTRYPOINT ["/usr/bin/dotnet", "prime.dll"]
+RUN find /opt -type f -name dotnet
+ENTRYPOINT ["/opt/rh/rh-dotnet22/root/usr/lib64/dotnet/dotnet", "prime.dll"]

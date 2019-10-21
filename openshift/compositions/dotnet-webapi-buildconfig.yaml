@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: BuildConfig
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --provider=openshift --build=build-config --build-repo=https://github.com/bcgov/moh-prime.git
+    kompose.version: 1.18.0 (06a2e56)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: dotnet-webapi
+  name: dotnet-webapi
+spec:
+  nodeSelector: null
+  output:
+    to:
+      kind: ImageStreamTag
+      name: dotnet-webapi:latest
+  postCommit: {}
+  resources: 
+    requests:
+      cpu: "300m"
+      memory: "512Mi"
+    limits:
+      cpu: "1" 
+      memory: "1024Mi" 
+  runPolicy: Serial
+  source:
+    contextDir: prime-dotnet-webapi/
+    git:
+      ref: develop
+      uri: https://github.com/bcgov/moh-prime.git
+    type: Git
+  strategy:
+    dockerStrategy: {}
+    type: Docker
+  triggers:
+  - type: ConfigChange
+status:
+  lastVersion: 0

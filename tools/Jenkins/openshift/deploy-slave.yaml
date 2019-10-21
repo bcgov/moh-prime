@@ -1,0 +1,198 @@
+---
+apiVersion: template.openshift.io/v1
+kind: Template
+labels:
+  app: jenkins-prod
+metadata:
+  creationTimestamp:
+  name: jenkins
+objects:
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp:
+    name: "${NAME}-${SLAVE_NAME}${SUFFIX}"
+  spec:
+    replicas: "${{REPLICAS}}"
+    revisionHistoryLimit: 10
+    selector:
+      deploymentconfig: "${NAME}-${SLAVE_NAME}${SUFFIX}"
+    strategy:
+      activeDeadlineSeconds: 21600
+      recreateParams:
+        timeoutSeconds: 600
+      resources: {}
+      type: Recreate
+    template:
+      metadata:
+        creationTimestamp:
+        labels:
+          deploymentconfig: "${NAME}-${SLAVE_NAME}${SUFFIX}"
+      spec:
+        initContainers:
+        - name: init
+          image: docker-registry.default.svc:5000/${NAMESPACE}/${NAME}-slave-main:${VERSION}
+          command:
+          - curl
+          - "-sSf"
+          - http://${NAME}${SUFFIX}:8080/login
+        containers:
+        - command:
+          - bash
+          - "-c"
+          - cd $HOME && java -XshowSettings:vm -version && exec java -jar /usr/lib/jenkins/swarm-client.jar
+            -name "$(cat /etc/hostname)" -deleteExistingClients -fsroot "$JENKINS_HOME/$(cat
+            /etc/hostname)" -master http://$JENKINS_MASTER_SERVICE:8080 -disableSslVerification
+            -username  "$(cat /var/run/secrets/jenkins-slave-user/username)" -passwordFile
+            /var/run/secrets/jenkins-slave-user/password -description "$(cat /etc/hostname)"
+            -executors ${SLAVE_EXECUTORS} -labels '${SLAVE_LABELS}' -mode 'normal'
+            -retry 10 -tunnel $JENKINS_MASTER_SERVICE:50000 -disableClientsUniqueId
+          env:
+          - name: JENKINS_MASTER_SERVICE
+            value: "${NAME}${SUFFIX}"
+          - name: ENV_NAME
+            value: "${ENV_NAME}"
+          - name: ENV_ID
+            value: "${ENV_ID}"
+          image: docker-registry.default.svc:5000/${NAMESPACE}/${NAME}-slave-main:${VERSION}
+          imagePullPolicy: Always
+          name: jenkins
+          ports:
+          - containerPort: 50000
+            protocol: TCP
+          - containerPort: 8080
+            protocol: TCP
+          resources:
+            limits:
+              cpu: "${CPU_LIMIT}"
+              memory: "${MEMORY_LIMIT}"
+            requests:
+              cpu: "${CPU_REQUEST}"
+              memory: "${MEMORY_REQUEST}"
+          terminationMessagePath: "/dev/termination-log"
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: "/var/run/pod"
+            name: pod-metadata
+          - mountPath: "/run/secrets/jenkins-slave-user"
+            name: jenkins-slave-user
+            readOnly: true
+          - mountPath: "/run/secrets/github"
+            name: github
+            readOnly: true
+          - mountPath: "/run/configs/ns"
+            name: ns-config
+            readOnly: true
+          - mountPath: "/run/configs/jobs"
+            name: jobs-config
+            readOnly: true
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: "${NAME}${SUFFIX}"
+        serviceAccountName: "${NAME}${SUFFIX}"
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: jenkins-home
+          persistentVolumeClaim:
+            claimName: "${NAME}${SUFFIX}"
+        - downwardAPI:
+            items:
+            - fieldRef:
+                fieldPath: metadata.name
+              name: name
+              path: name
+            - fieldRef:
+                fieldPath: metadata.namespace
+              name: namespace
+              path: namespace
+            - fieldRef:
+                fieldPath: metadata.labels
+              name: labels
+              path: labels
+            - fieldRef:
+                fieldPath: metadata.annotations
+              name: annotations
+              path: annotations
+          name: pod-metadata
+        - name: jenkins-slave-user
+          secret:
+            defaultMode: 420
+            secretName: "${NAME}${SUFFIX}-slave-user"
+        - name: github
+          secret:
+            defaultMode: 420
+            secretName: "${NAME}${SUFFIX}-github"
+        - name: ns-config
+          configMap:
+            defaultMode: 420
+            name: ns-config
+        - name: jobs-config
+          configMap:
+            defaultMode: 420
+            name: jobs-config
+    test: false
+    triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - init
+        - jenkins
+        from:
+          kind: ImageStreamTag
+          name: "${NAME}-slave-main:${VERSION}"
+      type: ImageChange
+    - type: ConfigChange
+parameters:
+- name: NAME
+  description: A name used for all objects
+  displayName: Name
+  required: true
+  value: jenkins
+- name: SUFFIX
+  description: A name suffix used for all objects
+  displayName: Suffix
+  value: ''
+- name: VERSION
+  description: A version used for the image tags
+  displayName: Version
+  required: true
+  value: prod-1.0.0
+- name: NAMESPACE
+  description: Target namespace reference (i.e. 'k8vopl-tools')
+  displayName: Namespace
+  required: true
+- name: SLAVE_NAME
+  description: An identifier used for this slave
+  displayName: Slave Name
+  required: true
+  value: build
+- name: SLAVE_LABELS
+  description: Labels this slave should be annotated with
+  displayName: Slave Labels
+  value: linux node rhel rhel7 build test deploy light
+- name: SLAVE_EXECUTORS
+  description: Number of executors this slave instance should have
+  displayName: Slave Executors
+  value: '6'
+- name: REPLICAS
+  description: Number of pod replicas
+  displayName: Replicas
+  value: '1'
+- name: CPU_REQUEST
+  description: Minimal CPU needed to run
+  displayName: CPU Request
+  value: 300m
+- name: CPU_LIMIT
+  description: Maximum CPU allowed to use
+  displayName: CPU Limit
+  value: 4000m
+- name: MEMORY_REQUEST
+  description: Minimal amount of memory needed to run
+  displayName: Memory Request
+  value: 256Mi
+- name: MEMORY_LIMIT
+  description: Maximum amount of memory allowed to use
+  displayName: Memory Limit
+  value: 4Gi
