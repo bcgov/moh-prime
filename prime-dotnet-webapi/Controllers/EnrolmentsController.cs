@@ -26,7 +26,7 @@ namespace Prime.Controllers
         {
             _enrolmentService = enrolmentService;
         }
-        
+
         private bool BelongsToEnrollee(Enrolment enrolment)
         {
             bool belongsToEnrollee = false;
@@ -282,7 +282,7 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"Enrolment not found with id {enrolmentId}"));
             }
 
-            if (status?.Code == null)
+            if (status?.Code == null || status.Code < 1)
             {
                 this.ModelState.AddModelError("Status.Code", "Status Code is required to create statuses.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));

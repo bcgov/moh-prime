@@ -24,6 +24,7 @@ namespace PrimeTests.Integration
         private Enrolment CreateEnrolment(IServiceScope scope)
         {
             var enrolment = TestUtils.EnrolmentFaker.Generate();
+            // add in-progress status to this enrolment
             enrolment.EnrolmentStatuses = TestUtils.EnrolmentStatusFaker.Generate(1);
             var _dbContext = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
             _dbContext.Enrolments.Add(enrolment);

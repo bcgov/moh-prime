@@ -10,6 +10,7 @@ namespace PrimeTests.Services
     {
         protected string _databaseName;
         protected ApiDbContext _dbContext;
+        protected HttpContextAccessor _httpContext;
         protected T _service;
 
         public BaseServiceTests()
@@ -20,7 +21,7 @@ namespace PrimeTests.Services
                         .UseInMemoryDatabase(databaseName: _databaseName)
                       .Options;
 
-            var _httpContext = new HttpContextAccessor();
+            _httpContext = new HttpContextAccessor();
             _httpContext.HttpContext = new DefaultHttpContext();
 
             _dbContext = new ApiDbContext(options, _httpContext);

@@ -323,7 +323,7 @@ namespace Prime.Services
                 return createdEnrolmentStatus;
             }
 
-            return null;
+            throw new InvalidOperationException("Could not create enrolment status, status change is not allowed.");
         }
 
         public bool IsStatusChangeAllowed(Status startingStatus, Status endingStatus)

@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -14,6 +15,7 @@ using Prime.Services;
 
 using PrimeTests.Utils.Auth;
 using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace PrimeTests.Utils
 {
@@ -91,6 +93,21 @@ namespace PrimeTests.Utils
                                     .RuleFor(e => e.Organizations, f => OrganizationFaker.Generate(2))
                                     ;
 
+        public static void AddAdminRoleToUser(ClaimsPrincipal user)
+        {
+            var identity = user.Identity as ClaimsIdentity;
+            identity.AddClaim(new Claim(ClaimTypes.Role, PrimeConstants.PRIME_ADMIN_ROLE));
+        }
+
+        public static void RemoveAdminRoleFromUser(ClaimsPrincipal user)
+        {
+            var identity = user.Identity as ClaimsIdentity;
+            var claim = (from c in user.Claims
+                         where c.Value == PrimeConstants.PRIME_ADMIN_ROLE
+                         select c).Single();
+            identity.RemoveClaim(claim);
+        }
+
         public static int? CreateEnrolment(ApiDbContext apiDbContext, HttpContextAccessor httpContext)
         {
             return new DefaultEnrolmentService(apiDbContext, httpContext).CreateEnrolmentAsync(TestUtils.EnrolmentFaker.Generate()).Result;
@@ -143,11 +160,12 @@ namespace PrimeTests.Utils
             db.AddRange(new OrganizationType { Code = 1, Name = "Health Authority" });
             db.AddRange(new OrganizationType { Code = 2, Name = "Pharmacy" });
 
-            db.AddRange(new Status { Code = 1, Name = "In Progress" });
-            db.AddRange(new Status { Code = 2, Name = "Submitted" });
-            db.AddRange(new Status { Code = 3, Name = "Approved" });
-            db.AddRange(new Status { Code = 4, Name = "Denied" });
-            db.AddRange(new Status { Code = 5, Name = "Accepted" });
+            db.AddRange(new Status { Code = Status.IN_PROGRESS_CODE, Name = "In Progress" });
+            db.AddRange(new Status { Code = Status.SUBMITTED_CODE, Name = "Submitted" });
+            db.AddRange(new Status { Code = Status.APPROVED_CODE, Name = "Adjudicated/Approved" });
+            db.AddRange(new Status { Code = Status.DECLINED_CODE, Name = "Declined" });
+            db.AddRange(new Status { Code = Status.ACCEPTED_TOS_CODE, Name = "Accepted TOS (Terms of Service)" });
+            db.AddRange(new Status { Code = Status.DECLINED_TOS_CODE, Name = "Declined TOS (Terms of Service)" });
 
             db.SaveChanges();
         }
@@ -156,6 +174,12 @@ namespace PrimeTests.Utils
         {
             // db.Enrolments.RemoveRange(db.Enrolments);
             InitializeDbForTests(db);
+        }
+
+
+        public static StringContent GetStringContent(object obj)
+        {
+            return new StringContent(JsonConvert.SerializeObject(obj), Encoding.Default, "application/json");
         }
 
         public static async Task<string> GetBodyFromResponse(HttpResponseMessage response)

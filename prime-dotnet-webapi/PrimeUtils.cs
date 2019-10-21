@@ -13,13 +13,5 @@ namespace Prime
             string userId = User?.Identity?.Name;
             return userId != null ? new Guid(userId) : Guid.Empty;
         }
-
-        // TODO - remove this temp method which add an admin role to a User
-        public static void AddAdminRoleToUser(ClaimsPrincipal User)
-        {
-            var claimsIdentity = new ClaimsIdentity();
-            claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, PrimeConstants.PRIME_ADMIN_ROLE));
-            User.AddIdentity(claimsIdentity);
-        }
     }
 }
