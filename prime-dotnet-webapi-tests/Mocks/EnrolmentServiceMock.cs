@@ -51,6 +51,9 @@ namespace PrimeTests.Mocks
             int? enrolleeId = new Faker().Random.Int(MIN_ENROLLEE_ID, MAX_ENROLLEE_ID);
             enrolment.Id = enrolmentId;
             enrolment.Enrollee.Id = enrolleeId;
+            //add in-progress status to this enrolment
+            enrolment.EnrolmentStatuses = TestUtils.EnrolmentStatusFaker.Generate(1);
+
             this.GetEnrolmentHolder().Add((int)enrolmentId, enrolment);
             return Task.FromResult(enrolmentId);
         }
@@ -130,7 +133,13 @@ namespace PrimeTests.Mocks
 
         public bool IsEnrolmentInStatus(int enrolmentId, short statusCodeToCheck)
         {
-            throw new NotImplementedException();
+            Enrolment enrolment = null;
+            if (this.GetEnrolmentHolder().ContainsKey(enrolmentId))
+            {
+                enrolment = this.GetEnrolmentHolder()[enrolmentId];
+                return statusCodeToCheck.Equals(enrolment.CurrentStatus?.StatusCode);
+            }
+            return false;
         }
     }
 }

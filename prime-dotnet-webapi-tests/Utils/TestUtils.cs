@@ -64,11 +64,11 @@ namespace PrimeTests.Utils
                                 .RuleFor(o => o.StartDate, f => f.Date.Future(2))
                                 ;
 
-                          public static Faker<EnrolmentStatus> EnrolmentStatusFaker = new Faker<EnrolmentStatus>()
-                                .RuleFor(es => es.StatusCode, f => Status.IN_PROGRESS_CODE)
-                                .RuleFor(es => es.StatusDate, f => DateTime.Now)
-                                .RuleFor(es => es.IsCurrent, f => true)
-                                ;              
+        public static Faker<EnrolmentStatus> EnrolmentStatusFaker = new Faker<EnrolmentStatus>()
+              .RuleFor(es => es.StatusCode, f => Status.IN_PROGRESS_CODE)
+              .RuleFor(es => es.StatusDate, f => DateTime.Now)
+              .RuleFor(es => es.IsCurrent, f => true)
+              ;
 
         public static Faker<Enrolment> EnrolmentFaker = new Faker<Enrolment>()
                                     .RuleFor(e => e.Enrollee, f => EnrolleeFaker.Generate())
