@@ -2,9 +2,13 @@ version: "3"
 
 services:
   nginx-angular:
-    container_name: primeweb
+    container_name: prime-angular-frontend
     build:
         context: .
+    environment:
+      branchName: "${branchName}"
+    args:
+      branchName: "${branchName}"
     command: "nginx -g 'daemon off;'"
     restart: always
     ports:

@@ -2,24 +2,44 @@
   "kind": "Template",
   "apiVersion": "v1",
   "metadata": {
-    "name": "postgresql",
+    "name": "postgresql-bc",
     "creationTimestamp": null
   },
   "parameters": [
     {
       "name": "NAME",
       "displayName": "Name",
-      "description": "A name used for all objects",
+      "description": "A prefix appended to all objects",
       "required": true
     },
     {
-      "name": "NAME_SUFFIX",
+      "name": "SUFFIX",
       "displayName": "Name Suffix",
       "description": "A suffix appended to all objects",
       "required": true
     },
     {
-      "name": "TAG_NAME",
+      "name": "VERSION",
+      "required": true
+    },
+    {
+      "name": "SOURCE_CONTEXT_DIR",
+      "required": true
+    },
+    {
+      "name": "SOURCE_REPOSITORY_URL",
+      "required": true
+    },
+    {
+      "name": "SOURCE_REPOSITORY_REF",
+      "required": true
+    },
+    {
+      "name": "OC_NAMESPACE",
+      "required": true
+    },
+    {
+      "name": "OC_APP",
       "required": true
     }
   ],
@@ -28,7 +48,7 @@
       "kind": "ImageStream",
       "apiVersion": "v1",
       "metadata": {
-        "name": "${NAME}",
+        "name": "${NAME}-${SUFFIX}",
         "labels": {
           "shared": "true"
         },
@@ -40,12 +60,12 @@
         },
         "tags": [
           {
-            "name": "${TAG_NAME}",
+            "name": "${NAME}",
             "annotations": null,
             "from": {
               "kind": "ImageStreamTag",
-              "name": "postgresql-9.6-oracle-fdw:v1-stable",
-              "namespace": "bcgov"
+              "name": "postgresql:9.6",
+              "namespace": "openshift"
             },
             "generation": 1,
             "importPolicy": {},

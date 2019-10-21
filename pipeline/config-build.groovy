@@ -33,14 +33,24 @@ app {
         namespace = 'dqszvc-tools'
         timeoutInSeconds = 60*40 // 40 minutes
         templates = [
-                [
+                /*[
                     'file':'openshift/postgresql.bc.json',
                     'params':[
                         'NAME':"prime-postgresql",
                         'SUFFIX': "${app.build.suffix}",
                         'TAG_NAME':"${app.build.version}"
                     ]
-                ],
+                ],*/
+                [
+                    'file':'openshift/dotnet-webapi-bc.json',
+                    'params':[
+                            'NAME':"dotnet",
+                            'SUFFIX': "${app.build.suffix}",
+                            'VERSION':"${app.build.version}",
+                            'SOURCE_CONTEXT_DIR': "prime-dotnet-webapi",
+                            'SOURCE_REPOSITORY_URL': "${app.git.uri}"
+                    ]
+                ]
         ]
     }
 }

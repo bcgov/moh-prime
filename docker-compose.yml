@@ -25,7 +25,7 @@ services:
   postgres:
     restart: always
     container_name: primedb
-    image: postgres:9.6
+    image: postgres:11.4
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USERNAME: postgres
