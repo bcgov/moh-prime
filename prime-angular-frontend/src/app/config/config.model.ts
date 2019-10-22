@@ -6,7 +6,7 @@ export interface Configuration {
   licenses: LicenseConfig[];
   organizationNames: Config[];
   organizationTypes: Config[];
-  practices: Config[];
+  practices: PracticeConfig[];
   provinces: Config[];
 }
 
@@ -15,15 +15,19 @@ export interface Config {
   name: string;
 }
 
-export interface CollegeLicenseConfig {
-  collegeCode: number;
-  licenseCode: number;
-}
-
 export interface LicenseConfig extends Config {
-  collegeLicenses: CollegeLicenseConfig[];
+  collegeLicenses: AssociatedCollegeConfig[];
 }
 
-export interface CollegeConfig extends LicenseConfig {
+export interface PracticeConfig extends Config {
+  collegePractices: AssociatedCollegeConfig[];
+}
+
+export interface AssociatedCollegeConfig {
+  collegeCode: number;
+  [key: string]: number;
+}
+
+export interface CollegeConfig extends LicenseConfig, PracticeConfig {
   prefix: string;
 }
