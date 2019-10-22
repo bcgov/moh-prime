@@ -8,13 +8,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppConfigModule } from './app-config.module';
 import { AppComponent } from './app.component';
 
-// TODO: check bundle sizes based on lazy loading
-// TODO: potentially lazy load both of these modules
-// TODO: preload dashboard, etc; when in auth
 import { AuthModule } from '@auth/auth.module';
-import { DashboardModule } from '@dashboard/dashboard.module';
-
-import { EnrolmentModule } from './features/enrolment/enrolment.module';
+import { EnrolmentModule } from '@enrolment/enrolment.module';
+import { ProvisionModule } from '@provision/provision.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -24,8 +20,8 @@ import { EnrolmentModule } from './features/enrolment/enrolment.module';
     CoreModule,
     AppConfigModule,
     AuthModule, // TODO: lazy load this module
-    DashboardModule, // TODO: lazy load this module
     EnrolmentModule, // TODO: lazy load this module
+    ProvisionModule, // TODO: lazy load this module
     AppRoutingModule // WARNING: MUST be the last routing module imported!!!
   ],
   bootstrap: [AppComponent]
