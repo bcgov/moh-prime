@@ -32,8 +32,6 @@ namespace Prime.Models
 
         public bool? IsDeviceProvider { get; set; }
 
-        public string DeviceProviderPrefix { get; set; }
-
         [RegularExpression(@"([0-9]+)", ErrorMessage = "Device Provider Number should not contain characters")]
         [StringLength(5, MinimumLength = 5, ErrorMessage = "Device Provider Number must be 5 digits")]
         public string DeviceProviderNumber { get; set; }

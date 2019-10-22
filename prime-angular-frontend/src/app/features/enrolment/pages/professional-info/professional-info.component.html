@@ -60,9 +60,12 @@
     <div class="col-sm-12 col-md-6 col-xl-4">
 
       <mat-form-field class="w-100">
+        <span matPrefix>D1&nbsp;</span>
         <input matInput
                placeholder="Device Provider Number"
                formControlName="deviceProviderNumber">
+        <!-- TODO <mat-error *ngIf="deviceProviderNumber.hasError('numeric')">Must be a number</mat-error> -->
+        <mat-error *ngIf="deviceProviderNumber.hasError('length')">Must be a 5 digit number</mat-error>
       </mat-form-field>
 
     </div>

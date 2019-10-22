@@ -204,7 +204,6 @@ namespace Prime.Migrations
                     ApprovedDate = table.Column<DateTime>(nullable: true),
                     HasCertification = table.Column<bool>(nullable: true),
                     IsDeviceProvider = table.Column<bool>(nullable: true),
-                    DeviceProviderPrefix = table.Column<string>(nullable: true),
                     DeviceProviderNumber = table.Column<string>(maxLength: 5, nullable: true),
                     IsInsulinPumpProvider = table.Column<bool>(nullable: true),
                     IsAccessingPharmaNetOnBehalfOf = table.Column<bool>(nullable: true),

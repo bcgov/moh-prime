@@ -434,8 +434,6 @@ namespace Prime.Migrations
                     b.Property<string>("DeviceProviderNumber")
                         .HasMaxLength(5);
 
-                    b.Property<string>("DeviceProviderPrefix");
-
                     b.Property<int>("EnrolleeId");
 
                     b.Property<bool?>("HasCertification");
