@@ -5,7 +5,6 @@ import { AuthComponent } from './shared/components/auth/auth.component';
 import { AuthRedirectGuard } from './shared/guards/auth-redirect.guard';
 
 import { InfoComponent } from './pages/info/info.component';
-import { LoginComponent } from './pages/login/login.component';
 
 const routes: Routes = [
   {
@@ -17,12 +16,7 @@ const routes: Routes = [
         path: 'info',
         component: InfoComponent,
         data: { title: 'Welcome - PRIME' }
-      },
-      {
-        path: 'login',
-        component: LoginComponent,
-        data: { title: 'Sign In - PRIME' }
-      },
+      },      
       {
         path: '', // Equivalent to `/` and alias for `login`
         redirectTo: 'info',
