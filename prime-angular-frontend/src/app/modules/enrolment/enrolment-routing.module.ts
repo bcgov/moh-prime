@@ -9,6 +9,7 @@ import { ProfessionalInfoComponent } from './pages/professional-info/professiona
 import { SelfDeclarationComponent } from './pages/self-declaration/self-declaration.component';
 import { PharmanetAccessComponent } from './pages/pharmanet-access/pharmanet-access.component';
 import { ReviewComponent } from './pages/review/review.component';
+// TODO: temporary until UX is provided
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 
 import { DashboardComponent } from './shared/components/dashboard/dashboard.component';
@@ -53,6 +54,11 @@ const routes: Routes = [
       {
         path: 'confirmation',
         component: ConfirmationComponent
+      },
+      {
+        path: '', // Equivalent to `/` and alias for `profile`
+        redirectTo: 'profile',
+        pathMatch: 'full'
       }
     ]
   }

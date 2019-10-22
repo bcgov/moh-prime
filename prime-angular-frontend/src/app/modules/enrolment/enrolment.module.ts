@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 
-import { EnrolmentRoutingModule } from './enrolment-routing.module';
 import { SharedModule } from '@shared/shared.module';
+import { EnrolmentRoutingModule } from './enrolment-routing.module';
 
 import { ProfileComponent } from './pages/profile/profile.component';
 import { ContactComponent } from './pages/contact/contact.component';
@@ -9,12 +9,12 @@ import { SelfDeclarationComponent } from './pages/self-declaration/self-declarat
 import { ProfessionalInfoComponent } from './pages/professional-info/professional-info.component';
 import { PharmanetAccessComponent } from './pages/pharmanet-access/pharmanet-access.component';
 import { ReviewComponent } from './pages/review/review.component';
-
-import { SubHeaderComponent } from './shared/components/sub-header/sub-header.component';
-import { DashboardComponent } from './shared/components/dashboard/dashboard.component';
-import { PageTitleComponent } from './shared/components/page-title/page-title.component';
-import { CollegeCertificationsComponent } from './shared/components/college-certifications/college-certifications.component';
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
+
+import { DashboardComponent } from './shared/components/dashboard/dashboard.component';
+import { CollegeCertificationsComponent } from './shared/components/college-certifications/college-certifications.component';
+import { PageTitleComponent } from './shared/components/page-title/page-title.component';
+import { SubHeaderComponent } from './shared/components/sub-header/sub-header.component';
 
 @NgModule({
   declarations: [
@@ -24,11 +24,11 @@ import { ConfirmationComponent } from './pages/confirmation/confirmation.compone
     SelfDeclarationComponent,
     PharmanetAccessComponent,
     ReviewComponent,
-    SubHeaderComponent,
+    ConfirmationComponent,
     DashboardComponent,
-    PageTitleComponent,
     CollegeCertificationsComponent,
-    ConfirmationComponent
+    PageTitleComponent,
+    SubHeaderComponent
   ],
   imports: [
     SharedModule,
