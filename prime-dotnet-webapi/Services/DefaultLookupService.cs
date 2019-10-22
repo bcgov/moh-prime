@@ -2,23 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
 using System.Threading.Tasks;
-
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Prime.Models;
 
 namespace Prime.Services
 {
-    public class DefaultLookupService : ILookupService
+    public class DefaultLookupService : BaseService, ILookupService
     {
-        private readonly ApiDbContext _context;
-
         public DefaultLookupService(
-            ApiDbContext context)
-        {
-            _context = context;
-        }
+            ApiDbContext context, IHttpContextAccessor httpContext) 
+            : base(context, httpContext)
+        { }
 
         public async Task<List<T>> GetLookupsAsync<T>(params Expression<Func<T, object>>[] includes) where T : class, ILookup
         {

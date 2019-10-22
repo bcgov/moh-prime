@@ -31,6 +31,8 @@ namespace Prime
         public DbSet<Organization> Organizations { get; set; }
         public DbSet<Enrollee> Enrollees { get; set; }
         public DbSet<Address> Addresses { get; set; }
+        public DbSet<EnrolmentStatus> EnrolmentStatuses { get; set; }
+        public DbSet<Status> Statuses { get; set; }
 
         public override int SaveChanges()
         {
@@ -185,9 +187,10 @@ namespace Prime
             modelBuilder.Entity<Status>().HasData(
                 new Status { Code = 1, Name = "In Progress", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
                 new Status { Code = 2, Name = "Submitted", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
-                new Status { Code = 3, Name = "Approved", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
-                new Status { Code = 4, Name = "Denied", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
-                new Status { Code = 5, Name = "Accepted", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE }
+                new Status { Code = 3, Name = "Adjudicated/Approved", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
+                new Status { Code = 4, Name = "Declined", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
+                new Status { Code = 5, Name = "Accepted TOS (Terms of Service)", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
+                new Status { Code = 6, Name = "Declined TOS (Terms of Service)", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE }
                 );
             #endregion
 

@@ -24,6 +24,8 @@ namespace PrimeTests.Integration
         private Enrolment CreateEnrolment(IServiceScope scope)
         {
             var enrolment = TestUtils.EnrolmentFaker.Generate();
+            // For integration tests, remove current status 'Status Object' that the faker created so it doesn't try to save the status twice to the DbContext
+            enrolment.CurrentStatus.Status = null;
             var _dbContext = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
             _dbContext.Enrolments.Add(enrolment);
             _dbContext.SaveChanges();
@@ -40,6 +42,7 @@ namespace PrimeTests.Integration
                         .Include(e => e.Certifications)
                         .Include(e => e.Jobs)
                         .Include(e => e.Organizations)
+                        .Include(e => e.EnrolmentStatuses)
                         .AsNoTracking().Single(e => e.Id == enrolmentId);
         }
 
@@ -93,6 +96,8 @@ namespace PrimeTests.Integration
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
                 var testEnrolment = TestUtils.EnrolmentFaker.Generate();
+                // For integration tests, remove the enrolment status that the faker created, as it should get created by the service layer
+                testEnrolment.EnrolmentStatuses.Clear();
 
                 var response = await _client.PostAsJsonAsync("/api/enrolments", testEnrolment);
                 Assert.Equal(HttpStatusCode.Created, response.StatusCode);

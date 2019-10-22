@@ -14,8 +14,8 @@ namespace Prime.Services
 
         Task<Enrolment> GetEnrolmentForUserIdAsync(
             Guid userId);
-            
-        Task<IEnumerable<Enrolment>> GetEnrolmentsAsync();
+
+        Task<IEnumerable<Enrolment>> GetEnrolmentsAsync(EnrolmentSearchOptions searchOptions);
 
         Task<IEnumerable<Enrolment>> GetEnrolmentsForUserIdAsync(
             Guid userId);
@@ -25,6 +25,16 @@ namespace Prime.Services
         Task<int> UpdateEnrolmentAsync(Enrolment enrolment);
 
         Task DeleteEnrolmentAsync(int enrolmentId);
+
+        Task<IEnumerable<Status>> GetAvailableEnrolmentStatusesAsync(int enrolmentId);
+
+        Task<IEnumerable<EnrolmentStatus>> GetEnrolmentStatusesAsync(int enrolmentId);
+
+        Task<EnrolmentStatus> CreateEnrolmentStatusAsync(int enrolmentId, Status status);
+
+        bool IsStatusChangeAllowed(Status startingStatus, Status endingStatus);
+
+        Task<bool> IsEnrolmentInStatusAsync(int enrolmentId, short statusCodeToCheck);
 
     }
 }
