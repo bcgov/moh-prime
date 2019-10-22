@@ -122,7 +122,7 @@ namespace Prime.Services
 
             if (searchOptions.statusCode != null)
             {
-                query = query.Where(e => e.EnrolmentStatuses.Where(es => es.IsCurrent).Single().StatusCode == (short)searchOptions.statusCode);
+                query = query.Where(e => e.EnrolmentStatuses.Single(es => es.IsCurrent).StatusCode == (short)searchOptions.statusCode);
             }
 
             var items = await query.ToArrayAsync();

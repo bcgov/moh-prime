@@ -84,9 +84,6 @@ namespace PrimeTests.Mocks
             int? enrolleeId = new Faker().Random.Int(MIN_ENROLLEE_ID, MAX_ENROLLEE_ID);
             enrolment.Id = enrolmentId;
             enrolment.Enrollee.Id = enrolleeId;
-            // add in-progress status to this enrolment
-            enrolment.EnrolmentStatuses = TestUtils.EnrolmentStatusFaker.Generate(1);
-            enrolment.CurrentStatus.Status = _statusMap[Status.IN_PROGRESS_CODE];
 
             this.GetEnrolmentHolder().Add((int)enrolmentId, enrolment);
             return Task.FromResult(enrolmentId);

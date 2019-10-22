@@ -68,6 +68,7 @@ namespace PrimeTests.Utils
 
         public static Faker<EnrolmentStatus> EnrolmentStatusFaker = new Faker<EnrolmentStatus>()
               .RuleFor(es => es.StatusCode, f => Status.IN_PROGRESS_CODE)
+              .RuleFor(es => es.Status, f => new Status { Code = Status.IN_PROGRESS_CODE, Name = "In Progress" })
               .RuleFor(es => es.StatusDate, f => DateTime.Now)
               .RuleFor(es => es.IsCurrent, f => true)
               ;
@@ -91,6 +92,7 @@ namespace PrimeTests.Utils
                                     .RuleFor(e => e.HasPharmaNetSuspended, f => f.Random.Bool())
                                     .RuleFor(e => e.HasPharmaNetSuspendedDetails, f => f.Lorem.Paragraphs(2))
                                     .RuleFor(e => e.Organizations, f => OrganizationFaker.Generate(2))
+                                    .RuleFor(e => e.EnrolmentStatuses, f => EnrolmentStatusFaker.Generate(1))
                                     ;
 
         public static void AddAdminRoleToUser(ClaimsPrincipal user)

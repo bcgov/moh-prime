@@ -39,6 +39,8 @@ namespace PrimeTests.Services
         public async void testCreateEnrolment()
         {
             var testEnrolment = TestUtils.EnrolmentFaker.Generate();
+            // remove the enrolment status that the faker created, as it should get created by the service layer
+            testEnrolment.EnrolmentStatuses.Clear();
             Guid expectedUserId = testEnrolment.Enrollee.UserId;
 
             // create the enrolment through the service layer code
@@ -105,6 +107,31 @@ namespace PrimeTests.Services
             var enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
             Assert.NotNull(enrolments);
             Assert.Equal(3, enrolments.Count());
+        }
+
+        [Fact]
+        public async void testGetEnrolments_Filtered()
+        {
+            //make sure there are no enrolments
+            Assert.False(_dbContext.Enrolments.Any());
+            await _dbContext.SaveChangesAsync();
+
+            // create some enrolments directly to the context
+            _dbContext.Enrolments.Add(TestUtils.EnrolmentFaker.Generate());
+            _dbContext.Enrolments.Add(TestUtils.EnrolmentFaker.Generate());
+            _dbContext.Enrolments.Add(TestUtils.EnrolmentFaker.Generate());
+
+            await _dbContext.SaveChangesAsync();
+
+            // get the enrolments through the service layer code
+            var enrolmentsInProgress = await _service.GetEnrolmentsAsync(new EnrolmentSearchOptions { statusCode = Status.IN_PROGRESS_CODE });
+            Assert.NotNull(enrolmentsInProgress);
+            Assert.Equal(3, enrolmentsInProgress.Count());
+
+            // get the enrolments through the service layer code
+            var enrolmentsSubmitted = await _service.GetEnrolmentsAsync(new EnrolmentSearchOptions { statusCode = Status.SUBMITTED_CODE });
+            Assert.NotNull(enrolmentsSubmitted);
+            Assert.Empty(enrolmentsSubmitted);
         }
 
         [Fact]
@@ -198,9 +225,7 @@ namespace PrimeTests.Services
         public async void testGetAvailableEnrolmentStatuses()
         {
             var testEnrolment = TestUtils.EnrolmentFaker.Generate();
-            // add in-progress status to this enrolment
-            testEnrolment.EnrolmentStatuses = TestUtils.EnrolmentStatusFaker.Generate(1);
-            Guid expectedUserId = testEnrolment.Enrollee.UserId;
+             Guid expectedUserId = testEnrolment.Enrollee.UserId;
 
             // create the enrolment directly to the context
             _dbContext.Enrolments.Add(testEnrolment);
@@ -218,9 +243,7 @@ namespace PrimeTests.Services
         public async void testGetEnrolmentStatuses()
         {
             var testEnrolment = TestUtils.EnrolmentFaker.Generate();
-            // add in-progress status to this enrolment
-            testEnrolment.EnrolmentStatuses = TestUtils.EnrolmentStatusFaker.Generate(1);
-            Guid expectedUserId = testEnrolment.Enrollee.UserId;
+             Guid expectedUserId = testEnrolment.Enrollee.UserId;
 
             // create the enrolment directly to the context
             _dbContext.Enrolments.Add(testEnrolment);
@@ -238,8 +261,6 @@ namespace PrimeTests.Services
         public async void testCreateEnrolmentStatuses()
         {
             var testEnrolment = TestUtils.EnrolmentFaker.Generate();
-            // add in-progress status to this enrolment
-            testEnrolment.EnrolmentStatuses = TestUtils.EnrolmentStatusFaker.Generate(1);
             Guid expectedUserId = testEnrolment.Enrollee.UserId;
 
             // create the enrolment directly to the context
