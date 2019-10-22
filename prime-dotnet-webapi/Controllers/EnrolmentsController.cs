@@ -51,7 +51,7 @@ namespace Prime.Controllers
             return belongsToEnrollee;
         }
 
-        // GET: api/Enrolment
+        // GET: api/Enrolments
         /// <summary>
         /// Gets all of the enrolments for the user, or all enrolments if user has ADMIN role.
         /// </summary>
@@ -59,7 +59,8 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiOkResponse<IEnumerable<Enrolment>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Enrolment>>> GetEnrolments()
+        public async Task<ActionResult<IEnumerable<Enrolment>>> GetEnrolments(
+            [FromQuery]EnrolmentSearchOptions searchOptions)
         {
             IEnumerable<Enrolment> enrolments = null;
 
@@ -67,7 +68,7 @@ namespace Prime.Controllers
             // TODO - remove this 'always' true once there are OAuth tokens
             if (true || User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE))
             {
-                enrolments = await _enrolmentService.GetEnrolmentsAsync();
+                enrolments = await _enrolmentService.GetEnrolmentsAsync(searchOptions);
             }
             else
             {
@@ -78,7 +79,7 @@ namespace Prime.Controllers
             return Ok(new ApiOkResponse<IEnumerable<Enrolment>>(enrolments.ToList()));
         }
 
-        // GET: api/Enrolment/5
+        // GET: api/Enrolments/5
         /// <summary>
         /// Gets a specific Enrolment.
         /// </summary>
@@ -107,7 +108,7 @@ namespace Prime.Controllers
             return Ok(new ApiOkResponse<Enrolment>(enrolment));
         }
 
-        // POST: api/Enrolment
+        // POST: api/Enrolments
         /// <summary>
         /// Creates a new Enrolment.
         /// </summary>
@@ -122,7 +123,7 @@ namespace Prime.Controllers
             return CreatedAtAction(nameof(GetEnrolmentById), new { enrolmentId = createdEnrolmentId }, enrolment);
         }
 
-        // PUT: api/Enrolment/5
+        // PUT: api/Enrolments/5
         /// <summary>
         /// Updates a specific Enrolment.
         /// </summary>
@@ -155,7 +156,7 @@ namespace Prime.Controllers
             }
 
             // if the enrolment is not in the status of 'In Progress', it cannot be updated
-            if (!_enrolmentService.IsEnrolmentInStatus(enrolmentId, Status.IN_PROGRESS_CODE))
+            if (!(await _enrolmentService.IsEnrolmentInStatusAsync(enrolmentId, Status.IN_PROGRESS_CODE)))
             {
                 this.ModelState.AddModelError("Enrolment.CurrentStatus", "Enrolment can not be updated when the current status is not 'In Progress'.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
@@ -172,7 +173,7 @@ namespace Prime.Controllers
             return NoContent();
         }
 
-        // DELETE: api/Enrolment/5
+        // DELETE: api/Enrolments/5
         /// <summary>
         /// Deletes a specific Enrolment.
         /// </summary>
@@ -201,7 +202,7 @@ namespace Prime.Controllers
             return Ok(new ApiOkResponse<Enrolment>(enrolment));
         }
 
-        // GET: api/Enrolment/5/availableStatuses
+        // GET: api/Enrolments/5/availableStatuses
         /// <summary>
         /// Gets a list of the statuses that the enrolment can change to.
         /// </summary>
@@ -227,12 +228,12 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            var availableEnrolmentStatuses = await _enrolmentService.GetAvailableEnrolmentStatuses(enrolmentId);
+            var availableEnrolmentStatuses = await _enrolmentService.GetAvailableEnrolmentStatusesAsync(enrolmentId);
 
             return Ok(new ApiOkResponse<IEnumerable<Status>>(availableEnrolmentStatuses));
         }
 
-        // GET: api/Enrolment/5/statuses
+        // GET: api/Enrolments/5/statuses
         /// <summary>
         /// Gets all of the status changes for a specific Enrolment.
         /// </summary>
@@ -258,12 +259,12 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            var enrolments = await _enrolmentService.GetEnrolmentStatuses(enrolmentId);
+            var enrolments = await _enrolmentService.GetEnrolmentStatusesAsync(enrolmentId);
 
             return Ok(new ApiOkResponse<IEnumerable<EnrolmentStatus>>(enrolments));
         }
 
-        // POST: api/Enrolment/5/statuses
+        // POST: api/Enrolments/5/statuses
         /// <summary>
         /// Adds a status change for a specific Enrolment.
         /// </summary>
@@ -300,7 +301,7 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            var enrolmentStatus = await _enrolmentService.CreateEnrolmentStatus(enrolmentId, status);
+            var enrolmentStatus = await _enrolmentService.CreateEnrolmentStatusAsync(enrolmentId, status);
 
             return Ok(new ApiOkResponse<EnrolmentStatus>(enrolmentStatus));
         }

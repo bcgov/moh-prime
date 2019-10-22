@@ -118,7 +118,7 @@ namespace PrimeTests.Mocks
             throw new System.NotImplementedException();
         }
 
-        public Task<IEnumerable<Enrolment>> GetEnrolmentsAsync()
+        public Task<IEnumerable<Enrolment>> GetEnrolmentsAsync(EnrolmentSearchOptions searchOptions)
         {
             IEnumerable<Enrolment> enrolments = TestUtils.EnrolmentFaker.Generate(DEFAULT_ENROLMENTS_SIZE);
             return Task.FromResult((IEnumerable<Enrolment>)this.GetEnrolmentHolder().Values?.ToList());
@@ -145,7 +145,7 @@ namespace PrimeTests.Mocks
             return Task.FromResult(updated);
         }
 
-        public Task<IEnumerable<Status>> GetAvailableEnrolmentStatuses(int enrolmentId)
+        public Task<IEnumerable<Status>> GetAvailableEnrolmentStatusesAsync(int enrolmentId)
         {
             ICollection<Status> availableStatuses = new List<Status>();
             Enrolment enrolment = null;
@@ -161,7 +161,7 @@ namespace PrimeTests.Mocks
             return Task.FromResult(availableStatuses as IEnumerable<Status>);
         }
 
-        public Task<IEnumerable<EnrolmentStatus>> GetEnrolmentStatuses(int enrolmentId)
+        public Task<IEnumerable<EnrolmentStatus>> GetEnrolmentStatusesAsync(int enrolmentId)
         {
             Enrolment enrolment = null;
             if (this.GetEnrolmentHolder().ContainsKey(enrolmentId))
@@ -171,7 +171,7 @@ namespace PrimeTests.Mocks
             return Task.FromResult(enrolment?.EnrolmentStatuses as IEnumerable<EnrolmentStatus>);
         }
 
-        public Task<EnrolmentStatus> CreateEnrolmentStatus(int enrolmentId, Status status)
+        public Task<EnrolmentStatus> CreateEnrolmentStatusAsync(int enrolmentId, Status status)
         {
             ICollection<Status> availableStatuses = new List<Status>();
             Enrolment enrolment = null;
@@ -207,15 +207,15 @@ namespace PrimeTests.Mocks
             return availableStatuses.Contains(endingStatus);
         }
 
-        public bool IsEnrolmentInStatus(int enrolmentId, short statusCodeToCheck)
+        public Task<bool> IsEnrolmentInStatusAsync(int enrolmentId, short statusCodeToCheck)
         {
             Enrolment enrolment = null;
             if (this.GetEnrolmentHolder().ContainsKey(enrolmentId))
             {
                 enrolment = this.GetEnrolmentHolder()[enrolmentId];
-                return statusCodeToCheck.Equals(enrolment.CurrentStatus?.StatusCode);
+                return Task.FromResult(statusCodeToCheck.Equals(enrolment.CurrentStatus?.StatusCode));
             }
-            return false;
+            return Task.FromResult(false);
         }
     }
 }

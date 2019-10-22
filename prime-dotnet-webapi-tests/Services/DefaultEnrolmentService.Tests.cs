@@ -11,6 +11,8 @@ namespace PrimeTests.Services
 {
     public class DefaultEnrolmentServiceTests : BaseServiceTests<DefaultEnrolmentService>
     {
+        private static EnrolmentSearchOptions EMPTY_ENROLMENT_SEARCH_OPTIONS = new EnrolmentSearchOptions();
+
         [Fact]
         public async void testEnrolmentExists()
         {
@@ -25,7 +27,7 @@ namespace PrimeTests.Services
 
             //make sure there are now enrolments
             Assert.True(_dbContext.Enrolments.Any());
-            
+
             // get the created enrolment id
             int expectedEnrolmentId = (int)enrolment.Id;
 
@@ -100,7 +102,7 @@ namespace PrimeTests.Services
             await _dbContext.SaveChangesAsync();
 
             // get the enrolments through the service layer code
-            var enrolments = await _service.GetEnrolmentsAsync();
+            var enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
             Assert.NotNull(enrolments);
             Assert.Equal(3, enrolments.Count());
         }
@@ -206,7 +208,7 @@ namespace PrimeTests.Services
             int expectedEnrolmentId = (int)testEnrolment.Id;
 
             // get the available statuses through the service layer code
-            var statuses = await _service.GetAvailableEnrolmentStatuses((int)expectedEnrolmentId);
+            var statuses = await _service.GetAvailableEnrolmentStatusesAsync((int)expectedEnrolmentId);
             Assert.NotNull(statuses);
             Assert.Single(statuses);
             Assert.Contains(_dbContext.Statuses.Single(s => s.Code == Status.SUBMITTED_CODE), statuses);
@@ -226,7 +228,7 @@ namespace PrimeTests.Services
             int expectedEnrolmentId = (int)testEnrolment.Id;
 
             // get the enrolment statuses through the service layer code
-            var enrolmentStatuses = await _service.GetEnrolmentStatuses((int)expectedEnrolmentId);
+            var enrolmentStatuses = await _service.GetEnrolmentStatusesAsync((int)expectedEnrolmentId);
             Assert.NotNull(enrolmentStatuses);
             Assert.Single(enrolmentStatuses);
             Assert.Equal(_dbContext.Statuses.Single(s => s.Code == Status.IN_PROGRESS_CODE), enrolmentStatuses.First().Status);
@@ -246,7 +248,7 @@ namespace PrimeTests.Services
             int expectedEnrolmentId = (int)testEnrolment.Id;
 
             // get the enrolment statuses through the service layer code
-            var enrolmentStatus = await _service.CreateEnrolmentStatus((int)expectedEnrolmentId, _dbContext.Statuses.Single(s => s.Code == Status.SUBMITTED_CODE));
+            var enrolmentStatus = await _service.CreateEnrolmentStatusAsync((int)expectedEnrolmentId, _dbContext.Statuses.Single(s => s.Code == Status.SUBMITTED_CODE));
             Assert.NotNull(enrolmentStatus);
             Assert.Equal(_dbContext.Statuses.Single(s => s.Code == Status.SUBMITTED_CODE), enrolmentStatus.Status);
         }

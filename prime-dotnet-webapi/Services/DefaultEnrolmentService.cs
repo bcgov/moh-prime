@@ -107,7 +107,7 @@ namespace Prime.Services
             return entity;
         }
 
-        public async Task<IEnumerable<Enrolment>> GetEnrolmentsAsync()
+        public async Task<IEnumerable<Enrolment>> GetEnrolmentsAsync(EnrolmentSearchOptions searchOptions)
         {
             IQueryable<Enrolment> query = _context.Enrolments
                 .Include(e => e.Enrollee)
@@ -119,6 +119,11 @@ namespace Prime.Services
                 .Include(e => e.Organizations)
                 .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.Status)
                 ;
+
+            if (searchOptions.statusCode != null)
+            {
+                query = query.Where(e => e.EnrolmentStatuses.Where(es => es.IsCurrent).Single().StatusCode == (short)searchOptions.statusCode);
+            }
 
             var items = await query.ToArrayAsync();
 
@@ -271,7 +276,7 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Status>> GetAvailableEnrolmentStatuses(int enrolmentId)
+        public async Task<IEnumerable<Status>> GetAvailableEnrolmentStatusesAsync(int enrolmentId)
         {
             var enrolment = await _context.Enrolments
                 .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.Status)
@@ -281,7 +286,7 @@ namespace Prime.Services
             return this.GetAvailableStatuses(enrolment.CurrentStatus?.Status);
         }
 
-        public async Task<IEnumerable<EnrolmentStatus>> GetEnrolmentStatuses(int enrolmentId)
+        public async Task<IEnumerable<EnrolmentStatus>> GetEnrolmentStatusesAsync(int enrolmentId)
         {
             IQueryable<EnrolmentStatus> query = _context.EnrolmentStatuses
                 .Include(es => es.Status)
@@ -293,7 +298,7 @@ namespace Prime.Services
             return items;
         }
 
-        public async Task<EnrolmentStatus> CreateEnrolmentStatus(int enrolmentId, Status status)
+        public async Task<EnrolmentStatus> CreateEnrolmentStatusAsync(int enrolmentId, Status status)
         {
             var enrolment = await _context.Enrolments
                 .AsNoTracking()
@@ -307,7 +312,7 @@ namespace Prime.Services
             if (IsStatusChangeAllowed(currentStatus ?? NULL_STATUS, status))
             {
                 // update all of the existing statuses to not be current, and then create a new current status
-                var existingEnrolmentStatuses = await this.GetEnrolmentStatuses(enrolmentId);
+                var existingEnrolmentStatuses = await this.GetEnrolmentStatusesAsync(enrolmentId);
                 foreach (var enrolmentStatus in existingEnrolmentStatuses)
                 {
                     enrolmentStatus.IsCurrent = false;
@@ -332,12 +337,12 @@ namespace Prime.Services
             return availableStatuses.Contains(endingStatus);
         }
 
-        public bool IsEnrolmentInStatus(int enrolmentId, short statusCodeToCheck)
+        public async Task<bool> IsEnrolmentInStatusAsync(int enrolmentId, short statusCodeToCheck)
         {
-            var enrolment = _context.Enrolments
+            var enrolment = await _context.Enrolments
                 .AsNoTracking()
                 .Include(e => e.EnrolmentStatuses)
-                .SingleOrDefault(e => e.Id == enrolmentId);
+                .SingleOrDefaultAsync(e => e.Id == enrolmentId);
             if (enrolment == null) return false;
 
             var currentStatusCode = enrolment.CurrentStatus?.StatusCode;
