@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { KeycloakService } from 'keycloak-angular';
 
 @Component({
   selector: 'app-info',
@@ -7,9 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class InfoComponent implements OnInit {
 
-  constructor() { }
+  constructor(private keycloakService: KeycloakService) { }
 
   ngOnInit() {
   }
-
+ 
+  public bcscLogin() {
+    this.keycloakService.login({
+      idpHint: 'bcsc',
+      redirectUri: 'http://localhost:4200/enrolment/profile'
+    })
+  }
 }
