@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, FormControl, Validators, NG_VALUE_ACCESSOR, NG_
 
 import { Subscription } from 'rxjs';
 
-import { Login } from '@auth/shared/models/login.model';
+import { Login } from '../../models/login.model';
 
 @Component({
   selector: 'app-login-form',

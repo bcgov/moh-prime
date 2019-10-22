@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 
-import { AuthService } from '@auth/shared/services/auth.service';
+import { AuthService } from '../services/auth.service';
 
 @Injectable({
   providedIn: 'root'

@@ -4,7 +4,7 @@ import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from
 import { Observable } from 'rxjs';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
-import { AuthTokenService } from '@auth/shared/services/auth-token.service';
+import { AuthTokenService } from '../services/auth-token.service';
 
 @Injectable({
   providedIn: 'root'

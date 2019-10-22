@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 
-import { Role } from '@auth/shared/enum/role.enum';
-import { User } from '@auth/shared/models/user.model';
-import { AuthTokenService } from '@auth/shared/services/auth-token.service';
+import { Role } from '../enum/role.enum';
+import { User } from '../models/user.model';
+import { AuthTokenService } from './auth-token.service';
 
 @Injectable({
   providedIn: 'root'

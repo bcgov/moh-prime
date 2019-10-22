@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 
 import { Subscription } from 'rxjs';
@@ -7,7 +7,8 @@ import { map } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { LoggerService } from '@core/services/logger.service';
-import { AuthResource } from '@auth/shared/services/auth-resource.service';
+
+import { AuthResource } from '../../shared/services/auth-resource.service';
 
 @Component({
   selector: 'app-login',

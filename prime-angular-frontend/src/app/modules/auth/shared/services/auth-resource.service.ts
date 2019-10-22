@@ -6,7 +6,8 @@ import { map, catchError } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { LoggerService } from '@core/services/logger.service';
-import { AuthTokenService } from '@auth/shared/services/auth-token.service';
+
+import { AuthTokenService } from './auth-token.service';
 
 @Injectable({
   providedIn: 'root'
