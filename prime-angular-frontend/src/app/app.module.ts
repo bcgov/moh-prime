@@ -11,6 +11,7 @@ import { AppComponent } from './app.component';
 import { AuthModule } from '@auth/auth.module';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { ProvisionModule } from '@provision/provision.module';
+import { AdminModule } from '@admin/admin.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -22,6 +23,7 @@ import { ProvisionModule } from '@provision/provision.module';
     AuthModule, // TODO: lazy load this module
     EnrolmentModule, // TODO: lazy load this module
     ProvisionModule, // TODO: lazy load this module
+    AdminModule, // TODO: lazy load this module
     AppRoutingModule // WARNING: MUST be the last routing module imported!!!
   ],
   bootstrap: [AppComponent]
