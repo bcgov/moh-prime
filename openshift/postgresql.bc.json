@@ -16,7 +16,7 @@
       "name": "SUFFIX",
       "displayName": "Name Suffix",
       "description": "A suffix appended to all objects",
-      "required": true
+      "required": false
     },
     {
       "name": "VERSION",
