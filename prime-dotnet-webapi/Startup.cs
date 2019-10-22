@@ -18,10 +18,12 @@ namespace Prime
         public Startup(IHostingEnvironment env, IConfiguration configuration)
         {
             Configuration = configuration;
+            StaticConfig = configuration;
             Environment = env;
         }
 
         public IConfiguration Configuration { get; }
+        public static IConfiguration StaticConfig { get; private set; }
         public IHostingEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.

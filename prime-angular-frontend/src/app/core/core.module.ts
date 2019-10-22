@@ -7,6 +7,7 @@ import { throwIfAlreadyLoaded } from '@core/module-import-guard';
 import { AccessDeniedComponent } from '@core/components/access-denied/access-denied.component';
 import { PageNotFoundComponent } from '@core/components/page-not-found/page-not-found.component';
 import { AuthHttpModule } from '@core/modules/auth-http/auth-http.module';
+import { KeycloakModule } from '@core/modules/keycloak/keycloak.module';
 import { ErrorHandlerInterceptor } from '@core/interceptors/error-handler.interceptor';
 import { ErrorHandlerService } from '@core/services/error-handler.service';
 import { MaintenanceComponent } from './components/maintenance/maintenance.component';
@@ -14,10 +15,11 @@ import { MaintenanceComponent } from './components/maintenance/maintenance.compo
 @NgModule({
   imports: [
     BrowserAnimationsModule,
-    AuthHttpModule
+    AuthHttpModule,
+    KeycloakModule
   ],
   providers: [
-    // TODO: move to own HttpModule
+    // TODO: move to HttpModule
     {
       provide: ErrorHandler,
       useClass: ErrorHandlerService
