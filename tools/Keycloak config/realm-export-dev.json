@@ -464,21 +464,6 @@
           }
         },
         {
-          "id": "d8423668-8ece-4d36-987e-1043d3e2cf76",
-          "name": "set audience to prime-application-local",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-hardcoded-claim-mapper",
-          "consentRequired": false,
-          "config": {
-            "claim.value": "prime-application-local",
-            "userinfo.token.claim": "true",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "aud",
-            "jsonType.label": "String"
-          }
-        },
-        {
           "id": "be217bc6-ec69-4849-9a19-19e77aadf3b1",
           "name": "Client ID",
           "protocol": "openid-connect",
@@ -522,6 +507,21 @@
           }
         },
         {
+          "id": "5bfb2f02-528f-470b-aefe-b04490eda9a8",
+          "name": "given names",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-property-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "true",
+            "user.attribute": "given_names",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "given_names",
+            "jsonType.label": "String"
+          }
+        },
+        {
           "id": "59687560-d34b-4d6e-b70b-e6908ee875d8",
           "name": "family name",
           "protocol": "openid-connect",
@@ -549,36 +549,6 @@
           }
         },
         {
-          "id": "c312f931-681f-4d5e-8199-c0966e463afc",
-          "name": "test",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usermodel-property-mapper",
-          "consentRequired": false,
-          "config": {
-            "userinfo.token.claim": "true",
-            "user.attribute": "test",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "test",
-            "jsonType.label": "int"
-          }
-        },
-        {
-          "id": "13a0b4f0-0ce6-4018-a44c-ee49d7c2b0b7",
-          "name": "given_names",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usermodel-property-mapper",
-          "consentRequired": false,
-          "config": {
-            "userinfo.token.claim": "true",
-            "user.attribute": "given_names",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "given_names",
-            "jsonType.label": "String"
-          }
-        },
-        {
           "id": "35b32da0-9b10-41e0-bb0d-d0c45040ae58",
           "name": "Client IP Address",
           "protocol": "openid-connect",
@@ -589,6 +559,21 @@
             "id.token.claim": "true",
             "access.token.claim": "true",
             "claim.name": "clientAddress",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "bad88c6c-5a7a-49e6-8e16-3aff623a5224",
+          "name": "set audience to prime-web-api",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-hardcoded-claim-mapper",
+          "consentRequired": false,
+          "config": {
+            "claim.value": "prime-web-api",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "aud",
             "jsonType.label": "String"
           }
         }
