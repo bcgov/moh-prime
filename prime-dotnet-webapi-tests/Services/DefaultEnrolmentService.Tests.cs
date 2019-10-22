@@ -3,6 +3,8 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
+using SimpleBase;
+
 using Prime.Models;
 using Prime.Services;
 using PrimeTests.Utils;
@@ -12,6 +14,22 @@ namespace PrimeTests.Services
     public class DefaultEnrolmentServiceTests : BaseServiceTests<DefaultEnrolmentService>
     {
         private static EnrolmentSearchOptions EMPTY_ENROLMENT_SEARCH_OPTIONS = new EnrolmentSearchOptions();
+
+        [Fact]
+        public void testGuid_Ascii85_Encoding()
+        {
+            Guid guid = Guid.NewGuid();
+            Assert.NotNull(guid);
+
+            string encodedString = Base85.Ascii85.Encode(guid.ToByteArray());
+            Assert.NotNull(encodedString);
+            Assert.Equal(20, encodedString.Length);
+
+            Span<byte> decodedBytes = Base85.Ascii85.Decode(encodedString);
+            Guid decodedGuid = new Guid(decodedBytes);
+            Assert.NotNull(decodedGuid);
+            Assert.Equal(guid, decodedGuid);
+        }
 
         [Fact]
         public async void testEnrolmentExists()
@@ -225,7 +243,7 @@ namespace PrimeTests.Services
         public async void testGetAvailableEnrolmentStatuses()
         {
             var testEnrolment = TestUtils.EnrolmentFaker.Generate();
-             Guid expectedUserId = testEnrolment.Enrollee.UserId;
+            Guid expectedUserId = testEnrolment.Enrollee.UserId;
 
             // create the enrolment directly to the context
             _dbContext.Enrolments.Add(testEnrolment);
@@ -243,7 +261,7 @@ namespace PrimeTests.Services
         public async void testGetEnrolmentStatuses()
         {
             var testEnrolment = TestUtils.EnrolmentFaker.Generate();
-             Guid expectedUserId = testEnrolment.Enrollee.UserId;
+            Guid expectedUserId = testEnrolment.Enrollee.UserId;
 
             // create the enrolment directly to the context
             _dbContext.Enrolments.Add(testEnrolment);

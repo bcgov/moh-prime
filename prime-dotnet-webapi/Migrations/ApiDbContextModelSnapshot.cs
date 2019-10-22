@@ -391,6 +391,9 @@ namespace Prime.Migrations
                     b.Property<string>("LastName")
                         .IsRequired();
 
+                    b.Property<string>("LicensePlate")
+                        .HasMaxLength(20);
+
                     b.Property<string>("MiddleName");
 
                     b.Property<string>("PreferredFirstName");
