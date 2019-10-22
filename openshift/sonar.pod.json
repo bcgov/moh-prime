@@ -122,7 +122,7 @@
               },
               {
                 "name": "DB_NAME_TEST",
-                "value": "mds_test"
+                "value": "prime"
               },
               {
                 "name": "UPLOADED_DOCUMENT_DEST",
