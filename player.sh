@@ -4,6 +4,38 @@ export yamlLocation='openshift/compositions'
 export gitUrl='https://github.com/bcgov/moh-prime.git'
 #export branchName="$BRANCH_NAME"
 export branchName=$(echo "$BRANCH_NAME" | tr '[:upper:]' '[:lower:]') 
+
+
+
+function determineMode() {
+    `oc get $2/$1-$branchName --ignore-not-found=true`
+    if [ -z ${buildPresent} ];
+    then MODE="apply"
+    else MODE="create"
+    fi;
+}
+# Build an deploy are very alike, require similar logic for config injestion.
+function ocApply() {
+    if [ "${process}" == "build" ];
+    then configType="bc"
+    elif [ "${process}" == "deploy" ];
+    then configType="dc"
+    fi
+    if [ "${branchName}" == "develop" ] || [ "${branchName}" == "master" ];
+    then SUFFIX=""
+    else SUFFIX="-${branchName}";
+    fi
+    oc process -f openshift/$1.$configType.json \
+    -p NAME="$1" \
+    -p VERSION="$BUILD_NUMBER" \
+    -p SUFFIX="$SUFFIX" \
+    -p SOURCE_CONTEXT_DIR="prime-$1" \
+    -p SOURCE_REPOSITORY_URL="$gitUrl" \
+    -p SOURCE_REPOSITORY_REF="$BRANCH_NAME" \
+    -p OC_NAMESPACE="$licensePlate" \
+    -p OC_APP="$OC_APP" | oc $MODE -f - --namespace=$licensePlate-$OC_APP
+}
+
 function build(){
     OC_APP=$2
     buildPresent=`oc get bc/$1-$branchName --ignore-not-found=true`
@@ -49,7 +81,12 @@ function deploy(){
     echo "Building..."
 }
 
+
+
+#
 case "$1" in
+    ocApply)
+        ocApply $2 $3
     build)
         build $2 $3
         ;;

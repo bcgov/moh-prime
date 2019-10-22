@@ -48,7 +48,7 @@
       "kind": "ImageStream",
       "apiVersion": "v1",
       "metadata": {
-        "name": "${NAME}-${SUFFIX}",
+        "name": "${NAME}${SUFFIX}",
         "labels": {
           "shared": "true"
         },
