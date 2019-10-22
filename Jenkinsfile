@@ -1,3 +1,5 @@
+def scannerHome = tool 'SonarQubeScanner';
+withSonarQubeEnv('sonarqube') 
 pipeline {
     agent none
     options {
@@ -23,6 +25,22 @@ pipeline {
                 sh "bash ./player.sh deploy postgresql dev"
                 sh "bash ./player.sh deploy dotnet-webapi dev"
                 sh "bash ./player.sh deploy angular-frontend dev"
+            }
+        }
+        stage('SonarQube analysis') {
+        agent { label 'master' }
+        steps { 
+              sh "${scannerHome}/bin/sonar-scanner -X"
+            }
+        }
+        stage('Code Quality Check') {
+            agent { label 'master' }
+            steps {
+                echo "Deploy (DEV) ..."
+                sh "export OC_APP=dev"
+                sh "bash ./player.sh sonar.pod "
+                sh "bash ./player.sh sonar dotnet-webapi dev"
+                sh "bash ./player.sh sonar angular-frontend dev"
             }
         }
         /*

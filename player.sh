@@ -46,7 +46,27 @@ function deploy(){
     -p SOURCE_REPOSITORY_REF="$BRANCH_NAME" \
     -p OC_NAMESPACE="$licensePlate" \
     -p OC_APP="$OC_APP" | oc $MODE -f - --namespace=$licensePlate-$OC_APP
-    echo "Building..."
+    echo "Deploying.."
+}
+
+function sonar(){
+    OC_APP=$2
+    deployPresent=`oc get bc/$1-$branchName --ignore-not-found=true`
+    if [ -z ${deployPresent} ];
+    then MODE="apply"
+    else MODE="create"
+    fi;
+    oc process -f openshift/sonar.pod.json \
+    -p NAME="sonar-runner" \
+    -p VERSION="$BUILD_NUMBER" \
+    -p SUFFIX="$branchName" \
+    -p SOURCE_CONTEXT_DIR="." \
+    -p SOURCE_REPOSITORY_URL="$gitUrl" \
+    -p SOURCE_REPOSITORY_REF="$BRANCH_NAME" \
+    -p OC_NAMESPACE="$licensePlate" \
+    -p OC_APP="$OC_APP" | oc $MODE -f - --namespace=$licensePlate-$OC_APP
+    echo "Scanning..."
+    sonar-scanner -X
 }
 
 case "$1" in
@@ -57,7 +77,7 @@ case "$1" in
         deploy $2 $3
         ;;
     sonar)
-        sonar $2 $3
+        sonar
         ;;
     zap)
         zap $2 $3
