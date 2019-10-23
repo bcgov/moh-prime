@@ -29,8 +29,11 @@ function cleanPR(){
 function ocApply() {
     echo "ocApply..."
     if [ "$1" == "build" ];
-    then configType="bc"
+    then 
+    configType="bc"
+    ocAction='oc start-build $1-$branchName -n $licensePlate-$OC_APP --wait --follow'
     elif [ "$1" == "deploy" ];
+    ocAction=""
     then configType="dc"
     fi
     if [ "${branchName}" == "develop" ] || [ "${branchName}" == "master" ];
@@ -46,6 +49,7 @@ function ocApply() {
     -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH"  \
     -p OC_NAMESPACE="$licensePlate" \
     -p OC_APP="$3" | oc apply -f - --namespace=$licensePlate-$3
+    $ocAction
 }
 
 function build(){
@@ -90,7 +94,7 @@ function deploy(){
     -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH" \
     -p OC_NAMESPACE="$licensePlate" \
     -p OC_APP="$OC_APP" | oc $MODE -f - --namespace=$licensePlate-$OC_APP
-    echo "Building..."
+    echo "Deployment should be automatic..."
 }
 
 
