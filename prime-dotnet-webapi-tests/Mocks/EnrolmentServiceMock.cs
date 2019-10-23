@@ -83,13 +83,12 @@ namespace PrimeTests.Mocks
 
         public Task<IEnumerable<Enrolment>> GetEnrolmentsAsync()
         {
-            IEnumerable<Enrolment> enrolments = TestUtils.EnrolmentFaker.Generate(DEFAULT_ENROLMENTS_SIZE);
             return Task.FromResult((IEnumerable<Enrolment>)this.GetEnrolmentHolder().Values?.ToList());
         }
 
         public Task<IEnumerable<Enrolment>> GetEnrolmentsForUserIdAsync(Guid userId)
         {
-            throw new System.NotImplementedException();
+            return Task.FromResult((IEnumerable<Enrolment>)this.GetEnrolmentHolder().Values?.ToList().Where(e => e.Enrollee.UserId == userId));
         }
 
         public Task<int> UpdateEnrolmentAsync(Enrolment enrolment)
