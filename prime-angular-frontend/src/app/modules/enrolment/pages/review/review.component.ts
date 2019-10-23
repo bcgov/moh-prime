@@ -37,7 +37,7 @@ export class ReviewComponent implements OnInit {
             this.router.navigate(['confirmation'], { relativeTo: this.route.parent });
           },
           (error: any) => {
-            this.toastService.openSuccessToast('Enrolment could not be submitted');
+            this.toastService.openErrorToast('Enrolment could not be submitted');
             this.logger.error('[Enrolment] Review::onSubmit error has occurred: ', error);
           });
     } else {
@@ -51,7 +51,7 @@ export class ReviewComponent implements OnInit {
   }
 
   public showYesNo(declared: boolean) {
-    return (declared === null) ? ''
+    return (declared === null) ? 'N/A'
       : (declared) ? 'Yes' : 'No';
   }
 

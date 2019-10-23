@@ -14,7 +14,7 @@
         <input matInput
                placeholder="First Name"
                formControlName="firstName">
-        <mat-error *ngIf="firstName.hasError('required')">Required</mat-error>
+        <mat-error>Required</mat-error>
       </mat-form-field>
 
     </div>
@@ -37,7 +37,7 @@
         <input matInput
                placeholder="Last Name"
                formControlName="lastName">
-        <mat-error *ngIf="lastName.hasError('required')">Required</mat-error>
+        <mat-error>Required</mat-error>
       </mat-form-field>
 
     </div>
@@ -55,7 +55,7 @@
         <mat-datepicker #picker
                         startView="multi-year"
                         [touchUi]="isMobile"></mat-datepicker>
-        <mat-error *ngIf="dateOfBirth.hasError('required')">Required</mat-error>
+        <mat-error>Required</mat-error>
       </mat-form-field>
 
     </div>
@@ -123,6 +123,7 @@
             <input matInput
                    placeholder="Country"
                    formControlName="country">
+            <mat-error>Required</mat-error>
           </mat-form-field>
 
         </div>
@@ -138,6 +139,7 @@
                 {{ province.name }}
               </mat-option>
             </mat-select>
+            <mat-error>Required</mat-error>
           </mat-form-field>
 
         </div>
@@ -149,6 +151,7 @@
             <input matInput
                    placeholder="Street Address"
                    formControlName="street">
+            <mat-error>Required</mat-error>
           </mat-form-field>
 
         </div>
@@ -160,6 +163,7 @@
             <input matInput
                    placeholder="City"
                    formControlName="city">
+            <mat-error>Required</mat-error>
           </mat-form-field>
 
         </div>
@@ -172,6 +176,7 @@
                    placeholder="Postal Code"
                    mask="S0S 0S0"
                    formControlName="postal">
+            <mat-error>Required</mat-error>
           </mat-form-field>
 
         </div>

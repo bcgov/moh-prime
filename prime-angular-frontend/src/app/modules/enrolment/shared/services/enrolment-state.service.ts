@@ -152,39 +152,39 @@ export class EnrolmentStateService {
 
   private buildProfileForm(): FormGroup {
     return this.fb.group({
-      userId: [{ value: '', disabled: true }, [Validators.required]],
-      firstName: [{ value: '', disabled: true }, [Validators.required]],
-      middleName: [{ value: '', disabled: false }, []],
-      lastName: [{ value: '', disabled: true }, [Validators.required]],
+      userId: [{ value: null, disabled: true }, [Validators.required]],
+      firstName: [{ value: null, disabled: true }, [Validators.required]],
+      middleName: [{ value: null, disabled: false }, []],
+      lastName: [{ value: null, disabled: true }, [Validators.required]],
       dateOfBirth: [{ value: null, disabled: false }, []],
-      preferredFirstName: ['', []],
-      preferredMiddleName: ['', []],
-      preferredLastName: ['', []],
+      preferredFirstName: [null, []],
+      preferredMiddleName: [null, []],
+      preferredLastName: [null, []],
       physicalAddress: this.fb.group({
-        country: [{ value: '', disabled: false }, []],
-        province: [{ value: '', disabled: false }, []],
-        street: [{ value: '', disabled: false }, []],
-        city: [{ value: '', disabled: false }, []],
-        postal: [{ value: '', disabled: false }, []]
+        country: [{ value: null, disabled: false }, [Validators.required]],
+        province: [{ value: null, disabled: false }, [Validators.required]],
+        street: [{ value: null, disabled: false }, [Validators.required]],
+        city: [{ value: null, disabled: false }, [Validators.required]],
+        postal: [{ value: null, disabled: false }, [Validators.required]]
       }),
       mailingAddress: this.fb.group({
-        country: ['', []],
-        province: ['', []],
-        street: ['', []],
-        city: ['', []],
-        postal: ['', []]
+        country: [null, []],
+        province: [null, []],
+        street: [null, []],
+        city: [null, []],
+        postal: [null, []]
       })
     });
   }
 
   private buildContactForm(): FormGroup {
     return this.fb.group({
-      voicePhone: ['', [FormControlValidators.phone]],
-      voiceExtension: ['', [FormControlValidators.numeric]],
+      voicePhone: [null, [FormControlValidators.phone]],
+      voiceExtension: [null, [FormControlValidators.numeric]],
       hasContactEmail: [false, []],
-      contactEmail: ['', [FormControlValidators.email]],
+      contactEmail: [null, [FormControlValidators.email]],
       hasContactPhone: [false, []],
-      contactPhone: ['', [FormControlValidators.phone]]
+      contactPhone: [null, [FormControlValidators.phone]]
     });
   }
 
@@ -253,51 +253,5 @@ export class EnrolmentStateService {
       startDate: [null, [Validators.required]],
       endDate: [null, []]
     });
-  }
-
-  // TODO: temporary test data for filling out an enrolment
-  public getRawEnrolment(): Enrolment {
-    return {
-      // id: 1,
-      enrollee: {
-        // id: 1,
-        userId: '99999999',
-        firstName: 'Marty',
-        middleName: 'Tudor',
-        lastName: 'Pultz',
-        preferredFirstName: null,
-        preferredMiddleName: null,
-        preferredLastName: null,
-        dateOfBirth: '1977-09-22T00:00:00',
-        physicalAddress: {
-          country: 'Canada',
-          province: 'British Columbia',
-          street: '1502 Fairfield',
-          city: 'Victoria',
-          postal: 'M4E 2B6'
-        },
-        mailingAddress: null,
-        contactEmail: null,
-        contactPhone: null,
-        voicePhone: null,
-        voiceExtension: null
-      },
-      hasCertification: null,
-      certifications: [],
-      isDeviceProvider: null,
-      deviceProviderNumber: null,
-      isInsulinPumpProvider: null,
-      isAccessingPharmaNetOnBehalfOf: null,
-      jobs: [],
-      hasConviction: null,
-      hasConvictionDetails: null,
-      hasRegistrationSuspended: null,
-      hasRegistrationSuspendedDetails: null,
-      hasDisciplinaryAction: null,
-      hasDisciplinaryActionDetails: null,
-      hasPharmaNetSuspended: null,
-      hasPharmaNetSuspendedDetails: null,
-      organizations: []
-    };
   }
 }

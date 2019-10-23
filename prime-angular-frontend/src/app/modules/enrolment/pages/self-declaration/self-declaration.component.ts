@@ -77,7 +77,7 @@ export class SelfDeclarationComponent implements OnInit {
             this.router.navigate(['access'], { relativeTo: this.route.parent });
           },
           (error: any) => {
-            this.toastService.openSuccessToast('Self declaration could not be saved');
+            this.toastService.openErrorToast('Self declaration could not be saved');
             this.logger.error('[Enrolment] SelfDeclaration::onSubmit error has occurred: ', error);
           });
     } else {

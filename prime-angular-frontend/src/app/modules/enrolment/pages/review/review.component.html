@@ -80,9 +80,9 @@
 
       <dl class="row mb-4">
         <dt class="col-sm-12 col-md-6 py-1">Phone</dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.contactEmail }}&nbsp;</dd>
-        <dt class="col-sm-12 col-md-6 py-1">Email</dt>
         <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.contactPhone }}&nbsp;</dd>
+        <dt class="col-sm-12 col-md-6 py-1">Email</dt>
+        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.contactEmail }}&nbsp;</dd>
       </dl>
 
       <app-sub-header subheader="Self Declaration">
@@ -190,7 +190,7 @@
           <dt class="col-sm-12 col-md-6 py-1">Job Title</dt>
           <dd class="col-sm-12 col-md-6 py-1">
             <ul class="list-unstyled">
-              <li *ngFor="let job of enrolment.jobs; let i = index">{{ job }}</li>
+              <li *ngFor="let job of enrolment.jobs; let i = index">{{ job.title }}</li>
             </ul>
           </dd>
         </ng-container>

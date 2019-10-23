@@ -46,7 +46,7 @@ export class EnrolmentGuard implements CanActivate, CanActivateChild, CanLoad {
    * @memberof EnrolmentGuard
    */
   private checkPermissions(): boolean {
-    if (this.authService.isApplicant()) {
+    if (this.authService.isEnrollee()) {
       return true;
     } else if (this.authService.isAdmin()) {
       // WARNING: Don't redirect if they are an admin instead let the

@@ -1,9 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSidenav } from '@angular/material';
 
+import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { ViewportService } from '@core/services/viewport.service';
 import { DeviceResolution } from '@shared/enums/device-resolution.enum';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 // TODO: revisit the dashboard component for reuse when used in admin and provisioning
 @Component({
@@ -23,6 +25,8 @@ export class DashboardComponent implements OnInit {
   };
 
   constructor(
+    @Inject(APP_CONFIG) private config: AppConfig,
+    private authService: AuthService,
     private viewportService: ViewportService,
     private router: Router
   ) { }
@@ -78,19 +82,7 @@ export class DashboardComponent implements OnInit {
    * @memberof DashboardComponent
    */
   public logout() {
-    //   this.authResource.logout()
-    //     .subscribe(
-    //       () => { this.logger.error('Logout response should never be 200.'); },
-    //       (error) => {
-    //         this.routeMessengerService.set(error.message);
-    //         // Indicate the route is associated to logging out for
-    //         // deactivation guards
-    //         const navigationExtras: NavigationExtras = {
-    //           queryParams: { logout: true }
-    //         };
-    //         this.router.navigate([this.config.routes.auth], navigationExtras);
-    //       }
-    //     );
+    this.authService.logout();
   }
 
   public ngOnInit() {
@@ -110,18 +102,19 @@ export class DashboardComponent implements OnInit {
    * @memberof DashboardComponent
    */
   private getSideNavSections() {
-    return this.getEnroleeSideNavSections();
+    return (this.authService.isProvisioner || this.authService.isAdmin)
+      ? this.getProvisionSideNavSections()
+      : this.getEnrolleeSideNavSections();
   }
 
   /**
-   * Get the sidenav sections.
+   * Get the sidenav sections for an enrollee.
    *
    * @private
    * @returns
    * @memberof DashboardComponent
    */
-  // TODO: prevent routing to beyond enrollee when application has not been created
-  private getEnroleeSideNavSections() {
+  private getEnrolleeSideNavSections() {
     return [
       {
         header: 'Application Enrolment',
@@ -164,22 +157,28 @@ export class DashboardComponent implements OnInit {
             showItem: true
           }
         ]
-      },
+      }
+    ];
+  }
+
+  /**
+   * Get the sidenav sections for a provisioner.
+   *
+   * @private
+   * @returns
+   * @memberof DashboardComponent
+   */
+  private getProvisionSideNavSections() {
+    return [
       {
-        header: '',
-        showHeader: false,
+        header: 'Pharmacist Enrolments',
+        showHeader: true,
         items: [
           {
-            name: '',
-            icon: '',
-            route: '',
-            showItem: false
-          },
-          {
-            name: '',
-            icon: '',
-            route: '',
-            showItem: false
+            name: 'Enrolments',
+            icon: 'format_list_bulleted',
+            route: '/provision/enrolments',
+            showItem: true
           }
         ]
       }

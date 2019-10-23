@@ -3,8 +3,9 @@ import { Injectable } from '@angular/core';
 import { KeycloakService } from 'keycloak-angular';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
-import { User } from '../models/user.model';
 import { LoggerService } from '@core/services/logger.service';
+import { Role } from '../enum/role.enum';
+import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -57,16 +58,16 @@ export class AuthService {
     return (token.identity_assurance_level === assuranceLevel);
   }
 
-  public async isApplicant(): Promise<boolean> {
-    return this.hasRole('prime_user') && await this.checkAssuranceLevel(3);
+  public async isEnrollee(): Promise<boolean> {
+    return this.hasRole(Role.ENROLLEE) && await this.checkAssuranceLevel(3);
   }
 
   public isProvisioner(): boolean {
-    return this.hasRole('prime_admin');
+    return this.hasRole(Role.PROVISIONER);
   }
 
   public isAdmin(): boolean {
-    return this.hasRole('prime_admin');
+    return this.hasRole(Role.ADMIN);
   }
 
   public async decodeToken(): Promise<Keycloak.KeycloakTokenParsed | null> {
@@ -82,7 +83,8 @@ export class AuthService {
     return this.keycloakService.isLoggedIn();
   }
 
-  public logout(redirectUri?: string): Promise<void> {
+  // TODO: test / is used to do a relative redirect
+  public logout(redirectUri: string = '/'): Promise<void> {
     return this.keycloakService.logout(redirectUri);
   }
 
