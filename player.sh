@@ -14,6 +14,13 @@ function determineMode() {
     else MODE="create"
     fi;
 }
+function cleanPR(){
+    for i in [ `oc get all | grep "-$BRANCH_NAME"  | column -t | awk '{print $1}'`];
+    do
+    oc delete $i
+    done
+}
+
 # Build an deploy are very alike, require similar logic for config injestion.
 function ocApply() {
     if [ "${process}" == "build" ];
@@ -46,7 +53,7 @@ function build(){
     oc process -f openshift/$1.bc.json \
     -p NAME="$1" \
     -p VERSION="$BUILD_NUMBER" \
-    -p SUFFIX="$branchName" \
+    -p SUFFIX="-$branchName" \
     -p SOURCE_CONTEXT_DIR="prime-$1" \
     -p SOURCE_REPOSITORY_URL="$gitUrl" \
     -p SOURCE_REPOSITORY_REF="$BRANCH_NAME" \
@@ -72,7 +79,7 @@ function deploy(){
     oc process -f openshift/$1.dc.json \
     -p NAME="$1" \
     -p VERSION="$BUILD_NUMBER" \
-    -p SUFFIX="$branchName" \
+    -p SUFFIX="-$branchName" \
     -p SOURCE_CONTEXT_DIR="prime-$1" \
     -p SOURCE_REPOSITORY_URL="$gitUrl" \
     -p SOURCE_REPOSITORY_REF="$BRANCH_NAME" \
