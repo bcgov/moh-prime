@@ -4,36 +4,47 @@ pipeline {
         disableResume()
     }
     stages {
-        /*
         stage('Build') {
             agent { label 'master' }
             steps {
                 echo "Building ..."
-                sh "bash ./player.sh build postgresql dev"
-                sh "bash ./player.sh build dotnet-webapi dev"
-                sh "bash ./player.sh build angular-frontend dev"
+                sh "bash ./player.sh ocApply build postgresql dev"
+                sh "bash ./player.sh ocApply build dotnet-webapi dev"
+                sh "bash ./player.sh ocApply build angular-frontend dev"
             }
         }
         stage('Deploy (DEV)') {
             agent { label 'master' }
             steps {
                 echo "Deploy (DEV) ..."
-                sh "bash ./player.sh deploy postgresql dev"
-                sh "bash ./player.sh deploy dotnet-webapi dev"
-                sh "bash ./player.sh deploy angular-frontend dev"
+                sh "bash ./player.sh ocApply deploy postgresql dev"
+                sh "bash ./player.sh ocApply deploy dotnet-webapi dev"
+                sh "bash ./player.sh ocApply deploy angular-frontend dev"
             }
         }
-        */
+        /*
         stage('Test') {
             agent { label 'master' }
+            script {
+                    def IS_APPROVED = input(message: "Deploy to TEST?", ok: "yes", parameters: [string(name: 'IS_APPROVED', defaultValue: 'yes', description: 'Deploy to TEST?')])
+                    if (IS_APPROVED != 'yes') {
+                        currentBuild.result = "ABORTED"
+                        error "User cancelled"
+                    }
+            when {
+                environment name: 'CHANGE_TARGET', value: 'master'
+            }
             steps {
-                echo "test (DEV) ..."
+                echo "Test (DEV) ..."
                 sh "bash ./player.sh ocApply build postgresql dev"
                 sh "bash ./player.sh ocApply build dotnet-webapi dev"
                 sh "bash ./player.sh ocApply build angular-frontend dev"
+                sh "bash ./player.sh ocApply deploy postgresql dev"
+                sh "bash ./player.sh ocApply deploy dotnet-webapi dev"
+                sh "bash ./player.sh ocApply deploy angular-frontend dev"
             }
         }
-        
+        */
         /*
         stage('Unit Tests and SonarQube Reporting (DEV)') {
             agent { label 'master' }
