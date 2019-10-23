@@ -14,7 +14,10 @@
       },
       {
         "name": "NAME_SUFFIX",
-        "displayName": "Name Suffix",
+        "displayName": "        "name": "SUFFIX",
+        "displayName": "${NAME}${SUFFIX}",
+        "description": "A suffix appended to all objects",
+        "required": false",
         "description": "A suffix appended to all objects",
         "required": true
       },

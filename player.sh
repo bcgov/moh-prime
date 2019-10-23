@@ -87,6 +87,7 @@ function deploy(){
 case "$1" in
     ocApply)
         ocApply $2 $3
+        ;;
     build)
         build $2 $3
         ;;
