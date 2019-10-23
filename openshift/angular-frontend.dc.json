@@ -139,6 +139,8 @@
       },
       "spec": {
         "host": "${NAME}${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca",
+        "port": {
+          "targetPort": "8080",
         "to": {
           "kind": "Service",
           "name": "${NAME}${SUFFIX}"
