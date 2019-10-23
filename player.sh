@@ -32,9 +32,7 @@ function ocApply() {
     if [ "$1" == "build" ];
     then 
     configType="bc"
-    ocAction="oc start-build $1-$branchName -n $licensePlate-$OC_APP --wait --follow"
     elif [ "$1" == "deploy" ];
-    ocAction=""
     then configType="dc"
     fi
     if [ "${branchName}" == "develop" ] || [ "${branchName}" == "master" ];
@@ -50,7 +48,10 @@ function ocApply() {
     -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH"  \
     -p OC_NAMESPACE="$licensePlate" \
     -p OC_APP="$OC_APP" | oc apply -f - --namespace="$licensePlate-$OC_APP" 
-    $ocAction
+    if [ "$1" == "build" ];
+    then
+    oc start-build $1-$branchName -n $licensePlate-$OC_APP --wait --follow
+    fi
 }
 
 function build(){
