@@ -22,8 +22,7 @@
         <input matInput
                placeholder="License Number"
                formControlName="licenseNumber">
-        <mat-error *ngIf="form.get('licenseNumber').hasError('required')">Required
-        </mat-error>
+        <mat-error *ngIf="form.get('licenseNumber').hasError('required')">Required</mat-error>
         <mat-error *ngIf="form.get('licenseNumber').hasError('length')">Must be a 5 digit number</mat-error>
       </mat-form-field>
 
@@ -59,18 +58,18 @@
       </mat-form-field>
 
     </div>
-    <div class="col-sm-12">
+    <div class="col-sm-12"
+         *ngIf="hasPractices">
 
       <mat-form-field class="w-100">
         <mat-label>Advanced Practices</mat-label>
         <mat-select formControlName="practiceCode">
-          <mat-option *ngFor="let practice of practices"
+          <mat-option *ngFor="let practice of filteredPractices"
                       [value]="practice.code">
             {{ practice.name }}
           </mat-option>
         </mat-select>
-        <mat-error *ngIf="form.get('practiceCode').hasError('required')">Required
-        </mat-error>
+        <mat-error *ngIf="form.get('practiceCode').hasError('required')">Required</mat-error>
       </mat-form-field>
 
     </div>
