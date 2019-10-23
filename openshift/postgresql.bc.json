@@ -16,7 +16,7 @@
       "name": "SUFFIX",
       "displayName": "Name Suffix",
       "description": "A suffix appended to all objects",
-      "required": true
+      "required": false
     },
     {
       "name": "VERSION",
@@ -48,7 +48,7 @@
       "kind": "ImageStream",
       "apiVersion": "v1",
       "metadata": {
-        "name": "${NAME}-${SUFFIX}",
+        "name": "${NAME}${SUFFIX}",
         "labels": {
           "shared": "true"
         },
