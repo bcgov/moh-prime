@@ -6,8 +6,8 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
-import { AuthTokenService } from '@auth/shared/services/auth-token.service';
 import { LoggerService } from '@core/services/logger.service';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,7 @@ export class ErrorHandlerInterceptor {
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router,
-    private tokenService: AuthTokenService,
+    private authService: AuthService,
     private logger: LoggerService
   ) { }
 
@@ -41,9 +41,8 @@ export class ErrorHandlerInterceptor {
             if (status === 401) {
               this.logger.info('Unauthorized');
 
-              if (this.tokenService.hasToken) {
-                this.tokenService.removeToken();
-              }
+              // TODO: should the token be removed?
+              // this.authService.removeToken();
 
               // TODO: store the logout action for global reuse with auth service
               const isLogout = req.url.includes('logout');

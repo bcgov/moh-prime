@@ -9,10 +9,9 @@ export class AppConfig {
   apiEndpoint: string;
   routes: {
     auth: string;
-    dashboard: string;
     admin: string;
-    provision: string;
     enrolment: string;
+    provision: string;
     denied: string;
     maintenance: string;
   };
@@ -21,11 +20,10 @@ export class AppConfig {
 export const APP_DI_CONFIG: AppConfig = {
   apiEndpoint: environment.apiEndpoint,
   routes: {
-    auth: 'auth',
-    dashboard: 'dashboard',
+    auth: '',
     admin: 'admin',
-    provision: 'provision',
     enrolment: 'enrolment',
+    provision: 'provision',
     denied: 'denied',
     maintenance: 'maintenance'
   }
