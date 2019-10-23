@@ -33,7 +33,7 @@ function ocApply() {
     -p SOURCE_REPOSITORY_URL="$gitUrl" \
     -p SOURCE_REPOSITORY_REF="$BRANCH_NAME"  \
     -p OC_NAMESPACE="$licensePlate" \
-    -p OC_APP="$OC_APP" | oc $MODE -f - --namespace=$licensePlate-$OC_APP
+    -p OC_APP="$OC_APP" | oc apply -f - --namespace=$licensePlate-$OC_APP
 }
 
 function build(){
