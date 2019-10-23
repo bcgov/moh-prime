@@ -16,4 +16,4 @@ WORKDIR /opt/app-root/app
 COPY --from=build /opt/app-root/app/out /opt/app-root/app
 EXPOSE 8080 5001
 RUN find /opt -type f -name dotnet
-ENTRYPOINT ["/opt/rh/rh-dotnet22/root/usr/lib64/dotnet/dotnet", "prime.dll"]
+ENTRYPOINT ["dotnet", "prime.dll"]
