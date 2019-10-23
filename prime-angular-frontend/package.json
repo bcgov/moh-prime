@@ -31,7 +31,6 @@
     "keycloak-angular": "^7.0.1",
     "keycloak-js": "^6.0.1",
     "moment": "^2.24.0",
-    "ngx-bootstrap": "^5.2.0",
     "ngx-mask": "^8.0.7",
     "ngx-progressbar": "^2.1.1",
     "popper.js": "^1.15.0",
