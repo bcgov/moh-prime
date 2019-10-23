@@ -19,7 +19,8 @@ RUN rm -f /etc/nginx/conf.d/default.conf
 #COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build-deps /usr/src/app/nginx.template.conf /etc/nginx/nginx.template.conf
 USER 0
-RUN envsubst '$SUFFIX' < /etc/nginx/nginx.template.conf > /etc/nginx/conf.d/default.conf
+RUN echo "SUFFIX=$SUFFIX"
+#RUN envsubst '$SUFFIX' < /etc/nginx/nginx.template.conf > /etc/nginx/conf.d/default.conf
 COPY --from=build-deps /usr/src/app/entrypoint.sh /home
 
 EXPOSE 8080
