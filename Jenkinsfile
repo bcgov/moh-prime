@@ -25,6 +25,7 @@ pipeline {
                 sh "bash ./player.sh deploy angular-frontend dev"
             }
         }
+/*
         stage('Test') {
             agent { label 'master' }
             steps {
@@ -35,6 +36,7 @@ pipeline {
                 sh "bash ./player.sh deploy angular-frontend test"
             }
         }
+*/        
         /*
         stage('Unit Tests and SonarQube Reporting (DEV)') {
             agent { label 'master' }
