@@ -4,7 +4,7 @@ import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from
 import { Observable } from 'rxjs';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
-import { AuthTokenService } from '../services/auth-token.service';
+import { AuthService } from '../services/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class AuthRedirectGuard implements CanActivate {
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router,
-    private tokenService: AuthTokenService
+    private authService: AuthService
   ) { }
 
   canActivate(
@@ -31,16 +31,17 @@ export class AuthRedirectGuard implements CanActivate {
    * @memberof AuthRedirectGuard
    */
   private checkAuth(): boolean | Observable<boolean> {
-    if (this.tokenService.tokenHasNotExpired()) {
-      // Already logged in
-      this.router.navigate([this.config.routes.dashboard]);
-      return false;
-    }
+    // TODO: revisit guards when authentication is working
+    // if (this.authService.isTokenExpired()) {
+    //   // Already logged in
+    //   this.router.navigate([this.config.routes.auth]);
+    //   return false;
+    // }
 
-    // Expired tokens should be removed to prevent tokens
-    // being sent during re-authentication, which responds
-    // with an HTTP error status code
-    this.tokenService.removeToken();
+    // // Expired tokens should be removed to prevent tokens
+    // // being sent during re-authentication, which responds
+    // // with an HTTP error status code
+    // this.authService.removeToken();
 
     return true;
   }
