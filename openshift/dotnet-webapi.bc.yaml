@@ -92,7 +92,7 @@ objects:
       type: Git
     strategy:
       dockerStrategy:
-        dockerfilePath: ${SOURCE_CONTEXT_DIR}/openshift.dockerfile
+        dockerfilePath: openshift.dockerfile
       type: Docker
     triggers:
     - type: ConfigChange
