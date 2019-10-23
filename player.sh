@@ -49,9 +49,9 @@ function ocApply() {
     -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH"  \
     -p OC_NAMESPACE="$licensePlate" \
     -p OC_APP="$3" | oc apply -f - --namespace="$licensePlate-$3" 
-    if [ "$1" == "build" ];
+    if [[ "$1" == "build" &&  "$2" != "postgresql" ]];
     then
-    oc start-build $1-$branchName -n $licensePlate-$3 --wait --follow
+    oc start-build $2-$branchName -n $licensePlate-$3 --wait --follow
     fi
 }
 
