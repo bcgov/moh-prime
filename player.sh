@@ -14,10 +14,12 @@ function determineMode() {
     else MODE="create"
     fi;
 }
+
+# Scrubs all PR assets from the environment
 function cleanPR(){
-    for i in [ `oc get all | grep -i "-$BRANCH_NAME"  | column -t | awk '{print $1}'`];
+    for i in [ `oc get all -n $licensePlate-$1 | grep -i "-$BRANCH_NAME"  | column -t | awk '{print $1}'`];
     do
-    oc delete $i
+    oc delete -n dqszvc-dev $i
     done
 }
 
