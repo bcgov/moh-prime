@@ -16,9 +16,9 @@ RUN npm install @angular/cli -g --silent && \
 FROM nginx:1.15-alpine
 COPY --from=build-deps /usr/src/app/dist/angular-frontend /usr/share/nginx/html
 RUN rm -f /etc/nginx/conf.d/default.conf 
-COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/conf.d/default.conf
-#COPY --from=build-deps /usr/src/app/nginx.template.conf /etc/nginx/
-#COPY --from=build-deps /usr/src/app/entrypoint.sh /home
+#COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build-deps /usr/src/app/nginx.template.conf /etc/nginx/
+COPY --from=build-deps /usr/src/app/entrypoint.sh /home
 
 EXPOSE 8080
 RUN mkdir -p /var/cache/nginx && \ 
@@ -33,6 +33,6 @@ RUN mkdir -p /var/cache/nginx && \
     chmod 777 /home/entrypoint.sh && \
     echo "Build completed."
 
-CMD ["nginx", "-g", "daemon off;"]
+#CMD ["nginx", "-g", "daemon off;"]
 
-#ENTRYPOINT /home/entrypoint.sh
+ENTRYPOINT /home/entrypoint.sh
