@@ -15,10 +15,10 @@ const routes: Routes = [
       {
         path: 'info',
         component: InfoComponent,
-        data: { title: 'Welcome - PRIME' }
-      },      
+        data: { title: 'Welcome to PRIME' }
+      },
       {
-        path: '', // Equivalent to `/` and alias for `login`
+        path: '', // Equivalent to `/` and alias for `info`
         redirectTo: 'info',
         pathMatch: 'full'
       }
