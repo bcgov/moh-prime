@@ -28,7 +28,7 @@ function cleanPR(){
 # This takes in Git, Jenkins and system variables to the template that will be processed.
 function ocApply() {
     echo "ocApply..."
-    echo "1=$1 2=$2 3=$3 4=$4"
+    echo "$licensePlate-$3"
     if [ "$1" == "build" ];
     then 
     configType="bc"
