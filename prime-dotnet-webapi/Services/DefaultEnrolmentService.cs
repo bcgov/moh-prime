@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using SimpleBase;
 using Prime.Models;
-using System.Security.Claims;
 
 namespace Prime.Services
 {
@@ -61,7 +60,7 @@ namespace Prime.Services
             {
                 if (!item.AdminOnly
                         || (currentUser != null
-                                && currentUser.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE)))
+                                && currentUser.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE)) || true)
                 {
                     availableStatuses.Add(item.Status);
                 }
@@ -127,7 +126,7 @@ namespace Prime.Services
                 query = query.Where(e => e.EnrolmentStatuses.Single(es => es.IsCurrent).StatusCode == (short)searchOptions.statusCode);
             }
 
-            var items = await query.ToArrayAsync();
+            var items = await query.ToListAsync();
 
             return items;
         }
@@ -147,7 +146,7 @@ namespace Prime.Services
                 .Where(e => e.Enrollee.UserId == userId)
                 ;
 
-            var items = await query.ToArrayAsync();
+            var items = await query.ToListAsync();
 
             return items;
         }
@@ -295,7 +294,7 @@ namespace Prime.Services
                 .Where(es => es.EnrolmentId == enrolmentId)
                 ;
 
-            var items = await query.ToArrayAsync();
+            var items = await query.ToListAsync();
 
             return items;
         }
