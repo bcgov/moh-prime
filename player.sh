@@ -45,7 +45,7 @@ function ocApply() {
     -p SOURCE_REPOSITORY_URL="$gitUrl" \
     -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH"  \
     -p OC_NAMESPACE="$licensePlate" \
-    -p OC_APP="$OC_APP" | oc apply -f - --namespace=$licensePlate-$OC_APP
+    -p OC_APP="$3" | oc apply -f - --namespace=$licensePlate-$3
 }
 
 function build(){
