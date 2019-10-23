@@ -127,6 +127,9 @@ export class ProfileComponent implements OnInit {
           this.enrolmentStateService.enrolment = enrolment;
         } else {
           const user = await this.authService.getUser();
+
+          this.logger.info('USER', user);
+
           this.form.patchValue(user);
           this.enrolmentStateService.contactForm.patchValue(user);
         }

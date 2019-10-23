@@ -12,7 +12,6 @@ import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '../models/enrolment.model';
 import { Address } from '../models/address.model';
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -45,12 +44,11 @@ export class EnrolmentResource {
         map((response: PrimeHttpResponse) => response.result),
         map((enrolment: Enrolment) => {
           this.logger.info('ENROLMENT', enrolment);
-          return this.enrolmentAdapterResponse(this.enrolmentAdapterResponse(enrolment));
+          return this.enrolmentAdapterResponse(enrolment);
         })
       );
   }
 
-  // TODO: revisit response for an enrolment update if applicable
   public updateEnrolment(enrolment: Enrolment): Observable<any> {
     const { id } = enrolment;
     return this.http.put(`${this.config.apiEndpoint}/enrolments/${id}`, this.enrolmentAdapterRequest(enrolment));
@@ -65,7 +63,13 @@ export class EnrolmentResource {
   }
 
   private enrolmentAdapterRequest(enrolment: Enrolment): Enrolment {
-    // TODO: set postal code to be uppercase
+    if (enrolment.enrollee.physicalAddress.postal) {
+      enrolment.enrollee.physicalAddress.postal = enrolment.enrollee.physicalAddress.postal.toUpperCase();
+    }
+    if (enrolment.enrollee.mailingAddress.postal) {
+      enrolment.enrollee.mailingAddress.postal = enrolment.enrollee.mailingAddress.postal.toUpperCase();
+    }
+
     // TODO: temporary placeholder for birthdate until JWT authorization in place
     if (!enrolment.enrollee.dateOfBirth) {
       enrolment.enrollee.dateOfBirth = moment().toISOString();
