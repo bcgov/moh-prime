@@ -16,7 +16,7 @@
         "name": "SUFFIX",
         "displayName": "Name Suffix",
         "description": "A suffix appended to all objects",
-        "required": true
+        "required": false
       },
       {
         "name": "VERSION",
@@ -50,9 +50,9 @@
           "metadata": {
             "creationTimestamp": null,
             "labels": {
-              "io.kompose.service": "${NAME}-${SUFFIX}"
+              "io.kompose.service": "${NAME}${SUFFIX}"
             },
-            "name": "${NAME}-${SUFFIX}"
+            "name": "${NAME}${SUFFIX}"
           },
           "spec": {
             "containers": [
@@ -76,7 +76,7 @@
                   },
                   {
                     "name": "DB_CONNECTION_STRING",
-                    "value": "host=postgresql-${SUFFIX};port=5432;database=postgres;username=postgres;password=postgres"
+                    "value": "host=postgresql${SUFFIX};port=5432;database=postgres;username=postgres;password=postgres"
                   },
                   {
                     "name": "JWT_SIGNING_KEY",
@@ -90,7 +90,7 @@
                 "annotations": null,
                 "from": {
                   "kind": "DockerImage",
-                  "name": "${NAME}-${SUFFIX}"
+                  "name": "${NAME}${SUFFIX}"
                 },
                 "generation": null,
                 "importPolicy": {},
@@ -112,9 +112,9 @@
             },
             "creationTimestamp": null,
             "labels": {
-              "io.kompose.service": "${NAME}-${SUFFIX}"
+              "io.kompose.service": "${NAME}${SUFFIX}"
             },
-            "name": "${NAME}-${SUFFIX}"
+            "name": "${NAME}${SUFFIX}"
           },
           "spec": {
             "completionDeadlineSeconds": 6000,
@@ -122,7 +122,7 @@
             "output": {
               "to": {
                 "kind": "ImageStreamTag",
-                "name": "${NAME}-${SUFFIX}:latest"
+                "name": "${NAME}${SUFFIX}:latest"
               }
             },
             "postCommit": {},
