@@ -6,6 +6,7 @@ namespace Prime.Models
     {
         [Key]
         short Code { get; set; }
+        
         [Required]
         string Name { get; set; }
     }
