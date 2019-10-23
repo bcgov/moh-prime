@@ -138,7 +138,7 @@
         "name": "${NAME}${SUFFIX}"
       },
       "spec": {
-        "host": "${NAME}${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.gov.bc.ca",
+        "host": "${NAME}${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca",
         "to": {
           "kind": "Service",
           "name": "${NAME}${SUFFIX}"
