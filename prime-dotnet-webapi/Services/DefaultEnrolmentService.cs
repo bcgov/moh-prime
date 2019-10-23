@@ -60,7 +60,7 @@ namespace Prime.Services
             {
                 if (!item.AdminOnly
                         || (currentUser != null
-                                && currentUser.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE)) || true)
+                                && currentUser.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE)))
                 {
                     availableStatuses.Add(item.Status);
                 }
