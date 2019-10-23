@@ -3,7 +3,7 @@ export licensePlate='dqszvc'
 export yamlLocation='openshift/compositions'
 export gitUrl='https://github.com/bcgov/moh-prime.git'
 #export branchName="$BRANCH_NAME"
-export branchName=$(echo "$BRANCH_NAME" | tr '[:upper:]' '[:lower:]') 
+export branchName=$(echo "$CHANGE_BRANCH" | tr '[:upper:]' '[:lower:]') 
 
 $OVERRIDES
 
