@@ -25,6 +25,18 @@ pipeline {
                 sh "bash ./player.sh deploy angular-frontend dev"
             }
         }
+/*
+        stage('Test') {
+            agent { label 'master' }
+            steps {
+                echo "test (DEV) ..."
+                sh "export OC_APP=test"
+                sh "bash ./player.sh deploy postgresql test"
+                sh "bash ./player.sh deploy dotnet-webapi test"
+                sh "bash ./player.sh deploy angular-frontend test"
+            }
+        }
+*/        
         /*
         stage('Unit Tests and SonarQube Reporting (DEV)') {
             agent { label 'master' }

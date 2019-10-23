@@ -16,7 +16,7 @@
         "name": "SUFFIX",
         "displayName": "Name Suffix",
         "description": "A suffix appended to all objects",
-        "required": true
+        "required": false
       },
       {
         "name": "VERSION",
@@ -54,15 +54,15 @@
         },
         "creationTimestamp": null,
         "labels": {
-          "io.kompose.service": "${NAME}-${SUFFIX}"
+          "io.kompose.service": "${NAME}${SUFFIX}"
         },
-        "name": "${NAME}-${SUFFIX}"
+        "name": "${NAME}${SUFFIX}"
       },
       "spec": {
         "completionDeadlineSeconds": 1200,
         "replicas": 1,
         "selector": {
-          "io.kompose.service": "${NAME}-${SUFFIX}"
+          "io.kompose.service": "${NAME}${SUFFIX}"
         },
         "strategy": null,
         "resources": {
@@ -79,7 +79,7 @@
           "metadata": {
             "creationTimestamp": null,
             "labels": {
-              "io.kompose.service": "${NAME}-${SUFFIX}"
+              "io.kompose.service": "${NAME}${SUFFIX}"
             }
           },
           "spec": {
@@ -122,7 +122,7 @@
               ],
               "from": {
                 "kind": "ImageStreamTag",
-                "name": "${NAME}-${SUFFIX}:latest"
+                "name": "${NAME}${SUFFIX}:latest"
               }
             },
             "type": "ImageChange"
@@ -130,6 +130,23 @@
         ]
       },
       "status": {}
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Route",
+      "metadata": {
+        "name": "${NAME}${SUFFIX}"
+      },
+      "spec": {
+        "host": "${NAME}${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca",
+        "port": {
+          "targetPort": "8080"
+        },
+        "to": {
+          "kind": "Service",
+          "name": "${NAME}${SUFFIX}"
+        }
+      }
     },
     {
       "apiVersion": "v1",
@@ -141,9 +158,9 @@
         },
         "creationTimestamp": null,
         "labels": {
-          "io.kompose.service": "${NAME}-${SUFFIX}"
+          "io.kompose.service": "${NAME}${SUFFIX}"
         },
-        "name":"${NAME}-${SUFFIX}"
+        "name":"${NAME}${SUFFIX}"
       },
       "spec": {
         "ports": [
@@ -154,7 +171,7 @@
           }
         ],
         "selector": {
-          "io.kompose.service": "${NAME}-${SUFFIX}"
+          "io.kompose.service": "${NAME}${SUFFIX}"
         }
       },
       "status": {
