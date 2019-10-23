@@ -31,7 +31,7 @@ function ocApply() {
     -p SUFFIX="$SUFFIX" \
     -p SOURCE_CONTEXT_DIR="prime-$1" \
     -p SOURCE_REPOSITORY_URL="$gitUrl" \
-    -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH" \
+    -p SOURCE_REPOSITORY_REF="$BRANCH_NAME"  \
     -p OC_NAMESPACE="$licensePlate" \
     -p OC_APP="$OC_APP" | oc $MODE -f - --namespace=$licensePlate-$OC_APP
 }
@@ -49,7 +49,7 @@ function build(){
     -p SUFFIX="$branchName" \
     -p SOURCE_CONTEXT_DIR="prime-$1" \
     -p SOURCE_REPOSITORY_URL="$gitUrl" \
-    -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH" \
+    -p SOURCE_REPOSITORY_REF="$BRANCH_NAME" \
     -p OC_NAMESPACE="$licensePlate" \
     -p OC_APP="$OC_APP" | oc $MODE -f - --namespace=$licensePlate-$OC_APP
     if [ "$1" != "postgresql" ];
@@ -75,7 +75,7 @@ function deploy(){
     -p SUFFIX="$branchName" \
     -p SOURCE_CONTEXT_DIR="prime-$1" \
     -p SOURCE_REPOSITORY_URL="$gitUrl" \
-    -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCHE" \
+    -p SOURCE_REPOSITORY_REF="$BRANCH_NAME" \
     -p OC_NAMESPACE="$licensePlate" \
     -p OC_APP="$OC_APP" | oc $MODE -f - --namespace=$licensePlate-$OC_APP
     echo "Building..."
