@@ -8,7 +8,7 @@ export branchName=$(echo "$BRANCH_NAME" | tr '[:upper:]' '[:lower:]')
 $OVERRIDES
 
 function determineMode() {
-    `oc get $2/$1-$branchName --ignore-not-found=true`
+    buildPresent=`oc get $2/$1-$branchName --ignore-not-found=true`
     if [ -z ${buildPresent} ];
     then MODE="apply"
     else MODE="create"
