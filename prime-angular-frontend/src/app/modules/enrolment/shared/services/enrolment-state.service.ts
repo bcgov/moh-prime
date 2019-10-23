@@ -152,19 +152,20 @@ export class EnrolmentStateService {
 
   private buildProfileForm(): FormGroup {
     return this.fb.group({
+      userId: [{ value: '', disabled: true }, [Validators.required]],
       firstName: [{ value: '', disabled: true }, [Validators.required]],
-      middleName: [{ value: '', disabled: true }, []],
+      middleName: [{ value: '', disabled: false }, []],
       lastName: [{ value: '', disabled: true }, [Validators.required]],
-      dateOfBirth: [{ value: null, disabled: true }, []],
+      dateOfBirth: [{ value: null, disabled: false }, []],
       preferredFirstName: ['', []],
       preferredMiddleName: ['', []],
       preferredLastName: ['', []],
       physicalAddress: this.fb.group({
-        country: [{ value: '', disabled: true }, []],
-        province: [{ value: '', disabled: true }, []],
-        street: [{ value: '', disabled: true }, []],
-        city: [{ value: '', disabled: true }, []],
-        postal: [{ value: '', disabled: true }, []]
+        country: [{ value: '', disabled: false }, []],
+        province: [{ value: '', disabled: false }, []],
+        street: [{ value: '', disabled: false }, []],
+        city: [{ value: '', disabled: false }, []],
+        postal: [{ value: '', disabled: false }, []]
       }),
       mailingAddress: this.fb.group({
         country: ['', []],
@@ -192,7 +193,10 @@ export class EnrolmentStateService {
       hasCertification: [null, [FormControlValidators.requiredBoolean]],
       certifications: this.fb.array([]),
       isDeviceProvider: [null, [FormControlValidators.requiredBoolean]],
-      deviceProviderNumber: ['', [FormControlValidators.numeric, FormControlValidators.requiredLength(5)]],
+      deviceProviderNumber: [null, [
+        FormControlValidators.numeric,
+        FormControlValidators.requiredLength(5)
+      ]],
       isInsulinPumpProvider: [null, [FormControlValidators.requiredBoolean]],
       isAccessingPharmaNetOnBehalfOf: [null, [FormControlValidators.requiredBoolean]],
       jobs: this.fb.array([]),
@@ -203,8 +207,11 @@ export class EnrolmentStateService {
     return this.fb.group({
       id: [null, []],
       collegeCode: [null, [Validators.required]],
-      licenseNumber: [null, [Validators.required, FormControlValidators.numeric,
-         FormControlValidators.requiredLength(5)]],
+      licenseNumber: [null, [
+        Validators.required,
+        FormControlValidators.numeric,
+        FormControlValidators.requiredLength(5)
+      ]],
       licenseCode: [null, [Validators.required]],
       renewalDate: [null, [Validators.required]],
       practiceCode: [null, []]
