@@ -17,7 +17,7 @@ function determineMode() {
 
 # Scrubs all PR assets from the environment
 function cleanPR(){
-    artifactQueue=`oc get all -n $licensePlate-$1 | grep -i "-$BRANCH_NAME"  | column -t | awk '{print $1}'`
+    artifactQueue=`oc get all -n $licensePlate-$1 | grep -i "-$BRANCH_NAME"  | column -t | awk '{print $1}' | sort`
     for i in ${artifactQueue};
     do
     oc delete -n dqszvc-dev $i
