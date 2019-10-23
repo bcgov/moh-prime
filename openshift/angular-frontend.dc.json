@@ -133,6 +133,20 @@
     },
     {
       "apiVersion": "v1",
+      "kind": "Route",
+      "metadata": {
+        "name": "${NAME}${SUFFIX}"
+      },
+      "spec": {
+        "host": "${NAME}${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.gov.bc.ca",
+        "to": {
+          "kind": "Service",
+          "name": "${NAME}${SUFFIX}"
+        }
+      }
+    },
+    {
+      "apiVersion": "v1",
       "kind": "Service",
       "metadata": {
         "annotations": {
