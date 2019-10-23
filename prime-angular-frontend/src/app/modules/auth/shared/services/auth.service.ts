@@ -52,8 +52,13 @@ export class AuthService {
     return this.keycloakService.isUserInRole(role);
   }
 
-  public isApplicant(): boolean {
-    return this.hasRole('prime_user');
+  public async checkAssuranceLevel(assuranceLevel: number): Promise<boolean> {
+    const token = await this.decodeToken() as any;
+    return (token.identity_assurance_level === assuranceLevel);
+  }
+
+  public async isApplicant(): Promise<boolean> {
+    return this.hasRole('prime_user') && await this.checkAssuranceLevel(3);
   }
 
   public isProvisioner(): boolean {
