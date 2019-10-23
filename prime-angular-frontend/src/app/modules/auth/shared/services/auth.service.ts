@@ -1,38 +1,69 @@
 import { Injectable } from '@angular/core';
 
-import { Role } from '../enum/role.enum';
+import { KeycloakService } from 'keycloak-angular';
+
 import { User } from '../models/user.model';
-import { AuthTokenService } from './auth-token.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   constructor(
-    private tokenService: AuthTokenService
+    private keycloakService: KeycloakService
   ) { }
 
-  public get user(): User {
-    // TODO: update this to reflect the claim
-    return this.tokenService.decodeToken().user;
+  public async getUser(forceReload?: boolean): Promise<User> {
+    const {
+      username: userId,
+      firstName,
+      lastName,
+      email: contactEmail
+    } = await this.keycloakService.loadUserProfile(forceReload);
+
+    return {
+      userId,
+      firstName,
+      lastName,
+      contactEmail
+    };
   }
 
-  public isLoggedIn(): boolean {
-    return this.tokenService.tokenHasNotExpired();
+  public getRoles(): string[] {
+    return this.keycloakService.getUserRoles();
   }
 
+  public hasRole(role: string): boolean {
+    return this.keycloakService.isUserInRole(role);
+  }
+
+  // TODO: what is the applicant role?
   public isApplicant(): boolean {
-    const role = this.getRole();
-    return (role) ? !!(role === Role.APPLICANT) : false;
+    return this.hasRole('');
   }
 
+  // TODO: what is the provisioner role?
+  public isProvisioner(): boolean {
+    return this.hasRole('');
+  }
+
+  // TODO: what is the admin role?
   public isAdmin(): boolean {
-    const role = this.getRole();
-    return (role) ? !!(role === Role.ADMIN) : false;
+    return this.hasRole('');
   }
 
-  private getRole(): string {
-    const claim = this.tokenService.decodeToken();
-    return (claim && claim.user) ? claim.user.role : '';
+  public isTokenExpired(): boolean {
+    return this.keycloakService.isTokenExpired();
+  }
+
+  public removeToken() {
+    this.keycloakService.clearToken();
+  }
+
+  public isLoggedIn(): Promise<boolean> {
+    return this.keycloakService.isLoggedIn();
+  }
+
+  public logout(redirectUri?: string): Promise<void> {
+    return this.keycloakService.logout(redirectUri);
   }
 }

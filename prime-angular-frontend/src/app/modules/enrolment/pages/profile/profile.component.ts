@@ -12,6 +12,7 @@ import { ViewportService } from '@core/services/viewport.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { ConfirmDiscardChangesDialogComponent } from '@shared/components/dialogs/confirm-discard-changes-dialog/confirm-discard-changes-dialog.component';
+import { AuthService } from '@auth/shared/services/auth.service';
 import { Enrolment } from '../../shared/models/enrolment.model';
 import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
 import { EnrolmentResource } from '../../shared/services/enrolment-resource.service';
@@ -39,7 +40,8 @@ export class ProfileComponent implements OnInit {
     private enrolmentStateService: EnrolmentStateService,
     private enrolmentResource: EnrolmentResource,
     private toastService: ToastService,
-    private logger: LoggerService
+    private logger: LoggerService,
+    private authService: AuthService
   ) {
     this.provinces = this.configService.provinces;
     this.isNewEnrolment = true;
@@ -65,8 +67,7 @@ export class ProfileComponent implements OnInit {
     if (this.form.valid) {
       const payload = this.enrolmentStateService.enrolment;
       const request$ = (this.isNewEnrolment)
-        // TODO: temporarily use raw enrolment for creation
-        ? this.enrolmentResource.createEnrolment(this.enrolmentStateService.getRawEnrolment())
+        ? this.enrolmentResource.createEnrolment(payload)
           .pipe(map((enrolment: Enrolment) => this.enrolmentStateService.enrolment = enrolment))
         : this.enrolmentResource.updateEnrolment(payload);
 
@@ -120,10 +121,14 @@ export class ProfileComponent implements OnInit {
     this.createFormInstance();
 
     this.enrolmentResource.enrolments()
-      .subscribe((enrolment: Enrolment) => {
+      .subscribe(async (enrolment: Enrolment) => {
         if (enrolment) {
           this.isNewEnrolment = false;
           this.enrolmentStateService.enrolment = enrolment;
+        } else {
+          const user = await this.authService.getUser();
+          this.form.patchValue(user);
+          this.enrolmentStateService.contactForm.patchValue(user);
         }
 
         this.initForm();
