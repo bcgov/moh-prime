@@ -73,6 +73,8 @@ objects:
             value: host=postgresql${SUFFIX};port=5432;database=postgres;username=postgres;password=postgres
           - name: JWT_SIGNING_KEY
             value: SdqlA0Y5e6HMAK1wm6iHHHz2u37XGtlo
+          - name: SUFFIX
+            value: ${SUFFIX}
           image: " "
           name: primeapi
           ports:
