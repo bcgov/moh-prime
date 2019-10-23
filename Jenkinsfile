@@ -4,12 +4,11 @@ pipeline {
         disableResume()
     }
     stages {
+        /*
         stage('Build') {
             agent { label 'master' }
             steps {
                 echo "Building ..."
-                echo "${BRANCH_NAME}"
-                sh "export OC_APP=dev"
                 sh "bash ./player.sh build postgresql dev"
                 sh "bash ./player.sh build dotnet-webapi dev"
                 sh "bash ./player.sh build angular-frontend dev"
@@ -19,24 +18,22 @@ pipeline {
             agent { label 'master' }
             steps {
                 echo "Deploy (DEV) ..."
-                sh "export OC_APP=dev"
                 sh "bash ./player.sh deploy postgresql dev"
                 sh "bash ./player.sh deploy dotnet-webapi dev"
                 sh "bash ./player.sh deploy angular-frontend dev"
             }
         }
-/*
+        */
         stage('Test') {
             agent { label 'master' }
             steps {
                 echo "test (DEV) ..."
-                sh "export OC_APP=test"
-                sh "bash ./player.sh deploy postgresql test"
-                sh "bash ./player.sh deploy dotnet-webapi test"
-                sh "bash ./player.sh deploy angular-frontend test"
+                sh "bash ./player.sh ocApply build postgresql dev"
+                sh "bash ./player.sh ocApply build dotnet-webapi dev"
+                sh "bash ./player.sh ocApply build angular-frontend dev"
             }
         }
-*/        
+        
         /*
         stage('Unit Tests and SonarQube Reporting (DEV)') {
             agent { label 'master' }
