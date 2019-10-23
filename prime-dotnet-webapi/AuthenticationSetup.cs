@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -68,6 +69,8 @@ namespace Prime
                         OnTokenValidated = async context => await OnTokenValidated(context)
                     };
                 });
+
+            services.AddSingleton<IAuthorizationHandler, PrimeUserAuthHandler>();
 
             services.AddAuthorization(
                 options =>

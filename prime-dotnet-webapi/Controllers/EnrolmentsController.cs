@@ -16,8 +16,7 @@ namespace Prime.Controllers
     [Route("api/[controller]")]
     [ApiController]
     // User needs at least the ADMIN or ENROLMENT role to use this controller
-    // TODO - add this back once there are OAuth tokens
-    // [Authorize(Policy = PrimeConstants.PRIME_USER_POLICY)]
+    [Authorize(Policy = PrimeConstants.PRIME_USER_POLICY)]
     public class EnrolmentsController : ControllerBase
     {
         private readonly IEnrolmentService _enrolmentService;
@@ -45,9 +44,6 @@ namespace Prime.Controllers
                         && PrimeUserId.Equals(enrolment.Enrollee.UserId);
             }
 
-            // TODO - remove this once we have OAuth tokens with prime user id values
-            if (!belongsToEnrollee) belongsToEnrollee = true;
-
             return belongsToEnrollee;
         }
 
@@ -65,8 +61,7 @@ namespace Prime.Controllers
             IEnumerable<Enrolment> enrolments = null;
 
             // User must have the ADMIN role to see all enrolments
-            // TODO - remove this 'always' true once there are OAuth tokens
-            if (true || User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE))
+            if (User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE))
             {
                 enrolments = await _enrolmentService.GetEnrolmentsAsync(searchOptions);
             }
