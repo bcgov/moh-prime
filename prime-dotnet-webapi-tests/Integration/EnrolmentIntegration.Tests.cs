@@ -12,6 +12,7 @@ using Prime;
 using Prime.Models;
 using PrimeTests.Utils;
 using System;
+using System.Text;
 
 namespace PrimeTests.Integration
 {
@@ -51,9 +52,17 @@ namespace PrimeTests.Integration
         {
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
-                var response = await _client.GetAsync("/api/enrolments");
-                var body = await response.Content.ReadAsStringAsync();
+                // create a request with an AUTH token
+                var request = new HttpRequestMessage(HttpMethod.Get, "/api/enrolments");
+                var _token = TestUtils.TokenBuilder()
+                    .ForAudience("prime-web-api")
+                    .ForSubject(Guid.NewGuid().ToString())
+                    .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_ENROLMENT_ROLE)
+                    .BuildToken();
 
+                request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);
+
+                var response = await _client.SendAsync(request);
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             }
         }
@@ -63,30 +72,22 @@ namespace PrimeTests.Integration
         {
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
-                this.CreateEnrolment(scope);
+                var enrolment = this.CreateEnrolment(scope);
 
-                var response = await _client.GetAsync("/api/enrolments");
-                var body = await response.Content.ReadAsStringAsync();
-
-                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            }
-        }
-
-        [Fact]
-        public async void testGetEnrolments3()
-        {
-            using (var scope = _factory.Server.Host.Services.CreateScope())
-            {
+                // create a request with an AUTH token
                 var request = new HttpRequestMessage(HttpMethod.Get, "/api/enrolments");
                 var _token = TestUtils.TokenBuilder()
                     .ForAudience("prime-web-api")
-                    .ForSubject("1234567890")
+                    .ForSubject(enrolment.Enrollee.UserId.ToString())
+                    .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_ENROLMENT_ROLE)
                     .BuildToken();
 
                 request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);
 
-                var _response = await _client.SendAsync(request);
-                Assert.Equal(HttpStatusCode.OK, _response.StatusCode);
+                var response = await _client.SendAsync(request);
+                var body = await response.Content.ReadAsStringAsync();
+
+                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             }
         }
 
@@ -99,7 +100,18 @@ namespace PrimeTests.Integration
                 // For integration tests, remove the enrolment status that the faker created, as it should get created by the service layer
                 testEnrolment.EnrolmentStatuses.Clear();
 
-                var response = await _client.PostAsJsonAsync("/api/enrolments", testEnrolment);
+                // create a request with an AUTH token
+                var request = new HttpRequestMessage(HttpMethod.Post, "/api/enrolments");
+                var _token = TestUtils.TokenBuilder()
+                    .ForAudience("prime-web-api")
+                    .ForSubject(Guid.NewGuid().ToString())
+                    .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_ENROLMENT_ROLE)
+                    .BuildToken();
+                request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);
+
+                // try to create the enrolment
+                request.Content = new StringContent(JsonConvert.SerializeObject(testEnrolment), Encoding.UTF8, "application/json");
+                var response = await _client.SendAsync(request);
                 Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
                 var body = await response.Content.ReadAsStringAsync();
@@ -119,6 +131,7 @@ namespace PrimeTests.Integration
                 int expectedEnrolmentId = (int)enrolment.Id;
                 Guid expectedUserId = enrolment.Enrollee.UserId;
 
+                // create a request with an AUTH token
                 var request = new HttpRequestMessage(HttpMethod.Get, "/api/enrolments/" + expectedEnrolmentId);
                 var _token = TestUtils.TokenBuilder()
                     .ForAudience("prime-web-api")
@@ -148,10 +161,11 @@ namespace PrimeTests.Integration
                 this.CreateEnrolment(scope);
                 this.CreateEnrolment(scope);
 
+                // create a request with an AUTH token
                 var request = new HttpRequestMessage(HttpMethod.Get, "/api/enrolments");
                 var _token = TestUtils.TokenBuilder()
                     .ForAudience("prime-web-api")
-                    .ForSubject("admin")
+                    .ForSubject(Guid.NewGuid().ToString())
                     .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_ADMIN_ROLE)
                     .BuildToken();
 
@@ -181,7 +195,18 @@ namespace PrimeTests.Integration
                 //update the first name
                 enrolment.Enrollee.FirstName = expectedFirstName;
 
-                var response = await _client.PutAsJsonAsync("/api/enrolments/" + enrolmentId, enrolment);
+                // create a request with an AUTH token
+                var request = new HttpRequestMessage(HttpMethod.Put, "/api/enrolments/" + enrolmentId);
+                var _token = TestUtils.TokenBuilder()
+                    .ForAudience("prime-web-api")
+                    .ForSubject(enrolment.Enrollee.UserId.ToString())
+                    .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_ENROLMENT_ROLE)
+                    .BuildToken();
+
+                request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);
+
+                request.Content = new StringContent(JsonConvert.SerializeObject(enrolment), Encoding.UTF8, "application/json");
+                var response = await _client.SendAsync(request);
                 Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
 
                 Enrolment updatedEnrolment = this.GetEnrolment(scope, enrolmentId);
