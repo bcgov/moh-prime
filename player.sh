@@ -15,7 +15,7 @@ function determineMode() {
     fi;
 }
 function cleanPR(){
-    for i in [ `oc get all | grep "-$BRANCH_NAME"  | column -t | awk '{print $1}'`];
+    for i in [ `oc get all | grep -i "-$BRANCH_NAME"  | column -t | awk '{print $1}'`];
     do
     oc delete $i
     done
@@ -106,6 +106,9 @@ case "$1" in
         ;;
     zap)
         zap $2 $3
+        ;;
+    cleanup)
+        cleanup
         ;;
     *)
     echo "Usage: $0 {build|deploy|sonar|zap|promote} <app> <dev|test|prod>"
