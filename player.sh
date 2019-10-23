@@ -37,7 +37,7 @@ function ocApply() {
     then SUFFIX=""
     else SUFFIX="-${branchName}";
     fi
-    oc process -f openshift/$2.$configType.json \
+    oc process -f openshift/$2.$configType.yaml \
     -p NAME="$2" \
     -p VERSION="$BUILD_NUMBER" \
     -p SUFFIX="$SUFFIX" \
@@ -55,7 +55,7 @@ function build(){
     then MODE="apply"
     else MODE="create"
     fi;
-    oc process -f openshift/$1.bc.json \
+    oc process -f openshift/$1.bc.yaml \
     -p NAME="$1" \
     -p VERSION="$BUILD_NUMBER" \
     -p SUFFIX="-$branchName" \
@@ -81,7 +81,7 @@ function deploy(){
     then MODE="apply"
     else MODE="create"
     fi;
-    oc process -f openshift/$1.dc.json \
+    oc process -f openshift/$1.dc.yaml \
     -p NAME="$1" \
     -p VERSION="$BUILD_NUMBER" \
     -p SUFFIX="-$branchName" \
