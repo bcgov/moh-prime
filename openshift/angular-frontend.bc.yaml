@@ -36,7 +36,7 @@ objects:
   spec:
     containers:
     - env:
-      - name: branchName
+      - name: SUFFIX
         value: "${SUFFIX}"
     tags:
     - annotations: 
@@ -61,7 +61,7 @@ objects:
   spec:
     containers:
       env:
-      - name: branchName
+      - name: SUFFIX
         value: "${SUFFIX}"
     completionDeadlineSeconds: 6000
     nodeSelector: 

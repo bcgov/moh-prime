@@ -61,7 +61,7 @@ objects:
           - "-g"
           - daemon off;
           env:
-          - name: branchName
+          - name: SUFFIX
             value: "${SUFFIX}"
           image: " "
           name: primeweb

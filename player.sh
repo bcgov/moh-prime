@@ -2,7 +2,6 @@
 export licensePlate='dqszvc'
 export yamlLocation='openshift/compositions'
 export gitUrl='https://github.com/bcgov/moh-prime.git'
-#export branchName="$BRANCH_NAME"
 export branchName=$(echo "$BRANCH_NAME" | tr '[:upper:]' '[:lower:]') 
 
 $OVERRIDES
@@ -39,7 +38,6 @@ function ocApply() {
     then SUFFIX=""
     else SUFFIX="-${branchName}";
     fi
-    echo "oc process -f openshift/$2.$configType.yaml -p NAME=$2 -p VERSION=$BUILD_NUMBER -p SUFFIX=$SUFFIX -p SOURCE_CONTEXT_DIR=prime-$2 -p SOURCE_REPOSITORY_URL=$gitUrl -p SOURCE_REPOSITORY_REF=$CHANGE_BRANCH -p OC_NAMESPACE=$licensePlate -p OC_APP=$3 | oc apply -f - --namespace=$licensePlate-$3"
     oc process -f openshift/$2.$configType.yaml \
     -p NAME="$2" \
     -p VERSION="$BUILD_NUMBER" \
@@ -51,67 +49,16 @@ function ocApply() {
     -p OC_APP="$3" | oc apply -f - --namespace="$licensePlate-$3" 
     if [[ "$1" == "build" &&  "$2" != "postgresql" ]];
     then
-    oc start-build $2-$branchName -n $licensePlate-$3 --wait --follow
-    fi
-}
-
-function build(){
-    OC_APP=$2
-    buildPresent=`oc get bc/$1-$branchName --ignore-not-found=true`
-    if [ -z ${buildPresent} ];
-    then MODE="apply"
-    else MODE="create"
-    fi;
-    oc process -f openshift/$1.bc.yaml \
-    -p NAME="$1" \
-    -p VERSION="$BUILD_NUMBER" \
-    -p SUFFIX="-$branchName" \
-    -p SOURCE_CONTEXT_DIR="prime-$1" \
-    -p SOURCE_REPOSITORY_URL="$gitUrl" \
-    -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH" \
-    -p OC_NAMESPACE="$licensePlate" \
-    -p OC_APP="$OC_APP" | oc $MODE -f - --namespace=$licensePlate-$OC_APP
-    if [ "$1" != "postgresql" ];
-    then
     echo "Building..."
-    oc start-build $1-$branchName -n $licensePlate-$OC_APP --wait --follow
-    sleep 2
-    else 
-    echo "Component $1 does not need to be built, only deployed"
+    oc start-build $2-$branchName -n $licensePlate-$3 --wait --follow
+    else
+    echo "Deployment should be automatic..."
     fi
 }
-
-function deploy(){
-    OC_APP=$2
-    deployPresent=`oc get bc/$1-$branchName --ignore-not-found=true`
-    if [ -z ${deployPresent} ];
-    then MODE="apply"
-    else MODE="create"
-    fi;
-    oc process -f openshift/$1.dc.yaml \
-    -p NAME="$1" \
-    -p VERSION="$BUILD_NUMBER" \
-    -p SUFFIX="-$branchName" \
-    -p SOURCE_CONTEXT_DIR="prime-$1" \
-    -p SOURCE_REPOSITORY_URL="$gitUrl" \
-    -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH" \
-    -p OC_NAMESPACE="$licensePlate" \
-    -p OC_APP="$OC_APP" | oc $MODE -f - --namespace=$licensePlate-$OC_APP
-    echo "Deployment should be automatic..."
-}
-
-
-
 #
 case "$1" in
     ocApply)
         ocApply $2 $3 $4
-        ;;
-    build)
-        build $2 $3
-        ;;
-    deploy)
-        deploy $2 $3
         ;;
     sonar)
         sonar $2 $3
@@ -123,5 +70,5 @@ case "$1" in
         cleanup
         ;;
     *)
-    echo "Usage: $0 {build|deploy|sonar|zap|promote} <app> <dev|test|prod>"
+    echo "Usage: $0 {ocApply|sonar|zap|promote} [build|depoly] <app> <dev|test|prod>"
 esac

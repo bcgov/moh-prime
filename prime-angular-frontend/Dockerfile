@@ -20,8 +20,6 @@ RUN rm -f /etc/nginx/conf.d/default.conf
 COPY --from=build-deps /usr/src/app/nginx.template.conf /etc/nginx/
 COPY --from=build-deps /usr/src/app/entrypoint.sh /home
 
-#RUN envsubst '$branchName' < /etc/nginx/conf.d/nginx.template.conf > /etc/nginx/conf.d/default.conf
-
 EXPOSE 8080
 RUN mkdir -p /var/cache/nginx && \ 
     mkdir -p /var/cache/nginx/client_temp && \ 
@@ -36,5 +34,5 @@ RUN mkdir -p /var/cache/nginx && \
     echo "Build completed."
 
 #CMD ["nginx", "-g", "daemon off;"]
-#CMD envsubst '$branchName' < /etc/nginx/nginx.template.conf > /etc/nginx/conf.d/default.conf && nginx ;
+
 ENTRYPOINT /home/entrypoint.sh
