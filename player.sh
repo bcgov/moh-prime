@@ -15,14 +15,13 @@ function determineMode() {
 }
 
 # Scrubs all PR assets from the environment
-function cleanPR(){
+function ocCleanPR(){
     artifactQueue=`oc get all -n $licensePlate-$1 | grep -i "-$BRANCH_NAME"  | column -t | awk '{print $1}' | sort`
     for i in ${artifactQueue};
     do
     oc delete -n dqszvc-dev $i
     done
 }
-
 # Build an deploy are very alike, require similar logic for config injestion.
 # This takes in Git, Jenkins and system variables to the template that will be processed.
 function ocApply() {
