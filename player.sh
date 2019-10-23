@@ -28,20 +28,20 @@ function cleanPR(){
 # This takes in Git, Jenkins and system variables to the template that will be processed.
 function ocApply() {
     echo "ocApply..."
-    if [ "${process}" == "build" ];
+    if [ "$1 {process}" == "build" ];
     then configType="bc"
-    elif [ "${process}" == "deploy" ];
+    elif [ "$1" == "deploy" ];
     then configType="dc"
     fi
     if [ "${branchName}" == "develop" ] || [ "${branchName}" == "master" ];
     then SUFFIX=""
     else SUFFIX="-${branchName}";
     fi
-    oc process -f openshift/$1.$configType.json \
-    -p NAME="$1" \
+    oc process -f openshift/$2.$configType.json \
+    -p NAME="$2" \
     -p VERSION="$BUILD_NUMBER" \
     -p SUFFIX="$SUFFIX" \
-    -p SOURCE_CONTEXT_DIR="prime-$1" \
+    -p SOURCE_CONTEXT_DIR="prime-$2" \
     -p SOURCE_REPOSITORY_URL="$gitUrl" \
     -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH"  \
     -p OC_NAMESPACE="$licensePlate" \
@@ -98,7 +98,7 @@ function deploy(){
 #
 case "$1" in
     ocApply)
-        ocApply $2 $3 $process
+        ocApply $2 $3 $4
         ;;
     build)
         build $2 $3
