@@ -39,6 +39,7 @@ function ocApply() {
     then SUFFIX=""
     else SUFFIX="-${branchName}";
     fi
+    echo "oc process -f openshift/$2.$configType.yaml -p NAME=$2 -p VERSION=$BUILD_NUMBER -p SUFFIX=$SUFFIX -p SOURCE_CONTEXT_DIR=prime-$2 -p SOURCE_REPOSITORY_URL=$gitUrl -p SOURCE_REPOSITORY_REF=$CHANGE_BRANCH -p OC_NAMESPACE=$licensePlate -p OC_APP=$3 | oc apply -f - --namespace=$licensePlate-$3"
     oc process -f openshift/$2.$configType.yaml \
     -p NAME="$2" \
     -p VERSION="$BUILD_NUMBER" \
