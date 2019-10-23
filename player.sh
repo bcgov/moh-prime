@@ -25,6 +25,7 @@ function cleanPR(){
 }
 
 # Build an deploy are very alike, require similar logic for config injestion.
+# This takes in Git, Jenkins and system variables to the template that will be processed.
 function ocApply() {
     echo "ocApply..."
     if [ "${process}" == "build" ];
