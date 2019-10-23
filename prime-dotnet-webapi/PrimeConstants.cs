@@ -18,5 +18,7 @@ namespace Prime
         
         public const string PRIME_USER_POLICY = "prime-user-policy";
 
+        public const string ASSURANCE_LEVEL_CLAIM_TYPE = "identity_assurance_level";
+
     }
 }
