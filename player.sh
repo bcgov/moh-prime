@@ -26,6 +26,7 @@ function cleanPR(){
 
 # Build an deploy are very alike, require similar logic for config injestion.
 function ocApply() {
+    echo "ocApply..."
     if [ "${process}" == "build" ];
     then configType="bc"
     elif [ "${process}" == "deploy" ];
