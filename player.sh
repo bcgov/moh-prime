@@ -28,7 +28,7 @@ function cleanPR(){
 # This takes in Git, Jenkins and system variables to the template that will be processed.
 function ocApply() {
     echo "ocApply..."
-    if [ "$1 {process}" == "build" ];
+    if [ "$1" == "build" ];
     then configType="bc"
     elif [ "$1" == "deploy" ];
     then configType="dc"
