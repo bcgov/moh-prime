@@ -28,7 +28,7 @@ function cleanPR(){
 # This takes in Git, Jenkins and system variables to the template that will be processed.
 function ocApply() {
     echo "ocApply..."
-    export OC_APP="$4"
+    echo "1=$1 2=$2 3=$3 4=$4"
     if [ "$1" == "build" ];
     then 
     configType="bc"
@@ -47,7 +47,7 @@ function ocApply() {
     -p SOURCE_REPOSITORY_URL="$gitUrl" \
     -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH"  \
     -p OC_NAMESPACE="$licensePlate" \
-    -p OC_APP="$OC_APP" | oc apply -f - --namespace="$licensePlate-$OC_APP" 
+    -p OC_APP="$3" | oc apply -f - --namespace="$licensePlate-$OC_APP" 
     if [ "$1" == "build" ];
     then
     oc start-build $1-$branchName -n $licensePlate-$OC_APP --wait --follow
