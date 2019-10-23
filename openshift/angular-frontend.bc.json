@@ -16,7 +16,7 @@
         "name": "SUFFIX",
         "displayName": "Name Suffix",
         "description": "A suffix appended to all objects",
-        "required": true
+        "required": false
       },
       {
         "name": "VERSION",
@@ -50,9 +50,9 @@
           "metadata": {
             "creationTimestamp": null,
             "labels": {
-              "io.kompose.service": "${NAME}-${SUFFIX}"
+              "io.kompose.service": "${NAME}${SUFFIX}"
             },
-            "name": "${NAME}-${SUFFIX}"
+            "name": "${NAME}${SUFFIX}"
           },
           "spec": {
             "containers": [
@@ -70,7 +70,7 @@
                 "annotations": null,
                 "from": {
                   "kind": "DockerImage",
-                  "name": "${NAME}-${SUFFIX}"
+                  "name": "${NAME}${SUFFIX}"
                 },
                 "generation": null,
                 "importPolicy": {},
@@ -92,9 +92,9 @@
             },
             "creationTimestamp": null,
             "labels": {
-              "io.kompose.service": "${NAME}-${SUFFIX}"
+              "io.kompose.service": "${NAME}${SUFFIX}"
             },
-            "name": "${NAME}-${SUFFIX}"
+            "name": "${NAME}${SUFFIX}"
           },
           "spec": {
             "containers": {
@@ -110,7 +110,7 @@
             "output": {
               "to": {
                 "kind": "ImageStreamTag",
-                "name": "${NAME}-${SUFFIX}:latest"
+                "name": "${NAME}${SUFFIX}:latest"
               }
             },
             "postCommit": {},

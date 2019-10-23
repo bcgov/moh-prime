@@ -16,7 +16,7 @@
           "name": "SUFFIX",
           "displayName": "Name Suffix",
           "description": "A suffix appended to all objects",
-          "required": true
+          "required": false
         },
         {
           "name": "VERSION",
@@ -56,15 +56,15 @@
               },
               "creationTimestamp": null,
               "labels": {
-                "io.kompose.service": "${NAME}-${SUFFIX}"
+                "io.kompose.service": "${NAME}${SUFFIX}"
               },
-              "name": "${NAME}-${SUFFIX}"
+              "name": "${NAME}${SUFFIX}"
             },
             "spec": {
               "completionDeadlineSeconds": 1200,
               "replicas": 1,
               "selector": {
-                "io.kompose.service": "${NAME}-${SUFFIX}"
+                "io.kompose.service": "${NAME}${SUFFIX}"
               },
               "strategy": null,
               "resources": {
@@ -81,7 +81,7 @@
                 "metadata": {
                   "creationTimestamp": null,
                   "labels": {
-                    "io.kompose.service": "${NAME}-${SUFFIX}"
+                    "io.kompose.service": "${NAME}${SUFFIX}"
                   }
                 },
                 "spec": {
@@ -106,7 +106,7 @@
                         },
                         {
                           "name": "DB_CONNECTION_STRING",
-                          "value": "host=postgresql-${SUFFIX};port=5432;database=postgres;username=postgres;password=postgres"
+                          "value": "host=postgresql${SUFFIX};port=5432;database=postgres;username=postgres;password=postgres"
                         },
                         {
                           "name": "JWT_SIGNING_KEY",
@@ -142,7 +142,7 @@
                     ],
                     "from": {
                       "kind": "ImageStreamTag",
-                      "name": "${NAME}-${SUFFIX}:latest"
+                      "name": "${NAME}${SUFFIX}:latest"
                     }
                   },
                   "type": "ImageChange"
@@ -161,9 +161,9 @@
               },
               "creationTimestamp": null,
               "labels": {
-                "io.kompose.service": "${NAME}-${SUFFIX}"
+                "io.kompose.service": "${NAME}${SUFFIX}"
               },
-              "name":"${NAME}-${SUFFIX}"
+              "name":"${NAME}${SUFFIX}"
             },
             "spec": {
               "ports": [
@@ -179,7 +179,7 @@
                 }
               ],
               "selector": {
-                "io.kompose.service": "${NAME}-${SUFFIX}"
+                "io.kompose.service": "${NAME}${SUFFIX}"
               }
             },
             "status": {
