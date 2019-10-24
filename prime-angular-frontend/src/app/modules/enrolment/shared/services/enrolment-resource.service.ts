@@ -9,7 +9,7 @@ import * as moment from 'moment';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { PrimeHttpResponse } from '@core/models/prime-http-response.model';
 import { LoggerService } from '@core/services/logger.service';
-import { Enrolment } from '../models/enrolment.model';
+import { Enrolment } from '@shared/models/enrolment.model';
 import { Address } from '../models/address.model';
 
 @Injectable({

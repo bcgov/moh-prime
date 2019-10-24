@@ -51,11 +51,12 @@ export class ConfigService {
     return [...this.configuration.provinces];
   }
 
+  public get statuses() {
+    return [...this.configuration.statuses];
+  }
+
   /**
-   * Load runtime configuration.
-   *
-   * @returns {Promise<Configuration>}
-   * @memberof ConfigService
+   * Load the runtime configuration.
    */
   public async load(): Promise<Configuration> {
     return this.getConfiguration()
@@ -70,10 +71,6 @@ export class ConfigService {
 
   /**
    * Get the configuration for bootstrapping the application.
-   *
-   * @private
-   * @returns {Observable<Configuration>}
-   * @memberof ConfigService
    */
   private getConfiguration(): Observable<Configuration> {
     return this.http.get<PrimeHttpResponse>(`${this.config.apiEndpoint}/lookups`)

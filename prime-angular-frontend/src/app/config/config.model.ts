@@ -8,6 +8,7 @@ export interface Configuration {
   organizationTypes: Config[];
   practices: PracticeConfig[];
   provinces: Config[];
+  statuses: Config[];
 }
 
 export interface Config {
