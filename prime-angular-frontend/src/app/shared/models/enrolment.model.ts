@@ -1,7 +1,7 @@
-import { Address } from './address.model';
-import { CollegeCertification } from './college-certification.model';
-import { Job } from './job.model';
-import { Organization } from './organization.model';
+import { Address } from '../../modules/enrolment/shared/models/address.model';
+import { CollegeCertification } from '../../modules/enrolment/shared/models/college-certification.model';
+import { Job } from '../../modules/enrolment/shared/models/job.model';
+import { Organization } from '../../modules/enrolment/shared/models/organization.model';
 
 export interface Enrolment {
   id?: number;

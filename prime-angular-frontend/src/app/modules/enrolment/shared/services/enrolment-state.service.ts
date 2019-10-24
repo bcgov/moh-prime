@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
 
 import { FormControlValidators } from '@shared/validators/form-control.validators';
+import { Enrolment } from '@shared/models/enrolment.model';
 import { Job } from '../models/job.model';
-import { Enrolment } from '../models/enrolment.model';
 import { Organization } from '../models/organization.model';
 import { CollegeCertification } from '../models/college-certification.model';
 

@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { PrimeHttpResponse } from '@core/models/prime-http-response.model';
 import { LoggerService } from '@core/services/logger.service';
+import { Enrolment } from '@shared/models/enrolment.model';
 
 // TODO: moved to SharedModule
 import { Enrolment } from '@enrolment/shared/models/enrolment.model';
