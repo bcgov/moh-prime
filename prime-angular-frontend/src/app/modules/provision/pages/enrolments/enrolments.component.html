@@ -1,5 +1,23 @@
 <h1 class="h2 my-4">Pharmacist Enrolments</h1>
 
+<div class="row justify-content-end">
+  <div class="col text-right">
+
+    <mat-form-field>
+      <mat-label>Filter By Status</mat-label>
+      <mat-select value=""
+                  (selectionChange)="filterByStatus($event)">
+        <mat-option value="">All</mat-option>
+        <mat-option *ngFor="let status of statuses"
+                    [value]="status.code">
+          {{ status.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+  </div>
+</div>
+
 <table mat-table
        [dataSource]="dataSource"
        class="w-100">
@@ -59,6 +77,11 @@
   <tr mat-row
       *matRowDef="let row; columns: columns;"></tr>
 </table>
+
+<div *ngIf="!dataSource?.data.length"
+     class="py-2">
+  No {{ filterStatus?.name }} Enrolments
+</div>
 
 <ng-template #menu
              let-enrolment="enrolment">
