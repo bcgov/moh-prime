@@ -20,7 +20,7 @@ parameters:
 - name: SOURCE_REPOSITORY_REF
   required: true
 - name: SUFFIX
-  required: true
+  required: false
 - name: OC_NAMESPACE
   required: true
 - name: OC_APP
