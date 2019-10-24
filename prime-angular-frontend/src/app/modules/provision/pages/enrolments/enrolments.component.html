@@ -97,11 +97,13 @@
       <span>View Enrolment</span>
     </button>
     <button mat-menu-item
+            *ngIf="canApproveOrDeny(enrolment.currentStatus.status.code)"
             (click)="approveEnrolment(enrolment.id)">
       <mat-icon>check_circle_outline</mat-icon>
       <span>Approve Enrolment</span>
     </button>
     <button mat-menu-item
+            *ngIf="canApproveOrDeny(enrolment.currentStatus.status.code)"
             (click)="declineEnrolment(enrolment.id)">
       <mat-icon>block</mat-icon>
       <span>Decline Enrolment</span>

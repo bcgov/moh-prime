@@ -38,6 +38,10 @@ export class EnrolmentsComponent implements OnInit {
     this.getEnrolments(statusCode);
   }
 
+  public canApproveOrDeny(currentStatusCode: number) {
+    return (currentStatusCode === EnrolmentStatus.SUBMITTED);
+  }
+
   public approveEnrolment(id: number) {
     this.provisionResource.updateEnrolmentStatus(id, EnrolmentStatus.ADJUDICATED_APPROVED)
       // TODO: request the enrolment to refresh its status
