@@ -10,6 +10,9 @@ COPY . .
 
 RUN npm install @angular/cli -g --silent && \ 
     npm install && \
+    ls -alh && \
+    find / -type f -name && \
+    /usr/src/prime-angular-frontend/midpoint.sh && \
     ng build --prod && \
     echo "NPM packages installed..."
 
