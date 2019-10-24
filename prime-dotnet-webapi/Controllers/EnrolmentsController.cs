@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -25,7 +26,28 @@ namespace Prime.Controllers
             _enrolmentService = enrolmentService;
         }
 
-        // GET: api/Enrolment
+        private bool BelongsToEnrollee(Enrolment enrolment)
+        {
+            bool belongsToEnrollee = false;
+
+            // check to see if the logged in user is an admin
+            belongsToEnrollee = User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE);
+
+            // if user is not ADMIN, check that user belongs to the enrolment
+            if (!belongsToEnrollee)
+            {
+                // get the prime user id from the logged in user - note: this returns 'Guid.Empty' if there is no logged in user
+                Guid PrimeUserId = PrimeUtils.PrimeUserId(User);
+
+                // check to see if the logged in user id is not 'Guid.Empty', and matches the one in the enrolment
+                belongsToEnrollee = !PrimeUserId.Equals(Guid.Empty)
+                        && PrimeUserId.Equals(enrolment.Enrollee.UserId);
+            }
+
+            return belongsToEnrollee;
+        }
+
+        // GET: api/Enrolments
         /// <summary>
         /// Gets all of the enrolments for the user, or all enrolments if user has ADMIN role.
         /// </summary>
@@ -33,14 +55,15 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiOkResponse<IEnumerable<Enrolment>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Enrolment>>> GetEnrolments()
+        public async Task<ActionResult<IEnumerable<Enrolment>>> GetEnrolments(
+            [FromQuery]EnrolmentSearchOptions searchOptions)
         {
             IEnumerable<Enrolment> enrolments = null;
 
             // User must have the ADMIN role to see all enrolments
             if (User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE))
             {
-                enrolments = await _enrolmentService.GetEnrolmentsAsync();
+                enrolments = await _enrolmentService.GetEnrolmentsAsync(searchOptions);
             }
             else
             {
@@ -51,7 +74,7 @@ namespace Prime.Controllers
             return Ok(new ApiOkResponse<IEnumerable<Enrolment>>(enrolments.ToList()));
         }
 
-        // GET: api/Enrolment/5
+        // GET: api/Enrolments/5
         /// <summary>
         /// Gets a specific Enrolment.
         /// </summary>
@@ -80,7 +103,7 @@ namespace Prime.Controllers
             return Ok(new ApiOkResponse<Enrolment>(enrolment));
         }
 
-        // POST: api/Enrolment
+        // POST: api/Enrolments
         /// <summary>
         /// Creates a new Enrolment.
         /// </summary>
@@ -95,7 +118,7 @@ namespace Prime.Controllers
             return CreatedAtAction(nameof(GetEnrolmentById), new { enrolmentId = createdEnrolmentId }, enrolment);
         }
 
-        // PUT: api/Enrolment/5
+        // PUT: api/Enrolments/5
         /// <summary>
         /// Updates a specific Enrolment.
         /// </summary>
@@ -127,6 +150,13 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"Enrolment not found with id {enrolmentId}"));
             }
 
+            // if the enrolment is not in the status of 'In Progress', it cannot be updated
+            if (!(await _enrolmentService.IsEnrolmentInStatusAsync(enrolmentId, Status.IN_PROGRESS_CODE)))
+            {
+                this.ModelState.AddModelError("Enrolment.CurrentStatus", "Enrolment can not be updated when the current status is not 'In Progress'.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
+
             // if the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
             if (!BelongsToEnrollee(enrolment))
             {
@@ -138,7 +168,7 @@ namespace Prime.Controllers
             return NoContent();
         }
 
-        // DELETE: api/Enrolment/5
+        // DELETE: api/Enrolments/5
         /// <summary>
         /// Deletes a specific Enrolment.
         /// </summary>
@@ -167,25 +197,108 @@ namespace Prime.Controllers
             return Ok(new ApiOkResponse<Enrolment>(enrolment));
         }
 
-        private bool BelongsToEnrollee(Enrolment enrolment)
+        // GET: api/Enrolments/5/availableStatuses
+        /// <summary>
+        /// Gets a list of the statuses that the enrolment can change to.
+        /// </summary>
+        /// <param name="enrolmentId"></param> 
+        [HttpGet("{enrolmentId}/availableStatuses", Name = nameof(GetAvailableEnrolmentStatuses))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiOkResponse<IEnumerable<Status>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<Status>>> GetAvailableEnrolmentStatuses(int enrolmentId)
         {
-            bool belongsToEnrollee = false;
+            var enrolment = await _enrolmentService.GetEnrolmentAsync(enrolmentId);
 
-            // check to see if the logged in user is an admin
-            belongsToEnrollee = User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE);
-
-            // if user is not ADMIN, check that user belongs to the enrolment
-            if (!belongsToEnrollee)
+            if (enrolment == null)
             {
-                // get the prime user id from the logged in user - note: this returns 'Guid.Empty' if there is no logged in user
-                Guid PrimeUserId = PrimeUtils.PrimeUserId(User);
-
-                // check to see if the logged in user id is not 'Guid.Empty', and matches the one in the enrolment
-                belongsToEnrollee = !PrimeUserId.Equals(Guid.Empty)
-                        && PrimeUserId.Equals(enrolment.Enrollee.UserId);
+                return NotFound(new ApiResponse(404, $"Enrolment not found with id {enrolmentId}"));
             }
 
-            return belongsToEnrollee;
+            // if the user is not an ADMIN, make sure the enrolment matches the enrollee, otherwise return not authorized
+            if (!BelongsToEnrollee(enrolment))
+            {
+                return Forbid();
+            }
+
+            var availableEnrolmentStatuses = await _enrolmentService.GetAvailableEnrolmentStatusesAsync(enrolmentId);
+
+            return Ok(new ApiOkResponse<IEnumerable<Status>>(availableEnrolmentStatuses));
+        }
+
+        // GET: api/Enrolments/5/statuses
+        /// <summary>
+        /// Gets all of the status changes for a specific Enrolment.
+        /// </summary>
+        /// <param name="enrolmentId"></param> 
+        [HttpGet("{enrolmentId}/statuses", Name = nameof(GetEnrolmentStatuses))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiOkResponse<IEnumerable<Status>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<EnrolmentStatus>>> GetEnrolmentStatuses(int enrolmentId)
+        {
+            var enrolment = await _enrolmentService.GetEnrolmentAsync(enrolmentId);
+
+            if (enrolment == null)
+            {
+                return NotFound(new ApiResponse(404, $"Enrolment not found with id {enrolmentId}"));
+            }
+
+            // if the user is not an ADMIN, make sure the enrolment matches the enrollee, otherwise return not authorized
+            if (!BelongsToEnrollee(enrolment))
+            {
+                return Forbid();
+            }
+
+            var enrolments = await _enrolmentService.GetEnrolmentStatusesAsync(enrolmentId);
+
+            return Ok(new ApiOkResponse<IEnumerable<EnrolmentStatus>>(enrolments));
+        }
+
+        // POST: api/Enrolments/5/statuses
+        /// <summary>
+        /// Adds a status change for a specific Enrolment.
+        /// </summary>
+        [HttpPost("{enrolmentId}/statuses", Name = nameof(CreateEnrolmentStatus))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiOkResponse<IEnumerable<Status>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<EnrolmentStatus>> CreateEnrolmentStatus(int enrolmentId, Status status)
+        {
+            var enrolment = await _enrolmentService.GetEnrolmentAsync(enrolmentId);
+
+            if (enrolment == null)
+            {
+                return NotFound(new ApiResponse(404, $"Enrolment not found with id {enrolmentId}"));
+            }
+
+            if (status?.Code == null || status.Code < 1)
+            {
+                this.ModelState.AddModelError("Status.Code", "Status Code is required to create statuses.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
+
+            // if the user is not an ADMIN, make sure the enrolment matches the enrollee, otherwise return not authorized
+            if (!BelongsToEnrollee(enrolment))
+            {
+                return Forbid();
+            }
+
+            if (!_enrolmentService.IsStatusChangeAllowed(enrolment.CurrentStatus?.Status, status))
+            {
+                this.ModelState.AddModelError("Status.Code", $"Cannot change from current Status Code: {enrolment.CurrentStatus?.Status?.Code} to the new Status Code: {status.Code}");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
+
+            var enrolmentStatus = await _enrolmentService.CreateEnrolmentStatusAsync(enrolmentId, status);
+
+            return Ok(new ApiOkResponse<EnrolmentStatus>(enrolmentStatus));
         }
     }
 }

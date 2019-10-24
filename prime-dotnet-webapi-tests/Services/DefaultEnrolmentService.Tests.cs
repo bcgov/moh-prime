@@ -9,19 +9,15 @@ using PrimeTests.Utils;
 
 namespace PrimeTests.Services
 {
-    public class DefaultEnrolmentServiceTests :  BaseServiceTests<DefaultEnrolmentService>
+    public class DefaultEnrolmentServiceTests : BaseServiceTests<DefaultEnrolmentService>
     {
+        private static EnrolmentSearchOptions EMPTY_ENROLMENT_SEARCH_OPTIONS = new EnrolmentSearchOptions();
+
         [Fact]
         public async void testEnrolmentExists()
         {
             //make sure there are no enrolments
             Assert.False(_dbContext.Enrolments.Any());
-
-            // since there are no items, we are expecting the created Id to get set to 1
-            int expectedEnrolmentId = 1;
-
-            // check to see if the enrolment does not exist through the service layer
-            Assert.False(_service.EnrolmentExists(expectedEnrolmentId));
 
             // create the enrolment directly to the context
             var enrolment = TestUtils.EnrolmentFaker.Generate();
@@ -31,7 +27,9 @@ namespace PrimeTests.Services
 
             //make sure there are now enrolments
             Assert.True(_dbContext.Enrolments.Any());
-            Assert.Equal(expectedEnrolmentId, enrolment.Id);
+
+            // get the created enrolment id
+            int expectedEnrolmentId = (int)enrolment.Id;
 
             // check to see if the enrolment exists through the service layer
             Assert.True(_service.EnrolmentExists(expectedEnrolmentId));
@@ -41,6 +39,8 @@ namespace PrimeTests.Services
         public async void testCreateEnrolment()
         {
             var testEnrolment = TestUtils.EnrolmentFaker.Generate();
+            // remove the enrolment status that the faker created, as it should get created by the service layer
+            testEnrolment.EnrolmentStatuses.Clear();
             Guid expectedUserId = testEnrolment.Enrollee.UserId;
 
             // create the enrolment through the service layer code
@@ -104,9 +104,34 @@ namespace PrimeTests.Services
             await _dbContext.SaveChangesAsync();
 
             // get the enrolments through the service layer code
-            var enrolments = await _service.GetEnrolmentsAsync();
+            var enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
             Assert.NotNull(enrolments);
             Assert.Equal(3, enrolments.Count());
+        }
+
+        [Fact]
+        public async void testGetEnrolments_Filtered()
+        {
+            //make sure there are no enrolments
+            Assert.False(_dbContext.Enrolments.Any());
+            await _dbContext.SaveChangesAsync();
+
+            // create some enrolments directly to the context
+            _dbContext.Enrolments.Add(TestUtils.EnrolmentFaker.Generate());
+            _dbContext.Enrolments.Add(TestUtils.EnrolmentFaker.Generate());
+            _dbContext.Enrolments.Add(TestUtils.EnrolmentFaker.Generate());
+
+            await _dbContext.SaveChangesAsync();
+
+            // get the enrolments through the service layer code
+            var enrolmentsInProgress = await _service.GetEnrolmentsAsync(new EnrolmentSearchOptions { statusCode = Status.IN_PROGRESS_CODE });
+            Assert.NotNull(enrolmentsInProgress);
+            Assert.Equal(3, enrolmentsInProgress.Count());
+
+            // get the enrolments through the service layer code
+            var enrolmentsSubmitted = await _service.GetEnrolmentsAsync(new EnrolmentSearchOptions { statusCode = Status.SUBMITTED_CODE });
+            Assert.NotNull(enrolmentsSubmitted);
+            Assert.Empty(enrolmentsSubmitted);
         }
 
         [Fact]
@@ -194,6 +219,199 @@ namespace PrimeTests.Services
             // get the updated enrolment through the service layer code
             Enrolment deletedEnrolment = await _dbContext.Enrolments.FindAsync(enrolmentId);
             Assert.Null(deletedEnrolment);
+        }
+
+        [Fact]
+        public async void testGetAvailableEnrolmentStatuses()
+        {
+            var testEnrolment = TestUtils.EnrolmentFaker.Generate();
+             Guid expectedUserId = testEnrolment.Enrollee.UserId;
+
+            // create the enrolment directly to the context
+            _dbContext.Enrolments.Add(testEnrolment);
+            await _dbContext.SaveChangesAsync();
+            int expectedEnrolmentId = (int)testEnrolment.Id;
+
+            // get the available statuses through the service layer code
+            var statuses = await _service.GetAvailableEnrolmentStatusesAsync((int)expectedEnrolmentId);
+            Assert.NotNull(statuses);
+            Assert.Single(statuses);
+            Assert.Contains(_dbContext.Statuses.Single(s => s.Code == Status.SUBMITTED_CODE), statuses);
+        }
+
+        [Fact]
+        public async void testGetEnrolmentStatuses()
+        {
+            var testEnrolment = TestUtils.EnrolmentFaker.Generate();
+             Guid expectedUserId = testEnrolment.Enrollee.UserId;
+
+            // create the enrolment directly to the context
+            _dbContext.Enrolments.Add(testEnrolment);
+            await _dbContext.SaveChangesAsync();
+            int expectedEnrolmentId = (int)testEnrolment.Id;
+
+            // get the enrolment statuses through the service layer code
+            var enrolmentStatuses = await _service.GetEnrolmentStatusesAsync((int)expectedEnrolmentId);
+            Assert.NotNull(enrolmentStatuses);
+            Assert.Single(enrolmentStatuses);
+            Assert.Equal(_dbContext.Statuses.Single(s => s.Code == Status.IN_PROGRESS_CODE), enrolmentStatuses.First().Status);
+        }
+
+        [Fact]
+        public async void testCreateEnrolmentStatuses()
+        {
+            var testEnrolment = TestUtils.EnrolmentFaker.Generate();
+            Guid expectedUserId = testEnrolment.Enrollee.UserId;
+
+            // create the enrolment directly to the context
+            _dbContext.Enrolments.Add(testEnrolment);
+            await _dbContext.SaveChangesAsync();
+            int expectedEnrolmentId = (int)testEnrolment.Id;
+
+            // get the enrolment statuses through the service layer code
+            var enrolmentStatus = await _service.CreateEnrolmentStatusAsync((int)expectedEnrolmentId, _dbContext.Statuses.Single(s => s.Code == Status.SUBMITTED_CODE));
+            Assert.NotNull(enrolmentStatus);
+            Assert.Equal(_dbContext.Statuses.Single(s => s.Code == Status.SUBMITTED_CODE), enrolmentStatus.Status);
+        }
+
+        [Fact]
+        public void IsStatusChangeAllowed()
+        {
+            Status IN_PROGRESS = _dbContext.Statuses.Single(s => s.Code == Status.IN_PROGRESS_CODE);
+            Status SUBMITTED = _dbContext.Statuses.Single(s => s.Code == Status.SUBMITTED_CODE);
+            Status APPROVED = _dbContext.Statuses.Single(s => s.Code == Status.APPROVED_CODE);
+            Status DECLINED = _dbContext.Statuses.Single(s => s.Code == Status.DECLINED_CODE);
+            Status ACCEPTED_TOS = _dbContext.Statuses.Single(s => s.Code == Status.ACCEPTED_TOS_CODE);
+            Status DECLINED_TOS = _dbContext.Statuses.Single(s => s.Code == Status.DECLINED_TOS_CODE);
+
+            // check all of the permutations for workflow state changes
+            Assert.True(_service.IsStatusChangeAllowed(null, IN_PROGRESS));
+            Assert.False(_service.IsStatusChangeAllowed(null, SUBMITTED));
+            Assert.False(_service.IsStatusChangeAllowed(null, APPROVED));
+            Assert.False(_service.IsStatusChangeAllowed(null, DECLINED));
+            Assert.False(_service.IsStatusChangeAllowed(null, ACCEPTED_TOS));
+            Assert.False(_service.IsStatusChangeAllowed(null, DECLINED_TOS));
+
+            Assert.False(_service.IsStatusChangeAllowed(IN_PROGRESS, null));
+            Assert.False(_service.IsStatusChangeAllowed(IN_PROGRESS, IN_PROGRESS));
+            Assert.True(_service.IsStatusChangeAllowed(IN_PROGRESS, SUBMITTED));
+            Assert.False(_service.IsStatusChangeAllowed(IN_PROGRESS, APPROVED));
+            Assert.False(_service.IsStatusChangeAllowed(IN_PROGRESS, DECLINED));
+            Assert.False(_service.IsStatusChangeAllowed(IN_PROGRESS, ACCEPTED_TOS));
+            Assert.False(_service.IsStatusChangeAllowed(IN_PROGRESS, DECLINED_TOS));
+
+            Assert.False(_service.IsStatusChangeAllowed(SUBMITTED, null));
+            Assert.False(_service.IsStatusChangeAllowed(SUBMITTED, IN_PROGRESS));
+            Assert.False(_service.IsStatusChangeAllowed(SUBMITTED, SUBMITTED));
+            Assert.False(_service.IsStatusChangeAllowed(SUBMITTED, APPROVED));
+            Assert.False(_service.IsStatusChangeAllowed(SUBMITTED, DECLINED));
+            Assert.False(_service.IsStatusChangeAllowed(SUBMITTED, ACCEPTED_TOS));
+            Assert.False(_service.IsStatusChangeAllowed(SUBMITTED, DECLINED_TOS));
+
+            Assert.False(_service.IsStatusChangeAllowed(APPROVED, null));
+            Assert.False(_service.IsStatusChangeAllowed(APPROVED, IN_PROGRESS));
+            Assert.False(_service.IsStatusChangeAllowed(APPROVED, SUBMITTED));
+            Assert.False(_service.IsStatusChangeAllowed(APPROVED, APPROVED));
+            Assert.False(_service.IsStatusChangeAllowed(APPROVED, DECLINED));
+            Assert.True(_service.IsStatusChangeAllowed(APPROVED, ACCEPTED_TOS));
+            Assert.True(_service.IsStatusChangeAllowed(APPROVED, DECLINED_TOS));
+
+            Assert.False(_service.IsStatusChangeAllowed(DECLINED, null));
+            Assert.False(_service.IsStatusChangeAllowed(DECLINED, IN_PROGRESS));
+            Assert.False(_service.IsStatusChangeAllowed(DECLINED, SUBMITTED));
+            Assert.False(_service.IsStatusChangeAllowed(DECLINED, APPROVED));
+            Assert.False(_service.IsStatusChangeAllowed(DECLINED, DECLINED));
+            Assert.False(_service.IsStatusChangeAllowed(DECLINED, ACCEPTED_TOS));
+            Assert.False(_service.IsStatusChangeAllowed(DECLINED, DECLINED_TOS));
+
+            Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, null));
+            Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, IN_PROGRESS));
+            Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, SUBMITTED));
+            Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, APPROVED));
+            Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, DECLINED));
+            Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, ACCEPTED_TOS));
+            Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, DECLINED_TOS));
+
+            Assert.False(_service.IsStatusChangeAllowed(DECLINED_TOS, null));
+            Assert.False(_service.IsStatusChangeAllowed(DECLINED_TOS, IN_PROGRESS));
+            Assert.False(_service.IsStatusChangeAllowed(DECLINED_TOS, SUBMITTED));
+            Assert.False(_service.IsStatusChangeAllowed(DECLINED_TOS, APPROVED));
+            Assert.False(_service.IsStatusChangeAllowed(DECLINED_TOS, DECLINED));
+            Assert.False(_service.IsStatusChangeAllowed(DECLINED_TOS, ACCEPTED_TOS));
+            Assert.False(_service.IsStatusChangeAllowed(DECLINED_TOS, DECLINED_TOS));
+        }
+
+        [Fact]
+        public void IsStatusChangeAllowed_As_Admin()
+        {
+            Status IN_PROGRESS = _dbContext.Statuses.Single(s => s.Code == Status.IN_PROGRESS_CODE);
+            Status SUBMITTED = _dbContext.Statuses.Single(s => s.Code == Status.SUBMITTED_CODE);
+            Status APPROVED = _dbContext.Statuses.Single(s => s.Code == Status.APPROVED_CODE);
+            Status DECLINED = _dbContext.Statuses.Single(s => s.Code == Status.DECLINED_CODE);
+            Status ACCEPTED_TOS = _dbContext.Statuses.Single(s => s.Code == Status.ACCEPTED_TOS_CODE);
+            Status DECLINED_TOS = _dbContext.Statuses.Single(s => s.Code == Status.DECLINED_TOS_CODE);
+
+            // add the admin role to the user
+            TestUtils.AddAdminRoleToUser(_httpContext?.HttpContext?.User);
+
+            // check all of the permutations for workflow state changes
+            Assert.True(_service.IsStatusChangeAllowed(null, IN_PROGRESS));
+            Assert.False(_service.IsStatusChangeAllowed(null, SUBMITTED));
+            Assert.False(_service.IsStatusChangeAllowed(null, APPROVED));
+            Assert.False(_service.IsStatusChangeAllowed(null, DECLINED));
+            Assert.False(_service.IsStatusChangeAllowed(null, ACCEPTED_TOS));
+            Assert.False(_service.IsStatusChangeAllowed(null, DECLINED_TOS));
+
+            Assert.False(_service.IsStatusChangeAllowed(IN_PROGRESS, null));
+            Assert.False(_service.IsStatusChangeAllowed(IN_PROGRESS, IN_PROGRESS));
+            Assert.True(_service.IsStatusChangeAllowed(IN_PROGRESS, SUBMITTED));
+            Assert.False(_service.IsStatusChangeAllowed(IN_PROGRESS, APPROVED));
+            Assert.False(_service.IsStatusChangeAllowed(IN_PROGRESS, DECLINED));
+            Assert.False(_service.IsStatusChangeAllowed(IN_PROGRESS, ACCEPTED_TOS));
+            Assert.False(_service.IsStatusChangeAllowed(IN_PROGRESS, DECLINED_TOS));
+
+            Assert.False(_service.IsStatusChangeAllowed(SUBMITTED, null));
+            Assert.False(_service.IsStatusChangeAllowed(SUBMITTED, IN_PROGRESS));
+            Assert.False(_service.IsStatusChangeAllowed(SUBMITTED, SUBMITTED));
+            Assert.True(_service.IsStatusChangeAllowed(SUBMITTED, APPROVED));
+            Assert.True(_service.IsStatusChangeAllowed(SUBMITTED, DECLINED));
+            Assert.False(_service.IsStatusChangeAllowed(SUBMITTED, ACCEPTED_TOS));
+            Assert.False(_service.IsStatusChangeAllowed(SUBMITTED, DECLINED_TOS));
+
+            Assert.False(_service.IsStatusChangeAllowed(APPROVED, null));
+            Assert.False(_service.IsStatusChangeAllowed(APPROVED, IN_PROGRESS));
+            Assert.False(_service.IsStatusChangeAllowed(APPROVED, SUBMITTED));
+            Assert.False(_service.IsStatusChangeAllowed(APPROVED, APPROVED));
+            Assert.False(_service.IsStatusChangeAllowed(APPROVED, DECLINED));
+            Assert.True(_service.IsStatusChangeAllowed(APPROVED, ACCEPTED_TOS));
+            Assert.True(_service.IsStatusChangeAllowed(APPROVED, DECLINED_TOS));
+
+            Assert.False(_service.IsStatusChangeAllowed(DECLINED, null));
+            Assert.False(_service.IsStatusChangeAllowed(DECLINED, IN_PROGRESS));
+            Assert.False(_service.IsStatusChangeAllowed(DECLINED, SUBMITTED));
+            Assert.False(_service.IsStatusChangeAllowed(DECLINED, APPROVED));
+            Assert.False(_service.IsStatusChangeAllowed(DECLINED, DECLINED));
+            Assert.False(_service.IsStatusChangeAllowed(DECLINED, ACCEPTED_TOS));
+            Assert.False(_service.IsStatusChangeAllowed(DECLINED, DECLINED_TOS));
+
+            Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, null));
+            Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, IN_PROGRESS));
+            Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, SUBMITTED));
+            Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, APPROVED));
+            Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, DECLINED));
+            Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, ACCEPTED_TOS));
+            Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, DECLINED_TOS));
+
+            Assert.False(_service.IsStatusChangeAllowed(DECLINED_TOS, null));
+            Assert.False(_service.IsStatusChangeAllowed(DECLINED_TOS, IN_PROGRESS));
+            Assert.False(_service.IsStatusChangeAllowed(DECLINED_TOS, SUBMITTED));
+            Assert.False(_service.IsStatusChangeAllowed(DECLINED_TOS, APPROVED));
+            Assert.False(_service.IsStatusChangeAllowed(DECLINED_TOS, DECLINED));
+            Assert.False(_service.IsStatusChangeAllowed(DECLINED_TOS, ACCEPTED_TOS));
+            Assert.False(_service.IsStatusChangeAllowed(DECLINED_TOS, DECLINED_TOS));
+
+            // remove the admin role from the user
+            TestUtils.RemoveAdminRoleFromUser(_httpContext?.HttpContext?.User);
         }
     }
 }
