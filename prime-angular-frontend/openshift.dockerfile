@@ -9,7 +9,8 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-RUN npm install @angular/cli -g --silent && \ 
+RUN sed s/'$REDIRECT_URL'/$REDIRECT_URL/g /usr/src/app/src/environments/environment.prod.template.ts > /usr/src/app/src/environments/environment.prod.ts && \
+    npm install @angular/cli -g --silent && \ 
     npm install && \
     chmod +x /usr/src/app/midpoint.sh && \ 
     /usr/src/app/midpoint.sh && \
