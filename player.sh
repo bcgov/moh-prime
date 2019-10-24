@@ -31,11 +31,15 @@ function ocApply() {
     then 
     configType="bc"
     elif [ "$1" == "deploy" ];
-    then configType="dc"
+    then 
+    configType="dc"
     fi
     if [ "${branchName}" == "develop" ] || [ "${branchName}" == "master" ];
-    then SUFFIX=""
-    else SUFFIX="-${branchName}";
+    then 
+    SUFFIX=""
+    CHANGE_BRANCH="$BRANCH_NAME"
+    else 
+    SUFFIX="-${branchName}";
     fi
     oc process -f openshift/$2.$configType.yaml \
     -p NAME="$2" \
