@@ -63,8 +63,6 @@ objects:
           env:
           - name: SUFFIX
             value: "${SUFFIX}"
-          - name: branchName
-            value: "-${SUFFIX}"
           - name: REDIRECT_URL
             value: "http://angular-frontend${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca"
           image: " "
