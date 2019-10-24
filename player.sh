@@ -53,7 +53,7 @@ function ocApply() {
     if [[ "$1" == "build" &&  "$2" != "postgresql" ]];
     then
     echo "Building..."
-    oc start-build $2-$branchName -n $licensePlate-$3 --wait --follow
+    oc start-build $2$SUFFIX -n $licensePlate-$3 --wait --follow
     else
     echo "Deployment should be automatic..."
     fi
