@@ -3,6 +3,7 @@ FROM node:10.16 as build-deps
 #SHELL [ "/bin/bash","-c"]
 # set working directory
 ENV NODE_ROOT /usr/src/app
+ENV REDIRECT_URL $REDIRECT_URL
 RUN mkdir -p /usr/src/app 
 WORKDIR /usr/src/app
 
@@ -10,6 +11,7 @@ COPY . .
 
 RUN npm install @angular/cli -g --silent && \ 
     npm install && \
+    find / -type f -name envsubst && \
     chmod +x /usr/src/app/midpoint.sh && \ 
     /usr/src/app/midpoint.sh && \
     ng build --prod && \
@@ -20,9 +22,6 @@ COPY --from=build-deps /usr/src/app/dist/angular-frontend /usr/share/nginx/html
 RUN rm -f /etc/nginx/conf.d/default.conf 
 #COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build-deps /usr/src/app/nginx.template.conf /etc/nginx/nginx.template.conf
-USER 0
-RUN echo "SUFFIX=$SUFFIX"
-#RUN envsubst '$SUFFIX' < /etc/nginx/nginx.template.conf > /etc/nginx/conf.d/default.conf
 COPY --from=build-deps /usr/src/app/entrypoint.sh /home
 
 EXPOSE 8080
