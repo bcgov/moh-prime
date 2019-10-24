@@ -59,7 +59,7 @@
               {
                 "env": [
                   {
-                    "name": "branchName",
+                    "name": "SUFFIX",
                     "value": "${SUFFIX}"
                   }
                 ]
@@ -100,7 +100,7 @@
             "containers": {
               "env": [
                 {
-                  "name": "branchName",
+                  "name": "SUFFIX",
                   "value": "${SUFFIX}"
                 }
               ]
