@@ -3,13 +3,13 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/shared.module';
 import { ProvisionRoutingModule } from './provision-routing.module';
 
-import { ApplicationsComponent } from './pages/applications/applications.component';
-import { ApplicationComponent } from './pages/application/application.component';
+import { EnrolmentsComponent } from './pages/enrolments/enrolments.component';
+import { EnrolmentComponent } from './pages/enrolment/enrolment.component';
 
 @NgModule({
   declarations: [
-    ApplicationsComponent,
-    ApplicationComponent
+    EnrolmentsComponent,
+    EnrolmentComponent
   ],
   imports: [
     SharedModule,
