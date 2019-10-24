@@ -35,8 +35,6 @@ export class EnrolmentsComponent implements OnInit {
   public filterByStatus(selection: MatSelectChange) {
     const statusCode = selection.value;
     this.filteredStatus = this.statuses.find(s => s.code === statusCode);
-    console.log(this.filteredStatus);
-
     this.getEnrolments(statusCode);
   }
 

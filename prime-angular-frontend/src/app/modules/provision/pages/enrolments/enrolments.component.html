@@ -78,10 +78,10 @@
       *matRowDef="let row; columns: columns;"></tr>
 </table>
 
-<div *ngIf="!dataSource?.data.length"
-     class="py-2">
-  No {{ filterStatus?.name }} Enrolments
-</div>
+<p *ngIf="!dataSource?.data.length"
+   class="px-4 py-2 text-muted">
+  No {{ filteredStatus?.name }} Enrolments
+</p>
 
 <ng-template #menu
              let-enrolment="enrolment">
