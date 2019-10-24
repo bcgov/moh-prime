@@ -79,7 +79,7 @@ export class ProfileComponent implements OnInit {
             this.router.navigate(['contact'], { relativeTo: this.route.parent });
           },
           (error: any) => {
-            this.toastService.openSuccessToast('Profile information could not be saved');
+            this.toastService.openErrorToast('Profile information could not be saved');
             this.logger.error('[Enrolment] Profile::onSubmit error has occurred: ', error);
           }
         );
@@ -121,21 +121,27 @@ export class ProfileComponent implements OnInit {
     this.createFormInstance();
 
     this.enrolmentResource.enrolments()
-      .subscribe(async (enrolment: Enrolment) => {
-        if (enrolment) {
-          this.isNewEnrolment = false;
-          this.enrolmentStateService.enrolment = enrolment;
-        } else {
-          const user = await this.authService.getUser();
+      .subscribe(
+        async (enrolment: Enrolment) => {
+          if (enrolment) {
+            this.isNewEnrolment = false;
+            this.enrolmentStateService.enrolment = enrolment;
+          } else {
+            const user = await this.authService.getUser();
 
-          this.logger.info('USER', user);
+            this.logger.info('USER', user);
 
-          this.form.patchValue(user);
-          this.enrolmentStateService.contactForm.patchValue(user);
+            this.form.patchValue(user);
+            this.enrolmentStateService.contactForm.patchValue(user);
+          }
+
+          this.initForm();
+        },
+        (error: any) => {
+          this.toastService.openErrorToast('Enrolment could not be accessed');
+          this.logger.error('[Enrolment] Profile::getEnrolment error has occurred: ', error);
         }
-
-        this.initForm();
-      });
+      );
   }
 
   private createFormInstance() {

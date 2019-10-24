@@ -60,7 +60,7 @@ export class PharmanetAccessComponent implements OnInit {
             this.router.navigate(['review'], { relativeTo: this.route.parent });
           },
           (error: any) => {
-            this.toastService.openSuccessToast('PharmaNet access could not be saved');
+            this.toastService.openErrorToast('PharmaNet access could not be saved');
             this.logger.error('[Enrolment] PharmanetAccess::onSubmit error has occurred: ', error);
           });
     } else {

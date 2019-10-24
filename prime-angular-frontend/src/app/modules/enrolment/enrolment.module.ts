@@ -11,7 +11,6 @@ import { PharmanetAccessComponent } from './pages/pharmanet-access/pharmanet-acc
 import { ReviewComponent } from './pages/review/review.component';
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 
-import { DashboardComponent } from './shared/components/dashboard/dashboard.component';
 import { CollegeCertificationsComponent } from './shared/components/college-certifications/college-certifications.component';
 import { PageTitleComponent } from './shared/components/page-title/page-title.component';
 import { SubHeaderComponent } from './shared/components/sub-header/sub-header.component';
@@ -25,7 +24,6 @@ import { SubHeaderComponent } from './shared/components/sub-header/sub-header.co
     PharmanetAccessComponent,
     ReviewComponent,
     ConfirmationComponent,
-    DashboardComponent,
     CollegeCertificationsComponent,
     PageTitleComponent,
     SubHeaderComponent

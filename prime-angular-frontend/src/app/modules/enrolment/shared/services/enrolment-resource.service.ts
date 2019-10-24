@@ -70,11 +70,6 @@ export class EnrolmentResource {
       enrolment.enrollee.mailingAddress.postal = enrolment.enrollee.mailingAddress.postal.toUpperCase();
     }
 
-    // TODO: temporary placeholder for birthdate until JWT authorization in place
-    if (!enrolment.enrollee.dateOfBirth) {
-      enrolment.enrollee.dateOfBirth = moment().toISOString();
-    }
-
     return enrolment;
   }
 }

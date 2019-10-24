@@ -1,4 +1,5 @@
 export enum Role {
-  APPLICANT = 'applicant',
-  ADMIN = 'admin'
+  ENROLLEE = 'prime_user',
+  PROVISIONER = 'prime_admin',
+  ADMIN = 'prime_admin'
 }

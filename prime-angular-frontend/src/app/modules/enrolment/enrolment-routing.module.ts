@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { CanDeactivateFormGuard } from '@core/guards/can-deactivate-form.guard';
+import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 
 import { ProfileComponent } from './pages/profile/profile.component';
 import { ContactComponent } from './pages/contact/contact.component';
@@ -12,15 +13,12 @@ import { ReviewComponent } from './pages/review/review.component';
 // TODO: temporary until UX is provided
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 
-import { DashboardComponent } from './shared/components/dashboard/dashboard.component';
-
 const routes: Routes = [
   {
     path: 'enrolment',
     component: DashboardComponent,
-    // TODO: apply guards for loading
-    // canLoad: [],
-    // canActivate: [],
+    canLoad: [],
+    canActivate: [],
     children: [
       {
         path: 'profile',
