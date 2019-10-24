@@ -4,7 +4,10 @@ FROM node:10.16 as build-deps
 # set working directory
 ENV NODE_ROOT /usr/src/app
 ENV REDIRECT_URL $REDIRECT_URL
-RUN mkdir -p /usr/src/app 
+RUN mkdir -p /usr/src/app && \
+    pwd && \
+    echo $REDIRECT_URL && \
+    printenv
 WORKDIR /usr/src/app
 
 COPY . .
