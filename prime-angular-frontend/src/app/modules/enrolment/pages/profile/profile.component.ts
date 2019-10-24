@@ -138,7 +138,7 @@ export class ProfileComponent implements OnInit {
           this.initForm();
         },
         (error: any) => {
-          this.toastService.openErrorToast('Enrolment could not be accessed');
+          this.toastService.openErrorToast('Enrolment could not be retrieved');
           this.logger.error('[Enrolment] Profile::getEnrolment error has occurred: ', error);
         }
       );

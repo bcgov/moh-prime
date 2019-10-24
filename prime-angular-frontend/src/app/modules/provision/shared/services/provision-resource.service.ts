@@ -32,4 +32,15 @@ export class ProvisionResource {
         })
       );
   }
+
+  public deleteEnrolment(id: number): Observable<Enrolment> {
+    return this.http.delete(`${this.config.apiEndpoint}/enrolments/${id}`)
+      .pipe(
+        map((response: PrimeHttpResponse) => response.result),
+        map((enrolment: Enrolment) => {
+          this.logger.info('ENROLMENT', enrolment);
+          return enrolment;
+        })
+      );
+  }
 }

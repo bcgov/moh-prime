@@ -60,9 +60,6 @@
       *matRowDef="let row; columns: columns;"></tr>
 </table>
 
-<!-- <mat-paginator [pageSizeOptions]="[5, 10, 20]"
-               showFirstLastButtons></mat-paginator> -->
-
 <ng-template #menu
              let-enrolment="enrolment">
   <button mat-icon-button
@@ -76,13 +73,20 @@
       <mat-icon>remove_red_eye</mat-icon>
       <span>View Enrolment</span>
     </button>
-    <button mat-menu-item>
+    <button mat-menu-item
+            (click)="approveEnrolment(enrolment.id)">
       <mat-icon>check_circle_outline</mat-icon>
       <span>Approve Enrolment</span>
     </button>
-    <button mat-menu-item>
+    <button mat-menu-item
+            (click)="declineEnrolment(enrolment.id)">
       <mat-icon>block</mat-icon>
       <span>Decline Enrolment</span>
+    </button>
+    <button mat-menu-item
+            (click)="deleteEnrolment(enrolment.id)">
+      <mat-icon>delete</mat-icon>
+      <span>Delete Enrolment</span>
     </button>
   </mat-menu>
 </ng-template>
