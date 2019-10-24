@@ -15,9 +15,12 @@ const routes: Routes = [
     children: [
       {
         path: 'enrolments',
-        component: EnrolmentsComponent,
-        canDeactivate: [],
         children: [
+          {
+            path: '',
+            component: EnrolmentsComponent,
+            canDeactivate: []
+          },
           {
             path: ':id',
             component: EnrolmentComponent,
