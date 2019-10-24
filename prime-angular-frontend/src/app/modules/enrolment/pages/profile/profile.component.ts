@@ -11,9 +11,9 @@ import { ConfigService } from '@config/config.service';
 import { ViewportService } from '@core/services/viewport.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
+import { Enrolment } from '@shared/models/enrolment.model';
 import { ConfirmDiscardChangesDialogComponent } from '@shared/components/dialogs/confirm-discard-changes-dialog/confirm-discard-changes-dialog.component';
 import { AuthService } from '@auth/shared/services/auth.service';
-import { Enrolment } from '../../shared/models/enrolment.model';
 import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
 import { EnrolmentResource } from '../../shared/services/enrolment-resource.service';
 
@@ -138,7 +138,7 @@ export class ProfileComponent implements OnInit {
           this.initForm();
         },
         (error: any) => {
-          this.toastService.openErrorToast('Enrolment could not be accessed');
+          this.toastService.openErrorToast('Enrolment could not be retrieved');
           this.logger.error('[Enrolment] Profile::getEnrolment error has occurred: ', error);
         }
       );
