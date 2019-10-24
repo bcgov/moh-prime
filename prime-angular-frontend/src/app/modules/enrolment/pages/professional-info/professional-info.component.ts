@@ -91,7 +91,7 @@ export class ProfessionalInfoComponent implements OnInit {
             this.router.navigate(['declaration'], { relativeTo: this.route.parent });
           },
           (error: any) => {
-            this.toastService.openSuccessToast('Professional information could not be saved');
+            this.toastService.openErrorToast('Professional information could not be saved');
             this.logger.error('[Enrolment] Professional::onSubmit error has occurred: ', error);
           });
       this.form.markAsPristine();

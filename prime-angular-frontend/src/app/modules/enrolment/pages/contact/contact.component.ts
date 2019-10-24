@@ -65,7 +65,7 @@ export class ContactComponent implements OnInit {
             this.router.navigate(['professional'], { relativeTo: this.route.parent });
           },
           (error: any) => {
-            this.toastService.openSuccessToast('Contact information could not be saved');
+            this.toastService.openErrorToast('Contact information could not be saved');
             this.logger.error('[Enrolment] Contact::onSubmit error has occurred: ', error);
           });
     } else {
