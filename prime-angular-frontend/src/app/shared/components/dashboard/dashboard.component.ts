@@ -102,7 +102,7 @@ export class DashboardComponent implements OnInit {
    * @memberof DashboardComponent
    */
   private getSideNavSections() {
-    return (this.authService.isProvisioner || this.authService.isAdmin)
+    return (this.authService.isProvisioner() || this.authService.isAdmin())
       ? this.getProvisionSideNavSections()
       : this.getEnrolleeSideNavSections();
   }
