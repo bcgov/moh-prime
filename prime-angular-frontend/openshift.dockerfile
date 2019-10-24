@@ -10,7 +10,6 @@ COPY . .
 
 RUN npm install @angular/cli -g --silent && \ 
     npm install && \
-    pwd && \
     chmod +x /usr/src/app/midpoint.sh && \ 
     /usr/src/app/midpoint.sh && \
     ng build --prod && \
