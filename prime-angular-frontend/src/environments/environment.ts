@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   version: '1.0.0',
-  apiEndpoint: 'http://localhost:5000/api'
+  apiEndpoint: 'http://localhost:5000/api',
+  loginRedirectUrl: 'http://localhost-ppp:4200'
 };
 
 /*
