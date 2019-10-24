@@ -2,13 +2,12 @@
 export licensePlate='dqszvc'
 export yamlLocation='openshift/compositions'
 export gitUrl='https://github.com/bcgov/moh-prime.git'
-#export branchName="$BRANCH_NAME"
 export branchName=$(echo "$BRANCH_NAME" | tr '[:upper:]' '[:lower:]') 
 
 $OVERRIDES
 
 function determineMode() {
-    `oc get $2/$1-$branchName --ignore-not-found=true`
+    buildPresent=`oc get $2/$1-$branchName --ignore-not-found=true`
     if [ -z ${buildPresent} ];
     then MODE="apply"
     else MODE="create"
@@ -16,28 +15,33 @@ function determineMode() {
 }
 
 # Scrubs all PR assets from the environment
-function cleanPR(){
+function ocCleanPR(){
     artifactQueue=`oc get all -n $licensePlate-$1 | grep -i "-$BRANCH_NAME"  | column -t | awk '{print $1}' | sort`
     for i in ${artifactQueue};
     do
     oc delete -n dqszvc-dev $i
     done
 }
-
 # Build an deploy are very alike, require similar logic for config injestion.
 # This takes in Git, Jenkins and system variables to the template that will be processed.
 function ocApply() {
     echo "ocApply..."
-    if [ "$1 {process}" == "build" ];
-    then configType="bc"
+    echo "$licensePlate-$3"
+    if [ "$1" == "build" ];
+    then 
+    configType="bc"
     elif [ "$1" == "deploy" ];
-    then configType="dc"
+    then 
+    configType="dc"
     fi
     if [ "${branchName}" == "develop" ] || [ "${branchName}" == "master" ];
-    then SUFFIX=""
-    else SUFFIX="-${branchName}";
+    then 
+    SUFFIX=""
+    CHANGE_BRANCH="$BRANCH_NAME"
+    else 
+    SUFFIX="-${branchName}";
     fi
-    oc process -f openshift/$2.$configType.json \
+    oc process -f openshift/$2.$configType.yaml \
     -p NAME="$2" \
     -p VERSION="$BUILD_NUMBER" \
     -p SUFFIX="$SUFFIX" \
@@ -45,66 +49,19 @@ function ocApply() {
     -p SOURCE_REPOSITORY_URL="$gitUrl" \
     -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH"  \
     -p OC_NAMESPACE="$licensePlate" \
-    -p OC_APP="$OC_APP" | oc apply -f - --namespace=$licensePlate-$OC_APP
-}
-
-function build(){
-    OC_APP=$2
-    buildPresent=`oc get bc/$1-$branchName --ignore-not-found=true`
-    if [ -z ${buildPresent} ];
-    then MODE="apply"
-    else MODE="create"
-    fi;
-    oc process -f openshift/$1.bc.json \
-    -p NAME="$1" \
-    -p VERSION="$BUILD_NUMBER" \
-    -p SUFFIX="-$branchName" \
-    -p SOURCE_CONTEXT_DIR="prime-$1" \
-    -p SOURCE_REPOSITORY_URL="$gitUrl" \
-    -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH" \
-    -p OC_NAMESPACE="$licensePlate" \
-    -p OC_APP="$OC_APP" | oc $MODE -f - --namespace=$licensePlate-$OC_APP
-    if [ "$1" != "postgresql" ];
+    -p OC_APP="$3" | oc apply -f - --namespace="$licensePlate-$3" 
+    if [[ "$1" == "build" &&  "$2" != "postgresql" ]];
     then
     echo "Building..."
-    oc start-build $1-$branchName -n $licensePlate-$OC_APP --wait --follow
-    sleep 2
-    else 
-    echo "Component $1 does not need to be built, only deployed"
+    oc start-build $2$SUFFIX -n $licensePlate-$3 --wait --follow
+    else
+    echo "Deployment should be automatic..."
     fi
 }
-
-function deploy(){
-    OC_APP=$2
-    deployPresent=`oc get bc/$1-$branchName --ignore-not-found=true`
-    if [ -z ${deployPresent} ];
-    then MODE="apply"
-    else MODE="create"
-    fi;
-    oc process -f openshift/$1.dc.json \
-    -p NAME="$1" \
-    -p VERSION="$BUILD_NUMBER" \
-    -p SUFFIX="-$branchName" \
-    -p SOURCE_CONTEXT_DIR="prime-$1" \
-    -p SOURCE_REPOSITORY_URL="$gitUrl" \
-    -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH" \
-    -p OC_NAMESPACE="$licensePlate" \
-    -p OC_APP="$OC_APP" | oc $MODE -f - --namespace=$licensePlate-$OC_APP
-    echo "Building..."
-}
-
-
-
 #
 case "$1" in
     ocApply)
         ocApply $2 $3 $4
-        ;;
-    build)
-        build $2 $3
-        ;;
-    deploy)
-        deploy $2 $3
         ;;
     sonar)
         sonar $2 $3
@@ -116,5 +73,5 @@ case "$1" in
         cleanup
         ;;
     *)
-    echo "Usage: $0 {build|deploy|sonar|zap|promote} <app> <dev|test|prod>"
+    echo "Usage: $0 {ocApply|sonar|zap|promote} [build|depoly] <app> <dev|test|prod>"
 esac
