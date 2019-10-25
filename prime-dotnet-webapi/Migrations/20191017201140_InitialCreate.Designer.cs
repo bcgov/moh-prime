@@ -424,14 +424,6 @@ namespace Prime.Migrations
                     b.Property<int?>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("AppliedDate");
-
-                    b.Property<bool?>("Approved");
-
-                    b.Property<DateTime?>("ApprovedDate");
-
-                    b.Property<string>("ApprovedReason");
-
                     b.Property<DateTime>("CreatedTimeStamp");
 
                     b.Property<Guid>("CreatedUserId");
@@ -874,8 +866,7 @@ namespace Prime.Migrations
 
                     b.Property<Guid>("CreatedUserId");
 
-                    b.Property<string>("Name")
-                        .IsRequired();
+                    b.Property<string>("Name");
 
                     b.Property<DateTime>("UpdatedTimeStamp");
 
