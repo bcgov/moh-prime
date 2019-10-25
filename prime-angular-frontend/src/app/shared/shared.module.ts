@@ -27,7 +27,7 @@ import { HeaderComponent } from '@shared/components/header/header.component';
     FormControlValidityDirective,
     DashboardComponent,
     ConfirmDiscardChangesDialogComponent,
-    HeaderComponent
+    HeaderComponent,
     FormatDatePipe
   ],
   imports: [
