@@ -12,6 +12,7 @@ import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 import { PhonePipe } from '@shared/pipes/phone.pipe';
 import { ReplacePipe } from '@shared/pipes/replace.pipe';
 import { FirstKeyPipe } from '@shared/pipes/first-key.pipe';
+import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { FormControlValidityDirective } from '@shared/directives/form-control-validity.directive';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 import { ConfirmDiscardChangesDialogComponent } from '@shared/components/dialogs/confirm-discard-changes-dialog/confirm-discard-changes-dialog.component';
@@ -27,6 +28,7 @@ import { HeaderComponent } from '@shared/components/header/header.component';
     DashboardComponent,
     ConfirmDiscardChangesDialogComponent,
     HeaderComponent
+    FormatDatePipe
   ],
   imports: [
     CommonModule,
@@ -47,6 +49,7 @@ import { HeaderComponent } from '@shared/components/header/header.component';
     PhonePipe,
     ReplacePipe,
     FirstKeyPipe,
+    FormatDatePipe,
     FormControlValidityDirective,
     DashboardComponent,
     HeaderComponent
