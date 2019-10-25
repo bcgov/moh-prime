@@ -244,7 +244,7 @@ namespace Prime.Services
             }
         }
 
-        private void ReplaceExistingItems<T>(ICollection<T> dbCollection, ICollection<T> newCollection, Enrolment enrolment) where T : IEnrolmentNavigationProperty
+        private void ReplaceExistingItems<T>(ICollection<T> dbCollection, ICollection<T> newCollection, Enrolment enrolment) where T : class, IEnrolmentNavigationProperty
         {
             // remove existing items
             foreach (var item in dbCollection)

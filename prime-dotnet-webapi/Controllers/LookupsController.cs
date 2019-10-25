@@ -12,7 +12,8 @@ namespace Prime.Controllers
     [Route("api/[controller]")]
     [ApiController]
     // User needs at least the ADMIN or ENROLMENT role to use this controller
-    [Authorize(Policy = PrimeConstants.PRIME_USER_POLICY)]
+    // TODO - mtpultz - uncomment below to enable auth for lookup endpoint
+    // [Authorize(Policy = PrimeConstants.PRIME_USER_POLICY)]
     public class LookupsController : ControllerBase
     {
         private readonly ILookupService _lookupService;
