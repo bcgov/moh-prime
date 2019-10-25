@@ -88,8 +88,11 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(e => e.Id == enrolmentId)
                 ;
 
-            // add the available statuses to the enrolment
-            entity.AvailableStatuses = this.GetAvailableStatuses(entity.CurrentStatus?.Status);
+            if (entity != null)
+            {
+                // add the available statuses to the enrolment
+                entity.AvailableStatuses = this.GetAvailableStatuses(entity.CurrentStatus?.Status);
+            }
 
             return entity;
         }
@@ -108,8 +111,11 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(e => e.Enrollee.UserId == userId)
                 ;
 
-            // add the available statuses to the enrolment
-            entity.AvailableStatuses = this.GetAvailableStatuses(entity.CurrentStatus?.Status);
+            if (entity != null)
+            {
+                // add the available statuses to the enrolment
+                entity.AvailableStatuses = this.GetAvailableStatuses(entity.CurrentStatus?.Status);
+            }
 
             return entity;
         }
@@ -165,7 +171,7 @@ namespace Prime.Services
                 // add the available statuses to the enrolment
                 item.AvailableStatuses = this.GetAvailableStatuses(item.CurrentStatus?.Status);
             }
-            
+
             return items;
         }
 
