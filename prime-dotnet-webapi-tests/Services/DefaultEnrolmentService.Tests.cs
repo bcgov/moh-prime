@@ -286,10 +286,35 @@ namespace PrimeTests.Services
             await _dbContext.SaveChangesAsync();
             int expectedEnrolmentId = (int)testEnrolment.Id;
 
-            // get the enrolment statuses through the service layer code
+            // create the enrolment status through the service layer code
             var enrolmentStatus = await _service.CreateEnrolmentStatusAsync((int)expectedEnrolmentId, _dbContext.Statuses.Single(s => s.Code == Status.SUBMITTED_CODE));
             Assert.NotNull(enrolmentStatus);
             Assert.Equal(_dbContext.Statuses.Single(s => s.Code == Status.SUBMITTED_CODE), enrolmentStatus.Status);
+        }
+
+        [Fact]
+        public async void testCreateEnrolmentStatuses_Generate_LicensePlate()
+        {
+            var testEnrolment = TestUtils.EnrolmentFaker.Generate();
+            // manually change the status to approved
+            testEnrolment.CurrentStatus.StatusCode = Status.APPROVED_CODE;
+            Guid expectedUserId = testEnrolment.Enrollee.UserId;
+
+            // create the enrolment directly to the context
+            _dbContext.Enrolments.Add(testEnrolment);
+            await _dbContext.SaveChangesAsync();
+            int expectedEnrolmentId = (int)testEnrolment.Id;
+
+            // create the enrolment status through the service layer code
+            var enrolmentStatus = await _service.CreateEnrolmentStatusAsync((int)expectedEnrolmentId, _dbContext.Statuses.Single(s => s.Code == Status.ACCEPTED_TOS_CODE));
+            Assert.NotNull(enrolmentStatus);
+            Assert.Equal(_dbContext.Statuses.Single(s => s.Code == Status.ACCEPTED_TOS_CODE), enrolmentStatus.Status);
+
+            // get the enrollee object, and check that there is a 20 character license plate
+            var enrollee = _dbContext.Enrollees.Single(e => e.UserId == expectedUserId);
+            Assert.NotNull(enrollee);
+            Assert.NotNull(enrollee.LicensePlate);
+            Assert.Equal(20, enrollee.LicensePlate.Length);
         }
 
         [Fact]

@@ -209,6 +209,14 @@ namespace Prime
                 .HasIndex("EnrolleeId", "AddressType")
                 .HasName("IX_EnrolleeId_AddressType")
                 .IsUnique(true);
+
+            modelBuilder.Entity<Enrollee>()
+                .HasIndex("UserId")
+                .IsUnique(true);
+
+            modelBuilder.Entity<Enrolment>()
+                .HasIndex("EnrolleeId")
+                .IsUnique(true);
             #endregion
 
             #region Relationships

@@ -107,11 +107,21 @@ namespace Prime.Controllers
         /// Creates a new Enrolment.
         /// </summary>
         [HttpPost(Name = nameof(CreateEnrolment))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiCreatedResponse<Enrolment>), StatusCodes.Status201Created)]
         public async Task<ActionResult<Enrolment>> CreateEnrolment(Enrolment enrolment)
         {
+            // check to see if this userId already has an enrolment, if so, reject creating another
+            var existingEnrolment = await _enrolmentService.GetEnrolmentForUserIdAsync(enrolment.Enrollee.UserId);
+
+            if (existingEnrolment != null)
+            {
+                this.ModelState.AddModelError("Enrollee.UserId", "An enrolment already exists for this User Id, only one enrolment is allowed per User Id.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
+
             var createdEnrolmentId = await _enrolmentService.CreateEnrolmentAsync(enrolment);
 
             return CreatedAtAction(nameof(GetEnrolmentById), new { enrolmentId = createdEnrolmentId }, new ApiCreatedResponse<Enrolment>(enrolment));

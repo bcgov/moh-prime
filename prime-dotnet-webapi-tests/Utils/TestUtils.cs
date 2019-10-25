@@ -16,6 +16,7 @@ using PrimeTests.Utils.Auth;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using System.Net.Http.Headers;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace PrimeTests.Utils
 {
@@ -124,50 +125,74 @@ namespace PrimeTests.Utils
         {
             // db.Enrolments.AddRange(EnrolmentFaker.Generate(5));
 
-            db.AddRange(new College { Code = 1, Name = "College of Physicians and Surgeons of BC (CPSBC)", Prefix = "91" });
-            db.AddRange(new College { Code = 2, Name = "College of Pharmacists of BC (CPBC)", Prefix = "P1" });
-            db.AddRange(new College { Code = 3, Name = "College of Registered Nurses of BC (CRNBC)", Prefix = "96" });
-            db.AddRange(new College { Code = 4, Name = "None", Prefix = null });
+            if (!db.Set(typeof(College)).Any())
+            {
+                db.AddRange(new College { Code = 1, Name = "College of Physicians and Surgeons of BC (CPSBC)", Prefix = "91" });
+                db.AddRange(new College { Code = 2, Name = "College of Pharmacists of BC (CPBC)", Prefix = "P1" });
+                db.AddRange(new College { Code = 3, Name = "College of Registered Nurses of BC (CRNBC)", Prefix = "96" });
+                db.AddRange(new College { Code = 4, Name = "None", Prefix = null });
+            }
 
-            db.AddRange(new License { Code = 1, Name = "Full - General" });
-            db.AddRange(new License { Code = 2, Name = "Full - Pharmacist" });
-            db.AddRange(new License { Code = 3, Name = "Full - Specialty" });
-            db.AddRange(new License { Code = 4, Name = "Registered Nurse" });
-            db.AddRange(new License { Code = 5, Name = "Temporary Registered Nurse" });
+            if (!db.Set(typeof(License)).Any())
+            {
+                db.AddRange(new License { Code = 1, Name = "Full - General" });
+                db.AddRange(new License { Code = 2, Name = "Full - Pharmacist" });
+                db.AddRange(new License { Code = 3, Name = "Full - Specialty" });
+                db.AddRange(new License { Code = 4, Name = "Registered Nurse" });
+                db.AddRange(new License { Code = 5, Name = "Temporary Registered Nurse" });
+            }
 
-            db.AddRange(new CollegeLicense { CollegeCode = 1, LicenseCode = 2 });
-            db.AddRange(new CollegeLicense { CollegeCode = 1, LicenseCode = 3 });
-            db.AddRange(new CollegeLicense { CollegeCode = 2, LicenseCode = 4 });
-            db.AddRange(new CollegeLicense { CollegeCode = 2, LicenseCode = 5 });
-            db.AddRange(new CollegeLicense { CollegeCode = 3, LicenseCode = 1 });
-            db.AddRange(new CollegeLicense { CollegeCode = 3, LicenseCode = 5 });
+            if (!db.Set(typeof(CollegeLicense)).Any())
+            {
+                db.AddRange(new CollegeLicense { CollegeCode = 1, LicenseCode = 2 });
+                db.AddRange(new CollegeLicense { CollegeCode = 1, LicenseCode = 3 });
+                db.AddRange(new CollegeLicense { CollegeCode = 2, LicenseCode = 4 });
+                db.AddRange(new CollegeLicense { CollegeCode = 2, LicenseCode = 5 });
+                db.AddRange(new CollegeLicense { CollegeCode = 3, LicenseCode = 1 });
+                db.AddRange(new CollegeLicense { CollegeCode = 3, LicenseCode = 5 });
+            }
 
-            db.AddRange(new Practice { Code = 1, Name = "Remote Practice" });
-            db.AddRange(new Practice { Code = 2, Name = "Reproductive Care" });
-            db.AddRange(new Practice { Code = 3, Name = "Sexually Transmitted Infections (STI)" });
-            db.AddRange(new Practice { Code = 4, Name = "None" });
+            if (!db.Set(typeof(Practice)).Any())
+            {
+                db.AddRange(new Practice { Code = 1, Name = "Remote Practice" });
+                db.AddRange(new Practice { Code = 2, Name = "Reproductive Care" });
+                db.AddRange(new Practice { Code = 3, Name = "Sexually Transmitted Infections (STI)" });
+                db.AddRange(new Practice { Code = 4, Name = "None" });
+            }
 
-            db.AddRange(new JobName { Code = 1, Name = "Medical Office Assistant" });
-            db.AddRange(new JobName { Code = 2, Name = "Midwife" });
-            db.AddRange(new JobName { Code = 3, Name = "Nurse (not nurse practitioner)" });
-            db.AddRange(new JobName { Code = 4, Name = "Pharmacy Assistant" });
-            db.AddRange(new JobName { Code = 5, Name = "Pharmacy Technician" });
-            db.AddRange(new JobName { Code = 6, Name = "Registration Clerk" });
-            db.AddRange(new JobName { Code = 7, Name = "Ward Clerk" });
-            db.AddRange(new JobName { Code = 8, Name = "Other" });
+            if (!db.Set(typeof(JobName)).Any())
+            {
+                db.AddRange(new JobName { Code = 1, Name = "Medical Office Assistant" });
+                db.AddRange(new JobName { Code = 2, Name = "Midwife" });
+                db.AddRange(new JobName { Code = 3, Name = "Nurse (not nurse practitioner)" });
+                db.AddRange(new JobName { Code = 4, Name = "Pharmacy Assistant" });
+                db.AddRange(new JobName { Code = 5, Name = "Pharmacy Technician" });
+                db.AddRange(new JobName { Code = 6, Name = "Registration Clerk" });
+                db.AddRange(new JobName { Code = 7, Name = "Ward Clerk" });
+                db.AddRange(new JobName { Code = 8, Name = "Other" });
+            }
 
-            db.AddRange(new OrganizationName { Code = 1, Name = "Vancouver Island Health" });
-            db.AddRange(new OrganizationName { Code = 2, Name = "Shoppers Drug Mart" });
+            if (!db.Set(typeof(OrganizationName)).Any())
+            {
+                db.AddRange(new OrganizationName { Code = 1, Name = "Vancouver Island Health" });
+                db.AddRange(new OrganizationName { Code = 2, Name = "Shoppers Drug Mart" });
+            }
 
-            db.AddRange(new OrganizationType { Code = 1, Name = "Health Authority" });
-            db.AddRange(new OrganizationType { Code = 2, Name = "Pharmacy" });
+            if (!db.Set(typeof(OrganizationType)).Any())
+            {
+                db.AddRange(new OrganizationType { Code = 1, Name = "Health Authority" });
+                db.AddRange(new OrganizationType { Code = 2, Name = "Pharmacy" });
+            }
 
-            db.AddRange(new Status { Code = Status.IN_PROGRESS_CODE, Name = "In Progress" });
-            db.AddRange(new Status { Code = Status.SUBMITTED_CODE, Name = "Submitted" });
-            db.AddRange(new Status { Code = Status.APPROVED_CODE, Name = "Adjudicated/Approved" });
-            db.AddRange(new Status { Code = Status.DECLINED_CODE, Name = "Declined" });
-            db.AddRange(new Status { Code = Status.ACCEPTED_TOS_CODE, Name = "Accepted TOS (Terms of Service)" });
-            db.AddRange(new Status { Code = Status.DECLINED_TOS_CODE, Name = "Declined TOS (Terms of Service)" });
+            if (!db.Set(typeof(Status)).Any())
+            {
+                db.AddRange(new Status { Code = Status.IN_PROGRESS_CODE, Name = "In Progress" });
+                db.AddRange(new Status { Code = Status.SUBMITTED_CODE, Name = "Submitted" });
+                db.AddRange(new Status { Code = Status.APPROVED_CODE, Name = "Adjudicated/Approved" });
+                db.AddRange(new Status { Code = Status.DECLINED_CODE, Name = "Declined" });
+                db.AddRange(new Status { Code = Status.ACCEPTED_TOS_CODE, Name = "Accepted TOS (Terms of Service)" });
+                db.AddRange(new Status { Code = Status.DECLINED_TOS_CODE, Name = "Declined TOS (Terms of Service)" });
+            }
 
             db.SaveChanges();
         }

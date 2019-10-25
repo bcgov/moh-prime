@@ -16,8 +16,7 @@ namespace PrimeTests.Integration
     public class EnrolmentIntegrationTests : BaseIntegrationTests
     {
         public EnrolmentIntegrationTests(CustomWebApplicationFactory<TestStartup> factory) : base(factory)
-        {
-        }
+        { }
 
         private Enrolment CreateEnrolment(IServiceScope scope)
         {

@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Newtonsoft.Json;
+using Prime.Infrastructure;
 
 namespace Prime.Models
 {
@@ -32,6 +33,7 @@ namespace Prime.Models
 
         [RegularExpression(@"([0-9]+)", ErrorMessage = "Device Provider Number should not contain characters")]
         [StringLength(5, MinimumLength = 5, ErrorMessage = "Device Provider Number must be 5 digits")]
+        [JsonConverter(typeof(EmptyStringToNullJsonConverter))]
         public string DeviceProviderNumber { get; set; }
 
         public bool? IsInsulinPumpProvider { get; set; }
