@@ -19,7 +19,7 @@ namespace PrimeTests.Services
         public void testGuid_Ascii85_Encoding()
         {
             Guid guid = Guid.NewGuid();
-            Assert.NotNull(guid);
+            Assert.NotEqual(Guid.Empty, guid);
 
             string encodedString = Base85.Ascii85.Encode(guid.ToByteArray());
             Assert.NotNull(encodedString);
@@ -27,7 +27,7 @@ namespace PrimeTests.Services
 
             Span<byte> decodedBytes = Base85.Ascii85.Decode(encodedString);
             Guid decodedGuid = new Guid(decodedBytes);
-            Assert.NotNull(decodedGuid);
+            Assert.NotEqual(Guid.Empty, decodedGuid);
             Assert.Equal(guid, decodedGuid);
         }
 

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
 namespace Prime.Models
@@ -19,9 +20,9 @@ namespace Prime.Models
         {
             switch (statusCode)
             {
-                case 404:
+                case StatusCodes.Status404NotFound:
                     return "Resource not found";
-                case 500:
+                case StatusCodes.Status500InternalServerError:
                     return "An unhandled error occurred";
                 default:
                     return null;

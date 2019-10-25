@@ -12,10 +12,10 @@ using Prime;
 using Prime.Models;
 using Prime.Services;
 
-
 using PrimeTests.Utils.Auth;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
+using System.Net.Http.Headers;
 
 namespace PrimeTests.Utils
 {
@@ -220,6 +220,67 @@ namespace PrimeTests.Utils
                         .ForAudience(TestAuthorizationConstants.Audience)
                         .IssuedBy(TestAuthorizationConstants.Issuer)
                         .WithSigningCertificate(EmbeddedResourceReader.GetCertificate(TestAuthorizationConstants.CertificatePassword));
+        }
+
+        public static HttpRequestMessage CreateRequest(
+            HttpMethod method,
+            string requestUri,
+            Guid subject)
+        {
+            return CreateRequest<string>(method, requestUri, subject, null);
+        }
+
+        public static HttpRequestMessage CreateAdminRequest(
+            HttpMethod method,
+            string requestUri,
+            Guid subject)
+        {
+            return CreateAdminRequest<string>(method, requestUri, subject, null);
+        }
+
+        public static HttpRequestMessage CreateRequest<T>(
+            HttpMethod method,
+            string requestUri,
+            Guid subject,
+            T payload)
+        {
+            // create a request with an AUTH token
+            var request = new HttpRequestMessage(method, requestUri);
+            var _token = TestUtils.TokenBuilder()
+                .ForAudience(Startup.StaticConfig["Jwt:Audience"])
+                .ForSubject(subject.ToString())
+                .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_ENROLMENT_ROLE)
+                .WithClaim(PrimeConstants.ASSURANCE_LEVEL_CLAIM_TYPE, "3")
+                .BuildToken();
+
+            request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);
+
+            if (payload != null)
+            {
+                request.Content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json");
+            }
+
+            return request;
+        }
+
+        public static HttpRequestMessage CreateAdminRequest<T>(
+            HttpMethod method,
+            string requestUri,
+            Guid subject,
+            T payload)
+        {
+            var request = CreateRequest<T>(method, requestUri, subject, payload);
+
+            // replace the token - with an admin version of the token
+            var _token = TestUtils.TokenBuilder()
+                 .ForAudience(Startup.StaticConfig["Jwt:Audience"])
+                 .ForSubject(subject.ToString())
+                 .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_ADMIN_ROLE)
+                 .BuildToken();
+
+            request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);
+
+            return request;
         }
 
     }

@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
-using Prime.Models;
 
 namespace Prime.Migrations
 {
@@ -421,14 +420,6 @@ namespace Prime.Migrations
                 {
                     b.Property<int?>("Id")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("AppliedDate");
-
-                    b.Property<bool?>("Approved");
-
-                    b.Property<DateTime?>("ApprovedDate");
-
-                    b.Property<string>("ApprovedReason");
 
                     b.Property<DateTime>("CreatedTimeStamp");
 
@@ -872,8 +863,7 @@ namespace Prime.Migrations
 
                     b.Property<Guid>("CreatedUserId");
 
-                    b.Property<string>("Name")
-                        .IsRequired();
+                    b.Property<string>("Name");
 
                     b.Property<DateTime>("UpdatedTimeStamp");
 

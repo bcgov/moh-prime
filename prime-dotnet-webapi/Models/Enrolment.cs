@@ -18,13 +18,11 @@ namespace Prime.Models
 
         public Enrollee Enrollee { get; set; }
 
-        public DateTime AppliedDate { get; set; }
+        [NotMapped]
+        public DateTime? AppliedDate { get { return this.EnrolmentStatuses?.SingleOrDefault(es => es.StatusCode == Status.SUBMITTED_CODE)?.StatusDate; } }
 
-        public bool? Approved { get; set; }
-
-        public string ApprovedReason { get; set; }
-
-        public DateTime? ApprovedDate { get; set; }
+        [NotMapped]
+        public DateTime? ApprovedDate { get { return this.EnrolmentStatuses?.SingleOrDefault(es => es.StatusCode == Status.APPROVED_CODE)?.StatusDate; } }
 
         public bool? HasCertification { get; set; }
 
@@ -64,5 +62,8 @@ namespace Prime.Models
 
         [NotMapped]
         public EnrolmentStatus CurrentStatus { get { return this.EnrolmentStatuses?.SingleOrDefault(es => es.IsCurrent); } }
+
+        [NotMapped]
+        public ICollection<Status> AvailableStatuses { get; set; }
     }
 }

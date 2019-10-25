@@ -88,6 +88,9 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(e => e.Id == enrolmentId)
                 ;
 
+            // add the available statuses to the enrolment
+            entity.AvailableStatuses = this.GetAvailableStatuses(entity.CurrentStatus?.Status);
+
             return entity;
         }
 
@@ -104,6 +107,9 @@ namespace Prime.Services
                 .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.Status)
                 .SingleOrDefaultAsync(e => e.Enrollee.UserId == userId)
                 ;
+
+            // add the available statuses to the enrolment
+            entity.AvailableStatuses = this.GetAvailableStatuses(entity.CurrentStatus?.Status);
 
             return entity;
         }
@@ -128,6 +134,12 @@ namespace Prime.Services
 
             var items = await query.ToListAsync();
 
+            foreach (var item in items)
+            {
+                // add the available statuses to the enrolment
+                item.AvailableStatuses = this.GetAvailableStatuses(item.CurrentStatus?.Status);
+            }
+
             return items;
         }
 
@@ -148,12 +160,17 @@ namespace Prime.Services
 
             var items = await query.ToListAsync();
 
+            foreach (var item in items)
+            {
+                // add the available statuses to the enrolment
+                item.AvailableStatuses = this.GetAvailableStatuses(item.CurrentStatus?.Status);
+            }
+            
             return items;
         }
 
         public async Task<int?> CreateEnrolmentAsync(Enrolment enrolment)
         {
-            enrolment.AppliedDate = DateTime.Now;
             //create a status history record
             EnrolmentStatus enrolmentStatus = new EnrolmentStatus { Enrolment = enrolment, StatusCode = Status.IN_PROGRESS_CODE, StatusDate = DateTime.Now, IsCurrent = true };
             if (enrolment.EnrolmentStatuses == null)

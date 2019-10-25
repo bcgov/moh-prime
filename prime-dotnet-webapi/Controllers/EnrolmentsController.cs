@@ -109,12 +109,12 @@ namespace Prime.Controllers
         [HttpPost(Name = nameof(CreateEnrolment))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ApiCreatedResponse<Enrolment>), StatusCodes.Status201Created)]
         public async Task<ActionResult<Enrolment>> CreateEnrolment(Enrolment enrolment)
         {
             var createdEnrolmentId = await _enrolmentService.CreateEnrolmentAsync(enrolment);
 
-            return CreatedAtAction(nameof(GetEnrolmentById), new { enrolmentId = createdEnrolmentId }, enrolment);
+            return CreatedAtAction(nameof(GetEnrolmentById), new { enrolmentId = createdEnrolmentId }, new ApiCreatedResponse<Enrolment>(enrolment));
         }
 
         // PUT: api/Enrolments/5

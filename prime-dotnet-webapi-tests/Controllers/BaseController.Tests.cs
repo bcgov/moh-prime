@@ -2,10 +2,11 @@ using System.Net.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
+using Xunit;
+
 using Prime.Services;
 using PrimeTests.Mocks;
 using PrimeTests.Utils;
-using Xunit;
 
 namespace PrimeTests.Controllers
 {
@@ -26,6 +27,6 @@ namespace PrimeTests.Controllers
                     });
                 });
             _client = _factory.CreateClient();
-        }      
+        }
     }
 }

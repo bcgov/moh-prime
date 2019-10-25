@@ -146,7 +146,7 @@ namespace Prime.Migrations
                 {
                     Code = table.Column<short>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    Name = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
                     CreatedUserId = table.Column<Guid>(nullable: false),
                     CreatedTimeStamp = table.Column<DateTime>(nullable: false),
                     UpdatedUserId = table.Column<Guid>(nullable: false),
@@ -199,10 +199,6 @@ namespace Prime.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     EnrolleeId = table.Column<int>(nullable: false),
-                    AppliedDate = table.Column<DateTime>(nullable: false),
-                    Approved = table.Column<bool>(nullable: true),
-                    ApprovedReason = table.Column<string>(nullable: true),
-                    ApprovedDate = table.Column<DateTime>(nullable: true),
                     HasCertification = table.Column<bool>(nullable: true),
                     IsDeviceProvider = table.Column<bool>(nullable: true),
                     DeviceProviderNumber = table.Column<string>(maxLength: 5, nullable: true),
