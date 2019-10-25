@@ -8,8 +8,8 @@ pipeline {
             agent { label 'master' }
             steps {
                 echo "Building ..."
-                sh "bash ./player.sh ocApply build postgresql dev"
-                sh "bash ./player.sh ocApply build dotnet-webapi dev"
+                //sh "bash ./player.sh ocApply build postgresql dev"
+                //sh "bash ./player.sh ocApply build dotnet-webapi dev"
                 sh "bash ./player.sh ocApply build angular-frontend dev"
             }
         }
@@ -17,8 +17,8 @@ pipeline {
             agent { label 'master' }
             steps {
                 echo "Deploy (DEV) ..."
-                sh "bash ./player.sh ocApply deploy postgresql dev"
-                sh "bash ./player.sh ocApply deploy dotnet-webapi dev"
+                //sh "bash ./player.sh ocApply deploy postgresql dev"
+                //sh "bash ./player.sh ocApply deploy dotnet-webapi dev"
                 sh "bash ./player.sh ocApply deploy angular-frontend dev"
             }
         }

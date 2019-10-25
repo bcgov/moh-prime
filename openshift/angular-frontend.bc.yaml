@@ -38,6 +38,8 @@ objects:
     - env:
       - name: SUFFIX
         value: "${SUFFIX}"
+      - name: REDIRECT_URL
+        value: http://angular-frontend${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca
     tags:
     - annotations: 
       from:
@@ -63,6 +65,8 @@ objects:
       env:
       - name: SUFFIX
         value: "${SUFFIX}"
+      - name: SUFFIX
+        value: "${REDIRECT_URL}"
     completionDeadlineSeconds: 6000
     nodeSelector: 
     output:
