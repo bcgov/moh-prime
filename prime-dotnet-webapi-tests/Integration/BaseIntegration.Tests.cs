@@ -17,6 +17,12 @@ namespace PrimeTests.Integration
         {
             _factory = factory;
             _client = _factory.CreateClient();
+
+            using (var scope = _factory.Server.Host.Services.CreateScope())
+            {
+                var _dbContext = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
+                TestUtils.ReinitializeDbForTests(_dbContext);
+            }
         }
 
         public void Dispose()
