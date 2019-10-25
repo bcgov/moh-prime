@@ -232,6 +232,43 @@ namespace PrimeTests.Controllers
         }
 
         [Fact]
+        public async void testCreateEnrolment_400_BadRequest_Enrolment_Exists()
+        {
+            using (var scope = _factory.Server.Host.Services.CreateScope())
+            {
+                // initialize the data
+                var service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
+                ((EnrolmentServiceMock)service).InitializeDb();
+
+                // check the initial state
+                var enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
+
+                // pick off an enrolment to use for the userId
+                Enrolment existingEnrolment = enrolments.First();
+
+                // make a new enrolment object
+                var testEnrolment = TestUtils.EnrolmentFaker.Generate();
+                testEnrolment.Enrollee.UserId = existingEnrolment.Enrollee.UserId;
+
+                // create a request with an AUTH token
+                var request = TestUtils.CreateRequest(HttpMethod.Post, "/api/enrolments", existingEnrolment.Enrollee.UserId, testEnrolment);
+
+                // try to create the enrolment
+                var response = await _client.SendAsync(request);
+                Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+                // check for the expected error messages
+                var body = await response.Content.ReadAsStringAsync();
+                Assert.Contains("An enrolment already exists for this User Id, only one enrolment is allowed per User Id.", body);
+                
+                // make sure the same amount of enrolments exist
+                enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
+            }
+        }
+
+        [Fact]
         public async void testDeleteEnrolment()
         {
             using (var scope = _factory.Server.Host.Services.CreateScope())
