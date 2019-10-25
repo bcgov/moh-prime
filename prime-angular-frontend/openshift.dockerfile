@@ -7,6 +7,7 @@ ENV REDIRECT_URL $REDIRECT_URL
 RUN mkdir -p /usr/src/app && \
     pwd && \
     echo $REDIRECT_URL && \
+    echo "Step 1 environment..." && \
     printenv
 WORKDIR /usr/src/app
 
