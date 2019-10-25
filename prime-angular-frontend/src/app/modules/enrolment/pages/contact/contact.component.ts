@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
@@ -33,28 +33,28 @@ export class ContactComponent implements OnInit {
     private logger: LoggerService
   ) { }
 
-  public get voicePhone(): FormGroup {
-    return this.form.get('voicePhone') as FormGroup;
+  public get voicePhone(): FormControl {
+    return this.form.get('voicePhone') as FormControl;
   }
 
-  public get voiceExtension(): FormGroup {
-    return this.form.get('voiceExtension') as FormGroup;
+  public get voiceExtension(): FormControl {
+    return this.form.get('voiceExtension') as FormControl;
   }
 
-  public get hasContactEmail(): FormGroup {
-    return this.form.get('hasContactEmail') as FormGroup;
+  public get hasContactEmail(): FormControl {
+    return this.form.get('hasContactEmail') as FormControl;
   }
 
-  public get contactEmail(): FormGroup {
-    return this.form.get('contactEmail') as FormGroup;
+  public get contactEmail(): FormControl {
+    return this.form.get('contactEmail') as FormControl;
   }
 
-  public get hasContactPhone(): FormGroup {
-    return this.form.get('hasContactPhone') as FormGroup;
+  public get hasContactPhone(): FormControl {
+    return this.form.get('hasContactPhone') as FormControl;
   }
 
-  public get contactPhone(): FormGroup {
-    return this.form.get('contactPhone') as FormGroup;
+  public get contactPhone(): FormControl {
+    return this.form.get('contactPhone') as FormControl;
   }
 
   public isRequired(path: string) {
@@ -106,21 +106,8 @@ export class ContactComponent implements OnInit {
   }
 
   private initForm() {
-    this.hasContactEmail.valueChanges.subscribe((value: boolean) => {
-      if (!value) {
-        this.formUtilsService.resetAndClearValidators(this.contactEmail);
-      } else {
-        this.formUtilsService.setValidators(this.contactEmail, [Validators.required]);
-      }
-    });
-
-    this.hasContactPhone.valueChanges.subscribe((value: boolean) => {
-      if (!value) {
-        this.formUtilsService.resetAndClearValidators(this.contactPhone);
-      } else {
-        this.formUtilsService.setValidators(this.contactPhone, [Validators.required]);
-      }
-    });
+    this.hasContactEmail.valueChanges.subscribe((value: boolean) => this.toggleValidators(value, this.contactEmail));
+    this.hasContactPhone.valueChanges.subscribe((value: boolean) => this.toggleValidators(value, this.contactPhone));
 
     if (this.contactEmail.value) {
       this.form.get('hasContactEmail').patchValue(true);
@@ -131,5 +118,13 @@ export class ContactComponent implements OnInit {
     }
 
     this.form.markAsPristine();
+  }
+
+  private toggleValidators(value: boolean, control: FormControl) {
+    if (!value) {
+      this.formUtilsService.resetAndClearValidators(control);
+    } else {
+      this.formUtilsService.setValidators(control, [Validators.required]);
+    }
   }
 }

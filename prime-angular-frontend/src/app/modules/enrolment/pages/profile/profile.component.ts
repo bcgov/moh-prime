@@ -54,24 +54,20 @@ export class ProfileComponent implements OnInit {
     this.isNewEnrolment = true;
   }
 
-  public get firstName(): FormGroup {
-    return this.form.get('firstName') as FormGroup;
+  public get firstName(): FormControl {
+    return this.form.get('firstName') as FormControl;
   }
 
-  public get lastName(): FormGroup {
-    return this.form.get('lastName') as FormGroup;
+  public get lastName(): FormControl {
+    return this.form.get('lastName') as FormControl;
   }
 
-  public get dateOfBirth(): FormGroup {
-    return this.form.get('dateOfBirth') as FormGroup;
+  public get dateOfBirth(): FormControl {
+    return this.form.get('dateOfBirth') as FormControl;
   }
 
   public get isMobile() {
     return this.viewportService.isMobile;
-  }
-
-  public isRequired(path: string) {
-    this.formUtilsService.isRequired(this.form, path);
   }
 
   public onSubmit() {
@@ -117,7 +113,11 @@ export class ProfileComponent implements OnInit {
     this.hasMailingAddress = !this.hasMailingAddress;
     const mailingAddress = this.form.get('mailingAddress') as FormGroup;
 
-    this.resetAndClearValidators(mailingAddress);
+    this.toggleValidators(mailingAddress);
+  }
+
+  public isRequired(path: string) {
+    this.formUtilsService.isRequired(this.form, path);
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
@@ -177,12 +177,10 @@ export class ProfileComponent implements OnInit {
       mailingAddress.get('postal').value
     );
 
-    if (this.hasMailingAddress) {
-      this.resetAndClearValidators(mailingAddress);
-    }
+    this.toggleValidators(mailingAddress);
   }
 
-  private resetAndClearValidators(mailingAddress: FormGroup) {
+  private toggleValidators(mailingAddress: FormGroup) {
     if (!this.hasMailingAddress) {
       this.formUtilsService.resetAndClearValidators(mailingAddress);
     } else {
