@@ -8,9 +8,9 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-RUN npm install @angular/cli -g --silent
-RUN npm install
-RUN ng build --prod
+RUN npm install @angular/cli -g && \ 
+    npm install && \
+    ng build --prod 
 
 FROM nginx
 

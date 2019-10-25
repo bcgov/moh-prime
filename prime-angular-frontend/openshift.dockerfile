@@ -3,24 +3,32 @@ FROM node:10.16 as build-deps
 #SHELL [ "/bin/bash","-c"]
 # set working directory
 ENV NODE_ROOT /usr/src/app
-RUN mkdir -p /usr/src/app 
+ENV REDIRECT_URL $REDIRECT_URL
+RUN mkdir -p /usr/src/app && \
+    pwd && \
+    echo $REDIRECT_URL && \
+    echo "Step 1 environment..." && \
+    printenv
 WORKDIR /usr/src/app
 
 COPY . .
 
-RUN npm install @angular/cli -g --silent && \ 
+RUN sed s/'$REDIRECT_URL'/$REDIRECT_URL/g /usr/src/app/src/environments/environment.prod.template.ts > /usr/src/app/src/environments/environment.prod.ts && \
+    cat /usr/src/app/src/environments/environment.prod.ts && \
+    npm install @angular/cli -g --silent && \ 
     npm install && \
+    chmod +x /usr/src/app/midpoint.sh && \ 
+    /usr/src/app/midpoint.sh && \
+    cat /usr/src/app/src/environments/environment.prod.ts && \
     ng build --prod && \
-    echo "NPM packages installed..."
+    echo "NPM packages installed..." && \
+    printenv
 
 FROM nginx:1.15-alpine
 COPY --from=build-deps /usr/src/app/dist/angular-frontend /usr/share/nginx/html
 RUN rm -f /etc/nginx/conf.d/default.conf 
 #COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build-deps /usr/src/app/nginx.template.conf /etc/nginx/nginx.template.conf
-USER 0
-RUN echo "SUFFIX=$SUFFIX"
-#RUN envsubst '$SUFFIX' < /etc/nginx/nginx.template.conf > /etc/nginx/conf.d/default.conf
 COPY --from=build-deps /usr/src/app/entrypoint.sh /home
 
 EXPOSE 8080

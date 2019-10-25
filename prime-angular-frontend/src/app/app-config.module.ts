@@ -7,6 +7,7 @@ export let APP_CONFIG = new InjectionToken<AppConfig>('app.config');
 
 export class AppConfig {
   apiEndpoint: string;
+  loginRedirectUrl: string;
   routes: {
     auth: string;
     admin: string;
@@ -19,6 +20,7 @@ export class AppConfig {
 
 export const APP_DI_CONFIG: AppConfig = {
   apiEndpoint: environment.apiEndpoint,
+  loginRedirectUrl: environment.loginRedirectUrl,
   routes: {
     auth: '',
     admin: 'admin',
