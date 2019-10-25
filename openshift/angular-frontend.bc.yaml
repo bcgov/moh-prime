@@ -65,6 +65,8 @@ objects:
       env:
       - name: SUFFIX
         value: "${SUFFIX}"
+      - name: SUFFIX
+        value: "${REDIRECT_URL}"
     completionDeadlineSeconds: 6000
     nodeSelector: 
     output:
@@ -87,11 +89,17 @@ objects:
         uri: "${SOURCE_REPOSITORY_URL}"
       type: Git
     strategy:
+      sourceStrategy:
+        env:
+        - name: SUFFIX
+          value: "${SUFFIX}"
+        - name: REDIRECT_URL
+        value: http://angular-frontend${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca
       dockerStrategy: 
         dockerfile: -|
           FROM node:10.16 as build-deps
           ENV NODE_ROOT /usr/src/app
-          ENV REDIRECT_URL ${REDIRECT_URL}
+          ENV REDIRECT_URL ${REDIRECT_URL}'
           ENV SUFFIX ${SUFFIX}
           RUN mkdir -p /usr/src/app && \
               pwd && \
