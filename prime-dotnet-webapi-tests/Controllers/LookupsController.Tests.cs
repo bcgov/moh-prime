@@ -8,8 +8,7 @@ namespace PrimeTests.Controllers
     public class LookupsControllerTests : BaseControllerTests
     {
         public LookupsControllerTests(CustomWebApplicationFactory<TestStartup> factory) : base(factory)
-        {
-        }
+        { }
 
         [Fact]
         public async void testGetEnrolments()
@@ -25,6 +24,7 @@ namespace PrimeTests.Controllers
             Assert.NotEmpty(results.OrganizationNames);
             Assert.NotEmpty(results.OrganizationTypes);
             Assert.NotEmpty(results.Practices);
+            Assert.NotEmpty(results.Statuses);
         }
     }
 }
