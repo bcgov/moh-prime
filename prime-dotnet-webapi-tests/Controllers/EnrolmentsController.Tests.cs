@@ -1,8 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Xunit;
@@ -12,9 +12,6 @@ using Prime.Models;
 using Prime.Services;
 using PrimeTests.Mocks;
 using PrimeTests.Utils;
-using System;
-using System.Security.Claims;
-using System.Text;
 
 namespace PrimeTests.Controllers
 {
@@ -23,8 +20,7 @@ namespace PrimeTests.Controllers
         private static EnrolmentSearchOptions EMPTY_ENROLMENT_SEARCH_OPTIONS = new EnrolmentSearchOptions();
 
         public EnrolmentsControllerTests(CustomWebApplicationFactory<TestStartup> factory) : base(factory)
-        {
-        }
+        { }
 
         [Fact]
         public async void testGetEnrolments()
@@ -32,25 +28,18 @@ namespace PrimeTests.Controllers
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
                 // initialize the data
-                var _service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
-                ((EnrolmentServiceMock)_service).InitializeDb();
+                var service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
+                ((EnrolmentServiceMock)service).InitializeDb();
 
                 // check the initial state
-                var enrolments = await _service.GetEnrolmentsAsync(new EnrolmentSearchOptions());
+                var enrolments = await service.GetEnrolmentsAsync(new EnrolmentSearchOptions());
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
 
                 //pick off an enrolment to get the userId from
                 Enrolment expectedEnrolment = enrolments.First();
 
                 // create a request with an AUTH token
-                var request = new HttpRequestMessage(HttpMethod.Get, "/api/enrolments");
-                var _token = TestUtils.TokenBuilder()
-                    .ForAudience("prime-web-api")
-                    .ForSubject(expectedEnrolment.Enrollee.UserId.ToString())
-                    .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_ENROLMENT_ROLE)
-                    .BuildToken();
-
-                request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);
+                var request = TestUtils.CreateRequest(HttpMethod.Get, "/api/enrolments", expectedEnrolment.Enrollee.UserId);
 
                 // try to get the enrolments
                 var response = await _client.SendAsync(request);
@@ -68,11 +57,11 @@ namespace PrimeTests.Controllers
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
                 // initialize the data
-                var _service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
-                ((EnrolmentServiceMock)_service).InitializeDb();
+                var service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
+                ((EnrolmentServiceMock)service).InitializeDb();
 
                 // check the initial state
-                var enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                var enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
 
                 // pick off an enrolment to get
@@ -80,13 +69,7 @@ namespace PrimeTests.Controllers
                 int expectedEnrolmentId = (int)expectedEnrolment.Id;
 
                 // create a request with an AUTH token
-                var request = new HttpRequestMessage(HttpMethod.Get, "/api/enrolments/" + expectedEnrolmentId);
-                var _token = TestUtils.TokenBuilder()
-                    .ForAudience("prime-web-api")
-                    .ForSubject(expectedEnrolment.Enrollee.UserId.ToString())
-                    .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_ENROLMENT_ROLE)
-                    .BuildToken();
-                request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);
+                var request = TestUtils.CreateRequest(HttpMethod.Get, $"/api/enrolments/{expectedEnrolmentId}", expectedEnrolment.Enrollee.UserId);
 
                 // try to get the enrolment
                 var response = await _client.SendAsync(request);
@@ -98,7 +81,7 @@ namespace PrimeTests.Controllers
                 Assert.Equal(expectedEnrolmentId, enrolment.Id);
 
                 // make sure the same amount of enrolments exist
-                enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
             }
         }
@@ -109,30 +92,88 @@ namespace PrimeTests.Controllers
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
                 // initialize the data
-                var _service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
-                ((EnrolmentServiceMock)_service).InitializeDb();
+                var service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
+                ((EnrolmentServiceMock)service).InitializeDb();
 
                 // check the initial state
-                var enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                var enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
 
-                // try to get an enrolment that does not exist
+                // get an enrolment id that does not exist
                 int notFoundEnrolmentId = EnrolmentServiceMock.MAX_ENROLMENT_ID + 1;
 
                 // create a request with an AUTH token
-                var request = new HttpRequestMessage(HttpMethod.Get, "/api/enrolments/" + notFoundEnrolmentId);
-                var _token = TestUtils.TokenBuilder()
-                    .ForAudience("prime-web-api")
-                    .ForSubject(Guid.NewGuid().ToString())
-                    .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_ENROLMENT_ROLE)
-                    .BuildToken();
-                request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);
+                var request = TestUtils.CreateRequest(HttpMethod.Get, $"/api/enrolments/{notFoundEnrolmentId}", Guid.NewGuid());
 
+                // try to get an enrolment that does not exist
                 var response = await _client.SendAsync(request);
                 Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
 
                 // make sure the same amount of enrolments exist
-                enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
+            }
+        }
+
+        [Fact]
+        public async void testGetEnrolment_403_Forbidden()
+        {
+            using (var scope = _factory.Server.Host.Services.CreateScope())
+            {
+                // initialize the data
+                var service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
+                ((EnrolmentServiceMock)service).InitializeDb();
+
+                // check the initial state
+                var enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
+
+                // pick off an enrolment to get
+                Enrolment expectedEnrolment = enrolments.First();
+                int expectedEnrolmentId = (int)expectedEnrolment.Id;
+
+                // create a request with an AUTH token
+                var request = TestUtils.CreateRequest(HttpMethod.Get, $"/api/enrolments/{expectedEnrolmentId}", Guid.NewGuid());
+
+                // try to get an enrolment with a different userId
+                var response = await _client.SendAsync(request);
+                Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+
+                // make sure the same amount of enrolments exist
+                enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
+            }
+        }
+
+        [Fact]
+        public async void testGetEnrolment_401_Unauthorized()
+        {
+            using (var scope = _factory.Server.Host.Services.CreateScope())
+            {
+                // initialize the data
+                var service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
+                ((EnrolmentServiceMock)service).InitializeDb();
+
+                // check the initial state
+                var enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
+
+                // pick off an enrolment to get
+                Enrolment expectedEnrolment = enrolments.First();
+                int expectedEnrolmentId = (int)expectedEnrolment.Id;
+
+                // create a request with an AUTH token
+                var request = TestUtils.CreateRequest(HttpMethod.Get, $"/api/enrolments/{expectedEnrolmentId}", expectedEnrolment.Enrollee.UserId);
+
+                //remove the AUTH token
+                request.Headers.Authorization = null;
+
+                // try to get an enrolment without a token
+                var response = await _client.SendAsync(request);
+                Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+
+                // make sure the same amount of enrolments exist
+                enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
             }
         }
@@ -144,22 +185,15 @@ namespace PrimeTests.Controllers
             {
                 //get references to the services
                 var _dbContext = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
-                var _service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
+                var service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
 
                 // make a new enrolment object
                 var testEnrolment = TestUtils.EnrolmentFaker.Generate();
 
                 // create a request with an AUTH token
-                var request = new HttpRequestMessage(HttpMethod.Post, "/api/enrolments");
-                var _token = TestUtils.TokenBuilder()
-                    .ForAudience("prime-web-api")
-                    .ForSubject(Guid.NewGuid().ToString())
-                    .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_ENROLMENT_ROLE)
-                    .BuildToken();
-                request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);
+                var request = TestUtils.CreateRequest(HttpMethod.Post, "/api/enrolments", Guid.NewGuid(), testEnrolment);
 
                 // try to create the enrolment
-                request.Content = new StringContent(JsonConvert.SerializeObject(testEnrolment), Encoding.UTF8, "application/json");
                 var response = await _client.SendAsync(request);
                 Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
@@ -168,8 +202,69 @@ namespace PrimeTests.Controllers
                 Assert.Contains(testEnrolment.Enrollee.FirstName, body);
 
                 // check that the body contains the Enrollee UserId
-                Enrolment createdEnrolment = JsonConvert.DeserializeObject<Enrolment>(body);
+                Enrolment createdEnrolment = JsonConvert.DeserializeObject<ApiCreatedResponse<Enrolment>>(body).Result;
                 Assert.Equal(testEnrolment.Enrollee.UserId, createdEnrolment.Enrollee.UserId);
+            }
+        }
+
+        [Fact]
+        public async void testCreateEnrolment_401_Unauthorized()
+        {
+            using (var scope = _factory.Server.Host.Services.CreateScope())
+            {
+                //get references to the services
+                var _dbContext = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
+                var service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
+
+                // make a new enrolment object
+                var testEnrolment = TestUtils.EnrolmentFaker.Generate();
+
+                // create a request with an AUTH token
+                var request = TestUtils.CreateRequest(HttpMethod.Post, "/api/enrolments", Guid.NewGuid(), testEnrolment);
+
+                //remove the AUTH token
+                request.Headers.Authorization = null;
+
+                // try to create the enrolment without a token
+                var response = await _client.SendAsync(request);
+                Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+            }
+        }
+
+        [Fact]
+        public async void testCreateEnrolment_400_BadRequest_Enrolment_Exists()
+        {
+            using (var scope = _factory.Server.Host.Services.CreateScope())
+            {
+                // initialize the data
+                var service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
+                ((EnrolmentServiceMock)service).InitializeDb();
+
+                // check the initial state
+                var enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
+
+                // pick off an enrolment to use for the userId
+                Enrolment existingEnrolment = enrolments.First();
+
+                // make a new enrolment object
+                var testEnrolment = TestUtils.EnrolmentFaker.Generate();
+                testEnrolment.Enrollee.UserId = existingEnrolment.Enrollee.UserId;
+
+                // create a request with an AUTH token
+                var request = TestUtils.CreateRequest(HttpMethod.Post, "/api/enrolments", existingEnrolment.Enrollee.UserId, testEnrolment);
+
+                // try to create the enrolment
+                var response = await _client.SendAsync(request);
+                Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+                // check for the expected error messages
+                var body = await response.Content.ReadAsStringAsync();
+                Assert.Contains("An enrolment already exists for this User Id, only one enrolment is allowed per User Id.", body);
+                
+                // make sure the same amount of enrolments exist
+                enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
             }
         }
 
@@ -179,11 +274,11 @@ namespace PrimeTests.Controllers
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
                 // initialize the data
-                var _service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
-                ((EnrolmentServiceMock)_service).InitializeDb();
+                var service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
+                ((EnrolmentServiceMock)service).InitializeDb();
 
                 // check the initial state
-                var enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                var enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
 
                 // pick off an enrolment to delete
@@ -191,20 +286,14 @@ namespace PrimeTests.Controllers
                 int expectedEnrolmentId = (int)expectedEnrolment.Id;
 
                 // create a request with an AUTH token
-                var request = new HttpRequestMessage(HttpMethod.Delete, "/api/enrolments/" + expectedEnrolmentId);
-                var _token = TestUtils.TokenBuilder()
-                    .ForAudience("prime-web-api")
-                    .ForSubject(expectedEnrolment.Enrollee.UserId.ToString())
-                    .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_ENROLMENT_ROLE)
-                    .BuildToken();
-                request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);
+                var request = TestUtils.CreateRequest(HttpMethod.Delete, $"/api/enrolments/{expectedEnrolmentId}", expectedEnrolment.Enrollee.UserId);
 
                 // try to delete the enrolment
                 var response = await _client.SendAsync(request);
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
                 // check that the enrolment was removed
-                enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE - 1, enrolments.Count());
             }
         }
@@ -215,30 +304,56 @@ namespace PrimeTests.Controllers
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
                 // initialize the data
-                var _service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
-                ((EnrolmentServiceMock)_service).InitializeDb();
+                var service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
+                ((EnrolmentServiceMock)service).InitializeDb();
 
                 // check the initial state
-                var enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                var enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
 
-                // try to delete a non-existing enrolment
+                // get an enrolment id that does not exist
                 int notFoundEnrolmentId = EnrolmentServiceMock.MAX_ENROLMENT_ID + 1;
 
                 // create a request with an AUTH token
-                var request = new HttpRequestMessage(HttpMethod.Delete, "/api/enrolments/" + notFoundEnrolmentId);
-                var _token = TestUtils.TokenBuilder()
-                    .ForAudience("prime-web-api")
-                    .ForSubject(Guid.NewGuid().ToString())
-                    .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_ENROLMENT_ROLE)
-                    .BuildToken();
-                request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);
+                var request = TestUtils.CreateRequest(HttpMethod.Delete, $"/api/enrolments/{notFoundEnrolmentId}", Guid.NewGuid());
 
+                // try to delete a non-existing enrolment
                 var response = await _client.SendAsync(request);
                 Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
 
                 // make sure the same amount of enrolments exist
-                enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
+            }
+        }
+
+        [Fact]
+        public async void testDeleteEnrolment_403_Forbidden()
+        {
+            using (var scope = _factory.Server.Host.Services.CreateScope())
+            {
+                // initialize the data
+                var service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
+                ((EnrolmentServiceMock)service).InitializeDb();
+
+                // check the initial state
+                var enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
+
+                // pick off an enrolment to delete
+                Enrolment expectedEnrolment = enrolments.First();
+                int expectedEnrolmentId = (int)expectedEnrolment.Id;
+
+                // create a request with an AUTH token
+                var request = TestUtils.CreateRequest(HttpMethod.Delete, $"/api/enrolments/{expectedEnrolmentId}", Guid.NewGuid());
+
+                // try to delete the enrolment with a different userId
+                var response = await _client.SendAsync(request);
+                Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+
+                // check that the enrolment was not removed
+                Assert.True(service.EnrolmentExists(expectedEnrolmentId));
+                enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
             }
         }
@@ -249,11 +364,11 @@ namespace PrimeTests.Controllers
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
                 // initialize the data
-                var _service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
-                ((EnrolmentServiceMock)_service).InitializeDb();
+                var service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
+                ((EnrolmentServiceMock)service).InitializeDb();
 
                 // check the initial state
-                var enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                var enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
 
                 // pick off an enrolment to update
@@ -267,27 +382,20 @@ namespace PrimeTests.Controllers
                 // update the names
                 enrolment.Enrollee.FirstName = expectedFirstName;
                 enrolment.Enrollee.LastName = expectedLastName;
-                
+
                 // create a request with an AUTH token
-                var request = new HttpRequestMessage(HttpMethod.Put, "/api/enrolments/" + enrolmentId);
-                var _token = TestUtils.TokenBuilder()
-                    .ForAudience("prime-web-api")
-                    .ForSubject(enrolment.Enrollee.UserId.ToString())
-                    .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_ENROLMENT_ROLE)
-                    .BuildToken();
-                request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);
+                var request = TestUtils.CreateRequest<Enrolment>(HttpMethod.Put, $"/api/enrolments/{enrolmentId}", enrolment.Enrollee.UserId, enrolment);
 
                 // call the controller to update the enrolment
-                request.Content = new StringContent(JsonConvert.SerializeObject(enrolment), Encoding.UTF8, "application/json");
                 var response = await _client.SendAsync(request);
                 Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
 
                 // make sure the same amount of enrolments exist
-                enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
 
                 // check the updated enrolment in the database
-                var updatedEnrolment = await _service.GetEnrolmentAsync(enrolmentId);
+                var updatedEnrolment = await service.GetEnrolmentAsync(enrolmentId);
                 Assert.NotNull(updatedEnrolment);
                 Assert.Equal(enrolmentId, updatedEnrolment.Id);
                 Assert.Equal(expectedFirstName, updatedEnrolment.Enrollee.FirstName);
@@ -301,31 +409,27 @@ namespace PrimeTests.Controllers
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
                 // initialize the data
-                var _service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
-                ((EnrolmentServiceMock)_service).InitializeDb();
+                var service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
+                ((EnrolmentServiceMock)service).InitializeDb();
 
                 // check the initial state
-                var enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                var enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
 
                 // pick off an enrolment to update
                 Enrolment enrolment = enrolments.First();
                 int enrolmentId = (int)enrolment.Id;
 
-                // create a request with an AUTH token
-                var request = new HttpRequestMessage(HttpMethod.Put, "/api/enrolments/" + enrolmentId);
-                var _token = TestUtils.TokenBuilder()
-                    .ForAudience("prime-web-api")
-                    .ForSubject(enrolment.Enrollee.UserId.ToString())
-                    .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_ENROLMENT_ROLE)
-                    .BuildToken();
-                request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);
+                // get the User id from the record
+                Guid subject = enrolment.Enrollee.UserId;
 
                 // put in an invalid userId
                 enrolment.Enrollee.UserId = Guid.Empty;
 
+                // create a request with an AUTH token
+                var request = TestUtils.CreateRequest<Enrolment>(HttpMethod.Put, $"/api/enrolments/{enrolmentId}", subject, enrolment);
+
                 // call the controller to update the enrolment
-                request.Content = new StringContent(JsonConvert.SerializeObject(enrolment), Encoding.UTF8, "application/json");
                 var response = await _client.SendAsync(request);
                 Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
@@ -334,7 +438,7 @@ namespace PrimeTests.Controllers
                 Assert.Contains("UserId cannot be the empty value", body);
 
                 // make sure the same amount of enrolments exist
-                enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
             }
         }
@@ -345,31 +449,24 @@ namespace PrimeTests.Controllers
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
                 // initialize the data
-                var _service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
-                ((EnrolmentServiceMock)_service).InitializeDb();
+                var service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
+                ((EnrolmentServiceMock)service).InitializeDb();
 
                 // check the initial state
-                var enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                var enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
 
                 // pick off an enrolment to update
                 Enrolment enrolment = enrolments.First();
                 int enrolmentId = (int)enrolment.Id;
 
-                // create a request with an AUTH token
-                var request = new HttpRequestMessage(HttpMethod.Put, "/api/enrolments/" + enrolmentId);
-                var _token = TestUtils.TokenBuilder()
-                    .ForAudience("prime-web-api")
-                    .ForSubject(enrolment.Enrollee.UserId.ToString())
-                    .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_ENROLMENT_ROLE)
-                    .BuildToken();
-                request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);
-
                 // put in a mismatched enrolmentId
                 enrolment.Id = enrolmentId + 1;
 
+                // create a request with an AUTH token
+                var request = TestUtils.CreateRequest<Enrolment>(HttpMethod.Put, $"/api/enrolments/{enrolmentId}", enrolment.Enrollee.UserId, enrolment);
+
                 // call the controller to update the enrolment
-                request.Content = new StringContent(JsonConvert.SerializeObject(enrolment), Encoding.UTF8, "application/json");
                 var response = await _client.SendAsync(request);
                 Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
@@ -378,7 +475,7 @@ namespace PrimeTests.Controllers
                 Assert.Contains("Enrolment Id does not match with the payload.", body);
 
                 // make sure the same amount of enrolments exist
-                enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
             }
         }
@@ -389,31 +486,24 @@ namespace PrimeTests.Controllers
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
                 // initialize the data
-                var _service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
-                ((EnrolmentServiceMock)_service).InitializeDb();
+                var service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
+                ((EnrolmentServiceMock)service).InitializeDb();
 
                 // check the initial state
-                var enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                var enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
 
                 // pick off an enrolment to update
                 Enrolment enrolment = enrolments.First();
                 int enrolmentId = (int)enrolment.Id;
 
-                // create a request with an AUTH token
-                var request = new HttpRequestMessage(HttpMethod.Put, "/api/enrolments/" + enrolmentId);
-                var _token = TestUtils.TokenBuilder()
-                    .ForAudience("prime-web-api")
-                    .ForSubject(enrolment.Enrollee.UserId.ToString())
-                    .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_ENROLMENT_ROLE)
-                    .BuildToken();
-                request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);
-
                 // remove the enrolleeId
                 enrolment.Enrollee.Id = null;
 
+                // create a request with an AUTH token
+                var request = TestUtils.CreateRequest<Enrolment>(HttpMethod.Put, $"/api/enrolments/{enrolmentId}", enrolment.Enrollee.UserId, enrolment);
+
                 // call the controller to update the enrolment
-                request.Content = new StringContent(JsonConvert.SerializeObject(enrolment), Encoding.UTF8, "application/json");
                 var response = await _client.SendAsync(request);
                 Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
@@ -422,7 +512,7 @@ namespace PrimeTests.Controllers
                 Assert.Contains("Enrollee Id is required to make updates.", body);
 
                 // make sure the same amount of enrolments exist
-                enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
             }
         }
@@ -433,11 +523,11 @@ namespace PrimeTests.Controllers
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
                 // initialize the data
-                var _service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
-                ((EnrolmentServiceMock)_service).InitializeDb();
+                var service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
+                ((EnrolmentServiceMock)service).InitializeDb();
 
                 // check the initial state
-                var enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                var enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
 
                 // pick off an enrolment to update
@@ -448,16 +538,9 @@ namespace PrimeTests.Controllers
                 enrolment.Id = notFoundEnrolmentId;
 
                 // create a request with an AUTH token
-                var request = new HttpRequestMessage(HttpMethod.Put, "/api/enrolments/" + notFoundEnrolmentId);
-                var _token = TestUtils.TokenBuilder()
-                    .ForAudience("prime-web-api")
-                    .ForSubject(enrolment.Enrollee.UserId.ToString())
-                    .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_ENROLMENT_ROLE)
-                    .BuildToken();
-                request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);
+                var request = TestUtils.CreateRequest<Enrolment>(HttpMethod.Put, $"/api/enrolments/{notFoundEnrolmentId}", enrolment.Enrollee.UserId, enrolment);
 
                 // call the controller to update the enrolment
-                request.Content = new StringContent(JsonConvert.SerializeObject(enrolment), Encoding.UTF8, "application/json");
                 var response = await _client.SendAsync(request);
                 Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
 
@@ -466,7 +549,7 @@ namespace PrimeTests.Controllers
                 Assert.Contains("Enrolment not found with id " + notFoundEnrolmentId, body);
 
                 // make sure the same amount of enrolments exist
-                enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
             }
         }
@@ -477,11 +560,11 @@ namespace PrimeTests.Controllers
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
                 // initialize the data
-                var _service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
-                ((EnrolmentServiceMock)_service).InitializeDb();
+                var service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
+                ((EnrolmentServiceMock)service).InitializeDb();
 
                 // check the initial state
-                var enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                var enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
 
                 // pick off an enrolment to update
@@ -489,11 +572,14 @@ namespace PrimeTests.Controllers
                 int enrolmentId = (int)enrolment.Id;
 
                 // update the status to 'Submitted'
-                await _service.CreateEnrolmentStatusAsync(enrolmentId, new Status { Code = Status.SUBMITTED_CODE, Name = "Submitted" });
-                enrolment = await _service.GetEnrolmentAsync(enrolmentId);
+                await service.CreateEnrolmentStatusAsync(enrolmentId, new Status { Code = Status.SUBMITTED_CODE, Name = "Submitted" });
+                enrolment = await service.GetEnrolmentAsync(enrolmentId);
+
+                // create a request with an AUTH token
+                var request = TestUtils.CreateRequest<Enrolment>(HttpMethod.Put, $"/api/enrolments/{enrolmentId}", enrolment.Enrollee.UserId, enrolment);
 
                 // call the controller to update the enrolment
-                var response = await _client.PutAsJsonAsync("/api/enrolments/" + enrolmentId, enrolment);
+                var response = await _client.SendAsync(request);
                 Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
                 // check for the expected error messages
@@ -501,7 +587,37 @@ namespace PrimeTests.Controllers
                 Assert.Contains("Enrolment can not be updated when the current status is not 'In Progress'.", body);
 
                 // make sure the same amount of enrolments exist
-                enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
+            }
+        }
+
+        [Fact]
+        public async void testUpdateEnrolment_403_Forbidden()
+        {
+            using (var scope = _factory.Server.Host.Services.CreateScope())
+            {
+                // initialize the data
+                var service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
+                ((EnrolmentServiceMock)service).InitializeDb();
+
+                // check the initial state
+                var enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
+
+                // pick off an enrolment to update
+                Enrolment enrolment = enrolments.First();
+                int enrolmentId = (int)enrolment.Id;
+
+                // create a request with an AUTH token
+                var request = TestUtils.CreateRequest<Enrolment>(HttpMethod.Put, $"/api/enrolments/{enrolmentId}", Guid.NewGuid(), enrolment);
+
+                // call the controller to update the enrolment with a different userId
+                var response = await _client.SendAsync(request);
+                Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+
+                // make sure the same amount of enrolments exist
+                enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
             }
         }
@@ -512,19 +628,22 @@ namespace PrimeTests.Controllers
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
                 // initialize the data
-                var _service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
-                ((EnrolmentServiceMock)_service).InitializeDb();
+                var service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
+                ((EnrolmentServiceMock)service).InitializeDb();
 
                 // check the initial state
-                var enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                var enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
 
                 // pick off an enrolment to get
                 Enrolment expectedEnrolment = enrolments.First();
                 int expectedEnrolmentId = (int)expectedEnrolment.Id;
 
+                // create a request with an AUTH token
+                var request = TestUtils.CreateRequest(HttpMethod.Get, $"/api/enrolments/{expectedEnrolmentId}/availableStatuses", expectedEnrolment.Enrollee.UserId);
+
                 // try to get the available enrolment statuses
-                var response = await _client.GetAsync("/api/enrolments/" + expectedEnrolmentId + "/availableStatuses");
+                var response = await _client.SendAsync(request);
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
                 // check that the statuses were returned
@@ -534,7 +653,7 @@ namespace PrimeTests.Controllers
                 Assert.Contains(new Status { Code = Status.SUBMITTED_CODE }, statuses);
 
                 // make sure the same amount of enrolments exist
-                enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
             }
         }
@@ -545,20 +664,55 @@ namespace PrimeTests.Controllers
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
                 // initialize the data
-                var _service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
-                ((EnrolmentServiceMock)_service).InitializeDb();
+                var service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
+                ((EnrolmentServiceMock)service).InitializeDb();
 
                 // check the initial state
-                var enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                var enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
 
-                // try to get an enrolment that does not exist
+                // get an enrolment id that does not exist
                 int notFoundEnrolmentId = EnrolmentServiceMock.MAX_ENROLMENT_ID + 1;
-                var response = await _client.GetAsync("/api/enrolments/" + notFoundEnrolmentId + "/availableStatuses");
+
+                // create a request with an AUTH token
+                var request = TestUtils.CreateRequest(HttpMethod.Get, $"/api/enrolments/{notFoundEnrolmentId}/availableStatuses", Guid.NewGuid());
+
+                // try to get an enrolment that does not exist
+                var response = await _client.SendAsync(request);
                 Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
 
                 // make sure the same amount of enrolments exist
-                enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
+            }
+        }
+
+        [Fact]
+        public async void testGetAvailableEnrolmentStatuses_403_Forbidden()
+        {
+            using (var scope = _factory.Server.Host.Services.CreateScope())
+            {
+                // initialize the data
+                var service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
+                ((EnrolmentServiceMock)service).InitializeDb();
+
+                // check the initial state
+                var enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
+
+                // pick off an enrolment to get
+                Enrolment expectedEnrolment = enrolments.First();
+                int expectedEnrolmentId = (int)expectedEnrolment.Id;
+
+                // create a request with an AUTH token
+                var request = TestUtils.CreateRequest(HttpMethod.Get, $"/api/enrolments/{expectedEnrolmentId}/availableStatuses", Guid.NewGuid());
+
+                // try to get the available enrolment statuses with a different userId
+                var response = await _client.SendAsync(request);
+                Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+
+                // make sure the same amount of enrolments exist
+                enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
             }
         }
@@ -569,19 +723,22 @@ namespace PrimeTests.Controllers
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
                 // initialize the data
-                var _service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
-                ((EnrolmentServiceMock)_service).InitializeDb();
+                var service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
+                ((EnrolmentServiceMock)service).InitializeDb();
 
                 // check the initial state
-                var enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                var enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
 
                 // pick off an enrolment to get
                 Enrolment expectedEnrolment = enrolments.First();
                 int expectedEnrolmentId = (int)expectedEnrolment.Id;
 
+                // create a request with an AUTH token
+                var request = TestUtils.CreateRequest(HttpMethod.Get, $"/api/enrolments/{expectedEnrolmentId}/statuses", expectedEnrolment.Enrollee.UserId);
+
                 // try to get the enrolment statuses
-                var response = await _client.GetAsync("/api/enrolments/" + expectedEnrolmentId + "/statuses");
+                var response = await _client.SendAsync(request);
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
                 // check that the enrolment statuses were returned
@@ -591,7 +748,7 @@ namespace PrimeTests.Controllers
                 Assert.Equal(Status.IN_PROGRESS_CODE, enrolmentStatuses.First().StatusCode);
 
                 // make sure the same amount of enrolments exist
-                enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
             }
         }
@@ -602,20 +759,55 @@ namespace PrimeTests.Controllers
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
                 // initialize the data
-                var _service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
-                ((EnrolmentServiceMock)_service).InitializeDb();
+                var service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
+                ((EnrolmentServiceMock)service).InitializeDb();
 
                 // check the initial state
-                var enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                var enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
 
-                // try to get an enrolment that does not exist
+                // get an enrolment id that does not exist
                 int notFoundEnrolmentId = EnrolmentServiceMock.MAX_ENROLMENT_ID + 1;
-                var response = await _client.GetAsync("/api/enrolments/" + notFoundEnrolmentId + "/statuses");
+
+                // create a request with an AUTH token
+                var request = TestUtils.CreateRequest(HttpMethod.Get, $"/api/enrolments/{notFoundEnrolmentId}/statuses", Guid.NewGuid());
+
+                // try to get an enrolment that does not exist
+                var response = await _client.SendAsync(request);
                 Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
 
                 // make sure the same amount of enrolments exist
-                enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
+            }
+        }
+
+        [Fact]
+        public async void testGetEnrolmentStatuses_403_Forbidden()
+        {
+            using (var scope = _factory.Server.Host.Services.CreateScope())
+            {
+                // initialize the data
+                var service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
+                ((EnrolmentServiceMock)service).InitializeDb();
+
+                // check the initial state
+                var enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
+
+                // pick off an enrolment to get
+                Enrolment expectedEnrolment = enrolments.First();
+                int expectedEnrolmentId = (int)expectedEnrolment.Id;
+
+                // create a request with an AUTH token
+                var request = TestUtils.CreateRequest(HttpMethod.Get, $"/api/enrolments/{expectedEnrolmentId}/statuses", Guid.NewGuid());
+
+                // try to get the enrolment statuses with a different userId
+                var response = await _client.SendAsync(request);
+                Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+
+                // make sure the same amount of enrolments exist
+                enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
             }
         }
@@ -626,19 +818,22 @@ namespace PrimeTests.Controllers
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
                 // initialize the data
-                var _service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
-                ((EnrolmentServiceMock)_service).InitializeDb();
+                var service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
+                ((EnrolmentServiceMock)service).InitializeDb();
 
                 // check the initial state
-                var enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                var enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
 
                 // pick off an enrolment to get
                 Enrolment expectedEnrolment = enrolments.First();
                 int expectedEnrolmentId = (int)expectedEnrolment.Id;
 
+                // create a request with an AUTH token
+                var request = TestUtils.CreateRequest<Status>(HttpMethod.Post, $"/api/enrolments/{expectedEnrolmentId}/statuses", expectedEnrolment.Enrollee.UserId, new Status { Code = Status.SUBMITTED_CODE });
+
                 // try to create a new enrolment status
-                var response = await _client.PostAsJsonAsync("/api/enrolments/" + expectedEnrolmentId + "/statuses", new Status { Code = Status.SUBMITTED_CODE });
+                var response = await _client.SendAsync(request);
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
                 // check that the statuses were returned
@@ -647,7 +842,7 @@ namespace PrimeTests.Controllers
                 Assert.Equal(Status.SUBMITTED_CODE, enrolmentStatus.StatusCode);
 
                 // make sure the same amount of enrolments exist
-                enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
             }
         }
@@ -658,20 +853,25 @@ namespace PrimeTests.Controllers
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
                 // initialize the data
-                var _service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
-                ((EnrolmentServiceMock)_service).InitializeDb();
+                var service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
+                ((EnrolmentServiceMock)service).InitializeDb();
 
                 // check the initial state
-                var enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                var enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
 
                 // try to get an enrolment that does not exist
                 int notFoundEnrolmentId = EnrolmentServiceMock.MAX_ENROLMENT_ID + 1;
-                var response = await _client.PostAsJsonAsync("/api/enrolments/" + notFoundEnrolmentId + "/statuses", new Status { Code = Status.SUBMITTED_CODE });
+
+                // create a request with an AUTH token
+                var request = TestUtils.CreateRequest<Status>(HttpMethod.Post, $"/api/enrolments/{notFoundEnrolmentId}/statuses", Guid.NewGuid(), new Status { Code = Status.SUBMITTED_CODE });
+
+                // try to get an enrolment that does not exist
+                var response = await _client.SendAsync(request);
                 Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
 
                 // make sure the same amount of enrolments exist
-                enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
             }
         }
@@ -682,19 +882,22 @@ namespace PrimeTests.Controllers
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
                 // initialize the data
-                var _service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
-                ((EnrolmentServiceMock)_service).InitializeDb();
+                var service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
+                ((EnrolmentServiceMock)service).InitializeDb();
 
                 // check the initial state
-                var enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                var enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
 
                 // pick off an enrolment to get
                 Enrolment expectedEnrolment = enrolments.First();
                 int expectedEnrolmentId = (int)expectedEnrolment.Id;
 
+                // create a request with an AUTH token
+                var request = TestUtils.CreateRequest<Status>(HttpMethod.Post, $"/api/enrolments/{expectedEnrolmentId}/statuses", expectedEnrolment.Enrollee.UserId, new Status { Name = "No Code" });
+
                 // try to create a new enrolment status
-                var response = await _client.PostAsJsonAsync("/api/enrolments/" + expectedEnrolmentId + "/statuses", new Status { Name = "No Code" });
+                var response = await _client.SendAsync(request);
                 Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
                 // check for the expected error messages
@@ -702,7 +905,7 @@ namespace PrimeTests.Controllers
                 Assert.Contains("Status Code is required to create statuses.", body);
 
                 // make sure the same amount of enrolments exist
-                enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
             }
         }
@@ -713,19 +916,22 @@ namespace PrimeTests.Controllers
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
                 // initialize the data
-                var _service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
-                ((EnrolmentServiceMock)_service).InitializeDb();
+                var service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
+                ((EnrolmentServiceMock)service).InitializeDb();
 
                 // check the initial state
-                var enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                var enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
 
                 // pick off an enrolment to get
                 Enrolment expectedEnrolment = enrolments.First();
                 int expectedEnrolmentId = (int)expectedEnrolment.Id;
 
+                // create a request with an AUTH token
+                var request = TestUtils.CreateRequest<Status>(HttpMethod.Post, $"/api/enrolments/{expectedEnrolmentId}/statuses", expectedEnrolment.Enrollee.UserId, new Status { Code = Status.APPROVED_CODE });
+
                 // try to create a new enrolment status
-                var response = await _client.PostAsJsonAsync("/api/enrolments/" + expectedEnrolmentId + "/statuses", new Status { Code = Status.APPROVED_CODE });
+                var response = await _client.SendAsync(request);
                 Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
                 // check for the expected error messages
@@ -733,7 +939,37 @@ namespace PrimeTests.Controllers
                 Assert.Contains("Cannot change from current Status Code: " + Status.IN_PROGRESS_CODE + " to the new Status Code: " + Status.APPROVED_CODE, body);
 
                 // make sure the same amount of enrolments exist
-                enrolments = await _service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
+            }
+        }
+
+        [Fact]
+        public async void testCreateEnrolmentStatuses_403_Forbidden()
+        {
+            using (var scope = _factory.Server.Host.Services.CreateScope())
+            {
+                // initialize the data
+                var service = scope.ServiceProvider.GetRequiredService<IEnrolmentService>();
+                ((EnrolmentServiceMock)service).InitializeDb();
+
+                // check the initial state
+                var enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
+                Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
+
+                // pick off an enrolment to get
+                Enrolment expectedEnrolment = enrolments.First();
+                int expectedEnrolmentId = (int)expectedEnrolment.Id;
+
+                // create a request with an AUTH token
+                var request = TestUtils.CreateRequest<Status>(HttpMethod.Post, $"/api/enrolments/{expectedEnrolmentId}/statuses", Guid.NewGuid(), new Status { Code = Status.SUBMITTED_CODE });
+
+                // try to create a new enrolment status with a different userId
+                var response = await _client.SendAsync(request);
+                Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+
+                // make sure the same amount of enrolments exist
+                enrolments = await service.GetEnrolmentsAsync(EMPTY_ENROLMENT_SEARCH_OPTIONS);
                 Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrolments.Count());
             }
         }

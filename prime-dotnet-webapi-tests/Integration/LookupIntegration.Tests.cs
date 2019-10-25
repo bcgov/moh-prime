@@ -1,4 +1,6 @@
+using System;
 using System.Net;
+using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Prime.Models;
 using PrimeTests.Utils;
@@ -17,7 +19,11 @@ namespace PrimeTests.Integration
         {
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
-                var response = await _client.GetAsync("/api/lookups");
+                // create a request with an AUTH token
+                var request = TestUtils.CreateRequest(HttpMethod.Get, "/api/lookups", Guid.NewGuid());
+
+                // send the request
+                var response = await _client.SendAsync(request);
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
                 var apiResponse = TestUtils.DeserializeResponse<ApiOkResponse<LookupEntity>>(response).Result;

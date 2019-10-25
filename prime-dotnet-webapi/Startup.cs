@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 using Prime.Services;
+using Prime.Infrastructure;
 
 namespace Prime
 {
@@ -29,10 +30,15 @@ namespace Prime
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IEnrolmentService, DefaultEnrolmentService>();
             services.AddScoped<ILookupService, DefaultLookupService>();
+            services.AddScoped<IEnrolmentService, DefaultEnrolmentService>();
+            services.AddScoped<IEnrolleeService, DefaultEnrolleeService>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services
+                .AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                // add a convertor <globally> to change empty strings into null on serialization
+                .AddJsonOptions(options => options.SerializerSettings.Converters.Add(new EmptyStringToNullJsonConverter()));
 
             services.AddCors(options =>
             {

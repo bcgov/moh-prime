@@ -3,6 +3,8 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
+using SimpleBase;
+
 using Prime.Models;
 using Prime.Services;
 using PrimeTests.Utils;
@@ -12,6 +14,22 @@ namespace PrimeTests.Services
     public class DefaultEnrolmentServiceTests : BaseServiceTests<DefaultEnrolmentService>
     {
         private static EnrolmentSearchOptions EMPTY_ENROLMENT_SEARCH_OPTIONS = new EnrolmentSearchOptions();
+
+        [Fact]
+        public void testGuid_Ascii85_Encoding()
+        {
+            Guid guid = Guid.NewGuid();
+            Assert.NotEqual(Guid.Empty, guid);
+
+            string encodedString = Base85.Ascii85.Encode(guid.ToByteArray());
+            Assert.NotNull(encodedString);
+            Assert.Equal(20, encodedString.Length);
+
+            Span<byte> decodedBytes = Base85.Ascii85.Decode(encodedString);
+            Guid decodedGuid = new Guid(decodedBytes);
+            Assert.NotEqual(Guid.Empty, decodedGuid);
+            Assert.Equal(guid, decodedGuid);
+        }
 
         [Fact]
         public async void testEnrolmentExists()
@@ -225,7 +243,7 @@ namespace PrimeTests.Services
         public async void testGetAvailableEnrolmentStatuses()
         {
             var testEnrolment = TestUtils.EnrolmentFaker.Generate();
-             Guid expectedUserId = testEnrolment.Enrollee.UserId;
+            Guid expectedUserId = testEnrolment.Enrollee.UserId;
 
             // create the enrolment directly to the context
             _dbContext.Enrolments.Add(testEnrolment);
@@ -243,7 +261,7 @@ namespace PrimeTests.Services
         public async void testGetEnrolmentStatuses()
         {
             var testEnrolment = TestUtils.EnrolmentFaker.Generate();
-             Guid expectedUserId = testEnrolment.Enrollee.UserId;
+            Guid expectedUserId = testEnrolment.Enrollee.UserId;
 
             // create the enrolment directly to the context
             _dbContext.Enrolments.Add(testEnrolment);
@@ -268,10 +286,35 @@ namespace PrimeTests.Services
             await _dbContext.SaveChangesAsync();
             int expectedEnrolmentId = (int)testEnrolment.Id;
 
-            // get the enrolment statuses through the service layer code
+            // create the enrolment status through the service layer code
             var enrolmentStatus = await _service.CreateEnrolmentStatusAsync((int)expectedEnrolmentId, _dbContext.Statuses.Single(s => s.Code == Status.SUBMITTED_CODE));
             Assert.NotNull(enrolmentStatus);
             Assert.Equal(_dbContext.Statuses.Single(s => s.Code == Status.SUBMITTED_CODE), enrolmentStatus.Status);
+        }
+
+        [Fact]
+        public async void testCreateEnrolmentStatuses_Generate_LicensePlate()
+        {
+            var testEnrolment = TestUtils.EnrolmentFaker.Generate();
+            // manually change the status to approved
+            testEnrolment.CurrentStatus.StatusCode = Status.APPROVED_CODE;
+            Guid expectedUserId = testEnrolment.Enrollee.UserId;
+
+            // create the enrolment directly to the context
+            _dbContext.Enrolments.Add(testEnrolment);
+            await _dbContext.SaveChangesAsync();
+            int expectedEnrolmentId = (int)testEnrolment.Id;
+
+            // create the enrolment status through the service layer code
+            var enrolmentStatus = await _service.CreateEnrolmentStatusAsync((int)expectedEnrolmentId, _dbContext.Statuses.Single(s => s.Code == Status.ACCEPTED_TOS_CODE));
+            Assert.NotNull(enrolmentStatus);
+            Assert.Equal(_dbContext.Statuses.Single(s => s.Code == Status.ACCEPTED_TOS_CODE), enrolmentStatus.Status);
+
+            // get the enrollee object, and check that there is a 20 character license plate
+            var enrollee = _dbContext.Enrollees.Single(e => e.UserId == expectedUserId);
+            Assert.NotNull(enrollee);
+            Assert.NotNull(enrollee.LicensePlate);
+            Assert.Equal(20, enrollee.LicensePlate.Length);
         }
 
         [Fact]

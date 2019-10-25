@@ -82,11 +82,6 @@ namespace Prime
 
         private static Task OnTokenValidated(TokenValidatedContext context)
         {
-            // add some constants for the KEYCLOAK access token keys
-            const string REALM_ACCESS_KEY = "realm_access";
-            const string RESOURCE_ACCESS_KEY = "resource_access";
-            const string ROLES_KEY = "roles";
-
             if (context.SecurityToken is JwtSecurityToken accessToken
                     && context.Principal.Identity is ClaimsIdentity identity
                     && identity.IsAuthenticated)
@@ -96,43 +91,55 @@ namespace Prime
                 identity.AddClaim(new Claim(ClaimTypes.Name, accessToken.Subject));
 
                 // flatten realm_access because Microsoft identity model doesn't support nested claims
-                if (identity.HasClaim((claim) => claim.Type == REALM_ACCESS_KEY))
-                {
-                    var realmAccessClaim = identity.Claims.Single((claim) => claim.Type == REALM_ACCESS_KEY);
-                    var realmAccessAsDict = JsonConvert.DeserializeObject<Dictionary<string, string[]>>(realmAccessClaim.Value);
+                AddRolesForRealmAccessClaims(identity);
 
-                    if (realmAccessAsDict.ContainsKey(ROLES_KEY))
+                // flatten resource_access because Microsoft identity model doesn't support nested claims
+                AddRolesForResourceAccessClaims(identity);
+            }
+
+            return Task.CompletedTask;
+        }
+
+        private static void AddRolesForRealmAccessClaims(ClaimsIdentity identity)
+        {
+            // flatten realm_access because Microsoft identity model doesn't support nested claims
+            if (identity.HasClaim((claim) => claim.Type == PrimeConstants.KEYCLOAK_REALM_ACCESS_KEY))
+            {
+                var realmAccessClaim = identity.Claims.Single((claim) => claim.Type == PrimeConstants.KEYCLOAK_REALM_ACCESS_KEY);
+                var realmAccessAsDict = JsonConvert.DeserializeObject<Dictionary<string, string[]>>(realmAccessClaim.Value);
+
+                if (realmAccessAsDict.ContainsKey(PrimeConstants.KEYCLOAK_ROLES_KEY))
+                {
+                    foreach (var role in realmAccessAsDict[PrimeConstants.KEYCLOAK_ROLES_KEY])
                     {
-                        foreach (var role in realmAccessAsDict[ROLES_KEY])
+                        identity.AddClaim(new Claim(ClaimTypes.Role, role));
+                    }
+                }
+            }
+        }
+
+        private static void AddRolesForResourceAccessClaims(ClaimsIdentity identity)
+        {
+            // flatten resource_access because Microsoft identity model doesn't support nested claims
+            if (identity.HasClaim((claim) => claim.Type == PrimeConstants.KEYCLOAK_RESOURCE_ACCESS_KEY))
+            {
+                var resourceAccessClaim = identity.Claims.Single((claim) => claim.Type == PrimeConstants.KEYCLOAK_RESOURCE_ACCESS_KEY);
+                var resourceAccessAsDict = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string[]>>>(resourceAccessClaim.Value);
+
+                // get the roles from each potential client key that we care about
+                foreach (var clientId in PrimeConstants.PRIME_CLIENT_IDS)
+                {
+                    Dictionary<string, string[]> clientKeyValue;
+                    if (resourceAccessAsDict.TryGetValue(clientId, out clientKeyValue)
+                            && clientKeyValue.ContainsKey(PrimeConstants.KEYCLOAK_ROLES_KEY))
+                    {
+                        foreach (var role in clientKeyValue[PrimeConstants.KEYCLOAK_ROLES_KEY])
                         {
                             identity.AddClaim(new Claim(ClaimTypes.Role, role));
                         }
                     }
                 }
-
-                // flatten resource_access because Microsoft identity model doesn't support nested claims
-                if (identity.HasClaim((claim) => claim.Type == RESOURCE_ACCESS_KEY))
-                {
-                    var resourceAccessClaim = identity.Claims.Single((claim) => claim.Type == RESOURCE_ACCESS_KEY);
-                    var resourceAccessAsDict = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string[]>>>(resourceAccessClaim.Value);
-
-                    // get the roles from each potential client key that we care about
-                    foreach (var clientId in PrimeConstants.PRIME_CLIENT_IDS)
-                    {
-                        Dictionary<string, string[]> clientKeyValue;
-                        if (resourceAccessAsDict.TryGetValue(clientId, out clientKeyValue)
-                                && clientKeyValue.ContainsKey(ROLES_KEY))
-                        {
-                            foreach (var role in clientKeyValue[ROLES_KEY])
-                            {
-                                identity.AddClaim(new Claim(ClaimTypes.Role, role));
-                            }
-                        }
-                    }
-                }
             }
-
-            return Task.CompletedTask;
         }
     }
 }
