@@ -33,6 +33,18 @@ export class ProvisionResource {
       );
   }
 
+  public enrolment(id: number, statusCode?: number): Observable<Enrolment> {
+    const params = (statusCode) ? { statusCode: `${statusCode}` } : {};
+    return this.http.get(`${this.config.apiEndpoint}/enrolments/${id}`, { params })
+      .pipe(
+        map((response: PrimeHttpResponse) => response.result),
+        map((enrolment: Enrolment) => {
+          this.logger.info('ENROLMENT', enrolment);
+          return enrolment;
+        })
+      );
+  }
+
   public updateEnrolmentStatus(id: number, statusCode: number): Observable<Config[]> {
     const payload = { code: statusCode };
     return this.http.post(`${this.config.apiEndpoint}/enrolments/${id}/statuses`, payload)

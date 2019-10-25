@@ -13,7 +13,6 @@ import { ConfirmationComponent } from './pages/confirmation/confirmation.compone
 
 import { CollegeCertificationsComponent } from './shared/components/college-certifications/college-certifications.component';
 import { PageTitleComponent } from './shared/components/page-title/page-title.component';
-import { SubHeaderComponent } from './shared/components/sub-header/sub-header.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +25,6 @@ import { SubHeaderComponent } from './shared/components/sub-header/sub-header.co
     ConfirmationComponent,
     CollegeCertificationsComponent,
     PageTitleComponent,
-    SubHeaderComponent
   ],
   imports: [
     SharedModule,
