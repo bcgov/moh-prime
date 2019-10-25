@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 using Prime.Services;
+using Prime.Infrastructure;
 
 namespace Prime
 {
@@ -33,7 +34,11 @@ namespace Prime
             services.AddScoped<IEnrolmentService, DefaultEnrolmentService>();
             services.AddScoped<IEnrolleeService, DefaultEnrolleeService>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services
+                .AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                // add a convertor <globally> to change empty strings into null on serialization
+                .AddJsonOptions(options => options.SerializerSettings.Converters.Add(new EmptyStringToNullJsonConverter()));
 
             services.AddCors(options =>
             {

@@ -61,7 +61,7 @@ namespace PrimeTests.Mocks
 
         public Task<Enrolment> GetEnrolmentForUserIdAsync(Guid userId)
         {
-            throw new System.NotImplementedException();
+            return Task.FromResult(this.GetHolder<int, Enrolment>().Values?.ToList().SingleOrDefault(e => e.Enrollee.UserId == userId));
         }
 
         public Task<IEnumerable<Enrolment>> GetEnrolmentsAsync(EnrolmentSearchOptions searchOptions)
