@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using SimpleBase;
 using Prime.Models;
 
 namespace Prime.Services
@@ -125,7 +126,7 @@ namespace Prime.Services
                 query = query.Where(e => e.EnrolmentStatuses.Single(es => es.IsCurrent).StatusCode == (short)searchOptions.statusCode);
             }
 
-            var items = await query.ToArrayAsync();
+            var items = await query.ToListAsync();
 
             return items;
         }
@@ -145,7 +146,7 @@ namespace Prime.Services
                 .Where(e => e.Enrollee.UserId == userId)
                 ;
 
-            var items = await query.ToArrayAsync();
+            var items = await query.ToListAsync();
 
             return items;
         }
@@ -293,7 +294,7 @@ namespace Prime.Services
                 .Where(es => es.EnrolmentId == enrolmentId)
                 ;
 
-            var items = await query.ToArrayAsync();
+            var items = await query.ToListAsync();
 
             return items;
         }
@@ -322,6 +323,15 @@ namespace Prime.Services
                 var createdEnrolmentStatus = new EnrolmentStatus { EnrolmentId = enrolmentId, StatusCode = status.Code, StatusDate = DateTime.Now, IsCurrent = true };
                 _context.EnrolmentStatuses.Add(createdEnrolmentStatus);
 
+                if (Status.ACCEPTED_TOS_CODE.Equals(status?.Code))
+                {
+                    //create the license plate for this enrollee
+                    var enrollee = await _context.Enrollees
+                        .SingleAsync(e => e.Id == enrolment.EnrolleeId);
+
+                    enrollee.LicensePlate = this.GenerateLicensePlate();
+                }
+
                 var created = await _context.SaveChangesAsync();
                 if (created < 1) throw new InvalidOperationException("Could not create enrolment status.");
 
@@ -329,6 +339,11 @@ namespace Prime.Services
             }
 
             throw new InvalidOperationException("Could not create enrolment status, status change is not allowed.");
+        }
+
+        private string GenerateLicensePlate()
+        {
+            return Base85.Ascii85.Encode(Guid.NewGuid().ToByteArray());
         }
 
         public bool IsStatusChangeAllowed(Status startingStatus, Status endingStatus)
