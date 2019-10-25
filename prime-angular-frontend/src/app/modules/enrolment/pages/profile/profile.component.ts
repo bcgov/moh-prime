@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
@@ -66,9 +66,13 @@ export class ProfileComponent implements OnInit {
   public onSubmit() {
     if (this.form.valid) {
       const payload = this.enrolmentStateService.enrolment;
+
       const request$ = (this.isNewEnrolment)
         ? this.enrolmentResource.createEnrolment(payload)
-          .pipe(map((enrolment: Enrolment) => this.enrolmentStateService.enrolment = enrolment))
+          .pipe(
+            tap(() => this.isNewEnrolment = false),
+            map((enrolment: Enrolment) => this.enrolmentStateService.enrolment = enrolment)
+          )
         : this.enrolmentResource.updateEnrolment(payload);
 
       request$
@@ -166,8 +170,5 @@ export class ProfileComponent implements OnInit {
       mailingAddress.get('city').value ||
       mailingAddress.get('postal').value
     );
-
-    // TODO: when preferred name(s) is on should anything be required?
-    // TODO: when mailing address is toggled then validation should be applied or removed
   }
 }
