@@ -27,7 +27,7 @@
     <th mat-header-cell
         *matHeaderCellDef> Application Date </th>
     <td mat-cell
-        *matCellDef="let enrolment"> {{ enrolment.appliedDate | date: 'MMM d, y' }} </td>
+        *matCellDef="let enrolment"> {{ enrolment.appliedDate | formatDate }} </td>
   </ng-container>
 
   <!-- Name Column -->
@@ -55,7 +55,7 @@
     <th mat-header-cell
         *matHeaderCellDef> Approval Date </th>
     <td mat-cell
-        *matCellDef="let enrolment"> {{ enrolment.approvedDate | date: 'MMM d, y' }} </td>
+        *matCellDef="let enrolment"> {{ enrolment.approvedDate | formatDate }} </td>
   </ng-container>
 
   <!-- Actions Column -->
