@@ -113,13 +113,6 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiCreatedResponse<Enrolment>), StatusCodes.Status201Created)]
         public async Task<ActionResult<Enrolment>> CreateEnrolment(Enrolment enrolment)
         {
-            if (enrolment.Enrollee == null
-                    || enrolment.Enrollee.UserId == null)
-            {
-                this.ModelState.AddModelError("Enrollee.UserId", "Enrollee User Id is required to create an enrolment.");
-                return BadRequest(new ApiBadRequestResponse(this.ModelState));
-            }
-
             // check to see if this userId already has an enrolment, if so, reject creating another
             var existingEnrolment = await _enrolmentService.GetEnrolmentForUserIdAsync(enrolment.Enrollee.UserId);
 
