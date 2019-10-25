@@ -21,7 +21,8 @@ RUN sed s/'$REDIRECT_URL'/$REDIRECT_URL/g /usr/src/app/src/environments/environm
     /usr/src/app/midpoint.sh && \
     cat /usr/src/app/src/environments/environment.prod.ts && \
     ng build --prod && \
-    echo "NPM packages installed..."
+    echo "NPM packages installed..." && \
+    printenv
 
 FROM nginx:1.15-alpine
 COPY --from=build-deps /usr/src/app/dist/angular-frontend /usr/share/nginx/html
