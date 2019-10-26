@@ -35,6 +35,7 @@ function build() {
     -p OC_NAMESPACE="$PROJECT_PREFIX" \
     -p OC_APP="$2" | oc apply -f - --namespace="$PROJECT_PREFIX-$2" 
     echo "Building oc start-build $2$SUFFIX -n $PROJECT_PREFIX-$2 --wait --follow ..."
+    printenv
     oc start-build "$2$SUFFIX" -n "$PROJECT_PREFIX-$2" --wait --follow
 }
 
