@@ -15,6 +15,7 @@ import { FirstKeyPipe } from '@shared/pipes/first-key.pipe';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { FormControlValidityDirective } from '@shared/directives/form-control-validity.directive';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { ConfirmDiscardChangesDialogComponent } from '@shared/components/dialogs/confirm-discard-changes-dialog/confirm-discard-changes-dialog.component';
 import { HeaderComponent } from '@shared/components/header/header.component';
 import { SubHeaderComponent } from '@shared/components/sub-header/sub-header.component';
@@ -28,6 +29,7 @@ import { SubHeaderComponent } from '@shared/components/sub-header/sub-header.com
     FirstKeyPipe,
     FormControlValidityDirective,
     DashboardComponent,
+    ConfirmDialogComponent,
     ConfirmDiscardChangesDialogComponent,
     HeaderComponent,
     SubHeaderComponent,
@@ -59,6 +61,7 @@ import { SubHeaderComponent } from '@shared/components/sub-header/sub-header.com
     SubHeaderComponent
   ],
   entryComponents: [
+    ConfirmDialogComponent,
     ConfirmDiscardChangesDialogComponent
   ]
 })

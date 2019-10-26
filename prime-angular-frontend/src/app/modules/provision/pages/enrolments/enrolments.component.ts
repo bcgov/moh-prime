@@ -1,11 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource, MatSelectChange } from '@angular/material';
+import { MatTableDataSource, MatSelectChange, MatDialog } from '@angular/material';
+
+import { exhaustMap } from 'rxjs/operators';
+import { EMPTY } from 'rxjs';
 
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 import { ProvisionResource } from '@provision/shared/services/provision-resource.service';
 import { EnrolmentStatus } from '@provision/shared/enums/enrolment-status.enum';
@@ -25,6 +29,7 @@ export class EnrolmentsComponent implements OnInit {
     private configService: ConfigService,
     private provisionResource: ProvisionResource,
     private toastService: ToastService,
+    private dialog: MatDialog,
     private logger: LoggerService
   ) {
     this.columns = ['appliedDate', 'name', 'status', 'approvedDate', 'actions'];
@@ -36,6 +41,10 @@ export class EnrolmentsComponent implements OnInit {
     const statusCode = selection.value;
     this.filteredStatus = this.statuses.find(s => s.code === statusCode);
     this.getEnrolments(statusCode);
+  }
+
+  public canApproveOrDeny(currentStatusCode: number) {
+    return (currentStatusCode === EnrolmentStatus.SUBMITTED);
   }
 
   public approveEnrolment(id: number) {
@@ -67,7 +76,13 @@ export class EnrolmentsComponent implements OnInit {
   }
 
   public deleteEnrolment(id: number) {
-    this.provisionResource.deleteEnrolment(id)
+    this.dialog.open(ConfirmDialogComponent, { data: {} })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result: boolean) =>
+          (result) ? this.provisionResource.deleteEnrolment(id) : EMPTY
+        )
+      )
       .subscribe(
         (enrolment: Enrolment) => {
           this.toastService.openSuccessToast('Enrolment has been deleted');

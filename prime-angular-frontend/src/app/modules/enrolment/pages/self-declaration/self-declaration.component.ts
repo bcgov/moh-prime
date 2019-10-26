@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
@@ -9,8 +9,9 @@ import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { ConfirmDiscardChangesDialogComponent } from '@shared/components/dialogs/confirm-discard-changes-dialog/confirm-discard-changes-dialog.component';
 import { Enrolment } from '@shared/models/enrolment.model';
-import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
-import { EnrolmentResource } from '../../shared/services/enrolment-resource.service';
+import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { FormUtilsService } from '@enrolment/shared/services/form-utils.service';
 
 // TODO: make YesNo into a component and use projection for content
 @Component({
@@ -30,40 +31,41 @@ export class SelfDeclarationComponent implements OnInit {
     private dialog: MatDialog,
     private enrolmentStateService: EnrolmentStateService,
     private enrolmentResource: EnrolmentResource,
+    private formUtilsService: FormUtilsService,
     private toastService: ToastService,
     private logger: LoggerService
   ) { }
 
-  public get hasConviction(): FormGroup {
-    return this.form.get('hasConviction') as FormGroup;
+  public get hasConviction(): FormControl {
+    return this.form.get('hasConviction') as FormControl;
   }
 
-  public get hasConvictionDetails(): FormGroup {
-    return this.form.get('hasConvictionDetails') as FormGroup;
+  public get hasConvictionDetails(): FormControl {
+    return this.form.get('hasConvictionDetails') as FormControl;
   }
 
-  public get hasRegistrationSuspended(): FormGroup {
-    return this.form.get('hasRegistrationSuspended') as FormGroup;
+  public get hasRegistrationSuspended(): FormControl {
+    return this.form.get('hasRegistrationSuspended') as FormControl;
   }
 
-  public get hasRegistrationSuspendedDetails(): FormGroup {
-    return this.form.get('hasRegistrationSuspendedDetails') as FormGroup;
+  public get hasRegistrationSuspendedDetails(): FormControl {
+    return this.form.get('hasRegistrationSuspendedDetails') as FormControl;
   }
 
-  public get hasDisciplinaryAction(): FormGroup {
-    return this.form.get('hasDisciplinaryAction') as FormGroup;
+  public get hasDisciplinaryAction(): FormControl {
+    return this.form.get('hasDisciplinaryAction') as FormControl;
   }
 
-  public get hasDisciplinaryActionDetails(): FormGroup {
-    return this.form.get('hasDisciplinaryActionDetails') as FormGroup;
+  public get hasDisciplinaryActionDetails(): FormControl {
+    return this.form.get('hasDisciplinaryActionDetails') as FormControl;
   }
 
-  public get hasPharmaNetSuspended(): FormGroup {
-    return this.form.get('hasPharmaNetSuspended') as FormGroup;
+  public get hasPharmaNetSuspended(): FormControl {
+    return this.form.get('hasPharmaNetSuspended') as FormControl;
   }
 
-  public get hasPharmaNetSuspendedDetails(): FormGroup {
-    return this.form.get('hasPharmaNetSuspendedDetails') as FormGroup;
+  public get hasPharmaNetSuspendedDetails(): FormControl {
+    return this.form.get('hasPharmaNetSuspendedDetails') as FormControl;
   }
 
   public onSubmit() {
@@ -83,6 +85,10 @@ export class SelfDeclarationComponent implements OnInit {
     } else {
       this.form.markAllAsTouched();
     }
+  }
+
+  public isRequired(path: string) {
+    this.formUtilsService.isRequired(this.form, path);
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
@@ -111,29 +117,18 @@ export class SelfDeclarationComponent implements OnInit {
   }
 
   private initForm() {
-    // TODO: make YES/NO into own component to encapsulate toggling
-    this.hasConviction.valueChanges.subscribe((value) => {
-      this.toggleValidators(value, 'hasConvictionDetails');
-    });
-    this.hasRegistrationSuspended.valueChanges.subscribe((value) => {
-      this.toggleValidators(value, 'hasRegistrationSuspendedDetails');
-    });
-    this.hasDisciplinaryAction.valueChanges.subscribe((value) => {
-      this.toggleValidators(value, 'hasDisciplinaryActionDetails');
-    });
-    this.hasPharmaNetSuspended.valueChanges.subscribe((value) => {
-      this.toggleValidators(value, 'hasPharmaNetSuspendedDetails');
-    });
+    // TODO: make YES/NO into own component to encapsulate toggling and markup
+    this.hasConviction.valueChanges.subscribe((value: boolean) => this.toggleValidators(value, this.hasConvictionDetails));
+    this.hasRegistrationSuspended.valueChanges.subscribe((value: boolean) => this.toggleValidators(value, this.hasRegistrationSuspendedDetails));
+    this.hasDisciplinaryAction.valueChanges.subscribe((value: boolean) => this.toggleValidators(value, this.hasDisciplinaryActionDetails));
+    this.hasPharmaNetSuspended.valueChanges.subscribe((value: boolean) => this.toggleValidators(value, this.hasPharmaNetSuspendedDetails));
   }
 
-  private toggleValidators(value: boolean, controlName: string) {
+  private toggleValidators(value: boolean, control: FormControl) {
     if (!value) {
-      this.form.get(controlName).clearValidators();
-      this.form.get(controlName).updateValueAndValidity();
-      this.form.get(controlName).reset();
+      this.formUtilsService.resetAndClearValidators(control);
     } else {
-      this.form.get(controlName).setValidators([Validators.required]);
-      this.form.get(controlName).updateValueAndValidity();
+      this.formUtilsService.setValidators(control, [Validators.required]);
     }
   }
 }

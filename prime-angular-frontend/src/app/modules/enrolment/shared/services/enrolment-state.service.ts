@@ -156,7 +156,7 @@ export class EnrolmentStateService {
       firstName: [{ value: null, disabled: true }, [Validators.required]],
       middleName: [{ value: null, disabled: false }, []],
       lastName: [{ value: null, disabled: true }, [Validators.required]],
-      dateOfBirth: [{ value: null, disabled: false }, []],
+      dateOfBirth: [{ value: null, disabled: false }, [Validators.required]],
       preferredFirstName: [null, []],
       preferredMiddleName: [null, []],
       preferredLastName: [null, []],
@@ -168,18 +168,21 @@ export class EnrolmentStateService {
         postal: [{ value: null, disabled: false }, [Validators.required]]
       }),
       mailingAddress: this.fb.group({
-        country: [null, []],
-        province: [null, []],
-        street: [null, []],
-        city: [null, []],
-        postal: [null, []]
+        country: [{ value: null, disabled: false }, []],
+        province: [{ value: null, disabled: false }, []],
+        street: [{ value: null, disabled: false }, []],
+        city: [{ value: null, disabled: false }, []],
+        postal: [{ value: null, disabled: false }, []]
       })
     });
   }
 
   private buildContactForm(): FormGroup {
     return this.fb.group({
-      voicePhone: [null, [FormControlValidators.phone]],
+      voicePhone: [null, [
+        Validators.required,
+        FormControlValidators.phone
+      ]],
       voiceExtension: [null, [FormControlValidators.numeric]],
       hasContactEmail: [false, []],
       contactEmail: [null, [FormControlValidators.email]],
