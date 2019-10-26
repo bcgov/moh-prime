@@ -1,5 +1,3 @@
-def scannerHome = tool 'SonarQubeScanner';
-withSonarQubeEnv('sonarqube') 
 pipeline {
     agent none
     options {
