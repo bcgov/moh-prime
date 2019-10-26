@@ -23,7 +23,7 @@ function ocCleanPR(){
 # This takes in Git, Jenkins and system variables to the template that will be processed.
 function build()
     source $1.bash
-    echo "Building..."
+    echo "Building $1 to $2 ..."
     echo "$PROJECT_PREFIX-$2"
     oc process -f $TEMPLATE_DIRECTORY/$BUILD_CONFIG_TEMPLATE \
     -p NAME="$2" \
@@ -40,7 +40,7 @@ function build()
 
 function deploy()
     source $1.bash
-    echo "Building..."
+    echo "Deploying $1 to $2 ..."
     echo "$PROJECT_PREFIX-$2"
     oc process -f $TEMPLATE_DIRECTORY/$DEPLOY_CONFIG_TEMPLATE \
     -p NAME="$2" \
