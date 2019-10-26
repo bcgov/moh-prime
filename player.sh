@@ -1,5 +1,5 @@
 #!/bin/bash
-source project.conf
+source project.bash
 
 $OVERRIDES
 
@@ -22,7 +22,7 @@ function ocCleanPR(){
 # Build an deploy are very alike, require similar logic for config injestion.
 # This takes in Git, Jenkins and system variables to the template that will be processed.
 function build()
-    source $1.conf
+    source $1.bash
     echo "Building..."
     echo "$PROJECT_PREFIX-$2"
     oc process -f $TEMPLATE_DIRECTORY/$BUILD_CONFIG_TEMPLATE \
@@ -39,7 +39,7 @@ function build()
 }
 
 function deploy()
-    source $1.conf
+    source $1.bash
     echo "Building..."
     echo "$PROJECT_PREFIX-$2"
     oc process -f $TEMPLATE_DIRECTORY/$DEPLOY_CONFIG_TEMPLATE \
@@ -54,7 +54,7 @@ function deploy()
 }
 
 function ocApply() {
-    source $1.conf
+    source $1.bash
     echo "ocApply..."
     echo "$PROJECT_PREFIX-$2"
     if [ "$1" == "build" ];
