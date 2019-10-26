@@ -8,20 +8,21 @@ pipeline {
             agent { label 'master' }
             steps {
                 echo "Building ..."
-                sh "bash ./player.sh ocApply build postgresql dev"
-                sh "bash ./player.sh ocApply build dotnet-webapi dev"
-                sh "bash ./player.sh ocApply build angular-frontend dev"
+                sh "bash ./player.sh build database dev"
+                sh "bash ./player.sh build api dev"
+                sh "bash ./player.sh build frontend dev"
             }
         }
         stage('Deploy (DEV)') {
             agent { label 'master' }
             steps {
                 echo "Deploy (DEV) ..."
-                sh "bash ./player.sh ocApply deploy postgresql dev"
-                sh "bash ./player.sh ocApply deploy dotnet-webapi dev"
-                sh "bash ./player.sh ocApply deploy angular-frontend dev"
+                sh "bash ./player.sh deploy database dev"
+                sh "bash ./player.sh deploy api dev"
+                sh "bash ./player.sh deploy frontend dev"
             }
         }
+        /*
         stage('SonarQube analysis') {
         agent { label 'master' }
         steps { 
@@ -32,12 +33,13 @@ pipeline {
             agent { label 'master' }
             steps {
                 echo "Deploy (DEV) ..."
-                sh "export OC_APP=dev"
-                sh "bash ./player.sh sonar.pod "
-                sh "bash ./player.sh sonar dotnet-webapi dev"
-                sh "bash ./player.sh sonar angular-frontend dev"
+                //sh "export OC_APP=dev"
+                sh "bash ./player.sh sonar.pod"
+                //sh "bash ./player.sh sonar dotnet-webapi dev"
+                //sh "bash ./player.sh sonar angular-frontend dev"
             }
         }
+        */
         /*
         stage('Test') {
             agent { label 'master' }
