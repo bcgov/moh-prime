@@ -17,6 +17,8 @@ import { FormControlValidityDirective } from '@shared/directives/form-control-va
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 import { ConfirmDiscardChangesDialogComponent } from '@shared/components/dialogs/confirm-discard-changes-dialog/confirm-discard-changes-dialog.component';
 import { HeaderComponent } from '@shared/components/header/header.component';
+import { SubHeaderComponent } from '@shared/components/sub-header/sub-header.component';
+
 
 @NgModule({
   declarations: [
@@ -28,6 +30,7 @@ import { HeaderComponent } from '@shared/components/header/header.component';
     DashboardComponent,
     ConfirmDiscardChangesDialogComponent,
     HeaderComponent,
+    SubHeaderComponent,
     FormatDatePipe
   ],
   imports: [
@@ -52,7 +55,8 @@ import { HeaderComponent } from '@shared/components/header/header.component';
     FormatDatePipe,
     FormControlValidityDirective,
     DashboardComponent,
-    HeaderComponent
+    HeaderComponent,
+    SubHeaderComponent
   ],
   entryComponents: [
     ConfirmDiscardChangesDialogComponent

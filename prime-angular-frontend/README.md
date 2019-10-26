@@ -24,9 +24,7 @@ git clone https://github.com/bcgov/moh-prime
 
 #### Node
 
-[Download](https://nodejs.org/en/) and install **Node v10.x** and add a `NPM_HOME` environment variable that points to the location of the npm at `C:\Users\YOUR_USERNAME\AppData\Roaming\npm`, and add it to the path as `%NPM_HOME%`.
-
-> **WARNING:** If you install a more recent version of **Node** keep in mind that errors have been encountered and you may have to step back the version.
+[Download](https://nodejs.org/en/) and install **Node v12.x** 
 
 #### Yarn
 
