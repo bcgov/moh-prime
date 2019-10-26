@@ -13,7 +13,7 @@ function determineMode() {
 
 # Scrubs all PR assets from the environment
 function ocCleanPR(){
-    artifactQueue=`oc get all -n $PROJECT_PREFIX-$1 | grep -i "-$BRANCH_NAME"  | column -t | awk '{print $1}' | sort`
+    artifactQueue=`oc get all -n $PROJECT_PREFIX-$1 | grep -i "-$BRANCH_NAME"  | column -t | awk '{print $1}' | sort ; oc get secrets -n $PROJECT_PREFIX-$1 | grep -i "-$BRANCH_NAME"  | column -t | awk '{print $1}' | sort  `
     for i in ${artifactQueue};
     do
     oc delete -n dqszvc-dev $i
