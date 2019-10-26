@@ -49,8 +49,14 @@ function ocApply() {
     -p SOURCE_REPOSITORY_URL="$gitUrl" \
     -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH"  \
     -p OC_NAMESPACE="$licensePlate" \
-    -p OC_APP="$OC_APP" | oc $MODE -f - --namespace=$licensePlate-$OC_APP
-    echo "Deploying.."
+    -p OC_APP="$3" | oc apply -f - --namespace="$licensePlate-$3" 
+    if [[ "$1" == "build" &&  "$2" != "postgresql" ]];
+    then
+    echo "Building..."
+    oc start-build $2$SUFFIX -n $licensePlate-$3 --wait --follow
+    else
+    echo "Deployment should be automatic..."
+    fi
 }
 
 function sonar(){
@@ -60,7 +66,7 @@ function sonar(){
     then MODE="apply"
     else MODE="create"
     fi;
-    oc process -f openshift/sonar.pod.json \
+    oc process -f openshift/sonar.pod.yaml \
     -p NAME="sonar-runner" \
     -p VERSION="$BUILD_NUMBER" \
     -p SUFFIX="$branchName" \
