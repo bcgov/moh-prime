@@ -21,7 +21,7 @@ function ocCleanPR(){
 }
 # Build an deploy are very alike, require similar logic for config injestion.
 # This takes in Git, Jenkins and system variables to the template that will be processed.
-function build()
+function build() {
     source $1.bash
     echo "Building $1 to $2 ..."
     echo "$PROJECT_PREFIX-$2"
@@ -38,7 +38,7 @@ function build()
     oc start-build $2$SUFFIX -n $PROJECT_PREFIX-$2 --wait --follow
 }
 
-function deploy()
+function deploy() {
     source $1.bash
     echo "Deploying $1 to $2 ..."
     echo "$PROJECT_PREFIX-$2"
