@@ -2,10 +2,11 @@ using System.Net.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
+using Xunit;
+
 using Prime.Services;
 using PrimeTests.Mocks;
 using PrimeTests.Utils;
-using Xunit;
 
 namespace PrimeTests.Controllers
 {
@@ -22,10 +23,11 @@ namespace PrimeTests.Controllers
                     {
                         //add the mock service mapping, so that we are only testing the controllers
                         services.AddSingleton<IEnrolmentService, EnrolmentServiceMock>();
+                        services.AddSingleton<IEnrolleeService, EnrolleeServiceMock>();
                         services.AddSingleton<ILookupService, LookupServiceMock>();
                     });
                 });
             _client = _factory.CreateClient();
-        }      
+        }
     }
 }

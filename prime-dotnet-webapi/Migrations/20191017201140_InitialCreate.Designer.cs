@@ -393,6 +393,9 @@ namespace Prime.Migrations
                     b.Property<string>("LastName")
                         .IsRequired();
 
+                    b.Property<string>("LicensePlate")
+                        .HasMaxLength(20);
+
                     b.Property<string>("MiddleName");
 
                     b.Property<string>("PreferredFirstName");
@@ -421,22 +424,12 @@ namespace Prime.Migrations
                     b.Property<int?>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("AppliedDate");
-
-                    b.Property<bool?>("Approved");
-
-                    b.Property<DateTime?>("ApprovedDate");
-
-                    b.Property<string>("ApprovedReason");
-
                     b.Property<DateTime>("CreatedTimeStamp");
 
                     b.Property<Guid>("CreatedUserId");
 
                     b.Property<string>("DeviceProviderNumber")
                         .HasMaxLength(5);
-
-                    b.Property<string>("DeviceProviderPrefix");
 
                     b.Property<int>("EnrolleeId");
 
@@ -497,7 +490,7 @@ namespace Prime.Migrations
 
                     b.HasIndex("StatusCode");
 
-                    b.ToTable("EnrolmentStatus");
+                    b.ToTable("EnrolmentStatuses");
                 });
 
             modelBuilder.Entity("Prime.Models.Job", b =>
@@ -873,8 +866,7 @@ namespace Prime.Migrations
 
                     b.Property<Guid>("CreatedUserId");
 
-                    b.Property<string>("Name")
-                        .IsRequired();
+                    b.Property<string>("Name");
 
                     b.Property<DateTime>("UpdatedTimeStamp");
 
@@ -908,7 +900,7 @@ namespace Prime.Migrations
                             Code = (short)3,
                             CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Approved",
+                            Name = "Adjudicated/Approved",
                             UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -917,7 +909,7 @@ namespace Prime.Migrations
                             Code = (short)4,
                             CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Denied",
+                            Name = "Declined",
                             UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -926,7 +918,16 @@ namespace Prime.Migrations
                             Code = (short)5,
                             CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Accepted",
+                            Name = "Accepted TOS (Terms of Service)",
+                            UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = (short)6,
+                            CreatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Declined TOS (Terms of Service)",
                             UpdatedTimeStamp = new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });

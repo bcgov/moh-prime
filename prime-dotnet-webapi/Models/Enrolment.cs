@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Newtonsoft.Json;
+using Prime.Infrastructure;
 
 namespace Prime.Models
 {
@@ -18,13 +19,11 @@ namespace Prime.Models
 
         public Enrollee Enrollee { get; set; }
 
-        public DateTime AppliedDate { get; set; }
+        [NotMapped]
+        public DateTime? AppliedDate { get { return this.EnrolmentStatuses?.SingleOrDefault(es => es.StatusCode == Status.SUBMITTED_CODE)?.StatusDate; } }
 
-        public bool? Approved { get; set; }
-
-        public string ApprovedReason { get; set; }
-
-        public DateTime? ApprovedDate { get; set; }
+        [NotMapped]
+        public DateTime? ApprovedDate { get { return this.EnrolmentStatuses?.SingleOrDefault(es => es.StatusCode == Status.APPROVED_CODE)?.StatusDate; } }
 
         public bool? HasCertification { get; set; }
 
@@ -32,10 +31,9 @@ namespace Prime.Models
 
         public bool? IsDeviceProvider { get; set; }
 
-        public string DeviceProviderPrefix { get; set; }
-
         [RegularExpression(@"([0-9]+)", ErrorMessage = "Device Provider Number should not contain characters")]
         [StringLength(5, MinimumLength = 5, ErrorMessage = "Device Provider Number must be 5 digits")]
+        [JsonConverter(typeof(EmptyStringToNullJsonConverter))]
         public string DeviceProviderNumber { get; set; }
 
         public bool? IsInsulinPumpProvider { get; set; }
@@ -65,6 +63,9 @@ namespace Prime.Models
         public ICollection<EnrolmentStatus> EnrolmentStatuses { get; set; }
 
         [NotMapped]
-        public EnrolmentStatus CurrentStatus { get { return this.EnrolmentStatuses?.SingleOrDefault(es => es.IsCurrent == true); } }
+        public EnrolmentStatus CurrentStatus { get { return this.EnrolmentStatuses?.SingleOrDefault(es => es.IsCurrent); } }
+
+        [NotMapped]
+        public ICollection<Status> AvailableStatuses { get; set; }
     }
 }

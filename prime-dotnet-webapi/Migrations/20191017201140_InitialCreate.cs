@@ -33,6 +33,7 @@ namespace Prime.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     UserId = table.Column<Guid>(nullable: false),
+                    LicensePlate = table.Column<string>(maxLength: 20, nullable: true),
                     FirstName = table.Column<string>(nullable: false),
                     MiddleName = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: false),
@@ -145,7 +146,7 @@ namespace Prime.Migrations
                 {
                     Code = table.Column<short>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    Name = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
                     CreatedUserId = table.Column<Guid>(nullable: false),
                     CreatedTimeStamp = table.Column<DateTime>(nullable: false),
                     UpdatedUserId = table.Column<Guid>(nullable: false),
@@ -198,13 +199,8 @@ namespace Prime.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     EnrolleeId = table.Column<int>(nullable: false),
-                    AppliedDate = table.Column<DateTime>(nullable: false),
-                    Approved = table.Column<bool>(nullable: true),
-                    ApprovedReason = table.Column<string>(nullable: true),
-                    ApprovedDate = table.Column<DateTime>(nullable: true),
                     HasCertification = table.Column<bool>(nullable: true),
                     IsDeviceProvider = table.Column<bool>(nullable: true),
-                    DeviceProviderPrefix = table.Column<string>(nullable: true),
                     DeviceProviderNumber = table.Column<string>(maxLength: 5, nullable: true),
                     IsInsulinPumpProvider = table.Column<bool>(nullable: true),
                     IsAccessingPharmaNetOnBehalfOf = table.Column<bool>(nullable: true),
@@ -335,7 +331,7 @@ namespace Prime.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EnrolmentStatus",
+                name: "EnrolmentStatuses",
                 columns: table => new
                 {
                     EnrolmentId = table.Column<int>(nullable: false),
@@ -349,15 +345,15 @@ namespace Prime.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EnrolmentStatus", x => new { x.EnrolmentId, x.StatusCode });
+                    table.PrimaryKey("PK_EnrolmentStatuses", x => new { x.EnrolmentId, x.StatusCode });
                     table.ForeignKey(
-                        name: "FK_EnrolmentStatus_Enrolment_EnrolmentId",
+                        name: "FK_EnrolmentStatuses_Enrolment_EnrolmentId",
                         column: x => x.EnrolmentId,
                         principalTable: "Enrolment",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_EnrolmentStatus_StatusLookup_StatusCode",
+                        name: "FK_EnrolmentStatuses_StatusLookup_StatusCode",
                         column: x => x.StatusCode,
                         principalTable: "StatusLookup",
                         principalColumn: "Code",
@@ -496,9 +492,10 @@ namespace Prime.Migrations
                 {
                     { (short)1, new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498), new Guid("00000000-0000-0000-0000-000000000000"), "In Progress", new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498), new Guid("00000000-0000-0000-0000-000000000000") },
                     { (short)2, new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498), new Guid("00000000-0000-0000-0000-000000000000"), "Submitted", new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498), new Guid("00000000-0000-0000-0000-000000000000") },
-                    { (short)3, new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498), new Guid("00000000-0000-0000-0000-000000000000"), "Approved", new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498), new Guid("00000000-0000-0000-0000-000000000000") },
-                    { (short)4, new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498), new Guid("00000000-0000-0000-0000-000000000000"), "Denied", new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498), new Guid("00000000-0000-0000-0000-000000000000") },
-                    { (short)5, new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498), new Guid("00000000-0000-0000-0000-000000000000"), "Accepted", new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498), new Guid("00000000-0000-0000-0000-000000000000") }
+                    { (short)3, new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498), new Guid("00000000-0000-0000-0000-000000000000"), "Adjudicated/Approved", new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498), new Guid("00000000-0000-0000-0000-000000000000") },
+                    { (short)4, new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498), new Guid("00000000-0000-0000-0000-000000000000"), "Declined", new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498), new Guid("00000000-0000-0000-0000-000000000000") },
+                    { (short)5, new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498), new Guid("00000000-0000-0000-0000-000000000000"), "Accepted TOS (Terms of Service)", new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498), new Guid("00000000-0000-0000-0000-000000000000") },
+                    { (short)6, new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498), new Guid("00000000-0000-0000-0000-000000000000"), "Declined TOS (Terms of Service)", new DateTime(2019, 10, 17, 13, 11, 39, 787, DateTimeKind.Local).AddTicks(498), new Guid("00000000-0000-0000-0000-000000000000") }
                 });
 
             migrationBuilder.InsertData(
@@ -580,8 +577,8 @@ namespace Prime.Migrations
                 column: "EnrolleeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EnrolmentStatus_StatusCode",
-                table: "EnrolmentStatus",
+                name: "IX_EnrolmentStatuses_StatusCode",
+                table: "EnrolmentStatuses",
                 column: "StatusCode");
 
             migrationBuilder.CreateIndex(
@@ -615,7 +612,7 @@ namespace Prime.Migrations
                 name: "CollegePractice");
 
             migrationBuilder.DropTable(
-                name: "EnrolmentStatus");
+                name: "EnrolmentStatuses");
 
             migrationBuilder.DropTable(
                 name: "Job");

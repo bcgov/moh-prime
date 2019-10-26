@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   version: '1.0.0',
   apiEndpoint: 'http://localhost:5000/api',
-  whiteListedDomain: ['http://localhost:5000']
+  loginRedirectUrl: 'http://localhost:4200'
 };
 
 /*

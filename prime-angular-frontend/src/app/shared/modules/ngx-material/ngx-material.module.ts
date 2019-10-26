@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import {
-  MatInputModule, MatSelectModule, MatCheckboxModule, MatRadioModule,
-  MatButtonModule, MatSnackBarModule, MatIconModule, MatDialogModule,
-  MatSidenavModule, MatDatepickerModule, DateAdapter, MAT_DATE_LOCALE,
-  MatChipsModule, MatAutocompleteModule, MatSlideToggleModule,
-  MAT_DIALOG_DEFAULT_OPTIONS, MatToolbarModule, MatMenuModule, MatListModule,
-  MatTooltipModule
+  MatAutocompleteModule, MatButtonModule, MatCheckboxModule, MatChipsModule,
+  MatDatepickerModule, MatDialogModule, MatIconModule, MatInputModule,
+  MatListModule, MatMenuModule, MatSelectModule, MatSidenavModule,
+  MatSlideToggleModule, MatSnackBarModule, MatTableModule, MatToolbarModule,
+  MatTooltipModule, MatPaginatorModule, MatRadioModule,
+  DateAdapter, MAT_DATE_LOCALE, MAT_DIALOG_DEFAULT_OPTIONS,
+  MatFormFieldDefaultOptions, MAT_FORM_FIELD_DEFAULT_OPTIONS
 } from '@angular/material';
-import { MatMomentDateModule, MomentDateAdapter } from '@angular/material-moment-adapter';
+import { MomentDateAdapter, MatMomentDateModule } from '@angular/material-moment-adapter';
 
 export const APP_DATE_FORMATS = {
   parse: {
@@ -21,27 +22,11 @@ export const APP_DATE_FORMATS = {
   }
 };
 
+const matFormFieldCustomOptions: MatFormFieldDefaultOptions = {
+  hideRequiredMarker: true
+};
+
 @NgModule({
-  imports: [
-    MatAutocompleteModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatChipsModule,
-    MatDatepickerModule,
-    MatDialogModule,
-    MatIconModule,
-    MatInputModule,
-    MatListModule,
-    MatMenuModule,
-    MatMomentDateModule,
-    MatSelectModule,
-    MatSidenavModule,
-    MatSlideToggleModule,
-    MatSnackBarModule,
-    MatToolbarModule,
-    MatTooltipModule,
-    MatRadioModule
-  ],
   exports: [
     MatAutocompleteModule,
     MatButtonModule,
@@ -58,8 +43,10 @@ export const APP_DATE_FORMATS = {
     MatSidenavModule,
     MatSlideToggleModule,
     MatSnackBarModule,
+    MatTableModule,
     MatToolbarModule,
     MatTooltipModule,
+    MatPaginatorModule,
     MatRadioModule
   ],
   providers: [
@@ -69,11 +56,16 @@ export const APP_DATE_FORMATS = {
       deps: [MAT_DATE_LOCALE]
     },
     {
-      provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {
+      provide: MAT_DIALOG_DEFAULT_OPTIONS,
+      useValue: {
         width: '500px',
         hasBackdrop: true
       }
     },
+    {
+      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+      useValue: matFormFieldCustomOptions
+    }
   ]
 })
 export class NgxMaterialModule { }

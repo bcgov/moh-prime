@@ -163,4 +163,26 @@ export class FormControlValidators {
       ? null
       : { boolean: true };
   }
+
+  /**
+   * Checks a form control is within a valid length,
+   * if there is no maxLength, it will be assumed to be the same as minLength.
+   *
+   * @static
+   * @param {number} minLength
+   * @param {number} maxLength
+   * @returns {ValidatorFn}
+   * @memberof FormControlValidators
+   */
+  static requiredLength(minLength: number, maxLength?: number): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value || !minLength) { return null; }
+      if (!maxLength) { maxLength = minLength; }
+      const currentLength = control.value.length;
+      const valid = (control.valid
+        && currentLength >= minLength
+        && currentLength <= maxLength);
+      return valid ? null : { length: true };
+    }
+  }
 }

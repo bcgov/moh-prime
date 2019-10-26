@@ -32,16 +32,16 @@
         "./app/shared/*"
       ],
       "@auth/*": [
-        "./app/auth/*"
+        "./app/modules/auth/*"
       ],
-      "@dashboard/*": [
-        "./app/dashboard/*"
+      "@enrolment/*": [
+        "./app/modules/enrolment/*"
       ],
-      "@admins/*": [
-        "./app/features/admins/*"
+      "@provision/*": [
+        "./app/modules/provision/*"
       ],
-      "@applicants/*": [
-        "./app/features/applicants/*"
+      "@admin/*": [
+        "./app/modules/admin/*"
       ]
     }
   },

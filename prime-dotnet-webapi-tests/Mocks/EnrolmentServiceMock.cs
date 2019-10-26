@@ -10,38 +10,19 @@ using PrimeTests.Utils;
 
 namespace PrimeTests.Mocks
 {
-    public class EnrolmentServiceMock : IEnrolmentService
+    public class EnrolmentServiceMock : BaseMockService, IEnrolmentService
     {
-        public const int DEFAULT_ENROLMENTS_SIZE = 5;
-        public const int MIN_ENROLMENT_ID = 1;
-        public const int MAX_ENROLMENT_ID = 1000000;
-        public const int MIN_ENROLLEE_ID = 1;
-        public const int MAX_ENROLLEE_ID = 1000000;
+        public EnrolmentServiceMock() : base()
+        { }
 
-        private Dictionary<string, object> _fakeDb;
-
-        private const string ENROLMENT_KEY = "enrolments-key";
-
-        public EnrolmentServiceMock()
+        public override void SeedData()
         {
-            this.InitializeDb();
-        }
-
-        public void InitializeDb()
-        {
-            _fakeDb = new Dictionary<string, object>();
-            _fakeDb.Add(ENROLMENT_KEY, new Dictionary<int, Enrolment>());
             //seed the enrolments
             IEnumerable<Enrolment> enrolments = TestUtils.EnrolmentFaker.Generate(DEFAULT_ENROLMENTS_SIZE);
             foreach (var enrolment in enrolments)
             {
                 this.CreateEnrolmentAsync(enrolment);
             }
-        }
-
-        private Dictionary<int, Enrolment> GetEnrolmentHolder()
-        {
-            return (Dictionary<int, Enrolment>)_fakeDb[ENROLMENT_KEY];
         }
 
         public Task<int?> CreateEnrolmentAsync(Enrolment enrolment)
@@ -51,45 +32,46 @@ namespace PrimeTests.Mocks
             int? enrolleeId = new Faker().Random.Int(MIN_ENROLLEE_ID, MAX_ENROLLEE_ID);
             enrolment.Id = enrolmentId;
             enrolment.Enrollee.Id = enrolleeId;
-            this.GetEnrolmentHolder().Add((int)enrolmentId, enrolment);
+
+            this.GetHolder<int, Enrolment>().Add((int)enrolmentId, enrolment);
+            this.GetHolder<int, Enrollee>().Add((int)enrolleeId, enrolment.Enrollee);
             return Task.FromResult(enrolmentId);
         }
 
         public Task DeleteEnrolmentAsync(int enrolmentId)
         {
-            this.GetEnrolmentHolder().Remove(enrolmentId);
+            this.GetHolder<int, Enrolment>().Remove(enrolmentId);
             return Task.CompletedTask;
         }
 
         public bool EnrolmentExists(int enrolmentId)
         {
-            return this.GetEnrolmentHolder().ContainsKey(enrolmentId);
+            return this.GetHolder<int, Enrolment>().ContainsKey(enrolmentId);
         }
 
         public Task<Enrolment> GetEnrolmentAsync(int enrolmentId)
         {
             Enrolment enrolment = null;
-            if (this.GetEnrolmentHolder().ContainsKey(enrolmentId))
+            if (this.GetHolder<int, Enrolment>().ContainsKey(enrolmentId))
             {
-                enrolment = this.GetEnrolmentHolder()[enrolmentId];
+                enrolment = this.GetHolder<int, Enrolment>()[enrolmentId];
             }
             return Task.FromResult(enrolment);
         }
 
         public Task<Enrolment> GetEnrolmentForUserIdAsync(Guid userId)
         {
-            throw new System.NotImplementedException();
+            return Task.FromResult(this.GetHolder<int, Enrolment>().Values?.ToList().SingleOrDefault(e => e.Enrollee.UserId == userId));
         }
 
-        public Task<IEnumerable<Enrolment>> GetEnrolmentsAsync()
+        public Task<IEnumerable<Enrolment>> GetEnrolmentsAsync(EnrolmentSearchOptions searchOptions)
         {
-            IEnumerable<Enrolment> enrolments = TestUtils.EnrolmentFaker.Generate(DEFAULT_ENROLMENTS_SIZE);
-            return Task.FromResult((IEnumerable<Enrolment>)this.GetEnrolmentHolder().Values?.ToList());
+            return Task.FromResult((IEnumerable<Enrolment>)this.GetHolder<int, Enrolment>().Values?.ToList());
         }
 
         public Task<IEnumerable<Enrolment>> GetEnrolmentsForUserIdAsync(Guid userId)
         {
-            throw new System.NotImplementedException();
+            return Task.FromResult((IEnumerable<Enrolment>)this.GetHolder<int, Enrolment>().Values?.ToList().Where(e => e.Enrollee.UserId == userId));
         }
 
         public Task<int> UpdateEnrolmentAsync(Enrolment enrolment)
@@ -98,14 +80,87 @@ namespace PrimeTests.Mocks
             int? enrolmentId = enrolment.Id;
             if (enrolmentId != null)
             {
-                var found = this.GetEnrolmentHolder().Remove((int)enrolmentId);
+                var found = this.GetHolder<int, Enrolment>().Remove((int)enrolmentId);
                 if (found)
                 {
                     updated = 1;
                 }
-                this.GetEnrolmentHolder().Add((int)enrolmentId, enrolment);
+                this.GetHolder<int, Enrolment>().Add((int)enrolmentId, enrolment);
             }
             return Task.FromResult(updated);
+        }
+
+        public Task<IEnumerable<Status>> GetAvailableEnrolmentStatusesAsync(int enrolmentId)
+        {
+            ICollection<Status> availableStatuses = new List<Status>();
+            Enrolment enrolment = null;
+            if (this.GetHolder<int, Enrolment>().ContainsKey(enrolmentId))
+            {
+                enrolment = this.GetHolder<int, Enrolment>()[enrolmentId];
+                var results = _workflowStateMap[enrolment.CurrentStatus?.Status ?? this.GetHolder<short, Status>()[NULL_STATUS_CODE]];
+                foreach (var item in results)
+                {
+                    availableStatuses.Add(item.Status);
+                }
+            }
+            return Task.FromResult(availableStatuses as IEnumerable<Status>);
+        }
+
+        public Task<IEnumerable<EnrolmentStatus>> GetEnrolmentStatusesAsync(int enrolmentId)
+        {
+            Enrolment enrolment = null;
+            if (this.GetHolder<int, Enrolment>().ContainsKey(enrolmentId))
+            {
+                enrolment = this.GetHolder<int, Enrolment>()[enrolmentId];
+            }
+            return Task.FromResult(enrolment?.EnrolmentStatuses as IEnumerable<EnrolmentStatus>);
+        }
+
+        public Task<EnrolmentStatus> CreateEnrolmentStatusAsync(int enrolmentId, Status status)
+        {
+            ICollection<Status> availableStatuses = new List<Status>();
+            Enrolment enrolment = null;
+            EnrolmentStatus createdEnrolmentStatus = null;
+            if (this.GetHolder<int, Enrolment>().ContainsKey(enrolmentId))
+            {
+                enrolment = this.GetHolder<int, Enrolment>()[enrolmentId];
+                var currentStatusCode = enrolment.CurrentStatus?.StatusCode;
+
+                if (this.IsStatusChangeAllowed(this.GetHolder<short, Status>()[currentStatusCode ?? NULL_STATUS_CODE], status))
+                {
+                    foreach (var item in enrolment.EnrolmentStatuses)
+                    {
+                        item.IsCurrent = false;
+                    }
+                    createdEnrolmentStatus = new EnrolmentStatus { Enrolment = enrolment, EnrolmentId = (int)enrolment.Id, Status = status, StatusCode = status.Code, StatusDate = DateTime.Now, IsCurrent = true };
+                    enrolment.EnrolmentStatuses.Add(createdEnrolmentStatus);
+                }
+            }
+
+            return Task.FromResult(createdEnrolmentStatus);
+        }
+
+        public bool IsStatusChangeAllowed(Status startingStatus, Status endingStatus)
+        {
+            ICollection<Status> availableStatuses = new List<Status>();
+            var results = _workflowStateMap[startingStatus ?? this.GetHolder<short, Status>()[NULL_STATUS_CODE]];
+            foreach (var item in results)
+            {
+                availableStatuses.Add(item.Status);
+            }
+
+            return availableStatuses.Contains(endingStatus);
+        }
+
+        public Task<bool> IsEnrolmentInStatusAsync(int enrolmentId, short statusCodeToCheck)
+        {
+            Enrolment enrolment = null;
+            if (this.GetHolder<int, Enrolment>().ContainsKey(enrolmentId))
+            {
+                enrolment = this.GetHolder<int, Enrolment>()[enrolmentId];
+                return Task.FromResult(statusCodeToCheck.Equals(enrolment.CurrentStatus?.StatusCode));
+            }
+            return Task.FromResult(false);
         }
     }
 }
