@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using SimpleBase;
 using Prime.Models;
 
 namespace Prime.Services
@@ -87,6 +88,12 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(e => e.Id == enrolmentId)
                 ;
 
+            if (entity != null)
+            {
+                // add the available statuses to the enrolment
+                entity.AvailableStatuses = this.GetAvailableStatuses(entity.CurrentStatus?.Status);
+            }
+
             return entity;
         }
 
@@ -103,6 +110,12 @@ namespace Prime.Services
                 .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.Status)
                 .SingleOrDefaultAsync(e => e.Enrollee.UserId == userId)
                 ;
+
+            if (entity != null)
+            {
+                // add the available statuses to the enrolment
+                entity.AvailableStatuses = this.GetAvailableStatuses(entity.CurrentStatus?.Status);
+            }
 
             return entity;
         }
@@ -125,7 +138,13 @@ namespace Prime.Services
                 query = query.Where(e => e.EnrolmentStatuses.Single(es => es.IsCurrent).StatusCode == (short)searchOptions.statusCode);
             }
 
-            var items = await query.ToArrayAsync();
+            var items = await query.ToListAsync();
+
+            foreach (var item in items)
+            {
+                // add the available statuses to the enrolment
+                item.AvailableStatuses = this.GetAvailableStatuses(item.CurrentStatus?.Status);
+            }
 
             return items;
         }
@@ -145,14 +164,19 @@ namespace Prime.Services
                 .Where(e => e.Enrollee.UserId == userId)
                 ;
 
-            var items = await query.ToArrayAsync();
+            var items = await query.ToListAsync();
+
+            foreach (var item in items)
+            {
+                // add the available statuses to the enrolment
+                item.AvailableStatuses = this.GetAvailableStatuses(item.CurrentStatus?.Status);
+            }
 
             return items;
         }
 
         public async Task<int?> CreateEnrolmentAsync(Enrolment enrolment)
         {
-            enrolment.AppliedDate = DateTime.Now;
             //create a status history record
             EnrolmentStatus enrolmentStatus = new EnrolmentStatus { Enrolment = enrolment, StatusCode = Status.IN_PROGRESS_CODE, StatusDate = DateTime.Now, IsCurrent = true };
             if (enrolment.EnrolmentStatuses == null)
@@ -175,79 +199,18 @@ namespace Prime.Services
             var _enrolleeDb = _context.Enrollees.Include(e => e.PhysicalAddress).Include(e => e.MailingAddress).AsNoTracking().Where(e => e.Id == _enrollee.Id).FirstOrDefault();
             var _enrolmentDb = _context.Enrolments.Include(e => e.Certifications).Include(e => e.Jobs).Include(e => e.Organizations).AsNoTracking().Where(e => e.Id == enrolment.Id).FirstOrDefault();
 
-            // remove existing addresses
-            if (_enrolleeDb.PhysicalAddress != null)
-            {
-                _enrolleeDb.PhysicalAddress.Enrollee = null;
-                _context.Addresses.Remove(_enrolleeDb.PhysicalAddress);
-            }
-            if (_enrolleeDb.MailingAddress != null)
-            {
-                _enrolleeDb.MailingAddress.Enrollee = null;
-                _context.Addresses.Remove(_enrolleeDb.MailingAddress);
-            }
+            // remove existing addresses, and recreate if necessary
+            this.ReplaceExistingAddress(_enrolleeDb.PhysicalAddress, _enrollee.PhysicalAddress, _enrollee);
+            this.ReplaceExistingAddress(_enrolleeDb.MailingAddress, _enrollee.MailingAddress, _enrollee);
 
-            // create the new addresses, if they exist
-            PhysicalAddress _physicalAddress = _enrollee.PhysicalAddress;
-            if (_physicalAddress != null)
-            {
-                _physicalAddress.EnrolleeId = (int)_enrollee.Id;
-                _context.Entry(_physicalAddress).State = EntityState.Added;
-            }
-            MailingAddress _mailingAddress = _enrollee.MailingAddress;
-            if (_mailingAddress != null)
-            {
-                _mailingAddress.EnrolleeId = (int)_enrollee.Id;
-                _context.Entry(_mailingAddress).State = EntityState.Added;
-            }
+            // remove existing certifications, and recreate if necessary
+            this.ReplaceExistingItems(_enrolmentDb.Certifications, enrolment.Certifications, enrolment);
 
-            // remove existing certifications
-            foreach (var certification in _enrolmentDb.Certifications)
-            {
-                certification.Enrolment = null;
-                _context.Certifications.Remove(certification);
-            }
-            // create new certifications
-            if (enrolment.Certifications != null)
-            {
-                foreach (var certification in enrolment.Certifications)
-                {
-                    certification.EnrolmentId = (int)enrolment.Id;
-                    _context.Entry(certification).State = EntityState.Added;
-                }
-            }
+            // remove existing jobs, and recreate if necessary
+            this.ReplaceExistingItems(_enrolmentDb.Jobs, enrolment.Jobs, enrolment);
 
-            // remove existing jobs
-            foreach (var job in _enrolmentDb.Jobs)
-            {
-                job.Enrolment = null;
-                _context.Jobs.Remove(job);
-            }
-            // create new jobs
-            if (enrolment.Jobs != null)
-            {
-                foreach (var job in enrolment.Jobs)
-                {
-                    job.EnrolmentId = (int)enrolment.Id;
-                    _context.Entry(job).State = EntityState.Added;
-                }
-            }
-
-            // remove existing organizations
-            foreach (var organization in _enrolmentDb.Organizations)
-            {
-                organization.Enrolment = null;
-                _context.Organizations.Remove(organization);
-            }
-            if (enrolment.Organizations != null)
-            {
-                // create new organizations
-                foreach (var organization in enrolment.Organizations)
-                {
-                    organization.EnrolmentId = (int)enrolment.Id;
-                    _context.Entry(organization).State = EntityState.Added;
-                }
-            }
+            // remove existing organizations, and recreate if necessary
+            this.ReplaceExistingItems(_enrolmentDb.Organizations, enrolment.Organizations, enrolment);
 
             //update the enrolment to include the enrolleeId
             enrolment.EnrolleeId = (int)_enrollee.Id;
@@ -262,6 +225,41 @@ namespace Prime.Services
             catch (DbUpdateConcurrencyException)
             {
                 return 0;
+            }
+        }
+
+        private void ReplaceExistingAddress(Address dbAddress, Address newAddress, Enrollee enrollee)
+        {
+            // remove existing addresses
+            if (dbAddress != null)
+            {
+                dbAddress.Enrollee = null;
+                _context.Addresses.Remove(dbAddress);
+            }
+            // create the new addresses, if they exist
+            if (newAddress != null)
+            {
+                newAddress.EnrolleeId = (int)enrollee.Id;
+                _context.Entry(newAddress).State = EntityState.Added;
+            }
+        }
+
+        private void ReplaceExistingItems<T>(ICollection<T> dbCollection, ICollection<T> newCollection, Enrolment enrolment) where T : class, IEnrolmentNavigationProperty
+        {
+            // remove existing items
+            foreach (var item in dbCollection)
+            {
+                item.Enrolment = null;
+                _context.Remove(item);
+            }
+            // create new items
+            if (newCollection != null)
+            {
+                foreach (var item in newCollection)
+                {
+                    item.EnrolmentId = (int)enrolment.Id;
+                    _context.Entry(item).State = EntityState.Added;
+                }
             }
         }
 
@@ -293,7 +291,7 @@ namespace Prime.Services
                 .Where(es => es.EnrolmentId == enrolmentId)
                 ;
 
-            var items = await query.ToArrayAsync();
+            var items = await query.ToListAsync();
 
             return items;
         }
@@ -322,6 +320,15 @@ namespace Prime.Services
                 var createdEnrolmentStatus = new EnrolmentStatus { EnrolmentId = enrolmentId, StatusCode = status.Code, StatusDate = DateTime.Now, IsCurrent = true };
                 _context.EnrolmentStatuses.Add(createdEnrolmentStatus);
 
+                if (Status.ACCEPTED_TOS_CODE.Equals(status?.Code))
+                {
+                    //create the license plate for this enrollee
+                    var enrollee = await _context.Enrollees
+                        .SingleAsync(e => e.Id == enrolment.EnrolleeId);
+
+                    enrollee.LicensePlate = this.GenerateLicensePlate();
+                }
+
                 var created = await _context.SaveChangesAsync();
                 if (created < 1) throw new InvalidOperationException("Could not create enrolment status.");
 
@@ -329,6 +336,11 @@ namespace Prime.Services
             }
 
             throw new InvalidOperationException("Could not create enrolment status, status change is not allowed.");
+        }
+
+        private string GenerateLicensePlate()
+        {
+            return Base85.Ascii85.Encode(Guid.NewGuid().ToByteArray());
         }
 
         public bool IsStatusChangeAllowed(Status startingStatus, Status endingStatus)

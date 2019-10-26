@@ -18,6 +18,9 @@ namespace Prime.Models
         [Required]
         public Guid UserId { get; set; }
 
+        [StringLength(20)]
+        public string LicensePlate { get; set; }
+
         [Required]
         public string FirstName { get; set; }
 
