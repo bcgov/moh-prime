@@ -12,13 +12,21 @@ function determineMode() {
 }
 
 # Scrubs all PR assets from the environment
-function ocCleanPR(){
-    artifactQueue=`oc get all -n $PROJECT_PREFIX-$1 | grep -i "-$BRANCH_NAME"  | column -t | awk '{print $1}' | sort ; oc get secrets -n $PROJECT_PREFIX-$1 | grep -i "-$BRANCH_NAME"  | column -t | awk '{print $1}' | sort  `
-    for i in ${artifactQueue};
+function cleanOcArtifacts() {
+    artifactItems=`oc get all -n $PROJECT_PREFIX-dev | grep -i "\-$BRANCH_NAME"  | column -t | awk '{print $1}' | sort`
+    echo "$artifactItems"
+    for i in $artifactItems;
     do
     oc delete -n dqszvc-dev $i
     done
+    artifactSecrets=`oc get secrets -n $PROJECT_PREFIX-dev | grep -i "\-$BRANCH_NAME"  | column -t | awk '{print $1}' | sort`
+    echo "$artifactSecrets"
+    for i in $artifactSecrets;
+    do
+    oc delete -n dqszvc-dev secret/$i
+    done
 }
+
 # Build an deploy are very alike, require similar logic for config injestion.
 # This takes in Git, Jenkins and system variables to the template that will be processed.
 function build() {
@@ -35,8 +43,7 @@ function build() {
     -p OC_NAMESPACE="$PROJECT_PREFIX" \
     -p OC_APP="$2" | oc apply -f - --namespace="$PROJECT_PREFIX-$2" 
     echo "Building oc start-build $OC_APP_NAME$SUFFIX -n $PROJECT_PREFIX-$2 --wait --follow ..."
-    printenv
-    oc start-build "$OC_APP_NAME$SUFFIX" -n "$PROJECT_PREFIX-$2" --wait --follow
+    oc start-build bc/"$OC_APP_NAME$SUFFIX" -n "$PROJECT_PREFIX-$2" --wait --follow
 }
 
 function deploy() {
