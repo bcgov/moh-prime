@@ -1,6 +1,7 @@
 #!/bin/sh
-export COMPONENT=$1
-export OC_APP=$2
+export ACTION=$1
+export COMPONENT=$2
+export OC_APP=$3
 source ./project.sh
 # source ./functions.sh
 function build() {
