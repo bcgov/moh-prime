@@ -19,11 +19,11 @@ function build() {
     -p OC_NAMESPACE="$PROJECT_PREFIX" \
     -p OC_APP="$OC_APP" | oc apply -f - --namespace="$PROJECT_PREFIX-$OC_APP" 
     echo "Building oc start-build $OC_APP_NAME$SUFFIX -n $PROJECT_PREFIX-$OC_APP --wait --follow ..."
-    oc start-build "$OC_APP_NAME$SUFFIX" -n "$PROJECT_PREFIX"-"$OC_APP" --wait --follow
-    if [ "BUILD_REQUIRED" == "true" ];
+    oc start-build "$OC_APP_NAME$SUFFIX" -n "$PROJECT_PREFIX-$OC_APP" --wait --follow
+    if [ "$BUILD_REQUIRED" == "true" ];
     then
     echo "Building..."
-    oc start-build "$OC_APP$SUFFIX" -n "$PROJECT_PREFIX"-"$OC_APP" --wait --follow
+    oc start-build "$OC_APP$SUFFIX" -n "$PROJECT_PREFIX-$OC_APP" --wait --follow
     else
     echo "Deployment should be automatic..."
     fi
