@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource, MatSelectChange, MatDialog } from '@angular/material';
 
-import { exhaustMap } from 'rxjs/operators';
+import { exhaustMap, map } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
 
 import { Config } from '@config/config.model';
@@ -12,7 +12,8 @@ import { Enrolment } from '@shared/models/enrolment.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 import { ProvisionResource } from '@provision/shared/services/provision-resource.service';
-import { EnrolmentStatus } from '@provision/shared/enums/enrolment-status.enum';
+import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
 
 @Component({
   selector: 'app-enrolments',
@@ -49,10 +50,13 @@ export class EnrolmentsComponent implements OnInit {
 
   public approveEnrolment(id: number) {
     this.provisionResource.updateEnrolmentStatus(id, EnrolmentStatus.ADJUDICATED_APPROVED)
-      // TODO: request the enrolment to refresh its status
+      .pipe(
+        exhaustMap(() => this.provisionResource.enrolment(id))
+      )
       .subscribe(
-        () => {
+        (enrolment: Enrolment) => {
           this.toastService.openSuccessToast('Enrolment has been approved');
+          this.updateEnrolment(enrolment);
         },
         (error: any) => {
           this.toastService.openErrorToast('Enrolment could not be approved');
@@ -63,10 +67,13 @@ export class EnrolmentsComponent implements OnInit {
 
   public declineEnrolment(id: number) {
     this.provisionResource.updateEnrolmentStatus(id, EnrolmentStatus.DECLINED)
-      // TODO: request the enrolment to refresh its status
+      .pipe(
+        exhaustMap(() => this.provisionResource.enrolment(id))
+      )
       .subscribe(
-        () => {
+        (enrolment: Enrolment) => {
           this.toastService.openSuccessToast('Enrolment has been declined');
+          this.updateEnrolment(enrolment);
         },
         (error: any) => {
           this.toastService.openErrorToast('Enrolment could not be declined');
@@ -76,17 +83,25 @@ export class EnrolmentsComponent implements OnInit {
   }
 
   public deleteEnrolment(id: number) {
-    this.dialog.open(ConfirmDialogComponent, { data: {} })
+    const data: DialogDefaultOptions = {
+      title: 'Delete Enrolment',
+      message: 'Are you sure you want to delete this enrolment?',
+      actionType: 'warn',
+      actionText: 'Delete Enrolment'
+    };
+    this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
         exhaustMap((result: boolean) =>
-          (result) ? this.provisionResource.deleteEnrolment(id) : EMPTY
+          (result)
+            ? this.provisionResource.deleteEnrolment(id)
+            : EMPTY
         )
       )
       .subscribe(
         (enrolment: Enrolment) => {
           this.toastService.openSuccessToast('Enrolment has been deleted');
-          this.dataSource.data = this.dataSource.data.filter(e => e.id !== id);
+          this.removeEnrolment(enrolment);
         },
         (error: any) => {
           this.toastService.openErrorToast('Enrolment could not be deleted');
@@ -111,5 +126,17 @@ export class EnrolmentsComponent implements OnInit {
           this.logger.error('[Provision] Enrolments::getEnrolments error has occurred: ', error);
         }
       );
+  }
+
+  private updateEnrolment(enrolment: Enrolment) {
+    this.dataSource.data = this.dataSource.data
+      .map((currentEnrolment: Enrolment) =>
+        (currentEnrolment.id === enrolment.id) ? enrolment : currentEnrolment
+      );
+  }
+
+  private removeEnrolment(enrolment: Enrolment) {
+    this.dataSource.data = this.dataSource.data
+      .filter((currentEnrolment: Enrolment) => currentEnrolment.id !== enrolment.id);
   }
 }
