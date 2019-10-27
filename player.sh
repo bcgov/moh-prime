@@ -13,12 +13,13 @@ function variablePopulation() {
     export SUFFIX="-${BRANCH_LOWER}";
     fi
 }
+
 variablePopulation
 function build() {
     source ./"$COMPONENT.sh"
     echo "Building $COMPONENT to $PROJECT_PREFIX-$OC_APP..."
     echo "$PROJECT_PREFIX"-"$OC_APP"
-    oc process -f "$TEMPLATE_DIRECTORY"/"$BUILD_CONFIG_TEMPLATE" \
+    oc process -f "$TEMPLATE_DIRECTORY/$BUILD_CONFIG_TEMPLATE" \
     -p NAME="$OC_APP" \
     -p VERSION="$BUILD_NUMBER" \
     -p SUFFIX="$SUFFIX" \
@@ -27,12 +28,10 @@ function build() {
     -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH"  \
     -p OC_NAMESPACE="$PROJECT_PREFIX" \
     -p OC_APP="$OC_APP" | oc apply -f - --namespace="$PROJECT_PREFIX-$OC_APP" 
-    echo "Building oc start-build $APP_NAME$SUFFIX -n $PROJECT_PREFIX-$OC_APP --wait --follow ..."
-    oc start-build "$APP_NAME$SUFFIX" -n "$PROJECT_PREFIX-$OC_APP" --wait --follow
     if [ "$BUILD_REQUIRED" == true ];
     then
-        echo "Building..."
-        oc start-build "$APP_NAME$SUFFIX" -n "$PROJECT_PREFIX-$OC_APP" --wait --follow
+        echo "Building oc start-build $APP_NAME$SUFFIX -n $PROJECT_PREFIX-$OC_APP --wait --follow ..."
+        oc start-build "$APP_NAME$SUFFIX -n $PROJECT_PREFIX\-$OC_APP" --wait --follow
     else
         echo "Deployment should be automatic..."
     fi
@@ -42,7 +41,7 @@ function deploy() {
     source ./"$COMPONENT.sh"
     echo "Deploying $COMPONENT to $OC_APP ..."
     echo "$PROJECT_PREFIX"-"$OC_APP"
-    oc process -f "$TEMPLATE_DIRECTORY"/"$DEPLOY_CONFIG_TEMPLATE" \
+    oc process -f "$TEMPLATE_DIRECTORY/$DEPLOY_CONFIG_TEMPLATE" \
     -p NAME="$OC_APP" \
     -p VERSION="$BUILD_NUMBER" \
     -p SUFFIX="$SUFFIX" \
