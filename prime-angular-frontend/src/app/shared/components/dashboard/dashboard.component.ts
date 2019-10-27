@@ -155,6 +155,12 @@ export class DashboardComponent implements OnInit {
             icon: 'search',
             route: '/enrolment/review',
             showItem: true
+          },
+          {
+            name: 'Provision',
+            icon: 'format_list_bulleted',
+            route: '/provision/enrolments',
+            showItem: true
           }
         ]
       }
