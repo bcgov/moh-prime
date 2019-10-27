@@ -18,7 +18,7 @@ variablePopulation
 function build() {
     source ./"$COMPONENT.sh"
     echo "Building $COMPONENT to $PROJECT_PREFIX-$OC_APP..."
-    oc process -f "$TEMPLATE_DIRECTORY/$BUILD_CONFIG_TEMPLATE" \
+    oc process -f "$TEMPLATE_DIRECTORY"/"$BUILD_CONFIG_TEMPLATE" \
     -p NAME="$APP_NAME" \ 
     -p VERSION="$BUILD_NUMBER" \
     -p SUFFIX="$SUFFIX" \
@@ -40,7 +40,7 @@ function deploy() {
     source ./"$COMPONENT.sh"
     echo "Deploying $COMPONENT to $OC_APP ..."
     echo "$PROJECT_PREFIX"-"$OC_APP"
-    oc process -f ./"$TEMPLATE_DIRECTORY/$DEPLOY_CONFIG_TEMPLATE" \
+    oc process -f ./"$TEMPLATE_DIRECTORY"/"$DEPLOY_CONFIG_TEMPLATE" \
     -p NAME="$APP_NAME" \ 
     -p VERSION="$BUILD_NUMBER" \
     -p SUFFIX="$SUFFIX" \
