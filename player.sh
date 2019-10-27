@@ -47,7 +47,7 @@ function build() {
     if [ "BUILD_REQUIRED" == "true" ];
     then
     echo "Building..."
-    oc start-build $2$SUFFIX -n $PROJECT_PREFIX-$3 --wait --follow
+    oc start-build $2$SUFFIX -n $PROJECT_PREFIX-$2 --wait --follow
     else
     echo "Deployment should be automatic..."
     fi
