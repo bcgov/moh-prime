@@ -8,18 +8,18 @@ pipeline {
             agent { label 'master' }
             steps {
                 echo "Building ..."
-                sh "bash ./player.sh build database dev"
-                sh "bash ./player.sh build api dev"
-                sh "bash ./player.sh build frontend dev"
+                sh "./player.sh build database dev"
+                sh "./player.sh build api dev"
+                sh "./player.sh build frontend dev"
             }
         }
         stage('Deploy (DEV)') {
             agent { label 'master' }
             steps {
                 echo "Deploy (DEV) ..."
-                sh "bash ./player.sh deploy database dev"
-                sh "bash ./player.sh deploy api dev"
-                sh "bash ./player.sh deploy frontend dev"
+                sh "./player.sh deploy database dev"
+                sh "./player.sh deploy api dev"
+                sh "./player.sh deploy frontend dev"
             }
         }
         /*
@@ -34,9 +34,9 @@ pipeline {
             steps {
                 echo "Deploy (DEV) ..."
                 //sh "export OC_APP=dev"
-                sh "bash ./player.sh sonar.pod"
-                //sh "bash ./player.sh sonar dotnet-webapi dev"
-                //sh "bash ./player.sh sonar angular-frontend dev"
+                sh "./player.sh sonar.pod"
+                //sh "./player.sh sonar dotnet-webapi dev"
+                //sh "./player.sh sonar angular-frontend dev"
             }
         }
         */
