@@ -8,12 +8,12 @@ import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
+import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
+import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 import { ProvisionResource } from '@provision/shared/services/provision-resource.service';
-import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
-import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
 
 @Component({
   selector: 'app-enrolments',
@@ -83,7 +83,7 @@ export class EnrolmentsComponent implements OnInit {
   }
 
   public deleteEnrolment(id: number) {
-    const data: DialogDefaultOptions = {
+    const data: DialogOptions = {
       title: 'Delete Enrolment',
       message: 'Are you sure you want to delete this enrolment?',
       actionType: 'warn',

@@ -7,9 +7,9 @@ import { EMPTY } from 'rxjs';
 
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
-import { Enrolment } from '@shared/models/enrolment.model';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
-import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
+import { Enrolment } from '@shared/models/enrolment.model';
+import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
@@ -36,7 +36,7 @@ export class ReviewComponent implements OnInit {
   public onSubmit() {
     if (this.enrolmentStateService.isEnrolmentValid()) {
       const enrolment = this.enrolmentStateService.enrolment;
-      const data: DialogDefaultOptions = {
+      const data: DialogOptions = {
         title: 'Submit Enrolment',
         message: 'When your enrolment has submitted for adjudication it can no longer be updated. Are you ready to submit your enrolment?',
         actionText: 'Submit Enrolment'

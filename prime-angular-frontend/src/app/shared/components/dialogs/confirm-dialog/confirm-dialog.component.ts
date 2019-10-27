@@ -1,8 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
-import { DialogDefaultContent as DialogDefaultOptions } from '../dialog-default-content.model';
-import { DialogDefaultOptions as DialogOptions } from '../dialog-default-options.model';
+import { DialogOptions } from '../dialog-options.model';
+import { DialogDefaultOptions } from '../dialog-default-options.model';
 import { DIALOG_DEFAULT_OPTION } from '../dialogs-properties.provider';
 
 @Component({
@@ -18,20 +18,25 @@ export class ConfirmDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public customOptions: DialogOptions,
     @Inject(DIALOG_DEFAULT_OPTION) public defaultOptions: DialogDefaultOptions
   ) {
-    // if (typeof customOptions === 'string') {
-    //   const content = defaultOptions[customOptions]();
-    // } else {
-    const icon = (customOptions.actionType === 'warn') ? 'warning' : 'help';
-    this.options = {
-      icon,
+    this.options = (typeof customOptions === 'string')
+      ? this.getOptions(defaultOptions[customOptions]())
+      : this.getOptions(customOptions);
+  }
+
+  public ngOnInit() { }
+
+  private getOptions(dialogOptions: DialogOptions) {
+    const options: DialogOptions = {
       actionType: 'primary',
       actionText: 'Confirm',
       cancelText: 'Cancel',
       cancelHide: false,
-      ...customOptions
+      ...dialogOptions
     };
-    // }
-  }
 
-  public ngOnInit() { }
+    return {
+      icon: (options.actionType === 'warn') ? 'warning' : 'help',
+      ...options
+    };
+  }
 }
