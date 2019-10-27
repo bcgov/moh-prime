@@ -7,8 +7,8 @@ import { Observable } from 'rxjs';
 
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
-import { ConfirmDiscardChangesDialogComponent } from '@shared/components/dialogs/confirm-discard-changes-dialog/confirm-discard-changes-dialog.component';
 import { Enrolment } from '@shared/models/enrolment.model';
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { FormUtilsService } from '@enrolment/shared/services/form-utils.service';
@@ -92,8 +92,9 @@ export class SelfDeclarationComponent implements OnInit {
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
+    const data = 'unsaved';
     return (this.form.dirty)
-      ? this.dialog.open(ConfirmDiscardChangesDialogComponent).afterClosed()
+      ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
       : true;
   }
 

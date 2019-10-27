@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, AbstractControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MatDialog, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material';
+import { MatDialog } from '@angular/material';
 
 import * as moment from 'moment';
 
@@ -14,7 +14,7 @@ import { ViewportService } from '@core/services/viewport.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
-import { ConfirmDiscardChangesDialogComponent } from '@shared/components/dialogs/confirm-discard-changes-dialog/confirm-discard-changes-dialog.component';
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
 import { EnrolmentResource } from '../../shared/services/enrolment-resource.service';
@@ -121,8 +121,9 @@ export class ProfileComponent implements OnInit {
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
+    const data = 'unsaved';
     return (this.form.dirty)
-      ? this.dialog.open(ConfirmDiscardChangesDialogComponent).afterClosed()
+      ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
       : true;
   }
 

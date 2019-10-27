@@ -11,7 +11,7 @@ import { ConfigService } from '@config/config.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
-import { ConfirmDiscardChangesDialogComponent } from '@shared/components/dialogs/confirm-discard-changes-dialog/confirm-discard-changes-dialog.component';
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { Job } from '../../shared/models/job.model';
 import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
 import { EnrolmentResource } from '../../shared/services/enrolment-resource.service';
@@ -141,8 +141,9 @@ export class ProfessionalInfoComponent implements OnInit {
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
+    const data = 'unsaved';
     return (this.form.dirty)
-      ? this.dialog.open(ConfirmDiscardChangesDialogComponent).afterClosed()
+      ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
       : true;
   }
 
