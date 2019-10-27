@@ -1,6 +1,6 @@
 #!/bin/sh
 function build() {
-    . "$COMPONENT.bash"
+    . "$COMPONENT.sh"
     echo "Building $COMPONENT to $PROJECT_PREFIX-$OC_APP..."
     echo "$PROJECT_PREFIX"-"$OC_APP"
     oc process -f "$TEMPLATE_DIRECTORY"/"$BUILD_CONFIG_TEMPLATE" \
@@ -24,7 +24,7 @@ function build() {
 }
 
 function deploy() {
-    . "$COMPONENT.bash"
+    . "$COMPONENT.sh"
     echo "Deploying $COMPONENT to $OC_APP ..."
     echo "$PROJECT_PREFIX"-"$OC_APP"
     oc process -f "$TEMPLATE_DIRECTORY"/"$DEPLOY_CONFIG_TEMPLATE" \
@@ -39,7 +39,7 @@ function deploy() {
 }
 
 function ocApply() {
-    . "$COMPONENT.bash"
+    . "$COMPONENT.sh"
     echo "ocApply..."
     echo "$PROJECT_PREFIX-$OC_APP"
     if [ $COMPONENT == "build" ];
