@@ -4,7 +4,16 @@ export COMPONENT=$2
 export OC_APP=$3
 source ./project.sh
 # source ./functions.sh
-
+function variablePopulation() {
+    if [ "${BRANCH_LOWER}" == "develop" ] || [ "${BRANCH_LOWER}" == "master" ];
+    then 
+    export SUFFIX=""
+    export CHANGE_BRANCH="$BRANCH_NAME"
+    else 
+    export SUFFIX="-${BRANCH_LOWER}";
+    fi
+}
+variablePopulation
 function build() {
     source ./"$COMPONENT.sh"
     echo "Building $COMPONENT to $PROJECT_PREFIX-$OC_APP..."

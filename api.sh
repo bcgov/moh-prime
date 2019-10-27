@@ -1,7 +1,7 @@
 #!/bin/sh
-export TEMPLATE_DIRECTORY="openshift"
-export SOURCE_CONTEXT_DIR="prime-dotnet-webapi"
-export BUILD_CONFIG_TEMPLATE="dotnet-webapi.bc.yaml"
-export DEPLOY_CONFIG_TEMPLATE="dotnet-webapi.dc.yaml"
-export APP_NAME="dotnet-webapi"
-export BUILD_REQUIRED="true"
+TEMPLATE_DIRECTORY="openshift"
+SOURCE_CONTEXT_DIR="prime-dotnet-webapi"
+BUILD_CONFIG_TEMPLATE="dotnet-webapi.bc.yaml"
+DEPLOY_CONFIG_TEMPLATE="dotnet-webapi.dc.yaml"
+APP_NAME="dotnet-webapi"
+BUILD_REQUIRED="true"

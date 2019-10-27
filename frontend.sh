@@ -1,7 +1,7 @@
 #!/bin/sh
-export TEMPLATE_DIRECTORY="openshift"
-export SOURCE_CONTEXT_DIR="prime-angular-frontend"
-export BUILD_CONFIG_TEMPLATE="angular-frontend.bc.yaml"
-export DEPLOY_CONFIG_TEMPLATE="angular-frontend.dc.yaml"
-export APP_NAME="angular-frontend"
-export BUILD_REQUIRED="true"
+TEMPLATE_DIRECTORY="openshift"
+SOURCE_CONTEXT_DIR="prime-angular-frontend"
+BUILD_CONFIG_TEMPLATE="angular-frontend.bc.yaml"
+DEPLOY_CONFIG_TEMPLATE="angular-frontend.dc.yaml"
+APP_NAME="angular-frontend"
+BUILD_REQUIRED="true"

@@ -1,7 +1,7 @@
 #!/bin/sh
-export TEMPLATE_DIRECTORY="openshift"
-export SOURCE_CONTEXT_DIR="prime-postgres"
-export BUILD_CONFIG_TEMPLATE="postgresql.bc.yaml"
-export DEPLOY_CONFIG_TEMPLATE="postgresql.dc.yaml"
-export APP_NAME="postgresql"
-export BUILD_REQUIRED=false
+TEMPLATE_DIRECTORY="openshift"
+SOURCE_CONTEXT_DIR="prime-postgres"
+BUILD_CONFIG_TEMPLATE="postgresql.bc.yaml"
+DEPLOY_CONFIG_TEMPLATE="postgresql.dc.yaml"
+APP_NAME="postgresql"
+BUILD_REQUIRED=false
