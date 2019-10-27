@@ -17,6 +17,11 @@ function variablePopulation() {
 variablePopulation
 function build() {
     source ./"$COMPONENT.sh"
+    buildPresent=$(oc get bc/"$APP_NAME"-"$BRANCH_LOWER" --ignore-not-found=true)
+    if [ -z "${buildPresent}" ];
+    then MODE="apply"
+    else MODE="create"
+    fi;
     echo "Building $COMPONENT to $PROJECT_PREFIX-$OC_APP..."
     echo "oc process -f $TEMPLATE_DIRECTORY/$BUILD_CONFIG_TEMPLATE -p NAME=$APP_NAME -p VERSION=$BUILD_NUMBER -p SUFFIX=$SUFFIX -p SOURCE_CONTEXT_DIR=$SOURCE_CONTEXT_DIR -p SOURCE_REPOSITORY_URL=$GIT_URL -p SOURCE_REPOSITORY_REF=$CHANGE_BRANCH -p OC_NAMESPACE=$PROJECT_PREFIX -p OC_APP=$OC_APP | oc apply -f - --namespace=$PROJECT_PREFIX-$OC_APP"
     oc process -f "$TEMPLATE_DIRECTORY"/"$BUILD_CONFIG_TEMPLATE" \
@@ -27,7 +32,7 @@ function build() {
     -p SOURCE_REPOSITORY_URL="$GIT_URL" \
     -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH" \
     -p OC_NAMESPACE="$PROJECT_PREFIX" \
-    -p OC_APP="$OC_APP" | oc apply -f - --namespace="$PROJECT_PREFIX\-$OC_APP"
+    -p OC_APP="$OC_APP" | oc $MODE -f - --namespace="$PROJECT_PREFIX\-$OC_APP"
     if [ "$BUILD_REQUIRED" == true ];
     then
         echo "Building oc start-build $APP_NAME$SUFFIX -n $PROJECT_PREFIX-$OC_APP --wait --follow ..."
@@ -39,6 +44,11 @@ function build() {
 
 function deploy() {
     source ./"$COMPONENT.sh"
+    deployPresent=$(oc get dc/"$APP_NAME"-"$BRANCH_LOWER" --ignore-not-found=true)
+    if [ -z "${deployPresent}" ];
+    then MODE="apply"
+    else MODE="create"
+    fi;
     echo "Deploying $COMPONENT to $OC_APP ..."
     echo "$PROJECT_PREFIX"-"$OC_APP"
     oc process -f ./"$TEMPLATE_DIRECTORY"/"$DEPLOY_CONFIG_TEMPLATE" \
@@ -49,7 +59,7 @@ function deploy() {
     -p SOURCE_REPOSITORY_URL="$GIT_URL" \
     -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH" \
     -p OC_NAMESPACE="$PROJECT_PREFIX" \
-    -p OC_APP="$OC_APP" | oc apply -f - --namespace="$PROJECT_PREFIX\-$OC_APP"
+    -p OC_APP="$OC_APP" | oc "$MODE" -f - --namespace="$PROJECT_PREFIX\-$OC_APP"
 }
 
 function ocApply() {
