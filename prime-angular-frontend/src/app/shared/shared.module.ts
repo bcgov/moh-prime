@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { NgxBusyModule } from './modules/ngx-busy/ngx-busy.module';
 import { NgxMaskModule } from 'ngx-mask';
 
 import { ConfigModule } from '@config/config.module';
@@ -39,13 +38,11 @@ import { SubHeaderComponent } from '@shared/components/sub-header/sub-header.com
     NgxMaterialModule,
     NgxMaskModule.forRoot(),
     NgxProgressModule,
-    ReactiveFormsModule,
-    NgxBusyModule
+    ReactiveFormsModule
   ],
   exports: [
     CommonModule,
     ConfigModule,
-    NgxBusyModule,
     NgxMaterialModule,
     NgxProgressModule,
     NgxMaskModule,
