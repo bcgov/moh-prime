@@ -4,6 +4,9 @@ import { Routes, RouterModule } from '@angular/router';
 import { CanDeactivateFormGuard } from '@core/guards/can-deactivate-form.guard';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 
+import { EnrolleeGuard } from './shared/guards/enrollee.guard';
+import { EnrolmentGuard } from './shared/guards/enrolment.guard';
+
 import { ProfileComponent } from './pages/profile/profile.component';
 import { ContactComponent } from './pages/contact/contact.component';
 import { ProfessionalInfoComponent } from './pages/professional-info/professional-info.component';
@@ -17,8 +20,10 @@ const routes: Routes = [
   {
     path: 'enrolment',
     component: DashboardComponent,
-    canLoad: [],
-    canActivate: [],
+    // canLoad: [EnrolleeGuard],
+    // canActivate: [EnrolleeGuard],
+    // TODO: figure out how to get around endless redirects using EnrolmentGuard
+    // canActivateChild: [EnrolleeGuard],
     children: [
       {
         path: 'profile',

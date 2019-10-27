@@ -3,6 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 
+import { ProvisionGuard } from './shared/guards/provision.guard';
+
 import { EnrolmentsComponent } from './pages/enrolments/enrolments.component';
 import { EnrolmentComponent } from './pages/enrolment/enrolment.component';
 
@@ -10,8 +12,9 @@ const routes: Routes = [
   {
     path: 'provision',
     component: DashboardComponent,
-    canLoad: [],
-    canActivate: [],
+    // canLoad: [ProvisionGuard],
+    // canActivate: [ProvisionGuard],
+    // canActivateChild: [ProvisionGuard],
     children: [
       {
         path: 'enrolments',
