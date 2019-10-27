@@ -4,8 +4,9 @@ export COMPONENT=$2
 export OC_APP=$3
 source ./project.sh
 # source ./functions.sh
+
 function build() {
-    source "$COMPONENT.sh"
+    source ./"$COMPONENT.sh"
     echo "Building $COMPONENT to $PROJECT_PREFIX-$OC_APP..."
     echo "$PROJECT_PREFIX"-"$OC_APP"
     oc process -f "$TEMPLATE_DIRECTORY"/"$BUILD_CONFIG_TEMPLATE" \
@@ -29,7 +30,7 @@ function build() {
 }
 
 function deploy() {
-    source "$COMPONENT.sh"
+    source ./"$COMPONENT.sh"
     echo "Deploying $COMPONENT to $OC_APP ..."
     echo "$PROJECT_PREFIX"-"$OC_APP"
     oc process -f "$TEMPLATE_DIRECTORY"/"$DEPLOY_CONFIG_TEMPLATE" \
@@ -44,7 +45,7 @@ function deploy() {
 }
 
 function ocApply() {
-    source "$COMPONENT.sh"
+    source ./"$COMPONENT.sh"
     echo "ocApply..."
     echo "$PROJECT_PREFIX-$OC_APP"
     if [ $COMPONENT == "build" ];
