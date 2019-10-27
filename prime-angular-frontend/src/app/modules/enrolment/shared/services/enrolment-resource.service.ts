@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import * as moment from 'moment';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
+import { Config } from '@config/config.model';
 import { PrimeHttpResponse } from '@core/models/prime-http-response.model';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
@@ -52,6 +53,18 @@ export class EnrolmentResource {
   public updateEnrolment(enrolment: Enrolment): Observable<any> {
     const { id } = enrolment;
     return this.http.put(`${this.config.apiEndpoint}/enrolments/${id}`, this.enrolmentAdapterRequest(enrolment));
+  }
+
+  public updateEnrolmentStatus(id: number, statusCode: number): Observable<Config[]> {
+    const payload = { code: statusCode };
+    return this.http.post(`${this.config.apiEndpoint}/enrolments/${id}/statuses`, payload)
+      .pipe(
+        map((response: PrimeHttpResponse) => response.result),
+        map((statuses: Config[]) => {
+          this.logger.info('ENROLMENT_STATUSES', statuses);
+          return statuses;
+        })
+      );
   }
 
   private enrolmentAdapterResponse(enrolment: Enrolment): Enrolment {
