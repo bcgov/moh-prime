@@ -1,3 +1,4 @@
+#!/bin/sh
 export TEMPLATE_DIRECTORY="openshift"
 export SOURCE_CONTEXT_DIR="prime-angular-frontend"
 export BUILD_CONFIG_TEMPLATE="angular-frontend.bc.yaml"

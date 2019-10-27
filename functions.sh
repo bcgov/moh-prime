@@ -1,8 +1,4 @@
 #!/bin/sh
-export COMPONENT=$1
-export OC_APP=$2
-source ./project.bash
-# source ./functions.bash
 function build() {
     . "$COMPONENT.bash"
     echo "Building $COMPONENT to $PROJECT_PREFIX-$OC_APP..."
@@ -121,30 +117,3 @@ function cleanOcArtifacts() {
     oc delete -n dqszvc-dev secret/"$i"
     done
 }
-
-
-# Build an deploy are very alike, require similar logic for config injestion.
-# This takes in Git, Jenkins and system variables to the template that will be processed.
-
-case "$1" in
-    build)
-        build $2 $3
-        ;;
-    deploy)
-        deploy $2 $3
-        ;;
-    ocApply)
-        ocApply $2 $3 $4
-        ;;
-    sonar)
-        sonar
-        ;;
-    zap)
-        zap $2 $3
-        ;;
-    cleanup)
-        cleanup
-        ;;
-    *)
-    echo "Usage: $0 {ocApply|sonar|zap|promote} [build|depoly] <app> <dev|test|prod>"
-esac
