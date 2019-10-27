@@ -1,11 +1,11 @@
 #!/bin/bash
-source project.bash
+source ./project.bash
 
 $OVERRIDES
 
 function determineMode() {
-    buildPresent=`oc get $2/$1-$BRANCH_LOWER --ignore-not-found=true`
-    if [ -z ${buildPresent} ];
+    buildPresent=$(oc get "$2"/"$1"-"$BRANCH_LOWER" --ignore-not-found=true)
+    if [ -z "${buildPresent}" ];
     then MODE="apply"
     else MODE="create"
     fi;
@@ -13,17 +13,17 @@ function determineMode() {
 
 # Scrubs all PR assets from the environment
 function cleanOcArtifacts() {
-    artifactItems=`oc get all -n $PROJECT_PREFIX-dev | grep -i "\-$BRANCH_NAME"  | column -t | awk '{print $1}' | sort`
+    artifactItems=$(oc get all -n "$PROJECT_PREFIX"-dev | grep -i -"$BRANCH_NAME"  | column -t | awk '{print $1}' | sort)
     echo "$artifactItems"
     for i in $artifactItems;
     do
     oc delete -n dqszvc-dev $i
     done
-    artifactSecrets=`oc get secrets -n $PROJECT_PREFIX-dev | grep -i "\-$BRANCH_NAME"  | column -t | awk '{print $1}' | sort`
+    artifactSecrets=$(oc get secrets -n "$PROJECT_PREFIX"-dev | grep -i -"$BRANCH_NAME"  | column -t | awk '{print $1}' | sort)
     echo "$artifactSecrets"
     for i in $artifactSecrets;
     do
-    oc delete -n dqszvc-dev secret/$i
+    oc delete -n dqszvc-dev secret/"$i"
     done
 }
 
@@ -31,9 +31,9 @@ function cleanOcArtifacts() {
 # This takes in Git, Jenkins and system variables to the template that will be processed.
 function build() {
     source $1.bash
-    echo "Building $1 to $PROJECT_PREFIX-$2 ..."
-    echo "$PROJECT_PREFIX-$2"
-    oc process -f $TEMPLATE_DIRECTORY/$BUILD_CONFIG_TEMPLATE \
+    echo "Building "$1" to "$PROJECT_PREFIX"-"$2" ..."
+    echo "$PROJECT_PREFIX"-"$2"
+    oc process -f "$TEMPLATE_DIRECTORY"/"$BUILD_CONFIG_TEMPLATE" \
     -p NAME="$2" \
     -p VERSION="$BUILD_NUMBER" \
     -p SUFFIX="$SUFFIX" \
@@ -41,23 +41,23 @@ function build() {
     -p SOURCE_REPOSITORY_URL="$GIT_URL" \
     -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH"  \
     -p OC_NAMESPACE="$PROJECT_PREFIX" \
-    -p OC_APP="$2" | oc apply -f - --namespace="$PROJECT_PREFIX-$2" 
+    -p OC_APP="$2" | oc apply -f - --namespace="$PROJECT_PREFIX"-"$2" 
     echo "Building oc start-build $OC_APP_NAME$SUFFIX -n $PROJECT_PREFIX-$2 --wait --follow ..."
-    oc start-build "$OC_APP_NAME$SUFFIX" -n "$PROJECT_PREFIX-$2" --wait --follow
+    oc start-build "$OC_APP_NAME$SUFFIX" -n "$PROJECT_PREFIX"-"$2" --wait --follow
     if [ "BUILD_REQUIRED" == "true" ];
     then
     echo "Building..."
-    oc start-build $2$SUFFIX -n $PROJECT_PREFIX-$2 --wait --follow
+    oc start-build "$2$SUFFIX" -n "$PROJECT_PREFIX"-"$2" --wait --follow
     else
     echo "Deployment should be automatic..."
     fi
 }
 
 function deploy() {
-    source $1.bash
+    source "$1".bash
     echo "Deploying $1 to $2 ..."
-    echo "$PROJECT_PREFIX-$2"
-    oc process -f $TEMPLATE_DIRECTORY/$DEPLOY_CONFIG_TEMPLATE \
+    echo "$PROJECT_PREFIX"-"$2"
+    oc process -f "$TEMPLATE_DIRECTORY"/"$DEPLOY_CONFIG_TEMPLATE" \
     -p NAME="$2" \
     -p VERSION="$BUILD_NUMBER" \
     -p SUFFIX="$SUFFIX" \
@@ -69,7 +69,7 @@ function deploy() {
 }
 
 function ocApply() {
-    source $1.bash
+    source "$1".bash
     echo "ocApply..."
     echo "$PROJECT_PREFIX-$2"
     if [ "$1" == "build" ];
@@ -84,9 +84,9 @@ function ocApply() {
     SUFFIX=""
     CHANGE_BRANCH="$BRANCH_NAME"
     else 
-    SUFFIX="-${BRANCH_LOWER}";
+    SUFFIX="\-${BRANCH_LOWER}";
     fi
-    oc process -f openshift/$2.$configType.yaml \
+    oc process -f openshift/"$2"."$configType".yaml \
     -p NAME="$2" \
     -p VERSION="$BUILD_NUMBER" \
     -p SUFFIX="$SUFFIX" \
@@ -106,7 +106,7 @@ function ocApply() {
 
 function sonar(){
     OC_APP=$2
-    deployPresent=`oc get bc/$1-$BRANCH_LOWER --ignore-not-found=true`
+    deployPresent=$(oc get bc/$1-$BRANCH_LOWER --ignore-not-found=true)
     if [ -z ${deployPresent} ];
     then MODE="apply"
     else MODE="create"
