@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
+import { NgxBusyModule } from './modules/ngx-busy/ngx-busy.module';
 import { NgxMaskModule } from 'ngx-mask';
 
 import { ConfigModule } from '@config/config.module';
@@ -16,10 +17,8 @@ import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { FormControlValidityDirective } from '@shared/directives/form-control-validity.directive';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { ConfirmDiscardChangesDialogComponent } from '@shared/components/dialogs/confirm-discard-changes-dialog/confirm-discard-changes-dialog.component';
 import { HeaderComponent } from '@shared/components/header/header.component';
 import { SubHeaderComponent } from '@shared/components/sub-header/sub-header.component';
-
 
 @NgModule({
   declarations: [
@@ -30,7 +29,6 @@ import { SubHeaderComponent } from '@shared/components/sub-header/sub-header.com
     FormControlValidityDirective,
     DashboardComponent,
     ConfirmDialogComponent,
-    ConfirmDiscardChangesDialogComponent,
     HeaderComponent,
     SubHeaderComponent,
     FormatDatePipe
@@ -41,11 +39,13 @@ import { SubHeaderComponent } from '@shared/components/sub-header/sub-header.com
     NgxMaterialModule,
     NgxMaskModule.forRoot(),
     NgxProgressModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxBusyModule
   ],
   exports: [
     CommonModule,
     ConfigModule,
+    NgxBusyModule,
     NgxMaterialModule,
     NgxProgressModule,
     NgxMaskModule,
@@ -61,8 +61,7 @@ import { SubHeaderComponent } from '@shared/components/sub-header/sub-header.com
     SubHeaderComponent
   ],
   entryComponents: [
-    ConfirmDialogComponent,
-    ConfirmDiscardChangesDialogComponent
+    ConfirmDialogComponent
   ]
 })
 export class SharedModule { }
