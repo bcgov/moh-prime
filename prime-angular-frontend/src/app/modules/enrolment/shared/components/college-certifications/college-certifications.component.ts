@@ -13,6 +13,7 @@ import { ViewportService } from '@core/services/viewport.service';
 })
 export class CollegeCertificationsComponent implements OnInit {
   @Input() public form: FormGroup;
+  @Input() public isFirst: boolean;
   @Output() public remove: EventEmitter<number>;
 
   public colleges: CollegeConfig[];

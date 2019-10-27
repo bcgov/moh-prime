@@ -93,10 +93,16 @@ export class ProfessionalInfoComponent implements OnInit {
           (error: any) => {
             this.toastService.openErrorToast('Professional information could not be saved');
             this.logger.error('[Enrolment] Professional::onSubmit error has occurred: ', error);
-          });
+          }
+        );
       this.form.markAsPristine();
     } else {
       this.form.markAllAsTouched();
+      Object.keys(this.certifications.controls).forEach((key, index) => {
+        console.log(this.certifications.at(index));
+
+        this.certifications.at(index).markAllAsTouched();
+      });
     }
   }
 
@@ -175,6 +181,11 @@ export class ProfessionalInfoComponent implements OnInit {
 
         this.isAccessingPharmaNetOnBehalfOf.enable({ emitEvent: false });
       } else {
+        if (!this.certifications.length) {
+          // Add an initial empty certification when displayed
+          this.addCertification();
+        }
+
         // College certification indicates not being accessed on behalf of
         this.isAccessingPharmaNetOnBehalfOf.reset(null, { emitEvent: false });
         this.isAccessingPharmaNetOnBehalfOf.disable({ emitEvent: false });
