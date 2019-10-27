@@ -35,15 +35,15 @@ function build() {
     echo "-p SOURCE_REPOSITORY_REF=$CHANGE_BRANCH"  
     echo "-p OC_NAMESPACE=$PROJECT_PREFIX"
     echo "-p OC_APP=$APP_NAME | oc apply -f - --namespace=$PROJECT_PREFIX-$OC_APP"
-    oc process -f "$TEMPLATE_DIRECTORY/$BUILD_CONFIG_TEMPLATE" 
-    -p NAME="$APP_NAME" \
-    -p VERSION="$BUILD_NUMBER" \
-    -p SUFFIX="$SUFFIX" \
-    -p SOURCE_CONTEXT_DIR="$SOURCE_CONTEXT_DIR" \
-    -p SOURCE_REPOSITORY_URL="$GIT_URL" \
-    -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH"  \
-    -p OC_NAMESPACE="$PROJECT_PREFIX" \
-    -p OC_APP="$OC_APP" | oc apply -f - --namespace="$PROJECT_PREFIX-$OC_APP" 
+    oc process -f "$TEMPLATE_DIRECTORY/$BUILD_CONFIG_TEMPLATE" \
+        -p NAME="$APP_NAME" \
+        -p VERSION="$BUILD_NUMBER" \
+        -p SUFFIX="$SUFFIX" \
+        -p SOURCE_CONTEXT_DIR="$SOURCE_CONTEXT_DIR" \
+        -p SOURCE_REPOSITORY_URL="$GIT_URL" \
+        -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH"  \
+        -p OC_NAMESPACE="$PROJECT_PREFIX" \
+        -p OC_APP="$OC_APP" | oc apply -f - --namespace="$PROJECT_PREFIX-$OC_APP" 
     if [ "$BUILD_REQUIRED" == true ];
     then
         echo "Building oc start-build $APP_NAME$SUFFIX -n $PROJECT_PREFIX-$OC_APP --wait --follow ..."
@@ -58,14 +58,14 @@ function deploy() {
     echo "Deploying $COMPONENT to $OC_APP ..."
     echo "$PROJECT_PREFIX"-"$OC_APP"
     oc process -f "$TEMPLATE_DIRECTORY/$DEPLOY_CONFIG_TEMPLATE" \
-    -p NAME="$APP_NAME" \
-    -p VERSION="$BUILD_NUMBER" \
-    -p SUFFIX="$SUFFIX" \
-    -p SOURCE_CONTEXT_DIR="$SOURCE_CONTEXT_DIR" \
-    -p SOURCE_REPOSITORY_URL="$GIT_URL" \
-    -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH"  \
-    -p OC_NAMESPACE="$PROJECT_PREFIX" \
-    -p OC_APP="$OC_APP" | oc apply -f - --namespace="$PROJECT_PREFIX-$OC_APP" 
+        -p NAME="$APP_NAME" \
+        -p VERSION="$BUILD_NUMBER" \
+        -p SUFFIX="$SUFFIX" \
+        -p SOURCE_CONTEXT_DIR="$SOURCE_CONTEXT_DIR" \
+        -p SOURCE_REPOSITORY_URL="$GIT_URL" \
+        -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH"  \
+        -p OC_NAMESPACE="$PROJECT_PREFIX" \
+        -p OC_APP="$OC_APP" | oc apply -f - --namespace="$PROJECT_PREFIX-$OC_APP" 
 }
 
 function ocApply() {
