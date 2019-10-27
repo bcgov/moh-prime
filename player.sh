@@ -26,6 +26,15 @@ function build() {
     echo APP_NAME="$APP_NAME"
     echo BUILD_REQUIRED="$BUILD_REQUIRED"
     echo SUFFIX="$SUFFIX"
+    echo "oc process -f $TEMPLATE_DIRECTORY/$BUILD_CONFIG_TEMPLATE"
+    echo "-p NAME=$OC_APP" 
+    echo "-p VERSION=$BUILD_NUMBER"
+    echo "-p SUFFIX=$SUFFIX"
+    echo "-p SOURCE_CONTEXT_DIR=$SOURCE_CONTEXT_DIR"
+    echo "-p SOURCE_REPOSITORY_URL=$GIT_URL" 
+    echo "-p SOURCE_REPOSITORY_REF=$CHANGE_BRANCH"  
+    echo "-p OC_NAMESPACE=$PROJECT_PREFIX"
+    echo "-p OC_APP=$OC_APP | oc apply -f - --namespace=$PROJECT_PREFIX-$OC_APP"
     oc process -f "$TEMPLATE_DIRECTORY/$BUILD_CONFIG_TEMPLATE" \
     -p NAME="$OC_APP" \
     -p VERSION="$BUILD_NUMBER" \
