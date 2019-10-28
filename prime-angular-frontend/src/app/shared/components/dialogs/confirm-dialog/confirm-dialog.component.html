@@ -1,17 +1,22 @@
-<h2 mat-dialog-title>
-  {{ title }}
+<h2 mat-dialog-title
+    class="d-flex align-items-stretch">
+  <mat-icon *ngIf="options.icon"
+            [color]="options.actionType">{{ options.icon }}</mat-icon>
+  <span class="flex-grow-1">
+    {{ options.title }}
+  </span>
 </h2>
 <mat-dialog-content>
-  {{ message }}
+  <p>{{ options.message }}</p>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-raised-button
-          color="primary"
+  <button *ngIf="!options.cancelHide"
+          mat-stroked-button
           [mat-dialog-close]="false"
           cdkFocusInitial
-          class="my-2 mr-3">{{ cancel }}</button>
+          class="my-2 mr-3">{{ options.cancelText }}</button>
   <button mat-raised-button
-          color="warn"
+          [color]="options.actionType"
           [mat-dialog-close]="true"
-          class="my-2 mr-3">{{ confirm }}</button>
+          class="my-2 mr-3">{{ options.actionText }}</button>
 </mat-dialog-actions>
