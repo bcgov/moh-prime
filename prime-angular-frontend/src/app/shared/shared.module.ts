@@ -38,7 +38,6 @@ import { SubHeaderComponent } from '@shared/components/sub-header/sub-header.com
   imports: [
     CommonModule,
     RouterModule,
-    NgxBusyModule,
     NgxMaterialModule,
     NgxMaskModule.forRoot(),
     NgxProgressModule,

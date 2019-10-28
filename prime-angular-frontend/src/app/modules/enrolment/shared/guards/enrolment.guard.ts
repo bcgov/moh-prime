@@ -4,7 +4,7 @@ import {
   RouterStateSnapshot, Router, Route, UrlSegment, UrlTree
 } from '@angular/router';
 
-import { Observable, EMPTY } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
@@ -26,14 +26,16 @@ export class EnrolmentGuard implements CanActivate, CanActivateChild, CanLoad {
     route: Route,
     segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean {
 
-    return this.checkEnrolment();
+    return this.checkEnrolment(route.path);
   }
 
   public canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-    return this.checkEnrolment();
+    const [segment] = next.url;
+
+    return this.checkEnrolment(segment.path);
   }
 
   public canActivateChild(
@@ -45,20 +47,24 @@ export class EnrolmentGuard implements CanActivate, CanActivateChild, CanLoad {
 
   /**
    * @description
-   * Check for an enrolment, and attempt to redirect
-   * to an appropriate destination on failure.
+   * Check for an enrolment, and attempt to redirect to an appropriate
+   * destination based on its existence or status.
    */
-  private checkEnrolment(): Observable<boolean> {
+  // TODO: potentially expensive since it would be invoked on each route
+  // TODO: export enrolment steps into an enum, and reuse for routes
+  private checkEnrolment(routePath: string): Observable<boolean> {
     return this.enrolmentResource.enrolments()
       .pipe(
         map((enrolment: Enrolment) => {
           const routes = this.config.routes;
 
           if (!enrolment) {
-            this.router.navigate([routes.enrolment, 'profile']);
-          }
-
-          if (enrolment) {
+            if (routePath !== 'profile') {
+              this.router.navigate([routes.enrolment, 'profile']);
+            } else {
+              return true;
+            }
+          } else if (enrolment) {
             switch (enrolment.currentStatus.status.code) {
               case EnrolmentStatus.IN_PROGRESS:
                 // Allow access to the route and provide the enrolment
@@ -73,6 +79,9 @@ export class EnrolmentGuard implements CanActivate, CanActivateChild, CanLoad {
               // case EnrolmentStatus.ACCEPTED_TOS:
               // case EnrolmentStatus.DECLINED_TOS:
               //   this.router.navigate([routes.???, '...']);
+              //   break;
+              // default:
+              //   TODO: should there be a default sending them to access denied?
               //   break;
             }
           }

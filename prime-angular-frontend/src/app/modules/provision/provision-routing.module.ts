@@ -12,9 +12,17 @@ const routes: Routes = [
   {
     path: 'provision',
     component: DashboardComponent,
-    // canLoad: [ProvisionGuard],
-    // canActivate: [ProvisionGuard],
-    // canActivateChild: [ProvisionGuard],
+    // Check authentication and authorization each time
+    // the router navigates to the next route
+    // canLoad: [],
+    // canActivate: [],
+    // TODO: apply AuthGuard and then ProvisionGuard
+    // canActivateChild: [
+    //   AuthGuard,
+    //   // Guard module from being accessed without the proper
+    //   // authorization based on the user role permissions
+    //   ProvisionGuard
+    // ],
     children: [
       {
         path: 'enrolments',

@@ -20,38 +20,51 @@ const routes: Routes = [
   {
     path: 'enrolment',
     component: DashboardComponent,
-    // canLoad: [EnrolleeGuard],
-    // canActivate: [EnrolleeGuard],
-    // TODO: figure out how to get around endless redirects using EnrolmentGuard
-    // canActivateChild: [EnrolleeGuard],
+    // Check authentication and authorization each time
+    // the router navigates to the next route
+    // canLoad: [],
+    // canActivate: [],
+    // TODO: apply AuthGuard and then EnrolleeGuard
+    // canActivateChild: [
+    //   AuthGuard,
+    //   // Guard module from being accessed without the proper
+    //   // authorization based on the user role permissions
+    //   EnrolleeGuard
+    // ],
     children: [
       {
         path: 'profile',
         component: ProfileComponent,
+        canActivate: [EnrolmentGuard],
         canDeactivate: [CanDeactivateFormGuard]
       },
       {
         path: 'contact',
         component: ContactComponent,
+        canActivate: [EnrolmentGuard],
         canDeactivate: [CanDeactivateFormGuard]
       },
       {
         path: 'professional',
         component: ProfessionalInfoComponent,
+        canActivate: [EnrolmentGuard],
         canDeactivate: [CanDeactivateFormGuard]
       },
       {
         path: 'declaration',
         component: SelfDeclarationComponent,
+        canActivate: [EnrolmentGuard],
         canDeactivate: [CanDeactivateFormGuard]
       },
       {
         path: 'access',
         component: PharmanetAccessComponent,
+        canActivate: [EnrolmentGuard],
         canDeactivate: [CanDeactivateFormGuard]
       },
       {
         path: 'review',
+        canActivate: [EnrolmentGuard],
         component: ReviewComponent
       },
       {
