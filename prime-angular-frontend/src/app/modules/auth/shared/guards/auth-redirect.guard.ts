@@ -1,6 +1,12 @@
 import { Injectable, Inject } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
+import {
+  CanActivateChild, ActivatedRouteSnapshot,
+  RouterStateSnapshot, UrlTree, Router
+} from '@angular/router';
 
+import { Observable } from 'rxjs';
+
+import { KeycloakLoginOptions } from 'keycloak-js';
 import { KeycloakAuthGuard, KeycloakService } from 'keycloak-angular';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
@@ -10,7 +16,7 @@ import { Role } from '../enum/role.enum';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthRedirectGuard extends KeycloakAuthGuard implements CanActivate {
+export class AuthRedirectGuard extends KeycloakAuthGuard implements CanActivateChild {
   constructor(
     protected router: Router,
     protected keycloakAngular: KeycloakService,
@@ -20,15 +26,31 @@ export class AuthRedirectGuard extends KeycloakAuthGuard implements CanActivate 
     super(router, keycloakAngular);
   }
 
+  public canActivateChild(
+    next: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+
+    return this.canActivate(next, state);
+  }
+
   /**
    * @description
-   * Check the access of the authenticated user.
+   * Check the access of the authenticated user, and
+   * redirect to an appropriate destination.
    */
   public isAccessAllowed(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
     return new Promise((resolve, reject) => {
       if (!this.authenticated) {
-        this.keycloakAngular.login()
+        // Capture the user's current location, and provide it to
+        // Keycloak to redirect the user to where they originated
+        // once authenticated
+        const options: KeycloakLoginOptions = {
+          redirectUri: state.url
+        };
+
+        this.keycloakAngular.login(options)
           .catch(e => this.logger.error(e));
+
         return reject(false);
       }
 
@@ -43,6 +65,7 @@ export class AuthRedirectGuard extends KeycloakAuthGuard implements CanActivate 
         reject(false);
       }
 
+      // Otherwise, allow current route access
       resolve(true);
     });
   }
