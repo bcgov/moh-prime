@@ -1,48 +1,49 @@
 import { Injectable, Inject } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 
-import { Observable } from 'rxjs';
+import { KeycloakAuthGuard, KeycloakService } from 'keycloak-angular';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
-import { AuthService } from '../services/auth.service';
+import { LoggerService } from '@core/services/logger.service';
+import { Role } from '../enum/role.enum';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthRedirectGuard implements CanActivate {
+export class AuthRedirectGuard extends KeycloakAuthGuard implements CanActivate {
   constructor(
+    protected router: Router,
+    protected keycloakAngular: KeycloakService,
     @Inject(APP_CONFIG) private config: AppConfig,
-    private router: Router,
-    private authService: AuthService
-  ) { }
-
-  canActivate(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-
-    return this.checkAuth();
+    private logger: LoggerService
+  ) {
+    super(router, keycloakAngular);
   }
 
   /**
-   * Check the authentication of the user.
-   *
-   * @private
-   * @returns {(boolean | Observable<boolean>)}
-   * @memberof AuthRedirectGuard
+   * @description
+   * Check the access of the authenticated user.
    */
-  private checkAuth(): boolean | Observable<boolean> {
-    // TODO: revisit guards when authentication is working
-    // if (this.authService.isTokenExpired()) {
-    //   // Already logged in
-    //   this.router.navigate([this.config.routes.auth]);
-    //   return false;
-    // }
+  public isAccessAllowed(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      if (!this.authenticated) {
+        this.keycloakAngular.login()
+          .catch(e => this.logger.error(e));
+        return reject(false);
+      }
 
-    // // Expired tokens should be removed to prevent tokens
-    // // being sent during re-authentication, which responds
-    // // with an HTTP error status code
-    // this.authService.removeToken();
+      if (this.keycloakAngular.isUserInRole(Role.ENROLLEE)) {
+        this.router.navigate([this.config.routes.enrolment]);
+        reject(false);
+      } else if (
+        this.keycloakAngular.isUserInRole(Role.PROVISIONER) ||
+        this.keycloakAngular.isUserInRole(Role.ADMIN)
+      ) {
+        this.router.navigate([this.config.routes.provision]);
+        reject(false);
+      }
 
-    return true;
+      resolve(true);
+    });
   }
 }

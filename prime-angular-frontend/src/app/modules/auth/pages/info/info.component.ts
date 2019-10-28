@@ -14,11 +14,8 @@ export class InfoComponent implements OnInit {
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private keycloakService: KeycloakService,
-    router: Router) {
-    if (keycloakService.getUserRoles().includes('prime_user')) {
-      router.navigate(['/enrolment/profile']);
-    }
-  }
+    router: Router
+  ) { }
 
   ngOnInit() {
   }
