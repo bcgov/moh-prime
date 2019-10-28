@@ -98,11 +98,6 @@ export class ProfessionalInfoComponent implements OnInit {
       this.form.markAsPristine();
     } else {
       this.form.markAllAsTouched();
-      Object.keys(this.certifications.controls).forEach((key, index) => {
-        console.log(this.certifications.at(index));
-
-        this.certifications.at(index).markAllAsTouched();
-      });
     }
   }
 
