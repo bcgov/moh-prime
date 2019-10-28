@@ -1,36 +1,31 @@
 import { Injectable, Inject } from '@angular/core';
 import {
-  CanActivate, CanActivateChild, CanLoad, Route, UrlSegment,
-  ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router
+  CanActivateChild, ActivatedRouteSnapshot,
+  RouterStateSnapshot, UrlTree, Router
 } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
+import { KeycloakLoginOptions } from 'keycloak-js';
+import { KeycloakAuthGuard, KeycloakService } from 'keycloak-angular';
+
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
+import { LoggerService } from '@core/services/logger.service';
+import { Role } from '@auth/shared/enum/role.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProvisionGuard implements CanActivate, CanActivateChild, CanLoad {
+export class ProvisionGuard extends KeycloakAuthGuard implements CanActivateChild {
   constructor(
+    protected router: Router,
+    protected keycloakAngular: KeycloakService,
     @Inject(APP_CONFIG) private config: AppConfig,
-    private router: Router,
-    private authService: AuthService
-  ) { }
-
-  public canLoad(
-    route: Route,
-    segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean {
-
-    return this.checkPermissions();
-  }
-
-  public canActivate(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-
-    return this.checkPermissions();
+    private authService: AuthService,
+    private logger: LoggerService
+  ) {
+    super(router, keycloakAngular);
   }
 
   public canActivateChild(
@@ -42,21 +37,35 @@ export class ProvisionGuard implements CanActivate, CanActivateChild, CanLoad {
 
   /**
    * @description
-   * Check permissions of the use, and attempt to redirect
-   * to an appropriate destination on failure.
+   * Check the access of the authenticated user, and
+   * redirect to an appropriate destination.
    */
-  private async checkPermissions(): Promise<boolean> {
-    if (this.authService.isProvisioner() || this.authService.isAdmin()) {
-      return true;
-    } else if (await this.authService.isEnrollee()) {
-      // WARNING: Don't redirect if they are an admin instead let the
-      // AdminRedirect guard manage the redirection, otherwise routes
-      // are called rapidly in quick succession, which causes conflicts!
-      return false;
-    }
+  public isAccessAllowed(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      if (!this.authenticated) {
+        // Capture the user's current location, and provide it to
+        // Keycloak to redirect the user to where they originated
+        // once authenticated
+        const options: KeycloakLoginOptions = {
+          redirectUri: state.url
+        };
 
-    // Access has been denied
-    this.router.navigate([this.config.routes.denied]);
-    return false;
+        this.keycloakAngular.login(options)
+          .catch(e => this.logger.error(e));
+
+        return reject(false);
+      }
+
+      if (
+        this.keycloakAngular.isUserInRole(Role.PROVISIONER) ||
+        this.keycloakAngular.isUserInRole(Role.ADMIN)
+      ) {
+        return resolve(true);
+      }
+
+      // Access has been denied
+      this.router.navigate([this.config.routes.denied]);
+      return reject(false);
+    });
   }
 }

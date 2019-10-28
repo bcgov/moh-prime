@@ -10,8 +10,8 @@ import { KeycloakLoginOptions } from 'keycloak-js';
 import { KeycloakAuthGuard, KeycloakService } from 'keycloak-angular';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
+import { Role } from '@auth/shared/enum/role.enum';
 import { LoggerService } from '@core/services/logger.service';
-import { Role } from '../enum/role.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -56,17 +56,17 @@ export class AuthRedirectGuard extends KeycloakAuthGuard implements CanActivateC
 
       if (this.keycloakAngular.isUserInRole(Role.ENROLLEE)) {
         this.router.navigate([this.config.routes.enrolment]);
-        reject(false);
+        return reject(false);
       } else if (
         this.keycloakAngular.isUserInRole(Role.PROVISIONER) ||
         this.keycloakAngular.isUserInRole(Role.ADMIN)
       ) {
         this.router.navigate([this.config.routes.provision]);
-        reject(false);
+        return reject(false);
       }
 
       // Otherwise, allow current route access
-      resolve(true);
+      return resolve(true);
     });
   }
 }
