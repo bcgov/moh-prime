@@ -41,8 +41,7 @@ export class AuthRedirectGuard extends KeycloakAuthGuard implements CanActivateC
   public isAccessAllowed(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
     return new Promise((resolve, reject) => {
       if (!this.authenticated) {
-        this.router.navigate([this.config.routes.auth]);
-        return reject(false);
+        return resolve(true);
       }
 
       if (this.keycloakAngular.isUserInRole(Role.ENROLLEE)) {
