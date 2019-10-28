@@ -1,44 +1,62 @@
 import { Injectable, Inject } from '@angular/core';
 import {
-  CanLoad, CanActivate, CanActivateChild,
-  ActivatedRouteSnapshot, RouterStateSnapshot,
-  Route, Router, NavigationExtras
+  CanActivateChild, ActivatedRouteSnapshot,
+  RouterStateSnapshot, UrlTree, Router
 } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
-import { APP_CONFIG, AppConfig } from 'app/app-config.module';
+import { KeycloakLoginOptions } from 'keycloak-js';
+import { KeycloakAuthGuard, KeycloakService } from 'keycloak-angular';
 
-import { AuthService } from '../services/auth.service';
+import { APP_CONFIG, AppConfig } from 'app/app-config.module';
+import { LoggerService } from '@core/services/logger.service';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanLoad, CanActivate, CanActivateChild {
+export class AuthGuard extends KeycloakAuthGuard implements CanActivateChild {
   constructor(
+    protected router: Router,
+    protected keycloakAngular: KeycloakService,
     @Inject(APP_CONFIG) private config: AppConfig,
-    private router: Router,
-    private authService: AuthService
-  ) { }
-
-  canLoad(route: Route): boolean | Observable<boolean> | Promise<boolean> {
-
-    return this.checkAuth();
+    private authService: AuthService,
+    private logger: LoggerService
+  ) {
+    super(router, keycloakAngular);
   }
 
-  canActivate(
+  public canActivateChild(
     next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    const url: string = state.url;
-
-    return this.checkAuth(url);
-  }
-
-  canActivateChild(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
     return this.canActivate(next, state);
+  }
+
+  /**
+   * @description
+   * Check the access of the authenticated user, and
+   * redirect to an appropriate destination.
+   */
+  public isAccessAllowed(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      if (!this.authenticated) {
+        // Capture the user's current location, and provide it to
+        // Keycloak to redirect the user to where they originated
+        // once authenticated
+        const options: KeycloakLoginOptions = {
+          redirectUri: state.url
+        };
+
+        this.keycloakAngular.login(options)
+          .catch(e => this.logger.error(e));
+
+        return reject(false);
+      }
+
+      return resolve(true);
+    });
   }
 
   /**
