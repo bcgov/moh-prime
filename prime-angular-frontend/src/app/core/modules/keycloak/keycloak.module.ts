@@ -1,15 +1,10 @@
 import { NgModule, APP_INITIALIZER } from '@angular/core';
-import { KeycloakService, KeycloakAngularModule } from 'keycloak-angular';
+import { environment } from '@env/environment';
 
-export function initializer(keycloak: KeycloakService): () => Promise<any> {
-  return (): Promise<any> => keycloak.init({
-    // TODO: use environment variables
-    config: {
-      url: 'https://sso-dev.pathfinder.gov.bc.ca/auth',
-      realm: 'v4mbqqas',
-      clientId: 'prime-application-local'
-    }
-  });
+import { KeycloakService, KeycloakAngularModule, KeycloakOptions } from 'keycloak-angular';
+
+export function initializer(keycloak: KeycloakService): () => Promise<boolean> {
+  return (): Promise<boolean> => keycloak.init(environment.keycloakConfig as KeycloakOptions);
 }
 
 @NgModule({
