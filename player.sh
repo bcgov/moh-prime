@@ -26,7 +26,7 @@ function build() {
     fi;
     echo "Building $COMPONENT to $PROJECT_PREFIX-$OC_APP..."
     echo "oc process -f $TEMPLATE_DIRECTORY/$BUILD_CONFIG_TEMPLATE -p NAME=$APP_NAME -p VERSION=$BUILD_NUMBER -p SUFFIX=$SUFFIX -p SOURCE_CONTEXT_DIR=$SOURCE_CONTEXT_DIR -p SOURCE_REPOSITORY_URL=$GIT_URL -p SOURCE_REPOSITORY_REF=$CHANGE_BRANCH -p OC_NAMESPACE=$PROJECT_PREFIX -p OC_APP=$OC_APP | oc apply -f - --namespace=$PROJECT_PREFIX-$OC_APP"
-    oc process -f "$TEMPLATE_DIRECTORY"/"$BUILD_CONFIG_TEMPLATE" \
+    oc process -f "$TEMPLATE_DIRECTORY/$BUILD_CONFIG_TEMPLATE" \
     -p NAME="$APP_NAME" \ 
     -p VERSION="$BUILD_NUMBER" \
     -p SUFFIX="$SUFFIX" \
@@ -55,7 +55,7 @@ function deploy() {
     fi;
     echo "Deploying $COMPONENT to $OC_APP ..."
     echo "$PROJECT_PREFIX"-"$OC_APP"
-    oc process -f ./"$TEMPLATE_DIRECTORY"/"$DEPLOY_CONFIG_TEMPLATE" \
+    oc process -f ./"$TEMPLATE_DIRECTORY/$DEPLOY_CONFIG_TEMPLATE" \
     -p NAME="$APP_NAME" \ 
     -p VERSION="$BUILD_NUMBER" \
     -p SUFFIX="$SUFFIX" \
@@ -77,7 +77,7 @@ function deleteBc() {
     fi;
     echo "Deleting $COMPONENT from $OC_APP ..."
     echo "$PROJECT_PREFIX"-"$OC_APP"
-    oc process -f ./"$TEMPLATE_DIRECTORY"/"$DEPLOY_CONFIG_TEMPLATE" \
+    oc process -f ./"$TEMPLATE_DIRECTORY/$DEPLOY_CONFIG_TEMPLATE" \
     -p NAME="$APP_NAME" \ 
     -p VERSION="$BUILD_NUMBER" \
     -p SUFFIX="$SUFFIX" \
@@ -90,7 +90,7 @@ function deleteBc() {
 
 function deleteDc() {
     source ./"$COMPONENT.sh"
-    deployPresent=$(oc get dc/"$APP_NAME"-"$BRANCH_LOWER" --ignore-not-found=true)
+    deployPresent=$(oc get dc/"$APP_NAME-$BRANCH_LOWER" --ignore-not-found=true)
     if [ -z "${deployPresent}" ];
     then 
         MODE="apply"
@@ -99,7 +99,7 @@ function deleteDc() {
     fi;
     echo "Deleting $COMPONENT from $OC_APP ..."
     echo "$PROJECT_PREFIX"-"$OC_APP"
-    oc process -f ./"$TEMPLATE_DIRECTORY"/"$DEPLOY_CONFIG_TEMPLATE" \
+    oc process -f ./"$TEMPLATE_DIRECTORY/$DEPLOY_CONFIG_TEMPLATE" \
     -p NAME="$APP_NAME" \ 
     -p VERSION="$BUILD_NUMBER" \
     -p SUFFIX="$SUFFIX" \
