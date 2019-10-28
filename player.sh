@@ -7,10 +7,10 @@ source ./project.sh
 function variablePopulation() {
     if [ "${BRANCH_LOWER}" == "develop" ] || [ "${BRANCH_LOWER}" == "master" ];
     then 
-    export SUFFIX=""
-    export CHANGE_BRANCH="$BRANCH_NAME"
+        export SUFFIX=""
+        export CHANGE_BRANCH="$BRANCH_NAME"
     else 
-    export SUFFIX="-${BRANCH_LOWER}";
+        export SUFFIX="-${BRANCH_LOWER}";
     fi
 }
 
@@ -19,8 +19,10 @@ function build() {
     source ./"$COMPONENT.sh"
     buildPresent=$(oc get bc/"$APP_NAME"-"$BRANCH_LOWER" --ignore-not-found=true)
     if [ -z "${buildPresent}" ];
-    then MODE="apply"
-    else MODE="create"
+    then 
+        MODE="apply"
+    else 
+        MODE="create"
     fi;
     echo "Building $COMPONENT to $PROJECT_PREFIX-$OC_APP..."
     echo "oc process -f $TEMPLATE_DIRECTORY/$BUILD_CONFIG_TEMPLATE -p NAME=$APP_NAME -p VERSION=$BUILD_NUMBER -p SUFFIX=$SUFFIX -p SOURCE_CONTEXT_DIR=$SOURCE_CONTEXT_DIR -p SOURCE_REPOSITORY_URL=$GIT_URL -p SOURCE_REPOSITORY_REF=$CHANGE_BRANCH -p OC_NAMESPACE=$PROJECT_PREFIX -p OC_APP=$OC_APP | oc apply -f - --namespace=$PROJECT_PREFIX-$OC_APP"
@@ -46,8 +48,10 @@ function deploy() {
     source ./"$COMPONENT.sh"
     deployPresent=$(oc get dc/"$APP_NAME"-"$BRANCH_LOWER" --ignore-not-found=true)
     if [ -z "${deployPresent}" ];
-    then MODE="apply"
-    else MODE="create"
+    then 
+        MODE="apply"
+    else 
+        MODE="create"
     fi;
     echo "Deploying $COMPONENT to $OC_APP ..."
     echo "$PROJECT_PREFIX"-"$OC_APP"
@@ -60,6 +64,50 @@ function deploy() {
     -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH" \
     -p OC_NAMESPACE="$PROJECT_PREFIX" \
     -p OC_APP="$OC_APP" | oc "$MODE" -f - --namespace="$PROJECT_PREFIX\-$OC_APP"
+}
+
+function deleteBc() {
+    source ./"$COMPONENT.sh"
+    deployPresent=$(oc get bc/"$APP_NAME"-"$BRANCH_LOWER" --ignore-not-found=true)
+    if [ -z "${deployPresent}" ];
+    then 
+        MODE="apply"
+    else 
+        MODE="create"
+    fi;
+    echo "Deleting $COMPONENT from $OC_APP ..."
+    echo "$PROJECT_PREFIX"-"$OC_APP"
+    oc process -f ./"$TEMPLATE_DIRECTORY"/"$DEPLOY_CONFIG_TEMPLATE" \
+    -p NAME="$APP_NAME" \ 
+    -p VERSION="$BUILD_NUMBER" \
+    -p SUFFIX="$SUFFIX" \
+    -p SOURCE_CONTEXT_DIR="$SOURCE_CONTEXT_DIR" \
+    -p SOURCE_REPOSITORY_URL="$GIT_URL" \
+    -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH" \
+    -p OC_NAMESPACE="$PROJECT_PREFIX" \
+    -p OC_APP="$OC_APP" | oc delete -f - --namespace="$PROJECT_PREFIX\-$OC_APP"
+}
+
+function deleteDc() {
+    source ./"$COMPONENT.sh"
+    deployPresent=$(oc get dc/"$APP_NAME"-"$BRANCH_LOWER" --ignore-not-found=true)
+    if [ -z "${deployPresent}" ];
+    then 
+        MODE="apply"
+    else 
+        MODE="create"
+    fi;
+    echo "Deleting $COMPONENT from $OC_APP ..."
+    echo "$PROJECT_PREFIX"-"$OC_APP"
+    oc process -f ./"$TEMPLATE_DIRECTORY"/"$DEPLOY_CONFIG_TEMPLATE" \
+    -p NAME="$APP_NAME" \ 
+    -p VERSION="$BUILD_NUMBER" \
+    -p SUFFIX="$SUFFIX" \
+    -p SOURCE_CONTEXT_DIR="$SOURCE_CONTEXT_DIR" \
+    -p SOURCE_REPOSITORY_URL="$GIT_URL" \
+    -p SOURCE_REPOSITORY_REF="$CHANGE_BRANCH" \
+    -p OC_NAMESPACE="$PROJECT_PREFIX" \
+    -p OC_APP="$OC_APP" | oc delete -f - --namespace="$PROJECT_PREFIX\-$OC_APP"
 }
 
 function ocApply() {
@@ -91,10 +139,10 @@ function ocApply() {
     -p OC_APP="$3" | oc apply -f - --namespace="$PROJECT_PREFIX-$3" 
     if [[ $COMPONENT == "build" &&  "$OC_APP" != "postgresql" ]];
     then
-    echo "Building..."
-    oc start-build $OC_APP$SUFFIX -n $PROJECT_PREFIX-$3 --wait --follow
+        echo "Building..."
+        oc start-build $OC_APP$SUFFIX -n $PROJECT_PREFIX-$3 --wait --follow
     else
-    echo "Deployment should be automatic..."
+        echo "Deployment should be automatic..."
     fi
 }
 
@@ -132,13 +180,19 @@ function cleanOcArtifacts() {
     echo "$artifactItems"
     for i in $artifactItems;
     do
-    oc delete -n dqszvc-dev $i
+        oc delete -n dqszvc-dev $i
     done
     artifactSecrets=$(oc get secrets -n "$PROJECT_PREFIX"-dev | grep -i -"$BRANCH_NAME"  | column -t | awk '{print $1}' | sort)
     echo "$artifactSecrets"
     for i in $artifactSecrets;
     do
-    oc delete -n dqszvc-dev secret/"$i"
+        oc delete -n dqszvc-dev secret/"$i"
+    done
+    artifactStorage=$(oc get all -n "$PROJECT_PREFIX"-dev | grep -i -"$BRANCH_NAME"  | column -t | awk '{print $1}' | sort)
+    echo "$artifactSorage"
+    for i in $artifactStorage;
+    do
+        oc delete -n dqszvc-dev $i
     done
 }
 
