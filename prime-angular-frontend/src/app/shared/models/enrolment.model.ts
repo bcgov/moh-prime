@@ -2,6 +2,8 @@ import { Address } from '../../modules/enrolment/shared/models/address.model';
 import { CollegeCertification } from '../../modules/enrolment/shared/models/college-certification.model';
 import { Job } from '../../modules/enrolment/shared/models/job.model';
 import { Organization } from '../../modules/enrolment/shared/models/organization.model';
+import { Config } from 'protractor';
+import { EnrolmentStatus } from './enrolment-status.model';
 
 export interface Enrolment {
   id?: number;
@@ -22,6 +24,8 @@ export interface Enrolment {
     voicePhone: string;
     voiceExtension: string;
   };
+  appliedDate: string;
+  approvedDate: string;
   hasCertification: boolean;
   certifications: CollegeCertification[];
   isDeviceProvider: boolean;
@@ -38,4 +42,7 @@ export interface Enrolment {
   hasPharmaNetSuspended: boolean;
   hasPharmaNetSuspendedDetails: boolean;
   organizations: Organization[];
+  enrolmentStatuses: EnrolmentStatus[];
+  currentStatus: EnrolmentStatus;
+  availableStatuses: Config[];
 }
