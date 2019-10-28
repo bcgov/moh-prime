@@ -43,7 +43,7 @@
         <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.postal }}&nbsp;</dd>
       </dl>
 
-      <ng-container *ngIf="enrolment.enrollee.mailingAddress">
+      <ng-container *ngIf="enrolment?.enrollee.mailingAddress.country">
 
         <h3 class="lead">Mailing Address</h3>
 
@@ -72,17 +72,23 @@
       <dl class="row mb-4">
         <dt class="col-sm-12 col-md-6 py-1">Voice Phone</dt>
         <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.voicePhone }}&nbsp;</dd>
-        <dt class="col-sm-12 col-md-6 py-1">Extension</dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.voiceExtension }}&nbsp;</dd>
+        <ng-container *ngIf="enrolment.enrollee.voiceExtension">
+          <dt class="col-sm-12 col-md-6 py-1">Extension</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.voiceExtension }}&nbsp;</dd>
+        </ng-container>
       </dl>
 
       <h3 class="lead">Preferred Contact</h3>
 
       <dl class="row mb-4">
-        <dt class="col-sm-12 col-md-6 py-1">Phone</dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.contactPhone }}&nbsp;</dd>
-        <dt class="col-sm-12 col-md-6 py-1">Email</dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.contactEmail }}&nbsp;</dd>
+        <ng-container *ngIf="enrolment.enrollee.contactPhone">
+          <dt class="col-sm-12 col-md-6 py-1">Phone</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.contactPhone }}&nbsp;</dd>
+        </ng-container>
+        <ng-container *ngIf="enrolment.enrollee.contactEmail">
+          <dt class="col-sm-12 col-md-6 py-1">Email</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.contactEmail }}&nbsp;</dd>
+        </ng-container>
       </dl>
 
       <app-sub-header subheader="Self Declaration">
