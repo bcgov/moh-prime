@@ -10,14 +10,14 @@ function variablePopulation() {
         export SUFFIX=""
         export CHANGE_BRANCH="$BRANCH_NAME"
     else 
-        export SUFFIX="-${BRANCH_LOWER}";
+        export SUFFIX="\-${BRANCH_LOWER}";
     fi
 }
 
 variablePopulation
 function build() {
     source ./"$COMPONENT.sh"
-    buildPresent=$(oc get bc/"$APP_NAME"-"$BRANCH_LOWER" --ignore-not-found=true)
+    buildPresent=$(oc get bc/"$APP_NAME-$BRANCH_LOWER" --ignore-not-found=true)
     if [ -z "${buildPresent}" ];
     then 
         MODE="apply"
@@ -46,7 +46,7 @@ function build() {
 
 function deploy() {
     source ./"$COMPONENT.sh"
-    deployPresent=$(oc get dc/"$APP_NAME"-"$BRANCH_LOWER" --ignore-not-found=true)
+    deployPresent=$(oc get dc/"$APP_NAME-$BRANCH_LOWER" --ignore-not-found=true)
     if [ -z "${deployPresent}" ];
     then 
         MODE="apply"
@@ -54,7 +54,7 @@ function deploy() {
         MODE="create"
     fi;
     echo "Deploying $COMPONENT to $OC_APP ..."
-    echo "$PROJECT_PREFIX"-"$OC_APP"
+    echo "$PROJECT_PREFIX-$OC_APP"
     oc process -f ./"$TEMPLATE_DIRECTORY/$DEPLOY_CONFIG_TEMPLATE" \
     -p NAME="$APP_NAME" \ 
     -p VERSION="$BUILD_NUMBER" \
@@ -68,7 +68,7 @@ function deploy() {
 
 function deleteBc() {
     source ./"$COMPONENT.sh"
-    deployPresent=$(oc get bc/"$APP_NAME"-"$BRANCH_LOWER" --ignore-not-found=true)
+    deployPresent=$(oc get bc/"$APP_NAME-$BRANCH_LOWER" --ignore-not-found=true)
     if [ -z "${deployPresent}" ];
     then 
         MODE="apply"
@@ -76,7 +76,7 @@ function deleteBc() {
         MODE="create"
     fi;
     echo "Deleting $COMPONENT from $OC_APP ..."
-    echo "$PROJECT_PREFIX"-"$OC_APP"
+    echo "$PROJECT_PREFIX-$OC_APP"
     oc process -f ./"$TEMPLATE_DIRECTORY/$DEPLOY_CONFIG_TEMPLATE" \
     -p NAME="$APP_NAME" \ 
     -p VERSION="$BUILD_NUMBER" \
@@ -98,7 +98,7 @@ function deleteDc() {
         MODE="create"
     fi;
     echo "Deleting $COMPONENT from $OC_APP ..."
-    echo "$PROJECT_PREFIX"-"$OC_APP"
+    echo "$PROJECT_PREFIX-$OC_APP"
     oc process -f ./"$TEMPLATE_DIRECTORY/$DEPLOY_CONFIG_TEMPLATE" \
     -p NAME="$APP_NAME" \ 
     -p VERSION="$BUILD_NUMBER" \
@@ -167,7 +167,7 @@ function sonar(){
 }
 
 function determineMode() {
-    buildPresent=$(oc get "$2"/"$1"-"$BRANCH_LOWER" --ignore-not-found=true)
+    buildPresent=$(oc get "$2"/"$1-$BRANCH_LOWER" --ignore-not-found=true)
     if [ -z "${buildPresent}" ];
     then MODE="apply"
     else MODE="create"
