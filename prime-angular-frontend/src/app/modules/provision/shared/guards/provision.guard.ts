@@ -43,16 +43,7 @@ export class ProvisionGuard extends KeycloakAuthGuard implements CanActivateChil
   public isAccessAllowed(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
     return new Promise((resolve, reject) => {
       if (!this.authenticated) {
-        // Capture the user's current location, and provide it to
-        // Keycloak to redirect the user to where they originated
-        // once authenticated
-        const options: KeycloakLoginOptions = {
-          redirectUri: state.url
-        };
-
-        this.keycloakAngular.login(options)
-          .catch(e => this.logger.error(e));
-
+        this.router.navigate([this.config.routes.auth]);
         return reject(false);
       }
 
