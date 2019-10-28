@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
+import { AuthGuard } from '@auth/shared/guards/auth.guard';
+
+import { ProvisionGuard } from './shared/guards/provision.guard';
 
 import { EnrolmentsComponent } from './pages/enrolments/enrolments.component';
 import { EnrolmentComponent } from './pages/enrolment/enrolment.component';
@@ -10,8 +13,14 @@ const routes: Routes = [
   {
     path: 'provision',
     component: DashboardComponent,
-    canLoad: [],
-    canActivate: [],
+    // Check authentication and authorization each time
+    // the router navigates to the next route
+    canActivateChild: [
+      AuthGuard,
+      // Guard module from being accessed without the proper
+      // authorization based on the user role permissions
+      ProvisionGuard
+    ],
     children: [
       {
         path: 'enrolments',

@@ -11,12 +11,13 @@ import { KeycloakAuthGuard, KeycloakService } from 'keycloak-angular';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { LoggerService } from '@core/services/logger.service';
+import { Role } from '@auth/shared/enum/role.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard extends KeycloakAuthGuard implements CanActivateChild {
+export class ProvisionGuard extends KeycloakAuthGuard implements CanActivateChild {
   constructor(
     protected router: Router,
     protected keycloakAngular: KeycloakService,
@@ -42,21 +43,20 @@ export class AuthGuard extends KeycloakAuthGuard implements CanActivateChild {
   public isAccessAllowed(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
     return new Promise((resolve, reject) => {
       if (!this.authenticated) {
-        // Capture the user's current location, and provide it to
-        // Keycloak to redirect the user to where they originated
-        // once authenticated
-        const options: KeycloakLoginOptions = {
-          redirectUri: state.url
-        };
-
-        this.keycloakAngular.login(options)
-          .catch(e => this.logger.error(e));
-
+        this.router.navigate([this.config.routes.auth]);
         return reject(false);
       }
 
-      // Otherwise, allow current route access
-      return resolve(true);
+      if (
+        this.keycloakAngular.isUserInRole(Role.PROVISIONER) ||
+        this.keycloakAngular.isUserInRole(Role.ADMIN)
+      ) {
+        return resolve(true);
+      }
+
+      // Access has been denied
+      this.router.navigate([this.config.routes.denied]);
+      return reject(false);
     });
   }
 }
