@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
+import { AuthGuard } from '@auth/shared/guards/auth.guard';
 
 import { ProvisionGuard } from './shared/guards/provision.guard';
 
@@ -14,15 +15,12 @@ const routes: Routes = [
     component: DashboardComponent,
     // Check authentication and authorization each time
     // the router navigates to the next route
-    // canLoad: [],
-    // canActivate: [],
-    // TODO: apply AuthGuard and then ProvisionGuard
-    // canActivateChild: [
-    //   AuthGuard,
-    //   // Guard module from being accessed without the proper
-    //   // authorization based on the user role permissions
-    //   ProvisionGuard
-    // ],
+    canActivateChild: [
+      AuthGuard,
+      // Guard module from being accessed without the proper
+      // authorization based on the user role permissions
+      ProvisionGuard
+    ],
     children: [
       {
         path: 'enrolments',

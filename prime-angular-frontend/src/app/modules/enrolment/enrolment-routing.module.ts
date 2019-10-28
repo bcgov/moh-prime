@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { CanDeactivateFormGuard } from '@core/guards/can-deactivate-form.guard';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
+import { AuthGuard } from '@auth/shared/guards/auth.guard';
 
 import { EnrolleeGuard } from './shared/guards/enrollee.guard';
 import { EnrolmentGuard } from './shared/guards/enrolment.guard';
@@ -22,15 +23,12 @@ const routes: Routes = [
     component: DashboardComponent,
     // Check authentication and authorization each time
     // the router navigates to the next route
-    // canLoad: [],
-    // canActivate: [],
-    // TODO: apply AuthGuard and then EnrolleeGuard
-    // canActivateChild: [
-    //   AuthGuard,
-    //   // Guard module from being accessed without the proper
-    //   // authorization based on the user role permissions
-    //   EnrolleeGuard
-    // ],
+    canActivateChild: [
+      AuthGuard,
+      // Guard module from being accessed without the proper
+      // authorization based on the user role permissions
+      EnrolleeGuard
+    ],
     children: [
       {
         path: 'profile',
