@@ -10,9 +10,12 @@ import { ProfessionalInfoComponent } from './pages/professional-info/professiona
 import { PharmanetAccessComponent } from './pages/pharmanet-access/pharmanet-access.component';
 import { ReviewComponent } from './pages/review/review.component';
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
+import { AccessAgreementComponent } from './pages/access-agreement/access-agreement.component';
 
 import { CollegeCertificationsComponent } from './shared/components/college-certifications/college-certifications.component';
 import { PageTitleComponent } from './shared/components/page-title/page-title.component';
+import { SummaryComponent } from './pages/summary/summary.component';
+
 
 @NgModule({
   declarations: [
@@ -25,6 +28,8 @@ import { PageTitleComponent } from './shared/components/page-title/page-title.co
     ConfirmationComponent,
     CollegeCertificationsComponent,
     PageTitleComponent,
+    AccessAgreementComponent,
+    SummaryComponent,
   ],
   imports: [
     SharedModule,
