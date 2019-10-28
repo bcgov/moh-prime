@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { AuthComponent } from './shared/components/auth/auth.component';
-import { AuthRedirectGuard } from './shared/guards/auth-redirect.guard';
+import { AuthorizationRedirectGuard } from './shared/guards/authorization-redirect.guard';
 
 import { InfoComponent } from './pages/info/info.component';
 
@@ -10,7 +10,7 @@ const routes: Routes = [
   {
     path: '',
     component: AuthComponent,
-    canActivate: [AuthRedirectGuard],
+    canActivate: [AuthorizationRedirectGuard],
     children: [
       {
         path: 'info',

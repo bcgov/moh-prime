@@ -10,17 +10,18 @@ import { KeycloakLoginOptions } from 'keycloak-js';
 import { KeycloakAuthGuard, KeycloakService } from 'keycloak-angular';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
-import { Role } from '@auth/shared/enum/role.enum';
 import { LoggerService } from '@core/services/logger.service';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthRedirectGuard extends KeycloakAuthGuard implements CanActivateChild {
+export class AuthenticateGuard extends KeycloakAuthGuard implements CanActivateChild {
   constructor(
     protected router: Router,
     protected keycloakAngular: KeycloakService,
     @Inject(APP_CONFIG) private config: AppConfig,
+    private authService: AuthService,
     private logger: LoggerService
   ) {
     super(router, keycloakAngular);
@@ -41,23 +42,21 @@ export class AuthRedirectGuard extends KeycloakAuthGuard implements CanActivateC
   public isAccessAllowed(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
     return new Promise((resolve, reject) => {
       if (!this.authenticated) {
-        return resolve(true);
+        // Capture the user's current location, and provide it to
+        // Keycloak to redirect the user to where they originated
+        // once authenticated
+        const options: KeycloakLoginOptions = {
+          redirectUri: state.url
+        };
+
+        this.keycloakAngular.login(options)
+          .catch(e => this.logger.error(e));
+
+        return reject(false);
       }
 
-      if (this.keycloakAngular.isUserInRole(Role.ENROLLEE)) {
-        this.router.navigate([this.config.routes.enrolment]);
-        return reject(false);
-      } else if (
-        this.keycloakAngular.isUserInRole(Role.PROVISIONER) ||
-        this.keycloakAngular.isUserInRole(Role.ADMIN)
-      ) {
-        this.router.navigate([this.config.routes.provision]);
-        return reject(false);
-      }
-
-      // Access has been denied
-      this.router.navigate([this.config.routes.denied]);
-      return reject(false);
+      // Otherwise, allow current route access
+      return resolve(true);
     });
   }
 }
