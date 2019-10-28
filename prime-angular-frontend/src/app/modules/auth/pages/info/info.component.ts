@@ -26,4 +26,11 @@ export class InfoComponent implements OnInit {
       redirectUri: this.config.loginRedirectUrl
     });
   }
+
+  public idirLogin() {
+    this.keycloakService.login({
+      idpHint: 'idir',
+      redirectUri: this.config.loginRedirectUrl
+    });
+  }
 }
