@@ -52,28 +52,28 @@ export class ProfessionalInfoComponent implements OnInit {
     this.jobNames = this.configService.jobNames;
   }
 
-  public get hasCertification(): FormGroup {
-    return this.form.get('hasCertification') as FormGroup;
+  public get hasCertification(): FormControl {
+    return this.form.get('hasCertification') as FormControl;
   }
 
   public get certifications(): FormArray {
     return this.form.get('certifications') as FormArray;
   }
 
-  public get isDeviceProvider(): FormGroup {
-    return this.form.get('isDeviceProvider') as FormGroup;
+  public get isDeviceProvider(): FormControl {
+    return this.form.get('isDeviceProvider') as FormControl;
   }
 
-  public get deviceProviderNumber(): FormGroup {
-    return this.form.get('deviceProviderNumber') as FormGroup;
+  public get deviceProviderNumber(): FormControl {
+    return this.form.get('deviceProviderNumber') as FormControl;
   }
 
-  public get isInsulinPumpProvider(): FormGroup {
-    return this.form.get('isInsulinPumpProvider') as FormGroup;
+  public get isInsulinPumpProvider(): FormControl {
+    return this.form.get('isInsulinPumpProvider') as FormControl;
   }
 
-  public get isAccessingPharmaNetOnBehalfOf(): FormGroup {
-    return this.form.get('isAccessingPharmaNetOnBehalfOf') as FormGroup;
+  public get isAccessingPharmaNetOnBehalfOf(): FormControl {
+    return this.form.get('isAccessingPharmaNetOnBehalfOf') as FormControl;
   }
 
   public get jobs(): FormArray {
@@ -93,7 +93,8 @@ export class ProfessionalInfoComponent implements OnInit {
           (error: any) => {
             this.toastService.openErrorToast('Professional information could not be saved');
             this.logger.error('[Enrolment] Professional::onSubmit error has occurred: ', error);
-          });
+          }
+        );
       this.form.markAsPristine();
     } else {
       this.form.markAllAsTouched();
@@ -175,6 +176,11 @@ export class ProfessionalInfoComponent implements OnInit {
 
         this.isAccessingPharmaNetOnBehalfOf.enable({ emitEvent: false });
       } else {
+        if (!this.certifications.length) {
+          // Add an initial empty certification when displayed
+          this.addCertification();
+        }
+
         // College certification indicates not being accessed on behalf of
         this.isAccessingPharmaNetOnBehalfOf.reset(null, { emitEvent: false });
         this.isAccessingPharmaNetOnBehalfOf.disable({ emitEvent: false });

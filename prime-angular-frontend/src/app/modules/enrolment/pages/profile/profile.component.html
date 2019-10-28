@@ -13,7 +13,8 @@
       <mat-form-field class="w-100">
         <input matInput
                placeholder="First Name"
-               formControlName="firstName">
+               formControlName="firstName"
+               [required]="isRequired('firstName')">
         <mat-error>Required</mat-error>
       </mat-form-field>
 
@@ -24,8 +25,9 @@
 
       <mat-form-field class="w-100">
         <input matInput
-               placeholder="Middle Name"
-               formControlName="middleName">
+               placeholder="Middle Name (Optional)"
+               formControlName="middleName"
+               [required]="isRequired('middleName')">
       </mat-form-field>
 
     </div>
@@ -36,7 +38,8 @@
       <mat-form-field class="w-100">
         <input matInput
                placeholder="Last Name"
-               formControlName="lastName">
+               formControlName="lastName"
+               [required]="isRequired('lastName')">
         <mat-error>Required</mat-error>
       </mat-form-field>
 
@@ -49,7 +52,9 @@
         <input matInput
                placeholder="Date of Birth"
                [matDatepicker]="picker"
-               formControlName="dateOfBirth">
+               formControlName="dateOfBirth"
+               [max]="maxBirthDate"
+               [required]="isRequired('dateOfBirth')">
         <mat-datepicker-toggle matSuffix
                                [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker
@@ -80,7 +85,8 @@
         <mat-form-field class="w-100">
           <input matInput
                  placeholder="Preferred First Name"
-                 formControlName="preferredFirstName">
+                 formControlName="preferredFirstName"
+                 [required]="isRequired('preferredFirstName')">
         </mat-form-field>
 
       </div>
@@ -91,7 +97,8 @@
         <mat-form-field class="w-100">
           <input matInput
                  placeholder="Preferred Middle Name"
-                 formControlName="preferredMiddleName">
+                 formControlName="preferredMiddleName"
+                 [required]="isRequired('preferredMiddleName')">
         </mat-form-field>
 
       </div>
@@ -102,7 +109,8 @@
         <mat-form-field class="w-100">
           <input matInput
                  placeholder="Preferred Last Name"
-                 formControlName="preferredLastName">
+                 formControlName="preferredLastName"
+                 [required]="isRequired('preferredLastName')">
         </mat-form-field>
 
       </div>
@@ -122,7 +130,8 @@
           <mat-form-field class="w-100">
             <input matInput
                    placeholder="Country"
-                   formControlName="country">
+                   formControlName="country"
+                   [required]="isRequired('physicalAddress.country')">
             <mat-error>Required</mat-error>
           </mat-form-field>
 
@@ -133,7 +142,8 @@
 
           <mat-form-field class="w-100">
             <mat-label>Province</mat-label>
-            <mat-select formControlName="province">
+            <mat-select formControlName="province"
+                        [required]="isRequired('physicalAddress.province')">
               <mat-option *ngFor="let province of provinces"
                           [value]="province.name">
                 {{ province.name }}
@@ -150,7 +160,8 @@
           <mat-form-field class="w-100">
             <input matInput
                    placeholder="Street Address"
-                   formControlName="street">
+                   formControlName="street"
+                   [required]="isRequired('physicalAddress.street')">
             <mat-error>Required</mat-error>
           </mat-form-field>
 
@@ -162,7 +173,8 @@
           <mat-form-field class="w-100">
             <input matInput
                    placeholder="City"
-                   formControlName="city">
+                   formControlName="city"
+                   [required]="isRequired('physicalAddress.city')">
             <mat-error>Required</mat-error>
           </mat-form-field>
 
@@ -175,7 +187,8 @@
             <input matInput
                    placeholder="Postal Code"
                    mask="S0S 0S0"
-                   formControlName="postal">
+                   formControlName="postal"
+                   [required]="isRequired('physicalAddress.postal')">
             <mat-error>Required</mat-error>
           </mat-form-field>
 
@@ -206,7 +219,9 @@
             <mat-form-field class="w-100">
               <input matInput
                      placeholder="Country"
-                     formControlName="country">
+                     formControlName="country"
+                     [required]="isRequired('mailingAddress.country')">
+              <mat-error>Required</mat-error>
             </mat-form-field>
 
           </div>
@@ -216,12 +231,14 @@
 
             <mat-form-field class="w-100">
               <mat-label>Province</mat-label>
-              <mat-select formControlName="province">
+              <mat-select formControlName="province"
+                          [required]="isRequired('mailingAddress.province')">
                 <mat-option *ngFor="let province of provinces"
                             [value]="province.name">
                   {{ province.name }}
                 </mat-option>
               </mat-select>
+              <mat-error>Required</mat-error>
             </mat-form-field>
 
           </div>
@@ -232,7 +249,9 @@
             <mat-form-field class="w-100">
               <input matInput
                      placeholder="Street Address"
-                     formControlName="street">
+                     formControlName="street"
+                     [required]="isRequired('mailingAddress.street')">
+              <mat-error>Required</mat-error>
             </mat-form-field>
 
           </div>
@@ -243,7 +262,9 @@
             <mat-form-field class="w-100">
               <input matInput
                      placeholder="City"
-                     formControlName="city">
+                     formControlName="city"
+                     [required]="isRequired('mailingAddress.city')">
+              <mat-error>Required</mat-error>
             </mat-form-field>
 
           </div>
@@ -255,7 +276,9 @@
               <input matInput
                      placeholder="Postal Code"
                      mask="S0S 0S0"
-                     formControlName="postal">
+                     formControlName="postal"
+                     [required]="isRequired('mailingAddress.postal')">
+              <mat-error>Required</mat-error>
             </mat-form-field>
 
           </div>

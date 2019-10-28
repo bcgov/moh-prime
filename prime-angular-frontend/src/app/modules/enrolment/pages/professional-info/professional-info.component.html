@@ -30,7 +30,9 @@
         <hr *ngIf="!first">
 
         <app-college-certifications [form]="certificate"
-                                    (remove)="removeCertification(i)"></app-college-certifications>
+                                    [index]="i"
+                                    [total]="certifications.controls.length"
+                                    (remove)="removeCertification($event)"></app-college-certifications>
 
       </ng-container>
 

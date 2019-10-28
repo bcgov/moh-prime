@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormControl, AbstractControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material';
+
+import * as moment from 'moment';
 
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
@@ -17,6 +19,8 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
 import { EnrolmentResource } from '../../shared/services/enrolment-resource.service';
 
+import { FormUtilsService } from '@enrolment/shared/services/form-utils.service';
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -24,6 +28,7 @@ import { EnrolmentResource } from '../../shared/services/enrolment-resource.serv
 })
 export class ProfileComponent implements OnInit {
   public form: FormGroup;
+  public maxBirthDate: moment.Moment;
   public hasPreferredName: boolean;
   public hasMailingAddress: boolean;
   public provinces: Config[];
@@ -35,28 +40,30 @@ export class ProfileComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
-    private viewportService: ViewportService,
     private configService: ConfigService,
+    private authService: AuthService,
     private enrolmentStateService: EnrolmentStateService,
     private enrolmentResource: EnrolmentResource,
+    private formUtilsService: FormUtilsService,
     private toastService: ToastService,
+    private viewportService: ViewportService,
     private logger: LoggerService,
-    private authService: AuthService
   ) {
+    this.maxBirthDate = moment();
     this.provinces = this.configService.provinces;
     this.isNewEnrolment = true;
   }
 
-  public get firstName(): FormGroup {
-    return this.form.get('firstName') as FormGroup;
+  public get firstName(): FormControl {
+    return this.form.get('firstName') as FormControl;
   }
 
-  public get lastName(): FormGroup {
-    return this.form.get('lastName') as FormGroup;
+  public get lastName(): FormControl {
+    return this.form.get('lastName') as FormControl;
   }
 
-  public get dateOfBirth(): FormGroup {
-    return this.form.get('dateOfBirth') as FormGroup;
+  public get dateOfBirth(): FormControl {
+    return this.form.get('dateOfBirth') as FormControl;
   }
 
   public get isMobile() {
@@ -66,9 +73,13 @@ export class ProfileComponent implements OnInit {
   public onSubmit() {
     if (this.form.valid) {
       const payload = this.enrolmentStateService.enrolment;
+
       const request$ = (this.isNewEnrolment)
         ? this.enrolmentResource.createEnrolment(payload)
-          .pipe(map((enrolment: Enrolment) => this.enrolmentStateService.enrolment = enrolment))
+          .pipe(
+            tap(() => this.isNewEnrolment = false),
+            map((enrolment: Enrolment) => this.enrolmentStateService.enrolment = enrolment)
+          )
         : this.enrolmentResource.updateEnrolment(payload);
 
       request$
@@ -100,15 +111,13 @@ export class ProfileComponent implements OnInit {
 
   public onMailingAddressChange() {
     this.hasMailingAddress = !this.hasMailingAddress;
+    const mailingAddress = this.form.get('mailingAddress') as FormGroup;
 
-    if (!this.hasMailingAddress) {
-      const mailingAddress = this.form.get('mailingAddress');
-      mailingAddress.get('country').reset();
-      mailingAddress.get('province').reset();
-      mailingAddress.get('street').reset();
-      mailingAddress.get('city').reset();
-      mailingAddress.get('postal').reset();
-    }
+    this.toggleValidators(mailingAddress);
+  }
+
+  public isRequired(path: string) {
+    this.formUtilsService.isRequired(this.form, path);
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
@@ -156,8 +165,9 @@ export class ProfileComponent implements OnInit {
       this.form.get('preferredLastName').value
     );
 
-    const mailingAddress = this.form.get('mailingAddress');
+    const mailingAddress = this.form.get('mailingAddress') as FormGroup;
 
+    // TODO: update to use valueChanges by forcing value changes when visible
     // Show mailing address if it exists
     this.hasMailingAddress = !!(
       mailingAddress.get('country').value ||
@@ -167,7 +177,14 @@ export class ProfileComponent implements OnInit {
       mailingAddress.get('postal').value
     );
 
-    // TODO: when preferred name(s) is on should anything be required?
-    // TODO: when mailing address is toggled then validation should be applied or removed
+    this.toggleValidators(mailingAddress);
+  }
+
+  private toggleValidators(mailingAddress: FormGroup) {
+    if (!this.hasMailingAddress) {
+      this.formUtilsService.resetAndClearValidators(mailingAddress);
+    } else {
+      this.formUtilsService.setValidators(mailingAddress, [Validators.required]);
+    }
   }
 }

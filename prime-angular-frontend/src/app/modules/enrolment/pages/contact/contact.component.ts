@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
@@ -11,6 +11,8 @@ import { Enrolment } from '@shared/models/enrolment.model';
 import { ConfirmDiscardChangesDialogComponent } from '@shared/components/dialogs/confirm-discard-changes-dialog/confirm-discard-changes-dialog.component';
 import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
 import { EnrolmentResource } from '../../shared/services/enrolment-resource.service';
+
+import { FormUtilsService } from '@enrolment/shared/services/form-utils.service';
 
 @Component({
   selector: 'app-contact',
@@ -26,32 +28,37 @@ export class ContactComponent implements OnInit {
     private dialog: MatDialog,
     private enrolmentStateService: EnrolmentStateService,
     private enrolmentResource: EnrolmentResource,
+    private formUtilsService: FormUtilsService,
     private toastService: ToastService,
     private logger: LoggerService
   ) { }
 
-  public get voicePhone(): FormGroup {
-    return this.form.get('voicePhone') as FormGroup;
+  public get voicePhone(): FormControl {
+    return this.form.get('voicePhone') as FormControl;
   }
 
-  public get voiceExtension(): FormGroup {
-    return this.form.get('voiceExtension') as FormGroup;
+  public get voiceExtension(): FormControl {
+    return this.form.get('voiceExtension') as FormControl;
   }
 
-  public get hasContactEmail(): FormGroup {
-    return this.form.get('hasContactEmail') as FormGroup;
+  public get hasContactEmail(): FormControl {
+    return this.form.get('hasContactEmail') as FormControl;
   }
 
-  public get contactEmail(): FormGroup {
-    return this.form.get('contactEmail') as FormGroup;
+  public get contactEmail(): FormControl {
+    return this.form.get('contactEmail') as FormControl;
   }
 
-  public get hasContactPhone(): FormGroup {
-    return this.form.get('hasContactPhone') as FormGroup;
+  public get hasContactPhone(): FormControl {
+    return this.form.get('hasContactPhone') as FormControl;
   }
 
-  public get contactPhone(): FormGroup {
-    return this.form.get('contactPhone') as FormGroup;
+  public get contactPhone(): FormControl {
+    return this.form.get('contactPhone') as FormControl;
+  }
+
+  public isRequired(path: string) {
+    this.formUtilsService.isRequired(this.form, path);
   }
 
   public onSubmit() {
@@ -99,7 +106,9 @@ export class ContactComponent implements OnInit {
   }
 
   private initForm() {
-    // TODO: update to eliminate controls in form
+    this.hasContactEmail.valueChanges.subscribe((value: boolean) => this.toggleValidators(value, this.contactEmail));
+    this.hasContactPhone.valueChanges.subscribe((value: boolean) => this.toggleValidators(value, this.contactPhone));
+
     if (this.contactEmail.value) {
       this.form.get('hasContactEmail').patchValue(true);
     }
@@ -109,16 +118,13 @@ export class ContactComponent implements OnInit {
     }
 
     this.form.markAsPristine();
+  }
 
-    this.hasContactEmail.valueChanges.subscribe((value: boolean) => {
-      if (!value) {
-        this.contactEmail.reset();
-      }
-    });
-    this.hasContactPhone.valueChanges.subscribe((value: boolean) => {
-      if (!value) {
-        this.contactPhone.reset();
-      }
-    });
+  private toggleValidators(value: boolean, control: FormControl) {
+    if (!value) {
+      this.formUtilsService.resetAndClearValidators(control);
+    } else {
+      this.formUtilsService.setValidators(control, [Validators.required]);
+    }
   }
 }
