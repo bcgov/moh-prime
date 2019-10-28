@@ -53,11 +53,6 @@ export class EnrolleeGuard extends KeycloakAuthGuard implements CanActivateChild
         this.keycloakAngular.isUserInRole(Role.PROVISIONER) ||
         this.keycloakAngular.isUserInRole(Role.ADMIN)
       ) {
-        // WARNING: Don't redirect if they are a provisioner or admin
-        // instead let the ProvisionRedirect guard manage the redirection,
-        // otherwise routes called rapidly in quick succession, which
-        // causes conflicts!
-        // TODO: test that redirection is still an issue
         this.router.navigate([this.config.routes.provision]);
         return reject(false);
       }
