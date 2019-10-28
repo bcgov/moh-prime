@@ -55,8 +55,9 @@ export class AuthRedirectGuard extends KeycloakAuthGuard implements CanActivateC
         return reject(false);
       }
 
-      // Otherwise, allow current route access
-      return resolve(true);
+      // Access has been denied
+      this.router.navigate([this.config.routes.denied]);
+      return reject(false);
     });
   }
 }
