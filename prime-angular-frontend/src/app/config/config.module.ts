@@ -4,7 +4,7 @@ import { ConfigService } from './config.service';
 import { ConfigCodePipe } from './config-code.pipe';
 
 const initializer = (config: ConfigService) => {
-  return () => config.load();
+  return () => config.load().toPromise();
 };
 
 @NgModule({
