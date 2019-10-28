@@ -1,13 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { MatDialog } from '@angular/material';
 
-import { map } from 'rxjs/operators';
+import { map, exhaustMap } from 'rxjs/operators';
+import { EMPTY } from 'rxjs';
 
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
+import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
-import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
-import { EnrolmentResource } from '../../shared/services/enrolment-resource.service';
+import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 
 @Component({
   selector: 'app-review',
@@ -24,13 +29,27 @@ export class ReviewComponent implements OnInit {
     private enrolmentStateService: EnrolmentStateService,
     private enrolmentResource: EnrolmentResource,
     private toastService: ToastService,
+    private dialog: MatDialog,
     private logger: LoggerService
   ) { }
 
   public onSubmit() {
     if (this.enrolmentStateService.isEnrolmentValid()) {
-      const payload = this.enrolmentStateService.enrolment;
-      this.enrolmentResource.updateEnrolment(payload)
+      const enrolment = this.enrolmentStateService.enrolment;
+      const data: DialogOptions = {
+        title: 'Submit Enrolment',
+        message: 'When your enrolment has submitted for adjudication it can no longer be updated. Are you ready to submit your enrolment?',
+        actionText: 'Submit Enrolment'
+      };
+      this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          exhaustMap((result: boolean) =>
+            (result)
+              ? this.enrolmentResource.updateEnrolmentStatus(enrolment.id, EnrolmentStatus.SUBMITTED)
+              : EMPTY
+          )
+        )
         .subscribe(
           () => {
             this.toastService.openSuccessToast('Enrolment has been submitted');
@@ -61,7 +80,7 @@ export class ReviewComponent implements OnInit {
 
   public ngOnInit() {
     // TODO: detect enrolment already exists and don't reload
-    // TODO: apply guard if not enrolment is found to redirect to profile
+    // TODO: apply guard if no enrolment is found to redirect to profile
     this.enrolmentResource.enrolments()
       .pipe(
         map((enrolment: Enrolment) => this.enrolment = enrolment)
