@@ -13,7 +13,8 @@ import { ViewportService } from '@core/services/viewport.service';
 })
 export class CollegeCertificationsComponent implements OnInit {
   @Input() public form: FormGroup;
-  @Input() public isFirst: boolean;
+  @Input() public index: number;
+  @Input() public total: number;
   @Output() public remove: EventEmitter<number>;
 
   public colleges: CollegeConfig[];
@@ -47,7 +48,7 @@ export class CollegeCertificationsComponent implements OnInit {
   }
 
   public onRemove() {
-    this.remove.emit();
+    this.remove.emit(this.index);
   }
 
   public ngOnInit() {

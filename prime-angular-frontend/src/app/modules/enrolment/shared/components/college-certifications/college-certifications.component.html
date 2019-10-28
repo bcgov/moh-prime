@@ -77,7 +77,7 @@
 
       <button mat-raised-button
               color="warn"
-              [disabled]="isFirst"
+              [disabled]="total < 2"
               (click)="onRemove()">Remove Certification</button>
 
     </div>
