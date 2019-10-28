@@ -13,12 +13,10 @@ export class InfoComponent implements OnInit {
 
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
-    private keycloakService: KeycloakService,
-    router: Router
+    private keycloakService: KeycloakService
   ) { }
 
-  ngOnInit() {
-  }
+  public ngOnInit() { }
 
   public bcscLogin() {
     this.keycloakService.login({
