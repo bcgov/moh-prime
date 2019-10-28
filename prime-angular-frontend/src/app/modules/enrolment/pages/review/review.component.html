@@ -236,6 +236,13 @@
     </div>
   </div>
 
+  <app-sub-header subheader=""
+                  help=""></app-sub-header>
+  <div>
+    <mat-checkbox class="mr-4"
+                  (change)="changeCheck($event)">I confirm that all information provided is accurate.</mat-checkbox>
+  </div>
+
   <div class="row justify-content-between">
     <div class="col pt-2">
 
@@ -249,6 +256,7 @@
 
       <button mat-raised-button
               color="primary"
+              [disabled]="disabledAgreement"
               (click)="onSubmit()">Submit</button>
 
     </div>

@@ -73,15 +73,15 @@ export class EnrolmentGuard implements CanActivate, CanActivateChild, CanLoad {
                 // TODO: update to redirect to the actual status view
                 this.router.navigate([routes.enrolment, 'confirmation']);
                 break;
-              // TODO: should there be more status based redirects?
-              // case EnrolmentStatus.ADJUDICATED_APPROVED:
+              case EnrolmentStatus.ADJUDICATED_APPROVED:
+                this.router.navigate([routes.enrolment, 'agreement']);
+                break;
               // case EnrolmentStatus.DECLINED:
-              // case EnrolmentStatus.ACCEPTED_TOS:
+              case EnrolmentStatus.ACCEPTED_TOS:
+                this.router.navigate([routes.enrolment, 'summary']);
+                break;
               // case EnrolmentStatus.DECLINED_TOS:
               //   this.router.navigate([routes.???, '...']);
-              //   break;
-              // default:
-              //   TODO: should there be a default sending them to access denied?
               //   break;
             }
           }
