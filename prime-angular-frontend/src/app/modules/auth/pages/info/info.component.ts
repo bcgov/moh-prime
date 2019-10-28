@@ -13,19 +13,21 @@ export class InfoComponent implements OnInit {
 
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
-    private keycloakService: KeycloakService,
-    router: Router) {
-    if (keycloakService.getUserRoles().includes('prime_user')) {
-      router.navigate(['/enrolment/profile']);
-    }
-  }
+    private keycloakService: KeycloakService
+  ) { }
 
-  ngOnInit() {
-  }
+  public ngOnInit() { }
 
   public bcscLogin() {
     this.keycloakService.login({
       idpHint: 'bcsc',
+      redirectUri: this.config.loginRedirectUrl
+    });
+  }
+
+  public idirLogin() {
+    this.keycloakService.login({
+      idpHint: 'idir',
       redirectUri: this.config.loginRedirectUrl
     });
   }

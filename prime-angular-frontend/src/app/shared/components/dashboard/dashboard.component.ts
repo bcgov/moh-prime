@@ -155,6 +155,19 @@ export class DashboardComponent implements OnInit {
             icon: 'search',
             route: '/enrolment/review',
             showItem: true
+          },
+          // TODO: temporary for testing route guards
+          {
+            name: 'Confirmation',
+            icon: 'done',
+            route: '/enrolment/confirmation',
+            showItem: true
+          },
+          {
+            name: 'Provision',
+            icon: 'format_list_bulleted',
+            route: '/provision/enrolments',
+            showItem: true
           }
         ]
       }

@@ -169,8 +169,10 @@
           <dd class="col-sm-12 col-md-6 py-1">{{ certification.licenseCode | configCode: 'licenses' }}&nbsp;</dd>
           <dt class="col-sm-12 col-md-6 py-1">Renewal Date</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ certification.renewalDate | formatDate }}&nbsp;</dd>
-          <dt class="col-sm-12 col-md-6 py-1">Advanced Practices</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ certification.practiceCode | configCode: 'practices' }}&nbsp;</dd>
+          <ng-container *ngIf="certification.practiceCode">
+            <dt class="col-sm-12 col-md-6 py-1">Advanced Practices</dt>
+            <dd class="col-sm-12 col-md-6 py-1">{{ certification.practiceCode | configCode: 'practices' }}&nbsp;</dd>
+          </ng-container>
         </dl>
 
       </ng-container>

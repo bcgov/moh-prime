@@ -1,8 +1,0 @@
-export enum EnrolmentStatus {
-  IN_PROGRESS = 1,
-  SUBMITTED,
-  ADJUDICATED_APPROVED,
-  DECLINED,
-  ACCEPTED_TOS,
-  DECLINED_TOS
-}
