@@ -18,6 +18,7 @@ variablePopulation
 
 function build() {
     source ./"$COMPONENT.sh"
+    echo "Building $COMPONENT to $PROJECT_PREFIX-$OC_APP..."
     buildPresent=$(oc get bc/"$APP_NAME-$BRANCH_LOWER" --ignore-not-found=true)
     if [ -z "${buildPresent}" ];
     then 
@@ -25,17 +26,30 @@ function build() {
     else 
         MODE="create"
     fi;
-    echo "Building $COMPONENT to $PROJECT_PREFIX-$OC_APP..."
-    echo "oc process -f $TEMPLATE_DIRECTORY/$BUILD_CONFIG_TEMPLATE -p NAME=$APP_NAME -p VERSION=$BUILD_NUMBER -p SUFFIX=$SUFFIX -p SOURCE_CONTEXT_DIR=$SOURCE_CONTEXT_DIR -p SOURCE_REPOSITORY_URL=$GIT_URL -p SOURCE_REPOSITORY_REF=$CHANGE_BRANCH -p OC_NAMESPACE=$PROJECT_PREFIX -p OC_APP=$OC_APP | oc apply -f - --namespace=$PROJECT_PREFIX-$OC_APP"
-    oc process -f "${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE}" \
-    -p NAME="${APP_NAME}" \ 
-    -p VERSION="${BUILD_NUMBER}" \
-    -p SUFFIX="${SUFFIX}" \
-    -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
-    -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
-    -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
-    -p OC_NAMESPACE="${PROJECT_PREFIX}" \
-    -p OC_APP="${OC_APP}" | oc ${MODE} -f - --namespace="${PROJECT_PREFIX}\-${OC_APP}"
+    if [ "${BRANCH_LOWER}" == "develop" ] || [ "${BRANCH_LOWER}" == "master" ];
+    then 
+        export SUFFIX=""
+        export CHANGE_BRANCH="$BRANCH_NAME"
+        oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
+        -p NAME="${APP_NAME}" \ 
+        -p VERSION="${BUILD_NUMBER}" \
+        -p SUFFIX="${SUFFIX}" \
+        -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
+        -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
+        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
+        -p OC_NAMESPACE="${PROJECT_PREFIX}" \
+        -p OC_APP="${OC_APP}" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"  
+    else 
+        oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
+        -p NAME="${APP_NAME}" \ 
+        -p VERSION="${BUILD_NUMBER}" \
+        -p SUFFIX="-${BRANCH_LOWER}" \
+        -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
+        -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
+        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
+        -p OC_NAMESPACE="${PROJECT_PREFIX}" \
+        -p OC_APP="${OC_APP}" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"
+    fi;
     if [ "$BUILD_REQUIRED" == true ];
     then
         echo "Building oc start-build $APP_NAME$SUFFIX -n $PROJECT_PREFIX-$OC_APP --wait --follow ..."
@@ -47,6 +61,8 @@ function build() {
 
 function deploy() {
     source ./"${COMPONENT}.sh"
+    echo "Deploying ${COMPONENT} to ${OC_APP} ..."
+    echo "${PROJECT_PREFIX}-${OC_APP}"
     deployPresent=$(oc get dc/"${APP_NAME}-${BRANCH_LOWER}" --ignore-not-found=true)
     if [ -z "${deployPresent}" ];
     then 
@@ -54,17 +70,30 @@ function deploy() {
     else 
         MODE="create"
     fi;
-    echo "Deploying ${COMPONENT} to ${OC_APP} ..."
-    echo "${PROJECT_PREFIX}-${OC_APP}"
-    oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
-    -p NAME="${APP_NAME}" \ 
-    -p VERSION="${BUILD_NUMBER}" \
-    -p SUFFIX="${SUFFIX}" \
-    -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
-    -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
-    -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
-    -p OC_NAMESPACE="${PROJECT_PREFIX}" \
-    -p OC_APP="${OC_APP}" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"
+    if [ "${BRANCH_LOWER}" == "develop" ] || [ "${BRANCH_LOWER}" == "master" ];
+    then 
+        export SUFFIX=""
+        export CHANGE_BRANCH="$BRANCH_NAME"
+        oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
+        -p NAME="${APP_NAME}" \ 
+        -p VERSION="${BUILD_NUMBER}" \
+        -p SUFFIX="${SUFFIX}" \
+        -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
+        -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
+        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
+        -p OC_NAMESPACE="${PROJECT_PREFIX}" \
+        -p OC_APP="${OC_APP}" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"  
+    else 
+        oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
+        -p NAME="${APP_NAME}" \ 
+        -p VERSION="${BUILD_NUMBER}" \
+        -p SUFFIX="-${BRANCH_LOWER}" \
+        -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
+        -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
+        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
+        -p OC_NAMESPACE="${PROJECT_PREFIX}" \
+        -p OC_APP="${OC_APP}" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"
+    fi;
 }
 
 function deleteBc() {
@@ -124,7 +153,7 @@ function ocApply() {
     fi
     if [ "${BRANCH_LOWER}" == "develop" ] || [ "${BRANCH_LOWER}" == "master" ];
     then 
-        SUFFIX=""
+
         CHANGE_BRANCH="${BRANCH_NAME}"
     else 
         SUFFIX="\-${BRANCH_LOWER}";
