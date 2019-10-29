@@ -21,9 +21,6 @@ variablePopulation
 
 function build() {
     source ./"$COMPONENT.sh"
-    echo "${APP_NAME}" 
-    echo "-${BRANCH_LOWER}"
-    echo "${BUILD_NUMBER}" 
     echo "Building $COMPONENT (${APP_NAME}) to $PROJECT_PREFIX-$OC_APP..."
     buildPresent=$(oc get bc/"$APP_NAME-$BRANCH_LOWER" --ignore-not-found=true)
     if [ -z "${buildPresent}" ];
@@ -65,7 +62,6 @@ function build() {
 function deploy() {
     source ./"${COMPONENT}.sh"
     echo "Deploying ${COMPONENT} (${APP_NAME}) to ${OC_APP} ..."
-    echo "${PROJECT_PREFIX}-${OC_APP}"
     deployPresent=$(oc get dc/"${APP_NAME}-${BRANCH_LOWER}" --ignore-not-found=true)
     if [ -z "${deployPresent}" ];
     then 
@@ -206,23 +202,23 @@ function determineMode() {
 
 # Scrubs all PR assets from the environment
 function cleanOcArtifacts() {
-    artifactItems=$(oc get all -n "${PROJECT_PREFIX}"-dev | grep -i -"${BRANCH_NAME}"  | column -t | awk '{print $1}' | sort)
+    artifactItems=$(oc get all -n ${PROJECT_PREFIX}-dev | grep -i "\-${BRANCH_NAME}"  | column -t | awk '{print $1}' | sort)
     echo "${artifactItems}"
     for i in ${artifactItems};
     do
-        oc delete -n dqszvc-dev $i
+        oc delete -n ${PROJECT_PREFIX}-dev $i
     done
-    artifactSecrets=$(oc get secrets -n "${PROJECT_PREFIX}"-dev | grep -i -"${BRANCH_NAME}"  | column -t | awk '{print $1}' | sort)
+    artifactSecrets=$(oc get secrets -n ${PROJECT_PREFIX}-dev | grep -i "\-${BRANCH_NAME}"  | column -t | awk '{print $1}' | sort)
     echo "${artifactSecrets}"
     for i in ${artifactSecrets};
     do
-        oc delete -n dqszvc-dev secret/"$i"
+        oc delete -n ${PROJECT_PREFIX}-dev secret/"$i"
     done
-    artifactStorage=$(oc get all -n "${PROJECT_PREFIX}"-dev | grep -i -"${BRANCH_NAME}"  | column -t | awk '{print $1}' | sort)
+    artifactStorage=$(oc get all -n ${PROJECT_PREFIX}-dev | grep -i "\-${BRANCH_NAME}"  | column -t | awk '{print $1}' | sort)
     echo "${artifactSorage}"
     for i in ${artifactStorage};
     do
-        oc delete -n dqszvc-dev $i
+        oc delete -n ${PROJECT_PREFIX}-dev $i
     done
 }
 
