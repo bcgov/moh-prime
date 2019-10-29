@@ -46,7 +46,7 @@ function build() {
         oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
         -p NAME="${APP_NAME}" \
         -p VERSION="${BUILD_NUMBER}" \
-        -p SUFFIX="\-${BRANCH_LOWER}" \
+        -p SUFFIX='-'"${BRANCH_LOWER}" \
         -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
@@ -87,7 +87,7 @@ function deploy() {
         oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
         -p NAME="${APP_NAME}" \
         -p VERSION="${BUILD_NUMBER}" \
-        -p SUFFIX="\-${BRANCH_LOWER}" \
+        -p SUFFIX='-'"${BRANCH_LOWER}" \
         -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
