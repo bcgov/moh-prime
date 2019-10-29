@@ -14,11 +14,8 @@ import { ProfessionalInfoComponent } from './pages/professional-info/professiona
 import { SelfDeclarationComponent } from './pages/self-declaration/self-declaration.component';
 import { PharmanetAccessComponent } from './pages/pharmanet-access/pharmanet-access.component';
 import { ReviewComponent } from './pages/review/review.component';
-// TODO: temporary until UX is provided
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 import { AccessAgreementComponent } from './pages/access-agreement/access-agreement.component';
-
-
 
 const routes: Routes = [
   {
