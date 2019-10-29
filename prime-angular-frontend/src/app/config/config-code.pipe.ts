@@ -11,7 +11,7 @@ export class ConfigCodePipe implements PipeTransform {
     private config: ConfigService
   ) { }
 
-  transform(code: number, configKey: string): any {
+  transform(code: number, configKey: string): string {
     return this.config[configKey].find((c: Config) => c.code === code).name;
   }
 }

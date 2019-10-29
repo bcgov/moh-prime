@@ -66,10 +66,7 @@ export class ConfigService {
           // TODO: temporary until provided by config service
           map(this.addProvinces),
           map(this.addCountries),
-          map((config: Configuration) => this.configuration = config),
-          // Fail gracefully due to an authentication error
-          // allowing the application to load auth views
-          catchError(() => of(null))
+          map((config: Configuration) => this.configuration = config)
         );
     }
 
