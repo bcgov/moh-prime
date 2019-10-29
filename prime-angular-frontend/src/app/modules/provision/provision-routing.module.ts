@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
+import { ConfigResolver } from '@config/config-resolver';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 
@@ -21,6 +22,7 @@ const routes: Routes = [
       // authorization based on the user role permissions
       ProvisionGuard
     ],
+    resolve: [ConfigResolver],
     children: [
       {
         path: 'enrolments',
