@@ -16,7 +16,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthenticateGuard extends KeycloakAuthGuard implements CanActivateChild {
+export class AuthenticationGuard extends KeycloakAuthGuard implements CanActivateChild {
   constructor(
     protected router: Router,
     protected keycloakAngular: KeycloakService,
