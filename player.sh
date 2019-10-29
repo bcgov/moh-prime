@@ -10,7 +10,7 @@ function variablePopulation() {
         export SUFFIX=""
         export CHANGE_BRANCH="$BRANCH_NAME"
     else 
-        export SUFFIX="\-${BRANCH_LOWER}";
+        export SUFFIX="-${BRANCH_LOWER}";
     fi
 }
 
