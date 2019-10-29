@@ -1,8 +1,11 @@
 #!/bin/sh
+export PROJECT_PREFIX="dqszvc"
+export GIT_URL='https://github.com/bcgov/moh-prime.git'
+export BRANCH_LOWER=$(echo "${BRANCH_NAME}" | tr '[:upper:]' '[:lower:]') 
 export ACTION=$1
 export COMPONENT=$2
 export OC_APP=$3
-source ./project.sh
+# source ./project.sh
 # source ./functions.sh
 function variablePopulation() {
     if [ "${BRANCH_LOWER}" == "develop" ] || [ "${BRANCH_LOWER}" == "master" ];
