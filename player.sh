@@ -34,23 +34,23 @@ function build() {
     fi;
     if [ "${BRANCH_LOWER}" == "develop" ] || [ "${BRANCH_LOWER}" == "master" ];
     then 
-        oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \ 
-        -p NAME="${APP_NAME}" \ 
-        -p VERSION="${BUILD_NUMBER}" \ 
-        -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \ 
-        -p SOURCE_REPOSITORY_URL="${GIT_URL}" \ 
-        -p SOURCE_REPOSITORY_REF="${BRANCH_NAME}" \ 
-        -p OC_NAMESPACE="${PROJECT_PREFIX}" \ 
+        oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
+        -p NAME="${APP_NAME}" \
+        -p VERSION="${BUILD_NUMBER}" \
+        -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
+        -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
+        -p SOURCE_REPOSITORY_REF="${BRANCH_NAME}" \
+        -p OC_NAMESPACE="${PROJECT_PREFIX}" \
         -p OC_APP="${OC_APP}" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"  
     else 
-        oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \ 
-        -p NAME="${APP_NAME}" \ 
-        -p VERSION="${BUILD_NUMBER}" \ 
-        -p SUFFIX="\-${BRANCH_LOWER}" \ 
-        -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \ 
-        -p SOURCE_REPOSITORY_URL="${GIT_URL}" \ 
-        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \ 
-        -p OC_NAMESPACE="${PROJECT_PREFIX}" \ 
+        oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
+        -p NAME="${APP_NAME}" \
+        -p VERSION="${BUILD_NUMBER}" \
+        -p SUFFIX="\-${BRANCH_LOWER}" \
+        -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
+        -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
+        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
+        -p OC_NAMESPACE="${PROJECT_PREFIX}" \
         -p OC_APP="${OC_APP}" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"
     fi;
     if [ "$BUILD_REQUIRED" == true ];
@@ -75,23 +75,23 @@ function deploy() {
     fi;
     if [ "${BRANCH_LOWER}" == "develop" ] || [ "${BRANCH_LOWER}" == "master" ];
     then 
-        oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \ 
-        -p NAME="${APP_NAME}" \ 
-        -p VERSION="${BUILD_NUMBER}" \ 
-        -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \ 
-        -p SOURCE_REPOSITORY_URL="${GIT_URL}" \ 
-        -p SOURCE_REPOSITORY_REF="${BRANCH_NAME}" \ 
-        -p OC_NAMESPACE="${PROJECT_PREFIX}" \ 
+        oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
+        -p NAME="${APP_NAME}" \
+        -p VERSION="${BUILD_NUMBER}" \
+        -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
+        -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
+        -p SOURCE_REPOSITORY_REF="${BRANCH_NAME}" \
+        -p OC_NAMESPACE="${PROJECT_PREFIX}" \
         -p OC_APP="${OC_APP}" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"  
     else 
-        oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \ 
-        -p NAME="${APP_NAME}" \ 
-        -p VERSION="${BUILD_NUMBER}" \ 
-        -p SUFFIX="\-${BRANCH_LOWER}" \ 
-        -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \ 
-        -p SOURCE_REPOSITORY_URL="${GIT_URL}" \ 
-        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \ 
-        -p OC_NAMESPACE="${PROJECT_PREFIX}" \ 
+        oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
+        -p NAME="${APP_NAME}" \
+        -p VERSION="${BUILD_NUMBER}" \
+        -p SUFFIX="\-${BRANCH_LOWER}" \
+        -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
+        -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
+        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
+        -p OC_NAMESPACE="${PROJECT_PREFIX}" \
         -p OC_APP="${OC_APP}" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"
     fi;
 }
@@ -107,14 +107,14 @@ function deleteBc() {
     fi;
     echo "Deleting ${COMPONENT} from $OC_APP ..."
     echo "${PROJECT_PREFIX}-${OC_APP}"
-    oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \ 
-    -p NAME="${APP_NAME}" \ 
-    -p VERSION="${BUILD_NUMBER}" \ 
-    -p SUFFIX="${SUFFIX}" \ 
-    -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \ 
-    -p SOURCE_REPOSITORY_URL="${GIT_URL}" \ 
-    -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \ 
-    -p OC_NAMESPACE="${PROJECT_PREFIX}" \ 
+    oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
+    -p NAME="${APP_NAME}" \
+    -p VERSION="${BUILD_NUMBER}" \
+    -p SUFFIX="${SUFFIX}" \
+    -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
+    -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
+    -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
+    -p OC_NAMESPACE="${PROJECT_PREFIX}" \
     -p OC_APP="${OC_APP}" | oc delete -f - --namespace="${PROJECT_PREFIX}\-${OC_APP}"
 }
 
@@ -129,14 +129,14 @@ function deleteDc() {
     fi;
     echo "Deleting ${COMPONENT} from ${OC_APP} ..."
     echo "${PROJECT_PREFIX}-${OC_APP}"
-    oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \ 
-    -p NAME="${APP_NAME}" \ 
-    -p VERSION="${BUILD_NUMBER}" \ 
-    -p SUFFIX="${SUFFIX}" \ 
-    -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \ 
-    -p SOURCE_REPOSITORY_URL="${GIT_URL}" \ 
-    -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \ 
-    -p OC_NAMESPACE="${PROJECT_PREFIX}" \ 
+    oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
+    -p NAME="${APP_NAME}" \
+    -p VERSION="${BUILD_NUMBER}" \
+    -p SUFFIX="${SUFFIX}" \
+    -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
+    -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
+    -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
+    -p OC_NAMESPACE="${PROJECT_PREFIX}" \
     -p OC_APP="${OC_APP}" | oc delete -f - --namespace="${PROJECT_PREFIX}\-${OC_APP}"
 }
 
@@ -158,14 +158,14 @@ function ocApply() {
     else 
         SUFFIX="\-${BRANCH_LOWER}";
     fi
-    oc process -f openshift/"${OC_APP}"."${configType}".yaml \ 
-    -p NAME="${OC_APP}" \ 
-    -p VERSION="${BUILD_NUMBER}" \ 
-    -p SUFFIX="${SUFFIX}" \ 
-    -p SOURCE_CONTEXT_DIR="prime-${OC_APP}" \ 
-    -p SOURCE_REPOSITORY_URL="${GIT_URL}" \ 
-    -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}"  \ 
-    -p OC_NAMESPACE="${PROJECT_PREFIX}" \ 
+    oc process -f openshift/"${OC_APP}"."${configType}".yaml \
+    -p NAME="${OC_APP}" \
+    -p VERSION="${BUILD_NUMBER}" \
+    -p SUFFIX="${SUFFIX}" \
+    -p SOURCE_CONTEXT_DIR="prime-${OC_APP}" \
+    -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
+    -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}"  \
+    -p OC_NAMESPACE="${PROJECT_PREFIX}" \
     -p OC_APP="$3" | oc apply -f - --namespace="${PROJECT_PREFIX}-$3" 
     if [[ ${COMPONENT} == "build" &&  "${OC_APP}" != "postgresql" ]];
     then
@@ -183,14 +183,14 @@ function sonar(){
     then MODE="apply"
     else MODE="create"
     fi;
-    oc process -f openshift/sonar.pod.yaml \ 
-    -p NAME="sonar-runner" \ 
-    -p VERSION="${BUILD_NUMBER}" \ 
-    -p SUFFIX='-'"${BRANCH_LOWER}" \ 
-    -p SOURCE_CONTEXT_DIR="." \ 
-    -p SOURCE_REPOSITORY_URL="${GIT_URL}" \ 
-    -p SOURCE_REPOSITORY_REF="${BRANCH_NAME}" \ 
-    -p OC_NAMESPACE="${PROJECT_PREFIX}" \ 
+    oc process -f openshift/sonar.pod.yaml \
+    -p NAME="sonar-runner" \
+    -p VERSION="${BUILD_NUMBER}" \
+    -p SUFFIX='-'"${BRANCH_LOWER}" \
+    -p SOURCE_CONTEXT_DIR="." \
+    -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
+    -p SOURCE_REPOSITORY_REF="${BRANCH_NAME}" \
+    -p OC_NAMESPACE="${PROJECT_PREFIX}" \
     -p OC_APP="${OC_APP}" | oc ${MODE} -f - --namespace=${PROJECT_PREFIX}-${OC_APP}
     echo "Scanning..."
     sonar-scanner -X
