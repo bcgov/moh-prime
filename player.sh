@@ -2,7 +2,6 @@
 export PROJECT_PREFIX="dqszvc"
 export GIT_URL='https://github.com/bcgov/moh-prime.git'
 export BRANCH_LOWER=`echo "${BRANCH_NAME}" | awk '{print tolower($0)}'`
-echo "${BRANCH_LOWER}"
 export ACTION=$1
 export COMPONENT=$2
 export OC_APP=$3
@@ -47,7 +46,7 @@ function build() {
         oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
         -p NAME="${APP_NAME}" \ 
         -p VERSION="${BUILD_NUMBER}" \
-        -p SUFFIX="-${BRANCH_LOWER}" \
+        -p SUFFIX="\-${BRANCH_LOWER}" \
         -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
@@ -88,7 +87,7 @@ function deploy() {
         oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
         -p NAME="${APP_NAME}" \ 
         -p VERSION="${BUILD_NUMBER}" \
-        -p SUFFIX="-${BRANCH_LOWER}" \
+        -p SUFFIX="\-${BRANCH_LOWER}" \
         -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
@@ -187,7 +186,7 @@ function sonar(){
     oc process -f openshift/sonar.pod.yaml \
     -p NAME="sonar-runner" \
     -p VERSION="${BUILD_NUMBER}" \
-    -p SUFFIX="${BRANCH_LOWER}" \
+    -p SUFFIX='-'"${BRANCH_LOWER}" \
     -p SOURCE_CONTEXT_DIR="." \
     -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
     -p SOURCE_REPOSITORY_REF="${BRANCH_NAME}" \
