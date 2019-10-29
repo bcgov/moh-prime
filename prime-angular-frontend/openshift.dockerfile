@@ -7,9 +7,8 @@ ENV REDIRECT_URL $REDIRECT_URL
 ENV OC_APP $OC_APP
 RUN mkdir -p /usr/src/app && \
     pwd && \
-    echo $REDIRECT_URL && \
-    echo $OC_APP && \
-    /bin/sh /usr/src/app/keycloak.${OC_APP}.conf && \
+    echo "RedirectURL = $REDIRECT_URL" && \
+    echo "OC APP = $OC_APP" && \
     echo "Step 1 environment..." && \
     printenv
 WORKDIR /usr/src/app
