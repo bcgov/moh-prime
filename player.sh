@@ -22,6 +22,9 @@ variablePopulation
 
 function build() {
     source ./"$COMPONENT.sh"
+    echo "${APP_NAME}" 
+    echo "-${BRANCH_LOWER}"
+    echo "${BUILD_NUMBER}" 
     echo "Building $COMPONENT (${APP_NAME}) to $PROJECT_PREFIX-$OC_APP..."
     buildPresent=$(oc get bc/"$APP_NAME-$BRANCH_LOWER" --ignore-not-found=true)
     if [ -z "${buildPresent}" ];
