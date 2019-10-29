@@ -5,13 +5,11 @@ import * as moment from 'moment';
   name: 'formatDate'
 })
 export class FormatDatePipe implements PipeTransform {
-
-  transform(date: any, format: string = 'MMM D, Y'): any {
+  transform(date: string, format: string = 'MMM D, Y'): string {
     if (date) {
       date = moment(date).format(format);
     }
 
     return date;
   }
-
 }
