@@ -40,7 +40,8 @@ objects:
           annotations: null
           from:
             kind: ImageStreamTag
-            name: 'docker-registry.default.svc:5000/${OC_NAMESPACE}-${OC_APP}/postgresql-96'
+            name: 'postgresql:9.6'
+            namespace: openshift
           generation: 1
           importPolicy: {}
           referencePolicy:
