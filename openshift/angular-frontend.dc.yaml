@@ -60,7 +60,7 @@ objects:
           - nginx
           - "-g"
           - daemon off;
-          env:
+        - env:
           - name: SUFFIX
             value: "${SUFFIX}"
           - name: OC_APP
