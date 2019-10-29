@@ -16,6 +16,9 @@ import { PharmanetAccessComponent } from './pages/pharmanet-access/pharmanet-acc
 import { ReviewComponent } from './pages/review/review.component';
 // TODO: temporary until UX is provided
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
+import { AccessAgreementComponent } from './pages/access-agreement/access-agreement.component';
+
+
 
 const routes: Routes = [
   {
@@ -67,7 +70,13 @@ const routes: Routes = [
       },
       {
         path: 'confirmation',
+        canActivate: [EnrolmentGuard],
         component: ConfirmationComponent
+      },
+      {
+        path: 'agreement',
+        canActivate: [EnrolmentGuard],
+        component: AccessAgreementComponent
       },
       {
         path: '', // Equivalent to `/` and alias for `profile`

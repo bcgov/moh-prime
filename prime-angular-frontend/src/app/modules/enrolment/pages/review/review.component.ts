@@ -22,6 +22,7 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 export class ReviewComponent implements OnInit {
   // TODO: make a proper enrolment model
   public enrolment: Enrolment;
+  disabledAgreement = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -32,6 +33,11 @@ export class ReviewComponent implements OnInit {
     private dialog: MatDialog,
     private logger: LoggerService
   ) { }
+
+
+  changeCheck(event) {
+    this.disabledAgreement = !event.checked;
+  }
 
   public onSubmit() {
     if (this.enrolmentStateService.isEnrolmentValid()) {
