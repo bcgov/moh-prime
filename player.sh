@@ -1,7 +1,8 @@
 #!/bin/sh
 export PROJECT_PREFIX="dqszvc"
 export GIT_URL='https://github.com/bcgov/moh-prime.git'
-export BRANCH_LOWER=`echo "${BRANCH_NAME}" | tr '[:upper:]' '[:lower:]'`
+export BRANCH_LOWER=`echo "${BRANCH_NAME}" | awk '{print tolower($0)}'`
+echo "${BRANCH_LOWER}"
 export ACTION=$1
 export COMPONENT=$2
 export OC_APP=$3
