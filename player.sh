@@ -39,7 +39,7 @@ function build() {
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${BRANCH_NAME}" \
         -p OC_NAMESPACE="${PROJECT_PREFIX}" \
-        -p OC_APP="${OC_APP}" #| oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"  
+        -p OC_APP="${OC_APP}" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}\-${OC_APP}"  
     else 
         echo "oc process -f ./${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE} -p NAME=${APP_NAME} -p VERSION=${BUILD_NUMBER} -p SUFFIX=-${BRANCH_LOWER} -p SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR} -p SOURCE_REPOSITORY_URL=${GIT_URL} -p SOURCE_REPOSITORY_REF=${BRANCH_NAME} -p OC_NAMESPACE=${PROJECT_PREFIX} -p OC_APP=${OC_APP} | oc ${MODE} -f - --namespace=${PROJECT_PREFIX}-${OC_APP}"  
         oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
@@ -50,7 +50,7 @@ function build() {
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
         -p OC_NAMESPACE="${PROJECT_PREFIX}" \
-        -p OC_APP="${OC_APP}" #| oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"
+        -p OC_APP="${OC_APP}" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}\-${OC_APP}"
     fi;
     if [ "$BUILD_REQUIRED" == true ];
     then
@@ -80,7 +80,7 @@ function deploy() {
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${BRANCH_NAME}" \
         -p OC_NAMESPACE="${PROJECT_PREFIX}" \
-        -p OC_APP="${OC_APP}" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"  
+        -p OC_APP="${OC_APP}" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}\-${OC_APP}"  
     else 
         oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
         -p NAME="${APP_NAME}" \
@@ -90,7 +90,7 @@ function deploy() {
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
         -p OC_NAMESPACE="${PROJECT_PREFIX}" \
-        -p OC_APP="${OC_APP}" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"
+        -p OC_APP="${OC_APP}" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}\-${OC_APP}"
     fi;
 }
 
@@ -189,7 +189,7 @@ function sonar(){
     -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
     -p SOURCE_REPOSITORY_REF="${BRANCH_NAME}" \
     -p OC_NAMESPACE="${PROJECT_PREFIX}" \
-    -p OC_APP="${OC_APP}" | oc ${MODE} -f - --namespace=${PROJECT_PREFIX}-${OC_APP}
+    -p OC_APP="${OC_APP}" | oc ${MODE} -f - --namespace="${PROJECT_PREFIX}\-${OC_APP}"
     echo "Scanning..."
     sonar-scanner -X
 }
