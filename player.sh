@@ -28,15 +28,12 @@ function build() {
     fi;
     if [ "${BRANCH_LOWER}" == "develop" ] || [ "${BRANCH_LOWER}" == "master" ];
     then 
-        export SUFFIX=""
-        export CHANGE_BRANCH="$BRANCH_NAME"
         oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
         -p NAME="${APP_NAME}" \ 
         -p VERSION="${BUILD_NUMBER}" \
-        -p SUFFIX="${SUFFIX}" \
         -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
-        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
+        -p SOURCE_REPOSITORY_REF="${BRANCH_NAME}" \
         -p OC_NAMESPACE="${PROJECT_PREFIX}" \
         -p OC_APP="${OC_APP}" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"  
     else 
@@ -72,15 +69,12 @@ function deploy() {
     fi;
     if [ "${BRANCH_LOWER}" == "develop" ] || [ "${BRANCH_LOWER}" == "master" ];
     then 
-        export SUFFIX=""
-        export CHANGE_BRANCH="$BRANCH_NAME"
         oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
         -p NAME="${APP_NAME}" \ 
         -p VERSION="${BUILD_NUMBER}" \
-        -p SUFFIX="${SUFFIX}" \
         -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
-        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
+        -p SOURCE_REPOSITORY_REF="${BRANCH_NAME}" \
         -p OC_NAMESPACE="${PROJECT_PREFIX}" \
         -p OC_APP="${OC_APP}" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"  
     else 
