@@ -82,7 +82,7 @@ export class DashboardComponent implements OnInit {
    * @memberof DashboardComponent
    */
   public logout() {
-    this.authService.logout();
+    this.authService.logout(this.config.loginRedirectUrl);
   }
 
   public ngOnInit() {
