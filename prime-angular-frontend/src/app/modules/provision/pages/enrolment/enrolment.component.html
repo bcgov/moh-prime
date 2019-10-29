@@ -14,16 +14,17 @@
         <dd class="col-sm-12 col-md-6 py-1">
           {{ enrolment.enrollee.firstName }} {{ enrolment.enrollee.middleName }} {{ enrolment.enrollee.lastName }}&nbsp;
         </dd>
-        <ng-container *ngIf="enrolment?.enrollee.preferredFirstName || enrolment?.enrollee.preferredMiddleName || enrolment?.enrollee.preferredLastName">
-            <dt class="col-sm-12 col-md-6 py-1">Preferred Name</dt>
-            <dd class="col-sm-12 col-md-6 py-1">
-              {{ enrolment.enrollee.preferredFirstName }} {{ enrolment.enrollee.preferredMiddleName }}
-              {{ enrolment.enrollee.preferredLastName }}&nbsp;
-            </dd>
+        <ng-container
+                      *ngIf="enrolment?.enrollee.preferredFirstName || enrolment?.enrollee.preferredMiddleName || enrolment?.enrollee.preferredLastName">
+          <dt class="col-sm-12 col-md-6 py-1">Preferred Name</dt>
+          <dd class="col-sm-12 col-md-6 py-1">
+            {{ enrolment.enrollee.preferredFirstName }} {{ enrolment.enrollee.preferredMiddleName }}
+            {{ enrolment.enrollee.preferredLastName }}&nbsp;
+          </dd>
         </ng-container>
 
         <dt class="col-sm-12 col-md-6 py-1">Date of Birth</dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.dateOfBirth | formatDate:'MM' }}&nbsp;</dd>
+        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.dateOfBirth | formatDate }}&nbsp;</dd>
       </dl>
 
       <h3 class="lead">Address</h3>
@@ -69,7 +70,7 @@
         <dt class="col-sm-12 col-md-6 py-1">Voice Phone</dt>
         <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.voicePhone }}&nbsp;</dd>
         <ng-container *ngIf="enrolment?.enrollee.voiceExtension">
-          <dt class="col-sm-12 col-md-6 py-1" >Extension</dt>
+          <dt class="col-sm-12 col-md-6 py-1">Extension</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.voiceExtension }}&nbsp;</dd>
         </ng-container>
 
@@ -79,12 +80,12 @@
 
       <dl class="row mb-4">
         <ng-container *ngIf="enrolment?.enrollee.contactPhone">
-            <dt class="col-sm-12 col-md-6 py-1">Phone</dt>
-            <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.contactPhone }}&nbsp;</dd>
+          <dt class="col-sm-12 col-md-6 py-1">Phone</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.contactPhone }}&nbsp;</dd>
         </ng-container>
         <ng-container *ngIf="enrolment?.enrollee.contactEmail">
-            <dt class="col-sm-12 col-md-6 py-1">Email</dt>
-            <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.contactEmail }}&nbsp;</dd>
+          <dt class="col-sm-12 col-md-6 py-1">Email</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.contactEmail }}&nbsp;</dd>
         </ng-container>
 
       </dl>
