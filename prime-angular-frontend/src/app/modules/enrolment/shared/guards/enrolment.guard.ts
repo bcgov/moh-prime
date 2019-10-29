@@ -16,6 +16,8 @@ import { EnrolmentResource } from '../services/enrolment-resource.service';
   providedIn: 'root'
 })
 export class EnrolmentGuard implements CanActivate, CanActivateChild, CanLoad {
+
+
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router,
@@ -67,19 +69,22 @@ export class EnrolmentGuard implements CanActivate, CanActivateChild, CanLoad {
         map((enrolment: Enrolment) => {
           // return true;
           const routes = this.config.routes;
+          const submittedRoutes: string[] = ['confirmation', 'agreement', 'summary'];
 
           if (!enrolment) {
             return this.navigate(routePath, 'profile');
           } else if (enrolment) {
             switch (enrolment.currentStatus.status.code) {
+              // Allow access to the route and provide the enrolment
               case EnrolmentStatus.IN_PROGRESS:
-                // Allow access to the route and provide the enrolment
+                if (submittedRoutes.includes(routePath)) {
+                  // Should not see till after submit, redirect to profile page
+                  return this.navigate(routePath, 'profile');
+                }
                 return true;
               case EnrolmentStatus.SUBMITTED:
-                // this.router.navigate([routes.enrolment, 'confirmation']);
                 return this.navigate(routePath, 'confirmation');
               case EnrolmentStatus.ADJUDICATED_APPROVED:
-                // this.router.navigate([routes.enrolment, 'agreement']);
                 return this.navigate(routePath, 'agreement');
               // case EnrolmentStatus.DECLINED:
               case EnrolmentStatus.ACCEPTED_TOS:
