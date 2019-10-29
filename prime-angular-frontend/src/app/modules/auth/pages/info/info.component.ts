@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Inject } from '@angular/core';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
+import { AuthProvider } from '@auth/shared/enum/auth-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 @Component({
@@ -18,14 +19,14 @@ export class InfoComponent implements OnInit {
 
   public loginUsingBCSC() {
     this.authService.login({
-      idpHint: 'bcsc',
+      idpHint: AuthProvider.BCSC,
       redirectUri: this.config.loginRedirectUrl
     });
   }
 
   public loginUsingIDIR() {
     this.authService.login({
-      idpHint: 'idir',
+      idpHint: AuthProvider.IDIR,
       redirectUri: this.config.loginRedirectUrl
     });
   }
