@@ -93,7 +93,8 @@ objects:
           uri: '${SOURCE_REPOSITORY_URL}'
         type: Git
       strategy:
-        dockerStrategy: {}
+        dockerStrategy: 
+          dockerfilePath: openshift.dockerfile
         type: Docker
       triggers:
         - type: ConfigChange
