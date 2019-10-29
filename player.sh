@@ -39,7 +39,7 @@ function build() {
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${BRANCH_NAME}" \
         -p OC_NAMESPACE="${PROJECT_PREFIX}" \
-        -p OC_APP="${OC_APP}" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}\-${OC_APP}"  
+        -p OC_APP="${OC_APP}" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"  
     else 
         echo "oc process -f ./${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE} -p NAME=${APP_NAME} -p VERSION=${BUILD_NUMBER} -p SUFFIX=-${BRANCH_LOWER} -p SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR} -p SOURCE_REPOSITORY_URL=${GIT_URL} -p SOURCE_REPOSITORY_REF=${BRANCH_NAME} -p OC_NAMESPACE=${PROJECT_PREFIX} -p OC_APP=${OC_APP} | oc ${MODE} -f - --namespace=${PROJECT_PREFIX}-${OC_APP}"  
         oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
@@ -50,7 +50,7 @@ function build() {
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
         -p OC_NAMESPACE="${PROJECT_PREFIX}" \
-        -p OC_APP="${OC_APP}" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}\-${OC_APP}"
+        -p OC_APP="${OC_APP}" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"
     fi;
     if [ "$BUILD_REQUIRED" == true ];
     then
@@ -80,7 +80,7 @@ function deploy() {
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${BRANCH_NAME}" \
         -p OC_NAMESPACE="${PROJECT_PREFIX}" \
-        -p OC_APP="${OC_APP}" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}\-${OC_APP}"  
+        -p OC_APP="${OC_APP}" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"  
     else 
         oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
         -p NAME="${APP_NAME}" \
@@ -90,7 +90,7 @@ function deploy() {
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
         -p OC_NAMESPACE="${PROJECT_PREFIX}" \
-        -p OC_APP="${OC_APP}" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}\-${OC_APP}"
+        -p OC_APP="${OC_APP}" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"
     fi;
 }
 
@@ -113,7 +113,7 @@ function deleteBc() {
     -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
     -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
     -p OC_NAMESPACE="${PROJECT_PREFIX}" \
-    -p OC_APP="${OC_APP}" | oc delete -f - --namespace="${PROJECT_PREFIX}\-${OC_APP}"
+    -p OC_APP="${OC_APP}" | oc delete -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"
 }
 
 function deleteDc() {
@@ -135,7 +135,7 @@ function deleteDc() {
     -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
     -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
     -p OC_NAMESPACE="${PROJECT_PREFIX}" \
-    -p OC_APP="${OC_APP}" | oc delete -f - --namespace="${PROJECT_PREFIX}\-${OC_APP}"
+    -p OC_APP="${OC_APP}" | oc delete -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"
 }
 
 function ocApply() {
@@ -189,7 +189,7 @@ function sonar(){
     -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
     -p SOURCE_REPOSITORY_REF="${BRANCH_NAME}" \
     -p OC_NAMESPACE="${PROJECT_PREFIX}" \
-    -p OC_APP="${OC_APP}" | oc ${MODE} -f - --namespace="${PROJECT_PREFIX}\-${OC_APP}"
+    -p OC_APP="${OC_APP}" | oc ${MODE} -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"
     echo "Scanning..."
     sonar-scanner -X
 }
@@ -204,19 +204,19 @@ function determineMode() {
 
 # Scrubs all PR assets from the environment
 function cleanOcArtifacts() {
-    artifactItems=$(oc get all -n ${PROJECT_PREFIX}-dev | grep -i "\-${BRANCH_NAME}"  | column -t | awk '{print $1}' | sort)
+    artifactItems=$(oc get all -n ${PROJECT_PREFIX}-dev | grep -i "-${BRANCH_NAME}"  | column -t | awk '{print $1}' | sort)
     echo "${artifactItems}"
     for i in ${artifactItems};
     do
         oc delete -n ${PROJECT_PREFIX}-dev $i
     done
-    artifactSecrets=$(oc get secrets -n ${PROJECT_PREFIX}-dev | grep -i "\-${BRANCH_NAME}"  | column -t | awk '{print $1}' | sort)
+    artifactSecrets=$(oc get secrets -n ${PROJECT_PREFIX}-dev | grep -i "-${BRANCH_NAME}"  | column -t | awk '{print $1}' | sort)
     echo "${artifactSecrets}"
     for i in ${artifactSecrets};
     do
         oc delete -n ${PROJECT_PREFIX}-dev secret/"$i"
     done
-    artifactStorage=$(oc get all -n ${PROJECT_PREFIX}-dev | grep -i "\-${BRANCH_NAME}"  | column -t | awk '{print $1}' | sort)
+    artifactStorage=$(oc get all -n ${PROJECT_PREFIX}-dev | grep -i "-${BRANCH_NAME}"  | column -t | awk '{print $1}' | sort)
     echo "${artifactSorage}"
     for i in ${artifactStorage};
     do
