@@ -14,6 +14,7 @@ import { AccessAgreementComponent } from './pages/access-agreement/access-agreem
 
 import { CollegeCertificationsComponent } from './shared/components/college-certifications/college-certifications.component';
 import { PageTitleComponent } from './shared/components/page-title/page-title.component';
+import { SummaryComponent } from './pages/summary/summary.component';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { PageTitleComponent } from './shared/components/page-title/page-title.co
     ConfirmationComponent,
     CollegeCertificationsComponent,
     PageTitleComponent,
-    AccessAgreementComponent
+    AccessAgreementComponent,
+    SummaryComponent,
   ],
   imports: [
     SharedModule,

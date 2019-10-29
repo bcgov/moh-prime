@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { CanDeactivateFormGuard } from '@core/guards/can-deactivate-form.guard';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
-import { AuthenticateGuard } from '@auth/shared/guards/authentication.guard';
+import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 
 import { EnrolleeGuard } from './shared/guards/enrollee.guard';
 import { EnrolmentGuard } from './shared/guards/enrolment.guard';
@@ -17,7 +17,7 @@ import { ReviewComponent } from './pages/review/review.component';
 // TODO: temporary until UX is provided
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 import { AccessAgreementComponent } from './pages/access-agreement/access-agreement.component';
-
+import { SummaryComponent } from './pages/summary/summary.component';
 
 
 const routes: Routes = [
@@ -27,7 +27,7 @@ const routes: Routes = [
     // Check authentication and authorization each time
     // the router navigates to the next route
     canActivateChild: [
-      AuthenticateGuard,
+      AuthenticationGuard,
       // Guard module from being accessed without the proper
       // authorization based on the user role permissions
       EnrolleeGuard
@@ -77,6 +77,11 @@ const routes: Routes = [
         path: 'agreement',
         canActivate: [EnrolmentGuard],
         component: AccessAgreementComponent
+      },
+      {
+        path: 'summary',
+        canActivate: [EnrolmentGuard],
+        component: SummaryComponent
       },
       {
         path: '', // Equivalent to `/` and alias for `profile`

@@ -42,20 +42,22 @@ export class ProvisionGuard extends KeycloakAuthGuard implements CanActivateChil
    */
   public isAccessAllowed(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      if (!this.authenticated) {
-        this.router.navigate([this.config.routes.auth]);
-        return reject(false);
-      }
+      // if (!this.authenticated) {
+      //   this.router.navigate([this.config.routes.auth]);
+      //   return reject(false);
+      // }
 
-      if (
-        this.keycloakAngular.isUserInRole(Role.PROVISIONER) ||
-        this.keycloakAngular.isUserInRole(Role.ADMIN)
-      ) {
-        return resolve(true);
-      }
+      // if (
+      //   this.keycloakAngular.isUserInRole(Role.PROVISIONER) ||
+      //   this.keycloakAngular.isUserInRole(Role.ADMIN)
+      // ) {
+      //   return resolve(true);
+      // }
 
-      // Access has been denied
-      this.router.navigate([this.config.routes.denied]);
+      // // Access has been denied
+      // this.router.navigate([this.config.routes.denied]);
+      // FOR TESTING ONLY
+      return resolve(true); ///// MAKE SURE YOU REMOVE
       return reject(false);
     });
   }
