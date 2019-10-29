@@ -176,11 +176,6 @@ function ocApply() {
 
 function sonar(){
     OC_APP="$OC_APP"
-    deployPresent=$(oc get bc/${COMPONENT}-${BRANCH_LOWER} --ignore-not-found=true)
-    if [ -z ${deployPresent} ];
-    then MODE="apply"
-    else MODE="create"
-    fi;
     oc process -f openshift/sonar.pod.yaml \
     -p NAME="sonar-runner" \
     -p VERSION="${BUILD_NUMBER}" \
