@@ -64,7 +64,7 @@ objects:
     name: "${NAME}${SUFFIX}"
   spec:
     containers:
-      env:
+    - env:
       - name: SUFFIX
         value: "${SUFFIX}"
       - name: REDIRECT_URL
