@@ -45,6 +45,15 @@ export class EnrolmentGuard implements CanActivate, CanActivateChild, CanLoad {
     return this.canActivate(next, state);
   }
 
+  public navigate(routePath: string, navPath: string) {
+    const routes = this.config.routes;
+    if (routePath !== navPath) {
+      this.router.navigate([routes.enrolment, navPath]);
+    } else {
+      return true;
+    }
+  }
+
   /**
    * @description
    * Check for an enrolment, and attempt to redirect to an appropriate
@@ -56,30 +65,25 @@ export class EnrolmentGuard implements CanActivate, CanActivateChild, CanLoad {
     return this.enrolmentResource.enrolments()
       .pipe(
         map((enrolment: Enrolment) => {
+          // return true;
           const routes = this.config.routes;
 
           if (!enrolment) {
-            if (routePath !== 'profile') {
-              this.router.navigate([routes.enrolment, 'profile']);
-            } else {
-              return true;
-            }
+            return this.navigate(routePath, 'profile');
           } else if (enrolment) {
             switch (enrolment.currentStatus.status.code) {
               case EnrolmentStatus.IN_PROGRESS:
                 // Allow access to the route and provide the enrolment
                 return true;
               case EnrolmentStatus.SUBMITTED:
-                // TODO: update to redirect to the actual status view
-                this.router.navigate([routes.enrolment, 'confirmation']);
-                break;
+                // this.router.navigate([routes.enrolment, 'confirmation']);
+                return this.navigate(routePath, 'confirmation');
               case EnrolmentStatus.ADJUDICATED_APPROVED:
-                this.router.navigate([routes.enrolment, 'agreement']);
-                break;
+                // this.router.navigate([routes.enrolment, 'agreement']);
+                return this.navigate(routePath, 'agreement');
               // case EnrolmentStatus.DECLINED:
               case EnrolmentStatus.ACCEPTED_TOS:
-                this.router.navigate([routes.enrolment, 'summary']);
-                break;
+                return this.navigate(routePath, 'summary');
               // case EnrolmentStatus.DECLINED_TOS:
               //   this.router.navigate([routes.???, '...']);
               //   break;

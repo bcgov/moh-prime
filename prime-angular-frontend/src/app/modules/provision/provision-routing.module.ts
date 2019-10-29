@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
-import { AuthenticateGuard } from '@auth/shared/guards/authentication.guard';
+import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 
 import { ProvisionGuard } from './shared/guards/provision.guard';
 
@@ -16,7 +16,7 @@ const routes: Routes = [
     // Check authentication and authorization each time
     // the router navigates to the next route
     canActivateChild: [
-      AuthenticateGuard,
+      AuthenticationGuard,
       // Guard module from being accessed without the proper
       // authorization based on the user role permissions
       ProvisionGuard
