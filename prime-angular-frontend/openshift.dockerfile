@@ -9,7 +9,7 @@ RUN mkdir -p /usr/src/app && \
     pwd && \
     echo $REDIRECT_URL && \
     echo $OC_APP && \
-    source /usr/src/app/keycloak.${OC_APP}.conf && \
+    /bin/sh /usr/src/app/keycloak.${OC_APP}.conf && \
     echo "Step 1 environment..." && \
     printenv
 WORKDIR /usr/src/app
