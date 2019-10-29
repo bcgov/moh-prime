@@ -18,7 +18,7 @@ variablePopulation
 
 function build() {
     source ./"$COMPONENT.sh"
-    echo "Building $COMPONENT to $PROJECT_PREFIX-$OC_APP..."
+    echo "Building $COMPONENT (${APP_NAME}) to $PROJECT_PREFIX-$OC_APP..."
     buildPresent=$(oc get bc/"$APP_NAME-$BRANCH_LOWER" --ignore-not-found=true)
     if [ -z "${buildPresent}" ];
     then 
@@ -61,7 +61,7 @@ function build() {
 
 function deploy() {
     source ./"${COMPONENT}.sh"
-    echo "Deploying ${COMPONENT} to ${OC_APP} ..."
+    echo "Deploying ${COMPONENT} (${APP_NAME}) to ${OC_APP} ..."
     echo "${PROJECT_PREFIX}-${OC_APP}"
     deployPresent=$(oc get dc/"${APP_NAME}-${BRANCH_LOWER}" --ignore-not-found=true)
     if [ -z "${deployPresent}" ];
