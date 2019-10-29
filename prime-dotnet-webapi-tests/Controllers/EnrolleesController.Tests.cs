@@ -29,7 +29,7 @@ namespace PrimeTests.Controllers
 
                 // check the initial state
                 var enrollees = await service.GetEnrolleesAsync();
-                Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrollees.Count());
+                Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
                 //pick off an enrollee to get the userId from
                 Enrollee expectedEnrollee = enrollees.First();
@@ -58,7 +58,7 @@ namespace PrimeTests.Controllers
 
                 // check the initial state
                 var enrollees = await service.GetEnrolleesAsync();
-                Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, enrollees.Count());
+                Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
                 // create a request with an AUTH token
                 var request = TestUtils.CreateAdminRequest(HttpMethod.Get, "/api/enrollees", Guid.NewGuid());
@@ -69,7 +69,39 @@ namespace PrimeTests.Controllers
 
                 // check that the controller returned only the one user's enrollee record
                 var returnedEnrollees = (await TestUtils.DeserializeResponse<ApiOkResponse<IEnumerable<Enrollee>>>(response)).Result;
-                Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLMENTS_SIZE, returnedEnrollees.Count());
+                Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLLEES_SIZE, returnedEnrollees.Count());
+            }
+        }
+
+        [Fact]
+        public async void testGetEnrollees_401_Unauthorized()
+        {
+            using (var scope = _factory.Server.Host.Services.CreateScope())
+            {
+                // initialize the data
+                var service = scope.ServiceProvider.GetRequiredService<IEnrolleeService>();
+                ((EnrolleeServiceMock)service).InitializeDb();
+
+                // check the initial state
+                var enrollees = await service.GetEnrolleesAsync();
+                Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
+
+                //pick off an enrollee to get the userId from
+                Enrollee expectedEnrollee = enrollees.First();
+
+                // create a request with an AUTH token
+                var request = TestUtils.CreateRequest(HttpMethod.Get, "/api/enrollees", expectedEnrollee.UserId);
+
+                //remove the AUTH token
+                request.Headers.Authorization = null;
+
+                // try to get the enrollees without a token
+                var response = await _client.SendAsync(request);
+                Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+
+                // make sure the same amount of enrollees exist
+                enrollees = await service.GetEnrolleesAsync();
+                Assert.Equal(EnrolmentServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
             }
         }
     }
