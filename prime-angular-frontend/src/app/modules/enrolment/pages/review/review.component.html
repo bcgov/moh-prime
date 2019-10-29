@@ -238,9 +238,11 @@
 
   <app-sub-header subheader=""
                   help=""></app-sub-header>
-  <div>
+
+  <div class="text-right">
     <mat-checkbox class="mr-4"
-                  (change)="changeCheck($event)">I confirm that all information provided is accurate.</mat-checkbox>
+                  (change)="onConfirmAccuracy($event)">I confirm that all information provided is accurate.
+    </mat-checkbox>
   </div>
 
   <div class="row justify-content-between">
