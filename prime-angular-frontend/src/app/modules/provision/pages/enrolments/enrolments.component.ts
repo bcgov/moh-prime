@@ -85,6 +85,7 @@ export class EnrolmentsComponent implements OnInit {
     const data: DialogOptions = {
       title: 'Decline Enrolment',
       message: 'Are you sure you want to decline this enrolment?',
+      actionType: 'warn',
       actionText: 'Decline Enrolment'
     };
     this.dialog.open(ConfirmDialogComponent, { data })
