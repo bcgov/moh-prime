@@ -1,4 +1,5 @@
-FROM node:10.16 as build-deps
+# base image
+FROM node:10.16 AS build-deps
 
 ENV NODE_ROOT /usr/src/app
 ENV REDIRECT_URL ${REDIRECT_URL}
