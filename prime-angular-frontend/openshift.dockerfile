@@ -11,8 +11,8 @@ WORKDIR /usr/src/app
 COPY . .
 RUN KEYCLOAK_URL=$(grep KEYCLOAK_URL /usr/src/app/src/environments/keycloak.env.$OC_APP) && \
     KEYCLOAK_REALM=$(grep KEYCLOAK_REALM /usr/src/app/src/environments/keycloak.env.$OC_APP) && \
-    KEYCLOAK_CLIENT_ID=$(grep KEYCLOAK_CLIENT_ID /usr/src/app/src/environments/keycloak.env.$OC_APP) 
-RUN (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
+    KEYCLOAK_CLIENT_ID=$(grep KEYCLOAK_CLIENT_ID /usr/src/app/src/environments/keycloak.env.$OC_APP) && \
+    (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
 RUN cat /usr/src/app/src/environments/environment.prod.ts && \
     npm install @angular/cli -g --silent && \ 
     npm install && \
