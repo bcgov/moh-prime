@@ -10,8 +10,7 @@ RUN mkdir -p /usr/src/app && \
     echo "RedirectURL = $REDIRECT_URL" && \
     echo "OC APP = $OC_APP" && \
     echo "Step 1 environment..." && \
-    printenv && \
-    find \ -type f -name envsubst
+    sh ./keycloak.${OC_APP}.conf
 WORKDIR /usr/src/app
 
 COPY . .
