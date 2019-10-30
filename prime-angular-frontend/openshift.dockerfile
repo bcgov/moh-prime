@@ -7,7 +7,6 @@ ENV REDIRECT_URL ${REDIRECT_URL}
 ENV OC_APP ${OC_APP}
 RUN mkdir -p /usr/src/app && \
     pwd && \
-    cat /
     echo "RedirectURL = $REDIRECT_URL" && \
     echo "OC APP = $OC_APP" && \
     echo "Step 1 environment..."
