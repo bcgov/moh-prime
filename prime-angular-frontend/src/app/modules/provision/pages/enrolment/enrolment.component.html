@@ -14,7 +14,7 @@
           {{ enrolment.enrollee.firstName }} {{ enrolment.enrollee.middleName }} {{ enrolment.enrollee.lastName }}&nbsp;
         </dd>
         <ng-container
-                      *ngIf="enrolment?.enrollee.preferredFirstName || enrolment?.enrollee.preferredMiddleName || enrolment?.enrollee.preferredLastName">
+                      *ngIf="enrolment.enrollee.preferredFirstName || enrolment.enrollee.preferredMiddleName || enrolment.enrollee.preferredLastName">
           <dt class="col-sm-12 col-md-6 py-1">Preferred Name</dt>
           <dd class="col-sm-12 col-md-6 py-1">
             {{ enrolment.enrollee.preferredFirstName }} {{ enrolment.enrollee.preferredMiddleName }}
@@ -75,18 +75,20 @@
 
       </dl>
 
-      <h3 class="lead">Preferred Contact</h3>
+      <ng-container *ngIf="enrolment?.enrollee.contactPhone || enrolment?.enrollee.contactEmail">
+        <h3 class="lead">Preferred Contact</h3>
 
-      <dl class="row mb-4">
-        <ng-container *ngIf="enrolment?.enrollee.contactPhone">
-          <dt class="col-sm-12 col-md-6 py-1">Phone</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.contactPhone | phone }}&nbsp;</dd>
-        </ng-container>
-        <ng-container *ngIf="enrolment?.enrollee.contactEmail">
-          <dt class="col-sm-12 col-md-6 py-1">Email</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.contactEmail }}&nbsp;</dd>
-        </ng-container>
-      </dl>
+        <dl class="row mb-4">
+          <ng-container *ngIf="enrolment?.enrollee.contactPhone">
+            <dt class="col-sm-12 col-md-6 py-1">Phone</dt>
+            <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.contactPhone | phone }}&nbsp;</dd>
+          </ng-container>
+          <ng-container *ngIf="enrolment?.enrollee.contactEmail">
+            <dt class="col-sm-12 col-md-6 py-1">Email</dt>
+            <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.contactEmail }}&nbsp;</dd>
+          </ng-container>
+        </dl>
+      </ng-container>
 
       <app-sub-header subheader="Self Declaration">
       </app-sub-header>
