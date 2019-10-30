@@ -9,7 +9,7 @@ RUN mkdir -p /usr/src/app && \
     pwd && \
     echo "RedirectURL = $REDIRECT_URL" && \
     echo "OC APP = $OC_APP" && \
-    echo "Step 1 environment..." %% \
+    echo "Step 1 environment..."&& \
     which bash
 WORKDIR /usr/src/app`
 
