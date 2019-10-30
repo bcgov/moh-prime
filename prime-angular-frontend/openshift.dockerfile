@@ -1,6 +1,5 @@
 # base image
-FROM docker-registry.default.svc:5000/dqszvc-dev/node:10.16 
-#AS build-deps
+FROM node:10.16 AS build-deps
 
 ENV NODE_ROOT /usr/src/app
 ENV REDIRECT_URL ${REDIRECT_URL}
@@ -24,7 +23,7 @@ RUN npm install @angular/cli -g --silent && \
     ng build --prod && \
     echo "NPM packages installed..." && \
 
-FROM docker-registry.default.svc:5000/dqszvc-dev/nginx:latest
+FROM nginx:latest
 COPY --from=build-deps /usr/src/app/dist/angular-frontend /usr/share/nginx/html
 RUN rm -f /etc/nginx/conf.d/default.conf 
 #COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/conf.d/default.conf
