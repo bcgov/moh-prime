@@ -1,13 +1,12 @@
-# base image
-FROM docker-registry.default.svc:5000/dqszvc-dev/build-deps 
-#FROM node:10.16 AS build-deps
-
+FROM node:10.16 as build-deps
+#SHELL [ "/bin/bash","-c"]
+# set working directory
 ENV NODE_ROOT /usr/src/app
-ENV REDIRECT_URL ${REDIRECT_URL}
-ENV OC_APP ${OC_APP}
+ENV REDIRECT_URL $REDIRECT_URL
+ENV OC_APP $OC_APP
 RUN mkdir -p /usr/src/app
-
 WORKDIR /usr/src/app
+
 
 COPY . .
 
