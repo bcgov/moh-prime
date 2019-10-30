@@ -7,6 +7,7 @@ ENV REDIRECT_URL ${REDIRECT_URL}
 ENV OC_APP ${OC_APP}
 RUN mkdir -p /usr/src/app && \
     pwd && \
+    cat /
     echo "RedirectURL = $REDIRECT_URL" && \
     echo "OC APP = $OC_APP" && \
     echo "Step 1 environment..."
@@ -15,10 +16,7 @@ WORKDIR /usr/src/app
 
 COPY . .
 SHELL [ "/bin/bash" , "-c" ]
-RUN source "/usr/src/app/src/environments/keycloak.env.$OC_APP"
-RUN printenv 
-SHELL [ "/bin/sh" , "-c" ]
-RUN (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
+RUN set -o allexport [[ -f /usr/src/app/src/environments/keycloak.env."$OC_APP" ]] ; source .env; set +o allexport; (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
 RUN cat /usr/src/app/src/environments/environment.prod.ts && \
     npm install @angular/cli -g --silent && \ 
     npm install && \
