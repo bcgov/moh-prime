@@ -14,10 +14,7 @@ WORKDIR /usr/src/app`
 
 COPY . .
 
-RUN '(eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" )' | sh && \
-    echo "Method 2" && \
-    printenv 
-#RUN /usr/src/app/src/environments/keycloak.$OC_APP.sh
+RUN source /usr/src/app/src/environments/keycloak.$OC_APP.sh
 RUN '(eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" )' > /usr/src/app/src/environments/environment.prod.ts
 RUN cat /usr/src/app/src/environments/environment.prod.ts && \
     npm install @angular/cli -g --silent && \ 
