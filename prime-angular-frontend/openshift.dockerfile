@@ -14,9 +14,9 @@ RUN mkdir -p /usr/src/app && \
 WORKDIR /usr/src/app
 
 COPY . .
-
-RUN echo "Before" && \
-    printenv 
+SHELL [ "/bin/bash" , "-c" ]
+RUN source /usr/src/app/src/environments/keycloak.$OC_APP.env
+RUN printenv 
 RUN echo "After" && \
     source /etc/environment && \
     printenv
