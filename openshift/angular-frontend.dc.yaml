@@ -56,10 +56,6 @@ objects:
           io.kompose.service: "${NAME}${SUFFIX}"
       spec:
         containers:
-        - args:
-          - nginx
-          - "-g"
-          - daemon off;
         - env:
           - name: SUFFIX
             value: "${SUFFIX}"
