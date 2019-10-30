@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-
-import { map } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
 
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
-import { ProvisionResource } from '../../shared/services/provision-resource.service';
+
+import { ProvisionResource } from '@provision/shared/services/provision-resource.service';
 
 @Component({
   selector: 'app-enrolment',
@@ -19,7 +18,6 @@ export class EnrolmentComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private provisionResource: ProvisionResource,
     private toastService: ToastService,
     private logger: LoggerService
@@ -32,13 +30,19 @@ export class EnrolmentComponent implements OnInit {
 
   public ngOnInit() {
     this.getEnrolment(this.route.snapshot.params.id);
-
   }
 
-  private getEnrolment(id, statusCode?: number) {
+  private getEnrolment(id: number, statusCode?: number) {
     this.provisionResource.enrolment(id, statusCode)
-    .pipe(
-      map((enrolment: Enrolment) => this.enrolment = enrolment)
-    ).subscribe();
+      .subscribe(
+        (enrolment: Enrolment) => {
+          this.enrolment = enrolment;
+          this.toastService.openSuccessToast('');
+        },
+        (error: any) => {
+          this.toastService.openErrorToast('');
+          this.logger.error('', error);
+        }
+      );
   }
 }

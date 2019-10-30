@@ -159,7 +159,9 @@
           <dt class="col-sm-12 col-md-6 py-1">College Certification</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ certification.collegeCode | configCode: 'colleges' }}&nbsp;</dd>
           <dt class="col-sm-12 col-md-6 py-1">License Number</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ certification.licenseNumber }}&nbsp;</dd>
+          <dd class="col-sm-12 col-md-6 py-1">
+            {{ certification.collegeCode | configCode: 'colleges' : 'prefix' }}{{ certification.licenseNumber }}&nbsp;
+          </dd>
           <dt class="col-sm-12 col-md-6 py-1">License Class</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ certification.licenseCode | configCode: 'licenses' }}&nbsp;</dd>
           <dt class="col-sm-12 col-md-6 py-1">Renewal Date</dt>
