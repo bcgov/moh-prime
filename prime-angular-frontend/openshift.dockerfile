@@ -40,6 +40,4 @@ RUN mkdir -p /var/cache/nginx && \
     chmod 777 /home/entrypoint.sh && \
     echo "Build completed."
 
-#CMD ["nginx", "-g", "daemon off;"]
-
-ENTRYPOINT /home/entrypoint.sh
+CMD ["/home/entrypoint.sh"]
