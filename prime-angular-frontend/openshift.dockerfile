@@ -10,12 +10,13 @@ RUN mkdir -p /usr/src/app && \
     echo "RedirectURL = $REDIRECT_URL" && \
     echo "OC APP = $OC_APP" && \
     echo "Step 1 environment..."&& \
-    which bash
+    which bash && \
+    cat ~/.bashrc
 WORKDIR /usr/src/app`
 
 COPY . .
-SHELL ["/bin/bash","-c"]
-RUN source /usr/src/app/src/environments/keycloak.$OC_APP.sh
+SHELL [ "/bin/bash", "-c" ]
+RUN . ./usr/src/app/src/environments/keycloak.$OC_APP.sh
 RUN '(eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" )' > /usr/src/app/src/environments/environment.prod.ts
 RUN cat /usr/src/app/src/environments/environment.prod.ts && \
     npm install @angular/cli -g --silent && \ 
