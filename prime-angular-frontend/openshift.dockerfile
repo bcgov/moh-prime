@@ -14,9 +14,16 @@ WORKDIR /usr/src/app`
 
 COPY . .
 
-RUN printenv && \
-    chmod +x /usr/src/app/src/environments/keycloak.$OC_APP.sh
-RUN /usr/src/app/src/environments/keycloak.$OC_APP.sh
+RUN set -o allexport ; \
+    [ -f /usr/src/app/src/environments/keycloak.${OC_APP}.env ] && \
+    . /usr/src/app/src/environments/keycloak.${OC_APP}.env ; \
+    set +o allexport ; \
+    echo "Method 1" && \
+    printenv
+RUN '(eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" )' | sh && \
+    echo "Method 2" && \
+    printenv 
+#RUN /usr/src/app/src/environments/keycloak.$OC_APP.sh
 RUN '(eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" )' > /usr/src/app/src/environments/environment.prod.ts
 RUN cat /usr/src/app/src/environments/environment.prod.ts && \
     npm install @angular/cli -g --silent && \ 
