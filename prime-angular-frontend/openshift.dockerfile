@@ -1,5 +1,6 @@
 # base image
-FROM docker-registry.default.svc:5000/dqszvc-dev/node:10.16 AS build-deps
+FROM docker-registry.default.svc:5000/dqszvc-dev/node:10.16 
+#AS build-deps
 
 ENV NODE_ROOT /usr/src/app
 ENV REDIRECT_URL ${REDIRECT_URL}
