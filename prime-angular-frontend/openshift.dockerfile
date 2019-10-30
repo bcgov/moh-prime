@@ -1,16 +1,17 @@
 # base image
 FROM node:10.16 as build-deps
-
+WORKDIR /usr/src/app
 # set working directory
 ENV NODE_ROOT /usr/src/app
 ENV REDIRECT_URL ${REDIRECT_URL}
+ENV OC_APP ${OC_APP}
 RUN mkdir -p /usr/src/app && \
     pwd && \
     echo "RedirectURL = $REDIRECT_URL" && \
     echo "OC APP = $OC_APP" && \
     echo "Step 1 environment..."&& \
 
-WORKDIR /usr/src/app
+
 
 COPY . .
 SHELL [ "/bin/bash", "-c" ]
