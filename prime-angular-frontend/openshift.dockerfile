@@ -1,5 +1,5 @@
 # base image
-FROM docker-registry.default.svc:5000/dqszvc-dev/build-deps
+FROM docker-registry.default.svc:5000/dqszvc-dev/build-deps AS build-deps
 #FROM node:10.16 AS build-deps
 
 ENV NODE_ROOT /usr/src/app
