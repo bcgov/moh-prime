@@ -10,15 +10,13 @@ RUN mkdir -p /usr/src/app && \
     echo "RedirectURL = $REDIRECT_URL" && \
     echo "OC APP = $OC_APP" && \
     echo "Step 1 environment..." && \
-    printenv
+    printenv && \
+    find \ -type f -name envsubst
 WORKDIR /usr/src/app
 
 COPY . .
 
-RUN sed s/'$REDIRECT_URL'/$REDIRECT_URL/g /usr/src/app/src/environments/environment.prod.template.ts > /usr/src/app/src/environments/environment.prod.ts && \
-    sed s/'$KEYCLOAK_URL'/$KEYCLOAK_URL/g /usr/src/app/src/environments/environment.prod.template.ts > /usr/src/app/src/environments/environment.prod.ts && \
-    sed s/'$KEYCLOAK_REALM'/$KEYCLOAK_URL/g /usr/src/app/src/environments/environment.prod.template.ts > /usr/src/app/src/environments/environment.prod.ts && \
-    sed s/'$KEYCLOAK_CLIENT_ID'/$KEYCLOAK_CLIENT_ID/g /usr/src/app/src/environments/environment.prod.template.ts > /usr/src/app/src/environments/environment.prod.ts && \
+RUN ( eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"") > /usr/src/app/src/environments/environment.prod.ts && \
     cat /usr/src/app/src/environments/environment.prod.ts && \
     npm install @angular/cli -g --silent && \ 
     npm install && \
