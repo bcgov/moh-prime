@@ -7,7 +7,7 @@ SHELL [ "/bin/bash" , "-c" ]
 ENV NODE_ROOT /usr/src/app
 ENV REDIRECT_URL ${REDIRECT_URL}
 ENV OC_APP ${OC_APP}
-RUN mkdir -p ${NODE_ROOT}
+RUN pwd
 
 COPY . .
 
