@@ -5,27 +5,17 @@ FROM node:10.16 as build-deps
 ENV NODE_ROOT /usr/src/app
 ENV REDIRECT_URL $REDIRECT_URL
 ENV OC_APP $OC_APP
-RUN mkdir -p /usr/src/app && \
-    pwd && \
-    echo $REDIRECT_URL && \
-    echo $OC_APP && \
-    source /usr/src/app/keycloak.${OC_APP}.conf && \
-    echo "Step 1 environment..." && \
-    printenv
+RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 COPY . .
-
-RUN sed s/'$REDIRECT_URL'/$REDIRECT_URL/g /usr/src/app/src/environments/environment.prod.template.ts > /usr/src/app/src/environments/environment.prod.ts && \
-    sed s/'$KEYCLOAK_URL'/$KEYCLOAK_URL/g /usr/src/app/src/environments/environment.prod.template.ts > /usr/src/app/src/environments/environment.prod.ts && \
-    sed s/'$KEYCLOAK_REALM'/$KEYCLOAK_URL/g /usr/src/app/src/environments/environment.prod.template.ts > /usr/src/app/src/environments/environment.prod.ts && \
-    sed s/'$KEYCLOAK_CLIENT_ID'/$KEYCLOAK_CLIENT_ID/g /usr/src/app/src/environments/environment.prod.template.ts > /usr/src/app/src/environments/environment.prod.ts && \
-    cat /usr/src/app/src/environments/environment.prod.ts && \
+RUN KEYCLOAK_URL=$(grep KEYCLOAK_URL /usr/src/app/src/environments/keycloak.env.$OC_APP | cut -d "=" -f2) && \
+    KEYCLOAK_REALM=$(grep KEYCLOAK_REALM /usr/src/app/src/environments/keycloak.env.$OC_APP | cut -d "=" -f2) && \
+    KEYCLOAK_CLIENT_ID=$(grep KEYCLOAK_CLIENT_ID /usr/src/app/src/environments/keycloak.env.$OC_APP | cut -d "=" -f2) && \
+    (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
+RUN cat /usr/src/app/src/environments/environment.prod.ts && \
     npm install @angular/cli -g --silent && \ 
     npm install && \
-    #chmod +x /usr/src/app/midpoint.sh && \ 
-    #/usr/src/app/midpoint.sh && \
-    #cat /usr/src/app/src/environments/environment.prod.ts && \
     ng build --prod && \
     echo "NPM packages installed..." && \
     printenv
@@ -50,6 +40,4 @@ RUN mkdir -p /var/cache/nginx && \
     chmod 777 /home/entrypoint.sh && \
     echo "Build completed."
 
-#CMD ["nginx", "-g", "daemon off;"]
-
-ENTRYPOINT /home/entrypoint.sh
+CMD ["/home/entrypoint.sh"]
