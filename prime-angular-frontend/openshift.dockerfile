@@ -16,9 +16,6 @@ RUN KEYCLOAK_URL=$(grep KEYCLOAK_URL /usr/src/app/src/environments/keycloak.env.
 RUN cat /usr/src/app/src/environments/environment.prod.ts && \
     npm install @angular/cli -g --silent && \ 
     npm install && \
-    chmod +x /usr/src/app/midpoint.sh && \ 
-    /usr/src/app/midpoint.sh && \
-    cat /usr/src/app/src/environments/environment.prod.ts && \
     ng build --prod && \
     echo "NPM packages installed..." && \
     printenv
