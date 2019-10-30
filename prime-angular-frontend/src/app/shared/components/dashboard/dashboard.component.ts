@@ -149,6 +149,12 @@ export class DashboardComponent implements OnInit {
             icon: 'location_city',
             route: '/enrolment/access',
             showItem: true
+          },
+          {
+            name: 'Review',
+            icon: 'search',
+            route: '/enrolment/review',
+            showItem: true
           }
         ]
       }
