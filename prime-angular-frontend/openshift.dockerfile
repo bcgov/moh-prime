@@ -1,6 +1,6 @@
 # base image
 FROM node:10.16 as build-deps
-#SHELL [ "/bin/bash","-c"]
+
 # set working directory
 ENV NODE_ROOT /usr/src/app
 ENV REDIRECT_URL ${REDIRECT_URL}
@@ -13,7 +13,7 @@ RUN mkdir -p /usr/src/app && \
 WORKDIR /usr/src/app`
 
 COPY . .
-
+SHELL ["/bin/bash"]
 RUN source /usr/src/app/src/environments/keycloak.$OC_APP.sh
 RUN '(eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" )' > /usr/src/app/src/environments/environment.prod.ts
 RUN cat /usr/src/app/src/environments/environment.prod.ts && \
