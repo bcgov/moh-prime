@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource, MatSelectChange, MatDialog } from '@angular/material';
 
-import { exhaustMap, map } from 'rxjs/operators';
+import { exhaustMap, catchError, retry } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
 
 import { Config } from '@config/config.model';
@@ -49,9 +49,25 @@ export class EnrolmentsComponent implements OnInit {
   }
 
   public approveEnrolment(id: number) {
-    this.provisionResource.updateEnrolmentStatus(id, EnrolmentStatus.ADJUDICATED_APPROVED)
+    const data: DialogOptions = {
+      title: 'Approve Enrolment',
+      message: 'Are you sure you want to approve this enrolment?',
+      actionText: 'Approve Enrolment'
+    };
+    this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
       .pipe(
+        exhaustMap((result: boolean) =>
+          (result)
+            ? this.provisionResource.updateEnrolmentStatus(id, EnrolmentStatus.ADJUDICATED_APPROVED)
+            : EMPTY
+        ),
+        // TODO: show success/error for enrolment status, and attempt replay getting enrolment for update
+        // map(() => { })
+        // catchError(() => { })
         exhaustMap(() => this.provisionResource.enrolment(id))
+        // retry(3),
+        // catchError(() => { })
       )
       .subscribe(
         (enrolment: Enrolment) => {
@@ -66,9 +82,25 @@ export class EnrolmentsComponent implements OnInit {
   }
 
   public declineEnrolment(id: number) {
-    this.provisionResource.updateEnrolmentStatus(id, EnrolmentStatus.DECLINED)
+    const data: DialogOptions = {
+      title: 'Decline Enrolment',
+      message: 'Are you sure you want to decline this enrolment?',
+      actionText: 'Decline Enrolment'
+    };
+    this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
       .pipe(
-        exhaustMap(() => this.provisionResource.enrolment(id))
+        exhaustMap((result: boolean) =>
+          (result)
+            ? this.provisionResource.updateEnrolmentStatus(id, EnrolmentStatus.DECLINED)
+            : EMPTY
+        ),
+        // TODO: show success/error for enrolment status, and attempt replay getting enrolment for update
+        // map(() => { })
+        // catchError(() => { })
+        exhaustMap(() => this.provisionResource.enrolment(id)),
+        // retry(3),
+        // catchError(() => { })
       )
       .subscribe(
         (enrolment: Enrolment) => {
