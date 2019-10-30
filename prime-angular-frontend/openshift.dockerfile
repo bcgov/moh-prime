@@ -5,11 +5,8 @@ ENV NODE_ROOT /usr/src/app
 ENV REDIRECT_URL $REDIRECT_URL
 ENV OC_APP $OC_APP
 RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
-
-
+WORKDIR /usr/src/app/
 COPY . .
-
 
 RUN KEYCLOAK_URL=$(grep KEYCLOAK_URL /usr/src/app/src/environments/keycloak.env.$OC_APP) && \
     KEYCLOAK_REALM=$(grep KEYCLOAK_REALM /usr/src/app/src/environments/keycloak.env.$OC_APP) && \
