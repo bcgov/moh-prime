@@ -19,7 +19,7 @@ RUN cat /usr/src/app/src/environments/keycloak.env.$OC_APP >> /etc/environment &
     source /etc/environment
 RUN printenv 
 SHELL [ "/bin/sh" , "-c" ]
-RUN '(eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" )' > /usr/src/app/src/environments/environment.prod.ts
+RUN (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
 RUN cat /usr/src/app/src/environments/environment.prod.ts && \
     npm install @angular/cli -g --silent && \ 
     npm install && \
