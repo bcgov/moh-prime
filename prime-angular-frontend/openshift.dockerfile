@@ -1,22 +1,22 @@
 # base image
 FROM node:10.16 as build-deps
-WORKDIR /usr/src/app
-USER 0
-SHELL [ "/bin/bash" , "-c" ]
+
 # set working directory
 ENV NODE_ROOT /usr/src/app
 ENV REDIRECT_URL ${REDIRECT_URL}
 ENV OC_APP ${OC_APP}
-RUN pwd
+RUN mkdir -p /usr/src/app && \
+    pwd && \
+    echo "RedirectURL = $REDIRECT_URL" && \
+    echo "OC APP = $OC_APP" && \
+    echo "Step 1 environment..."
+
+WORKDIR /usr/src/app
 
 COPY . .
 
-RUN cp /usr/src/app/src/environments/keycloak.$OC_APP.env /tmp/keycloak.env 
 RUN echo "Before" && \
-    printenv && \
-    cat /tmp/keycloak.env >> /etc/environment && \
-    source /etc/environment
-
+    printenv 
 RUN echo "After" && \
     source /etc/environment && \
     printenv
