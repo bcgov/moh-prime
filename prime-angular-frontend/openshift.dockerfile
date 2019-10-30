@@ -16,7 +16,7 @@ WORKDIR /usr/src/app`
 
 COPY . .
 SHELL [ "/bin/bash", "-c" ]
-RUN cat /usr/src/app/src/environments/keycloak.$OC_APP.sh /etc/environment && \
+RUN cat /usr/src/app/src/environments/keycloak."${OC_APP}".sh >> /etc/environment && \
     echo "Before" && \
     printenv && \
     echo "After" && \
