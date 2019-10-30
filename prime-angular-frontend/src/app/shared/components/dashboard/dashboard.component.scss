@@ -9,3 +9,21 @@
   left: 0;
   right: 0;
 }
+
+@media print {
+  .prime-sidenav { display: none; }
+  .app-print-layout { display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    visibility: visible; }
+  .prime-sidenav-container {  position: absolute;
+    left: 0;
+    top: 0; }
+    app-root {visibility: hidden;}
+
+    .prime-sidenav-container .container {
+      max-width: 100%;
+    }
+}
+
