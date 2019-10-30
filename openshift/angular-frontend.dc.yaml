@@ -56,13 +56,11 @@ objects:
           io.kompose.service: "${NAME}${SUFFIX}"
       spec:
         containers:
-        - args:
-          - nginx
-          - "-g"
-          - daemon off;
-          env:
+        - env:
           - name: SUFFIX
             value: "${SUFFIX}"
+          - name: OC_APP
+            value: ${OC_APP}
           - name: REDIRECT_URL
             value: http://angular-frontend${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca
           image: " "

@@ -40,6 +40,8 @@ objects:
         value: "${SUFFIX}"
       - name: REDIRECT_URL
         value: http://angular-frontend${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca
+      - name: OC_APP
+        value: ${OC_APP}
     tags:
     - annotations: 
       from:
@@ -62,11 +64,13 @@ objects:
     name: "${NAME}${SUFFIX}"
   spec:
     containers:
-      env:
+    - env:
       - name: SUFFIX
         value: "${SUFFIX}"
-      - name: SUFFIX
-        value: "${REDIRECT_URL}"
+      - name: REDIRECT_URL
+        value: http://angular-frontend${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca
+      - name: OC_APP
+        value: ${OC_APP}
     completionDeadlineSeconds: 6000
     nodeSelector: 
     output:
@@ -91,6 +95,13 @@ objects:
     strategy:
       dockerStrategy: 
         dockerfilePath: openshift.dockerfile
+        env:
+          - name: SUFFIX
+            value: "${SUFFIX}"
+          - name: REDIRECT_URL
+            value: http://angular-frontend${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca
+          - name: OC_APP
+            value: ${OC_APP}
       type: Docker
     triggers:
     - type: ConfigChange
