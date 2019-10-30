@@ -6,8 +6,7 @@
        *ngIf="enrolment">
     <div class="col-sm-6">
 
-      <app-sub-header subheader="Enrollee">
-      </app-sub-header>
+      <app-sub-header subheader="Enrollee"></app-sub-header>
 
       <dl class="row mb-4">
         <dt class="col-sm-12 col-md-6 py-1">Name</dt>
@@ -87,7 +86,6 @@
           <dt class="col-sm-12 col-md-6 py-1">Email</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.contactEmail }}&nbsp;</dd>
         </ng-container>
-
       </dl>
 
       <app-sub-header subheader="Self Declaration">
@@ -117,7 +115,7 @@
 
       <dl class="row mb-4">
         <dt class="col-sm-12 col-md-6 py-1">
-          Have you ever had Terms and Conditions imposed on your license as a result of disciplinary actions taken
+          Have you ever had Terms and Conditions imposed on your licence as a result of disciplinary actions taken
           by a governing body?
         </dt>
         <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.hasDisciplinaryAction) }}&nbsp;</dd>
@@ -129,7 +127,7 @@
 
       <dl class="row mb-4">
         <dt class="col-sm-12 col-md-6 py-1">
-          Have you ever had Terms and Conditions imposed on your license as a result of disciplinary actions taken
+          Have you ever had Terms and Conditions imposed on your licence as a result of disciplinary actions taken
           by a governing body?
         </dt>
         <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.hasPharmaNetSuspended) }}&nbsp;</dd>
