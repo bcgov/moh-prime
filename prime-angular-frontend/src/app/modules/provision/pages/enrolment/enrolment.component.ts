@@ -35,13 +35,10 @@ export class EnrolmentComponent implements OnInit {
   private getEnrolment(id: number, statusCode?: number) {
     this.provisionResource.enrolment(id, statusCode)
       .subscribe(
-        (enrolment: Enrolment) => {
-          this.enrolment = enrolment;
-          this.toastService.openSuccessToast('');
-        },
+        (enrolment: Enrolment) => this.enrolment = enrolment,
         (error: any) => {
-          this.toastService.openErrorToast('');
-          this.logger.error('', error);
+          this.toastService.openErrorToast('Enrolment could not be found');
+          this.logger.error('[Provision] Enrolment::getEnrolment error has occurred: ', error);
         }
       );
   }

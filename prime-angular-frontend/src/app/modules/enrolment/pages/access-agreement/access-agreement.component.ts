@@ -47,39 +47,39 @@ export class AccessAgreementComponent implements OnInit {
   }
 
   public onSubmit() {
-    // if (this.enrolmentStateService.isEnrolmentValid()) {
-    const enrolment = this.enrolmentStateService.enrolment;
-    const data: DialogOptions = {
-      title: 'Access Agreement',
-      message: 'Are you sure you agree to the access agreement?',
-      actionText: 'Confirm'
-    };
-    this.dialog.open(ConfirmDialogComponent, { data })
-      .afterClosed()
-      .pipe(
-        exhaustMap((result: boolean) =>
-          (result)
-            ? this.enrolmentResource.updateEnrolmentStatus(enrolment.id, EnrolmentStatus.ACCEPTED_TOS)
-            : EMPTY
+    if (this.enrolmentStateService.isEnrolmentValid()) {
+      const enrolment = this.enrolmentStateService.enrolment;
+      const data: DialogOptions = {
+        title: 'Access Agreement',
+        message: 'Are you sure you agree to the access agreement?',
+        actionText: 'Confirm'
+      };
+      this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          exhaustMap((result: boolean) =>
+            (result)
+              ? this.enrolmentResource.updateEnrolmentStatus(enrolment.id, EnrolmentStatus.ACCEPTED_TOS)
+              : EMPTY
+          )
         )
-      )
-      .subscribe(
-        () => {
-          this.toastService.openSuccessToast('Enrolment has been submitted');
-          this.router.navigate(['confirmation'], { relativeTo: this.route.parent });
-        },
-        (error: any) => {
-          this.toastService.openErrorToast('Enrolment could not be submitted');
-          this.logger.error('[Enrolment] Review::onSubmit error has occurred: ', error);
-        });
-    // } else {
-    //   // TODO: indicate where validation failed in the review to prompt user edits
-    //   console.log('PROFILE', this.enrolmentStateService.isProfileInfoValid());
-    //   console.log('CONTACT', this.enrolmentStateService.isContactInfoValid());
-    //   console.log('PROFESSIONAL', this.enrolmentStateService.isProfessionalInfoValid());
-    //   console.log('DECLARATION', this.enrolmentStateService.isSelfDeclarationValid());
-    //   console.log('ACCESS', this.enrolmentStateService.isPharmaNetAccessValid());
-    // }
+        .subscribe(
+          () => {
+            this.toastService.openSuccessToast('Enrolment has been submitted');
+            this.router.navigate(['confirmation'], { relativeTo: this.route.parent });
+          },
+          (error: any) => {
+            this.toastService.openErrorToast('Enrolment could not be submitted');
+            this.logger.error('[Enrolment] Review::onSubmit error has occurred: ', error);
+          });
+    } else {
+      // TODO: indicate where validation failed in the review to prompt user edits
+      console.log('PROFILE', this.enrolmentStateService.isProfileInfoValid());
+      console.log('CONTACT', this.enrolmentStateService.isContactInfoValid());
+      console.log('PROFESSIONAL', this.enrolmentStateService.isProfessionalInfoValid());
+      console.log('DECLARATION', this.enrolmentStateService.isSelfDeclarationValid());
+      console.log('ACCESS', this.enrolmentStateService.isPharmaNetAccessValid());
+    }
   }
 
 }
