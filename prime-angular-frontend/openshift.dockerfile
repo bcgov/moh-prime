@@ -15,7 +15,10 @@ WORKDIR /usr/src/app
 
 COPY . .
 SHELL [ "/bin/bash" , "-c" ]
-RUN set -o allexport [[ -f /usr/src/app/src/environments/keycloak.env."$OC_APP" ]] ; source .env; set +o allexport; (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
+RUN KEYCLOAK_URL=$(grep KEYCLOAK_URL keycloak.env.$OC_APP) && \
+    KEYCLOAK_REALM=$(grep KEYCLOAK_REALM keycloak.env.$OC_APP) && \
+    KEYCLOAK_CLIENT_ID=$(grep KEYCLOAK_CLIENT_ID keycloak.env.$OC_APP) && \
+    (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
 RUN cat /usr/src/app/src/environments/environment.prod.ts && \
     npm install @angular/cli -g --silent && \ 
     npm install && \
