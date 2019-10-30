@@ -7,11 +7,10 @@ SHELL [ "/bin/bash" , "-c" ]
 ENV NODE_ROOT /usr/src/app
 ENV REDIRECT_URL ${REDIRECT_URL}
 ENV OC_APP ${OC_APP}
-RUN mkdir -p /usr/src/app && \
-    pwd
+RUN mkdir -p ${NODE_ROOT}
+
 COPY . .
 
-ENV OC_APP ${OC_APP}
 RUN cp /usr/src/app/src/environments/keycloak.$OC_APP.env /tmp/keycloak.env 
 RUN echo "Before" && \
     printenv && \
