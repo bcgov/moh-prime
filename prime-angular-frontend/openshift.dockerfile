@@ -10,18 +10,15 @@ RUN mkdir -p /usr/src/app && \
     echo "RedirectURL = $REDIRECT_URL" && \
     echo "OC APP = $OC_APP" && \
     echo "Step 1 environment..."
-WORKDIR /usr/src/app
+WORKDIR /usr/src/app`
 
 COPY . .
 
-RUN  /usr/src/app/src/keycloak.${OC_APP}.conf && \
+RUN sh /usr/src/app/src/environments/keycloak.${OC_APP}.conf && \
     ( eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"") > /usr/src/app/src/environments/environment.prod.ts && \
     cat /usr/src/app/src/environments/environment.prod.ts && \
     npm install @angular/cli -g --silent && \ 
     npm install && \
-    #chmod +x /usr/src/app/midpoint.sh && \ 
-    #/usr/src/app/midpoint.sh && \
-    #cat /usr/src/app/src/environments/environment.prod.ts && \
     ng build --prod && \
     echo "NPM packages installed..." && \
     printenv
