@@ -14,12 +14,11 @@ RUN rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-p
     npm install -g @angular/cli sonarqube-scanner 
 COPY ./prime-dotnet-webapi/ /opt/app-root/app/prime-dotnet-webapi
 COPY ./prime-dotnet-webapi-tests/ /opt/app-root/app/prime-dotnet-webapi-tests
-COPY ./sonarqube/entrypoint.sh /opt/app-root/app
-COPY ./sonarqube/sonarQube.cmd /opt/app-root/app/prime-dotnet-webapi-tests
+COPY ./prime-angular-frontend/ /opt/app-root/app/prime-angular-frontend
+COPY ./sonarqube/sonarQube.cmd /opt/app-root/app/
 RUN dotnet tool install --global coverlet.console && \
     dotnet tool install --global dotnet-sonarscanner --version 4.7.1 && \
-    chmod +x entrypoint.sh && \
-    chmod +x /opt/app-root/app/prime-dotnet-webapi-tests/sonarQube.cmd && \
+    chmod +x /opt/app-root/app/sonarQube.cmd && \
     mkdir -p /.dotnet && \
     chown -R 1001:1001 /.dotnet && \
     mkdir -p /.local && \
@@ -30,4 +29,4 @@ RUN dotnet tool install --global coverlet.console && \
     chown -R 1001:1001 /tmp/NuGetScratch/ && \
     chown -R 1001:1001 /opt/app-root/
 USER 1001
-ENTRYPOINT [ "/opt/app-root/app/entrypoint.sh" ]
+CMD [ "/bin/bash","/opt/app-root/app/sonarQube.cmd" ]
