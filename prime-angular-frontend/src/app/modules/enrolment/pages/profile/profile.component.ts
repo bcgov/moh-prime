@@ -31,6 +31,7 @@ export class ProfileComponent implements OnInit {
   public maxBirthDate: moment.Moment;
   public hasPreferredName: boolean;
   public hasMailingAddress: boolean;
+  public countries: Config[];
   public provinces: Config[];
   public subheadings: { [key: string]: { subheader: string, help: string } };
 
@@ -50,6 +51,7 @@ export class ProfileComponent implements OnInit {
     private logger: LoggerService,
   ) {
     this.maxBirthDate = moment();
+    this.countries = this.configService.countries;
     this.provinces = this.configService.provinces;
     this.isNewEnrolment = true;
   }

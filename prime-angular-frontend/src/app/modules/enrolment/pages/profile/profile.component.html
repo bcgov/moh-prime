@@ -128,10 +128,14 @@
         <div class="col-sm-12 col-md-6 col-xl-4">
 
           <mat-form-field class="w-100">
-            <input matInput
-                   placeholder="Country"
-                   formControlName="country"
-                   [required]="isRequired('physicalAddress.country')">
+            <mat-label>Country</mat-label>
+            <mat-select formControlName="country"
+                        [required]="isRequired('physicalAddress.country')">
+              <mat-option *ngFor="let country of countries"
+                          [value]="country.code">
+                {{ country.name }}
+              </mat-option>
+            </mat-select>
             <mat-error>Required</mat-error>
           </mat-form-field>
 
@@ -145,7 +149,7 @@
             <mat-select formControlName="province"
                         [required]="isRequired('physicalAddress.province')">
               <mat-option *ngFor="let province of provinces"
-                          [value]="province.name">
+                          [value]="province.code">
                 {{ province.name }}
               </mat-option>
             </mat-select>
