@@ -2,9 +2,9 @@ version: "3"
 
 services:
 ######################################################### Sign-in #
-  sonarrunner:
-    container_name: sonarrunner
+  sonar-runner:
+    container_name: sonar-scanner
     restart: always
     build:
       context: ../
-      dockerfile: sonarqube/openshift.dockerfile
+      dockerfile: sonar-scanner/openshift.dockerfile

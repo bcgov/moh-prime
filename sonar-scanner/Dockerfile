@@ -8,8 +8,8 @@ RUN mkdir -p /opt/app-root/app && \
     apt-get install -yqq default-jre
 COPY ./prime-dotnet-webapi/ /opt/app-root/app/prime-dotnet-webapi
 COPY ./prime-dotnet-webapi-tests/ /opt/app-root/app/prime-dotnet-webapi-tests
-COPY ./sonarqube/sonarQube.cmd /opt/app-root/app
+COPY ./sonar-scanner/sonar-runner.cmd /opt/app-root/app
 RUN dotnet tool install --global coverlet.console && \
     dotnet tool install --global dotnet-sonarscanner --version 4.7.1 && \
-    chmod +x /opt/app-root/app/sonarQube.cmd 
-CMD [ "/bin/sh","./sonarQube.cmd" ]
+    chmod +x /opt/app-root/app/sonar-runner.cmd 
+CMD [ "/bin/sh","./sonar-runner.cmd" ]

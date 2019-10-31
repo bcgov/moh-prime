@@ -27,9 +27,9 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\prime-dotnet-webapi\Prime.csproj" />
+    <ProjectReference Include="..\prime-dotnet-webapi\prime.csproj" />
   </ItemGroup>
-
+:
   <ItemGroup>
     <EmbeddedResource Include=".\Utils\Auth\prime-api-test.pfx" />
   </ItemGroup>
