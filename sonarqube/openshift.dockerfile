@@ -6,7 +6,7 @@ WORKDIR /opt/app-root/app
 ENV HOME /opt/app-root/app
 RUN mkdir -p /opt/app-root/app
 #USER 0
-ENV PATH $PATH:/root/.dotnet/tools:/opt/app-root/app/prime-dotnet-webapi-tests:./.dotnet/tools/
+ENV PATH $PATH:/root/.dotnet/tools:/opt/app-root/app/prime-dotnet-webapi-tests:/opt/app-root/app/.dotnet/tools/
 ENV ASPNETCORE_ENVIRONMENT Development
 RUN rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm && \
     curl -sL https://rpm.nodesource.com/setup_10.x | bash - && \
