@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <RootNamespace>PrimeTests</RootNamespace>
     <IsPackable>false</IsPackable>
+    <ProjectGuid>1b897c69-8137-4549-b655-69914acd7842</ProjectGuid>
   </PropertyGroup>
 
   <ItemGroup>
