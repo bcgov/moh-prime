@@ -23,6 +23,7 @@ export interface Enrolment {
     contactPhone: string;
     voicePhone: string;
     voiceExtension: string;
+    licensePlate: string;
   };
   appliedDate: string;
   approvedDate: string;

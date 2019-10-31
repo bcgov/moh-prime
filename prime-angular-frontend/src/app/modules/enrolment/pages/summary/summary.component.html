@@ -1,7 +1,50 @@
-<div>
+<div class="app-print-layout">
+
   <h1 class="h2 mb-4">Summary</h1>
 
-  <app-sub-header subheader="Status"
+  <app-sub-header subheader="Enrolment Status"
                   help="Lorem ipsum dolor, sit amet consectetur adipisicing elit."></app-sub-header>
 
+  <ng-container *ngIf="enrolment">
+
+    <dl class="row mb-4">
+      <dt class="col-sm-12 col-md-6 py-1">Name</dt>
+      <dd class="col-sm-12 col-md-6 py-1">
+        {{ enrolment.enrollee.firstName }} {{ enrolment.enrollee.middleName }} {{ enrolment.enrollee.lastName }}&nbsp;
+      </dd>
+
+      <ng-container
+                    *ngIf="enrolment.enrollee.preferredFirstName || enrolment.enrollee.preferredMiddleName || enrolment.enrollee.preferredLastName">
+        <dt class="col-sm-12 col-md-6 py-1">Preferred Name</dt>
+        <dd class="col-sm-12 col-md-6 py-1">
+          {{ enrolment.enrollee.preferredFirstName }} {{ enrolment.enrollee.preferredMiddleName }}
+          {{ enrolment.enrollee.preferredLastName }}&nbsp;
+        </dd>
+      </ng-container>
+      <dt class="col-sm-12 col-md-6 py-1">Date of Birth</dt>
+      <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.dateOfBirth | formatDate }}&nbsp;</dd>
+    </dl>
+
+    <h3 class="lead">Address</h3>
+
+    <dl class="row mb-4">
+      <dt class="col-sm-12 col-md-6 py-1">Country</dt>
+      <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.country }}&nbsp;</dd>
+      <dt class="col-sm-12 col-md-6 py-1">Province</dt>
+      <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.province }}&nbsp;</dd>
+      <dt class="col-sm-12 col-md-6 py-1">Street Address</dt>
+      <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.street }}&nbsp;</dd>
+      <dt class="col-sm-12 col-md-6 py-1">City</dt>
+      <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.city }}&nbsp;</dd>
+      <dt class="col-sm-12 col-md-6 py-1">Postal Code</dt>
+      <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.postal | postal }}&nbsp;</dd>
+    </dl>
+
+    <h3 class="lead">Licence Plate</h3>
+    <dl class="row mb-4">
+      <dt class="col-sm-12 col-md-6 py-1">Licence Plate</dt>
+      <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.licensePlate }}&nbsp;</dd>
+    </dl>
+
+  </ng-container>
 </div>

@@ -1,8 +1,9 @@
-import { Injectable, Inject } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
-import { KeycloakService } from 'keycloak-angular';
-import { Router } from '@angular/router';
+import { Inject } from '@angular/core';
+
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
+import { AuthProvider } from '@auth/shared/enum/auth-provider.enum';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 @Component({
   selector: 'app-info',
@@ -13,22 +14,22 @@ export class InfoComponent implements OnInit {
 
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
-    private keycloakService: KeycloakService
+    private authService: AuthService
   ) { }
 
+  public loginUsingBCSC() {
+    this.authService.login({
+      idpHint: AuthProvider.BCSC,
+      redirectUri: this.config.loginRedirectUrl
+    });
+  }
+
+  public loginUsingIDIR() {
+    this.authService.login({
+      idpHint: AuthProvider.IDIR,
+      redirectUri: this.config.loginRedirectUrl
+    });
+  }
+
   public ngOnInit() { }
-
-  public bcscLogin() {
-    this.keycloakService.login({
-      idpHint: 'bcsc',
-      redirectUri: this.config.loginRedirectUrl
-    });
-  }
-
-  public idirLogin() {
-    this.keycloakService.login({
-      idpHint: 'idir',
-      redirectUri: this.config.loginRedirectUrl
-    });
-  }
 }

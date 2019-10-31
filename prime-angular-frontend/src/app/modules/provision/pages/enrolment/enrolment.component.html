@@ -6,24 +6,24 @@
        *ngIf="enrolment">
     <div class="col-sm-6">
 
-      <app-sub-header subheader="Enrollee">
-      </app-sub-header>
+      <app-sub-header subheader="Enrollee"></app-sub-header>
 
       <dl class="row mb-4">
         <dt class="col-sm-12 col-md-6 py-1">Name</dt>
         <dd class="col-sm-12 col-md-6 py-1">
           {{ enrolment.enrollee.firstName }} {{ enrolment.enrollee.middleName }} {{ enrolment.enrollee.lastName }}&nbsp;
         </dd>
-        <ng-container *ngIf="enrolment?.enrollee.preferredFirstName || enrolment?.enrollee.preferredMiddleName || enrolment?.enrollee.preferredLastName">
-            <dt class="col-sm-12 col-md-6 py-1">Preferred Name</dt>
-            <dd class="col-sm-12 col-md-6 py-1">
-              {{ enrolment.enrollee.preferredFirstName }} {{ enrolment.enrollee.preferredMiddleName }}
-              {{ enrolment.enrollee.preferredLastName }}&nbsp;
-            </dd>
+        <ng-container
+                      *ngIf="enrolment.enrollee.preferredFirstName || enrolment.enrollee.preferredMiddleName || enrolment.enrollee.preferredLastName">
+          <dt class="col-sm-12 col-md-6 py-1">Preferred Name</dt>
+          <dd class="col-sm-12 col-md-6 py-1">
+            {{ enrolment.enrollee.preferredFirstName }} {{ enrolment.enrollee.preferredMiddleName }}
+            {{ enrolment.enrollee.preferredLastName }}&nbsp;
+          </dd>
         </ng-container>
 
         <dt class="col-sm-12 col-md-6 py-1">Date of Birth</dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.dateOfBirth | formatDate:'MM' }}&nbsp;</dd>
+        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.dateOfBirth | formatDate }}&nbsp;</dd>
       </dl>
 
       <h3 class="lead">Address</h3>
@@ -38,7 +38,7 @@
         <dt class="col-sm-12 col-md-6 py-1">City</dt>
         <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.city }}&nbsp;</dd>
         <dt class="col-sm-12 col-md-6 py-1">Postal Code</dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.postal }}&nbsp;</dd>
+        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.postal | postal }}&nbsp;</dd>
       </dl>
 
       <ng-container *ngIf="enrolment?.enrollee.mailingAddress.country">
@@ -55,7 +55,7 @@
           <dt class="col-sm-12 col-md-6 py-1">City</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.mailingAddress.city }}&nbsp;</dd>
           <dt class="col-sm-12 col-md-6 py-1">Postal Code</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.mailingAddress.postal }}&nbsp;</dd>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.mailingAddress.postal | postal }}&nbsp;</dd>
         </dl>
 
       </ng-container>
@@ -67,27 +67,28 @@
 
       <dl class="row mb-4">
         <dt class="col-sm-12 col-md-6 py-1">Voice Phone</dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.voicePhone }}&nbsp;</dd>
+        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.voicePhone | phone }}&nbsp;</dd>
         <ng-container *ngIf="enrolment?.enrollee.voiceExtension">
-          <dt class="col-sm-12 col-md-6 py-1" >Extension</dt>
+          <dt class="col-sm-12 col-md-6 py-1">Extension</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.voiceExtension }}&nbsp;</dd>
         </ng-container>
 
       </dl>
 
-      <h3 class="lead">Preferred Contact</h3>
+      <ng-container *ngIf="enrolment?.enrollee.contactPhone || enrolment?.enrollee.contactEmail">
+        <h3 class="lead">Preferred Contact</h3>
 
-      <dl class="row mb-4">
-        <ng-container *ngIf="enrolment?.enrollee.contactPhone">
+        <dl class="row mb-4">
+          <ng-container *ngIf="enrolment?.enrollee.contactPhone">
             <dt class="col-sm-12 col-md-6 py-1">Phone</dt>
-            <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.contactPhone }}&nbsp;</dd>
-        </ng-container>
-        <ng-container *ngIf="enrolment?.enrollee.contactEmail">
+            <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.contactPhone | phone }}&nbsp;</dd>
+          </ng-container>
+          <ng-container *ngIf="enrolment?.enrollee.contactEmail">
             <dt class="col-sm-12 col-md-6 py-1">Email</dt>
             <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.contactEmail }}&nbsp;</dd>
-        </ng-container>
-
-      </dl>
+          </ng-container>
+        </dl>
+      </ng-container>
 
       <app-sub-header subheader="Self Declaration">
       </app-sub-header>
@@ -116,7 +117,7 @@
 
       <dl class="row mb-4">
         <dt class="col-sm-12 col-md-6 py-1">
-          Have you ever had Terms and Conditions imposed on your license as a result of disciplinary actions taken
+          Have you ever had Terms and Conditions imposed on your licence as a result of disciplinary actions taken
           by a governing body?
         </dt>
         <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.hasDisciplinaryAction) }}&nbsp;</dd>
@@ -128,7 +129,7 @@
 
       <dl class="row mb-4">
         <dt class="col-sm-12 col-md-6 py-1">
-          Have you ever had Terms and Conditions imposed on your license as a result of disciplinary actions taken
+          Have you ever had Terms and Conditions imposed on your licence as a result of disciplinary actions taken
           by a governing body?
         </dt>
         <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.hasPharmaNetSuspended) }}&nbsp;</dd>
@@ -158,7 +159,9 @@
           <dt class="col-sm-12 col-md-6 py-1">College Certification</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ certification.collegeCode | configCode: 'colleges' }}&nbsp;</dd>
           <dt class="col-sm-12 col-md-6 py-1">License Number</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ certification.licenseNumber }}&nbsp;</dd>
+          <dd class="col-sm-12 col-md-6 py-1">
+            {{ certification.collegeCode | configCode: 'colleges' : 'prefix' }}{{ certification.licenseNumber }}&nbsp;
+          </dd>
           <dt class="col-sm-12 col-md-6 py-1">License Class</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ certification.licenseCode | configCode: 'licenses' }}&nbsp;</dd>
           <dt class="col-sm-12 col-md-6 py-1">Renewal Date</dt>
@@ -208,7 +211,9 @@
           <dt class="col-sm-12 col-md-6 py-1">Organization Name</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ organization.name }}&nbsp;</dd>
           <dt class="col-sm-12 col-md-6 py-1">Organization Type</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ organization.organizationTypeCode }}&nbsp;</dd>
+          <dd class="col-sm-12 col-md-6 py-1">
+            {{ organization.organizationTypeCode | configCode: 'organizationTypes' }}&nbsp;
+          </dd>
           <dt class="col-sm-12 col-md-6 py-1">City</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ organization.city }}&nbsp;</dd>
           <dt class="col-sm-12 col-md-6 py-1">Start Date</dt>

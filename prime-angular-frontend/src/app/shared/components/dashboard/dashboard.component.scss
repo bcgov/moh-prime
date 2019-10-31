@@ -9,3 +9,10 @@
   left: 0;
   right: 0;
 }
+
+@media print {
+  .mat-sidenav-content {
+    margin-left: 0 !important;
+  }
+}
+

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatCheckboxChange } from '@angular/material';
 
 import { map, exhaustMap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
@@ -33,11 +33,6 @@ export class ReviewComponent implements OnInit {
     private dialog: MatDialog,
     private logger: LoggerService
   ) { }
-
-
-  changeCheck(event) {
-    this.disabledAgreement = !event.checked;
-  }
 
   public onSubmit() {
     if (this.enrolmentStateService.isEnrolmentValid()) {
@@ -73,6 +68,10 @@ export class ReviewComponent implements OnInit {
       console.log('DECLARATION', this.enrolmentStateService.isSelfDeclarationValid());
       console.log('ACCESS', this.enrolmentStateService.isPharmaNetAccessValid());
     }
+  }
+
+  public onConfirmAccuracy(event: MatCheckboxChange) {
+    this.disabledAgreement = !event.checked;
   }
 
   public showYesNo(declared: boolean) {
