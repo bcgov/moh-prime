@@ -1,9 +1,9 @@
-<div>
+<div class="app-print-layout">
+
   <h1 class="h2 mb-4">Summary</h1>
 
-  <app-sub-header subheader="Status"
-                  help="Lorem ipsum dolor, sit amet consectetur adipisicing elit.">
-  </app-sub-header>
+  <app-sub-header subheader="Enrolment Status"
+                  help="Lorem ipsum dolor, sit amet consectetur adipisicing elit."></app-sub-header>
 
   <ng-container *ngIf="enrolment">
 
@@ -37,7 +37,7 @@
       <dt class="col-sm-12 col-md-6 py-1">City</dt>
       <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.city }}&nbsp;</dd>
       <dt class="col-sm-12 col-md-6 py-1">Postal Code</dt>
-      <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.postal }}&nbsp;</dd>
+      <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.postal | postal }}&nbsp;</dd>
     </dl>
 
     <h3 class="lead">Licence Plate</h3>

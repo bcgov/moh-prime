@@ -45,37 +45,37 @@ export class ErrorHandlerInterceptor {
               // this.authService.removeToken();
 
               // TODO: store the logout action for global reuse with auth service
-              const isLogout = req.url.includes('logout');
-              let navigationExtras: NavigationExtras = {};
+              // const isLogout = req.url.includes('logout');
+              // let navigationExtras: NavigationExtras = {};
 
-              if (!isLogout) {
-                // Redirect to login for authentication, but create a
-                // redirect URL to continue at current point once
-                // re-authenticated for use when token expires
-                const url: string = this.router.url;
-                navigationExtras =
-                  // Only if the redirect URL doesn't already exist or
-                  // not transitioning to an auth route
-                  (url.indexOf('redirectUrl') === -1 && url.indexOf('auth') === -1)
-                    ? { queryParams: { redirectUrl: url } }
-                    : { queryParamsHandling: 'preserve' };
-              }
+              // if (!isLogout) {
+              //   // Redirect to login for authentication, but create a
+              //   // redirect URL to continue at current point once
+              //   // re-authenticated for use when token expires
+              //   const url: string = this.router.url;
+              //   navigationExtras =
+              //     // Only if the redirect URL doesn't already exist or
+              //     // not transitioning to an auth route
+              //     (url.indexOf('redirectUrl') === -1 && url.indexOf('auth') === -1)
+              //       ? { queryParams: { redirectUrl: url } }
+              //       : { queryParamsHandling: 'preserve' };
+              // }
 
-              this.router.navigate([this.config.routes.auth], navigationExtras);
+              // this.router.navigate([this.config.routes.auth], navigationExtras);
             } else if (status === 422) {
-              if (error.error.errors) {
-                // TODO: use exception service?
-                // Convert the validation error bag into default error
-                // format, which only cares about a single error
-                // TODO: configure to capture validation error(s)
-                // const message = error.error.errors[Object.keys(error.error.errors)[0]][0];
-                // error = { error: { message }, status };
-              }
+              // if (error.error.errors) {
+              // TODO: use exception service?
+              // Convert the validation error bag into default error
+              // format, which only cares about a single error
+              // TODO: configure to capture validation error(s)
+              // const message = error.error.errors[Object.keys(error.error.errors)[0]][0];
+              // error = { error: { message }, status };
+              // }
             } else if (status === 500) {
               // Provide a default 500 error message
               // TODO: use exception service?
-              const message = 'An internal server error has occurred, and has been reported.';
-              error = { error: { message }, status };
+              // const message = 'An internal server error has occurred, and has been reported.';
+              // error = { error: { message }, status };
             }
 
             return throwError(error);

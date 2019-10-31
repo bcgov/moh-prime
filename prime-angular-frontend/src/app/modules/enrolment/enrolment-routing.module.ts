@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
+import { ConfigResolver } from '@config/config-resolver';
 import { CanDeactivateFormGuard } from '@core/guards/can-deactivate-form.guard';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
@@ -14,11 +15,9 @@ import { ProfessionalInfoComponent } from './pages/professional-info/professiona
 import { SelfDeclarationComponent } from './pages/self-declaration/self-declaration.component';
 import { PharmanetAccessComponent } from './pages/pharmanet-access/pharmanet-access.component';
 import { ReviewComponent } from './pages/review/review.component';
-// TODO: temporary until UX is provided
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 import { AccessAgreementComponent } from './pages/access-agreement/access-agreement.component';
 import { SummaryComponent } from './pages/summary/summary.component';
-
 
 const routes: Routes = [
   {
@@ -32,6 +31,7 @@ const routes: Routes = [
       // authorization based on the user role permissions
       EnrolleeGuard
     ],
+    resolve: [ConfigResolver],
     children: [
       {
         path: 'profile',
