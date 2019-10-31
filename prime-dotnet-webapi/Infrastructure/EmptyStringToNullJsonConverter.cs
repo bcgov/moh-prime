@@ -15,13 +15,18 @@ namespace Prime.Infrastructure
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
+            if (reader == null)
+            {
+                throw new InvalidOperationException("The passed in JsonReader cannot be null.");
+            }
+
             string value = (string)reader.Value;
             return string.IsNullOrWhiteSpace(value) ? null : value.Trim();
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            throw new NotImplementedException("Unnecessary because CanWrite is false. The type will skip the converter.");
+            throw new NotSupportedException("Unnecessary because CanWrite is false. The type will skip the converter.");
         }
     }
 }

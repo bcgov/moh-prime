@@ -208,15 +208,15 @@ namespace Prime
             modelBuilder.Entity<Address>()
                 .HasIndex("EnrolleeId", "AddressType")
                 .HasName("IX_EnrolleeId_AddressType")
-                .IsUnique(true);
+                .IsUnique();
 
             modelBuilder.Entity<Enrollee>()
                 .HasIndex("UserId")
-                .IsUnique(true);
+                .IsUnique();
 
             modelBuilder.Entity<Enrolment>()
                 .HasIndex("EnrolleeId")
-                .IsUnique(true);
+                .IsUnique();
             #endregion
 
             #region Relationships
@@ -268,17 +268,6 @@ namespace Prime
             method = method.MakeGenericMethod(T);
 
             return method.Invoke(context, null) as IQueryable;
-        }
-
-        public static IQueryable<T> Set<T>(this DbContext context)
-        {
-            // Get the generic type definition 
-            MethodInfo method = typeof(DbContext).GetMethod(nameof(DbContext.Set), BindingFlags.Public | BindingFlags.Instance);
-
-            // Build a method with the specific type argument you're interested in 
-            method = method.MakeGenericMethod(typeof(T));
-
-            return method.Invoke(context, null) as IQueryable<T>;
         }
 
         public static IQueryable<T> Set<T>(this DbContext context, params Expression<Func<T, object>>[] includes) where T : class

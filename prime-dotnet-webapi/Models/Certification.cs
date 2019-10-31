@@ -7,6 +7,7 @@ using Prime.Infrastructure;
 
 namespace Prime.Models
 {
+
     [Table("Certification")]
     public class Certification : BaseAuditable, IEnrolmentNavigationProperty
     {

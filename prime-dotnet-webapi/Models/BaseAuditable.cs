@@ -6,6 +6,9 @@ namespace Prime.Models
 {
     public class BaseAuditable : IAuditable
     {
+        protected BaseAuditable()
+        { }
+
         [JsonIgnore]
         [Required]
         public Guid CreatedUserId { get; set; }
