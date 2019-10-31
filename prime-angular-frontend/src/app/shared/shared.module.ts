@@ -18,6 +18,7 @@ import { DashboardComponent } from '@shared/components/dashboard/dashboard.compo
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { HeaderComponent } from '@shared/components/header/header.component';
 import { SubHeaderComponent } from '@shared/components/sub-header/sub-header.component';
+import { EnrolmentPipe } from './pipes/enrolment.pipe';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { SubHeaderComponent } from '@shared/components/sub-header/sub-header.com
     ConfirmDialogComponent,
     HeaderComponent,
     SubHeaderComponent,
-    FormatDatePipe
+    FormatDatePipe,
+    EnrolmentPipe
   ],
   imports: [
     CommonModule,
@@ -52,6 +54,7 @@ import { SubHeaderComponent } from '@shared/components/sub-header/sub-header.com
     ReplacePipe,
     FirstKeyPipe,
     FormatDatePipe,
+    EnrolmentPipe,
     FormControlValidityDirective,
     DashboardComponent,
     HeaderComponent,
