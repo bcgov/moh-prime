@@ -33,7 +33,7 @@ import { EnrolmentPipe } from './pipes/enrolment.pipe';
     HeaderComponent,
     SubHeaderComponent,
     FormatDatePipe,
-    PostalPipe
+    PostalPipe,
     EnrolmentPipe
   ],
   imports: [
