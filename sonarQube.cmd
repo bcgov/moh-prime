@@ -1,5 +1,6 @@
 rem https://docs.sonarqube.org/latest/analysis/scan/sonarscanner-for-msbuild/
 rem https://medium.com/agilix/collecting-test-coverage-using-coverlet-and-sonarqube-for-a-net-core-project-ef4a507d4b28
+rem https://github.com/tonerdo/coverlet
 rem docker run -d --name sonarqube -p 9000:9000 -p 9092:9092 sonarqube
 rem dotnet tool install --global coverlet.console --version 1.6.0
 rem dotnet tool install --global dotnet-sonarscanner --version 4.3.1
