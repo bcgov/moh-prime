@@ -4,6 +4,7 @@ pipeline {
         disableResume()
     }
     stages {
+        /*
         stage('Build') {
             agent { label 'master' }
             steps {
@@ -22,6 +23,7 @@ pipeline {
                 sh "./player.sh deploy frontend dev"
             }
         }
+        */
         /*
         stage('SonarQube analysis') {
         agent { label 'master' }
@@ -29,6 +31,7 @@ pipeline {
               sh "${scannerHome}/bin/sonar-scanner -X"
             }
         }
+        */
         stage('Code Quality Check') {
             agent { label 'master' }
             steps {
@@ -39,7 +42,7 @@ pipeline {
                 //sh "./player.sh sonar angular-frontend dev"
             }
         }
-        */
+        
         /*
         stage('Test') {
             agent { label 'master' }
