@@ -13,6 +13,7 @@ import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { LoggerService } from '@core/services/logger.service';
 import { AuthProvider } from '@auth/shared/enum/auth-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { environment } from '@env/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -47,7 +48,7 @@ export class AuthenticationGuard extends KeycloakAuthGuard implements CanActivat
         const adminRoutes = [routes.provision, routes.admin];
         const moduleRoutes = [routes.enrolment, ...adminRoutes];
 
-        const redirectUri = state.url;
+        const redirectUri = environment.loginRedirectUrl + state.url;
         const modulePath = redirectUri.slice(1).split('/').shift();
 
         // Attempt to directly redirect the user to authenticate
@@ -61,7 +62,6 @@ export class AuthenticationGuard extends KeycloakAuthGuard implements CanActivat
           // Capture the user's current location, and provide it to
           // Keycloak to redirect the user to where they originated
           // once authenticated
-          // TODO: does the redirect URI need to be fully qualified?
           const options: KeycloakLoginOptions = {
             redirectUri,
             idpHint
