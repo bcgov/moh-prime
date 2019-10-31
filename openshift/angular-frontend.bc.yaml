@@ -37,6 +37,8 @@ objects:
         - env:
             - name: SUFFIX
               value: '${SUFFIX}'
+            - name: OC_APP
+              value: '${OC_APP}'  
       tags:
         - annotations: null
           from:
@@ -64,6 +66,8 @@ objects:
         env:
           - name: SUFFIX
             value: '${SUFFIX}'
+          - name: OC_APP
+            value: '${OC_APP}'           
       completionDeadlineSeconds: 6000
       nodeSelector: null
       output:
