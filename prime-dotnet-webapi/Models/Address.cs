@@ -11,11 +11,8 @@ namespace Prime.Models
     };
 
     [Table("Address")]
-    public class Address : BaseAuditable
+    public abstract class Address : BaseAuditable
     {
-        protected Address()
-        { }
-
         [Key]
         public int? Id { get; set; }
 

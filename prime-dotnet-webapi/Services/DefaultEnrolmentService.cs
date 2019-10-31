@@ -179,7 +179,7 @@ namespace Prime.Services
         {
             if (enrolment == null)
             {
-                throw new InvalidOperationException("Could not create an enrolment, the passed in Enrolment cannot be null.");
+                throw new ArgumentNullException("Could not create an enrolment, the passed in Enrolment cannot be null.");
             }
 
             //create a status history record
@@ -314,7 +314,7 @@ namespace Prime.Services
         {
             if (status == null)
             {
-                throw new InvalidOperationException("Could not create an enrolment status, the passed in Status cannot be null.");
+                throw new ArgumentNullException("Could not create an enrolment status, the passed in Status cannot be null.");
             }
 
             var enrolment = await _context.Enrolments

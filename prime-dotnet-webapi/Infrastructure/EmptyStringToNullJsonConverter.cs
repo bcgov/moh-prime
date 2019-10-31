@@ -17,7 +17,7 @@ namespace Prime.Infrastructure
         {
             if (reader == null)
             {
-                throw new InvalidOperationException("The passed in JsonReader cannot be null.");
+                throw new ArgumentNullException("The passed in JsonReader cannot be null.");
             }
 
             string value = (string)reader.Value;

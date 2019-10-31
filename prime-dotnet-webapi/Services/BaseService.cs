@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Prime.Services
 {
-    public class BaseService
+    public abstract class BaseService
     {
         protected readonly ApiDbContext _context;
 
