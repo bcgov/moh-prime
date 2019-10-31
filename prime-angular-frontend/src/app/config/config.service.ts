@@ -1,11 +1,11 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 import { Configuration } from './config.model';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
-import { map } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 import { PrimeHttpResponse } from '@core/models/prime-http-response.model';
 
 @Injectable({
@@ -56,20 +56,25 @@ export class ConfigService {
   }
 
   /**
+   * @description
    * Load the runtime configuration.
    */
-  public async load(): Promise<Configuration> {
-    return this.getConfiguration()
-      .pipe(
-        // TODO: temporary until provided by config service
-        map(this.addProvinces),
-        map(this.addCountries),
-        map((config: Configuration) => this.configuration = config)
-      )
-      .toPromise();
+  public load(): Observable<Configuration> {
+    if (!this.configuration) {
+      return this.getConfiguration()
+        .pipe(
+          // TODO: temporary until provided by config service
+          map(this.addProvinces),
+          map(this.addCountries),
+          map((config: Configuration) => this.configuration = config)
+        );
+    }
+
+    return of(this.configuration);
   }
 
   /**
+   * @description
    * Get the configuration for bootstrapping the application.
    */
   private getConfiguration(): Observable<Configuration> {
@@ -79,6 +84,7 @@ export class ConfigService {
       );
   }
 
+  // TODO: temporary until provided by config service
   private addProvinces(config: Configuration) {
     return {
       provinces: [
@@ -100,6 +106,7 @@ export class ConfigService {
     };
   }
 
+  // TODO: temporary until provided by config service
   private addCountries(config: Configuration) {
     return {
       countries: [

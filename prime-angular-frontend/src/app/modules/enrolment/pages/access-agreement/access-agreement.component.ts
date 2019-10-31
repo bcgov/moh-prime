@@ -21,7 +21,6 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
   styleUrls: ['./access-agreement.component.scss']
 })
 export class AccessAgreementComponent implements OnInit {
-
   public enrolment: Enrolment;
 
   constructor(
@@ -47,12 +46,11 @@ export class AccessAgreementComponent implements OnInit {
   }
 
   public onSubmit() {
-    // if (this.enrolmentStateService.isEnrolmentValid()) {
     const enrolment = this.enrolmentStateService.enrolment;
     const data: DialogOptions = {
       title: 'Access Agreement',
-      message: 'Are you sure you agree to the access agreement?',
-      actionText: 'Confirm'
+      message: 'Are you sure you want to accept the access agreement?',
+      actionText: 'Accept Agreement'
     };
     this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
@@ -71,15 +69,8 @@ export class AccessAgreementComponent implements OnInit {
         (error: any) => {
           this.toastService.openErrorToast('Enrolment could not be submitted');
           this.logger.error('[Enrolment] Review::onSubmit error has occurred: ', error);
-        });
-    // } else {
-    //   // TODO: indicate where validation failed in the review to prompt user edits
-    //   console.log('PROFILE', this.enrolmentStateService.isProfileInfoValid());
-    //   console.log('CONTACT', this.enrolmentStateService.isContactInfoValid());
-    //   console.log('PROFESSIONAL', this.enrolmentStateService.isProfessionalInfoValid());
-    //   console.log('DECLARATION', this.enrolmentStateService.isSelfDeclarationValid());
-    //   console.log('ACCESS', this.enrolmentStateService.isPharmaNetAccessValid());
-    // }
+        }
+      );
   }
 
 }

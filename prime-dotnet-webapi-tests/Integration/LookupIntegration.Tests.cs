@@ -29,6 +29,12 @@ namespace PrimeTests.Integration
                 var apiResponse = TestUtils.DeserializeResponse<ApiOkResponse<LookupEntity>>(response).Result;
                 Assert.NotNull(apiResponse);
                 Assert.NotEmpty(apiResponse.Result.Colleges);
+                Assert.NotEmpty(apiResponse.Result.JobNames);
+                Assert.NotEmpty(apiResponse.Result.Licenses);
+                Assert.NotEmpty(apiResponse.Result.OrganizationNames);
+                Assert.NotEmpty(apiResponse.Result.OrganizationTypes);
+                Assert.NotEmpty(apiResponse.Result.Practices);
+                Assert.NotEmpty(apiResponse.Result.Statuses);
             }
         }
     }
