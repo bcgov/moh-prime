@@ -6,6 +6,7 @@ ENV ASPNETCORE_ENVIRONMENT Development
 RUN mkdir -p /opt/app-root/app 
 COPY ./prime-dotnet-webapi/ /opt/app-root/app/prime-dotnet-webapi
 COPY ./prime-dotnet-webapi-tests/ /opt/app-root/app/prime-dotnet-webapi-tests
-RUN dotnet tool install --global dotnet-sonarscanner --version 4.7.1
+RUN dotnet tool install --global coverlet.console && \
+    dotnet tool install --global dotnet-sonarscanner --version 4.7.1
 
 CMD ["/opt/app-root/app/prime-dotnet-webapi-tests/sonarQube.cmd"]
