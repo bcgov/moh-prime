@@ -72,10 +72,10 @@ export class AuthenticationGuard extends KeycloakAuthGuard implements CanActivat
         this.keycloakAngular.login(options)
           .catch((e) => {
             this.logger.error(e);
-            this.router.navigate([this.config.routes.auth]);
+            this.router.navigate([routes.auth]);
           });
       } else {
-        this.router.navigate([this.config.routes.auth]);
+        this.router.navigate([routes.auth]);
       }
 
       return reject(false);
