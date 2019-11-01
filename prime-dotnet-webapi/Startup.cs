@@ -117,6 +117,11 @@ namespace Prime
 
         public virtual void UpdateDatabase(IApplicationBuilder app)
         {
+            if (app == null)
+            {
+                throw new ArgumentNullException("Could not update database, the passed in IApplicationBuilder cannot be null.");
+            }
+
             using (var serviceScope = app.ApplicationServices
                 .GetRequiredService<IServiceScopeFactory>()
                 .CreateScope())

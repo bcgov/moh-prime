@@ -113,6 +113,12 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiCreatedResponse<Enrolment>), StatusCodes.Status201Created)]
         public async Task<ActionResult<Enrolment>> CreateEnrolment(Enrolment enrolment)
         {
+            if (enrolment == null)
+            {
+                this.ModelState.AddModelError("Enrolment", "Could not create an enrolment, the passed in Enrolment cannot be null.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
+
             // check to see if this userId already has an enrolment, if so, reject creating another
             var existingEnrolment = await _enrolmentService.GetEnrolmentForUserIdAsync(enrolment.Enrollee.UserId);
 
@@ -141,6 +147,12 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> UpdateEnrolment(int enrolmentId, Enrolment enrolment)
         {
+            if (enrolment == null)
+            {
+                this.ModelState.AddModelError("Enrolment", "Could not update the enrolment, the passed in Enrolment cannot be null.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
+
             if (enrolmentId != enrolment.Id)
             {
                 this.ModelState.AddModelError("Enrolment.Id", "Enrolment Id does not match with the payload.");

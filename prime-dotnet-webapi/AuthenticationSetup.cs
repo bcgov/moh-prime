@@ -52,7 +52,7 @@ namespace Prime
                     }
                     options.Audience = configuration["Jwt:Audience"];
                     options.MetadataAddress = configuration["Jwt:WellKnown"];
-                    options.Events = new JwtBearerEvents()
+                    options.Events = new JwtBearerEvents
                     {
                         OnAuthenticationFailed = c =>
                         {
@@ -66,7 +66,7 @@ namespace Prime
                             }
                             return c.Response.WriteAsync("An error occured processing your authentication.");
                         },
-                        OnTokenValidated = async context => await OnTokenValidated(context)
+                        OnTokenValidated = async context => await OnTokenValidatedAsync(context)
                     };
                 });
 
@@ -80,7 +80,7 @@ namespace Prime
                 });
         }
 
-        private static Task OnTokenValidated(TokenValidatedContext context)
+        private static Task OnTokenValidatedAsync(TokenValidatedContext context)
         {
             if (context.SecurityToken is JwtSecurityToken accessToken
                     && context.Principal.Identity is ClaimsIdentity identity
