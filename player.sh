@@ -1,5 +1,5 @@
-#!/bin/sh
-source project.conf
+#!/bin/bash
+source ./project.conf
 #export PROJECT_PREFIX="dqszvc"
 #export GIT_URL='https://github.com/bcgov/moh-prime.git'
 #export BRANCH_LOWER=`echo "${BRANCH_NAME}" | awk '{print tolower($0)}'`
