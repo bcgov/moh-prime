@@ -16,7 +16,7 @@ parameters:
     required: true
   - name: SOURCE_CONTEXT_DIR
     required: true
-    value: ""
+    value: sonar-scanner
   - name: SOURCE_REPOSITORY_URL
     required: true
   - name: SOURCE_REPOSITORY_REF
