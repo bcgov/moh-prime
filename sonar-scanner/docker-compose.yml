@@ -6,5 +6,5 @@ services:
     container_name: sonar-scanner
     restart: always
     build:
-      context: sonar-scanner
+      context: .
       dockerfile: openshift.dockerfile

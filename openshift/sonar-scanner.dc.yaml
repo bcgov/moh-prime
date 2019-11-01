@@ -16,7 +16,6 @@ parameters:
     required: true
   - name: SOURCE_CONTEXT_DIR
     required: true
-    value: sonar-scanner
   - name: SOURCE_REPOSITORY_URL
     required: true
     value: 'https://github.com/bcgov/moh-prime'
