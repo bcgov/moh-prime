@@ -88,4 +88,3 @@ objects:
         - type: ImageChange
     status:
       lastVersion: 0
-
