@@ -8,7 +8,7 @@ namespace Prime.Services
 {
     public class DefaultAutomaticAdjudicationServiceService : BaseService, IAutomaticAdjudicationService
     {
-        List<IAutomaticAdjudicationRule> _rules = new List<IAutomaticAdjudicationRule>();
+        readonly List<IAutomaticAdjudicationRule> _rules = new List<IAutomaticAdjudicationRule>();
 
         public DefaultAutomaticAdjudicationServiceService(
             ApiDbContext context, IHttpContextAccessor httpContext)
@@ -19,6 +19,7 @@ namespace Prime.Services
             _rules.Add(new OutsideBritishColumbiaRule());
             _rules.Add(new PumpProviderRule());
             _rules.Add(new CertificationRule());
+            _rules.Add(new LicenceClassRule());
         }
 
         public bool QualifiesForAutomaticAdjudication(Enrolment enrolment)
@@ -33,7 +34,7 @@ namespace Prime.Services
 
             return passed;
         }
-        
+
         private interface IAutomaticAdjudicationRule
         {
             bool ProcessRule(Enrolment enrolment);
@@ -152,16 +153,15 @@ namespace Prime.Services
                 if (enrolment.Certifications != null
                         && enrolment.Certifications.Any())
                 {
-                    foreach (var item in enrolment.Certifications)
-                    {
-                        // TODO - properly implement this check
-                        // if (item.LicenseCode.Equals(XX))
-                        // {
-                        result.Add(new StatusReason { Code = StatusReason.LICENCE_CLASS_CODE });
-                        break;
-                        // }
-                    }
-
+                    // TODO - properly implement this check
+                    // foreach (var item in enrolment.Certifications)
+                    // {
+                    //     if (item.LicenseCode.Equals(XX))
+                    //     {
+                            result.Add(new StatusReason { Code = StatusReason.LICENCE_CLASS_CODE });
+                    //         break;
+                    //     }
+                    // }
                 }
 
                 return result;
