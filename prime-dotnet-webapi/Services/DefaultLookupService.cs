@@ -16,7 +16,7 @@ namespace Prime.Services
             : base(context, httpContext)
         { }
 
-        public async Task<List<T>> GetLookupsAsync<T>(params Expression<Func<T, object>>[] includes) where T : class, ILookup
+        public async Task<List<T>> GetLookupsAsync<TKey, T>(params Expression<Func<T, object>>[] includes) where T : class, ILookup<TKey>
         {
             IQueryable<T> query = ApiDbContextExtensions.Set<T>(_context, includes);
 

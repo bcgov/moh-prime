@@ -20,8 +20,8 @@ export class CollegeCertificationsComponent implements OnInit {
   public colleges: CollegeConfig[];
   public licenses: LicenseConfig[];
   public practices: PracticeConfig[];
-  public filteredLicenses: Config[];
-  public filteredPractices: Config[];
+  public filteredLicenses: Config<number>[];
+  public filteredPractices: Config<number>[];
   public hasPractices: boolean;
   public licensePrefix: string;
 

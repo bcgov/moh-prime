@@ -161,15 +161,15 @@ export class EnrolmentStateService {
       preferredMiddleName: [null, []],
       preferredLastName: [null, []],
       physicalAddress: this.fb.group({
-        country: [{ value: null, disabled: false }, [Validators.required]],
-        province: [{ value: null, disabled: false }, [Validators.required]],
+        countryCode: [{ value: null, disabled: false }, [Validators.required]],
+        provinceCode: [{ value: null, disabled: false }, [Validators.required]],
         street: [{ value: null, disabled: false }, [Validators.required]],
         city: [{ value: null, disabled: false }, [Validators.required]],
         postal: [{ value: null, disabled: false }, [Validators.required]]
       }),
       mailingAddress: this.fb.group({
-        country: [{ value: null, disabled: false }, []],
-        province: [{ value: null, disabled: false }, []],
+        countryCode: [{ value: null, disabled: false }, []],
+        provinceCode: [{ value: null, disabled: false }, []],
         street: [{ value: null, disabled: false }, []],
         city: [{ value: null, disabled: false }, []],
         postal: [{ value: null, disabled: false }, []]

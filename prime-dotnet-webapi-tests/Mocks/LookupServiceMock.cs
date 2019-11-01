@@ -18,7 +18,7 @@ namespace PrimeTests.Mocks
             // no data to seed, as it is done in the base class for lookups
         }
 
-        Task<List<T>> ILookupService.GetLookupsAsync<T>(params Expression<Func<T, object>>[] includes)
+        Task<List<T>> ILookupService.GetLookupsAsync<TKey, T>(params Expression<Func<T, object>>[] includes)
         {
             var type = typeof(T);
             var holder = this.GetHolder<short, T>();

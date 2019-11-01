@@ -22,9 +22,15 @@ namespace Prime.Models
         [JsonIgnore]
         public Enrollee Enrollee { get; set; }
 
-        public string Country { get; set; }
+        public string CountryCode { get; set; }
 
-        public string Province { get; set; }
+        [JsonIgnore]
+        public Country Country { get; set; }
+
+        public string ProvinceCode { get; set; }
+
+        [JsonIgnore]
+        public Province Province { get; set; }
 
         public string Street { get; set; }
 

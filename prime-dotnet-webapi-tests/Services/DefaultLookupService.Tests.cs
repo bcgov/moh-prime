@@ -11,7 +11,7 @@ namespace PrimeTests.Services
         {
             // College Lookups
             {
-                var results = await _service.GetLookupsAsync<College>();
+                var results = await _service.GetLookupsAsync<short, College>();
                 Assert.NotNull(results);
                 Assert.NotEmpty(results);
                 Assert.Equal(4, results.Count);
@@ -19,7 +19,7 @@ namespace PrimeTests.Services
 
             // JobName Lookups
             {
-                var results = await _service.GetLookupsAsync<JobName>();
+                var results = await _service.GetLookupsAsync<short, JobName>();
                 Assert.NotNull(results);
                 Assert.NotEmpty(results);
                 Assert.Equal(8, results.Count);
@@ -27,7 +27,7 @@ namespace PrimeTests.Services
 
             // License Lookups
             {
-                var results = await _service.GetLookupsAsync<License>();
+                var results = await _service.GetLookupsAsync<short, License>();
                 Assert.NotNull(results);
                 Assert.NotEmpty(results);
                 Assert.Equal(5, results.Count);
@@ -35,7 +35,7 @@ namespace PrimeTests.Services
 
             // OrganizationName Lookups
             {
-                var results = await _service.GetLookupsAsync<OrganizationName>();
+                var results = await _service.GetLookupsAsync<short, OrganizationName>();
                 Assert.NotNull(results);
                 Assert.NotEmpty(results);
                 Assert.Equal(2, results.Count);
@@ -43,7 +43,7 @@ namespace PrimeTests.Services
 
             // OrganizationType Lookups
             {
-                var results = await _service.GetLookupsAsync<OrganizationType>();
+                var results = await _service.GetLookupsAsync<short, OrganizationType>();
                 Assert.NotNull(results);
                 Assert.NotEmpty(results);
                 Assert.Equal(2, results.Count);
@@ -51,7 +51,7 @@ namespace PrimeTests.Services
 
             // Practice Lookups
             {
-                var results = await _service.GetLookupsAsync<Practice>();
+                var results = await _service.GetLookupsAsync<short, Practice>();
                 Assert.NotNull(results);
                 Assert.NotEmpty(results);
                 Assert.Equal(4, results.Count);
@@ -59,10 +59,26 @@ namespace PrimeTests.Services
 
             // Status Lookups
             {
-                var results = await _service.GetLookupsAsync<Status>();
+                var results = await _service.GetLookupsAsync<short, Status>();
                 Assert.NotNull(results);
                 Assert.NotEmpty(results);
                 Assert.Equal(6, results.Count);
+            }
+
+            // Country Lookups
+            {
+                var results = await _service.GetLookupsAsync<string, Country>();
+                Assert.NotNull(results);
+                Assert.NotEmpty(results);
+                Assert.Single(results);
+            }
+
+            // Province Lookups
+            {
+                var results = await _service.GetLookupsAsync<string, Province>();
+                Assert.NotNull(results);
+                Assert.NotEmpty(results);
+                Assert.Equal(13, results.Count);
             }
 
         }
