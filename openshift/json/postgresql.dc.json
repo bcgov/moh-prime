@@ -33,7 +33,7 @@
     },
     {
       "name": "SUFFIX",
-      "required": true
+      "required": false
     },
     {
       "name": "OC_NAMESPACE",
