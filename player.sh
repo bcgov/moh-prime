@@ -3,9 +3,9 @@
 #export PROJECT_PREFIX="dqszvc"
 #export GIT_URL='https://github.com/bcgov/moh-prime.git'
 #export BRANCH_LOWER=`echo "${BRANCH_NAME}" | awk '{print tolower($0)}'`
-#export ACTION=$1
-#export COMPONENT=$2
-#export OC_APP=$3
+export ACTION=$1
+export COMPONENT=$2
+export OC_APP=$3
 # source ./project.sh
 # source ./functions.sh
 function variablePopulation() {
@@ -21,8 +21,8 @@ function variablePopulation() {
 variablePopulation
 
 function build() {
-    source ./"$2.conf"
-    echo "Building $2 (${APP_NAME}) to $PROJECT_PREFIX-$3..."
+    source ./"$1.conf"
+    echo "Building $1 (${APP_NAME}) to $PROJECT_PREFIX-$2..."
     buildPresent=$(oc get bc/"$APP_NAME-$BRANCH_LOWER" --ignore-not-found=true)
     if [ -z "${buildPresent}" ];
     then 
@@ -32,7 +32,7 @@ function build() {
     fi;
     if [ "${BRANCH_LOWER}" == "develop" ] || [ "${BRANCH_LOWER}" == "master" ];
     then 
-        echo "oc process -f ./${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE} -p NAME=${APP_NAME} -p VERSION=${BUILD_NUMBER} -p SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR} -p SOURCE_REPOSITORY_URL=${GIT_URL} -p SOURCE_REPOSITORY_REF=${BRANCH_NAME} -p OC_NAMESPACE=${PROJECT_PREFIX} -p OC_APP=${OC_APP} | oc ${MODE} -f - --namespace=${PROJECT_PREFIX}-${OC_APP}"  
+        echo "oc process -f ./${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE} -p NAME=${APP_NAME} -p VERSION=${BUILD_NUMBER} -p SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR} -p SOURCE_REPOSITORY_URL=${GIT_URL} -p SOURCE_REPOSITORY_REF=${BRANCH_NAME} -p OC_NAMESPACE=${PROJECT_PREFIX} -p OC_APP=$2 | oc ${MODE} -f - --namespace=${PROJECT_PREFIX}-$2"  
         oc process -f ./"${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE}" \
         -p NAME="${APP_NAME}" \
         -p VERSION="${BUILD_NUMBER}" \
@@ -40,9 +40,9 @@ function build() {
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${BRANCH_NAME}" \
         -p OC_NAMESPACE="${PROJECT_PREFIX}" \
-        -p OC_APP="${OC_APP}" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"  
+        -p OC_APP="$2" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-$2"  
     else 
-        echo "oc process -f ./${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE} -p NAME=${APP_NAME} -p VERSION=${BUILD_NUMBER} -p SUFFIX=-${BRANCH_LOWER} -p SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR} -p SOURCE_REPOSITORY_URL=${GIT_URL} -p SOURCE_REPOSITORY_REF=${BRANCH_NAME} -p OC_NAMESPACE=${PROJECT_PREFIX} -p OC_APP=${OC_APP} | oc ${MODE} -f - --namespace=${PROJECT_PREFIX}-${OC_APP}"  
+        echo "oc process -f ./${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE} -p NAME=${APP_NAME} -p VERSION=${BUILD_NUMBER} -p SUFFIX=-${BRANCH_LOWER} -p SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR} -p SOURCE_REPOSITORY_URL=${GIT_URL} -p SOURCE_REPOSITORY_REF=${BRANCH_NAME} -p OC_NAMESPACE=${PROJECT_PREFIX} -p OC_APP=$2 | oc ${MODE} -f - --namespace=${PROJECT_PREFIX}-$2"  
         oc process -f ./"${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE}" \
         -p NAME="${APP_NAME}" \
         -p VERSION="${BUILD_NUMBER}" \
@@ -51,12 +51,12 @@ function build() {
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
         -p OC_NAMESPACE="${PROJECT_PREFIX}" \
-        -p OC_APP="${OC_APP}" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"
+        -p OC_APP="$2" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-$2"
     fi;
     if [ "$BUILD_REQUIRED" == true ];
     then
-        echo "Building oc start-build $APP_NAME$SUFFIX -n $PROJECT_PREFIX-$3 --wait --follow ..."
-        oc start-build "$APP_NAME$SUFFIX" -n "$PROJECT_PREFIX-$3" --wait --follow 
+        echo "Building oc start-build $APP_NAME$SUFFIX -n $PROJECT_PREFIX-$2 --wait --follow ..."
+        oc start-build "$APP_NAME$SUFFIX" -n "$PROJECT_PREFIX-$2" --wait --follow 
     else
         echo "Deployment should be automatic..."
     fi
@@ -64,7 +64,7 @@ function build() {
 
 function deploy() {
     source ./"${COMPONENT}.sh"
-    echo "Deploying ${COMPONENT} (${APP_NAME}) to ${OC_APP} ..."
+    echo "Deploying ${COMPONENT} (${APP_NAME}) to $2 ..."
     deployPresent=$(oc get dc/"${APP_NAME}-${BRANCH_LOWER}" --ignore-not-found=true)
     if [ -z "${deployPresent}" ];
     then 
@@ -81,7 +81,7 @@ function deploy() {
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${BRANCH_NAME}" \
         -p OC_NAMESPACE="${PROJECT_PREFIX}" \
-        -p OC_APP="${OC_APP}" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"  
+        -p OC_APP="$2" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-$2"  
     else 
         oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
         -p NAME="${APP_NAME}" \
@@ -91,12 +91,12 @@ function deploy() {
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
         -p OC_NAMESPACE="${PROJECT_PREFIX}" \
-        -p OC_APP="${OC_APP}" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"
+        -p OC_APP="$2" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-$2"
     fi;
 }
 
 function deleteBc() {
-    source ./"$2.sh"
+    source ./"$1.sh"
     deployPresent=$(oc get bc/"${APP_NAME}-${BRANCH_LOWER}" --ignore-not-found=true)
     if [ -z "${deployPresent}" ];
     then 
@@ -104,8 +104,8 @@ function deleteBc() {
     else 
         MODE="create"
     fi;
-    echo "Deleting ${COMPONENT} from $3 ..."
-    echo "${PROJECT_PREFIX}-${OC_APP}"
+    echo "Deleting ${COMPONENT} from $2 ..."
+    echo "${PROJECT_PREFIX}-$2"
     oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
     -p NAME="${APP_NAME}" \
     -p VERSION="${BUILD_NUMBER}" \
@@ -114,11 +114,11 @@ function deleteBc() {
     -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
     -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
     -p OC_NAMESPACE="${PROJECT_PREFIX}" \
-    -p OC_APP="${OC_APP}" | oc delete -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"
+    -p OC_APP="$2" | oc delete -f - --namespace="${PROJECT_PREFIX}-$2"
 }
 
 function deleteDc() {
-    source ./"$2.sh"
+    source ./"$1.sh"
     deployPresent=$(oc get dc/"${APP_NAME}-${BRANCH_LOWER}" --ignore-not-found=true)
     if [ -z "${deployPresent}" ];
     then 
@@ -126,8 +126,8 @@ function deleteDc() {
     else 
         MODE="create"
     fi;
-    echo "Deleting ${COMPONENT} from ${OC_APP} ..."
-    echo "${PROJECT_PREFIX}-${OC_APP}"
+    echo "Deleting ${COMPONENT} from $2 ..."
+    echo "${PROJECT_PREFIX}-$2"
     oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
     -p NAME="${APP_NAME}" \
     -p VERSION="${BUILD_NUMBER}" \
@@ -136,13 +136,13 @@ function deleteDc() {
     -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
     -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
     -p OC_NAMESPACE="${PROJECT_PREFIX}" \
-    -p OC_APP="${OC_APP}" | oc delete -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"
+    -p OC_APP="$2" | oc delete -f - --namespace="${PROJECT_PREFIX}-$2"
 }
 
 function ocApply() {
     source ./"${COMPONENT}.sh"
     echo "ocApply..."
-    echo "${PROJECT_PREFIX}-${OC_APP}"
+    echo "${PROJECT_PREFIX}-$2"
     if [ ${COMPONENT} == "build" ];
     then 
         configType="bc"
@@ -157,26 +157,26 @@ function ocApply() {
     else 
         SUFFIX="\-${BRANCH_LOWER}";
     fi
-    oc process -f openshift/"${OC_APP}"."${configType}".yaml \
-    -p NAME="${OC_APP}" \
+    oc process -f openshift/"$2"."${configType}".yaml \
+    -p NAME="$2" \
     -p VERSION="${BUILD_NUMBER}" \
     -p SUFFIX="${SUFFIX}" \
-    -p SOURCE_CONTEXT_DIR="prime-${OC_APP}" \
+    -p SOURCE_CONTEXT_DIR="prime-$2" \
     -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
     -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}"  \
     -p OC_NAMESPACE="${PROJECT_PREFIX}" \
     -p OC_APP="$3" | oc apply -f - --namespace="${PROJECT_PREFIX}-$3" 
-    if [[ ${COMPONENT} == "build" &&  "${OC_APP}" != "postgresql" ]];
+    if [[ ${COMPONENT} == "build" &&  "$2" != "postgresql" ]];
     then
         echo "Building..."
-        oc start-build ${OC_APP}${SUFFIX} -n ${PROJECT_PREFIX}-$3 --wait --follow
+        oc start-build $2${SUFFIX} -n ${PROJECT_PREFIX}-$3 --wait --follow
     else
         echo "Deployment should be automatic..."
     fi
 }
 
 function sonar(){
-    OC_APP="$3"
+    OC_APP="$2"
     oc process -f openshift/sonar.pod.yaml \
     -p NAME="sonar-runner" \
     -p VERSION="${BUILD_NUMBER}" \
@@ -185,7 +185,7 @@ function sonar(){
     -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
     -p SOURCE_REPOSITORY_REF="${BRANCH_NAME}" \
     -p OC_NAMESPACE="${PROJECT_PREFIX}" \
-    -p OC_APP="${OC_APP}" | oc ${MODE} -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"
+    -p OC_APP="$2" | oc ${MODE} -f - --namespace="${PROJECT_PREFIX}-$2"
     echo "Scanning..."
     sonar-scanner -X
 }
