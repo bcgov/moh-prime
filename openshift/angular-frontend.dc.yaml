@@ -70,7 +70,7 @@ objects:
           readinessProbe:
             failureThreshold: 3
             httpGet:
-              path: /api/v1/enrolments
+              path: /info
               port: 8080
               scheme: HTTP
             initialDelaySeconds: 5
