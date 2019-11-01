@@ -4,7 +4,6 @@ pipeline {
         disableResume()
     }
     stages {
-        /* Will uncomment before the merge
         stage('Build') {
             agent { label 'master' }
             steps {
@@ -23,27 +22,24 @@ pipeline {
                 sh "./player.sh deploy frontend dev"
             }
         }
-        */
         /*
         stage('SonarQube analysis') {
         agent { label 'master' }
         steps { 
-              sh "${scannerHome}/bin/sonar-scanner -X"
+                sh "${scannerHome}/bin/sonar-scanner -X"
             }
         }
-        */
         // This is the work on the current branch
         stage('Code Quality Check') {
             agent { label 'master' }
             steps {
                 echo "Deploy (DEV) ..."
                 //sh "export OC_APP=dev"
-                sh "./player.sh sonar"
+                //sh "./player.sh sonar"
                 //sh "./player.sh sonar dotnet-webapi dev"
                 //sh "./player.sh sonar angular-frontend dev"
             }
         }
-        
         /*
         stage('Test') {
             agent { label 'master' }
@@ -92,7 +88,7 @@ pipeline {
         stage('Deploy (TEST)') {
             agent { label 'master' }
             when {
-              environment name: 'CHANGE_TARGET', value: 'master'
+                environment name: 'CHANGE_TARGET', value: 'master'
             }
             steps {
                 echo "Deploy (TEST)"
@@ -102,7 +98,7 @@ pipeline {
         stage('Deploy (PROD)') {
             agent { label 'master' }
             when {
-              environment name: 'CHANGE_TARGET', value: 'master'
+                environment name: 'CHANGE_TARGET', value: 'master'
             }
             steps {
                 script {
@@ -119,7 +115,7 @@ pipeline {
         stage('Merge to master') {
             agent { label 'master' }
             when {
-              environment name: 'CHANGE_TARGET', value: 'master'
+                environment name: 'CHANGE_TARGET', value: 'master'
             }
             steps {
                 script {
