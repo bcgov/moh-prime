@@ -60,6 +60,8 @@ namespace Prime
                     {
                         wellKnownConfig = configuration["Jwt:WellKnown"];
                     }
+                    options.Audience = audience;
+                    options.MetadataAddress = wellKnownConfig;
                     options.Events = new JwtBearerEvents
                     {
                         OnAuthenticationFailed = c =>
