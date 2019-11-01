@@ -30,13 +30,6 @@ objects:
   - apiVersion: v1
     kind: DeploymentConfig
     metadata:
-      annotations:
-        kompose.cmd: >-
-          kompose convert --provider=openshift --build=build-config
-          --build-repo=https://github.com/bcgov/moh-prime.git
-
-          --build-branch=develop --deployment-config
-        kompose.version: 1.18.0 (06a2e56)
       creationTimestamp: null
       labels:
         io.kompose.service: '${NAME}${SUFFIX}'
@@ -46,7 +39,7 @@ objects:
       replicas: 1
       selector:
         io.kompose.service: '${NAME}${SUFFIX}'
-      strategy: null
+      strategy:
       resources:
         requests:
           cpu: 300m
@@ -61,59 +54,42 @@ objects:
             io.kompose.service: '${NAME}${SUFFIX}'
         spec:
           containers:
-            - env:
-                - name: PATH
-                  value: '$PATH:/opt/rh/rh-dotnet22/root/usr/lib64/dotnet'
-                - name: ASPNETCORE_ENVIRONMENT
-                  value: Development
-                - name: ASPNETCORE_HTTPS_PORT
-                  value: '5001'
-                - name: ASPNETCORE_URLS
-                  value: 'http://+:8080'
-                - name: DB_CONNECTION_STRING
-                  value: >-
-                    host=postgresql${SUFFIX};port=5432;database=postgres;username=postgres;password=postgres
-                - name: JWT_SIGNING_KEY
-                  value: SdqlA0Y5e6HMAK1wm6iHHHz2u37XGtlo
-              image: ' '
-              name: primeapi
-              ports:
-                - containerPort: 8080
-                - containerPort: 5001
-              resources: {}
-          restartPolicy: Always
+          - env:
+          - name: SUFFIX
+            value: "${SUFFIX}"
+          - name: OC_APP
+            value: ${OC_APP}
+          - name: BRANCH_NAME
+            value: ${SOURCE_REPOSITORY_REF}
+          image: ' '
+          name: sonar-scanner
+          resources: {}
+          restartPolicy: Never
       test: false
       triggers:
-        - type: ConfigChange
-        - imageChangeParams:
-            automatic: true
-            containerNames:
-              - primeapi
-            from:
-              kind: ImageStreamTag
-              name: '${NAME}${SUFFIX}:latest'
-          type: ImageChange
-    status: {}
+      - type: ConfigChange
+      - imageChangeParams:
+          automatic: true
+          containerNames:
+          - sonar-scanner
+          from:
+            kind: ImageStreamTag
+            name: sonar-runner:latest
+        type: ImageChange
+      status: {}
   - apiVersion: v1
     kind: Service
     metadata:
-      annotations:
-        kompose.cmd: >-
-          kompose convert --provider=openshift --build=build-config
-          --build-repo=https://github.com/bcgov/moh-prime.git
-        kompose.version: 1.18.0 (06a2e56)
       creationTimestamp: null
       labels:
         io.kompose.service: '${NAME}${SUFFIX}'
       name: '${NAME}${SUFFIX}'
     spec:
+      clusterIP: None
       ports:
-        - name: '5000'
-          port: 5000
-          targetPort: 8080
-        - name: '5001'
-          port: 5001
-          targetPort: 5001
+      - name: headless
+        port: 55555
+        targetPort: 0
       selector:
         io.kompose.service: '${NAME}${SUFFIX}'
     status:

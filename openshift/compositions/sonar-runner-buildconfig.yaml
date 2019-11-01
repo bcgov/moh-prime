@@ -1,32 +1,30 @@
 apiVersion: v1
 kind: BuildConfig
 metadata:
-  annotations:
-    kompose.cmd: kompose convert --provider=openshift --build=build-config
-    kompose.version: 1.19.0 (f63a961c)
   creationTimestamp: null
   labels:
-    io.kompose.service: sonarrunner
-  name: sonarrunner
+    io.kompose.service: sonar-runner
+  name: sonar-runner
 spec:
   nodeSelector: null
   output:
     to:
       kind: ImageStreamTag
-      name: sonarrunner:latest
+      name: sonar-runner:latest
   postCommit: {}
   resources: {}
   runPolicy: Serial
   source:
     git:
       ref: feature/automatic-code-review
-      uri: git@github.com:bcgov/moh-prime.git
+      uri: https://github.com/bcgov/moh-prime.git
     type: Git
   strategy:
     dockerStrategy:
-      dockerfilePath: sonarqube/openshift.dockerfile
+      dockerfilePath: sonar-scanner/openshift.dockerfile
     type: Docker
   triggers:
   - type: ConfigChange
+  - type: ImageChange
 status:
   lastVersion: 0

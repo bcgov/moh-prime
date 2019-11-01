@@ -1,39 +1,36 @@
 apiVersion: v1
 kind: DeploymentConfig
 metadata:
-  annotations:
-    kompose.cmd: kompose convert --provider=openshift --build=build-config
-    kompose.version: 1.19.0 (f63a961c)
   creationTimestamp: null
   labels:
-    io.kompose.service: sonarrunner
-  name: sonarrunner
+    io.kompose.service: sonar-runner
+  name: sonar-runner
 spec:
   replicas: 1
   selector:
-    io.kompose.service: sonarrunner
+    io.kompose.service: sonar-runner
   strategy:
     resources: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
-        io.kompose.service: sonarrunner
+        io.kompose.service: sonar-runner
     spec:
       containers:
       - image: ' '
-        name: sonarrunner
+        name: sonar-scanner
         resources: {}
-      restartPolicy: Always
+      restartPolicy: Never
   test: false
   triggers:
   - type: ConfigChange
   - imageChangeParams:
       automatic: true
       containerNames:
-      - sonarrunner
+      - sonar-scanner
       from:
         kind: ImageStreamTag
-        name: sonarrunner:latest
+        name: sonar-runner:latest
     type: ImageChange
 status: {}
