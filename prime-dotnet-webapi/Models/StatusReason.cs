@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 namespace Prime.Models
 {
     [Table("StatusReasonLookup")]
-    public sealed class StatusReason : BaseAuditable, ILookup, IEquatable<StatusReason>
+    public sealed class StatusReason : BaseAuditable, ILookup<short>, IEquatable<StatusReason>
     {
         public readonly static short AUTOMATIC_CODE = 1;
         public readonly static short MANUAL_CODE = 2;
