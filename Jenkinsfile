@@ -8,18 +8,36 @@ pipeline {
             agent { label 'master' }
             steps {
                 echo "Building ..."
-                sh "bash ./player.sh ocApply build postgresql dev"
-                sh "bash ./player.sh ocApply build dotnet-webapi dev"
-                sh "bash ./player.sh ocApply build angular-frontend dev"
+                sh "./player.sh build database dev"
+                sh "./player.sh build api dev"
+                sh "./player.sh build frontend dev"
             }
         }
         stage('Deploy (DEV)') {
             agent { label 'master' }
             steps {
                 echo "Deploy (DEV) ..."
-                sh "bash ./player.sh ocApply deploy postgresql dev"
-                sh "bash ./player.sh ocApply deploy dotnet-webapi dev"
-                sh "bash ./player.sh ocApply deploy angular-frontend dev"
+                sh "./player.sh deploy database dev"
+                sh "./player.sh deploy api dev"
+                sh "./player.sh deploy frontend dev"
+            }
+        }
+        /*
+        stage('SonarQube analysis') {
+        agent { label 'master' }
+        steps { 
+                sh "${scannerHome}/bin/sonar-scanner -X"
+            }
+        }
+        // This is the work on the current branch
+        stage('Code Quality Check') {
+            agent { label 'master' }
+            steps {
+                echo "Deploy (DEV) ..."
+                //sh "export OC_APP=dev"
+                //sh "./player.sh sonar"
+                //sh "./player.sh sonar dotnet-webapi dev"
+                //sh "./player.sh sonar angular-frontend dev"
             }
         }
         /*
@@ -70,7 +88,7 @@ pipeline {
         stage('Deploy (TEST)') {
             agent { label 'master' }
             when {
-              environment name: 'CHANGE_TARGET', value: 'master'
+                environment name: 'CHANGE_TARGET', value: 'master'
             }
             steps {
                 echo "Deploy (TEST)"
@@ -80,7 +98,7 @@ pipeline {
         stage('Deploy (PROD)') {
             agent { label 'master' }
             when {
-              environment name: 'CHANGE_TARGET', value: 'master'
+                environment name: 'CHANGE_TARGET', value: 'master'
             }
             steps {
                 script {
@@ -97,7 +115,7 @@ pipeline {
         stage('Merge to master') {
             agent { label 'master' }
             when {
-              environment name: 'CHANGE_TARGET', value: 'master'
+                environment name: 'CHANGE_TARGET', value: 'master'
             }
             steps {
                 script {
