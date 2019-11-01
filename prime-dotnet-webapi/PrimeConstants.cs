@@ -4,9 +4,9 @@ namespace Prime
     {
         public readonly static string PRIME_ACCESS_TOKEN_KEY = "prime-access-token";
 
-        public readonly static string PRIME_ADMIN_CLIENT = Startup.StaticConfig["Jwt:AdminClient"];
+        public readonly static string PRIME_ADMIN_CLIENT = System.Environment.GetEnvironmentVariable("JWT_ADMIN_CLIENT") ?? Startup.StaticConfig["Jwt:AdminClient"];
 
-        public readonly static string PRIME_USER_CLIENT = Startup.StaticConfig["Jwt:UserClient"];
+        public readonly static string PRIME_USER_CLIENT = System.Environment.GetEnvironmentVariable("JWT_USER_CLIENT") ?? Startup.StaticConfig["Jwt:UserClient"];
 
         public readonly static string[] PRIME_CLIENT_IDS = { PRIME_ADMIN_CLIENT, PRIME_USER_CLIENT };
 
