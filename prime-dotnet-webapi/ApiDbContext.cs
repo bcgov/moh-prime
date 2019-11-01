@@ -32,6 +32,7 @@ namespace Prime
         public DbSet<Enrollee> Enrollees { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<EnrolmentStatus> EnrolmentStatuses { get; set; }
+        public DbSet<EnrolmentStatusReason> EnrolmentStatusReasons { get; set; }
         public DbSet<Status> Statuses { get; set; }
 
         public override int SaveChanges()
@@ -194,6 +195,19 @@ namespace Prime
                 );
             #endregion
 
+            #region StatusReasonSeed
+            modelBuilder.Entity<StatusReason>().HasData(
+                new StatusReason { Code = 1, Name = "Automatic", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
+                new StatusReason { Code = 2, Name = "Manual", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
+                new StatusReason { Code = 3, Name = "Certification Name", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
+                new StatusReason { Code = 4, Name = "Licence Inactive", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
+                new StatusReason { Code = 5, Name = "Insulin Pump Provider", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
+                new StatusReason { Code = 6, Name = "Licence Class", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
+                new StatusReason { Code = 7, Name = "Self Declaration", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
+                new StatusReason { Code = 8, Name = "Outside British Columbia", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE }
+                );
+            #endregion
+
             #region Indexes
             modelBuilder.Entity<MailingAddress>()
                 .HasIndex(a => a.EnrolleeId)
@@ -252,6 +266,17 @@ namespace Prime
                 .HasOne(es => es.Status)
                 .WithMany(s => s.EnrolmentStatuses)
                 .HasForeignKey(es => es.StatusCode);
+
+            modelBuilder.Entity<EnrolmentStatusReason>()
+                .HasKey(esr => new { esr.EnrolmentId, esr.StatusCode, esr.StatusReasonCode });
+            modelBuilder.Entity<EnrolmentStatusReason>()
+                .HasOne(esr => esr.EnrolmentStatus)
+                .WithMany(es => es.EnrolmentStatusReasons)
+                .HasForeignKey(esr => new { esr.EnrolmentId, esr.StatusCode });
+            modelBuilder.Entity<EnrolmentStatusReason>()
+                .HasOne(esr => esr.StatusReason)
+                .WithMany(sr => sr.EnrolmentStatusReasons)
+                .HasForeignKey(esr => esr.StatusReasonCode);
             #endregion
         }
 

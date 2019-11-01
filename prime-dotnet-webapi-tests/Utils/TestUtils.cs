@@ -111,14 +111,14 @@ namespace PrimeTests.Utils
             identity.RemoveClaim(claim);
         }
 
-        public static int? CreateEnrolment(ApiDbContext apiDbContext, HttpContextAccessor httpContext)
+        public static int? CreateEnrolment(ApiDbContext apiDbContext, HttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService)
         {
-            return new DefaultEnrolmentService(apiDbContext, httpContext).CreateEnrolmentAsync(TestUtils.EnrolmentFaker.Generate()).Result;
+            return new DefaultEnrolmentService(apiDbContext, httpContext, automaticAdjudicationService).CreateEnrolmentAsync(TestUtils.EnrolmentFaker.Generate()).Result;
         }
 
-        public static Enrolment GetEnrolmentById(ApiDbContext apiDbContext, HttpContextAccessor httpContext, int enrolmentId)
+        public static Enrolment GetEnrolmentById(ApiDbContext apiDbContext, HttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService, int enrolmentId)
         {
-            return new DefaultEnrolmentService(apiDbContext, httpContext).GetEnrolmentAsync(enrolmentId).Result;
+            return new DefaultEnrolmentService(apiDbContext, httpContext, automaticAdjudicationService).GetEnrolmentAsync(enrolmentId).Result;
         }
 
         public static void InitializeDbForTests(ApiDbContext db)
