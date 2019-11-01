@@ -8,12 +8,16 @@ using SimpleBase;
 using Prime.Models;
 using Prime.Services;
 using PrimeTests.Utils;
+using PrimeTests.Mocks;
 
 namespace PrimeTests.Services
 {
     public class DefaultEnrolmentServiceTests : BaseServiceTests<DefaultEnrolmentService>
     {
         private static EnrolmentSearchOptions EMPTY_ENROLMENT_SEARCH_OPTIONS = new EnrolmentSearchOptions();
+
+        public DefaultEnrolmentServiceTests() : base(new object[] { new AutomaticAdjudicationServiceMock() })
+        { }
 
         [Fact]
         public void testGuid_Ascii85_Encoding()

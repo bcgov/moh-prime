@@ -26,7 +26,7 @@ namespace Prime.Services
         public DefaultEnrolmentService(
             ApiDbContext context, IHttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService)
             : base(context, httpContext)
-        { 
+        {
             _automaticAdjudicationService = automaticAdjudicationService;
         }
 
@@ -80,16 +80,7 @@ namespace Prime.Services
 
         public async Task<Enrolment> GetEnrolmentAsync(int enrolmentId)
         {
-            var entity = await _context.Enrolments
-                .Include(e => e.Enrollee)
-                .ThenInclude(e => e.PhysicalAddress)
-                .Include(e => e.Enrollee)
-                .ThenInclude(e => e.MailingAddress)
-                .Include(e => e.Certifications)
-                .Include(e => e.Jobs)
-                .Include(e => e.Organizations)
-                .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.Status)
-                .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.EnrolmentStatusReasons).ThenInclude(esr => esr.StatusReason)
+            var entity = await this.GetBaseEnrolmentQuery()
                 .SingleOrDefaultAsync(e => e.Id == enrolmentId)
                 ;
 
@@ -104,16 +95,7 @@ namespace Prime.Services
 
         public async Task<Enrolment> GetEnrolmentForUserIdAsync(Guid userId)
         {
-            var entity = await _context.Enrolments
-                .Include(e => e.Enrollee)
-                .ThenInclude(e => e.PhysicalAddress)
-                .Include(e => e.Enrollee)
-                .ThenInclude(e => e.MailingAddress)
-                .Include(e => e.Certifications)
-                .Include(e => e.Jobs)
-                .Include(e => e.Organizations)
-                .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.Status)
-                .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.EnrolmentStatusReasons).ThenInclude(esr => esr.StatusReason)
+            var entity = await this.GetBaseEnrolmentQuery()
                 .SingleOrDefaultAsync(e => e.Enrollee.UserId == userId)
                 ;
 
@@ -126,19 +108,24 @@ namespace Prime.Services
             return entity;
         }
 
+        private IQueryable<Enrolment> GetBaseEnrolmentQuery()
+        {
+            return _context.Enrolments
+                    .Include(e => e.Enrollee)
+                    .ThenInclude(e => e.PhysicalAddress)
+                    .Include(e => e.Enrollee)
+                    .ThenInclude(e => e.MailingAddress)
+                    .Include(e => e.Certifications)
+                    .Include(e => e.Jobs)
+                    .Include(e => e.Organizations)
+                    .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.Status)
+                    .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.EnrolmentStatusReasons).ThenInclude(esr => esr.StatusReason)
+                    ;
+        }
+
         public async Task<IEnumerable<Enrolment>> GetEnrolmentsAsync(EnrolmentSearchOptions searchOptions)
         {
-            IQueryable<Enrolment> query = _context.Enrolments
-                .Include(e => e.Enrollee)
-                .ThenInclude(e => e.PhysicalAddress)
-                .Include(e => e.Enrollee)
-                .ThenInclude(e => e.MailingAddress)
-                .Include(e => e.Certifications)
-                .Include(e => e.Jobs)
-                .Include(e => e.Organizations)
-                .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.Status)
-                .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.EnrolmentStatusReasons).ThenInclude(esr => esr.StatusReason)
-                ;
+            IQueryable<Enrolment> query = this.GetBaseEnrolmentQuery();
 
             if (searchOptions.StatusCode != null)
             {
@@ -159,16 +146,7 @@ namespace Prime.Services
         public async Task<IEnumerable<Enrolment>> GetEnrolmentsForUserIdAsync(
             Guid userId)
         {
-            IQueryable<Enrolment> query = _context.Enrolments
-                .Include(e => e.Enrollee)
-                .ThenInclude(e => e.PhysicalAddress)
-                .Include(e => e.Enrollee)
-                .ThenInclude(e => e.MailingAddress)
-                .Include(e => e.Certifications)
-                .Include(e => e.Jobs)
-                .Include(e => e.Organizations)
-                .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.Status)
-                .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.EnrolmentStatusReasons).ThenInclude(esr => esr.StatusReason)
+            IQueryable<Enrolment> query = this.GetBaseEnrolmentQuery()
                 .Where(e => e.Enrollee.UserId == userId)
                 ;
 
