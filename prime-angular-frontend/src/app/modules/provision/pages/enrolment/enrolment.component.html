@@ -30,9 +30,9 @@
 
       <dl class="row mb-4">
         <dt class="col-sm-12 col-md-6 py-1">Country</dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.country }}&nbsp;</dd>
+        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.countryCode | configCode: 'countries' }}&nbsp;</dd>
         <dt class="col-sm-12 col-md-6 py-1">Province</dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.province }}&nbsp;</dd>
+        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.provinceCode | configCode: 'provinces' }}&nbsp;</dd>
         <dt class="col-sm-12 col-md-6 py-1">Street Address</dt>
         <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.street }}&nbsp;</dd>
         <dt class="col-sm-12 col-md-6 py-1">City</dt>
@@ -41,15 +41,15 @@
         <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.postal | postal }}&nbsp;</dd>
       </dl>
 
-      <ng-container *ngIf="enrolment?.enrollee.mailingAddress.country">
+      <ng-container *ngIf="enrolment?.enrollee.mailingAddress.countryCode">
 
         <h3 class="lead">Mailing Address</h3>
 
         <dl class="row mb-4">
           <dt class="col-sm-12 col-md-6 py-1">Country</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.mailingAddress.country }}&nbsp;</dd>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.mailingAddress.countryCode | configCode: 'countries' }}&nbsp;</dd>
           <dt class="col-sm-12 col-md-6 py-1">Province</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.mailingAddress.province }}&nbsp;</dd>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.mailingAddress.provinceCode | configCode: 'provinces' }}&nbsp;</dd>
           <dt class="col-sm-12 col-md-6 py-1">Street Address</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.mailingAddress.street }}&nbsp;</dd>
           <dt class="col-sm-12 col-md-6 py-1">City</dt>
