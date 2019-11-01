@@ -45,12 +45,12 @@ export class ProvisionResource {
       );
   }
 
-  public updateEnrolmentStatus(id: number, statusCode: number): Observable<Config[]> {
+  public updateEnrolmentStatus(id: number, statusCode: number): Observable<Config<number>[]> {
     const payload = { code: statusCode };
     return this.http.post(`${this.config.apiEndpoint}/enrolments/${id}/statuses`, payload)
       .pipe(
         map((response: PrimeHttpResponse) => response.result),
-        map((statuses: Config[]) => {
+        map((statuses: Config<number>[]) => {
           this.logger.info('ENROLMENT_STATUSES', statuses);
           return statuses;
         })

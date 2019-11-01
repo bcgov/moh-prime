@@ -22,8 +22,8 @@ import { EnrolmentResource } from '../../shared/services/enrolment-resource.serv
 })
 export class PharmanetAccessComponent implements OnInit {
   public form: FormGroup;
-  public organizationNames: Config[];
-  public organizationTypes: Config[];
+  public organizationNames: Config<number>[];
+  public organizationTypes: Config<number>[];
 
   constructor(
     private route: ActivatedRoute,
