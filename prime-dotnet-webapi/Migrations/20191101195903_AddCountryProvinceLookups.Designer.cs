@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -10,9 +11,10 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191101195903_AddCountryProvinceLookups")]
+    partial class AddCountryProvinceLookups
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -529,29 +531,6 @@ namespace Prime.Migrations
                     b.HasIndex("StatusCode");
 
                     b.ToTable("EnrolmentStatuses");
-                });
-
-            modelBuilder.Entity("Prime.Models.EnrolmentStatusReason", b =>
-                {
-                    b.Property<int>("EnrolmentId");
-
-                    b.Property<short>("StatusCode");
-
-                    b.Property<short>("StatusReasonCode");
-
-                    b.Property<DateTime>("CreatedTimeStamp");
-
-                    b.Property<Guid>("CreatedUserId");
-
-                    b.Property<DateTime>("UpdatedTimeStamp");
-
-                    b.Property<Guid>("UpdatedUserId");
-
-                    b.HasKey("EnrolmentId", "StatusCode", "StatusReasonCode");
-
-                    b.HasIndex("StatusReasonCode");
-
-                    b.ToTable("EnrolmentStatusReasons");
                 });
 
             modelBuilder.Entity("Prime.Models.Job", b =>
@@ -1235,19 +1214,6 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Status", "Status")
                         .WithMany("EnrolmentStatuses")
                         .HasForeignKey("StatusCode")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Prime.Models.EnrolmentStatusReason", b =>
-                {
-                    b.HasOne("Prime.Models.StatusReason", "StatusReason")
-                        .WithMany("EnrolmentStatusReasons")
-                        .HasForeignKey("StatusReasonCode")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Prime.Models.EnrolmentStatus", "EnrolmentStatus")
-                        .WithMany("EnrolmentStatusReasons")
-                        .HasForeignKey("EnrolmentId", "StatusCode")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

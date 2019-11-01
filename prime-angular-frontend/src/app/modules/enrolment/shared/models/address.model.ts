@@ -1,6 +1,6 @@
 export class Address {
-  country: string = null;
-  province: string = null;
+  countryCode: string = null;
+  provinceCode: string = null;
   street: string = null;
   city: string = null;
   postal: string = null;

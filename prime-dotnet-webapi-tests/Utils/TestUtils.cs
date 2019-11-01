@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 using Bogus;
+using Bogus.Extensions;
 
 using Prime;
 using Prime.Models;
@@ -22,20 +23,25 @@ namespace PrimeTests.Utils
 {
     public class TestUtils
     {
+
+        public static string[] countries = new [] { "CA" };
+
+        public static string[] provinces = new [] { "AB", "BC", "MB", "NB", "NL", "NS", "ON", "PE", "QC", "SK", "NT", "NU", "YT" };
+
         public static Faker<PhysicalAddress> PhysicalAddressFaker = new Faker<PhysicalAddress>()
-                                .RuleFor(a => a.Country, f => f.Address.Country())
-                                .RuleFor(a => a.Province, f => f.Address.StateAbbr())
-                                .RuleFor(a => a.Street, f => f.Address.StreetName())
+                                .RuleFor(a => a.CountryCode, f => f.PickRandom(countries))
+                                .RuleFor(a => a.ProvinceCode, f => f.PickRandom(provinces))
+                                .RuleFor(a => a.Street, f => f.Address.StreetAddress())
                                 .RuleFor(a => a.City, f => f.Address.City())
-                                .RuleFor(a => a.Postal, f => f.Address.ZipCode())
+                                .RuleFor(a => a.Postal, f => f.Address.ZipCode("?#?#?#"))
                                 ;
 
         public static Faker<MailingAddress> MailingAddressFaker = new Faker<MailingAddress>()
-                                .RuleFor(a => a.Country, f => f.Address.Country())
-                                .RuleFor(a => a.Province, f => f.Address.StateAbbr())
-                                .RuleFor(a => a.Street, f => f.Address.StreetName())
+                                .RuleFor(a => a.CountryCode, f => f.PickRandom(countries))
+                                .RuleFor(a => a.ProvinceCode, f => f.PickRandom(provinces))
+                                .RuleFor(a => a.Street, f => f.Address.StreetAddress())
                                 .RuleFor(a => a.City, f => f.Address.City())
-                                .RuleFor(a => a.Postal, f => f.Address.ZipCode())
+                                .RuleFor(a => a.Postal, f => f.Address.ZipCode("?#?#?#"))
                                 ;
 
         public static Faker<Enrollee> EnrolleeFaker = new Faker<Enrollee>()
@@ -43,7 +49,7 @@ namespace PrimeTests.Utils
                                 .RuleFor(e => e.FirstName, f => f.Name.FirstName())
                                 .RuleFor(e => e.MiddleName, f => f.Name.FirstName())
                                 .RuleFor(e => e.LastName, f => f.Name.LastName())
-                                .RuleFor(e => e.DateOfBirth, f => f.Date.Past(20))
+                                .RuleFor(e => e.DateOfBirth, f => f.Date.Past(20, DateTime.Now.AddYears(-18)))
                                 .RuleFor(e => e.PhysicalAddress, f => PhysicalAddressFaker.Generate())
                                 .RuleFor(e => e.MailingAddress, f => MailingAddressFaker.Generate())
                                 ;
@@ -52,7 +58,7 @@ namespace PrimeTests.Utils
                                 .RuleFor(c => c.CollegeCode, f => f.Random.Short(1, 5))
                                 .RuleFor(c => c.LicenseNumber, f => f.Random.Int(100000, 999999).ToString().Substring(1))
                                 .RuleFor(c => c.LicenseCode, f => f.Random.Short(1, 4))
-                                .RuleFor(c => c.RenewalDate, f => f.Date.Past(20))
+                                .RuleFor(c => c.RenewalDate, f => f.Date.Future(1))
                                 .RuleFor(c => c.PracticeCode, f => f.Random.Short(1, 4))
                                 ;
 
@@ -64,7 +70,8 @@ namespace PrimeTests.Utils
                                 .RuleFor(o => o.Name, f => f.Random.Word())
                                 .RuleFor(o => o.OrganizationTypeCode, f => f.Random.Short(1, 2))
                                 .RuleFor(o => o.City, f => f.Address.City())
-                                .RuleFor(o => o.StartDate, f => f.Date.Future(2))
+                                .RuleFor(o => o.StartDate, f => f.Date.Past(2))
+                                .RuleFor(o => o.EndDate, f => f.Date.Future(2).OrNull(f))
                                 ;
 
         public static Faker<EnrolmentStatus> EnrolmentStatusFaker = new Faker<EnrolmentStatus>()
@@ -76,7 +83,6 @@ namespace PrimeTests.Utils
 
         public static Faker<Enrolment> EnrolmentFaker = new Faker<Enrolment>()
                                     .RuleFor(e => e.Enrollee, f => EnrolleeFaker.Generate())
-                                    .RuleFor(e => e.AppliedDate, f => DateTime.Now)
                                     .RuleFor(e => e.HasCertification, f => f.Random.Bool())
                                     .RuleFor(e => e.Certifications, f => CertificationFaker.Generate(2))
                                     .RuleFor(e => e.IsDeviceProvider, f => f.Random.Bool())
@@ -192,6 +198,28 @@ namespace PrimeTests.Utils
                 db.AddRange(new Status { Code = Status.DECLINED_CODE, Name = "Declined" });
                 db.AddRange(new Status { Code = Status.ACCEPTED_TOS_CODE, Name = "Accepted TOS (Terms of Service)" });
                 db.AddRange(new Status { Code = Status.DECLINED_TOS_CODE, Name = "Declined TOS (Terms of Service)" });
+            }
+
+            if (!db.Set(typeof(Country)).Any())
+            {
+                db.AddRange(new Country { Code = "CA", Name = "Canada" });
+            }
+
+            if (!db.Set(typeof(Province)).Any())
+            {
+                db.AddRange(new Province { Code = "AB", Name = "Alberta" });
+                db.AddRange(new Province { Code = "BC", Name = "British Columbia" });
+                db.AddRange(new Province { Code = "MB", Name = "Manitoba" });
+                db.AddRange(new Province { Code = "NB", Name = "New Brunswick" });
+                db.AddRange(new Province { Code = "NL", Name = "Newfoundland and Labrador" });
+                db.AddRange(new Province { Code = "NS", Name = "Nova Scotia" });
+                db.AddRange(new Province { Code = "ON", Name = "Ontario" });
+                db.AddRange(new Province { Code = "PE", Name = "Prince Edward Island" });
+                db.AddRange(new Province { Code = "QC", Name = "Quebec" });
+                db.AddRange(new Province { Code = "SK", Name = "Saskatchewan" });
+                db.AddRange(new Province { Code = "NT", Name = "Northwest Territories" });
+                db.AddRange(new Province { Code = "NU", Name = "Nunavut" });
+                db.AddRange(new Province { Code = "YT", Name = "Yukon" });
             }
 
             db.SaveChanges();
