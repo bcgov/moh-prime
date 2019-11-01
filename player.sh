@@ -1,7 +1,8 @@
 #!/bin/sh
-export PROJECT_PREFIX="dqszvc"
-export GIT_URL='https://github.com/bcgov/moh-prime.git'
-export BRANCH_LOWER=`echo "${BRANCH_NAME}" | awk '{print tolower($0)}'`
+source project.conf
+#export PROJECT_PREFIX="dqszvc"
+#export GIT_URL='https://github.com/bcgov/moh-prime.git'
+#export BRANCH_LOWER=`echo "${BRANCH_NAME}" | awk '{print tolower($0)}'`
 export ACTION=$1
 export COMPONENT=$2
 export OC_APP=$3
@@ -20,7 +21,7 @@ function variablePopulation() {
 variablePopulation
 
 function build() {
-    source ./"$COMPONENT.sh"
+    source ./"$COMPONENT.conf"
     echo "Building $COMPONENT (${APP_NAME}) to $PROJECT_PREFIX-$OC_APP..."
     buildPresent=$(oc get bc/"$APP_NAME-$BRANCH_LOWER" --ignore-not-found=true)
     if [ -z "${buildPresent}" ];
