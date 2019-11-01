@@ -64,7 +64,7 @@ objects:
           image: ' '
           name: sonar-scanner
           resources: {}
-          restartPolicy: Never
+          restartPolicy: Always
       test: false
       triggers:
       - type: ConfigChange
