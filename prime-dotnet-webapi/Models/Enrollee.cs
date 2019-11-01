@@ -54,7 +54,7 @@ namespace Prime.Models
         {
             if (Guid.Empty.Equals(this.UserId))
             {
-                yield return new ValidationResult(String.Format("UserId cannot be the empty value: {0}", this.UserId.ToString()));
+                yield return new ValidationResult($"UserId cannot be the empty value: {this.UserId.ToString()}");
             }
         }
     }

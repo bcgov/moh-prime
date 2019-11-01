@@ -10,7 +10,10 @@ namespace Prime.Models
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Message { get; }
 
-        public ApiResponse(int statusCode, string message = null)
+        public ApiResponse(int statusCode) : this(statusCode, null)
+        { }
+
+        public ApiResponse(int statusCode, string message)
         {
             StatusCode = statusCode;
             Message = message ?? GetDefaultMessageForStatusCode(statusCode);

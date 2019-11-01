@@ -39,10 +39,10 @@ namespace Prime.Services
                 Status DECLINED_TOS = _context.Statuses.Single(s => s.Code == Status.DECLINED_TOS_CODE);
 
                 _workflowStateMap = new Dictionary<Status, StatusWrapper[]>();
-                _workflowStateMap.Add(NULL_STATUS, new StatusWrapper[] { new StatusWrapper { Status = IN_PROGRESS, AdminOnly = false } });
-                _workflowStateMap.Add(IN_PROGRESS, new StatusWrapper[] { new StatusWrapper { Status = SUBMITTED, AdminOnly = false } });
-                _workflowStateMap.Add(SUBMITTED, new StatusWrapper[] { new StatusWrapper { Status = APPROVED, AdminOnly = true }, new StatusWrapper { Status = DECLINED, AdminOnly = true } });
-                _workflowStateMap.Add(APPROVED, new StatusWrapper[] { new StatusWrapper { Status = ACCEPTED_TOS, AdminOnly = false }, new StatusWrapper { Status = DECLINED_TOS, AdminOnly = false } });
+                _workflowStateMap.Add(NULL_STATUS, new[] { new StatusWrapper { Status = IN_PROGRESS, AdminOnly = false } });
+                _workflowStateMap.Add(IN_PROGRESS, new[] { new StatusWrapper { Status = SUBMITTED, AdminOnly = false } });
+                _workflowStateMap.Add(SUBMITTED, new[] { new StatusWrapper { Status = APPROVED, AdminOnly = true }, new StatusWrapper { Status = DECLINED, AdminOnly = true } });
+                _workflowStateMap.Add(APPROVED, new[] { new StatusWrapper { Status = ACCEPTED_TOS, AdminOnly = false }, new StatusWrapper { Status = DECLINED_TOS, AdminOnly = false } });
                 _workflowStateMap.Add(DECLINED, new StatusWrapper[0]);
                 _workflowStateMap.Add(ACCEPTED_TOS, new StatusWrapper[0]);
                 _workflowStateMap.Add(DECLINED_TOS, new StatusWrapper[0]);
@@ -133,9 +133,9 @@ namespace Prime.Services
                 .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.Status)
                 ;
 
-            if (searchOptions.statusCode != null)
+            if (searchOptions.StatusCode != null)
             {
-                query = query.Where(e => e.EnrolmentStatuses.Single(es => es.IsCurrent).StatusCode == (short)searchOptions.statusCode);
+                query = query.Where(e => e.EnrolmentStatuses.Single(es => es.IsCurrent).StatusCode == (short)searchOptions.StatusCode);
             }
 
             var items = await query.ToListAsync();
@@ -177,6 +177,11 @@ namespace Prime.Services
 
         public async Task<int?> CreateEnrolmentAsync(Enrolment enrolment)
         {
+            if (enrolment == null)
+            {
+                throw new ArgumentNullException("Could not create an enrolment, the passed in Enrolment cannot be null.");
+            }
+
             //create a status history record
             EnrolmentStatus enrolmentStatus = new EnrolmentStatus { Enrolment = enrolment, StatusCode = Status.IN_PROGRESS_CODE, StatusDate = DateTime.Now, IsCurrent = true };
             if (enrolment.EnrolmentStatuses == null)
@@ -187,7 +192,10 @@ namespace Prime.Services
             _context.Enrolments.Add(enrolment);
 
             var created = await _context.SaveChangesAsync();
-            if (created < 1) throw new InvalidOperationException("Could not create enrolment.");
+            if (created < 1)
+            {
+                throw new InvalidOperationException("Could not create enrolment.");
+            }
 
             return enrolment.Id;
         }
@@ -267,7 +275,10 @@ namespace Prime.Services
         {
             var enrolment = await _context.Enrolments
                 .SingleOrDefaultAsync(e => e.Id == enrolmentId);
-            if (enrolment == null) return;
+            if (enrolment == null)
+            {
+                return;
+            }
 
             _context.Enrolments.Remove(enrolment);
             _context.Enrollees.Remove(enrolment.Enrollee);
@@ -279,7 +290,10 @@ namespace Prime.Services
             var enrolment = await _context.Enrolments
                 .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.Status)
                 .SingleOrDefaultAsync(e => e.Id == enrolmentId);
-            if (enrolment == null) return null;
+            if (enrolment == null)
+            {
+                return null;
+            }
 
             return this.GetAvailableStatuses(enrolment.CurrentStatus?.Status);
         }
@@ -298,11 +312,19 @@ namespace Prime.Services
 
         public async Task<EnrolmentStatus> CreateEnrolmentStatusAsync(int enrolmentId, Status status)
         {
+            if (status == null)
+            {
+                throw new ArgumentNullException("Could not create an enrolment status, the passed in Status cannot be null.");
+            }
+
             var enrolment = await _context.Enrolments
                 .AsNoTracking()
                 .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.Status)
                 .SingleOrDefaultAsync(e => e.Id == enrolmentId);
-            if (enrolment == null) return null;
+            if (enrolment == null)
+            {
+                return null;
+            }
 
             var currentStatus = enrolment.CurrentStatus?.Status;
 
@@ -330,7 +352,10 @@ namespace Prime.Services
                 }
 
                 var created = await _context.SaveChangesAsync();
-                if (created < 1) throw new InvalidOperationException("Could not create enrolment status.");
+                if (created < 1)
+                {
+                    throw new InvalidOperationException("Could not create enrolment status.");
+                }
 
                 return createdEnrolmentStatus;
             }
@@ -355,7 +380,10 @@ namespace Prime.Services
                 .AsNoTracking()
                 .Include(e => e.EnrolmentStatuses)
                 .SingleOrDefaultAsync(e => e.Id == enrolmentId);
-            if (enrolment == null) return false;
+            if (enrolment == null)
+            {
+                return false;
+            }
 
             var currentStatusCode = enrolment.CurrentStatus?.StatusCode;
 

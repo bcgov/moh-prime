@@ -9,12 +9,12 @@ namespace Prime.Models
     [Table("StatusLookup")]
     public sealed class Status : BaseAuditable, ILookup, IEquatable<Status>
     {
-        public const short IN_PROGRESS_CODE = 1;
-        public const short SUBMITTED_CODE = 2;
-        public const short APPROVED_CODE = 3;
-        public const short DECLINED_CODE = 4;
-        public const short ACCEPTED_TOS_CODE = 5;
-        public const short DECLINED_TOS_CODE = 6;
+        public readonly static short IN_PROGRESS_CODE = 1;
+        public readonly static short SUBMITTED_CODE = 2;
+        public readonly static short APPROVED_CODE = 3;
+        public readonly static short DECLINED_CODE = 4;
+        public readonly static short ACCEPTED_TOS_CODE = 5;
+        public readonly static short DECLINED_TOS_CODE = 6;
 
         [Key]
         public short Code { get; set; }
@@ -41,8 +41,8 @@ namespace Prime.Models
 
         public override int GetHashCode()
         {
-            var hashCode = 352033288;
-            hashCode = hashCode * -1521134295 + Code.GetHashCode();
+            var hashCode = 352_033_288;
+            hashCode = hashCode * -1_521_134_295 + Code.GetHashCode();
             return hashCode;
         }
     }
