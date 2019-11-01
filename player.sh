@@ -63,8 +63,8 @@ function build() {
 }
 
 function deploy() {
-    source ./"${COMPONENT}.sh"
-    echo "Deploying ${COMPONENT} (${APP_NAME}) to $2 ..."
+    source ./"$1.conf"
+    echo "Deploying $1 (${APP_NAME}) to $2 ..."
     deployPresent=$(oc get dc/"${APP_NAME}-${BRANCH_LOWER}" --ignore-not-found=true)
     if [ -z "${deployPresent}" ];
     then 
@@ -96,7 +96,7 @@ function deploy() {
 }
 
 function deleteBc() {
-    source ./"$1.sh"
+    source ./"$1.conf"
     deployPresent=$(oc get bc/"${APP_NAME}-${BRANCH_LOWER}" --ignore-not-found=true)
     if [ -z "${deployPresent}" ];
     then 
@@ -104,7 +104,7 @@ function deleteBc() {
     else 
         MODE="create"
     fi;
-    echo "Deleting ${COMPONENT} from $2 ..."
+    echo "Deleting $1 from $2 ..."
     echo "${PROJECT_PREFIX}-$2"
     oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
     -p NAME="${APP_NAME}" \
@@ -118,7 +118,7 @@ function deleteBc() {
 }
 
 function deleteDc() {
-    source ./"$1.sh"
+    source ./"$1.conf"
     deployPresent=$(oc get dc/"${APP_NAME}-${BRANCH_LOWER}" --ignore-not-found=true)
     if [ -z "${deployPresent}" ];
     then 
@@ -126,7 +126,7 @@ function deleteDc() {
     else 
         MODE="create"
     fi;
-    echo "Deleting ${COMPONENT} from $2 ..."
+    echo "Deleting $1 from $2 ..."
     echo "${PROJECT_PREFIX}-$2"
     oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
     -p NAME="${APP_NAME}" \
@@ -140,13 +140,13 @@ function deleteDc() {
 }
 
 function ocApply() {
-    source ./"${COMPONENT}.sh"
+    source ./"$1.conf"
     echo "ocApply..."
     echo "${PROJECT_PREFIX}-$2"
-    if [ ${COMPONENT} == "build" ];
+    if [ $1 == "build" ];
     then 
         configType="bc"
-    elif [ ${COMPONENT} == "deploy" ];
+    elif [ $1 == "deploy" ];
     then 
         configType="dc"
     fi
@@ -166,7 +166,7 @@ function ocApply() {
     -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}"  \
     -p OC_NAMESPACE="${PROJECT_PREFIX}" \
     -p OC_APP="$3" | oc apply -f - --namespace="${PROJECT_PREFIX}-$3" 
-    if [[ ${COMPONENT} == "build" &&  "$2" != "postgresql" ]];
+    if [[ $1 == "build" &&  "$2" != "postgresql" ]];
     then
         echo "Building..."
         oc start-build $2${SUFFIX} -n ${PROJECT_PREFIX}-$3 --wait --follow
