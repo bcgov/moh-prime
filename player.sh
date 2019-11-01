@@ -239,6 +239,11 @@ function cleanup() {
         oc delete -n ${PROJECT_PREFIX}-dev $i
     done
 }
+
+function sonar() {
+    build sonar dev
+    deploy sonar dev
+}
 # Build an deploy are very alike, require similar logic for config injestion.
 # This takes in Git, Jenkins and system variables to the template that will be processed.
 
