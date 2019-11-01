@@ -219,7 +219,26 @@ function cleanOcArtifacts() {
     done
 }
 
-
+function cleanup() {
+    artifactItems=$(oc get all -n ${PROJECT_PREFIX}-dev | grep -i "-$1"  | column -t | awk '{print $1}' | sort)
+    echo "${artifactItems}"
+    for i in ${artifactItems};
+    do
+        oc delete -n ${PROJECT_PREFIX}-dev $i
+    done
+    artifactSecrets=$(oc get secrets -n ${PROJECT_PREFIX}-dev | grep -i "-$1"  | column -t | awk '{print $1}' | sort)
+    echo "${artifactSecrets}"
+    for i in ${artifactSecrets};
+    do
+        oc delete -n ${PROJECT_PREFIX}-dev secret/"$i"
+    done
+    artifactStorage=$(oc get all -n ${PROJECT_PREFIX}-dev | grep -i "-$1"  | column -t | awk '{print $1}' | sort)
+    echo "${artifactSorage}"
+    for i in ${artifactStorage};
+    do
+        oc delete -n ${PROJECT_PREFIX}-dev $i
+    done
+}
 # Build an deploy are very alike, require similar logic for config injestion.
 # This takes in Git, Jenkins and system variables to the template that will be processed.
 
@@ -240,7 +259,7 @@ case "$1" in
         zap $2 $3
         ;;
     cleanup)
-        cleanup
+        cleanup $2
         ;;
     *)
     echo "Usage: $0 {ocApply|sonar|zap|promote} [build|depoly] <app> <dev|test|prod>"
