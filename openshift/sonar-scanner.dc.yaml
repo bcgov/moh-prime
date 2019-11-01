@@ -1,7 +1,7 @@
 kind: Template
 apiVersion: v1
 metadata:
-  name: dotnet-webapi-dc
+  name: sonar-scanner-dc
   creationTimestamp: null
 parameters:
   - name: NAME
@@ -16,7 +16,7 @@ parameters:
     required: true
   - name: SOURCE_CONTEXT_DIR
     required: true
-    value: prime-dotnet-webapi
+    value: sonar-scanner
   - name: SOURCE_REPOSITORY_URL
     required: true
     value: 'https://github.com/bcgov/moh-prime'
