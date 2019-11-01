@@ -121,3 +121,4 @@ objects:
       io.kompose.service: "${NAME}${SUFFIX}"
   status:
     loadBalancer: {}
+    
