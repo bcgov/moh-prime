@@ -50,8 +50,18 @@ namespace Prime
                         IdentityModelEventSource.ShowPII = true;
                         options.RequireHttpsMetadata = false;
                     }
-                    options.Audience = configuration["Jwt:Audience"];
-                    options.MetadataAddress = configuration["Jwt:WellKnown"];
+                    var audience = System.Environment.GetEnvironmentVariable("JWT_AUDIENCE");
+                    if (audience == null)
+                    {
+                        audience = configuration["Jwt:Audience"];
+                    }
+                    var wellKnownConfig = System.Environment.GetEnvironmentVariable("JWT_WELL_KNOWN_CONFIG");
+                    if (wellKnownConfig == null)
+                    {
+                        wellKnownConfig = configuration["Jwt:WellKnown"];
+                    }
+                    options.Audience = audience;
+                    options.MetadataAddress = wellKnownConfig;
                     options.Events = new JwtBearerEvents
                     {
                         OnAuthenticationFailed = c =>
