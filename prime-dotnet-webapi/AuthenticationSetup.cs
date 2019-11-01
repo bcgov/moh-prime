@@ -50,9 +50,19 @@ namespace Prime
                         IdentityModelEventSource.ShowPII = true;
                         options.RequireHttpsMetadata = false;
                     }
-                    options.Audience = configuration["Jwt:Audience"];
-                    options.MetadataAddress = configuration["Jwt:WellKnown"];
-                    options.Events = new JwtBearerEvents()
+                    var audience = System.Environment.GetEnvironmentVariable("JWT_AUDIENCE");
+                    if (audience == null)
+                    {
+                        audience = configuration["Jwt:Audience"];
+                    }
+                    var wellKnownConfig = System.Environment.GetEnvironmentVariable("JWT_WELL_KNOWN_CONFIG");
+                    if (wellKnownConfig == null)
+                    {
+                        wellKnownConfig = configuration["Jwt:WellKnown"];
+                    }
+                    options.Audience = audience;
+                    options.MetadataAddress = wellKnownConfig;
+                    options.Events = new JwtBearerEvents
                     {
                         OnAuthenticationFailed = c =>
                         {
@@ -66,7 +76,7 @@ namespace Prime
                             }
                             return c.Response.WriteAsync("An error occured processing your authentication.");
                         },
-                        OnTokenValidated = async context => await OnTokenValidated(context)
+                        OnTokenValidated = async context => await OnTokenValidatedAsync(context)
                     };
                 });
 
@@ -80,7 +90,7 @@ namespace Prime
                 });
         }
 
-        private static Task OnTokenValidated(TokenValidatedContext context)
+        private static Task OnTokenValidatedAsync(TokenValidatedContext context)
         {
             if (context.SecurityToken is JwtSecurityToken accessToken
                     && context.Principal.Identity is ClaimsIdentity identity

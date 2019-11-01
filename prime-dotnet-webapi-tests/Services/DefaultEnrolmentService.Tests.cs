@@ -142,12 +142,12 @@ namespace PrimeTests.Services
             await _dbContext.SaveChangesAsync();
 
             // get the enrolments through the service layer code
-            var enrolmentsInProgress = await _service.GetEnrolmentsAsync(new EnrolmentSearchOptions { statusCode = Status.IN_PROGRESS_CODE });
+            var enrolmentsInProgress = await _service.GetEnrolmentsAsync(new EnrolmentSearchOptions { StatusCode = Status.IN_PROGRESS_CODE });
             Assert.NotNull(enrolmentsInProgress);
             Assert.Equal(3, enrolmentsInProgress.Count());
 
             // get the enrolments through the service layer code
-            var enrolmentsSubmitted = await _service.GetEnrolmentsAsync(new EnrolmentSearchOptions { statusCode = Status.SUBMITTED_CODE });
+            var enrolmentsSubmitted = await _service.GetEnrolmentsAsync(new EnrolmentSearchOptions { StatusCode = Status.SUBMITTED_CODE });
             Assert.NotNull(enrolmentsSubmitted);
             Assert.Empty(enrolmentsSubmitted);
         }

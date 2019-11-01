@@ -296,9 +296,15 @@ namespace PrimeTests.Utils
         {
             var request = CreateRequest<T>(method, requestUri, subject, payload);
 
+            var audience = System.Environment.GetEnvironmentVariable("JWT_AUDIENCE");
+            if (audience == null)
+            {
+                audience = Startup.StaticConfig["Jwt:Audience"];
+            }
+
             // replace the token - with an admin version of the token
             var _token = TestUtils.TokenBuilder()
-                 .ForAudience(Startup.StaticConfig["Jwt:Audience"])
+                 .ForAudience(audience)
                  .ForSubject(subject.ToString())
                  .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_ADMIN_ROLE)
                  .BuildToken();

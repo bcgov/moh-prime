@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Prime.Models
@@ -10,9 +11,10 @@ namespace Prime.Models
         public IEnumerable<string> Errors { get; }
 
         public ApiBadRequestResponse(ModelStateDictionary modelState)
-            : base(400)
+            : base(StatusCodes.Status400BadRequest)
         {
-            if (modelState.IsValid)
+            if (modelState != null
+                    && modelState.IsValid)
             {
                 throw new ArgumentException("ModelState must be invalid", nameof(modelState));
             }

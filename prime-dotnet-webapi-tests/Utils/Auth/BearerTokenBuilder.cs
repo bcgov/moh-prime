@@ -109,7 +109,7 @@ namespace PrimeTests.Utils.Auth
         {
             if (_signingCertificate == null)
             {
-                throw new InvalidOperationException(
+                throw new ArgumentNullException(
                     "You must specify an X509 certificate to use for signing the JWT Token");
             }
 
