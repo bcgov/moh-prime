@@ -16,8 +16,10 @@ parameters:
     required: true
   - name: SOURCE_CONTEXT_DIR
     required: true
+    value: sonar-scanner
   - name: SOURCE_REPOSITORY_URL
     required: true
+    value: 'https://github.com/bcgov/moh-prime'
   - name: SOURCE_REPOSITORY_REF
     required: true
   - name: OC_NAMESPACE
@@ -32,9 +34,17 @@ objects:
       labels:
         io.kompose.service: sonar-runner
       name: sonar-runner
-    spec: {}
+    spec: 
+      tags:
+        - annotations: null
+          from:
+            kind: DockerImage
+            name: '${NAME}${SUFFIX}'
+          generation: null
+          importPolicy: {}
+          name: latest
     status:
-      dockerImageRepository: ""
+      dockerImageRepository: ''
   - apiVersion: v1
     kind: BuildConfig
     metadata:

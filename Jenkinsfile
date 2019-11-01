@@ -4,7 +4,7 @@ pipeline {
         disableResume()
     }
     stages {
-        /*
+        /* Will uncomment before the merge
         stage('Build') {
             agent { label 'master' }
             steps {
@@ -32,6 +32,7 @@ pipeline {
             }
         }
         */
+        // This is the work on the current branch
         stage('Code Quality Check') {
             agent { label 'master' }
             steps {
