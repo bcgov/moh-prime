@@ -1,11 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <RootNamespace>PrimeTests</RootNamespace>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Bogus" Version="28.3.1" />
     <PackageReference Include="coverlet.msbuild" Version="2.7.0">
@@ -25,18 +23,14 @@
     <PackageReference Include="coverlet.collector" Version="1.1.0" />
     <PackageReference Include="XunitXml.TestLogger" Version="2.1.26" />
   </ItemGroup>
-  
   <ItemGroup>
     <ProjectReference Include="..\prime-dotnet-webapi\prime.csproj" />
   </ItemGroup>
-:
   <ItemGroup>
     <EmbeddedResource Include=".\Utils\Auth\prime-api-test.pfx" />
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Include=".\Utils\Auth\well-known\microsoft-openid-config.json" />
     <EmbeddedResource Include=".\Utils\Auth\well-known\microsoft-wellknown-keys.json" />
   </ItemGroup>
-
 </Project>

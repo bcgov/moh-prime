@@ -1,11 +1,10 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API", "/opt/app-root/app/prime-dotnet-webapi/prime.csproj", "{D4FBF0EE-E179-4385-A524-0BDDDCA1C9A4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrimeAPI", "\opt\app-root\app\prime-dotnet-webapi\prime.csproj", "{D4FBF0EE-E179-4385-A524-0BDDDCA1C9A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API Tests", "/opt/app-root/app/prime-dotnet-webapi-tests/PrimeTests.csproj", "{EFE286F1-F4F2-4709-946A-381B99A06C87}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrimeAPITests", "\opt\app-root\app\prime-dotnet-webapi-tests\PrimeTests.csproj", "{EFE286F1-F4F2-4709-946A-381B99A06C87}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
