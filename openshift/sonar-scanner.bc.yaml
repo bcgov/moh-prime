@@ -1,7 +1,7 @@
 kind: Template
 apiVersion: v1
 metadata:
-  name: dotnet-webapi-bc
+  name: sonar-scanner-bc
   creationTimestamp: null
 parameters:
   - name: NAME
@@ -16,8 +16,10 @@ parameters:
     required: true
   - name: SOURCE_CONTEXT_DIR
     required: true
+    value: sonar-scanner
   - name: SOURCE_REPOSITORY_URL
     required: true
+    value: 'https://github.com/bcgov/moh-prime'
   - name: SOURCE_REPOSITORY_REF
     required: true
   - name: OC_NAMESPACE
@@ -30,24 +32,9 @@ objects:
     metadata:
       creationTimestamp: null
       labels:
-        io.kompose.service: '${NAME}${SUFFIX}'
-      name: '${NAME}${SUFFIX}'
-    spec:
-      containers:
-        - env:
-            - name: PATH
-              value: '$PATH:/opt/rh/rh-dotnet22/root/usr/lib64/dotnet'
-            - name: ASPNETCORE_ENVIRONMENT
-              value: Development
-            - name: ASPNETCORE_HTTPS_PORT
-              value: '5001'
-            - name: ASPNETCORE_URLS
-              value: 'http://+:8080'
-            - name: DB_CONNECTION_STRING
-              value: >-
-                host=postgresql${SUFFIX};port=5432;database=postgres;username=postgres;password=postgres
-            - name: JWT_SIGNING_KEY
-              value: SdqlA0Y5e6HMAK1wm6iHHHz2u37XGtlo
+        io.kompose.service: sonar-runner
+      name: sonar-runner
+    spec: 
       tags:
         - annotations: null
           from:

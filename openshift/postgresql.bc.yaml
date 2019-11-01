@@ -1,49 +1,48 @@
----
 kind: Template
 apiVersion: v1
 metadata:
   name: postgresql-bc
-  creationTimestamp: 
+  creationTimestamp: null
 parameters:
-- name: NAME
-  displayName: Name
-  description: A prefix appended to all objects
-  required: true
-- name: SUFFIX
-  displayName: Name Suffix
-  description: A suffix appended to all objects
-  required: false
-- name: VERSION
-  required: true
-- name: SOURCE_CONTEXT_DIR
-  required: true
-- name: SOURCE_REPOSITORY_URL
-  required: true
-- name: SOURCE_REPOSITORY_REF
-  required: true
-- name: OC_NAMESPACE
-  required: true
-- name: OC_APP
-  required: true
+  - name: NAME
+    displayName: Name
+    description: A prefix appended to all objects
+    required: true
+  - name: SUFFIX
+    displayName: Name Suffix
+    description: A suffix appended to all objects
+    required: false
+  - name: VERSION
+    required: true
+  - name: SOURCE_CONTEXT_DIR
+    required: true
+  - name: SOURCE_REPOSITORY_URL
+    required: true
+  - name: SOURCE_REPOSITORY_REF
+    required: true
+  - name: OC_NAMESPACE
+    required: true
+  - name: OC_APP
+    required: true
 objects:
-- kind: ImageStream
-  apiVersion: v1
-  metadata:
-    name: "${NAME}${SUFFIX}"
-    labels:
-      shared: 'true'
-    annotations: {}
-  spec:
-    lookupPolicy:
-      local: false
-    tags:
-    - name: "${NAME}"
-      annotations: 
-      from:
-        kind: ImageStreamTag
-        name: postgresql:9.6
-        namespace: openshift
-      generation: 1
-      importPolicy: {}
-      referencePolicy:
-        type: Local
+  - kind: ImageStream
+    apiVersion: v1
+    metadata:
+      name: '${NAME}${SUFFIX}'
+      labels:
+        shared: 'true'
+      annotations: {}
+    spec:
+      lookupPolicy:
+        local: false
+      tags:
+        - name: '${NAME}'
+          annotations: null
+          from:
+            kind: ImageStreamTag
+            name: 'postgresql'
+            namespace: openshift
+          generation: 1
+          importPolicy: {}
+          referencePolicy:
+            type: Local

@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: sonar-runner
+  name: sonar-runner
+spec:
+  replicas: 1
+  selector:
+    io.kompose.service: sonar-runner
+  strategy:
+    resources: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: sonar-runner
+    spec:
+      containers:
+      - image: ' '
+        name: sonar-scanner
+        resources: {}
+      restartPolicy: Always
+  test: false
+  triggers:
+  - type: ConfigChange
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - sonar-scanner
+      from:
+        kind: ImageStreamTag
+        name: sonar-runner:latest
+    type: ImageChange
+status: {}
