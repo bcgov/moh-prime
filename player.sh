@@ -3,9 +3,9 @@
 #export PROJECT_PREFIX="dqszvc"
 #export GIT_URL='https://github.com/bcgov/moh-prime.git'
 #export BRANCH_LOWER=`echo "${BRANCH_NAME}" | awk '{print tolower($0)}'`
-export ACTION=$1
-export COMPONENT=$2
-export OC_APP=$3
+#export ACTION=$1
+#export COMPONENT=$2
+#export OC_APP=$3
 # source ./project.sh
 # source ./functions.sh
 function variablePopulation() {
@@ -21,8 +21,8 @@ function variablePopulation() {
 variablePopulation
 
 function build() {
-    source ./"$COMPONENT.conf"
-    echo "Building $COMPONENT (${APP_NAME}) to $PROJECT_PREFIX-$OC_APP..."
+    source ./"$2.conf"
+    echo "Building $2 (${APP_NAME}) to $PROJECT_PREFIX-$3..."
     buildPresent=$(oc get bc/"$APP_NAME-$BRANCH_LOWER" --ignore-not-found=true)
     if [ -z "${buildPresent}" ];
     then 
@@ -55,8 +55,8 @@ function build() {
     fi;
     if [ "$BUILD_REQUIRED" == true ];
     then
-        echo "Building oc start-build $APP_NAME$SUFFIX -n $PROJECT_PREFIX-$OC_APP --wait --follow ..."
-        oc start-build "$APP_NAME$SUFFIX" -n "$PROJECT_PREFIX-$OC_APP" --wait --follow 
+        echo "Building oc start-build $APP_NAME$SUFFIX -n $PROJECT_PREFIX-$3 --wait --follow ..."
+        oc start-build "$APP_NAME$SUFFIX" -n "$PROJECT_PREFIX-$3" --wait --follow 
     else
         echo "Deployment should be automatic..."
     fi
@@ -96,7 +96,7 @@ function deploy() {
 }
 
 function deleteBc() {
-    source ./"$COMPONENT.sh"
+    source ./"$2.sh"
     deployPresent=$(oc get bc/"${APP_NAME}-${BRANCH_LOWER}" --ignore-not-found=true)
     if [ -z "${deployPresent}" ];
     then 
@@ -104,7 +104,7 @@ function deleteBc() {
     else 
         MODE="create"
     fi;
-    echo "Deleting ${COMPONENT} from $OC_APP ..."
+    echo "Deleting ${COMPONENT} from $3 ..."
     echo "${PROJECT_PREFIX}-${OC_APP}"
     oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
     -p NAME="${APP_NAME}" \
@@ -118,7 +118,7 @@ function deleteBc() {
 }
 
 function deleteDc() {
-    source ./"$COMPONENT.sh"
+    source ./"$2.sh"
     deployPresent=$(oc get dc/"${APP_NAME}-${BRANCH_LOWER}" --ignore-not-found=true)
     if [ -z "${deployPresent}" ];
     then 
@@ -176,7 +176,7 @@ function ocApply() {
 }
 
 function sonar(){
-    OC_APP="$OC_APP"
+    OC_APP="$3"
     oc process -f openshift/sonar.pod.yaml \
     -p NAME="sonar-runner" \
     -p VERSION="${BUILD_NUMBER}" \
