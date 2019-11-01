@@ -43,41 +43,42 @@ export class AuthenticationGuard extends KeycloakAuthGuard implements CanActivat
    */
   public isAccessAllowed(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      if (!this.authenticated) {
-        const routes = this.config.routes;
-        const adminRoutes = [routes.provision, routes.admin];
-        const moduleRoutes = [routes.enrolment, ...adminRoutes];
-
-        const redirectUri = environment.loginRedirectUrl + state.url;
-        const modulePath = redirectUri.slice(1).split('/').shift();
-
-        // Attempt to directly redirect the user to authenticate
-        // using Keycloak, otherwise redirect to the enrollee
-        // authentication
-        if (moduleRoutes.includes(modulePath)) {
-          const idpHint = (adminRoutes.includes(modulePath))
-            ? AuthProvider.IDIR
-            : AuthProvider.BCSC;
-
-          // Capture the user's current location, and provide it to
-          // Keycloak to redirect the user to where they originated
-          // once authenticated
-          const options: KeycloakLoginOptions = {
-            redirectUri,
-            idpHint
-          };
-
-          this.keycloakAngular.login(options)
-            .catch(e => this.logger.error(e));
-        } else {
-          this.router.navigate([this.config.routes.auth]);
-        }
-
-        return reject(false);
+      if (this.authenticated) {
+        // Allow current route access
+        return resolve(true);
       }
 
-      // Otherwise, allow current route access
-      return resolve(true);
+      const routes = this.config.routes;
+      const adminRoutes = [routes.provision, routes.admin];
+      const moduleRoutes = [routes.enrolment, ...adminRoutes];
+      const targetModule = state.url.slice(1).split('/').shift();
+
+      // Attempt to directly redirect the user to authenticate
+      // using Keycloak, otherwise redirect to the enrollee
+      // authentication
+      if (moduleRoutes.includes(targetModule)) {
+        // Capture the user's current location, and provide it to
+        // Keycloak to redirect the user to where they originated
+        // once authenticated
+        const redirectUri = `${environment.loginRedirectUrl}${state.url}`;
+        const idpHint = (adminRoutes.includes(targetModule))
+          ? AuthProvider.IDIR
+          : AuthProvider.BCSC;
+        const options: KeycloakLoginOptions = {
+          redirectUri,
+          idpHint
+        };
+
+        this.keycloakAngular.login(options)
+          .catch((e) => {
+            this.logger.error(e);
+            this.router.navigate([this.config.routes.auth]);
+          });
+      } else {
+        this.router.navigate([this.config.routes.auth]);
+      }
+
+      return reject(false);
     });
   }
 }
