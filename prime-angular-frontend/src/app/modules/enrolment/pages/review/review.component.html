@@ -17,14 +17,13 @@
       <dl class="row mb-4">
         <dt class="col-sm-12 col-md-6 py-1">Name</dt>
         <dd class="col-sm-12 col-md-6 py-1">
-          {{ enrolment.enrollee.firstName }} {{ enrolment.enrollee.middleName }} {{ enrolment.enrollee.lastName }}&nbsp;
+          {{ enrolment | enrolment:'fullName' }}&nbsp;
         </dd>
         <ng-container
                       *ngIf="enrolment.enrollee.preferredFirstName || enrolment.enrollee.preferredMiddleName || enrolment.enrollee.preferredLastName">
           <dt class="col-sm-12 col-md-6 py-1">Preferred Name</dt>
           <dd class="col-sm-12 col-md-6 py-1">
-            {{ enrolment.enrollee.preferredFirstName }} {{ enrolment.enrollee.preferredMiddleName }}
-            {{ enrolment.enrollee.preferredLastName }}&nbsp;
+            {{ enrolment | enrolment:'preferredName' }}&nbsp;
           </dd>
         </ng-container>
         <dt class="col-sm-12 col-md-6 py-1">Date of Birth</dt>
