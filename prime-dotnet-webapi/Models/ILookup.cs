@@ -2,10 +2,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Prime.Models
 {
-    public interface ILookup
+    public interface ILookup<T>
     {
         [Key]
-        short Code { get; set; }
+        T Code { get; set; }
         
         [Required]
         string Name { get; set; }

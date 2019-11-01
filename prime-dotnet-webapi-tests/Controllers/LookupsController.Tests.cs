@@ -31,6 +31,8 @@ namespace PrimeTests.Controllers
             Assert.NotEmpty(results.OrganizationTypes);
             Assert.NotEmpty(results.Practices);
             Assert.NotEmpty(results.Statuses);
+            Assert.NotEmpty(results.Countries);
+            Assert.NotEmpty(results.Provinces);
         }
 
         [Fact]

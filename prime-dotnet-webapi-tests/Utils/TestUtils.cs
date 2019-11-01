@@ -194,6 +194,28 @@ namespace PrimeTests.Utils
                 db.AddRange(new Status { Code = Status.DECLINED_TOS_CODE, Name = "Declined TOS (Terms of Service)" });
             }
 
+            if (!db.Set(typeof(Country)).Any())
+            {
+                db.AddRange(new Country { Code = "CA", Name = "Canada" });
+            }
+
+            if (!db.Set(typeof(Province)).Any())
+            {
+                db.AddRange(new Province { Code = "AB", Name = "Alberta" });
+                db.AddRange(new Province { Code = "BC", Name = "British Columbia" });
+                db.AddRange(new Province { Code = "MB", Name = "Manitoba" });
+                db.AddRange(new Province { Code = "NB", Name = "New Brunswick" });
+                db.AddRange(new Province { Code = "NL", Name = "Newfoundland and Labrador" });
+                db.AddRange(new Province { Code = "NS", Name = "Nova Scotia" });
+                db.AddRange(new Province { Code = "ON", Name = "Ontario" });
+                db.AddRange(new Province { Code = "PE", Name = "Prince Edward Island" });
+                db.AddRange(new Province { Code = "QC", Name = "Quebec" });
+                db.AddRange(new Province { Code = "SK", Name = "Saskatchewan" });
+                db.AddRange(new Province { Code = "NT", Name = "Northwest Territories" });
+                db.AddRange(new Province { Code = "NU", Name = "Nunavut" });
+                db.AddRange(new Province { Code = "YT", Name = "Yukon" });
+            }
+
             db.SaveChanges();
         }
 

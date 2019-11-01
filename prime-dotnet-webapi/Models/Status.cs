@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 namespace Prime.Models
 {
     [Table("StatusLookup")]
-    public sealed class Status : BaseAuditable, ILookup, IEquatable<Status>
+    public sealed class Status : BaseAuditable, ILookup<short>, IEquatable<Status>
     {
         public readonly static short IN_PROGRESS_CODE = 1;
         public readonly static short SUBMITTED_CODE = 2;
