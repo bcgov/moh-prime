@@ -11,7 +11,7 @@ RUN mkdir -p /opt/app-root/app
 ENV PATH $PATH:/root/.dotnet/tools:/opt/app-root/app/prime-dotnet-webapi-tests:/opt/app-root/app/.dotnet/tools/:/usr/share/dotnet
 ENV ASPNETCORE_ENVIRONMENT Development
 ENV JAVA_HOME /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.232.b09-0.el7_7.x86_64/jre
-COPY ./sonar-scanner/entrypoint.bash /opt/app-root/app/sonar-scanner/entrypoint.bash 
+COPY entrypoint.bash /opt/app-root/app/sonar-scanner/entrypoint.bash 
 RUN rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm && \
     curl -sL https://rpm.nodesource.com/setup_10.x | bash - && \
     yum install -y -q dotnet-sdk-2.2 java-1.8.0-openjdk-1.8.0.232 gcc-c++ make nodejs nano xterm envsubst git && \

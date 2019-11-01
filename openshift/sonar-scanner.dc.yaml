@@ -60,7 +60,7 @@ objects:
           - name: OC_APP
             value: ${OC_APP}
           - name: BRANCH_NAME
-            value: ${SOURCE_REPOSITORY_REF}
+            value: "${SOURCE_REPOSITORY_REF}"
           image: ' '
           name: sonar-scanner
           resources: {}
