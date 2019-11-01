@@ -31,7 +31,8 @@ export class ProfileComponent implements OnInit {
   public maxBirthDate: moment.Moment;
   public hasPreferredName: boolean;
   public hasMailingAddress: boolean;
-  public provinces: Config[];
+  public countries: Config<string>[];
+  public provinces: Config<string>[];
   public subheadings: { [key: string]: { subheader: string, help: string } };
 
   private isNewEnrolment: boolean;
@@ -50,6 +51,7 @@ export class ProfileComponent implements OnInit {
     private logger: LoggerService,
   ) {
     this.maxBirthDate = moment();
+    this.countries = this.configService.countries;
     this.provinces = this.configService.provinces;
     this.isNewEnrolment = true;
   }
@@ -171,8 +173,8 @@ export class ProfileComponent implements OnInit {
     // TODO: update to use valueChanges by forcing value changes when visible
     // Show mailing address if it exists
     this.hasMailingAddress = !!(
-      mailingAddress.get('country').value ||
-      mailingAddress.get('province').value ||
+      mailingAddress.get('countryCode').value ||
+      mailingAddress.get('provinceCode').value ||
       mailingAddress.get('street').value ||
       mailingAddress.get('city').value ||
       mailingAddress.get('postal').value

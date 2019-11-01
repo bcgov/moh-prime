@@ -52,6 +52,8 @@ namespace PrimeTests.Mocks
         private readonly string ORGANIZATION_TYPE_KEY = typeof(OrganizationType).FullName;
         private readonly string PRACTICE_KEY = typeof(Practice).FullName;
         private readonly string STATUS_KEY = typeof(Status).FullName;
+        private readonly string COUNTRY_KEY = typeof(Country).FullName;
+        private readonly string PROVINCE_KEY = typeof(Province).FullName;
 
         public BaseMockService()
         {
@@ -112,6 +114,26 @@ namespace PrimeTests.Mocks
             });
 
             _fakeDb.Add(STATUS_KEY, _statusMap);
+            
+            _fakeDb.Add(COUNTRY_KEY, new Dictionary<short, Country> {
+                { 1, new Country { Code = "CA", Name = "Canada" } }
+            });
+            
+            _fakeDb.Add(PROVINCE_KEY, new Dictionary<short, Province> {
+                { 1, new Province { Code = "AB", Name = "Alberta" } },
+                { 2, new Province { Code = "BC", Name = "British Columbia" } },
+                { 3, new Province { Code = "MB", Name = "Manitoba" } },
+                { 4, new Province { Code = "NB", Name = "New Brunswick" } },
+                { 5, new Province { Code = "NL", Name = "Newfoundland and Labrador" } },
+                { 6, new Province { Code = "NS", Name = "Nova Scotia" } },
+                { 7, new Province { Code = "ON", Name = "Ontario" } },
+                { 8, new Province { Code = "PE", Name = "Prince Edward Island" } },
+                { 9, new Province { Code = "QC", Name = "Quebec" } },
+                { 10, new Province { Code = "SK", Name = "Saskatchewan" } },
+                { 11, new Province { Code = "NT", Name = "Northwest Territories" } },
+                { 12, new Province { Code = "NU", Name = "Nunavut" } },
+                { 13, new Province { Code = "YT", Name = "Yukon" } }
+            });
 
             this.SeedData();
         }

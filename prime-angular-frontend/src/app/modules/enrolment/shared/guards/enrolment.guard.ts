@@ -16,8 +16,6 @@ import { EnrolmentResource } from '../services/enrolment-resource.service';
   providedIn: 'root'
 })
 export class EnrolmentGuard implements CanActivate, CanActivateChild, CanLoad {
-
-
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router,

@@ -1,9 +1,9 @@
 
+import { Config } from '@config/config.model';
 import { CollegeCertification } from '../../modules/enrolment/shared/models/college-certification.model';
 import { Job } from '../../modules/enrolment/shared/models/job.model';
 import { Organization } from '../../modules/enrolment/shared/models/organization.model';
 import { Enrollee } from '../../modules/enrolment/shared/models/enrollee.model';
-import { Config } from 'protractor';
 import { EnrolmentStatus } from './enrolment-status.model';
 
 export interface Enrolment {
@@ -29,5 +29,5 @@ export interface Enrolment {
   organizations: Organization[];
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;
-  availableStatuses: Config[];
+  availableStatuses: Config<number>[];
 }
