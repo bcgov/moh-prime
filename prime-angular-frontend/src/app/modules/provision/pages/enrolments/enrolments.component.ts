@@ -22,8 +22,8 @@ import { ProvisionResource } from '@provision/shared/services/provision-resource
 })
 export class EnrolmentsComponent implements OnInit {
   public columns: string[];
-  public statuses: Config[];
-  public filteredStatus: Config;
+  public statuses: Config<number>[];
+  public filteredStatus: Config<number>;
   public dataSource: MatTableDataSource<Enrolment>;
 
   constructor(

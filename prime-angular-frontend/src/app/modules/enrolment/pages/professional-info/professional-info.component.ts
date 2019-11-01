@@ -30,11 +30,11 @@ export class ProfessionalInfoComponent implements OnInit {
   public decisions: { code: boolean, name: string }[] = [
     { code: false, name: 'No' }, { code: true, name: 'Yes' }
   ];
-  public colleges: Config[];
-  public licenses: Config[];
-  public practices: Config[];
-  public jobNames: Config[];
-  public filteredJobNames: Observable<Config[]>;
+  public colleges: Config<number>[];
+  public licenses: Config<number>[];
+  public practices: Config<number>[];
+  public jobNames: Config<number>[];
+  public filteredJobNames: Observable<Config<number>[]>;
 
   constructor(
     private route: ActivatedRoute,
@@ -224,19 +224,19 @@ export class ProfessionalInfoComponent implements OnInit {
 
           return (jobName)
             ? this.filterJobNames(jobName)
-            : availableJobs.filter(({ name }: Config) => !selectedJobs.includes(name.toLowerCase()));
+            : availableJobs.filter(({ name }: Config<number>) => !selectedJobs.includes(name.toLowerCase()));
         })
       );
   }
 
-  private filterJobNames(jobName: string): Config[] {
+  private filterJobNames(jobName: string): Config<number>[] {
     const jobsFilter = [...this.jobs.value.map((j: Job) => j.title.toLowerCase()), jobName.toLowerCase()];
 
     return this.jobNames
       // Remove selected jobs from the list of available jobs
-      .filter(({ name }: Config) => !jobsFilter.includes(name.toLowerCase()))
+      .filter(({ name }: Config<number>) => !jobsFilter.includes(name.toLowerCase()))
       // Perform type ahead filtering for auto-complete
-      .filter(({ name }: Config) => name.toLowerCase().indexOf(jobName.toLowerCase()) === 0);
+      .filter(({ name }: Config<number>) => name.toLowerCase().indexOf(jobName.toLowerCase()) === 0);
   }
 
   private clearInputValue() {
