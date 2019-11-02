@@ -31,13 +31,13 @@ objects:
     metadata:
       creationTimestamp: null
       labels:
-        io.kompose.service: '${NAME}${SUFFIX}'
-      name: '${NAME}${SUFFIX}'
+        io.kompose.service: '${NAME}'
+      name: '${NAME}'
     spec:
       completionDeadlineSeconds: 1200
       replicas: 1
       selector:
-        io.kompose.service: '${NAME}${SUFFIX}'
+        io.kompose.service: '${NAME}'
       strategy:
       resources:
         requests:
@@ -50,7 +50,7 @@ objects:
         metadata:
           creationTimestamp: null
           labels:
-            io.kompose.service: '${NAME}${SUFFIX}'
+            io.kompose.service: '${NAME}'
         spec:
           containers:
           - env:
@@ -81,8 +81,8 @@ objects:
     metadata:
       creationTimestamp: null
       labels:
-        io.kompose.service: '${NAME}${SUFFIX}'
-      name: '${NAME}${SUFFIX}'
+        io.kompose.service: '${NAME}'
+      name: '${NAME}'
     spec:
       clusterIP: None
       ports:
@@ -90,6 +90,6 @@ objects:
         port: 55555
         targetPort: 0
       selector:
-        io.kompose.service: '${NAME}${SUFFIX}'
+        io.kompose.service: '${NAME}'
     status:
       loadBalancer: {}

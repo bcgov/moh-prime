@@ -16,7 +16,7 @@ parameters:
     required: true
   - name: SOURCE_CONTEXT_DIR
     required: true
-    value: sonar-scanner
+    value: 'sonar-scanner'
   - name: SOURCE_REPOSITORY_URL
     required: true
     value: 'https://github.com/bcgov/moh-prime'
@@ -39,7 +39,7 @@ objects:
         - annotations: null
           from:
             kind: DockerImage
-            name: '${NAME}${SUFFIX}'
+            name: '${NAME}'
           generation: null
           importPolicy: {}
           name: latest
@@ -55,15 +55,15 @@ objects:
         kompose.version: 1.18.0 (06a2e56)
       creationTimestamp: null
       labels:
-        io.kompose.service: '${NAME}${SUFFIX}'
-      name: '${NAME}${SUFFIX}'
+        io.kompose.service: '${NAME}'
+      name: '${NAME}'
     spec:
       completionDeadlineSeconds: 6000
       nodeSelector: null
       output:
         to:
           kind: ImageStreamTag
-          name: '${NAME}${SUFFIX}:latest'
+          name: ${NAME}:latest
       postCommit: {}
       resources:
         requests:
