@@ -7,7 +7,7 @@ SHELL ["/bin/bash", "-c"]
 WORKDIR /opt/app-root/app
 ENV HOME /opt/app-root/app
 RUN mkdir -p /opt/app-root/
-COPY ./sonarscanner . 
+COPY . . 
 #USER 0
 ENV PATH $PATH:/root/.dotnet/tools:/opt/app-root/app/prime-dotnet-webapi-tests:/opt/app-root/app/.dotnet/tools/:/usr/share/dotnet
 ENV ASPNETCORE_ENVIRONMENT Development
