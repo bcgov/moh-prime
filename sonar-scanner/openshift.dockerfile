@@ -31,4 +31,5 @@ RUN ls -alh && \
     chmod +x /opt/app-root/app/sonar-scanner/entrypoint.bash
 
 USER 1001
-CMD [ "./entrypoint.bash" ]
+CMD [ "tail","-f","/dev/null" ]
+#CMD [ "./entrypoint.bash" ]
