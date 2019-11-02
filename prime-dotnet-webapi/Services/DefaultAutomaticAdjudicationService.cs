@@ -105,8 +105,6 @@ namespace Prime.Services
 
         private class OutsideBritishColumbiaRule : BaseAutomaticAdjudicationRule
         {
-            private readonly static string BRITISH_COLUMBIA_CODE = "British Columbia";
-
             public override ICollection<StatusReason> ProcessRuleInternal(Enrolment enrolment)
             {
                 var result = new List<StatusReason>(0);
@@ -114,11 +112,11 @@ namespace Prime.Services
                 var physicalAddress = enrolment.Enrollee?.PhysicalAddress;
                 var mailingAddress = enrolment.Enrollee?.MailingAddress;
                 if ((physicalAddress != null
-                        && physicalAddress.Province != null
-                        && !physicalAddress.Province.Equals(BRITISH_COLUMBIA_CODE))
+                        && physicalAddress.ProvinceCode != null
+                        && !physicalAddress.ProvinceCode.Equals(Province.BRITISH_COLUMBIA_CODE))
                     || (mailingAddress != null
-                        && mailingAddress.Province != null
-                        && !mailingAddress.Province.Equals(BRITISH_COLUMBIA_CODE)))
+                        && mailingAddress.ProvinceCode != null
+                        && !mailingAddress.ProvinceCode.Equals(Province.BRITISH_COLUMBIA_CODE)))
                 {
                     result.Add(new StatusReason { Code = StatusReason.OUTSIDE_BC_CODE });
                 }

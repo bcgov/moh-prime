@@ -6,6 +6,8 @@ namespace Prime.Models
     [Table("ProvinceLookup")]
     public class Province : BaseAuditable, ILookup<string>
     {
+        public readonly static string BRITISH_COLUMBIA_CODE = "BC";
+
         [Key]
         public string Code { get; set; }
 
