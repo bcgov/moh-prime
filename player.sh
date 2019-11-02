@@ -178,9 +178,9 @@ function ocApply() {
 function sonar(){
     OC_APP="$2"
     oc process -f openshift/sonar-scanner.bc.yaml \
-    | oc apply -f - --namespace="${PROJECT_PREFIX}-$2"
+    | oc apply -f - --namespace="${PROJECT_PREFIX}-$1"
     oc process -f openshift/sonar-scanner.dc.yaml \
-    | oc apply -f - --namespace="${PROJECT_PREFIX}-$2"
+    | oc apply -f - --namespace="${PROJECT_PREFIX}-$1"
 }
 
 function determineMode() {
