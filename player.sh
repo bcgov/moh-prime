@@ -181,6 +181,7 @@ function sonar(){
     | oc apply -f - --namespace="${PROJECT_PREFIX}-$1"
     oc process -f openshift/sonar-scanner.dc.yaml \
     | oc apply -f - --namespace="${PROJECT_PREFIX}-$1"
+    oc start-build sonar-runner -n ${PROJECT_PREFIX}-$1 --wait --follow
 }
 
 function determineMode() {
