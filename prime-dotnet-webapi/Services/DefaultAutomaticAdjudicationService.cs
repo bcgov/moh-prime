@@ -73,7 +73,7 @@ namespace Prime.Services
                         {
                             currentStatus.EnrolmentStatusReasons = new List<EnrolmentStatusReason>(0);
                         }
-                        currentStatus.EnrolmentStatusReasons.Add(new EnrolmentStatusReason { EnrolmentStatus = currentStatus, StatusReason = item });
+                        currentStatus.EnrolmentStatusReasons.Add(new EnrolmentStatusReason { EnrolmentStatus = currentStatus, StatusReasonCode = item.Code });
                     }
                 }
 
