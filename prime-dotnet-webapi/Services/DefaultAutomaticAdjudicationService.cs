@@ -20,6 +20,7 @@ namespace Prime.Services
             _rules.Add(new PumpProviderRule());
             _rules.Add(new CertificationRule());
             _rules.Add(new LicenceClassRule());
+            _rules.Add(new LicenceNumberActiveRule());
         }
 
         public bool QualifiesForAutomaticAdjudication(Enrolment enrolment)

@@ -303,11 +303,8 @@ namespace Prime.Services
                 throw new ArgumentNullException("Could not create an enrolment status, the passed in Status cannot be null.");
             }
 
-            var enrolment = await _context.Enrolments
+            var enrolment = await this.GetBaseEnrolmentQuery()
                 .AsNoTracking()
-                .Include(e => e.Enrollee).ThenInclude(e => e.PhysicalAddress)
-                .Include(e => e.Enrollee).ThenInclude(e => e.MailingAddress)
-                .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.Status)
                 .SingleOrDefaultAsync(e => e.Id == enrolmentId);
             if (enrolment == null)
             {
