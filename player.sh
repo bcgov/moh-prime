@@ -233,11 +233,11 @@ function cleanup() {
     do
         oc delete -n ${PROJECT_PREFIX}-dev secret/"$i"
     done
-    artifactStorage=$(oc get all -n ${PROJECT_PREFIX}-dev | grep -i "\-$1"  | column -t | awk '{print $1}' | sort)
+    artifactStorage=$(oc get pvc -n ${PROJECT_PREFIX}-dev | grep -i "\-$1"  | column -t | awk '{print $1}' | sort)
     echo "${artifactSorage}"
     for i in ${artifactStorage};
     do
-        oc delete -n ${PROJECT_PREFIX}-dev $i
+        oc delete pvc -n ${PROJECT_PREFIX}-dev $i
     done
 }
 
