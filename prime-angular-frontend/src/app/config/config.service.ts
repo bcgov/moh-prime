@@ -2,16 +2,29 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 
-import { Configuration } from './config.model';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
-import { map, catchError } from 'rxjs/operators';
+import { Configuration, Config, PracticeConfig, CollegeConfig } from './config.model';
 import { PrimeHttpResponse } from '@core/models/prime-http-response.model';
+
+export interface IConfigService {
+  practices: PracticeConfig[];
+  colleges: CollegeConfig[];
+  countries: Config<string>[];
+  jobNames: Config<number>[];
+  licenses: Config<number>[];
+  organizationNames: Config<number>[];
+  organizationTypes: Config<number>[];
+  provinces: Config<string>[];
+  statuses: Config<number>[];
+  load(): Observable<Configuration>;
+}
 
 @Injectable({
   providedIn: 'root'
 })
-export class ConfigService {
+export class ConfigService implements IConfigService {
   private configuration: Configuration;
 
   constructor(
@@ -19,39 +32,39 @@ export class ConfigService {
     private http: HttpClient
   ) { }
 
-  public get practices() {
+  public get practices(): PracticeConfig[] {
     return [...this.configuration.practices];
   }
 
-  public get colleges() {
+  public get colleges(): CollegeConfig[] {
     return [...this.configuration.colleges];
   }
 
-  public get countries() {
+  public get countries(): Config<string>[] {
     return [...this.configuration.countries];
   }
 
-  public get jobNames() {
+  public get jobNames(): Config<number>[] {
     return [...this.configuration.jobNames];
   }
 
-  public get licenses() {
+  public get licenses(): Config<number>[] {
     return [...this.configuration.licenses];
   }
 
-  public get organizationNames() {
+  public get organizationNames(): Config<number>[] {
     return [...this.configuration.organizationNames];
   }
 
-  public get organizationTypes() {
+  public get organizationTypes(): Config<number>[] {
     return [...this.configuration.organizationTypes];
   }
 
-  public get provinces() {
+  public get provinces(): Config<string>[] {
     return [...this.configuration.provinces];
   }
 
-  public get statuses() {
+  public get statuses(): Config<number>[] {
     return [...this.configuration.statuses];
   }
 
@@ -63,9 +76,6 @@ export class ConfigService {
     if (!this.configuration) {
       return this.getConfiguration()
         .pipe(
-          // TODO: temporary until provided by config service
-          map(this.addProvinces),
-          map(this.addCountries),
           map((config: Configuration) => this.configuration = config)
         );
     }
@@ -82,37 +92,5 @@ export class ConfigService {
       .pipe(
         map((response: PrimeHttpResponse) => response.result)
       );
-  }
-
-  // TODO: temporary until provided by config service
-  private addProvinces(config: Configuration) {
-    return {
-      provinces: [
-        { code: 'AB', name: 'Alberta' },
-        { code: 'BC', name: 'British Columbia' },
-        { code: 'MB', name: 'Manitoba' },
-        { code: 'NB', name: 'New Brunswick' },
-        { code: 'NL', name: 'Newfoundland and Labrador' },
-        { code: 'NS', name: 'Nova Scotia' },
-        { code: 'ON', name: 'Ontario' },
-        { code: 'PE', name: 'Prince Edward Island' },
-        { code: 'QC', name: 'Quebec' },
-        { code: 'SK', name: 'Saskatchewan' },
-        { code: 'NT', name: 'Northwest Territories' },
-        { code: 'NU', name: 'Nunavut' },
-        { code: 'YT', name: 'Yukon' }
-      ],
-      ...config
-    };
-  }
-
-  // TODO: temporary until provided by config service
-  private addCountries(config: Configuration) {
-    return {
-      countries: [
-        { code: 'CA', name: 'Canada' }
-      ],
-      ...config,
-    };
   }
 }
