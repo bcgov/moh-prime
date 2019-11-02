@@ -3,7 +3,7 @@ pipeline {
     options {
         disableResume()
     }
-    stages {
+    stages {/*
         stage('Build') {
             agent { label 'master' }
             steps {
@@ -30,12 +30,13 @@ pipeline {
             }
         }
         // This is the work on the current branch
+        */
         stage('Code Quality Check') {
             agent { label 'master' }
             steps {
                 echo "Deploy (DEV) ..."
                 //sh "export OC_APP=dev"
-                //sh "./player.sh sonar"
+                sh "./player.sh sonar dev"
                 //sh "./player.sh sonar dotnet-webapi dev"
                 //sh "./player.sh sonar angular-frontend dev"
             }

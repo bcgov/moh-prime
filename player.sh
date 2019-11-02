@@ -177,17 +177,10 @@ function ocApply() {
 
 function sonar(){
     OC_APP="$2"
-    oc process -f openshift/sonar.pod.yaml \
-    -p NAME="sonar-runner" \
-    -p VERSION="${BUILD_NUMBER}" \
-    -p SUFFIX='-'"${BRANCH_LOWER}" \
-    -p SOURCE_CONTEXT_DIR="." \
-    -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
-    -p SOURCE_REPOSITORY_REF="${BRANCH_NAME}" \
-    -p OC_NAMESPACE="${PROJECT_PREFIX}" \
-    -p OC_APP="$2" | oc ${MODE} -f - --namespace="${PROJECT_PREFIX}-$2"
-    echo "Scanning..."
-    sonar-scanner -X
+    oc process -f openshift/sonar-scanner.bc.yaml \
+    | oc apply -f - --namespace="${PROJECT_PREFIX}-$2"
+    oc process -f openshift/sonar-scanner.dc.yaml \
+    | oc apply -f - --namespace="${PROJECT_PREFIX}-$2"
 }
 
 function determineMode() {
