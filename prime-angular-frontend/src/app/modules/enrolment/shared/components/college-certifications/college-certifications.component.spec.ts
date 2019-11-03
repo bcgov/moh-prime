@@ -1,6 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ReactiveFormsModule, FormGroup } from '@angular/forms';
+
+import { MockConfigService } from 'test/mocks/mock-config.service';
 
 import { CollegeCertificationsComponent } from './college-certifications.component';
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { ConfigService } from '@config/config.service';
+import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
 
 describe('CollegeCertificationsComponent', () => {
   let component: CollegeCertificationsComponent;
@@ -8,9 +15,25 @@ describe('CollegeCertificationsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CollegeCertificationsComponent ]
-    })
-    .compileComponents();
+      imports: [
+        HttpClientTestingModule,
+        NgxMaterialModule,
+        ReactiveFormsModule
+      ],
+      declarations: [
+        CollegeCertificationsComponent
+      ],
+      providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        },
+        {
+          provide: ConfigService,
+          useValue: MockConfigService
+        }
+      ]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +42,7 @@ describe('CollegeCertificationsComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create component', () => {
     expect(component).toBeTruthy();
   });
 });
