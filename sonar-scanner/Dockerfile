@@ -14,6 +14,7 @@ ENV ASPNETCORE_ENVIRONMENT Development
 ENV JAVA_HOME /opt/app-root/app/jdk-11.0.2/bin
 ENV PATH $PATH:$JAVA_HOME
 RUN chmod +x *.bash && \
+    chmod +x sonar-scanner/*.bash && \
     useradd jenkins-prod && \
     chmod 777 /opt/app-root/app && \
     rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm && \
@@ -28,14 +29,14 @@ RUN chmod +x *.bash && \
     wget https://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/jnlpJars/agent.jar && \
     mkdir -p /opt/app-root/app/jenkins && \
     mkdir -p /.dotnet && \
-    chown -R 1001:1001 /.dotnet && \
+    chown -R jenkins-prod:jenkins-prod /.dotnet && \
     mkdir -p /.local && \
-    chown -R 1001:1001 /.local && \
+    chown -R jenkins-prod:jenkins-prod /.local && \
     mkdir -p /.nuget && \
-    chown -R 1001:1001 /.nuget && \
+    chown -R jenkins-prod:jenkins-prod/.nuget && \
     mkdir -p /tmp/NuGetScratch/ && \
-    chown -R 1001:1001 /tmp/NuGetScratch/ && \
-    chown -R 1001:1001 /opt/app-root/
+    chown -R jenkins-prod:jenkins-prod /tmp/NuGetScratch/ && \
+    chown -R jenkins-prod:jenkins-prod /opt/app-root/
 
 USER jenkins-prod
 #CMD [ "tail","-f","/dev/null" ]
