@@ -15,7 +15,6 @@ ENV JAVA_HOME /opt/app-root/app
 ENV PATH $PATH:$JAVA_HOME
 RUN chmod +x entrypoint.bash && \
     chmod 777 /opt/app-root/app && \
-    https://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/jnlpJars/agent.jar && \
     rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm && \
     curl -sL https://rpm.nodesource.com/setup_10.x | bash - && \
     yum -y install epel-release && \
@@ -25,6 +24,7 @@ RUN chmod +x entrypoint.bash && \
     npm install -g @angular/cli sonarqube-scanner && \
     dotnet tool install --global coverlet.console && \
     dotnet tool install --global dotnet-sonarscanner --version 4.7.1 && \
+    wget https://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/jnlpJars/agent.jar && \
     mkdir -p /opt/app-root/app/jenkins && \
     mkdir -p /.dotnet && \
     chown -R 1001:1001 /.dotnet && \
@@ -35,7 +35,6 @@ RUN chmod +x entrypoint.bash && \
     mkdir -p /tmp/NuGetScratch/ && \
     chown -R 1001:1001 /tmp/NuGetScratch/ && \
     chown -R 1001:1001 /opt/app-root/
-
 
 USER 1001
 #CMD [ "tail","-f","/dev/null" ]
