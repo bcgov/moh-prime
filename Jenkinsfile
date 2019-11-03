@@ -37,6 +37,7 @@ pipeline {
                 echo "Deploy (DEV) ..."
                 //sh "export OC_APP=dev"
                 sh "./player.sh sonar tools"
+                sh "./sonar-runner.bash"
                 //sh "./player.sh sonar dotnet-webapi dev"
                 //sh "./player.sh sonar angular-frontend dev"
             }
