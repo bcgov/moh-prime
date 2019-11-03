@@ -27,8 +27,7 @@ RUN ls -alh && \
     chown -R 1001:1001 /.nuget && \
     mkdir -p /tmp/NuGetScratch/ && \
     chown -R 1001:1001 /tmp/NuGetScratch/ && \
-    chown -R 1001:1001 /opt/app-root/ && \
-    chmod +x /opt/app-root/app/sonar-scanner/entrypoint.bash
+    chown -R 1001:1001 /opt/app-root/ 
 
 USER 1001
 CMD [ "tail","-f","/dev/null" ]

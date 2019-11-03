@@ -194,21 +194,9 @@ function determineMode() {
 
 # Scrubs all PR assets from the environment
 function cleanOcArtifacts() {
-    artifactItems=$(oc get all -n ${PROJECT_PREFIX}-dev | grep -i "\-${BRANCH_NAME}"  | column -t | awk '{print $1}' | sort)
+    artifactItems=$(oc get all,secrets,pvc -n ${PROJECT_PREFIX}-dev | grep -i "\-${BRANCH_NAME}"  | column -t | awk '{print $1}' | sort)
     echo "${artifactItems}"
     for i in ${artifactItems};
-    do
-        oc delete -n ${PROJECT_PREFIX}-dev $i
-    done
-    artifactSecrets=$(oc get secrets -n ${PROJECT_PREFIX}-dev | grep -i "\-${BRANCH_NAME}"  | column -t | awk '{print $1}' | sort)
-    echo "${artifactSecrets}"
-    for i in ${artifactSecrets};
-    do
-        oc delete -n ${PROJECT_PREFIX}-dev secret/"$i"
-    done
-    artifactStorage=$(oc get all -n ${PROJECT_PREFIX}-dev | grep -i "\-${BRANCH_NAME}"  | column -t | awk '{print $1}' | sort)
-    echo "${artifactSorage}"
-    for i in ${artifactStorage};
     do
         oc delete -n ${PROJECT_PREFIX}-dev $i
     done
