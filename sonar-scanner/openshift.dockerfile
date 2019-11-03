@@ -1,7 +1,7 @@
 #FROM docker-registry.default.svc:5000/dqszvc-tools/dotnet-22-rhel7 
 #FROM mcr.microsoft.com/dotnet/core/sdk:2.2
 #FROM registry.redhat.io/dotnet/dotnet-22-rhel7
-FROM docker-registry.default.svc:5000/dqszvc-dev/centos:7
+FROM docker-registry.default.svc:5000/dqszvc-tools/centos:7
 #FROM centos:7
 SHELL ["/bin/bash", "-c"]
 WORKDIR /opt/app-root/app
