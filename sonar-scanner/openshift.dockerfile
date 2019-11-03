@@ -11,12 +11,17 @@ COPY . .
 #USER 0
 ENV PATH $PATH:/root/.dotnet/tools:/opt/app-root/app/prime-dotnet-webapi-tests:/opt/app-root/app/.dotnet/tools/:/usr/share/dotnet
 ENV ASPNETCORE_ENVIRONMENT Development
-ENV JAVA_HOME /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.232.b09-0.el7_7.x86_64/jre
+ENV JAVA_HOME /opt/app-root/app
+ENV PATH $PATH:$JAVA_HOME
 RUN chmod +x entrypoint.bash && \
+    chmod 777 /opt/app-root/app && \
+    wget https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz && \
+    tar -zxf openjdk-11.0.2_linux-x64_bin.tar.gz && \
+    https://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/jnlpJars/agent.jar && \
     rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm && \
     curl -sL https://rpm.nodesource.com/setup_10.x | bash - && \
     yum -y install epel-release && \
-    yum install -y -q dotnet-sdk-2.2 java-1.8.0-openjdk-1.8.0.232 gcc-c++ make nodejs nano xterm envsubst git wget && \
+    yum install -y -q which dotnet-sdk-2.2 gcc-c++ make nodejs nano xterm envsubst git wget && \
     npm install -g @angular/cli sonarqube-scanner && \
     dotnet tool install --global coverlet.console && \
     dotnet tool install --global dotnet-sonarscanner --version 4.7.1 && \
@@ -29,7 +34,7 @@ RUN chmod +x entrypoint.bash && \
     chown -R 1001:1001 /.nuget && \
     mkdir -p /tmp/NuGetScratch/ && \
     chown -R 1001:1001 /tmp/NuGetScratch/ && \
-    chown -R 1001:1001 /opt/app-root/ 
+    chown -R 1001:1001 /opt/app-root/
 
 
 USER 1001
