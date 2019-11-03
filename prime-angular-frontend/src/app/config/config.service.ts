@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
-import { Configuration, Config, PracticeConfig, CollegeConfig } from './config.model';
+import { Configuration, Config, PracticeConfig, CollegeConfig, LicenseConfig } from './config.model';
 import { PrimeHttpResponse } from '@core/models/prime-http-response.model';
 
 export interface IConfigService {
@@ -48,7 +48,7 @@ export class ConfigService implements IConfigService {
     return [...this.configuration.jobNames];
   }
 
-  public get licenses(): Config<number>[] {
+  public get licenses(): LicenseConfig[] {
     return [...this.configuration.licenses];
   }
 
