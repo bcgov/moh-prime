@@ -22,7 +22,7 @@ describe('ProvisionGuard', () => {
         },
         {
           provide: KeycloakService,
-          useValue: MockKeycloakService
+          useClass: MockKeycloakService
         }
       ]
     });

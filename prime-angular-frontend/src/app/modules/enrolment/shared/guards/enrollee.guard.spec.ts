@@ -23,7 +23,7 @@ describe('EnrolleeGuard', () => {
           },
           {
             provide: KeycloakService,
-            useValue: MockKeycloakService
+            useClass: MockKeycloakService
           }
         ]
       }

@@ -22,7 +22,7 @@ describe('AuthorizationRedirectGuard', () => {
         },
         {
           provide: KeycloakService,
-          useValue: MockKeycloakService
+          useClass: MockKeycloakService
         }
       ]
     });

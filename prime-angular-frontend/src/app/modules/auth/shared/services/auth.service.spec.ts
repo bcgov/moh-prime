@@ -11,7 +11,7 @@ describe('AuthService', () => {
     providers: [
       {
         provide: KeycloakService,
-        useValue: MockKeycloakService
+        useClass: MockKeycloakService
       }
     ]
   }));

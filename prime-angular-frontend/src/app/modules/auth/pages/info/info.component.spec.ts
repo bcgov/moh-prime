@@ -23,7 +23,7 @@ describe('InfoComponent', () => {
           },
           {
             provide: AuthService,
-            useValue: MockAuthService
+            useClass: MockAuthService
           }
         ]
       }

@@ -19,7 +19,7 @@ describe('ErrorHandlerInterceptor', () => {
       },
       {
         provide: AuthService,
-        useValue: MockAuthService
+        useClass: MockAuthService
       }
     ]
   }));
