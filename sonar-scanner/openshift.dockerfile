@@ -19,6 +19,7 @@ RUN ls -alh && \
     npm install -g @angular/cli sonarqube-scanner && \
     dotnet tool install --global coverlet.console && \
     dotnet tool install --global dotnet-sonarscanner --version 4.7.1 && \
+    mkdir -p /opt/app-root/app/jenkins && \
     mkdir -p /.dotnet && \
     chown -R 1001:1001 /.dotnet && \
     mkdir -p /.local && \
@@ -28,6 +29,7 @@ RUN ls -alh && \
     mkdir -p /tmp/NuGetScratch/ && \
     chown -R 1001:1001 /tmp/NuGetScratch/ && \
     chown -R 1001:1001 /opt/app-root/ 
+
 
 USER 1001
 CMD [ "tail","-f","/dev/null" ]
