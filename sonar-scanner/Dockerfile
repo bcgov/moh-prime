@@ -8,12 +8,13 @@ WORKDIR /opt/app-root/app
 ENV HOME /opt/app-root/app
 RUN mkdir -p /opt/app-root/
 COPY . . 
-#USER 0
+USER 0
 ENV PATH $PATH:/root/.dotnet/tools:/opt/app-root/app/prime-dotnet-webapi-tests:/opt/app-root/app/.dotnet/tools/:/usr/share/dotnet
 ENV ASPNETCORE_ENVIRONMENT Development
-ENV JAVA_HOME /opt/app-root/app
+ENV JAVA_HOME /opt/app-root/app/jdk-11.0.2/bin
 ENV PATH $PATH:$JAVA_HOME
-RUN chmod +x entrypoint.bash && \
+RUN chmod +x *.bash && \
+    useradd jenkins-prod && \
     chmod 777 /opt/app-root/app && \
     rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm && \
     curl -sL https://rpm.nodesource.com/setup_10.x | bash - && \
@@ -36,6 +37,6 @@ RUN chmod +x entrypoint.bash && \
     chown -R 1001:1001 /tmp/NuGetScratch/ && \
     chown -R 1001:1001 /opt/app-root/
 
-USER 1001
+USER jenkins-prod
 #CMD [ "tail","-f","/dev/null" ]
 CMD [ "./entrypoint.bash" ]
