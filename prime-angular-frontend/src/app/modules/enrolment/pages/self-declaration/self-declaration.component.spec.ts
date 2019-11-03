@@ -41,7 +41,7 @@ describe('SelfDeclarationComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create SelfDeclarationComponent', () => {
+  it('should create component', () => {
     expect(component).toBeTruthy();
   });
 });

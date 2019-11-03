@@ -51,7 +51,7 @@ describe('ReviewComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create ReviewComponent', () => {
+  it('should create component', () => {
     expect(component).toBeTruthy();
   });
 });

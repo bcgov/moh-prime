@@ -49,7 +49,7 @@ describe('SummaryComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create SummaryComponent', () => {
+  it('should create component', () => {
     expect(component).toBeTruthy();
   });
 });

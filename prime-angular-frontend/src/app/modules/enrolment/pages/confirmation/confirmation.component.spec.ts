@@ -29,7 +29,7 @@ describe('ConfirmationComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create ConfirmationComponent', () => {
+  it('should create component', () => {
     expect(component).toBeTruthy();
   });
 });

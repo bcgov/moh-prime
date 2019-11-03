@@ -48,7 +48,7 @@ describe('PharmanetAccessComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create PharmanetAccessComponent', () => {
+  it('should create component', () => {
     expect(component).toBeTruthy();
   });
 });

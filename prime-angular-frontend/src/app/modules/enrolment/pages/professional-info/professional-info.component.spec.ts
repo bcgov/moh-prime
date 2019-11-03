@@ -50,7 +50,7 @@ describe('ProfessionalInfoComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create ProfessionalInfoComponent', () => {
+  it('should create component', () => {
     expect(component).toBeTruthy();
   });
 });

@@ -57,7 +57,7 @@ describe('ProfileComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create ProfileComponent', () => {
+  it('should create component', () => {
     expect(component).toBeTruthy();
   });
 });
