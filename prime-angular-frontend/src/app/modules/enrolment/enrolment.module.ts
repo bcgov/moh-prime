@@ -5,7 +5,6 @@ import { EnrolmentRoutingModule } from './enrolment-routing.module';
 
 import { ProfileComponent } from './pages/profile/profile.component';
 import { SelfDeclarationComponent } from './pages/self-declaration/self-declaration.component';
-import { ProfessionalInfoComponent } from './pages/professional-info/professional-info.component';
 import { PharmanetAccessComponent } from './pages/pharmanet-access/pharmanet-access.component';
 import { ReviewComponent } from './pages/review/review.component';
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
@@ -14,12 +13,13 @@ import { AccessAgreementComponent } from './pages/access-agreement/access-agreem
 import { CollegeCertificationsComponent } from './shared/components/college-certifications/college-certifications.component';
 import { PageTitleComponent } from './shared/components/page-title/page-title.component';
 import { SummaryComponent } from './pages/summary/summary.component';
+import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
+import { DeviceProviderComponent } from './pages/device-provider/device-provider.component';
 
 
 @NgModule({
   declarations: [
     ProfileComponent,
-    ProfessionalInfoComponent,
     SelfDeclarationComponent,
     PharmanetAccessComponent,
     ReviewComponent,
@@ -28,10 +28,13 @@ import { SummaryComponent } from './pages/summary/summary.component';
     PageTitleComponent,
     AccessAgreementComponent,
     SummaryComponent,
+    RegulatoryComponent,
+    DeviceProviderComponent,
   ],
   imports: [
     SharedModule,
     EnrolmentRoutingModule
-  ]
+  ],
+  exports: [RegulatoryComponent, DeviceProviderComponent]
 })
 export class EnrolmentModule { }
