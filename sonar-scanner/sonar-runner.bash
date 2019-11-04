@@ -3,10 +3,7 @@ function dotnetTests()
 {   
     echo "Starting tests..." 
     dotnet build 
-    coverlet "./prime-dotnet-webapi-tests/bin/Debug/netcoreapp2.2/PrimeTests.dll" \ 
-        --target "dotnet" \ 
-        --targetargs "test . --no-build --logger "trx;LogFileName=TestResults.trx" --logger "xunit;LogFileName=TestResults.xml" --results-directory ./BuildReports/UnitTests" \ 
-        -f opencover -o ./BuildReports/Coverage/coverage 
+    coverlet "./prime-dotnet-webapi-tests/bin/Debug/netcoreapp2.2/PrimeTests.dll" --target "dotnet" --targetargs "test . --no-build --logger "trx;LogFileName=TestResults.trx" --logger "xunit;LogFileName=TestResults.xml" --results-directory ./BuildReports/UnitTests" -f opencover -o ./BuildReports/Coverage/coverage 
     dotnet build-server shutdown 
     dotnet sonarscanner begin \ 
         /k:"prime-web-api" \ 

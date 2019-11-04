@@ -24,6 +24,9 @@ RUN mkdir -p /.nuget && \
     chown -R jenkins:jenkins /.nuget 
 RUN mkdir -p /tmp/NuGetScratch/ && \
     chown -R jenkins:jenkins /tmp/NuGetScratch/ 
+RUN mkdir -p /opt/app-root/app && \
+    mkdir -p /opt/app-root/out && \
+    chown -R jenkins:jenkins /opt/app-root
 RUN chmod 777 /etc/passwd
 #USER jenkins
 #CMD [ "tail","-f","/dev/null" ]
