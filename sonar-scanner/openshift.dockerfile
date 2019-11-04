@@ -14,7 +14,7 @@ ENV ASPNETCORE_ENVIRONMENT Development
 ENV JAVA_HOME /opt/app-root/app/jdk-11.0.2/bin
 ENV PATH $PATH:$JAVA_HOME
 RUN chmod +x *.bash && \
-    useradd jenkins-prod && \
+    useradd jenkins && \
     chmod 777 /opt/app-root/app && \
     rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm && \
     curl -sL https://rpm.nodesource.com/setup_10.x | bash - && \
@@ -25,18 +25,18 @@ RUN chmod +x *.bash && \
     npm install -g @angular/cli sonarqube-scanner && \
     dotnet tool install --global coverlet.console && \
     dotnet tool install --global dotnet-sonarscanner --version 4.7.1 && \
-    wget https://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/jnlpJars/agent.jar && \
+    wget https://jenkins-dqszvc-tools.pathfinder.gov.bc.ca/jnlpJars/agent.jar && \
     mkdir -p /opt/app-root/app/jenkins && \
     mkdir -p /.dotnet && \
-    chown -R 1001:1001 /.dotnet && \
+    chown -R jenkins:jenkins /.dotnet && \
     mkdir -p /.local && \
-    chown -R 1001:1001 /.local && \
+    chown -R jenkins:jenkins /.local && \
     mkdir -p /.nuget && \
-    chown -R 1001:1001 /.nuget && \
+    chown -R jenkins:jenkins /.nuget && \
     mkdir -p /tmp/NuGetScratch/ && \
-    chown -R 1001:1001 /tmp/NuGetScratch/ && \
-    chown -R 1001:1001 /opt/app-root/
+    chown -R jenkins:jenkins /tmp/NuGetScratch/ && \
+    chown -R jenkins:jenkins /opt/app-root/
 
-USER jenkins-prod
+USER jenkins
 #CMD [ "tail","-f","/dev/null" ]
 CMD [ "./entrypoint.bash" ]
