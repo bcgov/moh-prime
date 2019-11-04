@@ -57,4 +57,31 @@ objects:
         io.kompose.service: sonar-runner
     status:
       loadBalancer: {}
+  - apiVersion: v1
+    kind: SecurityContextConstraints
+    metadata:
+        name: uid1000
+    requiredDropCapabilities:
+        - KILL
+        - MKNOD
+        - SYS_CHROOT
+        - SETUID
+        - SETGID
+    runAsUser:
+        type: MustRunAs
+        uid: '1000'
+    seLinuxContext:
+        type: MustRunAs
+    supplementalGroups:
+        type: RunAsAny
+    fsGroup:
+        type: MustRunAs
+    volumes:
+        - configMap
+        - downwardAPI
+        - emptyDir
+        - persistentVolumeClaim
+        - projected
+        - secret
+
 
