@@ -8,12 +8,14 @@ function dotnetTests()
     $HOME/.dotnet/tools/dotnet-sonarscanner begin /k:"prime-dotnet-webapi" /d:sonar.host.url=http://sonarqube:9000 /d:sonar.cs.opencover.reportsPaths="./BuildReports/Coverage/coverage.opencover.xml" /d:sonar.exclusions="**/Migrations/*" /d:sonar.coverage.exclusions="**Tests*.cs","**/Migrations/*","**/Program.cs" /d:sonar.cpd.exclusions="**/Migrations/*" /d:sonar.cs.vstest.reportsPaths="./BuildReports/UnitTests/TestResults.trx" /d:sonar.cs.nunit.reportsPaths="./BuildReports/UnitTests/TestResults.xml"
     dotnet build
     $HOME/.dotnet/tools/dotnet-sonarscanner end
-} 
+}
+
 function angularTests()
 { 
     cd prime-angular-frontend
-    sonar-scanner -Dsonar.host.url=http://sonar-backend-dqszvc-tools.pathfinder.gov.bc.ca
+    sonar-scanner -Dsonar.host.url=http://sonarqube:9000
 }
+
 echo "Beginning tests in container..."
 dotnetTests
 angularTests
