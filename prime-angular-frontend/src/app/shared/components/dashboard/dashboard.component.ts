@@ -127,12 +127,6 @@ export class DashboardComponent implements OnInit {
             showItem: true
           },
           {
-            name: 'Contact Information',
-            icon: 'phone',
-            route: '/enrolment/contact',
-            showItem: true
-          },
-          {
             name: 'Professional Information',
             icon: 'work',
             route: '/enrolment/professional',
