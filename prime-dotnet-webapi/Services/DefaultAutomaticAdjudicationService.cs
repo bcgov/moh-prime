@@ -16,11 +16,11 @@ namespace Prime.Services
         {
             // add the rules to the list that this implementation will process
             _rules.Add(new SelfDeclarationRule());
-            _rules.Add(new OutsideBritishColumbiaRule());
+            _rules.Add(new AddressRule());
             _rules.Add(new PumpProviderRule());
-            _rules.Add(new CertificationRule());
+            _rules.Add(new CertificationNameRule());
             _rules.Add(new LicenceClassRule());
-            _rules.Add(new LicenceNumberActiveRule());
+            _rules.Add(new LicenceNumberRule());
         }
 
         public bool QualifiesForAutomaticAdjudication(Enrolment enrolment)
@@ -85,6 +85,7 @@ namespace Prime.Services
 
         }
 
+        /// check to see if any of the self-declaration rules were answered as 'Yes'
         private class SelfDeclarationRule : BaseAutomaticAdjudicationRule
         {
             public override ICollection<StatusReason> ProcessRuleInternal(Enrolment enrolment)
@@ -104,7 +105,8 @@ namespace Prime.Services
             }
         }
 
-        private class OutsideBritishColumbiaRule : BaseAutomaticAdjudicationRule
+        /// check to see if any of the addresses are outside of BC
+        private class AddressRule : BaseAutomaticAdjudicationRule
         {
             public override ICollection<StatusReason> ProcessRuleInternal(Enrolment enrolment)
             {
@@ -119,13 +121,14 @@ namespace Prime.Services
                         && mailingAddress.ProvinceCode != null
                         && !mailingAddress.ProvinceCode.Equals(Province.BRITISH_COLUMBIA_CODE)))
                 {
-                    result.Add(new StatusReason { Code = StatusReason.OUTSIDE_BC_CODE });
+                    result.Add(new StatusReason { Code = StatusReason.ADDRESS_CODE });
                 }
 
                 return result;
             }
         }
 
+        /// check to see if the enrolment is a pump provider
         private class PumpProviderRule : BaseAutomaticAdjudicationRule
         {
             public override ICollection<StatusReason> ProcessRuleInternal(Enrolment enrolment)
@@ -143,6 +146,7 @@ namespace Prime.Services
             }
         }
 
+        /// check to see if the enrolment has a particular licence class
         private class LicenceClassRule : BaseAutomaticAdjudicationRule
         {
             public override ICollection<StatusReason> ProcessRuleInternal(Enrolment enrolment)
@@ -157,7 +161,7 @@ namespace Prime.Services
                     // {
                     //     if (item.LicenseCode.Equals(XX))
                     //     {
-                            result.Add(new StatusReason { Code = StatusReason.LICENCE_CLASS_CODE });
+                    result.Add(new StatusReason { Code = StatusReason.LICENCE_CLASS_CODE });
                     //         break;
                     //     }
                     // }
@@ -167,7 +171,8 @@ namespace Prime.Services
             }
         }
 
-        private class LicenceNumberActiveRule : BaseAutomaticAdjudicationRule
+        /// check to see if the enrolment has an inactive license number
+        private class LicenceNumberRule : BaseAutomaticAdjudicationRule
         {
             public override ICollection<StatusReason> ProcessRuleInternal(Enrolment enrolment)
             {
@@ -181,7 +186,7 @@ namespace Prime.Services
                         // TODO - properly implement this check
                         if (item.LicenseNumber != null)
                         {
-                            result.Add(new StatusReason { Code = StatusReason.LICENCE_INACTIVE_CODE });
+                            result.Add(new StatusReason { Code = StatusReason.NOT_IN_PHARMANET_CODE });
                             break;
                         }
                     }
@@ -192,16 +197,17 @@ namespace Prime.Services
             }
         }
 
-        private class CertificationRule : BaseAutomaticAdjudicationRule
+        /// check to see if the enrolment has an certification name discrepancy
+        private class CertificationNameRule : BaseAutomaticAdjudicationRule
         {
             public override ICollection<StatusReason> ProcessRuleInternal(Enrolment enrolment)
             {
                 var result = new List<StatusReason>(0);
-                // check to see if the enrolment has an invalid certification
+                // check to see if the enrolment has an certification name discrepancy
                 if (enrolment.HasCertification ?? false)
                 {
                     // TODO - properly implement this check
-                    result.Add(new StatusReason { Code = StatusReason.CERTIFICATION_NAME_CODE });
+                    result.Add(new StatusReason { Code = StatusReason.NAME_DISCREPANCY_CODE });
                 }
 
                 return result;

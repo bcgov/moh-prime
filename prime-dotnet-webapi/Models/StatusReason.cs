@@ -11,12 +11,12 @@ namespace Prime.Models
     {
         public readonly static short AUTOMATIC_CODE = 1;
         public readonly static short MANUAL_CODE = 2;
-        public readonly static short CERTIFICATION_NAME_CODE = 3;
-        public readonly static short LICENCE_INACTIVE_CODE = 4;
+        public readonly static short NAME_DISCREPANCY_CODE = 3;
+        public readonly static short NOT_IN_PHARMANET_CODE = 4;
         public readonly static short PUMP_PROVIDER_CODE = 5;
         public readonly static short LICENCE_CLASS_CODE = 6;
         public readonly static short SELF_DECLARATION_CODE = 7;
-        public readonly static short OUTSIDE_BC_CODE = 8;
+        public readonly static short ADDRESS_CODE = 8;
 
         [Key]
         public short Code { get; set; }
