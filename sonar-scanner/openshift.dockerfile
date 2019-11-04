@@ -36,7 +36,7 @@ RUN chmod +x *.bash && \
     mkdir -p /tmp/NuGetScratch/ && \
     chown -R default:default /tmp/NuGetScratch/ && \
     chown -R default:default /opt/app-root/
-
+RUN chgrp -R 0 /run && chmod -R g=u /run
 USER default
 #CMD [ "tail","-f","/dev/null" ]
 CMD [ "./entrypoint.bash" ]
