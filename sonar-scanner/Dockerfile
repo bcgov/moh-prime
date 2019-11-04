@@ -5,7 +5,6 @@ COPY . /var/lib/origin
 USER 0
 #ENV PATH $PATH:/root/.dotnet/tools:/opt/app-root/app/prime-dotnet-webapi-tests:/opt/app-root/app/.dotnet/tools/:/usr/share/dotnet
 ENV ASPNETCORE_ENVIRONMENT Development
-ENV PATH $PATH:/home/jenkins/.dotnet/tools
 #ENV JAVA_HOME /opt/app-root/app/jdk-11.0.2/bin
 #ENV PATH $PATH:$JAVA_HOME
 RUN chmod +x *.bash 
@@ -29,6 +28,7 @@ RUN mkdir -p /opt/app-root/app && \
     mkdir -p /opt/app-root/out && \
     chown -R default:0 /opt/app-root
 RUN chmod 777 /etc/passwd
+ENV PATH $PATH:/home/default/.dotnet/tools
 #USER jenkins
 #CMD [ "tail","-f","/dev/null" ]
 CMD [ "./entrypoint.bash" ]
