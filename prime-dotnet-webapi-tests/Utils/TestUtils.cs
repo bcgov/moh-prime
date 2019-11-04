@@ -24,13 +24,13 @@ namespace PrimeTests.Utils
     public class TestUtils
     {
 
-        public static string[] countries = new [] { "CA" };
+        public static string[] countries = new[] { "CA" };
 
-        public static string[] provinces = new [] { "AB", "BC", "MB", "NB", "NL", "NS", "ON", "PE", "QC", "SK", "NT", "NU", "YT" };
+        public static string[] provinces = new[] { "AB", "BC", "MB", "NB", "NL", "NS", "ON", "PE", "QC", "SK", "NT", "NU", "YT" };
 
         public static Faker<PhysicalAddress> PhysicalAddressFaker = new Faker<PhysicalAddress>()
                                 .RuleFor(a => a.CountryCode, f => f.PickRandom(countries))
-                                .RuleFor(a => a.ProvinceCode, f => f.PickRandom(provinces))
+                                .RuleFor(a => a.ProvinceCode, TestUtils.RandomProvince())
                                 .RuleFor(a => a.Street, f => f.Address.StreetAddress())
                                 .RuleFor(a => a.City, f => f.Address.City())
                                 .RuleFor(a => a.Postal, f => f.Address.ZipCode("?#?#?#"))
@@ -38,7 +38,7 @@ namespace PrimeTests.Utils
 
         public static Faker<MailingAddress> MailingAddressFaker = new Faker<MailingAddress>()
                                 .RuleFor(a => a.CountryCode, f => f.PickRandom(countries))
-                                .RuleFor(a => a.ProvinceCode, f => f.PickRandom(provinces))
+                                .RuleFor(a => a.ProvinceCode, TestUtils.RandomProvince())
                                 .RuleFor(a => a.Street, f => f.Address.StreetAddress())
                                 .RuleFor(a => a.City, f => f.Address.City())
                                 .RuleFor(a => a.Postal, f => f.Address.ZipCode("?#?#?#"))
@@ -86,7 +86,7 @@ namespace PrimeTests.Utils
                                     .RuleFor(e => e.HasCertification, f => f.Random.Bool())
                                     .RuleFor(e => e.Certifications, f => CertificationFaker.Generate(2))
                                     .RuleFor(e => e.IsDeviceProvider, f => f.Random.Bool())
-                                    .RuleFor(e => e.DeviceProviderNumber, f => f.Random.Int(100000, 999999).ToString().Substring(1))
+                                    .RuleFor(e => e.DeviceProviderNumber, TestUtils.RandomDeviceProviderNumber())
                                     .RuleFor(e => e.IsInsulinPumpProvider, f => f.Random.Bool())
                                     .RuleFor(e => e.IsAccessingPharmaNetOnBehalfOf, f => f.Random.Bool())
                                     .RuleFor(e => e.Jobs, f => JobFaker.Generate(2))
@@ -101,6 +101,20 @@ namespace PrimeTests.Utils
                                     .RuleFor(e => e.Organizations, f => OrganizationFaker.Generate(2))
                                     .RuleFor(e => e.EnrolmentStatuses, f => EnrolmentStatusFaker.Generate(1))
                                     ;
+
+        public static string RandomProvince(string[] excluded = null)
+        {
+            if (excluded == null)
+            {
+                excluded = new string[0];
+            }
+            return new Faker().PickRandom(provinces.Except(excluded));
+        }
+
+        public static string RandomDeviceProviderNumber()
+        {
+            return new Faker().Random.Int(100000, 999999).ToString().Substring(1);
+        }
 
         public static void AddAdminRoleToUser(ClaimsPrincipal user)
         {

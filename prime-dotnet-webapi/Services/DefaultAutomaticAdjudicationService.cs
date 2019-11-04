@@ -48,7 +48,7 @@ namespace Prime.Services
                 // make sure that there is an enrolment to process the rule against
                 if (enrolment == null)
                 {
-                    throw new InvalidOperationException($"Could not process enrolment rule, passed in Enrolment cannot be null.");
+                    throw new ArgumentNullException($"Could not process enrolment rule, passed in Enrolment cannot be null.");
                 }
 
                 // process the rule and check the results
@@ -64,7 +64,7 @@ namespace Prime.Services
                     // make sure there is a current status
                     if (currentStatus == null)
                     {
-                        throw new InvalidOperationException($"Could not process enrolment rule, current status was missing for Enrolment.Id={enrolment.Id}.");
+                        throw new ArgumentNullException($"Could not process enrolment rule, current status was missing for Enrolment.Id={enrolment.Id}.");
                     }
 
                     // for every item returned in the results, add the reason to the current status
@@ -136,8 +136,8 @@ namespace Prime.Services
                 var result = new List<StatusReason>(0);
                 // check to see if the enrolment is a pump provider
                 // note: if for some reason the question was not answered, we will assume 'Yes'
-                if (enrolment.IsDeviceProvider ?? true
-                        & enrolment.IsInsulinPumpProvider ?? true)
+                if ((enrolment.IsDeviceProvider ?? true)
+                        & (enrolment.IsInsulinPumpProvider ?? true))
                 {
                     result.Add(new StatusReason { Code = StatusReason.PUMP_PROVIDER_CODE });
                 }

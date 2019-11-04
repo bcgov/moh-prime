@@ -38,7 +38,7 @@ namespace PrimeTests.Services
         [Fact]
         public async void testEnrolmentExists()
         {
-            //make sure there are no enrolments
+            // make sure there are no enrolments
             Assert.False(_dbContext.Enrolments.Any());
 
             // create the enrolment directly to the context
@@ -114,7 +114,7 @@ namespace PrimeTests.Services
         [Fact]
         public async void testGetEnrolments()
         {
-            //make sure there are no enrolments
+            // make sure there are no enrolments
             Assert.False(_dbContext.Enrolments.Any());
             await _dbContext.SaveChangesAsync();
 
@@ -134,7 +134,7 @@ namespace PrimeTests.Services
         [Fact]
         public async void testGetEnrolments_Filtered()
         {
-            //make sure there are no enrolments
+            // make sure there are no enrolments
             Assert.False(_dbContext.Enrolments.Any());
             await _dbContext.SaveChangesAsync();
 
@@ -159,7 +159,7 @@ namespace PrimeTests.Services
         [Fact]
         public async void testGetEnrolmentsForUserId()
         {
-            //make sure there are no enrolments
+            // make sure there are no enrolments
             Assert.False(_dbContext.Enrolments.Any());
             await _dbContext.SaveChangesAsync();
 
