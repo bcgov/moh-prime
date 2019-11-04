@@ -14,7 +14,7 @@ ENV ASPNETCORE_ENVIRONMENT Development
 ENV JAVA_HOME /opt/app-root/app/jdk-11.0.2/bin
 ENV PATH $PATH:$JAVA_HOME
 RUN chmod +x *.bash && \
-    useradd jenkins && \
+    useradd default -g 1001750000 && \
     chmod 777 /opt/app-root/app && \
     rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm && \
     curl -sL https://rpm.nodesource.com/setup_10.x | bash - && \
@@ -28,15 +28,15 @@ RUN chmod +x *.bash && \
     wget https://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/jnlpJars/agent.jar && \
     mkdir -p /opt/app-root/app/jenkins && \
     mkdir -p /.dotnet && \
-    chown -R jenkins:jenkins /.dotnet && \
+    chown -R default:1001750000 /.dotnet && \
     mkdir -p /.local && \
-    chown -R jenkins:jenkins /.local && \
+    chown -R default:1001750000 /.local && \
     mkdir -p /.nuget && \
-    chown -R jenkins:jenkins /.nuget && \
+    chown -R default:1001750000 /.nuget && \
     mkdir -p /tmp/NuGetScratch/ && \
-    chown -R jenkins:jenkins /tmp/NuGetScratch/ && \
-    chown -R jenkins:jenkins /opt/app-root/
+    chown -R default:1001750000 /tmp/NuGetScratch/ && \
+    chown -R default:1001750000 /opt/app-root/
 
-USER jenkins
+USER default
 #CMD [ "tail","-f","/dev/null" ]
 CMD [ "./entrypoint.bash" ]

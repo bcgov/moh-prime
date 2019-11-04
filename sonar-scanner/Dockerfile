@@ -14,8 +14,7 @@ ENV ASPNETCORE_ENVIRONMENT Development
 ENV JAVA_HOME /opt/app-root/app/jdk-11.0.2/bin
 ENV PATH $PATH:$JAVA_HOME
 RUN chmod +x *.bash && \
-    chmod +x sonar-scanner/*.bash && \
-    useradd jenkins-prod && \
+    useradd jenkins && \
     chmod 777 /opt/app-root/app && \
     rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm && \
     curl -sL https://rpm.nodesource.com/setup_10.x | bash - && \
@@ -29,16 +28,15 @@ RUN chmod +x *.bash && \
     wget https://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/jnlpJars/agent.jar && \
     mkdir -p /opt/app-root/app/jenkins && \
     mkdir -p /.dotnet && \
-    chown -R jenkins-prod:jenkins-prod /.dotnet && \
+    chown -R jenkins:jenkins /.dotnet && \
     mkdir -p /.local && \
-    chown -R jenkins-prod:jenkins-prod /.local && \
+    chown -R jenkins:jenkins /.local && \
     mkdir -p /.nuget && \
-    chown -R jenkins-prod:jenkins-prod/.nuget && \
+    chown -R jenkins:jenkins /.nuget && \
     mkdir -p /tmp/NuGetScratch/ && \
-    chown -R jenkins-prod:jenkins-prod /tmp/NuGetScratch/ && \
-    chown -R jenkins-prod:jenkins-prod /opt/app-root/
+    chown -R jenkins:jenkins /tmp/NuGetScratch/ && \
+    chown -R jenkins:jenkins /opt/app-root/
 
-USER jenkins-prod
+USER jenkins
 #CMD [ "tail","-f","/dev/null" ]
-#CMD [ "./entrypoint.bash" ]
-ENTRYPOINT [ 'java -jar agent.jar -jnlpUrl http://jenkins-prod/computer/code-tests/slave-agent.jnlp -secret c598ca95983a9f6df4d06cc7f770b0d1ea404b806851f1a7f1066d89515c2c12 -workDir "/opt/app-root/app/"' ]
+CMD [ "./entrypoint.bash" ]
