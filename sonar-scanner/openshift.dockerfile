@@ -24,7 +24,7 @@ RUN chmod +x *.bash && \
     chown -R jenkins:jenkins /.nuget && \
     mkdir -p /tmp/NuGetScratch/ && \
     chown -R jenkins:jenkins /tmp/NuGetScratch/ 
-
-USER jenkins
+RUN chmod 777 /etc/passwd
+#USER jenkins
 #CMD [ "tail","-f","/dev/null" ]
 CMD [ "./entrypoint.bash" ]
