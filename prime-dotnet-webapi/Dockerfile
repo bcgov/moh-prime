@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:2.2 as build
+FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build
 WORKDIR /opt/app-root/app
 
 
@@ -16,3 +16,4 @@ COPY --from=build /opt/app-root/app/out /opt/app-root/app
 EXPOSE 8080 5001
 
 ENTRYPOINT ["dotnet", "Prime.dll"]
+
