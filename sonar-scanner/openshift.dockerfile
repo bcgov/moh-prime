@@ -14,7 +14,7 @@ ENV ASPNETCORE_ENVIRONMENT Development
 ENV JAVA_HOME /opt/app-root/app/jdk-11.0.2/bin
 ENV PATH $PATH:$JAVA_HOME
 RUN chmod +x *.bash && \
-    useradd default -g default && \
+    useradd default && \
     chmod 777 /opt/app-root/app && \
     rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm && \
     curl -sL https://rpm.nodesource.com/setup_10.x | bash - && \
