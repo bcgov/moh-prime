@@ -9,7 +9,7 @@ ENV PATH $PATH:/home/jenkins/.dotnet/tools
 #ENV JAVA_HOME /opt/app-root/app/jdk-11.0.2/bin
 #ENV PATH $PATH:$JAVA_HOME
 RUN chmod +x *.bash 
-RUN useradd jenkins 
+RUN useradd default
 RUN rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm 
 RUN yum -y install epel-release 
 RUN yum install -y -q which dotnet-sdk-2.2 gcc-c++ make nano xterm envsubst git wget 
@@ -18,16 +18,16 @@ RUN dotnet tool install --global coverlet.console
 RUN dotnet tool install --global dotnet-sonarscanner --version 4.7.1 
 RUN wget https://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/jnlpJars/agent.jar 
 RUN mkdir -p /.dotnet && \
-    chown -R jenkins:jenkins /.dotnet 
+    chown -R default:0 /.dotnet 
 RUN mkdir -p /.local && \
-    chown -R jenkins:jenkins /.local 
+    chown -R default:0 /.local 
 RUN mkdir -p /.nuget && \
-    chown -R jenkins:jenkins /.nuget 
+    chown -R default:0 /.nuget 
 RUN mkdir -p /tmp/NuGetScratch/ && \
-    chown -R jenkins:jenkins /tmp/NuGetScratch/
+    chown -R default:0 /tmp/NuGetScratch/
 RUN mkdir -p /opt/app-root/app && \
     mkdir -p /opt/app-root/out && \
-    chown -R jenkins:jenkins /opt/app-root
+    chown -R default:0 /opt/app-root
 RUN chmod 777 /etc/passwd
 #USER jenkins
 #CMD [ "tail","-f","/dev/null" ]

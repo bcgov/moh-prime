@@ -203,23 +203,11 @@ function cleanOcArtifacts() {
 }
 
 function cleanup() {
-    artifactItems=$(oc get all -n ${PROJECT_PREFIX}-dev | grep -i "\-$1"  | column -t | awk '{print $1}' | sort)
+    artifactItems=$(oc get all,pvc,secrets -n ${PROJECT_PREFIX}-dev | grep -i "\-$1"  | column -t | awk '{print $1}' | sort)
     echo "${artifactItems}"
     for i in ${artifactItems};
     do
         oc delete -n ${PROJECT_PREFIX}-dev $i
-    done
-    artifactSecrets=$(oc get secrets -n ${PROJECT_PREFIX}-dev | grep -i "\-$1"  | column -t | awk '{print $1}' | sort)
-    echo "${artifactSecrets}"
-    for i in ${artifactSecrets};
-    do
-        oc delete -n ${PROJECT_PREFIX}-dev secret/"$i"
-    done
-    artifactStorage=$(oc get pvc -n ${PROJECT_PREFIX}-dev | grep -i "\-$1"  | column -t | awk '{print $1}' | sort)
-    echo "${artifactSorage}"
-    for i in ${artifactStorage};
-    do
-        oc delete pvc -n ${PROJECT_PREFIX}-dev $i
     done
 }
 function dotnetTests()
