@@ -23,7 +23,7 @@ RUN chmod +x *.bash && \
     mkdir -p /.nuget && \
     chown -R jenkins:jenkins /.nuget && \
     mkdir -p /tmp/NuGetScratch/ && \
-    chown -R jenkins:jenkins /tmp/NuGetScratch/ && \
+    chown -R jenkins:jenkins /tmp/NuGetScratch/ 
 
 USER jenkins
 #CMD [ "tail","-f","/dev/null" ]
