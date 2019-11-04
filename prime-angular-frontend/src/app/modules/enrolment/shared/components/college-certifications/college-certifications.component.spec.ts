@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 
@@ -8,6 +8,7 @@ import { CollegeCertificationsComponent } from './college-certifications.compone
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
+import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 
 describe('CollegeCertificationsComponent', () => {
   let component: CollegeCertificationsComponent;
@@ -31,16 +32,19 @@ describe('CollegeCertificationsComponent', () => {
         {
           provide: ConfigService,
           useValue: MockConfigService
-        }
+        },
+        EnrolmentStateService
       ]
     }).compileComponents();
   }));
 
-  beforeEach(() => {
+  beforeEach(inject([EnrolmentStateService], (enrolmentStateService: EnrolmentStateService) => {
     fixture = TestBed.createComponent(CollegeCertificationsComponent);
     component = fixture.componentInstance;
+    // Add the bound FormGroup to the component
+    component.form = enrolmentStateService.buildCollegeCertificationForm();
     fixture.detectChanges();
-  });
+  }));
 
   it('should create component', () => {
     expect(component).toBeTruthy();
