@@ -25,7 +25,7 @@ RUN chmod +x *.bash && \
     npm install -g @angular/cli sonarqube-scanner && \
     dotnet tool install --global coverlet.console && \
     dotnet tool install --global dotnet-sonarscanner --version 4.7.1 && \
-    wget https://jenkins-dqszvc-tools.pathfinder.gov.bc.ca/jnlpJars/agent.jar && \
+    wget https://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/jnlpJars/agent.jar && \
     mkdir -p /opt/app-root/app/jenkins && \
     mkdir -p /.dotnet && \
     chown -R jenkins:jenkins /.dotnet && \
