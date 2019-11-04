@@ -8,7 +8,6 @@ ENV ASPNETCORE_ENVIRONMENT Development
 #ENV JAVA_HOME /opt/app-root/app/jdk-11.0.2/bin
 #ENV PATH $PATH:$JAVA_HOME
 RUN chmod +x *.bash && \
-    chmod 777 /opt/app-root/app && \
     rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm && \
     yum -y install epel-release && \
     yum install -y -q which dotnet-sdk-2.2 gcc-c++ make nano xterm envsubst git wget && \
@@ -16,7 +15,6 @@ RUN chmod +x *.bash && \
     dotnet tool install --global coverlet.console && \
     dotnet tool install --global dotnet-sonarscanner --version 4.7.1 && \
     wget https://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/jnlpJars/agent.jar && \
-    mkdir -p /opt/app-root/app/jenkins && \
     mkdir -p /.dotnet && \
     chown -R jenkins:jenkins /.dotnet && \
     mkdir -p /.local && \
@@ -25,7 +23,6 @@ RUN chmod +x *.bash && \
     chown -R jenkins:jenkins /.nuget && \
     mkdir -p /tmp/NuGetScratch/ && \
     chown -R jenkins:jenkins /tmp/NuGetScratch/ && \
-    chown -R jenkins:jenkins /opt/app-root/
 
 USER jenkins
 #CMD [ "tail","-f","/dev/null" ]
