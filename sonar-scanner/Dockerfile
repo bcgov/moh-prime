@@ -40,4 +40,5 @@ RUN chmod +x *.bash && \
 
 USER jenkins-prod
 #CMD [ "tail","-f","/dev/null" ]
-CMD [ "./entrypoint.bash" ]
+#CMD [ "./entrypoint.bash" ]
+ENTRYPOINT [ 'java -jar agent.jar -jnlpUrl http://jenkins-prod/computer/code-tests/slave-agent.jnlp -secret c598ca95983a9f6df4d06cc7f770b0d1ea404b806851f1a7f1066d89515c2c12 -workDir "/opt/app-root/app/"' ]

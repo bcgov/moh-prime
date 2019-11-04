@@ -32,7 +32,7 @@ pipeline {
         // This is the work on the current branch
         */
         stage('Code Quality Check') {
-            agent { label 'code-tests' }
+            agent { label 'master' }
             steps {
                 echo "Deploy (DEV) ..."
                 //sh "export OC_APP=dev"
