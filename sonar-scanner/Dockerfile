@@ -20,6 +20,8 @@ RUN chmod +x *.bash && \
     wget https://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/jnlpJars/agent.jar && \
     chown -R default:0 /home/jenkins && \
     chmod -R a+rwx /home/jenkins && \
+    chown -R default:0 /var/lib/origin && \
+    chmod -R a+rwx /var/lib/origin && \
     mkdir -p /.dotnet && \
     chown -R default:0 /.dotnet && \
     chmod -R a+rwx /.dotnet && \
