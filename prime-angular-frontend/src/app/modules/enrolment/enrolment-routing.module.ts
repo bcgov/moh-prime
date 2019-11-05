@@ -18,6 +18,7 @@ import { ConfirmationComponent } from './pages/confirmation/confirmation.compone
 import { AccessAgreementComponent } from './pages/access-agreement/access-agreement.component';
 import { SummaryComponent } from './pages/summary/summary.component';
 import { DeviceProviderComponent } from './pages/device-provider/device-provider.component';
+import { JobComponent } from './pages/job/job.component';
 
 const routes: Routes = [
   {
@@ -48,6 +49,12 @@ const routes: Routes = [
       {
         path: 'device-provider',
         component: DeviceProviderComponent,
+        canActivate: [EnrolmentGuard],
+        canDeactivate: [CanDeactivateFormGuard]
+      },
+      {
+        path: 'job',
+        component: JobComponent,
         canActivate: [EnrolmentGuard],
         canDeactivate: [CanDeactivateFormGuard]
       },

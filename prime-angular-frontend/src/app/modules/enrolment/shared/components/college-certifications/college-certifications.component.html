@@ -6,6 +6,7 @@
       <mat-form-field class="w-100">
         <mat-label>College Certifications</mat-label>
         <mat-select formControlName="collegeCode">
+          <!-- <mat-option value="">None</mat-option> -->
           <mat-option *ngFor="let college of colleges"
                       [value]="college.code">
             {{ college.name }}
@@ -15,72 +16,76 @@
       </mat-form-field>
 
     </div>
-    <div class="col-sm-12">
 
-      <mat-form-field class="w-100">
-        <span matPrefix>{{ licensePrefix }}&nbsp;</span>
-        <input matInput
-               placeholder="Licence Number"
-               formControlName="licenseNumber">
-        <mat-error *ngIf="form.get('licenseNumber').hasError('required')">Required</mat-error>
-        <mat-error *ngIf="form.get('licenseNumber').hasError('length')">Must be a 5 digit number</mat-error>
-      </mat-form-field>
+    <ng-container *ngIf="collegeCode.value !== 'None'">
+      <div class="col-sm-12">
 
-    </div>
-    <div class="col-sm-12">
+        <mat-form-field class="w-100">
+          <span matPrefix>{{ licensePrefix }}&nbsp;</span>
+          <input matInput
+                 placeholder="Licence Number"
+                 formControlName="licenseNumber">
+          <mat-error *ngIf="form.get('licenseNumber').hasError('required')">Required</mat-error>
+          <mat-error *ngIf="form.get('licenseNumber').hasError('length')">Must be a 5 digit number</mat-error>
+        </mat-form-field>
 
-      <mat-form-field class="w-100">
-        <mat-label>Licence Class</mat-label>
-        <mat-select formControlName="licenseCode">
-          <mat-option *ngFor="let license of filteredLicenses"
-                      [value]="license.code">
-            {{ license.name }}
-          </mat-option>
-        </mat-select>
-        <mat-error *ngIf="form.get('licenseCode').hasError('required')">Required</mat-error>
-      </mat-form-field>
+      </div>
+      <div class="col-sm-12">
 
-    </div>
-    <div class="col-sm-12">
+        <mat-form-field class="w-100">
+          <mat-label>Licence Class</mat-label>
+          <mat-select formControlName="licenseCode">
+            <mat-option *ngFor="let license of filteredLicenses"
+                        [value]="license.code">
+              {{ license.name }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.get('licenseCode').hasError('required')">Required</mat-error>
+        </mat-form-field>
 
-      <mat-form-field class="w-100">
-        <input matInput
-               placeholder="Renewal Date"
-               [matDatepicker]="picker"
-               formControlName="renewalDate"
-               (click)="picker.open()">
-        <mat-datepicker-toggle matSuffix
-                               [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker
-                        startView="multi-year"
-                        [touchUi]="isMobile"></mat-datepicker>
-        <mat-error *ngIf="form.get('renewalDate').hasError('required')">Required</mat-error>
-      </mat-form-field>
+      </div>
+      <div class="col-sm-12">
 
-    </div>
-    <div class="col-sm-12"
-         *ngIf="hasPractices">
+        <mat-form-field class="w-100">
+          <input matInput
+                 placeholder="Renewal Date"
+                 [matDatepicker]="picker"
+                 formControlName="renewalDate"
+                 (click)="picker.open()">
+          <mat-datepicker-toggle matSuffix
+                                 [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker
+                          startView="multi-year"
+                          [touchUi]="isMobile"></mat-datepicker>
+          <mat-error *ngIf="form.get('renewalDate').hasError('required')">Required</mat-error>
+        </mat-form-field>
 
-      <mat-form-field class="w-100">
-        <mat-label>Advanced Practices</mat-label>
-        <mat-select formControlName="practiceCode">
-          <mat-option *ngFor="let practice of filteredPractices"
-                      [value]="practice.code">
-            {{ practice.name }}
-          </mat-option>
-        </mat-select>
-        <mat-error *ngIf="form.get('practiceCode').hasError('required')">Required</mat-error>
-      </mat-form-field>
+      </div>
+      <div class="col-sm-12"
+           *ngIf="hasPractices">
 
-    </div>
-    <div class="col-sm-12 text-right">
+        <mat-form-field class="w-100">
+          <mat-label>Advanced Practices</mat-label>
+          <mat-select formControlName="practiceCode">
+            <mat-option *ngFor="let practice of filteredPractices"
+                        [value]="practice.code">
+              {{ practice.name }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.get('practiceCode').hasError('required')">Required</mat-error>
+        </mat-form-field>
 
-      <button mat-raised-button
-              color="warn"
-              [disabled]="total < 2"
-              (click)="onRemove()">Remove Certification</button>
+      </div>
 
-    </div>
+      <div class="col-sm-12 text-right">
+
+        <button mat-raised-button
+                color="warn"
+                [disabled]="total < 2"
+                (click)="onRemove()">Remove Certification</button>
+
+      </div>
+    </ng-container>
   </div>
 
 </div>

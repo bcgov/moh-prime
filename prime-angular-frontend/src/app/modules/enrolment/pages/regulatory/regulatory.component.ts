@@ -52,12 +52,10 @@ export class RegulatoryComponent implements OnInit {
     return this.form.get('certifications') as FormArray;
   }
 
-  public get jobs(): FormArray {
-    return this.form.get('jobs') as FormArray;
-  }
 
   public onSubmit() {
     if (this.form.valid) {
+      console.log('Form is valid', this.form);
       const payload = this.enrolmentStateService.enrolment;
       this.enrolmentResource.updateEnrolment(payload)
         .subscribe(
@@ -73,8 +71,13 @@ export class RegulatoryComponent implements OnInit {
         );
       this.form.markAsPristine();
     } else {
+      console.log('not valid', this.form);
       this.form.markAllAsTouched();
     }
+
+
+    // FOR TESTING
+    this.router.navigate(['device-provider'], { relativeTo: this.route.parent });
   }
 
   public addCertification() {
@@ -108,9 +111,6 @@ export class RegulatoryComponent implements OnInit {
           this.enrolmentStateService.enrolment = enrolment;
         }
       });
-
-    // Initialize multi-select after patching
-    this.initMultiSelect();
   }
 
   private createFormInstance() {
@@ -121,7 +121,4 @@ export class RegulatoryComponent implements OnInit {
     this.addCertification();
   }
 
-  private initMultiSelect() {
-    this.jobCtrl = new FormControl();
-  }
 }

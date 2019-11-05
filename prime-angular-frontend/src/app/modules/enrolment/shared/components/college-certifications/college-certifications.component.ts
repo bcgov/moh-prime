@@ -55,6 +55,7 @@ export class CollegeCertificationsComponent implements OnInit {
     this.filteredLicenses = this.filterLicenses(this.collegeCode.value);
 
     this.collegeCode.valueChanges.subscribe((collegeCode: number) => {
+      console.log(collegeCode);
       this.filteredLicenses = this.filterLicenses(collegeCode);
       this.licensePrefix = this.colleges.filter(c => c.code === collegeCode).shift().prefix;
       this.form.get('licenseCode').patchValue(null);

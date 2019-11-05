@@ -15,6 +15,7 @@ import { PageTitleComponent } from './shared/components/page-title/page-title.co
 import { SummaryComponent } from './pages/summary/summary.component';
 import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
 import { DeviceProviderComponent } from './pages/device-provider/device-provider.component';
+import { JobComponent } from './pages/job/job.component';
 
 
 @NgModule({
@@ -30,11 +31,12 @@ import { DeviceProviderComponent } from './pages/device-provider/device-provider
     SummaryComponent,
     RegulatoryComponent,
     DeviceProviderComponent,
+    JobComponent,
   ],
   imports: [
     SharedModule,
     EnrolmentRoutingModule
   ],
-  exports: [RegulatoryComponent, DeviceProviderComponent]
+  exports: [RegulatoryComponent, DeviceProviderComponent, JobComponent]
 })
 export class EnrolmentModule { }
