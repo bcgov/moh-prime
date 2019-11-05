@@ -1,10 +1,11 @@
+import { HttpClient } from '@angular/common/http';
+import { Inject } from '@angular/core';
+
 import { Observable } from 'rxjs';
 
+import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { Configuration } from '@config/config.model';
 import { IConfigService, ConfigService } from '@config/config.service';
-import { Inject } from '@angular/core';
-import { APP_CONFIG, AppConfig } from 'app/app-config.module';
-import { HttpClient } from '@angular/common/http';
 
 export class MockConfigService extends ConfigService implements IConfigService {
   constructor(

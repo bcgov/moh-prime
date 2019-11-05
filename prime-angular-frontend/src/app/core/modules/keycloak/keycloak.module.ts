@@ -1,10 +1,12 @@
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { environment } from '@env/environment';
 
-import { KeycloakAngularModule, KeycloakService, KeycloakOptions } from 'keycloak-angular';
+import { KeycloakAngularModule, KeycloakOptions } from 'keycloak-angular';
 
-export function initializer(keycloak: KeycloakService): () => Promise<boolean> {
-  return (): Promise<boolean> => keycloak.init(environment.keycloakConfig as KeycloakOptions);
+import { AuthService } from '@auth/shared/services/auth.service';
+
+export function initializer(authService: AuthService): () => Promise<boolean> {
+  return (): Promise<boolean> => authService.init(environment.keycloakConfig as KeycloakOptions);
 }
 
 @NgModule({
@@ -14,7 +16,7 @@ export function initializer(keycloak: KeycloakService): () => Promise<boolean> {
       provide: APP_INITIALIZER,
       useFactory: initializer,
       multi: true,
-      deps: [KeycloakService]
+      deps: [AuthService]
     }
   ]
 })
