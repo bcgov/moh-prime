@@ -120,7 +120,7 @@ namespace Prime
         {
             if (app == null)
             {
-                throw new ArgumentNullException("Could not update database, the passed in IApplicationBuilder cannot be null.");
+                throw new ArgumentNullException(nameof(app), "Could not update database, the passed in IApplicationBuilder cannot be null.");
             }
 
             using (var serviceScope = app.ApplicationServices

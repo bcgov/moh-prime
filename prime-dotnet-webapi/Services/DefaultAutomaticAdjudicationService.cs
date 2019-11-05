@@ -48,7 +48,7 @@ namespace Prime.Services
                 // make sure that there is an enrolment to process the rule against
                 if (enrolment == null)
                 {
-                    throw new ArgumentNullException($"Could not process enrolment rule, passed in Enrolment cannot be null.");
+                    throw new ArgumentNullException(nameof(enrolment), "Could not process enrolment rule, passed in Enrolment cannot be null.");
                 }
 
                 // process the rule and check the results
@@ -64,7 +64,7 @@ namespace Prime.Services
                     // make sure there is a current status
                     if (currentStatus == null)
                     {
-                        throw new ArgumentNullException($"Could not process enrolment rule, current status was missing for Enrolment.Id={enrolment.Id}.");
+                        throw new InvalidOperationException($"Could not process enrolment rule, current status was missing for Enrolment.Id={enrolment.Id}.");
                     }
 
                     // for every item returned in the results, add the reason to the current status
@@ -93,10 +93,10 @@ namespace Prime.Services
                 var result = new List<StatusReason>(0);
                 // check to see if any of the self-declaration rules were answered as 'Yes'
                 // note: if for some reason the question was not answered, we will assume 'Yes'
-                if ((enrolment.HasConviction ?? true)
-                        | (enrolment.HasDisciplinaryAction ?? true)
-                        | (enrolment.HasPharmaNetSuspended ?? true)
-                        | (enrolment.HasRegistrationSuspended ?? true))
+                if (enrolment.HasConviction.GetValueOrDefault(true)
+                        || enrolment.HasDisciplinaryAction.GetValueOrDefault(true)
+                        || enrolment.HasPharmaNetSuspended.GetValueOrDefault(true)
+                        || enrolment.HasRegistrationSuspended.GetValueOrDefault(true))
                 {
                     result.Add(new StatusReason { Code = StatusReason.SELF_DECLARATION_CODE });
                 }
@@ -112,14 +112,9 @@ namespace Prime.Services
             {
                 var result = new List<StatusReason>(0);
                 // check to see if any of the addresses are outside of BC
-                var physicalAddress = enrolment.Enrollee?.PhysicalAddress;
-                var mailingAddress = enrolment.Enrollee?.MailingAddress;
-                if ((physicalAddress != null
-                        && physicalAddress.ProvinceCode != null
-                        && !physicalAddress.ProvinceCode.Equals(Province.BRITISH_COLUMBIA_CODE))
-                    || (mailingAddress != null
-                        && mailingAddress.ProvinceCode != null
-                        && !mailingAddress.ProvinceCode.Equals(Province.BRITISH_COLUMBIA_CODE)))
+                // if there is not code (or address), use BC, so we don't get a mis-match
+                if (string.Compare(Province.BRITISH_COLUMBIA_CODE, (enrolment.Enrollee?.PhysicalAddress.ProvinceCode ?? Province.BRITISH_COLUMBIA_CODE), StringComparison.OrdinalIgnoreCase) != 0
+                    || string.Compare(Province.BRITISH_COLUMBIA_CODE, (enrolment.Enrollee?.MailingAddress?.ProvinceCode ?? Province.BRITISH_COLUMBIA_CODE), StringComparison.OrdinalIgnoreCase) != 0)
                 {
                     result.Add(new StatusReason { Code = StatusReason.ADDRESS_CODE });
                 }
@@ -136,8 +131,8 @@ namespace Prime.Services
                 var result = new List<StatusReason>(0);
                 // check to see if the enrolment is a pump provider
                 // note: if for some reason the question was not answered, we will assume 'Yes'
-                if ((enrolment.IsDeviceProvider ?? true)
-                        & (enrolment.IsInsulinPumpProvider ?? true))
+                if (enrolment.IsDeviceProvider.GetValueOrDefault(true)
+                        && enrolment.IsInsulinPumpProvider.GetValueOrDefault(true))
                 {
                     result.Add(new StatusReason { Code = StatusReason.PUMP_PROVIDER_CODE });
                 }
@@ -157,14 +152,15 @@ namespace Prime.Services
                         && enrolment.Certifications.Any())
                 {
                     // TODO - properly implement this check
-                    // foreach (var item in enrolment.Certifications)
-                    // {
-                    //     if (item.LicenseCode.Equals(XX))
-                    //     {
-                    result.Add(new StatusReason { Code = StatusReason.LICENCE_CLASS_CODE });
-                    //         break;
-                    //     }
-                    // }
+                    foreach (var item in enrolment.Certifications)
+                    {
+                        // check to see if there is a LicenseCode value - in future check for specific code values
+                        if (item.LicenseCode > 0)
+                        {
+                            result.Add(new StatusReason { Code = StatusReason.LICENCE_CLASS_CODE });
+                            break;
+                        }
+                    }
                 }
 
                 return result;
@@ -204,7 +200,7 @@ namespace Prime.Services
             {
                 var result = new List<StatusReason>(0);
                 // check to see if the enrolment has an certification name discrepancy
-                if (enrolment.HasCertification ?? false)
+                if (enrolment.HasCertification.GetValueOrDefault(false))
                 {
                     // TODO - properly implement this check
                     result.Add(new StatusReason { Code = StatusReason.NAME_DISCREPANCY_CODE });
