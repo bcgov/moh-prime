@@ -36,15 +36,20 @@ describe('ConfigCodePipe', () => {
     });
   }));
 
+  beforeEach(async(inject([ConfigService], (configService: ConfigService) => {
+    // Load the runtime configuration
+    configService.load().subscribe();
+  })));
+
   it('create an instance of Config Code Pipe', () => {
-    inject([MockConfigService], (config: MockConfigService) => {
+    inject([ConfigService], (config: ConfigService) => {
       const pipe = new ConfigCodePipe(config);
       expect(pipe).toBeTruthy();
     });
   });
 
   it('should get college name from a config code', () => {
-    inject([MockConfigService], (config: MockConfigService) => {
+    inject([ConfigService], (config: ConfigService) => {
       const pipe = new ConfigCodePipe(config);
       const prefix = pipe.transform(config.colleges[0].code, 'colleges');
       expect(prefix).toBe(config.colleges[0].name);
@@ -52,7 +57,7 @@ describe('ConfigCodePipe', () => {
   });
 
   it('should get a college prefix from a config code', () => {
-    inject([MockConfigService], (config: MockConfigService) => {
+    inject([ConfigService], (config: ConfigService) => {
       const pipe = new ConfigCodePipe(config);
       const prefix = pipe.transform(config.colleges[1].code, 'colleges', 'prefix');
       expect(prefix).toBe(config.colleges[1].prefix);
