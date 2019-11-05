@@ -14,7 +14,7 @@ export class AuthService extends KeycloakService {
   private jwtHelper: JwtHelperService;
 
   constructor(
-    private logger: LoggerService
+    protected logger: LoggerService
   ) {
     super();
 
