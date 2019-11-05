@@ -17,7 +17,7 @@ function variablePopulation() {
         export SUFFIX="-${BRANCH_LOWER}";
     fi
 }
-
+export JAVA_HOME=$JAVA_HOME
 variablePopulation
 
 function build() {
@@ -213,6 +213,7 @@ function cleanup() {
 
 function dotnetTests()
 {   
+    "JAVA_HOME=%SONAR_SCANNER_HOME%\jre"
     echo "Starting tests..." 
     dotnet build 
     echo "Beginning .NET code coverage scan..."
