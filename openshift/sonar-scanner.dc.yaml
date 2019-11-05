@@ -24,6 +24,11 @@ objects:
             io.kompose.service: sonar-runner
         spec:
           containers:
+            - env:
+                - name: JAVA_HOME
+                  value: '/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64/jre/bin'
+                - name: PATH
+                  value: '$PATH:$JAVA_HOME:/var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScanner/bin:/home/default/.dotnet/tools'
           - image: ' '
             name: sonar-scanner
             resources: {}
@@ -57,6 +62,3 @@ objects:
         io.kompose.service: sonar-runner
     status:
       loadBalancer: {}
-
-
-

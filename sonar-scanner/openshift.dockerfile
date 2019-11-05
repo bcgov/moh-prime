@@ -7,9 +7,8 @@ COPY . /var/lib/origin
 USER 0
 #ENV PATH $PATH:/root/.dotnet/tools:/opt/app-root/app/prime-dotnet-webapi-tests:/opt/app-root/app/.dotnet/tools/:/usr/share/dotnet
 ENV ASPNETCORE_ENVIRONMENT Development
-#ENV JAVA_HOME /opt/app-root/app/jdk-11.0.2/bin
-#ENV PATH $PATH:$JAVA_HOME
-ENV PATH $PATH:/var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScanner/bin/
+ENV JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64/jre/bin
+ENV PATH $PATH:$JAVA_HOME:/var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScanner/bin:/home/default/.dotnet/tools
 RUN chmod +x *.bash && \
     useradd default && \
     rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm && \
@@ -31,7 +30,7 @@ RUN chmod +x *.bash && \
     mkdir -p /opt/app-root/out && \
     chown -R default:0 /opt/app-root && \
     chmod 777 /etc/passwd
-ENV PATH $PATH:/home/default/.dotnet/tools
+
 #USER jenkins
 #CMD [ "tail","-f","/dev/null" ]
 #CMD [ "./entrypoint.bash" ]
