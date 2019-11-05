@@ -10,7 +10,6 @@ import { EnrolleeGuard } from './shared/guards/enrollee.guard';
 import { EnrolmentGuard } from './shared/guards/enrolment.guard';
 
 import { ProfileComponent } from './pages/profile/profile.component';
-import { ContactComponent } from './pages/contact/contact.component';
 import { ProfessionalInfoComponent } from './pages/professional-info/professional-info.component';
 import { SelfDeclarationComponent } from './pages/self-declaration/self-declaration.component';
 import { PharmanetAccessComponent } from './pages/pharmanet-access/pharmanet-access.component';
@@ -36,12 +35,6 @@ const routes: Routes = [
       {
         path: 'profile',
         component: ProfileComponent,
-        canActivate: [EnrolmentGuard],
-        canDeactivate: [CanDeactivateFormGuard]
-      },
-      {
-        path: 'contact',
-        component: ContactComponent,
         canActivate: [EnrolmentGuard],
         canDeactivate: [CanDeactivateFormGuard]
       },

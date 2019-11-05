@@ -34,9 +34,11 @@
 
       <dl class="row mb-4">
         <dt class="col-sm-12 col-md-6 py-1">Country</dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.countryCode | configCode: 'countries' }}&nbsp;</dd>
+        <dd class="col-sm-12 col-md-6 py-1">
+          {{ enrolment.enrollee.physicalAddress.countryCode | configCode: 'countries' }}&nbsp;</dd>
         <dt class="col-sm-12 col-md-6 py-1">Province</dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.provinceCode | configCode: 'provinces' }}&nbsp;</dd>
+        <dd class="col-sm-12 col-md-6 py-1">
+          {{ enrolment.enrollee.physicalAddress.provinceCode | configCode: 'provinces' }}&nbsp;</dd>
         <dt class="col-sm-12 col-md-6 py-1">Street Address</dt>
         <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.street }}&nbsp;</dd>
         <dt class="col-sm-12 col-md-6 py-1">City</dt>
@@ -51,9 +53,11 @@
 
         <dl class="row mb-4">
           <dt class="col-sm-12 col-md-6 py-1">Country</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.mailingAddress.countryCode | configCode: 'countries' }}&nbsp;</dd>
+          <dd class="col-sm-12 col-md-6 py-1">
+            {{ enrolment.enrollee.mailingAddress.countryCode | configCode: 'countries' }}&nbsp;</dd>
           <dt class="col-sm-12 col-md-6 py-1">Province</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.mailingAddress.provinceCode | configCode: 'provinces' }}&nbsp;</dd>
+          <dd class="col-sm-12 col-md-6 py-1">
+            {{ enrolment.enrollee.mailingAddress.provinceCode | configCode: 'provinces' }}&nbsp;</dd>
           <dt class="col-sm-12 col-md-6 py-1">Street Address</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.mailingAddress.street }}&nbsp;</dd>
           <dt class="col-sm-12 col-md-6 py-1">City</dt>
@@ -258,7 +262,6 @@
 
       <button mat-raised-button
               type="button"
-              color="primary"
               routerLink="../access">Back</button>
 
     </div>
