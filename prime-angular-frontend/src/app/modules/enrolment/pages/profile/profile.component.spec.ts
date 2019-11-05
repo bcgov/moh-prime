@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { KeycloakService } from 'keycloak-angular';
+import { NgxMaskModule } from 'ngx-mask';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
 import { MockKeycloakService } from 'test/mocks/mock-keycloak.service';
@@ -25,6 +26,7 @@ describe('ProfileComponent', () => {
         imports: [
           BrowserAnimationsModule,
           HttpClientTestingModule,
+          NgxMaskModule.forRoot(),
           NgxMaterialModule,
           ReactiveFormsModule,
           RouterTestingModule
