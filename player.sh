@@ -213,7 +213,6 @@ function cleanup() {
 
 function dotnetTests()
 {   
-    "JAVA_HOME=%SONAR_SCANNER_HOME%\jre"
     echo "Starting tests..." 
     dotnet build 
     echo "Beginning .NET code coverage scan..."
