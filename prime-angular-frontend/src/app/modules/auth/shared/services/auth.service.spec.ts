@@ -1,8 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { KeycloakService } from 'keycloak-angular';
-
-import { MockKeycloakService } from 'test/mocks/mock-keycloak.service';
+import { MockAuthService } from 'test/mocks/mock-auth.service';
 
 import { AuthService } from './auth.service';
 
@@ -10,8 +8,8 @@ describe('AuthService', () => {
   beforeEach(() => TestBed.configureTestingModule({
     providers: [
       {
-        provide: KeycloakService,
-        useClass: MockKeycloakService
+        provide: AuthService,
+        useClass: MockAuthService
       }
     ]
   }));

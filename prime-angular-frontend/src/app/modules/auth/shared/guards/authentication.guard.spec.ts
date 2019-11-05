@@ -1,10 +1,7 @@
 import { TestBed, async, inject } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { KeycloakService } from 'keycloak-angular';
-
 import { MockAuthService } from 'test/mocks/mock-auth.service';
-import { MockKeycloakService } from 'test/mocks/mock-keycloak.service';
 
 import { AuthenticationGuard } from './authentication.guard';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
@@ -21,10 +18,6 @@ describe('AuthenticationGuard', () => {
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
-        },
-        {
-          provide: KeycloakService,
-          useClass: MockKeycloakService
         },
         {
           provide: AuthService,
