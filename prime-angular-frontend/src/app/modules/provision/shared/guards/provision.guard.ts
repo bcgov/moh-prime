@@ -6,9 +6,6 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { KeycloakLoginOptions } from 'keycloak-js';
-import { KeycloakAuthGuard, KeycloakService } from 'keycloak-angular';
-
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { LoggerService } from '@core/services/logger.service';
 import { Role } from '@auth/shared/enum/role.enum';
@@ -17,15 +14,29 @@ import { AuthService } from '@auth/shared/services/auth.service';
 @Injectable({
   providedIn: 'root'
 })
-export class ProvisionGuard extends KeycloakAuthGuard implements CanActivateChild {
+export class ProvisionGuard implements CanActivateChild {
+  private authenticated: boolean;
+  private roles: string[];
+
   constructor(
     protected router: Router,
-    protected keycloakAngular: KeycloakService,
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
     private logger: LoggerService
-  ) {
-    super(router, keycloakAngular);
+  ) { }
+
+  public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        this.authenticated = await this.authService.isLoggedIn();
+        this.roles = await this.authService.getUserRoles(true);
+
+        const result = await this.isAccessAllowed(route, state);
+        resolve(result);
+      } catch (error) {
+        reject('An error happened during access validation. Details:' + error);
+      }
+    });
   }
 
   public canActivateChild(
@@ -48,8 +59,8 @@ export class ProvisionGuard extends KeycloakAuthGuard implements CanActivateChil
       }
 
       if (
-        this.keycloakAngular.isUserInRole(Role.PROVISIONER) ||
-        this.keycloakAngular.isUserInRole(Role.ADMIN)
+        this.authService.isUserInRole(Role.PROVISIONER) ||
+        this.authService.isUserInRole(Role.ADMIN)
       ) {
         return resolve(true);
       }

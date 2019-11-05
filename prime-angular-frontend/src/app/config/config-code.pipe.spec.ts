@@ -1,33 +1,23 @@
 import { TestBed, async, inject } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+
+import { MockConfigService } from 'test/mocks/mock-config.service';
 
 import { ConfigCodePipe } from './config-code.pipe';
 import { ConfigService } from './config.service';
-
-class MockConfigService extends ConfigService {
-  public get colleges() {
-    return [
-      {
-        prefix: 'C0',
-        code: 0,
-        name: 'College of Registered Nurses',
-        collegeLicenses: [],
-        collegePractices: []
-      },
-      {
-        prefix: 'C1',
-        code: 1,
-        name: 'College of Doctors',
-        collegeLicenses: [],
-        collegePractices: []
-      }
-    ];
-  }
-}
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 
 describe('ConfigCodePipe', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule
+      ],
       providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        },
         {
           provide: ConfigService,
           useClass: MockConfigService
@@ -36,26 +26,20 @@ describe('ConfigCodePipe', () => {
     });
   }));
 
-  it('create an instance of Config Code Pipe', () => {
-    inject([MockConfigService], (config: MockConfigService) => {
-      const pipe = new ConfigCodePipe(config);
-      expect(pipe).toBeTruthy();
-    });
-  });
+  it('create an instance of Config Code Pipe', inject([ConfigService], (configService: ConfigService) => {
+    const pipe = new ConfigCodePipe(configService);
+    expect(pipe).toBeTruthy();
+  }));
 
-  it('should get college name from a config code', () => {
-    inject([MockConfigService], (config: MockConfigService) => {
-      const pipe = new ConfigCodePipe(config);
-      const prefix = pipe.transform(config.colleges[0].code, 'colleges');
-      expect(prefix).toBe(config.colleges[0].name);
-    });
-  });
+  it('should get college name from a config code', inject([ConfigService], (configService: ConfigService) => {
+    const pipe = new ConfigCodePipe(configService);
+    const prefix = pipe.transform(configService.colleges[0].code, 'colleges');
+    expect(prefix).toBe(configService.colleges[0].name);
+  }));
 
-  it('should get a college prefix from a config code', () => {
-    inject([MockConfigService], (config: MockConfigService) => {
-      const pipe = new ConfigCodePipe(config);
-      const prefix = pipe.transform(config.colleges[1].code, 'colleges', 'prefix');
-      expect(prefix).toBe(config.colleges[1].prefix);
-    });
-  });
+  it('should get a college prefix from a config code', inject([ConfigService], (configService: ConfigService) => {
+    const pipe = new ConfigCodePipe(configService);
+    const prefix = pipe.transform(configService.colleges[1].code, 'colleges', 'prefix');
+    expect(prefix).toBe(configService.colleges[1].prefix);
+  }));
 });
