@@ -33,4 +33,5 @@ RUN chmod +x *.bash && \
 ENV PATH $PATH:/home/default/.dotnet/tools
 #USER jenkins
 #CMD [ "tail","-f","/dev/null" ]
-CMD [ "./entrypoint.bash" ]
+#CMD [ "./entrypoint.bash" ]
+ENTRYPOINT [ "./entrypoint.bash" ]
