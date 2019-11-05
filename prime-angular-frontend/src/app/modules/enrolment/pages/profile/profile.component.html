@@ -176,6 +176,19 @@
 
           <mat-form-field class="w-100">
             <input matInput
+                   placeholder="Street Address 2"
+                   formControlName="street2"
+                   [required]="isRequired('physicalAddress.street2')">
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-6 col-xl-4">
+
+          <mat-form-field class="w-100">
+            <input matInput
                    placeholder="City"
                    formControlName="city"
                    [required]="isRequired('physicalAddress.city')">
@@ -265,6 +278,19 @@
 
             <mat-form-field class="w-100">
               <input matInput
+                     placeholder="Street Address 2"
+                     formControlName="street2"
+                     [required]="isRequired('mailingAddress.street2')">
+              <mat-error>Required</mat-error>
+            </mat-form-field>
+
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-6 col-xl-4">
+
+            <mat-form-field class="w-100">
+              <input matInput
                      placeholder="City"
                      formControlName="city"
                      [required]="isRequired('mailingAddress.city')">
@@ -295,12 +321,13 @@
 
   <app-sub-header subheader="Contact Information"
                   help="Lorem ipsum dolor, sit amet consectetur adipisicing elit."></app-sub-header>
+
   <div class="row">
     <div class="col-sm-12">
-      <div class="row">
-        <div class="col-sm-12 col-md-6 col-xl-4">
+      <div class="d-flex flex-row">
+        <span class="pr-2 w-100">
 
-          <mat-form-field class="w-100">
+          <mat-form-field class="">
             <input matInput
                    placeholder="Phone Number for Voice Contact"
                    formControlName="voicePhone"
@@ -311,9 +338,21 @@
             <mat-error *ngIf="voicePhone.hasError('phone')">Must be a valid phone number</mat-error>
           </mat-form-field>
 
-        </div>
+        </span>
+        <span>
+
+          <mat-form-field class="w-100 float-left">
+            <input matInput
+                   placeholder="Extension Number"
+                   formControlName="voiceExtension"
+                   [required]="isRequired('voiceExtension')">
+            <mat-error *ngIf="voiceExtension.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="voiceExtension.hasError('numeric')">Must contain only numbers</mat-error>
+          </mat-form-field>
+
+        </span>
       </div>
-      <div class="row">
+      <!-- <div class="row">
         <div class="col-sm-12 col-md-6 col-xl-4">
 
           <mat-form-field class="w-100">
@@ -326,7 +365,7 @@
           </mat-form-field>
 
         </div>
-      </div>
+      </div> -->
 
       <app-sub-header subheader="Preferred Contact Method"></app-sub-header>
 
@@ -336,35 +375,38 @@
                     formControlName="hasContactPhone">Mobile Phone</mat-checkbox>
 
       <div class="row">
-        <div class="col-sm-12 col-md-6 col-xl45"
+        <div class="col-sm-12"
              *ngIf="contactEmail.value || hasContactEmail.value">
+          <div class="row">
+            <div class="col-sm-12 col-md-6 col-xl-4">
+              <mat-form-field class="w-100">
+                <input matInput
+                       placeholder="Email"
+                       formControlName="contactEmail"
+                       [required]="isRequired('contactEmail')">
+                <mat-error *ngIf="contactEmail.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="contactEmail.hasError('email')">Must be a valid email address</mat-error>
+              </mat-form-field>
 
-          <mat-form-field class="w-100">
-            <input matInput
-                   placeholder="Email"
-                   formControlName="contactEmail"
-                   [required]="isRequired('contactEmail')">
-            <mat-error *ngIf="contactEmail.hasError('required')">Required</mat-error>
-            <mat-error *ngIf="contactEmail.hasError('email')">Must be a valid email address</mat-error>
-          </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12 col-md-6 col-xl-4"
+                 *ngIf="contactPhone.value || hasContactPhone.value">
 
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12 col-md-6 col-xl45"
-             *ngIf="contactPhone.value || hasContactPhone.value">
+              <mat-form-field class="w-100">
+                <input matInput
+                       placeholder="Phone"
+                       formControlName="contactPhone"
+                       mask="(000) 000-0000"
+                       [showMaskTyped]="false"
+                       [required]="isRequired('contactPhone')">
+                <mat-error *ngIf="contactPhone.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="contactPhone.hasError('phone')">Must be a valid phone number</mat-error>
+              </mat-form-field>
 
-          <mat-form-field class="w-100">
-            <input matInput
-                   placeholder="Phone"
-                   formControlName="contactPhone"
-                   mask="(000) 000-0000"
-                   [showMaskTyped]="false"
-                   [required]="isRequired('contactPhone')">
-            <mat-error *ngIf="contactPhone.hasError('required')">Required</mat-error>
-            <mat-error *ngIf="contactPhone.hasError('phone')">Must be a valid phone number</mat-error>
-          </mat-form-field>
-
+            </div>
+          </div>
         </div>
       </div>
 
