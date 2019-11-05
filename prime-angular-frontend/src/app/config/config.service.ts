@@ -13,7 +13,7 @@ export interface IConfigService {
   colleges: CollegeConfig[];
   countries: Config<string>[];
   jobNames: Config<number>[];
-  licenses: Config<number>[];
+  licenses: LicenseConfig[];
   organizationNames: Config<number>[];
   organizationTypes: Config<number>[];
   provinces: Config<string>[];
@@ -25,7 +25,7 @@ export interface IConfigService {
   providedIn: 'root'
 })
 export class ConfigService implements IConfigService {
-  private configuration: Configuration;
+  protected configuration: Configuration;
 
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,

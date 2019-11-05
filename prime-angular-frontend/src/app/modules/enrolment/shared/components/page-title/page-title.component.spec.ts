@@ -7,10 +7,13 @@ describe('PageTitleComponent', () => {
   let fixture: ComponentFixture<PageTitleComponent>;
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ PageTitleComponent ]
-    })
-    .compileComponents();
+    TestBed.configureTestingModule(
+      {
+        declarations: [
+          PageTitleComponent
+        ]
+      }
+    ).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +22,7 @@ describe('PageTitleComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create component', () => {
     expect(component).toBeTruthy();
   });
 });

@@ -69,7 +69,7 @@ export class AuthenticationGuard extends KeycloakAuthGuard implements CanActivat
           idpHint
         };
 
-        this.keycloakAngular.login(options)
+        this.authService.login(options)
           .catch((e) => {
             this.logger.error(e);
             this.router.navigate([routes.auth]);

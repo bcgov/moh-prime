@@ -10,13 +10,14 @@ import { User } from '../models/user.model';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class AuthService extends KeycloakService {
   private jwtHelper: JwtHelperService;
 
   constructor(
-    private logger: LoggerService,
-    private keycloakService: KeycloakService
+    private logger: LoggerService
   ) {
+    super();
+
     this.jwtHelper = new JwtHelperService();
   }
 
@@ -33,7 +34,7 @@ export class AuthService {
       firstName,
       lastName,
       email: contactEmail
-    } = await this.keycloakService.loadUserProfile(forceReload);
+    } = await this.loadUserProfile(forceReload);
 
     const userId = await this.getUserId();
 
@@ -45,54 +46,25 @@ export class AuthService {
     };
   }
 
-  public getRoles(): string[] {
-    return this.keycloakService.getUserRoles();
+  public async isEnrollee(): Promise<boolean> {
+    return this.isUserInRole(Role.ENROLLEE) && await this.checkAssuranceLevel(3);
   }
 
-  public hasRole(role: string): boolean {
-    return this.keycloakService.isUserInRole(role);
+  public isProvisioner(): boolean {
+    return this.isUserInRole(Role.PROVISIONER);
+  }
+
+  public isAdmin(): boolean {
+    return this.isUserInRole(Role.ADMIN);
+  }
+
+  public async decodeToken(): Promise<Keycloak.KeycloakTokenParsed | null> {
+    const token = await this.getToken();
+    return (token) ? this.jwtHelper.decodeToken(token) : null;
   }
 
   public async checkAssuranceLevel(assuranceLevel: number): Promise<boolean> {
     const token = await this.decodeToken() as any;
     return (token.identity_assurance_level === assuranceLevel);
-  }
-
-  public async isEnrollee(): Promise<boolean> {
-    return this.hasRole(Role.ENROLLEE) && await this.checkAssuranceLevel(3);
-  }
-
-  public isProvisioner(): boolean {
-    return this.hasRole(Role.PROVISIONER);
-  }
-
-  public isAdmin(): boolean {
-    return this.hasRole(Role.ADMIN);
-  }
-
-  public async decodeToken(): Promise<Keycloak.KeycloakTokenParsed | null> {
-    const token = await this.keycloakService.getToken();
-    return (token) ? this.jwtHelper.decodeToken(token) : null;
-  }
-
-  public login(options?: Keycloak.KeycloakLoginOptions): Promise<void> {
-    return this.keycloakService.login(options);
-  }
-
-  public isLoggedIn(): Promise<boolean> {
-    return this.keycloakService.isLoggedIn();
-  }
-
-  // TODO: test / is used to do a relative redirect
-  public logout(redirectUri: string = '/'): Promise<void> {
-    return this.keycloakService.logout(redirectUri);
-  }
-
-  public isTokenExpired(): boolean {
-    return this.keycloakService.isTokenExpired();
-  }
-
-  public clearToken() {
-    this.keycloakService.clearToken();
   }
 }
