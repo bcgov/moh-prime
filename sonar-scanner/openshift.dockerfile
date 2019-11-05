@@ -1,5 +1,5 @@
 #FROM docker-registry.default.svc:5000/dqszvc-tools/jenkins-slave-nodejs-rhel7
-FROM docker-registry.default.svc:5000/dqszvc-tools/jenkins-slave-base-rhel7
+FROM docker-registry.default.svc:5000/dqszvc-tools/jenkins-slave-base-centos7
 #FROM openshift/jenkins-slave-base-centos7
 #FROM openshift/jenkins-slave-nodejs-centos7
 SHELL ["/bin/bash", "-c"]
