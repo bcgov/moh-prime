@@ -20,16 +20,22 @@ RUN chmod +x *.bash && \
     wget https://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/jnlpJars/agent.jar && \
     mkdir -p /.dotnet && \
     chown -R default:0 /.dotnet && \
+    chmod -R a+rwx /.dotnet && \
     mkdir -p /.local && \
     chown -R default:0 /.local && \
+    chmod -R a+rwx /.local && \
     mkdir -p /.nuget && \
     chown -R default:0 /.nuget && \
+    chmod -R a+rwx /.nuget && \
     mkdir -p /tmp/NuGetScratch/ && \
     chown -R default:0 /tmp/NuGetScratch/ && \
+    chmod -R a+rwx /tmp/NuGetScratch/ && \
     mkdir -p /opt/app-root/app && \
     mkdir -p /opt/app-root/out && \
     chown -R default:0 /opt/app-root && \
+    chmod -R a+rwx /opt/app-root && \
     chmod 777 /etc/passwd
+
 
 #USER jenkins
 #CMD [ "tail","-f","/dev/null" ]
