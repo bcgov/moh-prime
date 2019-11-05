@@ -26,11 +26,6 @@ describe('ConfigCodePipe', () => {
     });
   }));
 
-  beforeEach(async(inject([ConfigService], (configService: ConfigService) => {
-    // Load the runtime configuration
-    configService.load().subscribe();
-  })));
-
   it('create an instance of Config Code Pipe', inject([ConfigService], (configService: ConfigService) => {
     const pipe = new ConfigCodePipe(configService);
     expect(pipe).toBeTruthy();

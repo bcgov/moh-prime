@@ -40,11 +40,6 @@ describe('CollegeCertificationsComponent', () => {
     }).compileComponents();
   }));
 
-  beforeEach(async(inject([ConfigService], (configService: ConfigService) => {
-    // Load the runtime configuration
-    configService.load().subscribe();
-  })));
-
   beforeEach(inject([EnrolmentStateService], (enrolmentStateService: EnrolmentStateService) => {
     fixture = TestBed.createComponent(CollegeCertificationsComponent);
     component = fixture.componentInstance;
