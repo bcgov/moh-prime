@@ -3,6 +3,7 @@ pipeline {
     options {
         disableResume()
     }
+/*
     stages {
         stage('Build') {
             agent { label 'master' }
@@ -22,19 +23,19 @@ pipeline {
                 sh "./player.sh deploy frontend dev"
             }
         }
-/*
+*/
         stage('Code Quality Check') {
-            agent { label 'master' }
+            agent { label 'code-tests' }
             steps {
                 echo "Deploy (DEV) ..."
                 //sh "export OC_APP=dev"
-                //sh "./player.sh scan"
+                sh "./player.sh scan"
                 //sh "./sonar-runner.bash"
                 //sh "./player.sh sonar dotnet-webapi dev"
                 //sh "./player.sh sonar angular-frontend dev"
             }
         }
-        stage('Test') {
+/*        stage('Test') {
             agent { label 'master' }
             script {
                     def IS_APPROVED = input(message: "Deploy to TEST?", ok: "yes", parameters: [string(name: 'IS_APPROVED', defaultValue: 'yes', description: 'Deploy to TEST?')])
