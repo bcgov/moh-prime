@@ -9,7 +9,10 @@ USER 0
 ENV ASPNETCORE_ENVIRONMENT Development
 #ENV JAVA_HOME /opt/app-root/app/jdk-11.0.2/bin
 #ENV PATH $PATH:$JAVA_HOME
-ENV PATH $PATH:/var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScanner/bin/
+ENV JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64/jre/bin
+ENV PATH $PATH:$JAVA_HOME:/var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScanner/bin/
+ENV GIT_COMMITTER_NAME default
+ENV GIT_COMMITTER_EMAIL noreply@gov.bc.ca
 RUN chmod +x *.bash && \
     useradd default && \
     rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm && \

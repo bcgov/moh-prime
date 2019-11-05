@@ -11,6 +11,8 @@ ENV ASPNETCORE_ENVIRONMENT Development
 #ENV PATH $PATH:$JAVA_HOME
 ENV JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64/jre/bin
 ENV PATH $PATH:$JAVA_HOME:/var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScanner/bin/
+ENV GIT_COMMITTER_NAME default
+ENV GIT_COMMITTER_EMAIL noreply@gov.bc.ca
 RUN chmod +x *.bash && \
     useradd default && \
     rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm && \
@@ -35,4 +37,5 @@ RUN chmod +x *.bash && \
 ENV PATH $PATH:/home/default/.dotnet/tools
 #USER jenkins
 #CMD [ "tail","-f","/dev/null" ]
-CMD [ "./entrypoint.bash" ]
+#CMD [ "./entrypoint.bash" ]
+ENTRYPOINT [ "./entrypoint.bash" ]
