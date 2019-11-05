@@ -18,6 +18,8 @@ RUN chmod +x *.bash && \
     dotnet tool install --global coverlet.console && \
     dotnet tool install --global dotnet-sonarscanner --version 4.7.1 && \
     wget https://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/jnlpJars/agent.jar && \
+    chown -R default:0 /home/jenkins && \
+    chmod -R a+rwx /home/jenkins && \
     mkdir -p /.dotnet && \
     chown -R default:0 /.dotnet && \
     chmod -R a+rwx /.dotnet && \
