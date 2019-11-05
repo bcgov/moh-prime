@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ReactiveFormsModule, FormGroup } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
 
@@ -17,6 +18,7 @@ describe('CollegeCertificationsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
+        BrowserAnimationsModule,
         HttpClientTestingModule,
         NgxMaterialModule,
         ReactiveFormsModule
@@ -31,12 +33,17 @@ describe('CollegeCertificationsComponent', () => {
         },
         {
           provide: ConfigService,
-          useValue: MockConfigService
+          useClass: MockConfigService
         },
         EnrolmentStateService
       ]
     }).compileComponents();
   }));
+
+  beforeEach(async(inject([ConfigService], (configService: ConfigService) => {
+    // Load the runtime configuration
+    configService.load().subscribe();
+  })));
 
   beforeEach(inject([EnrolmentStateService], (enrolmentStateService: EnrolmentStateService) => {
     fixture = TestBed.createComponent(CollegeCertificationsComponent);
