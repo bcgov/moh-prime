@@ -35,7 +35,7 @@ describe('DashboardComponent', () => {
           },
           {
             provide: AuthService,
-            useValue: MockAuthService
+            useClass: MockAuthService
           }
         ]
       }

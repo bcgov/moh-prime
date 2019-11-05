@@ -4,17 +4,17 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { KeycloakService } from 'keycloak-angular';
 import { NgxMaskModule } from 'ngx-mask';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
-import { MockKeycloakService } from 'test/mocks/mock-keycloak.service';
+import { MockAuthService } from 'test/mocks/mock-auth.service';
 
 import { ProfileComponent } from './profile.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
 import { SubHeaderComponent } from '@shared/components/sub-header/sub-header.component';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 describe('ProfileComponent', () => {
   let component: ProfileComponent;
@@ -45,8 +45,8 @@ describe('ProfileComponent', () => {
             useValue: MockConfigService
           },
           {
-            provide: KeycloakService,
-            useValue: MockKeycloakService
+            provide: AuthService,
+            useClass: MockAuthService
           }
         ]
       }

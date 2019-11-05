@@ -28,8 +28,8 @@ export class ConfigService implements IConfigService {
   protected configuration: Configuration;
 
   constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
-    private http: HttpClient
+    @Inject(APP_CONFIG) protected config: AppConfig,
+    protected http: HttpClient
   ) { }
 
   public get practices(): PracticeConfig[] {
