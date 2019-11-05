@@ -181,6 +181,16 @@ export class MockConfigService extends ConfigService implements IConfigService {
           { code: 1, name: 'In Progress' },
           { code: 2, name: 'Submitted' },
           { code: 6, name: 'Declined TOS (Terms of Service)' }
+        ],
+        statusReasons: [
+          {code: 7, name: 'Self Declaration'},
+          {code: 1, name: 'Automatic'},
+          {code: 2, name: 'Manual'},
+          {code: 3, name: 'Name Discrepancy'},
+          {code: 4, name: 'Not in PharmaNet'},
+          {code: 5, name: 'Insulin Pump Provider'},
+          {code: 6, name: 'Licence Class'},
+          {code: 8, name: 'Contact address or Identity Address Out of British Columbia'}
         ]
       };
 
