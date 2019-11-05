@@ -6,6 +6,7 @@ import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { AuthenticationGuard } from './authentication.guard';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { AuthService } from '../services/auth.service';
+import { Role } from '../enum/role.enum';
 
 describe('AuthenticationGuard', () => {
   beforeEach(() => {
@@ -27,7 +28,9 @@ describe('AuthenticationGuard', () => {
     });
   });
 
-  it('should be injected', inject([AuthenticationGuard], (guard: AuthenticationGuard) => {
+  it('should be injected', inject([AuthenticationGuard, AuthService], (guard: AuthenticationGuard, authService: MockAuthService) => {
+    authService.loggedIn = true;
+    authService.role = Role.ADMIN;
     expect(guard).toBeTruthy();
   }));
 });
