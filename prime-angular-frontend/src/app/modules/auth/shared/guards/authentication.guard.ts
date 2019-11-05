@@ -6,27 +6,38 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { KeycloakLoginOptions } from 'keycloak-js';
-import { KeycloakAuthGuard, KeycloakService } from 'keycloak-angular';
-
+import { environment } from '@env/environment';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { LoggerService } from '@core/services/logger.service';
 import { AuthProvider } from '@auth/shared/enum/auth-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
-import { environment } from '@env/environment';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthenticationGuard extends KeycloakAuthGuard implements CanActivateChild {
+export class AuthenticationGuard implements CanActivateChild {
+  private authenticated: boolean;
+  private roles: string[];
+
   constructor(
-    protected router: Router,
-    protected keycloakAngular: KeycloakService,
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
+    private router: Router,
     private logger: LoggerService
-  ) {
-    super(router, keycloakAngular);
+  ) { }
+
+  public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        this.authenticated = await this.authService.isLoggedIn();
+        this.roles = await this.authService.getUserRoles(true);
+
+        const result = await this.isAccessAllowed(route, state);
+        resolve(result);
+      } catch (error) {
+        reject('An error happened during access validation. Details:' + error);
+      }
+    });
   }
 
   public canActivateChild(
@@ -64,7 +75,7 @@ export class AuthenticationGuard extends KeycloakAuthGuard implements CanActivat
         const idpHint = (adminRoutes.includes(targetModule))
           ? AuthProvider.IDIR
           : AuthProvider.BCSC;
-        const options: KeycloakLoginOptions = {
+        const options = {
           redirectUri,
           idpHint
         };

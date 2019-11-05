@@ -4,8 +4,6 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import * as moment from 'moment';
-
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { Config } from '@config/config.model';
 import { PrimeHttpResponse } from '@core/models/prime-http-response.model';
