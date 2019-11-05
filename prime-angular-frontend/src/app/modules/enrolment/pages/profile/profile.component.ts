@@ -72,6 +72,30 @@ export class ProfileComponent implements OnInit {
     return this.viewportService.isMobile;
   }
 
+  public get voicePhone(): FormControl {
+    return this.form.get('voicePhone') as FormControl;
+  }
+
+  public get voiceExtension(): FormControl {
+    return this.form.get('voiceExtension') as FormControl;
+  }
+
+  public get hasContactEmail(): FormControl {
+    return this.form.get('hasContactEmail') as FormControl;
+  }
+
+  public get contactEmail(): FormControl {
+    return this.form.get('contactEmail') as FormControl;
+  }
+
+  public get hasContactPhone(): FormControl {
+    return this.form.get('hasContactPhone') as FormControl;
+  }
+
+  public get contactPhone(): FormControl {
+    return this.form.get('contactPhone') as FormControl;
+  }
+
   public onSubmit() {
     if (this.form.valid) {
       const payload = this.enrolmentStateService.enrolment;
@@ -89,7 +113,7 @@ export class ProfileComponent implements OnInit {
           () => {
             this.toastService.openSuccessToast('Profile information has been saved');
             this.form.markAsPristine();
-            this.router.navigate(['contact'], { relativeTo: this.route.parent });
+            this.router.navigate(['professional'], { relativeTo: this.route.parent });
           },
           (error: any) => {
             this.toastService.openErrorToast('Profile information could not be saved');
@@ -144,7 +168,6 @@ export class ProfileComponent implements OnInit {
             this.logger.info('USER', user);
 
             this.form.patchValue(user);
-            this.enrolmentStateService.contactForm.patchValue(user);
           }
 
           this.initForm();
@@ -181,6 +204,17 @@ export class ProfileComponent implements OnInit {
     );
 
     this.toggleValidators(mailingAddress);
+
+    this.hasContactEmail.valueChanges.subscribe((value: boolean) => this.toggleContactValidators(value, this.contactEmail));
+    this.hasContactPhone.valueChanges.subscribe((value: boolean) => this.toggleContactValidators(value, this.contactPhone));
+
+    if (this.contactEmail.value) {
+      this.form.get('hasContactEmail').patchValue(true);
+    }
+
+    if (this.contactPhone.value) {
+      this.form.get('hasContactPhone').patchValue(true);
+    }
   }
 
   private toggleValidators(mailingAddress: FormGroup) {
@@ -188,6 +222,14 @@ export class ProfileComponent implements OnInit {
       this.formUtilsService.resetAndClearValidators(mailingAddress);
     } else {
       this.formUtilsService.setValidators(mailingAddress, [Validators.required]);
+    }
+  }
+
+  private toggleContactValidators(value: boolean, control: FormControl) {
+    if (!value) {
+      this.formUtilsService.resetAndClearValidators(control);
+    } else {
+      this.formUtilsService.setValidators(control, [Validators.required]);
     }
   }
 }

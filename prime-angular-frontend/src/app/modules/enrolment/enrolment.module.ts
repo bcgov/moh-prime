@@ -4,7 +4,6 @@ import { SharedModule } from '@shared/shared.module';
 import { EnrolmentRoutingModule } from './enrolment-routing.module';
 
 import { ProfileComponent } from './pages/profile/profile.component';
-import { ContactComponent } from './pages/contact/contact.component';
 import { SelfDeclarationComponent } from './pages/self-declaration/self-declaration.component';
 import { ProfessionalInfoComponent } from './pages/professional-info/professional-info.component';
 import { PharmanetAccessComponent } from './pages/pharmanet-access/pharmanet-access.component';
@@ -20,7 +19,6 @@ import { SummaryComponent } from './pages/summary/summary.component';
 @NgModule({
   declarations: [
     ProfileComponent,
-    ContactComponent,
     ProfessionalInfoComponent,
     SelfDeclarationComponent,
     PharmanetAccessComponent,
