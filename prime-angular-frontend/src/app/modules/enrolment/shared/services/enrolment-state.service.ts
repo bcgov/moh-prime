@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, FormArray, FormControl } from '@angular/forms';
 
 import { FormControlValidators } from '@shared/validators/form-control.validators';
 import { Enrolment } from '@shared/models/enrolment.model';
@@ -15,7 +15,6 @@ export class EnrolmentStateService {
   // TODO: revisit access to form groups as service is refined, but for now public
   // TODO: make into BehaviourSubject or asObservable, which would possibly make it immutable
   public profileForm: FormGroup;
-  public contactForm: FormGroup;
   public professionalInfoForm: FormGroup;
   public selfDeclarationForm: FormGroup;
   public pharmaNetAccessForm: FormGroup;
@@ -28,7 +27,6 @@ export class EnrolmentStateService {
     private fb: FormBuilder
   ) {
     this.profileForm = this.buildProfileForm();
-    this.contactForm = this.buildContactForm();
     this.professionalInfoForm = this.buildProfessionalInfoForm();
     this.selfDeclarationForm = this.buildSelfDeclarationForm();
     this.pharmaNetAccessForm = this.buildPharmaNetAccessForm();
@@ -54,7 +52,6 @@ export class EnrolmentStateService {
     const userId = this.userId;
 
     const profile = this.profileForm.getRawValue();
-    const contact = this.contactForm.getRawValue();
     const professionalInfo = this.professionalInfoForm.getRawValue();
     const selfDeclaration = this.selfDeclarationForm.getRawValue();
     const pharmaNetAccess = this.pharmaNetAccessForm.getRawValue();
@@ -64,8 +61,7 @@ export class EnrolmentStateService {
       enrollee: {
         id: enrolleeId,
         userId,
-        ...profile,
-        ...contact
+        ...profile
       },
       ...professionalInfo,
       ...selfDeclaration,
@@ -76,7 +72,6 @@ export class EnrolmentStateService {
   public isEnrolmentValid(): boolean {
     return (
       this.isProfileInfoValid() &&
-      this.isContactInfoValid() &&
       this.isProfessionalInfoValid() &&
       this.isSelfDeclarationValid() &&
       this.isPharmaNetAccessValid()
@@ -85,10 +80,6 @@ export class EnrolmentStateService {
 
   public isProfileInfoValid(): boolean {
     return this.profileForm.valid;
-  }
-
-  public isContactInfoValid(): boolean {
-    return this.contactForm.valid;
   }
 
   public isProfessionalInfoValid(): boolean {
@@ -112,7 +103,6 @@ export class EnrolmentStateService {
     if (enrolment) {
       // TODO: create separate service for reuseable form create methods
       this.profileForm.patchValue(enrolment.enrollee);
-      this.contactForm.patchValue(enrolment.enrollee);
       this.professionalInfoForm.patchValue(enrolment);
 
       if (enrolment.certifications.length) {
@@ -173,12 +163,7 @@ export class EnrolmentStateService {
         street: [{ value: null, disabled: false }, []],
         city: [{ value: null, disabled: false }, []],
         postal: [{ value: null, disabled: false }, []]
-      })
-    });
-  }
-
-  private buildContactForm(): FormGroup {
-    return this.fb.group({
+      }),
       voicePhone: [null, [
         Validators.required,
         FormControlValidators.phone
