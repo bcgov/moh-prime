@@ -35,4 +35,4 @@ RUN chmod +x *.bash && \
 #CMD [ "tail","-f","/dev/null" ]
 #CMD [ "./entrypoint.bash" ]
 #ENTRYPOINT [ "./entrypoint.bash" ]
-ENTRYPOINT ['/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64/jre/bin/java -jar agent.jar -jnlpUrl http://jenkins-prod/computer/code-tests/slave-agent.jnlp -secret c598ca95983a9f6df4d06cc7f770b0d1ea404b806851f1a7f1066d89515c2c12 -workDir "$HOME"'']
+CMD ["/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64/jre/bin/java","-jar agent.jar","-jnlpUrl http://jenkins-prod/computer/code-tests/slave-agent.jnlp","-secret c598ca95983a9f6df4d06cc7f770b0d1ea404b806851f1a7f1066d89515c2c12","-workDir $HOME"]
