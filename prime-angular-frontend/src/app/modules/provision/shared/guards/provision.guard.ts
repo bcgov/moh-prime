@@ -6,8 +6,7 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { KeycloakLoginOptions } from 'keycloak-js';
-import { KeycloakAuthGuard, KeycloakService } from 'keycloak-angular';
+import { KeycloakAuthGuard } from 'keycloak-angular';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { LoggerService } from '@core/services/logger.service';
@@ -20,12 +19,11 @@ import { AuthService } from '@auth/shared/services/auth.service';
 export class ProvisionGuard extends KeycloakAuthGuard implements CanActivateChild {
   constructor(
     protected router: Router,
-    protected keycloakAngular: KeycloakService,
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
     private logger: LoggerService
   ) {
-    super(router, keycloakAngular);
+    super(router, authService);
   }
 
   public canActivateChild(
@@ -48,8 +46,8 @@ export class ProvisionGuard extends KeycloakAuthGuard implements CanActivateChil
       }
 
       if (
-        this.keycloakAngular.isUserInRole(Role.PROVISIONER) ||
-        this.keycloakAngular.isUserInRole(Role.ADMIN)
+        this.authService.isUserInRole(Role.PROVISIONER) ||
+        this.authService.isUserInRole(Role.ADMIN)
       ) {
         return resolve(true);
       }

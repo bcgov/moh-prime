@@ -6,11 +6,12 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { KeycloakAuthGuard, KeycloakService } from 'keycloak-angular';
+import { KeycloakAuthGuard } from 'keycloak-angular';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
-import { Role } from '@auth/shared/enum/role.enum';
 import { LoggerService } from '@core/services/logger.service';
+import { Role } from '@auth/shared/enum/role.enum';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,11 +19,11 @@ import { LoggerService } from '@core/services/logger.service';
 export class AuthorizationRedirectGuard extends KeycloakAuthGuard implements CanActivateChild {
   constructor(
     protected router: Router,
-    protected keycloakAngular: KeycloakService,
+    protected authService: AuthService,
     @Inject(APP_CONFIG) private config: AppConfig,
     private logger: LoggerService
   ) {
-    super(router, keycloakAngular);
+    super(router, authService);
   }
 
   public canActivateChild(

@@ -7,7 +7,7 @@ import {
 import { Observable } from 'rxjs';
 
 import { KeycloakLoginOptions } from 'keycloak-js';
-import { KeycloakAuthGuard, KeycloakService } from 'keycloak-angular';
+import { KeycloakAuthGuard } from 'keycloak-angular';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { LoggerService } from '@core/services/logger.service';
@@ -21,12 +21,11 @@ import { environment } from '@env/environment';
 export class AuthenticationGuard extends KeycloakAuthGuard implements CanActivateChild {
   constructor(
     protected router: Router,
-    protected keycloakAngular: KeycloakService,
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
     private logger: LoggerService
   ) {
-    super(router, keycloakAngular);
+    super(router, authService);
   }
 
   public canActivateChild(
