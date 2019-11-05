@@ -28,8 +28,10 @@ RUN chmod +x *.bash && \
     chown -R default:0 /.nuget && \
     chmod -R a+rwx /.nuget && \
     mkdir -p /tmp/NuGetScratch/ && \
+    mkdir -p /tmp/NuGetScratch/lock && \
     chown -R default:0 /tmp/NuGetScratch/ && \
     chmod -R a+rwx /tmp/NuGetScratch/ && \
+    chmod -R 777 /tmp/NuGetScratch/ && \
     mkdir -p /opt/app-root/app && \
     mkdir -p /opt/app-root/out && \
     chown -R default:0 /opt/app-root && \
