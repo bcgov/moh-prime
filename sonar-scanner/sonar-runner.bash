@@ -12,8 +12,7 @@ function dotnetTests()
 
 function angularTests()
 { 
-    cd prime-angular-frontend
-    sonar-scanner -Dsonar.host.url=http://sonarqube:9000
+    sonar-scanner -Dsonar.host.url=http://sonarqube:9000 -Dsonar.projectKey=angular-frontend -Dsonar.sources=prime-angular-frontend
 }
 
 echo "Beginning tests in container..."
