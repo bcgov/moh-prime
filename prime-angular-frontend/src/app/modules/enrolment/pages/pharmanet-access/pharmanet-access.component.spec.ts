@@ -35,7 +35,7 @@ describe('PharmanetAccessComponent', () => {
           },
           {
             provide: ConfigService,
-            useValue: MockConfigService
+            useClass: MockConfigService
           }
         ]
       }
