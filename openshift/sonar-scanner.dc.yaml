@@ -26,7 +26,7 @@ objects:
           containers:
             - env: 
                 - name: PATH
-                  value: '$PATH:$JAVA_HOME:/var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScanner/bin:/home/default/.dotnet/tools'
+                  value: '$PATH:$JAVA_HOME:/var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScanner/bin:/home/jenkins/.dotnet/tools'
                 - name: ASPNETCORE_ENVIRONMENT
                   value: Development
                 - name: JAVA_HOME
