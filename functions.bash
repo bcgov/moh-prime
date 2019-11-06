@@ -85,11 +85,12 @@ function deploy() {
 }
 
 function sonar(){
-    OC_APP="$2"
     oc process -f openshift/sonar-scanner.bc.yaml \
-    | oc apply -f - --namespace="${PROJECT_PREFIX}-$1"
+        -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
+        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" | oc apply -f - --namespace="${PROJECT_PREFIX}-$1"
     oc process -f openshift/sonar-scanner.dc.yaml \
-    | oc apply -f - --namespace="${PROJECT_PREFIX}-$1"
+        -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
+        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" | oc apply -f - --namespace="${PROJECT_PREFIX}-$1"
     oc start-build sonar-runner -n ${PROJECT_PREFIX}-$1 --wait --follow
 }
 
