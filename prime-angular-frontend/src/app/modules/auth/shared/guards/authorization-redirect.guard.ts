@@ -22,11 +22,11 @@ export class AuthorizationRedirectGuard extends BaseGuard {
 
   /**
    * @description
-   * Attempt to redirect an authenticated user to an
-   * appropriate destination when possible, otherwise
-   * prompt user to re/authenticate.
+   * Attempt to redirect an authenticated user to an appropriate
+   * destination when possible, otherwise prompt user to
+   * authenticate.
    */
-  protected canAccess(authenticated: boolean, roles: string[]): Promise<boolean> {
+  protected canAccess(authenticated: boolean, roles: string[], routePath: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
       if (!authenticated) {
         // Allow route to resolve for user to authenticate
