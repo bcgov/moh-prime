@@ -13,7 +13,8 @@ RUN chmod +x *.bash && \
     yum install -y -q epel-release && \
     yum install -y -q dotnet-sdk-2.2 java-1.8.0-openjdk-1.8.0.232 gcc-c++ make nodejs nano xterm envsubst git find which && \
     npm install -g @angular/cli sonarqube-scanner sonar-scanner && \
-    npm install puppeteer && \
+    npm install -g --save-dev karma karma-chrome-launcher karma-mocha karma-chai && \
+    npm install -g --save-dev mocha chai && \
     dotnet tool install --global coverlet.console && \
     dotnet tool install --global dotnet-sonarscanner --version 4.7.1 && \
     wget https://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/jnlpJars/agent.jar && \
