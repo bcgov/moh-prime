@@ -400,7 +400,7 @@
       "webOrigins": [
         "http://localhost:4200"
       ],
-      "notBefore": 1572920187,
+      "notBefore": 0,
       "bearerOnly": false,
       "consentRequired": false,
       "standardFlowEnabled": true,
