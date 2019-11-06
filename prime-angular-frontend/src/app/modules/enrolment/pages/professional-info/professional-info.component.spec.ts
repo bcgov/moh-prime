@@ -37,7 +37,7 @@ describe('ProfessionalInfoComponent', () => {
           },
           {
             provide: ConfigService,
-            useValue: MockConfigService
+            useClass: MockConfigService
           }
         ]
       }
