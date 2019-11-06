@@ -199,6 +199,7 @@ export class ProfileComponent implements OnInit {
       mailingAddress.get('countryCode').value ||
       mailingAddress.get('provinceCode').value ||
       mailingAddress.get('street').value ||
+      mailingAddress.get('street2').value ||
       mailingAddress.get('city').value ||
       mailingAddress.get('postal').value
     );
