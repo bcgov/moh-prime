@@ -10,7 +10,7 @@ RUN chmod +x *.bash && \
     useradd default && \
     useradd jenkins && \
     rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm && \
-    yum -y install epel-release && \
+    yum install -y -q epel-release && \
     yum install -y -q dotnet-sdk-2.2 java-1.8.0-openjdk-1.8.0.232 gcc-c++ make nodejs nano xterm envsubst git find which && \
     npm install -g @angular/cli sonarqube-scanner sonar-scanner puppeteer && \
     dotnet tool install --global coverlet.console && \

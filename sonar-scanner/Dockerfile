@@ -11,12 +11,14 @@ RUN chmod +x *.bash && \
     rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm && \
     yum -y install epel-release && \
     yum install -y -q dotnet-sdk-2.2 java-1.8.0-openjdk-1.8.0.232 gcc-c++ make nodejs nano xterm envsubst git find which && \
-    npm install -g @angular/cli sonarqube-scanner && \
+    npm install -g @angular/cli sonarqube-scanner sonar-scanner puppeteer && \
     dotnet tool install --global coverlet.console && \
     dotnet tool install --global dotnet-sonarscanner --version 4.7.1 && \
     wget https://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/jnlpJars/agent.jar && \
     chown -R default:0 /home/jenkins && \
     chmod -R a+rwx /home/jenkins && \
+    chown -R default:0 /home/default && \
+    chmod -R a+rwx /home/default && \
     chown -R default:0 /var/lib/origin && \
     chmod -R a+rwx /var/lib/origin && \
     mkdir -p /.dotnet && \
