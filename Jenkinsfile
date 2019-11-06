@@ -30,6 +30,7 @@ pipeline {
                 echo "PR ${CHANGE_ID}"
             }
         }
+        /*
         stage('Test') {
             agent { label 'master' }
             script {
@@ -50,7 +51,7 @@ pipeline {
                 sh "./player.sh deploy api dev"
                 sh "./player.sh deploy frontend dev"
             }
-        }
+        }/*
         stage('Deploy (PROD)') {
             agent { label 'master' }
             when {
@@ -67,7 +68,7 @@ pipeline {
                     sh "./player.sh "
                 }
             }
-        }
+        }/*
         stage('Merge to master') {
             agent { label 'master' }
             when {
@@ -83,7 +84,7 @@ pipeline {
                     echo "Squashing commits and merging to master"
                 }
                 withCredentials([usernamePassword(credentialsId: 'github-account', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                    sh """
+                    sh '
                         # Update master with latest changes from develop
                         git checkout master
                         git fetch
@@ -96,10 +97,11 @@ pipeline {
                         git fetch
                         git merge -s ours -m "Updating develop with master" origin/master
                         git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/bcgov/moh-prime.git
-                    """
+                    '
                 }
             }
-        }
+        }*/
+        /*
         stage('Acceptance') {
             agent { label 'master' }
             input {
@@ -110,7 +112,6 @@ pipeline {
                 echo "Acceptance ..."
                 sh "./player cleanup ${CHANGE_ID}"
             }
-        }
-        */
+        }*/
     }
 }
