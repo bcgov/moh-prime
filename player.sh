@@ -253,7 +253,7 @@ case "$1" in
         sonar $2
         ;;
     scan)
-        scan > /dev/null 2>&1 
+        scan
         ;;
     zap)
         zap $2 $3

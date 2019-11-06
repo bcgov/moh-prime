@@ -28,8 +28,6 @@ pipeline {
         stage('Code Quality Check') {
             agent { label 'code-tests' }
             steps {
-                echo "Deploy (DEV) ..."
-                //sh "export OC_APP=dev"
                 sh "./player.sh scan"
                 //sh "./sonar-runner.bash"
                 //sh "./player.sh sonar dotnet-webapi dev"
