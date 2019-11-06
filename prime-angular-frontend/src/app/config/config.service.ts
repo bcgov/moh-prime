@@ -68,6 +68,10 @@ export class ConfigService implements IConfigService {
     return [...this.configuration.statuses];
   }
 
+  public get statusReasons() {
+    return [...this.configuration.statusReasons];
+  }
+
   /**
    * @description
    * Load the runtime configuration.

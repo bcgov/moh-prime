@@ -22,7 +22,7 @@ namespace PrimeTests.Services
                 var results = await _service.GetLookupsAsync<short, JobName>();
                 Assert.NotNull(results);
                 Assert.NotEmpty(results);
-                Assert.Equal(8, results.Count);
+                Assert.Equal(4, results.Count);
             }
 
             // License Lookups
@@ -79,6 +79,14 @@ namespace PrimeTests.Services
                 Assert.NotNull(results);
                 Assert.NotEmpty(results);
                 Assert.Equal(13, results.Count);
+            }
+
+            // Status Reason Lookups
+            {
+                var results = await _service.GetLookupsAsync<short, StatusReason>();
+                Assert.NotNull(results);
+                Assert.NotEmpty(results);
+                Assert.Equal(8, results.Count);
             }
 
         }
