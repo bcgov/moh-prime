@@ -13,7 +13,7 @@ export interface IConfigService {
   colleges: CollegeConfig[];
   countries: Config<string>[];
   jobNames: Config<number>[];
-  licenses: Config<number>[];
+  licenses: LicenseConfig[];
   organizationNames: Config<number>[];
   organizationTypes: Config<number>[];
   provinces: Config<string>[];
@@ -25,11 +25,11 @@ export interface IConfigService {
   providedIn: 'root'
 })
 export class ConfigService implements IConfigService {
-  private configuration: Configuration;
+  protected configuration: Configuration;
 
   constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
-    private http: HttpClient
+    @Inject(APP_CONFIG) protected config: AppConfig,
+    protected http: HttpClient
   ) { }
 
   public get practices(): PracticeConfig[] {
@@ -66,6 +66,10 @@ export class ConfigService implements IConfigService {
 
   public get statuses(): Config<number>[] {
     return [...this.configuration.statuses];
+  }
+
+  public get statusReasons() {
+    return [...this.configuration.statusReasons];
   }
 
   /**

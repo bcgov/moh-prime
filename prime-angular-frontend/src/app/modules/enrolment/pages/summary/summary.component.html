@@ -2,8 +2,9 @@
 
   <h1 class="h2 mb-4">Summary</h1>
 
-  <app-sub-header subheader="Enrolment Status"
-                  help="Lorem ipsum dolor, sit amet consectetur adipisicing elit."></app-sub-header>
+  <app-sub-header subheader="PRIME Enrolment Details"
+                  help="This page contains your PharmaNet ID.  You will need to provide this ID to any administrator or vendor who is setting up your PharmaNet access account. This ID will be recorded on all your PharmaNet transactions.">
+  </app-sub-header>
 
   <ng-container *ngIf="enrolment">
 
@@ -45,9 +46,9 @@
       <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.postal | postal }}&nbsp;</dd>
     </dl>
 
-    <h3 class="lead">Licence Plate</h3>
+    <h3 class="lead">PharmaNet ID</h3>
     <dl class="row mb-4">
-      <dt class="col-sm-12 col-md-6 py-1">Licence Plate</dt>
+      <dt class="col-sm-12 col-md-6 py-1">PharmaNet ID</dt>
       <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.licensePlate }}&nbsp;</dd>
     </dl>
 

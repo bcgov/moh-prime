@@ -9,6 +9,7 @@ export interface Configuration {
   practices: PracticeConfig[];
   provinces: Config<string>[];
   statuses: Config<number>[];
+  statusReasons: Config<number>[];
 }
 
 export interface Config<T> {

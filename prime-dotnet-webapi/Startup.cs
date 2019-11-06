@@ -33,6 +33,7 @@ namespace Prime
             services.AddScoped<ILookupService, DefaultLookupService>();
             services.AddScoped<IEnrolmentService, DefaultEnrolmentService>();
             services.AddScoped<IEnrolleeService, DefaultEnrolleeService>();
+            services.AddScoped<IAutomaticAdjudicationService, DefaultAutomaticAdjudicationService>();
 
             services
                 .AddMvc()
@@ -119,7 +120,7 @@ namespace Prime
         {
             if (app == null)
             {
-                throw new ArgumentNullException("Could not update database, the passed in IApplicationBuilder cannot be null.");
+                throw new ArgumentNullException(nameof(app), "Could not update database, the passed in IApplicationBuilder cannot be null.");
             }
 
             using (var serviceScope = app.ApplicationServices

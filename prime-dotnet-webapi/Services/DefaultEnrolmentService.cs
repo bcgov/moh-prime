@@ -11,6 +11,8 @@ namespace Prime.Services
 {
     public class DefaultEnrolmentService : BaseService, IEnrolmentService
     {
+        private readonly IAutomaticAdjudicationService _automaticAdjudicationService;
+
         private class StatusWrapper
         {
             public Status Status { get; set; }
@@ -22,9 +24,11 @@ namespace Prime.Services
         private static Status NULL_STATUS = new Status { Code = -1, Name = "No Status" };
 
         public DefaultEnrolmentService(
-            ApiDbContext context, IHttpContextAccessor httpContext)
+            ApiDbContext context, IHttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService)
             : base(context, httpContext)
-        { }
+        {
+            _automaticAdjudicationService = automaticAdjudicationService;
+        }
 
         private Dictionary<Status, StatusWrapper[]> GetWorkFlowStateMap()
         {
@@ -76,15 +80,7 @@ namespace Prime.Services
 
         public async Task<Enrolment> GetEnrolmentAsync(int enrolmentId)
         {
-            var entity = await _context.Enrolments
-                .Include(e => e.Enrollee)
-                .ThenInclude(e => e.PhysicalAddress)
-                .Include(e => e.Enrollee)
-                .ThenInclude(e => e.MailingAddress)
-                .Include(e => e.Certifications)
-                .Include(e => e.Jobs)
-                .Include(e => e.Organizations)
-                .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.Status)
+            var entity = await this.GetBaseEnrolmentQuery()
                 .SingleOrDefaultAsync(e => e.Id == enrolmentId)
                 ;
 
@@ -99,15 +95,7 @@ namespace Prime.Services
 
         public async Task<Enrolment> GetEnrolmentForUserIdAsync(Guid userId)
         {
-            var entity = await _context.Enrolments
-                .Include(e => e.Enrollee)
-                .ThenInclude(e => e.PhysicalAddress)
-                .Include(e => e.Enrollee)
-                .ThenInclude(e => e.MailingAddress)
-                .Include(e => e.Certifications)
-                .Include(e => e.Jobs)
-                .Include(e => e.Organizations)
-                .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.Status)
+            var entity = await this.GetBaseEnrolmentQuery()
                 .SingleOrDefaultAsync(e => e.Enrollee.UserId == userId)
                 ;
 
@@ -120,18 +108,24 @@ namespace Prime.Services
             return entity;
         }
 
+        private IQueryable<Enrolment> GetBaseEnrolmentQuery()
+        {
+            return _context.Enrolments
+                    .Include(e => e.Enrollee)
+                    .ThenInclude(e => e.PhysicalAddress)
+                    .Include(e => e.Enrollee)
+                    .ThenInclude(e => e.MailingAddress)
+                    .Include(e => e.Certifications)
+                    .Include(e => e.Jobs)
+                    .Include(e => e.Organizations)
+                    .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.Status)
+                    .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.EnrolmentStatusReasons).ThenInclude(esr => esr.StatusReason)
+                    ;
+        }
+
         public async Task<IEnumerable<Enrolment>> GetEnrolmentsAsync(EnrolmentSearchOptions searchOptions)
         {
-            IQueryable<Enrolment> query = _context.Enrolments
-                .Include(e => e.Enrollee)
-                .ThenInclude(e => e.PhysicalAddress)
-                .Include(e => e.Enrollee)
-                .ThenInclude(e => e.MailingAddress)
-                .Include(e => e.Certifications)
-                .Include(e => e.Jobs)
-                .Include(e => e.Organizations)
-                .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.Status)
-                ;
+            IQueryable<Enrolment> query = this.GetBaseEnrolmentQuery();
 
             if (searchOptions.StatusCode != null)
             {
@@ -152,15 +146,7 @@ namespace Prime.Services
         public async Task<IEnumerable<Enrolment>> GetEnrolmentsForUserIdAsync(
             Guid userId)
         {
-            IQueryable<Enrolment> query = _context.Enrolments
-                .Include(e => e.Enrollee)
-                .ThenInclude(e => e.PhysicalAddress)
-                .Include(e => e.Enrollee)
-                .ThenInclude(e => e.MailingAddress)
-                .Include(e => e.Certifications)
-                .Include(e => e.Jobs)
-                .Include(e => e.Organizations)
-                .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.Status)
+            IQueryable<Enrolment> query = this.GetBaseEnrolmentQuery()
                 .Where(e => e.Enrollee.UserId == userId)
                 ;
 
@@ -175,13 +161,18 @@ namespace Prime.Services
             return items;
         }
 
-        public async Task<int?> CreateEnrolmentAsync(Enrolment enrolment)
+        public Task<int?> CreateEnrolmentAsync(Enrolment enrolment)
         {
             if (enrolment == null)
             {
-                throw new ArgumentNullException("Could not create an enrolment, the passed in Enrolment cannot be null.");
+                throw new ArgumentNullException(nameof(enrolment), "Could not create an enrolment, the passed in Enrolment cannot be null.");
             }
 
+            return this.CreateEnrolmentInternalAsync(enrolment);
+        }
+
+        private async Task<int?> CreateEnrolmentInternalAsync(Enrolment enrolment)
+        {
             //create a status history record
             EnrolmentStatus enrolmentStatus = new EnrolmentStatus { Enrolment = enrolment, StatusCode = Status.IN_PROGRESS_CODE, StatusDate = DateTime.Now, IsCurrent = true };
             if (enrolment.EnrolmentStatuses == null)
@@ -310,16 +301,20 @@ namespace Prime.Services
             return items;
         }
 
-        public async Task<EnrolmentStatus> CreateEnrolmentStatusAsync(int enrolmentId, Status status)
+        public Task<EnrolmentStatus> CreateEnrolmentStatusAsync(int enrolmentId, Status status)
         {
             if (status == null)
             {
-                throw new ArgumentNullException("Could not create an enrolment status, the passed in Status cannot be null.");
+                throw new ArgumentNullException(nameof(status), "Could not create an enrolment status, the passed in Status cannot be null.");
             }
 
-            var enrolment = await _context.Enrolments
+            return this.CreateEnrolmentStatusInternalAsync(enrolmentId, status);
+        }
+
+        private async Task<EnrolmentStatus> CreateEnrolmentStatusInternalAsync(int enrolmentId, Status status)
+        {
+            var enrolment = await this.GetBaseEnrolmentQuery()
                 .AsNoTracking()
-                .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.Status)
                 .SingleOrDefaultAsync(e => e.Id == enrolmentId);
             if (enrolment == null)
             {
@@ -332,6 +327,10 @@ namespace Prime.Services
             if (IsStatusChangeAllowed(currentStatus ?? NULL_STATUS, status))
             {
                 // update all of the existing statuses to not be current, and then create a new current status
+                if (currentStatus != null)
+                {
+                    enrolment.CurrentStatus.IsCurrent = false;
+                }
                 var existingEnrolmentStatuses = await this.GetEnrolmentStatusesAsync(enrolmentId);
                 foreach (var enrolmentStatus in existingEnrolmentStatuses)
                 {
@@ -341,6 +340,38 @@ namespace Prime.Services
                 // create a new enrolment status
                 var createdEnrolmentStatus = new EnrolmentStatus { EnrolmentId = enrolmentId, StatusCode = status.Code, StatusDate = DateTime.Now, IsCurrent = true };
                 _context.EnrolmentStatuses.Add(createdEnrolmentStatus);
+                enrolment.EnrolmentStatuses.Add(createdEnrolmentStatus);
+
+                switch (status?.Code)
+                {
+                    case Status.SUBMITTED_CODE:
+                        // check to see if this should be auto adjudicated
+                        if (_automaticAdjudicationService.QualifiesForAutomaticAdjudication(enrolment))
+                        {
+                            // change the status to adjudicated/approved
+                            createdEnrolmentStatus.IsCurrent = false;
+                            // create a new approved enrolment status
+                            var adjudicatedEnrolmentStatus = new EnrolmentStatus { EnrolmentId = enrolmentId, StatusCode = Status.APPROVED_CODE, StatusDate = DateTime.Now, IsCurrent = true };
+                            adjudicatedEnrolmentStatus.EnrolmentStatusReasons = new List<EnrolmentStatusReason> { new EnrolmentStatusReason { EnrolmentStatus = adjudicatedEnrolmentStatus, StatusReasonCode = StatusReason.AUTOMATIC_CODE } };
+                            _context.EnrolmentStatuses.Add(adjudicatedEnrolmentStatus);
+                            enrolment.EnrolmentStatuses.Add(adjudicatedEnrolmentStatus);
+                            // flip to the object that will get returned
+                            createdEnrolmentStatus = adjudicatedEnrolmentStatus;
+                        }
+                        break;
+                    case Status.APPROVED_CODE:
+                        // add the manual reason code
+                        createdEnrolmentStatus.EnrolmentStatusReasons = new List<EnrolmentStatusReason> { new EnrolmentStatusReason { EnrolmentStatus = createdEnrolmentStatus, StatusReasonCode = StatusReason.MANUAL_CODE } };
+                        break;
+
+                    case Status.ACCEPTED_TOS_CODE:
+                        // create the license plate for this enrollee
+                        var enrollee = await _context.Enrollees
+                            .SingleAsync(e => e.Id == enrolment.EnrolleeId);
+
+                        enrollee.LicensePlate = this.GenerateLicensePlate();
+                        break;
+                }
 
                 if (Status.ACCEPTED_TOS_CODE.Equals(status?.Code))
                 {
