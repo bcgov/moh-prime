@@ -33,7 +33,7 @@ objects:
       source:
         contextDir: sonar-scanner/
         git:
-          ref: develop
+          ref: feature/sonar-scanner-phase-3
           uri: https://github.com/bcgov/moh-prime.git
         type: Git
       strategy:
