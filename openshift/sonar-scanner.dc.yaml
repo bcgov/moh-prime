@@ -33,6 +33,8 @@ objects:
                   value: 'default'
                 - name: GIT_COMMITTER_EMAIL
                   value: 'noreply@gov.bc.ca'
+                - name: PATH
+                  value: '$PATH:$JAVA_HOME:/var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScanner/bin:/home/jenkins/.dotnet/tools'
               image: ' '
               name: sonar-scanner
               resources: {}
