@@ -234,13 +234,10 @@ function scan()
 
 case "$1" in
     build)
-        build $2 $3
+        build $2 $3 > /dev/null 2>&1 
         ;;
     deploy)
-        deploy $2 $3
-        ;;
-    ocApply)
-        ocApply $2 $3 $4
+        deploy $2 $3 > /dev/null 2>&1 
         ;;
     sonar)
         sonar $2
