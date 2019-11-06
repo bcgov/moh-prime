@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using Xunit;
 
@@ -9,7 +8,7 @@ using System.Collections.Generic;
 
 namespace PrimeTests.Services
 {
-    public class DefaultAutomaticAdjudicationServiceServiceTests : BaseServiceTests<DefaultAutomaticAdjudicationServiceService>
+    public class DefaultAutomaticAdjudicationServiceServiceTests : BaseServiceTests<DefaultAutomaticAdjudicationService>
     {
         private void UpdateCertifications(Enrolment enrolment, bool hasCertification = false)
         {

@@ -183,13 +183,9 @@ namespace PrimeTests.Utils
             if (!db.Set(typeof(JobName)).Any())
             {
                 db.AddRange(new JobName { Code = 1, Name = "Medical Office Assistant" });
-                db.AddRange(new JobName { Code = 2, Name = "Midwife" });
-                db.AddRange(new JobName { Code = 3, Name = "Nurse (not nurse practitioner)" });
-                db.AddRange(new JobName { Code = 4, Name = "Pharmacy Assistant" });
-                db.AddRange(new JobName { Code = 5, Name = "Pharmacy Technician" });
-                db.AddRange(new JobName { Code = 6, Name = "Registration Clerk" });
-                db.AddRange(new JobName { Code = 7, Name = "Ward Clerk" });
-                db.AddRange(new JobName { Code = 8, Name = "Other" });
+                db.AddRange(new JobName { Code = 2, Name = "Pharmacy Assistant" });
+                db.AddRange(new JobName { Code = 3, Name = "Registration Clerk" });
+                db.AddRange(new JobName { Code = 4, Name = "Ward Clerk" });
             }
 
             if (!db.Set(typeof(OrganizationName)).Any())
@@ -234,6 +230,18 @@ namespace PrimeTests.Utils
                 db.AddRange(new Province { Code = "NT", Name = "Northwest Territories" });
                 db.AddRange(new Province { Code = "NU", Name = "Nunavut" });
                 db.AddRange(new Province { Code = "YT", Name = "Yukon" });
+            }
+
+            if (!db.Set(typeof(StatusReason)).Any())
+            {
+                db.AddRange(new StatusReason { Code = 1, Name = "Automatic" });
+                db.AddRange(new StatusReason { Code = 2, Name = "Manual" });
+                db.AddRange(new StatusReason { Code = 3, Name = "Name Discrepancy" });
+                db.AddRange(new StatusReason { Code = 4, Name = "Not in PharmaNet" });
+                db.AddRange(new StatusReason { Code = 5, Name = "Insulin Pump Provider" });
+                db.AddRange(new StatusReason { Code = 6, Name = "Licence Class" });
+                db.AddRange(new StatusReason { Code = 7, Name = "Self Declaration" });
+                db.AddRange(new StatusReason { Code = 8, Name = "Contact address or Identity Address Out of British Columbia" });
             }
 
             db.SaveChanges();

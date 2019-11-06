@@ -6,11 +6,11 @@ using Prime.Models;
 
 namespace Prime.Services
 {
-    public class DefaultAutomaticAdjudicationServiceService : BaseService, IAutomaticAdjudicationService
+    public class DefaultAutomaticAdjudicationService : BaseService, IAutomaticAdjudicationService
     {
         readonly List<IAutomaticAdjudicationRule> _rules = new List<IAutomaticAdjudicationRule>();
 
-        public DefaultAutomaticAdjudicationServiceService(
+        public DefaultAutomaticAdjudicationService(
             ApiDbContext context, IHttpContextAccessor httpContext)
             : base(context, httpContext)
         {
@@ -67,13 +67,15 @@ namespace Prime.Services
                         throw new InvalidOperationException($"Could not process enrolment rule, current status was missing for Enrolment.Id={enrolment.Id}.");
                     }
 
+                    // add a enrolment status reason list if one doesn't already exist
+                    if (currentStatus.EnrolmentStatusReasons == null)
+                    {
+                        currentStatus.EnrolmentStatusReasons = new List<EnrolmentStatusReason>(0);
+                    }
+
                     // for every item returned in the results, add the reason to the current status
                     foreach (var item in results)
                     {
-                        if (currentStatus.EnrolmentStatusReasons == null)
-                        {
-                            currentStatus.EnrolmentStatusReasons = new List<EnrolmentStatusReason>(0);
-                        }
                         currentStatus.EnrolmentStatusReasons.Add(new EnrolmentStatusReason { EnrolmentStatus = currentStatus, StatusReasonCode = item.Code });
                     }
                 }
@@ -112,9 +114,8 @@ namespace Prime.Services
             {
                 var result = new List<StatusReason>(0);
                 // check to see if any of the addresses are outside of BC
-                // if there is not code (or address), use BC, so we don't get a mis-match
-                if (string.Compare(Province.BRITISH_COLUMBIA_CODE, (enrolment.Enrollee?.PhysicalAddress.ProvinceCode ?? Province.BRITISH_COLUMBIA_CODE), StringComparison.OrdinalIgnoreCase) != 0
-                    || string.Compare(Province.BRITISH_COLUMBIA_CODE, (enrolment.Enrollee?.MailingAddress?.ProvinceCode ?? Province.BRITISH_COLUMBIA_CODE), StringComparison.OrdinalIgnoreCase) != 0)
+                var provinceCodes = new[] { enrolment.Enrollee?.PhysicalAddress?.ProvinceCode, enrolment.Enrollee?.MailingAddress?.ProvinceCode };
+                if (provinceCodes.Any(p => p != null && !p.Equals(Province.BRITISH_COLUMBIA_CODE, StringComparison.InvariantCultureIgnoreCase)))
                 {
                     result.Add(new StatusReason { Code = StatusReason.ADDRESS_CODE });
                 }

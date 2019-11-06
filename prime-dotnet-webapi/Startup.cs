@@ -33,7 +33,7 @@ namespace Prime
             services.AddScoped<ILookupService, DefaultLookupService>();
             services.AddScoped<IEnrolmentService, DefaultEnrolmentService>();
             services.AddScoped<IEnrolleeService, DefaultEnrolleeService>();
-            services.AddScoped<IAutomaticAdjudicationService, DefaultAutomaticAdjudicationServiceService>();
+            services.AddScoped<IAutomaticAdjudicationService, DefaultAutomaticAdjudicationService>();
 
             services
                 .AddMvc()
