@@ -14,12 +14,8 @@ const routes: Routes = [
   {
     path: 'provision',
     component: DashboardComponent,
-    // Check authentication and authorization each time
-    // the router navigates to the next route
     canActivateChild: [
       AuthenticationGuard,
-      // Guard module from being accessed without the proper
-      // authorization based on the user role permissions
       ProvisionGuard
     ],
     resolve: [ConfigResolver],
@@ -29,13 +25,11 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            component: EnrolmentsComponent,
-            canDeactivate: []
+            component: EnrolmentsComponent
           },
           {
             path: ':id',
-            component: EnrolmentComponent,
-            canDeactivate: []
+            component: EnrolmentComponent
           }
         ]
       },

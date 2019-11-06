@@ -1,61 +1,48 @@
 import { Injectable, Inject } from '@angular/core';
-import {
-  CanActivateChild, ActivatedRouteSnapshot,
-  RouterStateSnapshot, UrlTree, Router
-} from '@angular/router';
-
-import { Observable } from 'rxjs';
-
-import { KeycloakAuthGuard, KeycloakService } from 'keycloak-angular';
+import { Router } from '@angular/router';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
-import { Role } from '@auth/shared/enum/role.enum';
+import { BaseGuard } from '@core/guards/base.guard';
 import { LoggerService } from '@core/services/logger.service';
+import { Role } from '@auth/shared/enum/role.enum';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthorizationRedirectGuard extends KeycloakAuthGuard implements CanActivateChild {
+export class AuthorizationRedirectGuard extends BaseGuard {
   constructor(
-    protected router: Router,
-    protected keycloakAngular: KeycloakService,
+    protected authService: AuthService,
+    protected logger: LoggerService,
     @Inject(APP_CONFIG) private config: AppConfig,
-    private logger: LoggerService
+    private router: Router
   ) {
-    super(router, keycloakAngular);
-  }
-
-  public canActivateChild(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-
-    return this.canActivate(next, state);
+    super(authService, logger);
   }
 
   /**
    * @description
-   * Check the access of the authenticated user, and
-   * redirect to an appropriate destination.
+   * Attempt to redirect an authenticated user to an appropriate
+   * destination when possible, otherwise prompt user to
+   * authenticate.
    */
-  public isAccessAllowed(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
+  protected canAccess(authenticated: boolean, roles: string[], routePath: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      if (!this.authenticated) {
+      if (!authenticated) {
+        // Allow route to resolve for user to authenticate
         return resolve(true);
       }
 
-      if (this.keycloakAngular.isUserInRole(Role.ENROLLEE)) {
-        this.router.navigate([this.config.routes.enrolment]);
-        return reject(false);
-      } else if (
-        this.keycloakAngular.isUserInRole(Role.PROVISIONER) ||
-        this.keycloakAngular.isUserInRole(Role.ADMIN)
-      ) {
-        this.router.navigate([this.config.routes.provision]);
-        return reject(false);
+      let destinationRoute = this.config.routes.denied;
+
+      if (roles.includes(Role.ENROLLEE)) {
+        destinationRoute = this.config.routes.enrolment;
+      } else if (roles.includes(Role.PROVISIONER) || roles.includes(Role.ADMIN)) {
+        destinationRoute = this.config.routes.provision;
       }
 
-      // Access has been denied
-      this.router.navigate([this.config.routes.denied]);
+      // Otherwise, redirect to an appropriate destination
+      this.router.navigate([destinationRoute]);
       return reject(false);
     });
   }

@@ -1,157 +1,143 @@
-apiVersion: v1
-kind: Pod
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
 metadata:
   annotations:
-    openshift.io/deployment-config.latest-version: '1'
-    openshift.io/deployment-config.name: jenkins-prod
-    openshift.io/deployment.name: jenkins-prod-1
-    openshift.io/scc: restricted
-  creationTimestamp: '2019-10-05T15:17:03Z'
-  generateName: jenkins-prod-1-
+    template.alpha.openshift.io/wait-for-ready: 'true'
+  creationTimestamp: '2019-10-05T15:16:54Z'
+  generation: 6
   labels:
-    deployment: jenkins-prod-1
-    deploymentconfig: jenkins-prod
-    name: jenkins-prod
-  name: jenkins-prod-1-4v6np
+    template: jenkins-persistent-template
+    template.openshift.io/template-instance-owner: 29e3deea-e783-11e9-8615-0050568348cc
+  name: jenkins-prod
   namespace: dqszvc-tools
-  ownerReferences:
-    - apiVersion: v1
-      blockOwnerDeletion: true
-      controller: true
-      kind: ReplicationController
-      name: jenkins-prod-1
-      uid: 2a0188e2-e783-11e9-8615-0050568348cc
-  resourceVersion: '1035914171'
-  selfLink: /api/v1/namespaces/dqszvc-tools/pods/jenkins-prod-1-4v6np
-  uid: 2f610df3-e783-11e9-aa2d-005056832285
+  resourceVersion: '1074231876'
+  selfLink: >-
+    /apis/apps.openshift.io/v1/namespaces/dqszvc-tools/deploymentconfigs/jenkins-prod
+  uid: 29f6e4b1-e783-11e9-8615-0050568348cc
 spec:
-  containers:
-    - env:
-        - name: OPENSHIFT_ENABLE_OAUTH
-          value: 'true'
-        - name: OPENSHIFT_ENABLE_REDIRECT_PROMPT
-          value: 'true'
-        - name: OPENSHIFT_JENKINS_JVM_ARCH
-          value: x86_64
-        - name: KUBERNETES_MASTER
-          value: 'https://kubernetes.default:443'
-        - name: KUBERNETES_TRUST_CERTIFICATES
-          value: 'true'
-        - name: JNLP_SERVICE_NAME
-          value: jenkins-jnlp
-        - name: JAVA_OPTS
-          value: >-
-            -XX:MaxMetaspaceSize=512m -Duser.timezone=America/Vancouver
-            -Dhudson.model.DirectoryBrowserSupport.CSP=
-      image: >-
-        docker-registry.default.svc:5000/openshift/jenkins@sha256:36f8501570cd2846cc93f34a53010f3971803876bf11362399267fcd0368feb2
-      imagePullPolicy: IfNotPresent
-      livenessProbe:
-        failureThreshold: 30
-        httpGet:
-          path: /login
-          port: 8080
-          scheme: HTTP
-        initialDelaySeconds: 420
-        periodSeconds: 10
-        successThreshold: 1
-        timeoutSeconds: 3
-      name: jenkins
-      readinessProbe:
-        failureThreshold: 3
-        httpGet:
-          path: /login
-          port: 8080
-          scheme: HTTP
-        initialDelaySeconds: 3
-        periodSeconds: 10
-        successThreshold: 1
-        timeoutSeconds: 3
-      resources:
-        limits:
-          cpu: '4'
-          memory: 4Gi
-        requests:
-          cpu: '1'
-          memory: 1Gi
-      securityContext:
-        capabilities:
-          drop:
-            - KILL
-            - MKNOD
-            - SETGID
-            - SETUID
-        privileged: false
-        runAsUser: 1001750000
-      terminationMessagePath: /dev/termination-log
-      terminationMessagePolicy: File
-      volumeMounts:
-        - mountPath: /var/lib/jenkins
-          name: jenkins-prod-data
-        - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
-          name: jenkins-prod-token-nsjzg
-          readOnly: true
-  dnsPolicy: ClusterFirst
-  imagePullSecrets:
-    - name: jenkins-prod-dockercfg-tjxht
-  nodeName: ociopf-p-193.dmz
-  nodeSelector:
-    region: app
-  priority: 0
-  restartPolicy: Always
-  schedulerName: default-scheduler
-  securityContext:
-    fsGroup: 1001750000
-    seLinuxOptions:
-      level: 's0:c42,c14'
-  serviceAccount: jenkins-prod
-  serviceAccountName: jenkins-prod
-  terminationGracePeriodSeconds: 30
-  tolerations:
-    - effect: NoSchedule
-      key: node.kubernetes.io/memory-pressure
-      operator: Exists
-  volumes:
-    - name: jenkins-prod-data
-      persistentVolumeClaim:
-        claimName: jenkins-prod
-    - name: jenkins-prod-token-nsjzg
-      secret:
-        defaultMode: 420
-        secretName: jenkins-prod-token-nsjzg
+  replicas: 0
+  revisionHistoryLimit: 10
+  selector:
+    name: jenkins-prod
+  strategy:
+    activeDeadlineSeconds: 21600
+    recreateParams:
+      timeoutSeconds: 600
+    resources: {}
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        name: jenkins-prod
+    spec:
+      containers:
+        - env:
+            - name: OPENSHIFT_ENABLE_OAUTH
+              value: 'true'
+            - name: OPENSHIFT_ENABLE_REDIRECT_PROMPT
+              value: 'true'
+            - name: OPENSHIFT_JENKINS_JVM_ARCH
+              value: x86_64
+            - name: KUBERNETES_MASTER
+              value: 'https://kubernetes.default:443'
+            - name: KUBERNETES_TRUST_CERTIFICATES
+              value: 'true'
+            - name: JNLP_SERVICE_NAME
+              value: jenkins-jnlp
+            - name: JAVA_OPTS
+              value: >-
+                -XX:MaxMetaspaceSize=512m -Duser.timezone=America/Vancouver
+                -Dhudson.model.DirectoryBrowserSupport.CSP=
+          image: >-
+            docker-registry.default.svc:5000/openshift/jenkins@sha256:36f8501570cd2846cc93f34a53010f3971803876bf11362399267fcd0368feb2
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 30
+            httpGet:
+              path: /login
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 420
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+          name: jenkins
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /login
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 3
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+          resources:
+            limits:
+              cpu: '4'
+              memory: 4Gi
+            requests:
+              cpu: '1'
+              memory: 1Gi
+          securityContext:
+            capabilities: {}
+            privileged: false
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /var/lib/jenkins
+              name: jenkins-prod-data
+            - mountPath: /backup
+              name: volume-8gxdz
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: jenkins-prod
+      serviceAccountName: jenkins-prod
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: jenkins-prod-data
+          persistentVolumeClaim:
+            claimName: jenkins-prod
+        - name: volume-8gxdz
+          persistentVolumeClaim:
+            claimName: jenkins-prod-home
+  test: false
+  triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+          - jenkins
+        from:
+          kind: ImageStreamTag
+          name: 'jenkins:2'
+          namespace: openshift
+        lastTriggeredImage: >-
+          docker-registry.default.svc:5000/openshift/jenkins@sha256:36f8501570cd2846cc93f34a53010f3971803876bf11362399267fcd0368feb2
+      type: ImageChange
+    - type: ConfigChange
 status:
+  availableReplicas: 0
   conditions:
-    - lastProbeTime: null
-      lastTransitionTime: '2019-10-05T15:17:20Z'
+    - lastTransitionTime: '2019-10-31T02:19:38Z'
+      lastUpdateTime: '2019-10-31T02:20:23Z'
+      message: replication controller "jenkins-prod-2" successfully rolled out
+      reason: NewReplicationControllerAvailable
       status: 'True'
-      type: Initialized
-    - lastProbeTime: null
-      lastTransitionTime: '2019-10-21T21:11:03Z'
-      status: 'True'
-      type: Ready
-    - lastProbeTime: null
-      lastTransitionTime: null
-      status: 'True'
-      type: ContainersReady
-    - lastProbeTime: null
-      lastTransitionTime: '2019-10-05T15:17:20Z'
-      status: 'True'
-      type: PodScheduled
-  containerStatuses:
-    - containerID: >-
-        docker://077e3b2fcd50062769f731c4dbe5c8354ec646dfd18b9104b54caf8b58637a48
-      image: 'sha256:476ab469e17b55efdb3589ffc51f95926e6b962fa3fb1bb77b273f86b5f9729a'
-      imageID: >-
-        docker-pullable://docker-registry.default.svc:5000/openshift/jenkins@sha256:36f8501570cd2846cc93f34a53010f3971803876bf11362399267fcd0368feb2
-      lastState: {}
-      name: jenkins
-      ready: true
-      restartCount: 0
-      state:
-        running:
-          startedAt: '2019-10-05T15:17:26Z'
-  hostIP: 142.34.143.179
-  phase: Running
-  podIP: 172.51.120.207
-  qosClass: Burstable
-  startTime: '2019-10-05T15:17:20Z'
+      type: Progressing
+    - lastTransitionTime: '2019-10-31T02:32:38Z'
+      lastUpdateTime: '2019-10-31T02:32:38Z'
+      message: Deployment config does not have minimum availability.
+      status: 'False'
+      type: Available
+  details:
+    causes:
+      - type: ConfigChange
+    message: config change
+  latestVersion: 2
+  observedGeneration: 6
+  replicas: 0
+  unavailableReplicas: 0
+  updatedReplicas: 0

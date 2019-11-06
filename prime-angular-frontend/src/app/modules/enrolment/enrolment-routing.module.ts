@@ -24,20 +24,16 @@ const routes: Routes = [
   {
     path: 'enrolment',
     component: DashboardComponent,
-    // Check authentication and authorization each time
-    // the router navigates to the next route
     canActivateChild: [
       AuthenticationGuard,
-      // Guard module from being accessed without the proper
-      // authorization based on the user role permissions
-      EnrolleeGuard
+      EnrolleeGuard,
+      EnrolmentGuard
     ],
     resolve: [ConfigResolver],
     children: [
       {
         path: 'profile',
         component: ProfileComponent,
-        canActivate: [EnrolmentGuard],
         canDeactivate: [CanDeactivateFormGuard]
       },
       {
@@ -61,33 +57,27 @@ const routes: Routes = [
       {
         path: 'declaration',
         component: SelfDeclarationComponent,
-        canActivate: [EnrolmentGuard],
         canDeactivate: [CanDeactivateFormGuard]
       },
       {
         path: 'access',
         component: PharmanetAccessComponent,
-        canActivate: [EnrolmentGuard],
         canDeactivate: [CanDeactivateFormGuard]
       },
       {
         path: 'review',
-        canActivate: [EnrolmentGuard],
         component: ReviewComponent
       },
       {
         path: 'confirmation',
-        canActivate: [EnrolmentGuard],
         component: ConfirmationComponent
       },
       {
         path: 'agreement',
-        canActivate: [EnrolmentGuard],
         component: AccessAgreementComponent
       },
       {
         path: 'summary',
-        canActivate: [EnrolmentGuard],
         component: SummaryComponent
       },
       {

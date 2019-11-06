@@ -24,13 +24,13 @@ namespace PrimeTests.Utils
     public class TestUtils
     {
 
-        public static string[] countries = new [] { "CA" };
+        public static string[] countries = new[] { "CA" };
 
-        public static string[] provinces = new [] { "AB", "BC", "MB", "NB", "NL", "NS", "ON", "PE", "QC", "SK", "NT", "NU", "YT" };
+        public static string[] provinces = new[] { "AB", "BC", "MB", "NB", "NL", "NS", "ON", "PE", "QC", "SK", "NT", "NU", "YT" };
 
         public static Faker<PhysicalAddress> PhysicalAddressFaker = new Faker<PhysicalAddress>()
                                 .RuleFor(a => a.CountryCode, f => f.PickRandom(countries))
-                                .RuleFor(a => a.ProvinceCode, f => f.PickRandom(provinces))
+                                .RuleFor(a => a.ProvinceCode, TestUtils.RandomProvince())
                                 .RuleFor(a => a.Street, f => f.Address.StreetAddress())
                                 .RuleFor(a => a.City, f => f.Address.City())
                                 .RuleFor(a => a.Postal, f => f.Address.ZipCode("?#?#?#"))
@@ -38,7 +38,7 @@ namespace PrimeTests.Utils
 
         public static Faker<MailingAddress> MailingAddressFaker = new Faker<MailingAddress>()
                                 .RuleFor(a => a.CountryCode, f => f.PickRandom(countries))
-                                .RuleFor(a => a.ProvinceCode, f => f.PickRandom(provinces))
+                                .RuleFor(a => a.ProvinceCode, TestUtils.RandomProvince())
                                 .RuleFor(a => a.Street, f => f.Address.StreetAddress())
                                 .RuleFor(a => a.City, f => f.Address.City())
                                 .RuleFor(a => a.Postal, f => f.Address.ZipCode("?#?#?#"))
@@ -86,7 +86,7 @@ namespace PrimeTests.Utils
                                     .RuleFor(e => e.HasCertification, f => f.Random.Bool())
                                     .RuleFor(e => e.Certifications, f => CertificationFaker.Generate(2))
                                     .RuleFor(e => e.IsDeviceProvider, f => f.Random.Bool())
-                                    .RuleFor(e => e.DeviceProviderNumber, f => f.Random.Int(100000, 999999).ToString().Substring(1))
+                                    .RuleFor(e => e.DeviceProviderNumber, TestUtils.RandomDeviceProviderNumber())
                                     .RuleFor(e => e.IsInsulinPumpProvider, f => f.Random.Bool())
                                     .RuleFor(e => e.IsAccessingPharmaNetOnBehalfOf, f => f.Random.Bool())
                                     .RuleFor(e => e.Jobs, f => JobFaker.Generate(2))
@@ -101,6 +101,20 @@ namespace PrimeTests.Utils
                                     .RuleFor(e => e.Organizations, f => OrganizationFaker.Generate(2))
                                     .RuleFor(e => e.EnrolmentStatuses, f => EnrolmentStatusFaker.Generate(1))
                                     ;
+
+        public static string RandomProvince(string[] excluded = null)
+        {
+            if (excluded == null)
+            {
+                excluded = new string[0];
+            }
+            return new Faker().PickRandom(provinces.Except(excluded));
+        }
+
+        public static string RandomDeviceProviderNumber()
+        {
+            return new Faker().Random.Int(100000, 999999).ToString().Substring(1);
+        }
 
         public static void AddAdminRoleToUser(ClaimsPrincipal user)
         {
@@ -117,14 +131,14 @@ namespace PrimeTests.Utils
             identity.RemoveClaim(claim);
         }
 
-        public static int? CreateEnrolment(ApiDbContext apiDbContext, HttpContextAccessor httpContext)
+        public static int? CreateEnrolment(ApiDbContext apiDbContext, HttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService)
         {
-            return new DefaultEnrolmentService(apiDbContext, httpContext).CreateEnrolmentAsync(TestUtils.EnrolmentFaker.Generate()).Result;
+            return new DefaultEnrolmentService(apiDbContext, httpContext, automaticAdjudicationService).CreateEnrolmentAsync(TestUtils.EnrolmentFaker.Generate()).Result;
         }
 
-        public static Enrolment GetEnrolmentById(ApiDbContext apiDbContext, HttpContextAccessor httpContext, int enrolmentId)
+        public static Enrolment GetEnrolmentById(ApiDbContext apiDbContext, HttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService, int enrolmentId)
         {
-            return new DefaultEnrolmentService(apiDbContext, httpContext).GetEnrolmentAsync(enrolmentId).Result;
+            return new DefaultEnrolmentService(apiDbContext, httpContext, automaticAdjudicationService).GetEnrolmentAsync(enrolmentId).Result;
         }
 
         public static void InitializeDbForTests(ApiDbContext db)
@@ -169,13 +183,9 @@ namespace PrimeTests.Utils
             if (!db.Set(typeof(JobName)).Any())
             {
                 db.AddRange(new JobName { Code = 1, Name = "Medical Office Assistant" });
-                db.AddRange(new JobName { Code = 2, Name = "Midwife" });
-                db.AddRange(new JobName { Code = 3, Name = "Nurse (not nurse practitioner)" });
-                db.AddRange(new JobName { Code = 4, Name = "Pharmacy Assistant" });
-                db.AddRange(new JobName { Code = 5, Name = "Pharmacy Technician" });
-                db.AddRange(new JobName { Code = 6, Name = "Registration Clerk" });
-                db.AddRange(new JobName { Code = 7, Name = "Ward Clerk" });
-                db.AddRange(new JobName { Code = 8, Name = "Other" });
+                db.AddRange(new JobName { Code = 2, Name = "Pharmacy Assistant" });
+                db.AddRange(new JobName { Code = 3, Name = "Registration Clerk" });
+                db.AddRange(new JobName { Code = 4, Name = "Ward Clerk" });
             }
 
             if (!db.Set(typeof(OrganizationName)).Any())
@@ -220,6 +230,18 @@ namespace PrimeTests.Utils
                 db.AddRange(new Province { Code = "NT", Name = "Northwest Territories" });
                 db.AddRange(new Province { Code = "NU", Name = "Nunavut" });
                 db.AddRange(new Province { Code = "YT", Name = "Yukon" });
+            }
+
+            if (!db.Set(typeof(StatusReason)).Any())
+            {
+                db.AddRange(new StatusReason { Code = 1, Name = "Automatic" });
+                db.AddRange(new StatusReason { Code = 2, Name = "Manual" });
+                db.AddRange(new StatusReason { Code = 3, Name = "Name Discrepancy" });
+                db.AddRange(new StatusReason { Code = 4, Name = "Not in PharmaNet" });
+                db.AddRange(new StatusReason { Code = 5, Name = "Insulin Pump Provider" });
+                db.AddRange(new StatusReason { Code = 6, Name = "Licence Class" });
+                db.AddRange(new StatusReason { Code = 7, Name = "Self Declaration" });
+                db.AddRange(new StatusReason { Code = 8, Name = "Contact address or Identity Address Out of British Columbia" });
             }
 
             db.SaveChanges();

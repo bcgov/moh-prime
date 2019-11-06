@@ -22,25 +22,18 @@ pipeline {
                 sh "./player.sh deploy frontend dev"
             }
         }
-        /*
-        stage('SonarQube analysis') {
-        agent { label 'master' }
-        steps { 
-                sh "${scannerHome}/bin/sonar-scanner -X"
-            }
-        }
-        // This is the work on the current branch
+/*
         stage('Code Quality Check') {
             agent { label 'master' }
             steps {
                 echo "Deploy (DEV) ..."
                 //sh "export OC_APP=dev"
-                //sh "./player.sh sonar"
+                //sh "./player.sh scan"
+                //sh "./sonar-runner.bash"
                 //sh "./player.sh sonar dotnet-webapi dev"
                 //sh "./player.sh sonar angular-frontend dev"
             }
         }
-        /*
         stage('Test') {
             agent { label 'master' }
             script {

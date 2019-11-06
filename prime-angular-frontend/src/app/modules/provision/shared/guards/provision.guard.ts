@@ -6,56 +6,43 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { KeycloakLoginOptions } from 'keycloak-js';
-import { KeycloakAuthGuard, KeycloakService } from 'keycloak-angular';
-
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { LoggerService } from '@core/services/logger.service';
 import { Role } from '@auth/shared/enum/role.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { BaseGuard } from '@core/guards/base.guard';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProvisionGuard extends KeycloakAuthGuard implements CanActivateChild {
+export class ProvisionGuard extends BaseGuard {
   constructor(
-    protected router: Router,
-    protected keycloakAngular: KeycloakService,
+    protected authService: AuthService,
+    protected logger: LoggerService,
     @Inject(APP_CONFIG) private config: AppConfig,
-    private authService: AuthService,
-    private logger: LoggerService
+    private router: Router
   ) {
-    super(router, keycloakAngular);
-  }
-
-  public canActivateChild(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-
-    return this.canActivate(next, state);
+    super(authService, logger);
   }
 
   /**
    * @description
-   * Check the access of the authenticated user, and
-   * redirect to an appropriate destination.
+   * Check the user is authenticated, otherwise redirect
+   * them to an appropriate destination.
    */
-  public isAccessAllowed(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
+  protected canAccess(authenticated: boolean, roles: string[], routePath: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      if (!this.authenticated) {
-        this.router.navigate([this.config.routes.auth]);
-        return reject(false);
-      }
+      let destinationRoute = this.config.routes.denied;
 
-      if (
-        this.keycloakAngular.isUserInRole(Role.PROVISIONER) ||
-        this.keycloakAngular.isUserInRole(Role.ADMIN)
-      ) {
+      if (!authenticated) {
+        destinationRoute = this.config.routes.auth;
+      } else if (roles.includes(Role.PROVISIONER) || roles.includes(Role.ADMIN)) {
+        // Allow route to resolve
         return resolve(true);
       }
 
-      // Access has been denied
-      this.router.navigate([this.config.routes.denied]);
+      // Otherwise, redirect to an appropriate destination
+      this.router.navigate([destinationRoute]);
       return reject(false);
     });
   }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Prime;
@@ -13,7 +14,11 @@ namespace PrimeTests.Services
         protected HttpContextAccessor _httpContext;
         protected T _service;
 
-        public BaseServiceTests()
+
+        public BaseServiceTests() : this(null)
+        { }
+
+        public BaseServiceTests(object[] extraParams)
         {
             _databaseName = Guid.NewGuid().ToString();
 
@@ -28,7 +33,17 @@ namespace PrimeTests.Services
 
             TestUtils.InitializeDbForTests(_dbContext);
 
-            _service = (T)Activator.CreateInstance(typeof(T), new object[] { _dbContext, _httpContext, });
+            var baseParams = new object[] { _dbContext, _httpContext, };
+            // merge in the values from the passed in extraParams
+            var mergedParamList = new List<object>();
+            mergedParamList.AddRange(baseParams);
+            if (extraParams != null)
+            {
+                mergedParamList.AddRange(extraParams);
+            }
+            object[] finalParams = mergedParamList.ToArray();
+
+            _service = (T)Activator.CreateInstance(typeof(T), finalParams);
         }
 
         public void Dispose()
