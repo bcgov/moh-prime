@@ -27,9 +27,9 @@ pipeline {
             agent { label 'code-tests' }
             steps {
                 sh "./player.sh scan"
+                echo "PR ${CHANGE_ID}"
             }
         }
-        /*
         stage('Test') {
             agent { label 'master' }
             script {
@@ -43,45 +43,12 @@ pipeline {
             }
             steps {
                 echo "Test (DEV) ..."
-                sh "bash ./player.sh ocApply build postgresql dev"
-                sh "bash ./player.sh ocApply build dotnet-webapi dev"
-                sh "bash ./player.sh ocApply build angular-frontend dev"
-                sh "bash ./player.sh ocApply deploy postgresql dev"
-                sh "bash ./player.sh ocApply deploy dotnet-webapi dev"
-                sh "bash ./player.sh ocApply deploy angular-frontend dev"
-            }
-        }
-        */
-        /*
-        stage('Unit Tests and SonarQube Reporting (DEV)') {
-            agent { label 'master' }
-            steps {
-                echo "Running unit tests and reporting them to SonarQube ..."
-                sh "unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-unit-test -Pargs.--config=pipeline/config-dev.groovy -Pargs.--pr=${CHANGE_ID} -Pargs.--env=dev -Pargs.--branch=${CHANGE_BRANCH}"
-            }
-        }
-        stage('Functional Test (DEV)') {
-            agent { label 'master' }
-            steps {
-                echo "Functional Test (DEV) ..."
-                sh "unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-functional-test -Pargs.--config=pipeline/config-dev.groovy -Pargs.--pr=${CHANGE_ID} -Pargs.--env=dev"
-            }
-        }
-        stage ('ZAP (DEV)'){
-            agent { label 'master' }
-            steps {
-                echo "ZAP (DEV)"
-                sh "unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-zap -Pargs.--config=pipeline/config-dev.groovy -Pargs.--pr=${CHANGE_ID} -Pargs.--env=dev"
-            }
-        }
-        stage('Deploy (TEST)') {
-            agent { label 'master' }
-            when {
-                environment name: 'CHANGE_TARGET', value: 'master'
-            }
-            steps {
-                echo "Deploy (TEST)"
-                sh "unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-deploy -Pargs.--config=pipeline/config-test.groovy -Pargs.--pr=${CHANGE_ID} -Pargs.--env=test"
+                sh "./player.sh build database dev"
+                sh "./player.sh build api dev"
+                sh "./player.sh build frontend dev"
+                sh "./player.sh deploy database dev"
+                sh "./player.sh deploy api dev"
+                sh "./player.sh deploy frontend dev"
             }
         }
         stage('Deploy (PROD)') {
@@ -97,7 +64,7 @@ pipeline {
                         error "User cancelled"
                     }
                     echo "Deploy (PROD)"
-                    sh "unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-deploy -Pargs.--config=pipeline/config-prod.groovy -Pargs.--pr=${CHANGE_ID} -Pargs.--env=prod"
+                    sh "./player.sh "
                 }
             }
         }
@@ -141,7 +108,7 @@ pipeline {
             }
             steps {
                 echo "Acceptance ..."
-                sh "unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-clean -Pargs.--config=pipeline/config-dev.groovy -Pargs.--pr=${CHANGE_ID}"
+                sh "./player cleanup ${CHANGE_ID}"
             }
         }
         */
