@@ -11,7 +11,7 @@ namespace Prime.Infrastructure
         {
             if (context == null)
             {
-                throw new ArgumentNullException("The passed in AuthorizationHandlerContext cannot be null.");
+                throw new ArgumentNullException(nameof(context), "The passed in AuthorizationHandlerContext cannot be null.");
             }
 
             if (context.User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE)
