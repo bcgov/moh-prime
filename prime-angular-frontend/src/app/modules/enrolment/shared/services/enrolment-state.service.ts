@@ -154,6 +154,7 @@ export class EnrolmentStateService {
         countryCode: [{ value: null, disabled: false }, [Validators.required]],
         provinceCode: [{ value: null, disabled: false }, [Validators.required]],
         street: [{ value: null, disabled: false }, [Validators.required]],
+        street2: [{ value: null, disabled: false }, []],
         city: [{ value: null, disabled: false }, [Validators.required]],
         postal: [{ value: null, disabled: false }, [Validators.required]]
       }),
@@ -161,6 +162,7 @@ export class EnrolmentStateService {
         countryCode: [{ value: null, disabled: false }, []],
         provinceCode: [{ value: null, disabled: false }, []],
         street: [{ value: null, disabled: false }, []],
+        street2: [{ value: null, disabled: false }, []],
         city: [{ value: null, disabled: false }, []],
         postal: [{ value: null, disabled: false }, []]
       }),
