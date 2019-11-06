@@ -22,21 +22,21 @@ pipeline {
                 //sh "./player.sh deploy database dev"
                 //sh "./player.sh deploy api dev"
                 //sh "./player.sh deploy frontend dev"
-                sh "./player.sh sonar tools"
             }
         }
-/*
+
         stage('Code Quality Check') {
             agent { label 'master' }
             steps {
                 echo "Deploy (DEV) ..."
                 //sh "export OC_APP=dev"
-                //sh "./player.sh scan"
+                sh "./player.sh scan"
                 //sh "./sonar-runner.bash"
                 //sh "./player.sh sonar dotnet-webapi dev"
                 //sh "./player.sh sonar angular-frontend dev"
             }
         }
+        /*
         stage('Test') {
             agent { label 'master' }
             script {
