@@ -27,7 +27,6 @@ pipeline {
             agent { label 'code-tests' }
             steps {
                 sh "./player.sh scan"
-                echo "PR ${CHANGE_ID}"
             }
         }
         /*
