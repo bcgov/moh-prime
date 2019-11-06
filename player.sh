@@ -1,13 +1,8 @@
 #!/bin/bash
 source project.conf
-#export PROJECT_PREFIX="dqszvc"
-#export GIT_URL='https://github.com/bcgov/moh-prime.git'
-#export BRANCH_LOWER=`echo "${BRANCH_NAME}" | awk '{print tolower($0)}'`
 export ACTION=$1
 export COMPONENT=$2
 export OC_APP=$3
-# source ./project.sh
-# source ./functions.sh
 function variablePopulation() {
     if [ "${BRANCH_LOWER}" == "develop" ] || [ "${BRANCH_LOWER}" == "master" ];
     then 
@@ -236,8 +231,6 @@ function scan()
     echo "Beginning tests on Angular ..."
     angularTests > /dev/null 2>&1 
 }
-# Build an deploy are very alike, require similar logic for config injestion.
-# This takes in Git, Jenkins and system variables to the template that will be processed.
 
 case "$1" in
     build)
