@@ -4,7 +4,6 @@ pipeline {
         disableResume()
     }
     stages {
-        /*
         stage('Build') {
             agent { label 'master' }
             steps {
@@ -14,14 +13,13 @@ pipeline {
                 sh "./player.sh build frontend dev"
             }
         }
-        */
         stage('Deploy (DEV)') {
             agent { label 'master' }
             steps {
                 echo "Deploy (DEV) ..."
-                //sh "./player.sh deploy database dev"
-                //sh "./player.sh deploy api dev"
-                //sh "./player.sh deploy frontend dev"
+                sh "./player.sh deploy database dev"
+                sh "./player.sh deploy api dev"
+                sh "./player.sh deploy frontend dev"
             }
         }
 
@@ -29,9 +27,6 @@ pipeline {
             agent { label 'code-tests' }
             steps {
                 sh "./player.sh scan"
-                //sh "./sonar-runner.bash"
-                //sh "./player.sh sonar dotnet-webapi dev"
-                //sh "./player.sh sonar angular-frontend dev"
             }
         }
         /*
