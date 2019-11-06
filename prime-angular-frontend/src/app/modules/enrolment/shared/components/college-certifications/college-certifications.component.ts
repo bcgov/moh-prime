@@ -24,8 +24,6 @@ export class CollegeCertificationsComponent implements OnInit {
   public filteredPractices: Config<number>[];
   public hasPractices: boolean;
   public licensePrefix: string;
-  public collegeCodeDefault: number;
-  public didSelectCollege: boolean;
 
   constructor(
     private configService: ConfigService,
@@ -56,24 +54,19 @@ export class CollegeCertificationsComponent implements OnInit {
   public ngOnInit() {
     this.filteredLicenses = this.filterLicenses(this.collegeCode.value);
 
-    // Set default college to none
-    const defaultNoneCollege = this.colleges.find((college) => college.name === 'None');
-    if (defaultNoneCollege) {
-      this.collegeCodeDefault = defaultNoneCollege.code;
-    }
-
     this.collegeCode.valueChanges.subscribe((collegeCode: number) => {
-      if (collegeCode !== defaultNoneCollege.code) {
-        this.didSelectCollege = true;
-      }
-      this.filteredLicenses = this.filterLicenses(collegeCode);
-      this.licensePrefix = this.colleges.filter(c => c.code === collegeCode).shift().prefix;
-      this.form.get('licenseCode').patchValue(null);
+      if (collegeCode) {
+        this.filteredLicenses = this.filterLicenses(collegeCode);
+        this.licensePrefix = this.colleges.filter(c => c.code === collegeCode).shift().prefix;
+        this.form.get('licenseCode').patchValue(null);
 
-      this.filteredPractices = this.filterPractices(collegeCode);
-      this.form.get('practiceCode').patchValue(null);
-      this.hasPractices = (this.filteredPractices.length) ? true : false;
+        this.filteredPractices = this.filterPractices(collegeCode);
+        this.form.get('practiceCode').patchValue(null);
+        this.hasPractices = (this.filteredPractices.length) ? true : false;
+      }
     });
+
+    console.log(this.collegeCode.value);
   }
 
   private filterLicenses(collegeCode: number): LicenseConfig[] {
