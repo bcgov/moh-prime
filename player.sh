@@ -232,9 +232,10 @@ function angularTests()
 
 function scan() 
 {
-    echo "Beginning tests in container..."
-    dotnetTests
-    angularTests
+    echo "Beginning tests on .NET ..."
+    dotnetTests > /dev/null 2>&1 
+    echo "Beginning tests on Angular ..."
+    angularTests > /dev/null 2>&1 
 }
 # Build an deploy are very alike, require similar logic for config injestion.
 # This takes in Git, Jenkins and system variables to the template that will be processed.
@@ -253,7 +254,7 @@ case "$1" in
         sonar $2
         ;;
     scan)
-        scan
+        scan > /dev/null 2>&1 
         ;;
     zap)
         zap $2 $3
