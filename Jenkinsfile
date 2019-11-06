@@ -4,7 +4,6 @@ pipeline {
         disableResume()
     }
     stages {
-/*
         stage('Build') {
             agent { label 'master' }
             steps {
@@ -23,7 +22,6 @@ pipeline {
                 sh "./player.sh deploy frontend dev"
             }
         }
-*/
         stage('Code Quality Check') {
             agent { label 'code-tests' }
             steps {
