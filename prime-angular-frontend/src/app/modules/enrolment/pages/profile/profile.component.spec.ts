@@ -42,7 +42,7 @@ describe('ProfileComponent', () => {
           },
           {
             provide: ConfigService,
-            useValue: MockConfigService
+            useClass: MockConfigService
           },
           {
             provide: AuthService,
