@@ -22,12 +22,12 @@ To update the database schema, first update the model file in the
 
 To generate a new migration file, run this command:
 
-	dotnet ef database update
+	dotnet ef migrations add InitialCreate
 
 Then, to migrate the new model schema over to the database, run the
 following command:
 
-	dotnet ef migrations add InitialCreate
+	dotnet ef database update
 	
 Your changes will be deployed automatically next time the app starts.
 
