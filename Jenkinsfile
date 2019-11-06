@@ -4,16 +4,18 @@ pipeline {
         disableResume()
     }
     stages {
-/*
+
         stage('Build') {
             agent { label 'master' }
             steps {
                 echo "Building ..."
-                sh "./player.sh build database dev"
-                sh "./player.sh build api dev"
-                sh "./player.sh build frontend dev"
+                sh "./player.sh sonar tools"
+                //sh "./player.sh build database dev"
+                //sh "./player.sh build api dev"
+                //sh "./player.sh build frontend dev"
             }
         }
+/*
         stage('Deploy (DEV)') {
             agent { label 'master' }
             steps {
