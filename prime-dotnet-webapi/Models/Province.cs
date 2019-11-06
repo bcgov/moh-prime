@@ -4,19 +4,19 @@ using Newtonsoft.Json;
 
 namespace Prime.Models
 {
-  [Table("ProvinceLookup")]
-  public class Province : BaseAuditable, ILookup<string>
-  {
-    [Key]
-    public string Code { get; set; }
+    [Table("ProvinceLookup")]
+    public class Province : BaseAuditable, ILookup<string>
+    {
+        [Key]
+        public string Code { get; set; }
 
-    [Required]
-    public string CountryCode { get; set; }
+        [Required]
+        public string CountryCode { get; set; }
 
-    [JsonIgnore]
-    public Country Country { get; set; }
+        [JsonIgnore]
+        public Country Country { get; set; }
 
-    [Required]
-    public string Name { get; set; }
-  }
+        [Required]
+        public string Name { get; set; }
+    }
 }
