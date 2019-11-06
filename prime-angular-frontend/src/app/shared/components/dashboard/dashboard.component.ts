@@ -7,7 +7,6 @@ import { ViewportService } from '@core/services/viewport.service';
 import { DeviceResolution } from '@shared/enums/device-resolution.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 
-// TODO: revisit the dashboard component for reuse when used in admin and provisioning
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -124,12 +123,6 @@ export class DashboardComponent implements OnInit {
             name: 'Enrollee Information',
             icon: 'person',
             route: '/enrolment/profile',
-            showItem: true
-          },
-          {
-            name: 'Contact Information',
-            icon: 'phone',
-            route: '/enrolment/contact',
             showItem: true
           },
           {

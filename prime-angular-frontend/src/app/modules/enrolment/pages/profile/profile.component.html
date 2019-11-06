@@ -4,8 +4,7 @@
 
   <h1 class="h2 my-4">Application Enrolment</h1>
 
-  <app-sub-header subheader="Enrolee Information"
-                  help="Lorem ipsum dolor, sit amet consectetur adipisicing elit."></app-sub-header>
+  <app-sub-header subheader="Enrollee Information"></app-sub-header>
 
   <div class="row">
     <div class="col-sm-12 col-md-6 col-xl-4">
@@ -70,7 +69,7 @@
                     color="primary"
                     (change)="onPreferredNameChange()"
                     [checked]="hasPreferredName">
-    Have a preferred name that is different than your legal name
+    I have a preferred name that is different than my legal name
   </mat-slide-toggle>
 
   <ng-container *ngIf="hasPreferredName">
@@ -206,7 +205,7 @@
                     color="primary"
                     (change)="onMailingAddressChange()"
                     [checked]="hasMailingAddress">
-    Mailing address is different
+    My mailing address is different
   </mat-slide-toggle>
 
   <ng-container *ngIf="hasMailingAddress">
@@ -221,10 +220,14 @@
           <div class="col-sm-12 col-md-6 col-xl-4">
 
             <mat-form-field class="w-100">
-              <input matInput
-                     placeholder="Country"
-                     formControlName="countryCode"
-                     [required]="isRequired('mailingAddress.countryCode')">
+              <mat-label>Country</mat-label>
+              <mat-select formControlName="countryCode"
+                          [required]="isRequired('mailingAddress.countryCode')">
+                <mat-option *ngFor="let country of countries"
+                            [value]="country.code">
+                  {{ country.name }}
+                </mat-option>
+              </mat-select>
               <mat-error>Required</mat-error>
             </mat-form-field>
 
@@ -238,7 +241,7 @@
               <mat-select formControlName="provinceCode"
                           [required]="isRequired('mailingAddress.provinceCode')">
                 <mat-option *ngFor="let province of provinces"
-                            [value]="province.name">
+                            [value]="province.code">
                   {{ province.name }}
                 </mat-option>
               </mat-select>
@@ -293,13 +296,94 @@
 
   </ng-container>
 
-  <div class="row justify-content-end">
-    <div class="col pt-2 text-right">
+  <app-sub-header subheader="Phone Number"
+                  help="">
+  </app-sub-header>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="row">
+        <div class="col-sm-12 col-md-6 col-xl-4">
 
-      <button mat-raised-button
-              type="submit"
-              color="primary">Save and Continue</button>
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="Phone Number for Voice Contact"
+                   formControlName="voicePhone"
+                   mask="(000) 000-0000"
+                   [showMaskTyped]="false"
+                   [required]="isRequired('voicePhone')">
+            <mat-error *ngIf="voicePhone.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="voicePhone.hasError('phone')">Must be a valid phone number</mat-error>
+          </mat-form-field>
 
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-6 col-xl-4">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="Extension Number"
+                   formControlName="voiceExtension"
+                   [required]="isRequired('voiceExtension')">
+            <mat-error *ngIf="voiceExtension.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="voiceExtension.hasError('numeric')">Must contain only numbers</mat-error>
+          </mat-form-field>
+
+        </div>
+      </div>
+
+      <app-sub-header subheader="Preferred Contact Method"
+                      help="Please provide an email address and phone number that may be used for notifications from the PRIME system.">
+      </app-sub-header>
+
+      <mat-checkbox class="mr-4"
+                    formControlName="hasContactEmail">Email</mat-checkbox>
+      <mat-checkbox class="mr-4"
+                    formControlName="hasContactPhone">Mobile Phone</mat-checkbox>
+
+      <div class="row">
+        <div class="col-sm-12 col-md-6 col-xl45"
+             *ngIf="contactEmail.value || hasContactEmail.value">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="Email"
+                   formControlName="contactEmail"
+                   [required]="isRequired('contactEmail')">
+            <mat-error *ngIf="contactEmail.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="contactEmail.hasError('email')">Must be a valid email address</mat-error>
+          </mat-form-field>
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-6 col-xl45"
+             *ngIf="contactPhone.value || hasContactPhone.value">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="Phone"
+                   formControlName="contactPhone"
+                   mask="(000) 000-0000"
+                   [showMaskTyped]="false"
+                   [required]="isRequired('contactPhone')">
+            <mat-error *ngIf="contactPhone.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="contactPhone.hasError('phone')">Must be a valid phone number</mat-error>
+          </mat-form-field>
+
+        </div>
+      </div>
+
+
+      <div class="row justify-content-end">
+        <div class="col pt-2 text-right">
+
+          <button mat-raised-button
+                  type="submit"
+                  color="primary">Save and Continue</button>
+
+        </div>
+      </div>
     </div>
   </div>
 

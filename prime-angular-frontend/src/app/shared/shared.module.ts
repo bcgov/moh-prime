@@ -13,7 +13,6 @@ import { PhonePipe } from '@shared/pipes/phone.pipe';
 import { ReplacePipe } from '@shared/pipes/replace.pipe';
 import { FirstKeyPipe } from '@shared/pipes/first-key.pipe';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
-import { FormControlValidityDirective } from '@shared/directives/form-control-validity.directive';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { HeaderComponent } from '@shared/components/header/header.component';
@@ -27,7 +26,6 @@ import { EnrolmentPipe } from './pipes/enrolment.pipe';
     PhonePipe,
     ReplacePipe,
     FirstKeyPipe,
-    FormControlValidityDirective,
     DashboardComponent,
     ConfirmDialogComponent,
     HeaderComponent,
@@ -57,7 +55,6 @@ import { EnrolmentPipe } from './pipes/enrolment.pipe';
     FirstKeyPipe,
     FormatDatePipe,
     EnrolmentPipe,
-    FormControlValidityDirective,
     DashboardComponent,
     HeaderComponent,
     SubHeaderComponent,

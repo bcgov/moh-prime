@@ -7,15 +7,32 @@ import { LoggerService } from '@core/services/logger.service';
 import { Role } from '../enum/role.enum';
 import { User } from '../models/user.model';
 
+export interface IAuthService {
+  getUserId(): Promise<string>;
+  getUser(forceReload?: boolean): Promise<User>;
+  getUserRoles(): string[];
+  isUserInRole(role: string): boolean;
+  checkAssuranceLevel(assuranceLevel: number): Promise<boolean>;
+  isEnrollee(): Promise<boolean>;
+  isProvisioner(): boolean;
+  isAdmin(): boolean;
+  decodeToken(): Promise<Keycloak.KeycloakTokenParsed | null>;
+  login(options?: Keycloak.KeycloakLoginOptions): Promise<void>;
+  isLoggedIn(): Promise<boolean>;
+  logout(redirectUri: string): Promise<void>;
+  isTokenExpired(): boolean;
+  clearToken(): void;
+}
+
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class AuthService implements IAuthService {
   private jwtHelper: JwtHelperService;
 
   constructor(
-    private logger: LoggerService,
-    private keycloakService: KeycloakService
+    private keycloakService: KeycloakService,
+    private logger: LoggerService
   ) {
     this.jwtHelper = new JwtHelperService();
   }
@@ -45,29 +62,29 @@ export class AuthService {
     };
   }
 
-  public getRoles(): string[] {
-    return this.keycloakService.getUserRoles();
-  }
-
-  public hasRole(role: string): boolean {
-    return this.keycloakService.isUserInRole(role);
-  }
-
   public async checkAssuranceLevel(assuranceLevel: number): Promise<boolean> {
     const token = await this.decodeToken() as any;
     return (token.identity_assurance_level === assuranceLevel);
   }
 
+  public getUserRoles(allRoles?: boolean): string[] {
+    return this.keycloakService.getUserRoles(allRoles);
+  }
+
+  public isUserInRole(role: string): boolean {
+    return this.keycloakService.isUserInRole(role);
+  }
+
   public async isEnrollee(): Promise<boolean> {
-    return this.hasRole(Role.ENROLLEE) && await this.checkAssuranceLevel(3);
+    return this.isUserInRole(Role.ENROLLEE) && await this.checkAssuranceLevel(3);
   }
 
   public isProvisioner(): boolean {
-    return this.hasRole(Role.PROVISIONER);
+    return this.isUserInRole(Role.PROVISIONER);
   }
 
   public isAdmin(): boolean {
-    return this.hasRole(Role.ADMIN);
+    return this.isUserInRole(Role.ADMIN);
   }
 
   public async decodeToken(): Promise<Keycloak.KeycloakTokenParsed | null> {

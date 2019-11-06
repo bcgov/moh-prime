@@ -54,6 +54,7 @@ namespace PrimeTests.Mocks
         private readonly string STATUS_KEY = typeof(Status).FullName;
         private readonly string COUNTRY_KEY = typeof(Country).FullName;
         private readonly string PROVINCE_KEY = typeof(Province).FullName;
+        private readonly string STATUS_REASON_KEY = typeof(StatusReason).FullName;
 
         public BaseMockService()
         {
@@ -94,13 +95,9 @@ namespace PrimeTests.Mocks
 
             _fakeDb.Add(JOB_NAME_KEY, new Dictionary<short, JobName> {
                 { 1, new JobName { Code = 1, Name = "Medical Office Assistant" } },
-                { 2, new JobName { Code = 2, Name = "Midwife" } },
-                { 3, new JobName { Code = 3, Name = "Nurse (not nurse practitioner)" } },
-                { 4, new JobName { Code = 4, Name = "Pharmacy Assistant" } },
-                { 5, new JobName { Code = 5, Name = "Pharmacy Technician" } },
-                { 6, new JobName { Code = 6, Name = "Registration Clerk" } },
-                { 7, new JobName { Code = 7, Name = "Ward Clerk" } },
-                { 8, new JobName { Code = 8, Name = "Other" } }
+                { 4, new JobName { Code = 2, Name = "Pharmacy Assistant" } },
+                { 6, new JobName { Code = 3, Name = "Registration Clerk" } },
+                { 7, new JobName { Code = 4, Name = "Ward Clerk" } }
             });
 
             _fakeDb.Add(ORGANIZATION_NAME_KEY, new Dictionary<short, OrganizationName> {
@@ -114,11 +111,11 @@ namespace PrimeTests.Mocks
             });
 
             _fakeDb.Add(STATUS_KEY, _statusMap);
-            
+
             _fakeDb.Add(COUNTRY_KEY, new Dictionary<short, Country> {
                 { 1, new Country { Code = "CA", Name = "Canada" } }
             });
-            
+
             _fakeDb.Add(PROVINCE_KEY, new Dictionary<short, Province> {
                 { 1, new Province { Code = "AB", Name = "Alberta" } },
                 { 2, new Province { Code = "BC", Name = "British Columbia" } },
@@ -133,6 +130,17 @@ namespace PrimeTests.Mocks
                 { 11, new Province { Code = "NT", Name = "Northwest Territories" } },
                 { 12, new Province { Code = "NU", Name = "Nunavut" } },
                 { 13, new Province { Code = "YT", Name = "Yukon" } }
+            });
+
+            _fakeDb.Add(STATUS_REASON_KEY, new Dictionary<short, StatusReason> {
+                { 1, new StatusReason { Code = 1, Name = "Automatic" } },
+                { 2, new StatusReason { Code = 2, Name = "Manual" } },
+                { 3, new StatusReason { Code = 2, Name = "Name Discrepancy" } },
+                { 4, new StatusReason { Code = 2, Name = "Not in PharmaNet" } },
+                { 5, new StatusReason { Code = 2, Name = "Insulin Pump Provider" } },
+                { 6, new StatusReason { Code = 2, Name = "Licence Class" } },
+                { 7, new StatusReason { Code = 2, Name = "Self Declaration" } },
+                { 8, new StatusReason { Code = 2, Name = "Contact address or Identity Address Out of British Columbia" } }
             });
 
             this.SeedData();
