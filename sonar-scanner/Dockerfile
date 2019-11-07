@@ -54,5 +54,11 @@ RUN echo "Installing .NET, coverlet, scanner..." && \
     chmod -R a+rwx /tmp/NuGetScratch/ && \
     chmod -R 777 /tmp/NuGetScratch/ 
 
+# All files in Jenkins home need to be writable 
+RUN chown -R default:0 /home/jenkins && \
+    chmod -R a+rwx /home/jenkins && \
+    chown -R default:0 /var/lib/origin && \
+    chmod -R a+rwx /var/lib/origin
+
 USER 1000
 ENTRYPOINT [ "./entrypoint.bash" ]
