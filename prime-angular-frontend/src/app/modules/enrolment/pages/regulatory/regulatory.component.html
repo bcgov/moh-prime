@@ -22,12 +22,15 @@
                                     [total]="certifications.controls.length"
                                     (remove)="removeCertification($event)"></app-college-certifications>
 
+        <ng-container *ngIf="certifications.invalid === false">
+          <button mat-raised-button
+                  color="primary"
+                  (click)="addCertification()"
+                  [disabled]="certifications.invalid">Add Certification</button>
+        </ng-container>
+
       </ng-container>
 
-      <button mat-raised-button
-              color="primary"
-              (click)="addCertification()"
-              [disabled]="certifications.invalid">Add Certification</button>
 
     </div>
   </div>

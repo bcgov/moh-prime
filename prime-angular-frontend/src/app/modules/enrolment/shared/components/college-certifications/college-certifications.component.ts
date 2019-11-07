@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { Config, CollegeConfig, LicenseConfig, PracticeConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
@@ -56,6 +56,8 @@ export class CollegeCertificationsComponent implements OnInit {
 
     this.collegeCode.valueChanges.subscribe((collegeCode: number) => {
       if (collegeCode) {
+        this.collegeCode.setValidators([Validators.required]);
+        this.collegeCode.updateValueAndValidity();
         this.filteredLicenses = this.filterLicenses(collegeCode);
         this.licensePrefix = this.colleges.filter(c => c.code === collegeCode).shift().prefix;
         this.form.get('licenseCode').patchValue(null);
@@ -63,6 +65,9 @@ export class CollegeCertificationsComponent implements OnInit {
         this.filteredPractices = this.filterPractices(collegeCode);
         this.form.get('practiceCode').patchValue(null);
         this.hasPractices = (this.filteredPractices.length) ? true : false;
+      } else {
+        this.collegeCode.clearValidators();
+        this.collegeCode.updateValueAndValidity();
       }
     });
 
