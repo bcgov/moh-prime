@@ -7,7 +7,7 @@ export interface Configuration {
   organizationNames: Config<number>[];
   organizationTypes: Config<number>[];
   practices: PracticeConfig[];
-  provinces: Config<string>[];
+  provinces: ProvinceConfig[];
   statuses: Config<number>[];
   statusReasons: Config<number>[];
 }
@@ -23,6 +23,10 @@ export interface LicenseConfig extends Config<number> {
 
 export interface PracticeConfig extends Config<number> {
   collegePractices: AssociatedCollegeConfig[];
+}
+
+export interface ProvinceConfig extends Config<string> {
+  countryCode: string;
 }
 
 export interface AssociatedCollegeConfig {
