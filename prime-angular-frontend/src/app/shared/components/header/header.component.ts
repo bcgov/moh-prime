@@ -7,8 +7,8 @@ import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, Input
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderComponent implements OnInit {
-  @Input() public username: string;
   @Input() public isMobile: boolean;
+  @Input() public username: string;
   @Output() public toggle: EventEmitter<void>;
   @Output() public logout: EventEmitter<void>;
 
