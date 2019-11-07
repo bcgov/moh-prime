@@ -5,6 +5,15 @@
   <span>
     <img src="/assets/gov_bc_logo.png">
   </span>
+
+  <span class="flex-fill"></span>
+
+  <span class="username">
+    {{ username }}
+  </span>
+  <span class="logout">
+    <mat-icon (click)="onLogout()">logout</mat-icon>
+  </span>
 </mat-toolbar>
 
 <div class="ngx-progress">
