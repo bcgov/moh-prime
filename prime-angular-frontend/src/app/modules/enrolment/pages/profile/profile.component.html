@@ -7,7 +7,7 @@
   <app-sub-header subheader="Enrollee Information"></app-sub-header>
 
   <div class="row">
-    <div class="col-sm-12 col-md-6 col-xl-4">
+    <div class="col-sm-12 col-md-6 col-xl-5">
 
       <mat-form-field class="w-100">
         <input matInput
@@ -20,7 +20,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-sm-12 col-md-6 col-xl-4">
+    <div class="col-sm-12 col-md-6 col-xl-5">
 
       <mat-form-field class="w-100">
         <input matInput
@@ -32,7 +32,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-sm-12 col-md-6 col-xl-4">
+    <div class="col-sm-12 col-md-6 col-xl-5">
 
       <mat-form-field class="w-100">
         <input matInput
@@ -45,7 +45,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-sm-12 col-md-6 col-xl-4">
+    <div class="col-sm-12 col-md-6 col-xl-5">
 
       <mat-form-field class="w-100">
         <input matInput
@@ -79,7 +79,7 @@
     </app-sub-header>
 
     <div class="row">
-      <div class="col-sm-12 col-md-6 col-xl-4">
+      <div class="col-sm-12 col-md-6 col-xl-5">
 
         <mat-form-field class="w-100">
           <input matInput
@@ -91,7 +91,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-sm-12 col-md-6 col-xl-4">
+      <div class="col-sm-12 col-md-6 col-xl-5">
 
         <mat-form-field class="w-100">
           <input matInput
@@ -103,7 +103,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-sm-12 col-md-6 col-xl-4">
+      <div class="col-sm-12 col-md-6 col-xl-5">
 
         <mat-form-field class="w-100">
           <input matInput
@@ -119,100 +119,7 @@
 
   <app-sub-header subheader="Address"></app-sub-header>
 
-  <div class="row">
-    <div class="col-sm-12"
-         formGroupName="physicalAddress">
-
-      <div class="row">
-        <div class="col-sm-12 col-md-6 col-xl-4">
-
-          <mat-form-field class="w-100">
-            <mat-label>Country</mat-label>
-            <mat-select formControlName="countryCode"
-                        [required]="isRequired('physicalAddress.countryCode')">
-              <mat-option *ngFor="let country of countries"
-                          [value]="country.code">
-                {{ country.name }}
-              </mat-option>
-            </mat-select>
-            <mat-error>Required</mat-error>
-          </mat-form-field>
-
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12 col-md-6 col-xl-4">
-
-          <mat-form-field class="w-100">
-            <mat-label>Province</mat-label>
-            <mat-select formControlName="provinceCode"
-                        [required]="isRequired('physicalAddress.provinceCode')">
-              <mat-option *ngFor="let province of provinces"
-                          [value]="province.code">
-                {{ province.name }}
-              </mat-option>
-            </mat-select>
-            <mat-error>Required</mat-error>
-          </mat-form-field>
-
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12 col-md-6 col-xl-4">
-
-          <mat-form-field class="w-100">
-            <input matInput
-                   placeholder="Street Address"
-                   formControlName="street"
-                   [required]="isRequired('physicalAddress.street')">
-            <mat-error>Required</mat-error>
-          </mat-form-field>
-
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12 col-md-6 col-xl-4">
-
-          <mat-form-field class="w-100">
-            <input matInput
-                   placeholder="Street Address 2"
-                   formControlName="street2"
-                   [required]="isRequired('physicalAddress.street2')">
-            <mat-error>Required</mat-error>
-          </mat-form-field>
-
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12 col-md-6 col-xl-4">
-
-          <mat-form-field class="w-100">
-            <input matInput
-                   placeholder="City"
-                   formControlName="city"
-                   [required]="isRequired('physicalAddress.city')">
-            <mat-error>Required</mat-error>
-          </mat-form-field>
-
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12 col-md-6 col-xl-4">
-
-          <mat-form-field class="w-100">
-            <input matInput
-                   placeholder="Postal Code"
-                   mask="S0S 0S0"
-                   formControlName="postal"
-                   [required]="isRequired('physicalAddress.postal')">
-            <mat-error>Required</mat-error>
-          </mat-form-field>
-
-        </div>
-      </div>
-
-    </div>
-  </div>
+  <app-address [form]="physicalAddress"></app-address>
 
   <mat-slide-toggle class="mb-3"
                     color="primary"
@@ -225,100 +132,7 @@
 
     <app-sub-header subheader="Mailing Address"></app-sub-header>
 
-    <div class="row">
-      <div class="col-sm-12"
-           formGroupName="mailingAddress">
-
-        <div class="row">
-          <div class="col-sm-12 col-md-6 col-xl-4">
-
-            <mat-form-field class="w-100">
-              <mat-label>Country</mat-label>
-              <mat-select formControlName="countryCode"
-                          [required]="isRequired('mailingAddress.countryCode')">
-                <mat-option *ngFor="let country of countries"
-                            [value]="country.code">
-                  {{ country.name }}
-                </mat-option>
-              </mat-select>
-              <mat-error>Required</mat-error>
-            </mat-form-field>
-
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12 col-md-6 col-xl-4">
-
-            <mat-form-field class="w-100">
-              <mat-label>Province</mat-label>
-              <mat-select formControlName="provinceCode"
-                          [required]="isRequired('mailingAddress.provinceCode')">
-                <mat-option *ngFor="let province of provinces"
-                            [value]="province.code">
-                  {{ province.name }}
-                </mat-option>
-              </mat-select>
-              <mat-error>Required</mat-error>
-            </mat-form-field>
-
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12 col-md-6 col-xl-4">
-
-            <mat-form-field class="w-100">
-              <input matInput
-                     placeholder="Street Address"
-                     formControlName="street"
-                     [required]="isRequired('mailingAddress.street')">
-              <mat-error>Required</mat-error>
-            </mat-form-field>
-
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12 col-md-6 col-xl-4">
-
-            <mat-form-field class="w-100">
-              <input matInput
-                     placeholder="Street Address 2"
-                     formControlName="street2"
-                     [required]="isRequired('mailingAddress.street2')">
-              <mat-error>Required</mat-error>
-            </mat-form-field>
-
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12 col-md-6 col-xl-4">
-
-            <mat-form-field class="w-100">
-              <input matInput
-                     placeholder="City"
-                     formControlName="city"
-                     [required]="isRequired('mailingAddress.city')">
-              <mat-error>Required</mat-error>
-            </mat-form-field>
-
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12 col-md-6 col-xl-4">
-
-            <mat-form-field class="w-100">
-              <input matInput
-                     placeholder="Postal Code"
-                     mask="S0S 0S0"
-                     formControlName="postal"
-                     [required]="isRequired('mailingAddress.postal')">
-              <mat-error>Required</mat-error>
-            </mat-form-field>
-
-          </div>
-        </div>
-
-      </div>
-    </div>
+    <app-address [form]="mailingAddress"></app-address>
 
   </ng-container>
 
@@ -326,69 +140,49 @@
                   help="Lorem ipsum dolor, sit amet consectetur adipisicing elit."></app-sub-header>
 
   <div class="row">
-    <div class="col-sm-12 col-md-6 col-xl-4">
-      <div class="d-flex justify-content-start">
+    <div class="col-sm-12 col-md-4 col-xl-3">
 
-        <span class="pr-2">
+      <mat-form-field class="w-100">
+        <input matInput
+               placeholder="Phone Number for Voice Contact"
+               formControlName="voicePhone"
+               mask="(000) 000-0000"
+               [showMaskTyped]="false"
+               [required]="isRequired('voicePhone')">
+        <mat-error *ngIf="voicePhone.hasError('required')">Required</mat-error>
+        <mat-error *ngIf="voicePhone.hasError('phone')">Must be a valid phone number</mat-error>
+      </mat-form-field>
 
-          <mat-form-field>
-            <input matInput
-                  placeholder="Phone Number for Voice Contact"
-                  formControlName="voicePhone"
-                  mask="(000) 000-0000"
-                  [showMaskTyped]="false"
-                  [required]="isRequired('voicePhone')">
-            <mat-error *ngIf="voicePhone.hasError('required')">Required</mat-error>
-            <mat-error *ngIf="voicePhone.hasError('phone')">Must be a valid phone number</mat-error>
-          </mat-form-field>
+    </div>
+    <div class="col-sm-12 col-md-2">
 
-        </span>
-        <span>
+      <mat-form-field class="w-100">
+        <input matInput
+               placeholder="Extension Number"
+               formControlName="voiceExtension"
+               [required]="isRequired('voiceExtension')">
+        <mat-error *ngIf="voiceExtension.hasError('required')">Required</mat-error>
+        <mat-error *ngIf="voiceExtension.hasError('numeric')">Must contain only numbers</mat-error>
+      </mat-form-field>
 
-            <mat-form-field>
-              <input matInput
-                    placeholder="Extension Number"
-                    formControlName="voiceExtension"
-                    [required]="isRequired('voiceExtension')">
-              <mat-error *ngIf="voiceExtension.hasError('required')">Required</mat-error>
-              <mat-error *ngIf="voiceExtension.hasError('numeric')">Must contain only numbers</mat-error>
-            </mat-form-field>
-
-        </span>
-
-      </div>
     </div>
   </div>
-
-  <!-- <div class="row">
-        <div class="col-sm-12 col-md-6 col-xl-4">
-
-          <mat-form-field class="w-100">
-            <input matInput
-                   placeholder="Extension Number"
-                   formControlName="voiceExtension"
-                   [required]="isRequired('voiceExtension')">
-            <mat-error *ngIf="voiceExtension.hasError('required')">Required</mat-error>
-            <mat-error *ngIf="voiceExtension.hasError('numeric')">Must contain only numbers</mat-error>
-          </mat-form-field>
-
-        </div>
-      </div> -->
 
   <app-sub-header subheader="Preferred Contact Method"
                   help="Please provide an email address and phone number that may be used for notifications from the PRIME system.">
   </app-sub-header>
 
   <mat-checkbox class="mr-4"
-                formControlName="hasContactEmail">Email</mat-checkbox>
+                formControlName="hasContactEmail">Email Notification</mat-checkbox>
   <mat-checkbox class="mr-4"
-                formControlName="hasContactPhone">Mobile Phone</mat-checkbox>
+                formControlName="hasContactPhone">Text Notification (SMS)</mat-checkbox>
 
   <div class="row">
     <div class="col-sm-12"
          *ngIf="contactEmail.value || hasContactEmail.value">
+
       <div class="row">
-        <div class="col-sm-12 col-md-6 col-xl-4">
+        <div class="col-sm-12 col-md-6 col-xl-5">
           <mat-form-field class="w-100">
             <input matInput
                    placeholder="Email"
@@ -400,8 +194,9 @@
 
         </div>
       </div>
+
       <div class="row">
-        <div class="col-sm-12 col-md-6 col-xl-4"
+        <div class="col-sm-12 col-md-6 col-xl-5"
              *ngIf="contactPhone.value || hasContactPhone.value">
 
           <mat-form-field class="w-100">
@@ -417,9 +212,9 @@
 
         </div>
       </div>
+
     </div>
   </div>
-
 
   <div class="row justify-content-end">
     <div class="col pt-2 text-right">
