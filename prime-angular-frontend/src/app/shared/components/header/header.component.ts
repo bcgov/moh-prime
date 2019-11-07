@@ -7,15 +7,22 @@ import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, Input
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderComponent implements OnInit {
+  @Input() public username: string;
   @Input() public isMobile: boolean;
   @Output() public toggle: EventEmitter<void>;
+  @Output() public logout: EventEmitter<void>;
 
   constructor() {
     this.toggle = new EventEmitter<void>();
+    this.logout = new EventEmitter<void>();
   }
 
   public toggleSidenav() {
     this.toggle.emit();
+  }
+
+  public onLogout() {
+    this.logout.emit();
   }
 
   public ngOnInit() { }
