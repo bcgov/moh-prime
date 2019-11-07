@@ -18,11 +18,10 @@ RUN echo "Installing common, Jenkins prerequisites..." && \
     chmod 777 /etc/passwd
 
 # Node
-ENV NVM_DIR="$HOME/.nvm"
 RUN echo "Installing Node and Sonar Scanner..." && \
     curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash && \ 
     yum install -y -q gcc-c++ make yarn nodejs && \    
-    npm install -g @angular/cli sonarqube-scanner sonar-scanner
+    npm install -g @angular/cli sonarqube-scanner sonar-scanner chromium
 
 #.NET 2.2
 ENV ASPNETCORE_ENVIRONMENT Development
