@@ -13,11 +13,8 @@ function dotnetTests()
 
 function angularTests()
 { 
-    echo "Beginning angular/javascript sonar scan..."
     cd prime-angular-frontend
-    sonar-scanner \ 
-        -Dsonar.host.url=http://sonarqube:9000 \ 
-        -Dsonar.projectKey=angular-frontend -Dsonar.sources=prime-angular-frontend
+    npm run sonar
     cd ..
 }
 
