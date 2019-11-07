@@ -1,5 +1,7 @@
-<app-header [isMobile]="isMobile"
-            (toggle)="sidenav.toggle()"></app-header>
+<app-header [username]="username"
+            [isMobile]="isMobile"
+            (toggle)="sidenav.toggle()"
+            (logout)="onLogout()"></app-header>
 
 <mat-sidenav-container class="prime-sidenav-container">
   <mat-sidenav #sidenav
@@ -40,9 +42,9 @@
 
     <mat-nav-list>
 
-      <mat-list-item (click)="logout()">
+      <mat-list-item (click)="onLogout()">
         <mat-icon mat-list-icon
-                  [ngClass]="{ 'center-sidenav-icon': !isDesktop }">exit_to_app</mat-icon>
+                  [ngClass]="{ 'center-sidenav-icon': !isDesktop }">logout</mat-icon>
 
         <a matLine>
           <span *ngIf="sideNavProps.showText">
