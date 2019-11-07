@@ -1,4 +1,5 @@
 FROM docker-registry.default.svc:5000/dqszvc-tools/jenkins-slave-base-centos7
+#FROM openshift/jenkins-slave-base-centos7
 SHELL ["/bin/bash", "-c"]
 COPY . /var/lib/origin 
 USER 0
@@ -6,22 +7,30 @@ USER 0
 ENV JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64/jre/bin
 ENV PATH $PATH:$JAVA_HOME:/var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScanner/bin:/opt/sonar/bin
 #COMMON
-RUN echo "Installing common, Jenkins prerequisites..." && \
-    chmod +x *.bash && \
-    yum install -y epel-release java-1.8.0-openjdk-1.8.0.232 nano xterm envsubst git gunzip find which unzip && \
+RUN echo "Installing common, Jenkins and Sonar Scanner prerequisites..." && \
+    yum install -y -q java-1.8.0-openjdk-1.8.0.232 envsubst git find which && \
+    wget -O /etc/yum.repos.d/sonar.repo http://downloads.sourceforge.net/project/sonar-pkg/rpm/sonar.repo && \
+    yum install -y -q sonar && \
+    wget https://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/jnlpJars/agent.jar && \
     useradd default && \
+    chmod +x *.bash && \
     chown -R default:0 /home/default && \
     chmod -R a+rwx /home/default && \
     chown -R default:0 /var/lib/origin && \
     chmod -R a+rwx /var/lib/origin && \
-    wget https://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/jnlpJars/agent.jar && \
     chmod 777 /etc/passwd
 
+# Headless Chrome
+RUN wget https://chromedriver.storage.googleapis.com/2.9/chromedriver_linux64.zip && \
+    unzip chromedriver_linux64.zip && \
+    yum install -y -q https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm Xvfb maven
+
 # Node
-RUN echo "Installing Node and Sonar Scanner..." && \
-    curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash && \ 
-    yum install -y -q gcc-c++ make yarn nodejs && \    
-    npm install -g @angular/cli sonarqube-scanner sonar-scanner chromium
+RUN echo "Installing Node..." && \
+    yum install -y -q https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
+    curl -sL https://rpm.nodesource.com/setup_12.x | bash - && \
+    yum install -y -q gcc-c++ make yarn sonar-scanner nodejs && \ 
+    npm install -g @angular/cli 
 
 #.NET 2.2
 ENV ASPNETCORE_ENVIRONMENT Development
