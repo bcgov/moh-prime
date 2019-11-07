@@ -5,6 +5,17 @@
   <span>
     <img src="/assets/gov_bc_logo.png">
   </span>
+
+  <span class="flex-fill"></span>
+
+  <span *ngIf="username && !isMobile"
+        class="username">
+    {{ username }}
+  </span>
+  <span *ngIf="username"
+        class="logout">
+    <mat-icon (click)="onLogout()">logout</mat-icon>
+  </span>
 </mat-toolbar>
 
 <div class="ngx-progress">

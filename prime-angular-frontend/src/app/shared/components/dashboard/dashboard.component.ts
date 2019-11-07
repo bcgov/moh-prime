@@ -23,6 +23,8 @@ export class DashboardComponent implements OnInit {
     showText: boolean
   };
 
+  public username: string;
+
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
@@ -31,31 +33,21 @@ export class DashboardComponent implements OnInit {
   ) { }
 
   /**
+   * @description
    * Check viewport size is equivalent to desktop.
-   *
-   * @returns {boolean}
-   * @memberof DashboardComponent
    */
   public get isMobile(): boolean {
     return this.viewportService.isMobile;
   }
 
   /**
+   * @description
    * Check viewport size is equivalent to desktop.
-   *
-   * @returns {boolean}
-   * @memberof DashboardComponent
    */
   public get isDesktop(): boolean {
     return this.viewportService.isDesktop || this.viewportService.isWideDesktop;
   }
 
-  /**
-   * Route to the next view.
-   *
-   * @param {string} route
-   * @memberof DashboardComponent
-   */
   public routeTo(route: string) {
     if (this.viewportService.isMobile) {
       this.sideNav.close();
@@ -64,55 +56,34 @@ export class DashboardComponent implements OnInit {
     this.router.navigate([route]);
   }
 
-  /**
-   * Handle on route event.
-   *
-   * @memberof DashboardComponent
-   */
   public onRoute(): void {
     if (this.viewportService.isMobile) {
       this.sideNav.close();
     }
   }
 
-  /**
-   * Logout the authenticated user.
-   *
-   * @memberof DashboardComponent
-   */
-  public logout() {
+  public onLogout() {
     this.authService.logout(this.config.loginRedirectUrl);
   }
 
-  public ngOnInit() {
+  public async ngOnInit() {
     this.sideNavSections = this.getSideNavSections();
     // Initialize the sidenav with properties based on current viewport
     this.setSideNavProps(this.viewportService.device);
     // Subscribe to viewport onresize changes
     this.viewportService.onResize()
       .subscribe((device: string) => this.setSideNavProps(device));
+
+    const user = await this.authService.getUser();
+    this.username = `${user.firstName} ${user.firstName}`;
   }
 
-  /**
-   * Get the side navigation sections.
-   *
-   * @private
-   * @returns
-   * @memberof DashboardComponent
-   */
   private getSideNavSections() {
     return (this.authService.isProvisioner() || this.authService.isAdmin())
       ? this.getProvisionSideNavSections()
       : this.getEnrolleeSideNavSections();
   }
 
-  /**
-   * Get the sidenav sections for an enrollee.
-   *
-   * @private
-   * @returns
-   * @memberof DashboardComponent
-   */
   private getEnrolleeSideNavSections() {
     return [
       {
@@ -154,13 +125,6 @@ export class DashboardComponent implements OnInit {
     ];
   }
 
-  /**
-   * Get the sidenav sections for a provisioner.
-   *
-   * @private
-   * @returns
-   * @memberof DashboardComponent
-   */
   private getProvisionSideNavSections() {
     return [
       {
@@ -178,13 +142,6 @@ export class DashboardComponent implements OnInit {
     ];
   }
 
-  /**
-   * Set the properties of the side navigation.
-   *
-   * @private
-   * @param {string} device
-   * @memberof DashboardComponent
-   */
   private setSideNavProps(device: string) {
     if (device === DeviceResolution.MOBILE) {
       this.sideNavProps = {
