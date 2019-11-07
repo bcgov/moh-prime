@@ -11,6 +11,9 @@ RUN chmod +x *.bash && \
     rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm && \
     curl -sL https://rpm.nodesource.com/setup_12.x | bash - && \
     yum install -y -q dotnet-sdk-2.2 java-1.8.0-openjdk-1.8.0.232 gcc-c++ make nodejs nano xterm envsubst git find which && \
+    mkdir -p /usr/lib/node_modules/chromium && \
+    chown -R default:0 /usr/lib/node_modules/chromium && \
+    chmod -R a+rwx /usr/lib/node_modules/chromium && \
     npm install -g @angular/cli sonarqube-scanner sonar-scanner chromium && \
     dotnet tool install --global coverlet.console && \
     dotnet tool install --global dotnet-sonarscanner --version 4.7.1 && \
