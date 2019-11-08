@@ -14,7 +14,6 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 
-
 @Component({
   selector: 'app-access-agreement',
   templateUrl: './access-agreement.component.html',
