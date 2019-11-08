@@ -30,7 +30,7 @@ RUN echo "Installing Node..." && \
     yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
     curl -sL https://rpm.nodesource.com/setup_12.x | bash - && \
     yum install -y gcc-c++ make yarn sonar-scanner nodejs && \ 
-    npm install -g @angular/cli @angular-devkit/build-angular @angular/compiler-cli chromium
+    npm install -g @angular/cli @angular-devkit/build-angular @angular/compiler-cli chromium typescript
 
 #.NET 2.2
 ENV ASPNETCORE_ENVIRONMENT Development

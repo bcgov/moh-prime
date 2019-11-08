@@ -31,7 +31,6 @@ pipeline {
                 sh "./player.sh sonar tools"
             }
         }
-        */
         /*        
         stage('Code Quality Check') {
             agent { label 'code-tests' }
