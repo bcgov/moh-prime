@@ -32,8 +32,6 @@ export class DashboardComponent implements OnInit {
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
-    private enrolmentResource: EnrolmentResource,
-    private toastService: ToastService,
     private viewportService: ViewportService,
     private enrolmentService: EnrolmentService,
     private router: Router,
