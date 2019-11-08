@@ -1,8 +1,11 @@
 import { Role } from '@auth/shared/enum/role.enum';
 import { IAuthService } from '@auth/shared/services/auth.service';
+import { User } from '@auth/shared/models/user.model';
 
 export class MockAuthService implements IAuthService {
+  // tslint:disable-next-line: variable-name
   private _role: Role;
+  // tslint:disable-next-line: variable-name
   private _loggedIn: boolean;
 
   constructor(
@@ -22,8 +25,13 @@ export class MockAuthService implements IAuthService {
     throw new Error('Method not implemented.');
   }
 
-  public getUser(forceReload?: boolean): Promise<import('../../app/modules/auth/shared/models/user.model').User> {
-    throw new Error('Method not implemented.');
+  public getUser(forceReload?: boolean): Promise<User> {
+    return new Promise((resolve, reject) => resolve({
+      userId: 'fakeguid',
+      firstName: 'Example',
+      lastName: 'Example',
+      contactEmail: 'test@example.com'
+    }));
   }
 
   public getUserRoles(): string[] {
@@ -63,8 +71,8 @@ export class MockAuthService implements IAuthService {
   public isLoggedIn(): Promise<boolean> {
     return new Promise((resolve, reject) => {
       this._loggedIn
-      ? resolve(true)
-      : reject(false);
+        ? resolve(true)
+        : reject(false);
     });
   }
 
