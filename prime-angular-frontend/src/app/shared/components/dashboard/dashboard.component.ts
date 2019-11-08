@@ -6,6 +6,10 @@ import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { ViewportService } from '@core/services/viewport.service';
 import { DeviceResolution } from '@shared/enums/device-resolution.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { ToastService } from '@core/services/toast.service';
+import { LoggerService } from '@core/services/logger.service';
+import { Enrolment } from '@shared/models/enrolment.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -28,22 +32,17 @@ export class DashboardComponent implements OnInit {
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
+    private enrolmentResource: EnrolmentResource,
+    private toastService: ToastService,
     private viewportService: ViewportService,
-    private router: Router
+    private router: Router,
+    private logger: LoggerService
   ) { }
 
-  /**
-   * @description
-   * Check viewport size is equivalent to desktop.
-   */
   public get isMobile(): boolean {
     return this.viewportService.isMobile;
   }
 
-  /**
-   * @description
-   * Check viewport size is equivalent to desktop.
-   */
   public get isDesktop(): boolean {
     return this.viewportService.isDesktop || this.viewportService.isWideDesktop;
   }
@@ -85,39 +84,38 @@ export class DashboardComponent implements OnInit {
   }
 
   private getEnrolleeSideNavSections() {
+    this.enrolmentResource.enrolments()
+      .subscribe(
+        (enrolment: Enrolment) => {
+
+        },
+        (error: any) => {
+          this.toastService.openErrorToast('Enrolment could not be retrieved');
+          this.logger.error('[Shared] Dashboard::getEnrolleeSideNavSections error has occurred: ', error);
+        }
+      );
+
     return [
       {
         header: 'Application Enrolment',
-        showHeader: true,
+        showHeader: false,
         items: [
           {
-            name: 'Enrollee Information',
-            icon: 'person',
+            name: 'Enrolment',
+            icon: 'assignment_ind', // assignment_turned_in
             route: '/enrolment/profile',
             showItem: true
           },
           {
-            name: 'Professional Information',
-            icon: 'work',
-            route: '/enrolment/professional',
+            name: 'Access Agreement',
+            icon: 'lock', // assignment, assignment_turned_in
+            route: '/enrolment/agreement',
             showItem: true
           },
           {
-            name: 'Self Declaration',
-            icon: 'description',
-            route: '/enrolment/declaration',
-            showItem: true
-          },
-          {
-            name: 'PharmaNet Access',
-            icon: 'location_city',
-            route: '/enrolment/access',
-            showItem: true
-          },
-          {
-            name: 'Review',
-            icon: 'search',
-            route: '/enrolment/review',
+            name: 'Status',
+            icon: 'lock', // assignment_turned_in
+            route: '/enrolment/summary',
             showItem: true
           }
         ]
@@ -129,7 +127,7 @@ export class DashboardComponent implements OnInit {
     return [
       {
         header: 'Pharmacist Enrolments',
-        showHeader: true,
+        showHeader: false,
         items: [
           {
             name: 'Enrolments',
