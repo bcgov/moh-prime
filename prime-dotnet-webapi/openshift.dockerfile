@@ -12,6 +12,6 @@ FROM docker-registry.default.svc:5000/dqszvc-dev/dotnet-22-runtime-rhel7 AS runt
 WORKDIR /opt/app-root/app
 ENV PATH "$PATH:/opt/rh/rh-dotnet22/root/usr/lib64/dotnet"
 COPY --from=build /opt/app-root/app/out /opt/app-root/app
-EXPOSE 8080 5001
+EXPOSE 8080 5001 1025
 RUN find /opt -type f -name dotnet
 ENTRYPOINT ["/opt/rh/rh-dotnet22/root/usr/lib64/dotnet/dotnet", "prime.dll"]

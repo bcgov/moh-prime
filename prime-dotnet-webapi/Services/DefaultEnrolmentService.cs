@@ -12,6 +12,7 @@ namespace Prime.Services
     public class DefaultEnrolmentService : BaseService, IEnrolmentService
     {
         private readonly IAutomaticAdjudicationService _automaticAdjudicationService;
+        private readonly IEmailService _emailService;
 
         private class StatusWrapper
         {
@@ -24,10 +25,11 @@ namespace Prime.Services
         private static Status NULL_STATUS = new Status { Code = -1, Name = "No Status" };
 
         public DefaultEnrolmentService(
-            ApiDbContext context, IHttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService)
+            ApiDbContext context, IHttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService, IEmailService emailService)
             : base(context, httpContext)
         {
             _automaticAdjudicationService = automaticAdjudicationService;
+            _emailService = emailService;
         }
 
         private Dictionary<Status, StatusWrapper[]> GetWorkFlowStateMap()
@@ -360,8 +362,12 @@ namespace Prime.Services
                         }
                         break;
                     case Status.APPROVED_CODE:
-                        // add the manual reason code
+                        // add the manual reason code, send email
                         createdEnrolmentStatus.EnrolmentStatusReasons = new List<EnrolmentStatusReason> { new EnrolmentStatusReason { EnrolmentStatus = createdEnrolmentStatus, StatusReasonCode = StatusReason.MANUAL_CODE } };
+                        if (!string.IsNullOrWhiteSpace(enrolment.Enrollee?.ContactEmail))
+                        {
+                            _emailService.Send("THE.MINISTER.OF.HEALTH@prime.bc.ca", enrolment.Enrollee?.ContactEmail, "Your application has been approved", "It's approved! Yay!");
+                        }
                         break;
 
                     case Status.ACCEPTED_TOS_CODE:

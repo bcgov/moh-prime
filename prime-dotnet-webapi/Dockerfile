@@ -9,5 +9,5 @@ RUN dotnet publish -c Release -o /opt/app-root/app/out /p:MicrosoftNETPlatformLi
 FROM mcr.microsoft.com/dotnet/core/aspnet:2.2 AS runtime
 WORKDIR /opt/app-root/app
 COPY --from=build /opt/app-root/app/out /opt/app-root/app
-EXPOSE 8080 5001
+EXPOSE 8080 5001 1025
 ENTRYPOINT ["dotnet", "prime.dll"]

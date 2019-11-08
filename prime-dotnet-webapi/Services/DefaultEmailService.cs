@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Http;
 using System.Net.Mail;
 
@@ -23,7 +24,24 @@ namespace Prime.Services
             };
 
             SmtpClient smtp = new SmtpClient("127.0.0.1", 1025);
-            smtp.Send(mail);
+            try
+            {
+                smtp.Send(mail);
+
+            }
+            catch (Exception ex)
+            {
+                if (ex is InvalidOperationException
+                 || ex is SmtpException
+                 || ex is SmtpFailedRecipientException
+                 || ex is SmtpFailedRecipientsException)
+                {
+                    Console.Write(ex.Message);
+                    return;
+                }
+
+                throw;
+            }
         }
     }
 }
