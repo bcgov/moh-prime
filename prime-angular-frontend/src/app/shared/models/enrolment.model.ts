@@ -12,7 +12,6 @@ export interface Enrolment {
   appliedDate: string;
   approvedDate: string;
   certifications: CollegeCertification[];
-  isDeviceProvider: boolean;
   deviceProviderNumber: string;
   isInsulinPumpProvider: boolean;
   isAccessingPharmaNetOnBehalfOf: boolean;
