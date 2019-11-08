@@ -17,7 +17,7 @@ describe('ConfigService', () => {
     ]
   }));
 
-  it('should be created', () => {
+  it('should create', () => {
     const service: ConfigService = TestBed.get(ConfigService);
     expect(service).toBeTruthy();
   });

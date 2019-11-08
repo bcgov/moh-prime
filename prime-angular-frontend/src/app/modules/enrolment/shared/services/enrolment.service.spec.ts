@@ -5,7 +5,7 @@ import { EnrolmentService } from './enrolment.service';
 describe('EnrolmentService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
-  it('should be created', () => {
+  it('should create', () => {
     const service: EnrolmentService = TestBed.get(EnrolmentService);
     expect(service).toBeTruthy();
   });

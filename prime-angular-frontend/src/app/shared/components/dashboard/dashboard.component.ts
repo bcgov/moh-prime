@@ -4,12 +4,12 @@ import { MatSidenav } from '@angular/material';
 
 import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { ViewportService } from '@core/services/viewport.service';
+import { LoggerService } from '@core/services/logger.service';
 import { DeviceResolution } from '@shared/enums/device-resolution.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
-import { ToastService } from '@core/services/toast.service';
-import { LoggerService } from '@core/services/logger.service';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { Enrolment } from '@shared/models/enrolment.model';
+import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 
 @Component({
   selector: 'app-dashboard',
@@ -32,9 +32,8 @@ export class DashboardComponent implements OnInit {
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
-    private enrolmentResource: EnrolmentResource,
-    private toastService: ToastService,
     private viewportService: ViewportService,
+    private enrolmentService: EnrolmentService,
     private router: Router,
     private logger: LoggerService
   ) { }
@@ -66,10 +65,20 @@ export class DashboardComponent implements OnInit {
   }
 
   public async ngOnInit() {
+    // Initialize the side navigation based on the type of user
     this.sideNavSections = this.getSideNavSections();
+    if (this.authService.isEnrollee()) {
+      // Listen for enrolment status changes to update the side navigation
+      // based on user progression
+      this.enrolmentService.enrolment$
+        .subscribe(() => {
+          this.sideNavSections = this.getSideNavSections();
+        });
+    }
+
     // Initialize the sidenav with properties based on current viewport
     this.setSideNavProps(this.viewportService.device);
-    // Subscribe to viewport onresize changes
+    // Listen for viewport onresize changes
     this.viewportService.onResize()
       .subscribe((device: string) => this.setSideNavProps(device));
 
@@ -84,16 +93,10 @@ export class DashboardComponent implements OnInit {
   }
 
   private getEnrolleeSideNavSections() {
-    this.enrolmentResource.enrolments()
-      .subscribe(
-        (enrolment: Enrolment) => {
-
-        },
-        (error: any) => {
-          this.toastService.openErrorToast('Enrolment could not be retrieved');
-          this.logger.error('[Shared] Dashboard::getEnrolleeSideNavSections error has occurred: ', error);
-        }
-      );
+    const statusCode = (this.enrolmentService.enrolment)
+      ? this.enrolmentService.enrolment.currentStatus.status.code
+      : EnrolmentStatus.IN_PROGRESS;
+    const statusIcons = this.getEnrolmentStatusIcons(statusCode);
 
     return [
       {
@@ -102,19 +105,19 @@ export class DashboardComponent implements OnInit {
         items: [
           {
             name: 'Enrolment',
-            icon: 'assignment_ind', // assignment_turned_in
+            icon: statusIcons.enrolment,
             route: '/enrolment/profile',
             showItem: true
           },
           {
             name: 'Access Agreement',
-            icon: 'lock', // assignment, assignment_turned_in
+            icon: statusIcons.accessAgreement,
             route: '/enrolment/agreement',
             showItem: true
           },
           {
             name: 'Status',
-            icon: 'lock', // assignment_turned_in
+            icon: statusIcons.status,
             route: '/enrolment/summary',
             showItem: true
           }
@@ -163,5 +166,30 @@ export class DashboardComponent implements OnInit {
         showText: true
       };
     }
+  }
+
+  private getEnrolmentStatusIcons(statusCode: number) {
+    let enrolment = 'assignment_turned_in';
+    let accessAgreement = 'lock';
+    let status = 'lock';
+    switch (statusCode) {
+      case EnrolmentStatus.IN_PROGRESS:
+        enrolment = 'assignment_ind';
+        break;
+      case EnrolmentStatus.SUBMITTED:
+        accessAgreement = 'schedule';
+        break;
+      case EnrolmentStatus.ADJUDICATED_APPROVED:
+        accessAgreement = 'assignment';
+        break;
+      // case EnrolmentStatus.DECLINED:
+      case EnrolmentStatus.ACCEPTED_TOS:
+        accessAgreement = 'assignment_turned_in';
+        status = 'assignment_turned_in';
+        break;
+      // case EnrolmentStatus.DECLINED_TOS:
+    }
+
+    return { enrolment, accessAgreement, status };
   }
 }
