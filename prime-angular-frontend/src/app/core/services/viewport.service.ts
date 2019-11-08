@@ -21,61 +21,48 @@ export class ViewportService {
   }
 
   /**
+   * @description
    * Check viewport size is equivalent to mobile.
-   *
-   * @returns {boolean}
-   * @memberof ViewportService
    */
   public get isMobile(): boolean {
     return this.device === DeviceResolution.MOBILE;
   }
 
   /**
+   * @description
    * Check viewport size is equivalent to mobile.
-   *
-   * @returns {boolean}
-   * @memberof ViewportService
    */
   public get isTablet(): boolean {
     return this.device === DeviceResolution.TABLET;
   }
 
   /**
+   * @description
    * Check viewport size is equivalent to desktop.
-   *
-   * @returns {boolean}
-   * @memberof ViewportService
    */
   public get isDesktop(): boolean {
     return this.device === DeviceResolution.DESKTOP;
   }
 
   /**
+   * @description
    * Check viewport size is equivalent to wide desktop.
-   *
-   * @returns {boolean}
-   * @memberof ViewportService
    */
   public get isWideDesktop(): boolean {
     return this.device === DeviceResolution.WIDE;
   }
 
   /**
+   * @description
    * Gets the device based on the viewport dimensions.
-   *
-   * @readonly
-   * @type {DeviceResolution}
-   * @memberof ViewportService
    */
   public get device(): DeviceResolution {
     return this.getDevice();
   }
 
   /**
+   * @description
    * Gets the observable for subscribing to the viewport onresize event.
-   *
-   * @returns
-   * @memberof ViewportService
    */
   public onResize() {
     if (this.viewport === null) {
@@ -89,10 +76,8 @@ export class ViewportService {
   }
 
   /**
+   * @description
    * Setups the observable and viewport onresize event listener.
-   *
-   * @private
-   * @memberof ViewportService
    */
   private setupViewportListener() {
     this.viewport = new Observable(observer => {
@@ -103,6 +88,7 @@ export class ViewportService {
   }
 
   /**
+   * @description
    * Gets the type of "device" based on the viewport width.
    * ---
    * Devices are based on generally accepted media queries for viewport
@@ -114,10 +100,6 @@ export class ViewportService {
    * Wide: Extra Large > 992px
    *
    * @see https://getbootstrap.com/docs/4.0/layout/grid/#variables
-   *
-   * @private
-   * @returns {DeviceResolution}
-   * @memberof ViewportService
    */
   private getDevice(): DeviceResolution {
     const width = this.window.innerWidth;
