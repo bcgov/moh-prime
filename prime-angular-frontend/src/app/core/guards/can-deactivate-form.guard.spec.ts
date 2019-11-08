@@ -9,7 +9,7 @@ describe('CanDeactivateFormGuard', () => {
     });
   });
 
-  it('should ...', inject([CanDeactivateFormGuard], (guard: CanDeactivateFormGuard) => {
+  it('should create', inject([CanDeactivateFormGuard], (guard: CanDeactivateFormGuard) => {
     expect(guard).toBeTruthy();
   }));
 });
