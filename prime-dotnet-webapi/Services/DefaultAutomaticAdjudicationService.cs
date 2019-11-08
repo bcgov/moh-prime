@@ -132,8 +132,7 @@ namespace Prime.Services
                 var result = new List<StatusReason>(0);
                 // check to see if the enrolment is a pump provider
                 // note: if for some reason the question was not answered, we will assume 'Yes'
-                if (enrolment.IsDeviceProvider.GetValueOrDefault(true)
-                        && enrolment.IsInsulinPumpProvider.GetValueOrDefault(true))
+                if (enrolment.IsInsulinPumpProvider.GetValueOrDefault(true))
                 {
                     result.Add(new StatusReason { Code = StatusReason.PUMP_PROVIDER_CODE });
                 }
@@ -201,7 +200,8 @@ namespace Prime.Services
             {
                 var result = new List<StatusReason>(0);
                 // check to see if the enrolment has an certification name discrepancy
-                if (enrolment.HasCertification.GetValueOrDefault(false))
+                // if (enrolment.HasCertification.GetValueOrDefault(false))
+                if (enrolment.Certifications.Count > 0)
                 {
                     // TODO - properly implement this check
                     result.Add(new StatusReason { Code = StatusReason.NAME_DISCREPANCY_CODE });
