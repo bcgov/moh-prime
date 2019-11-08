@@ -11,6 +11,7 @@ import { Enrolment } from '@shared/models/enrolment.model';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,7 @@ export class EnrolmentGuard extends BaseGuard {
     protected logger: LoggerService,
     @Inject(APP_CONFIG) private config: AppConfig,
     private enrolmentResource: EnrolmentResource,
+    private enrolmentService: EnrolmentService,
     private router: Router
   ) {
     super(authService, logger);
@@ -32,37 +34,46 @@ export class EnrolmentGuard extends BaseGuard {
    * to an appropriate destination based on its existence or
    * status.
    */
-  // TODO: expensive since invoked on each route in guard and component
   protected checkAccess(routePath: string = null): Observable<boolean> | Promise<boolean> {
     return this.enrolmentResource.enrolments()
       .pipe(
         map((enrolment: Enrolment) => {
-          if (!enrolment) {
-            return this.navigate(routePath, 'profile');
-          } else if (enrolment) {
-            switch (enrolment.currentStatus.status.code) {
-              case EnrolmentStatus.IN_PROGRESS:
-                const postEnrolmentRoutes = ['confirmation', 'agreement', 'summary'];
-                return (postEnrolmentRoutes.includes(routePath))
-                  // Prevent access to post enrolment routes
-                  ? this.navigate(routePath, 'profile')
-                  // Otherwise, allow the route to resolve
-                  : true;
-              case EnrolmentStatus.SUBMITTED:
-                return this.navigate(routePath, 'confirmation');
-              case EnrolmentStatus.ADJUDICATED_APPROVED:
-                return this.navigate(routePath, 'agreement');
-              // case EnrolmentStatus.DECLINED:
-              case EnrolmentStatus.ACCEPTED_TOS:
-                return this.navigate(routePath, 'summary');
-              // case EnrolmentStatus.DECLINED_TOS:
-            }
-          }
-
-          // Otherwise, prevent the route from resolving
-          return false;
+          // Store the enrolment for access throughout enrolment
+          this.enrolmentService.enrolment$.next(enrolment);
+          return this.routeDestination(routePath, enrolment);
         })
       );
+  }
+
+  /**
+   * @description
+   * Determine the route destination based on the enrolment status.
+   */
+  private routeDestination(routePath: string, enrolment: Enrolment) {
+    if (!enrolment) {
+      return this.navigate(routePath, 'profile');
+    } else if (enrolment) {
+      switch (enrolment.currentStatus.status.code) {
+        case EnrolmentStatus.IN_PROGRESS:
+          const postEnrolmentRoutes = ['confirmation', 'agreement', 'summary'];
+          return (postEnrolmentRoutes.includes(routePath))
+            // Prevent access to post enrolment routes
+            ? this.navigate(routePath, 'profile')
+            // Otherwise, allow the route to resolve
+            : true;
+        case EnrolmentStatus.SUBMITTED:
+          return this.navigate(routePath, 'confirmation');
+        case EnrolmentStatus.ADJUDICATED_APPROVED:
+          return this.navigate(routePath, 'agreement');
+        // case EnrolmentStatus.DECLINED:
+        case EnrolmentStatus.ACCEPTED_TOS:
+          return this.navigate(routePath, 'summary');
+        // case EnrolmentStatus.DECLINED_TOS:
+      }
+    }
+
+    // Otherwise, prevent the route from resolving
+    return false;
   }
 
   /**
