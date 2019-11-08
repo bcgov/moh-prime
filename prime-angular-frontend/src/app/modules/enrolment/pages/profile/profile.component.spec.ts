@@ -15,6 +15,7 @@ import { ConfigService } from '@config/config.service';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
 import { SubHeaderComponent } from '@shared/components/sub-header/sub-header.component';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { AddressComponent } from '@shared/components/forms/address/address.component';
 
 describe('ProfileComponent', () => {
   let component: ProfileComponent;
@@ -33,7 +34,8 @@ describe('ProfileComponent', () => {
         ],
         declarations: [
           ProfileComponent,
-          SubHeaderComponent
+          SubHeaderComponent,
+          AddressComponent
         ],
         providers: [
           {
@@ -59,7 +61,7 @@ describe('ProfileComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create component', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });
