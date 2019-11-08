@@ -29,14 +29,14 @@ RUN echo "Installing Node..." && \
     yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
     curl -sL https://rpm.nodesource.com/setup_12.x | bash - && \
     yum install -y gcc-c++ make yarn sonar-scanner nodejs && \ 
-    npm install -g @angular/cli 
+    npm install -g @angular/cli @angular-devkit/build-angular
 
 #.NET 2.2
 ENV ASPNETCORE_ENVIRONMENT Development
 ENV PATH=$PATH:/home/default/.dotnet/tools
 RUN echo "Installing .NET, coverlet, scanner..." && \
     rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm && \
-    yum install -y -q dotnet-sdk-2.2 && \
+    yum install -y dotnet-sdk-2.2 && \
     dotnet tool install --global coverlet.console && \
     dotnet tool install --global dotnet-sonarscanner --version 4.7.1 && \
     mkdir -p /.dotnet && \

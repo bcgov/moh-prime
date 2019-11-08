@@ -8,9 +8,9 @@ ENV JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64/jre/b
 ENV PATH $PATH:$JAVA_HOME:/var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScanner/bin:/opt/sonar/bin
 #COMMON
 RUN echo "Installing common, Jenkins and Sonar Scanner prerequisites..." && \
-    yum install -y -q java-1.8.0-openjdk-1.8.0.232 envsubst git find which && \
+    yum install -y java-1.8.0-openjdk-1.8.0.232 envsubst git find which && \
     wget -O /etc/yum.repos.d/sonar.repo http://downloads.sourceforge.net/project/sonar-pkg/rpm/sonar.repo && \
-    yum install -y -q sonar && \
+    yum install -y sonar && \
     wget https://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/jnlpJars/agent.jar && \
     useradd default && \
     chmod +x *.bash && \
@@ -23,21 +23,21 @@ RUN echo "Installing common, Jenkins and Sonar Scanner prerequisites..." && \
 # Headless Chrome
 RUN wget https://chromedriver.storage.googleapis.com/2.9/chromedriver_linux64.zip && \
     unzip chromedriver_linux64.zip && \
-    yum install -y -q https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm Xvfb maven
+    yum install -y https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm Xvfb maven
 
 # Node
 RUN echo "Installing Node..." && \
-    yum install -y -q https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
+    yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
     curl -sL https://rpm.nodesource.com/setup_12.x | bash - && \
-    yum install -y -q gcc-c++ make yarn sonar-scanner nodejs && \ 
-    npm install -g @angular/cli 
+    yum install -y gcc-c++ make yarn sonar-scanner nodejs && \ 
+    npm install -g @angular/cli @angular-devkit/build-angular
 
 #.NET 2.2
 ENV ASPNETCORE_ENVIRONMENT Development
 ENV PATH=$PATH:/home/default/.dotnet/tools
 RUN echo "Installing .NET, coverlet, scanner..." && \
     rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm && \
-    yum install -y -q dotnet-sdk-2.2 && \
+    yum install -y dotnet-sdk-2.2 && \
     dotnet tool install --global coverlet.console && \
     dotnet tool install --global dotnet-sonarscanner --version 4.7.1 && \
     mkdir -p /.dotnet && \
