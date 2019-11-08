@@ -1,1 +1,74 @@
-<p>job works!</p>
+<form (ngSubmit)="onSubmit()"
+      [formGroup]="form"
+      novalidate>
+
+  <h1 class="h2 mb-4">Application Enrolment</h1>
+
+  <app-sub-header subheader="Job Information"
+                  help="If you have provided a Device Number you do not have to provide a job title unless you are going to be accessing PharmaNet in a different position.">
+  </app-sub-header>
+
+
+
+  <p>Are you accessing PharmaNet on behalf of someone else?</p>
+
+  <mat-radio-group aria-labelledby="example-radio-group-label"
+                   class="example-radio-group"
+                   formControlName="isAccessingPharmaNetOnBehalfOf">
+    <mat-radio-button class="mr-4"
+                      *ngFor="let decision of decisions"
+                      [value]="decision.code">
+      {{ decision.name }}
+    </mat-radio-button>
+  </mat-radio-group>
+
+  <div class="row"
+       *ngIf="isAccessingPharmaNetOnBehalfOf.value">
+    <div class="col-sm-12 col-md-6 col-xl-4">
+
+      <mat-form-field class="w-100">
+        <mat-chip-list #chipList>
+          <mat-chip *ngFor="let job of jobs.controls; let i = index"
+                    [selectable]="true"
+                    [removable]="true"
+                    (removed)="removeJob(i)">
+            {{ job.value.title }}
+            <mat-icon matChipRemove>cancel</mat-icon>
+          </mat-chip>
+          <input placeholder="Job Title"
+                 #jobInput
+                 [matAutocomplete]="auto"
+                 [matChipInputFor]="chipList"
+                 [matChipInputAddOnBlur]="true"
+                 (matChipInputTokenEnd)="addJob($event)"
+                 [formControl]="jobCtrl">
+        </mat-chip-list>
+        <mat-autocomplete #auto="matAutocomplete"
+                          (optionSelected)="selectedJob($event)">
+          <mat-option *ngFor="let job of filteredJobNames | async"
+                      [value]="job.name">
+            {{ job.name }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+    </div>
+  </div>
+
+  <div class="row justify-content-between">
+    <div class="col pt-2">
+
+      <button mat-raised-button
+              type="button"
+              routerLink="../contact">Back</button>
+
+    </div>
+    <div class="col pt-2 text-right">
+
+      <button mat-raised-button
+              color="primary">Save and Continue</button>
+
+    </div>
+  </div>
+
+</form>

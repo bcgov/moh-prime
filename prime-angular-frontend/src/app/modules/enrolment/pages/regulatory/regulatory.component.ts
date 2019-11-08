@@ -44,9 +44,9 @@ export class RegulatoryComponent implements OnInit {
     this.licenses = this.configService.licenses;
   }
 
-  public get hasCertification(): FormControl {
-    return this.form.get('hasCertification') as FormControl;
-  }
+  // public get hasCertification(): FormControl {
+  //   return this.form.get('hasCertification') as FormControl;
+  // }
 
   public get certifications(): FormArray {
     return this.form.get('certifications') as FormArray;
@@ -57,16 +57,18 @@ export class RegulatoryComponent implements OnInit {
     if (this.form.valid) {
       console.log('Form is valid', this.form);
       const payload = this.enrolmentStateService.enrolment;
+      console.log(payload);
       this.enrolmentResource.updateEnrolment(payload)
         .subscribe(
           () => {
-            this.toastService.openSuccessToast('Professional information has been saved');
+            this.toastService.openSuccessToast('Regulatory information has been saved');
             this.form.markAsPristine();
+            this.certifications.clear();
             this.router.navigate(['device-provider'], { relativeTo: this.route.parent });
           },
           (error: any) => {
-            this.toastService.openErrorToast('Professional information could not be saved');
-            this.logger.error('[Enrolment] Professional::onSubmit error has occurred: ', error);
+            this.toastService.openErrorToast('Regulatory information could not be saved');
+            this.logger.error('[Enrolment] Regulatory::onSubmit error has occurred: ', error);
           }
         );
       this.form.markAsPristine();
@@ -114,11 +116,15 @@ export class RegulatoryComponent implements OnInit {
   }
 
   private createFormInstance() {
-    this.form = this.enrolmentStateService.professionalInfoForm;
+    this.form = this.enrolmentStateService.regulatoryForm;
   }
 
   private initForm() {
-    this.addCertification();
+    if (this.certifications.length === 0) {
+      this.addCertification();
+    } else {
+      this.form.markAsPristine();
+    }
   }
 
 }

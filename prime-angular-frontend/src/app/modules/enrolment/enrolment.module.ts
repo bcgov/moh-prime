@@ -16,7 +16,7 @@ import { SummaryComponent } from './pages/summary/summary.component';
 import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
 import { DeviceProviderComponent } from './pages/device-provider/device-provider.component';
 import { JobComponent } from './pages/job/job.component';
-
+import { ProfessionalInfoComponent } from './pages/professional-info/professional-info.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +32,7 @@ import { JobComponent } from './pages/job/job.component';
     RegulatoryComponent,
     DeviceProviderComponent,
     JobComponent,
+    ProfessionalInfoComponent
   ],
   imports: [
     SharedModule,

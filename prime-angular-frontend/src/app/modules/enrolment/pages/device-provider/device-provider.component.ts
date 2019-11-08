@@ -1,18 +1,15 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { FormGroup, FormArray, FormControl } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MatDialog, MatChipInputEvent, MatAutocompleteSelectedEvent } from '@angular/material';
+import { MatDialog } from '@angular/material';
 
 import { Observable } from 'rxjs';
-import { startWith, map } from 'rxjs/operators';
 
-import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { Job } from '../../shared/models/job.model';
 import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
 import { EnrolmentResource } from '../../shared/services/enrolment-resource.service';
 
@@ -32,17 +29,11 @@ export class DeviceProviderComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
-    private configService: ConfigService,
     private enrolmentStateService: EnrolmentStateService,
     private enrolmentResource: EnrolmentResource,
     private toastService: ToastService,
     private logger: LoggerService
   ) {
-  }
-
-
-  public get isDeviceProvider(): FormControl {
-    return this.form.get('isDeviceProvider') as FormControl;
   }
 
   public get deviceProviderNumber(): FormControl {
@@ -53,23 +44,24 @@ export class DeviceProviderComponent implements OnInit {
     return this.form.get('isInsulinPumpProvider') as FormControl;
   }
 
-  public get isAccessingPharmaNetOnBehalfOf(): FormControl {
-    return this.form.get('isAccessingPharmaNetOnBehalfOf') as FormControl;
-  }
-
   public onSubmit() {
     if (this.form.valid) {
       const payload = this.enrolmentStateService.enrolment;
+      console.log(payload);
       this.enrolmentResource.updateEnrolment(payload)
         .subscribe(
           () => {
-            this.toastService.openSuccessToast('Professional information has been saved');
+            this.toastService.openSuccessToast('Device Provider information has been saved');
             this.form.markAsPristine();
-            this.router.navigate(['declaration'], { relativeTo: this.route.parent });
+            if (payload.certifications.length > 0) {
+              this.router.navigate(['declaration'], { relativeTo: this.route.parent });
+            } else {
+              this.router.navigate(['job'], { relativeTo: this.route.parent });
+            }
           },
           (error: any) => {
-            this.toastService.openErrorToast('Professional information could not be saved');
-            this.logger.error('[Enrolment] Professional::onSubmit error has occurred: ', error);
+            this.toastService.openErrorToast('Device Provider information could not be saved');
+            this.logger.error('[Enrolment] Device Provider::onSubmit error has occurred: ', error);
           }
         );
       this.form.markAsPristine();
@@ -102,14 +94,12 @@ export class DeviceProviderComponent implements OnInit {
   }
 
   private createFormInstance() {
-    this.form = this.enrolmentStateService.professionalInfoForm;
+    this.form = this.enrolmentStateService.deviceProviderForm;
   }
 
   private initForm() {
-    this.isDeviceProvider.valueChanges.subscribe((value) => {
+    this.deviceProviderNumber.valueChanges.subscribe((value) => {
       if (!value) {
-        this.deviceProviderNumber.reset();
-
         // Device providers can be an insulin providers, otherwise disabled
         this.isInsulinPumpProvider.reset(null, { emitEvent: false });
         this.isInsulinPumpProvider.disable({ emitEvent: false });

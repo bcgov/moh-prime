@@ -56,8 +56,8 @@ export class CollegeCertificationsComponent implements OnInit {
 
     this.collegeCode.valueChanges.subscribe((collegeCode: number) => {
       if (collegeCode) {
-        this.collegeCode.setValidators([Validators.required]);
-        this.collegeCode.updateValueAndValidity();
+        // this.collegeCode.setValidators([Validators.required]);
+        // this.collegeCode.updateValueAndValidity();
         this.filteredLicenses = this.filterLicenses(collegeCode);
         this.licensePrefix = this.colleges.filter(c => c.code === collegeCode).shift().prefix;
         this.form.get('licenseCode').patchValue(null);
@@ -66,8 +66,8 @@ export class CollegeCertificationsComponent implements OnInit {
         this.form.get('practiceCode').patchValue(null);
         this.hasPractices = (this.filteredPractices.length) ? true : false;
       } else {
-        this.collegeCode.clearValidators();
-        this.collegeCode.updateValueAndValidity();
+        // this.collegeCode.clearValidators();
+        // this.collegeCode.updateValueAndValidity();
       }
     });
 
