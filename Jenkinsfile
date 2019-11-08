@@ -28,9 +28,10 @@ pipeline {
             agent { label 'master' }
             steps {
                 echo "Deploy (DEV) ..."
-                sh "./player.sh sonar test"
+                sh "./player.sh sonar tools"
             }
         }
+        */
         /*        
         stage('Code Quality Check') {
             agent { label 'code-tests' }
