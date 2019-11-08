@@ -1,3 +1,5 @@
+import * as faker from 'faker';
+
 import { Role } from '@auth/shared/enum/role.enum';
 import { IAuthService } from '@auth/shared/services/auth.service';
 import { User } from '@auth/shared/models/user.model';
@@ -27,10 +29,10 @@ export class MockAuthService implements IAuthService {
 
   public getUser(forceReload?: boolean): Promise<User> {
     return new Promise((resolve, reject) => resolve({
-      userId: 'fakeguid',
-      firstName: 'Example',
-      lastName: 'Example',
-      contactEmail: 'test@example.com'
+      userId: `${faker.random.uuid()}`,
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      contactEmail: faker.internet.email()
     }));
   }
 

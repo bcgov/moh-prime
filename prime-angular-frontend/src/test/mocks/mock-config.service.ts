@@ -174,18 +174,18 @@ export class MockConfigService extends ConfigService implements IConfigService {
           }
         ],
         provinces: [
-          { code: 'QC', name: 'Quebec', countryCode: 'CA' },
           { code: 'AB', name: 'Alberta', countryCode: 'CA' },
           { code: 'BC', name: 'British Columbia', countryCode: 'CA' },
           { code: 'MB', name: 'Manitoba', countryCode: 'CA' },
           { code: 'NB', name: 'New Brunswick', countryCode: 'CA' },
           { code: 'NL', name: 'Newfoundland and Labrador', countryCode: 'CA' },
           { code: 'NS', name: 'Nova Scotia', countryCode: 'CA' },
-          { code: 'ON', name: 'Ontario', countryCode: 'CA' },
-          { code: 'PE', name: 'Prince Edward Island', countryCode: 'CA' },
-          { code: 'SK', name: 'Saskatchewan', countryCode: 'CA' },
           { code: 'NT', name: 'Northwest Territories', countryCode: 'CA' },
           { code: 'NU', name: 'Nunavut', countryCode: 'CA' },
+          { code: 'ON', name: 'Ontario', countryCode: 'CA' },
+          { code: 'PE', name: 'Prince Edward Island', countryCode: 'CA' },
+          { code: 'QC', name: 'Quebec', countryCode: 'CA' },
+          { code: 'SK', name: 'Saskatchewan', countryCode: 'CA' },
           { code: 'YT', name: 'Yukon', countryCode: 'CA' }
         ],
         statuses: [
