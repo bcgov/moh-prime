@@ -208,7 +208,6 @@ export class EnrolmentStateService {
 
   private buildProfessionalInfoForm(): FormGroup {
     return this.fb.group({
-      hasCertification: [null, [FormControlValidators.requiredBoolean]],
       certifications: this.fb.array([]),
       deviceProviderNumber: [null, [
         FormControlValidators.numeric,
@@ -222,7 +221,6 @@ export class EnrolmentStateService {
 
   private buildRegulatoryForm(): FormGroup {
     return this.fb.group({
-      // hasCertification: [null, [FormControlValidators.requiredBoolean]],
       certifications: this.fb.array([]),
     });
   }

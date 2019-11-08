@@ -44,14 +44,9 @@ export class RegulatoryComponent implements OnInit {
     this.licenses = this.configService.licenses;
   }
 
-  // public get hasCertification(): FormControl {
-  //   return this.form.get('hasCertification') as FormControl;
-  // }
-
   public get certifications(): FormArray {
     return this.form.get('certifications') as FormArray;
   }
-
 
   public onSubmit() {
     if (this.form.valid) {

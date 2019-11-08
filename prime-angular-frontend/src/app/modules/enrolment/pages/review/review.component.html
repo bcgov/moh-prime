@@ -161,10 +161,10 @@
 
       <dl class="row mb-4">
         <dt class="col-sm-12 col-md-6 py-1">Do you have a college certification?</dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.hasCertification) }}&nbsp;</dd>
+        <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.certifications.length > 0) }}&nbsp;</dd>
       </dl>
 
-      <ng-container *ngIf="enrolment.hasCertification">
+      <ng-container *ngIf="enrolment.certifications.length > 0">
 
         <h3 class="lead">Certifications</h3>
 
