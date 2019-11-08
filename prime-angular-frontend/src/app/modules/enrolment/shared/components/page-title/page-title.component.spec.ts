@@ -22,7 +22,7 @@ describe('PageTitleComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create component', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

@@ -29,7 +29,7 @@ describe('EnrolleeGuard', () => {
     );
   });
 
-  it('should be injected', inject([EnrolleeGuard], (guard: EnrolleeGuard) => {
+  it('should create', inject([EnrolleeGuard], (guard: EnrolleeGuard) => {
     expect(guard).toBeTruthy();
   }));
 });

@@ -5,7 +5,7 @@ import { ErrorHandlerService } from './error-handler.service';
 describe('ErrorHandlerService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
-  it('should be created', () => {
+  it('should create', () => {
     const service: ErrorHandlerService = TestBed.get(ErrorHandlerService);
     expect(service).toBeTruthy();
   });
