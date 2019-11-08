@@ -12,6 +12,12 @@
                [fixedBottomGap]="0"
                class="prime-sidenav d-print-none">
 
+    <div class="logo">
+      <img src="/assets/prime_logo.svg"
+           alt="PRIME Logo"
+           [ngClass]="{ 'is-deskop': isDesktop }">
+    </div>
+
     <mat-nav-list *ngFor="let sideNavSection of sideNavSections">
       <h3 mat-subheader
           *ngIf="sideNavSection.showHeader && sideNavProps.showText">
@@ -38,24 +44,6 @@
       </div>
 
       <mat-divider *ngIf="sideNavSection.showHeader"></mat-divider>
-    </mat-nav-list>
-
-    <mat-nav-list>
-
-      <mat-list-item (click)="onLogout()">
-        <mat-icon mat-list-icon
-                  [ngClass]="{ 'center-sidenav-icon': !isDesktop }">logout</mat-icon>
-
-        <a matLine>
-          <span *ngIf="sideNavProps.showText">
-            Logout
-          </span>
-        </a>
-        <button mat-icon-button
-                *ngIf="sideNavProps.showText">
-        </button>
-      </mat-list-item>
-
     </mat-nav-list>
 
   </mat-sidenav>

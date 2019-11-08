@@ -5,7 +5,7 @@ import { WindowRefService } from './window-ref.service';
 describe('WindowRefService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
-  it('should be created', () => {
+  it('should create', () => {
     const service: WindowRefService = TestBed.get(WindowRefService);
     expect(service).toBeTruthy();
   });

@@ -24,7 +24,7 @@ describe('ErrorHandlerInterceptor', () => {
     ]
   }));
 
-  it('should be created', () => {
+  it('should create', () => {
     const service: ErrorHandlerInterceptor = TestBed.get(ErrorHandlerInterceptor);
     expect(service).toBeTruthy();
   });
