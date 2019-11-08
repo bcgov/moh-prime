@@ -214,7 +214,6 @@ export class EnrolmentStateService {
         FormControlValidators.requiredLength(5)
       ]],
       isInsulinPumpProvider: [null, [FormControlValidators.requiredBoolean]],
-      isAccessingPharmaNetOnBehalfOf: [null, [FormControlValidators.requiredBoolean]],
       jobs: this.fb.array([]),
     });
   }

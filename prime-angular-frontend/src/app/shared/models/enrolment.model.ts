@@ -14,7 +14,6 @@ export interface Enrolment {
   certifications: CollegeCertification[];
   deviceProviderNumber: string;
   isInsulinPumpProvider: boolean;
-  isAccessingPharmaNetOnBehalfOf: boolean;
   jobs: Job[];
   hasConviction: boolean;
   hasConvictionDetails: string;

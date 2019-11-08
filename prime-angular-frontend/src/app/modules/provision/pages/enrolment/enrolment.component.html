@@ -191,9 +191,7 @@
       </dl>
 
       <dl class="row mb-4">
-        <dt class="col-sm-12 col-md-6 py-1">Are you accessing PharmaNet on behalf of someone else?</dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.isAccessingPharmaNetOnBehalfOf) }}&nbsp;</dd>
-        <ng-container *ngIf="enrolment.isAccessingPharmaNetOnBehalfOf">
+        <ng-container *ngIf="enrolment.jobs.length > 0">
           <dt class="col-sm-12 col-md-6 py-1">Job Title</dt>
           <dd class="col-sm-12 col-md-6 py-1">
             <ul class="list-unstyled">

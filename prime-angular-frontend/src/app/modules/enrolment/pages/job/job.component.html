@@ -10,20 +10,7 @@
 
 
 
-  <p>Are you accessing PharmaNet on behalf of someone else?</p>
-
-  <mat-radio-group aria-labelledby="example-radio-group-label"
-                   class="example-radio-group"
-                   formControlName="isAccessingPharmaNetOnBehalfOf">
-    <mat-radio-button class="mr-4"
-                      *ngFor="let decision of decisions"
-                      [value]="decision.code">
-      {{ decision.name }}
-    </mat-radio-button>
-  </mat-radio-group>
-
-  <div class="row"
-       *ngIf="isAccessingPharmaNetOnBehalfOf.value">
+  <div class="row">
     <div class="col-sm-12 col-md-6 col-xl-4">
 
       <mat-form-field class="w-100">
@@ -60,7 +47,7 @@
 
       <button mat-raised-button
               type="button"
-              routerLink="../contact">Back</button>
+              routerLink="../device-provider">Back</button>
 
     </div>
     <div class="col pt-2 text-right">

@@ -45,10 +45,6 @@ export class JobComponent implements OnInit {
     this.jobNames = this.configService.jobNames;
   }
 
-  public get isAccessingPharmaNetOnBehalfOf(): FormControl {
-    return this.form.get('isAccessingPharmaNetOnBehalfOf') as FormControl;
-  }
-
   public get jobs(): FormArray {
     return this.form.get('jobs') as FormArray;
   }
@@ -134,12 +130,12 @@ export class JobComponent implements OnInit {
   private initForm() {
 
 
-    this.isAccessingPharmaNetOnBehalfOf.valueChanges.subscribe((value) => {
-      if (!value) {
-        this.jobs.clear();
-      } else {
-      }
-    });
+    // this.isAccessingPharmaNetOnBehalfOf.valueChanges.subscribe((value) => {
+    //   if (!value) {
+    //     this.jobs.clear();
+    //   } else {
+    //   }
+    // });
   }
 
   private initMultiSelect() {
