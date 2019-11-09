@@ -2,10 +2,14 @@
       [formGroup]="form"
       novalidate>
 
-  <h1 class="h2 mb-4">Application Enrolment</h1>
+  <app-page-header>Application Enrolment</app-page-header>
 
-  <app-sub-header subheader="Self Declaration"
-                  help="Lorem ipsum dolor, sit amet consectetur adipisicing elit."></app-sub-header>
+  <app-page-sub-header>
+    <ng-container appSubheaderTitle>Self Declaration</ng-container>
+    <ng-container appSubheaderDesc>
+      Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+    </ng-container>
+  </app-page-sub-header>
 
   <p>Have you ever been the subject of an order or a conviction for an information contravention?</p>
 

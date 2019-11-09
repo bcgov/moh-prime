@@ -1,12 +1,14 @@
 <div>
 
-  <h1 class="h2 mb-4">Pharmacist Enrolment</h1>
+  <app-page-header>Pharmacist Enrolment</app-page-header>
 
   <div class="row"
        *ngIf="enrolment">
     <div class="col-sm-6">
 
-      <app-sub-header subheader="Enrollee"></app-sub-header>
+      <app-page-sub-header>
+        <ng-container appSubheaderTitle>Enrollee</ng-container>
+      </app-page-sub-header>
 
       <dl class="row mb-4">
         <dt class="col-sm-12 col-md-6 py-1">Name</dt>
@@ -72,8 +74,9 @@
 
       </ng-container>
 
-      <app-sub-header subheader="Contact">
-      </app-sub-header>
+      <app-page-sub-header>
+        <ng-container appSubheaderTitle>Contact</ng-container>
+      </app-page-sub-header>
 
       <h3 class="lead">Voice Contact</h3>
 
@@ -102,8 +105,9 @@
         </dl>
       </ng-container>
 
-      <app-sub-header subheader="Self Declaration">
-      </app-sub-header>
+      <app-page-sub-header>
+        <ng-container appSubheaderTitle>Self Declaration</ng-container>
+      </app-page-sub-header>
 
       <dl class="row mb-4">
         <dt class="col-sm-12 col-md-6 py-1">
@@ -154,8 +158,9 @@
     </div>
     <div class="col-sm-6">
 
-      <app-sub-header subheader="Professional Information">
-      </app-sub-header>
+      <app-page-sub-header>
+        <ng-container appSubheaderTitle>Professional Information</ng-container>
+      </app-page-sub-header>
 
       <dl class="row mb-4">
         <dt class="col-sm-12 col-md-6 py-1">Do you have a college certification?</dt>
@@ -211,8 +216,9 @@
         </ng-container>
       </dl>
 
-      <app-sub-header subheader="PharmaNet Access">
-      </app-sub-header>
+      <app-page-sub-header>
+        <ng-container appSubheaderTitle>PharmaNet Access</ng-container>
+      </app-page-sub-header>
 
       <ng-container *ngIf="enrolment.organizations.length; else noOrganization">
 
