@@ -3,10 +3,14 @@ import { CommonModule } from '@angular/common';
 import { MatMenuModule, MatIconModule, MatButtonModule } from '@angular/material';
 
 import { ContextualHelpComponent } from './contextual-help/contextual-help.component';
+import { ContextualTitleDirective } from './contextual-title.directive';
+import { ContextualContentDirective } from './contextual-content.directive';
 
 @NgModule({
   declarations: [
-    ContextualHelpComponent
+    ContextualHelpComponent,
+    ContextualTitleDirective,
+    ContextualContentDirective
   ],
   imports: [
     CommonModule,
@@ -15,7 +19,9 @@ import { ContextualHelpComponent } from './contextual-help/contextual-help.compo
     MatMenuModule
   ],
   exports: [
-    ContextualHelpComponent
+    ContextualHelpComponent,
+    ContextualTitleDirective,
+    ContextualContentDirective
   ]
 })
 export class NgxContextualHelpModule { }
