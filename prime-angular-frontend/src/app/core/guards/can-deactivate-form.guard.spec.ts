@@ -5,7 +5,9 @@ import { CanDeactivateFormGuard } from './can-deactivate-form.guard';
 describe('CanDeactivateFormGuard', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [CanDeactivateFormGuard]
+      providers: [
+        CanDeactivateFormGuard
+      ]
     });
   });
 
