@@ -8,7 +8,10 @@ import { MockConfigService } from 'test/mocks/mock-config.service';
 import { EnrolmentsComponent } from './enrolments.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
+import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
+import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
+import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 
 describe('EnrolmentsComponent', () => {
@@ -21,11 +24,14 @@ describe('EnrolmentsComponent', () => {
         imports: [
           BrowserAnimationsModule,
           HttpClientTestingModule,
+          NgxContextualHelpModule,
           NgxMaterialModule,
           RouterTestingModule
         ],
         declarations: [
           EnrolmentsComponent,
+          PageHeaderComponent,
+          PageSubheaderComponent,
           FormatDatePipe
         ],
         providers: [
