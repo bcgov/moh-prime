@@ -99,7 +99,6 @@ export class ProfileComponent implements OnInit {
   public onSubmit() {
     if (this.form.valid) {
       const payload = this.enrolmentStateService.enrolment;
-
       const request$ = (this.isNewEnrolment)
         ? this.enrolmentResource.createEnrolment(payload)
           .pipe(

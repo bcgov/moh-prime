@@ -51,6 +51,7 @@ export class JobComponent implements OnInit {
 
   public onSubmit() {
     if (this.form.valid) {
+      this.clearCollegeForm();
       const payload = this.enrolmentStateService.enrolment;
       this.enrolmentResource.updateEnrolment(payload)
         .subscribe(
@@ -67,6 +68,14 @@ export class JobComponent implements OnInit {
       this.form.markAsPristine();
     } else {
       this.form.markAllAsTouched();
+    }
+  }
+
+  public clearCollegeForm() {
+    if (this.enrolmentStateService.enrolment.certifications.length > 0) {
+      const regulatoryForm = this.enrolmentStateService.regulatoryForm;
+      const certs = regulatoryForm.get('certifications') as FormArray;
+      certs.clear();
     }
   }
 

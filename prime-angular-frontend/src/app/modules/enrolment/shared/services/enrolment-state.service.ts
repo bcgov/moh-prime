@@ -34,7 +34,6 @@ export class EnrolmentStateService {
     this.professionalInfoForm = this.buildProfessionalInfoForm();
     this.regulatoryForm = this.buildRegulatoryForm();
     this.jobsForm = this.buildJobsForm();
-    // this.collegeCertificationForm = this.buildCollegeCertificationForm();
     this.deviceProviderForm = this.buildDeviceProviderForm();
     this.selfDeclarationForm = this.buildSelfDeclarationForm();
     this.pharmaNetAccessForm = this.buildPharmaNetAccessForm();
@@ -245,12 +244,12 @@ export class EnrolmentStateService {
       id: [null, []],
       collegeCode: [null, []],
       licenseNumber: [null, [
-        Validators.required,
+        // Validators.required,
         FormControlValidators.numeric,
         FormControlValidators.requiredLength(5)
       ]],
-      licenseCode: [null, [Validators.required]],
-      renewalDate: [null, [Validators.required]],
+      licenseCode: [null, []],
+      renewalDate: [null, []],
       practiceCode: [null, []]
     });
   }

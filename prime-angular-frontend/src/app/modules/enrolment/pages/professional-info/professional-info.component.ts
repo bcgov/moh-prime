@@ -52,10 +52,6 @@ export class ProfessionalInfoComponent implements OnInit {
     this.jobNames = this.configService.jobNames;
   }
 
-  public get hasCertification(): FormControl {
-    return this.form.get('hasCertification') as FormControl;
-  }
-
   public get certifications(): FormArray {
     return this.form.get('certifications') as FormArray;
   }
@@ -171,22 +167,22 @@ export class ProfessionalInfoComponent implements OnInit {
   }
 
   private initForm() {
-    this.hasCertification.valueChanges.subscribe((value) => {
-      if (!value) {
-        this.certifications.clear();
+    // this.hasCertification.valueChanges.subscribe((value) => {
+    //   if (!value) {
+    //     this.certifications.clear();
 
-        this.isAccessingPharmaNetOnBehalfOf.enable({ emitEvent: false });
-      } else {
-        if (!this.certifications.length) {
-          // Add an initial empty certification when displayed
-          this.addCertification();
-        }
+    //     this.isAccessingPharmaNetOnBehalfOf.enable({ emitEvent: false });
+    //   } else {
+    //     if (!this.certifications.length) {
+    //       // Add an initial empty certification when displayed
+    //       this.addCertification();
+    //     }
 
-        // College certification indicates not being accessed on behalf of
-        this.isAccessingPharmaNetOnBehalfOf.reset(null, { emitEvent: false });
-        this.isAccessingPharmaNetOnBehalfOf.disable({ emitEvent: false });
-      }
-    });
+    //     // College certification indicates not being accessed on behalf of
+    //     this.isAccessingPharmaNetOnBehalfOf.reset(null, { emitEvent: false });
+    //     this.isAccessingPharmaNetOnBehalfOf.disable({ emitEvent: false });
+    //   }
+    // });
 
     this.isDeviceProvider.valueChanges.subscribe((value) => {
       if (!value) {
@@ -201,15 +197,15 @@ export class ProfessionalInfoComponent implements OnInit {
     });
 
     this.isAccessingPharmaNetOnBehalfOf.valueChanges.subscribe((value) => {
-      if (!value) {
-        this.jobs.clear();
+      // if (!value) {
+      //   this.jobs.clear();
 
-        this.hasCertification.enable({ emitEvent: false });
-      } else {
-        // Accessing on behalf of indicates no college certification
-        this.hasCertification.reset(null, { emitEvent: false });
-        this.hasCertification.disable({ emitEvent: false });
-      }
+      //   this.hasCertification.enable({ emitEvent: false });
+      // } else {
+      //   // Accessing on behalf of indicates no college certification
+      //   this.hasCertification.reset(null, { emitEvent: false });
+      //   this.hasCertification.disable({ emitEvent: false });
+      // }
     });
   }
 

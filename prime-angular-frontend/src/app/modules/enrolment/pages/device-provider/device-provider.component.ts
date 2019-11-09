@@ -47,7 +47,6 @@ export class DeviceProviderComponent implements OnInit {
   public onSubmit() {
     if (this.form.valid) {
       const payload = this.enrolmentStateService.enrolment;
-      console.log(payload);
       this.enrolmentResource.updateEnrolment(payload)
         .subscribe(
           () => {

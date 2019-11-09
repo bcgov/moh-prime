@@ -39,6 +39,18 @@ export class CollegeCertificationsComponent implements OnInit {
     return this.form.get('collegeCode') as FormControl;
   }
 
+  public get licenseNumber(): FormControl {
+    return this.form.get('licenseNumber') as FormControl;
+  }
+
+  public get licenseCode(): FormControl {
+    return this.form.get('licenseCode') as FormControl;
+  }
+
+  public get renewalDate(): FormControl {
+    return this.form.get('renewalDate') as FormControl;
+  }
+
   public get practiceCode(): FormControl {
     return this.form.get('practiceCode') as FormControl;
   }
@@ -56,8 +68,13 @@ export class CollegeCertificationsComponent implements OnInit {
 
     this.collegeCode.valueChanges.subscribe((collegeCode: number) => {
       if (collegeCode) {
-        // this.collegeCode.setValidators([Validators.required]);
-        // this.collegeCode.updateValueAndValidity();
+        this.licenseNumber.setValidators([Validators.required]);
+        this.licenseNumber.updateValueAndValidity();
+        this.licenseCode.setValidators([Validators.required]);
+        this.licenseCode.updateValueAndValidity();
+        this.renewalDate.setValidators([Validators.required]);
+        this.renewalDate.updateValueAndValidity();
+
         this.filteredLicenses = this.filterLicenses(collegeCode);
         this.licensePrefix = this.colleges.filter(c => c.code === collegeCode).shift().prefix;
         this.form.get('licenseCode').patchValue(null);
@@ -65,13 +82,8 @@ export class CollegeCertificationsComponent implements OnInit {
         this.filteredPractices = this.filterPractices(collegeCode);
         this.form.get('practiceCode').patchValue(null);
         this.hasPractices = (this.filteredPractices.length) ? true : false;
-      } else {
-        // this.collegeCode.clearValidators();
-        // this.collegeCode.updateValueAndValidity();
       }
     });
-
-    console.log(this.collegeCode.value);
   }
 
   private filterLicenses(collegeCode: number): LicenseConfig[] {

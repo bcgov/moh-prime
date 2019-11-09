@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { FormGroup, FormArray, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
@@ -19,14 +19,10 @@ import { EnrolmentResource } from '../../shared/services/enrolment-resource.serv
   templateUrl: './regulatory.component.html',
   styleUrls: ['./regulatory.component.scss']
 })
-export class RegulatoryComponent implements OnInit {
+export class RegulatoryComponent implements OnInit, OnDestroy {
 
   public form: FormGroup;
-  public jobCtrl: FormControl;
-  @ViewChild('jobInput', { static: false }) jobInput: ElementRef<HTMLInputElement>;
-  public decisions: { code: boolean, name: string }[] = [
-    { code: false, name: 'No' }, { code: true, name: 'Yes' }
-  ];
+  public jobForm: FormGroup;
   public colleges: Config<number>[];
   public licenses: Config<number>[];
 
@@ -50,9 +46,9 @@ export class RegulatoryComponent implements OnInit {
 
   public onSubmit() {
     if (this.form.valid) {
-      console.log('Form is valid', this.form);
+      this.clearEmptyCertifications();
+      this.clearJobForm();
       const payload = this.enrolmentStateService.enrolment;
-      console.log(payload);
       this.enrolmentResource.updateEnrolment(payload)
         .subscribe(
           () => {
@@ -68,7 +64,6 @@ export class RegulatoryComponent implements OnInit {
         );
       this.form.markAsPristine();
     } else {
-      console.log('not valid', this.form);
       this.form.markAllAsTouched();
     }
 
@@ -108,6 +103,42 @@ export class RegulatoryComponent implements OnInit {
           this.enrolmentStateService.enrolment = enrolment;
         }
       });
+  }
+
+  public ngOnDestroy() {
+    this.clearEmptyCertifications();
+  }
+
+  public clearEmptyCertifications() {
+    let i = 0;
+    for (const control of this.certifications.controls) {
+      if (control instanceof FormGroup) {
+        if (control.get('collegeCode').value === null) {
+          this.removeCertification(i);
+        }
+      }
+      i++;
+    }
+  }
+
+  public clearJobForm() {
+    if (this.enrolmentStateService.enrolment.jobs.length > 0) {
+      this.jobForm = this.enrolmentStateService.jobsForm;
+      const jobs = this.jobForm.get('jobs') as FormArray;
+      jobs.clear();
+      // this.jobForm.reset();
+    }
+  }
+
+  public canAddCertification(): boolean {
+    for (const control of this.certifications.controls) {
+      if (control instanceof FormGroup) {
+        if (control.get('collegeCode').value === null) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
   private createFormInstance() {
