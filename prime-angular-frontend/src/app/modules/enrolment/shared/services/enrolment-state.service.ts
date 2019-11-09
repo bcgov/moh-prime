@@ -217,13 +217,13 @@ export class EnrolmentStateService {
 
   private buildSelfDeclarationForm(): FormGroup {
     return this.fb.group({
-      hasConviction: [null, [FormControlValidators.requiredBoolean]],
+      hasConviction: [false, [FormControlValidators.requiredBoolean]],
       hasConvictionDetails: [null, []],
-      hasRegistrationSuspended: [null, [FormControlValidators.requiredBoolean]],
+      hasRegistrationSuspended: [false, [FormControlValidators.requiredBoolean]],
       hasRegistrationSuspendedDetails: [null, []],
-      hasDisciplinaryAction: [null, [FormControlValidators.requiredBoolean]],
+      hasDisciplinaryAction: [false, [FormControlValidators.requiredBoolean]],
       hasDisciplinaryActionDetails: [null, []],
-      hasPharmaNetSuspended: [null, [FormControlValidators.requiredBoolean]],
+      hasPharmaNetSuspended: [false, [FormControlValidators.requiredBoolean]],
       hasPharmaNetSuspendedDetails: [null, []]
     });
   }
