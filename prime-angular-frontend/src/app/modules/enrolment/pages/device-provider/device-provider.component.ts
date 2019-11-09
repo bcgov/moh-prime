@@ -100,7 +100,7 @@ export class DeviceProviderComponent implements OnInit {
     this.deviceProviderNumber.valueChanges.subscribe((value) => {
       if (!value) {
         // Device providers can be an insulin providers, otherwise disabled
-        this.isInsulinPumpProvider.reset(null, { emitEvent: false });
+        this.isInsulinPumpProvider.reset(false, { emitEvent: false });
         this.isInsulinPumpProvider.disable({ emitEvent: false });
       } else {
         this.isInsulinPumpProvider.enable({ emitEvent: false });

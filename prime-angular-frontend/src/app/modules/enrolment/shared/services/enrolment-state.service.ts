@@ -85,7 +85,7 @@ export class EnrolmentStateService {
   public isEnrolmentValid(): boolean {
     return (
       this.isProfileInfoValid() &&
-      this.isProfessionalInfoValid() &&
+      // this.isProfessionalInfoValid() &&
       this.isRegulatoryValid() &&
       this.isDeviceProviderValid() &&
       this.isJobsValid() &&
@@ -99,7 +99,11 @@ export class EnrolmentStateService {
   }
 
   public isProfessionalInfoValid(): boolean {
-    return this.professionalInfoForm.valid;
+    return (
+      this.isRegulatoryValid() &&
+      this.isDeviceProviderValid() &&
+      this.isJobsValid()
+    );
   }
 
   public isRegulatoryValid(): boolean {
@@ -231,7 +235,7 @@ export class EnrolmentStateService {
         FormControlValidators.numeric,
         FormControlValidators.requiredLength(5)
       ]],
-      isInsulinPumpProvider: [null, [FormControlValidators.requiredBoolean]]
+      isInsulinPumpProvider: [false, [FormControlValidators.requiredBoolean]]
     });
   }
 
