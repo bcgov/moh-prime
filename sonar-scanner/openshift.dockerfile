@@ -29,11 +29,32 @@ RUN wget https://chromedriver.storage.googleapis.com/2.9/chromedriver_linux64.zi
 RUN echo "Installing Node..." && \
     yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
     curl -sL https://rpm.nodesource.com/setup_12.x | bash - && \
-    yum install -y gcc-c++ make yarn sonar-scanner nodejs && \ 
+    yum install -y gcc-c++ \
+        make \
+        yarn \ 
+        sonar-scanner \ 
+        nodejs \
+        glib2 && \ 
     export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 && \
-    npm install -g --silent @angular/cli @angular-devkit/build-angular @angular/compiler @angular/compiler-cli typescript chromium puppeteer && \
+    npm install -g --silent @angular/cli \
+        @angular-devkit/build-angular \
+        @angular/compiler \ 
+        @angular/compiler-cli \ 
+        @angular/core \ 
+        typescript \ 
+        chromium \ 
+        puppeteer \ 
+        jasmine \ 
+        karma \ 
+        karma-chrome-launcher \ 
+        karma-mocha \ 
+        karma-chai \ 
+        karma-jasmine && \
+        karma-jasmine-html-reporter && \
+        karma-coverage-istanbul-reporter && \
     setcap cap_dac_override=ep /usr/lib/node_modules/npm/bin/npm && \
     setcap cap_dac_override=ep /usr/bin/node
+
 #.NET 2.2
 ENV ASPNETCORE_ENVIRONMENT Development
 ENV PATH=$PATH:/home/default/.dotnet/tools
