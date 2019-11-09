@@ -27,7 +27,7 @@ describe('ProvisionGuard', () => {
     });
   });
 
-  it('should be injected', inject([ProvisionGuard], (guard: ProvisionGuard) => {
+  it('should create', inject([ProvisionGuard], (guard: ProvisionGuard) => {
     expect(guard).toBeTruthy();
   }));
 });

@@ -22,7 +22,7 @@ describe('ConfigResolver', () => {
     );
   });
 
-  it('should be injected', inject([ConfigResolver], (guard: ConfigResolver) => {
+  it('should create', inject([ConfigResolver], (guard: ConfigResolver) => {
     expect(guard).toBeTruthy();
   }));
 });

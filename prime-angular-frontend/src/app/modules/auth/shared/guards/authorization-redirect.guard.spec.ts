@@ -27,7 +27,7 @@ describe('AuthorizationRedirectGuard', () => {
     });
   });
 
-  it('should be injected', inject([AuthorizationRedirectGuard], (guard: AuthorizationRedirectGuard) => {
+  it('should create', inject([AuthorizationRedirectGuard], (guard: AuthorizationRedirectGuard) => {
     expect(guard).toBeTruthy();
   }));
 });

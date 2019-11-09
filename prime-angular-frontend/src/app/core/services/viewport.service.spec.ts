@@ -5,7 +5,7 @@ import { ViewportService } from './viewport.service';
 describe('ViewportService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
-  it('should be created', () => {
+  it('should create', () => {
     const service: ViewportService = TestBed.get(ViewportService);
     expect(service).toBeTruthy();
   });
