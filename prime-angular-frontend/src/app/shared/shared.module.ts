@@ -21,8 +21,10 @@ import { ReplacePipe } from '@shared/pipes/replace.pipe';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 import { HeaderComponent } from '@shared/components/header/header.component';
 import { SubHeaderComponent } from '@shared/components/sub-header/sub-header.component';
-import { PageHeaderComponent } from './components/page-header/page-header.component';
-import { PageSubHeaderComponent } from './components/page-sub-header/page-sub-header.component';
+import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
+import { PageSubheaderComponent } from './components/page-subheader/page-subheader.component';
+import { PageSubheaderTitleDirective } from '@shared/components/page-subheader/page-subheader-title.directive';
+import { PageSubheaderSummaryDirective } from '@shared/components/page-subheader/page-subheader-summary.directive';
 
 @NgModule({
   declarations: [
@@ -39,7 +41,9 @@ import { PageSubHeaderComponent } from './components/page-sub-header/page-sub-he
     SubHeaderComponent,
     AddressComponent,
     PageHeaderComponent,
-    PageSubHeaderComponent
+    PageSubheaderComponent,
+    PageSubheaderTitleDirective,
+    PageSubheaderSummaryDirective,
   ],
   imports: [
     CommonModule,
@@ -70,7 +74,9 @@ import { PageSubHeaderComponent } from './components/page-sub-header/page-sub-he
     HeaderComponent,
     SubHeaderComponent,
     PageHeaderComponent,
-    PageSubHeaderComponent
+    PageSubheaderComponent,
+    PageSubheaderTitleDirective,
+    PageSubheaderSummaryDirective
   ],
   entryComponents: [
     ConfirmDialogComponent

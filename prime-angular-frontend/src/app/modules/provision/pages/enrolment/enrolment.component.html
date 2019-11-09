@@ -6,9 +6,9 @@
        *ngIf="enrolment">
     <div class="col-sm-6">
 
-      <app-page-sub-header>
-        <ng-container appSubheaderTitle>Enrollee</ng-container>
-      </app-page-sub-header>
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Enrollee</ng-container>
+      </app-page-subheader>
 
       <dl class="row mb-4">
         <dt class="col-sm-12 col-md-6 py-1">Name</dt>
@@ -74,9 +74,9 @@
 
       </ng-container>
 
-      <app-page-sub-header>
-        <ng-container appSubheaderTitle>Contact</ng-container>
-      </app-page-sub-header>
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Contact</ng-container>
+      </app-page-subheader>
 
       <h3 class="lead">Voice Contact</h3>
 
@@ -105,9 +105,9 @@
         </dl>
       </ng-container>
 
-      <app-page-sub-header>
-        <ng-container appSubheaderTitle>Self Declaration</ng-container>
-      </app-page-sub-header>
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Self Declaration</ng-container>
+      </app-page-subheader>
 
       <dl class="row mb-4">
         <dt class="col-sm-12 col-md-6 py-1">
@@ -158,9 +158,9 @@
     </div>
     <div class="col-sm-6">
 
-      <app-page-sub-header>
-        <ng-container appSubheaderTitle>Professional Information</ng-container>
-      </app-page-sub-header>
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Professional Information</ng-container>
+      </app-page-subheader>
 
       <dl class="row mb-4">
         <dt class="col-sm-12 col-md-6 py-1">Do you have a college certification?</dt>
@@ -216,9 +216,9 @@
         </ng-container>
       </dl>
 
-      <app-page-sub-header>
-        <ng-container appSubheaderTitle>PharmaNet Access</ng-container>
-      </app-page-sub-header>
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>PharmaNet Access</ng-container>
+      </app-page-subheader>
 
       <ng-container *ngIf="enrolment.organizations.length; else noOrganization">
 
@@ -250,14 +250,13 @@
   </div>
 
   <div class="row justify-content-between">
-    <div class="col pt-2">
+    <div class="col pt-4">
 
-      <button mat-raised-button
+      <button mat-stroked-button
               type="button"
               routerLink="../">Back</button>
 
     </div>
-
   </div>
 
 </div>
