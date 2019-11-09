@@ -10,9 +10,22 @@
   right: 0;
 }
 
+.logo {
+  text-align: center;
+
+  img {
+    margin: 2em 0 1.5em;
+    width: 40px;
+    height: auto;
+
+    @media (min-width: 992px) {
+      width: 90px
+    }
+  }
+}
+
 @media print {
   .mat-sidenav-content {
     margin-left: 0 !important;
   }
 }
-

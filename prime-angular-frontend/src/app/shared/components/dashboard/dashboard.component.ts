@@ -4,8 +4,12 @@ import { MatSidenav } from '@angular/material';
 
 import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { ViewportService } from '@core/services/viewport.service';
+import { LoggerService } from '@core/services/logger.service';
 import { DeviceResolution } from '@shared/enums/device-resolution.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { Enrolment } from '@shared/models/enrolment.model';
+import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 
 @Component({
   selector: 'app-dashboard',
@@ -23,39 +27,25 @@ export class DashboardComponent implements OnInit {
     showText: boolean
   };
 
+  public username: string;
+
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
     private viewportService: ViewportService,
-    private router: Router
+    private enrolmentService: EnrolmentService,
+    private router: Router,
+    private logger: LoggerService
   ) { }
 
-  /**
-   * Check viewport size is equivalent to desktop.
-   *
-   * @returns {boolean}
-   * @memberof DashboardComponent
-   */
   public get isMobile(): boolean {
     return this.viewportService.isMobile;
   }
 
-  /**
-   * Check viewport size is equivalent to desktop.
-   *
-   * @returns {boolean}
-   * @memberof DashboardComponent
-   */
   public get isDesktop(): boolean {
     return this.viewportService.isDesktop || this.viewportService.isWideDesktop;
   }
 
-  /**
-   * Route to the next view.
-   *
-   * @param {string} route
-   * @memberof DashboardComponent
-   */
   public routeTo(route: string) {
     if (this.viewportService.isMobile) {
       this.sideNav.close();
@@ -64,89 +54,71 @@ export class DashboardComponent implements OnInit {
     this.router.navigate([route]);
   }
 
-  /**
-   * Handle on route event.
-   *
-   * @memberof DashboardComponent
-   */
   public onRoute(): void {
     if (this.viewportService.isMobile) {
       this.sideNav.close();
     }
   }
 
-  /**
-   * Logout the authenticated user.
-   *
-   * @memberof DashboardComponent
-   */
-  public logout() {
+  public onLogout() {
     this.authService.logout(this.config.loginRedirectUrl);
   }
 
-  public ngOnInit() {
+  public async ngOnInit() {
+    // Initialize the side navigation based on the type of user
     this.sideNavSections = this.getSideNavSections();
+    if (this.authService.isEnrollee()) {
+      // Listen for enrolment status changes to update the side navigation
+      // based on user progression
+      this.enrolmentService.enrolment$
+        .subscribe(() => {
+          this.sideNavSections = this.getSideNavSections();
+        });
+    }
+
     // Initialize the sidenav with properties based on current viewport
     this.setSideNavProps(this.viewportService.device);
-    // Subscribe to viewport onresize changes
+    // Listen for viewport onresize changes
     this.viewportService.onResize()
       .subscribe((device: string) => this.setSideNavProps(device));
+
+    const user = await this.authService.getUser();
+    this.username = `${user.firstName} ${user.firstName}`;
   }
 
-  /**
-   * Get the side navigation sections.
-   *
-   * @private
-   * @returns
-   * @memberof DashboardComponent
-   */
   private getSideNavSections() {
     return (this.authService.isProvisioner() || this.authService.isAdmin())
       ? this.getProvisionSideNavSections()
       : this.getEnrolleeSideNavSections();
   }
 
-  /**
-   * Get the sidenav sections for an enrollee.
-   *
-   * @private
-   * @returns
-   * @memberof DashboardComponent
-   */
   private getEnrolleeSideNavSections() {
+    const statusCode = (this.enrolmentService.enrolment)
+      ? this.enrolmentService.enrolment.currentStatus.status.code
+      : EnrolmentStatus.IN_PROGRESS;
+    const statusIcons = this.getEnrolmentStatusIcons(statusCode);
+
     return [
       {
         header: 'Application Enrolment',
-        showHeader: true,
+        showHeader: false,
         items: [
           {
-            name: 'Enrollee Information',
-            icon: 'person',
+            name: 'Enrolment',
+            icon: statusIcons.enrolment,
             route: '/enrolment/profile',
             showItem: true
           },
           {
-            name: 'Professional Information',
-            icon: 'work',
-            route: '/enrolment/professional',
+            name: 'Access Agreement',
+            icon: statusIcons.accessAgreement,
+            route: '/enrolment/agreement',
             showItem: true
           },
           {
-            name: 'Self Declaration',
-            icon: 'description',
-            route: '/enrolment/declaration',
-            showItem: true
-          },
-          {
-            name: 'PharmaNet Access',
-            icon: 'location_city',
-            route: '/enrolment/access',
-            showItem: true
-          },
-          {
-            name: 'Review',
-            icon: 'search',
-            route: '/enrolment/review',
+            name: 'Status',
+            icon: statusIcons.status,
+            route: '/enrolment/summary',
             showItem: true
           }
         ]
@@ -154,18 +126,11 @@ export class DashboardComponent implements OnInit {
     ];
   }
 
-  /**
-   * Get the sidenav sections for a provisioner.
-   *
-   * @private
-   * @returns
-   * @memberof DashboardComponent
-   */
   private getProvisionSideNavSections() {
     return [
       {
         header: 'Pharmacist Enrolments',
-        showHeader: true,
+        showHeader: false,
         items: [
           {
             name: 'Enrolments',
@@ -178,13 +143,6 @@ export class DashboardComponent implements OnInit {
     ];
   }
 
-  /**
-   * Set the properties of the side navigation.
-   *
-   * @private
-   * @param {string} device
-   * @memberof DashboardComponent
-   */
   private setSideNavProps(device: string) {
     if (device === DeviceResolution.MOBILE) {
       this.sideNavProps = {
@@ -208,5 +166,30 @@ export class DashboardComponent implements OnInit {
         showText: true
       };
     }
+  }
+
+  private getEnrolmentStatusIcons(statusCode: number) {
+    let enrolment = 'assignment_turned_in';
+    let accessAgreement = 'lock';
+    let status = 'lock';
+    switch (statusCode) {
+      case EnrolmentStatus.IN_PROGRESS:
+        enrolment = 'assignment_ind';
+        break;
+      case EnrolmentStatus.SUBMITTED:
+        accessAgreement = 'schedule';
+        break;
+      case EnrolmentStatus.ADJUDICATED_APPROVED:
+        accessAgreement = 'assignment';
+        break;
+      // case EnrolmentStatus.DECLINED:
+      case EnrolmentStatus.ACCEPTED_TOS:
+        accessAgreement = 'assignment_turned_in';
+        status = 'assignment_turned_in';
+        break;
+      // case EnrolmentStatus.DECLINED_TOS:
+    }
+
+    return { enrolment, accessAgreement, status };
   }
 }

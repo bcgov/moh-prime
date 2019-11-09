@@ -10,7 +10,7 @@ describe('RouteStateService', () => {
     ]
   }));
 
-  it('should be created', () => {
+  it('should create', () => {
     const service: RouteStateService = TestBed.get(RouteStateService);
     expect(service).toBeTruthy();
   });

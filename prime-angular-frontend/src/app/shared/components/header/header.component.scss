@@ -3,14 +3,24 @@
 .mat-toolbar {
   height: 70px;
 
-  .mat-icon {
-    cursor: pointer;
-    margin-top: 0.3em;
-    user-select: none;
-  }
-
   img {
     margin-left: 15px;
     margin-top: -15px;
+  }
+
+  .username {
+    font-size: .8rem;
+  }
+
+  .mat-icon {
+    cursor: pointer;
+    font-size: 20px;
+    margin-top: 0.4em;
+    user-select: none;
+  }
+
+  .logout {
+    margin-left: 1.2em;
+    margin-right: .2em;
   }
 }

@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
-import { Configuration, Config, PracticeConfig, CollegeConfig, LicenseConfig } from './config.model';
+import { Configuration, Config, PracticeConfig, CollegeConfig, LicenseConfig, ProvinceConfig } from './config.model';
 import { PrimeHttpResponse } from '@core/models/prime-http-response.model';
 
 export interface IConfigService {
@@ -16,7 +16,7 @@ export interface IConfigService {
   licenses: LicenseConfig[];
   organizationNames: Config<number>[];
   organizationTypes: Config<number>[];
-  provinces: Config<string>[];
+  provinces: ProvinceConfig[];
   statuses: Config<number>[];
   load(): Observable<Configuration>;
 }
@@ -60,7 +60,7 @@ export class ConfigService implements IConfigService {
     return [...this.configuration.organizationTypes];
   }
 
-  public get provinces(): Config<string>[] {
+  public get provinces(): ProvinceConfig[] {
     return [...this.configuration.provinces];
   }
 

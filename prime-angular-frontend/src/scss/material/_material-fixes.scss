@@ -19,28 +19,34 @@
 .mat-sidenav-container {
   // Force the background to match busy loader
   background-color: #fff !important;
-  // Design: yellow line at top of viewport
-  // border-top: 5px solid theme-palette(yellow);
 }
 
 .mat-sidenav {
-  background-color: theme-palette(grey, lighter);
+  background-color: theme-palette(grey, lightest);
+  border-right: 2px solid theme-palette(grey, light);
 
-  // Only applied to branding at top of sidenav
-  // .brand-container {
-  //   // Adjust padding to "vertically" align brand with adjacent toolbar
-  //   padding-top: 20px !important;
-  // }
+  .mat-list-item {
+    color: theme-palette(blue) !important;
 
-  .mat-list-item .extend-content-width {
-    // Force the link content to extend width of sidenav
-    padding-right: 2rem !important;
+    .extend-content-width {
+      // Force the link content to extend width of sidenav
+      // padding-right: 2rem !important;
+    }
   }
 
-  .active a,
-  .active .mat-icon {
-    // Highlight the active router link
+  a,
+  .mat-icon {
     color: theme-palette(blue) !important;
+  }
+
+  .active,
+  .active:focus,
+  .mat-list-item:focus {
+    background-color: theme-palette(grey, lighter) !important;
+  }
+
+  .active a {
+    font-weight: bold !important;
   }
 
   // Force the mat-icon to be centered in the sidenav
@@ -52,37 +58,3 @@
     width: 90% !important;
   }
 }
-
-// .mat-toolbar {
-//   .fill-remaining-space {
-//     /* This fills the remaining space, by using flexbox.
-//        Every toolbar row uses a flexbox row layout. */
-//     flex: 1 1 auto;
-//   }
-// }
-
-
-// .mat-sidenav-content {
-
-//   & > .mat-toolbar:first-child {
-//     // Remove default theming from the toolbar
-//     background-color: transparent;
-
-//     // Increase the height of the main toolbar to match brand height
-//     // height: 70px;
-
-//     .fill-remaining-space {
-//       // This fills the remaining space, by using flexbox.
-//       // Every toolbar row uses a flexbox row layout.
-//       flex: 1 1 auto;
-//     }
-
-//     .mat-icon {
-//       // Indicate area is click-able
-//       cursor: pointer;
-//       // Increase spacing between toolbar icons, as well as increase the
-//       // clicker-able area surrounding the icon
-//       margin: 10px;
-//     }
-//   }
-// }

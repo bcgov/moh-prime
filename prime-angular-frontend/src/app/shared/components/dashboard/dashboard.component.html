@@ -1,5 +1,7 @@
 <app-header [isMobile]="isMobile"
-            (toggle)="sidenav.toggle()"></app-header>
+            [username]="username"
+            (toggle)="sidenav.toggle()"
+            (logout)="onLogout()"></app-header>
 
 <mat-sidenav-container class="prime-sidenav-container">
   <mat-sidenav #sidenav
@@ -9,6 +11,12 @@
                [fixedTopGap]="0"
                [fixedBottomGap]="0"
                class="prime-sidenav d-print-none">
+
+    <div class="logo">
+      <img src="/assets/prime_logo.svg"
+           alt="PRIME Logo"
+           [ngClass]="{ 'is-deskop': isDesktop }">
+    </div>
 
     <mat-nav-list *ngFor="let sideNavSection of sideNavSections">
       <h3 mat-subheader
@@ -36,24 +44,6 @@
       </div>
 
       <mat-divider *ngIf="sideNavSection.showHeader"></mat-divider>
-    </mat-nav-list>
-
-    <mat-nav-list>
-
-      <mat-list-item (click)="logout()">
-        <mat-icon mat-list-icon
-                  [ngClass]="{ 'center-sidenav-icon': !isDesktop }">exit_to_app</mat-icon>
-
-        <a matLine>
-          <span *ngIf="sideNavProps.showText">
-            Logout
-          </span>
-        </a>
-        <button mat-icon-button
-                *ngIf="sideNavProps.showText">
-        </button>
-      </mat-list-item>
-
     </mat-nav-list>
 
   </mat-sidenav>

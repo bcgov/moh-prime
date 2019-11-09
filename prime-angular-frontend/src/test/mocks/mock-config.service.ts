@@ -174,19 +174,19 @@ export class MockConfigService extends ConfigService implements IConfigService {
           }
         ],
         provinces: [
-          { code: 'QC', name: 'Quebec' },
-          { code: 'AB', name: 'Alberta' },
-          { code: 'BC', name: 'British Columbia' },
-          { code: 'MB', name: 'Manitoba' },
-          { code: 'NB', name: 'New Brunswick' },
-          { code: 'NL', name: 'Newfoundland and Labrador' },
-          { code: 'NS', name: 'Nova Scotia' },
-          { code: 'ON', name: 'Ontario' },
-          { code: 'PE', name: 'Prince Edward Island' },
-          { code: 'SK', name: 'Saskatchewan' },
-          { code: 'NT', name: 'Northwest Territories' },
-          { code: 'NU', name: 'Nunavut' },
-          { code: 'YT', name: 'Yukon' }
+          { code: 'AB', name: 'Alberta', countryCode: 'CA' },
+          { code: 'BC', name: 'British Columbia', countryCode: 'CA' },
+          { code: 'MB', name: 'Manitoba', countryCode: 'CA' },
+          { code: 'NB', name: 'New Brunswick', countryCode: 'CA' },
+          { code: 'NL', name: 'Newfoundland and Labrador', countryCode: 'CA' },
+          { code: 'NS', name: 'Nova Scotia', countryCode: 'CA' },
+          { code: 'NT', name: 'Northwest Territories', countryCode: 'CA' },
+          { code: 'NU', name: 'Nunavut', countryCode: 'CA' },
+          { code: 'ON', name: 'Ontario', countryCode: 'CA' },
+          { code: 'PE', name: 'Prince Edward Island', countryCode: 'CA' },
+          { code: 'QC', name: 'Quebec', countryCode: 'CA' },
+          { code: 'SK', name: 'Saskatchewan', countryCode: 'CA' },
+          { code: 'YT', name: 'Yukon', countryCode: 'CA' }
         ],
         statuses: [
           { code: 4, name: 'Declined' },
@@ -197,14 +197,14 @@ export class MockConfigService extends ConfigService implements IConfigService {
           { code: 6, name: 'Declined TOS (Terms of Service)' }
         ],
         statusReasons: [
-          {code: 7, name: 'Self Declaration'},
-          {code: 1, name: 'Automatic'},
-          {code: 2, name: 'Manual'},
-          {code: 3, name: 'Name Discrepancy'},
-          {code: 4, name: 'Not in PharmaNet'},
-          {code: 5, name: 'Insulin Pump Provider'},
-          {code: 6, name: 'Licence Class'},
-          {code: 8, name: 'Contact address or Identity Address Out of British Columbia'}
+          { code: 7, name: 'Self Declaration' },
+          { code: 1, name: 'Automatic' },
+          { code: 2, name: 'Manual' },
+          { code: 3, name: 'Name Discrepancy' },
+          { code: 4, name: 'Not in PharmaNet' },
+          { code: 5, name: 'Insulin Pump Provider' },
+          { code: 6, name: 'Licence Class' },
+          { code: 8, name: 'Contact address or Identity Address Out of British Columbia' }
         ]
       };
 

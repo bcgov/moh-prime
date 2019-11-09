@@ -7,13 +7,14 @@ import { Job } from '../models/job.model';
 import { Organization } from '../models/organization.model';
 import { CollegeCertification } from '../models/college-certification.model';
 
-// TODO: revisit state service when API is flushed out more in next sprint
+// TODO refactor into enrolment service and enrolment form service
+// TODO implement using NGXS to manage state
 @Injectable({
   providedIn: 'root'
 })
 export class EnrolmentStateService {
-  // TODO: revisit access to form groups as service is refined, but for now public
-  // TODO: make into BehaviourSubject or asObservable, which would possibly make it immutable
+  // TODO revisit access to form groups as service is refined, but for now public
+  // TODO make into BehaviourSubject or asObservable, which would make it immutable
   public profileForm: FormGroup;
   public professionalInfoForm: FormGroup;
   public regulatoryForm: FormGroup;
@@ -128,7 +129,6 @@ export class EnrolmentStateService {
    */
   private patchEnrolment(enrolment: Enrolment) {
     if (enrolment) {
-      // TODO: create separate service for reuseable form create methods
       this.profileForm.patchValue(enrolment.enrollee);
       this.professionalInfoForm.patchValue(enrolment);
       this.deviceProviderForm.patchValue(enrolment);
@@ -183,6 +183,7 @@ export class EnrolmentStateService {
         countryCode: [{ value: null, disabled: false }, [Validators.required]],
         provinceCode: [{ value: null, disabled: false }, [Validators.required]],
         street: [{ value: null, disabled: false }, [Validators.required]],
+        street2: [{ value: null, disabled: false }, []],
         city: [{ value: null, disabled: false }, [Validators.required]],
         postal: [{ value: null, disabled: false }, [Validators.required]]
       }),
@@ -190,6 +191,7 @@ export class EnrolmentStateService {
         countryCode: [{ value: null, disabled: false }, []],
         provinceCode: [{ value: null, disabled: false }, []],
         street: [{ value: null, disabled: false }, []],
+        street2: [{ value: null, disabled: false }, []],
         city: [{ value: null, disabled: false }, []],
         postal: [{ value: null, disabled: false }, []]
       }),

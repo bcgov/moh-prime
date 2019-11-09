@@ -8,7 +8,6 @@ import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
-import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { ViewportService } from '@core/services/viewport.service';
 import { ToastService } from '@core/services/toast.service';
@@ -31,8 +30,6 @@ export class ProfileComponent implements OnInit {
   public maxBirthDate: moment.Moment;
   public hasPreferredName: boolean;
   public hasMailingAddress: boolean;
-  public countries: Config<string>[];
-  public provinces: Config<string>[];
   public subheadings: { [key: string]: { subheader: string, help: string } };
 
   private isNewEnrolment: boolean;
@@ -51,8 +48,6 @@ export class ProfileComponent implements OnInit {
     private logger: LoggerService,
   ) {
     this.maxBirthDate = moment();
-    this.countries = this.configService.countries;
-    this.provinces = this.configService.provinces;
     this.isNewEnrolment = true;
   }
 
@@ -70,6 +65,14 @@ export class ProfileComponent implements OnInit {
 
   public get isMobile() {
     return this.viewportService.isMobile;
+  }
+
+  public get physicalAddress(): FormGroup {
+    return this.form.get('physicalAddress') as FormGroup;
+  }
+
+  public get mailingAddress(): FormGroup {
+    return this.form.get('mailingAddress') as FormGroup;
   }
 
   public get voicePhone(): FormControl {
@@ -136,9 +139,7 @@ export class ProfileComponent implements OnInit {
 
   public onMailingAddressChange() {
     this.hasMailingAddress = !this.hasMailingAddress;
-    const mailingAddress = this.form.get('mailingAddress') as FormGroup;
-
-    this.toggleValidators(mailingAddress);
+    this.toggleValidators(this.mailingAddress, ['street2']);
   }
 
   public isRequired(path: string) {
@@ -169,6 +170,8 @@ export class ProfileComponent implements OnInit {
             this.form.patchValue(user);
           }
 
+          this.form.markAsPristine();
+
           this.initForm();
         },
         (error: any) => {
@@ -190,19 +193,18 @@ export class ProfileComponent implements OnInit {
       this.form.get('preferredLastName').value
     );
 
-    const mailingAddress = this.form.get('mailingAddress') as FormGroup;
-
     // TODO: update to use valueChanges by forcing value changes when visible
     // Show mailing address if it exists
     this.hasMailingAddress = !!(
-      mailingAddress.get('countryCode').value ||
-      mailingAddress.get('provinceCode').value ||
-      mailingAddress.get('street').value ||
-      mailingAddress.get('city').value ||
-      mailingAddress.get('postal').value
+      this.mailingAddress.get('countryCode').value ||
+      this.mailingAddress.get('provinceCode').value ||
+      this.mailingAddress.get('street').value ||
+      this.mailingAddress.get('street2').value ||
+      this.mailingAddress.get('city').value ||
+      this.mailingAddress.get('postal').value
     );
 
-    this.toggleValidators(mailingAddress);
+    this.toggleValidators(this.mailingAddress, ['street2']);
 
     this.hasContactEmail.valueChanges.subscribe((value: boolean) => this.toggleContactValidators(value, this.contactEmail));
     this.hasContactPhone.valueChanges.subscribe((value: boolean) => this.toggleContactValidators(value, this.contactPhone));
@@ -216,11 +218,11 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  private toggleValidators(mailingAddress: FormGroup) {
+  private toggleValidators(mailingAddress: FormGroup, blacklist: string[] = []) {
     if (!this.hasMailingAddress) {
       this.formUtilsService.resetAndClearValidators(mailingAddress);
     } else {
-      this.formUtilsService.setValidators(mailingAddress, [Validators.required]);
+      this.formUtilsService.setValidators(mailingAddress, [Validators.required], blacklist);
     }
   }
 

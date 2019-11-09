@@ -16,8 +16,6 @@ import { Job } from '../../shared/models/job.model';
 import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
 import { EnrolmentResource } from '../../shared/services/enrolment-resource.service';
 
-// TODO: make YesNo into a component and use projection for content
-// TODO: how much do validations need to be locked down?
 @Component({
   selector: 'app-professional-info',
   templateUrl: './professional-info.component.html',

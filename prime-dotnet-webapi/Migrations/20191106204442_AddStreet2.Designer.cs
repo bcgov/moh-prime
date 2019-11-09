@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -10,9 +11,10 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191106204442_AddStreet2")]
+    partial class AddStreet2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -481,6 +483,8 @@ namespace Prime.Migrations
 
                     b.Property<int>("EnrolleeId");
 
+                    b.Property<bool?>("HasCertification");
+
                     b.Property<bool?>("HasConviction");
 
                     b.Property<string>("HasConvictionDetails");
@@ -496,6 +500,10 @@ namespace Prime.Migrations
                     b.Property<bool?>("HasRegistrationSuspended");
 
                     b.Property<string>("HasRegistrationSuspendedDetails");
+
+                    b.Property<bool?>("IsAccessingPharmaNetOnBehalfOf");
+
+                    b.Property<bool?>("IsDeviceProvider");
 
                     b.Property<bool?>("IsInsulinPumpProvider");
 

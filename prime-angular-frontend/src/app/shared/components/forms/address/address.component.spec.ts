@@ -1,25 +1,19 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ReactiveFormsModule } from '@angular/forms';
-import { RouterTestingModule } from '@angular/router/testing';
-
-import { NgxMaskModule } from 'ngx-mask';
+import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
-import { MockAuthService } from 'test/mocks/mock-auth.service';
 
-import { ProfileComponent } from './profile.component';
+import { AddressComponent } from './address.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
-import { SubHeaderComponent } from '@shared/components/sub-header/sub-header.component';
-import { AuthService } from '@auth/shared/services/auth.service';
-import { AddressComponent } from '@shared/components/forms/address/address.component';
+import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 
-describe('ProfileComponent', () => {
-  let component: ProfileComponent;
-  let fixture: ComponentFixture<ProfileComponent>;
+describe('AddressComponent', () => {
+  let component: AddressComponent;
+  let fixture: ComponentFixture<AddressComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule(
@@ -27,14 +21,10 @@ describe('ProfileComponent', () => {
         imports: [
           BrowserAnimationsModule,
           HttpClientTestingModule,
-          NgxMaskModule.forRoot(),
           NgxMaterialModule,
-          ReactiveFormsModule,
-          RouterTestingModule
+          ReactiveFormsModule
         ],
         declarations: [
-          ProfileComponent,
-          SubHeaderComponent,
           AddressComponent
         ],
         providers: [
@@ -45,21 +35,19 @@ describe('ProfileComponent', () => {
           {
             provide: ConfigService,
             useClass: MockConfigService
-          },
-          {
-            provide: AuthService,
-            useClass: MockAuthService
           }
         ]
       }
     ).compileComponents();
   }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(ProfileComponent);
+  beforeEach(inject([EnrolmentStateService], (enrolmentStateService: EnrolmentStateService) => {
+    fixture = TestBed.createComponent(AddressComponent);
     component = fixture.componentInstance;
+    // Add the bound FormGroup to the component
+    component.form = enrolmentStateService.profileForm.get('physicalAddress') as FormGroup;
     fixture.detectChanges();
-  });
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();

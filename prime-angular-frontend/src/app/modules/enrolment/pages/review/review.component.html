@@ -42,6 +42,10 @@
           {{ enrolment.enrollee.physicalAddress.provinceCode | configCode: 'provinces' }}&nbsp;</dd>
         <dt class="col-sm-12 col-md-6 py-1">Street Address</dt>
         <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.street }}&nbsp;</dd>
+        <ng-container *ngIf="enrolment.enrollee.physicalAddress.street2">
+          <dt class="col-sm-12 col-md-6 py-1">Street Address 2</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.street2 }}&nbsp;</dd>
+        </ng-container>
         <dt class="col-sm-12 col-md-6 py-1">City</dt>
         <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.city }}&nbsp;</dd>
         <dt class="col-sm-12 col-md-6 py-1">Postal Code</dt>
@@ -61,6 +65,10 @@
             {{ enrolment.enrollee.mailingAddress.provinceCode | configCode: 'provinces' }}&nbsp;</dd>
           <dt class="col-sm-12 col-md-6 py-1">Street Address</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.mailingAddress.street }}&nbsp;</dd>
+          <ng-container *ngIf="enrolment.enrollee.mailingAddress.street2">
+            <dt class="col-sm-12 col-md-6 py-1">Street Address 2</dt>
+            <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.mailingAddress.street2 }}&nbsp;</dd>
+          </ng-container>
           <dt class="col-sm-12 col-md-6 py-1">City</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.mailingAddress.city }}&nbsp;</dd>
           <dt class="col-sm-12 col-md-6 py-1">Postal Code</dt>
@@ -247,10 +255,7 @@
     </div>
   </div>
 
-  <app-sub-header subheader=""
-                  help=""></app-sub-header>
-
-  <div class="text-right">
+  <div class="footer">
     <mat-checkbox class="mr-4"
                   (change)="onConfirmAccuracy($event)">I confirm that all information provided is accurate.
     </mat-checkbox>

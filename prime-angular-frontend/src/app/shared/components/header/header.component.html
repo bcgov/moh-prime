@@ -3,7 +3,19 @@
     <mat-icon (click)="toggleSidenav()">menu</mat-icon>
   </span>
   <span>
-    <img src="/assets/gov_bc_logo.png">
+    <img src="/assets/gov_bc_logo.png"
+         alt="Governmetn of BC Logo">
+  </span>
+
+  <span class="flex-fill"></span>
+
+  <span *ngIf="username && !isMobile"
+        class="username">
+    {{ username }}
+  </span>
+  <span *ngIf="username"
+        class="logout">
+    <mat-icon (click)="onLogout()">logout</mat-icon>
   </span>
 </mat-toolbar>
 

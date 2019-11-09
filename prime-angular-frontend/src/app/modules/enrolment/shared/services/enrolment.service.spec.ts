@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ErrorHandlerService } from './error-handler.service';
+import { EnrolmentService } from './enrolment.service';
 
-describe('ErrorHandlerService', () => {
+describe('EnrolmentService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should create', () => {
-    const service: ErrorHandlerService = TestBed.get(ErrorHandlerService);
+    const service: EnrolmentService = TestBed.get(EnrolmentService);
     expect(service).toBeTruthy();
   });
 });

@@ -5,11 +5,13 @@ import { CanDeactivateFormGuard } from './can-deactivate-form.guard';
 describe('CanDeactivateFormGuard', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [CanDeactivateFormGuard]
+      providers: [
+        CanDeactivateFormGuard
+      ]
     });
   });
 
-  it('should ...', inject([CanDeactivateFormGuard], (guard: CanDeactivateFormGuard) => {
+  it('should create', inject([CanDeactivateFormGuard], (guard: CanDeactivateFormGuard) => {
     expect(guard).toBeTruthy();
   }));
 });
