@@ -1,0 +1,38 @@
+@import 'palette';
+@import 'bootstrap';
+
+.page-sub-header {
+  border-bottom: 2px solid #efefef;
+  margin-bottom: 1rem;
+  padding-bottom: 0.25rem;
+
+  .title {
+    color: theme-palette(blue);
+    display: flex;
+  }
+
+  .description {
+    color: lighten(black, 40%);
+  }
+
+  .title,
+  .description {
+    margin-bottom: 0;
+  }
+
+  .help,
+  .description {
+    margin-top: -5px;
+  }
+
+  .help {
+    flex: 1 1 auto;
+    margin-left: 2px;
+    text-align: right;
+
+    @include media-breakpoint-up(md) {
+      flex: auto;
+      text-align: left;
+    }
+  }
+}

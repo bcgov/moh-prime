@@ -21,6 +21,8 @@ import { ReplacePipe } from '@shared/pipes/replace.pipe';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 import { HeaderComponent } from '@shared/components/header/header.component';
 import { SubHeaderComponent } from '@shared/components/sub-header/sub-header.component';
+import { PageHeaderComponent } from './components/page-header/page-header.component';
+import { PageSubHeaderComponent } from './components/page-sub-header/page-sub-header.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +37,9 @@ import { SubHeaderComponent } from '@shared/components/sub-header/sub-header.com
     ConfirmDialogComponent,
     HeaderComponent,
     SubHeaderComponent,
-    AddressComponent
+    AddressComponent,
+    PageHeaderComponent,
+    PageSubHeaderComponent
   ],
   imports: [
     CommonModule,
@@ -64,7 +68,9 @@ import { SubHeaderComponent } from '@shared/components/sub-header/sub-header.com
     AddressComponent,
     DashboardComponent,
     HeaderComponent,
-    SubHeaderComponent
+    SubHeaderComponent,
+    PageHeaderComponent,
+    PageSubHeaderComponent
   ],
   entryComponents: [
     ConfirmDialogComponent
