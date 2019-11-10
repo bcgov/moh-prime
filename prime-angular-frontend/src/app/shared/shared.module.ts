@@ -77,7 +77,7 @@ import { DialogContentDirective } from './components/dialogs/dialog-content.dire
     PageHeaderComponent,
     PageSubheaderComponent,
     PageSubheaderTitleDirective,
-    PageSubheaderSummaryDirective
+    PageSubheaderSummaryDirective,
     DialogContentDirective
   ],
   entryComponents: [
