@@ -7,10 +7,13 @@ describe('SubHeaderComponent', () => {
   let fixture: ComponentFixture<SubHeaderComponent>;
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ SubHeaderComponent ]
-    })
-    .compileComponents();
+    TestBed.configureTestingModule(
+      {
+        declarations: [
+          SubHeaderComponent
+        ]
+      }
+    ).compileComponents();
   }));
 
   beforeEach(() => {
