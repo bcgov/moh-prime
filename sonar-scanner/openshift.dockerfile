@@ -49,8 +49,8 @@ RUN echo "Installing Node..." && \
         karma-chrome-launcher \ 
         karma-mocha \ 
         karma-chai \ 
-        karma-jasmine && \
-        karma-jasmine-html-reporter && \
+        karma-jasmine \
+        karma-jasmine-html-reporter \
         karma-coverage-istanbul-reporter && \
     setcap cap_dac_override=ep /usr/lib/node_modules/npm/bin/npm && \
     setcap cap_dac_override=ep /usr/bin/node

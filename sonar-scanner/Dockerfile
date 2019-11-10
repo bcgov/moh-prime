@@ -43,11 +43,14 @@ RUN echo "Installing Node..." && \
         typescript \ 
         chromium \ 
         puppeteer \ 
+        jasmine \ 
         karma \ 
         karma-chrome-launcher \ 
         karma-mocha \ 
         karma-chai \ 
-        karma-jasmine && \
+        karma-jasmine \
+        karma-jasmine-html-reporter \
+        karma-coverage-istanbul-reporter && \
     setcap cap_dac_override=ep /usr/lib/node_modules/npm/bin/npm && \
     setcap cap_dac_override=ep /usr/bin/node
 
@@ -80,5 +83,7 @@ RUN chown -R default:0 /home/jenkins && \
     chown -R default:0 /var/lib/origin && \
     chmod -R a+rwx /var/lib/origin
 
+# For local testing
+VOLUME ../ ./moh-prime
 USER 1000
 ENTRYPOINT [ "./entrypoint.bash" ]
