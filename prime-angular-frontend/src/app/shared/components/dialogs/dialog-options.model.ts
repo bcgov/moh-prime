@@ -1,3 +1,5 @@
+import { Component } from '@angular/compiler/src/core';
+
 export interface DialogOptions {
   icon?: string;
   title?: string;
@@ -6,5 +8,6 @@ export interface DialogOptions {
   actionText?: string;
   cancelText?: string;
   cancelHide?: boolean;
+  component?: any;
   data?: { [key: string]: any };
 }
