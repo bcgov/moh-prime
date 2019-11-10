@@ -2,11 +2,14 @@
       [formGroup]="form"
       novalidate>
 
-  <h1 class="h2 mb-4">Application Enrolment</h1>
+  <app-page-header>Application Enrolment</app-page-header>
 
-  <app-sub-header subheader="Professional Information"
-                  help="This information is used to determine your PharmNet access privileges and user agreement.">
-  </app-sub-header>
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Professional Information</ng-container>
+    <ng-container appPageSubheaderSummary>
+      This information is used to determine your PharmNet access privileges and user agreement.
+    </ng-container>
+  </app-page-subheader>
 
   <p>Do you have a college certification?</p>
 
@@ -132,14 +135,14 @@
   </div>
 
   <div class="row justify-content-between">
-    <div class="col pt-2">
+    <div class="col pt-4">
 
-      <button mat-raised-button
+      <button mat-stroked-button
               type="button"
-              routerLink="../contact">Back</button>
+              routerLink="../profile">Back</button>
 
     </div>
-    <div class="col pt-2 text-right">
+    <div class="col pt-4 text-right">
 
       <button mat-raised-button
               color="primary">Save and Continue</button>

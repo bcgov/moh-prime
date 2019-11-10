@@ -1,4 +1,3 @@
-// TODO: revisit types, naming, etc; when configuration is more mature
 export interface Configuration {
   countries: Config<string>[];
   colleges: CollegeConfig[];

@@ -1,0 +1,30 @@
+<div class="page-subheader d-flex">
+  <div class="w-100">
+    <h2 class="title h4">
+      <ng-content select="[appPageSubheaderTitle]"></ng-content>
+      <span *ngIf="hasContextualContent"
+              class="help">
+        <app-contextual-help>
+          <ng-container *ngIf="hasContextualTitle"
+                        appContextualTitle>
+            <ng-content select="[appContextualTitle]"></ng-content>
+          </ng-container>
+          <ng-container *ngIf="hasContextualContent"
+                        appContextualContent>
+            <ng-content select="[appContextualContent]"></ng-content>
+          </ng-container>
+        </app-contextual-help>
+      </span>
+    </h2>
+    <p *ngIf="hasPageSubheaderSummary"
+       class="description">
+      <ng-content #summary
+                  select="[appPageSubheaderSummary]"></ng-content>
+    </p>
+  </div>
+  <div *ngIf="!hasContextualContent"
+       class="flex-shrink-1">
+    <!-- Optional icon for actions at the end of a subheading -->
+    <ng-content select="mat-icon"></ng-content>
+  </div>
+</div>

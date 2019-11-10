@@ -2,9 +2,11 @@
       [formGroup]="form"
       novalidate>
 
-  <h1 class="h2 my-4">Application Enrolment</h1>
+  <app-page-header>Application Enrolment</app-page-header>
 
-  <app-sub-header subheader="Enrollee Information"></app-sub-header>
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Enrollee Information</ng-container>
+  </app-page-subheader>
 
   <div class="row">
     <div class="col-sm-12 col-md-6 col-xl-5">
@@ -74,9 +76,13 @@
 
   <ng-container *ngIf="hasPreferredName">
 
-    <app-sub-header subheader="Preferred Name"
-                    help="If you have a name that is different than your legal name that people know you by, enter your full preferred name.">
-    </app-sub-header>
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>Preferred Name</ng-container>
+      <ng-container appPageSubheaderSummary>
+        If you have a name that is different than your legal name that people know you by, enter your full preferred
+        name.
+      </ng-container>
+    </app-page-subheader>
 
     <div class="row">
       <div class="col-sm-12 col-md-6 col-xl-5">
@@ -117,7 +123,9 @@
 
   </ng-container>
 
-  <app-sub-header subheader="Address"></app-sub-header>
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Address</ng-container>
+  </app-page-subheader>
 
   <app-address [form]="physicalAddress"></app-address>
 
@@ -130,14 +138,17 @@
 
   <ng-container *ngIf="hasMailingAddress">
 
-    <app-sub-header subheader="Mailing Address"></app-sub-header>
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>Mailing Address</ng-container>
+    </app-page-subheader>
 
     <app-address [form]="mailingAddress"></app-address>
 
   </ng-container>
 
-  <app-sub-header subheader="Contact Information"
-                  help="Lorem ipsum dolor, sit amet consectetur adipisicing elit."></app-sub-header>
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Contact Information</ng-container>
+  </app-page-subheader>
 
   <div class="row">
     <div class="col-sm-12 col-md-4 col-xl-3">
@@ -168,9 +179,12 @@
     </div>
   </div>
 
-  <app-sub-header subheader="Preferred Contact Method"
-                  help="Please provide an email address and phone number that may be used for notifications from the PRIME system.">
-  </app-sub-header>
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Preferred Contact Method</ng-container>
+    <ng-container appPageSubheaderSummary>
+      Please provide an email address and phone number that may be used for notifications from the PRIME system.
+    </ng-container>
+  </app-page-subheader>
 
   <mat-checkbox class="mr-4"
                 formControlName="hasContactEmail">Email Notification</mat-checkbox>
@@ -217,7 +231,7 @@
   </div>
 
   <div class="row justify-content-end">
-    <div class="col pt-2 text-right">
+    <div class="col pt-4 text-right">
 
       <button mat-raised-button
               type="submit"

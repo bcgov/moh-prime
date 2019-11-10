@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { NgxMaskModule } from 'ngx-mask';
 
 import { ConfigModule } from '@config/config.module';
+import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { NgxProgressModule } from '@shared/modules/ngx-progress/ngx-progress.module';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
 import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
@@ -21,6 +22,10 @@ import { ReplacePipe } from '@shared/pipes/replace.pipe';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 import { HeaderComponent } from '@shared/components/header/header.component';
 import { SubHeaderComponent } from '@shared/components/sub-header/sub-header.component';
+import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
+import { PageSubheaderComponent } from './components/page-subheader/page-subheader.component';
+import { PageSubheaderTitleDirective } from '@shared/components/page-subheader/page-subheader-title.directive';
+import { PageSubheaderSummaryDirective } from '@shared/components/page-subheader/page-subheader-summary.directive';
 import { DialogContentDirective } from './components/dialogs/dialog-content.directive';
 
 @NgModule({
@@ -43,6 +48,7 @@ import { DialogContentDirective } from './components/dialogs/dialog-content.dire
   imports: [
     CommonModule,
     RouterModule,
+    NgxContextualHelpModule,
     NgxMaskModule.forRoot(),
     NgxMaterialModule,
     NgxProgressModule,
@@ -51,9 +57,10 @@ import { DialogContentDirective } from './components/dialogs/dialog-content.dire
   exports: [
     CommonModule,
     ConfigModule,
+    NgxContextualHelpModule,
     NgxMaterialModule,
-    NgxProgressModule,
     NgxMaskModule,
+    NgxProgressModule,
     ReactiveFormsModule,
     CapitalizePipe,
     EnrolmentPipe,
@@ -67,6 +74,10 @@ import { DialogContentDirective } from './components/dialogs/dialog-content.dire
     EnrolmentStatusReasonsComponent,
     HeaderComponent,
     SubHeaderComponent,
+    PageHeaderComponent,
+    PageSubheaderComponent,
+    PageSubheaderTitleDirective,
+    PageSubheaderSummaryDirective
     DialogContentDirective
   ],
   entryComponents: [
