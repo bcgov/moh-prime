@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource, MatSelectChange, MatDialog } from '@angular/material';
 
-import { exhaustMap, catchError, retry } from 'rxjs/operators';
+import { exhaustMap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
 
 import { Config } from '@config/config.model';
@@ -12,9 +12,9 @@ import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { EnrolmentStatusReason } from '@shared/models/enrolment-status-reason.model';
 
 import { ProvisionResource } from '@provision/shared/services/provision-resource.service';
+import { EnrolmentStatusReasonsComponent } from '@shared/components/dialogs/content/enrolment-status-reasons/enrolment-status-reasons.component';
 
 @Component({
   selector: 'app-enrolments',
@@ -50,21 +50,12 @@ export class EnrolmentsComponent implements OnInit {
   }
 
   public reviewStatusReasons(enrolment: Enrolment) {
-    const message = enrolment.currentStatus.enrolmentStatusReasons
-      .reduce((result: string, enrolmentStatusReason: EnrolmentStatusReason) => {
-        if (result) {
-          return `${result}, ${enrolmentStatusReason.statusReason.name}`;
-        } else {
-          return `${enrolmentStatusReason.statusReason.name}`;
-        }
-      }, '');
-
     const data: DialogOptions = {
-      title: 'Review Enrolment Status Reasons',
+      title: 'Review Status Reasons',
       icon: 'flag',
-      message,
       actionText: 'Close',
       data: { enrolment },
+      component: EnrolmentStatusReasonsComponent,
       cancelHide: true
     };
     this.dialog.open(ConfirmDialogComponent, { data })
