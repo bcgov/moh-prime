@@ -45,7 +45,17 @@ export class MockEnrolmentService implements IEnrolmentService {
         },
         statusDate: null,
         isCurrent: null,
-        enrolmentStatusReasons: []
+        enrolmentStatusReasons: [
+          {
+            enrolmentId,
+            statusCode: null,
+            statusReasonCode: null,
+            statusReason: {
+              code: null,
+              name: faker.lorem.sentence(6)
+            }
+          }
+        ]
       },
       availableStatuses: null
     });
