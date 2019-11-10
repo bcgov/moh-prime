@@ -7,7 +7,7 @@ import { Enrolment } from '@shared/models/enrolment.model';
 import { IEnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 
-export class MockeEnrolmentService implements IEnrolmentService {
+export class MockEnrolmentService implements IEnrolmentService {
   // tslint:disable-next-line: variable-name
   private _enrolment: BehaviorSubject<Enrolment>;
 
