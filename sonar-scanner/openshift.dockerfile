@@ -30,6 +30,7 @@ RUN echo "Installing Node..." && \
     yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
     curl -sL https://rpm.nodesource.com/setup_12.x | bash - && \
     yum install -y gcc-c++ \
+        chromium \
         make \
         yarn \ 
         sonar-scanner \ 
@@ -42,7 +43,6 @@ RUN echo "Installing Node..." && \
         @angular/compiler-cli \ 
         @angular/core \ 
         typescript \ 
-        chromium \ 
         puppeteer \ 
         jasmine \ 
         karma \ 
