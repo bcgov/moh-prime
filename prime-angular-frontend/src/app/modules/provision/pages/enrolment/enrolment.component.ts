@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { Subscription } from 'rxjs';
+
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
@@ -13,7 +15,7 @@ import { ProvisionResource } from '@provision/shared/services/provision-resource
   styleUrls: ['./enrolment.component.scss']
 })
 export class EnrolmentComponent implements OnInit {
-
+  public busy: Subscription;
   public enrolment: Enrolment;
 
   constructor(
@@ -33,7 +35,7 @@ export class EnrolmentComponent implements OnInit {
   }
 
   private getEnrolment(id: number, statusCode?: number) {
-    this.provisionResource.enrolment(id, statusCode)
+    this.busy = this.provisionResource.enrolment(id, statusCode)
       .subscribe(
         (enrolment: Enrolment) => this.enrolment = enrolment,
         (error: any) => {

@@ -3,7 +3,7 @@ import { FormGroup, FormArray, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog, MatChipInputEvent, MatAutocompleteSelectedEvent } from '@angular/material';
 
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 
 import { Config } from '@config/config.model';
@@ -22,6 +22,7 @@ import { EnrolmentResource } from '../../shared/services/enrolment-resource.serv
   styleUrls: ['./professional-info.component.scss']
 })
 export class ProfessionalInfoComponent implements OnInit {
+  public busy: Subscription;
   public form: FormGroup;
   public jobCtrl: FormControl;
   @ViewChild('jobInput', { static: false }) jobInput: ElementRef<HTMLInputElement>;
@@ -81,7 +82,7 @@ export class ProfessionalInfoComponent implements OnInit {
   public onSubmit() {
     if (this.form.valid) {
       const payload = this.enrolmentStateService.enrolment;
-      this.enrolmentResource.updateEnrolment(payload)
+      this.busy = this.enrolmentResource.updateEnrolment(payload)
         .subscribe(
           () => {
             this.toastService.openSuccessToast('Professional information has been saved');
@@ -151,9 +152,9 @@ export class ProfessionalInfoComponent implements OnInit {
     // Initialize form changes before patching
     this.initForm();
 
-    // TODO: detect enrolment already exists and don't reload
-    // TODO: apply guard if not enrolment is found to redirect to profile
-    this.enrolmentResource.enrolments()
+    // TODO detect enrolment already exists and don't reload
+    // TODO apply guard if not enrolment is found to redirect to profile
+    this.busy = this.enrolmentResource.enrolments()
       .subscribe((enrolment: Enrolment) => {
         if (enrolment) {
           this.enrolmentStateService.enrolment = enrolment;

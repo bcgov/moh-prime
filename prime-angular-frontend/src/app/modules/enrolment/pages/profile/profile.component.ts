@@ -1,22 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
 import * as moment from 'moment';
 
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
-import { ConfigService } from '@config/config.service';
 import { ViewportService } from '@core/services/viewport.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { AuthService } from '@auth/shared/services/auth.service';
-import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
-import { EnrolmentResource } from '../../shared/services/enrolment-resource.service';
+import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 
 import { FormUtilsService } from '@enrolment/shared/services/form-utils.service';
 
@@ -26,6 +25,7 @@ import { FormUtilsService } from '@enrolment/shared/services/form-utils.service'
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
+  public busy: Subscription;
   public form: FormGroup;
   public maxBirthDate: moment.Moment;
   public hasPreferredName: boolean;
@@ -38,7 +38,6 @@ export class ProfileComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
-    private configService: ConfigService,
     private authService: AuthService,
     private enrolmentStateService: EnrolmentStateService,
     private enrolmentResource: EnrolmentResource,
@@ -61,10 +60,6 @@ export class ProfileComponent implements OnInit {
 
   public get dateOfBirth(): FormControl {
     return this.form.get('dateOfBirth') as FormControl;
-  }
-
-  public get isMobile() {
-    return this.viewportService.isMobile;
   }
 
   public get physicalAddress(): FormGroup {
@@ -99,6 +94,10 @@ export class ProfileComponent implements OnInit {
     return this.form.get('contactPhone') as FormControl;
   }
 
+  public get isMobile() {
+    return this.viewportService.isMobile;
+  }
+
   public onSubmit() {
     if (this.form.valid) {
       const payload = this.enrolmentStateService.enrolment;
@@ -111,7 +110,7 @@ export class ProfileComponent implements OnInit {
           )
         : this.enrolmentResource.updateEnrolment(payload);
 
-      request$
+      this.busy = request$
         .subscribe(
           () => {
             this.toastService.openSuccessToast('Profile information has been saved');
@@ -157,7 +156,7 @@ export class ProfileComponent implements OnInit {
   public ngOnInit() {
     this.createFormInstance();
 
-    this.enrolmentResource.enrolments()
+    this.busy = this.enrolmentResource.enrolments()
       .subscribe(
         async (enrolment: Enrolment) => {
           if (enrolment) {
@@ -194,7 +193,7 @@ export class ProfileComponent implements OnInit {
       this.form.get('preferredLastName').value
     );
 
-    // TODO: update to use valueChanges by forcing value changes when visible
+    // TODO update to use valueChanges by forcing value changes when visible
     // Show mailing address if it exists
     this.hasMailingAddress = !!(
       this.mailingAddress.get('countryCode').value ||

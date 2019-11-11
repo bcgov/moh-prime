@@ -3,7 +3,7 @@ import { FormGroup, FormArray, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
@@ -22,6 +22,7 @@ import { Organization } from '@enrolment/shared/models/organization.model';
   styleUrls: ['./pharmanet-access.component.scss']
 })
 export class PharmanetAccessComponent implements OnInit {
+  public busy: Subscription;
   public form: FormGroup;
   public organizationCtrl: FormControl;
   public organizationTypes: Config<number>[];
@@ -54,7 +55,7 @@ export class PharmanetAccessComponent implements OnInit {
     if (this.form.valid) {
       // TODO create rxjs pipe for updating enrolment submissions
       const payload = this.enrolmentStateService.enrolment;
-      this.enrolmentResource.updateEnrolment(payload)
+      this.busy = this.enrolmentResource.updateEnrolment(payload)
         .subscribe(
           () => {
             this.toastService.openSuccessToast('PharmaNet access has been saved');

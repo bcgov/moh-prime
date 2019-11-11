@@ -1,69 +1,72 @@
-<app-page-header>Enrolment Confirmation</app-page-header>
+<app-busy-overlay [busy]="busy">
 
-<div class="row">
-  <div class="col-md-7">
+  <app-page-header>Enrolment Confirmation</app-page-header>
 
-    <div class="alert alert-success"
-         role="alert">
+  <div class="row">
+    <div class="col-md-7">
 
-      <div class="d-flex">
-        <mat-icon [inline]="true"
-                  class="pr-3 icon">check_circle_outline</mat-icon>
-        <div class="flex-grow-1">
-          <h2 class="h3 m-0 mt-2">Success</h2>
-          <p class="m-0">Your application has been submitted!</p>
+      <div class="alert alert-success"
+           role="alert">
+
+        <div class="d-flex">
+          <mat-icon [inline]="true"
+                    class="pr-3 icon">check_circle_outline</mat-icon>
+          <div class="flex-grow-1">
+            <h2 class="h3 m-0 mt-2">Success</h2>
+            <p class="m-0">Your application has been submitted!</p>
+          </div>
         </div>
       </div>
+
     </div>
-
   </div>
-</div>
 
-<div class="row">
-  <div class="col-md-7">
-    <p>
-      Your application for PharmaNet access was successfully submitted.
-    </p>
+  <div class="row">
+    <div class="col-md-7">
+      <p>
+        Your application for PharmaNet access was successfully submitted.
+      </p>
+    </div>
   </div>
-</div>
 
-<div class="row">
-  <div class="col-md-7">
+  <div class="row">
+    <div class="col-md-7">
 
-    <app-page-subheader>
-      <ng-container appPageSubheaderTitle>Next Steps</ng-container>
-    </app-page-subheader>
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Next Steps</ng-container>
+      </app-page-subheader>
 
-    <ng-container *ngIf="isAutomatic; else manual">
-      <p>
-        Your application can be automatically processed. Within a few minutes you should receive approval to access
-        PharmaNet once you accept the PharmaNet User Access Agreement. Please read the agreement carefully before
-        accepting.
-      </p>
+      <ng-container *ngIf="isAutomatic; else manual">
+        <p>
+          Your application can be automatically processed. Within a few minutes you should receive approval to access
+          PharmaNet once you accept the PharmaNet User Access Agreement. Please read the agreement carefully before
+          accepting.
+        </p>
 
-      <p>
-        After you accept the User Access Agreement, you will receive your PharmaNet ID. Give this ID to the person or
-        organization responsible for setting up your PharmaNet access account. This ID must be associated with your
-        transactions on any PharmaNet access.
-      </p>
-    </ng-container>
+        <p>
+          After you accept the User Access Agreement, you will receive your PharmaNet ID. Give this ID to the person or
+          organization responsible for setting up your PharmaNet access account. This ID must be associated with your
+          transactions on any PharmaNet access.
+        </p>
+      </ng-container>
 
-    <ng-template #manual>
-      <p>
-        Your application will be reviewed by the Ministry of Health. Please ensure that the contact information we have
-        is
-        accurate and current so staff may contact you if they require more information.
-      </p>
-      <p>
-        You will be notified once your application has been reviewed. If approved, you will be directed to accept the
-        PharmaNet User Access Agreement. Please read the agreement carefully before accepting.
-      </p>
-      <p>
-        After you accept the User Access Agreement, you will receive your PharmaNet ID. Give this ID to the person or
-        organization responsible for setting up your PharmaNet access account. This ID must be associated with your
-        transactions on any PharmaNet access.
-      </p>
-    </ng-template>
+      <ng-template #manual>
+        <p>
+          Your application will be reviewed by the Ministry of Health. Please ensure that the contact information we
+          have is accurate and current so staff may contact you if they require more information.
+        </p>
+        <p>
+          You will be notified once your application has been reviewed. If approved, you will be directed to accept the
+          PharmaNet User Access Agreement. Please read the agreement carefully before accepting.
+        </p>
+        <p>
+          After you accept the User Access Agreement, you will receive your PharmaNet ID. Give this ID to the person or
+          organization responsible for setting up your PharmaNet access account. This ID must be associated with your
+          transactions on any PharmaNet access.
+        </p>
+      </ng-template>
 
+    </div>
   </div>
-</div>
+
+</app-busy-overlay>
