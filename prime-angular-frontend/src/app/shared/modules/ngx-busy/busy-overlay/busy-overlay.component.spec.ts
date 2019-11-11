@@ -1,16 +1,25 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { NgBusyModule } from 'ng-busy';
+
 import { BusyOverlayComponent } from '../busy-overlay/busy-overlay.component';
+import { busyConfig } from '../busy.config';
 
 describe('BusyOverlayComponent', () => {
   let component: BusyOverlayComponent;
   let fixture: ComponentFixture<BusyOverlayComponent>;
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [BusyOverlayComponent]
-    })
-      .compileComponents();
+    TestBed.configureTestingModule(
+      {
+        imports: [
+          NgBusyModule.forRoot(busyConfig)
+        ],
+        declarations: [
+          BusyOverlayComponent
+        ]
+      }
+    ).compileComponents();
   }));
 
   beforeEach(() => {

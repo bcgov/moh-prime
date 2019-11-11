@@ -1,16 +1,25 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { NgBusyModule } from 'ng-busy';
+
 import { BusyLoadingComponent } from './busy-loading.component';
+import { busyConfig } from '../busy.config';
 
 describe('BusyLoadingComponent', () => {
   let component: BusyLoadingComponent;
   let fixture: ComponentFixture<BusyLoadingComponent>;
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [BusyLoadingComponent]
-    })
-      .compileComponents();
+    TestBed.configureTestingModule(
+      {
+        imports: [
+          NgBusyModule.forRoot(busyConfig)
+        ],
+        declarations: [
+          BusyLoadingComponent
+        ]
+      }
+    ).compileComponents();
   }));
 
   beforeEach(() => {
