@@ -35,7 +35,6 @@ namespace Prime.Controllers
             lookupEntity.Colleges = await _lookupService.GetLookupsAsync<short, College>(c => c.CollegeLicenses, c => c.CollegePractices);
             lookupEntity.JobNames = await _lookupService.GetLookupsAsync<short, JobName>();
             lookupEntity.Licenses = await _lookupService.GetLookupsAsync<short, License>(l => l.CollegeLicenses);
-            lookupEntity.OrganizationNames = await _lookupService.GetLookupsAsync<short, OrganizationName>();
             lookupEntity.OrganizationTypes = await _lookupService.GetLookupsAsync<short, OrganizationType>();
             lookupEntity.Practices = await _lookupService.GetLookupsAsync<short, Practice>(p => p.CollegePractices);
             lookupEntity.Statuses = await _lookupService.GetLookupsAsync<short, Status>();

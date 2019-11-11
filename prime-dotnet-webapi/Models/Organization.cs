@@ -17,19 +17,9 @@ namespace Prime.Models
         [JsonIgnore]
         public Enrolment Enrolment { get; set; }
 
-        [Required]
-        public string Name { get; set; }
-
         public short OrganizationTypeCode { get; set; }
 
         [JsonIgnore]
         public OrganizationType OrganizationType { get; set; }
-
-        public string City { get; set; }
-
-        [Required]
-        public DateTime StartDate { get; set; }
-
-        public DateTime? EndDate { get; set; }
     }
 }
