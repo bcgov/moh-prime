@@ -1,0 +1,16 @@
+<ng-template [ngIf]="busy && !busy.closed">
+
+  <div #ref
+       class="busy-loading alert alert-primary"
+       [ngClass]="getTextAlignment()">
+    <ng-content></ng-content>
+    <div>
+      {{ loadingMessage }}
+    </div>
+  </div>
+  <span *ngIf="ref.children.length == 0"
+        [ngClass]="getTextAlignment()">
+     {{ loadingMessage }}
+  </span>
+
+</ng-template>

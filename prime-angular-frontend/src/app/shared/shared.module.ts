@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { NgxMaskModule } from 'ngx-mask';
 
 import { ConfigModule } from '@config/config.module';
+import { NgxBusyModule } from './modules/ngx-busy/ngx-busy.module';
 import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { NgxProgressModule } from '@shared/modules/ngx-progress/ngx-progress.module';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
@@ -50,6 +51,7 @@ import { DialogContentDirective } from '@shared/components/dialogs/dialog-conten
   imports: [
     CommonModule,
     RouterModule,
+    NgxBusyModule,
     NgxContextualHelpModule,
     NgxMaskModule.forRoot(),
     NgxMaterialModule,
@@ -59,6 +61,7 @@ import { DialogContentDirective } from '@shared/components/dialogs/dialog-conten
   exports: [
     CommonModule,
     ConfigModule,
+    NgxBusyModule,
     NgxContextualHelpModule,
     NgxMaterialModule,
     NgxMaskModule,
