@@ -12,9 +12,10 @@ import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { Job } from '../../shared/models/job.model';
-import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
-import { EnrolmentResource } from '../../shared/services/enrolment-resource.service';
+import { Job } from '@enrolment/shared/models/job.model';
+import { EnrolmentRoutes } from '@enrolment/enrolent.routes';
+import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 
 @Component({
   selector: 'app-professional-info',
@@ -34,6 +35,7 @@ export class ProfessionalInfoComponent implements OnInit {
   public practices: Config<number>[];
   public jobNames: Config<number>[];
   public filteredJobNames: Observable<Config<number>[]>;
+  public EnrolmentRoutes: EnrolmentRoutes;
 
   constructor(
     private route: ActivatedRoute,
@@ -87,7 +89,7 @@ export class ProfessionalInfoComponent implements OnInit {
           () => {
             this.toastService.openSuccessToast('Professional information has been saved');
             this.form.markAsPristine();
-            this.router.navigate(['declaration'], { relativeTo: this.route.parent });
+            this.router.navigate([EnrolmentRoutes.SELF_DECLARATION], { relativeTo: this.route.parent });
           },
           (error: any) => {
             this.toastService.openErrorToast('Professional information could not be saved');
