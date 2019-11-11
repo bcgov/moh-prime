@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NgBusyModule } from 'ng-busy';
+import { NgBusyModule, InstanceConfigHolderService } from 'ng-busy';
 
 import { BusyOverlayMessageComponent } from './busy-overlay-message.component';
 import { busyConfig } from '../busy.config';
@@ -17,6 +17,12 @@ describe('BusyOverlayMessageComponent', () => {
         ],
         declarations: [
           BusyOverlayMessageComponent
+        ],
+        providers: [
+          {
+            provide: 'instanceConfigHolder',
+            useClass: InstanceConfigHolderService
+          }
         ]
       }
     ).compileComponents();
