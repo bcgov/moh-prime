@@ -26,7 +26,7 @@ RUN mkdir /home/${user}/.${user} && \
         libgconf-2-4 \
         maven \
         apt-transport-https && \
-    curl --create-dirs -fsSLo /usr/share/${user}/agent.jar http://jenkins-prod:9000/jnlpJars/agent.jar && \
+    curl --create-dirs -fsSLo /usr/share/${user}/agent.jar http://jenkins-prod:8080/jnlpJars/agent.jar && \
     chmod 755 /usr/share/${user} && \
     chmod 644 /usr/share/${user}/agent.jar && \
     ln -sf /usr/share/${user}/agent.jar /usr/share/${user}/slave.jar
