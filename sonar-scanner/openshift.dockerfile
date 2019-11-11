@@ -29,6 +29,7 @@ RUN wget https://chromedriver.storage.googleapis.com/2.9/chromedriver_linux64.zi
 RUN echo "Installing Node..." && \
     yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
     echo 'kernel.unprivileged_userns_clone=1' > /etc/sysctl.d/userns.conf && \
+    sysctl -w kernel.unprivileged_userns_clone=1 && \
     curl -sL https://rpm.nodesource.com/setup_12.x | bash - && \
     yum install -y gcc-c++ \
         chromium \
