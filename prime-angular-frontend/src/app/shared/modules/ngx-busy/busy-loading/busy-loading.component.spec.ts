@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BusyLoadingComponent } from '@shared/modules/busy/busy-loading/busy-loading.component';
+import { BusyLoadingComponent } from './busy-loading.component';
 
 describe('BusyLoadingComponent', () => {
   let component: BusyLoadingComponent;
@@ -8,9 +8,9 @@ describe('BusyLoadingComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BusyLoadingComponent ]
+      declarations: [BusyLoadingComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

@@ -12,7 +12,7 @@ export class BusyOverlayMessageComponent {
     @Inject('instanceConfigHolder') private instanceConfigHolder: InstanceConfigHolderService
   ) { }
 
-  get message() {
+  public get message() {
     return this.instanceConfigHolder.config.message;
   }
 }

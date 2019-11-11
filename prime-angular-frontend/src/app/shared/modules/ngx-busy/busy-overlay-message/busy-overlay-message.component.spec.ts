@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BusyOverlayMessageComponent } from '@shared/modules/busy/busy-overlay-message/busy-overlay-message.component';
+import { BusyOverlayMessageComponent } from './busy-overlay-message.component';
 
 describe('BusyOverlayMessageComponent', () => {
   let component: BusyOverlayMessageComponent;
@@ -8,9 +8,9 @@ describe('BusyOverlayMessageComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BusyOverlayMessageComponent ]
+      declarations: [BusyOverlayMessageComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
