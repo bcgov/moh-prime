@@ -1,4 +1,4 @@
-import { Component, OnInit, ContentChildren, QueryList, AfterContentInit, ElementRef, TemplateRef } from '@angular/core';
+import { Component, OnInit, ContentChildren, QueryList } from '@angular/core';
 
 import { PageSubheaderTitleDirective } from '../page-subheader/page-subheader-title.directive';
 import { PageSubheaderSummaryDirective } from '../page-subheader/page-subheader-summary.directive';
@@ -10,7 +10,7 @@ import { ContextualContentDirective } from '@shared/modules/ngx-contextual-help/
   templateUrl: './page-subheader.component.html',
   styleUrls: ['./page-subheader.component.scss']
 })
-export class PageSubheaderComponent implements OnInit, AfterContentInit {
+export class PageSubheaderComponent implements OnInit {
   @ContentChildren(PageSubheaderTitleDirective, { descendants: true })
   public pageSubheaderTitleChildren: QueryList<PageSubheaderTitleDirective>;
   @ContentChildren(PageSubheaderSummaryDirective, { descendants: true })
@@ -39,10 +39,4 @@ export class PageSubheaderComponent implements OnInit, AfterContentInit {
   }
 
   public ngOnInit() { }
-
-  public ngAfterContentInit() {
-    // console.log(this.contextualTitleChildren.length);
-    // console.log(this.contextualContentChildren.length);
-    console.log(this.pageSubheaderSummaryChildren.length);
-  }
 }
