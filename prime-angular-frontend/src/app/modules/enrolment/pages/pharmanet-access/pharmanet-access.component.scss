@@ -1,8 +1,9 @@
-td {
-  border-top: 0;
-  vertical-align: middle;
+@import 'bootstrap/bootstrap-grid';
 
-  .remove-organization {
-    cursor: pointer;
+.mat-chip {
+  justify-content: space-between;
+
+  @include media-breakpoint-up(md) {
+    max-width: 250px;
   }
 }

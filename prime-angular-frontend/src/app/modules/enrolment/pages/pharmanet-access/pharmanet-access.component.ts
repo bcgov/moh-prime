@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormArray } from '@angular/forms';
+import { FormGroup, FormArray, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
@@ -10,10 +10,11 @@ import { ConfigService } from '@config/config.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { ViewportService } from '@core/services/viewport.service';
-import { Enrolment } from '@shared/models/enrolment.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
-import { EnrolmentResource } from '../../shared/services/enrolment-resource.service';
+import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { Organization } from '@enrolment/shared/models/organization.model';
 
 @Component({
   selector: 'app-pharmanet-access',
@@ -22,8 +23,9 @@ import { EnrolmentResource } from '../../shared/services/enrolment-resource.serv
 })
 export class PharmanetAccessComponent implements OnInit {
   public form: FormGroup;
-  public organizationNames: Config<number>[];
+  public organizationCtrl: FormControl;
   public organizationTypes: Config<number>[];
+  public filteredOrganizationTypes: Config<number>[];
 
   constructor(
     private route: ActivatedRoute,
@@ -33,11 +35,10 @@ export class PharmanetAccessComponent implements OnInit {
     private viewportService: ViewportService,
     private enrolmentStateService: EnrolmentStateService,
     private enrolmentResource: EnrolmentResource,
+    private enrolmentService: EnrolmentService,
     private toastService: ToastService,
     private logger: LoggerService
   ) {
-    this.organizationNames = this.configService.organizationNames;
-    // TODO: not used until requirements flushed out
     this.organizationTypes = this.configService.organizationTypes;
   }
 
@@ -51,6 +52,7 @@ export class PharmanetAccessComponent implements OnInit {
 
   public onSubmit() {
     if (this.form.valid) {
+      // TODO create rxjs pipe for updating enrolment submissions
       const payload = this.enrolmentStateService.enrolment;
       this.enrolmentResource.updateEnrolment(payload)
         .subscribe(
@@ -69,13 +71,32 @@ export class PharmanetAccessComponent implements OnInit {
   }
 
   public addOrganization() {
-    const organization = this.enrolmentStateService.buildOrganizationForm();
+    const code = this.organizationCtrl.value.code;
+    const organization = this.enrolmentStateService.buildOrganizationForm(code);
 
     this.organizations.push(organization);
+    this.organizationCtrl.reset();
+    this.filterOrganizationTypes();
   }
 
   public removeOrganization(index: number) {
     this.organizations.removeAt(index);
+    this.filterOrganizationTypes();
+  }
+
+  public organizationLookup(organizationTypeCode: number): string {
+    return this.organizationTypes
+      .find((c: Config<number>) => c.code === organizationTypeCode)
+      .name;
+  }
+
+  public displayOrganization(organizationType?: Config<number>): string {
+    return (organizationType) ? organizationType.name : null;
+  }
+
+  public disableOrganization(organizationTypeCode: number) {
+    // Omit organizations types that are not "Community Practices" for ComPap
+    return (organizationTypeCode !== 2);
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
@@ -87,24 +108,23 @@ export class PharmanetAccessComponent implements OnInit {
 
   public ngOnInit() {
     this.createFormInstance();
-
-    // TODO: detect enrolment already exists and don't reload
-    // TODO: apply guard if not enrolment is found to redirect to profile
-    this.enrolmentResource.enrolments()
-      .subscribe((enrolment: Enrolment) => {
-        if (enrolment) {
-          this.enrolmentStateService.enrolment = enrolment;
-        }
-
-        this.initForm();
-      });
+    // TODO no enrolment resource, but still not the best solution
+    // 1) set the enrolment state service in the guard
+    // 2) pass the BehaviourSubject into the enrolment state service
+    this.enrolmentStateService.enrolment = this.enrolmentService.enrolment;
+    this.filterOrganizationTypes();
   }
 
   private createFormInstance() {
     this.form = this.enrolmentStateService.pharmaNetAccessForm;
+    this.organizationCtrl = new FormControl();
   }
 
-  private initForm() {
+  private filterOrganizationTypes() {
+    const selectedOrgTypeCodes: number[] = this.organizations.value
+      .map((o: Organization) => o.organizationTypeCode);
 
+    this.filteredOrganizationTypes = this.organizationTypes
+      .filter((c: Config<number>) => !selectedOrgTypeCodes.includes(c.code));
   }
 }
