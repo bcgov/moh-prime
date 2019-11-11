@@ -124,4 +124,4 @@ RUN chown -R ${user}:${group} /home/${user} && \
 # For local testing
 #COPY ../ ./moh-prime
 USER ${user}
-ENTRYPOINT [ "${AGENT_WORKDIR}/entrypoint.bash" ]
+ENTRYPOINT [ "/home/jenkins/agent/entrypoint.bash" ]
