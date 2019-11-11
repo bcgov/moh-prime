@@ -8,8 +8,9 @@ import { LoggerService } from '@core/services/logger.service';
 import { DeviceResolution } from '@shared/enums/device-resolution.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { Enrolment } from '@shared/models/enrolment.model';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+import { EnrolmentRoutes } from '@enrolment/enrolent.routes';
+import { ProvisionRoutes } from '@provision/provision.routes';
 
 @Component({
   selector: 'app-dashboard',
@@ -106,19 +107,19 @@ export class DashboardComponent implements OnInit {
           {
             name: 'Enrolment',
             icon: statusIcons.enrolment,
-            route: '/enrolment/profile',
+            route: EnrolmentRoutes.PROFILE,
             showItem: true
           },
           {
             name: 'Access Agreement',
             icon: statusIcons.accessAgreement,
-            route: '/enrolment/agreement',
+            route: EnrolmentRoutes.ACCESS_AGREEMENT,
             showItem: true
           },
           {
             name: 'Status',
             icon: statusIcons.status,
-            route: '/enrolment/summary',
+            route: EnrolmentRoutes.SUMMARY,
             showItem: true
           }
         ]
@@ -135,7 +136,7 @@ export class DashboardComponent implements OnInit {
           {
             name: 'Enrolments',
             icon: 'format_list_bulleted',
-            route: '/provision/enrolments',
+            route: ProvisionRoutes.ENROLMENTS,
             showItem: true
           }
         ]
