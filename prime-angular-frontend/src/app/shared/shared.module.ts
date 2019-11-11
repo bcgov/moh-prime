@@ -21,12 +21,11 @@ import { PostalPipe } from '@shared/pipes/postal.pipe';
 import { ReplacePipe } from '@shared/pipes/replace.pipe';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 import { HeaderComponent } from '@shared/components/header/header.component';
-import { SubHeaderComponent } from '@shared/components/sub-header/sub-header.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { PageSubheaderComponent } from './components/page-subheader/page-subheader.component';
 import { PageSubheaderTitleDirective } from '@shared/components/page-subheader/page-subheader-title.directive';
 import { PageSubheaderSummaryDirective } from '@shared/components/page-subheader/page-subheader-summary.directive';
-import { DialogContentDirective } from './components/dialogs/dialog-content.directive';
+import { DialogContentDirective } from '@shared/components/dialogs/dialog-content.directive';
 
 @NgModule({
   declarations: [
@@ -42,7 +41,10 @@ import { DialogContentDirective } from './components/dialogs/dialog-content.dire
     ConfirmDialogComponent,
     EnrolmentStatusReasonsComponent,
     HeaderComponent,
-    SubHeaderComponent,
+    PageHeaderComponent,
+    PageSubheaderComponent,
+    PageSubheaderTitleDirective,
+    PageSubheaderSummaryDirective,
     DialogContentDirective
   ],
   imports: [
@@ -73,7 +75,6 @@ import { DialogContentDirective } from './components/dialogs/dialog-content.dire
     DashboardComponent,
     EnrolmentStatusReasonsComponent,
     HeaderComponent,
-    SubHeaderComponent,
     PageHeaderComponent,
     PageSubheaderComponent,
     PageSubheaderTitleDirective,

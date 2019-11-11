@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, ComponentFactoryResolver, ViewChild, ViewContainerRef, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Inject, ComponentFactoryResolver, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 import { DialogDefaultOptions } from '../dialog-default-options.model';
@@ -13,7 +13,7 @@ import { DialogContentDirective } from '../dialog-content.directive';
   styleUrls: ['./confirm-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ConfirmDialogComponent implements OnInit, AfterViewInit {
+export class ConfirmDialogComponent implements OnInit {
   public options: DialogOptions;
   @ViewChild(DialogContentDirective, { static: true }) public dialogContentHost: DialogContentDirective;
 
@@ -28,9 +28,7 @@ export class ConfirmDialogComponent implements OnInit, AfterViewInit {
       : this.getOptions(customOptions);
   }
 
-  public ngOnInit() { }
-
-  public ngAfterViewInit() {
+  public ngOnInit() {
     if (this.options.component) {
       this.loadDialogContentComponent(this.options.component, this.options.data);
     }
