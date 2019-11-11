@@ -119,7 +119,9 @@ RUN chown -R ${user}:${group} /home/${user} && \
     chown -R ${user}:${group} ${AGENT_WORKDIR} && \
     chmod -R a+rwx ${AGENT_WORKDIR} && \
     chown -R ${user}:${group} ${AGENT_WORKDIR} && \
-    chmod -R a+rwx ${AGENT_WORKDIR}
+    chmod -R a+rwx ${AGENT_WORKDIR} && \
+    chmod +x /home/jenkins/agent/*.bash
+
 
 # For local testing
 #COPY ../ ./moh-prime
