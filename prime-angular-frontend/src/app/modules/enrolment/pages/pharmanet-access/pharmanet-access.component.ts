@@ -12,6 +12,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { ViewportService } from '@core/services/viewport.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { EnrolmentRoutes } from '@enrolment/enrolent.routes';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { Organization } from '@enrolment/shared/models/organization.model';
@@ -27,6 +28,7 @@ export class PharmanetAccessComponent implements OnInit {
   public organizationCtrl: FormControl;
   public organizationTypes: Config<number>[];
   public filteredOrganizationTypes: Config<number>[];
+  public EnrolmentRoutes = EnrolmentRoutes;
 
   constructor(
     private route: ActivatedRoute,
@@ -60,7 +62,7 @@ export class PharmanetAccessComponent implements OnInit {
           () => {
             this.toastService.openSuccessToast('PharmaNet access has been saved');
             this.form.markAsPristine();
-            this.router.navigate(['review'], { relativeTo: this.route.parent });
+            this.router.navigate([EnrolmentRoutes.REVIEW], { relativeTo: this.route.parent });
           },
           (error: any) => {
             this.toastService.openErrorToast('PharmaNet access could not be saved');
