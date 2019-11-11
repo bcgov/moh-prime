@@ -38,10 +38,10 @@ RUN echo "Installing Node..." && \
         glib2 && \ 
     export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 && \
     npm install -g --silent @angular/cli \
+        @angular/core \ 
         @angular-devkit/build-angular \
         @angular/compiler \ 
         @angular/compiler-cli \ 
-        @angular/core \ 
         typescript \ 
         puppeteer \ 
         jasmine \ 

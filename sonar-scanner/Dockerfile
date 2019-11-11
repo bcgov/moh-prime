@@ -37,10 +37,10 @@ RUN echo "Installing Node..." && \
         glib2 && \ 
     export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 && \
     npm install -g --silent @angular/cli \
+        @angular/core \ 
         @angular-devkit/build-angular \
         @angular/compiler \ 
         @angular/compiler-cli \ 
-        @angular/core \ 
         typescript \ 
         puppeteer \ 
         jasmine \ 
@@ -84,6 +84,6 @@ RUN chown -R default:0 /home/jenkins && \
     chmod -R a+rwx /var/lib/origin
 
 # For local testing
-VOLUME ../ ./moh-prime
+COPY ../ ./moh-prime
 USER 1000
 ENTRYPOINT [ "./entrypoint.bash" ]
