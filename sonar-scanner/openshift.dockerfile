@@ -8,6 +8,7 @@ ENV JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64/jre/b
 ENV PATH $PATH:$JAVA_HOME:/var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScanner/bin:/opt/sonar/bin
 #COMMON
 RUN echo "Installing common, Jenkins and Sonar Scanner prerequisites..." && \
+    echo 'kernel.unprivileged_userns_clone=1' > /etc/sysctl.d/userns.conf && \
     yum install -y java-1.8.0-openjdk-1.8.0.232 envsubst git find which && \
     wget -O /etc/yum.repos.d/sonar.repo http://downloads.sourceforge.net/project/sonar-pkg/rpm/sonar.repo && \
     yum install -y sonar && \
@@ -28,7 +29,7 @@ RUN wget https://chromedriver.storage.googleapis.com/2.9/chromedriver_linux64.zi
 # Node
 RUN echo "Installing Node..." && \
     yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
-    sysctl -w kernel.unprivileged_userns_clone=1 && \
+    echo 'kernel.unprivileged_userns_clone=1' > /etc/sysctl.d/userns.conf && \
     curl -sL https://rpm.nodesource.com/setup_12.x | bash - && \
     yum install -y gcc-c++ \
         chromium \
