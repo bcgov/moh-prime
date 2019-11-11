@@ -10,6 +10,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { EnrolmentRoutes } from '@enrolment/enrolent.routes';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
@@ -51,23 +52,25 @@ export class EnrolmentGuard extends BaseGuard {
    */
   private routeDestination(routePath: string, enrolment: Enrolment) {
     if (!enrolment) {
-      return this.navigate(routePath, 'profile');
+      return this.navigate(routePath, EnrolmentRoutes.PROFILE);
     } else if (enrolment) {
       switch (enrolment.currentStatus.status.code) {
         case EnrolmentStatus.IN_PROGRESS:
-          const postEnrolmentRoutes = ['confirmation', 'agreement', 'summary'];
-          return (postEnrolmentRoutes.includes(routePath))
+          const postEnrolmentRoutes = EnrolmentRoutes.postEnrolmentRoutes();
+          const route = routePath.split('/').pop();
+
+          return (postEnrolmentRoutes.includes(route))
             // Prevent access to post enrolment routes
-            ? this.navigate(routePath, 'profile')
+            ? this.navigate(routePath, EnrolmentRoutes.PROFILE)
             // Otherwise, allow the route to resolve
             : true;
         case EnrolmentStatus.SUBMITTED:
-          return this.navigate(routePath, 'confirmation');
+          return this.navigate(routePath, EnrolmentRoutes.CONFIRMATION);
         case EnrolmentStatus.ADJUDICATED_APPROVED:
-          return this.navigate(routePath, 'agreement');
+          return this.navigate(routePath, EnrolmentRoutes.ACCESS_AGREEMENT);
         // case EnrolmentStatus.DECLINED:
         case EnrolmentStatus.ACCEPTED_TOS:
-          return this.navigate(routePath, 'summary');
+          return this.navigate(routePath, EnrolmentRoutes.SUMMARY);
         // case EnrolmentStatus.DECLINED_TOS:
       }
     }
