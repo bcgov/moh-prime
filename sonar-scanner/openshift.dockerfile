@@ -5,16 +5,16 @@ ARG user=jenkins
 ARG group=jenkins
 ARG uid=1000
 ARG gid=1000
-RUN groupadd -g ${gid} ${group} && \
-    useradd -c "${user} user" -d /home/${user} -u ${uid} -g ${gid} -m ${user}
-LABEL Description="This is a base image, which provides the ${user} agent executable (agent.jar)" Vendor="${user} project" Version="${VERSION}"
+RUN groupadd -g ${gid} 0 && \
+    useradd -c "jenkins user" -d /home/jenkins -u ${uid} -g ${gid} -m jenkins
+LABEL Description="This is a base image, which provides the jenkins agent executable (agent.jar)" Vendor="jenkins project" Version="${VERSION}"
 
-ARG AGENT_WORKDIR=/home/${user}/agent
+ARG AGENT_WORKDIR=/home/jenkins/agent
 ENV AGENT_WORKDIR=${AGENT_WORKDIR}
-WORKDIR /home/${user}
+WORKDIR /home/jenkins
 
 RUN echo 'deb http://deb.debian.org/debian stretch-backports main' > /etc/apt/sources.list.d/stretch-backports.list
-RUN mkdir /home/${user}/.${user} && \
+RUN mkdir /home/jenkins/.jenkins && \
     mkdir -p ${AGENT_WORKDIR} && \
     apt-get -yq update && \
     apt-get -yq install -t stretch-backports \
@@ -26,27 +26,28 @@ RUN mkdir /home/${user}/.${user} && \
         libgconf-2-4 \
         maven \
         apt-transport-https && \
-    curl --create-dirs -fsSLo /usr/share/${user}/agent.jar http://jenkins-prod/jnlpJars/agent.jar && \
-    chmod 755 /usr/share/${user} && \
-    chmod 644 /usr/share/${user}/agent.jar && \
-    ln -sf /usr/share/${user}/agent.jar /usr/share/${user}/slave.jar
+    curl --create-dirs -fsSLo /usr/share/jenkins/agent.jar http://jenkins-prod/jnlpJars/agent.jar && \
+    chmod 755 /usr/share/jenkins && \
+    chmod 644 /usr/share/jenkins/agent.jar && \
+    ln -sf /usr/share/jenkins/agent.jar /usr/share/jenkins/slave.jar
 
-VOLUME /home/${user}/.${user}
+VOLUME /home/jenkins/.jenkins
 VOLUME ${AGENT_WORKDIR}
 
 SHELL ["/bin/bash", "-c"]
 COPY . ${AGENT_WORKDIR}
 
 # ENV JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64/jre/bin
-ENV PATH $PATH:$JAVA_HOME:/var/lib/${user}/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScanner/bin:/opt/sonar/bin
+ENV PATH $PATH:$JAVA_HOME:/var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScanner/bin:/opt/sonar/bin
 #COMMON
-RUN echo "Installing common, ${user} and Sonar Scanner prerequisites..." && \
+RUN echo "Installing common, jenkins and Sonar Scanner prerequisites..." && \
+    useradd default && \
     apt-get -yq install openjdk-8-jre && \
     wget -q http://sourceforge.net/projects/sonar-pkg/files/deb/binary/sonar_6.7.4_all.deb && \
     dpkg -i sonar_6.7.4_all.deb && \
-    chown -R ${user}:${group} /home/${user} && \
-    chmod -R a+rwx /home/${user} && \
-    chown -R ${user}:${group} ${AGENT_WORKDIR} && \
+    chown -R default:0 /home/jenkins && \
+    chmod -R a+rwx /home/jenkins && \
+    chown -R default:0 ${AGENT_WORKDIR} && \
     chmod -R a+rwx ${AGENT_WORKDIR} && \
     chmod 777 /etc/passwd
 
@@ -86,7 +87,7 @@ RUN echo "Installing Node..." && \
 
 #.NET 2.2
 ENV ASPNETCORE_ENVIRONMENT Development
-ENV PATH=$PATH:/home/${user}/.dotnet/tools
+ENV PATH=$PATH:/home/jenkins/.dotnet/tools
 RUN echo "Installing .NET, coverlet, scanner..." && \
     wget -q -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.asc.gpg && \
     mv microsoft.asc.gpg /etc/apt/trusted.gpg.d/ && \
@@ -99,26 +100,26 @@ RUN echo "Installing .NET, coverlet, scanner..." && \
     dotnet tool install --global coverlet.console && \
     dotnet tool install --global dotnet-sonarscanner --version 4.7.1 && \
     mkdir -p /.dotnet && \
-    chown -R ${user}:${group} /.dotnet && \
+    chown -R default:0 /.dotnet && \
     chmod -R a+rwx /.dotnet && \
     mkdir -p /.local && \
-    chown -R ${user}:${group} /.local && \
+    chown -R default:0 /.local && \
     chmod -R a+rwx /.local && \
     mkdir -p /.nuget && \
-    chown -R ${user}:${group} /.nuget && \
+    chown -R default:0 /.nuget && \
     chmod -R a+rwx /.nuget && \
     mkdir -p /tmp/NuGetScratch/ && \
     mkdir -p /tmp/NuGetScratch/lock && \
-    chown -R ${user}:${group} /tmp/NuGetScratch/ && \
+    chown -R default:0 /tmp/NuGetScratch/ && \
     chmod -R a+rwx /tmp/NuGetScratch/ && \
     chmod -R 777 /tmp/NuGetScratch/ 
 
-# All files in ${user} home need to be writable 
-RUN chown -R ${user}:${group} /home/${user} && \
-    chmod -R a+rwx /home/${user} && \
-    chown -R ${user}:${group} ${AGENT_WORKDIR} && \
+# All files in jenkins home need to be writable 
+RUN chown -R default:0 /home/jenkins && \
+    chmod -R a+rwx /home/jenkins && \
+    chown -R default:0 ${AGENT_WORKDIR} && \
     chmod -R a+rwx ${AGENT_WORKDIR} && \
-    chown -R ${user}:${group} ${AGENT_WORKDIR} && \
+    chown -R default:0 ${AGENT_WORKDIR} && \
     chmod -R a+rwx ${AGENT_WORKDIR} && \
     chmod -R a+rwx /home/jenkins && \
     chmod +x /home/jenkins/agent/entrypoint.bash
@@ -126,5 +127,5 @@ RUN chown -R ${user}:${group} /home/${user} && \
 
 # For local testing
 #COPY ../ ./moh-prime
-
+USER default
 ENTRYPOINT [ "/home/jenkins/agent/entrypoint.bash" ]
