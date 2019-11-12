@@ -19,7 +19,7 @@ export class ConfirmationComponent implements OnInit {
   ) { }
 
   public ngOnInit() {
-    this.busy = this.enrolmentService.enrolment$
+    this.enrolmentService.enrolment$
       .subscribe((enrolment: Enrolment) => {
         this.isAutomatic = (!enrolment.currentStatus.enrolmentStatusReasons.length) ? true : false;
       });
