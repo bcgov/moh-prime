@@ -113,7 +113,7 @@ RUN echo "Installing .NET, coverlet, scanner..." && \
     chown -R default:0 /tmp/NuGetScratch/ && \
     chmod -R a+rwx /tmp/NuGetScratch/ && \
     chmod -R 777 /tmp/NuGetScratch/ 
-
+USER 0
 # All files in jenkins home need to be writable 
 RUN chown -R default:0 /home/jenkins && \
     chmod -R a+rwx /home/jenkins && \
@@ -122,10 +122,11 @@ RUN chown -R default:0 /home/jenkins && \
     chown -R default:0 ${AGENT_WORKDIR} && \
     chmod -R a+rwx ${AGENT_WORKDIR} && \
     chmod -R a+rwx /home/jenkins && \
+    chmod -R 777 /home/jenkins && \
     chmod +x /home/jenkins/agent/entrypoint.bash
 
 
 # For local testing
 #COPY ../ ./moh-prime
-USER default
+
 CMD [ "/bin/bash","-c","/home/jenkins/agent/entrypoint.bash" ]
