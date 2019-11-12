@@ -8,7 +8,7 @@ ARG gid=1000
 RUN groupadd -g ${gid} 0 && \
     useradd -c "jenkins user" -d /home/jenkins -u ${uid} -g ${gid} -m jenkins
 LABEL Description="This is a base image, which provides the jenkins agent executable (agent.jar)" Vendor="jenkins project" Version="${VERSION}"
-
+ENV HOME /home/jenkins
 ARG AGENT_WORKDIR=/home/jenkins/agent
 ENV AGENT_WORKDIR=${AGENT_WORKDIR}
 WORKDIR /home/jenkins
