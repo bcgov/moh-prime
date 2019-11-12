@@ -30,6 +30,7 @@
         <mat-list-item *ngIf="item.showItem"
                        [routerLink]="item.route"
                        routerLinkActive="active"
+                       [ngClass]="{ 'active': item.forceActive }"
                        (click)="onRoute()">
           <mat-icon mat-list-icon
                     [ngClass]="{ 'center-sidenav-icon': !isDesktop }">{{ item.icon }}</mat-icon>
