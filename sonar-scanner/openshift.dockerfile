@@ -120,10 +120,11 @@ RUN chown -R ${user}:${group} /home/${user} && \
     chmod -R a+rwx ${AGENT_WORKDIR} && \
     chown -R ${user}:${group} ${AGENT_WORKDIR} && \
     chmod -R a+rwx ${AGENT_WORKDIR} && \
+    chmod -R a+rwx /home/jenkins && \
     chmod +x /home/jenkins/agent/entrypoint.bash
 
 
 # For local testing
 #COPY ../ ./moh-prime
-USER ${user}
+
 ENTRYPOINT [ "/home/jenkins/agent/entrypoint.bash" ]
