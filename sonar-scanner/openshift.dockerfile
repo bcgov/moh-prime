@@ -75,13 +75,12 @@ ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD 1
 RUN echo "Installing Node..." && \
     curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
     apt-get -yqq install nodejs && \
-    mkdir -p /usr/lib/node_modules/chromedriver/lib/chromedriver && \
+    echo 'kernel.unprivileged_userns_clone=1' > /etc/sysctl.d/userns.conf && \
+    npm install -g --silent @angular/cli @angular/core && \
+    mkdir -p /usr/lib/node_modules/chromedriver/lib && \
     chmod -R a+rwx /usr/lib/node_modules && \ 
     chown -R default:0 /usr/lib/node_modules && \ 
-    cp /usr/bin/chromedriver /usr/lib/node_modules/chromedriver/lib/chromedriver && \ 
-    echo 'kernel.unprivileged_userns_clone=1' > /etc/sysctl.d/userns.conf && \
-    chmod -R a+rwx /usr/lib/node_modules/ && \
-    npm install -g --silent @angular/cli @angular/core && \
+    chmod -R 777 /usr/lib/node_modules && \ 
     npm install -g --silnet chromedriver && \
     echo n | npm install -g --silent chromium selenium-webdriver @angular-devkit/build-angular @angular/compiler @angular/compiler-cli typescript puppeteer jasmine karma karma-chrome-launcher karma-mocha karma-chai karma-jasmine karma-jasmine-html-reporter karma-coverage-istanbul-reporter selenium-webdriver geckodriver
 
