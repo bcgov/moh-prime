@@ -7,7 +7,8 @@
   </span>
 </h2>
 <mat-dialog-content>
-  <p>{{ options.message }}</p>
+  <p *ngIf="options.message">{{ options.message }}</p>
+  <ng-template appDialogContent></ng-template>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button *ngIf="!options.cancelHide"

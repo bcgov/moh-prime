@@ -1,0 +1,8 @@
+<p>
+  The enrollee was not automatically approved for the following reasons:
+</p>
+<ol>
+  <li *ngFor="let enrolment of enrolmentStatusReasons">
+    {{ enrolment.statusReason.name }}
+  </li>
+</ol>

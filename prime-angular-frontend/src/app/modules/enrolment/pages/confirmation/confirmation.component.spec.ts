@@ -6,7 +6,7 @@ import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.mod
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { MockeEnrolmentService } from 'test/mocks/mock-enrolment.service';
+import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
 describe('ConfirmationComponent', () => {
   let component: ConfirmationComponent;
@@ -27,7 +27,7 @@ describe('ConfirmationComponent', () => {
         providers: [
           {
             provide: EnrolmentService,
-            useClass: MockeEnrolmentService
+            useClass: MockEnrolmentService
           }
         ]
       }
