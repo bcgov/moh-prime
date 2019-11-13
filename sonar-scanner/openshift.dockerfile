@@ -72,16 +72,17 @@ RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-ke
 
 # Node
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD 1
+ENV CHROMEDRIVER_FILEPATH /usr/bin/chromedriver 
 RUN echo "Installing Node..." && \
     curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
     apt-get -yqq install nodejs && \
     echo 'kernel.unprivileged_userns_clone=1' > /etc/sysctl.d/userns.conf && \
-    npm install -g --silent @angular/cli @angular/core && \
-    mkdir -p /usr/lib/node_modules/chromedriver/lib && \
+    mkdir -p /usr/lib/node_modules/chromedriver/lib/chromedriver && \
+    cp /usr/bin/chromedriver /usr/lib/node_modules/chromedriver/lib/chromedriver && \
     chmod -R a+rwx /usr/lib/node_modules && \ 
     chown -R default:0 /usr/lib/node_modules && \ 
     chmod -R 777 /usr/lib/node_modules && \ 
-    npm install -g --silnet chromedriver && \
+    npm install -g --silent @angular/cli @angular/core && \
     echo n | npm install -g --silent chromium selenium-webdriver @angular-devkit/build-angular @angular/compiler @angular/compiler-cli typescript puppeteer jasmine karma karma-chrome-launcher karma-mocha karma-chai karma-jasmine karma-jasmine-html-reporter karma-coverage-istanbul-reporter selenium-webdriver geckodriver
 
 #.NET 2.2
