@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog, MatCheckboxChange } from '@angular/material';
 
 import { map, exhaustMap } from 'rxjs/operators';
-import { EMPTY } from 'rxjs';
+import { EMPTY, Subscription } from 'rxjs';
 
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
@@ -20,9 +20,9 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
   styleUrls: ['./review.component.scss']
 })
 export class ReviewComponent implements OnInit {
-  // TODO: make a proper enrolment model
+  public busy: Subscription;
   public enrolment: Enrolment;
-  disabledAgreement = true;
+  public disabledAgreement = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -42,7 +42,7 @@ export class ReviewComponent implements OnInit {
         message: 'When your enrolment has submitted for adjudication it can no longer be updated. Are you ready to submit your enrolment?',
         actionText: 'Submit Enrolment'
       };
-      this.dialog.open(ConfirmDialogComponent, { data })
+      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
         .afterClosed()
         .pipe(
           exhaustMap((result: boolean) =>
@@ -61,7 +61,7 @@ export class ReviewComponent implements OnInit {
             this.logger.error('[Enrolment] Review::onSubmit error has occurred: ', error);
           });
     } else {
-      // TODO: indicate where validation failed in the review to prompt user edits
+      // TODO indicate where validation failed in the review to prompt user edits
       console.log('PROFILE', this.enrolmentStateService.isProfileInfoValid());
       console.log('REGULATORY', this.enrolmentStateService.isRegulatoryValid());
       console.log('DEVICE_PROVIDER', this.enrolmentStateService.isDeviceProviderValid());
@@ -86,9 +86,9 @@ export class ReviewComponent implements OnInit {
   }
 
   public ngOnInit() {
-    // TODO: detect enrolment already exists and don't reload
-    // TODO: apply guard if no enrolment is found to redirect to profile
-    this.enrolmentResource.enrolments()
+    // TODO detect enrolment already exists and don't reload
+    // TODO apply guard if no enrolment is found to redirect to profile
+    this.busy = this.enrolmentResource.enrolments()
       .pipe(
         map((enrolment: Enrolment) => this.enrolment = enrolment)
       )

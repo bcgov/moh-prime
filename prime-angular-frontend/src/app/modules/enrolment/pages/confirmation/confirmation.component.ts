@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+
+import { Subscription } from 'rxjs';
+
 import { Enrolment } from '@shared/models/enrolment.model';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 @Component({
   selector: 'app-confirmation',
@@ -8,6 +11,7 @@ import { Enrolment } from '@shared/models/enrolment.model';
   styleUrls: ['./confirmation.component.scss']
 })
 export class ConfirmationComponent implements OnInit {
+  public busy: Subscription;
   public isAutomatic: boolean;
 
   constructor(
@@ -15,7 +19,7 @@ export class ConfirmationComponent implements OnInit {
   ) { }
 
   public ngOnInit() {
-    this.enrolmentService.enrolment$
+    this.busy = this.enrolmentService.enrolment$
       .subscribe((enrolment: Enrolment) => {
         this.isAutomatic = (!enrolment.currentStatus.enrolmentStatusReasons.length) ? true : false;
       });

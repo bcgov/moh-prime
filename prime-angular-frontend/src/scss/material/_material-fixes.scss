@@ -3,7 +3,7 @@
 // Used to fix issues related to Angular Material
 
 // Remove all outlines from all elements.  This is very aggressive! and should
-// be removed once supported Angular Material.
+// be removed once supported by Angular Material.
 * {
   outline: none !important;
 }
@@ -12,9 +12,9 @@
 // Sidenav
 //
 
-// NOTE: Cannot be moved into dashboard component for shadow
-// DOM, since some of this won't work in the component and has
-// to be global.
+// NOTE: Cannot be moved into dashboard component for use
+// in shadow DOM, since some of this won't work in the
+// component and has to be global.
 
 .mat-sidenav-container {
   // Force the background to match busy loader
@@ -44,6 +44,17 @@
   .mat-list-item:focus {
     background-color: theme-palette(grey, lighter) !important;
 
+    .mat-list-item-content {
+      border-right: 5px solid theme-palette(yellow) !important;
+    }
+  }
+
+  .mat-list-item-content {
+    border-right: 5px solid transparent !important;
+    padding-left: 25px !important;
+  }
+
+  .active {
     .mat-list-item-content {
       border-right: 5px solid theme-palette(yellow) !important;
     }

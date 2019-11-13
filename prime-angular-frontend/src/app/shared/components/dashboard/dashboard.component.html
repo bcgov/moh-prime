@@ -18,7 +18,8 @@
            [ngClass]="{ 'is-deskop': isDesktop }">
     </div>
 
-    <mat-nav-list *ngFor="let sideNavSection of sideNavSections">
+    <mat-nav-list *ngFor="let sideNavSection of sideNavSections"
+                  [disableRipple]="true">
       <h3 mat-subheader
           *ngIf="sideNavSection.showHeader && sideNavProps.showText">
         {{ sideNavSection.header }}

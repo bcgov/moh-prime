@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource, MatSelectChange, MatDialog } from '@angular/material';
 
 import { exhaustMap } from 'rxjs/operators';
-import { EMPTY } from 'rxjs';
+import { EMPTY, Subscription } from 'rxjs';
 
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
@@ -22,6 +22,7 @@ import { EnrolmentStatusReasonsComponent } from '@shared/components/dialogs/cont
   styleUrls: ['./enrolments.component.scss']
 })
 export class EnrolmentsComponent implements OnInit {
+  public busy: Subscription;
   public columns: string[];
   public statuses: Config<number>[];
   public filteredStatus: Config<number>;
@@ -69,7 +70,7 @@ export class EnrolmentsComponent implements OnInit {
       message: 'Are you sure you want to approve this enrolment?',
       actionText: 'Approve Enrolment'
     };
-    this.dialog.open(ConfirmDialogComponent, { data })
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
         exhaustMap((result: boolean) =>
@@ -103,7 +104,7 @@ export class EnrolmentsComponent implements OnInit {
       actionType: 'warn',
       actionText: 'Decline Enrolment'
     };
-    this.dialog.open(ConfirmDialogComponent, { data })
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
         exhaustMap((result: boolean) =>
@@ -137,7 +138,7 @@ export class EnrolmentsComponent implements OnInit {
       actionType: 'warn',
       actionText: 'Delete Enrolment'
     };
-    this.dialog.open(ConfirmDialogComponent, { data })
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
         exhaustMap((result: boolean) =>
@@ -163,7 +164,7 @@ export class EnrolmentsComponent implements OnInit {
   }
 
   private getEnrolments(statusCode?: number) {
-    this.provisionResource.enrolments(statusCode)
+    this.busy = this.provisionResource.enrolments(statusCode)
       .subscribe(
         (enrolments: Enrolment[]) => {
           this.logger.info('ENROLMENTS', enrolments);

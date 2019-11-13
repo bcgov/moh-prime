@@ -3,7 +3,7 @@ import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
@@ -20,6 +20,7 @@ import { FormUtilsService } from '@enrolment/shared/services/form-utils.service'
   styleUrls: ['./self-declaration.component.scss']
 })
 export class SelfDeclarationComponent implements OnInit {
+  public busy: Subscription;
   public form: FormGroup;
   public decisions: { code: boolean, name: string }[] = [
     { code: false, name: 'No' }, { code: true, name: 'Yes' }
@@ -71,7 +72,7 @@ export class SelfDeclarationComponent implements OnInit {
   public onSubmit() {
     if (this.form.valid) {
       const payload = this.enrolmentStateService.enrolment;
-      this.enrolmentResource.updateEnrolment(payload)
+      this.busy = this.enrolmentResource.updateEnrolment(payload)
         .subscribe(
           () => {
             this.toastService.openSuccessToast('Self declaration has been saved');
@@ -112,7 +113,7 @@ export class SelfDeclarationComponent implements OnInit {
 
     // TODO: detect enrolment already exists and don't reload
     // TODO: apply guard if not enrolment is found to redirect to profile
-    this.enrolmentResource.enrolments()
+    this.busy = this.enrolmentResource.enrolments()
       .subscribe((enrolment: Enrolment) => {
         if (enrolment) {
           this.enrolmentStateService.enrolment = enrolment;

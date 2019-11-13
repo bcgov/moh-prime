@@ -6,6 +6,7 @@ import { Config } from '@config/config.model';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { IEnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+import { Address } from '@enrolment/shared/models/address.model';
 
 export class MockEnrolmentService implements IEnrolmentService {
   // tslint:disable-next-line: variable-name
@@ -16,13 +17,30 @@ export class MockEnrolmentService implements IEnrolmentService {
     const enrolmentId = faker.random.number();
     this._enrolment = new BehaviorSubject<Enrolment>({
       id: enrolmentId,
-      enrollee: null,
+      enrollee: {
+        id: faker.random.number(),
+        userId: faker.random.uuid(),
+        firstName: faker.name.firstName(),
+        middleName: faker.name.findName(),
+        lastName: faker.name.lastName(),
+        preferredFirstName: null,
+        preferredMiddleName: null,
+        preferredLastName: null,
+        dateOfBirth: faker.date.past(2).toDateString(),
+        physicalAddress: new Address(),
+        mailingAddress: new Address(),
+        contactEmail: faker.internet.email(),
+        contactPhone: faker.phone.phoneNumber(),
+        voicePhone: faker.phone.phoneNumber(),
+        voiceExtension: null,
+        licensePlate: null,
+      },
       appliedDate: null,
       approvedDate: null,
-      certifications: null,
+      certifications: [],
       deviceProviderNumber: null,
       isInsulinPumpProvider: null,
-      jobs: null,
+      jobs: [],
       hasConviction: null,
       hasConvictionDetails: null,
       hasRegistrationSuspended: null,
@@ -31,7 +49,12 @@ export class MockEnrolmentService implements IEnrolmentService {
       hasDisciplinaryActionDetails: null,
       hasPharmaNetSuspended: null,
       hasPharmaNetSuspendedDetails: null,
-      organizations: null,
+      organizations: [
+        {
+          id: faker.random.number(),
+          organizationTypeCode: 1
+        }
+      ],
       enrolmentStatuses: null,
       currentStatus: {
         enrolmentId,
@@ -63,6 +86,8 @@ export class MockEnrolmentService implements IEnrolmentService {
   }
 
   public get enrolment(): Enrolment {
+    console.log('ENROLMENT', this._enrolment.value);
+
     return this._enrolment.value;
   }
 
