@@ -42,7 +42,7 @@ VOLUME /home/jenkins/.jenkins
 VOLUME ${AGENT_WORKDIR}
 
 SHELL ["/bin/bash", "-c"]
-COPY . ${WORKDIR}
+COPY . $HOME
 
 # ENV JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64/jre/bin
 ENV PATH $PATH:$JAVA_HOME:/var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScanner/bin:/opt/sonar/bin
@@ -123,9 +123,9 @@ RUN chown -R default:0 /home/jenkins && \
     chown -R default:0 ${AGENT_WORKDIR} && \
     chmod -R a+rwx /var/lib/origin && \
     chown -R default:0  /var/lib/origin && \
-    chmod +x /home/jenkins/agent/entrypoint.bash
+    chmod +x $HOME/entrypoint.bash
 
 # For local testing
 #COPY ../ ./moh-prime
-ENTRYPOINT sleep 60 && /usr/local/openjdk-8/bin/java -jar /home/jenkins/agent/agent.jar -jnlpUrl http://jenkins-prod/computer/code-tests/slave-agent.jnlp -secret c598ca95983a9f6df4d06cc7f770b0d1ea404b806851f1a7f1066d89515c2c12 -workDir /home/jenkins
+ENTRYPOINT sleep 60 && /usr/local/openjdk-8/bin/java -jar /home/jenkins/agent/agent.jar -jnlpUrl http://jenkins-prod/computer/code-tests/slave-agent.jnlp -secret c598ca95983a9f6df4d06cc7f770b0d1ea404b806851f1a7f1066d89515c2c12 -workDir $HOME
 #CMD [ "/bin/bash","-c","/home/jenkins/agent/entrypoint.bash" ]
