@@ -27,10 +27,10 @@
       </ng-container>
 
       <ng-container *ngIf="canAddCertification()">
-        <a mat-raised-button
+        <button mat-raised-button
                 color="primary"
                 (click)="addCertification()"
-                [disabled]="certifications.invalid">Add Certification</a>
+                [disabled]="certifications.invalid">Add Certification</button>
       </ng-container>
 
     </div>

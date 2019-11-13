@@ -108,6 +108,7 @@ export class JobComponent implements OnInit {
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
+    console.log('CAN DEACTIVATE', this.form)
     const data = 'unsaved';
     return (this.form.dirty)
       ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
@@ -124,12 +125,10 @@ export class JobComponent implements OnInit {
     this.enrolmentResource.enrolments()
       .subscribe((enrolment: Enrolment) => {
         if (enrolment) {
+          this.initMultiSelect();
           this.enrolmentStateService.enrolment = enrolment;
         }
       });
-
-    // Initialize multi-select after patching
-    this.initMultiSelect();
   }
 
   private createFormInstance() {
@@ -137,18 +136,10 @@ export class JobComponent implements OnInit {
   }
 
   private initForm() {
-
-
-    // this.isAccessingPharmaNetOnBehalfOf.valueChanges.subscribe((value) => {
-    //   if (!value) {
-    //     this.jobs.clear();
-    //   } else {
-    //   }
-    // });
+    this.jobCtrl = new FormControl();
   }
 
   private initMultiSelect() {
-    this.jobCtrl = new FormControl();
     this.filteredJobNames = this.jobCtrl.valueChanges
       .pipe(
         startWith(null),

@@ -60,7 +60,6 @@ export class EnrolmentStateService {
     const userId = this.userId;
 
     const profile = this.profileForm.getRawValue();
-    const professionalInfo = this.professionalInfoForm.getRawValue();
     const regulatory = this.regulatoryForm.getRawValue();
     const deviceProvider = this.deviceProviderForm.getRawValue();
     const jobs = this.jobsForm.getRawValue();
@@ -85,7 +84,6 @@ export class EnrolmentStateService {
   public isEnrolmentValid(): boolean {
     return (
       this.isProfileInfoValid() &&
-      // this.isProfessionalInfoValid() &&
       this.isRegulatoryValid() &&
       this.isDeviceProviderValid() &&
       this.isJobsValid() &&
@@ -134,7 +132,6 @@ export class EnrolmentStateService {
   private patchEnrolment(enrolment: Enrolment) {
     if (enrolment) {
       this.profileForm.patchValue(enrolment.enrollee);
-      this.professionalInfoForm.patchValue(enrolment);
       this.deviceProviderForm.patchValue(enrolment);
 
       if (enrolment.certifications.length) {
@@ -157,6 +154,7 @@ export class EnrolmentStateService {
         });
       }
 
+      this.regulatoryForm.patchValue(enrolment);
       this.jobsForm.patchValue(enrolment);
       this.selfDeclarationForm.patchValue(enrolment);
       this.pharmaNetAccessForm.patchValue(enrolment);

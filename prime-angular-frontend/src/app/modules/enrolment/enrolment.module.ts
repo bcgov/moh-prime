@@ -36,6 +36,6 @@ import { JobComponent } from './pages/job/job.component';
     SharedModule,
     EnrolmentRoutingModule
   ],
-  exports: [RegulatoryComponent, DeviceProviderComponent, JobComponent]
+  exports: []
 })
 export class EnrolmentModule { }

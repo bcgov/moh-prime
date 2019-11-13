@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
-import { FormGroup, FormArray, FormControl } from '@angular/forms';
+import { FormGroup, FormArray, FormControl, AbstractControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
@@ -66,10 +67,6 @@ export class RegulatoryComponent implements OnInit, OnDestroy {
     } else {
       this.form.markAllAsTouched();
     }
-
-
-    // FOR TESTING
-    this.router.navigate(['device-provider'], { relativeTo: this.route.parent });
   }
 
   public addCertification() {
@@ -85,6 +82,7 @@ export class RegulatoryComponent implements OnInit, OnDestroy {
 
   public canDeactivate(): Observable<boolean> | boolean {
     const data = 'unsaved';
+    this.clearEmptyCertifications();
     return (this.form.dirty)
       ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
       : true;
@@ -111,14 +109,14 @@ export class RegulatoryComponent implements OnInit, OnDestroy {
 
   public clearEmptyCertifications() {
     let i = 0;
-    for (const control of this.certifications.controls) {
+    this.certifications.controls.forEach((control: AbstractControl) => {
       if (control instanceof FormGroup) {
-        if (control.get('collegeCode').value === null) {
+        if (control.get('collegeNumber') || control.get('licenseNumber').value === null) {
           this.removeCertification(i);
         }
       }
       i++;
-    }
+    });
   }
 
   public clearJobForm() {
@@ -126,19 +124,12 @@ export class RegulatoryComponent implements OnInit, OnDestroy {
       this.jobForm = this.enrolmentStateService.jobsForm;
       const jobs = this.jobForm.get('jobs') as FormArray;
       jobs.clear();
-      // this.jobForm.reset();
     }
   }
 
   public canAddCertification(): boolean {
-    for (const control of this.certifications.controls) {
-      if (control instanceof FormGroup) {
-        if (control.get('collegeCode').value === null) {
-          return false;
-        }
-      }
-    }
-    return true;
+    return this.certifications.controls
+      .every((control: FormGroup) => control.get('collegeCode').value);
   }
 
   private createFormInstance() {
