@@ -12,7 +12,7 @@ ENV HOME /home/jenkins
 ARG AGENT_WORKDIR=/home/jenkins/agent
 ENV AGENT_WORKDIR=${AGENT_WORKDIR}
 WORKDIR /home/jenkins
-
+USER 0
 RUN echo 'deb http://deb.debian.org/debian stretch-backports main' > /etc/apt/sources.list.d/stretch-backports.list
 RUN mkdir /home/jenkins/.jenkins && \
     mkdir -p ${AGENT_WORKDIR} && \
@@ -72,6 +72,8 @@ RUN echo "Installing Node..." && \
     apt-get -yq install nodejs && \
     echo 'kernel.unprivileged_userns_clone=1' > /etc/sysctl.d/userns.conf && \
     export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 && \
+    mkdir -p /usr/lib/node_modules/chromedriver/lib/chromedriver && \
+    chmod -R 777 /usr/lib/node_modules/ && \
     echo n | npm install -g --silent @angular/cli @angular/core chromium chromedriver selenium-webdriver @angular-devkit/build-angular @angular/compiler @angular/compiler-cli typescript puppeteer jasmine karma karma-chrome-launcher karma-mocha karma-chai karma-jasmine karma-jasmine-html-reporter karma-coverage-istanbul-reporter 
 
 #.NET 2.2
