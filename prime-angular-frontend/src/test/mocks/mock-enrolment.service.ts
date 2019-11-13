@@ -89,8 +89,6 @@ export class MockEnrolmentService implements IEnrolmentService {
   }
 
   public get enrolment(): Enrolment {
-    console.log('ENROLMENT', this._enrolment.value);
-
     return this._enrolment.value;
   }
 

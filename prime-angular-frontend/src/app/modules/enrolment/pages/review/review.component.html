@@ -15,7 +15,7 @@
 
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Enrollee</ng-container>
-        <mat-icon (click)="redirect('profile')"
+        <mat-icon (click)="redirect(EnrolmentRoutes.PROFILE)"
                   matTooltip="Edit Enrollee">edit</mat-icon>
       </app-page-subheader>
 
@@ -83,7 +83,7 @@
 
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Contact</ng-container>
-        <mat-icon (click)="redirect('contact')"
+        <mat-icon (click)="redirect(EnrolmentRoutes.PROFILE)"
                   matTooltip="Edit Contact">edit</mat-icon>
       </app-page-subheader>
 
@@ -115,7 +115,7 @@
 
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Self Declaration</ng-container>
-        <mat-icon (click)="redirect('declaration')"
+        <mat-icon (click)="redirect(EnrolmentRoutes.SELF_DECLARATION)"
                   matTooltip="Edit Self Declaration">edit</mat-icon>
       </app-page-subheader>
 
@@ -170,16 +170,16 @@
 
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Professional Information</ng-container>
-        <mat-icon (click)="redirect('professional')"
+        <mat-icon (click)="redirect(EnrolmentRoutes.REGULATORY)"
                   matTooltip="Edit Professional Information">edit</mat-icon>
       </app-page-subheader>
 
       <dl class="row mb-4">
         <dt class="col-sm-12 col-md-6 py-1">Do you have a college certification?</dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.hasCertification) }}&nbsp;</dd>
+        <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.certifications.length > 0) }}&nbsp;</dd>
       </dl>
 
-      <ng-container *ngIf="enrolment.hasCertification">
+      <ng-container *ngIf="enrolment.certifications.length > 0">
 
         <h3 class="lead">Certifications</h3>
 
@@ -204,9 +204,7 @@
       </ng-container>
 
       <dl class="row mb-4">
-        <dt class="col-sm-12 col-md-6 py-1">Are you a device provider?</dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.isDeviceProvider) }}&nbsp;</dd>
-        <ng-container *ngIf="enrolment.isDeviceProvider">
+        <ng-container *ngIf="enrolment.deviceProviderNumber">
           <dt class="col-sm-12 col-md-6 py-1">Device Provider Number</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.deviceProviderNumber }}&nbsp;</dd>
         </ng-container>
@@ -218,9 +216,7 @@
       </dl>
 
       <dl class="row mb-4">
-        <dt class="col-sm-12 col-md-6 py-1">Are you accessing PharmaNet on behalf of someone else?</dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.isAccessingPharmaNetOnBehalfOf) }}&nbsp;</dd>
-        <ng-container *ngIf="enrolment.isAccessingPharmaNetOnBehalfOf">
+        <ng-container *ngIf="enrolment.jobs.length > 0">
           <dt class="col-sm-12 col-md-6 py-1">Job Title</dt>
           <dd class="col-sm-12 col-md-6 py-1">
             <ul class="list-unstyled">
@@ -232,7 +228,7 @@
 
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>PharmaNet Access</ng-container>
-        <mat-icon (click)="redirect('access')"
+        <mat-icon (click)="redirect(EnrolmentRoutes.PHARMANET_ACCESS)"
                   matTooltip="Edit PharmaNet Access">edit</mat-icon>
       </app-page-subheader>
 
