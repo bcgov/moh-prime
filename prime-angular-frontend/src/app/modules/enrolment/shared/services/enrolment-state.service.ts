@@ -17,6 +17,10 @@ export class EnrolmentStateService {
   // TODO make into BehaviourSubject or asObservable, which would make it immutable
   public profileForm: FormGroup;
   public professionalInfoForm: FormGroup;
+  public regulatoryForm: FormGroup;
+  public jobsForm: FormGroup;
+  public collegeCertificationForm: FormGroup;
+  public deviceProviderForm: FormGroup;
   public selfDeclarationForm: FormGroup;
   public pharmaNetAccessForm: FormGroup;
 
@@ -29,6 +33,9 @@ export class EnrolmentStateService {
   ) {
     this.profileForm = this.buildProfileForm();
     this.professionalInfoForm = this.buildProfessionalInfoForm();
+    this.regulatoryForm = this.buildRegulatoryForm();
+    this.jobsForm = this.buildJobsForm();
+    this.deviceProviderForm = this.buildDeviceProviderForm();
     this.selfDeclarationForm = this.buildSelfDeclarationForm();
     this.pharmaNetAccessForm = this.buildPharmaNetAccessForm();
   }
@@ -53,7 +60,9 @@ export class EnrolmentStateService {
     const userId = this.userId;
 
     const profile = this.profileForm.getRawValue();
-    const professionalInfo = this.professionalInfoForm.getRawValue();
+    const regulatory = this.regulatoryForm.getRawValue();
+    const deviceProvider = this.deviceProviderForm.getRawValue();
+    const jobs = this.jobsForm.getRawValue();
     const selfDeclaration = this.selfDeclarationForm.getRawValue();
     const pharmaNetAccess = this.pharmaNetAccessForm.getRawValue();
 
@@ -64,7 +73,9 @@ export class EnrolmentStateService {
         userId,
         ...profile
       },
-      ...professionalInfo,
+      ...regulatory,
+      ...deviceProvider,
+      ...jobs,
       ...selfDeclaration,
       ...pharmaNetAccess
     };
@@ -73,7 +84,9 @@ export class EnrolmentStateService {
   public isEnrolmentValid(): boolean {
     return (
       this.isProfileInfoValid() &&
-      this.isProfessionalInfoValid() &&
+      this.isRegulatoryValid() &&
+      this.isDeviceProviderValid() &&
+      this.isJobsValid() &&
       this.isSelfDeclarationValid() &&
       this.isPharmaNetAccessValid()
     );
@@ -84,7 +97,23 @@ export class EnrolmentStateService {
   }
 
   public isProfessionalInfoValid(): boolean {
-    return this.professionalInfoForm.valid;
+    return (
+      this.isRegulatoryValid() &&
+      this.isDeviceProviderValid() &&
+      this.isJobsValid()
+    );
+  }
+
+  public isRegulatoryValid(): boolean {
+    return this.regulatoryForm.valid;
+  }
+
+  public isDeviceProviderValid(): boolean {
+    return this.deviceProviderForm.valid;
+  }
+
+  public isJobsValid(): boolean {
+    return this.jobsForm.valid;
   }
 
   public isSelfDeclarationValid(): boolean {
@@ -103,10 +132,10 @@ export class EnrolmentStateService {
   private patchEnrolment(enrolment: Enrolment) {
     if (enrolment) {
       this.profileForm.patchValue(enrolment.enrollee);
-      this.professionalInfoForm.patchValue(enrolment);
+      this.deviceProviderForm.patchValue(enrolment);
 
       if (enrolment.certifications.length) {
-        const certifications = this.professionalInfoForm.get('certifications') as FormArray;
+        const certifications = this.regulatoryForm.get('certifications') as FormArray;
         certifications.clear();
         enrolment.certifications.forEach((c: CollegeCertification) => {
           const certification = this.buildCollegeCertificationForm();
@@ -116,7 +145,7 @@ export class EnrolmentStateService {
       }
 
       if (enrolment.jobs.length) {
-        const jobs = this.professionalInfoForm.get('jobs') as FormArray;
+        const jobs = this.jobsForm.get('jobs') as FormArray;
         jobs.clear();
         enrolment.jobs.forEach((j: Job) => {
           const job = this.buildJobForm();
@@ -125,6 +154,8 @@ export class EnrolmentStateService {
         });
       }
 
+      this.regulatoryForm.patchValue(enrolment);
+      this.jobsForm.patchValue(enrolment);
       this.selfDeclarationForm.patchValue(enrolment);
       this.pharmaNetAccessForm.patchValue(enrolment);
 
@@ -180,15 +211,34 @@ export class EnrolmentStateService {
 
   private buildProfessionalInfoForm(): FormGroup {
     return this.fb.group({
-      hasCertification: [null, [FormControlValidators.requiredBoolean]],
       certifications: this.fb.array([]),
-      isDeviceProvider: [null, [FormControlValidators.requiredBoolean]],
       deviceProviderNumber: [null, [
         FormControlValidators.numeric,
         FormControlValidators.requiredLength(5)
       ]],
       isInsulinPumpProvider: [null, [FormControlValidators.requiredBoolean]],
-      isAccessingPharmaNetOnBehalfOf: [null, [FormControlValidators.requiredBoolean]],
+      jobs: this.fb.array([]),
+    });
+  }
+
+  private buildRegulatoryForm(): FormGroup {
+    return this.fb.group({
+      certifications: this.fb.array([]),
+    });
+  }
+
+  private buildDeviceProviderForm(): FormGroup {
+    return this.fb.group({
+      deviceProviderNumber: [null, [
+        FormControlValidators.numeric,
+        FormControlValidators.requiredLength(5)
+      ]],
+      isInsulinPumpProvider: [false, [FormControlValidators.requiredBoolean]]
+    });
+  }
+
+  private buildJobsForm(): FormGroup {
+    return this.fb.group({
       jobs: this.fb.array([]),
     });
   }
@@ -196,14 +246,14 @@ export class EnrolmentStateService {
   public buildCollegeCertificationForm(): FormGroup {
     return this.fb.group({
       id: [null, []],
-      collegeCode: [null, [Validators.required]],
+      collegeCode: [null, []],
       licenseNumber: [null, [
-        Validators.required,
+        // Validators.required,
         FormControlValidators.numeric,
         FormControlValidators.requiredLength(5)
       ]],
-      licenseCode: [null, [Validators.required]],
-      renewalDate: [null, [Validators.required]],
+      licenseCode: [null, []],
+      renewalDate: [null, []],
       practiceCode: [null, []]
     });
   }
@@ -211,7 +261,7 @@ export class EnrolmentStateService {
   public buildJobForm(value: string = null): FormGroup {
     return this.fb.group({
       id: [null, []],
-      title: [value, [Validators.required]]
+      title: [value, []]
     });
   }
 
