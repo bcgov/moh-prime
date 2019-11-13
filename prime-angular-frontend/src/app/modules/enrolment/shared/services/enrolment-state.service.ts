@@ -16,11 +16,10 @@ export class EnrolmentStateService {
   // TODO revisit access to form groups as service is refined, but for now public
   // TODO make into BehaviourSubject or asObservable, which would make it immutable
   public profileForm: FormGroup;
-  public professionalInfoForm: FormGroup;
   public regulatoryForm: FormGroup;
-  public jobsForm: FormGroup;
   public collegeCertificationForm: FormGroup;
   public deviceProviderForm: FormGroup;
+  public jobsForm: FormGroup;
   public selfDeclarationForm: FormGroup;
   public pharmaNetAccessForm: FormGroup;
 
@@ -32,10 +31,9 @@ export class EnrolmentStateService {
     private fb: FormBuilder
   ) {
     this.profileForm = this.buildProfileForm();
-    this.professionalInfoForm = this.buildProfessionalInfoForm();
     this.regulatoryForm = this.buildRegulatoryForm();
-    this.jobsForm = this.buildJobsForm();
     this.deviceProviderForm = this.buildDeviceProviderForm();
+    this.jobsForm = this.buildJobsForm();
     this.selfDeclarationForm = this.buildSelfDeclarationForm();
     this.pharmaNetAccessForm = this.buildPharmaNetAccessForm();
   }
@@ -94,14 +92,6 @@ export class EnrolmentStateService {
 
   public isProfileInfoValid(): boolean {
     return this.profileForm.valid;
-  }
-
-  public isProfessionalInfoValid(): boolean {
-    return (
-      this.isRegulatoryValid() &&
-      this.isDeviceProviderValid() &&
-      this.isJobsValid()
-    );
   }
 
   public isRegulatoryValid(): boolean {
@@ -206,18 +196,6 @@ export class EnrolmentStateService {
       contactEmail: [null, [FormControlValidators.email]],
       hasContactPhone: [false, []],
       contactPhone: [null, [FormControlValidators.phone]]
-    });
-  }
-
-  private buildProfessionalInfoForm(): FormGroup {
-    return this.fb.group({
-      certifications: this.fb.array([]),
-      deviceProviderNumber: [null, [
-        FormControlValidators.numeric,
-        FormControlValidators.requiredLength(5)
-      ]],
-      isInsulinPumpProvider: [null, [FormControlValidators.requiredBoolean]],
-      jobs: this.fb.array([]),
     });
   }
 
