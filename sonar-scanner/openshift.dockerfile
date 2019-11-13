@@ -63,7 +63,7 @@ RUN echo "Installing common, jenkins and Sonar Scanner prerequisites..." && \
 RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
     echo "deb [arch=amd64]  http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list && \
     apt-get -yqq update && \
-    apt-get -yqq install google-chrome-stable && \
+    apt-get -yqq install google-chrome-stable chromium && \
     wget -q https://chromedriver.storage.googleapis.com/2.41/chromedriver_linux64.zip && \
     unzip chromedriver_linux64.zip && \
     mv chromedriver /usr/bin/chromedriver && \
@@ -83,7 +83,7 @@ RUN echo "Installing Node..." && \
     chown -R default:0 /usr/lib/node_modules && \ 
     chmod -R 777 /usr/lib/node_modules && \ 
     npm install -g --silent @angular/cli @angular/core && \
-    echo n | npm install -g --silent chromium selenium-webdriver @angular-devkit/build-angular @angular/compiler @angular/compiler-cli typescript puppeteer jasmine karma karma-chrome-launcher karma-mocha karma-chai karma-jasmine karma-jasmine-html-reporter karma-coverage-istanbul-reporter selenium-webdriver geckodriver
+    echo n | npm install -g --silent @angular-devkit/build-angular @angular/compiler @angular/compiler-cli typescript jasmine karma karma-chrome-launcher karma-mocha karma-chai karma-jasmine karma-jasmine-html-reporter karma-coverage-istanbul-reporter
 
 #.NET 2.2
 ENV ASPNETCORE_ENVIRONMENT Development
