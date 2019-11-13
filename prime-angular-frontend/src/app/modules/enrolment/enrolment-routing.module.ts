@@ -10,13 +10,15 @@ import { EnrolleeGuard } from './shared/guards/enrollee.guard';
 import { EnrolmentGuard } from './shared/guards/enrolment.guard';
 
 import { ProfileComponent } from './pages/profile/profile.component';
-import { ProfessionalInfoComponent } from './pages/professional-info/professional-info.component';
+import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
 import { SelfDeclarationComponent } from './pages/self-declaration/self-declaration.component';
 import { PharmanetAccessComponent } from './pages/pharmanet-access/pharmanet-access.component';
 import { ReviewComponent } from './pages/review/review.component';
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 import { AccessAgreementComponent } from './pages/access-agreement/access-agreement.component';
 import { SummaryComponent } from './pages/summary/summary.component';
+import { DeviceProviderComponent } from './pages/device-provider/device-provider.component';
+import { JobComponent } from './pages/job/job.component';
 
 const routes: Routes = [
   {
@@ -35,8 +37,21 @@ const routes: Routes = [
         canDeactivate: [CanDeactivateFormGuard]
       },
       {
-        path: 'professional',
-        component: ProfessionalInfoComponent,
+        path: 'regulatory',
+        component: RegulatoryComponent,
+        canActivate: [EnrolmentGuard],
+        canDeactivate: [CanDeactivateFormGuard]
+      },
+      {
+        path: 'device-provider',
+        component: DeviceProviderComponent,
+        canActivate: [EnrolmentGuard],
+        canDeactivate: [CanDeactivateFormGuard]
+      },
+      {
+        path: 'job',
+        component: JobComponent,
+        canActivate: [EnrolmentGuard],
         canDeactivate: [CanDeactivateFormGuard]
       },
       {

@@ -102,7 +102,6 @@ export class ProfileComponent implements OnInit {
   public onSubmit() {
     if (this.form.valid) {
       const payload = this.enrolmentStateService.enrolment;
-
       const request$ = (this.isNewEnrolment)
         ? this.enrolmentResource.createEnrolment(payload)
           .pipe(
@@ -116,7 +115,7 @@ export class ProfileComponent implements OnInit {
           () => {
             this.toastService.openSuccessToast('Profile information has been saved');
             this.form.markAsPristine();
-            this.router.navigate(['professional'], { relativeTo: this.route.parent });
+            this.router.navigate(['regulatory'], { relativeTo: this.route.parent });
           },
           (error: any) => {
             this.toastService.openErrorToast('Profile information could not be saved');
