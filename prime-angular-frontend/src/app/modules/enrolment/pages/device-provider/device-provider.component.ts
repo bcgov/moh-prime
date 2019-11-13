@@ -54,9 +54,9 @@ export class DeviceProviderComponent implements OnInit {
             this.toastService.openSuccessToast('Device Provider information has been saved');
             this.form.markAsPristine();
             if (payload.certifications.length > 0) {
-              this.router.navigate(['declaration'], { relativeTo: this.route.parent });
+              this.router.navigate([EnrolmentRoutes.SELF_DECLARATION], { relativeTo: this.route.parent });
             } else {
-              this.router.navigate(['job'], { relativeTo: this.route.parent });
+              this.router.navigate([EnrolmentRoutes.JOB], { relativeTo: this.route.parent });
             }
           },
           (error: any) => {
