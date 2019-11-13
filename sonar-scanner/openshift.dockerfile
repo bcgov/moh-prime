@@ -13,7 +13,7 @@ ARG AGENT_WORKDIR=/home/jenkins/agent
 ENV AGENT_WORKDIR=${AGENT_WORKDIR}
 ENV DISPLAY :99
 ENV TEMP /tmp
-ENV 
+
 WORKDIR /home/jenkins
 USER 0
 RUN echo 'deb http://deb.debian.org/debian stretch-backports main' > /etc/apt/sources.list.d/stretch-backports.list
