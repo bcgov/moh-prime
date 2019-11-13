@@ -52,7 +52,8 @@ module.exports = function (config) {
                 '--remote-debugging-address=0.0.0.0',
                 '--disable-dev-shm-usage',
                 '--disable-setuid-sandbox',
-                '--disable-namespace-sandbox'
+                '--disable-namespace-sandbox',
+                '--window-size=800x600'
             ]
         }
     },

@@ -11,6 +11,7 @@ LABEL Description="This is a base image, which provides the jenkins agent execut
 ENV HOME /home/jenkins
 ARG AGENT_WORKDIR=/home/jenkins/agent
 ENV AGENT_WORKDIR=${AGENT_WORKDIR}
+ENV DISPLAY :99
 WORKDIR /home/jenkins
 USER 0
 RUN echo 'deb http://deb.debian.org/debian stretch-backports main' > /etc/apt/sources.list.d/stretch-backports.list
@@ -72,6 +73,8 @@ RUN echo "Installing Node..." && \
     curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
     apt-get -yqq install nodejs && \
     mkdir -p /usr/lib/node_modules/chromedriver/lib/chromedriver && \
+    chmod -R a+rwx /usr/lib/node_modules && \ 
+    chown -R default:0 /usr/lib/node_modules && \ 
     cp /usr/bin/chromedriver /usr/lib/node_modules/chromedriver/lib/chromedriver && \
     echo 'kernel.unprivileged_userns_clone=1' > /etc/sysctl.d/userns.conf && \
     export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 && \

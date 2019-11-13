@@ -72,6 +72,8 @@ RUN echo "Installing Node..." && \
     curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
     apt-get -yqq install nodejs && \
     mkdir -p /usr/lib/node_modules/chromedriver/lib/chromedriver && \
+    chmod -R a+rwx /usr/lib/node_modules && \ 
+    chown -R default:0 /usr/lib/node_modules && \ 
     cp /usr/bin/chromedriver /usr/lib/node_modules/chromedriver/lib/chromedriver && \
     echo 'kernel.unprivileged_userns_clone=1' > /etc/sysctl.d/userns.conf && \
     export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 && \
