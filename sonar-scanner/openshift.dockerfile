@@ -45,6 +45,7 @@ RUN echo "Installing common, jenkins and Sonar Scanner prerequisites..." && \
     apt-get -yq install openjdk-8-jre && \
     wget -q http://sourceforge.net/projects/sonar-pkg/files/deb/binary/sonar_6.7.4_all.deb && \
     dpkg -i sonar_6.7.4_all.deb && \
+    mkdir -p /var/lib/origin && \
     chown -R default:0 /home/jenkins && \
     chmod -R a+rwx /home/jenkins && \
     chown -R default:0 ${AGENT_WORKDIR} && \
@@ -117,14 +118,13 @@ USER 0
 # All files in jenkins home need to be writable 
 RUN chown -R default:0 /home/jenkins && \
     chmod -R a+rwx /home/jenkins && \
-    chown -R default:0 ${AGENT_WORKDIR} && \
-    chmod -R a+rwx ${AGENT_WORKDIR} && \
-    chown -R default:0 ${AGENT_WORKDIR} && \
-    chmod -R a+rwx ${AGENT_WORKDIR} && \
-    chmod -R a+rwx /home/jenkins && \
     chmod -R 777 /home/jenkins && \
+    chown -R default:0 ${AGENT_WORKDIR} && \
+    chmod -R a+rwx ${AGENT_WORKDIR} && \
+    chown -R default:0 ${AGENT_WORKDIR} && \
+    chmod -R a+rwx /var/lib/origin && \
+    chown -R default:0  /var/lib/origin && \
     chmod +x /home/jenkins/agent/entrypoint.bash
-
 
 # For local testing
 #COPY ../ ./moh-prime
