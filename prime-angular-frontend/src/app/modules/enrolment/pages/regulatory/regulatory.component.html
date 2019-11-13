@@ -2,9 +2,11 @@
       [formGroup]="form"
       novalidate>
 
-  <h1 class="h2 mb-4">Application Enrolment</h1>
+  <app-page-header>Application Enrolment</app-page-header>
 
-  <app-sub-header subheader="Regulatory Information"></app-sub-header>
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Regulatory Information</ng-container>
+  </app-page-subheader>
 
   <div class="row"
        formArrayName="certifications">
