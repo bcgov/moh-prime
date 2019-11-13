@@ -14,7 +14,48 @@
   </head>
 
   <body>
-    <app-root></app-root>
+    <app-root>
+
+      <style>
+        app-root {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+        }
+
+        body {
+          background: white;
+          margin: 0;
+          padding: 0;
+        }
+
+        @keyframes zoominoutsinglefeatured {
+          0% {
+            transform: scale(1, 1);
+          }
+
+          50% {
+            transform: scale(1.2, 1.2);
+          }
+
+          100% {
+            transform: scale(1, 1);
+          }
+        }
+
+        img {
+          animation: zoominoutsinglefeatured 1s infinite;
+          /* Applied to constrain SVG in Firefox */
+          max-width: 100px;
+        }
+      </style>
+
+      <img src="/assets/prime_logo.svg"
+           alt="PRIME Logo">
+
+    </app-root>
+
   </body>
 
 </html>

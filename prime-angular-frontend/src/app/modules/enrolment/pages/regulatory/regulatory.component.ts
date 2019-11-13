@@ -1,10 +1,9 @@
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
-import { FormGroup, FormArray, FormControl, AbstractControl } from '@angular/forms';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormGroup, FormArray, AbstractControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, Subscription } from 'rxjs';
 
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
@@ -14,6 +13,7 @@ import { Enrolment } from '@shared/models/enrolment.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
 import { EnrolmentResource } from '../../shared/services/enrolment-resource.service';
+import { EnrolmentRoutes } from '@enrolment/enrolent.routes';
 
 @Component({
   selector: 'app-regulatory',
@@ -21,11 +21,12 @@ import { EnrolmentResource } from '../../shared/services/enrolment-resource.serv
   styleUrls: ['./regulatory.component.scss']
 })
 export class RegulatoryComponent implements OnInit, OnDestroy {
-
+  public busy: Subscription;
   public form: FormGroup;
   public jobForm: FormGroup;
   public colleges: Config<number>[];
   public licenses: Config<number>[];
+  public EnrolmentRoutes = EnrolmentRoutes;
 
   constructor(
     private route: ActivatedRoute,
@@ -50,13 +51,13 @@ export class RegulatoryComponent implements OnInit, OnDestroy {
       this.clearEmptyCertifications();
       this.clearJobForm();
       const payload = this.enrolmentStateService.enrolment;
-      this.enrolmentResource.updateEnrolment(payload)
+      this.busy = this.enrolmentResource.updateEnrolment(payload)
         .subscribe(
           () => {
             this.toastService.openSuccessToast('Regulatory information has been saved');
             this.form.markAsPristine();
             this.certifications.clear();
-            this.router.navigate(['device-provider'], { relativeTo: this.route.parent });
+            this.router.navigate([EnrolmentRoutes.DEVICE_PROVIDER], { relativeTo: this.route.parent });
           },
           (error: any) => {
             this.toastService.openErrorToast('Regulatory information could not be saved');
@@ -95,7 +96,7 @@ export class RegulatoryComponent implements OnInit, OnDestroy {
 
     // TODO: detect enrolment already exists and don't reload
     // TODO: apply guard if not enrolment is found to redirect to profile
-    this.enrolmentResource.enrolments()
+    this.busy = this.enrolmentResource.enrolments()
       .subscribe((enrolment: Enrolment) => {
         if (enrolment) {
           this.enrolmentStateService.enrolment = enrolment;

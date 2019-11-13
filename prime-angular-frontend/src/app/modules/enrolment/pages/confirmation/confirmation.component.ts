@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+
+import { Subscription } from 'rxjs';
+
 import { Enrolment } from '@shared/models/enrolment.model';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { EnrolmentStatusReason } from '@shared/models/enrolment-status-reason.model';
+import { EnrolmentStatusReason as EnrolmentStatusReasonEnum } from '@shared/enums/enrolment-status-reason.enum';
 
 @Component({
   selector: 'app-confirmation',
@@ -8,6 +13,7 @@ import { Enrolment } from '@shared/models/enrolment.model';
   styleUrls: ['./confirmation.component.scss']
 })
 export class ConfirmationComponent implements OnInit {
+  public busy: Subscription;
   public isAutomatic: boolean;
 
   constructor(
@@ -17,7 +23,9 @@ export class ConfirmationComponent implements OnInit {
   public ngOnInit() {
     this.enrolmentService.enrolment$
       .subscribe((enrolment: Enrolment) => {
-        this.isAutomatic = (!enrolment.currentStatus.enrolmentStatusReasons.length) ? true : false;
+        // Only automatic if the enrolment reason is `Automatic`
+        this.isAutomatic = enrolment.currentStatus.enrolmentStatusReasons
+          .every((reason: EnrolmentStatusReason) => reason.statusReasonCode === EnrolmentStatusReasonEnum.AUTOMATIC);
       });
   }
 }

@@ -1,4 +1,4 @@
-<div>
+<app-busy-overlay [busy]="busy">
 
   <app-page-header>Pharmacist Enrolment</app-page-header>
 
@@ -13,17 +13,15 @@
       <dl class="row mb-4">
         <dt class="col-sm-12 col-md-6 py-1">Name</dt>
         <dd class="col-sm-12 col-md-6 py-1">
-          {{ enrolment.enrollee.firstName }} {{ enrolment.enrollee.middleName }} {{ enrolment.enrollee.lastName }}&nbsp;
+          {{ enrolment | enrolment:'fullName' }}&nbsp;
         </dd>
         <ng-container
                       *ngIf="enrolment.enrollee.preferredFirstName || enrolment.enrollee.preferredMiddleName || enrolment.enrollee.preferredLastName">
           <dt class="col-sm-12 col-md-6 py-1">Preferred Name</dt>
           <dd class="col-sm-12 col-md-6 py-1">
-            {{ enrolment.enrollee.preferredFirstName }} {{ enrolment.enrollee.preferredMiddleName }}
-            {{ enrolment.enrollee.preferredLastName }}&nbsp;
+            {{ enrolment | enrolment:'preferredName' }}&nbsp;
           </dd>
         </ng-container>
-
         <dt class="col-sm-12 col-md-6 py-1">Date of Birth</dt>
         <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.dateOfBirth | formatDate }}&nbsp;</dd>
       </dl>
@@ -83,22 +81,21 @@
       <dl class="row mb-4">
         <dt class="col-sm-12 col-md-6 py-1">Voice Phone</dt>
         <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.voicePhone | phone }}&nbsp;</dd>
-        <ng-container *ngIf="enrolment?.enrollee.voiceExtension">
+        <ng-container *ngIf="enrolment.enrollee.voiceExtension">
           <dt class="col-sm-12 col-md-6 py-1">Extension</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.voiceExtension }}&nbsp;</dd>
         </ng-container>
-
       </dl>
 
       <ng-container *ngIf="enrolment?.enrollee.contactPhone || enrolment?.enrollee.contactEmail">
         <h3 class="lead">Preferred Contact</h3>
 
         <dl class="row mb-4">
-          <ng-container *ngIf="enrolment?.enrollee.contactPhone">
+          <ng-container *ngIf="enrolment.enrollee.contactPhone">
             <dt class="col-sm-12 col-md-6 py-1">Phone</dt>
             <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.contactPhone | phone }}&nbsp;</dd>
           </ng-container>
-          <ng-container *ngIf="enrolment?.enrollee.contactEmail">
+          <ng-container *ngIf="enrolment.enrollee.contactEmail">
             <dt class="col-sm-12 col-md-6 py-1">Email</dt>
             <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.contactEmail }}&nbsp;</dd>
           </ng-container>
@@ -183,14 +180,15 @@
           <dd class="col-sm-12 col-md-6 py-1">{{ certification.licenseCode | configCode: 'licenses' }}&nbsp;</dd>
           <dt class="col-sm-12 col-md-6 py-1">Renewal Date</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ certification.renewalDate | formatDate }}&nbsp;</dd>
-          <dt class="col-sm-12 col-md-6 py-1">Advanced Practices</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ certification.practiceCode | configCode: 'practices' }}&nbsp;</dd>
+          <ng-container *ngIf="certification.practiceCode">
+            <dt class="col-sm-12 col-md-6 py-1">Advanced Practices</dt>
+            <dd class="col-sm-12 col-md-6 py-1">{{ certification.practiceCode | configCode: 'practices' }}&nbsp;</dd>
+          </ng-container>
         </dl>
 
       </ng-container>
 
       <dl class="row mb-4">
-
         <ng-container *ngIf="enrolment.deviceProviderNumber">
           <dt class="col-sm-12 col-md-6 py-1">Device Provider Number</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.deviceProviderNumber }}&nbsp;</dd>
@@ -214,28 +212,19 @@
       </dl>
 
       <app-page-subheader>
-        <ng-container appPageSubheaderTitle>PharmaNet Access</ng-container>
+        <ng-container appPageSubheaderTitle>Organization Information</ng-container>
       </app-page-subheader>
 
       <ng-container *ngIf="enrolment.organizations.length; else noOrganization">
 
         <h3 class="lead">Organizations</h3>
 
-        <dl class="row mb-4"
-            *ngFor="let organization of enrolment.organizations; let i = index">
-          <dt class="col-sm-12 col-md-6 py-1">Organization Name</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ organization.name }}&nbsp;</dd>
-          <dt class="col-sm-12 col-md-6 py-1">Organization Type</dt>
-          <dd class="col-sm-12 col-md-6 py-1">
+        <ul *ngFor="let organization of enrolment.organizations; let i = index"
+            class="row mb-4">
+          <li class="col-sm-12 py-1">
             {{ organization.organizationTypeCode | configCode: 'organizationTypes' }}&nbsp;
-          </dd>
-          <dt class="col-sm-12 col-md-6 py-1">City</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ organization.city }}&nbsp;</dd>
-          <dt class="col-sm-12 col-md-6 py-1">Start Date</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ organization.startDate | formatDate }}&nbsp;</dd>
-          <dt class="col-sm-12 col-md-6 py-1">End Date</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ organization.endDate | formatDate }}&nbsp;</dd>
-        </dl>
+          </li>
+        </ul>
 
       </ng-container>
 
@@ -256,4 +245,4 @@
     </div>
   </div>
 
-</div>
+</app-busy-overlay>

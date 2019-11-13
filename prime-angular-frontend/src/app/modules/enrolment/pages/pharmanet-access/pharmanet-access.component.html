@@ -1,152 +1,79 @@
-<form (ngSubmit)="onSubmit()"
-      [formGroup]="form"
-      novalidate>
+<app-busy-overlay [busy]="busy">
 
-  <app-page-header>Application Enrolment</app-page-header>
+  <form (ngSubmit)="onSubmit()"
+        [formGroup]="form"
+        novalidate>
 
-  <app-page-subheader>
-    <ng-container appPageSubheaderTitle>PharmaNet Access</ng-container>
-    <ng-container appPageSubheaderSummary>
-      Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-    </ng-container>
-  </app-page-subheader>
+    <app-page-header>Application Enrolment</app-page-header>
 
-  <div class="row">
-    <div class="col text-right">
-
-      <button mat-raised-button
-              type="button"
-              class="mb-3"
-              color="primary"
-              (click)="addOrganization()"
-              [disabled]="organizations.invalid">Add Organization</button>
-
-    </div>
-  </div>
-
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">Organization Type</th>
-        <th scope="col">Organization Name</th>
-        <th scope="col">City</th>
-        <th scope="col">Start Date</th>
-        <th scope="col">End Date</th>
-        <th>&nbsp;</th>
-      </tr>
-    </thead>
-    <tbody formArrayName="organizations">
-
-      <ng-container *ngIf="organizations.controls.length; else noOrganization">
-        <ng-container *ngFor="let organization of organizations.controls; let i = index; let first = first"
-                      [formGroupName]="i">
-
-          <tr>
-            <td>
-
-              <mat-form-field class="w-100">
-                <mat-label>Organization Type</mat-label>
-                <mat-select formControlName="organizationTypeCode">
-                  <mat-option *ngFor="let organizationName of organizationNames"
-                              [value]="organizationName.code">{{ organizationName.name }}</mat-option>
-                </mat-select>
-                <mat-error *ngIf="organizations.at(i).get('organizationTypeCode').hasError('required')">Required
-                </mat-error>
-              </mat-form-field>
-
-            </td>
-            <td>
-
-              <mat-form-field class="w-100">
-                <input matInput
-                       placeholder="Organization Name"
-                       formControlName="name">
-                <mat-error *ngIf="organizations.at(i).get('name').hasError('required')">Required</mat-error>
-              </mat-form-field>
-
-            </td>
-            <td>
-
-              <mat-form-field class="w-100">
-                <input matInput
-                       placeholder="City"
-                       formControlName="city">
-                <mat-error *ngIf="organizations.at(i).get('city').hasError('required')">Required</mat-error>
-              </mat-form-field>
-
-            </td>
-            <td>
-
-              <mat-form-field class="w-100">
-                <input matInput
-                       placeholder="Start Date"
-                       [matDatepicker]="startDatePicker"
-                       formControlName="startDate"
-                       (click)="startDatePicker.open()">
-                <mat-datepicker-toggle matSuffix
-                                       [for]="startDatePicker"></mat-datepicker-toggle>
-                <mat-datepicker #startDatePicker
-                                startView="multi-year"
-                                [touchUi]="isMobile"></mat-datepicker>
-                <mat-error *ngIf="organizations.at(i).get('startDate').hasError('required')">Required</mat-error>
-              </mat-form-field>
-
-            </td>
-            <td>
-
-              <mat-form-field class="w-100">
-                <input matInput
-                       placeholder="End Date"
-                       [matDatepicker]="endDatePicker"
-                       formControlName="endDate"
-                       (click)="endDatePicker.open()">
-                <mat-datepicker-toggle matSuffix
-                                       [for]="endDatePicker"></mat-datepicker-toggle>
-                <mat-datepicker #endDatePicker
-                                startView="multi-year"
-                                [touchUi]="isMobile"></mat-datepicker>
-              </mat-form-field>
-
-            </td>
-            <td>
-
-              <mat-icon class="remove-organization"
-                        (click)="removeOrganization(i)">close</mat-icon>
-
-            </td>
-          </tr>
-
-        </ng-container>
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>Organization Information</ng-container>
+      <ng-container appPageSubheaderSummary>
+        Please identify the organization(s) for which you will be accessing PharmaNet.
       </ng-container>
+    </app-page-subheader>
 
-    </tbody>
-  </table>
+    <div class="row mb-3">
+      <div class="col-sm-12 col-md-6 col-xl-5">
 
-  <ng-template #noOrganization>
+        <mat-form-field class="w-100">
+          <input type="text"
+                 placeholder="Organization Type"
+                 matInput
+                 [formControl]="organizationCtrl"
+                 [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete"
+                            [displayWith]="displayOrganization">
+            <mat-option *ngFor="let organizationType of filteredOrganizationTypes"
+                        [value]="organizationType"
+                        [disabled]="disableOrganization(organizationType.code)">
+              {{ organizationType.name }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
 
-    <tr>
-      <td colspan="6">
-        <div class="lead px-2 py-3 text-muted text-center">Not associated with an organization</div>
-      </td>
-    </tr>
+      </div>
+      <div class="col">
 
-  </ng-template>
+        <button mat-raised-button
+                type="button"
+                color="primary"
+                class="mb-3 mt-1"
+                [disabled]="!organizationCtrl.value"
+                (click)="addOrganization()">Add Organization</button>
 
-  <div class="row justify-content-between">
-    <div class="col pt-4">
-
-      <button mat-stroked-button
-              type="button"
-              routerLink="../declaration">Back</button>
-
+      </div>
     </div>
-    <div class="col pt-4 text-right">
 
-      <button mat-raised-button
-              type="submit"
-              color="primary">Save and Continue</button>
+    <ng-container *ngIf="organizations.length">
 
+      <mat-chip-list class="mat-chip-list-stacked">
+        <mat-chip *ngFor="let organization of organizations.controls; let i = index">
+          {{ organizationLookup(organization.value.organizationTypeCode) }}
+          <mat-icon matChipRemove
+                    (click)="removeOrganization(i)">cancel</mat-icon>
+        </mat-chip>
+      </mat-chip-list>
+
+    </ng-container>
+
+    <div class="row justify-content-between">
+      <div class="col pt-4">
+
+        <button mat-stroked-button
+                type="button"
+                [routerLink]="['..', EnrolmentRoutes.SELF_DECLARATION]">Back</button>
+
+      </div>
+      <div class="col pt-4 text-right">
+
+        <button mat-raised-button
+                type="submit"
+                color="primary">Save and Continue</button>
+
+      </div>
     </div>
-  </div>
 
-</form>
+  </form>
+
+</app-busy-overlay>

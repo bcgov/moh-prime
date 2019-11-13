@@ -1,123 +1,127 @@
-<app-page-header>Pharmacist Enrolments</app-page-header>
+<app-busy-overlay [busy]="busy">
 
-<div class="row justify-content-end">
-  <div class="col text-right">
+  <app-page-header>Pharmacist Enrolments</app-page-header>
 
-    <mat-form-field>
-      <mat-label>Filter By Status</mat-label>
-      <mat-select value=""
-                  (selectionChange)="filterByStatus($event)">
-        <mat-option value="">All</mat-option>
-        <mat-option *ngFor="let status of statuses"
-                    [value]="status.code">
-          {{ status.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+  <div class="row justify-content-end">
+    <div class="col text-right">
 
+      <mat-form-field>
+        <mat-label>Filter By Status</mat-label>
+        <mat-select value=""
+                    (selectionChange)="filterByStatus($event)">
+          <mat-option value="">All</mat-option>
+          <mat-option *ngFor="let status of statuses"
+                      [value]="status.code">
+            {{ status.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </div>
   </div>
-</div>
 
-<table mat-table
-       [dataSource]="dataSource"
-       class="w-100">
+  <table mat-table
+         [dataSource]="dataSource"
+         class="w-100">
 
-  <!-- Applied Date Column -->
-  <ng-container matColumnDef="appliedDate">
-    <th mat-header-cell
-        *matHeaderCellDef> Application Date </th>
-    <td mat-cell
-        *matCellDef="let enrolment"> {{ enrolment.appliedDate | formatDate }} </td>
-  </ng-container>
+    <!-- Applied Date Column -->
+    <ng-container matColumnDef="appliedDate">
+      <th mat-header-cell
+          *matHeaderCellDef> Application Date </th>
+      <td mat-cell
+          *matCellDef="let enrolment"> {{ enrolment.appliedDate | formatDate }} </td>
+    </ng-container>
 
-  <!-- Name Column -->
-  <ng-container matColumnDef="name">
-    <th mat-header-cell
-        *matHeaderCellDef> Name </th>
-    <td mat-cell
-        *matCellDef="let enrolment"> {{ enrolment.enrollee.firstName }} {{ enrolment.enrollee.lastName }} </td>
-  </ng-container>
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell
+          *matHeaderCellDef> Name </th>
+      <td mat-cell
+          *matCellDef="let enrolment"> {{ enrolment.enrollee.firstName }} {{ enrolment.enrollee.lastName }} </td>
+    </ng-container>
 
-  <!-- Status Column -->
-  <ng-container matColumnDef="status">
-    <th mat-header-cell
-        *matHeaderCellDef> Status </th>
-    <td mat-cell
-        *matCellDef="let enrolment">
-      <mat-chip-list>
-        <mat-chip>{{ enrolment.currentStatus.status.name }}</mat-chip>
-      </mat-chip-list>
-    </td>
-  </ng-container>
+    <!-- Status Column -->
+    <ng-container matColumnDef="status">
+      <th mat-header-cell
+          *matHeaderCellDef> Status </th>
+      <td mat-cell
+          *matCellDef="let enrolment">
+        <mat-chip-list>
+          <mat-chip>{{ enrolment.currentStatus.status.name }}</mat-chip>
+        </mat-chip-list>
+      </td>
+    </ng-container>
 
-  <!-- Approved Date Column -->
-  <ng-container matColumnDef="approvedDate">
-    <th mat-header-cell
-        *matHeaderCellDef> Approval Date </th>
-    <td mat-cell
-        *matCellDef="let enrolment"> {{ enrolment.approvedDate | formatDate }} </td>
-  </ng-container>
+    <!-- Approved Date Column -->
+    <ng-container matColumnDef="approvedDate">
+      <th mat-header-cell
+          *matHeaderCellDef> Approval Date </th>
+      <td mat-cell
+          *matCellDef="let enrolment"> {{ enrolment.approvedDate | formatDate }} </td>
+    </ng-container>
 
-  <!-- Actions Column -->
-  <ng-container matColumnDef="actions">
-    <th mat-header-cell
-        *matHeaderCellDef>&nbsp;</th>
-    <td mat-cell
-        *matCellDef="let enrolment"
-        class="text-right">
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell
+          *matHeaderCellDef>&nbsp;</th>
+      <td mat-cell
+          *matCellDef="let enrolment"
+          class="text-right">
 
-      <ng-container [ngTemplateOutlet]="menu"
-                    [ngTemplateOutletContext]="{ enrolment: enrolment }"></ng-container>
+        <ng-container [ngTemplateOutlet]="menu"
+                      [ngTemplateOutletContext]="{ enrolment: enrolment }"></ng-container>
 
-    </td>
-  </ng-container>
+      </td>
+    </ng-container>
 
-  <tr mat-header-row
-      *matHeaderRowDef="columns; sticky: true"></tr>
-  <tr mat-row
-      *matRowDef="let row; columns: columns;"></tr>
-</table>
+    <tr mat-header-row
+        *matHeaderRowDef="columns; sticky: true"></tr>
+    <tr mat-row
+        *matRowDef="let row; columns: columns;"></tr>
+  </table>
 
-<p *ngIf="!dataSource?.data.length"
-   class="px-4 py-2 text-muted">
-  No {{ filteredStatus?.name }} Enrolments
-</p>
+  <p *ngIf="!dataSource?.data.length"
+     class="px-4 py-2 text-muted">
+    No {{ filteredStatus?.name }} Enrolments
+  </p>
 
-<ng-template #menu
-             let-enrolment="enrolment">
-  <button mat-icon-button
-          [matMenuTriggerFor]="menu">
-    <mat-icon>more_vert</mat-icon>
-  </button>
-
-  <mat-menu #menu="matMenu">
-    <button mat-menu-item
-            [routerLink]="[enrolment.id]">
-      <mat-icon>remove_red_eye</mat-icon>
-      <span>View Enrolment</span>
+  <ng-template #menu
+               let-enrolment="enrolment">
+    <button mat-icon-button
+            [matMenuTriggerFor]="menu">
+      <mat-icon>more_vert</mat-icon>
     </button>
-    <button mat-menu-item
-            *ngIf="enrolment.currentStatus.enrolmentStatusReasons.length"
-            (click)="reviewStatusReasons(enrolment)">
-      <mat-icon>flag</mat-icon>
-      <span>Review Status Reasons</span>
-    </button>
-    <button mat-menu-item
-            *ngIf="canApproveOrDeny(enrolment.currentStatus.status.code)"
-            (click)="approveEnrolment(enrolment.id)">
-      <mat-icon>check_circle_outline</mat-icon>
-      <span>Approve Enrolment</span>
-    </button>
-    <button mat-menu-item
-            *ngIf="canApproveOrDeny(enrolment.currentStatus.status.code)"
-            (click)="declineEnrolment(enrolment.id)">
-      <mat-icon>block</mat-icon>
-      <span>Decline Enrolment</span>
-    </button>
-    <button mat-menu-item
-            (click)="deleteEnrolment(enrolment.id)">
-      <mat-icon>delete</mat-icon>
-      <span>Delete Enrolment</span>
-    </button>
-  </mat-menu>
-</ng-template>
+
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item
+              [routerLink]="[enrolment.id]">
+        <mat-icon>remove_red_eye</mat-icon>
+        <span>View Enrolment</span>
+      </button>
+      <button mat-menu-item
+              *ngIf="enrolment.currentStatus.enrolmentStatusReasons.length"
+              (click)="reviewStatusReasons(enrolment)">
+        <mat-icon>flag</mat-icon>
+        <span>Review Status Reasons</span>
+      </button>
+      <button mat-menu-item
+              *ngIf="canApproveOrDeny(enrolment.currentStatus.status.code)"
+              (click)="approveEnrolment(enrolment.id)">
+        <mat-icon>check_circle_outline</mat-icon>
+        <span>Approve Enrolment</span>
+      </button>
+      <button mat-menu-item
+              *ngIf="canApproveOrDeny(enrolment.currentStatus.status.code)"
+              (click)="declineEnrolment(enrolment.id)">
+        <mat-icon>block</mat-icon>
+        <span>Decline Enrolment</span>
+      </button>
+      <button mat-menu-item
+              (click)="deleteEnrolment(enrolment.id)">
+        <mat-icon>delete</mat-icon>
+        <span>Delete Enrolment</span>
+      </button>
+    </mat-menu>
+  </ng-template>
+
+</app-busy-overlay>

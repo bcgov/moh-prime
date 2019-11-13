@@ -3,15 +3,15 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
-import { ConfigService } from '@config/config.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
-import { EnrolmentResource } from '../../shared/services/enrolment-resource.service';
+import { EnrolmentRoutes } from '@enrolment/enrolent.routes';
+import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 
 @Component({
   selector: 'app-device-provider',
@@ -19,11 +19,12 @@ import { EnrolmentResource } from '../../shared/services/enrolment-resource.serv
   styleUrls: ['./device-provider.component.scss']
 })
 export class DeviceProviderComponent implements OnInit {
-
+  public busy: Subscription;
   public form: FormGroup;
   public decisions: { code: boolean, name: string }[] = [
     { code: false, name: 'No' }, { code: true, name: 'Yes' }
   ];
+  public EnrolmentRoutes = EnrolmentRoutes;
 
   constructor(
     private route: ActivatedRoute,
@@ -47,15 +48,15 @@ export class DeviceProviderComponent implements OnInit {
   public onSubmit() {
     if (this.form.valid) {
       const payload = this.enrolmentStateService.enrolment;
-      this.enrolmentResource.updateEnrolment(payload)
+      this.busy = this.enrolmentResource.updateEnrolment(payload)
         .subscribe(
           () => {
             this.toastService.openSuccessToast('Device Provider information has been saved');
             this.form.markAsPristine();
             if (payload.certifications.length > 0) {
-              this.router.navigate(['declaration'], { relativeTo: this.route.parent });
+              this.router.navigate([EnrolmentRoutes.SELF_DECLARATION], { relativeTo: this.route.parent });
             } else {
-              this.router.navigate(['job'], { relativeTo: this.route.parent });
+              this.router.navigate([EnrolmentRoutes.JOB], { relativeTo: this.route.parent });
             }
           },
           (error: any) => {
@@ -84,7 +85,7 @@ export class DeviceProviderComponent implements OnInit {
 
     // TODO: detect enrolment already exists and don't reload
     // TODO: apply guard if not enrolment is found to redirect to profile
-    this.enrolmentResource.enrolments()
+    this.busy = this.enrolmentResource.enrolments()
       .subscribe((enrolment: Enrolment) => {
         if (enrolment) {
           this.enrolmentStateService.enrolment = enrolment;

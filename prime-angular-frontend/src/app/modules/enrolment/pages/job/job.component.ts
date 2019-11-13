@@ -3,7 +3,7 @@ import { FormGroup, FormArray, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog, MatChipInputEvent, MatAutocompleteSelectedEvent } from '@angular/material';
 
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 
 import { Config } from '@config/config.model';
@@ -15,6 +15,7 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 import { Job } from '../../shared/models/job.model';
 import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
 import { EnrolmentResource } from '../../shared/services/enrolment-resource.service';
+import { EnrolmentRoutes } from '@enrolment/enrolent.routes';
 
 @Component({
   selector: 'app-job',
@@ -22,7 +23,7 @@ import { EnrolmentResource } from '../../shared/services/enrolment-resource.serv
   styleUrls: ['./job.component.scss']
 })
 export class JobComponent implements OnInit {
-
+  public busy: Subscription;
   public form: FormGroup;
   public jobCtrl: FormControl;
   @ViewChild('jobInput', { static: false }) jobInput: ElementRef<HTMLInputElement>;
@@ -31,6 +32,7 @@ export class JobComponent implements OnInit {
   ];
   public jobNames: Config<number>[];
   public filteredJobNames: Observable<Config<number>[]>;
+  public EnrolmentRoutes = EnrolmentRoutes;
 
   constructor(
     private route: ActivatedRoute,
@@ -53,12 +55,12 @@ export class JobComponent implements OnInit {
     if (this.form.valid) {
       this.clearCollegeForm();
       const payload = this.enrolmentStateService.enrolment;
-      this.enrolmentResource.updateEnrolment(payload)
+      this.busy = this.enrolmentResource.updateEnrolment(payload)
         .subscribe(
           () => {
             this.toastService.openSuccessToast('Job information has been saved');
             this.form.markAsPristine();
-            this.router.navigate(['declaration'], { relativeTo: this.route.parent });
+            this.router.navigate([EnrolmentRoutes.SELF_DECLARATION], { relativeTo: this.route.parent });
           },
           (error: any) => {
             this.toastService.openErrorToast('Job information could not be saved');
@@ -122,7 +124,7 @@ export class JobComponent implements OnInit {
 
     // TODO: detect enrolment already exists and don't reload
     // TODO: apply guard if not enrolment is found to redirect to profile
-    this.enrolmentResource.enrolments()
+    this.busy = this.enrolmentResource.enrolments()
       .subscribe((enrolment: Enrolment) => {
         if (enrolment) {
           this.initMultiSelect();

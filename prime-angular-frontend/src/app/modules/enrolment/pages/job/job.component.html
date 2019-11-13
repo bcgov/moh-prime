@@ -1,65 +1,67 @@
-<form (ngSubmit)="onSubmit()"
-      [formGroup]="form"
-      novalidate>
+<app-busy-overlay [busy]="busy">
 
-  <h1 class="h2 mb-4">Application Enrolment</h1>
+  <form (ngSubmit)="onSubmit()"
+        [formGroup]="form"
+        novalidate>
 
-  <app-page-header>Job Information</app-page-header>
+    <app-page-header>Application Enrolment</app-page-header>
 
-  <app-page-subheader>
-    <ng-container appPageSubheaderTitle>Regulatory Information</ng-container>
-    <ng-container appPageSubheaderSummary>
-      If you have provided a Device Number you do not have to provide a job title unless you are going to be accessing
-      PharmaNet in a different position.
-    </ng-container>
-  </app-page-subheader>
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>Job Information</ng-container>
+      <ng-container appPageSubheaderSummary>
+        If you have provided a Device Number you do not have to provide a job title unless you are going to be accessing
+        PharmaNet in a different position.
+      </ng-container>
+    </app-page-subheader>
 
-  <div class="row">
-    <div class="col-sm-12 col-md-6 col-xl-4">
+    <div class="row">
+      <div class="col-sm-12 col-md-6 col-xl-5">
 
-      <mat-form-field class="w-100">
-        <mat-chip-list #chipList>
-          <mat-chip *ngFor="let job of jobs.controls; let i = index"
-                    [selectable]="true"
-                    [removable]="true"
-                    (removed)="removeJob(i)">
-            {{ job.value.title }}
-            <mat-icon matChipRemove>cancel</mat-icon>
-          </mat-chip>
-          <input placeholder="Job Title"
-                 #jobInput
-                 [matAutocomplete]="auto"
-                 [matChipInputFor]="chipList"
-                 [matChipInputAddOnBlur]="true"
-                 (matChipInputTokenEnd)="addJob($event)"
-                 [formControl]="jobCtrl">
-        </mat-chip-list>
-        <mat-autocomplete #auto="matAutocomplete"
-                          (optionSelected)="selectedJob($event)">
-          <mat-option *ngFor="let job of filteredJobNames | async"
-                      [value]="job.name">
-            {{ job.name }}
-          </mat-option>
-        </mat-autocomplete>
-      </mat-form-field>
+        <mat-form-field class="w-100">
+          <mat-chip-list #chipList>
+            <mat-chip *ngFor="let job of jobs.controls; let i = index"
+                      [selectable]="true"
+                      [removable]="true"
+                      (removed)="removeJob(i)">
+              {{ job.value.title }}
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+            <input placeholder="Job Title"
+                   #jobInput
+                   [matAutocomplete]="auto"
+                   [matChipInputFor]="chipList"
+                   [matChipInputAddOnBlur]="true"
+                   (matChipInputTokenEnd)="addJob($event)"
+                   [formControl]="jobCtrl">
+          </mat-chip-list>
+          <mat-autocomplete #auto="matAutocomplete"
+                            (optionSelected)="selectedJob($event)">
+            <mat-option *ngFor="let job of filteredJobNames | async"
+                        [value]="job.name">
+              {{ job.name }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
 
+      </div>
     </div>
-  </div>
 
-  <div class="row justify-content-between">
-    <div class="col pt-2">
+    <div class="row justify-content-between">
+      <div class="col pt-2">
 
-      <button mat-raised-button
-              type="button"
-              routerLink="../device-provider">Back</button>
+        <button mat-stroked-button
+                type="button"
+                [routerLink]="['..', EnrolmentRoutes.DEVICE_PROVIDER]">Back</button>
 
+      </div>
+      <div class="col pt-2 text-right">
+
+        <button mat-raised-button
+                color="primary">Save and Continue</button>
+
+      </div>
     </div>
-    <div class="col pt-2 text-right">
 
-      <button mat-raised-button
-              color="primary">Save and Continue</button>
+  </form>
 
-    </div>
-  </div>
-
-</form>
+</app-busy-overlay>

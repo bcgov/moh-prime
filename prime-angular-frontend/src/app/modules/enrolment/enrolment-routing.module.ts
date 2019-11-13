@@ -6,6 +6,7 @@ import { CanDeactivateFormGuard } from '@core/guards/can-deactivate-form.guard';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 
+import { EnrolmentRoutes } from './enrolent.routes';
 import { EnrolleeGuard } from './shared/guards/enrollee.guard';
 import { EnrolmentGuard } from './shared/guards/enrolment.guard';
 
@@ -20,6 +21,7 @@ import { SummaryComponent } from './pages/summary/summary.component';
 import { DeviceProviderComponent } from './pages/device-provider/device-provider.component';
 import { JobComponent } from './pages/job/job.component';
 
+
 const routes: Routes = [
   {
     path: 'enrolment',
@@ -32,57 +34,54 @@ const routes: Routes = [
     resolve: [ConfigResolver],
     children: [
       {
-        path: 'profile',
+        path: EnrolmentRoutes.PROFILE,
         component: ProfileComponent,
         canDeactivate: [CanDeactivateFormGuard]
       },
       {
-        path: 'regulatory',
+        path: EnrolmentRoutes.REGULATORY,
         component: RegulatoryComponent,
-        canActivate: [EnrolmentGuard],
         canDeactivate: [CanDeactivateFormGuard]
       },
       {
-        path: 'device-provider',
+        path: EnrolmentRoutes.DEVICE_PROVIDER,
         component: DeviceProviderComponent,
-        canActivate: [EnrolmentGuard],
         canDeactivate: [CanDeactivateFormGuard]
       },
       {
-        path: 'job',
+        path: EnrolmentRoutes.JOB,
         component: JobComponent,
-        canActivate: [EnrolmentGuard],
         canDeactivate: [CanDeactivateFormGuard]
       },
       {
-        path: 'declaration',
+        path: EnrolmentRoutes.SELF_DECLARATION,
         component: SelfDeclarationComponent,
         canDeactivate: [CanDeactivateFormGuard]
       },
       {
-        path: 'access',
+        path: EnrolmentRoutes.PHARMANET_ACCESS,
         component: PharmanetAccessComponent,
         canDeactivate: [CanDeactivateFormGuard]
       },
       {
-        path: 'review',
+        path: EnrolmentRoutes.REVIEW,
         component: ReviewComponent
       },
       {
-        path: 'confirmation',
+        path: EnrolmentRoutes.CONFIRMATION,
         component: ConfirmationComponent
       },
       {
-        path: 'agreement',
+        path: EnrolmentRoutes.ACCESS_AGREEMENT,
         component: AccessAgreementComponent
       },
       {
-        path: 'summary',
+        path: EnrolmentRoutes.SUMMARY,
         component: SummaryComponent
       },
       {
         path: '', // Equivalent to `/` and alias for `profile`
-        redirectTo: 'profile',
+        redirectTo: EnrolmentRoutes.PROFILE,
         pathMatch: 'full'
       }
     ]

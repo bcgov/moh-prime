@@ -42,20 +42,6 @@ export class FormControlValidators {
   }
 
   /**
-   * Checks the form control value is a date.
-   *
-   * @static
-   * @param {AbstractControl} control
-   * @returns {{ [key: string]: any }}
-   * @memberof FormControlValidators
-   */
-  static date(control: AbstractControl): ValidationErrors | null {
-    if (!control.value) { return null; }
-    // TODO: use moment or regexp to verify date format
-    return null;
-  }
-
-  /**
    * Checks the form control value is an email address.
    *
    * @static

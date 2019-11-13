@@ -16,11 +16,10 @@ export class EnrolmentStateService {
   // TODO revisit access to form groups as service is refined, but for now public
   // TODO make into BehaviourSubject or asObservable, which would make it immutable
   public profileForm: FormGroup;
-  public professionalInfoForm: FormGroup;
   public regulatoryForm: FormGroup;
-  public jobsForm: FormGroup;
   public collegeCertificationForm: FormGroup;
   public deviceProviderForm: FormGroup;
+  public jobsForm: FormGroup;
   public selfDeclarationForm: FormGroup;
   public pharmaNetAccessForm: FormGroup;
 
@@ -32,10 +31,9 @@ export class EnrolmentStateService {
     private fb: FormBuilder
   ) {
     this.profileForm = this.buildProfileForm();
-    this.professionalInfoForm = this.buildProfessionalInfoForm();
     this.regulatoryForm = this.buildRegulatoryForm();
-    this.jobsForm = this.buildJobsForm();
     this.deviceProviderForm = this.buildDeviceProviderForm();
+    this.jobsForm = this.buildJobsForm();
     this.selfDeclarationForm = this.buildSelfDeclarationForm();
     this.pharmaNetAccessForm = this.buildPharmaNetAccessForm();
   }
@@ -94,14 +92,6 @@ export class EnrolmentStateService {
 
   public isProfileInfoValid(): boolean {
     return this.profileForm.valid;
-  }
-
-  public isProfessionalInfoValid(): boolean {
-    return (
-      this.isRegulatoryValid() &&
-      this.isDeviceProviderValid() &&
-      this.isJobsValid()
-    );
   }
 
   public isRegulatoryValid(): boolean {
@@ -209,37 +199,9 @@ export class EnrolmentStateService {
     });
   }
 
-  private buildProfessionalInfoForm(): FormGroup {
+  public buildRegulatoryForm(): FormGroup {
     return this.fb.group({
       certifications: this.fb.array([]),
-      deviceProviderNumber: [null, [
-        FormControlValidators.numeric,
-        FormControlValidators.requiredLength(5)
-      ]],
-      isInsulinPumpProvider: [null, [FormControlValidators.requiredBoolean]],
-      jobs: this.fb.array([]),
-    });
-  }
-
-  private buildRegulatoryForm(): FormGroup {
-    return this.fb.group({
-      certifications: this.fb.array([]),
-    });
-  }
-
-  private buildDeviceProviderForm(): FormGroup {
-    return this.fb.group({
-      deviceProviderNumber: [null, [
-        FormControlValidators.numeric,
-        FormControlValidators.requiredLength(5)
-      ]],
-      isInsulinPumpProvider: [false, [FormControlValidators.requiredBoolean]]
-    });
-  }
-
-  private buildJobsForm(): FormGroup {
-    return this.fb.group({
-      jobs: this.fb.array([]),
     });
   }
 
@@ -255,6 +217,22 @@ export class EnrolmentStateService {
       licenseCode: [null, []],
       renewalDate: [null, []],
       practiceCode: [null, []]
+    });
+  }
+
+  public buildDeviceProviderForm(): FormGroup {
+    return this.fb.group({
+      deviceProviderNumber: [null, [
+        FormControlValidators.numeric,
+        FormControlValidators.requiredLength(5)
+      ]],
+      isInsulinPumpProvider: [false, [FormControlValidators.requiredBoolean]]
+    });
+  }
+
+  public buildJobsForm(): FormGroup {
+    return this.fb.group({
+      jobs: this.fb.array([]),
     });
   }
 
@@ -284,14 +262,10 @@ export class EnrolmentStateService {
     });
   }
 
-  public buildOrganizationForm(): FormGroup {
+  public buildOrganizationForm(code: number = null): FormGroup {
     return this.fb.group({
       id: [null, []],
-      organizationTypeCode: [null, [Validators.required]],
-      name: [null, [Validators.required]],
-      city: [null, [Validators.required]],
-      startDate: [null, [Validators.required]],
-      endDate: [null, []]
+      organizationTypeCode: [code, [Validators.required]]
     });
   }
 }

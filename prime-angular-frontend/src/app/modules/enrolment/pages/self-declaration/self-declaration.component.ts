@@ -3,12 +3,13 @@ import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { EnrolmentRoutes } from '@enrolment/enrolent.routes';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { FormUtilsService } from '@enrolment/shared/services/form-utils.service';
@@ -20,10 +21,12 @@ import { FormUtilsService } from '@enrolment/shared/services/form-utils.service'
   styleUrls: ['./self-declaration.component.scss']
 })
 export class SelfDeclarationComponent implements OnInit {
+  public busy: Subscription;
   public form: FormGroup;
   public decisions: { code: boolean, name: string }[] = [
     { code: false, name: 'No' }, { code: true, name: 'Yes' }
   ];
+  public EnrolmentRoutes = EnrolmentRoutes;
 
   constructor(
     private route: ActivatedRoute,
@@ -71,12 +74,12 @@ export class SelfDeclarationComponent implements OnInit {
   public onSubmit() {
     if (this.form.valid) {
       const payload = this.enrolmentStateService.enrolment;
-      this.enrolmentResource.updateEnrolment(payload)
+      this.busy = this.enrolmentResource.updateEnrolment(payload)
         .subscribe(
           () => {
             this.toastService.openSuccessToast('Self declaration has been saved');
             this.form.markAsPristine();
-            this.router.navigate(['access'], { relativeTo: this.route.parent });
+            this.router.navigate([EnrolmentRoutes.PHARMANET_ACCESS], { relativeTo: this.route.parent });
           },
           (error: any) => {
             this.toastService.openErrorToast('Self declaration could not be saved');
@@ -90,9 +93,9 @@ export class SelfDeclarationComponent implements OnInit {
   public onBack() {
     const currentEnrolment = this.enrolmentStateService.enrolment;
     if (currentEnrolment.certifications.length === 0) {
-      this.router.navigate(['job'], { relativeTo: this.route.parent });
+      this.router.navigate([EnrolmentRoutes.JOB], { relativeTo: this.route.parent });
     } else {
-      this.router.navigate(['device-provider'], { relativeTo: this.route.parent });
+      this.router.navigate([EnrolmentRoutes.DEVICE_PROVIDER], { relativeTo: this.route.parent });
     }
   }
 
@@ -112,7 +115,7 @@ export class SelfDeclarationComponent implements OnInit {
 
     // TODO: detect enrolment already exists and don't reload
     // TODO: apply guard if not enrolment is found to redirect to profile
-    this.enrolmentResource.enrolments()
+    this.busy = this.enrolmentResource.enrolments()
       .subscribe((enrolment: Enrolment) => {
         if (enrolment) {
           this.enrolmentStateService.enrolment = enrolment;
