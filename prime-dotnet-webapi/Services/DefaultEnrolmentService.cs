@@ -12,7 +12,6 @@ namespace Prime.Services
     public class DefaultEnrolmentService : BaseService, IEnrolmentService
     {
         private readonly IAutomaticAdjudicationService _automaticAdjudicationService;
-        private readonly IEmailService _emailService;
 
         private class StatusWrapper
         {
@@ -25,11 +24,10 @@ namespace Prime.Services
         private static Status NULL_STATUS = new Status { Code = -1, Name = "No Status" };
 
         public DefaultEnrolmentService(
-            ApiDbContext context, IHttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService, IEmailService emailService)
+            ApiDbContext context, IHttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService)
             : base(context, httpContext)
         {
             _automaticAdjudicationService = automaticAdjudicationService;
-            _emailService = emailService;
         }
 
         private Dictionary<Status, StatusWrapper[]> GetWorkFlowStateMap()
@@ -394,7 +392,6 @@ namespace Prime.Services
             }
 
             throw new InvalidOperationException("Could not create enrolment status, status change is not allowed.");
-            return null;
         }
 
         private string GenerateLicensePlate()
