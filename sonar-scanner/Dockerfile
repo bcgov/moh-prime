@@ -64,7 +64,6 @@ RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-ke
     wget -q https://chromedriver.storage.googleapis.com/2.41/chromedriver_linux64.zip && \
     unzip chromedriver_linux64.zip && \
     mv chromedriver /usr/bin/chromedriver && \
-    chown root:root /usr/bin/chromedriver && \
     chmod +x /usr/bin/chromedriver && \
     chmod 777 /usr/bin/chromedriver
 
@@ -72,6 +71,8 @@ RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-ke
 RUN echo "Installing Node..." && \
     curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
     apt-get -yqq install nodejs && \
+    mkdir -p /usr/lib/node_modules/chromedriver/lib/chromedriver && \
+    cp /usr/bin/chromedriver /usr/lib/node_modules/chromedriver/lib/chromedriver && \
     echo 'kernel.unprivileged_userns_clone=1' > /etc/sysctl.d/userns.conf && \
     export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 && \
     chmod -R a+rwx /usr/lib/node_modules/ && \
