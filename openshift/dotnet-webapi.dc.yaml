@@ -34,7 +34,6 @@ objects:
         kompose.cmd: >-
           kompose convert --provider=openshift --build=build-config
           --build-repo=https://github.com/bcgov/moh-prime.git
-
           --build-branch=develop --deployment-config
         kompose.version: 1.18.0 (06a2e56)
       creationTimestamp: null
@@ -118,8 +117,8 @@ objects:
       name: '${NAME}${SUFFIX}'
     spec:
       ports:
-        - name: '5000'
-          port: 5000
+        - name: '8080'
+          port: 8080
           targetPort: 8080
         - name: '5001'
           port: 5001
