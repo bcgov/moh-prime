@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatCheckboxChange } from '@angular/material';
 
 import { map, exhaustMap } from 'rxjs/operators';
 import { EMPTY, Subscription } from 'rxjs';
@@ -14,15 +14,22 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 import { EnrolmentRoutes } from '@enrolment/enrolent.routes';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-access-agreement',
   templateUrl: './access-agreement.component.html',
   styleUrls: ['./access-agreement.component.scss']
 })
+// TODO hacked to align last minute with demo expectations :(
 export class AccessAgreementComponent implements OnInit {
   public busy: Subscription;
   public enrolment: Enrolment;
+  public currentPageNumber: number;
+  public disabledAgreement: boolean;
+  public hasAcceptedEachPage: boolean;
+  public totalPages: number;
+  public acceptCtrl: FormControl;
 
   constructor(
     private route: ActivatedRoute,
@@ -32,7 +39,15 @@ export class AccessAgreementComponent implements OnInit {
     private toastService: ToastService,
     private dialog: MatDialog,
     private logger: LoggerService
-  ) { }
+  ) {
+    this.currentPageNumber = 0;
+    this.disabledAgreement = true;
+    this.hasAcceptedEachPage = false;
+  }
+
+  public get isMOA(): boolean {
+    return true;
+  }
 
   public onSubmit() {
     const enrolment = this.enrolmentStateService.enrolment;
@@ -53,13 +68,34 @@ export class AccessAgreementComponent implements OnInit {
       .subscribe(
         () => {
           this.toastService.openSuccessToast('Access agreement has been accepted');
-          this.router.navigate([EnrolmentRoutes.CONFIRMATION], { relativeTo: this.route.parent });
+          this.router.navigate([EnrolmentRoutes.SUMMARY], { relativeTo: this.route.parent });
         },
         (error: any) => {
           this.toastService.openErrorToast('Access agreement could not be accepted');
           this.logger.error('[Enrolment] AccessAgreement::onSubmit error has occurred: ', error);
         }
       );
+  }
+
+  public onPrint() {
+    this.toastService.openSuccessToast('Acceptance agreement is being prepared for downloading and printing')
+  }
+
+  public onCheckAcceptance(event: MatCheckboxChange) {
+    this.disabledAgreement = !event.checked;
+  }
+
+  public onAcceptPage() {
+    this.currentPageNumber++;
+
+    if (this.currentPageNumber === 13) {
+      // Show accept agreement instead of continue
+      this.hasAcceptedEachPage = true;
+    } else {
+      // Disable continue and reset acceptance check
+      this.disabledAgreement = true;
+      this.acceptCtrl.reset();
+    }
   }
 
   public ngOnInit() {
@@ -70,7 +106,10 @@ export class AccessAgreementComponent implements OnInit {
       .subscribe((enrolment: Enrolment) => {
         if (enrolment) {
           this.enrolmentStateService.enrolment = enrolment;
+          this.totalPages = 13; // MOA/OBO
         }
       });
+
+    this.acceptCtrl = new FormControl();
   }
 }
