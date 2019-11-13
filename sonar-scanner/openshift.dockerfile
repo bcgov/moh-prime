@@ -16,8 +16,8 @@ USER 0
 RUN echo 'deb http://deb.debian.org/debian stretch-backports main' > /etc/apt/sources.list.d/stretch-backports.list
 RUN mkdir /home/jenkins/.jenkins && \
     mkdir -p ${AGENT_WORKDIR} && \
-    apt-get -yq update && \
-    apt-get -yq install -t stretch-backports \
+    apt-get -yqq update && \
+    apt-get -yqq install -t stretch-backports \
         git-lfs \
         vim \
         nano \
@@ -28,6 +28,7 @@ RUN mkdir /home/jenkins/.jenkins && \
         libgconf-2-4 \
         maven \
         apt-transport-https && \
+        lspci && \
     curl --create-dirs -fsSLo /usr/share/jenkins/agent.jar http://jenkins-prod/jnlpJars/agent.jar && \
     chmod 755 /usr/share/jenkins && \
     chmod 644 /usr/share/jenkins/agent.jar && \
@@ -37,14 +38,14 @@ VOLUME /home/jenkins/.jenkins
 VOLUME ${AGENT_WORKDIR}
 
 SHELL ["/bin/bash", "-c"]
-COPY . ${AGENT_WORKDIR}
+COPY . ${WORKDIR}
 
 # ENV JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64/jre/bin
 ENV PATH $PATH:$JAVA_HOME:/var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScanner/bin:/opt/sonar/bin
 #COMMON
 RUN echo "Installing common, jenkins and Sonar Scanner prerequisites..." && \
     useradd default && \
-    apt-get -yq install openjdk-8-jre && \
+    apt-get -yqq install openjdk-8-jre && \
     wget -q http://sourceforge.net/projects/sonar-pkg/files/deb/binary/sonar_6.7.4_all.deb && \
     dpkg -i sonar_6.7.4_all.deb && \
     mkdir -p /var/lib/origin && \
@@ -54,11 +55,12 @@ RUN echo "Installing common, jenkins and Sonar Scanner prerequisites..." && \
     chmod -R a+rwx ${AGENT_WORKDIR} && \
     chmod 777 /etc/passwd
 
-# Headless Chrome
+# Headless Browsers
 RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
+    apt-add-repository ppa:mozillateam/firefox-next && \
     echo "deb [arch=amd64]  http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list && \
-    apt-get -yq update && \
-    apt-get -yq install google-chrome-stable && \
+    apt-get -yqq update && \
+    apt-get -yqq install google-chrome-stable firefox && \
     wget -q https://chromedriver.storage.googleapis.com/2.41/chromedriver_linux64.zip && \
     unzip chromedriver_linux64.zip && \
     mv chromedriver /usr/bin/chromedriver && \
@@ -69,13 +71,13 @@ RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-ke
 # Node
 RUN echo "Installing Node..." && \
     curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
-    apt-get -yq install nodejs && \
+    apt-get -yqq install nodejs && \
     echo 'kernel.unprivileged_userns_clone=1' > /etc/sysctl.d/userns.conf && \
     export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 && \
     mkdir -p /usr/lib/node_modules/chromedriver/lib/chromedriver && \
     chmod -R a+rwx /usr/lib/node_modules/ && \
     npm install -g --silent @angular/cli @angular/core && \
-    echo n | npm install -g --silent chromium chromedriver selenium-webdriver @angular-devkit/build-angular @angular/compiler @angular/compiler-cli typescript puppeteer jasmine karma karma-chrome-launcher karma-mocha karma-chai karma-jasmine karma-jasmine-html-reporter karma-coverage-istanbul-reporter 
+    echo n | npm install -g --silent chromium chromedriver selenium-webdriver @angular-devkit/build-angular @angular/compiler @angular/compiler-cli typescript puppeteer jasmine karma karma-chrome-launcher karma-mocha karma-chai karma-jasmine karma-jasmine-html-reporter karma-coverage-istanbul-reporter selenium-webdriver geckodriver
 
 #.NET 2.2
 ENV ASPNETCORE_ENVIRONMENT Development
@@ -87,8 +89,8 @@ RUN echo "Installing .NET, coverlet, scanner..." && \
     mv prod.list /etc/apt/sources.list.d/microsoft-prod.list && \
     chown root:root /etc/apt/trusted.gpg.d/microsoft.asc.gpg && \
     chown root:root /etc/apt/sources.list.d/microsoft-prod.list && \
-    apt-get -yq update && \
-    apt-get -yq install dotnet-sdk-2.2 && \
+    apt-get -yqq update && \
+    apt-get -yqq install dotnet-sdk-2.2 && \
     dotnet tool install --global coverlet.console && \
     dotnet tool install --global dotnet-sonarscanner --version 4.7.1 && \
     mkdir -p /.dotnet && \
