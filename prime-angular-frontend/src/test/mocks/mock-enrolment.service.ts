@@ -37,12 +37,9 @@ export class MockEnrolmentService implements IEnrolmentService {
       },
       appliedDate: null,
       approvedDate: null,
-      hasCertification: null,
       certifications: [],
-      isDeviceProvider: null,
       deviceProviderNumber: null,
       isInsulinPumpProvider: null,
-      isAccessingPharmaNetOnBehalfOf: null,
       jobs: [],
       hasConviction: null,
       hasConvictionDetails: null,
@@ -89,8 +86,6 @@ export class MockEnrolmentService implements IEnrolmentService {
   }
 
   public get enrolment(): Enrolment {
-    console.log('ENROLMENT', this._enrolment.value);
-
     return this._enrolment.value;
   }
 

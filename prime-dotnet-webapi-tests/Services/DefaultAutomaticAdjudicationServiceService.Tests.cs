@@ -13,7 +13,6 @@ namespace PrimeTests.Services
         private void UpdateCertifications(Enrolment enrolment, bool hasCertification = false)
         {
             // update certification information
-            enrolment.HasCertification = hasCertification;
             if (hasCertification)
             {
                 enrolment.Certifications = TestUtils.CertificationFaker.Generate(1);
@@ -27,7 +26,7 @@ namespace PrimeTests.Services
         private void UpdateDeviceProvider(Enrolment enrolment, bool provider = false, bool pumpProvider = false)
         {
             // update device provider information
-            enrolment.IsDeviceProvider = provider;
+            // enrolment.IsDeviceProvider = provider;
             if (provider)
             {
                 enrolment.DeviceProviderNumber = TestUtils.RandomDeviceProviderNumber();

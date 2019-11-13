@@ -162,7 +162,7 @@ export class FormControlValidators {
    */
   static requiredLength(minLength: number, maxLength?: number): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      if (!control.value || !minLength) { return null; }
+      if (!control.value) { return null; }
       if (!maxLength) { maxLength = minLength; }
       const currentLength = control.value.length;
       const valid = (control.valid
