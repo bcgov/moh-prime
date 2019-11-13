@@ -315,91 +315,86 @@ namespace Prime.Services
 
         private async Task<EnrolmentStatus> CreateEnrolmentStatusInternalAsync(int enrolmentId, Status status)
         {
-            // var enrolment = await this.GetBaseEnrolmentQuery()
-            //     .AsNoTracking()
-            //     .SingleOrDefaultAsync(e => e.Id == enrolmentId);
-            // if (enrolment == null)
-            // {
-            //     return null;
-            // }
+            var enrolment = await this.GetBaseEnrolmentQuery()
+                .AsNoTracking()
+                .SingleOrDefaultAsync(e => e.Id == enrolmentId);
+            if (enrolment == null)
+            {
+                return null;
+            }
 
-            // var currentStatus = enrolment.CurrentStatus?.Status;
+            var currentStatus = enrolment.CurrentStatus?.Status;
 
-            // // make sure the status change is allowed
-            // if (IsStatusChangeAllowed(currentStatus ?? NULL_STATUS, status))
-            // {
-            //     // update all of the existing statuses to not be current, and then create a new current status
-            //     if (currentStatus != null)
-            //     {
-            //         enrolment.CurrentStatus.IsCurrent = false;
-            //     }
-            //     var existingEnrolmentStatuses = await this.GetEnrolmentStatusesAsync(enrolmentId);
-            //     foreach (var enrolmentStatus in existingEnrolmentStatuses)
-            //     {
-            //         enrolmentStatus.IsCurrent = false;
-            //     }
+            // make sure the status change is allowed
+            if (IsStatusChangeAllowed(currentStatus ?? NULL_STATUS, status))
+            {
+                // update all of the existing statuses to not be current, and then create a new current status
+                if (currentStatus != null)
+                {
+                    enrolment.CurrentStatus.IsCurrent = false;
+                }
+                var existingEnrolmentStatuses = await this.GetEnrolmentStatusesAsync(enrolmentId);
+                foreach (var enrolmentStatus in existingEnrolmentStatuses)
+                {
+                    enrolmentStatus.IsCurrent = false;
+                }
 
-            //     // create a new enrolment status
-            //     var createdEnrolmentStatus = new EnrolmentStatus { EnrolmentId = enrolmentId, StatusCode = status.Code, StatusDate = DateTime.Now, IsCurrent = true };
-            //     _context.EnrolmentStatuses.Add(createdEnrolmentStatus);
-            //     enrolment.EnrolmentStatuses.Add(createdEnrolmentStatus);
+                // create a new enrolment status
+                var createdEnrolmentStatus = new EnrolmentStatus { EnrolmentId = enrolmentId, StatusCode = status.Code, StatusDate = DateTime.Now, IsCurrent = true };
+                _context.EnrolmentStatuses.Add(createdEnrolmentStatus);
+                enrolment.EnrolmentStatuses.Add(createdEnrolmentStatus);
 
-            //     switch (status?.Code)
-            //     {
-            //         case Status.SUBMITTED_CODE:
-            //             // check to see if this should be auto adjudicated
-            //             if (_automaticAdjudicationService.QualifiesForAutomaticAdjudication(enrolment))
-            //             {
-            //                 // change the status to adjudicated/approved
-            //                 createdEnrolmentStatus.IsCurrent = false;
-            //                 // create a new approved enrolment status
-            //                 var adjudicatedEnrolmentStatus = new EnrolmentStatus { EnrolmentId = enrolmentId, StatusCode = Status.APPROVED_CODE, StatusDate = DateTime.Now, IsCurrent = true };
-            //                 adjudicatedEnrolmentStatus.EnrolmentStatusReasons = new List<EnrolmentStatusReason> { new EnrolmentStatusReason { EnrolmentStatus = adjudicatedEnrolmentStatus, StatusReasonCode = StatusReason.AUTOMATIC_CODE } };
-            //                 _context.EnrolmentStatuses.Add(adjudicatedEnrolmentStatus);
-            //                 enrolment.EnrolmentStatuses.Add(adjudicatedEnrolmentStatus);
-            //                 // flip to the object that will get returned
-            //                 createdEnrolmentStatus = adjudicatedEnrolmentStatus;
-            //             }
-            //             break;
-            //         case Status.APPROVED_CODE:
-            //             // add the manual reason code, send email
-            //             createdEnrolmentStatus.EnrolmentStatusReasons = new List<EnrolmentStatusReason> { new EnrolmentStatusReason { EnrolmentStatus = createdEnrolmentStatus, StatusReasonCode = StatusReason.MANUAL_CODE } };
-                        // if (!string.IsNullOrWhiteSpace(enrolment.Enrollee?.ContactEmail))
-                        // {
-                            _emailService.Send("THE.MINISTER.OF.HEALTH@prime.bc.ca", "to@email.com", "Your application has been approved", "It's approved! Yay!");
-                            // _emailService.Send("THE.MINISTER.OF.HEALTH@prime.bc.ca", enrolment.Enrollee?.ContactEmail, "Your application has been approved", "It's approved! Yay!");
-                        // }
-                //         break;
+                switch (status?.Code)
+                {
+                    case Status.SUBMITTED_CODE:
+                        // check to see if this should be auto adjudicated
+                        if (_automaticAdjudicationService.QualifiesForAutomaticAdjudication(enrolment))
+                        {
+                            // change the status to adjudicated/approved
+                            createdEnrolmentStatus.IsCurrent = false;
+                            // create a new approved enrolment status
+                            var adjudicatedEnrolmentStatus = new EnrolmentStatus { EnrolmentId = enrolmentId, StatusCode = Status.APPROVED_CODE, StatusDate = DateTime.Now, IsCurrent = true };
+                            adjudicatedEnrolmentStatus.EnrolmentStatusReasons = new List<EnrolmentStatusReason> { new EnrolmentStatusReason { EnrolmentStatus = adjudicatedEnrolmentStatus, StatusReasonCode = StatusReason.AUTOMATIC_CODE } };
+                            _context.EnrolmentStatuses.Add(adjudicatedEnrolmentStatus);
+                            enrolment.EnrolmentStatuses.Add(adjudicatedEnrolmentStatus);
+                            // flip to the object that will get returned
+                            createdEnrolmentStatus = adjudicatedEnrolmentStatus;
+                        }
+                        break;
+                    case Status.APPROVED_CODE:
+                        // add the manual reason code, send email
+                        createdEnrolmentStatus.EnrolmentStatusReasons = new List<EnrolmentStatusReason> { new EnrolmentStatusReason { EnrolmentStatus = createdEnrolmentStatus, StatusReasonCode = StatusReason.MANUAL_CODE } };                        
+                        break;
 
-                //     case Status.ACCEPTED_TOS_CODE:
-                //         // create the license plate for this enrollee
-                //         var enrollee = await _context.Enrollees
-                //             .SingleAsync(e => e.Id == enrolment.EnrolleeId);
+                    case Status.ACCEPTED_TOS_CODE:
+                        // create the license plate for this enrollee
+                        var enrollee = await _context.Enrollees
+                            .SingleAsync(e => e.Id == enrolment.EnrolleeId);
 
-                //         enrollee.LicensePlate = this.GenerateLicensePlate();
-                //         break;
-                // }
+                        enrollee.LicensePlate = this.GenerateLicensePlate();
+                        break;
+                }
 
-                // if (Status.ACCEPTED_TOS_CODE.Equals(status?.Code))
-                // {
-                //     //create the license plate for this enrollee
-                //     var enrollee = await _context.Enrollees
-                //         .SingleAsync(e => e.Id == enrolment.EnrolleeId);
+                if (Status.ACCEPTED_TOS_CODE.Equals(status?.Code))
+                {
+                    //create the license plate for this enrollee
+                    var enrollee = await _context.Enrollees
+                        .SingleAsync(e => e.Id == enrolment.EnrolleeId);
 
-                //     enrollee.LicensePlate = this.GenerateLicensePlate();
-                // }
+                    enrollee.LicensePlate = this.GenerateLicensePlate();
+                }
 
-                // var created = await _context.SaveChangesAsync();
-                // if (created < 1)
-                // {
-                //     throw new InvalidOperationException("Could not create enrolment status.");
-                // }
+                var created = await _context.SaveChangesAsync();
+                if (created < 1)
+                {
+                    throw new InvalidOperationException("Could not create enrolment status.");
+                }
 
-            //     return createdEnrolmentStatus;
-            // }
+                return createdEnrolmentStatus;
+            }
 
-            // throw new InvalidOperationException("Could not create enrolment status, status change is not allowed.");
-            return null; 
+            throw new InvalidOperationException("Could not create enrolment status, status change is not allowed.");
+            return null;
         }
 
         private string GenerateLicensePlate()

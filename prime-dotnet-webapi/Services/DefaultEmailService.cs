@@ -29,24 +29,23 @@ namespace Prime.Services
             };
 
             SmtpClient smtp = new SmtpClient("localhost", 1025);
-            // try
-            // {
-            smtp.Send(mail);
+            try
+            {
+                smtp.Send(mail);
+            }
+            catch (Exception ex)
+            {
+                if (ex is InvalidOperationException
+                 || ex is SmtpException
+                 || ex is SmtpFailedRecipientException
+                 || ex is SmtpFailedRecipientsException)
+                {
+                    // TODO: Log failure
+                    return;
+                }
 
-            // }
-            // catch (Exception ex)
-            // {
-            //     if (ex is InvalidOperationException
-            //      || ex is SmtpException
-            //      || ex is SmtpFailedRecipientException
-            //      || ex is SmtpFailedRecipientsException)
-            //     {
-            //         Console.Write(ex.Message);
-            //         return;
-            //     }
-
-            //     throw;
-            // }
+                throw;
+            }
         }
     }
 }
