@@ -82,6 +82,17 @@
     }
   }
 
+  .mat-list-item-content {
+    border-right: 5px solid transparent !important;
+    padding-left: 25px !important;
+  }
+
+  .active {
+    .mat-list-item-content {
+      border-right: 5px solid theme-palette(yellow) !important;
+    }
+  }
+
   .active a {
     font-weight: bold !important;
   }

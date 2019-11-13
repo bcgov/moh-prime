@@ -108,7 +108,8 @@ export class DashboardComponent implements OnInit {
             name: 'Enrolment',
             icon: statusIcons.enrolment,
             route: EnrolmentRoutes.PROFILE,
-            showItem: true
+            showItem: true,
+            forceActive: (statusCode === EnrolmentStatus.IN_PROGRESS)
           },
           {
             name: 'Access Agreement',
