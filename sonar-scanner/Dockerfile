@@ -67,7 +67,9 @@ RUN echo "Installing Node..." && \
     apt-get -yq install nodejs && \
     echo 'kernel.unprivileged_userns_clone=1' > /etc/sysctl.d/userns.conf && \
     export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 && \
-    npm install -g --silent @angular/cli \
+    npm install -g --silent @angular/cli chromium \
+        chromedriver \ 
+        selenium-webdriver \
         @angular/core \ 
         @angular-devkit/build-angular \
         @angular/compiler \ 

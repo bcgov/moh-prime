@@ -72,21 +72,7 @@ RUN echo "Installing Node..." && \
     apt-get -yq install nodejs && \
     echo 'kernel.unprivileged_userns_clone=1' > /etc/sysctl.d/userns.conf && \
     export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 && \
-    npm install -g --silent @angular/cli \
-        @angular/core \ 
-        @angular-devkit/build-angular \
-        @angular/compiler \ 
-        @angular/compiler-cli \ 
-        typescript \ 
-        puppeteer \ 
-        jasmine \ 
-        karma \ 
-        karma-chrome-launcher \ 
-        karma-mocha \ 
-        karma-chai \ 
-        karma-jasmine \
-        karma-jasmine-html-reporter \
-        karma-coverage-istanbul-reporter 
+    echo n | npm install -g --silent @angular/cli @angular/core chromium chromedriver selenium-webdriver @angular-devkit/build-angular @angular/compiler @angular/compiler-cli typescript puppeteer jasmine karma karma-chrome-launcher karma-mocha karma-chai karma-jasmine karma-jasmine-html-reporter karma-coverage-istanbul-reporter 
 
 #.NET 2.2
 ENV ASPNETCORE_ENVIRONMENT Development

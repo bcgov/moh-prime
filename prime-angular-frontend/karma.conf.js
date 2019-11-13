@@ -51,7 +51,8 @@ module.exports = function (config) {
                 '--remote-debugging-port=9222',
                 '--remote-debugging-address=0.0.0.0',
                 '--disable-dev-shm-usage',
-                '--disable-setuid-sandbox'
+                '--disable-setuid-sandbox',
+                '--disable-namespace-sandbox'
             ]
         }
     },
