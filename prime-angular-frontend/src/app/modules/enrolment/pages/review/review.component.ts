@@ -63,6 +63,9 @@ export class ReviewComponent implements OnInit {
     } else {
       // TODO indicate where validation failed in the review to prompt user edits
       console.log('PROFILE', this.enrolmentStateService.isProfileInfoValid());
+      console.log('REGULATORY', this.enrolmentStateService.isRegulatoryValid());
+      console.log('DEVICE_PROVIDER', this.enrolmentStateService.isDeviceProviderValid());
+      console.log('JOBS', this.enrolmentStateService.isJobsValid());
       console.log('PROFESSIONAL', this.enrolmentStateService.isProfessionalInfoValid());
       console.log('DECLARATION', this.enrolmentStateService.isSelfDeclarationValid());
       console.log('ACCESS', this.enrolmentStateService.isPharmaNetAccessValid());

@@ -25,11 +25,11 @@ namespace Prime.Models
         [NotMapped]
         public DateTime? ApprovedDate { get { return this.EnrolmentStatuses?.SingleOrDefault(es => es.StatusCode == Status.APPROVED_CODE)?.StatusDate; } }
 
-        public bool? HasCertification { get; set; }
+        // public bool? HasCertification { get; set; }
 
         public ICollection<Certification> Certifications { get; set; }
 
-        public bool? IsDeviceProvider { get; set; }
+        // public bool? IsDeviceProvider { get; set; }
 
         [RegularExpression(@"([0-9]+)", ErrorMessage = "Device Provider Number should not contain characters")]
         [StringLength(5, MinimumLength = 5, ErrorMessage = "Device Provider Number must be 5 digits")]
@@ -38,7 +38,7 @@ namespace Prime.Models
 
         public bool? IsInsulinPumpProvider { get; set; }
 
-        public bool? IsAccessingPharmaNetOnBehalfOf { get; set; }
+        // public bool? IsAccessingPharmaNetOnBehalfOf { get; set; }
 
         public ICollection<Job> Jobs { get; set; }
 
