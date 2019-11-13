@@ -87,6 +87,15 @@ export class SelfDeclarationComponent implements OnInit {
     }
   }
 
+  public onBack() {
+    const currentEnrolment = this.enrolmentStateService.enrolment;
+    if (currentEnrolment.certifications.length === 0) {
+      this.router.navigate(['job'], { relativeTo: this.route.parent });
+    } else {
+      this.router.navigate(['device-provider'], { relativeTo: this.route.parent });
+    }
+  }
+
   public isRequired(path: string) {
     this.formUtilsService.isRequired(this.form, path);
   }

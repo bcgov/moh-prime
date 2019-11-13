@@ -11,12 +11,9 @@ export interface Enrolment {
   enrollee: Enrollee;
   appliedDate: string;
   approvedDate: string;
-  hasCertification: boolean;
   certifications: CollegeCertification[];
-  isDeviceProvider: boolean;
   deviceProviderNumber: string;
   isInsulinPumpProvider: boolean;
-  isAccessingPharmaNetOnBehalfOf: boolean;
   jobs: Job[];
   hasConviction: boolean;
   hasConvictionDetails: string;

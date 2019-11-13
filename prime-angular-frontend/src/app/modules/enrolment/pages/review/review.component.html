@@ -163,16 +163,16 @@
     <div class="col-sm-6">
 
       <app-sub-header subheader="Professional Information">
-        <mat-icon (click)="redirect('professional')"
+        <mat-icon (click)="redirect('regulatory')"
                   matTooltip="Edit Professional Information">edit</mat-icon>
       </app-sub-header>
 
       <dl class="row mb-4">
         <dt class="col-sm-12 col-md-6 py-1">Do you have a college certification?</dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.hasCertification) }}&nbsp;</dd>
+        <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.certifications.length > 0) }}&nbsp;</dd>
       </dl>
 
-      <ng-container *ngIf="enrolment.hasCertification">
+      <ng-container *ngIf="enrolment.certifications.length > 0">
 
         <h3 class="lead">Certifications</h3>
 
@@ -197,9 +197,7 @@
       </ng-container>
 
       <dl class="row mb-4">
-        <dt class="col-sm-12 col-md-6 py-1">Are you a device provider?</dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.isDeviceProvider) }}&nbsp;</dd>
-        <ng-container *ngIf="enrolment.isDeviceProvider">
+        <ng-container *ngIf="enrolment.deviceProviderNumber">
           <dt class="col-sm-12 col-md-6 py-1">Device Provider Number</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.deviceProviderNumber }}&nbsp;</dd>
         </ng-container>
@@ -211,9 +209,7 @@
       </dl>
 
       <dl class="row mb-4">
-        <dt class="col-sm-12 col-md-6 py-1">Are you accessing PharmaNet on behalf of someone else?</dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.isAccessingPharmaNetOnBehalfOf) }}&nbsp;</dd>
-        <ng-container *ngIf="enrolment.isAccessingPharmaNetOnBehalfOf">
+        <ng-container *ngIf="enrolment.jobs.length > 0">
           <dt class="col-sm-12 col-md-6 py-1">Job Title</dt>
           <dd class="col-sm-12 col-md-6 py-1">
             <ul class="list-unstyled">

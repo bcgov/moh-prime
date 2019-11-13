@@ -19,6 +19,8 @@ export class FormUtilsService {
         }
       });
     } else {
+      console.log('HERE I AM', validators);
+
       control.setValidators(validators);
       control.updateValueAndValidity();
     }
