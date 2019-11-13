@@ -43,6 +43,21 @@
   .active:focus,
   .mat-list-item:focus {
     background-color: theme-palette(grey, lighter) !important;
+
+    .mat-list-item-content {
+      border-right: 5px solid theme-palette(yellow) !important;
+    }
+  }
+
+  .mat-list-item-content {
+    border-right: 5px solid transparent !important;
+    padding-left: 25px !important;
+  }
+
+  .active {
+    .mat-list-item-content {
+      border-right: 5px solid theme-palette(yellow) !important;
+    }
   }
 
   .mat-list-item-content {
