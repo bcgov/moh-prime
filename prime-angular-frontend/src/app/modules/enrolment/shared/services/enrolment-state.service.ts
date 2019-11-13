@@ -284,14 +284,10 @@ export class EnrolmentStateService {
     });
   }
 
-  public buildOrganizationForm(): FormGroup {
+  public buildOrganizationForm(code: number = null): FormGroup {
     return this.fb.group({
       id: [null, []],
-      organizationTypeCode: [null, [Validators.required]],
-      name: [null, [Validators.required]],
-      city: [null, [Validators.required]],
-      startDate: [null, [Validators.required]],
-      endDate: [null, []]
+      organizationTypeCode: [code, [Validators.required]]
     });
   }
 }

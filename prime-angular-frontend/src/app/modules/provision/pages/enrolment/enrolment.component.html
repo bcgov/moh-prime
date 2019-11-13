@@ -221,21 +221,12 @@
 
         <h3 class="lead">Organizations</h3>
 
-        <dl class="row mb-4"
-            *ngFor="let organization of enrolment.organizations; let i = index">
-          <dt class="col-sm-12 col-md-6 py-1">Organization Name</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ organization.name }}&nbsp;</dd>
-          <dt class="col-sm-12 col-md-6 py-1">Organization Type</dt>
-          <dd class="col-sm-12 col-md-6 py-1">
+        <ul *ngFor="let organization of enrolment.organizations; let i = index"
+            class="row mb-4">
+          <li class="col-sm-12 col-md-6 py-1">
             {{ organization.organizationTypeCode | configCode: 'organizationTypes' }}&nbsp;
-          </dd>
-          <dt class="col-sm-12 col-md-6 py-1">City</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ organization.city }}&nbsp;</dd>
-          <dt class="col-sm-12 col-md-6 py-1">Start Date</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ organization.startDate | formatDate }}&nbsp;</dd>
-          <dt class="col-sm-12 col-md-6 py-1">End Date</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ organization.endDate | formatDate }}&nbsp;</dd>
-        </dl>
+          </li>
+        </ul>
 
       </ng-container>
 
