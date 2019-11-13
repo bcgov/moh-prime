@@ -292,30 +292,32 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiOkResponse<IEnumerable<Status>>), StatusCodes.Status200OK)]
         public async Task<ActionResult<EnrolmentStatus>> CreateEnrolmentStatus(int enrolmentId, Status status)
         {
-            var enrolment = await _enrolmentService.GetEnrolmentAsync(enrolmentId);
+            // var enrolment = await _enrolmentService.GetEnrolmentAsync(enrolmentId);
 
-            if (enrolment == null)
-            {
-                return NotFound(new ApiResponse(404, $"Enrolment not found with id {enrolmentId}"));
-            }
+            // if (enrolment == null)
+            // {
+            //     return NotFound(new ApiResponse(404, $"Enrolment not found with id {enrolmentId}"));
+            // }
 
-            if (status?.Code == null || status.Code < 1)
-            {
-                this.ModelState.AddModelError("Status.Code", "Status Code is required to create statuses.");
-                return BadRequest(new ApiBadRequestResponse(this.ModelState));
-            }
+            // if (status?.Code == null || status.Code < 1)
+            // {
+            //     this.ModelState.AddModelError("Status.Code", "Status Code is required to create statuses.");
+            //     return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            // }
 
-            // if the user is not an ADMIN, make sure the enrolment matches the enrollee, otherwise return not authorized
-            if (!BelongsToEnrollee(enrolment))
-            {
-                return Forbid();
-            }
+            // // if the user is not an ADMIN, make sure the enrolment matches the enrollee, otherwise return not authorized
+            // if (!BelongsToEnrollee(enrolment))
+            // {
+            //     return Forbid();
+            // }
 
-            if (!_enrolmentService.IsStatusChangeAllowed(enrolment.CurrentStatus?.Status, status))
-            {
-                this.ModelState.AddModelError("Status.Code", $"Cannot change from current Status Code: {enrolment.CurrentStatus?.Status?.Code} to the new Status Code: {status.Code}");
-                return BadRequest(new ApiBadRequestResponse(this.ModelState));
-            }
+            // if (!_enrolmentService.IsStatusChangeAllowed(enrolment.CurrentStatus?.Status, status))
+            // {
+            //     this.ModelState.AddModelError("Status.Code", $"Cannot change from current Status Code: {enrolment.CurrentStatus?.Status?.Code} to the new Status Code: {status.Code}");
+            //     return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            // }
+
+            return BadRequest(new { message = PrimeConstants.ENVIRONMENT_NAME });
 
             var enrolmentStatus = await _enrolmentService.CreateEnrolmentStatusAsync(enrolmentId, status);
 

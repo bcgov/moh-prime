@@ -2,6 +2,8 @@ namespace Prime
 {
     public static class PrimeConstants
     {
+        public readonly static string ENVIRONMENT_NAME = System.Environment.GetEnvironmentVariable("OC_APP") ?? "local";
+
         public readonly static string PRIME_ACCESS_TOKEN_KEY = "prime-access-token";
 
         public readonly static string PRIME_ADMIN_CLIENT = System.Environment.GetEnvironmentVariable("JWT_ADMIN_CLIENT") ?? Startup.StaticConfig["Jwt:AdminClient"];

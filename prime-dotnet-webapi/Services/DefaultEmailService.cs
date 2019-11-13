@@ -16,6 +16,11 @@ namespace Prime.Services
             var fromAddress = new MailAddress(from);
             var toAddress = new MailAddress(to);
 
+            if (PrimeConstants.ENVIRONMENT_NAME != "prod")
+            {
+                subject = $"THE FOLLOWING EMAIL IS A TEST: {subject}";
+            }
+
             MailMessage mail = new MailMessage(from: fromAddress, to: toAddress)
             {
                 Subject = subject,
@@ -23,25 +28,25 @@ namespace Prime.Services
                 IsBodyHtml = true,
             };
 
-            SmtpClient smtp = new SmtpClient("127.0.0.1", 1025);
-            try
-            {
-                smtp.Send(mail);
+            SmtpClient smtp = new SmtpClient("localhost", 1025);
+            // try
+            // {
+            smtp.Send(mail);
 
-            }
-            catch (Exception ex)
-            {
-                if (ex is InvalidOperationException
-                 || ex is SmtpException
-                 || ex is SmtpFailedRecipientException
-                 || ex is SmtpFailedRecipientsException)
-                {
-                    Console.Write(ex.Message);
-                    return;
-                }
+            // }
+            // catch (Exception ex)
+            // {
+            //     if (ex is InvalidOperationException
+            //      || ex is SmtpException
+            //      || ex is SmtpFailedRecipientException
+            //      || ex is SmtpFailedRecipientsException)
+            //     {
+            //         Console.Write(ex.Message);
+            //         return;
+            //     }
 
-                throw;
-            }
+            //     throw;
+            // }
         }
     }
 }
