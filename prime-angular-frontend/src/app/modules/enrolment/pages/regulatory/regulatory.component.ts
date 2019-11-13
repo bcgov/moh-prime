@@ -13,6 +13,7 @@ import { Enrolment } from '@shared/models/enrolment.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
 import { EnrolmentResource } from '../../shared/services/enrolment-resource.service';
+import { EnrolmentRoutes } from '@enrolment/enrolent.routes';
 
 @Component({
   selector: 'app-regulatory',
@@ -25,6 +26,7 @@ export class RegulatoryComponent implements OnInit, OnDestroy {
   public jobForm: FormGroup;
   public colleges: Config<number>[];
   public licenses: Config<number>[];
+  public EnrolmentRoutes = EnrolmentRoutes;
 
   constructor(
     private route: ActivatedRoute,

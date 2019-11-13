@@ -39,19 +39,19 @@ const routes: Routes = [
         canDeactivate: [CanDeactivateFormGuard]
       },
       {
-        path: 'regulatory',
+        path: EnrolmentRoutes.REGULATORY,
         component: RegulatoryComponent,
         canActivate: [EnrolmentGuard],
         canDeactivate: [CanDeactivateFormGuard]
       },
       {
-        path: 'device-provider',
+        path: EnrolmentRoutes.DEVICE_PROVIDER,
         component: DeviceProviderComponent,
         canActivate: [EnrolmentGuard],
         canDeactivate: [CanDeactivateFormGuard]
       },
       {
-        path: 'job',
+        path: EnrolmentRoutes.JOB,
         component: JobComponent,
         canActivate: [EnrolmentGuard],
         canDeactivate: [CanDeactivateFormGuard]

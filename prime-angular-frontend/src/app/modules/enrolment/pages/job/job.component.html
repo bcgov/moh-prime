@@ -4,12 +4,10 @@
         [formGroup]="form"
         novalidate>
 
-    <h1 class="h2 mb-4">Application Enrolment</h1>
-
-    <app-page-header>Job Information</app-page-header>
+    <app-page-header>Application Enrolment</app-page-header>
 
     <app-page-subheader>
-      <ng-container appPageSubheaderTitle>Regulatory Information</ng-container>
+      <ng-container appPageSubheaderTitle>Job Information</ng-container>
       <ng-container appPageSubheaderSummary>
         If you have provided a Device Number you do not have to provide a job title unless you are going to be accessing
         PharmaNet in a different position.
@@ -53,7 +51,7 @@
 
         <button mat-raised-button
                 type="button"
-                routerLink="../device-provider">Back</button>
+                [routerLink]="['..', EnrolmentRoutes.DEVICE_PROVIDER]">Back</button>
 
       </div>
       <div class="col pt-2 text-right">

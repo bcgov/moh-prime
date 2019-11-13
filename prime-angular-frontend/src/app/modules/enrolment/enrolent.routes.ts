@@ -9,7 +9,9 @@ export class EnrolmentRoutes extends BaseRoute {
   public static ENROLMENT = 'enrolment';
   // Enrolment
   public static PROFILE = 'profile';
-  public static PROFESSIONAL_INFO = 'professional-info';
+  public static REGULATORY = 'regulatory';
+  public static DEVICE_PROVIDER = 'device-provider';
+  public static JOB = 'job';
   public static SELF_DECLARATION = 'self-declaration';
   public static PHARMANET_ACCESS = 'pharmanet-access';
   public static REVIEW = 'review';
