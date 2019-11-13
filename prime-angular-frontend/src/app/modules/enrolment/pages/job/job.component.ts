@@ -17,20 +17,18 @@ import { EnrolmentStateService } from '../../shared/services/enrolment-state.ser
 import { EnrolmentResource } from '../../shared/services/enrolment-resource.service';
 
 @Component({
-  selector: 'app-professional-info',
-  templateUrl: './professional-info.component.html',
-  styleUrls: ['./professional-info.component.scss']
+  selector: 'app-job',
+  templateUrl: './job.component.html',
+  styleUrls: ['./job.component.scss']
 })
-export class ProfessionalInfoComponent implements OnInit {
+export class JobComponent implements OnInit {
+
   public form: FormGroup;
   public jobCtrl: FormControl;
   @ViewChild('jobInput', { static: false }) jobInput: ElementRef<HTMLInputElement>;
   public decisions: { code: boolean, name: string }[] = [
     { code: false, name: 'No' }, { code: true, name: 'Yes' }
   ];
-  public colleges: Config<number>[];
-  public licenses: Config<number>[];
-  public practices: Config<number>[];
   public jobNames: Config<number>[];
   public filteredJobNames: Observable<Config<number>[]>;
 
@@ -44,34 +42,7 @@ export class ProfessionalInfoComponent implements OnInit {
     private toastService: ToastService,
     private logger: LoggerService
   ) {
-    this.colleges = this.configService.colleges;
-    this.licenses = this.configService.licenses;
-    this.practices = this.configService.practices;
     this.jobNames = this.configService.jobNames;
-  }
-
-  public get hasCertification(): FormControl {
-    return this.form.get('hasCertification') as FormControl;
-  }
-
-  public get certifications(): FormArray {
-    return this.form.get('certifications') as FormArray;
-  }
-
-  public get isDeviceProvider(): FormControl {
-    return this.form.get('isDeviceProvider') as FormControl;
-  }
-
-  public get deviceProviderNumber(): FormControl {
-    return this.form.get('deviceProviderNumber') as FormControl;
-  }
-
-  public get isInsulinPumpProvider(): FormControl {
-    return this.form.get('isInsulinPumpProvider') as FormControl;
-  }
-
-  public get isAccessingPharmaNetOnBehalfOf(): FormControl {
-    return this.form.get('isAccessingPharmaNetOnBehalfOf') as FormControl;
   }
 
   public get jobs(): FormArray {
@@ -80,17 +51,18 @@ export class ProfessionalInfoComponent implements OnInit {
 
   public onSubmit() {
     if (this.form.valid) {
+      this.clearCollegeForm();
       const payload = this.enrolmentStateService.enrolment;
       this.enrolmentResource.updateEnrolment(payload)
         .subscribe(
           () => {
-            this.toastService.openSuccessToast('Professional information has been saved');
+            this.toastService.openSuccessToast('Job information has been saved');
             this.form.markAsPristine();
             this.router.navigate(['declaration'], { relativeTo: this.route.parent });
           },
           (error: any) => {
-            this.toastService.openErrorToast('Professional information could not be saved');
-            this.logger.error('[Enrolment] Professional::onSubmit error has occurred: ', error);
+            this.toastService.openErrorToast('Job information could not be saved');
+            this.logger.error('[Enrolment] Job::onSubmit error has occurred: ', error);
           }
         );
       this.form.markAsPristine();
@@ -99,15 +71,11 @@ export class ProfessionalInfoComponent implements OnInit {
     }
   }
 
-  public addCertification() {
-    const certification = this.enrolmentStateService.buildCollegeCertificationForm();
-
-    this.certifications.push(certification);
-  }
-
-  public removeCertification(index: number) {
-    if (index >= 0) {
-      this.certifications.removeAt(index);
+  public clearCollegeForm() {
+    if (this.enrolmentStateService.enrolment.certifications.length > 0) {
+      const regulatoryForm = this.enrolmentStateService.regulatoryForm;
+      const certs = regulatoryForm.get('certifications') as FormArray;
+      certs.clear();
     }
   }
 
@@ -140,6 +108,7 @@ export class ProfessionalInfoComponent implements OnInit {
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
+    console.log('CAN DEACTIVATE', this.form)
     const data = 'unsaved';
     return (this.form.dirty)
       ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
@@ -156,63 +125,21 @@ export class ProfessionalInfoComponent implements OnInit {
     this.enrolmentResource.enrolments()
       .subscribe((enrolment: Enrolment) => {
         if (enrolment) {
+          this.initMultiSelect();
           this.enrolmentStateService.enrolment = enrolment;
         }
       });
-
-    // Initialize multi-select after patching
-    this.initMultiSelect();
   }
 
   private createFormInstance() {
-    this.form = this.enrolmentStateService.professionalInfoForm;
+    this.form = this.enrolmentStateService.jobsForm;
   }
 
   private initForm() {
-    this.hasCertification.valueChanges.subscribe((value) => {
-      if (!value) {
-        this.certifications.clear();
-
-        this.isAccessingPharmaNetOnBehalfOf.enable({ emitEvent: false });
-      } else {
-        if (!this.certifications.length) {
-          // Add an initial empty certification when displayed
-          this.addCertification();
-        }
-
-        // College certification indicates not being accessed on behalf of
-        this.isAccessingPharmaNetOnBehalfOf.reset(null, { emitEvent: false });
-        this.isAccessingPharmaNetOnBehalfOf.disable({ emitEvent: false });
-      }
-    });
-
-    this.isDeviceProvider.valueChanges.subscribe((value) => {
-      if (!value) {
-        this.deviceProviderNumber.reset();
-
-        // Device providers can be an insulin providers, otherwise disabled
-        this.isInsulinPumpProvider.reset(null, { emitEvent: false });
-        this.isInsulinPumpProvider.disable({ emitEvent: false });
-      } else {
-        this.isInsulinPumpProvider.enable({ emitEvent: false });
-      }
-    });
-
-    this.isAccessingPharmaNetOnBehalfOf.valueChanges.subscribe((value) => {
-      if (!value) {
-        this.jobs.clear();
-
-        this.hasCertification.enable({ emitEvent: false });
-      } else {
-        // Accessing on behalf of indicates no college certification
-        this.hasCertification.reset(null, { emitEvent: false });
-        this.hasCertification.disable({ emitEvent: false });
-      }
-    });
+    this.jobCtrl = new FormControl();
   }
 
   private initMultiSelect() {
-    this.jobCtrl = new FormControl();
     this.filteredJobNames = this.jobCtrl.valueChanges
       .pipe(
         startWith(null),
@@ -242,3 +169,4 @@ export class ProfessionalInfoComponent implements OnInit {
     this.jobCtrl.setValue(null);
   }
 }
+

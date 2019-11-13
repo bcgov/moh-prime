@@ -1,0 +1,55 @@
+<form (ngSubmit)="onSubmit()"
+      [formGroup]="form"
+      novalidate>
+
+  <h1 class="h2 mb-4">Application Enrolment</h1>
+
+  <app-sub-header subheader="Regulatory Information"
+                  help="Lorem ipsum dolor, sit amet consectetur adipisicing elit."></app-sub-header>
+
+
+  <div class="row"
+       formArrayName="certifications">
+    <div class="col-sm-12 col-md-6 col-xl-4 py-3">
+
+      <ng-container *ngFor="let certificate of certifications.controls; let i = index, let first = first"
+                    [formGroupName]="i">
+
+        <hr *ngIf="!first">
+
+        <app-college-certifications [form]="certificate"
+                                    [index]="i"
+                                    [total]="certifications.controls.length"
+                                    (remove)="removeCertification($event)"></app-college-certifications>
+
+
+
+      </ng-container>
+
+      <ng-container *ngIf="canAddCertification()">
+        <button mat-raised-button
+                color="primary"
+                (click)="addCertification()"
+                [disabled]="certifications.invalid">Add Certification</button>
+      </ng-container>
+
+    </div>
+  </div>
+
+  <div class="row justify-content-between">
+    <div class="col pt-2">
+
+      <button mat-raised-button
+              type="button"
+              routerLink="../profile">Back</button>
+
+    </div>
+    <div class="col pt-2 text-right">
+
+      <button mat-raised-button
+              color="primary">Save and Continue</button>
+
+    </div>
+  </div>
+
+</form>
