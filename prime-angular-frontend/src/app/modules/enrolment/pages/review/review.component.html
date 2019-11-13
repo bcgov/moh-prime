@@ -1,19 +1,23 @@
 <div>
 
-  <h1 class="h2 mb-4">Application Enrolment</h1>
+  <app-page-header>Application Enrolment</app-page-header>
 
-  <app-sub-header subheader="Application Review"
-                  help="Please review all the information to ensure it is accurate.  If you need to edit any section click the pencil icon.">
-  </app-sub-header>
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Application Review</ng-container>
+    <ng-container appPageSubheaderSummary>
+      Please review all the information to ensure it is accurate. If you need to edit any section click the pencil icon.
+    </ng-container>
+  </app-page-subheader>
 
   <div class="row"
        *ngIf="enrolment">
     <div class="col-sm-6">
 
-      <app-sub-header subheader="Enrollee">
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Enrollee</ng-container>
         <mat-icon (click)="redirect('profile')"
                   matTooltip="Edit Enrollee">edit</mat-icon>
-      </app-sub-header>
+      </app-page-subheader>
 
       <dl class="row mb-4">
         <dt class="col-sm-12 col-md-6 py-1">Name</dt>
@@ -77,10 +81,11 @@
 
       </ng-container>
 
-      <app-sub-header subheader="Contact">
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Contact</ng-container>
         <mat-icon (click)="redirect('contact')"
                   matTooltip="Edit Contact">edit</mat-icon>
-      </app-sub-header>
+      </app-page-subheader>
 
       <h3 class="lead">Voice Contact</h3>
 
@@ -108,10 +113,11 @@
         </dl>
       </ng-container>
 
-      <app-sub-header subheader="Self Declaration">
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Self Declaration</ng-container>
         <mat-icon (click)="redirect('declaration')"
                   matTooltip="Edit Self Declaration">edit</mat-icon>
-      </app-sub-header>
+      </app-page-subheader>
 
       <dl class="row mb-4">
         <dt class="col-sm-12 col-md-6 py-1">
@@ -162,10 +168,11 @@
     </div>
     <div class="col-sm-6">
 
-      <app-sub-header subheader="Professional Information">
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Professional Information</ng-container>
         <mat-icon (click)="redirect('regulatory')"
                   matTooltip="Edit Professional Information">edit</mat-icon>
-      </app-sub-header>
+      </app-page-subheader>
 
       <dl class="row mb-4">
         <dt class="col-sm-12 col-md-6 py-1">Do you have a college certification?</dt>
@@ -219,10 +226,11 @@
         </ng-container>
       </dl>
 
-      <app-sub-header subheader="PharmaNet Access">
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>PharmaNet Access</ng-container>
         <mat-icon (click)="redirect('access')"
                   matTooltip="Edit PharmaNet Access">edit</mat-icon>
-      </app-sub-header>
+      </app-page-subheader>
 
       <ng-container *ngIf="enrolment.organizations.length; else noOrganization">
 
@@ -260,14 +268,14 @@
   </div>
 
   <div class="row justify-content-between">
-    <div class="col pt-2">
+    <div class="col pt-4">
 
-      <button mat-raised-button
+      <button mat-stroked-button
               type="button"
               routerLink="../access">Back</button>
 
     </div>
-    <div class="col pt-2 text-right">
+    <div class="col pt-4 text-right">
 
       <button mat-raised-button
               color="primary"

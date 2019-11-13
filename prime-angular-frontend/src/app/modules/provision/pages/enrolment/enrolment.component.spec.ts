@@ -4,8 +4,10 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { EnrolmentComponent } from './enrolment.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
-import { SubHeaderComponent } from '@shared/components/sub-header/sub-header.component';
+import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
+import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
 import { ConfigCodePipe } from '@config/config-code.pipe';
 import { PhonePipe } from '@shared/pipes/phone.pipe';
 import { EnrolmentPipe } from '@shared/pipes/enrolment.pipe';
@@ -21,12 +23,14 @@ describe('EnrolmentComponent', () => {
       {
         imports: [
           HttpClientTestingModule,
+          NgxContextualHelpModule,
           NgxMaterialModule,
           RouterTestingModule
         ],
         declarations: [
           EnrolmentComponent,
-          SubHeaderComponent,
+          PageHeaderComponent,
+          PageSubheaderComponent,
           ConfigCodePipe,
           EnrolmentPipe,
           FormatDatePipe,

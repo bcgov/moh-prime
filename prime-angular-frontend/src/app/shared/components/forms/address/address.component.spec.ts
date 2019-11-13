@@ -35,7 +35,8 @@ describe('AddressComponent', () => {
           {
             provide: ConfigService,
             useClass: MockConfigService
-          }
+          },
+          EnrolmentStateService
         ]
       }
     ).compileComponents();

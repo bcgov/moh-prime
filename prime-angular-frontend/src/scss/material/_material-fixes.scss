@@ -30,7 +30,7 @@
 
     .extend-content-width {
       // Force the link content to extend width of sidenav
-      // padding-right: 2rem !important;
+      padding-right: 3rem !important;
     }
   }
 
@@ -43,6 +43,10 @@
   .active:focus,
   .mat-list-item:focus {
     background-color: theme-palette(grey, lighter) !important;
+
+    .mat-list-item-content {
+      border-right: 5px solid theme-palette(yellow) !important;
+    }
   }
 
   .active a {

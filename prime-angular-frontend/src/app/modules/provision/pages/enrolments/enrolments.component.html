@@ -1,4 +1,4 @@
-<h1 class="h2 my-4">Pharmacist Enrolments</h1>
+<app-page-header>Pharmacist Enrolments</app-page-header>
 
 <div class="row justify-content-end">
   <div class="col text-right">
@@ -96,12 +96,14 @@
       <mat-icon>remove_red_eye</mat-icon>
       <span>View Enrolment</span>
     </button>
-    <button mat-menu-item *ngIf="enrolment.currentStatus.enrolmentStatusReasons.length"
-      (click)="reviewStatusReasons(enrolment)">
+    <button mat-menu-item
+            *ngIf="enrolment.currentStatus.enrolmentStatusReasons.length"
+            (click)="reviewStatusReasons(enrolment)">
       <mat-icon>flag</mat-icon>
       <span>Review Status Reasons</span>
     </button>
-    <button mat-menu-item *ngIf="canApproveOrDeny(enrolment.currentStatus.status.code)"
+    <button mat-menu-item
+            *ngIf="canApproveOrDeny(enrolment.currentStatus.status.code)"
             (click)="approveEnrolment(enrolment.id)">
       <mat-icon>check_circle_outline</mat-icon>
       <span>Approve Enrolment</span>

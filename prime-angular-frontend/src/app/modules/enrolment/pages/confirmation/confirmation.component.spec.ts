@@ -1,8 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ConfirmationComponent } from './confirmation.component';
+import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
-import { SubHeaderComponent } from '@shared/components/sub-header/sub-header.component';
+import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
+import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
 describe('ConfirmationComponent', () => {
   let component: ConfirmationComponent;
@@ -12,13 +16,20 @@ describe('ConfirmationComponent', () => {
     TestBed.configureTestingModule(
       {
         imports: [
+          NgxContextualHelpModule,
           NgxMaterialModule
         ],
         declarations: [
           ConfirmationComponent,
-          SubHeaderComponent
+          PageHeaderComponent,
+          PageSubheaderComponent
         ],
-        providers: []
+        providers: [
+          {
+            provide: EnrolmentService,
+            useClass: MockEnrolmentService
+          }
+        ]
       }
     ).compileComponents();
   }));

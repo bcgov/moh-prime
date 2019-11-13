@@ -5,8 +5,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { SelfDeclarationComponent } from './self-declaration.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
-import { SubHeaderComponent } from '@shared/components/sub-header/sub-header.component';
+import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
+import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
 
 describe('SelfDeclarationComponent', () => {
   let component: SelfDeclarationComponent;
@@ -17,13 +19,15 @@ describe('SelfDeclarationComponent', () => {
       {
         imports: [
           HttpClientTestingModule,
+          NgxContextualHelpModule,
           NgxMaterialModule,
           ReactiveFormsModule,
           RouterTestingModule
         ],
         declarations: [
           SelfDeclarationComponent,
-          SubHeaderComponent
+          PageHeaderComponent,
+          PageSubheaderComponent
         ],
         providers: [
           {

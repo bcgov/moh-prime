@@ -1,0 +1,7 @@
+@import 'palette';
+
+.title {
+  border-bottom: 1px solid theme-palette(grey, lightest);
+  color: theme-palette(blue);
+  padding-bottom: .3em;
+}

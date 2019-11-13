@@ -5,10 +5,16 @@ import { BehaviorSubject } from 'rxjs';
 import { Config } from '@config/config.model';
 import { Enrolment } from '@shared/models/enrolment.model';
 
+export interface IEnrolmentService {
+  enrolment$: BehaviorSubject<Enrolment>;
+  enrolment: Enrolment;
+  status: Config<number>;
+}
+
 @Injectable({
   providedIn: 'root'
 })
-export class EnrolmentService {
+export class EnrolmentService implements IEnrolmentService {
   // tslint:disable-next-line: variable-name
   private _enrolment: BehaviorSubject<Enrolment>;
 

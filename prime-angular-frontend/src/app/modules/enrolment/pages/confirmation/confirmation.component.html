@@ -1,4 +1,4 @@
-<h1 class="h2 mb-4">Enrolment Confirmation</h1>
+<app-page-header>Enrolment Confirmation</app-page-header>
 
 <div class="row">
   <div class="col-md-7">
@@ -30,7 +30,9 @@
 <div class="row">
   <div class="col-md-7">
 
-    <app-sub-header subheader="Next Steps"></app-sub-header>
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>Next Steps</ng-container>
+    </app-page-subheader>
 
     <ng-container *ngIf="isAutomatic; else manual">
       <p>
