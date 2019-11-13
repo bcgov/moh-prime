@@ -24,8 +24,8 @@ export class ConfirmationComponent implements OnInit {
     this.busy = this.enrolmentService.enrolment$
       .subscribe((enrolment: Enrolment) => {
         // Only automatic if the enrolment reason is `Automatic`
-        this.isAutomatic = !enrolment.currentStatus.enrolmentStatusReasons
-          .some((reason: EnrolmentStatusReason) => reason.statusReasonCode === EnrolmentStatusReasonEnum.AUTOMATIC);
+        this.isAutomatic = enrolment.currentStatus.enrolmentStatusReasons
+          .every((reason: EnrolmentStatusReason) => reason.statusReasonCode === EnrolmentStatusReasonEnum.AUTOMATIC);
       });
   }
 }
