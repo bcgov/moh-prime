@@ -5,8 +5,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { AccessAgreementComponent } from './access-agreement.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
-import { SubHeaderComponent } from '@shared/components/sub-header/sub-header.component';
+import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
+import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
+import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
 
 describe('AccessAgreementComponent', () => {
   let component: AccessAgreementComponent;
@@ -17,13 +19,15 @@ describe('AccessAgreementComponent', () => {
       {
         imports: [
           HttpClientTestingModule,
+          NgxContextualHelpModule,
           NgxMaterialModule,
           ReactiveFormsModule,
           RouterTestingModule
         ],
         declarations: [
           AccessAgreementComponent,
-          SubHeaderComponent
+          PageHeaderComponent,
+          PageSubheaderComponent
         ],
         providers: [
           {

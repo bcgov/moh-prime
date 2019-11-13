@@ -1,0 +1,25 @@
+<a mat-icon-button
+   color="primary"
+   aria-label="Help"
+   [matMenuTriggerFor]="help"
+   (click)="$event.stopPropagation()">
+  <mat-icon>info</mat-icon>
+</a>
+<mat-menu #help="matMenu"
+          class="p-3"
+          [xPosition]="xPosition"
+          [yPosition]="yPosition">
+  <ng-template matMenuContent>
+    <!-- Content project contextual help components when available -->
+    <h1 *ngIf="this.contextualHelpTitleChildren.length"
+        class="title lead">
+      <ng-content select="[appContextualTitle]"></ng-content>
+    </h1>
+    <p *ngIf="this.contextualHelpContentChildren.length"
+       class="description">
+      <ng-content select="[appContextualContent]"></ng-content>
+    </p>
+    <!-- Customize the contextual help with own markup -->
+    <ng-content></ng-content>
+  </ng-template>
+</mat-menu>

@@ -1,4 +1,5 @@
 @import 'palette';
+@import 'bootstrap';
 
 .prime-sidenav-container {
   position: absolute;
@@ -18,8 +19,8 @@
     width: 40px;
     height: auto;
 
-    @media (min-width: 992px) {
-      width: 90px
+    @include media-breakpoint-up(lg) {
+      width: 90px;
     }
   }
 }

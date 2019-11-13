@@ -6,12 +6,14 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ReviewComponent } from './review.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
-import { SubHeaderComponent } from '@shared/components/sub-header/sub-header.component';
+import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
+import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
 import { ConfigCodePipe } from '@config/config-code.pipe';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { PhonePipe } from '@shared/pipes/phone.pipe';
 import { PostalPipe } from '@shared/pipes/postal.pipe';
 import { EnrolmentPipe } from '@shared/pipes/enrolment.pipe';
+import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
 
 describe('ReviewComponent', () => {
   let component: ReviewComponent;
@@ -22,13 +24,15 @@ describe('ReviewComponent', () => {
       {
         imports: [
           HttpClientTestingModule,
+          NgxContextualHelpModule,
           NgxMaterialModule,
           ReactiveFormsModule,
           RouterTestingModule
         ],
         declarations: [
           ReviewComponent,
-          SubHeaderComponent,
+          PageHeaderComponent,
+          PageSubheaderComponent,
           ConfigCodePipe,
           EnrolmentPipe,
           FormatDatePipe,

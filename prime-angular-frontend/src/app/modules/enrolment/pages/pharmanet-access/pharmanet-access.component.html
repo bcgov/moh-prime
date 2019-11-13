@@ -2,10 +2,14 @@
       [formGroup]="form"
       novalidate>
 
-  <h1 class="h2 mb-4">Application Enrolment</h1>
+  <app-page-header>Application Enrolment</app-page-header>
 
-  <app-sub-header subheader="PharmaNet Access"
-                  help="Lorem ipsum dolor, sit amet consectetur adipisicing elit."></app-sub-header>
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>PharmaNet Access</ng-container>
+    <ng-container appPageSubheaderSummary>
+      Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+    </ng-container>
+  </app-page-subheader>
 
   <div class="row">
     <div class="col text-right">
@@ -128,16 +132,15 @@
 
   </ng-template>
 
-
   <div class="row justify-content-between">
-    <div class="col pt-2">
+    <div class="col pt-4">
 
-      <button mat-raised-button
+      <button mat-stroked-button
               type="button"
               routerLink="../declaration">Back</button>
 
     </div>
-    <div class="col pt-2 text-right">
+    <div class="col pt-4 text-right">
 
       <button mat-raised-button
               type="submit"
