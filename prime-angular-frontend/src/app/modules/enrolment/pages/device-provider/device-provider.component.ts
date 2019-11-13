@@ -3,7 +3,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { ConfigService } from '@config/config.service';
 import { ToastService } from '@core/services/toast.service';
@@ -19,7 +19,7 @@ import { EnrolmentResource } from '../../shared/services/enrolment-resource.serv
   styleUrls: ['./device-provider.component.scss']
 })
 export class DeviceProviderComponent implements OnInit {
-
+  public busy: Subscription;
   public form: FormGroup;
   public decisions: { code: boolean, name: string }[] = [
     { code: false, name: 'No' }, { code: true, name: 'Yes' }
@@ -47,7 +47,7 @@ export class DeviceProviderComponent implements OnInit {
   public onSubmit() {
     if (this.form.valid) {
       const payload = this.enrolmentStateService.enrolment;
-      this.enrolmentResource.updateEnrolment(payload)
+      this.busy = this.enrolmentResource.updateEnrolment(payload)
         .subscribe(
           () => {
             this.toastService.openSuccessToast('Device Provider information has been saved');
@@ -84,7 +84,7 @@ export class DeviceProviderComponent implements OnInit {
 
     // TODO: detect enrolment already exists and don't reload
     // TODO: apply guard if not enrolment is found to redirect to profile
-    this.enrolmentResource.enrolments()
+    this.busy = this.enrolmentResource.enrolments()
       .subscribe((enrolment: Enrolment) => {
         if (enrolment) {
           this.enrolmentStateService.enrolment = enrolment;

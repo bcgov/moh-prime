@@ -221,25 +221,9 @@ export class EnrolmentStateService {
     });
   }
 
-  private buildRegulatoryForm(): FormGroup {
+  public buildRegulatoryForm(): FormGroup {
     return this.fb.group({
       certifications: this.fb.array([]),
-    });
-  }
-
-  private buildDeviceProviderForm(): FormGroup {
-    return this.fb.group({
-      deviceProviderNumber: [null, [
-        FormControlValidators.numeric,
-        FormControlValidators.requiredLength(5)
-      ]],
-      isInsulinPumpProvider: [false, [FormControlValidators.requiredBoolean]]
-    });
-  }
-
-  private buildJobsForm(): FormGroup {
-    return this.fb.group({
-      jobs: this.fb.array([]),
     });
   }
 
@@ -255,6 +239,22 @@ export class EnrolmentStateService {
       licenseCode: [null, []],
       renewalDate: [null, []],
       practiceCode: [null, []]
+    });
+  }
+
+  public buildDeviceProviderForm(): FormGroup {
+    return this.fb.group({
+      deviceProviderNumber: [null, [
+        FormControlValidators.numeric,
+        FormControlValidators.requiredLength(5)
+      ]],
+      isInsulinPumpProvider: [false, [FormControlValidators.requiredBoolean]]
+    });
+  }
+
+  public buildJobsForm(): FormGroup {
+    return this.fb.group({
+      jobs: this.fb.array([]),
     });
   }
 

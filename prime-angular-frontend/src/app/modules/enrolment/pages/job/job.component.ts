@@ -3,7 +3,7 @@ import { FormGroup, FormArray, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog, MatChipInputEvent, MatAutocompleteSelectedEvent } from '@angular/material';
 
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 
 import { Config } from '@config/config.model';
@@ -22,7 +22,7 @@ import { EnrolmentResource } from '../../shared/services/enrolment-resource.serv
   styleUrls: ['./job.component.scss']
 })
 export class JobComponent implements OnInit {
-
+  public busy: Subscription;
   public form: FormGroup;
   public jobCtrl: FormControl;
   @ViewChild('jobInput', { static: false }) jobInput: ElementRef<HTMLInputElement>;
@@ -53,7 +53,7 @@ export class JobComponent implements OnInit {
     if (this.form.valid) {
       this.clearCollegeForm();
       const payload = this.enrolmentStateService.enrolment;
-      this.enrolmentResource.updateEnrolment(payload)
+      this.busy = this.enrolmentResource.updateEnrolment(payload)
         .subscribe(
           () => {
             this.toastService.openSuccessToast('Job information has been saved');
@@ -122,7 +122,7 @@ export class JobComponent implements OnInit {
 
     // TODO: detect enrolment already exists and don't reload
     // TODO: apply guard if not enrolment is found to redirect to profile
-    this.enrolmentResource.enrolments()
+    this.busy = this.enrolmentResource.enrolments()
       .subscribe((enrolment: Enrolment) => {
         if (enrolment) {
           this.initMultiSelect();

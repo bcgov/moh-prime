@@ -1,10 +1,9 @@
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
-import { FormGroup, FormArray, FormControl, AbstractControl } from '@angular/forms';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormGroup, FormArray, AbstractControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, Subscription } from 'rxjs';
 
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
@@ -21,7 +20,7 @@ import { EnrolmentResource } from '../../shared/services/enrolment-resource.serv
   styleUrls: ['./regulatory.component.scss']
 })
 export class RegulatoryComponent implements OnInit, OnDestroy {
-
+  public busy: Subscription;
   public form: FormGroup;
   public jobForm: FormGroup;
   public colleges: Config<number>[];
@@ -50,7 +49,7 @@ export class RegulatoryComponent implements OnInit, OnDestroy {
       this.clearEmptyCertifications();
       this.clearJobForm();
       const payload = this.enrolmentStateService.enrolment;
-      this.enrolmentResource.updateEnrolment(payload)
+      this.busy = this.enrolmentResource.updateEnrolment(payload)
         .subscribe(
           () => {
             this.toastService.openSuccessToast('Regulatory information has been saved');
@@ -95,7 +94,7 @@ export class RegulatoryComponent implements OnInit, OnDestroy {
 
     // TODO: detect enrolment already exists and don't reload
     // TODO: apply guard if not enrolment is found to redirect to profile
-    this.enrolmentResource.enrolments()
+    this.busy = this.enrolmentResource.enrolments()
       .subscribe((enrolment: Enrolment) => {
         if (enrolment) {
           this.enrolmentStateService.enrolment = enrolment;
