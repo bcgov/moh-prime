@@ -28,7 +28,6 @@ RUN mkdir /home/jenkins/.jenkins && \
         libgconf-2-4 \
         maven \
         apt-transport-https && \
-        lspci && \
     curl --create-dirs -fsSLo /usr/share/jenkins/agent.jar http://jenkins-prod/jnlpJars/agent.jar && \
     chmod 755 /usr/share/jenkins && \
     chmod 644 /usr/share/jenkins/agent.jar && \
