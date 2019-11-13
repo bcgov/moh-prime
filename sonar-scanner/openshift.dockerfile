@@ -73,8 +73,9 @@ RUN echo "Installing Node..." && \
     echo 'kernel.unprivileged_userns_clone=1' > /etc/sysctl.d/userns.conf && \
     export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 && \
     mkdir -p /usr/lib/node_modules/chromedriver/lib/chromedriver && \
-    chmod -R 777 /usr/lib/node_modules/ && \
-    echo n | npm install -g --silent @angular/cli @angular/core chromium chromedriver selenium-webdriver @angular-devkit/build-angular @angular/compiler @angular/compiler-cli typescript puppeteer jasmine karma karma-chrome-launcher karma-mocha karma-chai karma-jasmine karma-jasmine-html-reporter karma-coverage-istanbul-reporter 
+    chmod -R a+rwx /usr/lib/node_modules/ && \
+    npm install -g --silent @angular/cli @angular/core && \
+    echo n | npm install -g --silent chromium chromedriver selenium-webdriver @angular-devkit/build-angular @angular/compiler @angular/compiler-cli typescript puppeteer jasmine karma karma-chrome-launcher karma-mocha karma-chai karma-jasmine karma-jasmine-html-reporter karma-coverage-istanbul-reporter 
 
 #.NET 2.2
 ENV ASPNETCORE_ENVIRONMENT Development
