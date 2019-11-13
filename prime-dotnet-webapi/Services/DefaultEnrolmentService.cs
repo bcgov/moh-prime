@@ -362,8 +362,8 @@ namespace Prime.Services
                         }
                         break;
                     case Status.APPROVED_CODE:
-                        // add the manual reason code, send email
-                        createdEnrolmentStatus.EnrolmentStatusReasons = new List<EnrolmentStatusReason> { new EnrolmentStatusReason { EnrolmentStatus = createdEnrolmentStatus, StatusReasonCode = StatusReason.MANUAL_CODE } };                        
+                        // add the manual reason code
+                        createdEnrolmentStatus.EnrolmentStatusReasons = new List<EnrolmentStatusReason> { new EnrolmentStatusReason { EnrolmentStatus = createdEnrolmentStatus, StatusReasonCode = StatusReason.MANUAL_CODE } };
                         break;
 
                     case Status.ACCEPTED_TOS_CODE:
