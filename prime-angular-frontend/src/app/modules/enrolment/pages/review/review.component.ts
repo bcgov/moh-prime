@@ -11,6 +11,7 @@ import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { EnrolmentRoutes } from '@enrolment/enrolent.routes';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 
@@ -23,6 +24,7 @@ export class ReviewComponent implements OnInit {
   public busy: Subscription;
   public enrolment: Enrolment;
   public disabledAgreement = true;
+  public EnrolmentRoutes = EnrolmentRoutes;
 
   constructor(
     private route: ActivatedRoute,
@@ -54,7 +56,7 @@ export class ReviewComponent implements OnInit {
         .subscribe(
           () => {
             this.toastService.openSuccessToast('Enrolment has been submitted');
-            this.router.navigate(['confirmation'], { relativeTo: this.route.parent });
+            this.router.navigate([EnrolmentRoutes.CONFIRMATION], { relativeTo: this.route.parent });
           },
           (error: any) => {
             this.toastService.openErrorToast('Enrolment could not be submitted');
@@ -66,7 +68,6 @@ export class ReviewComponent implements OnInit {
       console.log('REGULATORY', this.enrolmentStateService.isRegulatoryValid());
       console.log('DEVICE_PROVIDER', this.enrolmentStateService.isDeviceProviderValid());
       console.log('JOBS', this.enrolmentStateService.isJobsValid());
-      console.log('PROFESSIONAL', this.enrolmentStateService.isProfessionalInfoValid());
       console.log('DECLARATION', this.enrolmentStateService.isSelfDeclarationValid());
       console.log('ACCESS', this.enrolmentStateService.isPharmaNetAccessValid());
     }
@@ -82,7 +83,7 @@ export class ReviewComponent implements OnInit {
   }
 
   public redirect(route: string) {
-    this.router.navigate(['enrolment', route]);
+    this.router.navigate([EnrolmentRoutes.ENROLMENT, route]);
   }
 
   public ngOnInit() {

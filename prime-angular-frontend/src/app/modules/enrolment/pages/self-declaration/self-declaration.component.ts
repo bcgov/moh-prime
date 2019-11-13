@@ -9,6 +9,7 @@ import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { EnrolmentRoutes } from '@enrolment/enrolent.routes';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { FormUtilsService } from '@enrolment/shared/services/form-utils.service';
@@ -25,6 +26,7 @@ export class SelfDeclarationComponent implements OnInit {
   public decisions: { code: boolean, name: string }[] = [
     { code: false, name: 'No' }, { code: true, name: 'Yes' }
   ];
+  public EnrolmentRoutes = EnrolmentRoutes;
 
   constructor(
     private route: ActivatedRoute,
@@ -77,7 +79,7 @@ export class SelfDeclarationComponent implements OnInit {
           () => {
             this.toastService.openSuccessToast('Self declaration has been saved');
             this.form.markAsPristine();
-            this.router.navigate(['access'], { relativeTo: this.route.parent });
+            this.router.navigate([EnrolmentRoutes.PHARMANET_ACCESS], { relativeTo: this.route.parent });
           },
           (error: any) => {
             this.toastService.openErrorToast('Self declaration could not be saved');

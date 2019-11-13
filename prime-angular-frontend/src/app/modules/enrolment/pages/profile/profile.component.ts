@@ -14,9 +14,9 @@ import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { EnrolmentRoutes } from '@enrolment/enrolent.routes';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
-
 import { FormUtilsService } from '@enrolment/shared/services/form-utils.service';
 
 @Component({
@@ -114,7 +114,7 @@ export class ProfileComponent implements OnInit {
           () => {
             this.toastService.openSuccessToast('Profile information has been saved');
             this.form.markAsPristine();
-            this.router.navigate(['regulatory'], { relativeTo: this.route.parent });
+            this.router.navigate([EnrolmentRoutes.REGULATORY], { relativeTo: this.route.parent });
           },
           (error: any) => {
             this.toastService.openErrorToast('Profile information could not be saved');

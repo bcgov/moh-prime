@@ -5,6 +5,7 @@ import { ConfigResolver } from '@config/config-resolver';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 
+import { ProvisionRoutes } from './provision.routes';
 import { ProvisionGuard } from './shared/guards/provision.guard';
 
 import { EnrolmentsComponent } from './pages/enrolments/enrolments.component';
@@ -21,7 +22,7 @@ const routes: Routes = [
     resolve: [ConfigResolver],
     children: [
       {
-        path: 'enrolments',
+        path: ProvisionRoutes.ENROLMENTS,
         children: [
           {
             path: '',
@@ -35,7 +36,7 @@ const routes: Routes = [
       },
       {
         path: '', // Equivalent to `/` and alias for `enrolments`
-        redirectTo: 'enrolments',
+        redirectTo: ProvisionRoutes.ENROLMENTS,
         pathMatch: 'full'
       }
     ]

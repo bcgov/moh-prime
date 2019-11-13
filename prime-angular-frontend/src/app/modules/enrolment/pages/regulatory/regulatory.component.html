@@ -1,55 +1,57 @@
-<form (ngSubmit)="onSubmit()"
-      [formGroup]="form"
-      novalidate>
+<app-busy-overlay [busy]="busy">
 
-  <app-page-header>Application Enrolment</app-page-header>
+  <form (ngSubmit)="onSubmit()"
+        [formGroup]="form"
+        novalidate>
 
-  <app-page-subheader>
-    <ng-container appPageSubheaderTitle>Regulatory Information</ng-container>
-  </app-page-subheader>
+    <app-page-header>Application Enrolment</app-page-header>
 
-  <div class="row"
-       formArrayName="certifications">
-    <div class="col-sm-12 col-md-6 col-xl-4 py-3">
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>Regulatory Information</ng-container>
+    </app-page-subheader>
 
-      <ng-container *ngFor="let certificate of certifications.controls; let i = index, let first = first"
-                    [formGroupName]="i">
+    <div class="row"
+         formArrayName="certifications">
+      <div class="col-sm-12 col-md-6 col-xl-4 py-3">
 
-        <hr *ngIf="!first">
+        <ng-container *ngFor="let certificate of certifications.controls; let i = index, let first = first"
+                      [formGroupName]="i">
 
-        <app-college-certifications [form]="certificate"
-                                    [index]="i"
-                                    [total]="certifications.controls.length"
-                                    (remove)="removeCertification($event)"></app-college-certifications>
+          <hr *ngIf="!first">
 
+          <app-college-certifications [form]="certificate"
+                                      [index]="i"
+                                      [total]="certifications.controls.length"
+                                      (remove)="removeCertification($event)"></app-college-certifications>
 
+        </ng-container>
 
-      </ng-container>
+        <ng-container *ngIf="canAddCertification()">
+          <button mat-raised-button
+                  color="primary"
+                  (click)="addCertification()"
+                  [disabled]="certifications.invalid">Add Certification</button>
+        </ng-container>
 
-      <ng-container *ngIf="canAddCertification()">
+      </div>
+    </div>
+
+    <div class="row justify-content-between">
+      <div class="col pt-2">
+
         <button mat-raised-button
-                color="primary"
-                (click)="addCertification()"
-                [disabled]="certifications.invalid">Add Certification</button>
-      </ng-container>
+                type="button"
+                [routerLink]="['..', EnrolmentRoutes.PROFILE]">Back</button>
 
+      </div>
+      <div class="col pt-2 text-right">
+
+        <button mat-raised-button
+                color="primary">Save and Continue</button>
+
+      </div>
     </div>
-  </div>
 
-  <div class="row justify-content-between">
-    <div class="col pt-2">
+  </form>
 
-      <button mat-raised-button
-              type="button"
-              routerLink="../profile">Back</button>
-
-    </div>
-    <div class="col pt-2 text-right">
-
-      <button mat-raised-button
-              color="primary">Save and Continue</button>
-
-    </div>
-  </div>
-
-</form>
+</app-busy-overlay>
