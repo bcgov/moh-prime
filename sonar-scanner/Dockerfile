@@ -18,6 +18,7 @@ RUN mkdir /home/jenkins/.jenkins && \
     mkdir -p ${AGENT_WORKDIR} && \
     apt-get -yqq update && \
     apt-get -yqq install -t stretch-backports \
+        software-properties-common \
         git-lfs \
         vim \
         nano \
@@ -27,8 +28,9 @@ RUN mkdir /home/jenkins/.jenkins && \
         libxi6 \
         libgconf-2-4 \
         maven \
+        pciutils \
         apt-transport-https && \
-    curl --create-dirs -fsSLo /usr/share/jenkins/agent.jar http://jenkins-prod/jnlpJars/agent.jar && \
+    curl --create-dirs -fsSLo /usr/share/jenkins/agent.jar http://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/jnlpJars/agent.jar && \
     chmod 755 /usr/share/jenkins && \
     chmod 644 /usr/share/jenkins/agent.jar && \
     ln -sf /usr/share/jenkins/agent.jar /usr/share/jenkins/slave.jar
@@ -44,7 +46,7 @@ ENV PATH $PATH:$JAVA_HOME:/var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunne
 #COMMON
 RUN echo "Installing common, jenkins and Sonar Scanner prerequisites..." && \
     useradd default && \
-    apt-get -yqq install openjdk-8-jre && \
+    apt-get -yqq install openjdk-8-jre  && \
     wget -q http://sourceforge.net/projects/sonar-pkg/files/deb/binary/sonar_6.7.4_all.deb && \
     dpkg -i sonar_6.7.4_all.deb && \
     mkdir -p /var/lib/origin && \
@@ -119,5 +121,5 @@ RUN chown -R default:0 /home/jenkins && \
 
 # For local testing
 #COPY ../ ./moh-prime
-ENTRYPOINT sleep 60 && /usr/local/openjdk-8/bin/java -jar /home/jenkins/agent/agent.jar -jnlpUrl http://jenkins-prod/computer/code-tests/slave-agent.jnlp -secret c598ca95983a9f6df4d06cc7f770b0d1ea404b806851f1a7f1066d89515c2c12 -workDir /home/jenkins
+ENTRYPOINT sleep 60 && /usr/local/openjdk-8/bin/java -jar /home/jenkins/agent/agent.jar -jnlpUrl http://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/computer/code-tests/slave-agent.jnlp -secret c598ca95983a9f6df4d06cc7f770b0d1ea404b806851f1a7f1066d89515c2c12 -workDir /home/jenkins
 #CMD [ "/bin/bash","-c","/home/jenkins/agent/entrypoint.bash" ]

@@ -18,6 +18,7 @@ RUN mkdir /home/jenkins/.jenkins && \
     mkdir -p ${AGENT_WORKDIR} && \
     apt-get -yqq update && \
     apt-get -yqq install -t stretch-backports \
+        software-properties-common \
         git-lfs \
         vim \
         nano \
@@ -27,6 +28,7 @@ RUN mkdir /home/jenkins/.jenkins && \
         libxi6 \
         libgconf-2-4 \
         maven \
+        pciutils \
         apt-transport-https && \
     curl --create-dirs -fsSLo /usr/share/jenkins/agent.jar http://jenkins-prod/jnlpJars/agent.jar && \
     chmod 755 /usr/share/jenkins && \
