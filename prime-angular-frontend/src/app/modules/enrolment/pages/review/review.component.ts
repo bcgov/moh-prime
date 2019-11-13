@@ -23,7 +23,7 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 export class ReviewComponent implements OnInit {
   public busy: Subscription;
   public enrolment: Enrolment;
-  public disabledAgreement = true;
+  public disabledAgreement: boolean;
   public EnrolmentRoutes = EnrolmentRoutes;
 
   constructor(
@@ -34,7 +34,9 @@ export class ReviewComponent implements OnInit {
     private toastService: ToastService,
     private dialog: MatDialog,
     private logger: LoggerService
-  ) { }
+  ) {
+    this.disabledAgreement = true;
+  }
 
   public onSubmit() {
     if (this.enrolmentStateService.isEnrolmentValid()) {

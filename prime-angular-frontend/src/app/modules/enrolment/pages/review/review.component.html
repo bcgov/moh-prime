@@ -227,9 +227,9 @@
       </dl>
 
       <app-page-subheader>
-        <ng-container appPageSubheaderTitle>PharmaNet Access</ng-container>
+        <ng-container appPageSubheaderTitle>Organization Information</ng-container>
         <mat-icon (click)="redirect(EnrolmentRoutes.PHARMANET_ACCESS)"
-                  matTooltip="Edit PharmaNet Access">edit</mat-icon>
+                  matTooltip="Edit Organization Information">edit</mat-icon>
       </app-page-subheader>
 
       <ng-container *ngIf="enrolment.organizations.length; else noOrganization">
@@ -238,7 +238,7 @@
 
         <ul *ngFor="let organization of enrolment.organizations; let i = index"
             class="row mb-4">
-          <li class="col-sm-12 col-md-6 py-1">
+          <li class="col-sm-12 py-1">
             {{ organization.organizationTypeCode | configCode: 'organizationTypes' }}&nbsp;
           </li>
         </ul>
@@ -254,7 +254,8 @@
 
   <div class="footer">
     <mat-checkbox class="mr-4"
-                  (change)="onConfirmAccuracy($event)">I confirm that all information provided is accurate.
+                  (change)="onConfirmAccuracy($event)">
+      I confirm that all information provided is accurate.
     </mat-checkbox>
   </div>
 

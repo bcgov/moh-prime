@@ -53,7 +53,7 @@ export class AccessAgreementComponent implements OnInit {
       .subscribe(
         () => {
           this.toastService.openSuccessToast('Access agreement has been accepted');
-          this.router.navigate([EnrolmentRoutes.CONFIRMATION], { relativeTo: this.route.parent });
+          this.router.navigate([EnrolmentRoutes.SUMMARY], { relativeTo: this.route.parent });
         },
         (error: any) => {
           this.toastService.openErrorToast('Access agreement could not be accepted');

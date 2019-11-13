@@ -99,7 +99,7 @@ export class PharmanetAccessComponent implements OnInit {
 
   public disableOrganization(organizationTypeCode: number) {
     // Omit organizations types that are not "Community Practices" for ComPap
-    return (organizationTypeCode !== 2);
+    return (organizationTypeCode !== 1);
   }
 
   public canDeactivate(): Observable<boolean> | boolean {

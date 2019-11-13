@@ -6,10 +6,15 @@
 
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>Device Provider Information</ng-container>
+      <!-- <ng-container appContextualTitle> TODO does this need a title</ng-container> -->
+      <ng-container appContextualContent>
+        <!-- TODO text needs to be updated -->
+        Indicating you are a device provider designates the position you hold when accessing PharmaNet.
+      </ng-container>
     </app-page-subheader>
 
     <div class="row">
-      <div class="col-sm-12 col-md-6 col-xl-4">
+      <div class="col-sm-12 col-md-6 col-xl-5">
 
         <mat-form-field class="w-100">
           <span matPrefix>D1&nbsp;</span>
@@ -38,7 +43,7 @@
     <div class="row justify-content-between">
       <div class="col pt-2">
 
-        <button mat-raised-button
+        <button mat-stroked-button
                 type="button"
                 [routerLink]="['..', EnrolmentRoutes.REGULATORY]">Back</button>
 

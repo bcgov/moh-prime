@@ -60,7 +60,7 @@ export class JobComponent implements OnInit {
           () => {
             this.toastService.openSuccessToast('Job information has been saved');
             this.form.markAsPristine();
-            this.router.navigate(['declaration'], { relativeTo: this.route.parent });
+            this.router.navigate([EnrolmentRoutes.SELF_DECLARATION], { relativeTo: this.route.parent });
           },
           (error: any) => {
             this.toastService.openErrorToast('Job information could not be saved');
