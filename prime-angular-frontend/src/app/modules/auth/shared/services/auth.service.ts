@@ -100,7 +100,6 @@ export class AuthService implements IAuthService {
     return this.keycloakService.isLoggedIn();
   }
 
-  // TODO: test / is used to do a relative redirect
   public logout(redirectUri: string = '/'): Promise<void> {
     return this.keycloakService.logout(redirectUri);
   }
