@@ -4,7 +4,10 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthComponent } from './shared/components/auth/auth.component';
 import { AuthorizationRedirectGuard } from './shared/guards/authorization-redirect.guard';
 
+import { AuthRoutes } from './auth.routes';
+
 import { InfoComponent } from './pages/info/info.component';
+import { AdminComponent } from './pages/admin/admin.component';
 
 const routes: Routes = [
   {
@@ -13,8 +16,13 @@ const routes: Routes = [
     canActivate: [AuthorizationRedirectGuard],
     children: [
       {
-        path: 'info',
+        path: AuthRoutes.INFO,
         component: InfoComponent,
+        data: { title: 'Welcome to PRIME' }
+      },
+      {
+        path: AuthRoutes.ADMIN,
+        component: AdminComponent,
         data: { title: 'Welcome to PRIME' }
       },
       {
