@@ -10,15 +10,16 @@ import {
 } from '@angular/material';
 import { MomentDateAdapter, MatMomentDateModule } from '@angular/material-moment-adapter';
 
+export const APP_DATE_FORMAT = 'D MMM YYYY';
 export const APP_DATE_FORMATS = {
   parse: {
     // Reformat entered date values to this format
-    dateInput: 'D MMM YYYY',
+    dateInput: APP_DATE_FORMAT,
   },
   display: {
-    dateInput: 'D MMM YYYY',
+    dateInput: APP_DATE_FORMAT,
     monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'D MMM YYYY',
+    dateA11yLabel: APP_DATE_FORMAT,
     monthYearA11yLabel: 'MMM YYYY',
   }
 };
@@ -52,7 +53,8 @@ const matFormFieldCustomOptions: MatFormFieldDefaultOptions = {
   ],
   providers: [
     {
-      provide: MAT_DATE_FORMATS, useValue: APP_DATE_FORMATS
+      provide: MAT_DATE_FORMATS,
+      useValue: APP_DATE_FORMATS
     },
     {
       provide: DateAdapter,
