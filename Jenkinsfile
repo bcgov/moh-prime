@@ -4,7 +4,6 @@ pipeline {
         disableResume()
     }
     stages {
-        /*
         stage('Build') {
             agent { label 'master' }
             steps {
@@ -23,7 +22,7 @@ pipeline {
                 sh "./player.sh deploy frontend dev"
             }
         }
-        */
+        /*
         stage('Build Sonar Scanner') {
             agent { label 'master' }
             steps {
@@ -31,7 +30,7 @@ pipeline {
                 sh "./player.sh sonar tools"
             }
         }
-        /*        
+        */
         stage('Code Quality Check') {
             agent { label 'code-tests' }
             steps {
