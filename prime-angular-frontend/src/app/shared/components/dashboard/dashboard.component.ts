@@ -66,7 +66,7 @@ export class DashboardComponent implements OnInit {
 
   public onLogout() {
     if (this.authService.isAdmin()) {
-      this.authService.logout(this.config.loginRedirectUrl + '/' + AuthRoutes.ADMIN);
+      this.authService.logout(`${this.config.loginRedirectUrl}/${AuthRoutes.ADMIN}`);
     } else {
       this.authService.logout(this.config.loginRedirectUrl);
     }
@@ -91,7 +91,6 @@ export class DashboardComponent implements OnInit {
       .subscribe((device: string) => this.setSideNavProps(device));
 
     const user = await this.authService.getUser();
-    console.log(user);
     this.username = `${user.firstName} ${user.firstName}`;
   }
 

@@ -7,7 +7,7 @@ export class AuthRoutes extends BaseRoute {
   }
 
   // Module
-  public static AUTH = '';
+  public static AUTH = BaseRoute.MODULE_PATH;
   // Authentication
   public static INFO = 'info';
   public static ADMIN = 'admin';
