@@ -6,11 +6,14 @@ import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { ViewportService } from '@core/services/viewport.service';
 import { LoggerService } from '@core/services/logger.service';
 import { DeviceResolution } from '@shared/enums/device-resolution.enum';
+
+
 import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { EnrolmentRoutes } from '@enrolment/enrolent.routes';
 import { ProvisionRoutes } from '@provision/provision.routes';
+import { AuthRoutes } from '@auth/auth.routes';
 
 @Component({
   selector: 'app-dashboard',
@@ -62,7 +65,11 @@ export class DashboardComponent implements OnInit {
   }
 
   public onLogout() {
-    this.authService.logout(this.config.loginRedirectUrl);
+    if (this.authService.isAdmin()) {
+      this.authService.logout(`${this.config.loginRedirectUrl}/${AuthRoutes.ADMIN}`);
+    } else {
+      this.authService.logout(this.config.loginRedirectUrl);
+    }
   }
 
   public async ngOnInit() {
