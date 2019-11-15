@@ -21,10 +21,9 @@ import { SummaryComponent } from './pages/summary/summary.component';
 import { DeviceProviderComponent } from './pages/device-provider/device-provider.component';
 import { JobComponent } from './pages/job/job.component';
 
-
 const routes: Routes = [
   {
-    path: 'enrolment',
+    path: EnrolmentRoutes.MODULE_PATH,
     component: DashboardComponent,
     canActivateChild: [
       AuthenticationGuard,

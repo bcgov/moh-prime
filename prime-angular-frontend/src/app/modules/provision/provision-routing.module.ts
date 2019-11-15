@@ -13,7 +13,7 @@ import { EnrolmentComponent } from './pages/enrolment/enrolment.component';
 
 const routes: Routes = [
   {
-    path: 'provision',
+    path: ProvisionRoutes.MODULE_PATH,
     component: DashboardComponent,
     canActivateChild: [
       AuthenticationGuard,
