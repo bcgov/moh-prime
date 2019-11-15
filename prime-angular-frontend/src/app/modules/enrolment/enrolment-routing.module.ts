@@ -12,14 +12,14 @@ import { EnrolmentGuard } from './shared/guards/enrolment.guard';
 
 import { ProfileComponent } from './pages/profile/profile.component';
 import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
+import { DeviceProviderComponent } from './pages/device-provider/device-provider.component';
+import { JobComponent } from './pages/job/job.component';
 import { SelfDeclarationComponent } from './pages/self-declaration/self-declaration.component';
-import { PharmanetAccessComponent } from './pages/pharmanet-access/pharmanet-access.component';
+import { OrganizationComponent } from './pages/organization/organization.component';
 import { ReviewComponent } from './pages/review/review.component';
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 import { AccessAgreementComponent } from './pages/access-agreement/access-agreement.component';
 import { SummaryComponent } from './pages/summary/summary.component';
-import { DeviceProviderComponent } from './pages/device-provider/device-provider.component';
-import { JobComponent } from './pages/job/job.component';
 
 const routes: Routes = [
   {
@@ -58,8 +58,8 @@ const routes: Routes = [
         canDeactivate: [CanDeactivateFormGuard]
       },
       {
-        path: EnrolmentRoutes.PHARMANET_ACCESS,
-        component: PharmanetAccessComponent,
+        path: EnrolmentRoutes.ORGANIZATION,
+        component: OrganizationComponent,
         canDeactivate: [CanDeactivateFormGuard]
       },
       {
