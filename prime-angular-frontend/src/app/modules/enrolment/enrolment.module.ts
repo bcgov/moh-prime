@@ -11,7 +11,6 @@ import { ConfirmationComponent } from './pages/confirmation/confirmation.compone
 import { AccessAgreementComponent } from './pages/access-agreement/access-agreement.component';
 
 import { CollegeCertificationsComponent } from './shared/components/college-certifications/college-certifications.component';
-import { PageTitleComponent } from './shared/components/page-title/page-title.component';
 import { SummaryComponent } from './pages/summary/summary.component';
 import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
 import { DeviceProviderComponent } from './pages/device-provider/device-provider.component';
@@ -25,7 +24,6 @@ import { JobComponent } from './pages/job/job.component';
     ReviewComponent,
     ConfirmationComponent,
     CollegeCertificationsComponent,
-    PageTitleComponent,
     AccessAgreementComponent,
     SummaryComponent,
     RegulatoryComponent,
