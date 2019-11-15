@@ -1,12 +1,12 @@
 import { BaseRoute } from '@core/models/base-route';
 
-export class ProvisionRoutes extends BaseRoute {
+export class AdjudicationRoutes extends BaseRoute {
   public static get MODULE_PATH(): string {
-    return ProvisionRoutes.PROVISION;
+    return AdjudicationRoutes.ADJUDICATION;
   }
 
   // Module
-  public static PROVISION = 'provision';
+  public static ADJUDICATION = 'adjudication';
   // Adjudication
   public static ENROLMENTS = 'enrolments';
 }

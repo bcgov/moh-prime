@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { ProvisionResource } from './provision-resource.service';
+import { AdjudicationResource } from './adjudication-resource.service';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 
-describe('ProvisionResource', () => {
+describe('AdjudicationResource', () => {
   beforeEach(() => TestBed.configureTestingModule({
     imports: [
       HttpClientTestingModule
@@ -18,7 +18,7 @@ describe('ProvisionResource', () => {
   }));
 
   it('should create', () => {
-    const service: ProvisionResource = TestBed.get(ProvisionResource);
+    const service: AdjudicationResource = TestBed.get(AdjudicationResource);
     expect(service).toBeTruthy();
   });
 });

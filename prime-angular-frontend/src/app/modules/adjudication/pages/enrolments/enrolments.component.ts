@@ -14,7 +14,7 @@ import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { EnrolmentStatusReasonsComponent } from '@shared/components/dialogs/content/enrolment-status-reasons/enrolment-status-reasons.component';
 
-import { ProvisionResource } from '@adjudication/shared/services/provision-resource.service';
+import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 @Component({
   selector: 'app-enrolments',
@@ -30,7 +30,7 @@ export class EnrolmentsComponent implements OnInit {
 
   constructor(
     private configService: ConfigService,
-    private provisionResource: ProvisionResource,
+    private adjudicationResource: AdjudicationResource,
     private toastService: ToastService,
     private dialog: MatDialog,
     private logger: LoggerService
@@ -75,13 +75,13 @@ export class EnrolmentsComponent implements OnInit {
       .pipe(
         exhaustMap((result: boolean) =>
           (result)
-            ? this.provisionResource.updateEnrolmentStatus(id, EnrolmentStatus.ADJUDICATED_APPROVED)
+            ? this.adjudicationResource.updateEnrolmentStatus(id, EnrolmentStatus.ADJUDICATED_APPROVED)
             : EMPTY
         ),
         // TODO: show success/error for enrolment status, and attempt replay getting enrolment for update
         // map(() => { })
         // catchError(() => { })
-        exhaustMap(() => this.provisionResource.enrolment(id))
+        exhaustMap(() => this.adjudicationResource.enrolment(id))
         // retry(3),
         // catchError(() => { })
       )
@@ -92,7 +92,7 @@ export class EnrolmentsComponent implements OnInit {
         },
         (error: any) => {
           this.toastService.openErrorToast('Enrolment could not be approved');
-          this.logger.error('[Provision] Enrolments::approveEnrolment error has occurred: ', error);
+          this.logger.error('[Adjudication] Enrolments::approveEnrolment error has occurred: ', error);
         }
       );
   }
@@ -109,13 +109,13 @@ export class EnrolmentsComponent implements OnInit {
       .pipe(
         exhaustMap((result: boolean) =>
           (result)
-            ? this.provisionResource.updateEnrolmentStatus(id, EnrolmentStatus.DECLINED)
+            ? this.adjudicationResource.updateEnrolmentStatus(id, EnrolmentStatus.DECLINED)
             : EMPTY
         ),
         // TODO: show success/error for enrolment status, and attempt replay getting enrolment for update
         // map(() => { })
         // catchError(() => { })
-        exhaustMap(() => this.provisionResource.enrolment(id)),
+        exhaustMap(() => this.adjudicationResource.enrolment(id)),
         // retry(3),
         // catchError(() => { })
       )
@@ -126,7 +126,7 @@ export class EnrolmentsComponent implements OnInit {
         },
         (error: any) => {
           this.toastService.openErrorToast('Enrolment could not be declined');
-          this.logger.error('[Provision] Enrolments::declineEnrolment error has occurred: ', error);
+          this.logger.error('[Adjudication] Enrolments::declineEnrolment error has occurred: ', error);
         }
       );
   }
@@ -143,7 +143,7 @@ export class EnrolmentsComponent implements OnInit {
       .pipe(
         exhaustMap((result: boolean) =>
           (result)
-            ? this.provisionResource.deleteEnrolment(id)
+            ? this.adjudicationResource.deleteEnrolment(id)
             : EMPTY
         )
       )
@@ -154,7 +154,7 @@ export class EnrolmentsComponent implements OnInit {
         },
         (error: any) => {
           this.toastService.openErrorToast('Enrolment could not be deleted');
-          this.logger.error('[Provision] Enrolments::deleteEnrolments error has occurred: ', error);
+          this.logger.error('[Adjudication] Enrolments::deleteEnrolments error has occurred: ', error);
         }
       );
   }
@@ -164,7 +164,7 @@ export class EnrolmentsComponent implements OnInit {
   }
 
   private getEnrolments(statusCode?: number) {
-    this.busy = this.provisionResource.enrolments(statusCode)
+    this.busy = this.adjudicationResource.enrolments(statusCode)
       .subscribe(
         (enrolments: Enrolment[]) => {
           this.logger.info('ENROLMENTS', enrolments);
@@ -172,7 +172,7 @@ export class EnrolmentsComponent implements OnInit {
         },
         (error: any) => {
           this.toastService.openErrorToast('Enrolments could not be retrieved');
-          this.logger.error('[Provision] Enrolments::getEnrolments error has occurred: ', error);
+          this.logger.error('[Adjudication] Enrolments::getEnrolments error has occurred: ', error);
         }
       );
   }

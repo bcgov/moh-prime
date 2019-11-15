@@ -10,7 +10,7 @@ import { AppComponent } from './app.component';
 
 import { AuthModule } from '@auth/auth.module';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
-import { ProvisionModule } from '@adjudication/provision.module';
+import { AdjudicationModule } from '@adjudication/adjudication.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -21,7 +21,7 @@ import { ProvisionModule } from '@adjudication/provision.module';
     AppConfigModule,
     AuthModule, // TODO: lazy load this module
     EnrolmentModule, // TODO: lazy load this module
-    ProvisionModule, // TODO: lazy load this module
+    AdjudicationModule, // TODO: lazy load this module
     AppRoutingModule // WARNING: MUST be the last routing module imported!!!
   ],
   bootstrap: [AppComponent]

@@ -7,7 +7,7 @@ import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 
-import { ProvisionResource } from '@adjudication/shared/services/provision-resource.service';
+import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 @Component({
   selector: 'app-enrolment',
@@ -20,7 +20,7 @@ export class EnrolmentComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private provisionResource: ProvisionResource,
+    private adjudicationResource: AdjudicationResource,
     private toastService: ToastService,
     private logger: LoggerService
   ) { }
@@ -35,12 +35,12 @@ export class EnrolmentComponent implements OnInit {
   }
 
   private getEnrolment(id: number, statusCode?: number) {
-    this.busy = this.provisionResource.enrolment(id, statusCode)
+    this.busy = this.adjudicationResource.enrolment(id, statusCode)
       .subscribe(
         (enrolment: Enrolment) => this.enrolment = enrolment,
         (error: any) => {
           this.toastService.openErrorToast('Enrolment could not be found');
-          this.logger.error('[Provision] Enrolment::getEnrolment error has occurred: ', error);
+          this.logger.error('[Adjudication] Enrolment::getEnrolment error has occurred: ', error);
         }
       );
   }
