@@ -3,6 +3,13 @@ apiVersion: v1
 metadata:
   name: sonar-scanner-bc
   creationTimestamp: null
+parameters:
+  - name: SOURCE_REPOSITORY_URL
+    required: true
+    value: 'https://github.com/bcgov/moh-prime'
+  - name: SOURCE_REPOSITORY_REF
+    required: true
+    value: 'develop'
 objects:
   - apiVersion: v1
     kind: ImageStream
@@ -28,13 +35,19 @@ objects:
           kind: ImageStreamTag
           name: sonar-runner:latest
       postCommit: {}
-      resources: {}
+      resources: 
+        requests:
+          cpu: 300m
+          memory: 512Mi
+        limits:
+          cpu: '1'
+          memory: 1024Mi
       runPolicy: Serial
       source:
         contextDir: sonar-scanner/
         git:
-          ref: feature/sonnar-runner-phase2
-          uri: https://github.com/bcgov/moh-prime.git
+          ref: '${SOURCE_REPOSITORY_REF}'
+          uri: '${SOURCE_REPOSITORY_URL}'
         type: Git
       strategy:
         dockerStrategy:

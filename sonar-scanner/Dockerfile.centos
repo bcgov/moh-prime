@@ -1,5 +1,4 @@
-FROM docker-registry.default.svc:5000/dqszvc-tools/jenkins-slave-base-centos7
-#FROM openshift/jenkins-slave-base-centos7
+FROM openshift/jenkins-slave-base-centos7
 SHELL ["/bin/bash", "-c"]
 COPY . /var/lib/origin 
 USER 0
@@ -86,5 +85,7 @@ RUN chown -R default:0 /home/jenkins && \
     chown -R default:0 /var/lib/origin && \
     chmod -R a+rwx /var/lib/origin
 
+# For local testing
+#COPY ../ ./moh-prime
 USER 1000
 ENTRYPOINT [ "./entrypoint.bash" ]
