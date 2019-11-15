@@ -21,10 +21,14 @@
       <div class="col-sm-12">
 
         <mat-form-field class="w-100">
-          <span matPrefix>{{ licensePrefix }}&nbsp;</span>
-          <input matInput
-                 placeholder="Licence Number"
-                 formControlName="licenseNumber">
+
+          <div class="d-flex">
+            <span class="prefix">{{ licensePrefix }}&nbsp;</span>
+            <input matInput
+                   placeholder="Licence Number"
+                   formControlName="licenseNumber">
+          </div>
+
           <mat-error *ngIf="form.get('licenseNumber').hasError('required')">Required</mat-error>
           <mat-error *ngIf="form.get('licenseNumber').hasError('length')">Must be a 5 digit number</mat-error>
         </mat-form-field>
