@@ -1,13 +1,9 @@
 import { BaseRoute } from '@core/models/base-route';
 
 export class AuthRoutes extends BaseRoute {
-  public static get MODULE_PATH(): string {
-    return AuthRoutes.AUTH;
-  }
-
-  // Module
   public static AUTH = '';
-  // Authentication
   public static INFO = 'info';
   public static ADMIN = 'admin';
+
+  public static MODULE_PATH = AuthRoutes.AUTH;
 }
