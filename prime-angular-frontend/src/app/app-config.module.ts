@@ -4,7 +4,7 @@ import { NgModule, InjectionToken } from '@angular/core';
 import { environment } from '../environments/environment';
 import { AppRoutes } from './app.routes';
 import { EnrolmentRoutes } from '@enrolment/enrolent.routes';
-import { ProvisionRoutes } from '@provision/provision.routes';
+import { ProvisionRoutes } from '@adjudication/provision.routes';
 
 export let APP_CONFIG = new InjectionToken<AppConfig>('app.config');
 

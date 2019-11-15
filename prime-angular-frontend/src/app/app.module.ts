@@ -10,7 +10,7 @@ import { AppComponent } from './app.component';
 
 import { AuthModule } from '@auth/auth.module';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
-import { ProvisionModule } from '@provision/provision.module';
+import { ProvisionModule } from '@adjudication/provision.module';
 
 @NgModule({
   declarations: [AppComponent],

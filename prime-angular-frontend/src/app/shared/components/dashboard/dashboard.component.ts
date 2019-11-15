@@ -12,7 +12,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { EnrolmentRoutes } from '@enrolment/enrolent.routes';
-import { ProvisionRoutes } from '@provision/provision.routes';
+import { ProvisionRoutes } from '@adjudication/provision.routes';
 
 @Component({
   selector: 'app-dashboard',

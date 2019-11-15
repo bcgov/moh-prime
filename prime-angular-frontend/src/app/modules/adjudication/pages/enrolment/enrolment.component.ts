@@ -7,7 +7,7 @@ import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 
-import { ProvisionResource } from '@provision/shared/services/provision-resource.service';
+import { ProvisionResource } from '@adjudication/shared/services/provision-resource.service';
 
 @Component({
   selector: 'app-enrolment',
