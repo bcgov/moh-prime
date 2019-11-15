@@ -1,10 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import {
-  CanActivateChild, ActivatedRouteSnapshot,
-  RouterStateSnapshot, UrlTree, Router
-} from '@angular/router';
-
-import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { LoggerService } from '@core/services/logger.service';
@@ -15,7 +10,7 @@ import { BaseGuard } from '@core/guards/base.guard';
 @Injectable({
   providedIn: 'root'
 })
-export class ProvisionGuard extends BaseGuard {
+export class AdjudicationGuard extends BaseGuard {
   constructor(
     protected authService: AuthService,
     protected logger: LoggerService,
@@ -36,7 +31,7 @@ export class ProvisionGuard extends BaseGuard {
 
       if (!authenticated) {
         destinationRoute = this.config.routes.auth;
-      } else if (roles.includes(Role.PROVISIONER) || roles.includes(Role.ADMIN)) {
+      } else if (roles.includes(Role.ADJUDICATOR) || roles.includes(Role.ADMIN)) {
         // Allow route to resolve
         return resolve(true);
       }

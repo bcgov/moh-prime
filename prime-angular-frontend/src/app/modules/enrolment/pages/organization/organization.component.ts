@@ -18,11 +18,11 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { Organization } from '@enrolment/shared/models/organization.model';
 
 @Component({
-  selector: 'app-pharmanet-access',
-  templateUrl: './pharmanet-access.component.html',
-  styleUrls: ['./pharmanet-access.component.scss']
+  selector: 'app-organization',
+  templateUrl: './organization.component.html',
+  styleUrls: ['./organization.component.scss']
 })
-export class PharmanetAccessComponent implements OnInit {
+export class OrganizationComponent implements OnInit {
   public busy: Subscription;
   public form: FormGroup;
   public organizationCtrl: FormControl;
@@ -66,7 +66,7 @@ export class PharmanetAccessComponent implements OnInit {
           },
           (error: any) => {
             this.toastService.openErrorToast('PharmaNet access could not be saved');
-            this.logger.error('[Enrolment] PharmanetAccess::onSubmit error has occurred: ', error);
+            this.logger.error('[Enrolment] Organization::onSubmit error has occurred: ', error);
           });
     } else {
       this.form.markAllAsTouched();
@@ -119,7 +119,7 @@ export class PharmanetAccessComponent implements OnInit {
   }
 
   private createFormInstance() {
-    this.form = this.enrolmentStateService.pharmaNetAccessForm;
+    this.form = this.enrolmentStateService.organizationForm;
     this.organizationCtrl = new FormControl();
   }
 

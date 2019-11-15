@@ -79,7 +79,7 @@ export class SelfDeclarationComponent implements OnInit {
           () => {
             this.toastService.openSuccessToast('Self declaration has been saved');
             this.form.markAsPristine();
-            this.router.navigate([EnrolmentRoutes.PHARMANET_ACCESS], { relativeTo: this.route.parent });
+            this.router.navigate([EnrolmentRoutes.ORGANIZATION], { relativeTo: this.route.parent });
           },
           (error: any) => {
             this.toastService.openErrorToast('Self declaration could not be saved');

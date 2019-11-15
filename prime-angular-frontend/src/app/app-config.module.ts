@@ -4,7 +4,7 @@ import { NgModule, InjectionToken } from '@angular/core';
 import { environment } from '../environments/environment';
 import { AppRoutes } from './app.routes';
 import { EnrolmentRoutes } from '@enrolment/enrolent.routes';
-import { ProvisionRoutes } from '@provision/provision.routes';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 export let APP_CONFIG = new InjectionToken<AppConfig>('app.config');
 
@@ -14,7 +14,7 @@ export class AppConfig {
   routes: {
     auth: string;
     enrolment: string;
-    provision: string;
+    adjudication: string;
     denied: string;
     maintenance: string;
   };
@@ -26,7 +26,7 @@ export const APP_DI_CONFIG: AppConfig = {
   routes: {
     auth: EnrolmentRoutes.MODULE_PATH,
     enrolment: EnrolmentRoutes.MODULE_PATH,
-    provision: ProvisionRoutes.MODULE_PATH,
+    adjudication: AdjudicationRoutes.MODULE_PATH,
     denied: AppRoutes.DENIED,
     maintenance: AppRoutes.MAINTENANCE
   }

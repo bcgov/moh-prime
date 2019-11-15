@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 
 import { SharedModule } from '@shared/shared.module';
-import { ProvisionRoutingModule } from './provision-routing.module';
+import { AdjudicationRoutingModule } from './adjudication-routing.module';
 
 import { EnrolmentsComponent } from './pages/enrolments/enrolments.component';
 import { EnrolmentComponent } from './pages/enrolment/enrolment.component';
@@ -13,7 +13,7 @@ import { EnrolmentComponent } from './pages/enrolment/enrolment.component';
   ],
   imports: [
     SharedModule,
-    ProvisionRoutingModule
+    AdjudicationRoutingModule
   ]
 })
-export class ProvisionModule { }
+export class AdjudicationModule { }
