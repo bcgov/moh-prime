@@ -37,8 +37,8 @@ export class AuthorizationRedirectGuard extends BaseGuard {
 
       if (roles.includes(Role.ENROLLEE)) {
         destinationRoute = this.config.routes.enrolment;
-      } else if (roles.includes(Role.PROVISIONER) || roles.includes(Role.ADMIN)) {
-        destinationRoute = this.config.routes.provision;
+      } else if (roles.includes(Role.ADJUDICATOR) || roles.includes(Role.ADMIN)) {
+        destinationRoute = this.config.routes.adjudication;
       }
 
       // Otherwise, redirect to an appropriate destination

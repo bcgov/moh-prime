@@ -7,7 +7,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
-import { PharmanetAccessComponent } from './pharmanet-access.component';
+import { OrganizationComponent } from './organization.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
@@ -17,9 +17,9 @@ import { PageSubheaderComponent } from '@shared/components/page-subheader/page-s
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
-describe('PharmanetAccessComponent', () => {
-  let component: PharmanetAccessComponent;
-  let fixture: ComponentFixture<PharmanetAccessComponent>;
+describe('OrganizationComponent', () => {
+  let component: OrganizationComponent;
+  let fixture: ComponentFixture<OrganizationComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule(
@@ -34,7 +34,7 @@ describe('PharmanetAccessComponent', () => {
           RouterTestingModule
         ],
         declarations: [
-          PharmanetAccessComponent,
+          OrganizationComponent,
           PageHeaderComponent,
           PageSubheaderComponent
         ],
@@ -58,7 +58,7 @@ describe('PharmanetAccessComponent', () => {
 
 
   beforeEach(inject([EnrolmentService], (enrolmentService: EnrolmentService) => {
-    fixture = TestBed.createComponent(PharmanetAccessComponent);
+    fixture = TestBed.createComponent(OrganizationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

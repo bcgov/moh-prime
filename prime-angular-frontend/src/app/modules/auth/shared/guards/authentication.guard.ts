@@ -38,7 +38,7 @@ export class AuthenticationGuard extends BaseGuard {
       }
 
       const routes = this.config.routes;
-      const adminRoutes = [routes.provision];
+      const adminRoutes = [routes.adjudication];
       const moduleRoutes = [routes.enrolment, ...adminRoutes];
       const targetModule = routePath.slice(1).split('/').shift();
 

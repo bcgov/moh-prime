@@ -54,8 +54,8 @@ export class MockAuthService implements IAuthService {
     });
   }
 
-  public isProvisioner(): boolean {
-    return this._role === Role.PROVISIONER;
+  public isAdjudicator(): boolean {
+    return this._role === Role.ADJUDICATOR;
   }
 
   public isAdmin(): boolean {

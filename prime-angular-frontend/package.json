@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "coverage": "ng test --watch=false --code-coverage --browsers=ChromeHeadless",
+    "coverage": "ng test --watch=false --code-coverage --browsers=ChromeHeadlessNoSandbox",
     "sonar": "npm run coverage && sonar-scanner"
   },
   "private": true,

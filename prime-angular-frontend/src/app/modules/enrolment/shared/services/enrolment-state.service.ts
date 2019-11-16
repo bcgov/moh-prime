@@ -21,7 +21,7 @@ export class EnrolmentStateService {
   public deviceProviderForm: FormGroup;
   public jobsForm: FormGroup;
   public selfDeclarationForm: FormGroup;
-  public pharmaNetAccessForm: FormGroup;
+  public organizationForm: FormGroup;
 
   private enrolmentId: number;
   private enrolleeId: number;
@@ -35,7 +35,7 @@ export class EnrolmentStateService {
     this.deviceProviderForm = this.buildDeviceProviderForm();
     this.jobsForm = this.buildJobsForm();
     this.selfDeclarationForm = this.buildSelfDeclarationForm();
-    this.pharmaNetAccessForm = this.buildPharmaNetAccessForm();
+    this.organizationForm = this.buildOrganizationsForm();
   }
 
   /**
@@ -62,7 +62,7 @@ export class EnrolmentStateService {
     const deviceProvider = this.deviceProviderForm.getRawValue();
     const jobs = this.jobsForm.getRawValue();
     const selfDeclaration = this.selfDeclarationForm.getRawValue();
-    const pharmaNetAccess = this.pharmaNetAccessForm.getRawValue();
+    const organization = this.organizationForm.getRawValue();
 
     return {
       id,
@@ -75,7 +75,7 @@ export class EnrolmentStateService {
       ...deviceProvider,
       ...jobs,
       ...selfDeclaration,
-      ...pharmaNetAccess
+      ...organization
     };
   }
 
@@ -86,7 +86,7 @@ export class EnrolmentStateService {
       this.isDeviceProviderValid() &&
       this.isJobsValid() &&
       this.isSelfDeclarationValid() &&
-      this.isPharmaNetAccessValid()
+      this.isOrganizationValid()
     );
   }
 
@@ -110,8 +110,8 @@ export class EnrolmentStateService {
     return this.selfDeclarationForm.valid;
   }
 
-  public isPharmaNetAccessValid(): boolean {
-    return this.pharmaNetAccessForm.valid;
+  public isOrganizationValid(): boolean {
+    return this.organizationForm.valid;
   }
 
   /**
@@ -147,10 +147,10 @@ export class EnrolmentStateService {
       this.regulatoryForm.patchValue(enrolment);
       this.jobsForm.patchValue(enrolment);
       this.selfDeclarationForm.patchValue(enrolment);
-      this.pharmaNetAccessForm.patchValue(enrolment);
+      this.organizationForm.patchValue(enrolment);
 
       if (enrolment.organizations.length) {
-        const organizations = this.pharmaNetAccessForm.get('organizations') as FormArray;
+        const organizations = this.organizationForm.get('organizations') as FormArray;
         organizations.clear();
         enrolment.organizations.forEach((o: Organization) => {
           const organization = this.buildOrganizationForm();
@@ -256,7 +256,7 @@ export class EnrolmentStateService {
     });
   }
 
-  private buildPharmaNetAccessForm(): FormGroup {
+  private buildOrganizationsForm(): FormGroup {
     return this.fb.group({
       organizations: this.fb.array([])
     });
