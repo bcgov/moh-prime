@@ -12,7 +12,8 @@ namespace Prime.Models
         public Guid Id { get; set; }
 
         [JsonIgnore]
-        public int EnrolleeId { get; set; }
+        [Required]
+        public int? EnrolleeId { get; set; }
 
         [JsonIgnore]
         public int ViewCount { get; set; }
