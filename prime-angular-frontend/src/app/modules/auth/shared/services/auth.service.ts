@@ -14,7 +14,7 @@ export interface IAuthService {
   isUserInRole(role: string): boolean;
   checkAssuranceLevel(assuranceLevel: number): Promise<boolean>;
   isEnrollee(): Promise<boolean>;
-  isProvisioner(): boolean;
+  isAdjudicator(): boolean;
   isAdmin(): boolean;
   decodeToken(): Promise<Keycloak.KeycloakTokenParsed | null>;
   login(options?: Keycloak.KeycloakLoginOptions): Promise<void>;
@@ -79,8 +79,8 @@ export class AuthService implements IAuthService {
     return this.isUserInRole(Role.ENROLLEE) && await this.checkAssuranceLevel(3);
   }
 
-  public isProvisioner(): boolean {
-    return this.isUserInRole(Role.PROVISIONER);
+  public isAdjudicator(): boolean {
+    return this.isUserInRole(Role.ADJUDICATOR);
   }
 
   public isAdmin(): boolean {

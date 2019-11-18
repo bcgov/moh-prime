@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { Config, CollegeConfig, LicenseConfig, PracticeConfig } from '@config/config.model';
@@ -37,6 +37,10 @@ export class CollegeCertificationsComponent implements OnInit {
     this.practices = this.configService.practices;
   }
 
+  public get isMobile() {
+    return this.viewportService.isMobile;
+  }
+
   public get collegeCode(): FormControl {
     return this.form.get('collegeCode') as FormControl;
   }
@@ -57,16 +61,11 @@ export class CollegeCertificationsComponent implements OnInit {
     return this.form.get('practiceCode') as FormControl;
   }
 
-  public get isMobile() {
-    return this.viewportService.isMobile;
-  }
-
   public onRemove() {
     this.remove.emit(this.index);
   }
 
   public ngOnInit() {
-
     if (this.collegeCode.value) {
       this.setValidation();
       this.loadLicenses(this.collegeCode.value);

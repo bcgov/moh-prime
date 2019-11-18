@@ -6,19 +6,21 @@ import {
   MatSlideToggleModule, MatSnackBarModule, MatTableModule, MatToolbarModule,
   MatTooltipModule, MatPaginatorModule, MatRadioModule,
   DateAdapter, MAT_DATE_LOCALE, MAT_DIALOG_DEFAULT_OPTIONS,
-  MatFormFieldDefaultOptions, MAT_FORM_FIELD_DEFAULT_OPTIONS
+  MatFormFieldDefaultOptions, MAT_FORM_FIELD_DEFAULT_OPTIONS, MAT_DATE_FORMATS
 } from '@angular/material';
 import { MomentDateAdapter, MatMomentDateModule } from '@angular/material-moment-adapter';
 
+export const APP_DATE_FORMAT = 'D MMM YYYY';
 export const APP_DATE_FORMATS = {
   parse: {
-    dateInput: 'LL',
+    // Reformat entered date values to this format
+    dateInput: APP_DATE_FORMAT,
   },
   display: {
-    dateInput: 'LL',
+    dateInput: APP_DATE_FORMAT,
     monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'MMMM YYYY',
+    dateA11yLabel: APP_DATE_FORMAT,
+    monthYearA11yLabel: 'MMM YYYY',
   }
 };
 
@@ -50,6 +52,10 @@ const matFormFieldCustomOptions: MatFormFieldDefaultOptions = {
     MatRadioModule
   ],
   providers: [
+    {
+      provide: MAT_DATE_FORMATS,
+      useValue: APP_DATE_FORMATS
+    },
     {
       provide: DateAdapter,
       useClass: MomentDateAdapter,

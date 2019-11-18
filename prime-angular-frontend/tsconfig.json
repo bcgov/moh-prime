@@ -38,11 +38,8 @@
       "@enrolment/*": [
         "./app/modules/enrolment/*"
       ],
-      "@provision/*": [
-        "./app/modules/provision/*"
-      ],
-      "@admin/*": [
-        "./app/modules/admin/*"
+      "@adjudication/*": [
+        "./app/modules/adjudication/*"
       ]
     }
   },

@@ -36,8 +36,8 @@ export class EnrolleeGuard extends BaseGuard {
       } else if (roles.includes(Role.ENROLLEE)) {
         // Allow route to resolve
         return resolve(true);
-      } else if (roles.includes(Role.PROVISIONER) || roles.includes(Role.ADMIN)) {
-        destinationRoute = this.config.routes.provision;
+      } else if (roles.includes(Role.ADJUDICATOR) || roles.includes(Role.ADMIN)) {
+        destinationRoute = this.config.routes.adjudication;
       }
 
       // Otherwise, redirect to an appropriate destination

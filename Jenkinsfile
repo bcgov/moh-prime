@@ -22,18 +22,22 @@ pipeline {
                 sh "./player.sh deploy frontend dev"
             }
         }
-/*
-        stage('Code Quality Check') {
+        /*
+        stage('Build Sonar Scanner') {
             agent { label 'master' }
             steps {
                 echo "Deploy (DEV) ..."
-                //sh "export OC_APP=dev"
-                //sh "./player.sh scan"
-                //sh "./sonar-runner.bash"
-                //sh "./player.sh sonar dotnet-webapi dev"
-                //sh "./player.sh sonar angular-frontend dev"
+                sh "./player.sh sonar tools"
             }
         }
+        */
+        stage('Code Quality Check') {
+            agent { label 'code-tests' }
+            steps {
+                sh "./player.sh scan"
+            }
+        }
+        /*
         stage('Test') {
             agent { label 'master' }
             script {
@@ -47,47 +51,14 @@ pipeline {
             }
             steps {
                 echo "Test (DEV) ..."
-                sh "bash ./player.sh ocApply build postgresql dev"
-                sh "bash ./player.sh ocApply build dotnet-webapi dev"
-                sh "bash ./player.sh ocApply build angular-frontend dev"
-                sh "bash ./player.sh ocApply deploy postgresql dev"
-                sh "bash ./player.sh ocApply deploy dotnet-webapi dev"
-                sh "bash ./player.sh ocApply deploy angular-frontend dev"
+                sh "./player.sh build database dev"
+                sh "./player.sh build api dev"
+                sh "./player.sh build frontend dev"
+                sh "./player.sh deploy database dev"
+                sh "./player.sh deploy api dev"
+                sh "./player.sh deploy frontend dev"
             }
-        }
-        */
-        /*
-        stage('Unit Tests and SonarQube Reporting (DEV)') {
-            agent { label 'master' }
-            steps {
-                echo "Running unit tests and reporting them to SonarQube ..."
-                sh "unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-unit-test -Pargs.--config=pipeline/config-dev.groovy -Pargs.--pr=${CHANGE_ID} -Pargs.--env=dev -Pargs.--branch=${CHANGE_BRANCH}"
-            }
-        }
-        stage('Functional Test (DEV)') {
-            agent { label 'master' }
-            steps {
-                echo "Functional Test (DEV) ..."
-                sh "unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-functional-test -Pargs.--config=pipeline/config-dev.groovy -Pargs.--pr=${CHANGE_ID} -Pargs.--env=dev"
-            }
-        }
-        stage ('ZAP (DEV)'){
-            agent { label 'master' }
-            steps {
-                echo "ZAP (DEV)"
-                sh "unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-zap -Pargs.--config=pipeline/config-dev.groovy -Pargs.--pr=${CHANGE_ID} -Pargs.--env=dev"
-            }
-        }
-        stage('Deploy (TEST)') {
-            agent { label 'master' }
-            when {
-                environment name: 'CHANGE_TARGET', value: 'master'
-            }
-            steps {
-                echo "Deploy (TEST)"
-                sh "unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-deploy -Pargs.--config=pipeline/config-test.groovy -Pargs.--pr=${CHANGE_ID} -Pargs.--env=test"
-            }
-        }
+        }/*
         stage('Deploy (PROD)') {
             agent { label 'master' }
             when {
@@ -101,10 +72,10 @@ pipeline {
                         error "User cancelled"
                     }
                     echo "Deploy (PROD)"
-                    sh "unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-deploy -Pargs.--config=pipeline/config-prod.groovy -Pargs.--pr=${CHANGE_ID} -Pargs.--env=prod"
+                    sh "./player.sh "
                 }
             }
-        }
+        }/*
         stage('Merge to master') {
             agent { label 'master' }
             when {
@@ -120,7 +91,7 @@ pipeline {
                     echo "Squashing commits and merging to master"
                 }
                 withCredentials([usernamePassword(credentialsId: 'github-account', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                    sh """
+                    sh '
                         # Update master with latest changes from develop
                         git checkout master
                         git fetch
@@ -133,10 +104,11 @@ pipeline {
                         git fetch
                         git merge -s ours -m "Updating develop with master" origin/master
                         git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/bcgov/moh-prime.git
-                    """
+                    '
                 }
             }
-        }
+        }*/
+        /*
         stage('Acceptance') {
             agent { label 'master' }
             input {
@@ -145,9 +117,8 @@ pipeline {
             }
             steps {
                 echo "Acceptance ..."
-                sh "unset JAVA_OPTS; pipeline/gradlew --no-build-cache --console=plain --no-daemon -b pipeline/build.gradle cd-clean -Pargs.--config=pipeline/config-dev.groovy -Pargs.--pr=${CHANGE_ID}"
+                sh "./player cleanup ${CHANGE_ID}"
             }
-        }
-        */
+        }*/
     }
 }

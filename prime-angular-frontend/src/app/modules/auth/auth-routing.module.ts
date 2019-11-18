@@ -11,7 +11,7 @@ import { AdminComponent } from './pages/admin/admin.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: AuthRoutes.MODULE_PATH,
     component: AuthComponent,
     canActivate: [AuthorizationRedirectGuard],
     children: [
@@ -27,7 +27,7 @@ const routes: Routes = [
       },
       {
         path: '', // Equivalent to `/` and alias for `info`
-        redirectTo: 'info',
+        redirectTo: AuthRoutes.INFO,
         pathMatch: 'full'
       }
     ]
