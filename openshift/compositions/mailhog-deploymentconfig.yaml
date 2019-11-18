@@ -6,23 +6,23 @@ metadata:
     kompose.version: 1.18.0 (06a2e56)
   creationTimestamp: null
   labels:
-    io.kompose.service: mailhog
-  name: mailhog
+    io.kompose.service: mailhog-server
+  name: mailhog-server
 spec:
   replicas: 1
   selector:
-    io.kompose.service: mailhog
+    io.kompose.service: mailhog-server
   strategy:
     resources: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
-        io.kompose.service: mailhog
+        io.kompose.service: mailhog-server
     spec:
       containers:
       - image: ' '
-        name: mailhog
+        name: mailhog-server
         ports:
         - containerPort: 1025
         - containerPort: 1025
@@ -35,7 +35,7 @@ spec:
   - imageChangeParams:
       automatic: true
       containerNames:
-      - mailhog
+      - mailhog-server
       from:
         kind: ImageStreamTag
         name: mailhog:latest

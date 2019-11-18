@@ -85,15 +85,22 @@ function deploy() {
 }
 
 function toolbelt(){
-    source $1.conf 
+    source $1.conf
     OC_APP=tools
+    buildPresent=$(oc get bc/"$APP_NAME" --ignore-not-found=true)
+    if [ -z "${buildPresent}" ];
+    then
+        MODE="apply"
+    else
+        MODE="create"
+    fi;
     oc process -f ./"${TEMPLATE_DIRECTORY}/$BUILD_CONFIG_TEMPLATE" \
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
-        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" | oc apply -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"
+        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" | oc $MODE -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"
     oc process -f "${TEMPLATE_DIRECTORY}/$DEPLOY_CONFIG_TEMPLATE" \
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
-        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" | oc apply -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"
-    oc start-build ${APP_NAME}-bc -n ${PROJECT_PREFIX}-${OC_APP} --wait --follow
+        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" | oc $MODE -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"
+    oc start-build ${APP_NAME} -n ${PROJECT_PREFIX}-${OC_APP} --wait --follow
 }
 
 function determineMode() {

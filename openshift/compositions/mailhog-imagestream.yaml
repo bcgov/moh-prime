@@ -4,7 +4,7 @@ metadata:
   creationTimestamp: null
   labels:
     io.kompose.service: mailhog
-  name: mailhog
+  name: mailhog-server
 spec:
   tags:
   - annotations: null
