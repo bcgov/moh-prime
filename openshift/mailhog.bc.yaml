@@ -32,7 +32,7 @@ objects:
           annotations: null
           from:
             kind: ImageStreamTag
-            name: 'mailhog'
+            name: 'mailhog:latest'
             namespace: ${OC_NAMESPACE}-${OC_APP}
           generation: 1
           importPolicy: {}
