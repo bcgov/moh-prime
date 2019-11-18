@@ -19,8 +19,8 @@ parameters:
     required: true
     value: 'tools'
 objects:
-  - apiVersion: v1
-    kind: Service
+  - kind: Service
+    apiVersion: v1
     metadata:
       creationTimestamp: null
       labels:
@@ -41,8 +41,8 @@ objects:
         io.kompose.service: mailhog
     status:
       loadBalancer: {}
-  - apiVersion: v1
-    kind: ImageStream
+  - kind: ImageStream
+    apiVersion: v1
     metadata:
       creationTimestamp: null
       labels:
@@ -59,7 +59,8 @@ objects:
         name: latest
     status:
       dockerImageRepository: ""
-  - apiVersion: v1
+  - kind: Service
+    apiVersion: v1
     metadata:
       creationTimestamp: null
       labels:
