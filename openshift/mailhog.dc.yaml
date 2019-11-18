@@ -12,6 +12,12 @@ parameters:
   - name: SOURCE_REPOSITORY_REF
     required: true
     value: 'develop'
+  - name: OC_NAMESPACE
+    required: true
+    value: 'dqszvc'
+  - name: OC_APP
+    required: true
+    value: 'tools'
 objects:
   - apiVersion: v1
     kind: Service
