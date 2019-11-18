@@ -86,6 +86,7 @@ function deploy() {
 
 function toolbelt(){
     source $1.conf 
+    OC_APP=tools
     oc process -f ./"${TEMPLATE_DIRECTORY}/$BUILD_CONFIG_TEMPLATE" \
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" | oc apply -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"
