@@ -92,7 +92,7 @@ function toolbelt(){
     oc process -f "${TEMPLATE_DIRECTORY}/$DEPLOY_CONFIG_TEMPLATE" \
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" | oc apply -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"
-    oc start-build ${APP_NAME} -n ${PROJECT_PREFIX}-${OC_APP} --wait --follow
+    oc start-build ${APP_NAME}-bc -n ${PROJECT_PREFIX}-${OC_APP} --wait --follow
 }
 
 function determineMode() {
