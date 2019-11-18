@@ -1,7 +1,7 @@
 kind: Template
 apiVersion: v1
 metadata:
-  name: mailhog-bc
+  name: mailhog-server-bc
   creationTimestamp: null
 parameters:
   - name: SOURCE_REPOSITORY_URL
@@ -28,7 +28,7 @@ objects:
       lookupPolicy:
         local: false
       tags:
-        - name: 'mailhog'
+        - name: 'mailhog-server'
           annotations: null
           from:
             kind: ImageStreamTag

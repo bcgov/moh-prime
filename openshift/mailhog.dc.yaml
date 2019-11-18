@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Template
 labels:
-  template: mailhog
+  template: mailhog-server
 metadata:
   creationTimestamp: null
-  name: mailog-dc
+  name: -mailhog-server-dc
 parameters:
   - name: SOURCE_REPOSITORY_URL
     required: true
@@ -24,8 +24,8 @@ objects:
     metadata:
       creationTimestamp: null
       labels:
-        io.kompose.service: mailhog
-      name: mailhog
+        io.kompose.service: mailhog-server
+      name: mailhog-server
     spec:
       ports:
       - name: "1025"
@@ -38,7 +38,7 @@ objects:
         port: 80
         targetPort: 8025
       selector:
-        io.kompose.service: mailhog
+        io.kompose.service: mailhog-server
     status:
       loadBalancer: {}
   - kind: ImageStream
@@ -46,7 +46,7 @@ objects:
     metadata:
       creationTimestamp: null
       labels:
-        io.kompose.service: mailhog
+        io.kompose.service: mailhog-server
       name: mailhog
     spec:
       tags:
@@ -67,19 +67,19 @@ objects:
         kompose.version: 1.18.0 (06a2e56)
       creationTimestamp: null
       labels:
-        io.kompose.service: mailhog
-      name: mailhog
+        io.kompose.service: mailhog-server
+      name: mailhog-server
     spec:
       replicas: 1
       selector:
-        io.kompose.service: mailhog
+        io.kompose.service: mailhog-server
       strategy:
         resources: {}
       template:
         metadata:
           creationTimestamp: null
           labels:
-            io.kompose.service: mailhog
+            io.kompose.service: mailhog-server
         spec:
           containers:
           - image: ' '
@@ -96,7 +96,7 @@ objects:
       - imageChangeParams:
           automatic: true
           containerNames:
-          - mailhog
+          - mailhog-server
           from:
             kind: ImageStreamTag
             name: mailhog:latest
