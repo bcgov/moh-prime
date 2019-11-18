@@ -14,7 +14,7 @@ objects:
   - kind: ImageStream
     apiVersion: v1
     metadata:
-      name: '${NAME}${SUFFIX}'
+      name: 'mailhog'
       labels:
         shared: 'true'
       annotations: {}
@@ -22,7 +22,7 @@ objects:
       lookupPolicy:
         local: false
       tags:
-        - name: '${NAME}'
+        - name: 'mailhog'
           annotations: null
           from:
             kind: ImageStreamTag
