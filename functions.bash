@@ -84,14 +84,15 @@ function deploy() {
     fi;
 }
 
-function sonar(){
-    oc process -f openshift/sonar-scanner.bc.yaml \
+function toolbelt(){
+    source $1.conf 
+    oc process -f ./"${TEMPLATE_DIRECTORY}/$BUILD_CONFIG_TEMPLATE" \
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
-        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" | oc apply -f - --namespace="${PROJECT_PREFIX}-$1"
-    oc process -f openshift/sonar-scanner.dc.yaml \
+        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" | oc apply -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"
+    oc process -f "${TEMPLATE_DIRECTORY}/$DEPLOY_CONFIG_TEMPLATE" \
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
-        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" | oc apply -f - --namespace="${PROJECT_PREFIX}-$1"
-    oc start-build sonar-runner -n ${PROJECT_PREFIX}-$1 --wait --follow
+        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" | oc apply -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"
+    oc start-build ${APP_NAME} -n ${PROJECT_PREFIX}-${OC_APP} --wait --follow
 }
 
 function determineMode() {

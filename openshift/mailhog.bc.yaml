@@ -1,0 +1,34 @@
+kind: Template
+apiVersion: v1
+metadata:
+  name: mailhog-bc
+  creationTimestamp: null
+parameters:
+  - name: SOURCE_REPOSITORY_URL
+    required: true
+    value: 'https://github.com/bcgov/moh-prime'
+  - name: SOURCE_REPOSITORY_REF
+    required: true
+    value: 'develop'
+objects:
+  - kind: ImageStream
+    apiVersion: v1
+    metadata:
+      name: '${NAME}${SUFFIX}'
+      labels:
+        shared: 'true'
+      annotations: {}
+    spec:
+      lookupPolicy:
+        local: false
+      tags:
+        - name: '${NAME}'
+          annotations: null
+          from:
+            kind: ImageStreamTag
+            name: 'mailhog'
+            namespace: ${OC_NAMESPACE}-${OC_APP}
+          generation: 1
+          importPolicy: {}
+          referencePolicy:
+            type: Local

@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ImageStream
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: mailhog
+  name: mailhog
+spec:
+  tags:
+  - annotations: null
+    from:
+      kind: DockerImage
+      name: mailhog
+    generation: null
+    importPolicy: {}
+    name: latest
+status:
+  dockerImageRepository: ""
