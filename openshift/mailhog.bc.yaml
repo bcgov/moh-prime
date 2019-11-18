@@ -20,7 +20,7 @@ objects:
   - kind: ImageStream
     apiVersion: v1
     metadata:
-      name: 'mailhog'
+      name: 'mailhog-server'
       labels:
         shared: 'true'
       annotations: {}

@@ -47,7 +47,7 @@ objects:
       creationTimestamp: null
       labels:
         io.kompose.service: mailhog-server
-      name: mailhog
+      name: mailhog-server
     spec:
       tags:
       - annotations: null
@@ -83,7 +83,7 @@ objects:
         spec:
           containers:
           - image: ' '
-            name: mailhog
+            name: mailhog-server
             ports:
             - containerPort: 1025
             - containerPort: 1025
