@@ -1,0 +1,24 @@
+<div class="d-flex">
+  <div class="flex-grow-1">
+
+    <ng-content></ng-content>
+
+  </div>
+  <div class="action"
+       *ngIf="show">
+
+    <ng-container *ngIf="contextualHelpChildren.length; else default">
+      <app-contextual-help cssClass="pl-3">
+        <ng-content select="[appContextualContent]"></ng-content>
+      </app-contextual-help>
+    </ng-container>
+
+    <ng-template #default>
+      <button mat-icon-button
+              (click)="onEvent()">
+        <mat-icon>{{ icon }}</mat-icon>
+      </button>
+    </ng-template>
+
+  </div>
+</div>

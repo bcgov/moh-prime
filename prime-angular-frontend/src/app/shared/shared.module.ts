@@ -27,6 +27,7 @@ import { PageSubheaderComponent } from './components/page-subheader/page-subhead
 import { PageSubheaderTitleDirective } from '@shared/components/page-subheader/page-subheader-title.directive';
 import { PageSubheaderSummaryDirective } from '@shared/components/page-subheader/page-subheader-summary.directive';
 import { DialogContentDirective } from '@shared/components/dialogs/dialog-content.directive';
+import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { DialogContentDirective } from '@shared/components/dialogs/dialog-conten
     PageSubheaderComponent,
     PageSubheaderTitleDirective,
     PageSubheaderSummaryDirective,
-    DialogContentDirective
+    DialogContentDirective,
+    FormIconGroupComponent
   ],
   imports: [
     CommonModule,
@@ -82,7 +84,8 @@ import { DialogContentDirective } from '@shared/components/dialogs/dialog-conten
     PageSubheaderComponent,
     PageSubheaderTitleDirective,
     PageSubheaderSummaryDirective,
-    DialogContentDirective
+    DialogContentDirective,
+    FormIconGroupComponent
   ],
   entryComponents: [
     ConfirmDialogComponent,
