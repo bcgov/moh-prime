@@ -22,10 +22,8 @@ export class RouteStateService {
   ) { }
 
   /**
+   * @description
    * Listener for the route navigation start event.
-   *
-   * @returns {Observable<RouterEvent>}
-   * @memberof RouteStateService
    */
   public onNavigationStart(): Observable<RouterEvent> {
     return this.router.events.pipe(
@@ -34,10 +32,8 @@ export class RouteStateService {
   }
 
   /**
+   * @description
    * Listener for the route navigation stop events.
-   *
-   * @returns {Observable<RouterEvent>}
-   * @memberof RouteStateService
    */
   public onNavigationStop(): Observable<RouterEvent> {
     return this.router.events.pipe(
@@ -50,10 +46,8 @@ export class RouteStateService {
   }
 
   /**
+   * @description
    * Listener for the route navigation end event.
-   *
-   * @returns {Observable<RouterEvent>}
-   * @memberof RoutingStateService
    */
   public onNavigationEnd(): Observable<RouterEvent> {
     return this.router.events.pipe(

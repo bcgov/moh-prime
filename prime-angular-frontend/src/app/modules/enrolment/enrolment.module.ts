@@ -15,20 +15,26 @@ import { AccessAgreementComponent } from './pages/access-agreement/access-agreem
 import { SummaryComponent } from './pages/summary/summary.component';
 
 import { CollegeCertificationsComponent } from './shared/components/college-certifications/college-certifications.component';
+import { MoaAccessAgreementComponent } from './pages/access-agreement/components/moa-access-agreement/moa-access-agreement.component';
+import { RuAccessAgreementComponent } from './pages/access-agreement/components/ru-access-agreement/ru-access-agreement.component';
+import { PageRefDirective } from './pages/access-agreement/page-ref.directive';
 
 @NgModule({
   declarations: [
     ProfileComponent,
     RegulatoryComponent,
+    AccessAgreementComponent,
     DeviceProviderComponent,
     JobComponent,
     SelfDeclarationComponent,
     OrganizationComponent,
     ReviewComponent,
     ConfirmationComponent,
-    AccessAgreementComponent,
     SummaryComponent,
-    CollegeCertificationsComponent
+    CollegeCertificationsComponent,
+    MoaAccessAgreementComponent,
+    RuAccessAgreementComponent,
+    PageRefDirective
   ],
   imports: [
     SharedModule,
