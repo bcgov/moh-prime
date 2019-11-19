@@ -79,7 +79,7 @@
       <mat-form-field class="w-100">
         <mat-label>{{ postalLabel }}</mat-label>
         <input matInput
-               mask="S0S 0S0"
+               [mask]="postalMask"
                formControlName="postal"
                [required]="isRequired('postal')">
         <mat-error>Required</mat-error>
