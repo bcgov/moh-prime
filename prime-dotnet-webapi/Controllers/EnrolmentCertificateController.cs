@@ -15,27 +15,27 @@ namespace Prime.Controllers
     [ApiController]
     // User needs at least the ADMIN or ENROLMENT role to use this controller
     [Authorize(Policy = PrimeConstants.PRIME_USER_POLICY)]
-    public class GpidController : ControllerBase
+    public class EnrolmentCertificateController : ControllerBase
     {
         private readonly IEnrolmentService _enrolmentService;
-        private readonly IGpidAccessService _gpidAccessService;
+        private readonly IEnrolmentCertificateAccessService _certificateAccessService;
 
-        public GpidController(IEnrolmentService enrolmentService, IGpidAccessService gpidAccessService)
+        public EnrolmentCertificateController(IEnrolmentService enrolmentService, IEnrolmentCertificateAccessService enrolmentCertificateAccessService)
         {
             _enrolmentService = enrolmentService;
-            _gpidAccessService = gpidAccessService;
+            _certificateAccessService = enrolmentCertificateAccessService;
         }
 
-        // POST: api/Gpid/access
+        // POST: api/enrolmentCertificate/access
         /// <summary>
-        /// Creates a GpidAccessTicket for the user if the user has a finished Enrolement.
+        /// Creates an EnrolmentCertificateAccessToken for the user if the user has a finished Enrolment.
         /// </summary>
-        [HttpPost("access", Name = nameof(CreateGpidAccessTicket))]
+        [HttpPost("access", Name = nameof(CreateEnrolmentCertificateAccessToken))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiOkResponse<GpidAccessTicket>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<GpidAccessTicket>> CreateGpidAccessTicket(/*Guid userId*/)
+        [ProducesResponseType(typeof(ApiOkResponse<EnrolmentCertificateAccessToken>), StatusCodes.Status201Created)]
+        public async Task<ActionResult<EnrolmentCertificateAccessToken>> CreateEnrolmentCertificateAccessToken(/*Guid userId*/)
         {
             // if (enrollee == null)
             // {
@@ -56,10 +56,10 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
             
-            var createdTicket = await _gpidAccessService.CreateGpidAccessTicketAsync(enrolment.EnrolleeId);
+            var createdToken = await _certificateAccessService.CreateEnrolmentCertificateAccessTokenAsync(enrolment.EnrolleeId);
 
             // return CreatedAtAction(nameof(GetEnrolmentById), new { enrolmentId = createdEnrolmentId }, new ApiCreatedResponse<Enrolment>(enrolment));
-            return Ok(new ApiCreatedResponse<GpidAccessTicket>(createdTicket));
+            return Ok(new ApiCreatedResponse<EnrolmentCertificateAccessToken>(createdToken));
         }
     }
 }

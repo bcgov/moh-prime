@@ -8,29 +8,30 @@ using Prime.Models;
 
 namespace Prime.Services
 {
-    public class DefaultGpidAccessService : BaseService, IGpidAccessService
+    public class DefaultEnrolmentCertificateAccessService : BaseService, IEnrolmentCertificateAccessService
     {
-        public DefaultGpidAccessService(
+        public DefaultEnrolmentCertificateAccessService(
             ApiDbContext context, IHttpContextAccessor httpContext)
             : base(context, httpContext)
         { }
 
-        public async Task<GpidAccessTicket> CreateGpidAccessTicketAsync(int enrolleeId)
+        public async Task<EnrolmentCertificateAccessToken> CreateEnrolmentCertificateAccessTokenAsync(int enrolleeId)
         {
-            GpidAccessTicket ticket = new GpidAccessTicket()
+            EnrolmentCertificateAccessToken token = new EnrolmentCertificateAccessToken()
             {
                 EnrolleeId = enrolleeId,
                 ViewCount = 0,
                 Active = true
             };
+            _context.EnrolmentCertificateAccessTokens.Add(token);
 
             var created = await _context.SaveChangesAsync();
             if (created < 1)
             {
-                throw new InvalidOperationException("Could not create GPID access ticket.");
+                throw new InvalidOperationException("Could not create Enrolment Certificate access token.");
             }
 
-            return ticket;
+            return token;
         }
     }
 }

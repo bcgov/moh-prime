@@ -5,17 +5,15 @@ using Newtonsoft.Json;
 
 namespace Prime.Models
 {
-    [Table("GpidAccessTicket")]
-    public sealed class GpidAccessTicket : BaseAuditable
+    [Table("EnrolmentCertificateAccessToken")]
+    public sealed class EnrolmentCertificateAccessToken : BaseAuditable
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
-        [JsonIgnore]
-        [Required]
-        public int? EnrolleeId { get; set; }
+        public int EnrolleeId { get; set; }
 
-        [JsonIgnore]
         public int ViewCount { get; set; }
 
         public Boolean Active { get; set; }

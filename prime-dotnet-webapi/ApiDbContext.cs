@@ -34,7 +34,7 @@ namespace Prime
     public DbSet<EnrolmentStatus> EnrolmentStatuses { get; set; }
     public DbSet<EnrolmentStatusReason> EnrolmentStatusReasons { get; set; }
     public DbSet<Status> Statuses { get; set; }
-    public DbSet<GpidAccessTicket> GpidAccessTickets { get; set; }
+    public DbSet<EnrolmentCertificateAccessToken> EnrolmentCertificateAccessTokens { get; set; }
 
     public override int SaveChanges()
     {

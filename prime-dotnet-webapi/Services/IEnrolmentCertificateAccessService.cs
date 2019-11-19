@@ -4,9 +4,9 @@ using Prime.Models;
 
 namespace Prime.Services
 {
-    public interface IGpidAccessService
+    public interface IEnrolmentCertificateAccessService
     {
-        Task<GpidAccessTicket> CreateGpidAccessTicketAsync(int enrolleeId);
+        Task<EnrolmentCertificateAccessToken> CreateEnrolmentCertificateAccessTokenAsync(int enrolleeId);
         // Task<Guid?> CreateGpidAccessTicketAsync(Enrollee enrollee);
     }
 }
