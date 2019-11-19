@@ -6,7 +6,7 @@ import { DOCUMENT } from '@angular/common';
 import { map, mergeMap } from 'rxjs/operators';
 
 import { RouteStateService } from '@core/services/route-state.service';
-import { WindowRefService } from '@core/services/window-ref.service';
+import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-root',
@@ -21,10 +21,8 @@ export class AppComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private titleService: Title,
     private routeStateService: RouteStateService,
-    private windowRef: WindowRefService
-  ) {
-    this.window = windowRef.nativeWindow;
-  }
+    private utilsService: UtilsService
+  ) { }
 
   public ngOnInit(): void {
     const onNavStart = this.routeStateService.onNavigationStart();
@@ -43,10 +41,7 @@ export class AppComponent implements OnInit {
    * @memberof AppComponent
    */
   private scrollTop(routeEvent: any) {
-    routeEvent.subscribe(() => {
-      const contentContainer = this.document.querySelector('.mat-sidenav-content') || this.window;
-      contentContainer.scroll({ top: 0, left: 0, behavior: 'smooth' });
-    });
+    routeEvent.subscribe(() => this.utilsService.scrollTop());
   }
 
   /**
