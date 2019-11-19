@@ -208,7 +208,8 @@ export class EnrolmentStateService {
   public buildCollegeCertificationForm(): FormGroup {
     return this.fb.group({
       id: [null, []],
-      collegeCode: [null, []],
+      // Force selection of "None" on new certifications
+      collegeCode: ['', []],
       licenseNumber: [null, [
         // Validators.required,
         FormControlValidators.numeric,
