@@ -1,23 +1,25 @@
-import { Injectable, Inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Injectable, Inject } from "@angular/core";
+import { Router } from "@angular/router";
 
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
 
-import { APP_CONFIG, AppConfig } from 'app/app-config.module';
-import { BaseGuard } from '@core/guards/base.guard';
-import { LoggerService } from '@core/services/logger.service';
-import { Enrolment } from '@shared/models/enrolment.model';
-import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
-import { AuthService } from '@auth/shared/services/auth.service';
-import { EnrolmentRoutes } from '@enrolment/enrolent.routes';
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
-import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { APP_CONFIG, AppConfig } from "app/app-config.module";
+import { BaseGuard } from "@core/guards/base.guard";
+import { LoggerService } from "@core/services/logger.service";
+import { Enrolment } from "@shared/models/enrolment.model";
+import { EnrolmentStatus } from "@shared/enums/enrolment-status.enum";
+import { AuthService } from "@auth/shared/services/auth.service";
+import { EnrolmentRoutes } from "@enrolment/enrolent.routes";
+import { EnrolmentResource } from "@enrolment/shared/services/enrolment-resource.service";
+import { EnrolmentService } from "@enrolment/shared/services/enrolment.service";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class EnrolmentGuard extends BaseGuard {
+  public enrolmentRoutePath: string = this.config.routes.enrolment;
+
   constructor(
     protected authService: AuthService,
     protected logger: LoggerService,
@@ -35,15 +37,16 @@ export class EnrolmentGuard extends BaseGuard {
    * to an appropriate destination based on its existence or
    * status.
    */
-  protected checkAccess(routePath: string = null): Observable<boolean> | Promise<boolean> {
-    return this.enrolmentResource.enrolments()
-      .pipe(
-        map((enrolment: Enrolment) => {
-          // Store the enrolment for access throughout enrolment
-          this.enrolmentService.enrolment$.next(enrolment);
-          return this.routeDestination(routePath, enrolment);
-        })
-      );
+  protected checkAccess(
+    routePath: string = null
+  ): Observable<boolean> | Promise<boolean> {
+    return this.enrolmentResource.enrolments().pipe(
+      map((enrolment: Enrolment) => {
+        // Store the enrolment for access throughout enrolment
+        this.enrolmentService.enrolment$.next(enrolment);
+        return this.routeDestination(routePath, enrolment);
+      })
+    );
   }
 
   /**
@@ -51,23 +54,30 @@ export class EnrolmentGuard extends BaseGuard {
    * Determine the route destination based on the enrolment status.
    */
   private routeDestination(routePath: string, enrolment: Enrolment) {
+    const state = this.router.getCurrentNavigation().extras.state;
     if (!enrolment) {
       return this.navigate(routePath, EnrolmentRoutes.PROFILE);
     } else if (enrolment) {
       switch (enrolment.currentStatus.status.code) {
         case EnrolmentStatus.IN_PROGRESS:
           const postEnrolmentRoutes = EnrolmentRoutes.postEnrolmentRoutes();
-          const route = routePath.split('/').pop();
+          const route = routePath.split("/").pop();
 
-          return (postEnrolmentRoutes.includes(route))
-            // Prevent access to post enrolment routes
-            ? this.navigate(routePath, EnrolmentRoutes.PROFILE)
-            // Otherwise, allow the route to resolve
-            : true;
+          return postEnrolmentRoutes.includes(route)
+            ? // Prevent access to post enrolment routes
+              this.navigate(routePath, EnrolmentRoutes.PROFILE)
+            : // Otherwise, allow the route to resolve
+              true;
         case EnrolmentStatus.SUBMITTED:
           return this.navigate(routePath, EnrolmentRoutes.CONFIRMATION);
         case EnrolmentStatus.ADJUDICATED_APPROVED:
+          if (state && state.fromReview) {
+            // Allow user to view confirmation only once
+            return this.navigate(routePath, EnrolmentRoutes.CONFIRMATION);
+          }
+
           return this.navigate(routePath, EnrolmentRoutes.ACCESS_AGREEMENT);
+
         // case EnrolmentStatus.DECLINED:
         case EnrolmentStatus.ACCEPTED_TOS:
           return this.navigate(routePath, EnrolmentRoutes.SUMMARY);
@@ -86,12 +96,10 @@ export class EnrolmentGuard extends BaseGuard {
    * path.
    */
   private navigate(routePath: string, destinationPath: string): boolean {
-    const enrolmentRoutePath = this.config.routes.enrolment;
-
-    if (routePath === `/${enrolmentRoutePath}/${destinationPath}`) {
+    if (routePath === `/${this.enrolmentRoutePath}/${destinationPath}`) {
       return true;
     } else {
-      this.router.navigate([enrolmentRoutePath, destinationPath]);
+      this.router.navigate([this.enrolmentRoutePath, destinationPath]);
       return false;
     }
   }
