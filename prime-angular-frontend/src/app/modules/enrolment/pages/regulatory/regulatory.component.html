@@ -17,8 +17,6 @@
         <ng-container *ngFor="let certificate of certifications.controls; let i = index, let first = first"
                       [formGroupName]="i">
 
-          <hr *ngIf="!first">
-
           <app-college-certifications [form]="certificate"
                                       [index]="i"
                                       [total]="certifications.controls.length"
@@ -26,11 +24,15 @@
 
         </ng-container>
 
-        <ng-container *ngIf="canAddCertification()">
-          <button mat-raised-button
+        <ng-container>
+          <button mat-button
+                  type="button"
+                  class="mt-3"
                   color="primary"
-                  (click)="addCertification()"
-                  [disabled]="certifications.invalid">Add Certification</button>
+                  (click)="addCertification()">
+            <mat-icon class="add-icon">add</mat-icon>
+            Add Additional Certification
+          </button>
         </ng-container>
 
       </div>

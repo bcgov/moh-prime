@@ -61,33 +61,31 @@ export class CollegeCertificationsComponent implements OnInit {
     return this.form.get('practiceCode') as FormControl;
   }
 
-  public onRemove() {
+  public removeCertification() {
     this.remove.emit(this.index);
   }
 
   public ngOnInit() {
-    if (this.collegeCode.value) {
+    this.setCollegeCertification(this.collegeCode.value);
+
+    this.collegeCode.valueChanges
+      .subscribe((collegeCode: number) => this.setCollegeCertification(collegeCode));
+  }
+
+  private setCollegeCertification(collegeCode: number) {
+    if (collegeCode) {
       this.setValidation();
-      this.loadLicenses(this.collegeCode.value);
-      this.loadPractices(this.collegeCode.value);
+      this.loadLicenses(collegeCode);
+      this.loadPractices(collegeCode);
+    } else {
+      this.removeCertification();
     }
-
-    // TODO Refactor so value changes is triggered when form is patched
-    this.collegeCode.valueChanges.subscribe((collegeCode: number) => {
-      if (collegeCode) {
-        this.setValidation();
-        this.loadLicenses(collegeCode);
-        this.loadPractices(collegeCode);
-      }
-    });
   }
 
-  private filterLicenses(collegeCode: number): LicenseConfig[] {
-    return this.licenses.filter(l => l.collegeLicenses.map(cl => cl.collegeCode).includes(collegeCode));
-  }
-
-  private filterPractices(collegeCode: number): PracticeConfig[] {
-    return this.practices.filter(p => p.collegePractices.map(cl => cl.collegeCode).includes(collegeCode));
+  private setValidation() {
+    this.formUtilsService.setValidators(this.licenseNumber, [Validators.required, FormControlValidators.requiredLength(5)]);
+    this.formUtilsService.setValidators(this.licenseCode, [Validators.required]);
+    this.formUtilsService.setValidators(this.renewalDate, [Validators.required]);
   }
 
   private loadLicenses(collegeCode: number) {
@@ -102,9 +100,11 @@ export class CollegeCertificationsComponent implements OnInit {
     this.hasPractices = (this.filteredPractices.length) ? true : false;
   }
 
-  private setValidation() {
-    this.formUtilsService.setValidators(this.licenseNumber, [Validators.required, FormControlValidators.requiredLength(5)]);
-    this.formUtilsService.setValidators(this.licenseCode, [Validators.required]);
-    this.formUtilsService.setValidators(this.renewalDate, [Validators.required]);
+  private filterLicenses(collegeCode: number): LicenseConfig[] {
+    return this.licenses.filter(l => l.collegeLicenses.map(cl => cl.collegeCode).includes(collegeCode));
+  }
+
+  private filterPractices(collegeCode: number): PracticeConfig[] {
+    return this.practices.filter(p => p.collegePractices.map(cl => cl.collegeCode).includes(collegeCode));
   }
 }

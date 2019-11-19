@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormArray, AbstractControl } from '@angular/forms';
+import { FormGroup, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
@@ -9,11 +9,11 @@ import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
-import { Enrolment } from '@shared/models/enrolment.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
-import { EnrolmentResource } from '../../shared/services/enrolment-resource.service';
 import { EnrolmentRoutes } from '@enrolment/enrolent.routes';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 
 @Component({
   selector: 'app-regulatory',
@@ -33,8 +33,9 @@ export class RegulatoryComponent implements OnInit, OnDestroy {
     private router: Router,
     private dialog: MatDialog,
     private configService: ConfigService,
-    private enrolmentStateService: EnrolmentStateService,
+    private enrolmentService: EnrolmentService,
     private enrolmentResource: EnrolmentResource,
+    private enrolmentStateService: EnrolmentStateService,
     private toastService: ToastService,
     private logger: LoggerService
   ) {
@@ -48,8 +49,8 @@ export class RegulatoryComponent implements OnInit, OnDestroy {
 
   public onSubmit() {
     if (this.form.valid) {
-      this.clearEmptyCertifications();
-      this.clearJobForm();
+      this.removeJobs();
+      this.removeEmptyCertifications();
       const payload = this.enrolmentStateService.enrolment;
       this.busy = this.enrolmentResource.updateEnrolment(payload)
         .subscribe(
@@ -82,8 +83,9 @@ export class RegulatoryComponent implements OnInit, OnDestroy {
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
+    this.removeEmptyCertifications();
+
     const data = 'unsaved';
-    this.clearEmptyCertifications();
     return (this.form.dirty)
       ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
       : true;
@@ -94,43 +96,11 @@ export class RegulatoryComponent implements OnInit, OnDestroy {
     // Initialize form changes before patching
     this.initForm();
 
-    // TODO: detect enrolment already exists and don't reload
-    // TODO: apply guard if not enrolment is found to redirect to profile
-    this.busy = this.enrolmentResource.enrolments()
-      .subscribe((enrolment: Enrolment) => {
-        if (enrolment) {
-          this.enrolmentStateService.enrolment = enrolment;
-        }
-      });
+    this.enrolmentStateService.enrolment = this.enrolmentService.enrolment;
   }
 
   public ngOnDestroy() {
-    this.clearEmptyCertifications();
-  }
-
-  public clearEmptyCertifications() {
-    let i = 0;
-    this.certifications.controls.forEach((control: AbstractControl) => {
-      if (control instanceof FormGroup) {
-        if (control.get('collegeNumber') || control.get('licenseNumber').value === null) {
-          this.removeCertification(i);
-        }
-      }
-      i++;
-    });
-  }
-
-  public clearJobForm() {
-    if (this.enrolmentStateService.enrolment.jobs.length > 0) {
-      this.jobForm = this.enrolmentStateService.jobsForm;
-      const jobs = this.jobForm.get('jobs') as FormArray;
-      jobs.clear();
-    }
-  }
-
-  public canAddCertification(): boolean {
-    return this.certifications.controls
-      .every((control: FormGroup) => control.get('collegeCode').value);
+    this.removeEmptyCertifications();
   }
 
   private createFormInstance() {
@@ -145,4 +115,22 @@ export class RegulatoryComponent implements OnInit, OnDestroy {
     }
   }
 
+  private removeEmptyCertifications() {
+    this.certifications.controls
+      .forEach((control: FormGroup, index: number) => {
+        console.log(control.get('collegeNumber'));
+
+        if (control.get('collegeNumber') || control.get('licenseNumber').value === null) {
+          this.removeCertification(index);
+        }
+      });
+  }
+
+  private removeJobs() {
+    if (this.enrolmentStateService.enrolment.jobs.length > 0) {
+      this.jobForm = this.enrolmentStateService.jobsForm;
+      const jobs = this.jobForm.get('jobs') as FormArray;
+      jobs.clear();
+    }
+  }
 }
