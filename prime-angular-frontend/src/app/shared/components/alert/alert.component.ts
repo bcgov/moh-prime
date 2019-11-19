@@ -1,4 +1,12 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  ContentChildren,
+  QueryList,
+  AfterContentInit,
+  TemplateRef
+} from '@angular/core';
 
 
 @Component({
@@ -6,14 +14,26 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   templateUrl: './alert.component.html',
   styleUrls: ['./alert.component.scss']
 })
-export class AlertComponent implements OnInit {
+export class AlertComponent implements OnInit, AfterContentInit {
 
-  @Input() text: string;
-  @Output() myEvent: EventEmitter<any> = new EventEmitter();
+  @Input() alertType: string;
+
+  @ContentChildren('[select=".alert-content"]', { descendants: true })
+  public test: QueryList<TemplateRef<any>>;
+  @ContentChildren('alertIcon', { descendants: true })
+  public alertIconChildren: QueryList<TemplateRef<any>>;
+  @ContentChildren('alertTitle', { descendants: true })
+  public alertTitleChildren: QueryList<TemplateRef<any>>;
+  @ContentChildren('alertContent', { descendants: true })
+  public alertContentChildren: QueryList<TemplateRef<any>>;
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  ngAfterContentInit() {
+    console.log(this.test);
   }
 
 }

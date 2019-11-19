@@ -1,12 +1,27 @@
-<div [alertType]="alert 'alertType'"
+<div [ngClass]="['alert', alertType]"
      role="alert">
 
   <div class="d-flex">
-    <mat-icon [inline]="true"
-              class="pr-3 icon">check_circle_outline</mat-icon>
+    <ng-container *ngIf="alertIconChildren.length">
+      <mat-icon [inline]="true"
+                class="pr-3 icon">
+        <ng-content #alertIcon
+                    class="test"
+                    select=".alert-icon"></ng-content>
+      </mat-icon>
+    </ng-container>
     <div class="flex-grow-1">
-      <h2 class="h3 m-0 mt-2">{{ text }}</h2>
-      <p class="m-0">Your application has been submitted!</p>
+      <ng-container *ngIf="alertTitleChildren.length">
+        <h2 class="h3 m-0 mt-2">
+          <ng-content select=".alert-title"></ng-content>
+        </h2>
+      </ng-container>
+      <ng-container *ngIf="alertContentChildren.length">
+        <p class="m-0">
+          <ng-content #alertContent
+                      select=".alert-content"></ng-content>
+        </p>
+      </ng-container>
     </div>
   </div>
 </div>

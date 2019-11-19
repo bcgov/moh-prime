@@ -5,18 +5,20 @@
   <div class="row">
     <div class="col-md-7">
 
-      <div class="alert alert-success"
-           role="alert">
-
-        <div class="d-flex">
-          <mat-icon [inline]="true"
-                    class="pr-3 icon">check_circle_outline</mat-icon>
-          <div class="flex-grow-1">
-            <h2 class="h3 m-0 mt-2">Success</h2>
-            <p class="m-0">Your application has been submitted!</p>
-          </div>
-        </div>
-      </div>
+      <app-alert alertType="alert-success">
+        <ng-container #alertIcon
+                      class="alert-icon">
+          check_circle_outline
+        </ng-container>
+        <ng-container #alertTitle
+                      class="alert-title">
+          Success
+        </ng-container>
+        <ng-container #alertContent
+                      class="alert-content">
+          Your application has been submitted!
+        </ng-container>
+      </app-alert>
 
     </div>
   </div>

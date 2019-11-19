@@ -2,12 +2,44 @@
 
   <app-page-header>Access Agreement</app-page-header>
 
+  <app-alert alertType="alert-success">
+    <ng-container #alertIcon
+                  class="alert-icon">
+      check_circle_outline
+    </ng-container>
+    <ng-container #alertTitle
+                  class="alert-title">
+      You've Been Approved
+    </ng-container>
+    <ng-container #alertContent
+                  class="alert-content">
+      You’ve been approved for PharmaNet access for direct patient care.
+    </ng-container>
+  </app-alert>
+
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>You've Been Approved</ng-container>
     <ng-container appPageSubheaderSummary>
       You’ve been approved for PharmaNet access for direct patient care.
     </ng-container>
+
   </app-page-subheader>
+
+  <app-alert alertType="alert-danger">
+    <ng-container #alertIcon
+                  class="alert-icon">
+      warning
+    </ng-container>
+    <ng-container #alertTitle
+                  class="alert-title">
+      You've Been Approved
+    </ng-container>
+
+    <ng-container #alertContent
+                  class="alert-content">
+      You’ve been approved for PharmaNet access for direct patient care.
+    </ng-container>
+  </app-alert>
 
   <p>
     To confirm your access, you must accept the PharmaNet User Access Agreement. This agreement is specific to the type
