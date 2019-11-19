@@ -3,6 +3,13 @@ apiVersion: v1
 metadata:
   name: sonar-scanner-dc
   creationTimestamp: null
+parameters:
+  - name: SOURCE_REPOSITORY_URL
+    required: true
+    value: 'https://github.com/bcgov/moh-prime'
+  - name: SOURCE_REPOSITORY_REF
+    required: true
+    value: 'develop'
 objects:
   - apiVersion: v1
     kind: DeploymentConfig
@@ -24,14 +31,24 @@ objects:
             io.kompose.service: sonar-runner
         spec:
           containers:
-            - env:
+            - env: 
+                - name: ASPNETCORE_ENVIRONMENT
+                  value: Development
                 - name: JAVA_HOME
-                  value: '/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64/jre/bin'
-                - name: PATH
-                  value: '$PATH:$JAVA_HOME:/var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScanner/bin:/home/default/.dotnet/tools'
-          - image: ' '
-            name: sonar-scanner
-            resources: {}
+                  value: '/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64/jre'
+                - name: GIT_COMMITTER_NAME
+                  value: 'default'
+                - name: GIT_COMMITTER_EMAIL
+                  value: 'noreply@gov.bc.ca'
+              image: ' '
+              name: sonar-scanner
+              resources: 
+                requests:
+                  cpu: 300m
+                  memory: 512Mi
+                limits:
+                  cpu: '1'
+                  memory: 1024Mi
           restartPolicy: Always
       test: false
       triggers:

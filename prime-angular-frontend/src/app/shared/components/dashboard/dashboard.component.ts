@@ -7,13 +7,12 @@ import { ViewportService } from '@core/services/viewport.service';
 import { LoggerService } from '@core/services/logger.service';
 import { DeviceResolution } from '@shared/enums/device-resolution.enum';
 
-
+import { AuthRoutes } from '@auth/auth.routes';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { EnrolmentRoutes } from '@enrolment/enrolent.routes';
-import { ProvisionRoutes } from '@provision/provision.routes';
-import { AuthRoutes } from '@auth/auth.routes';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
   selector: 'app-dashboard',
@@ -95,8 +94,8 @@ export class DashboardComponent implements OnInit {
   }
 
   private getSideNavSections() {
-    return (this.authService.isProvisioner() || this.authService.isAdmin())
-      ? this.getProvisionSideNavSections()
+    return (this.authService.isAdjudicator() || this.authService.isAdmin())
+      ? this.getAdjudicationSideNavSections()
       : this.getEnrolleeSideNavSections();
   }
 
@@ -135,7 +134,7 @@ export class DashboardComponent implements OnInit {
     ];
   }
 
-  private getProvisionSideNavSections() {
+  private getAdjudicationSideNavSections() {
     return [
       {
         header: 'Pharmacist Enrolments',
@@ -144,7 +143,7 @@ export class DashboardComponent implements OnInit {
           {
             name: 'Enrolments',
             icon: 'format_list_bulleted',
-            route: ProvisionRoutes.ENROLMENTS,
+            route: AdjudicationRoutes.ENROLMENTS,
             showItem: true
           }
         ]

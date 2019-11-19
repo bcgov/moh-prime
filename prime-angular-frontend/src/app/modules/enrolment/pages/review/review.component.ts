@@ -71,7 +71,7 @@ export class ReviewComponent implements OnInit {
       console.log('DEVICE_PROVIDER', this.enrolmentStateService.isDeviceProviderValid());
       console.log('JOBS', this.enrolmentStateService.isJobsValid());
       console.log('DECLARATION', this.enrolmentStateService.isSelfDeclarationValid());
-      console.log('ACCESS', this.enrolmentStateService.isPharmaNetAccessValid());
+      console.log('ACCESS', this.enrolmentStateService.isOrganizationValid());
     }
   }
 

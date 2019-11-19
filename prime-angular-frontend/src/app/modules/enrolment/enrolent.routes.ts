@@ -1,24 +1,19 @@
 import { BaseRoute } from '@core/models/base-route';
 
 export class EnrolmentRoutes extends BaseRoute {
-  public static get MODULE_PATH(): string {
-    return EnrolmentRoutes.ENROLMENT;
-  }
-
-  // Module
   public static ENROLMENT = 'enrolment';
-  // Enrolment
   public static PROFILE = 'profile';
   public static REGULATORY = 'regulatory';
   public static DEVICE_PROVIDER = 'device-provider';
   public static JOB = 'job';
   public static SELF_DECLARATION = 'self-declaration';
-  public static PHARMANET_ACCESS = 'pharmanet-access';
+  public static ORGANIZATION = 'organization';
   public static REVIEW = 'review';
-  // Post Enrolment
   public static CONFIRMATION = 'confirmation';
   public static ACCESS_AGREEMENT = 'access-agreement';
   public static SUMMARY = 'summary';
+
+  public static MODULE_PATH = EnrolmentRoutes.ENROLMENT;
 
   public static postEnrolmentRoutes(): string[] {
     return [

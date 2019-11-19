@@ -5,24 +5,24 @@ import { ConfigResolver } from '@config/config-resolver';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 
-import { ProvisionRoutes } from './provision.routes';
-import { ProvisionGuard } from './shared/guards/provision.guard';
+import { AdjudicationRoutes } from './adjudication.routes';
+import { AdjudicationGuard } from './shared/guards/adjudication.guard';
 
 import { EnrolmentsComponent } from './pages/enrolments/enrolments.component';
 import { EnrolmentComponent } from './pages/enrolment/enrolment.component';
 
 const routes: Routes = [
   {
-    path: 'provision',
+    path: AdjudicationRoutes.MODULE_PATH,
     component: DashboardComponent,
     canActivateChild: [
       AuthenticationGuard,
-      ProvisionGuard
+      AdjudicationGuard
     ],
     resolve: [ConfigResolver],
     children: [
       {
-        path: ProvisionRoutes.ENROLMENTS,
+        path: AdjudicationRoutes.ENROLMENTS,
         children: [
           {
             path: '',
@@ -36,7 +36,7 @@ const routes: Routes = [
       },
       {
         path: '', // Equivalent to `/` and alias for `enrolments`
-        redirectTo: ProvisionRoutes.ENROLMENTS,
+        redirectTo: AdjudicationRoutes.ENROLMENTS,
         pathMatch: 'full'
       }
     ]
@@ -47,4 +47,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class ProvisionRoutingModule { }
+export class AdjudicationRoutingModule { }

@@ -13,7 +13,7 @@ import { Enrolment } from '@shared/models/enrolment.model';
 @Injectable({
   providedIn: 'root'
 })
-export class ProvisionResource {
+export class AdjudicationResource {
 
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
