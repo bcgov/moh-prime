@@ -8,6 +8,7 @@ import { EMPTY, Subscription } from 'rxjs';
 
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
+import { UtilsService } from '@core/services/utils.service';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
@@ -37,6 +38,7 @@ export class AccessAgreementComponent implements OnInit {
     private toastService: ToastService,
     private dialog: MatDialog,
     private changeDetectorRef: ChangeDetectorRef,
+    private utilsService: UtilsService,
     private logger: LoggerService
   ) {
     this.currentPage = 0;
@@ -75,24 +77,28 @@ export class AccessAgreementComponent implements OnInit {
     }
   }
 
-  public onPrint() {
-    this.toastService.openSuccessToast('Access agreement is being prepared for printing');
+  public onPrevPage() {
+    if (this.currentPage > 0) {
+      this.agree.reset();
+      this.disabled = true;
+      this.utilsService.scrollTop();
+      this.currentPage--;
+      this.hasReadAgreement = false;
+    }
+  }
+
+  public onNextPage() {
+    if (!this.hasReadAgreement) {
+      this.utilsService.scrollTop();
+      this.currentPage++;
+    }
   }
 
   public onConfirmAgreement(value: MatCheckboxChange) {
     this.disabled = !value.checked;
   }
 
-  public onNextPage() {
-    if (!this.hasReadAgreement) {
-      this.currentPage++;
-    }
-  }
-
   public onPageChange(agreement: { atEnd: boolean }) {
-    this.disabled = true;
-    this.agree.reset();
-
     if (agreement.atEnd) {
       this.hasReadAgreement = agreement.atEnd;
       this.changeDetectorRef.detectChanges();
@@ -100,6 +106,7 @@ export class AccessAgreementComponent implements OnInit {
   }
 
   public ngOnInit() {
+    // TODO drop and access using enrolment service
     this.busy = this.enrolmentResource.enrolments()
       .pipe(
         map((enrolment: Enrolment) => this.enrolment = enrolment)
