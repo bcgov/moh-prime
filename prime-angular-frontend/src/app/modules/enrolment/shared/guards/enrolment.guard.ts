@@ -1,21 +1,21 @@
-import { Injectable, Inject } from "@angular/core";
-import { Router } from "@angular/router";
+import { Injectable, Inject } from '@angular/core';
+import { Router } from '@angular/router';
 
-import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
-import { APP_CONFIG, AppConfig } from "app/app-config.module";
-import { BaseGuard } from "@core/guards/base.guard";
-import { LoggerService } from "@core/services/logger.service";
-import { Enrolment } from "@shared/models/enrolment.model";
-import { EnrolmentStatus } from "@shared/enums/enrolment-status.enum";
-import { AuthService } from "@auth/shared/services/auth.service";
-import { EnrolmentRoutes } from "@enrolment/enrolent.routes";
-import { EnrolmentResource } from "@enrolment/shared/services/enrolment-resource.service";
-import { EnrolmentService } from "@enrolment/shared/services/enrolment.service";
+import { APP_CONFIG, AppConfig } from 'app/app-config.module';
+import { BaseGuard } from '@core/guards/base.guard';
+import { LoggerService } from '@core/services/logger.service';
+import { Enrolment } from '@shared/models/enrolment.model';
+import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+import { AuthService } from '@auth/shared/services/auth.service';
+import { EnrolmentRoutes } from '@enrolment/enrolent.routes';
+import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class EnrolmentGuard extends BaseGuard {
   public enrolmentRoutePath: string = this.config.routes.enrolment;
@@ -61,13 +61,13 @@ export class EnrolmentGuard extends BaseGuard {
       switch (enrolment.currentStatus.status.code) {
         case EnrolmentStatus.IN_PROGRESS:
           const postEnrolmentRoutes = EnrolmentRoutes.postEnrolmentRoutes();
-          const route = routePath.split("/").pop();
+          const route = routePath.split('/').pop();
 
           return postEnrolmentRoutes.includes(route)
             ? // Prevent access to post enrolment routes
-              this.navigate(routePath, EnrolmentRoutes.PROFILE)
+            this.navigate(routePath, EnrolmentRoutes.PROFILE)
             : // Otherwise, allow the route to resolve
-              true;
+            true;
         case EnrolmentStatus.SUBMITTED:
           return this.navigate(routePath, EnrolmentRoutes.CONFIRMATION);
         case EnrolmentStatus.ADJUDICATED_APPROVED:
