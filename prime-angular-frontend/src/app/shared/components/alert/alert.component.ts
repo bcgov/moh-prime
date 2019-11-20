@@ -14,7 +14,7 @@ import {
   styleUrls: ['./alert.component.scss']
 })
 export class AlertComponent implements OnInit, AfterContentInit {
-  @Input() alertType: string;
+  @Input() type: string;
 
   @ContentChildren('alertIcon', { descendants: true })
   public alertIconChildren: QueryList<TemplateRef<any>>;
