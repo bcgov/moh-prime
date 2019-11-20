@@ -9,7 +9,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "coverage": "ng test --watch=false --code-coverage --browsers=ChromeHeadlessNoSandbox",
-    "sonar": "npm run coverage && sonar-scanner"
+    "sonar": "npm run coverage && sonar-scanner",
+    "storybook": "start-storybook"
   },
   "private": true,
   "dependencies": {
@@ -46,10 +47,13 @@
     "@angular/cli": "^8.3.19",
     "@angular/compiler-cli": "^8.2.14",
     "@angular/language-service": "^8.2.14",
+    "@babel/core": "^7.7.2",
+    "@storybook/angular": "^5.2.6",
     "@types/faker": "^4.1.7",
     "@types/jasmine": "~3.3.8",
     "@types/jasminewd2": "^2.0.8",
     "@types/node": "~8.9.4",
+    "babel-loader": "^8.0.6",
     "codelyzer": "^5.2.0",
     "faker": "^4.1.0",
     "jasmine-core": "~3.4.0",
