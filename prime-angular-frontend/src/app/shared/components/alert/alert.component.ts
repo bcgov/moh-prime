@@ -6,26 +6,26 @@ import {
   QueryList,
   AfterContentInit,
   TemplateRef
-} from "@angular/core";
+} from '@angular/core';
 
 @Component({
-  selector: "app-alert",
-  templateUrl: "./alert.component.html",
-  styleUrls: ["./alert.component.scss"]
+  selector: 'app-alert',
+  templateUrl: './alert.component.html',
+  styleUrls: ['./alert.component.scss']
 })
 export class AlertComponent implements OnInit, AfterContentInit {
   @Input() alertType: string;
 
-  @ContentChildren("alertIcon", { descendants: true })
+  @ContentChildren('alertIcon', { descendants: true })
   public alertIconChildren: QueryList<TemplateRef<any>>;
-  @ContentChildren("alertTitle", { descendants: true })
+  @ContentChildren('alertTitle', { descendants: true })
   public alertTitleChildren: QueryList<TemplateRef<any>>;
-  @ContentChildren("alertContent", { descendants: true })
+  @ContentChildren('alertContent', { descendants: true })
   public alertContentChildren: QueryList<TemplateRef<any>>;
 
-  constructor() {}
+  constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
-  ngAfterContentInit() {}
+  ngAfterContentInit() { }
 }
