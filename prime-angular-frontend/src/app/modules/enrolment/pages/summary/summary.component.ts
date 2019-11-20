@@ -36,4 +36,9 @@ export class SummaryComponent implements OnInit {
         }
       });
   }
+
+  public generateLink() {
+    const userId = this.enrolmentStateService.enrolment.enrollee.id;
+    this.enrolmentResource.createEnrolmentCertificateAccessToken(userId).subscribe(() => { });
+  }
 }

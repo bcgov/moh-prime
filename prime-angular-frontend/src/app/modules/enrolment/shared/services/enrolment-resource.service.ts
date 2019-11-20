@@ -10,6 +10,7 @@ import { PrimeHttpResponse } from '@core/models/prime-http-response.model';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { Address } from '../models/address.model';
+import { EnrolmentCertificateAccessToken } from '@shared/models/enrolment-certificate-access-token.model';
 
 @Injectable({
   providedIn: 'root'
@@ -61,6 +62,18 @@ export class EnrolmentResource {
         map((statuses: Config<number>[]) => {
           this.logger.info('ENROLMENT_STATUSES', statuses);
           return statuses;
+        })
+      );
+  }
+
+  public createEnrolmentCertificateAccessToken(userId: number): Observable<EnrolmentCertificateAccessToken> {
+    const payload = { userId };
+    return this.http.post(`${this.config.apiEndpoint}/enrolmentCertificate/access`, payload)
+      .pipe(
+        map((response: PrimeHttpResponse) => response.result),
+        map((token: EnrolmentCertificateAccessToken) => {
+          this.logger.info('ACCESS_TOKEN', token);
+          return token;
         })
       );
   }

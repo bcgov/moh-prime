@@ -11,33 +11,25 @@ namespace Prime.Services
     public class DefaultEnrolleeService : BaseService, IEnrolleeService
     {
         public DefaultEnrolleeService(
-            ApiDbContext context, IHttpContextAccessor httpContext) 
+            ApiDbContext context, IHttpContextAccessor httpContext)
             : base(context, httpContext)
         { }
 
         public async Task<IEnumerable<Enrollee>> GetEnrolleesAsync()
         {
-            IQueryable<Enrollee> query = _context.Enrollees
+            return await _context.Enrollees
                 .Include(e => e.PhysicalAddress)
                 .Include(e => e.MailingAddress)
-                ;
-
-            var items = await query.ToListAsync();
-
-            return items;
+                .ToListAsync();
         }
 
-        public async Task<IEnumerable<Enrollee>> GetEnrolleesForUserIdAsync(Guid userId)
+        public async Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId)
         {
-            IQueryable<Enrollee> query = _context.Enrollees
+            return await _context.Enrollees
                 .Include(e => e.PhysicalAddress)
                 .Include(e => e.MailingAddress)
                 .Where(e => e.UserId == userId)
-                ;
-
-            var items = await query.ToListAsync();
-
-            return items;
+                .SingleOrDefaultAsync();
         }
     }
 }

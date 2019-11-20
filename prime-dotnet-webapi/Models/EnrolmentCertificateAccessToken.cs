@@ -12,7 +12,7 @@ namespace Prime.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
-        public int EnrolleeId { get; set; }
+        public Guid UserId { get; set; }
 
         public int ViewCount { get; set; }
 

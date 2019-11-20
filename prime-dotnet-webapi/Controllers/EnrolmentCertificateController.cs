@@ -1,5 +1,6 @@
-using System.Collections.Generic;
 using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -17,23 +18,90 @@ namespace Prime.Controllers
     [Authorize(Policy = PrimeConstants.PRIME_USER_POLICY)]
     public class EnrolmentCertificateController : ControllerBase
     {
+        private readonly IEnrolleeService _enrolleeService;
         private readonly IEnrolmentService _enrolmentService;
-        private readonly IEnrolmentCertificateAccessService _certificateAccessService;
+        private readonly IEnrolmentCertificateService _certificateService;
 
-        public EnrolmentCertificateController(IEnrolmentService enrolmentService, IEnrolmentCertificateAccessService enrolmentCertificateAccessService)
+        public EnrolmentCertificateController(IEnrolleeService enrolleeService, IEnrolmentService enrolmentService, IEnrolmentCertificateService enrolmentCertificateService)
         {
+            _enrolleeService = enrolleeService;
             _enrolmentService = enrolmentService;
-            _certificateAccessService = enrolmentCertificateAccessService;
+            _certificateService = enrolmentCertificateService;
         }
+
+        // GET: api/enrolmentCertificate/{guid}
+        /// <summary>
+        /// Gets the Enrolment Certificate based on the supplied Access Token GUID. This endpoint is not authenticated.
+        /// </summary>
+        [HttpGet("{tokenId}", Name = nameof(GetEnrolmentCertificate))]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiOkResponse<EnrolmentCertificate>), StatusCodes.Status200OK)]
+        [AllowAnonymous]
+        public async Task<ActionResult<EnrolmentCertificate>> GetEnrolmentCertificate(Guid accessTokenId)
+        {
+            var token = await _certificateService.GetCertificateAccessTokenAsync(accessTokenId);
+            if (token == null)
+            {
+                return NotFound(new ApiResponse(404, $"Enrolment Certificate Access Token not found with id {accessTokenId}"));
+            }
+
+            var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(token.UserId);
+            if (enrollee == null)
+            {
+                return NotFound(new ApiResponse(404, $"No corresponding Enrollee found"));
+            }
+
+            // TODO: Access controls, increment token
+
+            return Ok(new ApiOkResponse<EnrolmentCertificate>(EnrolmentCertificate.Create(enrollee)));
+        }
+
+
+        // GET: api/enrolmentCertificate/access
+        /// <summary>
+        /// Gets all of the access tokens for the user.
+        /// </summary>
+        [HttpGet("access", Name = nameof(GetAccessTokens))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiOkResponse<IEnumerable<EnrolmentCertificateAccessToken>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<EnrolmentCertificateAccessToken>>> GetAccessTokens()
+        {
+            var tokens = await _certificateService.GetCertificateAccessTokensForUserIdAsync(PrimeUtils.PrimeUserId(User));
+
+            return Ok(new ApiOkResponse<IEnumerable<EnrolmentCertificateAccessToken>>(tokens));
+        }
+
+
+        // GET: api/enrolmentCertificate/access/{guid}
+        /// <summary>
+        /// Gets the access token for the given GUID.
+        /// </summary>
+        [HttpGet("access/{tokenId}", Name = nameof(GetAccessToken))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiOkResponse<EnrolmentCertificateAccessToken>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<EnrolmentCertificateAccessToken>> GetAccessToken(Guid tokenId)
+        {
+            var token = await _certificateService.GetCertificateAccessTokenAsync(tokenId);
+            if (token == null)
+            {
+                return NotFound(new ApiResponse(404, $"Enrolment Certificate Access Token not found with id {tokenId}"));
+            }
+
+            return Ok(new ApiOkResponse<EnrolmentCertificateAccessToken>(token));
+        }
+
 
         // POST: api/enrolmentCertificate/access
         /// <summary>
         /// Creates an EnrolmentCertificateAccessToken for the user if the user has a finished Enrolment.
         /// </summary>
         [HttpPost("access", Name = nameof(CreateEnrolmentCertificateAccessToken))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiOkResponse<EnrolmentCertificateAccessToken>), StatusCodes.Status201Created)]
         public async Task<ActionResult<EnrolmentCertificateAccessToken>> CreateEnrolmentCertificateAccessToken(/*Guid userId*/)
         {
@@ -55,11 +123,10 @@ namespace Prime.Controllers
                 this.ModelState.AddModelError("Enrollee.UserId", "The enrolment for this User Id is not in a finished state.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
-            
-            var createdToken = await _certificateAccessService.CreateEnrolmentCertificateAccessTokenAsync(enrolment.EnrolleeId);
 
-            // return CreatedAtAction(nameof(GetEnrolmentById), new { enrolmentId = createdEnrolmentId }, new ApiCreatedResponse<Enrolment>(enrolment));
-            return Ok(new ApiCreatedResponse<EnrolmentCertificateAccessToken>(createdToken));
+            var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrolment.Enrollee.UserId);
+
+            return CreatedAtAction(nameof(GetAccessToken), new { tokenId = createdToken.Id }, new ApiCreatedResponse<EnrolmentCertificateAccessToken>(createdToken));
         }
     }
 }
