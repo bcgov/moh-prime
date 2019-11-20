@@ -85,15 +85,11 @@ export class RegulatoryComponent implements OnInit, OnDestroy {
   public removeCertification(index: number) {
     this.certifications.removeAt(index);
 
-    // Add a new certification is no certifications exist
+    // Add a new certification if no certifications exist
     // within the list
     if (!this.certifications.length) {
       this.addCertification();
     }
-  }
-
-  public trackCertificatesBy(index: number, certification: FormGroup) {
-    return index;
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
@@ -112,7 +108,6 @@ export class RegulatoryComponent implements OnInit, OnDestroy {
     this.createFormInstance();
     // Initialize form changes before patching
     this.initForm();
-
     this.enrolmentStateService.enrolment = this.enrolmentService.enrolment;
   }
 
@@ -132,7 +127,8 @@ export class RegulatoryComponent implements OnInit, OnDestroy {
       // the enrollee to fill out
       this.addCertification();
     } else {
-      // TODO potentially not needed
+      // After patched with existing data mark the form
+      // group as pristine to avoid dirty check on route
       this.form.markAsPristine();
     }
   }

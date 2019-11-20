@@ -10,11 +10,11 @@
       <ng-container appPageSubheaderTitle>Regulatory Information</ng-container>
     </app-page-subheader>
 
-    <div class="row"
-         formArrayName="certifications">
-      <div class="col-sm-12 col-md-6 col-xl-5 py-3">
+    <div class="row">
+      <div class="col-sm-12 col-md-6 col-xl-5 py-3"
+           formArrayName="certifications">
 
-        <ng-container *ngFor="let certificate of certifications.controls; trackBy: trackCertificatesBy; let i = index, let first = first"
+        <ng-container *ngFor="let certificate of certifications.controls; let i = index"
                       [formGroupName]="i">
 
           <app-college-certifications [form]="certificate"
@@ -24,16 +24,14 @@
 
         </ng-container>
 
-        <ng-container>
-          <button mat-button
-                  type="button"
-                  class="mt-3"
-                  color="primary"
-                  (click)="addCertification()">
-            <mat-icon class="add-icon">add</mat-icon>
-            Add Additional Certification
-          </button>
-        </ng-container>
+        <button mat-button
+                type="button"
+                class="mt-3"
+                color="primary"
+                (click)="addCertification()">
+          <mat-icon class="add-icon">add</mat-icon>
+          Add Additional Certification
+        </button>
 
       </div>
     </div>
