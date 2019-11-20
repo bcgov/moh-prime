@@ -7,11 +7,11 @@ import { Observable, Subscription } from 'rxjs';
 
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
-import { Enrolment } from '@shared/models/enrolment.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 @Component({
   selector: 'app-device-provider',
@@ -30,8 +30,9 @@ export class DeviceProviderComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
-    private enrolmentStateService: EnrolmentStateService,
+    private enrolmentService: EnrolmentService,
     private enrolmentResource: EnrolmentResource,
+    private enrolmentStateService: EnrolmentStateService,
     private toastService: ToastService,
     private logger: LoggerService
   ) {
@@ -82,15 +83,7 @@ export class DeviceProviderComponent implements OnInit {
     this.createFormInstance();
     // Initialize form changes before patching
     this.initForm();
-
-    // TODO: detect enrolment already exists and don't reload
-    // TODO: apply guard if not enrolment is found to redirect to profile
-    this.busy = this.enrolmentResource.enrolments()
-      .subscribe((enrolment: Enrolment) => {
-        if (enrolment) {
-          this.enrolmentStateService.enrolment = enrolment;
-        }
-      });
+    this.enrolmentStateService.enrolment = this.enrolmentService.enrolment;
   }
 
   private createFormInstance() {
@@ -98,14 +91,11 @@ export class DeviceProviderComponent implements OnInit {
   }
 
   private initForm() {
-    this.deviceProviderNumber.valueChanges.subscribe((value) => {
-      if (!value) {
-        // Device providers can be an insulin providers, otherwise disabled
-        this.isInsulinPumpProvider.reset(false, { emitEvent: false });
-        this.isInsulinPumpProvider.disable({ emitEvent: false });
-      } else {
-        this.isInsulinPumpProvider.enable({ emitEvent: false });
-      }
-    });
+    this.deviceProviderNumber.valueChanges
+      .subscribe((value) => {
+        if (!value) {
+          this.isInsulinPumpProvider.reset(false, { emitEvent: false });
+        }
+      });
   }
 }
