@@ -51,6 +51,10 @@ export class EnrolmentGuard extends BaseGuard {
    * Determine the route destination based on the enrolment status.
    */
   private routeDestination(routePath: string, enrolment: Enrolment) {
+    const state = this.router.getCurrentNavigation().extras.state;
+    if (state && state.fromAuth) {
+      return this.navigate(routePath, EnrolmentRoutes.COLLECTION_NOTICE);
+    }
     if (!enrolment) {
       return this.navigate(routePath, EnrolmentRoutes.PROFILE);
     } else if (enrolment) {

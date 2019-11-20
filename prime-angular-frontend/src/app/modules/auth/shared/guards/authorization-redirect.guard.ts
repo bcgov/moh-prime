@@ -42,7 +42,9 @@ export class AuthorizationRedirectGuard extends BaseGuard {
       }
 
       // Otherwise, redirect to an appropriate destination
-      this.router.navigate([destinationRoute]);
+      this.router.navigate([destinationRoute], {
+        state: { fromAuth: true }
+      });
       return reject(false);
     });
   }

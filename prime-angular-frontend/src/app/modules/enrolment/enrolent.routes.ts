@@ -2,6 +2,7 @@ import { BaseRoute } from '@core/models/base-route';
 
 export class EnrolmentRoutes extends BaseRoute {
   public static ENROLMENT = 'enrolment';
+  public static COLLECTION_NOTICE = 'collection-notice';
   public static PROFILE = 'profile';
   public static REGULATORY = 'regulatory';
   public static DEVICE_PROVIDER = 'device-provider';
