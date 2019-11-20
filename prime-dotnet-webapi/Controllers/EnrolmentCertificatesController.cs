@@ -12,24 +12,24 @@ using Prime.Services;
 namespace Prime.Controllers
 {
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    [Route("api/enrolment-certificates")]
     [ApiController]
     // User needs at least the ADMIN or ENROLMENT role to use this controller
     [Authorize(Policy = PrimeConstants.PRIME_USER_POLICY)]
-    public class EnrolmentCertificateController : ControllerBase
+    public class EnrolmentCertificatesController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
         private readonly IEnrolmentService _enrolmentService;
         private readonly IEnrolmentCertificateService _certificateService;
 
-        public EnrolmentCertificateController(IEnrolleeService enrolleeService, IEnrolmentService enrolmentService, IEnrolmentCertificateService enrolmentCertificateService)
+        public EnrolmentCertificatesController(IEnrolleeService enrolleeService, IEnrolmentService enrolmentService, IEnrolmentCertificateService enrolmentCertificateService)
         {
             _enrolleeService = enrolleeService;
             _enrolmentService = enrolmentService;
             _certificateService = enrolmentCertificateService;
         }
 
-        // GET: api/enrolmentCertificate/{guid}
+        // GET: api/enrolment-certificates/{guid}
         /// <summary>
         /// Gets the Enrolment Certificate based on the supplied Access Token GUID. This endpoint is not authenticated.
         /// </summary>
@@ -39,7 +39,7 @@ namespace Prime.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<EnrolmentCertificate>> GetEnrolmentCertificate(Guid accessTokenId)
         {
-            var token = await _certificateService.GetCertificateAccessTokenAsync(accessTokenId);
+            var token = await _certificateService.GetCertificateAccessTokenAsync(new Guid("fa490742-6648-460c-84ae-b49e63fed257"));
             if (token == null)
             {
                 return NotFound(new ApiResponse(404, $"Enrolment Certificate Access Token not found with id {accessTokenId}"));
@@ -57,7 +57,7 @@ namespace Prime.Controllers
         }
 
 
-        // GET: api/enrolmentCertificate/access
+        // GET: api/enrolment-certificates/access
         /// <summary>
         /// Gets all of the access tokens for the user.
         /// </summary>
@@ -73,7 +73,7 @@ namespace Prime.Controllers
         }
 
 
-        // GET: api/enrolmentCertificate/access/{guid}
+        // GET: api/enrolment-certificates/access/{guid}
         /// <summary>
         /// Gets the access token for the given GUID.
         /// </summary>
@@ -94,7 +94,7 @@ namespace Prime.Controllers
         }
 
 
-        // POST: api/enrolmentCertificate/access
+        // POST: api/enrolment-certificates/access
         /// <summary>
         /// Creates an EnrolmentCertificateAccessToken for the user if the user has a finished Enrolment.
         /// </summary>

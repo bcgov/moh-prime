@@ -1,6 +1,6 @@
 export interface EnrolmentCertificateAccessToken {
   Id: string;
-  EnrolleeId: number;
+  UserId: string;
   ViewCount: number;
   Active: boolean;
 }

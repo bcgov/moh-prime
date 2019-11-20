@@ -1,0 +1,72 @@
+<p>certificate works!</p>
+<!-- 
+<app-busy-overlay [busy]="busy">
+
+    <div class="app-print-layout">
+  
+      <app-page-header>Enrolment Summary</app-page-header>
+  
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>PRIME Enrolment Details</ng-container>
+        <ng-container appPageSubheaderSummary>
+          This page contains your PharmaNet ID. You will need to provide this ID to any administrator or vendor who is
+          setting up your PharmaNet access account. This ID will be recorded on all your PharmaNet transactions.
+        </ng-container>
+      </app-page-subheader>
+  
+      <ng-container *ngIf="enrolment">
+  
+        <dl class="row mb-4">
+          <dt class="col-sm-12 col-md-6 py-1">Name</dt>
+          <dd class="col-sm-12 col-md-6 py-1">
+            {{ enrolment | enrolment:'fullName' }}&nbsp;
+          </dd>
+  
+          <ng-container
+                        *ngIf="enrolment.enrollee.preferredFirstName || enrolment.enrollee.preferredMiddleName || enrolment.enrollee.preferredLastName">
+            <dt class="col-sm-12 col-md-6 py-1">Preferred Name</dt>
+            <dd class="col-sm-12 col-md-6 py-1">
+              {{ enrolment | enrolment:'preferredName' }} &nbsp;
+            </dd>
+          </ng-container>
+          <dt class="col-sm-12 col-md-6 py-1">Date of Birth</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.dateOfBirth | formatDate }}&nbsp;</dd>
+        </dl>
+  
+        <h3 class="lead">Address</h3>
+  
+        <dl class="row mb-4">
+          <dt class="col-sm-12 col-md-6 py-1">Country</dt>
+          <dd class="col-sm-12 col-md-6 py-1">
+            {{ enrolment.enrollee.physicalAddress.countryCode | configCode: 'countries' }}&nbsp;</dd>
+          <dt class="col-sm-12 col-md-6 py-1">Province</dt>
+          <dd class="col-sm-12 col-md-6 py-1">
+            {{ enrolment.enrollee.physicalAddress.provinceCode | configCode: 'provinces' }}&nbsp;</dd>
+          <dt class="col-sm-12 col-md-6 py-1">Street Address</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.street }}&nbsp;</dd>
+          <ng-container *ngIf="enrolment.enrollee.physicalAddress.street2">
+            <dt class="col-sm-12 col-md-6 py-1">Street Address 2</dt>
+            <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.street2 }}&nbsp;</dd>
+          </ng-container>
+          <dt class="col-sm-12 col-md-6 py-1">City</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.city }}&nbsp;</dd>
+          <dt class="col-sm-12 col-md-6 py-1">Postal Code</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.postal | postal }}&nbsp;</dd>
+        </dl>
+  
+        <h3 class="lead">PharmaNet ID</h3>
+        <dl class="row mb-4">
+          <dt class="col-sm-12 col-md-6 py-1">PharmaNet ID</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.licensePlate }}&nbsp;</dd>
+        </dl>
+  
+        <button mat-raised-button
+              color="primary"
+              (click)="generateLink()">Generate Link</button>
+  
+      </ng-container>
+  
+    </div>
+  
+  </app-busy-overlay>
+   -->

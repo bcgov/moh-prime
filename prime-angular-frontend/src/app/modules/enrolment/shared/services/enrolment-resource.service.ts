@@ -68,7 +68,7 @@ export class EnrolmentResource {
 
   public createEnrolmentCertificateAccessToken(userId: number): Observable<EnrolmentCertificateAccessToken> {
     const payload = { userId };
-    return this.http.post(`${this.config.apiEndpoint}/enrolmentCertificate/access`, payload)
+    return this.http.post(`${this.config.apiEndpoint}/enrolment-certificates/access`, payload)
       .pipe(
         map((response: PrimeHttpResponse) => response.result),
         map((token: EnrolmentCertificateAccessToken) => {
