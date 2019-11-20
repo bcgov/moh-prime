@@ -74,10 +74,14 @@ export class CollegeCertificationsComponent implements OnInit {
 
   private setCollegeCertification(collegeCode: number) {
     if (collegeCode) {
+      // Initialize the validations when the college code
+      // is not "None"
       this.setValidation();
       this.loadLicenses(collegeCode);
       this.loadPractices(collegeCode);
     } else {
+      // Prevention of removal based on it being the last
+      // control in the list is managed by the parent
       this.removeCertification();
     }
   }
