@@ -19,7 +19,7 @@ export class CertificateComponent implements OnInit {
   ngOnInit() {
     this.busy = this.enrolmentCertificateResource.getCertificate('fa490742-6648-460c-84ae-b49e63fed257')
       .subscribe((certificate: EnrolmentCertificate) => {
-        console.log(certificate);
+        this.certificate = certificate;
       });
   }
 }
