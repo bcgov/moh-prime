@@ -16,6 +16,9 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 import { EnrolmentRoutes } from '@enrolment/enrolent.routes';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentStatusReason } from '@shared/models/enrolment-status-reason.model';
+import { EnrolmentStatusReason as EnrolmentStatusReasonEnum } from '@shared/enums/enrolment-status-reason.enum';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 @Component({
   selector: 'app-access-agreement',
@@ -24,6 +27,7 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 })
 export class AccessAgreementComponent implements OnInit {
   public busy: Subscription;
+  public isAutomatic: boolean;
   public enrolment: Enrolment;
   public currentPage: number;
   public agree: FormControl;
@@ -33,6 +37,7 @@ export class AccessAgreementComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private enrolmentService: EnrolmentService,
     private enrolmentStateService: EnrolmentStateService,
     private enrolmentResource: EnrolmentResource,
     private toastService: ToastService,
@@ -115,6 +120,13 @@ export class AccessAgreementComponent implements OnInit {
         if (enrolment) {
           this.enrolmentStateService.enrolment = enrolment;
         }
+      });
+
+    this.enrolmentService.enrolment$
+      .subscribe((enrolment: Enrolment) => {
+        // Only automatic if the enrolment reason is `Automatic`
+        this.isAutomatic = enrolment.currentStatus.enrolmentStatusReasons
+          .every((reason: EnrolmentStatusReason) => reason.statusReasonCode === EnrolmentStatusReasonEnum.AUTOMATIC);
       });
   }
 }
