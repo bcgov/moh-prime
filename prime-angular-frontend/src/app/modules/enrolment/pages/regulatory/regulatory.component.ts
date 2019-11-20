@@ -56,8 +56,12 @@ export class RegulatoryComponent implements OnInit, OnDestroy {
           () => {
             this.toastService.openSuccessToast('Regulatory information has been saved');
             this.form.markAsPristine();
+            let route = EnrolmentRoutes.SELF_DECLARATION;
+            if (this.certifications.length === 0) {
+              route = EnrolmentRoutes.JOB;
+            }
             this.certifications.clear();
-            this.router.navigate([EnrolmentRoutes.DEVICE_PROVIDER], { relativeTo: this.route.parent });
+            this.router.navigate([route], { relativeTo: this.route.parent });
           },
           (error: any) => {
             this.toastService.openErrorToast('Regulatory information could not be saved');
