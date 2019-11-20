@@ -14,7 +14,7 @@
          formArrayName="certifications">
       <div class="col-sm-12 col-md-6 col-xl-5 py-3">
 
-        <ng-container *ngFor="let certificate of certifications.controls; let i = index, let first = first"
+        <ng-container *ngFor="let certificate of certifications.controls; trackBy: trackCertificatesBy; let i = index, let first = first"
                       [formGroupName]="i">
 
           <app-college-certifications [form]="certificate"
