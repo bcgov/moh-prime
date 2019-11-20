@@ -13,49 +13,41 @@
       </ng-container>
     </app-page-subheader>
 
-    <div class="row mb-3">
-      <div class="col-sm-12 col-md-6 col-xl-5">
+    <div class="row">
+      <div class="col-sm-12 col-md-6 col-xl-5 py-3"
+           formArrayName="organizations">
 
-        <mat-form-field class="w-100">
-          <input type="text"
-                 placeholder="Organization Type"
-                 matInput
-                 [formControl]="organizationCtrl"
-                 [matAutocomplete]="auto">
-          <mat-autocomplete #auto="matAutocomplete"
-                            [displayWith]="displayOrganization">
-            <mat-option *ngFor="let organizationType of filteredOrganizationTypes"
-                        [value]="organizationType"
-                        [disabled]="disableOrganization(organizationType.code)">
-              {{ organizationType.name }}
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
+        <ng-container *ngFor="let organization of organizations.controls; let i = index"
+                      [formGroupName]="i">
 
-      </div>
-      <div class="col">
+          <app-form-icon-group [show]="organizations.length > 1"
+                               (event)="removeOrganization(i)">
+            <mat-form-field class="w-100">
+              <mat-label>Organization Type</mat-label>
+              <mat-select formControlName="organizationTypeCode">
+                <mat-option *ngFor="let organizationType of organizationTypes"
+                            [value]="organizationType.code"
+                            [disabled]="disableOrganization(organizationType.code)">
+                  {{ organizationType.name }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="organization.get('organizationTypeCode').hasError('required')">Required</mat-error>
+            </mat-form-field>
+          </app-form-icon-group>
 
-        <button mat-raised-button
+        </ng-container>
+
+        <button mat-button
                 type="button"
+                class="mt-3"
                 color="primary"
-                class="mb-3 mt-1"
-                [disabled]="!organizationCtrl.value"
-                (click)="addOrganization()">Add Organization</button>
+                (click)="addOrganization()">
+          <mat-icon class="add-icon">add</mat-icon>
+          Add Additional Organization
+        </button>
 
       </div>
     </div>
-
-    <ng-container *ngIf="organizations.length">
-
-      <mat-chip-list class="mat-chip-list-stacked">
-        <mat-chip *ngFor="let organization of organizations.controls; let i = index">
-          {{ organizationLookup(organization.value.organizationTypeCode) }}
-          <mat-icon matChipRemove
-                    (click)="removeOrganization(i)">cancel</mat-icon>
-        </mat-chip>
-      </mat-chip-list>
-
-    </ng-container>
 
     <div class="row justify-content-between">
       <div class="col pt-4">

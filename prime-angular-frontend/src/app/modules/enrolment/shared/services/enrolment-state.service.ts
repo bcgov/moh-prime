@@ -210,9 +210,8 @@ export class EnrolmentStateService {
       id: [null, []],
       // Force selection of "None" on new certifications
       collegeCode: ['', []],
-      // Validators are applied at the component-level
-      // when fields are made visible to allow empty
-      // submissions
+      // Validators are applied at the component-level when
+      // fields are made visible to allow empty submissions
       licenseNumber: [null, []],
       licenseCode: [null, []],
       renewalDate: [null, []],

@@ -9,7 +9,6 @@ import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
-import { ViewportService } from '@core/services/viewport.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
@@ -35,7 +34,6 @@ export class OrganizationComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private configService: ConfigService,
-    private viewportService: ViewportService,
     private enrolmentStateService: EnrolmentStateService,
     private enrolmentResource: EnrolmentResource,
     private enrolmentService: EnrolmentService,
@@ -49,19 +47,14 @@ export class OrganizationComponent implements OnInit {
     return this.form.get('organizations') as FormArray;
   }
 
-  public get isMobile() {
-    return this.viewportService.isMobile;
-  }
-
   public onSubmit() {
     if (this.form.valid) {
-      // TODO create rxjs pipe for updating enrolment submissions
       const payload = this.enrolmentStateService.enrolment;
       this.busy = this.enrolmentResource.updateEnrolment(payload)
         .subscribe(
           () => {
-            this.toastService.openSuccessToast('PharmaNet access has been saved');
             this.form.markAsPristine();
+            this.toastService.openSuccessToast('PharmaNet access has been saved');
             this.router.navigate([EnrolmentRoutes.REVIEW], { relativeTo: this.route.parent });
           },
           (error: any) => {
@@ -74,32 +67,17 @@ export class OrganizationComponent implements OnInit {
   }
 
   public addOrganization() {
-    const code = this.organizationCtrl.value.code;
-    const organization = this.enrolmentStateService.buildOrganizationForm(code);
-
+    const organization = this.enrolmentStateService.buildOrganizationForm();
     this.organizations.push(organization);
-    this.organizationCtrl.reset();
-    this.filterOrganizationTypes();
+  }
+
+  public disableOrganization(organizationTypeCode: number): boolean {
+    // Omit organizations types that are not "Community Practices" for ComPap
+    return (organizationTypeCode !== 1);
   }
 
   public removeOrganization(index: number) {
     this.organizations.removeAt(index);
-    this.filterOrganizationTypes();
-  }
-
-  public organizationLookup(organizationTypeCode: number): string {
-    return this.organizationTypes
-      .find((c: Config<number>) => c.code === organizationTypeCode)
-      .name;
-  }
-
-  public displayOrganization(organizationType?: Config<number>): string {
-    return (organizationType) ? organizationType.name : null;
-  }
-
-  public disableOrganization(organizationTypeCode: number) {
-    // Omit organizations types that are not "Community Practices" for ComPap
-    return (organizationTypeCode !== 1);
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
@@ -111,16 +89,25 @@ export class OrganizationComponent implements OnInit {
 
   public ngOnInit() {
     this.createFormInstance();
-    // TODO no enrolment resource, but still not the best solution
-    // 1) set the enrolment state service in the guard
-    // 2) pass the BehaviourSubject into the enrolment state service
+    // Initialize form changes before patching
+    this.initForm();
     this.enrolmentStateService.enrolment = this.enrolmentService.enrolment;
-    this.filterOrganizationTypes();
   }
 
   private createFormInstance() {
     this.form = this.enrolmentStateService.organizationForm;
-    this.organizationCtrl = new FormControl();
+  }
+
+  private initForm() {
+    if (this.organizations.length === 0) {
+      // Always have at least one organization ready for
+      // the enrollee to fill out
+      this.addOrganization();
+    } else {
+      // After patched with existing data mark the form
+      // group as pristine to avoid dirty check on route
+      this.form.markAsPristine();
+    }
   }
 
   private filterOrganizationTypes() {
