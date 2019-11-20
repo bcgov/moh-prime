@@ -1,10 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-
-import { Subscription } from 'rxjs';
 
 import { EnrolmentRoutes } from '@enrolment/enrolent.routes';
-
 
 @Component({
   selector: 'app-collection-notice',
@@ -12,13 +8,9 @@ import { EnrolmentRoutes } from '@enrolment/enrolent.routes';
   styleUrls: ['./collection-notice.component.scss']
 })
 export class CollectionNoticeComponent implements OnInit {
-
-  public busy: Subscription;
-  constructor(private route: ActivatedRoute) { }
+  constructor() { }
 
   public EnrolmentRoutes = EnrolmentRoutes;
 
-  ngOnInit() {
-  }
-
+  public ngOnInit() {}
 }
