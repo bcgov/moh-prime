@@ -74,22 +74,33 @@ export class CollegeCertificationsComponent implements OnInit {
 
   private setCollegeCertification(collegeCode: number) {
     if (collegeCode) {
-      // Initialize the validations when the college code
-      // is not "None"
-      this.setValidation();
+      // Initialize the validations when the college code is not
+      // "None" to allow for submission when no college is selected
+      this.setValidations();
       this.loadLicenses(collegeCode);
       this.loadPractices(collegeCode);
     } else {
-      // Prevention of removal based on it being the last
-      // control in the list is managed by the parent
-      this.removeCertification();
+      this.removeValidations();
+
+      // Reset individually and not emitted to be handled by parent
+      // to prevent ExpressionChangedAfterItHasBeenCheckedError
+      this.licenseNumber.reset(null);
+      this.licenseCode.reset(null);
+      this.renewalDate.reset(null);
+      this.practiceCode.reset(null);
     }
   }
 
-  private setValidation() {
+  private setValidations() {
     this.formUtilsService.setValidators(this.licenseNumber, [Validators.required, FormControlValidators.requiredLength(5)]);
     this.formUtilsService.setValidators(this.licenseCode, [Validators.required]);
     this.formUtilsService.setValidators(this.renewalDate, [Validators.required]);
+  }
+
+  private removeValidations() {
+    this.formUtilsService.setValidators(this.licenseNumber, []);
+    this.formUtilsService.setValidators(this.licenseCode, []);
+    this.formUtilsService.setValidators(this.renewalDate, []);
   }
 
   private loadLicenses(collegeCode: number) {

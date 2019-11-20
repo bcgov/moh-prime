@@ -14,13 +14,14 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-regulatory',
   templateUrl: './regulatory.component.html',
   styleUrls: ['./regulatory.component.scss']
 })
-export class RegulatoryComponent implements OnInit, OnDestroy {
+export class RegulatoryComponent implements OnInit {
   public busy: Subscription;
   public form: FormGroup;
   public colleges: Config<number>[];
@@ -49,7 +50,9 @@ export class RegulatoryComponent implements OnInit, OnDestroy {
   public onSubmit() {
     if (this.form.valid) {
       this.removeJobs();
+      // TODO remove from payload instead so view doesn't jump
       this.removeIncompleteCertifications();
+
       const payload = this.enrolmentStateService.enrolment;
       this.busy = this.enrolmentResource.updateEnrolment(payload)
         .subscribe(
@@ -84,37 +87,30 @@ export class RegulatoryComponent implements OnInit, OnDestroy {
    */
   public removeCertification(index: number) {
     this.certifications.removeAt(index);
-
-    // Add a new certification if no certifications exist
-    // within the list
-    if (!this.certifications.length) {
-      this.addCertification();
-    }
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
-    this.removeIncompleteCertifications();
-
     const data = 'unsaved';
     return (this.form.dirty)
       ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
         .pipe(
-          // TODO remove values if needed
+          map((result: boolean) => {
+            if (!result) {
+              // Only remove incomplete certifications when the
+              // enrollee decides to discard their changes
+              this.removeIncompleteCertifications();
+            }
+
+            return result;
+          })
         )
       : true;
   }
 
   public ngOnInit() {
     this.createFormInstance();
-    // Initialize form changes before patching
     this.initForm();
     this.enrolmentStateService.enrolment = this.enrolmentService.enrolment;
-  }
-
-  public ngOnDestroy() {
-    // Remove incomplete certifications from the form model, otherwise
-    // they will be persisted
-    this.removeIncompleteCertifications();
   }
 
   private createFormInstance() {
@@ -122,15 +118,9 @@ export class RegulatoryComponent implements OnInit, OnDestroy {
   }
 
   private initForm() {
-    if (this.certifications.length === 0) {
-      // Always have at least one certification ready for
-      // the enrollee to fill out
-      this.addCertification();
-    } else {
-      // After patched with existing data mark the form
-      // group as pristine to avoid dirty check on route
-      this.form.markAsPristine();
-    }
+    // Always have at least one certification ready for
+    // the enrollee to fill out
+    this.addCertification();
   }
 
   /**
@@ -142,20 +132,18 @@ export class RegulatoryComponent implements OnInit, OnDestroy {
     this.certifications.controls
       .forEach((control: FormGroup, index: number) => {
         if (!control.get('collegeCode').value) {
-          this.certifications.removeAt(index);
+          this.removeCertification(index);
         }
       });
   }
 
   /**
    * @description
-   * Remove chosen jobs from the enrolment as enrollees can not
-   * have certificate(s), as well as, job(s).
+   * Remove jobs from the enrolment as enrollees can not have
+   * certificate(s), as well as, job(s).
    */
   private removeJobs() {
-    if (this.enrolmentStateService.enrolment.jobs.length) {
-      const jobs = this.enrolmentStateService.jobsForm.get('jobs') as FormArray;
-      jobs.clear();
-    }
+    const jobs = this.enrolmentStateService.jobsForm.get('jobs') as FormArray;
+    jobs.clear();
   }
 }
