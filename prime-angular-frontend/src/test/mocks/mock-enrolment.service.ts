@@ -77,7 +77,8 @@ export class MockEnrolmentService implements IEnrolmentService {
           }
         ]
       },
-      availableStatuses: null
+      availableStatuses: null,
+      enrolleeClassification: null,
     });
   }
 

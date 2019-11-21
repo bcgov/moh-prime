@@ -27,4 +27,5 @@ export interface Enrolment {
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;
   availableStatuses: Config<number>[];
+  enrolleeClassification: string;
 }
