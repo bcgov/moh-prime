@@ -18,6 +18,7 @@ import { CollegeCertificationsComponent } from './shared/components/college-cert
 import { MoaAccessAgreementComponent } from './pages/access-agreement/components/moa-access-agreement/moa-access-agreement.component';
 import { RuAccessAgreementComponent } from './pages/access-agreement/components/ru-access-agreement/ru-access-agreement.component';
 import { PageRefDirective } from './pages/access-agreement/page-ref.directive';
+import { PageFooterComponent } from './shared/components/page-footer/page-footer.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { PageRefDirective } from './pages/access-agreement/page-ref.directive';
     CollegeCertificationsComponent,
     MoaAccessAgreementComponent,
     RuAccessAgreementComponent,
-    PageRefDirective
+    PageRefDirective,
+    PageFooterComponent
   ],
   imports: [
     SharedModule,

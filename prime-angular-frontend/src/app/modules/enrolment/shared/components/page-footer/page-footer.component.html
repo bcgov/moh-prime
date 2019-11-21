@@ -1,0 +1,28 @@
+<div class="row justify-content-between pt-2">
+  <div class="col-6">
+
+    <button mat-stroked-button
+            onBack>Back</button>
+
+  </div>
+  <div class="col-6 text-right">
+
+    <ng-container *ngIf="hasReadAgreement; else hasMorePages">
+
+      <button mat-raised-button
+              color="primary"
+              [disabled]="disabled"
+              (click)="onSubmit()">Accept Agreement</button>
+
+    </ng-container>
+
+    <ng-template #hasMorePages>
+
+      <button mat-raised-button
+              color="primary"
+              (click)="onNextPage()">Continue</button>
+
+    </ng-template>
+
+  </div>
+</div>
