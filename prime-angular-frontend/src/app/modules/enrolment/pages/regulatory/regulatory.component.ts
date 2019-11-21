@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
 import { Observable, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
@@ -14,7 +15,6 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
-import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-regulatory',
@@ -49,9 +49,8 @@ export class RegulatoryComponent implements OnInit {
 
   public onSubmit() {
     if (this.form.valid) {
+      // Enrollees can not have certifications and jobs
       this.removeJobs();
-      // TODO remove from payload instead so view doesn't jump
-      this.removeIncompleteCertifications();
 
       const payload = this.enrolmentStateService.enrolment;
       this.busy = this.enrolmentResource.updateEnrolment(payload)
@@ -66,7 +65,6 @@ export class RegulatoryComponent implements OnInit {
             this.logger.error('[Enrolment] Regulatory::onSubmit error has occurred: ', error);
           }
         );
-      this.form.markAsPristine();
     } else {
       this.form.markAllAsTouched();
     }
@@ -95,7 +93,7 @@ export class RegulatoryComponent implements OnInit {
       ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
         .pipe(
           map((result: boolean) => {
-            if (!result) {
+            if (result) {
               // Only remove incomplete certifications when the
               // enrollee decides to discard their changes
               this.removeIncompleteCertifications();
@@ -110,7 +108,6 @@ export class RegulatoryComponent implements OnInit {
   public ngOnInit() {
     this.createFormInstance();
     this.initForm();
-    this.enrolmentStateService.enrolment = this.enrolmentService.enrolment;
   }
 
   private createFormInstance() {
@@ -118,12 +115,17 @@ export class RegulatoryComponent implements OnInit {
   }
 
   private initForm() {
+    this.enrolmentStateService.enrolment = this.enrolmentService.enrolment;
+
     // Always have at least one certification ready for
     // the enrollee to fill out
-    this.addCertification();
+    if (!this.certifications.length) {
+      this.addCertification();
+    }
   }
 
   /**
+   * @deprecated
    * @description
    * Removes incomplete certifications from the list in preparation
    * for submission, and allows for an empty list of certifications.
@@ -131,10 +133,17 @@ export class RegulatoryComponent implements OnInit {
   private removeIncompleteCertifications() {
     this.certifications.controls
       .forEach((control: FormGroup, index: number) => {
-        if (!control.get('collegeCode').value) {
+        // Remove if college code is "None" or the certification group is invalid
+        if (!control.get('collegeCode').value || control.invalid) {
           this.removeCertification(index);
         }
       });
+
+    // Always have a single cerfication available, and it prevents
+    // the page from jumping when routing
+    if (!this.certifications.controls.length) {
+      this.addCertification();
+    }
   }
 
   /**
