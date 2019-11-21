@@ -52,9 +52,13 @@ export class EnrolmentGuard extends BaseGuard {
    */
   private routeDestination(routePath: string, enrolment: Enrolment) {
     const state = this.router.getCurrentNavigation().extras.state;
+
+    console.log('HAS_STATE', state);
+
     if (state && state.fromAuth) {
       return this.navigate(routePath, EnrolmentRoutes.COLLECTION_NOTICE);
     }
+
     if (!enrolment) {
       return this.navigate(routePath, EnrolmentRoutes.PROFILE);
     } else if (enrolment) {
