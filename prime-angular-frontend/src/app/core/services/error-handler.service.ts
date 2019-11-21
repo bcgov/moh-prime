@@ -15,7 +15,7 @@ export class ErrorHandlerService implements ErrorHandler {
   ) { }
 
   public handleError(error: any) {
-    // TODO: check for instance of HttpErrorResponse
+    // TODO check for instance of HttpErrorResponse
     const logger = this.injector.get(LoggerService);
     const location = this.injector.get(Location);
     const message = (error.message)
@@ -25,7 +25,7 @@ export class ErrorHandlerService implements ErrorHandler {
       ? location.path()
       : '';
 
-    // TODO: implement stack trace and push to server for notification(s)
+    // TODO implement stack trace and push to server for notification(s)
     logger.error(message, { url });
 
     // IMPORTANT: Rethrow the error, otherwise it gets swallowed

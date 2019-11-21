@@ -192,7 +192,6 @@ export class ProfileComponent implements OnInit {
       this.form.get('preferredLastName').value
     );
 
-    // TODO update to use valueChanges by forcing value changes when visible
     // Show mailing address if it exists
     this.hasMailingAddress = !!(
       this.mailingAddress.get('countryCode').value ||

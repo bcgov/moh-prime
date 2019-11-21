@@ -14,8 +14,9 @@ import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
-import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 
 @Component({
   selector: 'app-access-agreement',
@@ -33,8 +34,9 @@ export class AccessAgreementComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private enrolmentStateService: EnrolmentStateService,
+    private enrolmentService: EnrolmentService,
     private enrolmentResource: EnrolmentResource,
+    private enrolmentStateService: EnrolmentStateService,
     private toastService: ToastService,
     private dialog: MatDialog,
     private changeDetectorRef: ChangeDetectorRef,
@@ -106,15 +108,6 @@ export class AccessAgreementComponent implements OnInit {
   }
 
   public ngOnInit() {
-    // TODO drop and access using enrolment service
-    this.busy = this.enrolmentResource.enrolments()
-      .pipe(
-        map((enrolment: Enrolment) => this.enrolment = enrolment)
-      )
-      .subscribe((enrolment: Enrolment) => {
-        if (enrolment) {
-          this.enrolmentStateService.enrolment = enrolment;
-        }
-      });
+    this.enrolmentStateService.enrolment = this.enrolmentService.enrolment;
   }
 }
