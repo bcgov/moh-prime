@@ -10,8 +10,9 @@ import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
-import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { FormUtilsService } from '@enrolment/shared/services/form-utils.service';
 
 // TODO: make YesNo into a component and use projection for content
@@ -32,8 +33,9 @@ export class SelfDeclarationComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
-    private enrolmentStateService: EnrolmentStateService,
+    private enrolmentService: EnrolmentService,
     private enrolmentResource: EnrolmentResource,
+    private enrolmentStateService: EnrolmentStateService,
     private formUtilsService: FormUtilsService,
     private toastService: ToastService,
     private logger: LoggerService
@@ -112,17 +114,8 @@ export class SelfDeclarationComponent implements OnInit {
 
   public ngOnInit() {
     this.createFormInstance();
-
-    // TODO: detect enrolment already exists and don't reload
-    // TODO: apply guard if not enrolment is found to redirect to profile
-    this.busy = this.enrolmentResource.enrolments()
-      .subscribe((enrolment: Enrolment) => {
-        if (enrolment) {
-          this.enrolmentStateService.enrolment = enrolment;
-        }
-
-        this.initForm();
-      });
+    this.enrolmentStateService.enrolment = this.enrolmentService.enrolment;
+    this.initForm();
   }
 
   private createFormInstance() {
@@ -130,7 +123,7 @@ export class SelfDeclarationComponent implements OnInit {
   }
 
   private initForm() {
-    // TODO: make YES/NO into own component to encapsulate toggling and markup
+    // TODO make YES/NO into own component to encapsulate toggling and markup
     this.hasConviction.valueChanges.subscribe((value: boolean) => this.toggleValidators(value, this.hasConvictionDetails));
     this.hasRegistrationSuspended.valueChanges.subscribe((value: boolean) => this.toggleValidators(value, this.hasRegistrationSuspendedDetails));
     this.hasDisciplinaryAction.valueChanges.subscribe((value: boolean) => this.toggleValidators(value, this.hasDisciplinaryActionDetails));
