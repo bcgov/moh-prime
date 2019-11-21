@@ -17,7 +17,6 @@ export class EnrolmentStateService {
   // TODO make into BehaviourSubject or asObservable, which would make it immutable
   public profileForm: FormGroup;
   public regulatoryForm: FormGroup;
-  public collegeCertificationForm: FormGroup;
   public deviceProviderForm: FormGroup;
   public jobsForm: FormGroup;
   public selfDeclarationForm: FormGroup;
@@ -207,7 +206,6 @@ export class EnrolmentStateService {
 
   public buildCollegeCertificationForm(): FormGroup {
     return this.fb.group({
-      id: [null, []],
       // Force selection of "None" on new certifications
       collegeCode: ['', []],
       // Validators are applied at the component-level when
@@ -237,7 +235,6 @@ export class EnrolmentStateService {
 
   public buildJobForm(value: string = null): FormGroup {
     return this.fb.group({
-      id: [null, []],
       title: [value, []]
     });
   }
@@ -263,7 +260,6 @@ export class EnrolmentStateService {
 
   public buildOrganizationForm(code: number = null): FormGroup {
     return this.fb.group({
-      id: [null, []],
       organizationTypeCode: [code, [Validators.required]]
     });
   }
