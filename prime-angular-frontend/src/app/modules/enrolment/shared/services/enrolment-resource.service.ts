@@ -10,6 +10,7 @@ import { PrimeHttpResponse } from '@core/models/prime-http-response.model';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { Address } from '../models/address.model';
+import { CollegeCertification } from '../models/college-certification.model';
 
 @Injectable({
   providedIn: 'root'
@@ -81,6 +82,30 @@ export class EnrolmentResource {
       enrolment.enrollee.mailingAddress.postal = enrolment.enrollee.mailingAddress.postal.toUpperCase();
     }
 
+    enrolment.certifications = this.removeIncompleteCollegeCertifications(enrolment.certifications);
+
     return enrolment;
+  }
+
+  // ---
+  // Sanitizer Helpers
+  // ---
+
+  private removeIncompleteCollegeCertifications(certifications: CollegeCertification[]) {
+    return certifications
+      .filter((certification: CollegeCertification) =>
+        this.collegeCertificationIsIncomplete(certification)
+      );
+  }
+
+  private collegeCertificationIsIncomplete(certification: CollegeCertification): boolean {
+    const whitelist = ['practiceCode'];
+
+    return Object.keys(certification)
+      .every((key: string) =>
+        (!whitelist.includes(key) && !certification[key])
+          ? certification[key]
+          : true
+      );
   }
 }
