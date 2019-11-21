@@ -13,23 +13,24 @@
     <ng-container *ngIf="certificate">
       <dt class="col-sm-12 col-md-6 py-1">Name</dt>
       <dd class="col-sm-12 col-md-6 py-1">
-        {{ enrolment | enrolment:'fullName' }}&nbsp;
+        {{ certificate.firstName }}&nbsp;
+        <!-- {{ certificate | enrolment:'fullName' }}&nbsp; -->
       </dd>
 
-      <ng-container
+      <!-- <ng-container
         *ngIf="enrolment.enrollee.preferredFirstName || enrolment.enrollee.preferredMiddleName || enrolment.enrollee.preferredLastName">
         <dt class="col-sm-12 col-md-6 py-1">Preferred Name</dt>
         <dd class="col-sm-12 col-md-6 py-1">
-          {{ enrolment | enrolment:'preferredName' }} &nbsp;
-        </dd>
+          {{ certificate | enrolment:'preferredName' }} &nbsp;
+        </dd> 
 
-      </ng-container>
+      </ng-container>-->
       <dt class="col-sm-12 col-md-6 py-1">Date of Birth</dt>
-      <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.dateOfBirth | formatDate }}&nbsp;</dd>
+      <dd class="col-sm-12 col-md-6 py-1">{{ certificate.dateOfBirth | formatDate }}&nbsp;</dd>
 
       <dl class="row mb-4">
         <dt class="col-sm-12 col-md-6 py-1">PharmaNet ID</dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.licensePlate }}&nbsp;</dd>
+        <dd class="col-sm-12 col-md-6 py-1">{{ certificate.licensePlate }}&nbsp;</dd>
       </dl>
     </ng-container>
   </div>
