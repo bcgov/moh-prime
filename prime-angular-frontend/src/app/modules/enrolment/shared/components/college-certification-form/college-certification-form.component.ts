@@ -8,11 +8,11 @@ import { FormUtilsService } from '@enrolment/shared/services/form-utils.service'
 import { FormControlValidators } from '@shared/validators/form-control.validators';
 
 @Component({
-  selector: 'app-college-certifications',
-  templateUrl: './college-certifications.component.html',
-  styleUrls: ['./college-certifications.component.scss']
+  selector: 'app-college-certification-form',
+  templateUrl: './college-certification-form.component.html',
+  styleUrls: ['./college-certification-form.component.scss']
 })
-export class CollegeCertificationsComponent implements OnInit {
+export class CollegeCertificationFormComponent implements OnInit {
   @Input() public form: FormGroup;
   @Input() public index: number;
   @Input() public total: number;
