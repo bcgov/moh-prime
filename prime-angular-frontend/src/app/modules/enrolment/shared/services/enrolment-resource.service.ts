@@ -9,8 +9,9 @@ import { Config } from '@config/config.model';
 import { PrimeHttpResponse } from '@core/models/prime-http-response.model';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
-import { Address } from '../models/address.model';
-import { CollegeCertification } from '../models/college-certification.model';
+import { Address } from '@enrolment/shared/models/address.model';
+import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
+import { Job } from '@enrolment/shared/models/job.model';
 
 @Injectable({
   providedIn: 'root'
@@ -83,6 +84,7 @@ export class EnrolmentResource {
     }
 
     enrolment.certifications = this.removeIncompleteCollegeCertifications(enrolment.certifications);
+    enrolment.jobs = this.removeIncompleteJobs(enrolment.jobs);
 
     return enrolment;
   }
@@ -92,10 +94,9 @@ export class EnrolmentResource {
   // ---
 
   private removeIncompleteCollegeCertifications(certifications: CollegeCertification[]) {
-    return certifications
-      .filter((certification: CollegeCertification) =>
-        this.collegeCertificationIsIncomplete(certification)
-      );
+    return certifications.filter((certification: CollegeCertification) =>
+      this.collegeCertificationIsIncomplete(certification)
+    );
   }
 
   private collegeCertificationIsIncomplete(certification: CollegeCertification): boolean {
@@ -107,5 +108,16 @@ export class EnrolmentResource {
           ? certification[key]
           : true
       );
+  }
+
+  private removeIncompleteJobs(jobs: Job[]) {
+    return jobs.filter((job: Job) =>
+      this.jobIsIncomplete(job)
+    );
+  }
+
+  private jobIsIncomplete(job: Job) {
+    return Object.keys(job)
+      .every((key: string) => (!job[key]) ? job[key] : true);
   }
 }

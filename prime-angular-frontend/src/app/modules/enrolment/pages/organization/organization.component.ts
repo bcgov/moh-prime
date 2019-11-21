@@ -82,16 +82,16 @@ export class OrganizationComponent implements OnInit {
 
   public filterOrganizationTypes(organization: FormGroup) {
     // Create a list of filtered organization types
-    if (this.organizationTypes.length) {
+    if (this.organizations.length) {
       // All the currently chosen organizations
-      const organizations = this.organizations.value as { organizationTypeCode: number }[];
-      const chosenOrganizations = organizations.map(o => o.organizationTypeCode);
+      const selectedOrganizationTypeCodes = this.organizations.value
+        .map((o: Organization) => o.organizationTypeCode);
       // Current organization type selected
       const currentOrganization = this.organizationTypes
         .find(o => o.code === organization.get('organizationTypeCode').value);
-      // Filter the list of possible organizations using the chosen organizations
+      // Filter the list of possible organizations using the selected organizations
       const filteredOrganizationTypes = this.organizationTypes
-        .filter(o => !chosenOrganizations.includes(o.code));
+        .filter((c: Config<number>) => !selectedOrganizationTypeCodes.includes(c.code));
 
       if (currentOrganization) {
         // Add the current organization to the list of filtered
@@ -129,13 +129,4 @@ export class OrganizationComponent implements OnInit {
     // the enrollee to fill out
     this.addOrganization();
   }
-
-  // TODO filter organizations on currently chosen organization(s)
-  // private filterOrganizationTypes() {
-  //   const selectedOrgTypeCodes: number[] = this.organizations.value
-  //     .map((o: Organization) => o.organizationTypeCode);
-
-  //   this.filteredOrganizationTypes = this.organizationTypes
-  //     .filter((c: Config<number>) => !selectedOrgTypeCodes.includes(c.code));
-  // }
 }
