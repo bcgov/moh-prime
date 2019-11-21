@@ -15,33 +15,40 @@
     </app-page-subheader>
 
     <div class="row">
-      <div class="col-sm-12 col-md-6 col-xl-5">
+      <div class="col-sm-12 col-md-6 col-xl-5 py-3"
+           formArrayName="jobs">
 
-        <mat-form-field class="w-100">
-          <mat-chip-list #chipList>
-            <mat-chip *ngFor="let job of jobs.controls; let i = index"
-                      [selectable]="true"
-                      [removable]="true"
-                      (removed)="removeJob(i)">
-              {{ job.value.title }}
-              <mat-icon matChipRemove>cancel</mat-icon>
-            </mat-chip>
-            <input placeholder="Job Title"
-                   #jobInput
-                   [matAutocomplete]="auto"
-                   [matChipInputFor]="chipList"
-                   [matChipInputAddOnBlur]="true"
-                   (matChipInputTokenEnd)="addJob($event)"
-                   [formControl]="jobCtrl">
-          </mat-chip-list>
-          <mat-autocomplete #auto="matAutocomplete"
-                            (optionSelected)="selectedJob($event)">
-            <mat-option *ngFor="let job of filteredJobNames | async"
-                        [value]="job.name">
-              {{ job.name }}
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
+        <ng-container *ngFor="let job of jobs.controls; let i = index"
+                      [formGroupName]="i">
+
+          <app-form-icon-group [show]="jobs.length > 1"
+                               (event)="removeJob(i)">
+            <mat-form-field class="w-100">
+              <input matInput
+                     type="text"
+                     placeholder="Job Title"
+                     formControlName="title"
+                     [matAutocomplete]="auto">
+              <mat-autocomplete #auto="matAutocomplete"
+                                autoActiveFirstOption>
+                <mat-option value="None">None</mat-option>
+                <mat-option *ngFor="let jobName of filterJobs(job)"
+                            [value]="jobName.name">
+                  {{ jobName.name }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </app-form-icon-group>
+
+        </ng-container>
+
+        <button mat-button
+                type="button"
+                color="primary"
+                (click)="addJob()">
+          <mat-icon class="add-icon">add</mat-icon>
+          Add Additional Job Title
+        </button>
 
       </div>
     </div>

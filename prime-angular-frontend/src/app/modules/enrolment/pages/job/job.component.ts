@@ -7,15 +7,16 @@ import { Observable, Subscription } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 
 import { Config } from '@config/config.model';
+import { Enrolment } from '@shared/models/enrolment.model';
 import { ConfigService } from '@config/config.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
-import { Enrolment } from '@shared/models/enrolment.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { Job } from '../../shared/models/job.model';
-import { EnrolmentStateService } from '../../shared/services/enrolment-state.service';
-import { EnrolmentResource } from '../../shared/services/enrolment-resource.service';
+import { Job } from '@enrolment/shared/models/job.model';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 
 @Component({
   selector: 'app-job',
@@ -25,11 +26,11 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 export class JobComponent implements OnInit {
   public busy: Subscription;
   public form: FormGroup;
-  public jobCtrl: FormControl;
-  @ViewChild('jobInput', { static: false }) jobInput: ElementRef<HTMLInputElement>;
-  public decisions: { code: boolean, name: string }[] = [
-    { code: false, name: 'No' }, { code: true, name: 'Yes' }
-  ];
+  // public jobCtrl: FormControl;
+  // @ViewChild('jobInput', { static: false }) jobInput: ElementRef<HTMLInputElement>;
+  // public decisions: { code: boolean, name: string }[] = [
+  //   { code: false, name: 'No' }, { code: true, name: 'Yes' }
+  // ];
   public jobNames: Config<number>[];
   public filteredJobNames: Observable<Config<number>[]>;
   public EnrolmentRoutes = EnrolmentRoutes;
@@ -39,8 +40,9 @@ export class JobComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private configService: ConfigService,
-    private enrolmentStateService: EnrolmentStateService,
+    private enrolmentService: EnrolmentService,
     private enrolmentResource: EnrolmentResource,
+    private enrolmentStateService: EnrolmentStateService,
     private toastService: ToastService,
     private logger: LoggerService
   ) {
@@ -53,7 +55,9 @@ export class JobComponent implements OnInit {
 
   public onSubmit() {
     if (this.form.valid) {
-      this.clearCollegeForm();
+      // Enrollees can not have jobs and certifications
+      this.removeCollegeCertifications();
+
       const payload = this.enrolmentStateService.enrolment;
       this.busy = this.enrolmentResource.updateEnrolment(payload)
         .subscribe(
@@ -67,50 +71,47 @@ export class JobComponent implements OnInit {
             this.logger.error('[Enrolment] Job::onSubmit error has occurred: ', error);
           }
         );
-      this.form.markAsPristine();
     } else {
       this.form.markAllAsTouched();
     }
   }
 
-  public clearCollegeForm() {
-    if (this.enrolmentStateService.enrolment.certifications.length > 0) {
-      const regulatoryForm = this.enrolmentStateService.regulatoryForm;
-      const certs = regulatoryForm.get('certifications') as FormArray;
-      certs.clear();
-    }
-  }
-
-  public addJob(event: MatChipInputEvent) {
-    const value = event.value;
-
-    if ((value || '').trim()) {
-      this.jobs.push(this.enrolmentStateService.buildJobForm(value.trim()));
-    }
-
-    // Remove input value after custom value added
-    this.clearInputValue();
+  public addJob(value: string = 'None') {
+    const job = this.enrolmentStateService.buildJobForm(value);
+    this.jobs.push(job);
   }
 
   public removeJob(index: number) {
-    if (index >= 0) {
-      this.jobs.removeAt(index);
-    }
+    this.jobs.removeAt(index);
   }
 
-  public selectedJob(event: MatAutocompleteSelectedEvent) {
-    this.jobs.push(this.enrolmentStateService.buildJobForm(event.option.viewValue));
+  public filterJobs(job: FormGroup) {
+    // Create a list of filtered job names
+    if (this.jobs.length) {
+      // All the currently chosen jobs
+      const selectedJobNames = this.jobs.value
+        .map((j: Job) => j.title);
+      // Current job name selected
+      const currentJob = this.jobNames
+        .find(j => j.code === job.get('title').value);
+      // Filter the list of possible jobs using the selected jobs
+      const filteredJobNames = this.jobNames
+        .filter((c: Config<number>) => !selectedJobNames.includes(c.code));
 
-    // Remove input value when selected from auto-complete
-    this.clearInputValue();
+      if (currentJob) {
+        // Add the current job to the list of filtered
+        // jobs so it remains visible
+        filteredJobNames.unshift(currentJob);
+      }
 
-    // Blur when selected so double click isn't required
-    // to reopen the list of jobs
-    this.jobInput.nativeElement.blur();
+      return filteredJobNames;
+    }
+
+    // Otherwise, provide the entire list of job names
+    return this.jobNames;
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
-    console.log('CAN DEACTIVATE', this.form)
     const data = 'unsaved';
     return (this.form.dirty)
       ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
@@ -121,16 +122,7 @@ export class JobComponent implements OnInit {
     this.createFormInstance();
     // Initialize form changes before patching
     this.initForm();
-
-    // TODO: detect enrolment already exists and don't reload
-    // TODO: apply guard if not enrolment is found to redirect to profile
-    this.busy = this.enrolmentResource.enrolments()
-      .subscribe((enrolment: Enrolment) => {
-        if (enrolment) {
-          this.initMultiSelect();
-          this.enrolmentStateService.enrolment = enrolment;
-        }
-      });
+    this.enrolmentStateService.enrolment = this.enrolmentService.enrolment;
   }
 
   private createFormInstance() {
@@ -138,37 +130,46 @@ export class JobComponent implements OnInit {
   }
 
   private initForm() {
-    this.jobCtrl = new FormControl();
+    // Always have at least one job ready for
+    // the enrollee to fill out
+    this.addJob();
   }
 
-  private initMultiSelect() {
-    this.filteredJobNames = this.jobCtrl.valueChanges
-      .pipe(
-        startWith(null),
-        map((jobName: string | null) => {
-          const availableJobs = [...this.jobNames];
-          const selectedJobs = this.jobs.value.map((j: Job) => j.title.toLowerCase());
+  // TODO create own job-titles component
+  // private initMultiSelect() {
+  //   this.filteredJobNames = this.jobCtrl.valueChanges
+  //     .pipe(
+  //       startWith(null),
+  //       map((jobName: string | null) => {
+  //         const availableJobs = [...this.jobNames];
+  //         const selectedJobs = this.jobs.value.map((j: Job) => j.title.toLowerCase());
 
-          return (jobName)
-            ? this.filterJobNames(jobName)
-            : availableJobs.filter(({ name }: Config<number>) => !selectedJobs.includes(name.toLowerCase()));
-        })
-      );
-  }
+  //         return (jobName)
+  //           ? this.filterJobNames(jobName)
+  //           : availableJobs.filter(({ name }: Config<number>) => !selectedJobs.includes(name.toLowerCase()));
+  //       })
+  //     );
+  // }
 
-  private filterJobNames(jobName: string): Config<number>[] {
-    const jobsFilter = [...this.jobs.value.map((j: Job) => j.title.toLowerCase()), jobName.toLowerCase()];
+  // TODO filter jobs based on currently chosen title(s)
+  // private filterJobNames(jobName: string): Config<number>[] {
+  //   const jobsFilter = [...this.jobs.value.map((j: Job) => j.title.toLowerCase()), jobName.toLowerCase()];
 
-    return this.jobNames
-      // Remove selected jobs from the list of available jobs
-      .filter(({ name }: Config<number>) => !jobsFilter.includes(name.toLowerCase()))
-      // Perform type ahead filtering for auto-complete
-      .filter(({ name }: Config<number>) => name.toLowerCase().indexOf(jobName.toLowerCase()) === 0);
-  }
+  //   return this.jobNames
+  //     // Remove selected jobs from the list of available jobs
+  //     .filter(({ name }: Config<number>) => !jobsFilter.includes(name.toLowerCase()))
+  //     // Perform type ahead filtering for auto-complete
+  //     .filter(({ name }: Config<number>) => name.toLowerCase().indexOf(jobName.toLowerCase()) === 0);
+  // }
 
-  private clearInputValue() {
-    this.jobInput.nativeElement.value = '';
-    this.jobCtrl.setValue(null);
+  /**
+   * @description
+   * Remove college certifications from the enrolment as enrollees can not have
+   * job(s), as well as, college certification(s).
+   */
+  private removeCollegeCertifications() {
+    const certifications = this.enrolmentStateService.regulatoryForm.get('certifications') as FormArray;
+    certifications.clear();
   }
 }
 
