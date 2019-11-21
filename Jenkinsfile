@@ -4,7 +4,6 @@ pipeline {
         disableResume()
     }
     stages {
-        /*
         stage('Build') {
             agent { label 'master' }
             steps {
@@ -23,7 +22,7 @@ pipeline {
                 sh "./player.sh deploy frontend dev"
             }
         }
-        */
+/*
         stage('Build & Deploy Tools') {
             agent { label 'master' }
             steps {
@@ -32,14 +31,14 @@ pipeline {
                 sh "./player.sh toolbelt mailhog"
             }
         }
-        /*        
+*/
         stage('Code Quality Check') {
             agent { label 'code-tests' }
             steps {
                 sh "./player.sh scan"
             }
         }
-        /*
+/*
         stage('Test') {
             agent { label 'master' }
             script {
