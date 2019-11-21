@@ -17,10 +17,10 @@
         <ng-container *ngFor="let certificate of certifications.controls; let i = index"
                       [formGroupName]="i">
 
-          <app-college-certifications [form]="certificate"
-                                      [index]="i"
-                                      [total]="certifications.controls.length"
-                                      (remove)="removeCertification($event)"></app-college-certifications>
+          <app-college-certification-form [form]="certificate"
+                                          [index]="i"
+                                          [total]="certifications.controls.length"
+                                          (remove)="removeCertification($event)"></app-college-certification-form>
 
         </ng-container>
 

@@ -125,7 +125,6 @@ export class RegulatoryComponent implements OnInit {
   }
 
   /**
-   * @deprecated
    * @description
    * Removes incomplete certifications from the list in preparation
    * for submission, and allows for an empty list of certifications.
@@ -140,7 +139,7 @@ export class RegulatoryComponent implements OnInit {
       });
 
     // Always have a single cerfication available, and it prevents
-    // the page from jumping when routing
+    // the page from jumping too much when routing
     if (!this.certifications.controls.length) {
       this.addCertification();
     }
