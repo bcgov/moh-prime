@@ -119,14 +119,9 @@ export class AccessAgreementComponent implements OnInit {
       .subscribe((enrolment: Enrolment) => {
         if (enrolment) {
           this.enrolmentStateService.enrolment = enrolment;
+          this.isAutomatic = enrolment.currentStatus.enrolmentStatusReasons
+            .every((reason: EnrolmentStatusReason) => reason.statusReasonCode === EnrolmentStatusReasonEnum.AUTOMATIC);
         }
-      });
-
-    this.enrolmentService.enrolment$
-      .subscribe((enrolment: Enrolment) => {
-        // Only automatic if the enrolment reason is `Automatic`
-        this.isAutomatic = enrolment.currentStatus.enrolmentStatusReasons
-          .every((reason: EnrolmentStatusReason) => reason.statusReasonCode === EnrolmentStatusReasonEnum.AUTOMATIC);
       });
   }
 }
