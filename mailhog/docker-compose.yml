@@ -1,0 +1,12 @@
+version: "2"
+
+services:
+######################################################### MailHog #
+  mailhog:
+    container_name: mailhog
+    restart: always
+    image: mailhog
+    ports:
+      - "1025:1025"
+      - "25:1025"
+      - "80:8025"
