@@ -25,7 +25,7 @@
             <mat-form-field class="w-100">
               <mat-label>Organization Type</mat-label>
               <mat-select formControlName="organizationTypeCode">
-                <mat-option *ngFor="let organizationType of organizationTypes"
+                <mat-option *ngFor="let organizationType of filterOrganizationTypes(organization)"
                             [value]="organizationType.code"
                             [disabled]="disableOrganization(organizationType.code)">
                   {{ organizationType.name }}
@@ -39,7 +39,6 @@
 
         <button mat-button
                 type="button"
-                class="mt-3"
                 color="primary"
                 (click)="addOrganization()">
           <mat-icon class="add-icon">add</mat-icon>
@@ -50,14 +49,14 @@
     </div>
 
     <div class="row justify-content-between">
-      <div class="col pt-4">
+      <div class="col pt-2">
 
         <button mat-stroked-button
                 type="button"
                 [routerLink]="['..', EnrolmentRoutes.SELF_DECLARATION]">Back</button>
 
       </div>
-      <div class="col pt-4 text-right">
+      <div class="col pt-2 text-right">
 
         <button mat-raised-button
                 type="submit"

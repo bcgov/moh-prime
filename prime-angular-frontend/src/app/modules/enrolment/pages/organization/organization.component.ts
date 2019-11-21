@@ -80,6 +80,32 @@ export class OrganizationComponent implements OnInit {
     this.organizations.removeAt(index);
   }
 
+  public filterOrganizationTypes(organization: FormGroup) {
+    // Create a list of filtered organization types
+    if (this.organizationTypes.length) {
+      // All the currently chosen organizations
+      const organizations = this.organizations.value as { organizationTypeCode: number }[];
+      const chosenOrganizations = organizations.map(o => o.organizationTypeCode);
+      // Current organization type selected
+      const currentOrganization = this.organizationTypes
+        .find(o => o.code === organization.get('organizationTypeCode').value);
+      // Filter the list of possible organizations using the chosen organizations
+      const filteredOrganizationTypes = this.organizationTypes
+        .filter(o => !chosenOrganizations.includes(o.code));
+
+      if (currentOrganization) {
+        // Add the current organization to the list of filtered
+        // organizations so it remains visible
+        filteredOrganizationTypes.unshift(currentOrganization);
+      }
+
+      return filteredOrganizationTypes;
+    }
+
+    // Otherwise, provide the entire list of organization types
+    return this.organizationTypes;
+  }
+
   public canDeactivate(): Observable<boolean> | boolean {
     const data = 'unsaved';
     return (this.form.dirty)
@@ -99,22 +125,17 @@ export class OrganizationComponent implements OnInit {
   }
 
   private initForm() {
-    if (this.organizations.length === 0) {
-      // Always have at least one organization ready for
-      // the enrollee to fill out
-      this.addOrganization();
-    } else {
-      // After patched with existing data mark the form
-      // group as pristine to avoid dirty check on route
-      this.form.markAsPristine();
-    }
+    // Always have at least one organization ready for
+    // the enrollee to fill out
+    this.addOrganization();
   }
 
-  private filterOrganizationTypes() {
-    const selectedOrgTypeCodes: number[] = this.organizations.value
-      .map((o: Organization) => o.organizationTypeCode);
+  // TODO filter organizations on currently chosen organization(s)
+  // private filterOrganizationTypes() {
+  //   const selectedOrgTypeCodes: number[] = this.organizations.value
+  //     .map((o: Organization) => o.organizationTypeCode);
 
-    this.filteredOrganizationTypes = this.organizationTypes
-      .filter((c: Config<number>) => !selectedOrgTypeCodes.includes(c.code));
-  }
+  //   this.filteredOrganizationTypes = this.organizationTypes
+  //     .filter((c: Config<number>) => !selectedOrgTypeCodes.includes(c.code));
+  // }
 }
