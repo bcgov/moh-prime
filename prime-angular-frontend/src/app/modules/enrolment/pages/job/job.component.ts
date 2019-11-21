@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormArray, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MatDialog, MatChipInputEvent, MatAutocompleteSelectedEvent } from '@angular/material';
+import { MatDialog } from '@angular/material';
 
 import { Observable, Subscription } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
@@ -26,11 +26,6 @@ import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-stat
 export class JobComponent implements OnInit {
   public busy: Subscription;
   public form: FormGroup;
-  // public jobCtrl: FormControl;
-  // @ViewChild('jobInput', { static: false }) jobInput: ElementRef<HTMLInputElement>;
-  // public decisions: { code: boolean, name: string }[] = [
-  //   { code: false, name: 'No' }, { code: true, name: 'Yes' }
-  // ];
   public jobNames: Config<number>[];
   public filteredJobNames: Observable<Config<number>[]>;
   public EnrolmentRoutes = EnrolmentRoutes;
@@ -93,10 +88,10 @@ export class JobComponent implements OnInit {
         .map((j: Job) => j.title);
       // Current job name selected
       const currentJob = this.jobNames
-        .find(j => j.code === job.get('title').value);
+        .find(j => j.name === job.get('title').value);
       // Filter the list of possible jobs using the selected jobs
       const filteredJobNames = this.jobNames
-        .filter((c: Config<number>) => !selectedJobNames.includes(c.code));
+        .filter((c: Config<number>) => !selectedJobNames.includes(c.name));
 
       if (currentJob) {
         // Add the current job to the list of filtered
@@ -172,4 +167,3 @@ export class JobComponent implements OnInit {
     certifications.clear();
   }
 }
-
