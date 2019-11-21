@@ -67,6 +67,7 @@
                    placeholder="Renewal Date"
                    [matDatepicker]="picker"
                    formControlName="renewalDate"
+                   readonly
                    (click)="picker.open()">
             <mat-datepicker-toggle matSuffix
                                    [for]="picker"></mat-datepicker-toggle>

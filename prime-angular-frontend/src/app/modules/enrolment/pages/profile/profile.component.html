@@ -56,6 +56,7 @@
                  placeholder="Date of Birth"
                  [matDatepicker]="picker"
                  formControlName="dateOfBirth"
+                 readonly
                  [max]="maxBirthDate"
                  [required]="isRequired('dateOfBirth')">
           <mat-datepicker-toggle matSuffix
