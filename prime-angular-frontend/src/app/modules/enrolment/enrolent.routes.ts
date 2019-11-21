@@ -1,6 +1,4 @@
-import { BaseRoute } from '@core/models/base-route';
-
-export class EnrolmentRoutes extends BaseRoute {
+export class EnrolmentRoutes {
   public static ENROLMENT = 'enrolment';
   public static COLLECTION_NOTICE = 'collection-notice';
   public static PROFILE = 'profile';
@@ -15,6 +13,10 @@ export class EnrolmentRoutes extends BaseRoute {
   public static SUMMARY = 'summary';
 
   public static MODULE_PATH = EnrolmentRoutes.ENROLMENT;
+
+  public static routePath(route: string): string {
+    return `/${EnrolmentRoutes.MODULE_PATH}/${route}`;
+  }
 
   public static postEnrolmentRoutes(): string[] {
     return [

@@ -51,6 +51,13 @@ export class EnrolmentGuard extends BaseGuard {
    * Determine the route destination based on the enrolment status.
    */
   private routeDestination(routePath: string, enrolment: Enrolment) {
+    // On login the enrollees will always be redirected to
+    // the collection notice
+    if (routePath.includes(EnrolmentRoutes.COLLECTION_NOTICE)) {
+      return true;
+    }
+
+    // Otherwise, routes are directed based on enrolment status
     if (!enrolment) {
       return this.navigate(routePath, EnrolmentRoutes.PROFILE);
     } else if (enrolment) {

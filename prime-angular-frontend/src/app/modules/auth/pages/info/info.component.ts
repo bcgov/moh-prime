@@ -19,9 +19,11 @@ export class InfoComponent implements OnInit {
   ) { }
 
   public loginUsingBCSC() {
+    const redirectUri = `${this.config.loginRedirectUrl}${EnrolmentRoutes.routePath(EnrolmentRoutes.COLLECTION_NOTICE)}`;
+
     this.authService.login({
       idpHint: AuthProvider.BCSC,
-      redirectUri: `${this.config.loginRedirectUrl}${EnrolmentRoutes.routePath(EnrolmentRoutes.COLLECTION_NOTICE)}`
+      redirectUri
     });
   }
 
