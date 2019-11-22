@@ -38,16 +38,14 @@ pipeline {
             }
         }
         stage('Merge to develop') {
-            when {
-                (GIT_BRANCH != 'origin/master' || GIT_BRANCH != 'origin/develop' )
-            }
+            when { expression { (GIT_BRANCH != 'origin/master' || GIT_BRANCH != 'origin/develop' ) } }
             agent { label 'master' }
             steps {
                 script {
-                    echo ${BRANCH_NAME}
+                    echo "${BRANCH_NAME}"
                     def IS_APPROVED = input(
                         id: 'IS_APPROVED', message: "Merge branch to develop?", ok: "yes", parameters: [
-                          string(name: 'IS_APPROVED', defaultValue: 'yes', description: 'Merge ${BRANCH_NAME} to develop?')
+                          string(name: 'IS_APPROVED', defaultValue: 'yes', description: "Merge ${BRANCH_NAME} to develop?")
                             ])
                     if (IS_APPROVED != 'yes' ) {
                         currentBuild.result = "ABORTED"
@@ -68,10 +66,8 @@ pipeline {
                     if (IS_APPROVED != 'yes') {
                         currentBuild.result = "ABORTED"
                         error "User cancelled"
+                      }
                     }
-            when {
-                environment name: 'CHANGE_TARGET', value: 'master'
-            }
             steps {
                 echo "Test (DEV) ..."
                 sh "./player.sh build database test"
