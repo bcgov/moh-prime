@@ -1,13 +1,12 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { FormGroup, FormArray, FormControl } from '@angular/forms';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormGroup, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
 import { Observable, Subscription } from 'rxjs';
-import { startWith, map } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 
 import { Config } from '@config/config.model';
-import { Enrolment } from '@shared/models/enrolment.model';
 import { ConfigService } from '@config/config.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
@@ -23,7 +22,7 @@ import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-stat
   templateUrl: './job.component.html',
   styleUrls: ['./job.component.scss']
 })
-export class JobComponent implements OnInit {
+export class JobComponent implements OnInit, OnDestroy {
   public busy: Subscription;
   public form: FormGroup;
   public jobNames: Config<number>[];
@@ -110,6 +109,9 @@ export class JobComponent implements OnInit {
     const data = 'unsaved';
     return (this.form.dirty)
       ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
+        .pipe(
+          tap(() => this.removeIncompleteJobs())
+        )
       : true;
   }
 
@@ -117,7 +119,10 @@ export class JobComponent implements OnInit {
     this.createFormInstance();
     // Initialize form changes before patching
     this.initForm();
-    this.enrolmentStateService.enrolment = this.enrolmentService.enrolment;
+  }
+
+  public ngOnDestroy() {
+    this.removeIncompleteJobs();
   }
 
   private createFormInstance() {
@@ -125,37 +130,32 @@ export class JobComponent implements OnInit {
   }
 
   private initForm() {
+    this.enrolmentStateService.enrolment = this.enrolmentService.enrolment;
+
     // Always have at least one job ready for
     // the enrollee to fill out
-    this.addJob();
+    if (!this.jobs.length) {
+      this.addJob();
+    }
   }
 
-  // TODO create own job-titles component
-  // private initMultiSelect() {
-  //   this.filteredJobNames = this.jobCtrl.valueChanges
-  //     .pipe(
-  //       startWith(null),
-  //       map((jobName: string | null) => {
-  //         const availableJobs = [...this.jobNames];
-  //         const selectedJobs = this.jobs.value.map((j: Job) => j.title.toLowerCase());
+  private removeIncompleteJobs() {
+    this.jobs.controls
+      .forEach((control: FormGroup, index: number) => {
+        const value = control.get('title').value;
 
-  //         return (jobName)
-  //           ? this.filterJobNames(jobName)
-  //           : availableJobs.filter(({ name }: Config<number>) => !selectedJobs.includes(name.toLowerCase()));
-  //       })
-  //     );
-  // }
+        // Remove if job is "None" or the group is invalid
+        if (!value || value === 'None' || control.invalid) {
+          this.removeJob(index);
+        }
+      });
 
-  // TODO filter jobs based on currently chosen title(s)
-  // private filterJobNames(jobName: string): Config<number>[] {
-  //   const jobsFilter = [...this.jobs.value.map((j: Job) => j.title.toLowerCase()), jobName.toLowerCase()];
-
-  //   return this.jobNames
-  //     // Remove selected jobs from the list of available jobs
-  //     .filter(({ name }: Config<number>) => !jobsFilter.includes(name.toLowerCase()))
-  //     // Perform type ahead filtering for auto-complete
-  //     .filter(({ name }: Config<number>) => name.toLowerCase().indexOf(jobName.toLowerCase()) === 0);
-  // }
+    // Always have a single job available, and it prevents
+    // the page from jumping too much when routing
+    if (!this.jobs.controls.length) {
+      this.addJob();
+    }
+  }
 
   /**
    * @description
@@ -163,7 +163,8 @@ export class JobComponent implements OnInit {
    * job(s), as well as, college certification(s).
    */
   private removeCollegeCertifications() {
-    const certifications = this.enrolmentStateService.regulatoryForm.get('certifications') as FormArray;
+    const form = this.enrolmentStateService.regulatoryForm;
+    const certifications = form.get('certifications') as FormArray;
     certifications.clear();
   }
 }

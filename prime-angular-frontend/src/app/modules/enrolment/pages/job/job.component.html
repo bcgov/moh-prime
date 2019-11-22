@@ -21,24 +21,11 @@
         <ng-container *ngFor="let job of jobs.controls; let i = index"
                       [formGroupName]="i">
 
-          <app-form-icon-group [show]="jobs.length > 1"
-                               (event)="removeJob(i)">
-            <mat-form-field class="w-100">
-              <input matInput
-                     type="text"
-                     placeholder="Job Title"
-                     formControlName="title"
-                     [matAutocomplete]="auto">
-              <mat-autocomplete #auto="matAutocomplete"
-                                autoActiveFirstOption>
-                <mat-option value="None">None</mat-option>
-                <mat-option *ngFor="let jobName of filterJobs(job)"
-                            [value]="jobName.name">
-                  {{ jobName.name }}
-                </mat-option>
-              </mat-autocomplete>
-            </mat-form-field>
-          </app-form-icon-group>
+          <app-job-form [form]="job"
+                        [index]="i"
+                        [total]="jobs.controls.length"
+                        [jobNames]="filterJobs(job)"
+                        (remove)="removeJob($event)"></app-job-form>
 
         </ng-container>
 
