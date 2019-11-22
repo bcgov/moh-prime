@@ -13,7 +13,7 @@ variablePopulation
 
 function build() {
     source ./"$1.conf"
-    if [ "${BUILD_REQUIRED}" =='true' ]
+    if [ "${BUILD_REQUIRED}" ==  'true' ] ;
     then
       echo "Building $1 (${APP_NAME}) to $PROJECT_PREFIX-$2..."
       buildPresent=$(oc get bc/"$APP_NAME-$BRANCH_LOWER" --ignore-not-found=true)
