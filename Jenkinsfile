@@ -39,7 +39,7 @@ pipeline {
         }
         stage('Merge to develop') {
             when {
-                (GIT_BRANCH != 'origin/master' || (GIT_BRANCH != 'origin/develop' )
+                (GIT_BRANCH != 'origin/master' || GIT_BRANCH != 'origin/develop' )
             }
             agent { label 'master' }
             steps {
