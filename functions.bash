@@ -15,7 +15,7 @@ function build() {
     source ./"$1.conf"
     echo "Building $1 (${APP_NAME}) to $PROJECT_PREFIX-$2..."
     buildPresent=$(oc get bc/"$APP_NAME-$BRANCH_LOWER" --ignore-not-found=true)
-    if [ -z "${buildPresent}" ];
+    if [ -z "${buildPresent}" ] && [ "${BUILD_REQUIRED}" =='true' ];
     then
         MODE="apply"
     else
