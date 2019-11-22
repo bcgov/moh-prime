@@ -110,7 +110,6 @@ export class JobComponent implements OnInit {
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
-    console.log('CAN DEACTIVATE', this.form)
     const data = 'unsaved';
     return (this.form.dirty)
       ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()

@@ -3,12 +3,8 @@ import { AbstractControl, FormGroup, ValidatorFn, Validator, Validators, Validat
 export class FormControlValidators {
 
   /**
+   * @description
    * Checks the form control value is letters.
-   *
-   * @static
-   * @param {AbstractControl} control
-   * @returns {{ [key: string]: any }}
-   * @memberof FormControlValidators
    */
   static alpha(control: AbstractControl): ValidationErrors | null {
     if (!control.value) { return null; }
@@ -18,6 +14,7 @@ export class FormControlValidators {
   }
 
   /**
+   * @description
    * Checks the form control value is a currency.
    *
    * 0?               The string can start with a zero if the value is zero, OR
@@ -27,11 +24,6 @@ export class FormControlValidators {
    *                  a decimal
    * (\.[\d]{2})?     The string will either have a fraction with a precision
    *                  of 2, or no fraction
-   *
-   * @static
-   * @param {AbstractControl} control
-   * @returns {{ [key: string]: any }}
-   * @memberof FormControlValidators
    */
   static currency(control: AbstractControl): ValidationErrors | null {
     if (!control.value) { return null; }
@@ -42,12 +34,8 @@ export class FormControlValidators {
   }
 
   /**
+   * @description
    * Checks the form control value is an email address.
-   *
-   * @static
-   * @param {AbstractControl} control
-   * @returns {{ [key: string]: any }}
-   * @memberof FormControlValidators
    */
   static email(control: AbstractControl): ValidationErrors | null {
     if (!control.value) { return null; }
@@ -57,12 +45,8 @@ export class FormControlValidators {
   }
 
   /**
+   * @description
    * Checks the form control value is an phone number.
-   *
-   * @static
-   * @param {AbstractControl} control
-   * @returns {{ [key: string]: any }}
-   * @memberof FormControlValidators
    */
   static phone(control: AbstractControl): ValidationErrors | null {
     if (!control.value) { return null; }
@@ -74,13 +58,8 @@ export class FormControlValidators {
   }
 
   /**
+   * @description
    * Checks the form control value is a float.
-   *
-   * @static
-   * @param {AbstractControl} control
-   * @param {number} [precision=2]
-   * @returns {(ValidationErrors | null)}
-   * @memberof FormControlValidators
    */
   static float(control: AbstractControl, precision: number = 2): ValidationErrors | null {
     if (!control.value) { return null; }
@@ -91,12 +70,8 @@ export class FormControlValidators {
   }
 
   /**
+   * @description
    * Checks the form control value is numeric.
-   *
-   * @static
-   * @param {AbstractControl} control
-   * @returns {{ [key: string]: any }}
-   * @memberof FormControlValidators
    */
   static numeric(control: AbstractControl): ValidationErrors | null {
     if (!control.value) { return null; }
@@ -106,12 +81,8 @@ export class FormControlValidators {
   }
 
   /**
+   * @description
    * Checks the form control value is a percentage.
-   *
-   * @static
-   * @param {AbstractControl} control
-   * @returns {{ [key: string]: any }}
-   * @memberof FormControlValidators
    */
   static percent(control: AbstractControl): ValidationErrors | null {
     if (!control.value) { return null; }
@@ -121,12 +92,8 @@ export class FormControlValidators {
   }
 
   /**
+   * @description
    * Checks a form control is non-empty or false.
-   *
-   * @static
-   * @param {AbstractControl} control
-   * @returns {(ValidationErrors | null)}
-   * @memberof FormControlValidators
    */
   static requiredTruthful(control: AbstractControl): ValidationErrors | null {
     // Not checking the control value on purpose!
@@ -136,12 +103,8 @@ export class FormControlValidators {
   }
 
   /**
+   * @description
    * Checks a form control is a boolean.
-   *
-   * @static
-   * @param {AbstractControl} control
-   * @returns {(ValidationErrors | null)}
-   * @memberof FormControlValidators
    */
   static requiredBoolean(control: AbstractControl): ValidationErrors | null {
     // Not checking the control value on purpose!
@@ -151,14 +114,9 @@ export class FormControlValidators {
   }
 
   /**
+   * @description
    * Checks a form control is within a valid length,
    * if there is no maxLength, it will be assumed to be the same as minLength.
-   *
-   * @static
-   * @param {number} minLength
-   * @param {number} maxLength
-   * @returns {ValidatorFn}
-   * @memberof FormControlValidators
    */
   static requiredLength(minLength: number, maxLength?: number): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
@@ -169,6 +127,6 @@ export class FormControlValidators {
         && currentLength >= minLength
         && currentLength <= maxLength);
       return valid ? null : { length: true };
-    }
+    };
   }
 }

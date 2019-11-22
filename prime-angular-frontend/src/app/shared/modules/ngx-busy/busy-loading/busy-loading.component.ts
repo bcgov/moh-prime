@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './busy-loading.component.html',
   styleUrls: ['./busy-loading.component.scss']
 })
-export class BusyLoadingComponent implements OnInit {
+export class BusyLoadingComponent {
   @Input() busy: Subscription;
   @Input() align: 'left' | 'center';
   @Input() loadingMessage: string;
@@ -18,19 +18,10 @@ export class BusyLoadingComponent implements OnInit {
   }
 
   /**
-   * Get the text alignment class.
-   *
-   * @returns
-   * @memberof BusyLoadingComponent
+   * @description
+   * Get the text alignment CSS class.
    */
   public getTextAlignment() {
     return `text-${this.align}`;
   }
-
-  /**
-   * OnInit lifecycle hook.
-   *
-   * @memberof BusyLoadingComponent
-   */
-  public ngOnInit() { }
 }

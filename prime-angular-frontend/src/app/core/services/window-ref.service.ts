@@ -11,11 +11,8 @@ export class WindowRefService {
   constructor() { }
 
   /**
+   * @description
    * Get a reference to the native window object.
-   *
-   * @readonly
-   * @type {*}
-   * @memberof WindowRefService
    */
   get nativeWindow(): Window {
     return getWindow();
