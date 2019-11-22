@@ -127,6 +127,10 @@ function cleanup() {
 }
 
 function gitPromote() {
+    echo "Git EMail: ${GIT_EMAIL}"
+    echo "Git Username ${GIT_USERNAME}"
+    echo "Git Branch ${GIT_BRANCH}"
+    echo "Git URL ${GIT_URL}"
     git config user.email "${GIT_EMAIL}"
     git config user.name "${GIT_USERNAME}"
     git checkout $1
