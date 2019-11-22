@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
 import { Observable, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
@@ -21,7 +21,7 @@ import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-stat
   templateUrl: './regulatory.component.html',
   styleUrls: ['./regulatory.component.scss']
 })
-export class RegulatoryComponent implements OnInit {
+export class RegulatoryComponent implements OnInit, OnDestroy {
   public busy: Subscription;
   public form: FormGroup;
   public colleges: Config<number>[];
@@ -92,22 +92,19 @@ export class RegulatoryComponent implements OnInit {
     return (this.form.dirty)
       ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
         .pipe(
-          map((result: boolean) => {
-            if (result) {
-              // Only remove incomplete certifications when the
-              // enrollee decides to discard their changes
-              this.removeIncompleteCertifications();
-            }
-
-            return result;
-          })
+          tap(() => this.removeIncompleteCertifications())
         )
       : true;
   }
 
   public ngOnInit() {
     this.createFormInstance();
+    // Initialize form changes before patching
     this.initForm();
+  }
+
+  public ngOnDestroy() {
+    this.removeIncompleteCertifications();
   }
 
   private createFormInstance() {
@@ -132,7 +129,7 @@ export class RegulatoryComponent implements OnInit {
   private removeIncompleteCertifications() {
     this.certifications.controls
       .forEach((control: FormGroup, index: number) => {
-        // Remove if college code is "None" or the certification group is invalid
+        // Remove if college code is "None" or the group is invalid
         if (!control.get('collegeCode').value || control.invalid) {
           this.removeCertification(index);
         }
@@ -151,7 +148,8 @@ export class RegulatoryComponent implements OnInit {
    * certificate(s), as well as, job(s).
    */
   private removeJobs() {
-    const jobs = this.enrolmentStateService.jobsForm.get('jobs') as FormArray;
+    const form = this.enrolmentStateService.jobsForm;
+    const jobs = form.get('jobs') as FormArray;
     jobs.clear();
   }
 }

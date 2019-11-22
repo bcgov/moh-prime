@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormArray, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
 import { Observable, Subscription } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
@@ -21,7 +22,7 @@ import { Organization } from '@enrolment/shared/models/organization.model';
   templateUrl: './organization.component.html',
   styleUrls: ['./organization.component.scss']
 })
-export class OrganizationComponent implements OnInit {
+export class OrganizationComponent implements OnInit, OnDestroy {
   public busy: Subscription;
   public form: FormGroup;
   public organizationCtrl: FormControl;
@@ -110,6 +111,9 @@ export class OrganizationComponent implements OnInit {
     const data = 'unsaved';
     return (this.form.dirty)
       ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
+        .pipe(
+          tap(() => this.removeIncompleteOrganizations())
+        )
       : true;
   }
 
@@ -117,7 +121,10 @@ export class OrganizationComponent implements OnInit {
     this.createFormInstance();
     // Initialize form changes before patching
     this.initForm();
-    this.enrolmentStateService.enrolment = this.enrolmentService.enrolment;
+  }
+
+  public ngOnDestroy() {
+    this.removeIncompleteOrganizations();
   }
 
   private createFormInstance() {
@@ -125,8 +132,30 @@ export class OrganizationComponent implements OnInit {
   }
 
   private initForm() {
+    this.enrolmentStateService.enrolment = this.enrolmentService.enrolment;
+
     // Always have at least one organization ready for
     // the enrollee to fill out
-    this.addOrganization();
+    if (!this.organizations.length) {
+      this.addOrganization();
+    }
+  }
+
+  private removeIncompleteOrganizations() {
+    this.organizations.controls
+      .forEach((control: FormGroup, index: number) => {
+        const value = control.get('organizationTypeCode').value;
+
+        // Remove if organization is empty or the group is invalid
+        if (!value || control.invalid) {
+          this.removeOrganization(index);
+        }
+      });
+
+    // Always have a single organization available, and it prevents
+    // the page from jumping too much when routing
+    if (!this.organizations.controls.length) {
+      this.addOrganization();
+    }
   }
 }

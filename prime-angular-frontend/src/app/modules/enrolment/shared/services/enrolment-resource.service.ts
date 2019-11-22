@@ -12,7 +12,7 @@ import { Enrolment } from '@shared/models/enrolment.model';
 import { Address } from '@enrolment/shared/models/address.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
-import { Organization } from '../models/organization.model';
+import { Organization } from '@enrolment/shared/models/organization.model';
 
 @Injectable({
   providedIn: 'root'
