@@ -18,6 +18,7 @@ import { RuAccessAgreementComponent } from './pages/access-agreement/components/
 import { SummaryComponent } from './pages/summary/summary.component';
 
 import { CollegeCertificationFormComponent } from './shared/components/college-certification-form/college-certification-form.component';
+import { JobFormComponent } from './shared/components/job-form/job-form.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { CollegeCertificationFormComponent } from './shared/components/college-c
     PageRefDirective,
     SummaryComponent,
     CollegeCertificationFormComponent,
+    JobFormComponent,
   ],
   imports: [
     SharedModule,
