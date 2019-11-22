@@ -42,10 +42,10 @@ pipeline {
             agent { label 'master' }
             steps {
                 script {
-                    echo "${BRANCH_NAME}"
+                    echo "${GIT_BRANCH}"
                     def IS_APPROVED = input(
                         id: 'IS_APPROVED', message: "Merge branch to develop?", ok: "yes", parameters: [
-                          string(name: 'IS_APPROVED', defaultValue: 'yes', description: "Merge ${BRANCH_NAME} to develop?")
+                          string(name: 'IS_APPROVED', defaultValue: 'yes', description: "Merge ${GIT_BRANCH} to develop?")
                             ])
                     if (IS_APPROVED != 'yes' ) {
                         currentBuild.result = "ABORTED"
@@ -61,21 +61,24 @@ pipeline {
         }
         stage('Test') {
             agent { label 'master' }
-            script {
-                    def IS_APPROVED = input(message: "Deploy to TEST?", ok: "yes", parameters: [string(name: 'IS_APPROVED', defaultValue: 'yes', description: 'Deploy to TEST?')])
-                    if (IS_APPROVED != 'yes') {
-                        currentBuild.result = "ABORTED"
-                        error "User cancelled"
-                      }
-                    }
             steps {
-                echo "Test (DEV) ..."
-                sh "./player.sh build database test"
-                sh "./player.sh build api test"
-                sh "./player.sh build frontend test"
-                sh "./player.sh deploy database test"
-                sh "./player.sh deploy api test"
-                sh "./player.sh deploy frontend test"
+                script {
+                        def IS_APPROVED = input(
+                            id: 'IS_APPROVED', message: "Deploy to TEST?", ok: "yes", parameters: [
+                              string(name: 'IS_APPROVED', defaultValue: 'yes', description: 'Deploy to TEST?')
+                              ])
+                        if (IS_APPROVED != 'yes') {
+                            currentBuild.result = "ABORTED"
+                            error "User cancelled"
+                        }
+                  echo "Test (DEV) ..."
+                  sh "./player.sh build database test"
+                  sh "./player.sh build api test"
+                  sh "./player.sh build frontend test"
+                  sh "./player.sh deploy database test"
+                  sh "./player.sh deploy api test"
+                  sh "./player.sh deploy frontend test"
+                }
             }
         }
         /*

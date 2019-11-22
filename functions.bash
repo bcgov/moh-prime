@@ -126,7 +126,7 @@ function cleanup() {
 function gitPromote() {
     git checkout $1
     git fetch
-    git merge --squash ${BRANCH_NAME}
-    git commit -m "Merge branch ${BRANCH_NAME} into $1"
+    git merge --squash ${GIT_BRANCH}
+    git commit -m "Merge branch ${GIT_BRANCH} into $1"
     git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_URL}
 }
