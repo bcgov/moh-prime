@@ -127,6 +127,8 @@ function cleanup() {
 }
 
 function gitPromote() {
+    git config user.email "${GIT_EMAIL}"
+    git config user.name "${GIT_USERNAME}"
     git checkout $1
     git fetch
     git merge --squash ${GIT_BRANCH}
