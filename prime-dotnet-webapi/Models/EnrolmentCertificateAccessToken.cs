@@ -12,7 +12,12 @@ namespace Prime.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
-        public Guid UserId { get; set; }
+        [ForeignKey("Id")]
+        [Required]
+        public int? EnrolleeId {get; set;}
+
+        [JsonIgnore]
+        public Enrollee Enrollee { get; set; }
 
         public int ViewCount { get; set; }
 

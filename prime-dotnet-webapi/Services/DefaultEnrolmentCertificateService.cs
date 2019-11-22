@@ -17,14 +17,37 @@ namespace Prime.Services
 
         public async Task<EnrolmentCertificate> GetEnrolmentCertificateAsync(Guid accessTokenId)
         {
-            throw new NotImplementedException();
+            var enrollee = await _context.EnrolmentCertificateAccessTokens
+                .Where(t => t.Id == accessTokenId)
+                .Select(t => t.Enrollee)
+                .SingleOrDefaultAsync();
+
+            if (enrollee == null)
+            {
+                return null;
+            }
+
+            // TODO Refactor this shortcut. This is only for POC of this service.
+            try
+            {
+                var token = await _context.EnrolmentCertificateAccessTokens
+                    .SingleOrDefaultAsync(t => t.Id == accessTokenId);
+                token.ViewCount++;
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                // ¯\_(ツ)_/¯
+            }
+
+            return EnrolmentCertificate.Create(enrollee);
         }
 
-        public async Task<EnrolmentCertificateAccessToken> CreateCertificateAccessTokenAsync(Guid userId)
+        public async Task<EnrolmentCertificateAccessToken> CreateCertificateAccessTokenAsync(Enrollee enrollee)
         {
             EnrolmentCertificateAccessToken token = new EnrolmentCertificateAccessToken()
             {
-                UserId = userId,
+                Enrollee = enrollee,
                 ViewCount = 0,
                 Active = true
             };
@@ -39,17 +62,11 @@ namespace Prime.Services
             return token;
         }
 
-        public async Task<EnrolmentCertificateAccessToken> GetCertificateAccessTokenAsync(Guid accessTokenId)
-        {
-            return await _context.EnrolmentCertificateAccessTokens
-                .Where(t => t.Id == accessTokenId)
-                .SingleOrDefaultAsync();
-        }
-
         public async Task<IEnumerable<EnrolmentCertificateAccessToken>> GetCertificateAccessTokensForUserIdAsync(Guid userId)
         {
             return await _context.EnrolmentCertificateAccessTokens
-                .Where(t => t.UserId == userId)
+                .Where(t => t.Enrollee.UserId == userId)
+                .Where(t => t.Active)
                 .ToListAsync();
         }
     }

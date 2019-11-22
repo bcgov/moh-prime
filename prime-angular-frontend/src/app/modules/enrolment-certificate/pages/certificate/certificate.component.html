@@ -1,3 +1,5 @@
+
+
 <!-- <app-busy-overlay [busy]="busy"> -->
 <ng-container>
   <div class="app-print-layout">
@@ -30,7 +32,7 @@
 
       <dl class="row mb-4">
         <dt class="col-sm-12 col-md-6 py-1">PharmaNet ID</dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ certificate.licensePlate }}&nbsp;</dd>
+        <dd class="col-sm-12 col-md-6 py-1"><app-clipboard-icon [message]="certificate.licensePlate"></app-clipboard-icon></dd>  
       </dl>
     </ng-container>
   </div>

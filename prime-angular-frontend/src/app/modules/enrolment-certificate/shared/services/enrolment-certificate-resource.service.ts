@@ -19,7 +19,7 @@ export class EnrolmentCertificateResource {
   ) { }
 
   public getCertificate(accessTokenId: string): Observable<EnrolmentCertificate> {
-    return this.http.get(`${this.config.apiEndpoint}/enrolment-certificates/${accessTokenId}`)
+    return this.http.get(`${this.config.apiEndpoint}/enrolment-certificates/certificate/${accessTokenId}`)
       .pipe(
         map((response: PrimeHttpResponse) => response.result),
         map((certificate: EnrolmentCertificate) => {

@@ -16,7 +16,7 @@ export const environment = {
     initOptions: {
       onLoad: 'check-sso'
     },
-    bearerExcludedUrls: ['/enrolment-certificates']
+    bearerExcludedUrls: ['/enrolment-certificates/certificate']
   }
 };
 

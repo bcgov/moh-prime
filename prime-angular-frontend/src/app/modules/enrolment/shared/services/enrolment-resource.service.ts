@@ -66,14 +66,24 @@ export class EnrolmentResource {
       );
   }
 
-  public createEnrolmentCertificateAccessToken(userId: number): Observable<EnrolmentCertificateAccessToken> {
-    const payload = { userId };
-    return this.http.post(`${this.config.apiEndpoint}/enrolment-certificates/access`, payload)
+  public createEnrolmentCertificateAccessToken(): Observable<EnrolmentCertificateAccessToken> {
+    return this.http.post(`${this.config.apiEndpoint}/enrolment-certificates/access`, {})
       .pipe(
         map((response: PrimeHttpResponse) => response.result),
         map((token: EnrolmentCertificateAccessToken) => {
           this.logger.info('ACCESS_TOKEN', token);
           return token;
+        })
+      );
+  }
+
+  public enrolmentCertificateAccessTokens(): Observable<EnrolmentCertificateAccessToken[]> {
+    return this.http.get(`${this.config.apiEndpoint}/enrolment-certificates/access`)
+      .pipe(
+        map((response: PrimeHttpResponse) => response.result),
+        map((tokens: EnrolmentCertificateAccessToken[]) => {
+          this.logger.info('ACCESS_TOKENS', tokens);
+          return tokens;
         })
       );
   }

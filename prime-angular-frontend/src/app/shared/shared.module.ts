@@ -4,9 +4,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { NgxMaskModule } from 'ngx-mask';
+import { ClipboardModule } from 'ngx-clipboard';
+import { NgxBusyModule } from './modules/ngx-busy/ngx-busy.module';
 
 import { ConfigModule } from '@config/config.module';
-import { NgxBusyModule } from './modules/ngx-busy/ngx-busy.module';
 import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { NgxProgressModule } from '@shared/modules/ngx-progress/ngx-progress.module';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
@@ -28,6 +29,7 @@ import { PageSubheaderTitleDirective } from '@shared/components/page-subheader/p
 import { PageSubheaderSummaryDirective } from '@shared/components/page-subheader/page-subheader-summary.directive';
 import { DialogContentDirective } from '@shared/components/dialogs/dialog-content.directive';
 import { AlertComponent } from './components/alert/alert.component';
+import { ClipboardIconComponent } from './components/clipboard-icon/clipboard-icon.component';
 
 @NgModule({
   declarations: [
@@ -48,11 +50,13 @@ import { AlertComponent } from './components/alert/alert.component';
     PageSubheaderTitleDirective,
     PageSubheaderSummaryDirective,
     DialogContentDirective,
-    AlertComponent
+    AlertComponent,
+    ClipboardIconComponent
   ],
   imports: [
     CommonModule,
     RouterModule,
+    ClipboardModule,
     NgxBusyModule,
     NgxContextualHelpModule,
     NgxMaskModule.forRoot(),
@@ -85,7 +89,8 @@ import { AlertComponent } from './components/alert/alert.component';
     PageSubheaderTitleDirective,
     PageSubheaderSummaryDirective,
     DialogContentDirective,
-    AlertComponent
+    AlertComponent,
+    ClipboardIconComponent
   ],
   entryComponents: [
     ConfirmDialogComponent,
