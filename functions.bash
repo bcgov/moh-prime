@@ -127,15 +127,12 @@ function cleanup() {
 }
 
 function gitPromote() {
-    echo "Git EMail: ${GIT_EMAIL}"
-    echo "Git Username ${GIT_USERNAME}"
-    echo "Git Branch ${GIT_BRANCH}"
-    echo "Git URL ${GIT_URL}"
+    git config push.default simple
     git config user.email "${GIT_EMAIL}"
     git config user.name "${GIT_USERNAME}"
     git checkout $1
     git fetch
-    git merge --squash ${GIT_BRANCH}
-    git commit -m "Merge branch ${GIT_BRANCH} into $1"
+    git merge --squash ${CHANGE_BRANCH}
+    git commit -m "Merge branch ${CHANGE_BRANCH} \(${BRANCH_NAME}\) into $1"
     git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_URL}
 }
