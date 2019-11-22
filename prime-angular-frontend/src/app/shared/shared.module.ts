@@ -27,7 +27,8 @@ import { PageSubheaderComponent } from './components/page-subheader/page-subhead
 import { PageSubheaderTitleDirective } from '@shared/components/page-subheader/page-subheader-title.directive';
 import { PageSubheaderSummaryDirective } from '@shared/components/page-subheader/page-subheader-summary.directive';
 import { DialogContentDirective } from '@shared/components/dialogs/dialog-content.directive';
-import { AlertComponent } from './components/alert/alert.component';
+import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
+import { AlertComponent } from '@shared/components/alert/alert.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { AlertComponent } from './components/alert/alert.component';
     PageSubheaderTitleDirective,
     PageSubheaderSummaryDirective,
     DialogContentDirective,
+    FormIconGroupComponent,
     AlertComponent
   ],
   imports: [
@@ -85,6 +87,7 @@ import { AlertComponent } from './components/alert/alert.component';
     PageSubheaderTitleDirective,
     PageSubheaderSummaryDirective,
     DialogContentDirective,
+    FormIconGroupComponent,
     AlertComponent
   ],
   entryComponents: [

@@ -19,7 +19,6 @@ import { MaintenanceComponent } from './components/maintenance/maintenance.compo
     KeycloakModule
   ],
   providers: [
-    // TODO: move to HttpModule
     {
       provide: ErrorHandler,
       useClass: ErrorHandlerService
