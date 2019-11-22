@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog, MatCheckboxChange } from '@angular/material';
 import { FormControl } from '@angular/forms';
 
-import { map, exhaustMap } from 'rxjs/operators';
+import { exhaustMap } from 'rxjs/operators';
 import { EMPTY, Subscription } from 'rxjs';
 
 import { ToastService } from '@core/services/toast.service';
@@ -12,12 +12,11 @@ import { UtilsService } from '@core/services/utils.service';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
-import { EnrolmentStatusReason } from '@shared/models/enrolment-status-reason.model';
-import { EnrolmentStatusReason as EnrolmentStatusReasonEnum } from '@shared/enums/enrolment-status-reason.enum';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 
 @Component({
   selector: 'app-access-agreement',
@@ -38,6 +37,7 @@ export class AccessAgreementComponent implements OnInit {
     private router: Router,
     private enrolmentService: EnrolmentService,
     private enrolmentResource: EnrolmentResource,
+    private enrolmentStateService: EnrolmentStateService,
     private toastService: ToastService,
     private dialog: MatDialog,
     private changeDetectorRef: ChangeDetectorRef,
