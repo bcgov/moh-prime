@@ -132,7 +132,11 @@ function gitPromote() {
     git config user.name "${GIT_USERNAME}"
     git checkout $1
     git fetch
+    git pull
     git merge --squash ${CHANGE_BRANCH}
     git commit -m "Merge branch ${CHANGE_BRANCH} \(${BRANCH_NAME}\) into $1"
+    git checkout ${CHANGE_BRANCH}
+    git fetch
+    git merge -s ours -m "Updating ${CHANGE_BRANCH} with $1" origin/$1
     git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_URL}
 }
