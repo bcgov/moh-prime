@@ -5,15 +5,15 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
 
-import { CollegeCertificationsComponent } from './college-certifications.component';
+import { CollegeCertificationFormComponent } from './college-certification-form.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 
-describe('CollegeCertificationsComponent', () => {
-  let component: CollegeCertificationsComponent;
-  let fixture: ComponentFixture<CollegeCertificationsComponent>;
+describe('CollegeCertificationFormComponent', () => {
+  let component: CollegeCertificationFormComponent;
+  let fixture: ComponentFixture<CollegeCertificationFormComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -24,7 +24,7 @@ describe('CollegeCertificationsComponent', () => {
         ReactiveFormsModule
       ],
       declarations: [
-        CollegeCertificationsComponent
+        CollegeCertificationFormComponent
       ],
       providers: [
         {
@@ -41,7 +41,7 @@ describe('CollegeCertificationsComponent', () => {
   }));
 
   beforeEach(inject([EnrolmentStateService], (enrolmentStateService: EnrolmentStateService) => {
-    fixture = TestBed.createComponent(CollegeCertificationsComponent);
+    fixture = TestBed.createComponent(CollegeCertificationFormComponent);
     component = fixture.componentInstance;
     // Add the bound FormGroup to the component
     component.form = enrolmentStateService.buildCollegeCertificationForm();

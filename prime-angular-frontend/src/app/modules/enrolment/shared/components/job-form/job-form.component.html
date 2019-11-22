@@ -1,0 +1,20 @@
+<app-form-icon-group [show]="total > 1"
+                     (event)="removeJob(index)"
+                     [formGroup]="form">
+  <mat-form-field class="w-100">
+    <input matInput
+           #input
+           type="text"
+           placeholder="Job Title"
+           formControlName="title"
+           [matAutocomplete]="auto">
+    <mat-autocomplete #auto="matAutocomplete"
+                      autoActiveFirstOption>
+      <mat-option value="None">None</mat-option>
+      <mat-option *ngFor="let jobName of filteredJobNames"
+                  [value]="jobName.name">
+        {{ jobName.name }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</app-form-icon-group>
