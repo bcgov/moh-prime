@@ -4,7 +4,6 @@ pipeline {
         disableResume()
     }
     stages {
-      /*
         stage('Build') {
             agent { label 'master' }
             steps {
@@ -38,7 +37,30 @@ pipeline {
                 sh "./player.sh scan"
             }
         }
-        /*
+        stage('Merge to develop') {
+            when {
+                (GIT_BRANCH != 'origin/master' || (GIT_BRANCH != 'origin/develop' )
+            }
+            agent { label 'master' }
+            steps {
+                script {
+                    echo ${BRANCH_NAME}
+                    def IS_APPROVED = input(
+                        id: 'IS_APPROVED', message: "Merge branch to develop?", ok: "yes", parameters: [
+                          string(name: 'IS_APPROVED', defaultValue: 'yes', description: 'Merge ${BRANCH_NAME} to develop?')
+                            ])
+                    if (IS_APPROVED != 'yes' ) {
+                        currentBuild.result = "ABORTED"
+                        error "User cancelled"
+                    }
+                    echo "Squashing commits and merging to develop"
+                }
+                withCredentials([usernamePassword(credentialsId: 'moh-prime', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                    sh "./player.sh gitPromote develop"
+                    sh "./player cleanup ${BRANCH_NAME}"
+                }
+            }
+        }
         stage('Test') {
             agent { label 'master' }
             script {
@@ -52,14 +74,15 @@ pipeline {
             }
             steps {
                 echo "Test (DEV) ..."
-                sh "./player.sh build database dev"
-                sh "./player.sh build api dev"
-                sh "./player.sh build frontend dev"
-                sh "./player.sh deploy database dev"
-                sh "./player.sh deploy api dev"
-                sh "./player.sh deploy frontend dev"
+                sh "./player.sh build database test"
+                sh "./player.sh build api test"
+                sh "./player.sh build frontend test"
+                sh "./player.sh deploy database test"
+                sh "./player.sh deploy api test"
+                sh "./player.sh deploy frontend test"
             }
-        }/*
+        }
+        /*
         stage('Deploy (PROD)') {
             agent { label 'master' }
             when {
@@ -74,6 +97,38 @@ pipeline {
                     }
                     echo "Deploy (PROD)"
                     sh "./player.sh "
+                }
+            }
+        }
+        stage('Merge to master') {
+            agent { label 'master' }
+            when {
+                environment name: 'CHANGE_TARGET', value: 'master'
+            }
+            steps {
+                script {
+                    def IS_APPROVED = input(message: "Merge to master?", ok: "yes", parameters: [string(name: 'IS_APPROVED', defaultValue: 'yes', description: 'Merge to master?')])
+                    if (IS_APPROVED != 'yes') {
+                        currentBuild.result = "ABORTED"
+                        error "User cancelled"
+                    }
+                    echo "Squashing commits and merging to master"
+                }
+                withCredentials([usernamePassword(credentialsId: 'github-account', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                    sh '
+                        # Update master with latest changes from develop
+                        git checkout master
+                        git fetch
+                        git merge --squash origin/develop
+                        git commit -m "Merge branch develop into master"
+                        git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/bcgov/moh-prime.git
+
+                        # Update the HEAD on develop to be the same as master
+                        git checkout develop
+                        git fetch
+                        git merge -s ours -m "Updating develop with master" origin/master
+                        git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/bcgov/moh-prime.git
+                    '
                 }
             }
         }/*
