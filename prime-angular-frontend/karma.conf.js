@@ -25,37 +25,37 @@ module.exports = function (config) {
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: ['ChromeHeadlessNoSandbox','ChromeHeadless','firefox'],
+    browsers: ['ChromeHeadlessNoSandbox', 'ChromeHeadless'],
     customLaunchers: {
-        ChromeHeadlessNoSandbox: {
-            base: 'ChromeHeadless',
-            flags: [
-                '--no-sandbox', // required to run without privileges in docker
-                '--user-data-dir=/tmp/chrome-test-profile',
-                '--disable-web-security',
-                '--disable-gpu',
-                '--disable-background-networking',
-                '--disable-default-apps',
-                '--disable-extensions',
-                '--disable-sync',
-                '--disable-translate',
-                '--headless',
-                '--hide-scrollbars',
-                '--metrics-recording-only',
-                '--mute-audio',
-                '--no-first-run',
-                '--safebrowsing-disable-auto-update',
-                '--ignore-certificate-errors',
-                '--ignore-ssl-errors',
-                '--ignore-certificate-errors-spki-list',
-                '--remote-debugging-port=9222',
-                '--remote-debugging-address=0.0.0.0',
-                '--disable-dev-shm-usage',
-                '--disable-setuid-sandbox',
-                '--disable-namespace-sandbox',
-                '--window-size=800x600'
-            ]
-        }
+      ChromeHeadlessNoSandbox: {
+        base: 'ChromeHeadless',
+        flags: [
+          '--no-sandbox', // required to run without privileges in docker
+          '--user-data-dir=/tmp/chrome-test-profile',
+          '--disable-web-security',
+          '--disable-gpu',
+          '--disable-background-networking',
+          '--disable-default-apps',
+          '--disable-extensions',
+          '--disable-sync',
+          '--disable-translate',
+          '--headless',
+          '--hide-scrollbars',
+          '--metrics-recording-only',
+          '--mute-audio',
+          '--no-first-run',
+          '--safebrowsing-disable-auto-update',
+          '--ignore-certificate-errors',
+          '--ignore-ssl-errors',
+          '--ignore-certificate-errors-spki-list',
+          '--remote-debugging-port=9222',
+          '--remote-debugging-address=0.0.0.0',
+          '--disable-dev-shm-usage',
+          '--disable-setuid-sandbox',
+          '--disable-namespace-sandbox',
+          '--window-size=800x600'
+        ]
+      }
     },
     singleRun: false,
     restartOnFileChange: true
