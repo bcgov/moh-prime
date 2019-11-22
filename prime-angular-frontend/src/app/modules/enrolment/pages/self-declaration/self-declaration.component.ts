@@ -26,6 +26,7 @@ export class SelfDeclarationComponent implements OnInit {
     { code: false, name: 'No' }, { code: true, name: 'Yes' }
   ];
   public EnrolmentRoutes = EnrolmentRoutes;
+  public error = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -73,6 +74,7 @@ export class SelfDeclarationComponent implements OnInit {
 
   public onSubmit() {
     if (this.form.valid) {
+      this.error = false;
       const payload = this.enrolmentStateService.enrolment;
       this.busy = this.enrolmentResource.updateEnrolment(payload)
         .subscribe(
@@ -86,6 +88,7 @@ export class SelfDeclarationComponent implements OnInit {
             this.logger.error('[Enrolment] SelfDeclaration::onSubmit error has occurred: ', error);
           });
     } else {
+      this.error = true;
       this.form.markAllAsTouched();
     }
   }
