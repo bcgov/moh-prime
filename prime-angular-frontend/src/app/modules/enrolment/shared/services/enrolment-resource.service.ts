@@ -12,6 +12,7 @@ import { Enrolment } from '@shared/models/enrolment.model';
 import { Address } from '@enrolment/shared/models/address.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
+import { Organization } from '../models/organization.model';
 
 @Injectable({
   providedIn: 'root'
@@ -85,6 +86,7 @@ export class EnrolmentResource {
 
     enrolment.certifications = this.removeIncompleteCollegeCertifications(enrolment.certifications);
     enrolment.jobs = this.removeIncompleteJobs(enrolment.jobs);
+    enrolment.organizations = this.removeIncompleteOrganizations(enrolment.organizations);
 
     return enrolment;
   }
@@ -104,20 +106,15 @@ export class EnrolmentResource {
 
     return Object.keys(certification)
       .every((key: string) =>
-        (!whitelist.includes(key) && !certification[key])
-          ? certification[key]
-          : true
+        (!whitelist.includes(key) && !certification[key]) ? certification[key] : true
       );
   }
 
   private removeIncompleteJobs(jobs: Job[]) {
-    return jobs.filter((job: Job) =>
-      this.jobIsIncomplete(job)
-    );
+    return jobs.filter((job: Job) => job.title !== 'None');
   }
 
-  private jobIsIncomplete(job: Job) {
-    return Object.keys(job)
-      .every((key: string) => (!job[key]) ? job[key] : true);
+  private removeIncompleteOrganizations(organizations: Organization[]) {
+    return organizations.filter((organization: Organization) => organization.organizationTypeCode);
   }
 }
