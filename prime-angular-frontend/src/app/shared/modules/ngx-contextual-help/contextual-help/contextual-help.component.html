@@ -13,11 +13,11 @@
           [yPosition]="yPosition">
   <ng-template matMenuContent>
     <!-- Content project contextual help components when available -->
-    <h1 *ngIf="this.contextualHelpTitleChildren.length"
+    <h1 *ngIf="contextualHelpTitleChildren.length"
         class="title lead">
       <ng-content select="[appContextualTitle]"></ng-content>
     </h1>
-    <p *ngIf="this.contextualHelpContentChildren.length"
+    <p *ngIf="contextualHelpContentChildren.length"
        class="description mb-0 pb-0">
       <ng-content select="[appContextualContent]"></ng-content>
     </p>
