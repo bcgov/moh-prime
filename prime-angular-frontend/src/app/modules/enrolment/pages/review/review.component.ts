@@ -67,7 +67,6 @@ export class ReviewComponent implements OnInit {
             this.logger.error('[Enrolment] Review::onSubmit error has occurred: ', error);
           });
     } else {
-      // TODO indicate where validation failed in the review to prompt user edits
       console.log('PROFILE', this.enrolmentStateService.isProfileInfoValid());
       console.log('REGULATORY', this.enrolmentStateService.isRegulatoryValid());
       console.log('DEVICE_PROVIDER', this.enrolmentStateService.isDeviceProviderValid());
@@ -82,8 +81,9 @@ export class ReviewComponent implements OnInit {
   }
 
   public showYesNo(declared: boolean) {
-    return (declared === null) ? 'N/A'
-      : (declared) ? 'Yes' : 'No';
+    return (declared === null)
+      ? 'N/A' : (declared)
+        ? 'Yes' : 'No';
   }
 
   public redirect(route: string) {
@@ -91,6 +91,8 @@ export class ReviewComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.enrolmentStateService.enrolment = this.enrolmentService.enrolment;
+    const enrolment = this.enrolmentService.enrolment;
+    this.enrolment = enrolment;
+    this.enrolmentStateService.enrolment = enrolment;
   }
 }
