@@ -8,11 +8,11 @@ import { FormUtilsService } from '@enrolment/shared/services/form-utils.service'
 import { FormControlValidators } from '@shared/validators/form-control.validators';
 
 @Component({
-  selector: 'app-college-certifications',
-  templateUrl: './college-certifications.component.html',
-  styleUrls: ['./college-certifications.component.scss']
+  selector: 'app-college-certification-form',
+  templateUrl: './college-certification-form.component.html',
+  styleUrls: ['./college-certification-form.component.scss']
 })
-export class CollegeCertificationsComponent implements OnInit {
+export class CollegeCertificationFormComponent implements OnInit {
   @Input() public form: FormGroup;
   @Input() public index: number;
   @Input() public total: number;
@@ -61,33 +61,46 @@ export class CollegeCertificationsComponent implements OnInit {
     return this.form.get('practiceCode') as FormControl;
   }
 
-  public onRemove() {
+  public removeCertification() {
     this.remove.emit(this.index);
   }
 
   public ngOnInit() {
-    if (this.collegeCode.value) {
-      this.setValidation();
-      this.loadLicenses(this.collegeCode.value);
-      this.loadPractices(this.collegeCode.value);
+    this.setCollegeCertification(this.collegeCode.value);
+
+    this.collegeCode.valueChanges
+      .subscribe((collegeCode: number) => this.setCollegeCertification(collegeCode));
+  }
+
+  private setCollegeCertification(collegeCode: number) {
+    if (collegeCode) {
+      // Initialize the validations when the college code is not
+      // "None" to allow for submission when no college is selected
+      this.setValidations();
+      this.loadLicenses(collegeCode);
+      this.loadPractices(collegeCode);
+    } else {
+      this.removeValidations();
+
+      // Reset individually and not emitted to be handled by parent
+      // to prevent ExpressionChangedAfterItHasBeenCheckedError
+      this.licenseNumber.reset(null);
+      this.licenseCode.reset(null);
+      this.renewalDate.reset(null);
+      this.practiceCode.reset(null);
     }
-
-    // TODO Refactor so value changes is triggered when form is patched
-    this.collegeCode.valueChanges.subscribe((collegeCode: number) => {
-      if (collegeCode) {
-        this.setValidation();
-        this.loadLicenses(collegeCode);
-        this.loadPractices(collegeCode);
-      }
-    });
   }
 
-  private filterLicenses(collegeCode: number): LicenseConfig[] {
-    return this.licenses.filter(l => l.collegeLicenses.map(cl => cl.collegeCode).includes(collegeCode));
+  private setValidations() {
+    this.formUtilsService.setValidators(this.licenseNumber, [Validators.required, FormControlValidators.requiredLength(5)]);
+    this.formUtilsService.setValidators(this.licenseCode, [Validators.required]);
+    this.formUtilsService.setValidators(this.renewalDate, [Validators.required]);
   }
 
-  private filterPractices(collegeCode: number): PracticeConfig[] {
-    return this.practices.filter(p => p.collegePractices.map(cl => cl.collegeCode).includes(collegeCode));
+  private removeValidations() {
+    this.formUtilsService.setValidators(this.licenseNumber, []);
+    this.formUtilsService.setValidators(this.licenseCode, []);
+    this.formUtilsService.setValidators(this.renewalDate, []);
   }
 
   private loadLicenses(collegeCode: number) {
@@ -102,9 +115,11 @@ export class CollegeCertificationsComponent implements OnInit {
     this.hasPractices = (this.filteredPractices.length) ? true : false;
   }
 
-  private setValidation() {
-    this.formUtilsService.setValidators(this.licenseNumber, [Validators.required, FormControlValidators.requiredLength(5)]);
-    this.formUtilsService.setValidators(this.licenseCode, [Validators.required]);
-    this.formUtilsService.setValidators(this.renewalDate, [Validators.required]);
+  private filterLicenses(collegeCode: number): LicenseConfig[] {
+    return this.licenses.filter(l => l.collegeLicenses.map(cl => cl.collegeCode).includes(collegeCode));
+  }
+
+  private filterPractices(collegeCode: number): PracticeConfig[] {
+    return this.practices.filter(p => p.collegePractices.map(cl => cl.collegeCode).includes(collegeCode));
   }
 }

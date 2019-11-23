@@ -3,7 +3,7 @@ import { NgModule, InjectionToken } from '@angular/core';
 
 import { environment } from '../environments/environment';
 import { AppRoutes } from './app.routes';
-import { EnrolmentRoutes } from '@enrolment/enrolent.routes';
+import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 export let APP_CONFIG = new InjectionToken<AppConfig>('app.config');

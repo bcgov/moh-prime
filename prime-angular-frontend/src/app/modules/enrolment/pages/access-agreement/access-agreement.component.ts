@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog, MatCheckboxChange } from '@angular/material';
 import { FormControl } from '@angular/forms';
 
-import { map, exhaustMap } from 'rxjs/operators';
+import { exhaustMap } from 'rxjs/operators';
 import { EMPTY, Subscription } from 'rxjs';
 
 import { ToastService } from '@core/services/toast.service';
@@ -13,12 +13,10 @@ import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { EnrolmentRoutes } from '@enrolment/enrolent.routes';
-import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
-import { EnrolmentStatusReason } from '@shared/models/enrolment-status-reason.model';
-import { EnrolmentStatusReason as EnrolmentStatusReasonEnum } from '@shared/enums/enrolment-status-reason.enum';
+import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 
 @Component({
   selector: 'app-access-agreement',
@@ -38,8 +36,8 @@ export class AccessAgreementComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private enrolmentService: EnrolmentService,
-    private enrolmentStateService: EnrolmentStateService,
     private enrolmentResource: EnrolmentResource,
+    private enrolmentStateService: EnrolmentStateService,
     private toastService: ToastService,
     private dialog: MatDialog,
     private changeDetectorRef: ChangeDetectorRef,
@@ -111,17 +109,6 @@ export class AccessAgreementComponent implements OnInit {
   }
 
   public ngOnInit() {
-    // TODO drop and access using enrolment service
-    this.busy = this.enrolmentResource.enrolments()
-      .pipe(
-        map((enrolment: Enrolment) => this.enrolment = enrolment)
-      )
-      .subscribe((enrolment: Enrolment) => {
-        if (enrolment) {
-          this.enrolmentStateService.enrolment = enrolment;
-          this.isAutomatic = enrolment.currentStatus.enrolmentStatusReasons
-            .every((reason: EnrolmentStatusReason) => reason.statusReasonCode === EnrolmentStatusReasonEnum.AUTOMATIC);
-        }
-      });
+    this.enrolment = this.enrolmentService.enrolment;
   }
 }

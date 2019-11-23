@@ -14,6 +14,13 @@ export class ConfigResolver implements Resolve<Configuration> {
     private configService: ConfigService
   ) { }
 
+  /**
+   * @description
+   * Resolves the run-time configuration outside of initialization
+   * of the application since the configuration endpoint is an
+   * authenticated endpoint, and is placed appropriately to
+   * guarantee authentication.
+   */
   public resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
