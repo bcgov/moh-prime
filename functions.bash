@@ -127,9 +127,6 @@ function cleanup() {
 }
 
 function gitPromote() {
-    git config --global push.default simple
-    git config --global user.email "${GIT_EMAIL}"
-    git config --global user.name "${GIT_USERNAME}"
     git checkout $1
     git fetch
     git pull

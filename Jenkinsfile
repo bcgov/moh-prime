@@ -55,7 +55,7 @@ pipeline {
                 }
                 withCredentials([usernamePassword(credentialsId: 'moh-prime', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                     sh "./player.sh gitPromote develop"
-                    sh "./player cleanup ${BRANCH_NAME}"
+                    sh "./player.sh cleanup ${BRANCH_NAME}"
                 }
             }
         }
