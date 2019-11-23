@@ -1,6 +1,4 @@
-import { BaseRoute } from '@core/models/base-route';
-
-export class AuthRoutes extends BaseRoute {
+export class AuthRoutes {
   public static AUTH = '';
   public static INFO = 'info';
   public static ADMIN = 'admin';
