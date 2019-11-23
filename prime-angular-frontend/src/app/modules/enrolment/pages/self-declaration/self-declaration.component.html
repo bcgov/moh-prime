@@ -16,6 +16,23 @@
       </ng-container>
     </app-page-subheader>
 
+    <ng-container *ngIf="error">
+      <app-alert type="danger">
+        <ng-container #alertIcon
+                      class="alert-icon">
+          error_outline
+        </ng-container>
+        <ng-container #alertTitle
+                      class="alert-title">
+          Error
+        </ng-container>
+        <ng-container #alertContent
+                      class="alert-content">
+          All fields must be completed before saving!
+        </ng-container>
+      </app-alert>
+    </ng-container>
+
     <p>Have you ever been the subject of an order or a conviction for an information contravention?</p>
 
     <mat-radio-group aria-labelledby="example-radio-group-label"
@@ -32,16 +49,13 @@
          *ngIf="hasConviction.value">
       <div class="col-sm-12 col-md-6 col-xl-4">
 
-        <mat-form-field class="w-100"
-                        hintLabel="Max 200 Characters">
+        <mat-form-field class="w-100">
           <textarea matInput
                     placeholder="Please provide details"
                     rows="5"
-                    maxlength="200"
                     #hasConvictionInput
                     formControlName="hasConvictionDetails"
                     [required]="isRequired('hasConvictionDetails')"></textarea>
-          <mat-hint align="end">{{ hasConvictionDetails.value?.length || 0 }}/200</mat-hint>
           <mat-error *ngIf="hasConvictionDetails.hasError('required')">Required</mat-error>
         </mat-form-field>
 
@@ -64,16 +78,13 @@
          *ngIf="hasRegistrationSuspended.value">
       <div class="col-sm-12 col-md-6 col-xl-4">
 
-        <mat-form-field class="w-100"
-                        hintLabel="Max 200 Characters">
+        <mat-form-field class="w-100">
           <textarea matInput
                     placeholder="Please provide details"
                     rows="5"
-                    maxlength="200"
                     #hasRegistrationSuspended
                     formControlName="hasRegistrationSuspendedDetails"
                     [required]="isRequired('hasRegistrationSuspendedDetails')"></textarea>
-          <mat-hint align="end">{{ hasRegistrationSuspendedDetails.value?.length || 0 }}/200</mat-hint>
           <mat-error *ngIf="hasRegistrationSuspendedDetails.hasError('required')">Required</mat-error>
         </mat-form-field>
 
@@ -99,16 +110,13 @@
          *ngIf="hasDisciplinaryAction.value">
       <div class="col-sm-12 col-md-6 col-xl-4">
 
-        <mat-form-field class="w-100"
-                        hintLabel="Max 200 Characters">
+        <mat-form-field class="w-100">
           <textarea matInput
                     placeholder="Please provide details"
                     rows="5"
-                    maxlength="200"
                     #hasDisciplinaryAction
                     formControlName="hasDisciplinaryActionDetails"
                     [required]="isRequired('hasDisciplinaryActionDetails')"></textarea>
-          <mat-hint align="end">{{ hasDisciplinaryActionDetails.value?.length || 0 }}/200</mat-hint>
           <mat-error *ngIf="hasDisciplinaryActionDetails.hasError('required')">Required</mat-error>
         </mat-form-field>
 
@@ -131,16 +139,13 @@
          *ngIf="hasPharmaNetSuspended.value">
       <div class="col-sm-12 col-md-6 col-xl-4">
 
-        <mat-form-field class="w-100"
-                        hintLabel="Max 200 Characters">
+        <mat-form-field class="w-100">
           <textarea matInput
                     placeholder="Please provide details"
                     rows="5"
-                    maxlength="200"
                     #hasPharmaNetSuspended
                     formControlName="hasPharmaNetSuspendedDetails"
                     [required]="isRequired('hasPharmaNetSuspendedDetails')"></textarea>
-          <mat-hint align="end">{{ hasPharmaNetSuspendedDetails.value?.length || 0 }}/200</mat-hint>
           <mat-error *ngIf="hasPharmaNetSuspendedDetails.hasError('required')">Required</mat-error>
         </mat-form-field>
 
@@ -150,9 +155,9 @@
     <div class="row justify-content-between">
       <div class="col pt-4">
 
-      <button mat-stroked-button
-              type="button"
-              (click)="onBack()">Back</button>
+        <button mat-stroked-button
+                type="button"
+                (click)="onBack()">Back</button>
 
       </div>
       <div class="col pt-4 text-right">

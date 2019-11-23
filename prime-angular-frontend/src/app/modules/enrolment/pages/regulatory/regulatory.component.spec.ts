@@ -14,7 +14,7 @@ import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
-import { CollegeCertificationsComponent } from '@enrolment/shared/components/college-certifications/college-certifications.component';
+import { CollegeCertificationFormComponent } from '@enrolment/shared/components/college-certification-form/college-certification-form.component';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 
 describe('RegulatoryComponent', () => {
@@ -37,7 +37,7 @@ describe('RegulatoryComponent', () => {
           RegulatoryComponent,
           PageHeaderComponent,
           PageSubheaderComponent,
-          CollegeCertificationsComponent
+          CollegeCertificationFormComponent
         ],
         providers: [
           {

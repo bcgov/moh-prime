@@ -14,14 +14,6 @@ export class CapitalizePipe implements PipeTransform {
     return value;
   }
 
-  /**
-   * Capitalize a word.
-   *
-   * @private
-   * @param {string} value
-   * @returns {string}
-   * @memberof CapitalizePipe
-   */
   private capitalizeWord(value: string): string {
     return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
   }

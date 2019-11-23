@@ -6,7 +6,7 @@ import { CanDeactivateFormGuard } from '@core/guards/can-deactivate-form.guard';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 
-import { EnrolmentRoutes } from './enrolent.routes';
+import { EnrolmentRoutes } from './enrolment.routes';
 import { EnrolleeGuard } from './shared/guards/enrollee.guard';
 import { EnrolmentGuard } from './shared/guards/enrolment.guard';
 

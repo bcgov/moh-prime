@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --provider=openshift --build=deploy-config --build-repo=https://github.com/bcgov/moh-prime.git
+    kompose.version: 1.18.0 (06a2e56)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: mailhog-server
+  name: mailhog-server
+spec:
+  replicas: 1
+  selector:
+    io.kompose.service: mailhog-server
+  strategy:
+    resources: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: mailhog-server
+    spec:
+      containers:
+      - image: ' '
+        name: mailhog-server
+        ports:
+        - containerPort: 1025
+        - containerPort: 1025
+        - containerPort: 8025
+        resources: {}
+      restartPolicy: Always
+  test: false
+  triggers:
+  - type: ConfigChange
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - mailhog-server
+      from:
+        kind: ImageStreamTag
+        name: mailhog:latest
+    type: ImageChange
+status: {}
