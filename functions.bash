@@ -127,16 +127,16 @@ function cleanup() {
 }
 
 function gitPromote() {
-    git config push.default simple
-    git config user.email "${GIT_EMAIL}"
-    git config user.name "${GIT_USERNAME}"
+    git config --global push.default simple
+    git config --global user.email "${GIT_EMAIL}"
+    git config --global user.name "${GIT_USERNAME}"
     git checkout $1
     git fetch
     git pull
     git merge --squash ${CHANGE_BRANCH}
-    git commit -m "Merge branch ${CHANGE_BRANCH} \(${BRANCH_NAME}\) into $1"
+    git commit -m "Merge branch ${CHANGE_BRANCH} ${BRANCH_NAME} into $1"
+    git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_URL}
     git checkout ${CHANGE_BRANCH}
     git fetch
     git merge -s ours -m "Updating ${CHANGE_BRANCH} with $1" origin/$1
-    git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_URL}
 }
