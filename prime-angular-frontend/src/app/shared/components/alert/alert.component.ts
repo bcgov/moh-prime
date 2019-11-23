@@ -13,19 +13,25 @@ import {
   templateUrl: './alert.component.html',
   styleUrls: ['./alert.component.scss']
 })
-export class AlertComponent implements OnInit, AfterContentInit {
+export class AlertComponent {
   @Input() type: string;
+  @Input() icon: string;
 
-  @ContentChildren('alertIcon', { descendants: true })
-  public alertIconChildren: QueryList<TemplateRef<any>>;
   @ContentChildren('alertTitle', { descendants: true })
   public alertTitleChildren: QueryList<TemplateRef<any>>;
   @ContentChildren('alertContent', { descendants: true })
   public alertContentChildren: QueryList<TemplateRef<any>>;
 
-  constructor() { }
+  constructor() {
+    this.type = 'info';
+    this.icon = 'info';
+  }
 
-  ngOnInit() { }
+  public hasTitle(): boolean {
+    return !!this.alertTitleChildren.length || false;
+  }
 
-  ngAfterContentInit() { }
+  public getType(): string {
+    return `alert-${this.type}`;
+  }
 }

@@ -17,18 +17,11 @@
     </app-page-subheader>
 
     <ng-container *ngIf="error">
-      <app-alert type="danger">
-        <ng-container #alertIcon
-                      class="alert-icon">
-          error_outline
-        </ng-container>
-        <ng-container #alertTitle
-                      class="alert-title">
-          Error
-        </ng-container>
+      <app-alert type="danger"
+                 icon="error_outline">
         <ng-container #alertContent
                       class="alert-content">
-          All fields must be completed before saving!
+          Each self declaration question must be answered before continuing with enrolment!
         </ng-container>
       </app-alert>
     </ng-container>
