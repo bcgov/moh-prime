@@ -4,7 +4,10 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { NgxMaskModule } from 'ngx-mask';
+
 import { MockConfigService } from 'test/mocks/mock-config.service';
+import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
 import { RegulatoryComponent } from './regulatory.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
@@ -18,7 +21,6 @@ import { PageSubheaderComponent } from '@shared/components/page-subheader/page-s
 import { CollegeCertificationFormComponent } from '@enrolment/shared/components/college-certification-form/college-certification-form.component';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
 describe('RegulatoryComponent', () => {
   let component: RegulatoryComponent;
@@ -33,6 +35,7 @@ describe('RegulatoryComponent', () => {
           RouterTestingModule,
           NgxBusyModule,
           NgxContextualHelpModule,
+          NgxMaskModule,
           NgxMaterialModule,
           ReactiveFormsModule
         ],
