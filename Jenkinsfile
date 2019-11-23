@@ -4,6 +4,7 @@ pipeline {
         disableResume()
     }
     stages {
+        /*
         stage('Build') {
             agent { label 'master' }
             steps {
@@ -34,7 +35,7 @@ pipeline {
             steps {
                 sh "./player.sh scan"
             }
-        }
+        }*/
         stage('Merge to develop') {
             when { expression { (GIT_BRANCH != 'origin/master' || GIT_BRANCH != 'origin/develop' ) } }
             agent { label 'master' }
