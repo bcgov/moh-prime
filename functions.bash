@@ -132,9 +132,9 @@ function gitPromote() {
     git fetch &&\
     git merge --squash ${CHANGE_BRANCH} &&\
     git commit -m "Merge branch ${CHANGE_BRANCH} into $1" &&\
-    git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_URL} &&\
+    git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_URL} ${CHANGE_BRANCH} &&\
     git checkout $1 &&\
     git fetch &&\
     git merge -s ours -m "Updating branch with $1" origin/$1 &&\
-    git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_URL}
+    git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_URL} $1
 }
