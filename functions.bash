@@ -127,20 +127,15 @@ function cleanup() {
 }
 
 function gitPromote() {
-    git config user.email "${GIT_EMAIL}"
-    git config user.name "${GIT_USERNAME}"
-    git checkout ${CHANGE_BRANCH} && \
-    git pull && \
-    git merge $1 ${CHANGE_BRANCH} && \
+    # Update branch with latest changes from branch
+    git checkout $1
+    git fetch
+    git merge --squash ${CHANGE_BRANCH}
+    git commit -m "Merge branch ${CHANGE_BRANCH} into $1"
     git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_URL}
-    git checkout $1 && \
-    git fetch && \
-    git pull && \
-    git merge --squash ${CHANGE_BRANCH} && \
-    git commit -m "Merge branch ${CHANGE_BRANCH} ${BRANCH_NAME} into $1" && \
+    # Update the HEAD on develop to be the same as master
+    git checkout develop
+    git fetch
+    git merge -s ours -m "Updating branch with $1" origin/$1
     git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_URL}
-    ###
-    #git checkout ${CHANGE_BRANCH}
-    #git fetch
-    #git merge -s ours -m "Updating ${CHANGE_BRANCH} with $1" origin/$1
 }
