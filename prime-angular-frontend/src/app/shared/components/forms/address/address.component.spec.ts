@@ -3,6 +3,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 
+import { NgxMaskModule } from 'ngx-mask';
+
 import { MockConfigService } from 'test/mocks/mock-config.service';
 
 import { AddressComponent } from './address.component';
@@ -22,6 +24,7 @@ describe('AddressComponent', () => {
           BrowserAnimationsModule,
           HttpClientTestingModule,
           NgxMaterialModule,
+          NgxMaskModule,
           ReactiveFormsModule
         ],
         declarations: [

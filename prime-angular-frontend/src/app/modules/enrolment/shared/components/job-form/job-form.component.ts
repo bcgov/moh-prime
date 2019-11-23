@@ -1,8 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 import { map, startWith } from 'rxjs/operators';
-import { Observable } from 'rxjs';
 
 import { Config } from '@config/config.model';
 import { Job } from '@enrolment/shared/models/job.model';

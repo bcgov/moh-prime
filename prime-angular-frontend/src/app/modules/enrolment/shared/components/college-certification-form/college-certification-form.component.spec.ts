@@ -8,7 +8,9 @@ import { MockConfigService } from 'test/mocks/mock-config.service';
 import { CollegeCertificationFormComponent } from './college-certification-form.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
+import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
+import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 
 describe('CollegeCertificationFormComponent', () => {
@@ -19,12 +21,14 @@ describe('CollegeCertificationFormComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         BrowserAnimationsModule,
+        NgxContextualHelpModule,
         HttpClientTestingModule,
         NgxMaterialModule,
         ReactiveFormsModule
       ],
       declarations: [
-        CollegeCertificationFormComponent
+        CollegeCertificationFormComponent,
+        FormIconGroupComponent
       ],
       providers: [
         {
