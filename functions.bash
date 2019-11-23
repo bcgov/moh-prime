@@ -128,14 +128,13 @@ function cleanup() {
 
 function gitPromote() {
     # Update branch with latest changes from branch
-    git checkout $1
-    git fetch
-    git merge --squash ${CHANGE_BRANCH}
-    git commit -m "Merge branch ${CHANGE_BRANCH} into $1"
-    git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_URL}
-    # Update the HEAD on develop to be the same as master
-    git checkout develop
-    git fetch
-    git merge -s ours -m "Updating branch with $1" origin/$1
+    git checkout $1 &&\
+    git fetch &&\
+    git merge --squash ${CHANGE_BRANCH} &&\
+    git commit -m "Merge branch ${CHANGE_BRANCH} into $1" &&\
+    git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_URL} &&\
+    git checkout $1 &&\
+    git fetch &&\
+    git merge -s ours -m "Updating branch with $1" origin/$1 &&\
     git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_URL}
 }
