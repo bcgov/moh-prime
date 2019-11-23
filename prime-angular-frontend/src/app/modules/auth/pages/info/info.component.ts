@@ -4,7 +4,7 @@ import { Inject } from '@angular/core';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { AuthProvider } from '@auth/shared/enum/auth-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
-import { EnrolmentRoutes } from '@enrolment/enrolent.routes';
+import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 
 @Component({
   selector: 'app-info',

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { EnrolmentRoutes } from '@enrolment/enrolent.routes';
+import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 
 @Component({
   selector: 'app-collection-notice',
@@ -12,5 +12,5 @@ export class CollectionNoticeComponent implements OnInit {
 
   public EnrolmentRoutes = EnrolmentRoutes;
 
-  public ngOnInit() {}
+  public ngOnInit() { }
 }
