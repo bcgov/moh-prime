@@ -18,7 +18,9 @@ import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.mod
 import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
-import { CollegeCertificationFormComponent } from '@enrolment/shared/components/college-certification-form/college-certification-form.component';
+import {
+  CollegeCertificationFormComponent
+} from '@enrolment/shared/components/college-certification-form/college-certification-form.component';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 

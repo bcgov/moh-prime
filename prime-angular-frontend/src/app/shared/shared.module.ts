@@ -13,7 +13,9 @@ import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.mod
 import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 import { AddressComponent } from '@shared/components/forms/address/address.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { EnrolmentStatusReasonsComponent } from '@shared/components/dialogs/content/enrolment-status-reasons/enrolment-status-reasons.component';
+import {
+  EnrolmentStatusReasonsComponent
+} from '@shared/components/dialogs/content/enrolment-status-reasons/enrolment-status-reasons.component';
 import { EnrolmentPipe } from '@shared/pipes/enrolment.pipe';
 import { FirstKeyPipe } from '@shared/pipes/first-key.pipe';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
