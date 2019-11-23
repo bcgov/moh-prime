@@ -4,6 +4,7 @@ pipeline {
         disableResume()
     }
     stages {
+        /*
         stage('Build') {
             agent { label 'master' }
             steps {
@@ -30,13 +31,13 @@ pipeline {
                 sh "./player.sh sonar tools"
             }
         }
-        */
+        *//*
         stage('Code Quality Check') {
             agent { label 'code-tests' }
             steps {
                 sh "./player.sh scan"
             }
-        }
+        }*/
         stage('Merge to develop') {
             when { expression { (GIT_BRANCH != 'origin/master' || GIT_BRANCH != 'origin/develop' ) } }
             agent { label 'master' }

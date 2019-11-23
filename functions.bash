@@ -129,13 +129,15 @@ function cleanup() {
 function gitPromote() {
     git config user.email "${GIT_EMAIL}"
     git config user.name "${GIT_USERNAME}"
+    git checkout ${CHANGE_BRANCH} && \
+    git pull && \
     git merge $1 ${CHANGE_BRANCH} && \
     git checkout $1 && \
     git fetch && \
     git pull && \
     git merge --squash ${CHANGE_BRANCH} && \
     git commit -m "Merge branch ${CHANGE_BRANCH} ${BRANCH_NAME} into $1" && \
-    git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_URL} 
+    git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_URL}
     ###
     #git checkout ${CHANGE_BRANCH}
     #git fetch
