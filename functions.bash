@@ -132,6 +132,7 @@ function gitPromote() {
     git checkout ${CHANGE_BRANCH} && \
     git pull && \
     git merge $1 ${CHANGE_BRANCH} && \
+    git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_URL}
     git checkout $1 && \
     git fetch && \
     git pull && \
