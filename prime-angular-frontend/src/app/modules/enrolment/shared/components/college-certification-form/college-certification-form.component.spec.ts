@@ -3,6 +3,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { NgxMaskModule } from 'ngx-mask';
+
 import { MockConfigService } from 'test/mocks/mock-config.service';
 
 import { CollegeCertificationFormComponent } from './college-certification-form.component';
@@ -23,6 +25,7 @@ describe('CollegeCertificationFormComponent', () => {
         BrowserAnimationsModule,
         NgxContextualHelpModule,
         HttpClientTestingModule,
+        NgxMaskModule,
         NgxMaterialModule,
         ReactiveFormsModule
       ],

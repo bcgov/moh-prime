@@ -12,7 +12,9 @@ import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { EnrolmentStatusReasonsComponent } from '@shared/components/dialogs/content/enrolment-status-reasons/enrolment-status-reasons.component';
+import {
+  EnrolmentStatusReasonsComponent
+} from '@shared/components/dialogs/content/enrolment-status-reasons/enrolment-status-reasons.component';
 
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
