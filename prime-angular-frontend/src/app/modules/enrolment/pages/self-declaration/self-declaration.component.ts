@@ -124,10 +124,15 @@ export class SelfDeclarationComponent implements OnInit {
   }
 
   private initForm() {
-    this.hasConviction.valueChanges.subscribe((value: boolean) => this.toggleValidators(value, this.hasConvictionDetails));
-    this.hasRegistrationSuspended.valueChanges.subscribe((value: boolean) => this.toggleValidators(value, this.hasRegistrationSuspendedDetails));
-    this.hasDisciplinaryAction.valueChanges.subscribe((value: boolean) => this.toggleValidators(value, this.hasDisciplinaryActionDetails));
-    this.hasPharmaNetSuspended.valueChanges.subscribe((value: boolean) => this.toggleValidators(value, this.hasPharmaNetSuspendedDetails));
+    // TODO: make YES/NO into own component to encapsulate toggling and markup
+    this.hasConviction.valueChanges
+      .subscribe((value: boolean) => this.toggleValidators(value, this.hasConvictionDetails));
+    this.hasRegistrationSuspended.valueChanges
+      .subscribe((value: boolean) => this.toggleValidators(value, this.hasRegistrationSuspendedDetails));
+    this.hasDisciplinaryAction.valueChanges
+      .subscribe((value: boolean) => this.toggleValidators(value, this.hasDisciplinaryActionDetails));
+    this.hasPharmaNetSuspended.valueChanges
+      .subscribe((value: boolean) => this.toggleValidators(value, this.hasPharmaNetSuspendedDetails));
   }
 
   private toggleValidators(value: boolean, control: FormControl) {

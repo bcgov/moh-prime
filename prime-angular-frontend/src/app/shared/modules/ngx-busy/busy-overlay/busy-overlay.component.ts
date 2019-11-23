@@ -18,20 +18,16 @@ export class BusyOverlayComponent {
   }
 
   /**
+   * @description
    * Indicate the busy overlay is displayed.
-   *
-   * @param {boolean} event
-   * @memberof BusyOverlayComponent
    */
   public onBusyStart(event: boolean) {
     this.started.emit(event);
   }
 
   /**
+   * @description
    * Indicate the busy overlay is hidden.
-   *
-   * @param {boolean} event
-   * @memberof BusyOverlayComponent
    */
   public onBusyStop(event: boolean) {
     this.stopped.emit(event);

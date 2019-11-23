@@ -1,9 +1,10 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterEvent } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
 
 import { map, mergeMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 import { RouteStateService } from '@core/services/route-state.service';
 import { UtilsService } from '@core/services/utils.service';
@@ -25,33 +26,27 @@ export class AppComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    const onNavStart = this.routeStateService.onNavigationStart();
-    const onNavStop = this.routeStateService.onNavigationStop();
-    const onNavEnd = this.routeStateService.onNavigationEnd();
+    // const onNavStart = this.routeStateService.onNavigationStart();
+    // const onNavStop = this.routeStateService.onNavigationStop();
+    const onNavEnd = this.routeStateService.onNavigationEnd() as Observable<RouterEvent>;
 
     this.scrollTop(onNavEnd);
     this.setPageTitle(onNavEnd);
   }
 
   /**
+   * @description
    * Scroll the page to the top on route event.
-   *
-   * @private
-   * @param {*} routeEvent
-   * @memberof AppComponent
    */
-  private scrollTop(routeEvent: any) {
+  private scrollTop(routeEvent: Observable<RouterEvent>) {
     routeEvent.subscribe(() => this.utilsService.scrollTop());
   }
 
   /**
+   * @description
    * Set the HTML page <title> on route event.
-   *
-   * @private
-   * @param {*} routeEvent
-   * @memberof AppComponent
    */
-  private setPageTitle(routeEvent: any) {
+  private setPageTitle(routeEvent: Observable<RouterEvent>) {
     routeEvent
       .pipe(
         // Swap what is being observed to the activated route

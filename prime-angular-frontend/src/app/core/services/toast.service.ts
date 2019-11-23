@@ -14,12 +14,8 @@ export class ToastService {
   }
 
   /**
+   * @description
    * Opens a toast to display success messages.
-   *
-   * @param {string} message
-   * @param {string} [action=null]
-   * @param {MatSnackBarConfig} [config=null]
-   * @memberof ToastService
    */
   public openSuccessToast(message: string, action: string = null, config: MatSnackBarConfig = null) {
     const defaultConfig: MatSnackBarConfig = Object.assign({
@@ -30,12 +26,8 @@ export class ToastService {
   }
 
   /**
+   * @description
    * Opens a toast to display error messages.
-   *
-   * @param {string} message
-   * @param {string} [action=null]
-   * @param {MatSnackBarConfig} [config=null]
-   * @memberof ToastService
    */
   public openErrorToast(message: string, action: string = null, config: MatSnackBarConfig = null) {
     const defaultConfig: MatSnackBarConfig = Object.assign({
@@ -45,15 +37,6 @@ export class ToastService {
     this.openToast(message, action, defaultConfig);
   }
 
-  /**
-   * Opens a toast.
-   *
-   * @private
-   * @param {string} message
-   * @param {string} [action=null]
-   * @param {MatSnackBarConfig} config
-   * @memberof ToastService
-   */
   private openToast(message: string, action: string = null, config: MatSnackBarConfig) {
     this.snackBar.open(message, action, config);
   }

@@ -5,13 +5,8 @@ import * as moment from 'moment';
 export class FormGroupValidators {
 
   /**
+   * @description
    * Checks two form control values are equal within a form group.
-   *
-   * @static
-   * @param {string} inputKey
-   * @param {string} confirmInputKey
-   * @returns {ValidatorFn}
-   * @memberof FormControlValidators
    */
   static match(inputKey: string, confirmInputKey: string): ValidatorFn {
     return (group: FormGroup): ValidationErrors | null => {
@@ -24,13 +19,8 @@ export class FormGroupValidators {
   }
 
   /**
+   * @description
    * Checks that at least one field has been chosen within a form group.
-   *
-   * @static
-   * @param {ValidatorFn} validator
-   * @param {string[]} [whitelist=[]]
-   * @returns {ValidatorFn}
-   * @memberof FormControlValidators
    */
   static atLeastOne(validator: ValidatorFn, whitelist: string[] = []): ValidatorFn {
     return (group: FormGroup): ValidationErrors | null => {
@@ -43,14 +33,8 @@ export class FormGroupValidators {
   }
 
   /**
+   * @description
    * Compares date range start and end.
-   *
-   * @static
-   * @param {string} rangeStartKey
-   * @param {string} rangeEndKey
-   * @param {string} rangeName
-   * @returns {ValidatorFn}
-   * @memberof FormGroupValidators
    */
   static dateRange(rangeStartKey: string, rangeEndKey: string, rangeName: string): ValidatorFn {
     return (group: FormGroup): ValidationErrors | null => {
