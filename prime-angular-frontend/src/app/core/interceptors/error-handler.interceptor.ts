@@ -22,13 +22,9 @@ export class ErrorHandlerInterceptor {
   ) { }
 
   /**
+   * @description
    * Intercept 401 responses to redirect to login if a user
    * is not authenticated.
-   *
-   * @param {HttpRequest<any>} req
-   * @param {HttpHandler} next
-   * @returns {Observable<HttpEvent<any>>}
-   * @memberof ErrorInterceptor
    */
   // TODO split into separate interceptors 401, 422, and 500
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
