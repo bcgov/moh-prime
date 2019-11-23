@@ -15,8 +15,8 @@ describe('CollectionNoticeComponent', () => {
           RouterTestingModule
         ],
         declarations: [
-          PageHeaderComponent,
-          CollectionNoticeComponent
+          CollectionNoticeComponent,
+          PageHeaderComponent
         ]
       }
     ).compileComponents();

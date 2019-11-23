@@ -21,7 +21,10 @@ export class EnrolmentPipe implements PipeTransform {
   }
 
   private getFullName(enrollee: any) {
-    return ` ${enrollee.firstName ? enrollee.firstName : ''} ${enrollee.middleName ? enrollee.middleName : ''} ${enrollee.lastName ? enrollee.lastName : ''} `;
+    const firstName = enrollee.firstName ? enrollee.firstName : '';
+    const middleName = enrollee.middleName ? enrollee.middleName : '';
+    const lastName = enrollee.lastName ? enrollee.lastName : '';
+    return ` ${firstName} ${middleName} ${lastName} `;
   }
 
   private getPreferredName(enrollee: any) {
