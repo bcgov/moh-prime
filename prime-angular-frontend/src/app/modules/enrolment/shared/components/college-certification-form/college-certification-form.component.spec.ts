@@ -25,7 +25,7 @@ describe('CollegeCertificationFormComponent', () => {
         BrowserAnimationsModule,
         NgxContextualHelpModule,
         HttpClientTestingModule,
-        NgxMaskModule,
+        NgxMaskModule.forRoot(),
         NgxMaterialModule,
         ReactiveFormsModule
       ],

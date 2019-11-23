@@ -24,7 +24,7 @@ describe('AddressComponent', () => {
           BrowserAnimationsModule,
           HttpClientTestingModule,
           NgxMaterialModule,
-          NgxMaskModule,
+          NgxMaskModule.forRoot(),
           ReactiveFormsModule
         ],
         declarations: [

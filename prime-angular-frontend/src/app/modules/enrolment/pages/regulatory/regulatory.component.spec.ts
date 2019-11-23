@@ -37,7 +37,7 @@ describe('RegulatoryComponent', () => {
           RouterTestingModule,
           NgxBusyModule,
           NgxContextualHelpModule,
-          NgxMaskModule,
+          NgxMaskModule.forRoot(),
           NgxMaterialModule,
           ReactiveFormsModule
         ],
