@@ -12,10 +12,13 @@ import { ConfigService } from '@config/config.service';
 import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
 import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
+import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
 import { CollegeCertificationFormComponent } from '@enrolment/shared/components/college-certification-form/college-certification-form.component';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
 describe('RegulatoryComponent', () => {
   let component: RegulatoryComponent;
@@ -34,6 +37,7 @@ describe('RegulatoryComponent', () => {
           ReactiveFormsModule
         ],
         declarations: [
+          FormIconGroupComponent,
           RegulatoryComponent,
           PageHeaderComponent,
           PageSubheaderComponent,
@@ -47,6 +51,10 @@ describe('RegulatoryComponent', () => {
           {
             provide: ConfigService,
             useClass: MockConfigService
+          },
+          {
+            provide: EnrolmentService,
+            useClass: MockEnrolmentService
           },
           EnrolmentStateService
         ]
