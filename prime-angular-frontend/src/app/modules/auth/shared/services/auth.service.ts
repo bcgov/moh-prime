@@ -6,8 +6,6 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { LoggerService } from '@core/services/logger.service';
 import { Role } from '../enum/role.enum';
 import { User } from '../models/user.model';
-import { Country } from '@shared/enums/country.enum';
-import { string } from 'prop-types';
 
 export interface IAuthService {
   getUserId(): Promise<string>;
