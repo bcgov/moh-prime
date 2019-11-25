@@ -128,6 +128,8 @@ function cleanup() {
 
 function gitPromote() {
     # Update branch with latest changes from branch
+    git checkout ${CHANGE_BRANCH} && \
+    git pull && \
     git checkout $1 &&\
     git fetch &&\
     git merge --squash ${CHANGE_BRANCH} &&\
