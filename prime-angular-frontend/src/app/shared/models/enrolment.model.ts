@@ -5,6 +5,7 @@ import { Job } from '../../modules/enrolment/shared/models/job.model';
 import { Organization } from '../../modules/enrolment/shared/models/organization.model';
 import { Enrollee } from '../../modules/enrolment/shared/models/enrollee.model';
 import { EnrolmentStatus } from './enrolment-status.model';
+import { EnrolleeClassification } from '@shared/enums/enrollee-classification.enum';
 
 export interface Enrolment {
   id?: number;
@@ -27,5 +28,5 @@ export interface Enrolment {
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;
   availableStatuses: Config<number>[];
-  enrolleeClassification: string;
+  enrolleeClassification: EnrolleeClassification;
 }
