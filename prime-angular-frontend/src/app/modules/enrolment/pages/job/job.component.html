@@ -24,7 +24,7 @@
           <app-job-form [form]="job"
                         [index]="i"
                         [total]="jobs.controls.length"
-                        [jobNames]="filterJobs(job)"
+                        [jobNames]="filteredJobNames"
                         (remove)="removeJob($event)"></app-job-form>
 
         </ng-container>

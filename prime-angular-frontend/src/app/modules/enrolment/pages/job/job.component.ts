@@ -3,7 +3,7 @@ import { FormGroup, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
-import { Observable, Subscription } from 'rxjs';
+import { Subscription, BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 import { Config } from '@config/config.model';
@@ -26,7 +26,7 @@ export class JobComponent implements OnInit, OnDestroy {
   public busy: Subscription;
   public form: FormGroup;
   public jobNames: Config<number>[];
-  public filteredJobNames: Observable<Config<number>[]>;
+  public filteredJobNames: BehaviorSubject<Config<number>[]>;
   public EnrolmentRoutes = EnrolmentRoutes;
 
   constructor(
@@ -41,6 +41,7 @@ export class JobComponent implements OnInit, OnDestroy {
     private logger: LoggerService
   ) {
     this.jobNames = this.configService.jobNames;
+    this.filteredJobNames = new BehaviorSubject<Config<number>[]>(this.jobNames);
   }
 
   public get jobs(): FormArray {
@@ -79,32 +80,6 @@ export class JobComponent implements OnInit, OnDestroy {
     this.jobs.removeAt(index);
   }
 
-  public filterJobs(job: FormGroup) {
-    // Create a list of filtered job names
-    if (this.jobs.length) {
-      // All the currently chosen jobs
-      const selectedJobNames = this.jobs.value
-        .map((j: Job) => j.title);
-      // Current job name selected
-      const currentJob = this.jobNames
-        .find(j => j.name === job.get('title').value);
-      // Filter the list of possible jobs using the selected jobs
-      const filteredJobNames = this.jobNames
-        .filter((c: Config<number>) => !selectedJobNames.includes(c.name));
-
-      if (currentJob) {
-        // Add the current job to the list of filtered
-        // jobs so it remains visible
-        filteredJobNames.unshift(currentJob);
-      }
-
-      return filteredJobNames;
-    }
-
-    // Otherwise, provide the entire list of job names
-    return this.jobNames;
-  }
-
   public canDeactivate(): Observable<boolean> | boolean {
     const data = 'unsaved';
     return (this.form.dirty)
@@ -137,6 +112,21 @@ export class JobComponent implements OnInit, OnDestroy {
     if (!this.jobs.length) {
       this.addJob();
     }
+
+    this.form.valueChanges
+      .subscribe(({ jobs }: { jobs: Job[] }) => this.filterJobNames(jobs));
+  }
+
+  private filterJobNames(jobs: Job[]) {
+    // All the currently chosen jobs
+    const selectedJobNames = jobs.map((j: Job) => j.title);
+    // Filter the list of possible jobs using the selected jobs
+    const filteredJobNames = this.jobNames
+      .filter((c: Config<number>) => !selectedJobNames.includes(c.name));
+
+    console.log('FILTER', filteredJobNames);
+
+    this.filteredJobNames.next(filteredJobNames);
   }
 
   private removeIncompleteJobs() {
