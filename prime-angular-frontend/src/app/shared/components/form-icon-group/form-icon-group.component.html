@@ -16,7 +16,8 @@
       <button mat-icon-button
               type="button"
               (click)="onEvent()">
-        <mat-icon>{{ icon }}</mat-icon>
+        <mat-icon [matTooltip]="tooltipMessage"
+                  matTooltipPosition="after">{{ icon }}</mat-icon>
       </button>
     </ng-template>
 
