@@ -9,8 +9,6 @@ import { ContextualContentDirective } from '../contextual-content.directive';
   styleUrls: ['./contextual-help.component.scss']
 })
 export class ContextualHelpComponent {
-  // Allow for small adjustments to the position of the icon the container
-  @Input() cssClass: string;
   @Input() xPosition: MenuPositionX = 'after';
   @Input() yPosition: MenuPositionY = 'below';
 
