@@ -22,24 +22,53 @@
 
       <ng-template #preamble>
         <app-page-subheader>
-          <ng-container appPageSubheaderTitle>You've Been Approved</ng-container>
-          <ng-container appPageSubheaderSummary>
-            You’ve been approved for PharmaNet access for direct patient care.
-          </ng-container>
+
         </app-page-subheader>
 
+        <app-alert type="success"
+                   icon="check_circle_outline">
+          <ng-container #alertTitle
+                        class="alert-title">
+            You've Been Approved
+          </ng-container>
+          <ng-container #alertContent
+                        class="alert-content">
+            You’ve been approved for PharmaNet access for direct patient care.
+          </ng-container>
+        </app-alert>
+
+        <ng-container *ngIf="isAutomatic">
+          <p>
+            Your application can be automatically processed. Within a few minutes you should receive approval to access
+            PharmaNet once you accept the PharmaNet User Access Agreement. Please read the agreement carefully before
+            accepting.
+          </p>
+
+          <p>
+            After you accept the User Access Agreement, you will receive your PharmaNet ID. Give this ID to the person
+            or
+            organization responsible for setting up your PharmaNet access account. This ID must be associated with your
+            transactions on any PharmaNet access.
+          </p>
+        </ng-container>
+
+
         <p>
-          To confirm your access, you must accept the PharmaNet User Access Agreement. This agreement is specific to the
+          To confirm your access, you must accept the PharmaNet User Access Agreement. This agreement is specific to
+          the
           type of access you have. If you request access as a different type of user or for a different type of
           organization
           at any point in the future, you may be required to accept a different PharmaNet User Access Agreement.
         </p>
 
         <p>
-          Please read the User Access Agreement carefully, and ensure that you are both willing and able to abide by its
+          Please read the User Access Agreement carefully, and ensure that you are both willing and able to abide by
+          its
           terms with respect to your use of PharmaNet. You are encouraged to print or save a copy of the User Access
           Agreement to keep for your reference.
         </p>
+
+
       </ng-template>
 
       <div *ngIf="hasReadAgreement"

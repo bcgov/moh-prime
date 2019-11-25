@@ -12,8 +12,8 @@ case "$1" in
         deploy $2 $3 
         #> /dev/null 2>&1 
         ;;
-    sonar)
-        sonar $2
+    toolbelt)
+        toolbelt $2
         ;;
     scan)
         scan

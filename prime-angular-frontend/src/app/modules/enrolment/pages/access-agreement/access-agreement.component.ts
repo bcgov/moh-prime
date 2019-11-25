@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog, MatCheckboxChange } from '@angular/material';
 import { FormControl } from '@angular/forms';
 
-import { map, exhaustMap } from 'rxjs/operators';
+import { exhaustMap } from 'rxjs/operators';
 import { EMPTY, Subscription } from 'rxjs';
 
 import { ToastService } from '@core/services/toast.service';
@@ -13,9 +13,10 @@ import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { EnrolmentRoutes } from '@enrolment/enrolent.routes';
-import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 
 @Component({
   selector: 'app-access-agreement',
@@ -24,6 +25,7 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 })
 export class AccessAgreementComponent implements OnInit {
   public busy: Subscription;
+  public isAutomatic: boolean;
   public enrolment: Enrolment;
   public currentPage: number;
   public agree: FormControl;
@@ -33,8 +35,9 @@ export class AccessAgreementComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private enrolmentStateService: EnrolmentStateService,
+    private enrolmentService: EnrolmentService,
     private enrolmentResource: EnrolmentResource,
+    private enrolmentStateService: EnrolmentStateService,
     private toastService: ToastService,
     private dialog: MatDialog,
     private changeDetectorRef: ChangeDetectorRef,
@@ -106,15 +109,6 @@ export class AccessAgreementComponent implements OnInit {
   }
 
   public ngOnInit() {
-    // TODO drop and access using enrolment service
-    this.busy = this.enrolmentResource.enrolments()
-      .pipe(
-        map((enrolment: Enrolment) => this.enrolment = enrolment)
-      )
-      .subscribe((enrolment: Enrolment) => {
-        if (enrolment) {
-          this.enrolmentStateService.enrolment = enrolment;
-        }
-      });
+    this.enrolment = this.enrolmentService.enrolment;
   }
 }

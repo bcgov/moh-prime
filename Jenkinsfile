@@ -13,31 +13,32 @@ pipeline {
                 sh "./player.sh build frontend dev"
             }
         }
-        stage('Deploy (DEV)') {
+        stage('Deploy') {
             agent { label 'master' }
             steps {
-                echo "Deploy (DEV) ..."
+                echo "Deploying..."
                 sh "./player.sh deploy database dev"
                 sh "./player.sh deploy api dev"
                 sh "./player.sh deploy frontend dev"
             }
         }
-        /*
-        stage('Build Sonar Scanner') {
+/*
+        stage('Build & Deploy Tools') {
             agent { label 'master' }
             steps {
-                echo "Deploy (DEV) ..."
-                sh "./player.sh sonar tools"
+                echo "Assemble toolbelt..."
+                //sh "./player.sh toolbelt sonar"
+                sh "./player.sh toolbelt mailhog"
             }
         }
-        */
+*/
         stage('Code Quality Check') {
             agent { label 'code-tests' }
             steps {
                 sh "./player.sh scan"
             }
         }
-        /*
+/*
         stage('Test') {
             agent { label 'master' }
             script {
