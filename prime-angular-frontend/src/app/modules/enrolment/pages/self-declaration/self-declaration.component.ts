@@ -74,7 +74,7 @@ export class SelfDeclarationComponent implements OnInit {
 
   public onSubmit() {
 
-    this.allRadioButtonsSelected() ? this.error = false : this.error = true;
+    this.error = (this.allRadioButtonsSelected()) ? false : true;
 
     if (this.form.valid) {
       const payload = this.enrolmentStateService.enrolment;
