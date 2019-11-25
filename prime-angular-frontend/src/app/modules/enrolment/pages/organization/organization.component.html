@@ -57,22 +57,7 @@
 
     </ng-container>
 
-    <div class="row justify-content-between">
-      <div class="col pt-4">
-
-        <button mat-stroked-button
-                type="button"
-                [routerLink]="['..', EnrolmentRoutes.SELF_DECLARATION]">Back</button>
-
-      </div>
-      <div class="col pt-4 text-right">
-
-        <button mat-raised-button
-                type="submit"
-                color="primary">Save and Continue</button>
-
-      </div>
-    </div>
+    <app-page-footer [backRoute]="EnrolmentRoutes.SELF_DECLARATION"></app-page-footer>
 
   </form>
 
