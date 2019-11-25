@@ -7,6 +7,7 @@ import { PageRefDirective } from './page-ref.directive';
 
 export abstract class Pager implements OnChanges, AfterViewInit {
   @Input() public currentPage: number;
+  @Input() public totalPages: number;
   @Output() public changed: EventEmitter<{ atEnd: boolean }>;
 
   @ViewChildren(PageRefDirective) public pages: QueryList<PageRefDirective>;
@@ -35,6 +36,7 @@ export abstract class Pager implements OnChanges, AfterViewInit {
   public ngAfterViewInit() {
     // Initial change after view has been initiated
     this.changePage();
+    this.totalPages = this.pages.length;
   }
 
   public changePage(skipChange: boolean = false) {
