@@ -62,17 +62,14 @@ export class AuthService implements IAuthService {
       lastName,
       email: contactEmail = '',
       attributes: {
-        birthdate: [dateOfBirth],
-        country: [countryCode],
-        region: [provinceCode],
-        streetAddress: [street],
-        locality: [city],
-        postalCode: [postal]
+        birthdate: [dateOfBirth] = '',
+        country: [countryCode] = '',
+        region: [provinceCode] = '',
+        streetAddress: [street] = '',
+        locality: [city] = '',
+        postalCode: [postal] = ''
       }
     } = await this.keycloakService.loadUserProfile(forceReload) as Keycloak.KeycloakProfile & KeycloakAttributes;
-
-    console.log(await this.keycloakService.loadUserProfile(forceReload));
-
 
     const userId = await this.getUserId();
 
