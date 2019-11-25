@@ -134,7 +134,7 @@ export class EnrolmentResource {
   }
 
   private removeIncompleteJobs(jobs: Job[]) {
-    return jobs.filter((job: Job) => job.title !== 'None');
+    return jobs.filter((job: Job) => (job.title !== ''));
   }
 
   private removeIncompleteOrganizations(organizations: Organization[]) {

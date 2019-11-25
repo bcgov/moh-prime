@@ -80,10 +80,11 @@ export class EnrolmentsComponent implements OnInit {
             ? this.adjudicationResource.updateEnrolmentStatus(id, EnrolmentStatus.ADJUDICATED_APPROVED)
             : EMPTY
         ),
-        // TODO: show success/error for enrolment status, and attempt replay getting enrolment for update
+        // TODO show success/error for enrolment status
         // map(() => { })
         // catchError(() => { })
         exhaustMap(() => this.adjudicationResource.enrolment(id))
+        // TODO attempt replay getting enrolment for update
         // retry(3),
         // catchError(() => { })
       )
@@ -114,10 +115,11 @@ export class EnrolmentsComponent implements OnInit {
             ? this.adjudicationResource.updateEnrolmentStatus(id, EnrolmentStatus.DECLINED)
             : EMPTY
         ),
-        // TODO: show success/error for enrolment status, and attempt replay getting enrolment for update
+        // TODO show success/error for enrolment status change
         // map(() => { })
         // catchError(() => { })
         exhaustMap(() => this.adjudicationResource.enrolment(id)),
+        // TODO and attempt replay getting enrolment for update
         // retry(3),
         // catchError(() => { })
       )

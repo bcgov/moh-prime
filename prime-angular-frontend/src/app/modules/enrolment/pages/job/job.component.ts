@@ -3,7 +3,7 @@ import { FormGroup, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
-import { Observable, Subscription } from 'rxjs';
+import { Subscription, BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 import { Config } from '@config/config.model';
@@ -26,7 +26,9 @@ export class JobComponent implements OnInit, OnDestroy {
   public busy: Subscription;
   public form: FormGroup;
   public jobNames: Config<number>[];
-  public filteredJobNames: Observable<Config<number>[]>;
+  public filteredJobNames: BehaviorSubject<Config<number>[]>;
+  public allowDefaultOption: boolean;
+  public defaultOptionLabel: string;
   public EnrolmentRoutes = EnrolmentRoutes;
 
   constructor(
@@ -41,6 +43,9 @@ export class JobComponent implements OnInit, OnDestroy {
     private logger: LoggerService
   ) {
     this.jobNames = this.configService.jobNames;
+    this.filteredJobNames = new BehaviorSubject<Config<number>[]>(this.jobNames);
+    this.allowDefaultOption = true;
+    this.defaultOptionLabel = 'None';
   }
 
   public get jobs(): FormArray {
@@ -53,6 +58,10 @@ export class JobComponent implements OnInit, OnDestroy {
       this.removeCollegeCertifications();
 
       const payload = this.enrolmentStateService.enrolment;
+      // Remove the default so not proliferated outside the component
+      payload.jobs = payload.jobs
+        .map((job: Job) => (job.title === this.defaultOptionLabel) ? { ...job, title: '' } : job);
+
       this.busy = this.enrolmentResource.updateEnrolment(payload)
         .subscribe(
           () => {
@@ -70,39 +79,16 @@ export class JobComponent implements OnInit, OnDestroy {
     }
   }
 
-  public addJob(value: string = 'None') {
-    const job = this.enrolmentStateService.buildJobForm(value);
+  public addJob(value: string = '') {
+    const defaultValue = (value)
+      ? value : (this.allowDefaultOption)
+        ? this.defaultOptionLabel : '';
+    const job = this.enrolmentStateService.buildJobForm(defaultValue);
     this.jobs.push(job);
   }
 
   public removeJob(index: number) {
     this.jobs.removeAt(index);
-  }
-
-  public filterJobs(job: FormGroup) {
-    // Create a list of filtered job names
-    if (this.jobs.length) {
-      // All the currently chosen jobs
-      const selectedJobNames = this.jobs.value
-        .map((j: Job) => j.title);
-      // Current job name selected
-      const currentJob = this.jobNames
-        .find(j => j.name === job.get('title').value);
-      // Filter the list of possible jobs using the selected jobs
-      const filteredJobNames = this.jobNames
-        .filter((c: Config<number>) => !selectedJobNames.includes(c.name));
-
-      if (currentJob) {
-        // Add the current job to the list of filtered
-        // jobs so it remains visible
-        filteredJobNames.unshift(currentJob);
-      }
-
-      return filteredJobNames;
-    }
-
-    // Otherwise, provide the entire list of job names
-    return this.jobNames;
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
@@ -117,7 +103,6 @@ export class JobComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.createFormInstance();
-    // Initialize form changes before patching
     this.initForm();
   }
 
@@ -130,6 +115,10 @@ export class JobComponent implements OnInit, OnDestroy {
   }
 
   private initForm() {
+    // Initialize listeners before patching
+    this.form.valueChanges
+      .subscribe(({ jobs }: { jobs: Job[] }) => this.filterJobNames(jobs));
+
     this.enrolmentStateService.enrolment = this.enrolmentService.enrolment;
 
     // Always have at least one job ready for
@@ -139,13 +128,23 @@ export class JobComponent implements OnInit, OnDestroy {
     }
   }
 
+  private filterJobNames(jobs: Job[]) {
+    // All the currently chosen jobs
+    const selectedJobNames = jobs.map((j: Job) => j.title);
+    // Filter the list of possible jobs using the selected jobs
+    const filteredJobNames = this.jobNames
+      .filter((c: Config<number>) => !selectedJobNames.includes(c.name));
+
+    this.filteredJobNames.next(filteredJobNames);
+  }
+
   private removeIncompleteJobs() {
     this.jobs.controls
       .forEach((control: FormGroup, index: number) => {
         const value = control.get('title').value;
 
-        // Remove if job is "None" or the group is invalid
-        if (!value || value === 'None' || control.invalid) {
+        // Remove when empty, default option, or group is invalid
+        if (!value || value === this.defaultOptionLabel || control.invalid) {
           this.removeJob(index);
         }
       });
