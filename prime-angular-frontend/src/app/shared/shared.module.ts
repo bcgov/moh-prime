@@ -54,7 +54,7 @@ import { AlertComponent } from '@shared/components/alert/alert.component';
     PageSubheaderSummaryDirective,
     DialogContentDirective,
     FormIconGroupComponent,
-    AlertComponent
+    AlertComponent,
     ClipboardIconComponent
   ],
   imports: [
@@ -94,7 +94,7 @@ import { AlertComponent } from '@shared/components/alert/alert.component';
     PageSubheaderSummaryDirective,
     DialogContentDirective,
     FormIconGroupComponent,
-    AlertComponent
+    AlertComponent,
     ClipboardIconComponent
   ],
   entryComponents: [
