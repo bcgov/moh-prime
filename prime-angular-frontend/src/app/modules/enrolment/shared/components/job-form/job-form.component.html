@@ -2,22 +2,28 @@
 
   <app-form-icon-group [show]="total > 1"
                        (event)="removeJob(index)">
-    <mat-form-field class="w-100">
-      <input matInput
-             #input
-             type="text"
-             placeholder="Job Title"
-             formControlName="title"
-             [matAutocomplete]="auto">
-      <mat-autocomplete #auto="matAutocomplete"
-                        autoActiveFirstOption>
-        <mat-option value="None">None</mat-option>
-        <mat-option *ngFor="let jobName of filteredJobNames"
-                    [value]="jobName.name">
-          {{ jobName.name }}
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
+    <app-form-icon-group>
+      <mat-form-field class="w-100">
+        <input matInput
+               #input
+               type="text"
+               placeholder="Job Title"
+               formControlName="title"
+               [matAutocomplete]="auto"
+               (focus)="removeNone(input)">
+        <mat-autocomplete #auto="matAutocomplete"
+                          autoActiveFirstOption>
+          <mat-option *ngFor="let jobName of filteredJobNames | async"
+                      [value]="jobName.name">
+            {{ jobName.name }}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error>Required</mat-error>
+      </mat-form-field>
+      <ng-container appContextualContent>
+        A job title assists with determining your access to PharmaNet
+      </ng-container>
+    </app-form-icon-group>
   </app-form-icon-group>
 
 </ng-container>

@@ -1,9 +1,10 @@
 @import './palette';
 
+$header-height: 73px;
+
 .container-fluid {
   // Pull the container up under the header
-  // TODO store header height as a variable for reuse
-  margin-top: -73px;
+  margin-top: -$header-height;
 
   .row:first-child {
     // Make the container fill the height of the viewport
@@ -11,7 +12,7 @@
 
     div:first-child {
       // Adjust content down from under the header
-      margin-top: 73px;
+      margin-top: $header-height;
     }
   }
 }
