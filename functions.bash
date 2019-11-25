@@ -13,46 +13,46 @@ variablePopulation
 
 function build() {
     source ./"$1.conf"
-    if [ "${BUILD_REQUIRED}" ==  'true' ] ;
+    if [ "${BUILD_REQUIRED}" !=  'true' ] ;
     then
-      echo "Building $1 (${APP_NAME}) to $PROJECT_PREFIX-$2..."
-      buildPresent=$(oc get bc/"$APP_NAME-$BRANCH_LOWER" --ignore-not-found=true)
-      if [ -z "${buildPresent}" ] ;
-      then
-          MODE="apply"
-      else
-          MODE="create"
-      fi;
-      if [ "${BRANCH_LOWER}" == "develop" ] || [ "${BRANCH_LOWER}" == "master" ];
-      then
-          echo "oc process -f ./${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE} -p NAME=${APP_NAME} -p VERSION=${BUILD_NUMBER} -p SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR} -p SOURCE_REPOSITORY_URL=${GIT_URL} -p SOURCE_REPOSITORY_REF=${BRANCH_NAME} -p OC_NAMESPACE=${PROJECT_PREFIX} -p OC_APP=$2 | oc ${MODE} -f - --namespace=${PROJECT_PREFIX}-$2"
-          oc process -f ./"${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE}" \
-          -p NAME="${APP_NAME}" \
-          -p VERSION="${BUILD_NUMBER}" \
-          -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
-          -p SOURCE_REPOSITORY_URL="https://${GIT_URL}" \
-          -p SOURCE_REPOSITORY_REF="${BRANCH_NAME}" \
-          -p OC_NAMESPACE="${PROJECT_PREFIX}" \
-          -p OC_APP="$2" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-$2"
-      else
-          echo "oc process -f ./${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE} -p NAME=${APP_NAME} -p VERSION=${BUILD_NUMBER} -p SUFFIX=-${BRANCH_LOWER} -p SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR} -p SOURCE_REPOSITORY_URL=${GIT_URL} -p SOURCE_REPOSITORY_REF=${BRANCH_NAME} -p OC_NAMESPACE=${PROJECT_PREFIX} -p OC_APP=$2 | oc ${MODE} -f - --namespace=${PROJECT_PREFIX}-$2"
-          oc process -f ./"${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE}" \
-          -p NAME="${APP_NAME}" \
-          -p VERSION="${BUILD_NUMBER}" \
-          -p SUFFIX="-${BRANCH_LOWER}" \
-          -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
-          -p SOURCE_REPOSITORY_URL="https://${GIT_URL}" \
-          -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
-          -p OC_NAMESPACE="${PROJECT_PREFIX}" \
-          -p OC_APP="$2" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-$2"
-      fi;
-      if [ "$BUILD_REQUIRED" == true ];
-      then
-          echo "Building oc start-build $APP_NAME$SUFFIX -n $PROJECT_PREFIX-$2 --wait --follow ..."
-          oc start-build "$APP_NAME$SUFFIX" -n "$PROJECT_PREFIX-$2" --wait --follow
-      else
-          echo "Deployment should be automatic..."
-      fi
+        echo "Deployment should be automatic..."
+    else
+        echo "Building $1 (${APP_NAME}) to $PROJECT_PREFIX-$2..."
+        buildPresent=$(oc get bc/"$APP_NAME-$BRANCH_LOWER" --ignore-not-found=true)
+        if [ -z "${buildPresent}" ] ;
+        then
+            MODE="apply"
+        else
+            MODE="create"
+        fi;
+        if [ "${BRANCH_LOWER}" == "develop" ] || [ "${BRANCH_LOWER}" == "master" ];
+        then
+            echo "oc process -f ./${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE} -p NAME=${APP_NAME} -p VERSION=${BUILD_NUMBER} -p SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR} -p SOURCE_REPOSITORY_URL=${GIT_URL} -p SOURCE_REPOSITORY_REF=${BRANCH_NAME} -p OC_NAMESPACE=${PROJECT_PREFIX} -p OC_APP=$2 | oc ${MODE} -f - --namespace=${PROJECT_PREFIX}-$2"
+            oc process -f ./"${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE}" \
+            -p NAME="${APP_NAME}" \
+            -p VERSION="${BUILD_NUMBER}" \
+            -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
+            -p SOURCE_REPOSITORY_URL="https://${GIT_URL}" \
+            -p SOURCE_REPOSITORY_REF="${BRANCH_NAME}" \
+            -p OC_NAMESPACE="${PROJECT_PREFIX}" \
+            -p OC_APP="$2" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-$2"
+        else
+            echo "oc process -f ./${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE} -p NAME=${APP_NAME} -p VERSION=${BUILD_NUMBER} -p SUFFIX=-${BRANCH_LOWER} -p SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR} -p SOURCE_REPOSITORY_URL=${GIT_URL} -p SOURCE_REPOSITORY_REF=${BRANCH_NAME} -p OC_NAMESPACE=${PROJECT_PREFIX} -p OC_APP=$2 | oc ${MODE} -f - --namespace=${PROJECT_PREFIX}-$2"
+            oc process -f ./"${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE}" \
+            -p NAME="${APP_NAME}" \
+            -p VERSION="${BUILD_NUMBER}" \
+            -p SUFFIX="-${BRANCH_LOWER}" \
+            -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
+            -p SOURCE_REPOSITORY_URL="https://${GIT_URL}" \
+            -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
+            -p OC_NAMESPACE="${PROJECT_PREFIX}" \
+            -p OC_APP="$2" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-$2"
+        fi;
+        if [ "$BUILD_REQUIRED" == true ];
+        then
+            echo "Building oc start-build $APP_NAME$SUFFIX -n $PROJECT_PREFIX-$2 --wait --follow ..."
+            oc start-build "$APP_NAME$SUFFIX" -n "$PROJECT_PREFIX-$2" --wait --follow
+        fi
     fi
 }
 
