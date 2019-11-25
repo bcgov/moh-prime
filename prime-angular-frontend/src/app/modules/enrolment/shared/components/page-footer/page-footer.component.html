@@ -1,28 +1,18 @@
-<div class="row justify-content-between pt-2">
-  <div class="col-6">
+<div class="row"
+     [ngClass]="getJustifyContent">
+  <div class="col pt-2">
 
-    <button mat-stroked-button
-            onBack>Back</button>
-
-  </div>
-  <div class="col-6 text-right">
-
-    <ng-container *ngIf="hasReadAgreement; else hasMorePages">
-
-      <button mat-raised-button
-              color="primary"
-              [disabled]="disabled"
-              (click)="onSubmit()">Accept Agreement</button>
-
+    <ng-container *ngIf="hideBack !== true">
+      <button mat-stroked-button
+              type="button"
+              [routerLink]="['..', backRoute]">Back</button>
     </ng-container>
 
-    <ng-template #hasMorePages>
+  </div>
+  <div class="col pt-2 text-right">
 
-      <button mat-raised-button
-              color="primary"
-              (click)="onNextPage()">Continue</button>
-
-    </ng-template>
+    <button mat-raised-button
+            color="primary">Save and Continue</button>
 
   </div>
 </div>
