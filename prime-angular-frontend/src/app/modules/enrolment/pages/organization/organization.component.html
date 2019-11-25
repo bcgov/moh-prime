@@ -22,17 +22,23 @@
 
           <app-form-icon-group [show]="organizations.length > 1"
                                (event)="removeOrganization(i)">
-            <mat-form-field class="w-100">
-              <mat-label>Organization Type</mat-label>
-              <mat-select formControlName="organizationTypeCode">
-                <mat-option *ngFor="let organizationType of filterOrganizationTypes(organization)"
-                            [value]="organizationType.code"
-                            [disabled]="disableOrganization(organizationType.code)">
-                  {{ organizationType.name }}
-                </mat-option>
-              </mat-select>
-              <mat-error *ngIf="organization.get('organizationTypeCode').hasError('required')">Required</mat-error>
-            </mat-form-field>
+            <app-form-icon-group>
+              <mat-form-field class="w-100">
+                <mat-label>Organization Type</mat-label>
+                <mat-select formControlName="organizationTypeCode">
+                  <mat-option *ngFor="let organizationType of filterOrganizationTypes(organization)"
+                              [value]="organizationType.code"
+                              [disabled]="disableOrganization(organizationType.code)">
+                    {{ organizationType.name }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="organization.get('organizationTypeCode').hasError('required')">Required</mat-error>
+              </mat-form-field>
+
+              <ng-container appContextualContent>
+                You must choose an Organization that you are associated.
+              </ng-container>
+            </app-form-icon-group>
           </app-form-icon-group>
 
         </ng-container>

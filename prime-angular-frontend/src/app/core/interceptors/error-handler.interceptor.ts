@@ -36,10 +36,6 @@ export class ErrorHandlerInterceptor {
             const status = error.status;
             if (status === 401) {
               this.logger.info('Unauthorized');
-
-              // TODO should the token be removed?
-              // this.authService.removeToken();
-
               // TODO store the logout action for global reuse with auth service
               // const isLogout = req.url.includes('logout');
               // let navigationExtras: NavigationExtras = {};
