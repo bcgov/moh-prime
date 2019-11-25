@@ -12,7 +12,6 @@
     "christian-kohler.path-intellisense",
     "wayou.vscode-todo-highlight",
     "gruntfuggly.todo-tree",
-    "ms-vscode.vscode-typescript-tslint-plugin",
-    "visualstudioexptteam.vscodeintellicode",
+    "ms-vscode.vscode-typescript-tslint-plugin"
   ]
 }
