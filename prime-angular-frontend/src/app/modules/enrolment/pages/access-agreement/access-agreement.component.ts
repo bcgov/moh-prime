@@ -10,6 +10,7 @@ import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+import { EnrolleeClassification } from '@shared/enums/enrollee-classification.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
@@ -17,6 +18,7 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+
 
 @Component({
   selector: 'app-access-agreement',
@@ -31,6 +33,8 @@ export class AccessAgreementComponent implements OnInit {
   public agree: FormControl;
   public disabled: boolean;
   public hasReadAgreement: boolean;
+  public EnrolleeClassification = EnrolleeClassification;
+
 
   constructor(
     private route: ActivatedRoute,
@@ -110,5 +114,7 @@ export class AccessAgreementComponent implements OnInit {
 
   public ngOnInit() {
     this.enrolment = this.enrolmentService.enrolment;
+    console.log(this.enrolment);
+    console.log(EnrolleeClassification.MOA);
   }
 }

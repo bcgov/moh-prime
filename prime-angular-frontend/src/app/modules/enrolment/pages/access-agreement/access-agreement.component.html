@@ -7,11 +7,11 @@
 
       <ng-container *ngIf="currentPage > 0; else preamble">
 
-        <ng-container *ngIf="enrolment.enrolleeClassification === 'MOA'">
+        <ng-container *ngIf="enrolment.enrolleeClassification === EnrolleeClassification.MOA">
           <app-moa-access-agreement [currentPage]="currentPage"
                                     (changed)="onPageChange($event)"></app-moa-access-agreement>
         </ng-container>
-        <ng-container *ngIf="enrolment.enrolleeClassification === 'RU'">
+        <ng-container *ngIf="enrolment.enrolleeClassification === EnrolleeClassification.RU">
           <app-ru-access-agreement [currentPage]="currentPage"
                                    (changed)="onPageChange($event)"></app-ru-access-agreement>
         </ng-container>
