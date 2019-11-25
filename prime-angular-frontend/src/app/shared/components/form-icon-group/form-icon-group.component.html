@@ -1,14 +1,13 @@
 <div class="d-flex">
-  <div class="flex-grow-1">
+  <div class="w-100">
 
     <ng-content></ng-content>
 
   </div>
-  <div class="action"
+  <div class="action flex-shrink-1"
        *ngIf="show">
-
     <ng-container *ngIf="contextualHelpChildren.length; else default">
-      <app-contextual-help cssClass="pl-3">
+      <app-contextual-help class="help">
         <ng-content select="[appContextualContent]"></ng-content>
       </app-contextual-help>
     </ng-container>
@@ -17,7 +16,8 @@
       <button mat-icon-button
               type="button"
               (click)="onEvent()">
-        <mat-icon>{{ icon }}</mat-icon>
+        <mat-icon [matTooltip]="tooltipMessage"
+                  matTooltipPosition="after">{{ icon }}</mat-icon>
       </button>
     </ng-template>
 

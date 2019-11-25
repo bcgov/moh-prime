@@ -6,6 +6,7 @@ import { Config } from '@config/config.model';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { IEnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+import { EnrolleeClassification } from '@shared/enums/enrollee-classification.enum';
 import { Address } from '@enrolment/shared/models/address.model';
 
 export class MockEnrolmentService implements IEnrolmentService {
@@ -77,7 +78,8 @@ export class MockEnrolmentService implements IEnrolmentService {
           }
         ]
       },
-      availableStatuses: null
+      availableStatuses: null,
+      enrolleeClassification: EnrolleeClassification.MOA,
     });
   }
 

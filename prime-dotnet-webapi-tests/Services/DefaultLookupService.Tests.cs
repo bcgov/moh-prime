@@ -33,14 +33,6 @@ namespace PrimeTests.Services
                 Assert.Equal(5, results.Count);
             }
 
-            // OrganizationName Lookups
-            {
-                var results = await _service.GetLookupsAsync<short, OrganizationName>();
-                Assert.NotNull(results);
-                Assert.NotEmpty(results);
-                Assert.Equal(2, results.Count);
-            }
-
             // OrganizationType Lookups
             {
                 var results = await _service.GetLookupsAsync<short, OrganizationType>();
