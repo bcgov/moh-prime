@@ -9,7 +9,10 @@ import { Config } from '@config/config.model';
 import { PrimeHttpResponse } from '@core/models/prime-http-response.model';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
-import { Address } from '../models/address.model';
+import { Address } from '@enrolment/shared/models/address.model';
+import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
+import { Job } from '@enrolment/shared/models/job.model';
+import { Organization } from '@enrolment/shared/models/organization.model';
 import { EnrolmentCertificateAccessToken } from '@shared/models/enrolment-certificate-access-token.model';
 
 @Injectable({
@@ -104,6 +107,37 @@ export class EnrolmentResource {
       enrolment.enrollee.mailingAddress.postal = enrolment.enrollee.mailingAddress.postal.toUpperCase();
     }
 
+    enrolment.certifications = this.removeIncompleteCollegeCertifications(enrolment.certifications);
+    enrolment.jobs = this.removeIncompleteJobs(enrolment.jobs);
+    enrolment.organizations = this.removeIncompleteOrganizations(enrolment.organizations);
+
     return enrolment;
+  }
+
+  // ---
+  // Sanitizer Helpers
+  // ---
+
+  private removeIncompleteCollegeCertifications(certifications: CollegeCertification[]) {
+    return certifications.filter((certification: CollegeCertification) =>
+      this.collegeCertificationIsIncomplete(certification)
+    );
+  }
+
+  private collegeCertificationIsIncomplete(certification: CollegeCertification): boolean {
+    const whitelist = ['practiceCode'];
+
+    return Object.keys(certification)
+      .every((key: string) =>
+        (!whitelist.includes(key) && !certification[key]) ? certification[key] : true
+      );
+  }
+
+  private removeIncompleteJobs(jobs: Job[]) {
+    return jobs.filter((job: Job) => job.title !== 'None');
+  }
+
+  private removeIncompleteOrganizations(organizations: Organization[]) {
+    return organizations.filter((organization: Organization) => organization.organizationTypeCode);
   }
 }

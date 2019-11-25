@@ -4,10 +4,13 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { AccessAgreementComponent } from './access-agreement.component';
+import { MoaAccessAgreementComponent } from './components/moa-access-agreement/moa-access-agreement.component';
+import { RuAccessAgreementComponent } from './components/ru-access-agreement/ru-access-agreement.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
 import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
+import { AlertComponent } from '@shared/components/alert/alert.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
 
@@ -27,9 +30,12 @@ describe('AccessAgreementComponent', () => {
           RouterTestingModule
         ],
         declarations: [
+          AlertComponent,
           AccessAgreementComponent,
+          MoaAccessAgreementComponent,
           PageHeaderComponent,
-          PageSubheaderComponent
+          PageSubheaderComponent,
+          RuAccessAgreementComponent
         ],
         providers: [
           {

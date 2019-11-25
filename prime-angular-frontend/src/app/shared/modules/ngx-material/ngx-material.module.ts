@@ -4,9 +4,10 @@ import {
   MatDatepickerModule, MatDialogModule, MatIconModule, MatInputModule,
   MatListModule, MatMenuModule, MatSelectModule, MatSidenavModule,
   MatSlideToggleModule, MatSnackBarModule, MatTableModule, MatToolbarModule,
-  MatTooltipModule, MatPaginatorModule, MatRadioModule,
-  DateAdapter, MAT_DATE_LOCALE, MAT_DIALOG_DEFAULT_OPTIONS,
-  MatFormFieldDefaultOptions, MAT_FORM_FIELD_DEFAULT_OPTIONS, MAT_DATE_FORMATS
+  MatTooltipModule, MatPaginatorModule, MatRadioModule, DateAdapter,
+  MAT_DATE_LOCALE, MAT_DIALOG_DEFAULT_OPTIONS, MAT_DATE_FORMATS,
+  MatFormFieldDefaultOptions, MAT_FORM_FIELD_DEFAULT_OPTIONS,
+  MAT_LABEL_GLOBAL_OPTIONS
 } from '@angular/material';
 import { MomentDateAdapter, MatMomentDateModule } from '@angular/material-moment-adapter';
 
@@ -67,6 +68,10 @@ const matFormFieldCustomOptions: MatFormFieldDefaultOptions = {
         width: '500px',
         hasBackdrop: true
       }
+    },
+    {
+      provide: MAT_LABEL_GLOBAL_OPTIONS,
+      useValue: { float: 'always' }
     },
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,

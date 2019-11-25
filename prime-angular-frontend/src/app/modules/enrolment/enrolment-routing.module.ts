@@ -6,7 +6,7 @@ import { CanDeactivateFormGuard } from '@core/guards/can-deactivate-form.guard';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 
-import { EnrolmentRoutes } from './enrolent.routes';
+import { EnrolmentRoutes } from './enrolment.routes';
 import { EnrolleeGuard } from './shared/guards/enrollee.guard';
 import { EnrolmentGuard } from './shared/guards/enrolment.guard';
 
@@ -20,6 +20,7 @@ import { ReviewComponent } from './pages/review/review.component';
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 import { AccessAgreementComponent } from './pages/access-agreement/access-agreement.component';
 import { SummaryComponent } from './pages/summary/summary.component';
+import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
 
 const routes: Routes = [
   {
@@ -32,6 +33,10 @@ const routes: Routes = [
     ],
     resolve: [ConfigResolver],
     children: [
+      {
+        path: EnrolmentRoutes.COLLECTION_NOTICE,
+        component: CollectionNoticeComponent,
+      },
       {
         path: EnrolmentRoutes.PROFILE,
         component: ProfileComponent,

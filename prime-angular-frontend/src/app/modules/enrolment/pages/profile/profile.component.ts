@@ -14,7 +14,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { AuthService } from '@auth/shared/services/auth.service';
-import { EnrolmentRoutes } from '@enrolment/enrolent.routes';
+import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { FormUtilsService } from '@enrolment/shared/services/form-utils.service';
@@ -192,7 +192,6 @@ export class ProfileComponent implements OnInit {
       this.form.get('preferredLastName').value
     );
 
-    // TODO update to use valueChanges by forcing value changes when visible
     // Show mailing address if it exists
     this.hasMailingAddress = !!(
       this.mailingAddress.get('countryCode').value ||

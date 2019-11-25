@@ -1,4 +1,10 @@
-.icon {
+.content {
+  // Vertically align content with icon
+  margin-top: 1px;
+  margin-bottom: 0;
+}
+
+.large {
   // Page refreshes cause mat-icon to take precendence
   font-size: 3rem !important;
 }

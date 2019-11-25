@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators, FormGroup, FormArray, FormControl } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
 
 import { FormControlValidators } from '@shared/validators/form-control.validators';
 import { Enrolment } from '@shared/models/enrolment.model';
@@ -17,7 +17,6 @@ export class EnrolmentStateService {
   // TODO make into BehaviourSubject or asObservable, which would make it immutable
   public profileForm: FormGroup;
   public regulatoryForm: FormGroup;
-  public collegeCertificationForm: FormGroup;
   public deviceProviderForm: FormGroup;
   public jobsForm: FormGroup;
   public selfDeclarationForm: FormGroup;
@@ -207,13 +206,11 @@ export class EnrolmentStateService {
 
   public buildCollegeCertificationForm(): FormGroup {
     return this.fb.group({
-      id: [null, []],
-      collegeCode: [null, []],
-      licenseNumber: [null, [
-        // Validators.required,
-        FormControlValidators.numeric,
-        FormControlValidators.requiredLength(5)
-      ]],
+      // Force selection of "None" on new certifications
+      collegeCode: ['', []],
+      // Validators are applied at the component-level when
+      // fields are made visible to allow empty submissions
+      licenseNumber: [null, []],
       licenseCode: [null, []],
       renewalDate: [null, []],
       practiceCode: [null, []]
@@ -238,7 +235,6 @@ export class EnrolmentStateService {
 
   public buildJobForm(value: string = null): FormGroup {
     return this.fb.group({
-      id: [null, []],
       title: [value, []]
     });
   }
@@ -264,7 +260,6 @@ export class EnrolmentStateService {
 
   public buildOrganizationForm(code: number = null): FormGroup {
     return this.fb.group({
-      id: [null, []],
       organizationTypeCode: [code, [Validators.required]]
     });
   }

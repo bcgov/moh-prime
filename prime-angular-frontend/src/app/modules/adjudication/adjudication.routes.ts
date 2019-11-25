@@ -1,6 +1,4 @@
-import { BaseRoute } from '@core/models/base-route';
-
-export class AdjudicationRoutes extends BaseRoute {
+export class AdjudicationRoutes {
   public static ADJUDICATION = 'adjudication';
   public static ENROLMENTS = 'enrolments';
 
