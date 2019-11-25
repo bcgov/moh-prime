@@ -6,10 +6,18 @@
       <app-page-header>Access Agreement</app-page-header>
 
       <ng-container *ngIf="currentPage > 0; else preamble">
-        <!-- <app-moa-access-agreement [currentPage]="currentPage"
-                                      (changed)="onPageChange($event)"></app-moa-access-agreement> -->
-        <app-ru-access-agreement [currentPage]="currentPage"
-                                 (changed)="onPageChange($event)"></app-ru-access-agreement>
+
+        <ng-container *ngIf="enrolment.enrolleeClassification === EnrolleeClassification.MOA">
+          <app-moa-access-agreement [currentPage]="currentPage"
+                                    (changed)="onPageChange($event)"></app-moa-access-agreement>
+        </ng-container>
+        <ng-container *ngIf="enrolment.enrolleeClassification === EnrolleeClassification.RU">
+          <app-ru-access-agreement [currentPage]="currentPage"
+                                   (changed)="onPageChange($event)"></app-ru-access-agreement>
+        </ng-container>
+
+
+
       </ng-container>
 
       <ng-template #preamble>

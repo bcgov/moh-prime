@@ -646,3 +646,8 @@
   </ol>
 
 </ng-template>
+
+<div *ngIf="currentPage > 0"
+     class="text-center">
+  Page {{ currentPage }} of {{ pages?.length }}
+</div>

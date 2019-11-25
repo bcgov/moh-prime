@@ -67,5 +67,17 @@ namespace Prime.Models
 
         [NotMapped]
         public ICollection<Status> AvailableStatuses { get; set; }
+
+        [NotMapped]
+        public string EnrolleeClassification { get {
+                ICollection<EnrolmentStatusReason> enrolmentStatusReasons = this.CurrentStatus?.EnrolmentStatusReasons;
+                if(enrolmentStatusReasons != null && enrolmentStatusReasons.Count > 0) {
+                    return enrolmentStatusReasons.Any(r => r.StatusReason?.Code == 1) ? PrimeConstants.PRIME_MOA : PrimeConstants.PRIME_RU; 
+                } else {
+                    return null;
+                }
+            } 
+        } 
+                  
     }
 }
