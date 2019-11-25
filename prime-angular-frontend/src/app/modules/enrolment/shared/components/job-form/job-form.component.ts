@@ -17,14 +17,16 @@ export class JobFormComponent implements OnInit {
   @Input() public index: number;
   @Input() public total: number;
   @Input() public jobNames: BehaviorSubject<Config<number>[]>;
+  @Input() public allowDefaultOption: boolean;
+  @Input() public defaultOptionLabel: string;
   @Output() public remove: EventEmitter<number>;
 
-  public defaultJobOptionLabel: string;
   public filteredJobNames: Observable<Config<number>[]>;
 
   constructor() {
     this.remove = new EventEmitter<number>();
-    this.defaultJobOptionLabel = 'None';
+    this.allowDefaultOption = false;
+    this.defaultOptionLabel = '';
   }
 
   public get title(): FormControl {
@@ -36,16 +38,23 @@ export class JobFormComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.filteredJobNames = combineLatest(
+    this.filteredJobNames = this.initAutoComplete();
+  }
+
+  private initAutoComplete() {
+    return combineLatest(
       this.jobNames // Initial jobs passed through bindings
         .asObservable() // Prevent accidentally affecting parent observable
         .pipe(switchMap((jobNames: Config<number>[]) => {
-          const copy = [...jobNames];
+          const copy = [...jobNames]; // Prevent changes by reference
           // Add the default option  when it doesn't exist
           // to the list so it can be filtered out
-          if (!copy.some((jobName: Config<number>) => jobName.name === this.defaultJobOptionLabel)) {
+          if (
+            this.allowDefaultOption &&
+            !copy.some((jobName: Config<number>) => jobName.name === this.defaultOptionLabel)
+          ) {
             // Default option code is not used since it's a free-form field
-            copy.unshift(new Config<number>(null, this.defaultJobOptionLabel));
+            copy.unshift(new Config<number>(null, this.defaultOptionLabel));
           }
           return of(copy);
         })),
@@ -61,16 +70,16 @@ export class JobFormComponent implements OnInit {
    * @description
    * Auto-complete filtering of the available jobs.
    *
-   * @param jobNames to be filtered
+   * @param availableJobNames to be filtered
    * @param currentJob predicate for filtering
    */
-  private filterJobNames(jobNames: Config<number>[], currentJob: Job): Config<number>[] {
+  private filterJobNames(availableJobNames: Config<number>[], currentJob: Job): Config<number>[] {
     // Default provide the entire list of jobs
-    let filteredJobNames = jobNames;
-    const currentJobTitle = (currentJob) ? currentJob.title.toLowerCase().trim() : null;
+    let filteredJobNames = availableJobNames;
+    const currentJobTitle = (currentJob) ? currentJob.title.toLowerCase().trim() : '';
 
-    if (jobNames.length && currentJobTitle) {
-      // Apply auto-complete filtering
+    // Apply auto-complete filtering
+    if (availableJobNames.length && currentJobTitle && currentJobTitle !== this.defaultOptionLabel.toLocaleLowerCase()) {
       filteredJobNames = filteredJobNames
         .filter((jobName: Config<number>) => jobName.name.toLowerCase().includes(currentJobTitle));
     }

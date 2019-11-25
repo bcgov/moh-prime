@@ -99,7 +99,6 @@ export class RegulatoryComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.createFormInstance();
-    // Initialize form changes before patching
     this.initForm();
   }
 

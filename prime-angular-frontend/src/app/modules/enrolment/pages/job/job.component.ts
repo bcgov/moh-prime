@@ -27,6 +27,8 @@ export class JobComponent implements OnInit, OnDestroy {
   public form: FormGroup;
   public jobNames: Config<number>[];
   public filteredJobNames: BehaviorSubject<Config<number>[]>;
+  public allowDefaultOption: boolean;
+  public defaultOptionLabel: string;
   public EnrolmentRoutes = EnrolmentRoutes;
 
   constructor(
@@ -42,6 +44,8 @@ export class JobComponent implements OnInit, OnDestroy {
   ) {
     this.jobNames = this.configService.jobNames;
     this.filteredJobNames = new BehaviorSubject<Config<number>[]>(this.jobNames);
+    this.allowDefaultOption = true;
+    this.defaultOptionLabel = 'None';
   }
 
   public get jobs(): FormArray {
@@ -54,6 +58,10 @@ export class JobComponent implements OnInit, OnDestroy {
       this.removeCollegeCertifications();
 
       const payload = this.enrolmentStateService.enrolment;
+      // Remove the default so not proliferated outside the component
+      payload.jobs = payload.jobs
+        .map((job: Job) => (job.title === this.defaultOptionLabel) ? { ...job, title: '' } : job);
+
       this.busy = this.enrolmentResource.updateEnrolment(payload)
         .subscribe(
           () => {
@@ -71,8 +79,11 @@ export class JobComponent implements OnInit, OnDestroy {
     }
   }
 
-  public addJob(value: string = 'None') {
-    const job = this.enrolmentStateService.buildJobForm(value);
+  public addJob(value: string = '') {
+    const defaultValue = (value)
+      ? value : (this.allowDefaultOption)
+        ? this.defaultOptionLabel : '';
+    const job = this.enrolmentStateService.buildJobForm(defaultValue);
     this.jobs.push(job);
   }
 
@@ -92,7 +103,6 @@ export class JobComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.createFormInstance();
-    // Initialize form changes before patching
     this.initForm();
   }
 
@@ -105,6 +115,10 @@ export class JobComponent implements OnInit, OnDestroy {
   }
 
   private initForm() {
+    // Initialize listeners before patching
+    this.form.valueChanges
+      .subscribe(({ jobs }: { jobs: Job[] }) => this.filterJobNames(jobs));
+
     this.enrolmentStateService.enrolment = this.enrolmentService.enrolment;
 
     // Always have at least one job ready for
@@ -112,9 +126,6 @@ export class JobComponent implements OnInit, OnDestroy {
     if (!this.jobs.length) {
       this.addJob();
     }
-
-    this.form.valueChanges
-      .subscribe(({ jobs }: { jobs: Job[] }) => this.filterJobNames(jobs));
   }
 
   private filterJobNames(jobs: Job[]) {
@@ -124,8 +135,6 @@ export class JobComponent implements OnInit, OnDestroy {
     const filteredJobNames = this.jobNames
       .filter((c: Config<number>) => !selectedJobNames.includes(c.name));
 
-    console.log('FILTER', filteredJobNames);
-
     this.filteredJobNames.next(filteredJobNames);
   }
 
@@ -134,8 +143,8 @@ export class JobComponent implements OnInit, OnDestroy {
       .forEach((control: FormGroup, index: number) => {
         const value = control.get('title').value;
 
-        // Remove if job is "None" or the group is invalid
-        if (!value || value === 'None' || control.invalid) {
+        // Remove when empty, default option, or group is invalid
+        if (!value || value === this.defaultOptionLabel || control.invalid) {
           this.removeJob(index);
         }
       });

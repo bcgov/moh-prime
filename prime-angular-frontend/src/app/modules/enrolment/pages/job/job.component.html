@@ -25,6 +25,8 @@
                         [index]="i"
                         [total]="jobs.controls.length"
                         [jobNames]="filteredJobNames"
+                        [allowDefaultOption]="allowDefaultOption"
+                        [defaultOptionLabel]="defaultOptionLabel"
                         (remove)="removeJob($event)"></app-job-form>
 
         </ng-container>

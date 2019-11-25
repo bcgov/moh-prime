@@ -235,7 +235,7 @@ export class EnrolmentStateService {
 
   public buildJobForm(value: string = null): FormGroup {
     return this.fb.group({
-      title: [value, []]
+      title: [value, [Validators.required]]
     });
   }
 
