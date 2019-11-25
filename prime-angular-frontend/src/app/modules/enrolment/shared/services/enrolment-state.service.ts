@@ -166,17 +166,17 @@ export class EnrolmentStateService {
       firstName: [{ value: null, disabled: true }, [Validators.required]],
       middleName: [{ value: null, disabled: false }, []],
       lastName: [{ value: null, disabled: true }, [Validators.required]],
-      dateOfBirth: [{ value: null, disabled: false }, [Validators.required]],
+      dateOfBirth: [{ value: null, disabled: true }, [Validators.required]],
       preferredFirstName: [null, []],
       preferredMiddleName: [null, []],
       preferredLastName: [null, []],
       physicalAddress: this.fb.group({
-        countryCode: [{ value: null, disabled: false }, [Validators.required]],
-        provinceCode: [{ value: null, disabled: false }, [Validators.required]],
-        street: [{ value: null, disabled: false }, [Validators.required]],
-        street2: [{ value: null, disabled: false }, []],
-        city: [{ value: null, disabled: false }, [Validators.required]],
-        postal: [{ value: null, disabled: false }, [Validators.required]]
+        countryCode: [{ value: null, disabled: true }, [Validators.required]],
+        provinceCode: [{ value: null, disabled: true }, [Validators.required]],
+        street: [{ value: null, disabled: true }, [Validators.required]],
+        street2: [{ value: null, disabled: true }, []],
+        city: [{ value: null, disabled: true }, [Validators.required]],
+        postal: [{ value: null, disabled: true }, [Validators.required]]
       }),
       mailingAddress: this.fb.group({
         countryCode: [{ value: null, disabled: false }, []],
