@@ -73,8 +73,10 @@ export class SelfDeclarationComponent implements OnInit {
   }
 
   public onSubmit() {
+
+    this.allRadioButtonsSelected() ? this.error = false : this.error = true;
+
     if (this.form.valid) {
-      this.error = false;
       const payload = this.enrolmentStateService.enrolment;
       this.busy = this.enrolmentResource.updateEnrolment(payload)
         .subscribe(
@@ -88,7 +90,6 @@ export class SelfDeclarationComponent implements OnInit {
             this.logger.error('[Enrolment] SelfDeclaration::onSubmit error has occurred: ', error);
           });
     } else {
-      this.error = true;
       this.form.markAllAsTouched();
     }
   }
@@ -141,5 +142,12 @@ export class SelfDeclarationComponent implements OnInit {
     } else {
       this.formUtilsService.setValidators(control, [Validators.required]);
     }
+  }
+
+  private allRadioButtonsSelected() {
+    return this.hasConviction.value !== null
+      && this.hasRegistrationSuspended.value !== null
+      && this.hasDisciplinaryAction.value !== null
+      && this.hasPharmaNetSuspended.value !== null;
   }
 }
