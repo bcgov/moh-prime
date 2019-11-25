@@ -28,7 +28,6 @@ export class AuthorizationRedirectGuard extends BaseGuard {
    */
   protected canAccess(authenticated: boolean, roles: string[], routePath: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
-
       if (!authenticated) {
         // Allow route to resolve for user to authenticate
         return resolve(true);
