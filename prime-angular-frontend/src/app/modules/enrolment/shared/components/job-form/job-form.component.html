@@ -9,7 +9,8 @@
                type="text"
                placeholder="Job Title"
                formControlName="title"
-               [matAutocomplete]="auto">
+               [matAutocomplete]="auto"
+               (focus)="removeNone(input)">
         <mat-autocomplete #auto="matAutocomplete"
                           autoActiveFirstOption>
           <mat-option *ngFor="let jobName of filteredJobNames | async"
@@ -17,6 +18,7 @@
             {{ jobName.name }}
           </mat-option>
         </mat-autocomplete>
+        <mat-error>Required</mat-error>
       </mat-form-field>
       <ng-container appContextualContent>
         A job title assists with determining your access to PharmaNet

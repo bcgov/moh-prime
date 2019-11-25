@@ -21,12 +21,14 @@ export class JobFormComponent implements OnInit {
   @Input() public defaultOptionLabel: string;
   @Output() public remove: EventEmitter<number>;
 
+  public allowRemoveNone: boolean;
   public filteredJobNames: Observable<Config<number>[]>;
 
   constructor() {
     this.remove = new EventEmitter<number>();
     this.allowDefaultOption = false;
     this.defaultOptionLabel = '';
+    this.allowRemoveNone = true;
   }
 
   public get title(): FormControl {
@@ -39,6 +41,13 @@ export class JobFormComponent implements OnInit {
 
   public ngOnInit() {
     this.filteredJobNames = this.initAutoComplete();
+  }
+
+  public removeNone(input: HTMLFormElement) {
+    if (this.allowRemoveNone && input.value === this.defaultOptionLabel) {
+      input.value = '';
+      this.allowRemoveNone = false;
+    }
   }
 
   private initAutoComplete() {
