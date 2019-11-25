@@ -114,7 +114,5 @@ export class AccessAgreementComponent implements OnInit {
 
   public ngOnInit() {
     this.enrolment = this.enrolmentService.enrolment;
-    console.log(this.enrolment);
-    console.log(EnrolleeClassification.MOA);
   }
 }
