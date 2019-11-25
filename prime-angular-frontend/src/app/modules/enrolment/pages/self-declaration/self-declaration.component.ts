@@ -90,7 +90,7 @@ export class SelfDeclarationComponent implements OnInit {
     }
   }
 
-  public onBack() {
+  public handleBack() {
     const currentEnrolment = this.enrolmentStateService.enrolment;
     if (currentEnrolment.certifications.length === 0) {
       this.router.navigate([EnrolmentRoutes.JOB], { relativeTo: this.route.parent });

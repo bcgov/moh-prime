@@ -1,5 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { EnrolmentRoutes } from '@enrolment/enrolent.routes';
+
 
 @Component({
   selector: 'app-page-footer',
@@ -9,19 +10,26 @@ import { EnrolmentRoutes } from '@enrolment/enrolent.routes';
 export class PageFooterComponent implements OnInit {
 
   @Input() backRoute: EnrolmentRoutes;
-  @Input() onClick;
   @Input() hideBack: boolean;
+  @Input() hasBackAction: boolean;
+
+  @Output() handleBack: EventEmitter<void>;
 
   public justifyContent = 'between';
 
-  constructor() { }
+  constructor() {
+    this.handleBack = new EventEmitter<void>();
+  }
+
+  handleBackClick() {
+    this.handleBack.emit();
+  }
 
   public getJustifyContent(justifyContent: string) {
     return `justify-content${justifyContent}`;
   }
 
   ngOnInit() {
-    console.log(this.hideBack);
     if (this.hideBack === true) {
       this.justifyContent = 'end';
     }

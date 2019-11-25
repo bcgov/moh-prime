@@ -147,21 +147,9 @@
       </div>
     </div>
 
-    <div class="row justify-content-between">
-      <div class="col pt-4">
+    <app-page-footer [hasBackAction]="true"
+                     (handleBack)="handleBack($event)"></app-page-footer>
 
-      <button mat-stroked-button
-              type="button"
-              (click)="onBack()">Back</button>
-
-      </div>
-      <div class="col pt-4 text-right">
-
-        <button mat-raised-button
-                color="primary">Save and Continue</button>
-
-      </div>
-    </div>
 
   </form>
 
