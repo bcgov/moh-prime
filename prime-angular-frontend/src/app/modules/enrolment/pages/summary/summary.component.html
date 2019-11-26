@@ -21,7 +21,7 @@
         </dd>
 
         <ng-container
-          *ngIf="enrolment.enrollee.preferredFirstName || enrolment.enrollee.preferredMiddleName || enrolment.enrollee.preferredLastName">
+                      *ngIf="enrolment.enrollee.preferredFirstName || enrolment.enrollee.preferredMiddleName || enrolment.enrollee.preferredLastName">
           <dt class="col-sm-12 col-md-6 py-1">Preferred Name</dt>
           <dd class="col-sm-12 col-md-6 py-1">
             {{ enrolment | enrolment:'preferredName' }} &nbsp;
@@ -58,7 +58,9 @@
         <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.licensePlate }}&nbsp;</dd>
       </dl>
 
-      <button mat-raised-button color="primary" (click)="generateProvisionerLink()">Generate Provisioner Link</button>
+      <button mat-raised-button
+              color="primary"
+              (click)="generateProvisionerLink()">Generate Provisioner Link</button>
       <app-contextual-help>
         <ng-container appContextualContent>
           These links to your enrolment information can be given to provisioners to facilitate your access into
