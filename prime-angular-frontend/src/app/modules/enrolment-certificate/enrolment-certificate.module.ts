@@ -13,7 +13,6 @@ import { EnrolmentCertificateComponent } from './shared/components/enrolment-cer
     EnrolmentCertificateComponent
   ],
   imports: [
-    CommonModule,
     SharedModule,
     EnrolmentCertificateRoutingModule
   ]
