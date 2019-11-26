@@ -6,11 +6,6 @@
 
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>Device Provider Information</ng-container>
-      <!-- <ng-container appContextualTitle> TODO does this need a title</ng-container> -->
-      <ng-container appContextualContent>
-        <!-- TODO text needs to be updated -->
-        Indicating you are a device provider designates the position you hold when accessing PharmaNet.
-      </ng-container>
     </app-page-subheader>
 
     <div class="row">
@@ -21,24 +16,29 @@
           <input matInput
                  placeholder="Device Provider Number"
                  formControlName="deviceProviderNumber">
-          <!-- TODO <mat-error *ngIf="deviceProviderNumber.hasError('numeric')">Must be a number</mat-error> -->
-          <mat-error *ngIf="deviceProviderNumber.hasError('length')">Must be a 5 digit number</mat-error>
+          <mat-error *ngIf="deviceProviderNumber.hasError('length') || deviceProviderNumber.hasError('numeric')">
+            Must be a 5 digit number
+          </mat-error>
         </mat-form-field>
 
       </div>
     </div>
 
-    <p>Are you an insulin pump provider?</p>
+    <ng-container *ngIf="deviceProviderNumber.value">
 
-    <mat-radio-group aria-labelledby="example-radio-group-label"
-                     class="example-radio-group"
-                     formControlName="isInsulinPumpProvider">
-      <mat-radio-button class="mr-4"
-                        *ngFor="let decision of decisions"
-                        [value]="decision.code">
-        {{ decision.name }}
-      </mat-radio-button>
-    </mat-radio-group>
+      <p>Are you an insulin pump provider?</p>
+
+      <mat-radio-group aria-labelledby="example-radio-group-label"
+                       class="example-radio-group"
+                       formControlName="isInsulinPumpProvider">
+        <mat-radio-button class="mr-4"
+                          *ngFor="let decision of decisions"
+                          [value]="decision.code">
+          {{ decision.name }}
+        </mat-radio-button>
+      </mat-radio-group>
+
+    </ng-container>
 
     <app-page-footer [backRoute]="EnrolmentRoutes.REGULATORY"></app-page-footer>
 

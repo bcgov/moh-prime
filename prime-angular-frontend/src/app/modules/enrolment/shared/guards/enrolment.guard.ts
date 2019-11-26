@@ -10,7 +10,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
-import { EnrolmentRoutes } from '@enrolment/enrolent.routes';
+import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
@@ -51,6 +51,13 @@ export class EnrolmentGuard extends BaseGuard {
    * Determine the route destination based on the enrolment status.
    */
   private routeDestination(routePath: string, enrolment: Enrolment) {
+    // On login the enrollees will always be redirected to
+    // the collection notice
+    if (routePath.includes(EnrolmentRoutes.COLLECTION_NOTICE)) {
+      return true;
+    }
+
+    // Otherwise, routes are directed based on enrolment status
     if (!enrolment) {
       return this.navigate(routePath, EnrolmentRoutes.PROFILE);
     } else if (enrolment) {

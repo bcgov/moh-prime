@@ -12,31 +12,35 @@ import { OrganizationComponent } from './pages/organization/organization.compone
 import { ReviewComponent } from './pages/review/review.component';
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 import { AccessAgreementComponent } from './pages/access-agreement/access-agreement.component';
-import { SummaryComponent } from './pages/summary/summary.component';
-
-import { CollegeCertificationsComponent } from './shared/components/college-certifications/college-certifications.component';
+import { PageRefDirective } from './pages/access-agreement/page-ref.directive';
 import { MoaAccessAgreementComponent } from './pages/access-agreement/components/moa-access-agreement/moa-access-agreement.component';
 import { RuAccessAgreementComponent } from './pages/access-agreement/components/ru-access-agreement/ru-access-agreement.component';
-import { PageRefDirective } from './pages/access-agreement/page-ref.directive';
 import { PageFooterComponent } from './shared/components/page-footer/page-footer.component';
+import { SummaryComponent } from './pages/summary/summary.component';
+import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
+
+import { CollegeCertificationFormComponent } from './shared/components/college-certification-form/college-certification-form.component';
+import { JobFormComponent } from './shared/components/job-form/job-form.component';
 
 @NgModule({
   declarations: [
     ProfileComponent,
     RegulatoryComponent,
-    AccessAgreementComponent,
     DeviceProviderComponent,
     JobComponent,
     SelfDeclarationComponent,
     OrganizationComponent,
     ReviewComponent,
     ConfirmationComponent,
-    SummaryComponent,
-    CollegeCertificationsComponent,
+    AccessAgreementComponent,
     MoaAccessAgreementComponent,
     RuAccessAgreementComponent,
-    PageRefDirective,
     PageFooterComponent
+    PageRefDirective,
+    SummaryComponent,
+    CollegeCertificationFormComponent,
+    JobFormComponent,
+    CollectionNoticeComponent
   ],
   imports: [
     SharedModule,

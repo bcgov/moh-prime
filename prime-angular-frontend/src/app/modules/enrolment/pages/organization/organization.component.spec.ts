@@ -13,6 +13,7 @@ import { ConfigService } from '@config/config.service';
 import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
 import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
+import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
@@ -34,6 +35,7 @@ describe('OrganizationComponent', () => {
           RouterTestingModule
         ],
         declarations: [
+          FormIconGroupComponent,
           OrganizationComponent,
           PageHeaderComponent,
           PageSubheaderComponent

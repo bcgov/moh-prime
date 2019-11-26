@@ -1,6 +1,4 @@
-import { BaseRoute } from '@core/models/base-route';
-
-export class AppRoutes extends BaseRoute {
+export class AppRoutes {
   public static DENIED = 'denied';
   public static MAINTENANCE = 'maintenance';
   public static PAGE_NOT_FOUND = '**';

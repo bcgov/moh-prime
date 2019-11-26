@@ -17,6 +17,7 @@ namespace Prime.Models
         [JsonIgnore]
         public Enrolment Enrolment { get; set; }
 
+        [Required]
         public short OrganizationTypeCode { get; set; }
 
         [JsonIgnore]
