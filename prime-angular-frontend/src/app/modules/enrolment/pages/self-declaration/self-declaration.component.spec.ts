@@ -14,6 +14,7 @@ import { AlertComponent } from '@shared/components/alert/alert.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { PageFooterComponent } from '@enrolment/shared/components/page-footer/page-footer.component';
 
 describe('SelfDeclarationComponent', () => {
   let component: SelfDeclarationComponent;
@@ -34,7 +35,8 @@ describe('SelfDeclarationComponent', () => {
           AlertComponent,
           PageHeaderComponent,
           PageSubheaderComponent,
-          SelfDeclarationComponent
+          SelfDeclarationComponent,
+          PageFooterComponent
         ],
         providers: [
           {

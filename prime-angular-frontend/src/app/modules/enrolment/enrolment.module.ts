@@ -35,7 +35,7 @@ import { JobFormComponent } from './shared/components/job-form/job-form.componen
     AccessAgreementComponent,
     MoaAccessAgreementComponent,
     RuAccessAgreementComponent,
-    PageFooterComponent
+    PageFooterComponent,
     PageRefDirective,
     SummaryComponent,
     CollegeCertificationFormComponent,

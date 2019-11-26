@@ -17,6 +17,7 @@ import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { PageFooterComponent } from '@enrolment/shared/components/page-footer/page-footer.component';
 
 describe('OrganizationComponent', () => {
   let component: OrganizationComponent;
@@ -38,7 +39,8 @@ describe('OrganizationComponent', () => {
           FormIconGroupComponent,
           OrganizationComponent,
           PageHeaderComponent,
-          PageSubheaderComponent
+          PageSubheaderComponent,
+          PageFooterComponent
         ],
         providers: [
           {

@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PageFooterComponent } from './page-footer.component';
+import { RouterTestingModule } from '@angular/router/testing';
+
+
 
 describe('PageFooterComponent', () => {
   let component: PageFooterComponent;
@@ -8,9 +11,10 @@ describe('PageFooterComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PageFooterComponent ]
+      imports: [RouterTestingModule],
+      declarations: [PageFooterComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
