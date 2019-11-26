@@ -47,11 +47,12 @@ const routes: Routes = [
         component: RegulatoryComponent,
         canDeactivate: [CanDeactivateFormGuard]
       },
-      {
-        path: EnrolmentRoutes.DEVICE_PROVIDER,
-        component: DeviceProviderComponent,
-        canDeactivate: [CanDeactivateFormGuard]
-      },
+      // TODO Remove Device Provider link until feature is needed
+      // {
+      //   path: EnrolmentRoutes.DEVICE_PROVIDER,
+      //   component: DeviceProviderComponent,
+      //   canDeactivate: [CanDeactivateFormGuard]
+      // },
       {
         path: EnrolmentRoutes.JOB,
         component: JobComponent,
