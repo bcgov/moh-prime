@@ -11,9 +11,10 @@ import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { EnrolmentRoutes } from '@enrolment/enrolent.routes';
-import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 
 @Component({
   selector: 'app-review',
@@ -29,8 +30,9 @@ export class ReviewComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private enrolmentStateService: EnrolmentStateService,
+    private enrolmentService: EnrolmentService,
     private enrolmentResource: EnrolmentResource,
+    private enrolmentStateService: EnrolmentStateService,
     private toastService: ToastService,
     private dialog: MatDialog,
     private logger: LoggerService
@@ -65,7 +67,6 @@ export class ReviewComponent implements OnInit {
             this.logger.error('[Enrolment] Review::onSubmit error has occurred: ', error);
           });
     } else {
-      // TODO indicate where validation failed in the review to prompt user edits
       console.log('PROFILE', this.enrolmentStateService.isProfileInfoValid());
       console.log('REGULATORY', this.enrolmentStateService.isRegulatoryValid());
       console.log('JOBS', this.enrolmentStateService.isJobsValid());
@@ -79,8 +80,9 @@ export class ReviewComponent implements OnInit {
   }
 
   public showYesNo(declared: boolean) {
-    return (declared === null) ? 'N/A'
-      : (declared) ? 'Yes' : 'No';
+    return (declared === null)
+      ? 'N/A' : (declared)
+        ? 'Yes' : 'No';
   }
 
   public redirect(route: string) {
@@ -88,16 +90,8 @@ export class ReviewComponent implements OnInit {
   }
 
   public ngOnInit() {
-    // TODO detect enrolment already exists and don't reload
-    // TODO apply guard if no enrolment is found to redirect to profile
-    this.busy = this.enrolmentResource.enrolments()
-      .pipe(
-        map((enrolment: Enrolment) => this.enrolment = enrolment)
-      )
-      .subscribe((enrolment: Enrolment) => {
-        if (enrolment) {
-          this.enrolmentStateService.enrolment = enrolment;
-        }
-      });
+    const enrolment = this.enrolmentService.enrolment;
+    this.enrolment = enrolment;
+    this.enrolmentStateService.enrolment = enrolment;
   }
 }

@@ -13,7 +13,9 @@ import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.mod
 import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 import { AddressComponent } from '@shared/components/forms/address/address.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { EnrolmentStatusReasonsComponent } from '@shared/components/dialogs/content/enrolment-status-reasons/enrolment-status-reasons.component';
+import {
+  EnrolmentStatusReasonsComponent
+} from '@shared/components/dialogs/content/enrolment-status-reasons/enrolment-status-reasons.component';
 import { EnrolmentPipe } from '@shared/pipes/enrolment.pipe';
 import { FirstKeyPipe } from '@shared/pipes/first-key.pipe';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
@@ -27,6 +29,8 @@ import { PageSubheaderComponent } from './components/page-subheader/page-subhead
 import { PageSubheaderTitleDirective } from '@shared/components/page-subheader/page-subheader-title.directive';
 import { PageSubheaderSummaryDirective } from '@shared/components/page-subheader/page-subheader-summary.directive';
 import { DialogContentDirective } from '@shared/components/dialogs/dialog-content.directive';
+import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
+import { AlertComponent } from '@shared/components/alert/alert.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +50,9 @@ import { DialogContentDirective } from '@shared/components/dialogs/dialog-conten
     PageSubheaderComponent,
     PageSubheaderTitleDirective,
     PageSubheaderSummaryDirective,
-    DialogContentDirective
+    DialogContentDirective,
+    FormIconGroupComponent,
+    AlertComponent
   ],
   imports: [
     CommonModule,
@@ -82,7 +88,9 @@ import { DialogContentDirective } from '@shared/components/dialogs/dialog-conten
     PageSubheaderComponent,
     PageSubheaderTitleDirective,
     PageSubheaderSummaryDirective,
-    DialogContentDirective
+    DialogContentDirective,
+    FormIconGroupComponent,
+    AlertComponent
   ],
   entryComponents: [
     ConfirmDialogComponent,

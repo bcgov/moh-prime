@@ -67,11 +67,7 @@ namespace PrimeTests.Utils
                                 ;
 
         public static Faker<Organization> OrganizationFaker = new Faker<Organization>()
-                                .RuleFor(o => o.Name, f => f.Random.Word())
                                 .RuleFor(o => o.OrganizationTypeCode, f => f.Random.Short(1, 2))
-                                .RuleFor(o => o.City, f => f.Address.City())
-                                .RuleFor(o => o.StartDate, f => f.Date.Past(2))
-                                .RuleFor(o => o.EndDate, f => f.Date.Future(2).OrNull(f))
                                 ;
 
         public static Faker<EnrolmentStatus> EnrolmentStatusFaker = new Faker<EnrolmentStatus>()
@@ -186,12 +182,6 @@ namespace PrimeTests.Utils
                 db.AddRange(new JobName { Code = 2, Name = "Pharmacy Assistant" });
                 db.AddRange(new JobName { Code = 3, Name = "Registration Clerk" });
                 db.AddRange(new JobName { Code = 4, Name = "Ward Clerk" });
-            }
-
-            if (!db.Set(typeof(OrganizationName)).Any())
-            {
-                db.AddRange(new OrganizationName { Code = 1, Name = "Vancouver Island Health" });
-                db.AddRange(new OrganizationName { Code = 2, Name = "Shoppers Drug Mart" });
             }
 
             if (!db.Set(typeof(OrganizationType)).Any())

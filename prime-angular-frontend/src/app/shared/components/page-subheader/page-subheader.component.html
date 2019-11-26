@@ -2,8 +2,8 @@
   <div class="w-100">
     <h2 class="title h4">
       <ng-content select="[appPageSubheaderTitle]"></ng-content>
-      <span *ngIf="hasContextualContent"
-              class="help">
+      <div *ngIf="hasContextualContent"
+           class="help">
         <app-contextual-help>
           <ng-container *ngIf="hasContextualTitle"
                         appContextualTitle>
@@ -14,7 +14,7 @@
             <ng-content select="[appContextualContent]"></ng-content>
           </ng-container>
         </app-contextual-help>
-      </span>
+      </div>
     </h2>
     <p *ngIf="hasPageSubheaderSummary"
        class="description">

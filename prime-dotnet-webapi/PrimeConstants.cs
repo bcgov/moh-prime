@@ -28,5 +28,11 @@ namespace Prime
 
         public const string PRIME_USER_POLICY = "prime-user-policy";
 
+        // Enrollee Classifications
+        public readonly static string PRIME_MOA = "MOA";
+
+        public readonly static string PRIME_RU = "RU";
+
+
     }
 }
