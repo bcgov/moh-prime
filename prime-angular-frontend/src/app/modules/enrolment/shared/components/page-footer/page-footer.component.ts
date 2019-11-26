@@ -21,7 +21,7 @@ export class PageFooterComponent implements OnInit {
     this.handleBack = new EventEmitter<void>();
   }
 
-  handleBackClick() {
+  public handleBackClick() {
     this.handleBack.emit();
   }
 
@@ -29,12 +29,9 @@ export class PageFooterComponent implements OnInit {
     return `justify-content${justifyContent}`;
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     if (this.hideBack === true) {
       this.justifyContent = 'end';
     }
   }
-
-
-
 }
