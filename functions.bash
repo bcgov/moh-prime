@@ -134,7 +134,6 @@ function gitPromote() {
         else
           cd $PROJECT_NAME
     fi
-    cd ${PROJECT_NAME}
     git fetch
     git checkout ${CHANGE_BRANCH} && \
     git checkout $1 &&\
