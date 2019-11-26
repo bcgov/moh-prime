@@ -44,7 +44,7 @@ export class SummaryComponent implements OnInit {
       });
   }
 
-  public generateLink() {
+  public generateProvisionerLink() {
     this.enrolmentResource.createEnrolmentCertificateAccessToken()
       .subscribe((token) => this.tokens.push(token));
   }
