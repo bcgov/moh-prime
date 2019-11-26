@@ -128,9 +128,7 @@ function cleanup() {
 
 function gitPromote() {
     # Update branch with latest changes from branch
-    if [ -f $PROJECT_NAME ];
-    then git clone ${GIT_URL}
-    fi
+    git clone ${GIT_URL}
     cd $PROJECT_NAME
     git fetch
     git checkout ${CHANGE_BRANCH} && \
