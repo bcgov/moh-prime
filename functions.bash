@@ -129,7 +129,7 @@ function cleanup() {
 function gitPromote() {
     # Update branch with latest changes from branch
     git clone ${GIT_URL}
-    cd $PROJECT_NAME
+    cd ${PROJECT_NAME}
     git fetch
     git checkout ${CHANGE_BRANCH} && \
     git commit -a -m "Merge branch ${CHANGE_BRANCH} into $1" &&\
