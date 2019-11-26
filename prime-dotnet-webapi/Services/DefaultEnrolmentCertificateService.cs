@@ -18,7 +18,7 @@ namespace Prime.Services
         public async Task<EnrolmentCertificate> GetEnrolmentCertificateAsync(Guid accessTokenId)
         {
             var enrollee = await _context.EnrolmentCertificateAccessTokens
-                .Where(t => t.Id == accessTokenId && t.Active == true)
+                .Where(t => t.Id == accessTokenId && t.Active)
                 .Select(t => t.Enrollee)
                 .SingleOrDefaultAsync();
             if (enrollee == null)
@@ -64,8 +64,7 @@ namespace Prime.Services
         public async Task<IEnumerable<EnrolmentCertificateAccessToken>> GetCertificateAccessTokensForUserIdAsync(Guid userId)
         {
             return await _context.EnrolmentCertificateAccessTokens
-                .Where(t => t.Enrollee.UserId == userId)
-                .Where(t => t.Active)
+                .Where(t => t.Enrollee.UserId == userId && t.Active)
                 .ToListAsync();
         }
     }
