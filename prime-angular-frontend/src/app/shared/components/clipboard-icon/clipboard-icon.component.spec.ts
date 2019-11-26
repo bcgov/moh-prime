@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ClipboardIconComponent } from './clipboard-icon.component';
+import { ClipboardModule } from 'ngx-clipboard';
+import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
 
 describe('ClipboardIconComponent', () => {
   let component: ClipboardIconComponent;
@@ -8,9 +10,15 @@ describe('ClipboardIconComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ClipboardIconComponent ]
+      imports: [
+        ClipboardModule,
+        NgxMaterialModule
+      ],
+      declarations: [
+        ClipboardIconComponent,
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
