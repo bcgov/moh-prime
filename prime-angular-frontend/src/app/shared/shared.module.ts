@@ -4,9 +4,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { NgxMaskModule } from 'ngx-mask';
+import { ClipboardModule } from 'ngx-clipboard';
+import { NgxBusyModule } from './modules/ngx-busy/ngx-busy.module';
 
 import { ConfigModule } from '@config/config.module';
-import { NgxBusyModule } from './modules/ngx-busy/ngx-busy.module';
 import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { NgxProgressModule } from '@shared/modules/ngx-progress/ngx-progress.module';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
@@ -22,6 +23,7 @@ import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { PhonePipe } from '@shared/pipes/phone.pipe';
 import { PostalPipe } from '@shared/pipes/postal.pipe';
 import { ReplacePipe } from '@shared/pipes/replace.pipe';
+import { CertificatePipe } from '@shared/pipes/certificate.pipe';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 import { HeaderComponent } from '@shared/components/header/header.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
@@ -29,6 +31,7 @@ import { PageSubheaderComponent } from './components/page-subheader/page-subhead
 import { PageSubheaderTitleDirective } from '@shared/components/page-subheader/page-subheader-title.directive';
 import { PageSubheaderSummaryDirective } from '@shared/components/page-subheader/page-subheader-summary.directive';
 import { DialogContentDirective } from '@shared/components/dialogs/dialog-content.directive';
+import { ClipboardIconComponent } from './components/clipboard-icon/clipboard-icon.component';
 import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
 import { AlertComponent } from '@shared/components/alert/alert.component';
 
@@ -52,11 +55,14 @@ import { AlertComponent } from '@shared/components/alert/alert.component';
     PageSubheaderSummaryDirective,
     DialogContentDirective,
     FormIconGroupComponent,
-    AlertComponent
+    AlertComponent,
+    ClipboardIconComponent,
+    CertificatePipe
   ],
   imports: [
     CommonModule,
     RouterModule,
+    ClipboardModule,
     NgxBusyModule,
     NgxContextualHelpModule,
     NgxMaskModule.forRoot(),
@@ -90,7 +96,9 @@ import { AlertComponent } from '@shared/components/alert/alert.component';
     PageSubheaderSummaryDirective,
     DialogContentDirective,
     FormIconGroupComponent,
-    AlertComponent
+    AlertComponent,
+    ClipboardIconComponent,
+    CertificatePipe
   ],
   entryComponents: [
     ConfirmDialogComponent,

@@ -58,8 +58,20 @@
         <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.licensePlate }}&nbsp;</dd>
       </dl>
 
+      <button mat-raised-button
+              color="primary"
+              (click)="generateProvisionerLink()">Generate Provisioner Link</button>
+      <app-contextual-help>
+        <ng-container appContextualContent>
+          These links to your enrolment information can be given to provisioners to facilitate your access into
+          PharmaNet.
+        </ng-container>
+      </app-contextual-help>
+
+      <div *ngFor="let token of tokens">
+        <app-clipboard-icon [message]="generateTokenUrl(token.id)"></app-clipboard-icon>
+      </div>
+
     </ng-container>
-
   </div>
-
 </app-busy-overlay>

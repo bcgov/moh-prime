@@ -1,0 +1,6 @@
+<div>
+    {{ message }}
+    <button mat-icon-button ngxClipboard [cbContent]="message" (click)="copyToast()">
+        <i class="material-icons-outlined">file_copy</i>
+    </button>
+</div>
