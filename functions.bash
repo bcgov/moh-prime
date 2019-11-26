@@ -129,7 +129,7 @@ function cleanup() {
 function gitPromote() {
     # Update branch with latest changes from branch
     rm -fr ${PROJECT_NAME}
-    git clone ${GIT_URL}
+    git clone https://${GIT_URL}
     cd ${PROJECT_NAME}
     git checkout ${CHANGE_BRANCH} && \
     git merge --squash -s ours -m "Merging $1 to ${CHANGE_BRANCH}" $1 ${CHANGE_BRANCH} &&
