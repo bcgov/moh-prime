@@ -128,6 +128,7 @@ function cleanup() {
 
 function gitPromote() {
     # Update branch with latest changes from branch
+    rm -fr ${PROJECT_NAME}
     git clone ${GIT_URL}
     cd ${PROJECT_NAME}
     git checkout ${CHANGE_BRANCH} && \
