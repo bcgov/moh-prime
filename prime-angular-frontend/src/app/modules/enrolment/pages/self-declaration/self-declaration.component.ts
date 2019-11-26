@@ -103,7 +103,7 @@ export class SelfDeclarationComponent implements OnInit {
   }
 
   public isRequired(path: string) {
-    this.formUtilsService.isRequired(this.form, path);
+    return this.formUtilsService.isRequired(this.form, path);
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
