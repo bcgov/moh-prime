@@ -55,18 +55,14 @@ pipeline {
                     echo "Squashing commits and merging to develop"
                 }
                 withCredentials([usernamePassword(credentialsId: 'moh-prime', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                    sh "git reset --hard"
-                    sh "git fetch"
-                    sh "git checkout develop"
-                    sh "git reset --hard"
-                    sh "git pull"
-                    sh "git checkout ${CHANGE_BRANCH}"
-                    sh "git reset --hard"
-                    sh "git pull"
-                    sh "get rebase develop"
-                    sh "git merge --squash origin/develop"
-                    sh "./player.sh cleanup ${BRANCH_NAME}"
+                    sh "./player.sh gitPromote develop"
                 }
+            }
+        }
+        stage('Cleanup') {
+            agent { label 'master' }
+            steps {
+                    sh "./player.sh cleanup ${BRANCH_NAME}"
             }
         }
         stage('Test') {

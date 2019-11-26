@@ -128,10 +128,14 @@ function cleanup() {
 
 function gitPromote() {
     # Update branch with latest changes from branch
+    if [ -f $PROJECT_NAME ] 
+        then git clone ${GIT_URL}
+        else cd $PROJECT_NAME
+    fi
+    cd ${PROJECT_NAME}
+    git fetch
     git checkout ${CHANGE_BRANCH} && \
-    git pull && \
     git checkout $1 &&\
-    git fetch &&\
     git merge --squash ${CHANGE_BRANCH} &&\
     git commit -m "Merge branch ${CHANGE_BRANCH} into $1" &&\
     git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_URL} ${CHANGE_BRANCH} &&\
