@@ -18,10 +18,9 @@ namespace Prime.Services
         public async Task<EnrolmentCertificate> GetEnrolmentCertificateAsync(Guid accessTokenId)
         {
             var enrollee = await _context.EnrolmentCertificateAccessTokens
-                .Where(t => t.Id == accessTokenId)
+                .Where(t => t.Id == accessTokenId && t.Active == true)
                 .Select(t => t.Enrollee)
                 .SingleOrDefaultAsync();
-
             if (enrollee == null)
             {
                 return null;

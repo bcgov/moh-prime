@@ -43,7 +43,7 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"No valid Enrolment Certificate Access Token found with id {accessTokenId}"));
             }
 
-            // TODO: Access controls
+            // TODO: Access controls based on vewcount, passphrase, etc.
 
             return Ok(new ApiOkResponse<EnrolmentCertificate>(certificate));
         }
