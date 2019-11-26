@@ -395,9 +395,11 @@
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
+        "http://localhost:8080/*",
         "http://localhost:4200/*"
       ],
       "webOrigins": [
+        "http://localhost:8080",
         "http://localhost:4200"
       ],
       "notBefore": 0,
@@ -491,6 +493,7 @@
       "defaultClientScopes": [
         "web-origins",
         "identity_provider",
+        "address",
         "role_list",
         "profile",
         "roles",
@@ -498,7 +501,6 @@
         "email"
       ],
       "optionalClientScopes": [
-        "address",
         "offline_access"
       ]
     },
@@ -649,13 +651,13 @@
       "defaultClientScopes": [
         "web-origins",
         "identity_provider",
+        "address",
         "profile",
         "roles",
         "identity_assurance_level",
         "email"
       ],
       "optionalClientScopes": [
-        "address",
         "offline_access"
       ]
     },
@@ -1159,11 +1161,10 @@
           "protocolMapper": "oidc-address-mapper",
           "consentRequired": false,
           "config": {
-            "user.attribute.formatted": "formatted",
             "user.attribute.country": "country",
-            "user.attribute.postal_code": "postal_code",
+            "user.attribute.postal_code": "postalCode",
             "userinfo.token.claim": "true",
-            "user.attribute.street": "street",
+            "user.attribute.street": "streetAddress",
             "id.token.claim": "true",
             "user.attribute.region": "region",
             "access.token.claim": "true",
@@ -1338,6 +1339,7 @@
     }
   ],
   "defaultDefaultClientScopes": [
+    "address",
     "profile",
     "email",
     "roles",
@@ -1346,8 +1348,7 @@
     "identity_provider"
   ],
   "defaultOptionalClientScopes": [
-    "offline_access",
-    "address"
+    "offline_access"
   ],
   "browserSecurityHeaders": {
     "contentSecurityPolicyReportOnly": "",
@@ -1432,6 +1433,37 @@
   "adminEventsDetailsEnabled": false,
   "identityProviders": [
     {
+      "alias": "bceid",
+      "displayName": "BCeID",
+      "internalId": "3f486f0b-b153-43f0-888d-3fc4251b00a7",
+      "providerId": "keycloak-oidc",
+      "enabled": false,
+      "updateProfileFirstLoginMode": "on",
+      "trustEmail": false,
+      "storeToken": false,
+      "addReadTokenRoleOnCreate": false,
+      "authenticateByDefault": false,
+      "linkOnly": false,
+      "firstBrokerLoginFlowAlias": "first broker login",
+      "config": {
+        "userInfoUrl": "https://sso-dev.pathfinder.gov.bc.ca/auth/realms/_bceid/protocol/openid-connect/userinfo",
+        "validateSignature": "true",
+        "hideOnLoginPage": "",
+        "clientId": "https://sso-dev.pathfinder.gov.bc.ca/auth/realms/v4mbqqas",
+        "tokenUrl": "https://sso-dev.pathfinder.gov.bc.ca/auth/realms/_bceid/protocol/openid-connect/token",
+        "uiLocales": "",
+        "jwksUrl": "https://sso-dev.pathfinder.gov.bc.ca/auth/realms/_bceid/protocol/openid-connect/certs",
+        "backchannelSupported": "true",
+        "issuer": "https://sso-dev.pathfinder.gov.bc.ca/auth/realms/_bceid",
+        "useJwksUrl": "true",
+        "loginHint": "",
+        "authorizationUrl": "https://sso-dev.pathfinder.gov.bc.ca/auth/realms/_bceid/protocol/openid-connect/auth",
+        "disableUserInfo": "",
+        "logoutUrl": "https://sso-dev.pathfinder.gov.bc.ca/auth/realms/_bceid/protocol/openid-connect/logout",
+        "clientSecret": "**********"
+      }
+    },
+    {
       "alias": "idir",
       "displayName": "IDIR",
       "internalId": "dc77020e-4610-4b8c-9c14-b763ca4af4a3",
@@ -1488,11 +1520,30 @@
         "logoutUrl": "https://idtest.gov.bc.ca/oauth2/revoke",
         "clientSecret": "**********",
         "prompt": "",
-        "defaultScope": "openid profile email"
+        "defaultScope": "openid profile address"
       }
     }
   ],
   "identityProviderMappers": [
+    {
+      "id": "e510a499-8f24-4899-b657-771d139aa381",
+      "name": "region",
+      "identityProviderAlias": "bcsc",
+      "identityProviderMapper": "oidc-user-attribute-idp-mapper",
+      "config": {
+        "claim": "address.region",
+        "user.attribute": "region"
+      }
+    },
+    {
+      "id": "5607e132-5c7e-4201-8290-a604616dc866",
+      "name": "username",
+      "identityProviderAlias": "bceid",
+      "identityProviderMapper": "oidc-username-idp-mapper",
+      "config": {
+        "template": "${CLAIM.preferred_username}@${ALIAS}"
+      }
+    },
     {
       "id": "b047648f-0749-4177-9999-732aa1b1225a",
       "name": "lastName",
@@ -1501,6 +1552,16 @@
       "config": {
         "claim": "family_name",
         "user.attribute": "lastName"
+      }
+    },
+    {
+      "id": "23869275-ef3c-4f36-a91e-1f23b33cf0e0",
+      "name": "country",
+      "identityProviderAlias": "bcsc",
+      "identityProviderMapper": "oidc-user-attribute-idp-mapper",
+      "config": {
+        "claim": "address.country",
+        "user.attribute": "country"
       }
     },
     {
@@ -1533,12 +1594,32 @@
       }
     },
     {
+      "id": "aa97baf9-e02e-43e8-9645-cfd4c58dfa2b",
+      "name": "locality",
+      "identityProviderAlias": "bcsc",
+      "identityProviderMapper": "oidc-user-attribute-idp-mapper",
+      "config": {
+        "claim": "address.locality",
+        "user.attribute": "locality"
+      }
+    },
+    {
       "id": "dc7718f0-3682-472a-988f-66bc283dd2f3",
       "name": "prime_user role",
       "identityProviderAlias": "bcsc",
       "identityProviderMapper": "oidc-hardcoded-role-idp-mapper",
       "config": {
         "role": "prime_user"
+      }
+    },
+    {
+      "id": "c15c372f-265f-46bf-a203-c3e5eb4c1b85",
+      "name": "street address",
+      "identityProviderAlias": "bcsc",
+      "identityProviderMapper": "oidc-user-attribute-idp-mapper",
+      "config": {
+        "claim": "address.street_address",
+        "user.attribute": "streetAddress"
       }
     },
     {
@@ -1611,6 +1692,16 @@
       }
     },
     {
+      "id": "d3537258-ba3e-44ea-897f-b64d003d62e6",
+      "name": "email",
+      "identityProviderAlias": "bceid",
+      "identityProviderMapper": "oidc-user-attribute-idp-mapper",
+      "config": {
+        "claim": "email",
+        "user.attribute": "email"
+      }
+    },
+    {
       "id": "f3e447d1-ac07-4d64-92d6-e22fc86c2d88",
       "name": "email",
       "identityProviderAlias": "idir",
@@ -1631,13 +1722,33 @@
       }
     },
     {
-      "id": "05005f15-3ed4-40c5-a95d-0c87a7081567",
-      "name": "email",
+      "id": "ac785d9c-23c0-444f-827c-af41dee1f170",
+      "name": "birth date",
       "identityProviderAlias": "bcsc",
       "identityProviderMapper": "oidc-user-attribute-idp-mapper",
       "config": {
-        "claim": "email",
-        "user.attribute": "email"
+        "claim": "birthdate",
+        "user.attribute": "birthdate"
+      }
+    },
+    {
+      "id": "f6906c3d-4938-4aa2-95bc-104f6f326b2f",
+      "name": "displayName",
+      "identityProviderAlias": "bceid",
+      "identityProviderMapper": "oidc-user-attribute-idp-mapper",
+      "config": {
+        "claim": "displayName",
+        "user.attribute": "displayName"
+      }
+    },
+    {
+      "id": "0ed7ded8-bf7f-408c-b030-5c07f83fb9de",
+      "name": "postal code",
+      "identityProviderAlias": "bcsc",
+      "identityProviderMapper": "oidc-user-attribute-idp-mapper",
+      "config": {
+        "claim": "address.postal_code",
+        "user.attribute": "postalCode"
       }
     }
   ],

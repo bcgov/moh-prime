@@ -9,6 +9,8 @@ import { ContextualContentDirective } from '@shared/modules/ngx-contextual-help/
 export class FormIconGroupComponent {
   @Input() public show: boolean;
   @Input() public icon: string;
+  // An empty tooltip message will not show a tooltip
+  @Input() public tooltipMessage: string;
   @Output() public event: EventEmitter<void>;
 
   @ContentChildren(ContextualContentDirective, { descendants: false })
@@ -17,6 +19,7 @@ export class FormIconGroupComponent {
   constructor() {
     this.show = true;
     this.icon = 'close';
+    this.tooltipMessage = 'Remove';
     this.event = new EventEmitter<void>();
   }
 

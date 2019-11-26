@@ -11,9 +11,14 @@ export interface Configuration {
   statusReasons: Config<number>[];
 }
 
-export interface Config<T> {
+export class Config<T> {
   code: T;
   name: string;
+
+  constructor(code: T, name: string) {
+    this.code = code;
+    this.name = name;
+  }
 }
 
 export interface LicenseConfig extends Config<number> {

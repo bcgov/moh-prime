@@ -24,7 +24,9 @@
           <app-job-form [form]="job"
                         [index]="i"
                         [total]="jobs.controls.length"
-                        [jobNames]="filterJobs(job)"
+                        [jobNames]="filteredJobNames"
+                        [allowDefaultOption]="allowDefaultOption"
+                        [defaultOptionLabel]="defaultOptionLabel"
                         (remove)="removeJob($event)"></app-job-form>
 
         </ng-container>
@@ -40,7 +42,7 @@
       </div>
     </div>
 
-    <app-page-footer [backRoute]="EnrolmentRoutes.DEVICE_PROVIDER"></app-page-footer>
+    <app-page-footer [backRoute]="EnrolmentRoutes.REGULATORY"></app-page-footer>
 
   </form>
 

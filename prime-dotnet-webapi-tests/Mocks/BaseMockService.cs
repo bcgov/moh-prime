@@ -48,7 +48,6 @@ namespace PrimeTests.Mocks
         private readonly string COLLEGE_KEY = typeof(College).FullName;
         private readonly string JOB_NAME_KEY = typeof(JobName).FullName;
         private readonly string LICENSE_KEY = typeof(License).FullName;
-        private readonly string ORGANIZATION_NAME_KEY = typeof(OrganizationName).FullName;
         private readonly string ORGANIZATION_TYPE_KEY = typeof(OrganizationType).FullName;
         private readonly string PRACTICE_KEY = typeof(Practice).FullName;
         private readonly string STATUS_KEY = typeof(Status).FullName;
@@ -98,11 +97,6 @@ namespace PrimeTests.Mocks
                 { 4, new JobName { Code = 2, Name = "Pharmacy Assistant" } },
                 { 6, new JobName { Code = 3, Name = "Registration Clerk" } },
                 { 7, new JobName { Code = 4, Name = "Ward Clerk" } }
-            });
-
-            _fakeDb.Add(ORGANIZATION_NAME_KEY, new Dictionary<short, OrganizationName> {
-                { 1, new OrganizationName { Code = 1, Name = "Vancouver Island Health" } },
-                { 2, new OrganizationName { Code = 2, Name = "Shoppers Drug Mart" } }
             });
 
             _fakeDb.Add(ORGANIZATION_TYPE_KEY, new Dictionary<short, OrganizationType> {
