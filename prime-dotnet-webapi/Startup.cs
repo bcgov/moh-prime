@@ -34,6 +34,7 @@ namespace Prime
             services.AddScoped<IEnrolmentService, DefaultEnrolmentService>();
             services.AddScoped<IEnrolleeService, DefaultEnrolleeService>();
             services.AddScoped<IAutomaticAdjudicationService, DefaultAutomaticAdjudicationService>();
+            services.AddScoped<IEnrolmentCertificateService, DefaultEnrolmentCertificateService>();
 
             services
                 .AddMvc()

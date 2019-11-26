@@ -11,6 +11,7 @@ import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.mod
 import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BehaviorSubject } from 'rxjs';
 
 describe('JobFormComponent', () => {
   let component: JobFormComponent;
@@ -51,7 +52,7 @@ describe('JobFormComponent', () => {
       component = fixture.componentInstance;
       // Add the bound FormGroup to the component
       component.form = enrolmentStateService.buildJobForm();
-      component.jobNames = configService.jobNames;
+      component.jobNames = new BehaviorSubject(configService.jobNames);
       fixture.detectChanges();
     }
   ));
