@@ -161,12 +161,6 @@ export class ProfileComponent implements OnInit {
           if (enrolment) {
             this.isNewEnrolment = false;
             this.enrolmentStateService.enrolment = enrolment;
-          } else {
-            const user = await this.authService.getUser();
-
-            this.logger.info('USER', user);
-
-            this.form.patchValue(user);
           }
 
           this.form.markAsPristine();
@@ -213,6 +207,18 @@ export class ProfileComponent implements OnInit {
 
     if (this.contactPhone.value) {
       this.form.get('hasContactPhone').patchValue(true);
+    }
+
+    this.patchForm();
+  }
+
+  private async patchForm() {
+    if (this.isNewEnrolment) {
+      const user = await this.authService.getUser();
+
+      this.logger.info('USER', user);
+
+      this.form.patchValue(user);
     }
   }
 
