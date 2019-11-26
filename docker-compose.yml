@@ -37,18 +37,18 @@ services:
     networks:
       - primenet
 ###################################################### Web Frontend #
-  # nginx-angular:
-  #   container_name: primeweb
-  #   build:
-  #       context: prime-angular-frontend/
-  #   command: "nginx -g 'daemon off;'"
-  #   restart: always
-  #   ports:
-  #     - "8080:8080"
-  #   expose:
-  #     - "8080"
-  #   networks:
-  #     - primenet
+  nginx-angular:
+    container_name: primeweb
+    build:
+        context: prime-angular-frontend/
+    command: "nginx -g 'daemon off;'"
+    restart: always
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    networks:
+      - primenet
 
 volumes:
   local_postgres_data: 
