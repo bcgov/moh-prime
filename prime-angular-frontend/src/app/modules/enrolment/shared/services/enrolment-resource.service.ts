@@ -13,6 +13,7 @@ import { Address } from '@enrolment/shared/models/address.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
 import { Organization } from '@enrolment/shared/models/organization.model';
+import { EnrolmentCertificateAccessToken } from '@shared/models/enrolment-certificate-access-token.model';
 
 @Injectable({
   providedIn: 'root'
@@ -64,6 +65,28 @@ export class EnrolmentResource {
         map((statuses: Config<number>[]) => {
           this.logger.info('ENROLMENT_STATUSES', statuses);
           return statuses;
+        })
+      );
+  }
+
+  public createEnrolmentCertificateAccessToken(): Observable<EnrolmentCertificateAccessToken> {
+    return this.http.post(`${this.config.apiEndpoint}/enrolment-certificates/access`, {})
+      .pipe(
+        map((response: PrimeHttpResponse) => response.result),
+        map((token: EnrolmentCertificateAccessToken) => {
+          this.logger.info('ACCESS_TOKEN', token);
+          return token;
+        })
+      );
+  }
+
+  public enrolmentCertificateAccessTokens(): Observable<EnrolmentCertificateAccessToken[]> {
+    return this.http.get(`${this.config.apiEndpoint}/enrolment-certificates/access`)
+      .pipe(
+        map((response: PrimeHttpResponse) => response.result),
+        map((tokens: EnrolmentCertificateAccessToken[]) => {
+          this.logger.info('ACCESS_TOKENS', tokens);
+          return tokens;
         })
       );
   }
