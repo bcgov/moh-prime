@@ -45,9 +45,9 @@ namespace PrimeTests.Services
 
             await _dbContext.SaveChangesAsync();
 
-            // get the enrollees through the service layer code
-            var enrollees = await _service.GetEnrolleeForUserIdAsync(expectedUserId);
-            Assert.NotNull(enrollees);
+            // get the enrollee through the service layer code
+            var enrollee = await _service.GetEnrolleeForUserIdAsync(expectedUserId);
+            Assert.NotNull(enrollee);
         }
     }
 }
