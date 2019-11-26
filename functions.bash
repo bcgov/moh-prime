@@ -132,9 +132,12 @@ function gitPromote() {
     git clone https://${GIT_URL}
     cd ${PROJECT_NAME}
     git checkout ${CHANGE_BRANCH} && \
-    git merge --squash -s ours -m "Merging $1 to ${CHANGE_BRANCH}" origin/$1 ${CHANGE_BRANCH} &&
+    git fetch
     git checkout $1 && \
     git merge -s ours -m "Updating branch with $1" ${CHANGE_BRANCH} $1 &&\
-    git commit -a -m "Merge branch ${CHANGE_BRANCH} into $1" &&\
-    git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_URL} $1
+    git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_URL} $1 &&\
+    git checkout ${CHANGE_BRANCH} && \
+    git merge --squash -s ours -m "Merging $1 to ${CHANGE_BRANCH}" $1 ${CHANGE_BRANCH} &&
+    git commit -a -m "Merge branch $1 into ${CHANGE_BRANCH}" &&\
+    git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_URL}
 }
