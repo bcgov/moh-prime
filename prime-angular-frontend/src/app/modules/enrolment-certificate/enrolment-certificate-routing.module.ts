@@ -16,11 +16,11 @@ const routes: Routes = [
         path: ':tokenId',
         component: CertificateComponent,
       },
-      // {
-      //   path: '',
-      //   component: PageNotFoundComponent,
-      //   pathMatch: 'full'
-      // }
+      {
+        path: '',
+        component: PageNotFoundComponent,
+        pathMatch: 'full'
+      }
     ]
   }];
 
