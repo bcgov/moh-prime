@@ -23,6 +23,7 @@ import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { PhonePipe } from '@shared/pipes/phone.pipe';
 import { PostalPipe } from '@shared/pipes/postal.pipe';
 import { ReplacePipe } from '@shared/pipes/replace.pipe';
+import { CertificatePipe } from '@shared/pipes/certificate.pipe';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 import { HeaderComponent } from '@shared/components/header/header.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
@@ -55,7 +56,8 @@ import { AlertComponent } from '@shared/components/alert/alert.component';
     DialogContentDirective,
     FormIconGroupComponent,
     AlertComponent,
-    ClipboardIconComponent
+    ClipboardIconComponent,
+    CertificatePipe
   ],
   imports: [
     CommonModule,
@@ -95,7 +97,8 @@ import { AlertComponent } from '@shared/components/alert/alert.component';
     DialogContentDirective,
     FormIconGroupComponent,
     AlertComponent,
-    ClipboardIconComponent
+    ClipboardIconComponent,
+    CertificatePipe
   ],
   entryComponents: [
     ConfirmDialogComponent,
