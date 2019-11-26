@@ -58,7 +58,14 @@ export class RegulatoryComponent implements OnInit, OnDestroy {
           () => {
             this.form.markAsPristine();
             this.toastService.openSuccessToast('Regulatory information has been saved');
-            this.router.navigate([EnrolmentRoutes.DEVICE_PROVIDER], { relativeTo: this.route.parent });
+
+            this.removeIncompleteCertifications(true);
+
+            let route = EnrolmentRoutes.SELF_DECLARATION;
+            if (this.certifications.length === 0) {
+              route = EnrolmentRoutes.JOB;
+            }
+            this.router.navigate([route], { relativeTo: this.route.parent });
           },
           (error: any) => {
             this.toastService.openErrorToast('Regulatory information could not be saved');
@@ -125,7 +132,7 @@ export class RegulatoryComponent implements OnInit, OnDestroy {
    * Removes incomplete certifications from the list in preparation
    * for submission, and allows for an empty list of certifications.
    */
-  private removeIncompleteCertifications() {
+  private removeIncompleteCertifications(noEmptyCert: boolean = false) {
     this.certifications.controls
       .forEach((control: FormGroup, index: number) => {
         // Remove if college code is "None" or the group is invalid
@@ -136,8 +143,10 @@ export class RegulatoryComponent implements OnInit, OnDestroy {
 
     // Always have a single cerfication available, and it prevents
     // the page from jumping too much when routing
-    if (!this.certifications.controls.length) {
-      this.addCertification();
+    if (!noEmptyCert) {
+      if (!this.certifications.controls.length) {
+        this.addCertification();
+      }
     }
   }
 
