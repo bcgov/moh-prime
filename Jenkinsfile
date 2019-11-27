@@ -49,6 +49,7 @@ pipeline {
                     sh "./player.sh gitPromote develop"
                 }
             }
+        stage)('Cleanup')
             steps {
                     sh "./player.sh cleanup ${BRANCH_NAME}"
             }
