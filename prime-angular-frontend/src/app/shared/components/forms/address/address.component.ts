@@ -52,13 +52,18 @@ export class AddressComponent implements OnInit {
   }
 
   private initForm() {
+    this.setAddress(this.countryCode.value);
     this.countryCode.valueChanges
       .subscribe((countryCode: string) => {
         this.provinceCode.reset();
         this.postal.reset();
-        this.filteredProvinces = this.provinces.filter(p => p.countryCode === countryCode);
-        this.setAddressLabels(countryCode);
+        this.setAddress(countryCode);
       });
+  }
+
+  private setAddress(countryCode) {
+    this.filteredProvinces = this.provinces.filter(p => p.countryCode === this.countryCode.value);
+    this.setAddressLabels(countryCode);
   }
 
   private setAddressLabels(countryCode: string = Country.CANADA): void {

@@ -203,17 +203,19 @@
 
       </ng-container>
 
-      <dl class="row mb-4">
-        <ng-container *ngIf="enrolment.deviceProviderNumber">
+      <ng-container *ngIf="enrolment.deviceProviderNumber">
+        <dl class="row mb-4">
+
           <dt class="col-sm-12 col-md-6 py-1">Device Provider Number</dt>
           <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.deviceProviderNumber }}&nbsp;</dd>
-        </ng-container>
-      </dl>
 
-      <dl class="row mb-4">
-        <dt class="col-sm-12 col-md-6 py-1">Are you an insulin pump provider?</dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.isInsulinPumpProvider) }}&nbsp;</dd>
-      </dl>
+        </dl>
+
+        <dl class="row mb-4">
+          <dt class="col-sm-12 col-md-6 py-1">Are you an insulin pump provider?</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.isInsulinPumpProvider) }}&nbsp;</dd>
+        </dl>
+      </ng-container>
 
       <dl class="row mb-4">
         <ng-container *ngIf="enrolment.jobs.length > 0">

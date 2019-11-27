@@ -156,8 +156,12 @@ export class RegulatoryComponent implements OnInit, OnDestroy {
    * certificate(s), as well as, job(s).
    */
   private removeJobs() {
-    const form = this.enrolmentStateService.jobsForm;
-    const jobs = form.get('jobs') as FormArray;
-    jobs.clear();
+    this.removeIncompleteCertifications(true);
+
+    if (this.certifications.length) {
+      const form = this.enrolmentStateService.jobsForm;
+      const jobs = form.get('jobs') as FormArray;
+      jobs.clear();
+    }
   }
 }
