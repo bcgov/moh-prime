@@ -11,6 +11,7 @@ using Microsoft.OpenApi.Models;
 
 using Prime.Services;
 using Prime.Infrastructure;
+using LiteX.HealthChecks.PostgreSql;
 
 namespace Prime
 {
@@ -84,6 +85,9 @@ namespace Prime
             // update the DB if necessary with new migrations
             this.UpdateDatabase(app);
 
+            // Enable healthchecks for an single endpoint
+            app.UseHealthChecks("/healthcheck");
+
             // TODO - disable always using https - probably want this turned back on though once have actual certs
             //app.UseHttpsRedirection();
 
@@ -112,9 +116,13 @@ namespace Prime
             {
                 connectionString = Configuration.GetConnectionString("PrimeDatabase");
             }
+
             services.AddDbContext<ApiDbContext>(options =>
                 options.UseNpgsql(connectionString)
             );
+
+            services.AddHealthChecks()
+                .AddPostgreSql(connectionString, "SELECT COUNT(*) FROM enrolments");
         }
 
         public virtual void UpdateDatabase(IApplicationBuilder app)
