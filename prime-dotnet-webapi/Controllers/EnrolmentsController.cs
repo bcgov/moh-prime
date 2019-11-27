@@ -115,6 +115,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiCreatedResponse<Enrolment>), StatusCodes.Status201Created)]
         public async Task<ActionResult<Enrolment>> CreateEnrolment()
         {
+            // TODO revert
             _email.Send("THE.MINISTER.OF.HEALTH@health.bc.ca", "to@email.com", "Your application has been approved!", "Your application is approved! click <a href=\"http://localhost:4200\"> here </a> to see it!");
 
             return Forbid();
