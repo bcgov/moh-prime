@@ -4,7 +4,7 @@ pipeline {
         disableResume()
     }
     stages {
-        /*
+        
         stage('Build') {
             agent { label 'master' }
             steps {
@@ -23,7 +23,6 @@ pipeline {
                 sh "./player.sh deploy frontend dev"
             }
         }
-        /*
         stage('Build Sonar Scanner') {
             agent { label 'master' }
             steps {
@@ -31,13 +30,12 @@ pipeline {
                 sh "./player.sh sonar tools"
             }
         }
-        *//*
         stage('Code Quality Check') {
             agent { label 'code-tests' }
             steps {
                 sh "./player.sh scan"
             }
-        }*/
+        }
         stage('Merge to develop') {
             when { expression { (GIT_BRANCH != 'origin/master' || GIT_BRANCH != 'origin/develop' ) } }
             agent { label 'master' }
@@ -46,7 +44,7 @@ pipeline {
                     echo "${GIT_BRANCH}"
                     def IS_APPROVED = input(
                         id: 'IS_APPROVED', message: "Merge branch to develop?", ok: "yes", parameters: [
-                          string(name: 'IS_APPROVED', defaultValue: 'yes', description: "Merge ${GIT_BRANCH} to develop?")
+                            string(name: 'IS_APPROVED', defaultValue: 'yes', description: "Merge ${GIT_BRANCH} to develop?")
                             ])
                     if (IS_APPROVED != 'yes' ) {
                         currentBuild.result = "ABORTED"
@@ -54,7 +52,7 @@ pipeline {
                     }
                     echo "Squashing commits and merging to develop"
                 }
-                withCredentials([usernamePassword(credentialsId: 'moh-prime', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                withCredentials([usernamePassword(credentialsId: 'prime-jenkins', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                     sh "./player.sh gitPromote develop"
                 }
             }
@@ -71,8 +69,8 @@ pipeline {
                 script {
                         def IS_APPROVED = input(
                             id: 'IS_APPROVED', message: "Deploy to TEST?", ok: "yes", parameters: [
-                              string(name: 'IS_APPROVED', defaultValue: 'yes', description: 'Deploy to TEST?')
-                              ])
+                                string(name: 'IS_APPROVED', defaultValue: 'yes', description: 'Deploy to TEST?')
+                                ])
                         if (IS_APPROVED != 'yes') {
                             currentBuild.result = "ABORTED"
                             error "User cancelled"
