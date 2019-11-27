@@ -22,47 +22,32 @@ pipeline {
                 sh "./player.sh deploy frontend dev"
             }
         }
-        stage('Build Sonar Scanner') {
-            agent { label 'master' }
-            steps {
-                echo "Deploy (DEV) ..."
-                sh "./player.sh sonar tools"
-            }
-        }
         stage('Code Quality Check') {
             agent { label 'code-tests' }
             steps {
                 sh "./player.sh scan"
             }
         }
-        stage('Merge to develop') {
-            when { expression { (GIT_BRANCH != 'origin/master' || GIT_BRANCH != 'origin/develop' ) } }
+        stage('Cleanup') {
+            when { expression { ( GIT_BRANCH != 'develop' ) } }
             agent { label 'master' }
             steps {
                 script {
-                    echo "${GIT_BRANCH}"
-                    def IS_APPROVED = input(
-                        id: 'IS_APPROVED', message: "Merge branch to develop?", ok: "yes", parameters: [
-                            string(name: 'IS_APPROVED', defaultValue: 'yes', description: "Merge ${GIT_BRANCH} to develop?")
-                            ])
-                    if (IS_APPROVED != 'yes' ) {
-                        currentBuild.result = "ABORTED"
-                        error "User cancelled"
-                    }
-                    echo "Squashing commits and merging to develop"
+                        def IS_APPROVED = input(
+                            id: 'IS_APPROVED', message: "Cleanup OpenShift Environment for ${BRANCH_NAME}?", ok: "yes", parameters: [
+                                string(name: 'IS_APPROVED', defaultValue: 'yes', description: 'Cleanup OpenShift Environment for branch?')
+                                ])
+                        if (IS_APPROVED != 'yes') {
+                            currentBuild.result = "ABORTED"
+                            error "User cancelled"
+                        }
+                    echo "Test (DEV) ..."
+                    sh "./player cleanup ${BRANCH_NAME}"
                 }
-                withCredentials([usernamePassword(credentialsId: 'prime-jenkins', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                    sh "./player.sh gitPromote develop"
-                }
-            }
-        }
-        stage('Cleanup') {
-            agent { label 'master' }
-            steps {
-                    sh "./player.sh cleanup ${BRANCH_NAME}"
             }
         }
         stage('Test') {
+            when { expression { ( GIT_BRANCH == 'develop' ) } }
             agent { label 'master' }
             steps {
                 script {
@@ -134,35 +119,24 @@ pipeline {
                 }
             }
         }/*
-        stage('Merge to master') {
+        stage('Merge to develop') {
+            when { expression { (GIT_BRANCH != 'origin/master' || GIT_BRANCH != 'origin/develop' ) } }
             agent { label 'master' }
-            when {
-                environment name: 'CHANGE_TARGET', value: 'master'
-            }
             steps {
                 script {
-                    def IS_APPROVED = input(message: "Merge to master?", ok: "yes", parameters: [string(name: 'IS_APPROVED', defaultValue: 'yes', description: 'Merge to master?')])
-                    if (IS_APPROVED != 'yes') {
+                    echo "${GIT_BRANCH}"
+                    def IS_APPROVED = input(
+                        id: 'IS_APPROVED', message: "Merge branch to develop?", ok: "yes", parameters: [
+                            string(name: 'IS_APPROVED', defaultValue: 'yes', description: "Merge ${GIT_BRANCH} to develop?")
+                            ])
+                    if (IS_APPROVED != 'yes' ) {
                         currentBuild.result = "ABORTED"
                         error "User cancelled"
                     }
-                    echo "Squashing commits and merging to master"
+                    echo "Squashing commits and merging to develop"
                 }
-                withCredentials([usernamePassword(credentialsId: 'github-account', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                    sh '
-                        # Update master with latest changes from develop
-                        git checkout master
-                        git fetch
-                        git merge --squash origin/develop
-                        git commit -m "Merge branch develop into master"
-                        git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/bcgov/moh-prime.git
-
-                        # Update the HEAD on develop to be the same as master
-                        git checkout develop
-                        git fetch
-                        git merge -s ours -m "Updating develop with master" origin/master
-                        git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/bcgov/moh-prime.git
-                    '
+                withCredentials([usernamePassword(credentialsId: 'prime-jenkins', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                    sh "./player.sh gitPromote develop"
                 }
             }
         }*/
