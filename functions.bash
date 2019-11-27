@@ -135,8 +135,8 @@ function gitPromote() {
     git fetch
     git merge --squash -s ours -m "Merging $1 to ${CHANGE_BRANCH}" $1 ${CHANGE_BRANCH}
     git commit -a -m "Merge branch $1 into ${CHANGE_BRANCH}"
-    git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/moh-prime.git ${CHANGE_BRANCH}
+    git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/moh-prime ${CHANGE_BRANCH}
     git checkout $1
     git merge -s ours -m "Updating branch with $1" ${CHANGE_BRANCH} $1
-    git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/moh-prime.git $1
+    git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/moh-prime $1
 }
