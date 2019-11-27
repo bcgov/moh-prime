@@ -27,23 +27,23 @@ function build() {
         fi;
         if [ "${BRANCH_LOWER}" == "develop" ] || [ "${BRANCH_LOWER}" == "master" ];
         then
-            echo "oc process -f ./${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE} -p NAME=${APP_NAME} -p VERSION=${BUILD_NUMBER} -p SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR} -p SOURCE_REPOSITORY_URL=${GIT_URL} -p SOURCE_REPOSITORY_REF=${BRANCH_NAME} -p OC_NAMESPACE=${PROJECT_PREFIX} -p OC_APP=$2 | oc ${MODE} -f - --namespace=${PROJECT_PREFIX}-$2"
+            echo "oc process -f ./${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE} -p NAME=${APP_NAME} -p VERSION=${BUILD_NUMBER} -p SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR} -p SOURCE_REPOSITORY_URL=${GIT_REPO} -p SOURCE_REPOSITORY_REF=${BRANCH_NAME} -p OC_NAMESPACE=${PROJECT_PREFIX} -p OC_APP=$2 | oc ${MODE} -f - --namespace=${PROJECT_PREFIX}-$2"
             oc process -f ./"${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE}" \
             -p NAME="${APP_NAME}" \
             -p VERSION="${BUILD_NUMBER}" \
             -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
-            -p SOURCE_REPOSITORY_URL="https://${GIT_URL}" \
+            -p SOURCE_REPOSITORY_URL="https://${GIT_REPO}" \
             -p SOURCE_REPOSITORY_REF="${BRANCH_NAME}" \
             -p OC_NAMESPACE="${PROJECT_PREFIX}" \
             -p OC_APP="$2" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-$2"
         else
-            echo "oc process -f ./${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE} -p NAME=${APP_NAME} -p VERSION=${BUILD_NUMBER} -p SUFFIX=-${BRANCH_LOWER} -p SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR} -p SOURCE_REPOSITORY_URL=${GIT_URL} -p SOURCE_REPOSITORY_REF=${BRANCH_NAME} -p OC_NAMESPACE=${PROJECT_PREFIX} -p OC_APP=$2 | oc ${MODE} -f - --namespace=${PROJECT_PREFIX}-$2"
+            echo "oc process -f ./${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE} -p NAME=${APP_NAME} -p VERSION=${BUILD_NUMBER} -p SUFFIX=-${BRANCH_LOWER} -p SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR} -p SOURCE_REPOSITORY_URL=${GIT_REPO} -p SOURCE_REPOSITORY_REF=${BRANCH_NAME} -p OC_NAMESPACE=${PROJECT_PREFIX} -p OC_APP=$2 | oc ${MODE} -f - --namespace=${PROJECT_PREFIX}-$2"
             oc process -f ./"${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE}" \
             -p NAME="${APP_NAME}" \
             -p VERSION="${BUILD_NUMBER}" \
             -p SUFFIX="-${BRANCH_LOWER}" \
             -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
-            -p SOURCE_REPOSITORY_URL="https://${GIT_URL}" \
+            -p SOURCE_REPOSITORY_URL="https://${GIT_REPO}" \
             -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
             -p OC_NAMESPACE="${PROJECT_PREFIX}" \
             -p OC_APP="$2" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-$2"
@@ -72,7 +72,7 @@ function deploy() {
         -p NAME="${APP_NAME}" \
         -p VERSION="${BUILD_NUMBER}" \
         -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
-        -p SOURCE_REPOSITORY_URL="https://${GIT_URL}" \
+        -p SOURCE_REPOSITORY_URL="https://${GIT_REPO}" \
         -p SOURCE_REPOSITORY_REF="${BRANCH_NAME}" \
         -p OC_NAMESPACE="${PROJECT_PREFIX}" \
         -p OC_APP="$2" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-$2"
@@ -82,7 +82,7 @@ function deploy() {
         -p VERSION="${BUILD_NUMBER}" \
         -p SUFFIX='-'"${BRANCH_LOWER}" \
         -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
-        -p SOURCE_REPOSITORY_URL="https://${GIT_URL}" \
+        -p SOURCE_REPOSITORY_URL="https://${GIT_REPO}" \
         -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
         -p OC_NAMESPACE="${PROJECT_PREFIX}" \
         -p OC_APP="$2" | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-$2"
@@ -91,10 +91,10 @@ function deploy() {
 
 function sonar(){
     oc process -f openshift/sonar-scanner.bc.yaml \
-        -p SOURCE_REPOSITORY_URL="https://${GIT_URL}" \
+        -p SOURCE_REPOSITORY_URL="https://${GIT_REPO}" \
         -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" | oc apply -f - --namespace="${PROJECT_PREFIX}-$1"
     oc process -f openshift/sonar-scanner.dc.yaml \
-        -p SOURCE_REPOSITORY_URL="https://${GIT_URL}" \
+        -p SOURCE_REPOSITORY_URL="https://${GIT_REPO}" \
         -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" | oc apply -f - --namespace="${PROJECT_PREFIX}-$1"
     oc start-build sonar-runner -n ${PROJECT_PREFIX}-$1 --wait --follow
 }
@@ -129,14 +129,14 @@ function cleanup() {
 function gitPromote() {
     # Update branch with latest changes from branch
     rm -fr ${PROJECT_NAME}
-    git clone https://${GIT_URL}
+    git clone https://${GIT_REPO}
     cd ${PROJECT_NAME}
     git checkout ${CHANGE_BRANCH} 
     git fetch
     git merge --squash -s ours -m "Merging $1 to ${CHANGE_BRANCH}" $1 ${CHANGE_BRANCH}
     git commit -a -m "Merge branch $1 into ${CHANGE_BRANCH}"
-    git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/moh-prime ${CHANGE_BRANCH}
+    git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO} ${CHANGE_BRANCH}
     git checkout $1
     git merge -s ours -m "Updating branch with $1" ${CHANGE_BRANCH} $1
-    git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/moh-prime $1
+    git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO} $1
 }
