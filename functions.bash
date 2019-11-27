@@ -84,7 +84,7 @@ function deploy() {
     fi;
 }
 
-function toolbelt(){
+function toolbelt() {
     source $1.conf
     OC_APP=tools
     buildPresent=$(oc get bc/"$APP_NAME" --ignore-not-found=true)
@@ -96,10 +96,10 @@ function toolbelt(){
     fi;
     oc process -f ./"${TEMPLATE_DIRECTORY}/$BUILD_CONFIG_TEMPLATE" \
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
-        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" | oc $MODE -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"
+        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" | oc $MODE -f - --namespace="${PROJECT_PREFIX}-$1"
     oc process -f "${TEMPLATE_DIRECTORY}/$DEPLOY_CONFIG_TEMPLATE" \
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
-        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" | oc $MODE -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"
+        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" | oc $MODE -f - --namespace="${PROJECT_PREFIX}-$1"
     if [ "$BUILD_REQUIRED" == true ];
     then
         echo "Building oc start-build $APP_NAME -n ${PROJECT_PREFIX}-${OC_APP} --wait --follow ..."
