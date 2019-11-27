@@ -135,7 +135,6 @@ function cleanup() {
         oc delete -n ${PROJECT_PREFIX}-dev $i
     done
 }
-<<<<<<< HEAD
 
 function gitPromote() {
     # Update branch with latest changes from branch
@@ -151,5 +150,3 @@ function gitPromote() {
     git merge -s ours -m "Updating branch with $1" ${CHANGE_BRANCH} origin/$1
     git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO} origin/$1
 }
-=======
->>>>>>> 43c963bdd9d3b8c59299abc20367b3f0ce092d09
