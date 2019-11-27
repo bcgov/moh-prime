@@ -21,6 +21,7 @@ import { PageSubheaderComponent } from '@shared/components/page-subheader/page-s
 import {
   CollegeCertificationFormComponent
 } from '@enrolment/shared/components/college-certification-form/college-certification-form.component';
+import { PageFooterComponent } from '@enrolment/shared/components/page-footer/page-footer.component';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
@@ -46,7 +47,8 @@ describe('RegulatoryComponent', () => {
           RegulatoryComponent,
           PageHeaderComponent,
           PageSubheaderComponent,
-          CollegeCertificationFormComponent
+          CollegeCertificationFormComponent,
+          PageFooterComponent
         ],
         providers: [
           {

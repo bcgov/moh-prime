@@ -94,7 +94,7 @@ export class SelfDeclarationComponent implements OnInit {
     }
   }
 
-  public onBack() {
+  public handleBack() {
     const currentEnrolment = this.enrolmentStateService.enrolment;
     if (currentEnrolment.certifications.length === 0) {
       this.router.navigate([EnrolmentRoutes.JOB], { relativeTo: this.route.parent });
@@ -104,7 +104,7 @@ export class SelfDeclarationComponent implements OnInit {
   }
 
   public isRequired(path: string) {
-    this.formUtilsService.isRequired(this.form, path);
+    return this.formUtilsService.isRequired(this.form, path);
   }
 
   public canDeactivate(): Observable<boolean> | boolean {

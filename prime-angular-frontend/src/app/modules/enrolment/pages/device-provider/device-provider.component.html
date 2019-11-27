@@ -40,21 +40,7 @@
 
     </ng-container>
 
-    <div class="row justify-content-between">
-      <div class="col pt-2">
-
-        <button mat-stroked-button
-                type="button"
-                [routerLink]="['..', EnrolmentRoutes.REGULATORY]">Back</button>
-
-      </div>
-      <div class="col pt-2 text-right">
-
-        <button mat-raised-button
-                color="primary">Save and Continue</button>
-
-      </div>
-    </div>
+    <app-page-footer [backRoute]="EnrolmentRoutes.REGULATORY"></app-page-footer>
 
   </form>
 

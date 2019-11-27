@@ -15,6 +15,7 @@ import { AccessAgreementComponent } from './pages/access-agreement/access-agreem
 import { PageRefDirective } from './pages/access-agreement/page-ref.directive';
 import { MoaAccessAgreementComponent } from './pages/access-agreement/components/moa-access-agreement/moa-access-agreement.component';
 import { RuAccessAgreementComponent } from './pages/access-agreement/components/ru-access-agreement/ru-access-agreement.component';
+import { PageFooterComponent } from './shared/components/page-footer/page-footer.component';
 import { SummaryComponent } from './pages/summary/summary.component';
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
 
@@ -34,6 +35,7 @@ import { JobFormComponent } from './shared/components/job-form/job-form.componen
     AccessAgreementComponent,
     MoaAccessAgreementComponent,
     RuAccessAgreementComponent,
+    PageFooterComponent,
     PageRefDirective,
     SummaryComponent,
     CollegeCertificationFormComponent,

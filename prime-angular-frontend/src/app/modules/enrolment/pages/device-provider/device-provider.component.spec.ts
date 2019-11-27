@@ -17,6 +17,7 @@ import { PageHeaderComponent } from '@shared/components/page-header/page-header.
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { PageFooterComponent } from '@enrolment/shared/components/page-footer/page-footer.component';
 
 describe('DeviceProviderComponent', () => {
   let component: DeviceProviderComponent;
@@ -37,7 +38,8 @@ describe('DeviceProviderComponent', () => {
         declarations: [
           DeviceProviderComponent,
           PageHeaderComponent,
-          PageSubheaderComponent
+          PageSubheaderComponent,
+          PageFooterComponent
         ],
         providers: [
           {
