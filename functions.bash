@@ -137,6 +137,6 @@ function gitPromote() {
     git commit -a -m "Merge branch $1 into ${CHANGE_BRANCH}"
     git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO} ${CHANGE_BRANCH}
     git checkout $1
-    git merge -s ours -m "Updating branch with $1" ${CHANGE_BRANCH} $1
-    git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO} $1
+    git merge -s ours -m "Updating branch with $1" ${CHANGE_BRANCH} origin/$1
+    git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO} origin/$1
 }
