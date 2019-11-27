@@ -21,6 +21,9 @@ case "$1" in
     gitPromote)
         gitPromote $2
         ;;
+    toolbelt)
+        toolbelt $1 $2
+        ;;
     zap)
         zap $2 $3
         ;;
