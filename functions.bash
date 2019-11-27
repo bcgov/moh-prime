@@ -103,7 +103,7 @@ function toolbelt(){
     if [ "$BUILD_REQUIRED" == true ];
     then
         echo "Building oc start-build $APP_NAME -n ${PROJECT_PREFIX}-${OC_APP} --wait --follow ..."
-        oc start-build $APP_NAME -n ${PROJECT_PREFIX}-${OC_APP} --wait --follow 
+        oc start-build $APP_NAME -n ${PROJECT_PREFIX}-$2 --wait --follow 
     else
         echo "Deployment should be automatic..."
     fi
