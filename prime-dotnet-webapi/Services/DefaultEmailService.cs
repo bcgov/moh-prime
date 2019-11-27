@@ -29,22 +29,22 @@ namespace Prime.Services
             };
 
             SmtpClient smtp = new SmtpClient(PrimeConstants.MAIL_SERVER_URL);
-            try
-            {
-                smtp.Send(mail);
-            }
-            catch (Exception ex)
-            {
-                if (ex is InvalidOperationException
-                 || ex is SmtpException
-                 || ex is SmtpFailedRecipientException
-                 || ex is SmtpFailedRecipientsException)
-                {
-                    throw new Exception($"attempted to email to [{ PrimeConstants.MAIL_SERVER_URL }], exception message was [{ex.Message}]");
-                }
+            // try
+            // {
+                 smtp.Send(mail);
+            // }
+            // catch (Exception ex)
+            // {
+            //     if (ex is InvalidOperationException
+            //      || ex is SmtpException
+            //      || ex is SmtpFailedRecipientException
+            //      || ex is SmtpFailedRecipientsException)
+            //     {
+            //         throw new Exception($"attempted to email to [{ PrimeConstants.MAIL_SERVER_URL }], exception message was [{ex.Message}]");
+            //     }
 
-                throw;
-            }
+            //     throw;
+            // }
         }
     }
 }
