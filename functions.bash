@@ -84,14 +84,29 @@ function deploy() {
     fi;
 }
 
-function sonar(){
-    oc process -f openshift/sonar-scanner.bc.yaml \
+function toolbelt(){
+    source $1.conf
+    OC_APP=tools
+    buildPresent=$(oc get bc/"$APP_NAME" --ignore-not-found=true)
+    if [ -z "${buildPresent}" ];
+    then
+        MODE="apply"
+    else
+        MODE="create"
+    fi;
+    oc process -f ./"${TEMPLATE_DIRECTORY}/$BUILD_CONFIG_TEMPLATE" \
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
-        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" | oc apply -f - --namespace="${PROJECT_PREFIX}-$1"
-    oc process -f openshift/sonar-scanner.dc.yaml \
+        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" | oc $MODE -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"
+    oc process -f "${TEMPLATE_DIRECTORY}/$DEPLOY_CONFIG_TEMPLATE" \
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
-        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" | oc apply -f - --namespace="${PROJECT_PREFIX}-$1"
-    oc start-build sonar-runner -n ${PROJECT_PREFIX}-$1 --wait --follow
+        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" | oc $MODE -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"
+    if [ "$BUILD_REQUIRED" == true ];
+    then
+        echo "Building oc start-build $APP_NAME -n ${PROJECT_PREFIX}-${OC_APP} --wait --follow ..."
+        oc start-build $APP_NAME -n ${PROJECT_PREFIX}-${OC_APP} --wait --follow 
+    else
+        echo "Deployment should be automatic..."
+    fi
 }
 
 function determineMode() {

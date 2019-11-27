@@ -12,7 +12,9 @@ import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { EnrolmentStatusReasonsComponent } from '@shared/components/dialogs/content/enrolment-status-reasons/enrolment-status-reasons.component';
+import {
+  EnrolmentStatusReasonsComponent
+} from '@shared/components/dialogs/content/enrolment-status-reasons/enrolment-status-reasons.component';
 
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
@@ -78,10 +80,11 @@ export class EnrolmentsComponent implements OnInit {
             ? this.adjudicationResource.updateEnrolmentStatus(id, EnrolmentStatus.ADJUDICATED_APPROVED)
             : EMPTY
         ),
-        // TODO: show success/error for enrolment status, and attempt replay getting enrolment for update
+        // TODO show success/error for enrolment status
         // map(() => { })
         // catchError(() => { })
         exhaustMap(() => this.adjudicationResource.enrolment(id))
+        // TODO attempt replay getting enrolment for update
         // retry(3),
         // catchError(() => { })
       )
@@ -112,10 +115,11 @@ export class EnrolmentsComponent implements OnInit {
             ? this.adjudicationResource.updateEnrolmentStatus(id, EnrolmentStatus.DECLINED)
             : EMPTY
         ),
-        // TODO: show success/error for enrolment status, and attempt replay getting enrolment for update
+        // TODO show success/error for enrolment status change
         // map(() => { })
         // catchError(() => { })
         exhaustMap(() => this.adjudicationResource.enrolment(id)),
+        // TODO and attempt replay getting enrolment for update
         // retry(3),
         // catchError(() => { })
       )

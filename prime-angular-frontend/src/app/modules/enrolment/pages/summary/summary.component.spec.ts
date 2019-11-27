@@ -14,6 +14,8 @@ import { PageSubheaderComponent } from '@shared/components/page-subheader/page-s
 import { EnrolmentPipe } from '@shared/pipes/enrolment.pipe';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { PostalPipe } from '@shared/pipes/postal.pipe';
+import { ClipboardIconComponent } from '@shared/components/clipboard-icon/clipboard-icon.component';
+import { ClipboardModule } from 'ngx-clipboard';
 
 describe('SummaryComponent', () => {
   let component: SummaryComponent;
@@ -29,6 +31,7 @@ describe('SummaryComponent', () => {
           NgxMaterialModule,
           ReactiveFormsModule,
           RouterTestingModule,
+          ClipboardModule
         ],
         declarations: [
           SummaryComponent,
@@ -37,7 +40,8 @@ describe('SummaryComponent', () => {
           ConfigCodePipe,
           EnrolmentPipe,
           FormatDatePipe,
-          PostalPipe
+          PostalPipe,
+          ClipboardIconComponent
         ],
         providers: [
           {

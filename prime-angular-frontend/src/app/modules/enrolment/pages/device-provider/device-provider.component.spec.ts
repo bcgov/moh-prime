@@ -5,6 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
+import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
 import { DeviceProviderComponent } from './device-provider.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
@@ -15,6 +16,8 @@ import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { PageFooterComponent } from '@enrolment/shared/components/page-footer/page-footer.component';
 
 describe('DeviceProviderComponent', () => {
   let component: DeviceProviderComponent;
@@ -35,7 +38,8 @@ describe('DeviceProviderComponent', () => {
         declarations: [
           DeviceProviderComponent,
           PageHeaderComponent,
-          PageSubheaderComponent
+          PageSubheaderComponent,
+          PageFooterComponent
         ],
         providers: [
           {
@@ -45,6 +49,10 @@ describe('DeviceProviderComponent', () => {
           {
             provide: ConfigService,
             useClass: MockConfigService
+          },
+          {
+            provide: EnrolmentService,
+            useClass: MockEnrolmentService
           },
           EnrolmentStateService
         ]

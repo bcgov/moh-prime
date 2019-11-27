@@ -1,18 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormArray, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
 import { Observable, Subscription } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
-import { ViewportService } from '@core/services/viewport.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
-import { EnrolmentRoutes } from '@enrolment/enrolent.routes';
+import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { Organization } from '@enrolment/shared/models/organization.model';
@@ -22,7 +22,7 @@ import { Organization } from '@enrolment/shared/models/organization.model';
   templateUrl: './organization.component.html',
   styleUrls: ['./organization.component.scss']
 })
-export class OrganizationComponent implements OnInit {
+export class OrganizationComponent implements OnInit, OnDestroy {
   public busy: Subscription;
   public form: FormGroup;
   public organizationCtrl: FormControl;
@@ -35,7 +35,6 @@ export class OrganizationComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private configService: ConfigService,
-    private viewportService: ViewportService,
     private enrolmentStateService: EnrolmentStateService,
     private enrolmentResource: EnrolmentResource,
     private enrolmentService: EnrolmentService,
@@ -49,19 +48,14 @@ export class OrganizationComponent implements OnInit {
     return this.form.get('organizations') as FormArray;
   }
 
-  public get isMobile() {
-    return this.viewportService.isMobile;
-  }
-
   public onSubmit() {
     if (this.form.valid) {
-      // TODO create rxjs pipe for updating enrolment submissions
       const payload = this.enrolmentStateService.enrolment;
       this.busy = this.enrolmentResource.updateEnrolment(payload)
         .subscribe(
           () => {
-            this.toastService.openSuccessToast('PharmaNet access has been saved');
             this.form.markAsPristine();
+            this.toastService.openSuccessToast('PharmaNet access has been saved');
             this.router.navigate([EnrolmentRoutes.REVIEW], { relativeTo: this.route.parent });
           },
           (error: any) => {
@@ -74,60 +68,93 @@ export class OrganizationComponent implements OnInit {
   }
 
   public addOrganization() {
-    const code = this.organizationCtrl.value.code;
-    const organization = this.enrolmentStateService.buildOrganizationForm(code);
-
+    const organization = this.enrolmentStateService.buildOrganizationForm();
     this.organizations.push(organization);
-    this.organizationCtrl.reset();
-    this.filterOrganizationTypes();
+  }
+
+  public disableOrganization(organizationTypeCode: number): boolean {
+    // Omit organizations types that are not "Community Practices" for ComPap
+    return (organizationTypeCode !== 1);
   }
 
   public removeOrganization(index: number) {
     this.organizations.removeAt(index);
-    this.filterOrganizationTypes();
   }
 
-  public organizationLookup(organizationTypeCode: number): string {
-    return this.organizationTypes
-      .find((c: Config<number>) => c.code === organizationTypeCode)
-      .name;
-  }
+  public filterOrganizationTypes(organization: FormGroup) {
+    // Create a list of filtered organization types
+    if (this.organizations.length) {
+      // All the currently chosen organizations
+      const selectedOrganizationTypeCodes = this.organizations.value
+        .map((o: Organization) => o.organizationTypeCode);
+      // Current organization type selected
+      const currentOrganization = this.organizationTypes
+        .find(o => o.code === organization.get('organizationTypeCode').value);
+      // Filter the list of possible organizations using the selected organizations
+      const filteredOrganizationTypes = this.organizationTypes
+        .filter((c: Config<number>) => !selectedOrganizationTypeCodes.includes(c.code));
 
-  public displayOrganization(organizationType?: Config<number>): string {
-    return (organizationType) ? organizationType.name : null;
-  }
+      if (currentOrganization) {
+        // Add the current organization to the list of filtered
+        // organizations so it remains visible
+        filteredOrganizationTypes.unshift(currentOrganization);
+      }
 
-  public disableOrganization(organizationTypeCode: number) {
-    // Omit organizations types that are not "Community Practices" for ComPap
-    return (organizationTypeCode !== 1);
+      return filteredOrganizationTypes;
+    }
+
+    // Otherwise, provide the entire list of organization types
+    return this.organizationTypes;
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
     const data = 'unsaved';
     return (this.form.dirty)
       ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
+        .pipe(
+          tap(() => this.removeIncompleteOrganizations())
+        )
       : true;
   }
 
   public ngOnInit() {
     this.createFormInstance();
-    // TODO no enrolment resource, but still not the best solution
-    // 1) set the enrolment state service in the guard
-    // 2) pass the BehaviourSubject into the enrolment state service
-    this.enrolmentStateService.enrolment = this.enrolmentService.enrolment;
-    this.filterOrganizationTypes();
+    this.initForm();
+  }
+
+  public ngOnDestroy() {
+    this.removeIncompleteOrganizations();
   }
 
   private createFormInstance() {
     this.form = this.enrolmentStateService.organizationForm;
-    this.organizationCtrl = new FormControl();
   }
 
-  private filterOrganizationTypes() {
-    const selectedOrgTypeCodes: number[] = this.organizations.value
-      .map((o: Organization) => o.organizationTypeCode);
+  private initForm() {
+    this.enrolmentStateService.enrolment = this.enrolmentService.enrolment;
 
-    this.filteredOrganizationTypes = this.organizationTypes
-      .filter((c: Config<number>) => !selectedOrgTypeCodes.includes(c.code));
+    // Always have at least one organization ready for
+    // the enrollee to fill out
+    if (!this.organizations.length) {
+      this.addOrganization();
+    }
+  }
+
+  private removeIncompleteOrganizations() {
+    this.organizations.controls
+      .forEach((control: FormGroup, index: number) => {
+        const value = control.get('organizationTypeCode').value;
+
+        // Remove if organization is empty or the group is invalid
+        if (!value || control.invalid) {
+          this.removeOrganization(index);
+        }
+      });
+
+    // Always have a single organization available, and it prevents
+    // the page from jumping too much when routing
+    if (!this.organizations.controls.length) {
+      this.addOrganization();
+    }
   }
 }

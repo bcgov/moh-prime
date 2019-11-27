@@ -6,6 +6,7 @@ import { Config } from '@config/config.model';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { IEnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+import { EnrolleeClassification } from '@shared/enums/enrollee-classification.enum';
 import { Address } from '@enrolment/shared/models/address.model';
 
 export class MockEnrolmentService implements IEnrolmentService {
@@ -27,7 +28,7 @@ export class MockEnrolmentService implements IEnrolmentService {
         preferredMiddleName: null,
         preferredLastName: null,
         dateOfBirth: faker.date.past(2).toDateString(),
-        physicalAddress: new Address(),
+        physicalAddress: new Address('CA', 'BC', faker.address.streetAddress(), '', faker.address.city(), faker.address.zipCode()),
         mailingAddress: new Address(),
         contactEmail: faker.internet.email(),
         contactPhone: faker.phone.phoneNumber(),
@@ -77,7 +78,8 @@ export class MockEnrolmentService implements IEnrolmentService {
           }
         ]
       },
-      availableStatuses: null
+      availableStatuses: null,
+      enrolleeClassification: EnrolleeClassification.MOA,
     });
   }
 

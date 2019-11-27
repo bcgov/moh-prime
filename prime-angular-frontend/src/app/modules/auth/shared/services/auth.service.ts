@@ -24,6 +24,17 @@ export interface IAuthService {
   clearToken(): void;
 }
 
+export interface KeycloakAttributes {
+  attributes: {
+    birthdate: string[];
+    country: string[];
+    region: string[]; // Province
+    streetAddress: string[];
+    locality: string[]; // City
+    postalCode: string[];
+  };
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -49,8 +60,16 @@ export class AuthService implements IAuthService {
     const {
       firstName,
       lastName,
-      email: contactEmail
-    } = await this.keycloakService.loadUserProfile(forceReload);
+      email: contactEmail = '',
+      attributes: {
+        birthdate: [dateOfBirth] = '',
+        country: [countryCode] = '',
+        region: [provinceCode] = '',
+        streetAddress: [street] = '',
+        locality: [city] = '',
+        postalCode: [postal] = ''
+      }
+    } = await this.keycloakService.loadUserProfile(forceReload) as Keycloak.KeycloakProfile & KeycloakAttributes;
 
     const userId = await this.getUserId();
 
@@ -58,6 +77,14 @@ export class AuthService implements IAuthService {
       userId,
       firstName,
       lastName,
+      dateOfBirth,
+      physicalAddress: {
+        countryCode,
+        provinceCode,
+        street,
+        city,
+        postal
+      },
       contactEmail
     };
   }

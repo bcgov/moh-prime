@@ -1,4 +1,5 @@
 import * as faker from 'faker';
+import { KeycloakTokenParsed, KeycloakLoginOptions } from 'keycloak-js';
 
 import { Role } from '@auth/shared/enum/role.enum';
 import { IAuthService } from '@auth/shared/services/auth.service';
@@ -32,6 +33,14 @@ export class MockAuthService implements IAuthService {
       userId: `${faker.random.uuid()}`,
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
+      dateOfBirth: faker.date.past().toISOString(),
+      physicalAddress: {
+        countryCode: faker.address.countryCode(),
+        provinceCode: faker.address.stateAbbr(),
+        street: faker.address.streetAddress(),
+        city: faker.address.city(),
+        postal: faker.address.zipCode()
+      },
       contactEmail: faker.internet.email()
     }));
   }
@@ -62,11 +71,11 @@ export class MockAuthService implements IAuthService {
     return this._role === Role.ADMIN;
   }
 
-  public decodeToken(): Promise<import('keycloak-js').KeycloakTokenParsed> {
+  public decodeToken(): Promise<KeycloakTokenParsed> {
     throw new Error('Method not implemented.');
   }
 
-  public login(options?: import('keycloak-js').KeycloakLoginOptions): Promise<void> {
+  public login(options?: KeycloakLoginOptions): Promise<void> {
     throw new Error('Method not implemented.');
   }
 

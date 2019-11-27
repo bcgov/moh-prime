@@ -9,7 +9,7 @@
 
     <meta name="viewport"
           content="width=device-width, initial-scale=1" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined"
           rel="stylesheet">
   </head>
 
@@ -30,7 +30,7 @@
           padding: 0;
         }
 
-        @keyframes zoominoutsinglefeatured {
+        @keyframes heartbeat1 {
           0% {
             transform: scale(1, 1);
           }
@@ -44,8 +44,58 @@
           }
         }
 
+        @keyframes heartbeat2 {
+          0% {
+            transform: scale(.90);
+          }
+
+          20% {
+            transform: scale(1.2);
+          }
+
+          40% {
+            transform: scale(.90);
+          }
+
+          60% {
+            transform: scale(1.2);
+          }
+
+          80% {
+            transform: scale(.90);
+          }
+
+          100% {
+            transform: scale(.90);
+          }
+        }
+
+        @keyframes heartbeat3 {
+          0% {
+            transform: scale(.95);
+          }
+
+          25% {
+            transform: scale(1.15);
+          }
+
+          40% {
+            transform: scale(.95);
+          }
+
+          60% {
+            transform: scale(1.15);
+          }
+
+          100% {
+            transform: scale(.95);
+          }
+        }
+
         img {
-          animation: zoominoutsinglefeatured 1s infinite;
+          animation: heartbeat1 1s infinite;
+          /* animation: heartbeat2 1.5s infinite; */
+          /* animation: heartbeat3 .8s infinite; */
           /* Applied to constrain SVG in Firefox */
           max-width: 100px;
         }

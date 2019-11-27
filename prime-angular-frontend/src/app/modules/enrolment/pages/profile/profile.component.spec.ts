@@ -19,6 +19,7 @@ import { PageHeaderComponent } from '@shared/components/page-header/page-header.
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AddressComponent } from '@shared/components/forms/address/address.component';
+import { PageFooterComponent } from '@enrolment/shared/components/page-footer/page-footer.component';
 
 describe('ProfileComponent', () => {
   let component: ProfileComponent;
@@ -41,7 +42,8 @@ describe('ProfileComponent', () => {
           ProfileComponent,
           AddressComponent,
           PageHeaderComponent,
-          PageSubheaderComponent
+          PageSubheaderComponent,
+          PageFooterComponent
         ],
         providers: [
           {

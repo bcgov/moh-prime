@@ -20,6 +20,7 @@ export class AddressComponent implements OnInit {
   public filteredProvinces: ProvinceConfig[];
   public provinceLabel: string;
   public postalLabel: string;
+  public postalMask: string;
 
   constructor(
     private configService: ConfigService,
@@ -38,6 +39,10 @@ export class AddressComponent implements OnInit {
     return this.form.get('provinceCode') as FormControl;
   }
 
+  public get postal(): FormControl {
+    return this.form.get('postal') as FormControl;
+  }
+
   public isRequired(path: string): boolean {
     return this.formUtilsService.isRequired(this.form, path);
   }
@@ -47,27 +52,34 @@ export class AddressComponent implements OnInit {
   }
 
   private initForm() {
+    this.setAddress(this.countryCode.value);
     this.countryCode.valueChanges
       .subscribe((countryCode: string) => {
         this.provinceCode.reset();
-        this.filteredProvinces = this.provinces.filter(p => p.countryCode === countryCode);
-        this.setAddressLabels(countryCode);
+        this.postal.reset();
+        this.setAddress(countryCode);
       });
   }
 
-  private setAddressLabels(countryCode: string = Country.CANADA): void {
-    const { province, postal } = this.addressLabels(countryCode);
-    this.provinceLabel = province;
-    this.postalLabel = postal;
+  private setAddress(countryCode) {
+    this.filteredProvinces = this.provinces.filter(p => p.countryCode === this.countryCode.value);
+    this.setAddressLabels(countryCode);
   }
 
-  private addressLabels(countryCode: string) {
+  private setAddressLabels(countryCode: string = Country.CANADA): void {
+    const { province, postal } = this.addressConfig(countryCode);
+    this.provinceLabel = province;
+    this.postalLabel = postal.label;
+    this.postalMask = postal.mask;
+  }
+
+  private addressConfig(countryCode: string) {
     switch (countryCode) {
       case Country.UNITED_STATES:
-        return { province: 'State', postal: 'Zip Code' };
+        return { province: 'State', postal: { label: 'Zip Code', mask: '00000' } };
       case Country.CANADA:
       default:
-        return { province: 'Province', postal: 'Postal Code' };
+        return { province: 'Province', postal: { label: 'Postal Code', mask: 'S0S 0S0' } };
     }
   }
 }

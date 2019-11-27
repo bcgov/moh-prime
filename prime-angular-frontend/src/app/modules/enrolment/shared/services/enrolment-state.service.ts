@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators, FormGroup, FormArray, FormControl } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
 
 import { FormControlValidators } from '@shared/validators/form-control.validators';
 import { Enrolment } from '@shared/models/enrolment.model';
@@ -17,7 +17,6 @@ export class EnrolmentStateService {
   // TODO make into BehaviourSubject or asObservable, which would make it immutable
   public profileForm: FormGroup;
   public regulatoryForm: FormGroup;
-  public collegeCertificationForm: FormGroup;
   public deviceProviderForm: FormGroup;
   public jobsForm: FormGroup;
   public selfDeclarationForm: FormGroup;
@@ -167,17 +166,17 @@ export class EnrolmentStateService {
       firstName: [{ value: null, disabled: true }, [Validators.required]],
       middleName: [{ value: null, disabled: false }, []],
       lastName: [{ value: null, disabled: true }, [Validators.required]],
-      dateOfBirth: [{ value: null, disabled: false }, [Validators.required]],
+      dateOfBirth: [{ value: null, disabled: true }, [Validators.required]],
       preferredFirstName: [null, []],
       preferredMiddleName: [null, []],
       preferredLastName: [null, []],
       physicalAddress: this.fb.group({
-        countryCode: [{ value: null, disabled: false }, [Validators.required]],
-        provinceCode: [{ value: null, disabled: false }, [Validators.required]],
-        street: [{ value: null, disabled: false }, [Validators.required]],
-        street2: [{ value: null, disabled: false }, []],
-        city: [{ value: null, disabled: false }, [Validators.required]],
-        postal: [{ value: null, disabled: false }, [Validators.required]]
+        countryCode: [{ value: null, disabled: true }, [Validators.required]],
+        provinceCode: [{ value: null, disabled: true }, [Validators.required]],
+        street: [{ value: null, disabled: true }, [Validators.required]],
+        street2: [{ value: null, disabled: true }, []],
+        city: [{ value: null, disabled: true }, [Validators.required]],
+        postal: [{ value: null, disabled: true }, [Validators.required]]
       }),
       mailingAddress: this.fb.group({
         countryCode: [{ value: null, disabled: false }, []],
@@ -207,13 +206,11 @@ export class EnrolmentStateService {
 
   public buildCollegeCertificationForm(): FormGroup {
     return this.fb.group({
-      id: [null, []],
-      collegeCode: [null, []],
-      licenseNumber: [null, [
-        // Validators.required,
-        FormControlValidators.numeric,
-        FormControlValidators.requiredLength(5)
-      ]],
+      // Force selection of "None" on new certifications
+      collegeCode: ['', []],
+      // Validators are applied at the component-level when
+      // fields are made visible to allow empty submissions
+      licenseNumber: [null, []],
       licenseCode: [null, []],
       renewalDate: [null, []],
       practiceCode: [null, []]
@@ -238,20 +235,19 @@ export class EnrolmentStateService {
 
   public buildJobForm(value: string = null): FormGroup {
     return this.fb.group({
-      id: [null, []],
-      title: [value, []]
+      title: [value, [Validators.required]]
     });
   }
 
   private buildSelfDeclarationForm(): FormGroup {
     return this.fb.group({
-      hasConviction: [false, [FormControlValidators.requiredBoolean]],
+      hasConviction: [null, [FormControlValidators.requiredBoolean]],
       hasConvictionDetails: [null, []],
-      hasRegistrationSuspended: [false, [FormControlValidators.requiredBoolean]],
+      hasRegistrationSuspended: [null, [FormControlValidators.requiredBoolean]],
       hasRegistrationSuspendedDetails: [null, []],
-      hasDisciplinaryAction: [false, [FormControlValidators.requiredBoolean]],
+      hasDisciplinaryAction: [null, [FormControlValidators.requiredBoolean]],
       hasDisciplinaryActionDetails: [null, []],
-      hasPharmaNetSuspended: [false, [FormControlValidators.requiredBoolean]],
+      hasPharmaNetSuspended: [null, [FormControlValidators.requiredBoolean]],
       hasPharmaNetSuspendedDetails: [null, []]
     });
   }
@@ -264,7 +260,6 @@ export class EnrolmentStateService {
 
   public buildOrganizationForm(code: number = null): FormGroup {
     return this.fb.group({
-      id: [null, []],
       organizationTypeCode: [code, [Validators.required]]
     });
   }

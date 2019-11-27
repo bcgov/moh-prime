@@ -1,12 +1,13 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterEvent } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
 
 import { map, mergeMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 import { RouteStateService } from '@core/services/route-state.service';
-import { WindowRefService } from '@core/services/window-ref.service';
+import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-root',
@@ -21,42 +22,31 @@ export class AppComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private titleService: Title,
     private routeStateService: RouteStateService,
-    private windowRef: WindowRefService
-  ) {
-    this.window = windowRef.nativeWindow;
-  }
+    private utilsService: UtilsService
+  ) { }
 
   public ngOnInit(): void {
-    const onNavStart = this.routeStateService.onNavigationStart();
-    const onNavStop = this.routeStateService.onNavigationStop();
-    const onNavEnd = this.routeStateService.onNavigationEnd();
+    // const onNavStart = this.routeStateService.onNavigationStart();
+    // const onNavStop = this.routeStateService.onNavigationStop();
+    const onNavEnd = this.routeStateService.onNavigationEnd() as Observable<RouterEvent>;
 
     this.scrollTop(onNavEnd);
     this.setPageTitle(onNavEnd);
   }
 
   /**
+   * @description
    * Scroll the page to the top on route event.
-   *
-   * @private
-   * @param {*} routeEvent
-   * @memberof AppComponent
    */
-  private scrollTop(routeEvent: any) {
-    routeEvent.subscribe(() => {
-      const contentContainer = this.document.querySelector('.mat-sidenav-content') || this.window;
-      contentContainer.scroll({ top: 0, left: 0, behavior: 'smooth' });
-    });
+  private scrollTop(routeEvent: Observable<RouterEvent>) {
+    routeEvent.subscribe(() => this.utilsService.scrollTop());
   }
 
   /**
+   * @description
    * Set the HTML page <title> on route event.
-   *
-   * @private
-   * @param {*} routeEvent
-   * @memberof AppComponent
    */
-  private setPageTitle(routeEvent: any) {
+  private setPageTitle(routeEvent: Observable<RouterEvent>) {
     routeEvent
       .pipe(
         // Swap what is being observed to the activated route
