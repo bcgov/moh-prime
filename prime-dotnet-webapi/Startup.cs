@@ -122,7 +122,7 @@ namespace Prime
             );
 
             services.AddHealthChecks()
-                .AddPostgreSql(connectionString, "SELECT COUNT(*) FROM enrolments");
+                .AddPostgreSql(connectionString);
         }
 
         public virtual void UpdateDatabase(IApplicationBuilder app)
