@@ -28,7 +28,7 @@ namespace Prime.Services
                 IsBodyHtml = true,
             };
 
-            SmtpClient smtp = new SmtpClient("localhost", 1025);
+            SmtpClient smtp = new SmtpClient(PrimeConstants.MAIL_SERVER_URL);
             // try
             // {
                 smtp.Send(mail);

@@ -35,6 +35,6 @@ namespace Prime
 
         public readonly static string PRIME_RU = "RU";
 
-
+        public readonly static string MAIL_SERVER_URL = System.Environment.GetEnvironmentVariable("MAIL_SERVER_URL") ?? "localhost:1025";
     }
 }
