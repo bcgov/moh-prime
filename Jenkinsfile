@@ -74,13 +74,13 @@ pipeline {
                             currentBuild.result = "ABORTED"
                             error "User cancelled"
                         }
-                  echo "Test (DEV) ..."
-                  sh "./player.sh build database test"
-                  sh "./player.sh build api test"
-                  sh "./player.sh build frontend test"
-                  sh "./player.sh deploy database test"
-                  sh "./player.sh deploy api test"
-                  sh "./player.sh deploy frontend test"
+                    echo "Test (DEV) ..."
+                    sh "./player.sh build database test"
+                    sh "./player.sh build api test"
+                    sh "./player.sh build frontend test"
+                    sh "./player.sh deploy database test"
+                    sh "./player.sh deploy api test"
+                    sh "./player.sh deploy frontend test"
                 }
             }
         }
