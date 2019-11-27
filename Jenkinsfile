@@ -4,7 +4,6 @@ pipeline {
         disableResume()
     }
     stages {
-        
         stage('Build') {
             agent { label 'master' }
             steps {

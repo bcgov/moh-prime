@@ -135,3 +135,18 @@ function cleanup() {
         oc delete -n ${PROJECT_PREFIX}-dev $i
     done
 }
+
+function gitPromote() {
+    # Update branch with latest changes from branch
+    rm -fr ${PROJECT_NAME}
+    git clone https://${GIT_REPO}
+    cd ${PROJECT_NAME}
+    git checkout ${CHANGE_BRANCH} 
+    git fetch
+    git merge --squash -s ours -m "Merging $1 to ${CHANGE_BRANCH}" $1 ${CHANGE_BRANCH}
+    git commit -a -m "Merge branch $1 into ${CHANGE_BRANCH}"
+    git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO} ${CHANGE_BRANCH}
+    git checkout $1
+    git merge -s ours -m "Updating branch with $1" ${CHANGE_BRANCH} origin/$1
+    git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO} origin/$1
+}
