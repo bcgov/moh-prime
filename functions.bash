@@ -123,7 +123,6 @@ function deploy() {
 
 function toolbelt() {
     source $1.conf
-    OC_APP=tools
     buildPresent=$(oc get bc/"$APP_NAME" --ignore-not-found=true)
     if [ -z "${buildPresent}" ];
     then
