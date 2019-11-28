@@ -4,6 +4,13 @@ pipeline {
         disableResume()
     }
     stages {
+        stage('Begin tool deployments') {
+            agent { label 'master' }
+            steps {
+                echo "Placeholder ${BRANCH_NAME}"
+                sh "printenv"
+            }
+        }
         /*
         stage('Build Tools') {
             agent { label 'master' }
@@ -13,9 +20,8 @@ pipeline {
                 sh "./player.sh toolbelt mailhog test"
             }
         }
-
         stage('Cleanup Branch') {
-            agent { label 'code-tests' }
+            agent { label 'master' }
             steps {
                 sh "./player.sh cleanup pr-103"
             }
