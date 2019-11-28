@@ -1,3 +1,4 @@
+export BRANCH_LOWER=`echo "${BRANCH_NAME}" | awk '{print tolower($0)}'`
 function variablePopulation() {
     if [ "${BRANCH_LOWER}" == "develop" ] || [ "${BRANCH_LOWER}" == "master" ];
     then 
@@ -84,7 +85,7 @@ function deploy() {
     fi;
 }
 
-function toolbelt(){
+function toolbelt() {
     source $1.conf
     OC_APP=tools
     buildPresent=$(oc get bc/"$APP_NAME" --ignore-not-found=true)
@@ -96,14 +97,14 @@ function toolbelt(){
     fi;
     oc process -f ./"${TEMPLATE_DIRECTORY}/$BUILD_CONFIG_TEMPLATE" \
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
-        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" | oc $MODE -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"
+        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" | oc $MODE -f - --namespace="${PROJECT_PREFIX}-$2"
     oc process -f "${TEMPLATE_DIRECTORY}/$DEPLOY_CONFIG_TEMPLATE" \
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
-        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" | oc $MODE -f - --namespace="${PROJECT_PREFIX}-${OC_APP}"
+        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" | oc $MODE -f - --namespace="${PROJECT_PREFIX}-$2"
     if [ "$BUILD_REQUIRED" == true ];
     then
         echo "Building oc start-build $APP_NAME -n ${PROJECT_PREFIX}-${OC_APP} --wait --follow ..."
-        oc start-build $APP_NAME -n ${PROJECT_PREFIX}-${OC_APP} --wait --follow 
+        oc start-build $APP_NAME -n ${PROJECT_PREFIX}-$2 --wait --follow 
     else
         echo "Deployment should be automatic..."
     fi
@@ -134,4 +135,19 @@ function cleanup() {
     do
         oc delete -n ${PROJECT_PREFIX}-dev $i
     done
+}
+
+function gitPromote() {
+    # Update branch with latest changes from branch
+    rm -fr ${PROJECT_NAME}
+    git clone https://${GIT_REPO}
+    cd ${PROJECT_NAME}
+    git checkout ${CHANGE_BRANCH} 
+    git fetch
+    git merge --squash -s ours -m "Merging $1 to ${CHANGE_BRANCH}" $1 ${CHANGE_BRANCH}
+    git commit -a -m "Merge branch $1 into ${CHANGE_BRANCH}"
+    git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO} ${CHANGE_BRANCH}
+    git checkout $1
+    git merge -s ours -m "Updating branch with $1" ${CHANGE_BRANCH} origin/$1
+    git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_REPO} origin/$1
 }
