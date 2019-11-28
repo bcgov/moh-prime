@@ -42,7 +42,7 @@ pipeline {
                             error "User cancelled"
                         }
                     echo "Test (DEV) ..."
-                    sh "./player cleanup ${BRANCH_NAME}"
+                    sh "./player.sh cleanup ${BRANCH_NAME}"
                 }
             }
         }
