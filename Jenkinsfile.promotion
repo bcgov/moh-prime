@@ -28,17 +28,25 @@ pipeline {
             }
         }
         stage('Deploy (PROD)') {
-            agent { label 'master' }
             when { expression { ( GIT_BRANCH == 'master' ) } }
+            agent { label 'master' }
             steps {
                 script {
-                    def IS_APPROVED = input(message: "Deploy to PROD?", ok: "yes", parameters: [string(name: 'IS_APPROVED', defaultValue: 'yes', description: 'Deploy to PROD?')])
-                    if (IS_APPROVED != 'yes') {
-                        currentBuild.result = "ABORTED"
-                        error "User cancelled"
-                    }
+                        def IS_APPROVED = input(
+                            id: 'IS_APPROVED', message: "Deploy to TEST?", ok: "yes", parameters: [
+                                string(name: 'IS_APPROVED', defaultValue: 'yes', description: 'Deploy to TEST?')
+                                ])
+                        if (IS_APPROVED != 'yes') {
+                            currentBuild.result = "ABORTED"
+                            error "User cancelled"
+                        }
                     echo "Deploy (PROD)"
-                    sh "./player.sh "
+                    sh "./player.sh build database prod"
+                    sh "./player.sh build api prod"
+                    sh "./player.sh build frontend prod"
+                    sh "./player.sh deploy database prod"
+                    sh "./player.sh deploy api prod"
+                    sh "./player.sh deploy frontend prod"
                 }
             }
         }
