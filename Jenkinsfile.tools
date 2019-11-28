@@ -4,6 +4,7 @@ pipeline {
         disableResume()
     }
     stages {
+        /*
         stage('Build Tools') {
             agent { label 'master' }
             steps {
@@ -12,7 +13,7 @@ pipeline {
                 sh "./player.sh toolbelt mailhog test"
             }
         }
-        /*
+
         stage('Cleanup Branch') {
             agent { label 'code-tests' }
             steps {
