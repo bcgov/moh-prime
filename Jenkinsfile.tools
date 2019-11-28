@@ -1,0 +1,24 @@
+pipeline {
+    agent none
+    options {
+        disableResume()
+    }
+    stages {
+        stage('Build Tools') {
+            agent { label 'master' }
+            steps {
+                echo "Building ..."
+                sh "./player.sh toolbelt sonar tools"
+                sh "./player.sh toolbelt mailhog test"
+            }
+        }
+        /*
+        stage('Cleanup Branch') {
+            agent { label 'code-tests' }
+            steps {
+                sh "./player.sh cleanup pr-103"
+            }
+        }
+        */
+    }
+}

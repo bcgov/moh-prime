@@ -4,7 +4,7 @@ pipeline {
         disableResume()
     }
     stages {
-        stage('Build') {
+        stage('Build Branch') {
             agent { label 'master' }
             steps {
                 echo "Building ..."
@@ -13,7 +13,7 @@ pipeline {
                 sh "./player.sh build frontend dev"
             }
         }
-        stage('Deploy (DEV)') {
+        stage('Deploy Branch') {
             agent { label 'master' }
             steps {
                 echo "Deploy (DEV) ..."
@@ -22,13 +22,13 @@ pipeline {
                 sh "./player.sh deploy frontend dev"
             }
         }
-        stage('Code Quality Check') {
+        stage('SonarQube Code Check') {
             agent { label 'code-tests' }
             steps {
                 sh "./player.sh scan"
             }
         }
-        stage('Cleanup') {
+        stage('Cleanup Branch') {
             when { expression { ( GIT_BRANCH != 'develop' ) } }
             agent { label 'master' }
             steps {
@@ -46,7 +46,7 @@ pipeline {
                 }
             }
         }
-        stage('Test') {
+        stage('Promote to Test') {
             when { expression { ( GIT_BRANCH == 'develop' ) } }
             agent { label 'master' }
             steps {
