@@ -46,28 +46,5 @@ pipeline {
                 }
             }
         }
-        stage('Promote to Test') {
-            when { expression { ( GIT_BRANCH == 'develop' ) } }
-            agent { label 'master' }
-            steps {
-                script {
-                        def IS_APPROVED = input(
-                            id: 'IS_APPROVED', message: "Deploy to TEST?", ok: "yes", parameters: [
-                                string(name: 'IS_APPROVED', defaultValue: 'yes', description: 'Deploy to TEST?')
-                                ])
-                        if (IS_APPROVED != 'yes') {
-                            currentBuild.result = "ABORTED"
-                            error "User cancelled"
-                        }
-                    echo "Test (DEV) ..."
-                    sh "./player.sh build database test"
-                    sh "./player.sh build api test"
-                    sh "./player.sh build frontend test"
-                    sh "./player.sh deploy database test"
-                    sh "./player.sh deploy api test"
-                    sh "./player.sh deploy frontend test"
-                }
-            }
-        }
     }
 }
