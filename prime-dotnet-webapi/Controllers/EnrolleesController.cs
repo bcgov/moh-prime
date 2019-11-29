@@ -223,7 +223,7 @@ namespace Prime.Controllers
             return Ok(new ApiOkResponse<Enrollee>(enrollee));
         }
 
-        // GET: api/Enrolments/5/availableStatuses
+        // GET: api/Enrollees/5/availableStatuses
         /// <summary>
         /// Gets a list of the statuses that the enrollee can change to.
         /// </summary>
@@ -243,18 +243,12 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
 
-            // if the user is not an ADMIN, make sure the enrollee matches the enrollee, otherwise return not authorized
-            if (!BelongsToEnrollee(enrollee))
-            {
-                return Forbid();
-            }
-
             var availableEnrolmentStatuses = await _enrolleeService.GetAvailableEnrolmentStatusesAsync(enrolleeId);
 
             return Ok(new ApiOkResponse<IEnumerable<Status>>(availableEnrolmentStatuses));
         }
 
-        // GET: api/Enrolments/5/statuses
+        // GET: api/Enrollees/5/statuses
         /// <summary>
         /// Gets all of the status changes for a specific Enrollee.
         /// </summary>
@@ -274,18 +268,12 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
 
-            // if the user is not an ADMIN, make sure the enrollee matches the enrollee, otherwise return not authorized
-            if (!BelongsToEnrollee(enrollee))
-            {
-                return Forbid();
-            }
-
             var enrollees = await _enrolleeService.GetEnrolmentStatusesAsync(enrolleeId);
 
             return Ok(new ApiOkResponse<IEnumerable<EnrolmentStatus>>(enrollees));
         }
 
-        // POST: api/Enrolments/5/statuses
+        // POST: api/Enrollees/5/statuses
         /// <summary>
         /// Adds a status change for a specific Enrollee.
         /// </summary>
@@ -310,21 +298,15 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            // if the user is not an ADMIN, make sure the enrollee matches the enrollee, otherwise return not authorized
-            if (!BelongsToEnrollee(enrollee))
-            {
-                return Forbid();
-            }
-
             if (!_enrolleeService.IsStatusChangeAllowed(enrollee.CurrentStatus?.Status, status))
             {
                 this.ModelState.AddModelError("Status.Code", $"Cannot change from current Status Code: {enrollee.CurrentStatus?.Status?.Code} to the new Status Code: {status.Code}");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            var enrolleeStatus = await _enrolleeService.CreateEnrolmentStatusAsync(enrolleeId, status);
+            var enrolmentStatus = await _enrolleeService.CreateEnrolmentStatusAsync(enrolleeId, status);
 
-            return Ok(new ApiOkResponse<EnrolmentStatus>(enrolleeStatus));
+            return Ok(new ApiOkResponse<EnrolmentStatus>(enrolmentStatus));
         }
 
     }

@@ -201,7 +201,7 @@ namespace Prime.Services
                 var result = new List<StatusReason>(0);
                 // check to see if the enrolment has an certification name discrepancy
                 // if (enrolment.HasCertification.GetValueOrDefault(false))
-                if (enrollee.Certifications.Count > 0)
+                if (enrollee?.Certifications?.Count > 0)
                 {
                     // TODO - properly implement this check
                     result.Add(new StatusReason { Code = StatusReason.NAME_DISCREPANCY_CODE });
