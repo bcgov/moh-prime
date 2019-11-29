@@ -50,27 +50,6 @@ namespace Prime.Controllers
         //     return Ok(new ApiOkResponse<IEnumerable<Enrollee>>(enrollees));
         // }
 
-        private bool BelongsToEnrollee(Enrollee enrollee)
-        {
-            bool belongsToEnrollee = false;
-
-            // check to see if the logged in user is an admin
-            belongsToEnrollee = User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE);
-
-            // if user is not ADMIN, check that user belongs to the enrollee
-            if (!belongsToEnrollee)
-            {
-                // get the prime user id from the logged in user - note: this returns 'Guid.Empty' if there is no logged in user
-                Guid PrimeUserId = PrimeUtils.PrimeUserId(User);
-
-                // check to see if the logged in user id is not 'Guid.Empty', and matches the one in the enrollee
-                belongsToEnrollee = !PrimeUserId.Equals(Guid.Empty)
-                        && PrimeUserId.Equals(enrollee.UserId);
-            }
-
-            return belongsToEnrollee;
-        }
-
         // GET: api/Enrollees
         /// <summary>
         /// Gets all of the enrollees for the user, or all enrollees if user has ADMIN role.
@@ -105,12 +84,6 @@ namespace Prime.Controllers
             if (enrollee == null)
             {
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
-            }
-
-            // if the user is not an ADMIN, make sure the enrollee matches the enrollee, otherwise return not authorized
-            if (!BelongsToEnrollee(enrollee))
-            {
-                return Forbid();
             }
 
             return Ok(new ApiOkResponse<Enrollee>(enrollee));
@@ -197,12 +170,6 @@ namespace Prime.Controllers
             if (enrollee == null)
             {
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
-            }
-
-            // if the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
-            if (!BelongsToEnrollee(enrollee))
-            {
-                return Forbid();
             }
 
             await _enrolleeService.DeleteEnrolleeAsync(enrolleeId);
