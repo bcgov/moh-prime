@@ -28,23 +28,23 @@ namespace Prime.Services
                 IsBodyHtml = true,
             };
 
-            SmtpClient smtp = new SmtpClient(PrimeConstants.MAIL_SERVER_URL);
-            // try
-            // {
-                 smtp.Send(mail);
-            // }
-            // catch (Exception ex)
-            // {
-            //     if (ex is InvalidOperationException
-            //      || ex is SmtpException
-            //      || ex is SmtpFailedRecipientException
-            //      || ex is SmtpFailedRecipientsException)
-            //     {
-            //         throw new Exception($"attempted to email to [{ PrimeConstants.MAIL_SERVER_URL }], exception message was [{ex.Message}]");
-            //     }
+            SmtpClient smtp = new SmtpClient(PrimeConstants.MAIL_SERVER_URL, PrimeConstants.MAIL_SERVER_PORT);
+            try
+            {
+                smtp.Send(mail);
+            }
+            catch (Exception ex)
+            {
+                if (ex is InvalidOperationException
+                 || ex is SmtpException
+                 || ex is SmtpFailedRecipientException
+                 || ex is SmtpFailedRecipientsException)
+                {
+                    // TODO log mail exception, parhaps in a table in the database?
+                }
 
-            //     throw;
-            // }
+                throw;
+            }
         }
     }
 }
