@@ -4,19 +4,10 @@ pipeline {
         disableResume()
     }
     stages {
-        stage('Promote to Test') {
-            when { expression { ( GIT_BRANCH == 'develop' ) } }
+        stage('Promote Master to Test') {
+            when { expression { ( GIT_BRANCH == 'master' ) } }
             agent { label 'master' }
             steps {
-                script {
-                        def IS_APPROVED = input(
-                            id: 'IS_APPROVED', message: "Deploy to TEST?", ok: "yes", parameters: [
-                                string(name: 'IS_APPROVED', defaultValue: 'yes', description: 'Deploy to TEST?')
-                                ])
-                        if (IS_APPROVED != 'yes') {
-                            currentBuild.result = "ABORTED"
-                            error "User cancelled"
-                        }
                     echo "Test (DEV) ..."
                     sh "./player.sh build database test"
                     sh "./player.sh build api test"
@@ -24,23 +15,22 @@ pipeline {
                     sh "./player.sh deploy database test"
                     sh "./player.sh deploy api test"
                     sh "./player.sh deploy frontend test"
-                }
             }
         }
-        stage('Deploy (PROD)') {
+        stage('Promote Master to Production') {
             when { expression { ( GIT_BRANCH == 'master' ) } }
             agent { label 'master' }
             steps {
                 script {
                         def IS_APPROVED = input(
-                            id: 'IS_APPROVED', message: "Deploy to TEST?", ok: "yes", parameters: [
-                                string(name: 'IS_APPROVED', defaultValue: 'yes', description: 'Deploy to TEST?')
+                            id: 'IS_APPROVED', message: "Deploy to Production?", ok: "yes", parameters: [
+                                string(name: 'IS_APPROVED', defaultValue: 'yes', description: 'Deploy to Production?')
                                 ])
                         if (IS_APPROVED != 'yes') {
                             currentBuild.result = "ABORTED"
                             error "User cancelled"
                         }
-                    echo "Deploy (PROD)"
+                    echo "Deploy to Production..."
                     sh "./player.sh build database prod"
                     sh "./player.sh build api prod"
                     sh "./player.sh build frontend prod"
@@ -50,60 +40,5 @@ pipeline {
                 }
             }
         }
-    /*
-            stage('Merge to develop') {
-            when { expression { (GIT_BRANCH != 'origin/master' || GIT_BRANCH != 'origin/develop' ) } }
-            agent { label 'master' }
-            steps {
-                script {
-                    echo "${GIT_BRANCH}"
-                    def IS_APPROVED = input(
-                        id: 'IS_APPROVED', message: "Merge branch to develop?", ok: "yes", parameters: [
-                            string(name: 'IS_APPROVED', defaultValue: 'yes', description: "Merge ${GIT_BRANCH} to develop?")
-                            ])
-                    if (IS_APPROVED != 'yes' ) {
-                        currentBuild.result = "ABORTED"
-                        error "User cancelled"
-                    }
-                    echo "Squashing commits and merging to develop"
-                }
-                withCredentials([usernamePassword(credentialsId: 'prime-jenkins', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                    sh "./player.sh gitPromote develop"
-                }
-            }
-        }
-        stage('Merge to master') {
-            agent { label 'master' }
-            when {
-                environment name: 'CHANGE_TARGET', value: 'master'
-            }
-            steps {
-                script {
-                    def IS_APPROVED = input(message: "Merge to master?", ok: "yes", parameters: [string(name: 'IS_APPROVED', defaultValue: 'yes', description: 'Merge to master?')])
-                    if (IS_APPROVED != 'yes') {
-                        currentBuild.result = "ABORTED"
-                        error "User cancelled"
-                    }
-                    echo "Squashing commits and merging to master"
-                }
-                withCredentials([usernamePassword(credentialsId: 'github-account', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                    sh '
-                        # Update master with latest changes from develop
-                        git checkout master
-                        git fetch
-                        git merge --squash origin/develop
-                        git commit -m "Merge branch develop into master"
-                        git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/bcgov/moh-prime.git
-
-                        # Update the HEAD on develop to be the same as master
-                        git checkout develop
-                        git fetch
-                        git merge -s ours -m "Updating develop with master" origin/master
-                        git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/bcgov/moh-prime.git
-                    '
-                }
-            }
-        }
-    */
     }
 }
