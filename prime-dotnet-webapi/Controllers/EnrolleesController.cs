@@ -71,7 +71,7 @@ namespace Prime.Controllers
             return belongsToEnrollee;
         }
 
-        // GET: api/Enrolments
+        // GET: api/Enrollees
         /// <summary>
         /// Gets all of the enrollees for the user, or all enrollees if user has ADMIN role.
         /// </summary>
@@ -79,7 +79,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiOkResponse<IEnumerable<Enrollee>>), StatusCodes.Status200OK)]
-        [Authorize(Policy = PrimeConstants.PRIME_ADMIN_POLICY)]
+        // [Authorize(Policy = PrimeConstants.PRIME_ADMIN_POLICY)]
         public async Task<ActionResult<IEnumerable<Enrollee>>> GetEnrollees(
             [FromQuery]EnrolmentSearchOptions searchOptions)
         {
@@ -87,7 +87,7 @@ namespace Prime.Controllers
             return Ok(new ApiOkResponse<IEnumerable<Enrollee>>(enrollees.ToList()));
         }
 
-        // GET: api/Enrolments/5
+        // GET: api/Enrollees/5
         /// <summary>
         /// Gets a specific Enrollee.
         /// </summary>
@@ -164,13 +164,6 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            // if (enrolment.Enrollee == null
-            //         || enrolment.Enrollee.Id == null)
-            // {
-            //     this.ModelState.AddModelError("Enrollee.Id", "Enrollee Id is required to make updates.");
-            //     return BadRequest(new ApiBadRequestResponse(this.ModelState));
-            // }
-
             if (!_enrolleeService.EnrolleeExists(enrolleeId))
             {
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
@@ -181,12 +174,6 @@ namespace Prime.Controllers
             {
                 this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee can not be updated when the current status is not 'In Progress'.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
-            }
-
-            // if the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
-            if (!BelongsToEnrollee(enrollee))
-            {
-                return Forbid();
             }
 
             await _enrolleeService.UpdateEnrolleeAsync(enrollee);

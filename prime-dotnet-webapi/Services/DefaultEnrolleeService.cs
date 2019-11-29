@@ -161,7 +161,7 @@ namespace Prime.Services
             return enrollee.Id;
         }
 
-        public async Task<int> UpdateEnrolmentAsync(Enrollee enrollee)
+        public async Task<int> UpdateEnrolleeAsync(Enrollee enrollee)
         {
 
             var _enrolleeDb = _context.Enrollees
@@ -399,7 +399,9 @@ namespace Prime.Services
 
         public bool EnrolleeExists(int enrolleeId)
         {
-            throw new NotImplementedException();
+            return _context.Enrollees
+                .Where(e => e.Id == enrolleeId)
+                .Any();
         }
 
         public async Task<Enrollee> GetEnrolleeAsync(int enrolleeId)
@@ -417,11 +419,6 @@ namespace Prime.Services
         }
 
         public Task<IEnumerable<Enrollee>> GetEnrolleesForUserIdAsync(Guid userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> UpdateEnrolleeAsync(Enrollee enrollee)
         {
             throw new NotImplementedException();
         }
