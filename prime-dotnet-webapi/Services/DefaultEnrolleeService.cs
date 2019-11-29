@@ -81,8 +81,7 @@ namespace Prime.Services
         public async Task<Enrollee> GetEnrolleeAsync(Guid userId)
         {
             var entity = await this.GetBaseEnrolleeQuery()
-                .SingleOrDefaultAsync(e => e.UserId == userId)
-                ;
+                .SingleOrDefaultAsync(e => e.UserId == userId);
 
             if (entity != null)
             {
@@ -121,24 +120,15 @@ namespace Prime.Services
             return items;
         }
 
-
-
-        public async Task<IEnumerable<Enrollee>> GetEnrolleeForUserIdAsync(
-            Guid userId)
+        public async Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId)
         {
-            IQueryable<Enrollee> query = this.GetBaseEnrolleeQuery()
-                .Where(e => e.UserId == userId)
-                ;
+            Enrollee enrollee = await this.GetBaseEnrolleeQuery()
+                .SingleOrDefaultAsync(e => e.UserId == userId);
 
-            var items = await query.ToListAsync();
+            // Add the available statuses to the enrolment
+            enrollee.AvailableStatuses = this.GetAvailableStatuses(enrollee.CurrentStatus?.Status);
 
-            foreach (var item in items)
-            {
-                // add the available statuses to the enrolment
-                item.AvailableStatuses = this.GetAvailableStatuses(item.CurrentStatus?.Status);
-            }
-
-            return items;
+            return enrollee;
         }
 
         public Task<int?> CreateEnrolleeAsync(Enrollee enrollee)
@@ -407,10 +397,10 @@ namespace Prime.Services
                     ;
         }
 
-        Task<Enrollee> IEnrolleeService.GetEnrolleeForUserIdAsync(Guid userId)
-        {
-            throw new NotImplementedException();
-        }
+        // Task<Enrollee> IEnrolleeService.GetEnrolleeForUserIdAsync(Guid userId)
+        // {
+        //     throw new NotImplementedException();
+        // }
 
         public bool EnrolleeExists(int enrolleeId)
         {

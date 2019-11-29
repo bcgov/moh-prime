@@ -15,7 +15,7 @@ namespace Prime.Controllers
     [Route("api/[controller]")]
     [ApiController]
     // User needs at least the ADMIN or ENROLMENT role to use this controller
-    [Authorize(Policy = PrimeConstants.PRIME_USER_POLICY)]
+    // [Authorize(Policy = PrimeConstants.PRIME_USER_POLICY)]
     public class EnrolleesController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
@@ -29,26 +29,26 @@ namespace Prime.Controllers
         /// <summary>
         /// Gets all of the enrollee records for the user, or all enrollee records if user has ADMIN role.
         /// </summary>
-        [HttpGet(Name = nameof(GetEnrollees))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ApiOkResponse<IEnumerable<Enrollee>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Enrollee>>> GetEnrollees()
-        {
-            IEnumerable<Enrollee> enrollees = null;
+        // [HttpGet(Name = nameof(GetEnrollees))]
+        // [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        // [ProducesResponseType(typeof(ApiOkResponse<IEnumerable<Enrollee>>), StatusCodes.Status200OK)]
+        // public async Task<ActionResult<IEnumerable<Enrollee>>> GetEnrollees()
+        // {
+        //     IEnumerable<Enrollee> enrollees = null;
 
-            // User must have the ADMIN role to see all enrollees
-            if (User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE))
-            {
-                enrollees = await _enrolleeService.GetEnrolleesAsync();
-            }
-            else
-            {
-                var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(PrimeUtils.PrimeUserId(User));
-                enrollees = new[] { enrollee };
-            }
+        //     // User must have the ADMIN role to see all enrollees
+        //     if (User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE))
+        //     {
+        //         enrollees = await _enrolleeService.GetEnrolleesAsync();
+        //     }
+        //     else
+        //     {
+        //         var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(PrimeUtils.PrimeUserId(User));
+        //         enrollees = new[] { enrollee };
+        //     }
 
-            return Ok(new ApiOkResponse<IEnumerable<Enrollee>>(enrollees));
-        }
+        //     return Ok(new ApiOkResponse<IEnumerable<Enrollee>>(enrollees));
+        // }
 
         private bool BelongsToEnrollee(Enrollee enrollee)
         {
@@ -102,7 +102,7 @@ namespace Prime.Controllers
         /// <summary>
         /// Gets a specific Enrollee.
         /// </summary>
-        /// <param name="enrolleeId"></param> 
+        /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}", Name = nameof(GetEnrolleeById))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -144,15 +144,6 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            // check to see if this userId already has an enrollee, if so, reject creating another
-            var existingEnrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(enrollee.UserId);
-
-            if (existingEnrollee != null)
-            {
-                this.ModelState.AddModelError("Enrollee.UserId", "An enrollee already exists for this User Id, only one enrollee is allowed per User Id.");
-                return BadRequest(new ApiBadRequestResponse(this.ModelState));
-            }
-
             var createdEnrolleeId = await _enrolleeService.CreateEnrolleeAsync(enrollee);
 
             return CreatedAtAction(nameof(GetEnrolleeById), new { enrolleeId = createdEnrolleeId }, new ApiCreatedResponse<Enrollee>(enrollee));
@@ -163,7 +154,7 @@ namespace Prime.Controllers
         /// Updates a specific Enrollee.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        /// <param name="enrollee"></param> 
+        /// <param name="enrollee"></param>
         [HttpPut("{enrolleeId}", Name = nameof(UpdateEnrollee))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -218,7 +209,7 @@ namespace Prime.Controllers
         /// <summary>
         /// Deletes a specific Enrollee.
         /// </summary>
-        /// <param name="enrolleeId"></param> 
+        /// <param name="enrolleeId"></param>
         [HttpDelete("{enrolleeId}", Name = nameof(DeleteEnrollee))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -247,7 +238,7 @@ namespace Prime.Controllers
         /// <summary>
         /// Gets a list of the statuses that the enrollee can change to.
         /// </summary>
-        /// <param name="enrolleeId"></param> 
+        /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}/availableStatuses", Name = nameof(GetAvailableEnrolmentStatuses))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -278,7 +269,7 @@ namespace Prime.Controllers
         /// <summary>
         /// Gets all of the status changes for a specific Enrollee.
         /// </summary>
-        /// <param name="enrolleeId"></param> 
+        /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}/statuses", Name = nameof(GetEnrolmentStatuses))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
