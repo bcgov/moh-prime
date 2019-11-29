@@ -79,22 +79,11 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiOkResponse<IEnumerable<Enrollee>>), StatusCodes.Status200OK)]
+        [Authorize(Policy = PrimeConstants.PRIME_ADMIN_POLICY)]
         public async Task<ActionResult<IEnumerable<Enrollee>>> GetEnrollees(
             [FromQuery]EnrolmentSearchOptions searchOptions)
         {
-            IEnumerable<Enrollee> enrollees = null;
-
-            // User must have the ADMIN role to see all enrollees
-            if (User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE))
-            {
-                enrollees = await _enrolleeService.GetEnrolleesAsync(searchOptions);
-            }
-            else
-            {
-                enrollees = await _enrolleeService.GetEnrolleesForUserIdAsync(
-                                        PrimeUtils.PrimeUserId(User));
-            }
-
+            IEnumerable<Enrollee> enrollees = await _enrolleeService.GetEnrolleesAsync(searchOptions);
             return Ok(new ApiOkResponse<IEnumerable<Enrollee>>(enrollees.ToList()));
         }
 

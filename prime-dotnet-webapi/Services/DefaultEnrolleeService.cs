@@ -397,11 +397,6 @@ namespace Prime.Services
                     ;
         }
 
-        // Task<Enrollee> IEnrolleeService.GetEnrolleeForUserIdAsync(Guid userId)
-        // {
-        //     throw new NotImplementedException();
-        // }
-
         public bool EnrolleeExists(int enrolleeId)
         {
             throw new NotImplementedException();

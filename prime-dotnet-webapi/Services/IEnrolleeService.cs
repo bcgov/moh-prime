@@ -18,8 +18,7 @@ namespace Prime.Services
 
         Task<IEnumerable<Enrollee>> GetEnrolleesAsync(EnrolmentSearchOptions searchOptions);
 
-        Task<IEnumerable<Enrollee>> GetEnrolleesForUserIdAsync(
-            Guid userId);
+        Task<IEnumerable<Enrollee>> GetEnrolleesForUserIdAsync(Guid userId);
 
         Task<int?> CreateEnrolleeAsync(Enrollee enrollee);
 
