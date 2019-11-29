@@ -25,10 +25,10 @@ namespace Prime.Controllers
             _enrolleeService = enrolleeService;
         }
 
-        // GET: api/Enrolments
-        /// <summary>
-        /// Gets all of the enrollee records for the user, or all enrollee records if user has ADMIN role.
-        /// </summary>
+        // // GET: api/Enrolments
+        // /// <summary>
+        // /// Gets all of the enrollee records for the user, or all enrollee records if user has ADMIN role.
+        // /// </summary>
         // [HttpGet(Name = nameof(GetEnrollees))]
         // [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         // [ProducesResponseType(typeof(ApiOkResponse<IEnumerable<Enrollee>>), StatusCodes.Status200OK)]
@@ -197,12 +197,6 @@ namespace Prime.Controllers
             if (enrollee == null)
             {
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
-            }
-
-            // if the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
-            if (!BelongsToEnrollee(enrollee))
-            {
-                return Forbid();
             }
 
             await _enrolleeService.DeleteEnrolleeAsync(enrolleeId);
