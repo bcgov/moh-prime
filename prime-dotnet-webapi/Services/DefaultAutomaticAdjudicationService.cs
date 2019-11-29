@@ -25,8 +25,10 @@ namespace Prime.Services
 
         public bool QualifiesForAutomaticAdjudication(Enrollee enrollee)
         {
-            // Check all of the rules to see if this should qualify to be automatically adjudicated.
-            // If it does not qualify not, it should add the reasons it did not meet the criteria to the current enrolment status
+            // Check all of the rules to see if this should qualify to be
+            // automatically adjudicated.  If it does not qualify not, it
+            // should add the reasons it did not meet the criteria to the
+            // current enrolment status
             bool passed = true;
             foreach (var rule in _rules)
             {
@@ -48,7 +50,7 @@ namespace Prime.Services
                 // make sure that there is an enrolment to process the rule against
                 if (enrollee == null)
                 {
-                    throw new ArgumentNullException(nameof(enrollee), "Could not process enrolment rule, passed in Enrolment cannot be null.");
+                    throw new ArgumentNullException(nameof(enrollee), "Could not process enrolment rule, passed in Enrollee cannot be null.");
                 }
 
                 // process the rule and check the results
@@ -58,7 +60,7 @@ namespace Prime.Services
 
                 if (ruleFailed)
                 {
-                    // get the current status record for the enrolment
+                    // get the current status record for the enrollee
                     var currentStatus = enrollee.CurrentStatus;
 
                     // make sure there is a current status
@@ -124,13 +126,13 @@ namespace Prime.Services
             }
         }
 
-        /// check to see if the enrolment is a pump provider
+        /// check to see if the enrollee is a pump provider
         private class PumpProviderRule : BaseAutomaticAdjudicationRule
         {
             public override ICollection<StatusReason> ProcessRuleInternal(Enrollee enrollee)
             {
                 var result = new List<StatusReason>(0);
-                // check to see if the enrolment is a pump provider
+                // check to see if the enrollee is a pump provider
                 // note: if for some reason the question was not answered, we will assume 'Yes'
                 if (enrollee.IsInsulinPumpProvider.GetValueOrDefault(true))
                 {
@@ -141,13 +143,13 @@ namespace Prime.Services
             }
         }
 
-        /// check to see if the enrolment has a particular licence class
+        /// check to see if the enrollee has a particular licence class
         private class LicenceClassRule : BaseAutomaticAdjudicationRule
         {
             public override ICollection<StatusReason> ProcessRuleInternal(Enrollee enrollee)
             {
                 var result = new List<StatusReason>(0);
-                // check to see if the enrolment has a particular licence class
+                // check to see if the enrollee has a particular licence class
                 if (enrollee.Certifications != null
                         && enrollee.Certifications.Any())
                 {
@@ -167,13 +169,13 @@ namespace Prime.Services
             }
         }
 
-        /// check to see if the enrolment has an inactive license number
+        /// check to see if the enrollee has an inactive license number
         private class LicenceNumberRule : BaseAutomaticAdjudicationRule
         {
             public override ICollection<StatusReason> ProcessRuleInternal(Enrollee enrollee)
             {
                 var result = new List<StatusReason>(0);
-                // check to see if the enrolment has an inactive license number
+                // check to see if the enrollee has an inactive license number
                 if (enrollee.Certifications != null
                         && enrollee.Certifications.Any())
                 {
@@ -193,14 +195,13 @@ namespace Prime.Services
             }
         }
 
-        /// check to see if the enrolment has an certification name discrepancy
+        /// check to see if the enrollee has an certification name discrepancy
         private class CertificationNameRule : BaseAutomaticAdjudicationRule
         {
             public override ICollection<StatusReason> ProcessRuleInternal(Enrollee enrollee)
             {
                 var result = new List<StatusReason>(0);
-                // check to see if the enrolment has an certification name discrepancy
-                // if (enrolment.HasCertification.GetValueOrDefault(false))
+                // check to see if the enrollee has an certification name discrepancy
                 if (enrollee?.Certifications?.Count > 0)
                 {
                     // TODO - properly implement this check

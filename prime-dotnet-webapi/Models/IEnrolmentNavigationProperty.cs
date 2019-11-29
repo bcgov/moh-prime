@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace Prime.Models
 {
-    public interface IEnrolmentNavigationProperty
+    public interface IEnrolleeNavigationProperty
     {
         [JsonIgnore]
         int EnrolleeId { get; set; }

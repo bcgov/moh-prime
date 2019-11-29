@@ -12,7 +12,7 @@ namespace Prime
 
         public readonly static string PRIME_ADMIN_ROLE = "prime_admin";
 
-        public readonly static string PRIME_ENROLMENT_ROLE = "prime_user";
+        public readonly static string PRIME_ENROLLEE_ROLE = "prime_user";
 
         public readonly static string ASSURANCE_LEVEL_CLAIM_TYPE = "identity_assurance_level";
 
