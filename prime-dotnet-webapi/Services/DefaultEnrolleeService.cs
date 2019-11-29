@@ -407,9 +407,18 @@ namespace Prime.Services
             throw new NotImplementedException();
         }
 
-        public Task<Enrollee> GetEnrolleeAsync(int enrolleeId)
+        public async Task<Enrollee> GetEnrolleeAsync(int enrolleeId)
         {
-            throw new NotImplementedException();
+            var entity = await this.GetBaseEnrolleeQuery()
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
+            if (entity != null)
+            {
+                // add the available statuses to the enrollee
+                entity.AvailableStatuses = this.GetAvailableStatuses(entity.CurrentStatus?.Status);
+            }
+
+            return entity;
         }
 
         public Task<IEnumerable<Enrollee>> GetEnrolleesForUserIdAsync(Guid userId)
