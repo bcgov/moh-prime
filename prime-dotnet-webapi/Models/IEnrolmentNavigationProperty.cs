@@ -5,9 +5,9 @@ namespace Prime.Models
     public interface IEnrolmentNavigationProperty
     {
         [JsonIgnore]
-        int EnrolmentId { get; set; }
+        int EnrolleeId { get; set; }
 
         [JsonIgnore]
-        Enrolment Enrolment { get; set; }
+        Enrollee Enrollee { get; set; }
     }
 }

@@ -23,14 +23,14 @@ namespace Prime.Services
             _rules.Add(new LicenceNumberRule());
         }
 
-        public bool QualifiesForAutomaticAdjudication(Enrolment enrolment)
+        public bool QualifiesForAutomaticAdjudication(Enrollee enrollee)
         {
             // Check all of the rules to see if this should qualify to be automatically adjudicated.
             // If it does not qualify not, it should add the reasons it did not meet the criteria to the current enrolment status
             bool passed = true;
             foreach (var rule in _rules)
             {
-                passed &= rule.ProcessRule(enrolment);
+                passed &= rule.ProcessRule(enrollee);
             }
 
             return passed;
@@ -38,33 +38,33 @@ namespace Prime.Services
 
         private interface IAutomaticAdjudicationRule
         {
-            bool ProcessRule(Enrolment enrolment);
+            bool ProcessRule(Enrollee enrollee);
         }
 
         private abstract class BaseAutomaticAdjudicationRule : IAutomaticAdjudicationRule
         {
-            public bool ProcessRule(Enrolment enrolment)
+            public bool ProcessRule(Enrollee enrollee)
             {
                 // make sure that there is an enrolment to process the rule against
-                if (enrolment == null)
+                if (enrollee == null)
                 {
-                    throw new ArgumentNullException(nameof(enrolment), "Could not process enrolment rule, passed in Enrolment cannot be null.");
+                    throw new ArgumentNullException(nameof(enrollee), "Could not process enrolment rule, passed in Enrolment cannot be null.");
                 }
 
                 // process the rule and check the results
-                var results = this.ProcessRuleInternal(enrolment);
+                var results = this.ProcessRuleInternal(enrollee);
 
                 bool ruleFailed = results.Any();
 
                 if (ruleFailed)
                 {
                     // get the current status record for the enrolment
-                    var currentStatus = enrolment.CurrentStatus;
+                    var currentStatus = enrollee.CurrentStatus;
 
                     // make sure there is a current status
                     if (currentStatus == null)
                     {
-                        throw new InvalidOperationException($"Could not process enrolment rule, current status was missing for Enrolment.Id={enrolment.Id}.");
+                        throw new InvalidOperationException($"Could not process enrolment rule, current status was missing for Enrollee.UserId={enrollee.UserId}.");
                     }
 
                     // add a enrolment status reason list if one doesn't already exist
@@ -83,22 +83,22 @@ namespace Prime.Services
                 return !ruleFailed;
             }
 
-            public abstract ICollection<StatusReason> ProcessRuleInternal(Enrolment enrolment);
+            public abstract ICollection<StatusReason> ProcessRuleInternal(Enrollee enrollee);
 
         }
 
         /// check to see if any of the self-declaration rules were answered as 'Yes'
         private class SelfDeclarationRule : BaseAutomaticAdjudicationRule
         {
-            public override ICollection<StatusReason> ProcessRuleInternal(Enrolment enrolment)
+            public override ICollection<StatusReason> ProcessRuleInternal(Enrollee enrollee)
             {
                 var result = new List<StatusReason>(0);
                 // check to see if any of the self-declaration rules were answered as 'Yes'
                 // note: if for some reason the question was not answered, we will assume 'Yes'
-                if (enrolment.HasConviction.GetValueOrDefault(true)
-                        || enrolment.HasDisciplinaryAction.GetValueOrDefault(true)
-                        || enrolment.HasPharmaNetSuspended.GetValueOrDefault(true)
-                        || enrolment.HasRegistrationSuspended.GetValueOrDefault(true))
+                if (enrollee.HasConviction.GetValueOrDefault(true)
+                        || enrollee.HasDisciplinaryAction.GetValueOrDefault(true)
+                        || enrollee.HasPharmaNetSuspended.GetValueOrDefault(true)
+                        || enrollee.HasRegistrationSuspended.GetValueOrDefault(true))
                 {
                     result.Add(new StatusReason { Code = StatusReason.SELF_DECLARATION_CODE });
                 }
@@ -110,11 +110,11 @@ namespace Prime.Services
         /// check to see if any of the addresses are outside of BC
         private class AddressRule : BaseAutomaticAdjudicationRule
         {
-            public override ICollection<StatusReason> ProcessRuleInternal(Enrolment enrolment)
+            public override ICollection<StatusReason> ProcessRuleInternal(Enrollee enrollee)
             {
                 var result = new List<StatusReason>(0);
                 // check to see if any of the addresses are outside of BC
-                var provinceCodes = new[] { enrolment.Enrollee?.PhysicalAddress?.ProvinceCode, enrolment.Enrollee?.MailingAddress?.ProvinceCode };
+                var provinceCodes = new[] { enrollee?.PhysicalAddress?.ProvinceCode, enrollee?.MailingAddress?.ProvinceCode };
                 if (provinceCodes.Any(p => p != null && !p.Equals(Province.BRITISH_COLUMBIA_CODE, StringComparison.InvariantCultureIgnoreCase)))
                 {
                     result.Add(new StatusReason { Code = StatusReason.ADDRESS_CODE });
@@ -127,12 +127,12 @@ namespace Prime.Services
         /// check to see if the enrolment is a pump provider
         private class PumpProviderRule : BaseAutomaticAdjudicationRule
         {
-            public override ICollection<StatusReason> ProcessRuleInternal(Enrolment enrolment)
+            public override ICollection<StatusReason> ProcessRuleInternal(Enrollee enrollee)
             {
                 var result = new List<StatusReason>(0);
                 // check to see if the enrolment is a pump provider
                 // note: if for some reason the question was not answered, we will assume 'Yes'
-                if (enrolment.IsInsulinPumpProvider.GetValueOrDefault(true))
+                if (enrollee.IsInsulinPumpProvider.GetValueOrDefault(true))
                 {
                     result.Add(new StatusReason { Code = StatusReason.PUMP_PROVIDER_CODE });
                 }
@@ -144,15 +144,15 @@ namespace Prime.Services
         /// check to see if the enrolment has a particular licence class
         private class LicenceClassRule : BaseAutomaticAdjudicationRule
         {
-            public override ICollection<StatusReason> ProcessRuleInternal(Enrolment enrolment)
+            public override ICollection<StatusReason> ProcessRuleInternal(Enrollee enrollee)
             {
                 var result = new List<StatusReason>(0);
                 // check to see if the enrolment has a particular licence class
-                if (enrolment.Certifications != null
-                        && enrolment.Certifications.Any())
+                if (enrollee.Certifications != null
+                        && enrollee.Certifications.Any())
                 {
                     // TODO - properly implement this check
-                    foreach (var item in enrolment.Certifications)
+                    foreach (var item in enrollee.Certifications)
                     {
                         // check to see if there is a LicenseCode value - in future check for specific code values
                         if (item.LicenseCode > 0)
@@ -170,14 +170,14 @@ namespace Prime.Services
         /// check to see if the enrolment has an inactive license number
         private class LicenceNumberRule : BaseAutomaticAdjudicationRule
         {
-            public override ICollection<StatusReason> ProcessRuleInternal(Enrolment enrolment)
+            public override ICollection<StatusReason> ProcessRuleInternal(Enrollee enrollee)
             {
                 var result = new List<StatusReason>(0);
                 // check to see if the enrolment has an inactive license number
-                if (enrolment.Certifications != null
-                        && enrolment.Certifications.Any())
+                if (enrollee.Certifications != null
+                        && enrollee.Certifications.Any())
                 {
-                    foreach (var item in enrolment.Certifications)
+                    foreach (var item in enrollee.Certifications)
                     {
                         // TODO - properly implement this check
                         if (item.LicenseNumber != null)
@@ -196,12 +196,12 @@ namespace Prime.Services
         /// check to see if the enrolment has an certification name discrepancy
         private class CertificationNameRule : BaseAutomaticAdjudicationRule
         {
-            public override ICollection<StatusReason> ProcessRuleInternal(Enrolment enrolment)
+            public override ICollection<StatusReason> ProcessRuleInternal(Enrollee enrollee)
             {
                 var result = new List<StatusReason>(0);
                 // check to see if the enrolment has an certification name discrepancy
                 // if (enrolment.HasCertification.GetValueOrDefault(false))
-                if (enrolment.Certifications.Count > 0)
+                if (enrollee.Certifications.Count > 0)
                 {
                     // TODO - properly implement this check
                     result.Add(new StatusReason { Code = StatusReason.NAME_DISCREPANCY_CODE });

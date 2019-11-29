@@ -31,7 +31,6 @@ namespace Prime
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<ILookupService, DefaultLookupService>();
-            services.AddScoped<IEnrolmentService, DefaultEnrolmentService>();
             services.AddScoped<IEnrolleeService, DefaultEnrolleeService>();
             services.AddScoped<IAutomaticAdjudicationService, DefaultAutomaticAdjudicationService>();
             services.AddScoped<IEnrolmentCertificateService, DefaultEnrolmentCertificateService>();

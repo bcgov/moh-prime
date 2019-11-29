@@ -18,12 +18,12 @@ namespace Prime.Controllers
     [Authorize(Policy = PrimeConstants.PRIME_USER_POLICY)]
     public class EnrolmentCertificatesController : ControllerBase
     {
-        private readonly IEnrolmentService _enrolmentService;
+        private readonly IEnrolleeService _enrolleeService;
         private readonly IEnrolmentCertificateService _certificateService;
 
-        public EnrolmentCertificatesController(IEnrolmentService enrolmentService, IEnrolmentCertificateService enrolmentCertificateService)
+        public EnrolmentCertificatesController(IEnrolleeService enrolleeService, IEnrolmentCertificateService enrolmentCertificateService)
         {
-            _enrolmentService = enrolmentService;
+            _enrolleeService = enrolleeService;
             _certificateService = enrolmentCertificateService;
         }
 
@@ -76,7 +76,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiOkResponse<EnrolmentCertificateAccessToken>), StatusCodes.Status201Created)]
         public async Task<ActionResult<EnrolmentCertificateAccessToken>> CreateEnrolmentCertificateAccessToken()
         {
-            var enrolment = await _enrolmentService.GetEnrolmentForUserIdAsync(PrimeUtils.PrimeUserId(User));
+            var enrolment = await _enrolleeService.GetEnrolleeForUserIdAsync(PrimeUtils.PrimeUserId(User));
             if (enrolment == null)
             {
                 this.ModelState.AddModelError("Enrollee.UserId", "No enrolment exists for this User Id.");
@@ -88,7 +88,7 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrolment.Enrollee);
+            var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrolment);
 
             return CreatedAtAction(nameof(GetEnrolmentCertificate), new { accessTokenId = createdToken.Id }, new ApiCreatedResponse<EnrolmentCertificateAccessToken>(createdToken));
         }

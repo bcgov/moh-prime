@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,14 +25,14 @@ namespace Prime.Controllers
             _enrolleeService = enrolleeService;
         }
 
-        // GET: api/Enrollees
+        // GET: api/Enrolments
         /// <summary>
         /// Gets all of the enrollee records for the user, or all enrollee records if user has ADMIN role.
         /// </summary>
         [HttpGet(Name = nameof(GetEnrollees))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ApiOkResponse<IEnumerable<Enrolment>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Enrolment>>> GetEnrollees()
+        [ProducesResponseType(typeof(ApiOkResponse<IEnumerable<Enrollee>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<Enrollee>>> GetEnrollees()
         {
             IEnumerable<Enrollee> enrollees = null;
 
@@ -48,5 +49,303 @@ namespace Prime.Controllers
 
             return Ok(new ApiOkResponse<IEnumerable<Enrollee>>(enrollees));
         }
+
+        private bool BelongsToEnrollee(Enrollee enrollee)
+        {
+            bool belongsToEnrollee = false;
+
+            // check to see if the logged in user is an admin
+            belongsToEnrollee = User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE);
+
+            // if user is not ADMIN, check that user belongs to the enrollee
+            if (!belongsToEnrollee)
+            {
+                // get the prime user id from the logged in user - note: this returns 'Guid.Empty' if there is no logged in user
+                Guid PrimeUserId = PrimeUtils.PrimeUserId(User);
+
+                // check to see if the logged in user id is not 'Guid.Empty', and matches the one in the enrollee
+                belongsToEnrollee = !PrimeUserId.Equals(Guid.Empty)
+                        && PrimeUserId.Equals(enrollee.UserId);
+            }
+
+            return belongsToEnrollee;
+        }
+
+        // GET: api/Enrolments
+        /// <summary>
+        /// Gets all of the enrollees for the user, or all enrollees if user has ADMIN role.
+        /// </summary>
+        [HttpGet(Name = nameof(GetEnrollees))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ApiOkResponse<IEnumerable<Enrollee>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<Enrollee>>> GetEnrollees(
+            [FromQuery]EnrolmentSearchOptions searchOptions)
+        {
+            IEnumerable<Enrollee> enrollees = null;
+
+            // User must have the ADMIN role to see all enrollees
+            if (User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE))
+            {
+                enrollees = await _enrolleeService.GetEnrolleesAsync(searchOptions);
+            }
+            else
+            {
+                enrollees = await _enrolleeService.GetEnrolleesForUserIdAsync(
+                                        PrimeUtils.PrimeUserId(User));
+            }
+
+            return Ok(new ApiOkResponse<IEnumerable<Enrollee>>(enrollees.ToList()));
+        }
+
+        // GET: api/Enrolments/5
+        /// <summary>
+        /// Gets a specific Enrollee.
+        /// </summary>
+        /// <param name="enrolleeId"></param> 
+        [HttpGet("{enrolleeId}", Name = nameof(GetEnrolleeById))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiOkResponse<Enrollee>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<Enrollee>> GetEnrolleeById(int enrolleeId)
+        {
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+
+            if (enrollee == null)
+            {
+                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
+            }
+
+            // if the user is not an ADMIN, make sure the enrollee matches the enrollee, otherwise return not authorized
+            if (!BelongsToEnrollee(enrollee))
+            {
+                return Forbid();
+            }
+
+            return Ok(new ApiOkResponse<Enrollee>(enrollee));
+        }
+
+        // POST: api/Enrolments
+        /// <summary>
+        /// Creates a new Enrollee.
+        /// </summary>
+        [HttpPost(Name = nameof(CreateEnrollee))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiCreatedResponse<Enrollee>), StatusCodes.Status201Created)]
+        public async Task<ActionResult<Enrollee>> CreateEnrollee(Enrollee enrollee)
+        {
+            if (enrollee == null)
+            {
+                this.ModelState.AddModelError("Enrollee", "Could not create an enrollee, the passed in Enrollee cannot be null.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
+
+            // check to see if this userId already has an enrollee, if so, reject creating another
+            var existingEnrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(enrollee.UserId);
+
+            if (existingEnrollee != null)
+            {
+                this.ModelState.AddModelError("Enrollee.UserId", "An enrollee already exists for this User Id, only one enrollee is allowed per User Id.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
+
+            var createdEnrolleeId = await _enrolleeService.CreateEnrolleeAsync(enrollee);
+
+            return CreatedAtAction(nameof(GetEnrolleeById), new { enrolleeId = createdEnrolleeId }, new ApiCreatedResponse<Enrollee>(enrollee));
+        }
+
+        // PUT: api/Enrolments/5
+        /// <summary>
+        /// Updates a specific Enrollee.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="enrollee"></param> 
+        [HttpPut("{enrolleeId}", Name = nameof(UpdateEnrollee))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> UpdateEnrollee(int enrolleeId, Enrollee enrollee)
+        {
+            if (enrollee == null)
+            {
+                this.ModelState.AddModelError("Enrollee", "Could not update the enrollee, the passed in Enrollee cannot be null.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
+
+            if (enrolleeId != enrollee.Id)
+            {
+                this.ModelState.AddModelError("Enrollee.Id", "Enrollee Id does not match with the payload.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
+
+            // if (enrolment.Enrollee == null
+            //         || enrolment.Enrollee.Id == null)
+            // {
+            //     this.ModelState.AddModelError("Enrollee.Id", "Enrollee Id is required to make updates.");
+            //     return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            // }
+
+            if (!_enrolleeService.EnrolleeExists(enrolleeId))
+            {
+                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
+            }
+
+            // if the enrollee is not in the status of 'In Progress', it cannot be updated
+            if (!(await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.IN_PROGRESS_CODE)))
+            {
+                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee can not be updated when the current status is not 'In Progress'.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
+
+            // if the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
+            if (!BelongsToEnrollee(enrollee))
+            {
+                return Forbid();
+            }
+
+            await _enrolleeService.UpdateEnrolleeAsync(enrollee);
+
+            return NoContent();
+        }
+
+        // DELETE: api/Enrolments/5
+        /// <summary>
+        /// Deletes a specific Enrollee.
+        /// </summary>
+        /// <param name="enrolleeId"></param> 
+        [HttpDelete("{enrolleeId}", Name = nameof(DeleteEnrollee))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiOkResponse<Enrollee>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<Enrollee>> DeleteEnrollee(int enrolleeId)
+        {
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+            if (enrollee == null)
+            {
+                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
+            }
+
+            // if the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
+            if (!BelongsToEnrollee(enrollee))
+            {
+                return Forbid();
+            }
+
+            await _enrolleeService.DeleteEnrolleeAsync(enrolleeId);
+
+            return Ok(new ApiOkResponse<Enrollee>(enrollee));
+        }
+
+        // GET: api/Enrolments/5/availableStatuses
+        /// <summary>
+        /// Gets a list of the statuses that the enrollee can change to.
+        /// </summary>
+        /// <param name="enrolleeId"></param> 
+        [HttpGet("{enrolleeId}/availableStatuses", Name = nameof(GetAvailableEnrolmentStatuses))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiOkResponse<IEnumerable<Status>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<Status>>> GetAvailableEnrolmentStatuses(int enrolleeId)
+        {
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+
+            if (enrollee == null)
+            {
+                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
+            }
+
+            // if the user is not an ADMIN, make sure the enrollee matches the enrollee, otherwise return not authorized
+            if (!BelongsToEnrollee(enrollee))
+            {
+                return Forbid();
+            }
+
+            var availableEnrolmentStatuses = await _enrolleeService.GetAvailableEnrolmentStatusesAsync(enrolleeId);
+
+            return Ok(new ApiOkResponse<IEnumerable<Status>>(availableEnrolmentStatuses));
+        }
+
+        // GET: api/Enrolments/5/statuses
+        /// <summary>
+        /// Gets all of the status changes for a specific Enrollee.
+        /// </summary>
+        /// <param name="enrolleeId"></param> 
+        [HttpGet("{enrolleeId}/statuses", Name = nameof(GetEnrolmentStatuses))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiOkResponse<IEnumerable<Status>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<EnrolmentStatus>>> GetEnrolmentStatuses(int enrolleeId)
+        {
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+
+            if (enrollee == null)
+            {
+                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
+            }
+
+            // if the user is not an ADMIN, make sure the enrollee matches the enrollee, otherwise return not authorized
+            if (!BelongsToEnrollee(enrollee))
+            {
+                return Forbid();
+            }
+
+            var enrollees = await _enrolleeService.GetEnrolmentStatusesAsync(enrolleeId);
+
+            return Ok(new ApiOkResponse<IEnumerable<EnrolmentStatus>>(enrollees));
+        }
+
+        // POST: api/Enrolments/5/statuses
+        /// <summary>
+        /// Adds a status change for a specific Enrollee.
+        /// </summary>
+        [HttpPost("{enrolleeId}/statuses", Name = nameof(CreateEnrolmentStatus))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiOkResponse<IEnumerable<Status>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<EnrolmentStatus>> CreateEnrolmentStatus(int enrolleeId, Status status)
+        {
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+
+            if (enrollee == null)
+            {
+                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
+            }
+
+            if (status?.Code == null || status.Code < 1)
+            {
+                this.ModelState.AddModelError("Status.Code", "Status Code is required to create statuses.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
+
+            // if the user is not an ADMIN, make sure the enrollee matches the enrollee, otherwise return not authorized
+            if (!BelongsToEnrollee(enrollee))
+            {
+                return Forbid();
+            }
+
+            if (!_enrolleeService.IsStatusChangeAllowed(enrollee.CurrentStatus?.Status, status))
+            {
+                this.ModelState.AddModelError("Status.Code", $"Cannot change from current Status Code: {enrollee.CurrentStatus?.Status?.Code} to the new Status Code: {status.Code}");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
+
+            var enrolleeStatus = await _enrolleeService.CreateEnrolmentStatusAsync(enrolleeId, status);
+
+            return Ok(new ApiOkResponse<EnrolmentStatus>(enrolleeStatus));
+        }
+
     }
 }

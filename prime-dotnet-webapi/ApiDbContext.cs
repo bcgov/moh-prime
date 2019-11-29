@@ -25,7 +25,6 @@ namespace Prime
       _context = context;
     }
 
-    public DbSet<Enrolment> Enrolments { get; set; }
     public DbSet<Certification> Certifications { get; set; }
     public DbSet<Job> Jobs { get; set; }
     public DbSet<Organization> Organizations { get; set; }
@@ -301,9 +300,9 @@ namespace Prime
           .HasIndex("UserId")
           .IsUnique();
 
-      modelBuilder.Entity<Enrolment>()
-          .HasIndex("EnrolleeId")
-          .IsUnique();
+      // modelBuilder.Entity<Enrolment>()
+      //     .HasIndex("EnrolleeId")
+      //     .IsUnique();
       #endregion
 
       #region Relationships
@@ -330,11 +329,11 @@ namespace Prime
           .HasForeignKey(cp => cp.PracticeCode);
 
       modelBuilder.Entity<EnrolmentStatus>()
-          .HasKey(es => new { es.EnrolmentId, es.StatusCode });
+          .HasKey(es => new { es.EnrolleeId, es.StatusCode });
       modelBuilder.Entity<EnrolmentStatus>()
-          .HasOne(es => es.Enrolment)
+          .HasOne(es => es.Enrollee)
           .WithMany(e => e.EnrolmentStatuses)
-          .HasForeignKey(es => es.EnrolmentId);
+          .HasForeignKey(es => es.EnrolleeId);
       modelBuilder.Entity<EnrolmentStatus>()
           .HasOne(es => es.Status)
           .WithMany(s => s.EnrolmentStatuses)

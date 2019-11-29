@@ -11,10 +11,10 @@ namespace Prime.Models
         public int? Id { get; set; }
 
         [JsonIgnore]
-        public int EnrolmentId { get; set; }
+        public int EnrolleeId { get; set; }
 
         [JsonIgnore]
-        public Enrolment Enrolment { get; set; }
+        public Enrollee Enrollee { get; set; }
 
         [Required]
         public string Title { get; set; }
