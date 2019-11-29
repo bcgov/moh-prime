@@ -135,7 +135,7 @@ namespace Prime.Services
         {
             if (enrollee == null)
             {
-                throw new ArgumentNullException(nameof(enrollee), "Could not create an enrolment, the passed in Enrolment cannot be null.");
+                throw new ArgumentNullException(nameof(enrollee), "Could not create an enrollee, the passed in Enrollee cannot be null.");
             }
 
             return this.CreateEnrolleeInternalAsync(enrollee);
@@ -213,7 +213,7 @@ namespace Prime.Services
             }
         }
 
-        private void ReplaceExistingItems<T>(ICollection<T> dbCollection, ICollection<T> newCollection, Enrollee enrollee) where T : class, IEnrolmentNavigationProperty
+        private void ReplaceExistingItems<T>(ICollection<T> dbCollection, ICollection<T> newCollection, Enrollee enrollee) where T : class, IEnrolleeNavigationProperty
         {
             // remove existing items
             foreach (var item in dbCollection)

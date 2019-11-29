@@ -14,7 +14,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    // User needs at least the ADMIN or ENROLMENT role to use this controller
+    // User needs at least the ADMIN or ENROLLEE role to use this controller
     [Authorize(Policy = PrimeConstants.PRIME_USER_POLICY)]
     public class EnrolleesController : ControllerBase
     {
@@ -64,7 +64,7 @@ namespace Prime.Controllers
             return Ok(new ApiOkResponse<Enrollee>(enrollee));
         }
 
-        // POST: api/Enrolments
+        // POST: api/Enrollees
         /// <summary>
         /// Creates a new Enrollee.
         /// </summary>
@@ -86,7 +86,7 @@ namespace Prime.Controllers
             return CreatedAtAction(nameof(GetEnrolleeById), new { enrolleeId = createdEnrolleeId }, new ApiCreatedResponse<Enrollee>(enrollee));
         }
 
-        // PUT: api/Enrolments/5
+        // PUT: api/Enrollees/5
         /// <summary>
         /// Updates a specific Enrollee.
         /// </summary>
@@ -129,7 +129,7 @@ namespace Prime.Controllers
             return NoContent();
         }
 
-        // DELETE: api/Enrolments/5
+        // DELETE: api/Enrollees/5
         /// <summary>
         /// Deletes a specific Enrollee.
         /// </summary>
