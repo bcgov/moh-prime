@@ -25,31 +25,6 @@ namespace Prime.Controllers
             _enrolleeService = enrolleeService;
         }
 
-        // GET: api/Enrolments
-        /// <summary>
-        /// Gets all of the enrollee records for the user, or all enrollee records if user has ADMIN role.
-        /// </summary>
-        // [HttpGet(Name = nameof(GetEnrollees))]
-        // [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        // [ProducesResponseType(typeof(ApiOkResponse<IEnumerable<Enrollee>>), StatusCodes.Status200OK)]
-        // public async Task<ActionResult<IEnumerable<Enrollee>>> GetEnrollees()
-        // {
-        //     IEnumerable<Enrollee> enrollees = null;
-
-        //     // User must have the ADMIN role to see all enrollees
-        //     if (User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE))
-        //     {
-        //         enrollees = await _enrolleeService.GetEnrolleesAsync();
-        //     }
-        //     else
-        //     {
-        //         var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(PrimeUtils.PrimeUserId(User));
-        //         enrollees = new[] { enrollee };
-        //     }
-
-        //     return Ok(new ApiOkResponse<IEnumerable<Enrollee>>(enrollees));
-        // }
-
         // GET: api/Enrollees
         /// <summary>
         /// Gets all of the enrollees for the user, or all enrollees if user has ADMIN role.
