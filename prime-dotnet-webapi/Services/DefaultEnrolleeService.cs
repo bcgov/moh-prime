@@ -163,7 +163,6 @@ namespace Prime.Services
 
         public async Task<int> UpdateEnrolleeAsync(Enrollee enrollee)
         {
-
             var _enrolleeDb = _context.Enrollees
                                 .Include(e => e.PhysicalAddress)
                                 .Include(e => e.MailingAddress)
@@ -173,8 +172,6 @@ namespace Prime.Services
                                 .AsNoTracking().Where(e => e.Id == enrollee.Id)
                                 .FirstOrDefault();
 
-            // var _enrolmentDb = _context.Enrolments.AsNoTracking().Where(e => e.Id == enrolment.Id).FirstOrDefault();
-
             // remove existing addresses, and recreate if necessary
             this.ReplaceExistingAddress(_enrolleeDb.PhysicalAddress, enrollee.PhysicalAddress, enrollee);
             this.ReplaceExistingAddress(_enrolleeDb.MailingAddress, enrollee.MailingAddress, enrollee);
@@ -183,10 +180,10 @@ namespace Prime.Services
             this.ReplaceExistingItems(_enrolleeDb.Certifications, enrollee.Certifications, enrollee);
 
             // remove existing jobs, and recreate if necessary
-            // this.ReplaceExistingItems(_enrolmentDb.Jobs, enrolment.Jobs, enrolment);
+            this.ReplaceExistingItems(_enrolleeDb.Jobs, enrollee.Jobs, enrollee);
 
             // remove existing organizations, and recreate if necessary
-            // this.ReplaceExistingItems(_enrolmentDb.Organizations, enrolment.Organizations, enrolment);
+            this.ReplaceExistingItems(_enrolleeDb.Organizations, enrollee.Organizations, enrollee);
 
             _context.Entry(enrollee).State = EntityState.Modified;
 
