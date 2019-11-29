@@ -27,8 +27,8 @@ pipeline {
                                 string(name: 'IS_APPROVED', defaultValue: 'yes', description: 'Deploy to Production?')
                                 ])
                         if (IS_APPROVED != 'yes') {
-                            currentBuild.result = "ABORTED"
-                            error "User cancelled"
+                            currentBuild.result = "SUCCESS"
+                            echo "User cancelled deployment"
                         }
                     echo "Deploy to Production..."
                     sh "./player.sh build database prod"
