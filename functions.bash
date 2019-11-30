@@ -138,14 +138,16 @@ function occleanup() {
     ORPHANS=$(echo ${OPEN_PR_ARRAY[@]} ${LIVE_BRANCH_ARRAY[@]} | tr ' ' '\n' | sort | uniq -u)
     for i in $ORPHANS
     do
-        cleanup PR-$i
+        echo "cleanup PR-$i via occleanup"
+        declare -p ALL_BRANCH_ARTIFACTS=( $(oc get all,pvc,secrets,route -n ${PROJECT_PREFIX}-dev | grep -i "\-$1" | awk '{print $1}' | grep -P "(\-pr\-\d+)") )
+        echo "oc delete -n ${PROJECT_PREFIX}-dev $i"
     done
 }
 
 function cleanup() {
     declare -p ALL_BRANCH_ARTIFACTS=( $(oc get all,pvc,secrets,route -n ${PROJECT_PREFIX}-dev | grep -i "\-$1" | awk '{print $1}' | grep -P "(\-pr\-\d+)") )
-    for i in "${ALL_BRANCH_ARTIFACTS[@]}"
+    for a in "${ALL_BRANCH_ARTIFACTS[@]}"
     do
-    echo "oc delete -n ${PROJECT_PREFIX}-dev $i"
+    echo "oc delete -n ${PROJECT_PREFIX}-dev $a"
     done
 }
