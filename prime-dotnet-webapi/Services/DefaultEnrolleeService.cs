@@ -125,8 +125,8 @@ namespace Prime.Services
             Enrollee enrollee = await this.GetBaseEnrolleeQuery()
                 .SingleOrDefaultAsync(e => e.UserId == userId);
 
-            // Add the available statuses to the enrolment
-            enrollee.AvailableStatuses = this.GetAvailableStatuses(enrollee.CurrentStatus?.Status);
+            // add the available statuses to the enrolment
+            enrollee.AvailableStatuses = this.GetAvailableStatuses(enrollee?.CurrentStatus?.Status);
 
             return enrollee;
         }
@@ -143,7 +143,7 @@ namespace Prime.Services
 
         private async Task<int?> CreateEnrolleeInternalAsync(Enrollee enrollee)
         {
-            //create a status history record
+            // create a status history record
             EnrolmentStatus enrolmentStatus = new EnrolmentStatus { Enrollee = enrollee, StatusCode = Status.IN_PROGRESS_CODE, StatusDate = DateTime.Now, IsCurrent = true };
             if (enrollee.EnrolmentStatuses == null)
             {
@@ -390,8 +390,7 @@ namespace Prime.Services
                     .Include(e => e.PhysicalAddress)
                     .Include(e => e.MailingAddress)
                     .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.Status)
-                    .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.EnrolmentStatusReasons).ThenInclude(esr => esr.StatusReason)
-                    ;
+                    .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.EnrolmentStatusReasons).ThenInclude(esr => esr.StatusReason);
         }
 
         public bool EnrolleeExists(int enrolleeId)
@@ -413,11 +412,6 @@ namespace Prime.Services
             }
 
             return entity;
-        }
-
-        public Task<IEnumerable<Enrollee>> GetEnrolleesForUserIdAsync(Guid userId)
-        {
-            throw new NotImplementedException();
         }
     }
 }
