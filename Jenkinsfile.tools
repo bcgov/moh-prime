@@ -1,0 +1,31 @@
+pipeline {
+    agent none
+    options {
+        disableResume()
+    }
+    stages {
+        /*
+        stage('Begin tool deployments') {
+            agent { label 'master' }
+            steps {
+                echo "Placeholder ${BRANCH_NAME}"
+                sh "printenv"
+            }
+        }
+        stage('Build Tools') {
+            agent { label 'master' }
+            steps {
+                echo "Building ..."
+                sh "./player.sh toolbelt sonar tools"
+                sh "./player.sh toolbelt mailhog test"
+            }
+        }*/
+        stage('Cleanup Branch') {
+        when { expression { ( GIT_BRANCH == 'develop' ) } }
+            agent { label 'master' }
+            steps {
+                sh "./player.sh occleanup"
+            }
+        }
+    }
+}
