@@ -123,6 +123,16 @@ objects:
         - name: '5001'
           port: 5001
           targetPort: 5001
+      readinessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /healthcheck
+          port: 8080
+          scheme: HTTP
+        initialDelaySeconds: 5
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 1
       selector:
         io.kompose.service: '${NAME}${SUFFIX}'
     status:
