@@ -5,9 +5,6 @@ pipeline {
     }
     stages {
         stage('Promote Master to Test') {
-        options {
-            timeout(time: 5, unit: 'MINUTES')   // timeout on this stage
-        }
             when { expression { ( GIT_BRANCH == 'master' ) } }
             agent { label 'master' }
             steps {
@@ -22,7 +19,7 @@ pipeline {
         }
         stage('Promote Master to Production') {
         options {
-            timeout(time: 5, unit: 'MINUTES')   // timeout on this stage
+            timeout(time: 60, unit: 'MINUTES')   // timeout on this stage
         }
             when { expression { ( GIT_BRANCH == 'master' ) } }
             agent { label 'master' }

@@ -21,6 +21,7 @@ pipeline {
             }
         }*/
         stage('Cleanup Branch') {
+        when { expression { ( GIT_BRANCH == 'develop' ) } }
             agent { label 'master' }
             steps {
                 sh "./player.sh occleanup"
