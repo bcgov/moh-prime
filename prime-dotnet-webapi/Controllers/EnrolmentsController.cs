@@ -19,12 +19,10 @@ namespace Prime.Controllers
     public class EnrolmentsController : ControllerBase
     {
         private readonly IEnrolmentService _enrolmentService;
-        private readonly IEmailService _email;
 
-        public EnrolmentsController(IEnrolmentService enrolmentService, IEmailService email)
+        public EnrolmentsController(IEnrolmentService enrolmentService)
         {
             _enrolmentService = enrolmentService;
-            _email = email;
         }
 
         private bool BelongsToEnrollee(Enrolment enrolment)
