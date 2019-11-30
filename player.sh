@@ -5,12 +5,12 @@ source functions.bash
 
 case "$1" in
     build)
-        build $2 $3 
-        #> /dev/null 2>&1 
+        build $2 $3
+        #> /dev/null 2>&1
         ;;
     deploy)
-        deploy $2 $3 
-        #> /dev/null 2>&1 
+        deploy $2 $3
+        #> /dev/null 2>&1
         ;;
     toolbelt)
         toolbelt $2 $3
@@ -24,6 +24,9 @@ case "$1" in
     cleanup)
         cleanup $2
         ;;
+    occleanup)
+        occleanup
+        ;;
     *)
-    echo "Usage: $0 [application (build|deploy) (dev|test|prod|tools) | scan]"
+    echo "You\'re doing it wrong..."
 esac
