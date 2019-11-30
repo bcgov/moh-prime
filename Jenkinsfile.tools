@@ -4,6 +4,7 @@ pipeline {
         disableResume()
     }
     stages {
+        /*
         stage('Begin tool deployments') {
             agent { label 'master' }
             steps {
@@ -11,7 +12,6 @@ pipeline {
                 sh "printenv"
             }
         }
-        /*
         stage('Build Tools') {
             agent { label 'master' }
             steps {
@@ -19,13 +19,12 @@ pipeline {
                 sh "./player.sh toolbelt sonar tools"
                 sh "./player.sh toolbelt mailhog test"
             }
-        }
+        }*/
         stage('Cleanup Branch') {
             agent { label 'master' }
             steps {
-                sh "./player.sh cleanup pr-103"
+                sh "./player.sh occleanup"
             }
         }
-        */
     }
 }
