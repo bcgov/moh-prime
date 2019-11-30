@@ -128,14 +128,6 @@ function cleanOcArtifacts() {
     done
 }
 
-function cleanup() {
-    declare -p ALL_BRANCH_ARTIFACTS=( $(oc get all,pvc,secrets,route -n ${PROJECT_PREFIX}-dev | grep -i "\-$1" | awk '{print $1}' | grep -P "(\-pr\-\d+)") )
-    for i in "${ALL_BRANCH_ARTIFACTS[@]}"
-    do
-        oc delete -n ${PROJECT_PREFIX}-dev $i
-    done
-}
-
 function occleanup() {
     OPEN_PR_ARRAY=()
     LIVE_BRANCH_ARRAY=()
@@ -147,5 +139,13 @@ function occleanup() {
     for i in $ORPHANS
     do
         cleanup PR-$i
+    done
+}
+
+function cleanup() {
+    declare -p ALL_BRANCH_ARTIFACTS=( $(oc get all,pvc,secrets,route -n ${PROJECT_PREFIX}-dev | grep -i "\-$1" | awk '{print $1}' | grep -P "(\-pr\-\d+)") )
+    for i in "${ALL_BRANCH_ARTIFACTS[@]}"
+    do
+    echo "oc delete -n ${PROJECT_PREFIX}-dev $i"
     done
 }

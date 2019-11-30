@@ -4,6 +4,7 @@ pipeline {
         disableResume()
     }
     stages {
+        /*
         stage('Begin tool deployments') {
             agent { label 'master' }
             steps {
@@ -11,7 +12,6 @@ pipeline {
                 sh "printenv"
             }
         }
-        /*
         stage('Build Tools') {
             agent { label 'master' }
             steps {
