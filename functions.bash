@@ -118,16 +118,6 @@ function determineMode() {
     fi;
 }
 
-# Scrubs all PR assets from the environment
-function cleanOcArtifacts() {
-    artifactItems=$(oc get all,secrets,pvc -n ${PROJECT_PREFIX}-dev | grep -i "\-${BRANCH_NAME}"  | column -t | awk '{print $1}' | sort)
-    echo "${artifactItems}"
-    for i in ${artifactItems};
-    do
-        oc delete -n ${PROJECT_PREFIX}-dev $i
-    done
-}
-
 function occleanup() {
     OPEN_PR_ARRAY=()
     LIVE_BRANCH_ARRAY=()
@@ -138,16 +128,14 @@ function occleanup() {
     ORPHANS=$(echo ${OPEN_PR_ARRAY[@]} ${LIVE_BRANCH_ARRAY[@]} | tr ' ' '\n' | sort | uniq -u)
     for i in $ORPHANS
     do
-        echo "cleanup PR-$i via occleanup"
-        declare -p ALL_BRANCH_ARTIFACTS=( $(oc get all,pvc,secrets,route -n ${PROJECT_PREFIX}-dev | grep -i "\-$1" | awk '{print $1}' | grep -P "(\-pr\-\d+)") )
-        echo "oc delete -n ${PROJECT_PREFIX}-dev $i"
+        cleanOcArtifacts $i
     done
 }
 
-function cleanup() {
+function cleanOcArtifacts() {
     declare -p ALL_BRANCH_ARTIFACTS=( $(oc get all,pvc,secrets,route -n ${PROJECT_PREFIX}-dev | grep -i "\-$1" | awk '{print $1}' | grep -P "(\-pr\-\d+)") )
     for a in "${ALL_BRANCH_ARTIFACTS[@]}"
     do
-    echo "oc delete -n ${PROJECT_PREFIX}-dev $a"
+    oc delete -n ${PROJECT_PREFIX}-dev $a
     done
 }
