@@ -20,12 +20,12 @@ pipeline {
                 sh "./player.sh toolbelt mailhog test"
             }
         }
+        */
         stage('Cleanup Branch') {
             agent { label 'master' }
             steps {
                 sh "./player.sh cleanup pr-103"
             }
         }
-        */
     }
 }
