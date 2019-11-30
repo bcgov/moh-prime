@@ -143,6 +143,6 @@ function occleanup() {
     declare -p LIVE_BRANCH_ARRAY=(`oc get route | grep -P "(\-pr\-\d+)" | sort -u | awk '{print $1}'| sed 's/[^0-9]*//g'`)
     ORPHANS=`echo ${OPEN_PR_ARRAY[@]} ${LIVE_BRANCH_ARRAY[@]} | tr ' ' '\n' | sort | uniq -u`
     for i in $ORPHANS
-    do cleanup $1
+    do cleanup PR-$i
     done
 }
