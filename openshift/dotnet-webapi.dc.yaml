@@ -1,0 +1,129 @@
+kind: Template
+apiVersion: v1
+metadata:
+  name: dotnet-webapi-dc
+  creationTimestamp: null
+parameters:
+  - name: NAME
+    displayName: Name
+    description: A prefix appended to all objects
+    required: true
+  - name: SUFFIX
+    displayName: Name Suffix
+    description: A suffix appended to all objects
+    required: false
+  - name: VERSION
+    required: true
+  - name: SOURCE_CONTEXT_DIR
+    required: true
+    value: prime-dotnet-webapi
+  - name: SOURCE_REPOSITORY_URL
+    required: true
+    value: 'https://github.com/bcgov/moh-prime'
+  - name: SOURCE_REPOSITORY_REF
+    required: true
+  - name: OC_NAMESPACE
+    required: true
+  - name: OC_APP
+    required: true
+objects:
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      annotations:
+        kompose.cmd: >-
+          kompose convert --provider=openshift --build=build-config
+          --build-repo=https://github.com/bcgov/moh-prime.git
+          --build-branch=develop --deployment-config
+        kompose.version: 1.18.0 (06a2e56)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: '${NAME}${SUFFIX}'
+      name: '${NAME}${SUFFIX}'
+    spec:
+      completionDeadlineSeconds: 1200
+      replicas: 1
+      selector:
+        io.kompose.service: '${NAME}${SUFFIX}'
+      strategy: null
+      resources:
+        requests:
+          cpu: 300m
+          memory: 512Mi
+        limits:
+          cpu: '1'
+          memory: 1024Mi
+      template:
+        metadata:
+          creationTimestamp: null
+          labels:
+            io.kompose.service: '${NAME}${SUFFIX}'
+        spec:
+          containers:
+            - env:
+                - name: OC_APP
+                  value: ${OC_APP}
+                - name: PATH
+                  value: '/opt/rh/rh-dotnet22/root/usr/lib64/dotnet:/opt/app-root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+                - name: ASPNETCORE_ENVIRONMENT
+                  value: Development
+                - name: ASPNETCORE_HTTPS_PORT
+                  value: '5001'
+                - name: ASPNETCORE_URLS
+                  value: 'http://+:8080'
+                - name: DB_CONNECTION_STRING
+                  value: >-
+                    host=postgresql${SUFFIX};port=5432;database=postgres;username=postgres;password=postgres
+                - name: JWT_SIGNING_KEY
+                  value: SdqlA0Y5e6HMAK1wm6iHHHz2u37XGtlo
+                - name: JWT_ADMIN_CLIENT
+                  value: 'prime-admin-${OC_APP}'
+                - name: JWT_USER_CLIENT
+                  value: 'prime-application-${OC_APP}'
+                - name: JWT_AUDIENCE
+                  value: 'prime-web-api'
+                - name: JWT_WELL_KNOWN_CONFIG 
+                  value: 'https://sso-${OC_APP}.pathfinder.gov.bc.ca/auth/realms/v4mbqqas/.well-known/openid-configuration' 
+              image: ' '
+              name: primeapi
+              ports:
+                - containerPort: 8080
+                - containerPort: 5001
+              resources: {}
+          restartPolicy: Always
+      test: false
+      triggers:
+        - type: ConfigChange
+        - imageChangeParams:
+            automatic: true
+            containerNames:
+              - primeapi
+            from:
+              kind: ImageStreamTag
+              name: '${NAME}${SUFFIX}:latest'
+          type: ImageChange
+    status: {}
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        kompose.cmd: >-
+          kompose convert --provider=openshift --build=build-config
+          --build-repo=https://github.com/bcgov/moh-prime.git
+        kompose.version: 1.18.0 (06a2e56)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: '${NAME}${SUFFIX}'
+      name: '${NAME}${SUFFIX}'
+    spec:
+      ports:
+        - name: '5000'
+          port: 5000
+          targetPort: 8080
+        - name: '5001'
+          port: 5001
+          targetPort: 5001
+      selector:
+        io.kompose.service: '${NAME}${SUFFIX}'
+    status:
+      loadBalancer: {}

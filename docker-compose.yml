@@ -1,6 +1,7 @@
 version: "3"
 
 services:
+######################################################### Sign-in #
   dotnet-webapi:
     container_name: primeapi
     restart: always
@@ -10,17 +11,21 @@ services:
       DB_CONNECTION_STRING: "host=postgres;port=5432;database=postgres;username=postgres;password=postgres"      
       JWT_SIGNING_KEY: "SdqlA0Y5e6HMAK1wm6iHHHz2u37XGtlo"      
       ASPNETCORE_HTTPS_PORT: "5001"
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_URLS: "http://+:8080"
+      DOTNET_CLI_HOME: "/tmp/DOTNET_CLI_HOME"
     ports:
-      - "5000:80"
+      - "5000:8080"
       - "5001:5001"
     networks:
       - primenet
     depends_on:
       - postgres
+######################################################### Database #
   postgres:
     restart: always
     container_name: primedb
-    image: postgres:11.4
+    image: postgres:9.6
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USERNAME: postgres
@@ -31,6 +36,7 @@ services:
       - local_postgres_data:/var/lib/postgresql/data
     networks:
       - primenet
+###################################################### Web Frontend #
   nginx-angular:
     container_name: primeweb
     build:
@@ -38,9 +44,9 @@ services:
     command: "nginx -g 'daemon off;'"
     restart: always
     ports:
-      - "80:80"
+      - "8080:8080"
     expose:
-      - "80"
+      - "8080"
     networks:
       - primenet
 

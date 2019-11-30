@@ -1,0 +1,25 @@
+<div class="row"
+     [ngClass]="getJustifyContent">
+  <div class="col pt-2">
+
+    <ng-container *ngIf="hideBack !== true">
+      <button *ngIf="backRoute"
+              mat-stroked-button
+              type="button"
+              [routerLink]="['..', backRoute]">Back</button>
+      <button *ngIf='hasBackAction'
+              mat-stroked-button
+              type="button"
+              (click)="handleBackClick()">Back</button>
+    </ng-container>
+
+  </div>
+  <div class="col
+              pt-2
+              text-right">
+
+    <button mat-raised-button
+            color="primary">Save and Continue</button>
+
+  </div>
+</div>

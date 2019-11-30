@@ -1,27 +1,31 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
+import { ConfigModule } from '@config/config.module';
+import { CoreModule } from '@core/core.module';
+
 import { AppRoutingModule } from './app-routing.module';
+import { AppConfigModule } from './app-config.module';
 import { AppComponent } from './app.component';
 
-import { CoreModule } from './core/core.module';
-import { ConfigModule } from './config/config.module';
-import { AppConfigModule } from './app-config.module';
-import { AuthModule } from './auth/auth.module';
-import { DashboardModule } from './dashboard/dashboard.module';
+import { AuthModule } from '@auth/auth.module';
+import { EnrolmentModule } from '@enrolment/enrolment.module';
+import { AdjudicationModule } from '@adjudication/adjudication.module';
+import { EnrolmentCertificateModule } from './modules/enrolment-certificate/enrolment-certificate.module';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
-    CoreModule,
     ConfigModule,
+    CoreModule,
     AppConfigModule,
-    AuthModule,
-    DashboardModule,
-    AppRoutingModule
+    AuthModule, // TODO: lazy load this module
+    EnrolmentModule, // TODO: lazy load this module
+    AdjudicationModule, // TODO: lazy load this module
+    EnrolmentCertificateModule,
+    AppRoutingModule // WARNING: MUST be the last routing module imported!!!
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

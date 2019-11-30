@@ -1,0 +1,81 @@
+kind: Template
+apiVersion: v1
+metadata:
+  name: sonar-scanner-dc
+  creationTimestamp: null
+parameters:
+  - name: SOURCE_REPOSITORY_URL
+    required: true
+    value: 'https://github.com/bcgov/moh-prime'
+  - name: SOURCE_REPOSITORY_REF
+    required: true
+    value: 'develop'
+objects:
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: sonar-runner
+      name: sonar-runner
+    spec:
+      replicas: 1
+      selector:
+        io.kompose.service: sonar-runner
+      strategy:
+        resources: {}
+      template:
+        metadata:
+          creationTimestamp: null
+          labels:
+            io.kompose.service: sonar-runner
+        spec:
+          containers:
+            - env: 
+                - name: ASPNETCORE_ENVIRONMENT
+                  value: Development
+                - name: JAVA_HOME
+                  value: '/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64/jre'
+                - name: GIT_COMMITTER_NAME
+                  value: 'default'
+                - name: GIT_COMMITTER_EMAIL
+                  value: 'noreply@gov.bc.ca'
+              image: ' '
+              name: sonar-scanner
+              resources: 
+                requests:
+                  cpu: 300m
+                  memory: 512Mi
+                limits:
+                  cpu: '1'
+                  memory: 1024Mi
+          restartPolicy: Always
+      test: false
+      triggers:
+      - type: ConfigChange
+      - imageChangeParams:
+          automatic: true
+          containerNames:
+          - sonar-scanner
+          from:
+            kind: ImageStreamTag
+            name: sonar-runner:latest
+        type: ImageChange
+    status: {}
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: sonar-runner
+      name: sonar-runner
+    spec:
+      clusterIP: None
+      ports:
+      - name: headless
+        port: 55555
+        targetPort: 0
+      selector:
+        io.kompose.service: sonar-runner
+    status:
+      loadBalancer: {}

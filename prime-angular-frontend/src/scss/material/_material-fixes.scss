@@ -1,9 +1,9 @@
 // Angular Material
 // ----------------------------------------------------------------------------
-// Used to fix issues related to Angular Material still being in beta release
+// Used to fix issues related to Angular Material
 
 // Remove all outlines from all elements.  This is very aggressive! and should
-// be removed once Angular Material is out of beta
+// be removed once supported by Angular Material.
 * {
   outline: none !important;
 }
@@ -12,35 +12,100 @@
 // Sidenav
 //
 
-// NOTE: Cannot be moved into dashboard component for shadow
-// DOM, since some of this won't work in the component and has
-// to be global.
+// NOTE: Cannot be moved into dashboard component for use
+// in shadow DOM, since some of this won't work in the
+// component and has to be global.
 
 .mat-sidenav-container {
   // Force the background to match busy loader
   background-color: #fff !important;
-  // Design: yellow line at top of viewport
-  border-top: 5px solid theme-palette(yellow);
 }
 
 .mat-sidenav {
-  background-color: theme-palette(blue);
+  background-color: theme-palette(grey, lightest);
+  border-right: 2px solid theme-palette(grey, light);
 
-  // Only applied to branding at top of sidenav
-  .brand-container {
-    // Adjust padding to "vertically" align brand with adjacent toolbar
-    padding-top: 20px !important;
+  .mat-list-item {
+    color: theme-palette(blue) !important;
+
+    .extend-content-width {
+      // Force the link content to extend width of sidenav
+      padding-right: 3rem !important;
+    }
   }
 
-  .mat-list-item .extend-content-width {
-    // Force the link content to width to extend
-    padding-right: 3rem !important;
+  a,
+  .mat-icon {
+    color: theme-palette(blue) !important;
   }
 
-  .active a,
-  .active .mat-icon {
-    // Highlight the active router link
-    color: theme-palette(blue, lighter) !important;
+  .active,
+  .active:focus,
+  .mat-list-item:focus {
+    background-color: theme-palette(grey, lighter) !important;
+
+    .mat-list-item-content {
+      border-right: 5px solid theme-palette(yellow) !important;
+    }
+  }
+
+  .mat-list-item-content {
+    border-right: 5px solid transparent !important;
+    padding-left: 25px !important;
+  }
+
+  .active {
+    .mat-list-item-content {
+      border-right: 5px solid theme-palette(yellow) !important;
+    }
+  }
+
+  .mat-list-item-content {
+    border-right: 5px solid transparent !important;
+    padding-left: 25px !important;
+  }
+
+  .active {
+    .mat-list-item-content {
+      border-right: 5px solid theme-palette(yellow) !important;
+    }
+  }
+
+  .mat-list-item-content {
+    border-right: 5px solid transparent !important;
+    padding-left: 25px !important;
+  }
+
+  .active {
+    .mat-list-item-content {
+      border-right: 5px solid theme-palette(yellow) !important;
+    }
+  }
+
+  .mat-list-item-content {
+    border-right: 5px solid transparent !important;
+    padding-left: 25px !important;
+  }
+
+  .active {
+    .mat-list-item-content {
+      border-right: 5px solid theme-palette(yellow) !important;
+    }
+  }
+
+  .mat-list-item-content {
+    border-right: 5px solid transparent !important;
+    padding-left: 25px !important;
+  }
+
+  .active {
+    .mat-list-item-content {
+      border-right: 5px solid theme-palette(yellow) !important;
+    }
+  }
+
+  .active a {
+    font-weight: bold !important;
   }
 
   // Force the mat-icon to be centered in the sidenav
@@ -50,39 +115,5 @@
     text-align: center !important;
     padding: 0 !important;
     width: 90% !important;
-  }
-}
-
-.mat-toolbar {
-  .fill-remaining-space {
-    /* This fills the remaining space, by using flexbox.
-       Every toolbar row uses a flexbox row layout. */
-    flex: 1 1 auto;
-  }
-}
-
-
-.mat-sidenav-content {
-
-  & > .mat-toolbar:first-child {
-    // Remove default theming from the toolbar
-    background-color: transparent;
-
-    // Increase the height of the main toolbar to match brand height
-    // height: 70px;
-
-    .fill-remaining-space {
-      // This fills the remaining space, by using flexbox.
-      // Every toolbar row uses a flexbox row layout.
-      flex: 1 1 auto;
-    }
-
-    .mat-icon {
-      // Indicate area is click-able
-      cursor: pointer;
-      // Increase spacing between toolbar icons, as well as increase the
-      // clicker-able area surrounding the icon
-      margin: 10px;
-    }
   }
 }

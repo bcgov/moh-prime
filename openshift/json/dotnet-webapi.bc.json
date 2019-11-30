@@ -1,0 +1,166 @@
+{
+    "kind": "Template",
+    "apiVersion": "v1",
+    "metadata": {
+      "name": "dotnet-webapi-bc",
+      "creationTimestamp": null
+    },
+    "parameters": [
+      {
+        "name": "NAME",
+        "displayName": "Name",
+        "description": "A prefix appended to all objects",
+        "required": true
+      },
+      {
+        "name": "SUFFIX",
+        "displayName": "Name Suffix",
+        "description": "A suffix appended to all objects",
+        "required": false
+      },
+      {
+        "name": "VERSION",
+        "required": true
+      },
+      {
+        "name": "SOURCE_CONTEXT_DIR",
+        "required": true
+      },
+      {
+        "name": "SOURCE_REPOSITORY_URL",
+        "required": true
+      },
+      {
+        "name": "SOURCE_REPOSITORY_REF",
+        "required": true
+      },
+      {
+        "name": "OC_NAMESPACE",
+        "required": true
+      },
+      {
+        "name": "OC_APP",
+        "required": true
+      }
+    ],
+    "objects": [
+       {
+          "apiVersion": "v1",
+          "kind": "ImageStream",
+          "metadata": {
+            "creationTimestamp": null,
+            "labels": {
+              "io.kompose.service": "${NAME}${SUFFIX}"
+            },
+            "name": "${NAME}${SUFFIX}"
+          },
+          "spec": {
+            "containers": [
+              {
+                "env": [
+                  {
+                    "name": "PATH",
+                    "value": "$PATH:/opt/rh/rh-dotnet22/root/usr/lib64/dotnet"
+                  },
+                  {
+                    "name": "ASPNETCORE_ENVIRONMENT",
+                    "value": "Development"
+                  },
+                  {
+                    "name": "ASPNETCORE_HTTPS_PORT",
+                    "value": "5001"
+                  },
+                  {
+                    "name": "ASPNETCORE_URLS",
+                    "value": "http://+:8080"
+                  },
+                  {
+                    "name": "DB_CONNECTION_STRING",
+                    "value": "host=postgresql${SUFFIX};port=5432;database=postgres;username=postgres;password=postgres"
+                  },
+                  {
+                    "name": "JWT_SIGNING_KEY",
+                    "value": "SdqlA0Y5e6HMAK1wm6iHHHz2u37XGtlo"
+                  }
+                ]
+              }
+            ],
+            "tags": [
+              {
+                "annotations": null,
+                "from": {
+                  "kind": "DockerImage",
+                  "name": "${NAME}${SUFFIX}"
+                },
+                "generation": null,
+                "importPolicy": {},
+                "name": "latest"
+              }
+            ]
+          },
+          "status": {
+            "dockerImageRepository": ""
+          }
+       },
+       {
+          "apiVersion": "v1",
+          "kind": "BuildConfig",
+          "metadata": {
+            "annotations": {
+              "kompose.cmd": "kompose convert --provider=openshift --build=build-config --build-repo=https://github.com/bcgov/moh-prime.git",
+              "kompose.version": "1.18.0 (06a2e56)"
+            },
+            "creationTimestamp": null,
+            "labels": {
+              "io.kompose.service": "${NAME}${SUFFIX}"
+            },
+            "name": "${NAME}${SUFFIX}"
+          },
+          "spec": {
+            "completionDeadlineSeconds": 6000,
+            "nodeSelector": null,
+            "output": {
+              "to": {
+                "kind": "ImageStreamTag",
+                "name": "${NAME}${SUFFIX}:latest"
+              }
+            },
+            "postCommit": {},
+            "resources": {
+              "requests": {
+                "cpu": "2",
+                "memory": "4Gi"
+              },
+              "limits": {
+                "cpu": "4",
+                "memory": "8Gi"
+              }
+            },
+            "runPolicy": "Serial",
+            "source": {
+              "contextDir": "${SOURCE_CONTEXT_DIR}",
+              "git": {
+                "ref": "${SOURCE_REPOSITORY_REF}",
+                "uri": "${SOURCE_REPOSITORY_URL}"
+              },
+              "type": "Git"
+            },
+            "strategy": {
+              "dockerStrategy": {},
+              "type": "Docker"
+            },
+            "triggers": [
+           {
+             "type": "ConfigChange"
+           },
+           {
+             "type": "ImageChange"
+           }
+            ]
+          },
+          "status": {
+            "lastVersion": 0
+          }
+       }
+    ]
+ }

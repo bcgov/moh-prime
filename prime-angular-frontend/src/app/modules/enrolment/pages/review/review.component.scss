@@ -1,0 +1,13 @@
+@import 'palette';
+
+.mat-icon {
+  color: theme-palette(blue);
+  cursor: pointer;
+  font-size: 1.35rem;
+}
+
+.footer {
+  border-top: 2px solid theme-palette(grey, lighter);
+  padding-top: 1rem;
+  text-align: right;
+}

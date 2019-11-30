@@ -1,0 +1,250 @@
+<app-busy-overlay [busy]="busy">
+
+  <app-page-header>Pharmacist Enrolment</app-page-header>
+
+  <div class="row"
+       *ngIf="enrolment">
+    <div class="col-sm-6">
+
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Enrollee</ng-container>
+      </app-page-subheader>
+
+      <dl class="row mb-4">
+        <dt class="col-sm-12 col-md-6 py-1">Name</dt>
+        <dd class="col-sm-12 col-md-6 py-1">
+          {{ enrolment | enrolment:'fullName' }}&nbsp;
+        </dd>
+        <ng-container
+                      *ngIf="enrolment.enrollee.preferredFirstName || enrolment.enrollee.preferredMiddleName || enrolment.enrollee.preferredLastName">
+          <dt class="col-sm-12 col-md-6 py-1">Preferred Name</dt>
+          <dd class="col-sm-12 col-md-6 py-1">
+            {{ enrolment | enrolment:'preferredName' }}&nbsp;
+          </dd>
+        </ng-container>
+        <dt class="col-sm-12 col-md-6 py-1">Date of Birth</dt>
+        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.dateOfBirth | formatDate }}&nbsp;</dd>
+      </dl>
+
+      <h3 class="lead">Address</h3>
+
+      <dl class="row mb-4">
+        <dt class="col-sm-12 col-md-6 py-1">Country</dt>
+        <dd class="col-sm-12 col-md-6 py-1">
+          {{ enrolment.enrollee.physicalAddress.countryCode | configCode: 'countries' }}&nbsp;</dd>
+        <dt class="col-sm-12 col-md-6 py-1">Province</dt>
+        <dd class="col-sm-12 col-md-6 py-1">
+          {{ enrolment.enrollee.physicalAddress.provinceCode | configCode: 'provinces' }}&nbsp;</dd>
+        <dt class="col-sm-12 col-md-6 py-1">Street Address</dt>
+        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.street }}&nbsp;</dd>
+        <ng-container *ngIf="enrolment.enrollee.physicalAddress.street2">
+          <dt class="col-sm-12 col-md-6 py-1">Street Address 2</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.street2 }}&nbsp;</dd>
+        </ng-container>
+        <dt class="col-sm-12 col-md-6 py-1">City</dt>
+        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.city }}&nbsp;</dd>
+        <dt class="col-sm-12 col-md-6 py-1">Postal Code</dt>
+        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.postal | postal }}&nbsp;</dd>
+      </dl>
+
+      <ng-container *ngIf="enrolment?.enrollee.mailingAddress.countryCode">
+
+        <h3 class="lead">Mailing Address</h3>
+
+        <dl class="row mb-4">
+          <dt class="col-sm-12 col-md-6 py-1">Country</dt>
+          <dd class="col-sm-12 col-md-6 py-1">
+            {{ enrolment.enrollee.mailingAddress.countryCode | configCode: 'countries' }}&nbsp;</dd>
+          <dt class="col-sm-12 col-md-6 py-1">Province</dt>
+          <dd class="col-sm-12 col-md-6 py-1">
+            {{ enrolment.enrollee.mailingAddress.provinceCode | configCode: 'provinces' }}&nbsp;</dd>
+          <dt class="col-sm-12 col-md-6 py-1">Street Address</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.mailingAddress.street }}&nbsp;</dd>
+          <ng-container *ngIf="enrolment.enrollee.mailingAddress.street2">
+            <dt class="col-sm-12 col-md-6 py-1">Street Address 2</dt>
+            <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.mailingAddress.street2 }}&nbsp;</dd>
+          </ng-container>
+          <dt class="col-sm-12 col-md-6 py-1">City</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.mailingAddress.city }}&nbsp;</dd>
+          <dt class="col-sm-12 col-md-6 py-1">Postal Code</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.mailingAddress.postal | postal }}&nbsp;</dd>
+        </dl>
+
+      </ng-container>
+
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Contact</ng-container>
+      </app-page-subheader>
+
+      <h3 class="lead">Voice Contact</h3>
+
+      <dl class="row mb-4">
+        <dt class="col-sm-12 col-md-6 py-1">Voice Phone</dt>
+        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.voicePhone | phone }}&nbsp;</dd>
+        <ng-container *ngIf="enrolment.enrollee.voiceExtension">
+          <dt class="col-sm-12 col-md-6 py-1">Extension</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.voiceExtension }}&nbsp;</dd>
+        </ng-container>
+      </dl>
+
+      <ng-container *ngIf="enrolment?.enrollee.contactPhone || enrolment?.enrollee.contactEmail">
+        <h3 class="lead">Preferred Contact</h3>
+
+        <dl class="row mb-4">
+          <ng-container *ngIf="enrolment.enrollee.contactPhone">
+            <dt class="col-sm-12 col-md-6 py-1">Phone</dt>
+            <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.contactPhone | phone }}&nbsp;</dd>
+          </ng-container>
+          <ng-container *ngIf="enrolment.enrollee.contactEmail">
+            <dt class="col-sm-12 col-md-6 py-1">Email</dt>
+            <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.contactEmail }}&nbsp;</dd>
+          </ng-container>
+        </dl>
+      </ng-container>
+
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Self Declaration</ng-container>
+      </app-page-subheader>
+
+      <dl class="row mb-4">
+        <dt class="col-sm-12 col-md-6 py-1">
+          Have you ever been the subject of an order or a conviction for an information contravention?
+        </dt>
+        <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.hasConviction) }}&nbsp;</dd>
+        <ng-container *ngIf="enrolment.hasConviction">
+          <dt class="col-sm-12 col-md-6 py-1">Details</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.hasConvictionDetails }}&nbsp;</dd>
+        </ng-container>
+      </dl>
+
+      <dl class="row mb-4">
+        <dt class="col-sm-12 col-md-6 py-1">
+          Have you ever been the subject of an order or a conviction for an information contravention?
+        </dt>
+        <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.hasRegistrationSuspended) }}&nbsp;</dd>
+        <ng-container *ngIf="enrolment.hasRegistrationSuspended">
+          <dt class="col-sm-12 col-md-6 py-1">Details</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.hasRegistrationSuspendedDetails }}&nbsp;</dd>
+        </ng-container>
+      </dl>
+
+      <dl class="row mb-4">
+        <dt class="col-sm-12 col-md-6 py-1">
+          Have you ever had Terms and Conditions imposed on your licence as a result of disciplinary actions taken
+          by a governing body?
+        </dt>
+        <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.hasDisciplinaryAction) }}&nbsp;</dd>
+        <ng-container *ngIf="enrolment.hasDisciplinaryAction">
+          <dt class="col-sm-12 col-md-6 py-1">Details</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.hasDisciplinaryActionDetails }}&nbsp;</dd>
+        </ng-container>
+      </dl>
+
+      <dl class="row mb-4">
+        <dt class="col-sm-12 col-md-6 py-1">
+          Have you ever had Terms and Conditions imposed on your licence as a result of disciplinary actions taken
+          by a governing body?
+        </dt>
+        <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.hasPharmaNetSuspended) }}&nbsp;</dd>
+        <ng-container *ngIf="enrolment.hasPharmaNetSuspended">
+          <dt class="col-sm-12 col-md-6 py-1">Details</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.hasPharmaNetSuspendedDetails }}&nbsp;</dd>
+        </ng-container>
+      </dl>
+
+    </div>
+    <div class="col-sm-6">
+
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Professional Information</ng-container>
+      </app-page-subheader>
+
+      <dl class="row mb-4">
+        <dt class="col-sm-12 col-md-6 py-1">Do you have a college certification?</dt>
+        <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.certifications.length > 0) }}&nbsp;</dd>
+      </dl>
+
+      <ng-container *ngIf="enrolment.certifications.length > 0">
+
+        <h3 class="lead">Certifications</h3>
+
+        <dl class="row mb-4"
+            *ngFor="let certification of enrolment.certifications; let i = index">
+          <dt class="col-sm-12 col-md-6 py-1">College Certification</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ certification.collegeCode | configCode: 'colleges' }}&nbsp;</dd>
+          <dt class="col-sm-12 col-md-6 py-1">License Number</dt>
+          <dd class="col-sm-12 col-md-6 py-1">
+            {{ certification.collegeCode | configCode: 'colleges' : 'prefix' }}{{ certification.licenseNumber }}&nbsp;
+          </dd>
+          <dt class="col-sm-12 col-md-6 py-1">License Class</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ certification.licenseCode | configCode: 'licenses' }}&nbsp;</dd>
+          <dt class="col-sm-12 col-md-6 py-1">Renewal Date</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ certification.renewalDate | formatDate }}&nbsp;</dd>
+          <ng-container *ngIf="certification.practiceCode">
+            <dt class="col-sm-12 col-md-6 py-1">Advanced Practices</dt>
+            <dd class="col-sm-12 col-md-6 py-1">{{ certification.practiceCode | configCode: 'practices' }}&nbsp;</dd>
+          </ng-container>
+        </dl>
+
+      </ng-container>
+
+      <ng-container *ngIf="enrolment.deviceProviderNumber">
+        <dl class="row mb-4">
+
+          <dt class="col-sm-12 col-md-6 py-1">Device Provider Number</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.deviceProviderNumber }}&nbsp;</dd>
+
+        </dl>
+
+        <dl class="row mb-4">
+          <dt class="col-sm-12 col-md-6 py-1">Are you an insulin pump provider?</dt>
+          <dd class="col-sm-12 col-md-6 py-1">{{ showYesNo(enrolment.isInsulinPumpProvider) }}&nbsp;</dd>
+        </dl>
+      </ng-container>
+
+      <dl class="row mb-4">
+        <ng-container *ngIf="enrolment.jobs.length > 0">
+          <dt class="col-sm-12 col-md-6 py-1">Job Title</dt>
+          <dd class="col-sm-12 col-md-6 py-1">
+            <ul class="list-unstyled">
+              <li *ngFor="let job of enrolment.jobs; let i = index">{{ job.title }}</li>
+            </ul>
+          </dd>
+        </ng-container>
+      </dl>
+
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Organization Information</ng-container>
+      </app-page-subheader>
+
+      <ng-container *ngIf="enrolment.organizations.length; else noOrganization">
+
+        <h3 class="lead">Organizations</h3>
+
+        <ul *ngFor="let organization of enrolment.organizations; let i = index"
+            class="row mb-4">
+          <li class="col-sm-12 py-1">
+            {{ organization.organizationTypeCode | configCode: 'organizationTypes' }}&nbsp;
+          </li>
+        </ul>
+
+      </ng-container>
+
+      <ng-template #noOrganization>
+        Not associated with an organization
+      </ng-template>
+
+    </div>
+  </div>
+
+  <div class="row justify-content-between">
+    <div class="col pt-4">
+
+      <button mat-stroked-button
+              type="button"
+              routerLink="../">Back</button>
+
+    </div>
+  </div>
+
+</app-busy-overlay>

@@ -1,46 +1,43 @@
-import { NgModule, Optional, SkipSelf } from '@angular/core';
+import { NgModule, Optional, SkipSelf, ErrorHandler } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
-import { throwIfAlreadyLoaded } from './module-import-guard';
-import { AuthHttpModule } from './modules/auth-http/auth-http.module';
+import { throwIfAlreadyLoaded } from '@core/module-import-guard';
 
-import { AccessDeniedComponent } from './components/access-denied/access-denied.component';
-import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
-
-import { LoggerService } from './services/logger.service';
-import { RouteStateService } from './services/route-state.service';
-import { ToastService } from './services/toast.service';
-import { UtilsService } from './services/utils.service';
-import { ViewportService } from './services/viewport.service';
-import { AuthTokenService } from './services/auth-token.service';
-import { AuthService } from './services/auth.service';
-
-import { AuthResource } from './resources/auth-resource.service';
+import { AccessDeniedComponent } from '@core/components/access-denied/access-denied.component';
+import { PageNotFoundComponent } from '@core/components/page-not-found/page-not-found.component';
+import { AuthHttpModule } from '@core/modules/auth-http/auth-http.module';
+import { KeycloakModule } from '@core/modules/keycloak/keycloak.module';
+import { ErrorHandlerInterceptor } from '@core/interceptors/error-handler.interceptor';
+import { ErrorHandlerService } from '@core/services/error-handler.service';
+import { MaintenanceComponent } from './components/maintenance/maintenance.component';
 
 @NgModule({
   imports: [
     BrowserAnimationsModule,
-    HttpClientModule,
-    AuthHttpModule
+    AuthHttpModule,
+    KeycloakModule
   ],
   providers: [
-    LoggerService,
-    RouteStateService,
-    ToastService,
-    UtilsService,
-    ViewportService,
-    AuthResource,
-    AuthTokenService,
-    AuthService
+    {
+      provide: ErrorHandler,
+      useClass: ErrorHandlerService
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorHandlerInterceptor,
+      multi: true
+    }
   ],
   declarations: [
     AccessDeniedComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    MaintenanceComponent
   ],
   exports: [
     PageNotFoundComponent,
-    AccessDeniedComponent
+    AccessDeniedComponent,
+    MaintenanceComponent
   ]
 })
 export class CoreModule {

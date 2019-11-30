@@ -1,21 +1,36 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <RootNamespace>PrimeTests</RootNamespace>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
-  
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.0.0"/>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.2.6"/>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+    <PackageReference Include="Bogus" Version="28.3.1" />
+    <PackageReference Include="coverlet.msbuild" Version="2.7.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.2.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.2.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.6" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.3.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
-    <PackageReference Include="Moq" Version="4.12.0"/>
+    <PackageReference Include="coverlet.collector" Version="1.1.0" />
+    <PackageReference Include="XunitXml.TestLogger" Version="2.1.26" />
   </ItemGroup>
-  
   <ItemGroup>
-    <ProjectReference Include="..\prime-dotnet-webapi\Prime.csproj" />
+    <ProjectReference Include="..\prime-dotnet-webapi\prime.csproj" />
   </ItemGroup>
-
+  <ItemGroup>
+    <EmbeddedResource Include=".\Utils\Auth\prime-api-test.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include=".\Utils\Auth\well-known\microsoft-openid-config.json" />
+    <EmbeddedResource Include=".\Utils\Auth\well-known\microsoft-wellknown-keys.json" />
+  </ItemGroup>
 </Project>

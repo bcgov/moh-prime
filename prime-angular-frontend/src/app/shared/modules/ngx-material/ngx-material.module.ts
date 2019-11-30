@@ -1,76 +1,81 @@
 import { NgModule } from '@angular/core';
 import {
-  MatSidenavModule, MatDialogModule, MatButtonModule, MatSnackBarModule,
-  MatToolbarModule, MatIconModule, MatListModule, MatDividerModule,
-  MatChipsModule, MatMenuModule, MatCardModule, MatDatepickerModule,
-  MatProgressSpinnerModule, MatProgressBarModule, MAT_DIALOG_DEFAULT_OPTIONS, MAT_DATE_FORMATS, MatSlideToggleModule,
+  MatAutocompleteModule, MatButtonModule, MatCheckboxModule, MatChipsModule,
+  MatDatepickerModule, MatDialogModule, MatIconModule, MatInputModule,
+  MatListModule, MatMenuModule, MatSelectModule, MatSidenavModule,
+  MatSlideToggleModule, MatSnackBarModule, MatTableModule, MatToolbarModule,
+  MatTooltipModule, MatPaginatorModule, MatRadioModule, DateAdapter,
+  MAT_DATE_LOCALE, MAT_DIALOG_DEFAULT_OPTIONS, MAT_DATE_FORMATS,
+  MatFormFieldDefaultOptions, MAT_FORM_FIELD_DEFAULT_OPTIONS,
+  MAT_LABEL_GLOBAL_OPTIONS
 } from '@angular/material';
-// import { MatMomentDateModule } from '@angular/material-moment-adapter';
-import { CdkTableModule } from '@angular/cdk/table';
-import { CdkStepperModule } from '@angular/cdk/stepper';
+import { MomentDateAdapter, MatMomentDateModule } from '@angular/material-moment-adapter';
 
+export const APP_DATE_FORMAT = 'D MMM YYYY';
 export const APP_DATE_FORMATS = {
   parse: {
-    dateInput: 'LL',
+    // Reformat entered date values to this format
+    dateInput: APP_DATE_FORMAT,
   },
   display: {
-    dateInput: 'LL',
+    dateInput: APP_DATE_FORMAT,
     monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'MMMM YYYY',
+    dateA11yLabel: APP_DATE_FORMAT,
+    monthYearA11yLabel: 'MMM YYYY',
   }
 };
 
+const matFormFieldCustomOptions: MatFormFieldDefaultOptions = {
+  hideRequiredMarker: true
+};
+
 @NgModule({
-  imports: [
-    MatSidenavModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatSnackBarModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatListModule,
-    MatDatepickerModule,
-    MatDividerModule,
-    MatChipsModule,
-    MatMenuModule,
-    MatCardModule,
-    MatSlideToggleModule,
-    // MatMomentDateModule,
-    MatProgressSpinnerModule,
-    MatProgressBarModule,
-    CdkTableModule,
-    CdkStepperModule
-  ],
   exports: [
-    MatSidenavModule,
-    MatDialogModule,
+    MatAutocompleteModule,
     MatButtonModule,
-    MatSnackBarModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatListModule,
-    MatDatepickerModule,
-    MatDividerModule,
+    MatCheckboxModule,
     MatChipsModule,
+    MatDatepickerModule,
+    MatDialogModule,
+    MatIconModule,
+    MatInputModule,
+    MatListModule,
     MatMenuModule,
-    MatCardModule,
+    MatMomentDateModule,
+    MatSelectModule,
+    MatSidenavModule,
     MatSlideToggleModule,
-    // MatMomentDateModule,
-    MatProgressSpinnerModule,
-    MatProgressBarModule,
-    CdkTableModule,
-    CdkStepperModule
+    MatSnackBarModule,
+    MatTableModule,
+    MatToolbarModule,
+    MatTooltipModule,
+    MatPaginatorModule,
+    MatRadioModule
   ],
   providers: [
     {
-      provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {
+      provide: MAT_DATE_FORMATS,
+      useValue: APP_DATE_FORMATS
+    },
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE]
+    },
+    {
+      provide: MAT_DIALOG_DEFAULT_OPTIONS,
+      useValue: {
         width: '500px',
         hasBackdrop: true
       }
     },
     {
-      provide: MAT_DATE_FORMATS, useValue: APP_DATE_FORMATS
+      provide: MAT_LABEL_GLOBAL_OPTIONS,
+      useValue: { float: 'always' }
+    },
+    {
+      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+      useValue: matFormFieldCustomOptions
     }
   ]
 })

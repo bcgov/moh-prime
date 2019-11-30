@@ -1,0 +1,32 @@
+@import 'palette';
+@import 'bootstrap/bootstrap-grid';
+
+.prime-sidenav-container {
+  position: absolute;
+  // Compensate for the application header, and the
+  // progres indicator for HTTP requests and routing
+  top: 73px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.logo {
+  text-align: center;
+
+  img {
+    margin: 2em 0 1.5em;
+    width: 40px;
+    height: auto;
+
+    @include media-breakpoint-up(lg) {
+      width: 90px;
+    }
+  }
+}
+
+@media print {
+  .mat-sidenav-content {
+    margin-left: 0 !important;
+  }
+}

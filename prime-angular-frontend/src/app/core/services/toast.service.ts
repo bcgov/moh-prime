@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material';
 
 @Injectable({
@@ -14,6 +13,10 @@ export class ToastService {
     this.duration = 8000; // ms
   }
 
+  /**
+   * @description
+   * Opens a toast to display success messages.
+   */
   public openSuccessToast(message: string, action: string = null, config: MatSnackBarConfig = null) {
     const defaultConfig: MatSnackBarConfig = Object.assign({
       duration: this.duration,
@@ -22,6 +25,10 @@ export class ToastService {
     this.openToast(message, action, defaultConfig);
   }
 
+  /**
+   * @description
+   * Opens a toast to display error messages.
+   */
   public openErrorToast(message: string, action: string = null, config: MatSnackBarConfig = null) {
     const defaultConfig: MatSnackBarConfig = Object.assign({
       duration: this.duration,

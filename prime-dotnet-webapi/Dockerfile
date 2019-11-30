@@ -1,17 +1,13 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build
-WORKDIR /app
-
-# Copy csproj and restore as distinct layers
-COPY *.csproj .
-RUN dotnet restore
-
-# Copy everything else and build
-COPY . ./
-RUN dotnet publish -c Release -o out
-
-# Build runtime image
+WORKDIR /opt/app-root/app
+ENV ASPNETCORE_ENVIRONMENT Development
+RUN mkdir -p /opt/app-root/app
+COPY *.csproj /opt/app-root/app
+RUN dotnet restore 
+COPY . /opt/app-root/app
+RUN dotnet publish -c Release -o /opt/app-root/app/out /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
 FROM mcr.microsoft.com/dotnet/core/aspnet:2.2 AS runtime
-WORKDIR /app
-COPY --from=build /app/out .
-EXPOSE 80
+WORKDIR /opt/app-root/app
+COPY --from=build /opt/app-root/app/out /opt/app-root/app
+EXPOSE 8080 5001
 ENTRYPOINT ["dotnet", "prime.dll"]

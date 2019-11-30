@@ -1,0 +1,48 @@
+<app-busy-overlay [busy]="busy">
+
+  <app-page-header>Enrolment Confirmation</app-page-header>
+
+  <div class="row">
+    <div class="col-md-7">
+
+      <app-alert type="info"
+                 icon="schedule">
+        <ng-container #alertTitle
+                      class="alert-title">
+          Success
+        </ng-container>
+        <ng-container #alertContent
+                      class="alert-content">
+          Your application for PharmaNet access was successfully submitted.
+        </ng-container>
+      </app-alert>
+
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-7">
+
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Next Steps</ng-container>
+      </app-page-subheader>
+
+      <p>
+        Your application will be reviewed by the Ministry of Health. Please ensure that the contact information we
+        have is accurate and current so staff may contact you if they require more information.
+      </p>
+      <p>
+        You will be notified once your application has been reviewed. If approved, you will be directed to accept the
+        PharmaNet User Access Agreement. Please read the agreement carefully before accepting.
+      </p>
+      <p>
+        After you accept the User Access Agreement, you will receive your PharmaNet ID. Give this ID to the person or
+        organization responsible for setting up your PharmaNet access account. This ID must be associated with your
+        transactions on any PharmaNet access.
+      </p>
+
+
+    </div>
+  </div>
+
+</app-busy-overlay>

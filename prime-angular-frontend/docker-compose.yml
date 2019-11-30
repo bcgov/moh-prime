@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  nginx-angular:
+    container_name: prime-angular-frontend
+    build:
+        context: .
+    environment:
+      SUFFIX: "${SUFFIX}"
+    args:
+      SUFFIX: "${SUFFIX}"
+    command: "nginx -g 'daemon off;'"
+    restart: always
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"

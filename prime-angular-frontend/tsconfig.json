@@ -1,7 +1,8 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./src",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
@@ -17,7 +18,30 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "@env/*": [
+        "./environments/*"
+      ],
+      "@config/*": [
+        "./app/config/*"
+      ],
+      "@core/*": [
+        "./app/core/*"
+      ],
+      "@shared/*": [
+        "./app/shared/*"
+      ],
+      "@auth/*": [
+        "./app/modules/auth/*"
+      ],
+      "@enrolment/*": [
+        "./app/modules/enrolment/*"
+      ],
+      "@adjudication/*": [
+        "./app/modules/adjudication/*"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

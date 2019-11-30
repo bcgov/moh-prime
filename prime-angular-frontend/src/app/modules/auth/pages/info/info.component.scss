@@ -1,0 +1,64 @@
+@import './palette';
+
+$header-height: 73px;
+
+.container-fluid {
+  // Pull the container up under the header
+  margin-top: -$header-height;
+
+  .row:first-child {
+    // Make the container fill the height of the viewport
+    height: 100vh;
+
+    div:first-child {
+      // Adjust content down from under the header
+      margin-top: $header-height;
+    }
+  }
+}
+
+.logo {
+  max-width: 150px;
+  margin-bottom: 5em;
+}
+
+.action,
+.content {
+  width: 245px;
+}
+
+.action {
+  margin-bottom: 2em;
+
+  button {
+    margin-bottom: .6em;
+  }
+
+  a {
+    color: lighten(theme-palette(blue), 10%);
+  }
+}
+
+.content {
+  .text-muted {
+    font-style: italic;
+  }
+
+  p:nth-child(2) {
+    margin-bottom: 0;
+  }
+
+  ul {
+    padding-left: 1.5em;
+  }
+}
+
+.action a,
+.content .text-muted {
+  font-size: .85rem;
+}
+
+.background {
+  background: no-repeat url('../../../../../assets/login-background.jpg');
+  z-index: -1;
+}

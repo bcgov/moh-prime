@@ -1,0 +1,61 @@
+<app-busy-overlay [busy]="busy">
+
+  <form (ngSubmit)="onSubmit()"
+        [formGroup]="form"
+        novalidate>
+
+    <app-page-header>Application Enrolment</app-page-header>
+
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>Organization Information</ng-container>
+      <ng-container appPageSubheaderSummary>
+        Please identify the organization(s) for which you will be accessing PharmaNet.
+      </ng-container>
+    </app-page-subheader>
+
+    <div class="row">
+      <div class="col-sm-12 col-md-6 col-xl-5 py-3"
+           formArrayName="organizations">
+
+        <ng-container *ngFor="let organization of organizations.controls; let i = index"
+                      [formGroupName]="i">
+
+          <app-form-icon-group [show]="organizations.length > 1"
+                               (event)="removeOrganization(i)">
+            <app-form-icon-group>
+              <mat-form-field class="w-100">
+                <mat-label>Organization Type</mat-label>
+                <mat-select formControlName="organizationTypeCode">
+                  <mat-option *ngFor="let organizationType of filterOrganizationTypes(organization)"
+                              [value]="organizationType.code"
+                              [disabled]="disableOrganization(organizationType.code)">
+                    {{ organizationType.name }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="organization.get('organizationTypeCode').hasError('required')">Required</mat-error>
+              </mat-form-field>
+
+              <ng-container appContextualContent>
+                You must choose an Organization that you are associated.
+              </ng-container>
+            </app-form-icon-group>
+          </app-form-icon-group>
+
+        </ng-container>
+
+        <button mat-button
+                type="button"
+                color="primary"
+                (click)="addOrganization()">
+          <mat-icon class="add-icon">add</mat-icon>
+          Add Additional Organization
+        </button>
+
+      </div>
+    </div>
+
+    <app-page-footer [backRoute]="EnrolmentRoutes.SELF_DECLARATION"></app-page-footer>
+
+  </form>
+
+</app-busy-overlay>

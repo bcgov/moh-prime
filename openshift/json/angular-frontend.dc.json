@@ -1,0 +1,182 @@
+{
+  "kind": "Template",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "dotnet-webapi-dc",
+    "creationTimestamp": null
+  },
+  "parameters": [
+      {
+        "name": "NAME",
+        "displayName": "Name",
+        "description": "A prefix appended to all objects",
+        "required": true
+      },
+      {
+        "name": "SUFFIX",
+        "displayName": "Name Suffix",
+        "description": "A suffix appended to all objects",
+        "required": false
+      },
+      {
+        "name": "VERSION",
+        "required": true
+      },
+      {
+        "name": "SOURCE_CONTEXT_DIR",
+        "required": true
+      },
+      {
+        "name": "SOURCE_REPOSITORY_URL",
+        "required": true
+      },
+      {
+        "name": "SOURCE_REPOSITORY_REF",
+        "required": true
+      },
+      {
+        "name": "OC_NAMESPACE",
+        "required": true
+      },
+      {
+        "name": "OC_APP",
+        "required": true
+      }
+    ],
+  "objects": [
+    {
+      "apiVersion": "v1",
+      "kind": "DeploymentConfig",
+      "metadata": {
+        "annotations": {
+          "kompose.cmd": "kompose convert --provider=openshift --build=build-config --build-repo=https://github.com/bcgov/moh-prime.git",
+          "kompose.version": "1.18.0 (06a2e56)"
+        },
+        "creationTimestamp": null,
+        "labels": {
+          "io.kompose.service": "${NAME}${SUFFIX}"
+        },
+        "name": "${NAME}${SUFFIX}"
+      },
+      "spec": {
+        "completionDeadlineSeconds": 1200,
+        "replicas": 1,
+        "selector": {
+          "io.kompose.service": "${NAME}${SUFFIX}"
+        },
+        "strategy": null,
+        "resources": {
+          "requests": {
+            "cpu": "300m",
+            "memory": "512Mi"
+          },
+          "limits": {
+            "cpu": "1",
+            "memory": "1024Mi"
+          }
+        },
+        "template": {
+          "metadata": {
+            "creationTimestamp": null,
+            "labels": {
+              "io.kompose.service": "${NAME}${SUFFIX}"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "args": [
+                  "nginx",
+                  "-g",
+                  "daemon off;"
+                ],
+                "env": [
+                  {
+                    "name": "SUFFIX",
+                    "value": "${SUFFIX}"
+                  }
+                ],
+                "image": " ",
+                "name": "primeweb",
+                "ports": [
+                  {
+                    "containerPort": 8080
+                  }
+                ],
+                "resources": {}
+              }
+            ],
+            "restartPolicy": "Always"
+          }
+        },
+        "test": false,
+        "triggers": [
+          {
+            "type": "ConfigChange"
+          },
+          {
+            "imageChangeParams": {
+              "automatic": true,
+              "containerNames": [
+                "primeweb"
+              ],
+              "from": {
+                "kind": "ImageStreamTag",
+                "name": "${NAME}${SUFFIX}:latest"
+              }
+            },
+            "type": "ImageChange"
+          }
+        ]
+      },
+      "status": {}
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Route",
+      "metadata": {
+        "name": "${NAME}${SUFFIX}"
+      },
+      "spec": {
+        "host": "${NAME}${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca",
+        "port": {
+          "targetPort": "8080"
+        },
+        "to": {
+          "kind": "Service",
+          "name": "${NAME}${SUFFIX}"
+        }
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "annotations": {
+          "kompose.cmd": "kompose convert --provider=openshift --build=build-config --build-repo=https://github.com/bcgov/moh-prime.git",
+          "kompose.version": "1.18.0 (06a2e56)"
+        },
+        "creationTimestamp": null,
+        "labels": {
+          "io.kompose.service": "${NAME}${SUFFIX}"
+        },
+        "name":"${NAME}${SUFFIX}"
+      },
+      "spec": {
+        "ports": [
+          {
+            "name": "8080",
+            "port": 8080,
+            "targetPort": 8080
+          }
+        ],
+        "selector": {
+          "io.kompose.service": "${NAME}${SUFFIX}"
+        }
+      },
+      "status": {
+        "loadBalancer": {}
+      }
+    }
+  ]
+}

@@ -12,19 +12,29 @@ import {
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class RouteStateService {
 
   constructor(
     private router: Router
   ) { }
 
+  /**
+   * @description
+   * Listener for the route navigation start event.
+   */
   public onNavigationStart(): Observable<RouterEvent> {
     return this.router.events.pipe(
       filter(event => event instanceof NavigationStart)
     );
   }
 
+  /**
+   * @description
+   * Listener for the route navigation stop events.
+   */
   public onNavigationStop(): Observable<RouterEvent> {
     return this.router.events.pipe(
       filter(event =>
@@ -35,6 +45,10 @@ export class RouteStateService {
     );
   }
 
+  /**
+   * @description
+   * Listener for the route navigation end event.
+   */
   public onNavigationEnd(): Observable<RouterEvent> {
     return this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)

@@ -4,21 +4,108 @@
   <head>
     <script src="https://apis.google.com/js/platform.js"></script>
     <meta charset="utf-8" />
-    <title>Optimize PRIME - Transforming your services</title>
+    <title>PRIME - PharmaNet Revisions for Information Management Enhancements</title>
     <base href="/" />
 
     <meta name="viewport"
           content="width=device-width, initial-scale=1" />
-    <link rel="icon"
-          type="image/png"
-          sizes="256x256"
-          href="./assets/favicon.png" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined"
           rel="stylesheet">
   </head>
 
   <body>
-    <app-root></app-root>
+    <app-root>
+
+      <style>
+        app-root {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+        }
+
+        body {
+          background: white;
+          margin: 0;
+          padding: 0;
+        }
+
+        @keyframes heartbeat1 {
+          0% {
+            transform: scale(1, 1);
+          }
+
+          50% {
+            transform: scale(1.2, 1.2);
+          }
+
+          100% {
+            transform: scale(1, 1);
+          }
+        }
+
+        @keyframes heartbeat2 {
+          0% {
+            transform: scale(.90);
+          }
+
+          20% {
+            transform: scale(1.2);
+          }
+
+          40% {
+            transform: scale(.90);
+          }
+
+          60% {
+            transform: scale(1.2);
+          }
+
+          80% {
+            transform: scale(.90);
+          }
+
+          100% {
+            transform: scale(.90);
+          }
+        }
+
+        @keyframes heartbeat3 {
+          0% {
+            transform: scale(.95);
+          }
+
+          25% {
+            transform: scale(1.15);
+          }
+
+          40% {
+            transform: scale(.95);
+          }
+
+          60% {
+            transform: scale(1.15);
+          }
+
+          100% {
+            transform: scale(.95);
+          }
+        }
+
+        img {
+          animation: heartbeat1 1s infinite;
+          /* animation: heartbeat2 1.5s infinite; */
+          /* animation: heartbeat3 .8s infinite; */
+          /* Applied to constrain SVG in Firefox */
+          max-width: 100px;
+        }
+      </style>
+
+      <img src="/assets/prime_logo.svg"
+           alt="PRIME Logo">
+
+    </app-root>
+
   </body>
 
 </html>

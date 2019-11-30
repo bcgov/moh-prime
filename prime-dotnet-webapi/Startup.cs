@@ -1,40 +1,47 @@
-﻿using System;
-using System.Text;
-using System.Security.Claims;
-using System.IdentityModel.Tokens.Jwt;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System;
+using System.IO;
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
-
-using Prime.Models;
+using Prime.Services;
+using Prime.Infrastructure;
 
 namespace Prime
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IHostingEnvironment env, IConfiguration configuration)
         {
             Configuration = configuration;
+            StaticConfig = configuration;
+            Environment = env;
         }
 
         public IConfiguration Configuration { get; }
+        public static IConfiguration StaticConfig { get; private set; }
+        public IHostingEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddScoped<ILookupService, DefaultLookupService>();
+            services.AddScoped<IEnrolmentService, DefaultEnrolmentService>();
+            services.AddScoped<IEnrolleeService, DefaultEnrolleeService>();
+            services.AddScoped<IAutomaticAdjudicationService, DefaultAutomaticAdjudicationService>();
+            services.AddScoped<IEnrolmentCertificateService, DefaultEnrolmentCertificateService>();
+
+            services
+                .AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                // add a convertor <globally> to change empty strings into null on serialization
+                .AddJsonOptions(options => options.SerializerSettings.Converters.Add(new EmptyStringToNullJsonConverter()));
+
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowAll",
@@ -48,8 +55,59 @@ namespace Prime
                     });
             });
 
+            // Register the Swagger generator, defining 1 or more Swagger documents
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Prime Web API", Version = "v1" });
+
+                // Set the comments path for the Swagger JSON and UI.
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
+
+            services.AddHttpContextAccessor();
+
+            this.ConfigureDatabase(services);
+
+            AuthenticationSetup.Initialize(services, Configuration, Environment);
+        }
+
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
+            // update the DB if necessary with new migrations
+            this.UpdateDatabase(app);
+
+            // TODO - disable always using https - probably want this turned back on though once have actual certs
+            //app.UseHttpsRedirection();
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Prime Web API V1");
+            });
+
+            app.UseCors("AllowAll");
+
+            app.UseAuthentication();
+
+            app.UseMvc();
+        }
+
+        protected virtual void ConfigureDatabase(IServiceCollection services)
+        {
             // Connect to database
-            var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+            var connectionString = System.Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
             if (connectionString == null)
             {
                 connectionString = Configuration.GetConnectionString("PrimeDatabase");
@@ -57,36 +115,15 @@ namespace Prime
             services.AddDbContext<ApiDbContext>(options =>
                 options.UseNpgsql(connectionString)
             );
-            // TODO: uncomment these lines to enable JWT token verification
-            // var key = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("JWT_SIGNING_KEY"));
-            // services.AddAuthentication(x =>
-            // {
-            //     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            // })
-            // .AddJwtBearer(x =>
-            // {
-            //     x.RequireHttpsMetadata = false;
-            //     x.TokenValidationParameters = new TokenValidationParameters
-            //     {
-            //         ValidateIssuerSigningKey = true,
-            //         IssuerSigningKey = new SymmetricSecurityKey(key),
-            //         ValidateIssuer = false,
-            //         ValidateAudience = false
-            //     };
-            // });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public virtual void UpdateDatabase(IApplicationBuilder app)
         {
-            UpdateDatabase(app);
-            app.UseCors("AllowAll");
-            app.UseMvc();
-        }
+            if (app == null)
+            {
+                throw new ArgumentNullException(nameof(app), "Could not update database, the passed in IApplicationBuilder cannot be null.");
+            }
 
-        private static void UpdateDatabase(IApplicationBuilder app)
-        {
             using (var serviceScope = app.ApplicationServices
                 .GetRequiredService<IServiceScopeFactory>()
                 .CreateScope())

@@ -1,12 +1,13 @@
 import { Component, OnInit, Inject } from '@angular/core';
+import { ActivatedRoute, RouterEvent } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
 
 import { map, mergeMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
-import { RouteStateService } from 'src/app/core/services/route-state.service';
-import { WindowRefService } from 'src/app/core/services/window-ref.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { RouteStateService } from '@core/services/route-state.service';
+import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,6 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  public title = 'Optimize PRIME: Transforming your services';
   private window: Window;
 
   constructor(
@@ -22,29 +22,31 @@ export class AppComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private titleService: Title,
     private routeStateService: RouteStateService,
-    private windowRef: WindowRefService,
-    private router: Router
-  ) {
-    this.window = windowRef.nativeWindow;
-  }
+    private utilsService: UtilsService
+  ) { }
 
   public ngOnInit(): void {
-    const onNavStart = this.routeStateService.onNavigationStart();
-    const onNavStop = this.routeStateService.onNavigationStop();
-    const onNavEnd = this.routeStateService.onNavigationEnd();
+    // const onNavStart = this.routeStateService.onNavigationStart();
+    // const onNavStop = this.routeStateService.onNavigationStop();
+    const onNavEnd = this.routeStateService.onNavigationEnd() as Observable<RouterEvent>;
 
     this.scrollTop(onNavEnd);
     this.setPageTitle(onNavEnd);
   }
 
-  private scrollTop(routeEvent: any) {
-    routeEvent.subscribe(() => {
-      const contentContainer = this.document.querySelector('.mat-sidenav-content') || this.window;
-      contentContainer.scroll({ top: 0, left: 0, behavior: 'smooth' });
-    });
+  /**
+   * @description
+   * Scroll the page to the top on route event.
+   */
+  private scrollTop(routeEvent: Observable<RouterEvent>) {
+    routeEvent.subscribe(() => this.utilsService.scrollTop());
   }
 
-  private setPageTitle(routeEvent: any) {
+  /**
+   * @description
+   * Set the HTML page <title> on route event.
+   */
+  private setPageTitle(routeEvent: Observable<RouterEvent>) {
     routeEvent
       .pipe(
         // Swap what is being observed to the activated route
@@ -60,8 +62,7 @@ export class AppComponent implements OnInit {
         mergeMap((route: ActivatedRoute) => route.data)
       )
       .subscribe((routeData: any) => {
-        const title = routeData.title;
-        this.titleService.setTitle(title);
+        this.titleService.setTitle(routeData.title);
       });
   }
 }
