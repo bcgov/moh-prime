@@ -29,6 +29,9 @@ pipeline {
             }
         }
         stage('Cleanup Branch') {
+        options {
+            timeout(time: 5, unit: 'MINUTES')   // timeout on this stage
+        }
             when { expression { ( GIT_BRANCH != 'develop' ) } }
             agent { label 'master' }
             steps {
@@ -38,8 +41,8 @@ pipeline {
                                 string(name: 'IS_APPROVED', defaultValue: 'yes', description: 'Cleanup OpenShift Environment for branch?')
                                 ])
                         if (IS_APPROVED != 'yes') {
-                            currentBuild.result = "ABORTED"
-                            error "User cancelled"
+                            currentBuild.result = "SUCCESS"
+                            echo "User cancelled cleanup"
                         }
                     echo "Test (DEV) ..."
                     sh "./player.sh cleanup ${BRANCH_NAME}"
