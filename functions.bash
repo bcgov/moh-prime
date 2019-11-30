@@ -129,20 +129,23 @@ function cleanOcArtifacts() {
 }
 
 function cleanup() {
-    artifactItems=$(oc get all,pvc,secrets -n ${PROJECT_PREFIX}-dev | grep -i "\-$1"  | column -t | awk '{print $1}' | sort)
-    echo "${artifactItems}"
-    for i in ${artifactItems};
+    declare -p ALL_BRANCH_ARTIFACTS=( $(oc get all,pvc,secrets,route -n ${PROJECT_PREFIX}-dev | grep -i "\-$1" | awk '{print $1}' | grep -P "(\-pr\-\d+)") )
+    for i in "${ALL_BRANCH_ARTIFACTS[@]}"
     do
         oc delete -n ${PROJECT_PREFIX}-dev $i
     done
 }
 
 function occleanup() {
+    OPEN_PR_ARRAY=()
+    LIVE_BRANCH_ARRAY=()
+    ORPPHANS=()
     curl -o openPRs.txt "https://api.github.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/pulls?status=open&sort=number"
-    declare -p OPEN_PR_ARRAY=( `grep '"number"' openPRs.txt | column -t | sed 's|[:,]||g' | awk '{print $2}'` )
-    declare -p LIVE_BRANCH_ARRAY=(`oc get route | grep -P "(\-pr\-\d+)" | sort -u | awk '{print $1}'| sed 's/[^0-9]*//g'`)
-    ORPHANS=`echo ${OPEN_PR_ARRAY[@]} ${LIVE_BRANCH_ARRAY[@]} | tr ' ' '\n' | sort | uniq -u`
+    declare -p OPEN_PR_ARRAY=( $(grep '"number"' openPRs.txt | column -t | sed 's|[:,]||g' | awk '{print $2}') )
+    declare -p LIVE_BRANCH_ARRAY=( $(oc get route | awk '{print $1}' | grep -P "(\-pr\-\d+)" | sed 's/[^0-9]*//g' | sort -un) )
+    ORPHANS=$(echo ${OPEN_PR_ARRAY[@]} ${LIVE_BRANCH_ARRAY[@]} | tr ' ' '\n' | sort | uniq -u)
     for i in $ORPHANS
-    do cleanup PR-$i
+    do
+        cleanup PR-$i
     done
 }
