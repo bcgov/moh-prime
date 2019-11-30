@@ -138,9 +138,11 @@ function cleanup() {
 }
 
 function occleanup() {
-    curl -o closedPRs.txt "https://api.github.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/pulls?status=closed&sort=number"
-    CLOSED_PRS=`grep '"number"' closedPRs.txt | column -t | sed 's|[:,]||g' | awk '{print $2}'`
-    for closedPR in ${CLOSED_PRS} ;
-    do cleanup closedPR
+    curl -o openPRs.txt "https://api.github.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/pulls?status=open&sort=number"
+    declare -p OPEN_PR_ARRAY=( `grep '"number"' openPRs.txt | column -t | sed 's|[:,]||g' | awk '{print $2}'` )
+    declare -p LIVE_BRANCH_ARRAY=(`oc get route | grep -P "(\-pr\-\d+)" | sort -u | awk '{print $1}'| sed 's/[^0-9]*//g'`)
+    ORPHANS=echo ${OPEN_PR_ARRAY[@]} ${LIVE_BRANCH_ARRAY[@]} | tr ' ' '\n' | sort | uniq -u
+    for i in $ORPHANS
+    do cleanup $1
     done
 }
