@@ -137,10 +137,10 @@ function cleanup() {
     done
 }
 
-function occleanup() {
-    curl -o closedPRs.txt "https://api.github.com/repos/bcgov/moh-prime/pulls?status=closed&sort=number"
-    CLOSED_PRS=`grep '"number"' closedPRs.txt | column -t | 's|[:,]||g' | awk '{print $2}'`
-    for closed in ${CLOSED_PRS} ;
-    do cleanup closed
+function gitCleanup() {
+    curl -o closedPRs.txt "https://api.github.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/pulls?status=closed&sort=number"
+    CLOSED_PRS = `grep '"number"' closedPRs.txt | column -t | sed 's|[:,]||g' | awk '{print $2}'`
+    for closedPR in ${CLOSED_PRS} ;
+    do cleanup closedPR
     done
 }
