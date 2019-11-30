@@ -139,7 +139,7 @@ function cleanup() {
 
 function occleanup() {
     curl -o closedPRs.txt "https://api.github.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/pulls?status=closed&sort=number"
-    CLOSED_PRS = `grep '"number"' closedPRs.txt | column -t | sed 's|[:,]||g' | awk '{print $2}'`
+    CLOSED_PRS=`grep '"number"' closedPRs.txt | column -t | sed 's|[:,]||g' | awk '{print $2}'`
     for closedPR in ${CLOSED_PRS} ;
     do cleanup closedPR
     done
