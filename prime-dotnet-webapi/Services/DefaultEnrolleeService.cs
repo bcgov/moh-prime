@@ -125,8 +125,11 @@ namespace Prime.Services
             Enrollee enrollee = await this.GetBaseEnrolleeQuery()
                 .SingleOrDefaultAsync(e => e.UserId == userId);
 
-            // add the available statuses to the enrolment
-            enrollee.AvailableStatuses = this.GetAvailableStatuses(enrollee?.CurrentStatus?.Status);
+            if (enrollee != null)
+            {
+                // add the available statuses to the enrolment
+                enrollee.AvailableStatuses = this.GetAvailableStatuses(enrollee?.CurrentStatus?.Status);
+            }
 
             return enrollee;
         }

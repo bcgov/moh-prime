@@ -45,10 +45,15 @@ namespace Prime.Controllers
             else
             {
                 var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(PrimeUtils.PrimeUserId(User));
-                enrollees = new[] { enrollee };
+                enrollees = new List<Enrollee>();
+
+                if (enrollee != null)
+                {
+                    enrollees.Append(enrollee);
+                }
             }
 
-            return Ok(new ApiOkResponse<IEnumerable<Enrollee>>(enrollees.ToList()));
+            return Ok(new ApiOkResponse<IEnumerable<Enrollee>>(enrollees));
         }
 
         // GET: api/Enrollees/5
