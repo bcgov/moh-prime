@@ -97,22 +97,22 @@ objects:
                 - name: HIBC_API_URL
                   valueFrom:
                     secretKeyRef:
-                      key: HIBC_API_URL
+                      key: API_URL
                       name: 'hibc'
                 - name: HIBC_API_USERNAME
                   valueFrom:
                     secretKeyRef:
-                      key: HIBC_API_USERNAME
+                      key: API_USERNAME
                       name: 'hibc'
                 - name: HIBC_API_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      key: HIBC_API_PASSWORD
+                      key: API_PASSWORD
                       name: 'hibc'
                 - name: HIBC_SSL_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      key: HIBC_SSL_PASSWORD
+                      key: SSL_CERT_PASSWORD
                       name: 'hibc'
               image: ' '
               name: primeapi
