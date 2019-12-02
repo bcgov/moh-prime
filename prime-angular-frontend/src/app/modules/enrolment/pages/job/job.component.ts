@@ -62,7 +62,7 @@ export class JobComponent implements OnInit, OnDestroy {
       payload.jobs = payload.jobs
         .map((job: Job) => (job.title === this.defaultOptionLabel) ? { ...job, title: '' } : job);
 
-      this.busy = this.enrolmentResource.updateEnrolment(payload)
+      this.busy = this.enrolmentResource.updateEnrollee(payload)
         .subscribe(
           () => {
             this.toastService.openSuccessToast('Job information has been saved');

@@ -164,7 +164,7 @@ export class EnrolmentStateService {
     return this.fb.group({
       userId: [{ value: null, disabled: true }, [Validators.required]],
       firstName: [{ value: null, disabled: true }, [Validators.required]],
-      middleName: [{ value: null, disabled: false }, []],
+      middleName: [{ value: null, disabled: true }, []],
       lastName: [{ value: null, disabled: true }, [Validators.required]],
       dateOfBirth: [{ value: null, disabled: true }, [Validators.required]],
       preferredFirstName: [null, []],
