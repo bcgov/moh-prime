@@ -23,7 +23,7 @@ export class AdjudicationResource {
 
   public enrolments(statusCode?: number): Observable<Enrolment[]> {
     const params = (statusCode) ? { statusCode: `${statusCode}` } : {};
-    return this.http.get(`${this.config.apiEndpoint}/enrolments`, { params })
+    return this.http.get(`${this.config.apiEndpoint}/enrollees`, { params })
       .pipe(
         map((response: PrimeHttpResponse) => response.result),
         map((enrolments: Enrolment[]) => {
@@ -35,7 +35,7 @@ export class AdjudicationResource {
 
   public enrolment(id: number, statusCode?: number): Observable<Enrolment> {
     const params = (statusCode) ? { statusCode: `${statusCode}` } : {};
-    return this.http.get(`${this.config.apiEndpoint}/enrolments/${id}`, { params })
+    return this.http.get(`${this.config.apiEndpoint}/enrollees/${id}`, { params })
       .pipe(
         map((response: PrimeHttpResponse) => response.result),
         map((enrolment: Enrolment) => {
@@ -47,7 +47,7 @@ export class AdjudicationResource {
 
   public updateEnrolmentStatus(id: number, statusCode: number): Observable<Config<number>[]> {
     const payload = { code: statusCode };
-    return this.http.post(`${this.config.apiEndpoint}/enrolments/${id}/statuses`, payload)
+    return this.http.post(`${this.config.apiEndpoint}/enrollees/${id}/statuses`, payload)
       .pipe(
         map((response: PrimeHttpResponse) => response.result),
         map((statuses: Config<number>[]) => {
@@ -58,7 +58,7 @@ export class AdjudicationResource {
   }
 
   public deleteEnrolment(id: number): Observable<Enrolment> {
-    return this.http.delete(`${this.config.apiEndpoint}/enrolments/${id}`)
+    return this.http.delete(`${this.config.apiEndpoint}/enrollees/${id}`)
       .pipe(
         map((response: PrimeHttpResponse) => response.result),
         map((enrolment: Enrolment) => {
