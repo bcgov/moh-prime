@@ -102,12 +102,12 @@ export class ProfileComponent implements OnInit {
     if (this.form.valid) {
       const payload = this.enrolmentStateService.enrolment;
       const request$ = (this.isNewEnrolment)
-        ? this.enrolmentResource.createEnrolment(payload)
+        ? this.enrolmentResource.createEnrollee(payload)
           .pipe(
             tap(() => this.isNewEnrolment = false),
             map((enrolment: Enrolment) => this.enrolmentStateService.enrolment = enrolment)
           )
-        : this.enrolmentResource.updateEnrolment(payload);
+        : this.enrolmentResource.updateEnrollee(payload);
 
       this.busy = request$
         .subscribe(
