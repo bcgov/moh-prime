@@ -202,10 +202,10 @@ namespace Prime.Controllers
         public async Task<ActionResult<Object>> DeleteEnrolment(int enrolmentId)
         {
             var ret = new {
-                api = PrimeConstants.HIBC_API_URL,
-                u = PrimeConstants.HIBC_API_USERNAME,
-                p = PrimeConstants.HIBC_API_PASSWORD,
-                ssl = PrimeConstants.HIBC_SSL_PASSWORD
+                // api = PrimeConstants.HIBC_API_URL,
+                // u = PrimeConstants.HIBC_API_USERNAME,
+                // p = PrimeConstants.HIBC_API_PASSWORD,
+                // ssl = PrimeConstants.HIBC_SSL_PASSWORD
             };
 
             return Ok(new ApiOkResponse<Object>(ret));
