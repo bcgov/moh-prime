@@ -49,7 +49,7 @@ namespace Prime.Controllers
 
                 if (enrollee != null)
                 {
-                    enrollees.Append(enrollee);
+                    enrollees = enrollees.Append(enrollee);
                 }
             }
 
