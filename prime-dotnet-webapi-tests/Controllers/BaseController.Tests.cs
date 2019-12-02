@@ -22,7 +22,6 @@ namespace PrimeTests.Controllers
                     builder.ConfigureTestServices(services =>
                     {
                         //add the mock service mapping, so that we are only testing the controllers
-                        services.AddSingleton<IEnrolmentService, EnrolmentServiceMock>();
                         services.AddSingleton<IEnrolleeService, EnrolleeServiceMock>();
                         services.AddSingleton<ILookupService, LookupServiceMock>();
                     });

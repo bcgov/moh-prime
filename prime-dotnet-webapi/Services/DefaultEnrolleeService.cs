@@ -100,7 +100,7 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Enrollee>> GetEnrolleesAsync(EnrolmentSearchOptions searchOptions)
+        public async Task<IEnumerable<Enrollee>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions)
         {
             IQueryable<Enrollee> query = this.GetBaseEnrolleeQuery();
 

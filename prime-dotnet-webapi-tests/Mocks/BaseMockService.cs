@@ -43,7 +43,7 @@ namespace PrimeTests.Mocks
 
         private Dictionary<string, object> _fakeDb;
 
-        private readonly string ENROLMENT_KEY = typeof(Enrolment).FullName;
+        private readonly string ENROLMENT_KEY = typeof(Enrollee).FullName;
         private readonly string ENROLLEE_KEY = typeof(Enrollee).FullName;
         private readonly string COLLEGE_KEY = typeof(College).FullName;
         private readonly string JOB_NAME_KEY = typeof(JobName).FullName;
@@ -66,7 +66,6 @@ namespace PrimeTests.Mocks
             _fakeDb = new Dictionary<string, object>();
 
             // create the holder for each fake table type
-            _fakeDb.Add(ENROLMENT_KEY, new Dictionary<int, Enrolment>());
             _fakeDb.Add(ENROLLEE_KEY, new Dictionary<int, Enrollee>());
 
             // seed the lookup tables

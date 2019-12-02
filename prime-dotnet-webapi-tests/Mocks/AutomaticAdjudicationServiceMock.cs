@@ -12,8 +12,8 @@ namespace PrimeTests.Mocks
         {
             // no data to seed, as it is done in the base class
         }
-        
-        public bool QualifiesForAutomaticAdjudication(Enrolment enrolment)
+
+        public bool QualifiesForAutomaticAdjudication(Enrollee enrollee)
         {
             // TODO - make this have more logic to help testing
             return false;
