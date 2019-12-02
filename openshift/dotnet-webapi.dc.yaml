@@ -94,6 +94,26 @@ objects:
                   value: 'prime-web-api'
                 - name: JWT_WELL_KNOWN_CONFIG
                   value: 'https://sso-${OC_APP}.pathfinder.gov.bc.ca/auth/realms/v4mbqqas/.well-known/openid-configuration'
+                - name: HIBC_API_URL
+                  valueFrom:
+                    secretKeyRef:
+                      key: HIBC_API_URL
+                      name: 'hibc'
+                - name: HIBC_API_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      key: HIBC_API_USERNAME
+                      name: 'hibc'
+                - name: HIBC_API_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: HIBC_API_PASSWORD
+                      name: 'hibc'
+                - name: HIBC_SSL_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: HIBC_SSL_PASSWORD
+                      name: 'hibc'
               image: ' '
               name: primeapi
               ports:

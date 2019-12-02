@@ -38,5 +38,11 @@ namespace Prime
         // Mail server
         public readonly static string MAIL_SERVER_URL = System.Environment.GetEnvironmentVariable("MAIL_SERVER_URL") ?? "localhost";
         public readonly static int MAIL_SERVER_PORT = int.Parse(System.Environment.GetEnvironmentVariable("MAIL_SERVER_PORT") ?? "1025");
+
+        // HIBC API
+        public readonly static string HIBC_API_URL = System.Environment.GetEnvironmentVariable("HIBC_API_URL") ?? "";
+        public readonly static string HIBC_API_USERNAME = System.Environment.GetEnvironmentVariable("HIBC_API_USERNAME") ?? "";
+        public readonly static string HIBC_API_PASSWORD = System.Environment.GetEnvironmentVariable("HIBC_API_PASSWORD") ?? "";
+        public readonly static string HIBC_SSL_PASSWORD = System.Environment.GetEnvironmentVariable("HIBC_SSL_PASSWORD") ?? "";
     }
 }
