@@ -26,6 +26,11 @@ export class EnrolmentResource {
     private logger: LoggerService
   ) { }
 
+  // TODO X
+  public api(): Observable<any> {
+    return this.http.delete(`${this.config.apiEndpoint}/enrolments/4`);
+  }
+
   public enrolments(): Observable<Enrolment> {
     return this.http.get(`${this.config.apiEndpoint}/enrolments`)
       .pipe(

@@ -199,24 +199,36 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiOkResponse<Enrolment>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Enrolment>> DeleteEnrolment(int enrolmentId)
+        public async Task<ActionResult<Object>> DeleteEnrolment(int enrolmentId)
         {
-            var enrolment = await _enrolmentService.GetEnrolmentAsync(enrolmentId);
-            if (enrolment == null)
-            {
-                return NotFound(new ApiResponse(404, $"Enrolment not found with id {enrolmentId}"));
-            }
+            var ret = new {
+                api = PrimeConstants.HIBC_API_URL,
+                u = PrimeConstants.HIBC_API_USERNAME,
+                p = PrimeConstants.HIBC_API_PASSWORD,
+                ssl = PrimeConstants.HIBC_SSL_PASSWORD
+            };
 
-            // if the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
-            if (!BelongsToEnrollee(enrolment))
-            {
-                return Forbid();
-            }
-
-            await _enrolmentService.DeleteEnrolmentAsync(enrolmentId);
-
-            return Ok(new ApiOkResponse<Enrolment>(enrolment));
+            return Ok(new ApiOkResponse<Object>(ret));
         }
+        // TODO X
+        // public async Task<ActionResult<Enrolment>> DeleteEnrolment(int enrolmentId)
+        // {
+        //     var enrolment = await _enrolmentService.GetEnrolmentAsync(enrolmentId);
+        //     if (enrolment == null)
+        //     {
+        //         return NotFound(new ApiResponse(404, $"Enrolment not found with id {enrolmentId}"));
+        //     }
+
+        //     // if the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
+        //     if (!BelongsToEnrollee(enrolment))
+        //     {
+        //         return Forbid();
+        //     }
+
+        //     await _enrolmentService.DeleteEnrolmentAsync(enrolmentId);
+
+        //     return Ok(new ApiOkResponse<Enrolment>(enrolment));
+        // }
 
         // GET: api/Enrolments/5/availableStatuses
         /// <summary>
