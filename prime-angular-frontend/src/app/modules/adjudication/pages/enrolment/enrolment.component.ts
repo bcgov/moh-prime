@@ -35,7 +35,7 @@ export class EnrolmentComponent implements OnInit {
   }
 
   private getEnrolment(id: number, statusCode?: number) {
-    this.busy = this.adjudicationResource.enrolment(id, statusCode)
+    this.busy = this.adjudicationResource.enrollee(id, statusCode)
       .subscribe(
         (enrolment: Enrolment) => this.enrolment = enrolment,
         (error: any) => {

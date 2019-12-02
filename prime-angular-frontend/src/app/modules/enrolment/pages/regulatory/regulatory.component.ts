@@ -53,7 +53,7 @@ export class RegulatoryComponent implements OnInit, OnDestroy {
       this.removeJobs();
 
       const payload = this.enrolmentStateService.enrolment;
-      this.busy = this.enrolmentResource.updateEnrolment(payload)
+      this.busy = this.enrolmentResource.updateEnrollee(payload)
         .subscribe(
           () => {
             this.form.markAsPristine();
