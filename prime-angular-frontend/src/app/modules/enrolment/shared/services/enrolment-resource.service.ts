@@ -27,7 +27,7 @@ export class EnrolmentResource {
   ) { }
 
   public enrolments(): Observable<Enrolment> {
-    return this.http.get(`${this.config.apiEndpoint}/enrolments`)
+    return this.http.get(`${this.config.apiEndpoint}/enrollees`)
       .pipe(
         map((response: PrimeHttpResponse) => response.result),
         map((enrolments: Enrolment[]) => {
@@ -42,7 +42,7 @@ export class EnrolmentResource {
   }
 
   public createEnrolment(payload: Enrolment): Observable<Enrolment> {
-    return this.http.post(`${this.config.apiEndpoint}/enrolments`, this.enrolmentAdapterRequest(payload))
+    return this.http.post(`${this.config.apiEndpoint}/enrollees`, this.enrolmentAdapterRequest(payload))
       .pipe(
         map((response: PrimeHttpResponse) => response.result),
         map((enrolment: Enrolment) => {
@@ -54,12 +54,12 @@ export class EnrolmentResource {
 
   public updateEnrolment(enrolment: Enrolment): Observable<any> {
     const { id } = enrolment;
-    return this.http.put(`${this.config.apiEndpoint}/enrolments/${id}`, this.enrolmentAdapterRequest(enrolment));
+    return this.http.put(`${this.config.apiEndpoint}/enrollees/${id}`, this.enrolmentAdapterRequest(enrolment));
   }
 
   public updateEnrolmentStatus(id: number, statusCode: number): Observable<Config<number>[]> {
     const payload = { code: statusCode };
-    return this.http.post(`${this.config.apiEndpoint}/enrolments/${id}/statuses`, payload)
+    return this.http.post(`${this.config.apiEndpoint}/enrollees/${id}/statuses`, payload)
       .pipe(
         map((response: PrimeHttpResponse) => response.result),
         map((statuses: Config<number>[]) => {
@@ -92,19 +92,19 @@ export class EnrolmentResource {
   }
 
   private enrolmentAdapterResponse(enrolment: Enrolment): Enrolment {
-    if (!enrolment.enrollee.mailingAddress) {
-      enrolment.enrollee.mailingAddress = new Address();
+    if (!enrolment.mailingAddress) {
+      enrolment.mailingAddress = new Address();
     }
 
     return enrolment;
   }
 
   private enrolmentAdapterRequest(enrolment: Enrolment): Enrolment {
-    if (enrolment.enrollee.physicalAddress.postal) {
-      enrolment.enrollee.physicalAddress.postal = enrolment.enrollee.physicalAddress.postal.toUpperCase();
+    if (enrolment.physicalAddress.postal) {
+      enrolment.physicalAddress.postal = enrolment.physicalAddress.postal.toUpperCase();
     }
-    if (enrolment.enrollee.mailingAddress.postal) {
-      enrolment.enrollee.mailingAddress.postal = enrolment.enrollee.mailingAddress.postal.toUpperCase();
+    if (enrolment.mailingAddress.postal) {
+      enrolment.mailingAddress.postal = enrolment.mailingAddress.postal.toUpperCase();
     }
 
     enrolment.certifications = this.removeIncompleteCollegeCertifications(enrolment.certifications);
@@ -115,7 +115,7 @@ export class EnrolmentResource {
   }
 
   // ---
-  // Sanitizer Helpers
+  // Sanitization Helpers
   // ---
 
   private removeIncompleteCollegeCertifications(certifications: CollegeCertification[]) {
