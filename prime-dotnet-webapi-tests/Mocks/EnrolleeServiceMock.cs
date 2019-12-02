@@ -165,11 +165,6 @@ namespace PrimeTests.Mocks
             return Task.FromResult(false);
         }
 
-        public Task<IEnumerable<Enrollee>> GetEnrolleesAsync(EnrolmentSearchOptions searchOptions)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<IEnumerable<Status>> GetAvailableEnrolmentStatusesAsync(int enrolleeId)
         {
             throw new NotImplementedException();

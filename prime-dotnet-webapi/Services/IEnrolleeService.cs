@@ -8,7 +8,7 @@ namespace Prime.Services
 {
     public interface IEnrolleeService
     {
-        // Task<IEnumerable<Enrollee>> GetEnrolleesAsync();
+        Task<IEnumerable<Enrollee>> GetEnrolleesAsync();
 
         Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId);
 

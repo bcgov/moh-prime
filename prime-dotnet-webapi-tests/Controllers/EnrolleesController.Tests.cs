@@ -17,6 +17,9 @@ namespace PrimeTests.Controllers
 {
     public class EnrolleesControllerTests : BaseControllerTests
     {
+
+        private static EnrolleeSearchOptions EMPTY_ENROLLEE_SEARCH_OPTIONS = new EnrolleeSearchOptions();
+
         public EnrolleesControllerTests(CustomWebApplicationFactory<TestStartup> factory) : base(factory)
         { }
 
@@ -125,7 +128,8 @@ namespace PrimeTests.Controllers
                 int expectedEnrolleeId = (int)expectedEnrollee.Id;
 
                 // create a request with an AUTH token
-                var request = TestUtils.CreateRequest(HttpMethod.Get, $"/api/enrollees/{expectedEnrolleeId}", expectedEnrollee.Enrollee.UserId);
+                var request = TestUtils.CreateRequest(HttpMethod.Get,
+                 $"/api/enrollees/{expectedEnrolleeId}", expectedEnrollee.UserId);
 
                 // try to get the enrollee
                 var response = await _client.SendAsync(request);
@@ -219,7 +223,8 @@ namespace PrimeTests.Controllers
                 int expectedEnrolleeId = (int)expectedEnrollee.Id;
 
                 // create a request with an AUTH token
-                var request = TestUtils.CreateRequest(HttpMethod.Get, $"/api/enrollees/{expectedEnrolleeId}", expectedEnrollee.Enrollee.UserId);
+                var request = TestUtils.CreateRequest(HttpMethod.Get,
+                 $"/api/enrollees/{expectedEnrolleeId}", expectedEnrollee.UserId);
 
                 //remove the AUTH token
                 request.Headers.Authorization = null;
@@ -342,7 +347,8 @@ namespace PrimeTests.Controllers
                 int expectedEnrolleeId = (int)expectedEnrollee.Id;
 
                 // create a request with an AUTH token
-                var request = TestUtils.CreateRequest(HttpMethod.Delete, $"/api/enrollees/{expectedEnrolleeId}", expectedEnrollee.Enrollee.UserId);
+                var request = TestUtils.CreateRequest(HttpMethod.Delete,
+                 $"/api/enrollees/{expectedEnrolleeId}", expectedEnrollee.UserId);
 
                 // try to delete the enrollee
                 var response = await _client.SendAsync(request);

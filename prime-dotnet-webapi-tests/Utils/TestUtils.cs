@@ -307,7 +307,7 @@ namespace PrimeTests.Utils
             var _token = TestUtils.TokenBuilder()
                 .ForAudience(Startup.StaticConfig["Jwt:Audience"])
                 .ForSubject(subject.ToString())
-                .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_ENROLMENT_ROLE)
+                .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_ENROLLEE_ROLE)
                 .WithClaim(PrimeConstants.ASSURANCE_LEVEL_CLAIM_TYPE, "3")
                 .BuildToken();
 
