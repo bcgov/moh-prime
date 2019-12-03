@@ -109,7 +109,7 @@ objects:
                     secretKeyRef:
                       key: API_PASSWORD
                       name: 'hibc'
-                - name: HIBC_SSL_PASSWORD
+                - name: HIBC_SSL_CERT_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       key: SSL_CERT_PASSWORD
