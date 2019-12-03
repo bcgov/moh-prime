@@ -172,7 +172,8 @@ namespace Prime.Services
                                 .Include(e => e.Certifications)
                                 .Include(e => e.Jobs)
                                 .Include(e => e.Organizations)
-                                .AsNoTracking().Where(e => e.Id == enrollee.Id)
+                                .AsNoTracking()
+                                .Where(e => e.Id == enrollee.Id)
                                 .FirstOrDefault();
 
             // remove existing addresses, and recreate if necessary
@@ -202,15 +203,17 @@ namespace Prime.Services
 
         private void ReplaceExistingAddress(Address dbAddress, Address newAddress, Enrollee enrollee)
         {
-            // remove existing addresses
+            // Remove existing addresses
             if (dbAddress != null)
             {
                 dbAddress.Enrollee = null;
                 _context.Addresses.Remove(dbAddress);
             }
-            // create the new addresses, if they exist
+
+            // Create the new addresses, if they exist
             if (newAddress != null)
             {
+                // Prevent the ID from being changed based on the incoming information
                 newAddress.EnrolleeId = (int)enrollee.Id;
                 _context.Entry(newAddress).State = EntityState.Added;
             }
@@ -218,17 +221,20 @@ namespace Prime.Services
 
         private void ReplaceExistingItems<T>(ICollection<T> dbCollection, ICollection<T> newCollection, Enrollee enrollee) where T : class, IEnrolleeNavigationProperty
         {
-            // remove existing items
+            // Remove existing items
             foreach (var item in dbCollection)
             {
+                item.Enrollee = null;
                 _context.Remove(item);
             }
-            // create new items
+
+            // Create new items
             if (newCollection != null)
             {
                 foreach (var item in newCollection)
                 {
-                    // item.EnrolmentId = (int)enrollee.Id;
+                    // Prevent the ID from being changed based on the incoming information
+                    item.EnrolleeId = (int)enrollee.Id;
                     _context.Entry(item).State = EntityState.Added;
                 }
             }
