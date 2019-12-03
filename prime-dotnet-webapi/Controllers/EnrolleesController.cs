@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,6 +23,25 @@ namespace Prime.Controllers
         public EnrolleesController(IEnrolleeService enrolleeService)
         {
             _enrolleeService = enrolleeService;
+        }
+
+        private bool BelongsToEnrollee(Enrollee enrollee)
+        {
+            bool belongsToEnrollee = false;
+
+            // Check to see if the logged in user is an admin
+            belongsToEnrollee = User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE);
+
+            // If user is not ADMIN, check that user belongs to the enrolment
+            if (!belongsToEnrollee)
+            {
+                // Get the prime user id from the logged in user - note: this returns 'Guid.Empty' if there is no logged in user
+                Guid PrimeUserId = PrimeUtils.PrimeUserId(User);
+                // Check to see if the logged in user id is not 'Guid.Empty', and matches the one in the enrolment
+                belongsToEnrollee = !PrimeUserId.Equals(Guid.Empty) && PrimeUserId.Equals(enrollee.UserId);
+            }
+
+            return belongsToEnrollee;
         }
 
         // GET: api/Enrollees
@@ -74,6 +94,12 @@ namespace Prime.Controllers
             if (enrollee == null)
             {
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
+            }
+
+            // if the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
+            if (!BelongsToEnrollee(enrollee))
+            {
+                return Forbid();
             }
 
             return Ok(new ApiOkResponse<Enrollee>(enrollee));
@@ -145,6 +171,12 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
+            // if the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
+            if (!BelongsToEnrollee(enrollee))
+            {
+                return Forbid();
+            }
+
             await _enrolleeService.UpdateEnrolleeAsync(enrollee);
 
             return NoContent();
@@ -166,6 +198,12 @@ namespace Prime.Controllers
             if (enrollee == null)
             {
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
+            }
+
+            // if the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
+            if (!BelongsToEnrollee(enrollee))
+            {
+                return Forbid();
             }
 
             await _enrolleeService.DeleteEnrolleeAsync(enrolleeId);
@@ -193,6 +231,12 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
 
+            // if the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
+            if (!BelongsToEnrollee(enrollee))
+            {
+                return Forbid();
+            }
+
             var availableEnrolmentStatuses = await _enrolleeService.GetAvailableEnrolmentStatusesAsync(enrolleeId);
 
             return Ok(new ApiOkResponse<IEnumerable<Status>>(availableEnrolmentStatuses));
@@ -216,6 +260,12 @@ namespace Prime.Controllers
             if (enrollee == null)
             {
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
+            }
+
+            // if the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
+            if (!BelongsToEnrollee(enrollee))
+            {
+                return Forbid();
             }
 
             var enrollees = await _enrolleeService.GetEnrolmentStatusesAsync(enrolleeId);
@@ -248,6 +298,12 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
+            // if the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
+            if (!BelongsToEnrollee(enrollee))
+            {
+                return Forbid();
+            }
+
             if (!_enrolleeService.IsStatusChangeAllowed(enrollee.CurrentStatus?.Status, status))
             {
                 this.ModelState.AddModelError("Status.Code", $"Cannot change from current Status Code: {enrollee.CurrentStatus?.Status?.Code} to the new Status Code: {status.Code}");
@@ -258,6 +314,5 @@ namespace Prime.Controllers
 
             return Ok(new ApiOkResponse<EnrolmentStatus>(enrolmentStatus));
         }
-
     }
 }
