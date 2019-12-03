@@ -94,14 +94,7 @@ namespace Prime.Services
         }
 
         public async Task<IEnumerable<Enrollee>> GetEnrolleesAsync()
-        {
-            return await _context.Enrollees
-                .Include(e => e.PhysicalAddress)
-                .Include(e => e.MailingAddress)
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<Enrollee>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions)
+        public async Task<IEnumerable<Enrollee>> GetEnrolleesAsync(EnrolmentSearchOptions searchOptions)
         {
             IQueryable<Enrollee> query = this.GetBaseEnrolleeQuery();
 
@@ -179,17 +172,11 @@ namespace Prime.Services
                                 .Where(e => e.Id == enrollee.Id)
                                 .FirstOrDefault();
 
-            // Remove existing addresses, and recreate if necessary
+            // Remove existing, and recreate if necessary
             this.ReplaceExistingAddress(_enrolleeDb.PhysicalAddress, enrollee.PhysicalAddress, enrollee);
             this.ReplaceExistingAddress(_enrolleeDb.MailingAddress, enrollee.MailingAddress, enrollee);
-
-            // Remove existing certifications, and recreate if necessary
             this.ReplaceExistingItems(_enrolleeDb.Certifications, enrollee.Certifications, enrollee);
-
-            // Remove existing jobs, and recreate if necessary
             this.ReplaceExistingItems(_enrolleeDb.Jobs, enrollee.Jobs, enrollee);
-
-            // Remove existing organizations, and recreate if necessary
             this.ReplaceExistingItems(_enrolleeDb.Organizations, enrollee.Organizations, enrollee);
 
             _context.Entry(enrollee).State = EntityState.Modified;
@@ -216,7 +203,7 @@ namespace Prime.Services
             // Create the new addresses, if they exist
             if (newAddress != null)
             {
-                // Prevent the ID from being changed based on the incoming information
+                // Prevent the ID from being changed by the incoming changes
                 newAddress.EnrolleeId = (int)enrollee.Id;
                 _context.Entry(newAddress).State = EntityState.Added;
             }
@@ -236,7 +223,7 @@ namespace Prime.Services
             {
                 foreach (var item in newCollection)
                 {
-                    // Prevent the ID from being changed based on the incoming information
+                    // Prevent the ID from being changed by the incoming changes
                     item.EnrolleeId = (int)enrollee.Id;
                     _context.Entry(item).State = EntityState.Added;
                 }
@@ -403,6 +390,9 @@ namespace Prime.Services
             return _context.Enrollees
                     .Include(e => e.PhysicalAddress)
                     .Include(e => e.MailingAddress)
+                    .Include(e => e.Certifications)
+                    .Include(e => e.Jobs)
+                    .Include(e => e.Organizations)
                     .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.Status)
                     .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.EnrolmentStatusReasons).ThenInclude(esr => esr.StatusReason);
         }
