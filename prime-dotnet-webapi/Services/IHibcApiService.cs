@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Prime.Services
 {
     public interface IHibcApiService
     {            
-        void ValidateCollegeLicense();
+        Task<string> ValidateCollegeLicense();
     }
 }

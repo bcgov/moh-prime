@@ -1,5 +1,9 @@
 using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Http;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Prime.Services
 {
@@ -10,9 +14,19 @@ namespace Prime.Services
             : base(context, httpContext)
         { }
 
-        public void ValidateCollegeLicense()
+        public async Task<string> ValidateCollegeLicense()
         {
-
+            X509Certificate2 certificate = new X509Certificate2(@"etc\certs\t1primesvc.pfx", PrimeConstants.HIBC_SSL_CERT_PASSWORD);
+            var httpClientHandler = new HttpClientHandler
+            {
+                ClientCertificateOptions = ClientCertificateOption.Manual,
+                ClientCertificates = { certificate }
+            };
+            using (var client = new HttpClient(httpClientHandler))
+            {
+                var resp = await client.GetAsync(PrimeConstants.HIBC_API_URL);
+                return await resp.Content.ReadAsStringAsync();
+            };
         }
     }
 }

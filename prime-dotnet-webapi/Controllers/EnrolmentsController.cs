@@ -19,10 +19,12 @@ namespace Prime.Controllers
     public class EnrolmentsController : ControllerBase
     {
         private readonly IEnrolmentService _enrolmentService;
+        private readonly IHibcApiService _hibcApiService;
 
-        public EnrolmentsController(IEnrolmentService enrolmentService)
+        public EnrolmentsController(IEnrolmentService enrolmentService, IHibcApiService hibcApiService)
         {
             _enrolmentService = enrolmentService;
+            _hibcApiService = hibcApiService;
         }
 
         private bool BelongsToEnrollee(Enrolment enrolment)
@@ -199,16 +201,11 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiOkResponse<Enrolment>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Object>> DeleteEnrolment(int enrolmentId)
+        public async Task<ActionResult<string>> DeleteEnrolment(int enrolmentId)
         {
-            var ret = new {
-                // api = PrimeConstants.HIBC_API_URL,
-                // u = PrimeConstants.HIBC_API_USERNAME,
-                // p = PrimeConstants.HIBC_API_PASSWORD,
-                // ssl = PrimeConstants.HIBC_SSL_PASSWORD
-            };
+            string resp = await _hibcApiService.ValidateCollegeLicense();
 
-            return Ok(new ApiOkResponse<Object>(ret));
+            return Ok(new ApiOkResponse<string>(resp));
         }
         // TODO X
         // public async Task<ActionResult<Enrolment>> DeleteEnrolment(int enrolmentId)
