@@ -61,6 +61,16 @@ objects:
         spec:
           containers:
             - env:
+                - name: MAIL_SERVER_URL
+                  valueFrom:
+                    secretKeyRef:
+                      key: MAIL_SERVER_URL
+                      name: 'mailserver'
+                - name: MAIL_SERVER_PORT
+                  valueFrom:
+                    secretKeyRef:
+                      key: MAIL_SERVER_PORT
+                      name: 'mailserver'
                 - name: OC_APP
                   value: ${OC_APP}
                 - name: PATH

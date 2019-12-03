@@ -8,8 +8,8 @@ services:
     build:
       context: prime-dotnet-webapi/
     environment:
-      DB_CONNECTION_STRING: "host=postgres;port=5432;database=postgres;username=postgres;password=postgres"      
-      JWT_SIGNING_KEY: "SdqlA0Y5e6HMAK1wm6iHHHz2u37XGtlo"      
+      DB_CONNECTION_STRING: "host=postgres;port=5432;database=postgres;username=postgres;password=postgres"
+      JWT_SIGNING_KEY: "SdqlA0Y5e6HMAK1wm6iHHHz2u37XGtlo"
       ASPNETCORE_HTTPS_PORT: "5001"
       ASPNETCORE_ENVIRONMENT: "Development"
       ASPNETCORE_URLS: "http://+:8080"
@@ -45,13 +45,26 @@ services:
     restart: always
     ports:
       - "8080:8080"
+      - "4200:8080"
     expose:
       - "8080"
+      - "4200"
+    networks:
+      - primenet
+################################################# Local SMTP Server #
+  mailhog:
+    container_name: mailhog
+    restart: always
+    image: mailhog/mailhog:latest
+    ports:
+      - 25:1025
+      - 1025:1025
+      - 8025:8025 # visit localhost:8025 to see the list of captured emails
     networks:
       - primenet
 
 volumes:
-  local_postgres_data: 
+  local_postgres_data:
 
 networks:
   primenet:
