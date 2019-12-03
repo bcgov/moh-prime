@@ -34,7 +34,7 @@ namespace Prime.Services
         {
             if (_workflowStateMap == null)
             {
-                // construct the workflow map
+                // Construct the workflow map
                 Status IN_PROGRESS = _context.Statuses.Single(s => s.Code == Status.IN_PROGRESS_CODE);
                 Status SUBMITTED = _context.Statuses.Single(s => s.Code == Status.SUBMITTED_CODE);
                 Status APPROVED = _context.Statuses.Single(s => s.Code == Status.APPROVED_CODE);
@@ -60,6 +60,7 @@ namespace Prime.Services
             ICollection<Status> availableStatuses = new List<Status>();
             var results = this.GetWorkFlowStateMap()[currentStatus ?? NULL_STATUS];
             var currentUser = _httpContext?.HttpContext?.User;
+
             foreach (var item in results)
             {
                 if (!item.AdminOnly
@@ -85,7 +86,7 @@ namespace Prime.Services
 
             if (entity != null)
             {
-                // add the available statuses to the enrollee
+                // Add the available statuses to the enrollee
                 entity.AvailableStatuses = this.GetAvailableStatuses(entity.CurrentStatus?.Status);
             }
 
@@ -113,7 +114,7 @@ namespace Prime.Services
 
             foreach (var item in items)
             {
-                // add the available statuses to the enrolment
+                // Add the available statuses to the enrolment
                 item.AvailableStatuses = this.GetAvailableStatuses(item.CurrentStatus?.Status);
             }
 
@@ -127,7 +128,7 @@ namespace Prime.Services
 
             if (enrollee != null)
             {
-                // add the available statuses to the enrolment
+                // Add the available statuses to the enrolment
                 enrollee.AvailableStatuses = this.GetAvailableStatuses(enrollee?.CurrentStatus?.Status);
             }
 
@@ -146,12 +147,14 @@ namespace Prime.Services
 
         private async Task<int?> CreateEnrolleeInternalAsync(Enrollee enrollee)
         {
-            // create a status history record
+            // Create a status history record
             EnrolmentStatus enrolmentStatus = new EnrolmentStatus { Enrollee = enrollee, StatusCode = Status.IN_PROGRESS_CODE, StatusDate = DateTime.Now, IsCurrent = true };
+
             if (enrollee.EnrolmentStatuses == null)
             {
                 enrollee.EnrolmentStatuses = new List<EnrolmentStatus>(0);
             }
+
             enrollee.EnrolmentStatuses.Add(enrolmentStatus);
             _context.Enrollees.Add(enrollee);
 
@@ -176,17 +179,17 @@ namespace Prime.Services
                                 .Where(e => e.Id == enrollee.Id)
                                 .FirstOrDefault();
 
-            // remove existing addresses, and recreate if necessary
+            // Remove existing addresses, and recreate if necessary
             this.ReplaceExistingAddress(_enrolleeDb.PhysicalAddress, enrollee.PhysicalAddress, enrollee);
             this.ReplaceExistingAddress(_enrolleeDb.MailingAddress, enrollee.MailingAddress, enrollee);
 
-            // remove existing certifications, and recreate if necessary
+            // Remove existing certifications, and recreate if necessary
             this.ReplaceExistingItems(_enrolleeDb.Certifications, enrollee.Certifications, enrollee);
 
-            // remove existing jobs, and recreate if necessary
+            // Remove existing jobs, and recreate if necessary
             this.ReplaceExistingItems(_enrolleeDb.Jobs, enrollee.Jobs, enrollee);
 
-            // remove existing organizations, and recreate if necessary
+            // Remove existing organizations, and recreate if necessary
             this.ReplaceExistingItems(_enrolleeDb.Organizations, enrollee.Organizations, enrollee);
 
             _context.Entry(enrollee).State = EntityState.Modified;
@@ -244,6 +247,7 @@ namespace Prime.Services
         {
             var enrollee = await _context.Enrollees
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
             if (enrollee == null)
             {
                 return;
@@ -256,8 +260,10 @@ namespace Prime.Services
         public async Task<IEnumerable<Status>> GetAvailableEnrolmentStatusesAsync(int enrolleeId)
         {
             var enrollee = await _context.Enrollees
-                .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.Status)
+                .Include(e => e.EnrolmentStatuses)
+                .ThenInclude(es => es.Status)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
             if (enrollee == null)
             {
                 return null;
@@ -270,8 +276,7 @@ namespace Prime.Services
         {
             IQueryable<EnrolmentStatus> query = _context.EnrolmentStatuses
                 .Include(es => es.Status)
-                .Where(es => es.EnrolleeId == enrolleeId)
-                ;
+                .Where(es => es.EnrolleeId == enrolleeId);
 
             var items = await query.ToListAsync();
 
@@ -291,8 +296,8 @@ namespace Prime.Services
         private async Task<EnrolmentStatus> CreateEnrolmentStatusInternalAsync(int enrolleeId, Status status)
         {
             var enrollee = await this.GetBaseEnrolleeQuery()
-                .AsNoTracking()
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
             if (enrollee == null)
             {
                 return null;
@@ -300,60 +305,60 @@ namespace Prime.Services
 
             var currentStatus = enrollee.CurrentStatus?.Status;
 
-            // make sure the status change is allowed
+            // Make sure the status change is allowed
             if (IsStatusChangeAllowed(currentStatus ?? NULL_STATUS, status))
             {
-                // update all of the existing statuses to not be current, and then create a new current status
+                // Update all of the existing statuses to not be current, and then create a new current status
                 if (currentStatus != null)
                 {
                     enrollee.CurrentStatus.IsCurrent = false;
                 }
+
                 var existingEnrolmentStatuses = await this.GetEnrolmentStatusesAsync(enrolleeId);
+
                 foreach (var enrolmentStatus in existingEnrolmentStatuses)
                 {
                     enrolmentStatus.IsCurrent = false;
                 }
 
-                // create a new enrolment status
+                // Create a new enrolment status
                 var createdEnrolmentStatus = new EnrolmentStatus { EnrolleeId = enrolleeId, StatusCode = status.Code, StatusDate = DateTime.Now, IsCurrent = true };
-                _context.EnrolmentStatuses.Add(createdEnrolmentStatus);
+
                 enrollee.EnrolmentStatuses.Add(createdEnrolmentStatus);
 
                 switch (status?.Code)
                 {
                     case Status.SUBMITTED_CODE:
-                        // check to see if this should be auto adjudicated
+                        // Check to see if this should be auto adjudicated
                         if (_automaticAdjudicationService.QualifiesForAutomaticAdjudication(enrollee))
                         {
-                            // change the status to adjudicated/approved
+                            // Change the status to adjudicated/approved
                             createdEnrolmentStatus.IsCurrent = false;
-                            // create a new approved enrolment status
+                            // Create a new approved enrolment status
                             var adjudicatedEnrolmentStatus = new EnrolmentStatus { EnrolleeId = enrolleeId, StatusCode = Status.APPROVED_CODE, StatusDate = DateTime.Now, IsCurrent = true };
                             adjudicatedEnrolmentStatus.EnrolmentStatusReasons = new List<EnrolmentStatusReason> { new EnrolmentStatusReason { EnrolmentStatus = adjudicatedEnrolmentStatus, StatusReasonCode = StatusReason.AUTOMATIC_CODE } };
-                            _context.EnrolmentStatuses.Add(adjudicatedEnrolmentStatus);
                             enrollee.EnrolmentStatuses.Add(adjudicatedEnrolmentStatus);
-                            // flip to the object that will get returned
+                            // Flip to the object that will get returned
                             createdEnrolmentStatus = adjudicatedEnrolmentStatus;
                         }
                         break;
                     case Status.APPROVED_CODE:
-                        // add the manual reason code
+                        // Add the manual reason code
                         createdEnrolmentStatus.EnrolmentStatusReasons = new List<EnrolmentStatusReason> { new EnrolmentStatusReason { EnrolmentStatus = createdEnrolmentStatus, StatusReasonCode = StatusReason.MANUAL_CODE } };
                         break;
 
                     case Status.ACCEPTED_TOS_CODE:
-                        // create the license plate for this enrollee
                         enrollee.LicensePlate = this.GenerateLicensePlate();
                         break;
                 }
 
                 if (Status.ACCEPTED_TOS_CODE.Equals(status?.Code))
                 {
-                    //create the license plate for this enrollee
                     enrollee.LicensePlate = this.GenerateLicensePlate();
                 }
 
                 var created = await _context.SaveChangesAsync();
+
                 if (created < 1)
                 {
                     throw new InvalidOperationException("Could not create enrolment status.");
