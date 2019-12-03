@@ -98,7 +98,7 @@ namespace Prime.Services
         {
             IQueryable<Enrollee> query = this.GetBaseEnrolleeQuery();
 
-            if (searchOptions.StatusCode != null)
+            if (searchOptions?.StatusCode != null)
             {
                 query = query.Where(e => e.EnrolmentStatuses.Single(es => es.IsCurrent).StatusCode == (short)searchOptions.StatusCode);
             }
