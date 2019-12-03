@@ -82,7 +82,7 @@ namespace PrimeTests.Mocks
             return Task.FromResult(updated);
         }
 
-        public Task<IEnumerable<Status>> GetAvailableEnrolleeStatusesAsync(int enrolleeId)
+        public Task<IEnumerable<Status>> GetAvailableEnrolmentStatusesAsync(int enrolleeId)
         {
             ICollection<Status> availableStatuses = new List<Status>();
             Enrollee enrollee = null;
@@ -153,11 +153,6 @@ namespace PrimeTests.Mocks
                 return Task.FromResult(statusCodeToCheck.Equals(enrollee.CurrentStatus?.StatusCode));
             }
             return Task.FromResult(false);
-        }
-
-        public Task<IEnumerable<Status>> GetAvailableEnrolmentStatusesAsync(int enrolleeId)
-        {
-            throw new NotImplementedException();
         }
     }
 }
