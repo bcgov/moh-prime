@@ -101,11 +101,17 @@ namespace Prime.Models
         }
 
         [NotMapped]
-        public string EnrolleeClassification { get {
+        public string EnrolleeClassification
+        {
+            get
+            {
                 ICollection<EnrolmentStatusReason> enrolmentStatusReasons = this.CurrentStatus?.EnrolmentStatusReasons;
-                if(enrolmentStatusReasons != null && enrolmentStatusReasons.Count > 0) {
+                if (enrolmentStatusReasons != null && enrolmentStatusReasons.Count > 0)
+                {
                     return enrolmentStatusReasons.Any(r => r.StatusReason?.Code == 1) ? PrimeConstants.PRIME_MOA : PrimeConstants.PRIME_RU;
-                } else {
+                }
+                else
+                {
                     return null;
                 }
             }
