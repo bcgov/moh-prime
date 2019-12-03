@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
+import * as moment from 'moment';
+
 import { Config, CollegeConfig, LicenseConfig, PracticeConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { ViewportService } from '@core/services/viewport.service';
@@ -25,6 +27,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   public filteredPractices: Config<number>[];
   public hasPractices: boolean;
   public licensePrefix: string;
+  public minRenewalDate: moment.Moment;
 
   constructor(
     private configService: ConfigService,
@@ -35,6 +38,7 @@ export class CollegeCertificationFormComponent implements OnInit {
     this.colleges = this.configService.colleges;
     this.licenses = this.configService.licenses;
     this.practices = this.configService.practices;
+    this.minRenewalDate = moment();
   }
 
   public get isMobile() {
