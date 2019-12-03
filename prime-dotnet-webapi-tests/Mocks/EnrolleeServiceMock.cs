@@ -71,11 +71,6 @@ namespace PrimeTests.Mocks
             return Task.FromResult((IEnumerable<Enrollee>)this.GetHolder<int, Enrollee>().Values?.ToList());
         }
 
-        public Task<IEnumerable<Enrollee>> GetEnrolleesForUserIdAsync(Guid userId)
-        {
-            return Task.FromResult((IEnumerable<Enrollee>)this.GetHolder<int, Enrollee>().Values?.ToList().Where(e => e.UserId == userId));
-        }
-
         public Task<int> UpdateEnrolleeAsync(Enrollee enrollee)
         {
             int updated = 0;

@@ -93,8 +93,8 @@ namespace Prime.Services
             return entity;
         }
 
-        public async Task<IEnumerable<Enrollee>> GetEnrolleesAsync()
-        public async Task<IEnumerable<Enrollee>> GetEnrolleesAsync(EnrolmentSearchOptions searchOptions)
+
+        public async Task<IEnumerable<Enrollee>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)
         {
             IQueryable<Enrollee> query = this.GetBaseEnrolleeQuery();
 
