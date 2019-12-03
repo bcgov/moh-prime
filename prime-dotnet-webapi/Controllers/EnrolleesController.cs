@@ -122,6 +122,15 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
+            // Check to see if this userId is already an enrollee, if so, reject creating another
+            var existingEnrolment = await _enrolleeService.GetEnrolleeForUserIdAsync(enrollee.UserId);
+
+            if (existingEnrolment != null)
+            {
+                this.ModelState.AddModelError("Enrollee.UserId", "An enrollee already exists for this User Id, only one enrollee is allowed per User Id.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
+
             var createdEnrolleeId = await _enrolleeService.CreateEnrolleeAsync(enrollee);
 
             return CreatedAtAction(nameof(GetEnrolleeById), new { enrolleeId = createdEnrolleeId }, new ApiCreatedResponse<Enrollee>(enrollee));
