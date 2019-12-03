@@ -99,5 +99,16 @@ namespace Prime.Models
                 yield return new ValidationResult($"UserId cannot be the empty value: {this.UserId.ToString()}");
             }
         }
+
+        [NotMapped]
+        public string EnrolleeClassification { get {
+                ICollection<EnrolmentStatusReason> enrolmentStatusReasons = this.CurrentStatus?.EnrolmentStatusReasons;
+                if(enrolmentStatusReasons != null && enrolmentStatusReasons.Count > 0) {
+                    return enrolmentStatusReasons.Any(r => r.StatusReason?.Code == 1) ? PrimeConstants.PRIME_MOA : PrimeConstants.PRIME_RU;
+                } else {
+                    return null;
+                }
+            }
+        }
     }
 }
