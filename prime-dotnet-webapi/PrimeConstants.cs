@@ -2,6 +2,8 @@ namespace Prime
 {
     public static class PrimeConstants
     {
+        public readonly static string ENVIRONMENT_NAME = System.Environment.GetEnvironmentVariable("OC_APP") ?? "local";
+
         public readonly static string PRIME_ACCESS_TOKEN_KEY = "prime-access-token";
 
         public readonly static string PRIME_ADMIN_CLIENT = System.Environment.GetEnvironmentVariable("JWT_ADMIN_CLIENT") ?? Startup.StaticConfig["Jwt:AdminClient"];
@@ -33,6 +35,8 @@ namespace Prime
 
         public readonly static string PRIME_RU = "RU";
 
-
+        // Mail server
+        public readonly static string MAIL_SERVER_URL = System.Environment.GetEnvironmentVariable("MAIL_SERVER_URL") ?? "localhost";
+        public readonly static int MAIL_SERVER_PORT = int.Parse(System.Environment.GetEnvironmentVariable("MAIL_SERVER_PORT") ?? "1025");
     }
 }
