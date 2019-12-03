@@ -16,7 +16,7 @@ namespace Prime.Services
 
         public async Task<string> ValidateCollegeLicense()
         {
-            X509Certificate2 certificate = new X509Certificate2(@"\opt\app-root\etc\certs\t1primesvc.pfx", PrimeConstants.HIBC_SSL_CERT_PASSWORD);
+            X509Certificate2 certificate = new X509Certificate2(@"/opt/app-root/etc/certs/t1primesvc.pfx", PrimeConstants.HIBC_SSL_CERT_PASSWORD);
             var httpClientHandler = new HttpClientHandler
             {
                 ClientCertificateOptions = ClientCertificateOption.Manual,
