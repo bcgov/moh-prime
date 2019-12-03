@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
+using Xunit.Abstractions;
 
 using Prime.Models;
 using Prime.Services;
@@ -17,36 +18,42 @@ namespace PrimeTests.Controllers
 {
     public class EnrolleesControllerTests : BaseControllerTests
     {
+        private readonly ITestOutputHelper output;
 
         private static EnrolleeSearchOptions EMPTY_ENROLLEE_SEARCH_OPTIONS = new EnrolleeSearchOptions();
 
-        public EnrolleesControllerTests(CustomWebApplicationFactory<TestStartup> factory) : base(factory)
-        { }
+        public EnrolleesControllerTests(CustomWebApplicationFactory<TestStartup> factory, ITestOutputHelper output) : base(factory)
+        {
+            this.output = output;
+        }
 
         [Fact]
         public async void testGetEnrollees()
         {
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
+
                 // initialize the data
                 var service = scope.ServiceProvider.GetRequiredService<IEnrolleeService>();
                 ((EnrolleeServiceMock)service).InitializeDb();
 
                 // check the initial state
-                var enrollees = await service.GetEnrolleesAsync();
+                var enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
                 Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
                 //pick off an enrollee to get the userId from
                 Enrollee expectedEnrollee = enrollees.First();
+                output.WriteLine(expectedEnrollee.UserId.ToString());
 
                 // create a request with an AUTH token
                 var request = TestUtils.CreateRequest(HttpMethod.Get, "/api/enrollees", expectedEnrollee.UserId);
 
-                // try to get the enrollees
+                // // try to get the enrollees
                 var response = await _client.SendAsync(request);
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+                output.WriteLine(response.ToString());
 
-                // check that the controller returned only the one user's enrollee record
+                // // check that the controller returned only the one user's enrollee record
                 var returnedEnrollees = (await TestUtils.DeserializeResponse<ApiOkResponse<IEnumerable<Enrollee>>>(response)).Result;
                 Assert.Single(returnedEnrollees);
             }

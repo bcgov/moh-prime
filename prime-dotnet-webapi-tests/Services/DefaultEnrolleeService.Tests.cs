@@ -40,25 +40,21 @@ namespace PrimeTests.Services
         }
 
         [Fact]
-        public async void testGetEnrolleesForUserId()
+        public async void testGetEnrolleeForUserId()
         {
-            // make sure there are no enrollees
-            Assert.False(_dbContext.Enrollees.Any());
-            await _dbContext.SaveChangesAsync();
-
-            // create some enrollees directly to the context
             var testEnrollee = TestUtils.EnrolleeFaker.Generate();
             Guid expectedUserId = testEnrollee.UserId;
+
+            // create the enrollee directly to the context
             _dbContext.Enrollees.Add(testEnrollee);
-            _dbContext.Enrollees.Add(TestUtils.EnrolleeFaker.Generate());
-            _dbContext.Enrollees.Add(TestUtils.EnrolleeFaker.Generate());
-
             await _dbContext.SaveChangesAsync();
+            int expectedEnrolleeId = (int)testEnrollee.Id;
 
-            // get the enrollees through the service layer code
-            var enrollees = await _service.GetEnrolleesForUserIdAsync(expectedUserId);
-            Assert.NotNull(enrollees);
-            Assert.Single(enrollees);
+            // get the enrollee through the service layer code
+            Enrollee enrollee = await _service.GetEnrolleeForUserIdAsync(expectedUserId);
+            Assert.NotNull(enrollee);
+            Assert.Equal(expectedEnrolleeId, enrollee.Id);
+            Assert.Equal(expectedUserId, enrollee.UserId);
         }
 
         [Fact]
@@ -135,23 +131,23 @@ namespace PrimeTests.Services
             Assert.Equal(expectedUserId, enrollee.UserId);
         }
 
-        [Fact]
-        public async void testGetEnrolleeForUserId()
-        {
-            var testEnrollee = TestUtils.EnrolleeFaker.Generate();
-            Guid expectedUserId = testEnrollee.UserId;
+        // [Fact]
+        // public async void testGetEnrolleeForUserId()
+        // {
+        //     var testEnrollee = TestUtils.EnrolleeFaker.Generate();
+        //     Guid expectedUserId = testEnrollee.UserId;
 
-            // create the enrollee directly to the context
-            _dbContext.Enrollees.Add(testEnrollee);
-            await _dbContext.SaveChangesAsync();
-            int expectedEnrolleeId = (int)testEnrollee.Id;
+        //     // create the enrollee directly to the context
+        //     _dbContext.Enrollees.Add(testEnrollee);
+        //     await _dbContext.SaveChangesAsync();
+        //     int expectedEnrolleeId = (int)testEnrollee.Id;
 
-            // get the enrollee through the service layer code
-            Enrollee enrollee = await _service.GetEnrolleeForUserIdAsync(expectedUserId);
-            Assert.NotNull(enrollee);
-            Assert.Equal(expectedEnrolleeId, enrollee.Id);
-            Assert.Equal(expectedUserId, enrollee.UserId);
-        }
+        //     // get the enrollee through the service layer code
+        //     Enrollee enrollee = await _service.GetEnrolleeForUserIdAsync(expectedUserId);
+        //     Assert.NotNull(enrollee);
+        //     Assert.Equal(expectedEnrolleeId, enrollee.Id);
+        //     Assert.Equal(expectedUserId, enrollee.UserId);
+        // }
 
         // [Fact]
         // public async void testGetEnrollees()
@@ -233,6 +229,7 @@ namespace PrimeTests.Services
             await _dbContext.SaveChangesAsync();
             int enrolleeId = (int)testEnrollee.Id;
 
+
             // get the enrollee directly from the context
             Enrollee enrollee = await _dbContext.Enrollees
                             .Include(e => e.PhysicalAddress)
@@ -247,6 +244,7 @@ namespace PrimeTests.Services
 
             // make sure we are not tracking anything - i.e. isolate following transaction
             TestUtils.DetachAllEntities(_dbContext);
+
 
             // update the enrollee through the service layer code
             enrollee.FirstName = expectedName;
