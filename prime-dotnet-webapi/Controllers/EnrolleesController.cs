@@ -127,6 +127,12 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
+            if (enrollee == null || enrollee.Id == null)
+            {
+                this.ModelState.AddModelError("Enrollee.Id", "Enrollee Id is required to make updates.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
+
             if (!_enrolleeService.EnrolleeExists(enrolleeId))
             {
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
