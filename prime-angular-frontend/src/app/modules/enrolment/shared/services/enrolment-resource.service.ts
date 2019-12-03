@@ -86,6 +86,18 @@ export class EnrolmentResource {
       enrollee.mailingAddress = new Address();
     }
 
+    if (!enrollee.certifications) {
+      enrollee.certifications = [];
+    }
+
+    if (!enrollee.jobs) {
+      enrollee.jobs = [];
+    }
+
+    if (!enrollee.organizations) {
+      enrollee.organizations = [];
+    }
+
     return this.enrolmentAdapter(enrollee);
   }
 
