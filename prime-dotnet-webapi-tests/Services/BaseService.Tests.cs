@@ -22,10 +22,9 @@ namespace PrimeTests.Services
         {
             _databaseName = Guid.NewGuid().ToString();
 
-        // TODO Rmove Sensitive data logging!!!!!!!!!!!!!
             var options = new DbContextOptionsBuilder<ApiDbContext>()
                         .UseInMemoryDatabase(databaseName: _databaseName)
-                        .EnableSensitiveDataLogging (sensitiveDataLoggingEnabled :true)
+                        .EnableSensitiveDataLogging (sensitiveDataLoggingEnabled :false)
                       .Options;
 
 
