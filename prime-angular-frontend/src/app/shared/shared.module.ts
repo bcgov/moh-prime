@@ -24,6 +24,7 @@ import { PhonePipe } from '@shared/pipes/phone.pipe';
 import { PostalPipe } from '@shared/pipes/postal.pipe';
 import { ReplacePipe } from '@shared/pipes/replace.pipe';
 import { CertificatePipe } from '@shared/pipes/certificate.pipe';
+import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 import { HeaderComponent } from '@shared/components/header/header.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
@@ -44,6 +45,7 @@ import { AlertComponent } from '@shared/components/alert/alert.component';
     FormatDatePipe,
     PostalPipe,
     EnrolmentPipe,
+    DefaultPipe,
     AddressComponent,
     DashboardComponent,
     ConfirmDialogComponent,
@@ -86,6 +88,7 @@ import { AlertComponent } from '@shared/components/alert/alert.component';
     PhonePipe,
     PostalPipe,
     ReplacePipe,
+    DefaultPipe,
     AddressComponent,
     DashboardComponent,
     EnrolmentStatusReasonsComponent,
