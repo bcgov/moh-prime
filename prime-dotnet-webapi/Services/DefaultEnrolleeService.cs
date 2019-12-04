@@ -100,7 +100,7 @@ namespace Prime.Services
 
             if (searchOptions?.StatusCode != null)
             {
-                query = query.Where(e => e.EnrolmentStatuses.Single(es => es.IsCurrent).StatusCode == (short)searchOptions.StatusCode);
+                query = query.Where(e => e.CurrentStatus.StatusCode == (short)searchOptions.StatusCode);
             }
 
             var items = await query.ToListAsync();
@@ -141,7 +141,7 @@ namespace Prime.Services
         private async Task<int?> CreateEnrolleeInternalAsync(Enrollee enrollee)
         {
             // Create a status history record
-            EnrolmentStatus enrolmentStatus = new EnrolmentStatus { Enrollee = enrollee, StatusCode = Status.IN_PROGRESS_CODE, StatusDate = DateTime.Now, IsCurrent = true };
+            EnrolmentStatus enrolmentStatus = new EnrolmentStatus { Enrollee = enrollee, StatusCode = Status.IN_PROGRESS_CODE, StatusDate = DateTime.Now, PharmaNetStatus = false };
 
             if (enrollee.EnrolmentStatuses == null)
             {
@@ -298,18 +298,18 @@ namespace Prime.Services
                 // Update all of the existing statuses to not be current, and then create a new current status
                 if (currentStatus != null)
                 {
-                    enrollee.CurrentStatus.IsCurrent = false;
+                    enrollee.CurrentStatus.PharmaNetStatus = false;
                 }
 
                 var existingEnrolmentStatuses = await this.GetEnrolmentStatusesAsync(enrolleeId);
 
                 foreach (var enrolmentStatus in existingEnrolmentStatuses)
                 {
-                    enrolmentStatus.IsCurrent = false;
+                    enrolmentStatus.PharmaNetStatus = false;
                 }
 
                 // Create a new enrolment status
-                var createdEnrolmentStatus = new EnrolmentStatus { EnrolleeId = enrolleeId, StatusCode = status.Code, StatusDate = DateTime.Now, IsCurrent = true };
+                var createdEnrolmentStatus = new EnrolmentStatus { EnrolleeId = enrolleeId, StatusCode = status.Code, StatusDate = DateTime.Now, PharmaNetStatus = false };
 
                 enrollee.EnrolmentStatuses.Add(createdEnrolmentStatus);
 
@@ -320,9 +320,9 @@ namespace Prime.Services
                         if (_automaticAdjudicationService.QualifiesForAutomaticAdjudication(enrollee))
                         {
                             // Change the status to adjudicated/approved
-                            createdEnrolmentStatus.IsCurrent = false;
+                            createdEnrolmentStatus.PharmaNetStatus = false;
                             // Create a new approved enrolment status
-                            var adjudicatedEnrolmentStatus = new EnrolmentStatus { EnrolleeId = enrolleeId, StatusCode = Status.APPROVED_CODE, StatusDate = DateTime.Now, IsCurrent = true };
+                            var adjudicatedEnrolmentStatus = new EnrolmentStatus { EnrolleeId = enrolleeId, StatusCode = Status.APPROVED_CODE, StatusDate = DateTime.Now, PharmaNetStatus = false };
                             adjudicatedEnrolmentStatus.EnrolmentStatusReasons = new List<EnrolmentStatusReason> { new EnrolmentStatusReason { EnrolmentStatus = adjudicatedEnrolmentStatus, StatusReasonCode = StatusReason.AUTOMATIC_CODE } };
                             enrollee.EnrolmentStatuses.Add(adjudicatedEnrolmentStatus);
                             // Flip to the object that will get returned
@@ -333,9 +333,15 @@ namespace Prime.Services
                         // Add the manual reason code
                         createdEnrolmentStatus.EnrolmentStatusReasons = new List<EnrolmentStatusReason> { new EnrolmentStatusReason { EnrolmentStatus = createdEnrolmentStatus, StatusReasonCode = StatusReason.MANUAL_CODE } };
                         break;
-
+                    case Status.DECLINED_CODE:
+                        createdEnrolmentStatus.PharmaNetStatus = true;
+                        break;
                     case Status.ACCEPTED_TOS_CODE:
                         enrollee.LicensePlate = this.GenerateLicensePlate();
+                        createdEnrolmentStatus.PharmaNetStatus = true;
+                        break;
+                    case Status.DECLINED_TOS_CODE:
+                        createdEnrolmentStatus.PharmaNetStatus = true;
                         break;
                 }
 

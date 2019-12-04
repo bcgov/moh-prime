@@ -122,9 +122,9 @@ namespace PrimeTests.Mocks
                 {
                     foreach (var item in enrollee.EnrolmentStatuses)
                     {
-                        item.IsCurrent = false;
+                        item.PharmaNetStatus = false;
                     }
-                    createdEnrolmentStatus = new EnrolmentStatus { Enrollee = enrollee, EnrolleeId = (int)enrollee.Id, Status = status, StatusCode = status.Code, StatusDate = DateTime.Now, IsCurrent = true };
+                    createdEnrolmentStatus = new EnrolmentStatus { Enrollee = enrollee, EnrolleeId = (int)enrollee.Id, Status = status, StatusCode = status.Code, StatusDate = DateTime.Now, PharmaNetStatus = false };
                     enrollee.EnrolmentStatuses.Add(createdEnrolmentStatus);
                 }
             }

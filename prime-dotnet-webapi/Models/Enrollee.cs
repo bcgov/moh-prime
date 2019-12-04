@@ -81,7 +81,13 @@ namespace Prime.Models
         public ICollection<EnrolmentStatus> EnrolmentStatuses { get; set; }
 
         [NotMapped]
-        public EnrolmentStatus CurrentStatus { get { return this.EnrolmentStatuses?.SingleOrDefault(es => es.IsCurrent); } }
+        public EnrolmentStatus CurrentStatus
+        {
+            get => this.EnrolmentStatuses?.SingleOrDefault(es => es.StatusDate == this.EnrolmentStatuses.Max(x => x.StatusDate));
+        }
+
+        [NotMapped]
+        public EnrolmentStatus PharmaNetStatus { get { return this.EnrolmentStatuses?.SingleOrDefault(es => es.PharmaNetStatus); } }
 
         [NotMapped]
         public ICollection<Status> AvailableStatuses { get; set; }
