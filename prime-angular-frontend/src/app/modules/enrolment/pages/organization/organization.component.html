@@ -54,7 +54,10 @@
       </div>
     </div>
 
-    <!-- <app-page-footer [backRoute]="EnrolmentRoutes.SELF_DECLARATION"></app-page-footer> -->
+    <app-page-footer [hasInitialStatus]="hasInitialStatus"
+                     (save)="onSubmit()"
+                     (continue)="onSubmit()"
+                     (back)="onRoute(EnrolmentRoutes.SELF_DECLARATION)"></app-page-footer>
 
   </form>
 

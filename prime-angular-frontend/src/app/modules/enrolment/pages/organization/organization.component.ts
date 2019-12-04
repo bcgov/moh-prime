@@ -28,6 +28,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
   public organizationCtrl: FormControl;
   public organizationTypes: Config<number>[];
   public filteredOrganizationTypes: Config<number>[];
+  public hasInitialStatus: boolean;
   public EnrolmentRoutes = EnrolmentRoutes;
 
   constructor(
@@ -107,6 +108,10 @@ export class OrganizationComponent implements OnInit, OnDestroy {
     return this.organizationTypes;
   }
 
+  public onRoute(routePath: EnrolmentRoutes) {
+    this.router.navigate([routePath], { relativeTo: this.route.parent });
+  }
+
   public canDeactivate(): Observable<boolean> | boolean {
     const data = 'unsaved';
     return (this.form.dirty)
@@ -131,7 +136,10 @@ export class OrganizationComponent implements OnInit, OnDestroy {
   }
 
   private initForm() {
-    this.enrolmentStateService.enrolment = this.enrolmentService.enrolment;
+    const enrolment = this.enrolmentService.enrolment;
+    this.hasInitialStatus = enrolment.initialStatus;
+
+    this.enrolmentStateService.enrolment = enrolment;
 
     // Always have at least one organization ready for
     // the enrollee to fill out
