@@ -24,7 +24,6 @@ import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-stat
 export class ReviewComponent implements OnInit {
   public busy: Subscription;
   public enrolment: Enrolment;
-  public disabledAgreement: boolean;
   public EnrolmentRoutes = EnrolmentRoutes;
 
   constructor(
@@ -36,9 +35,7 @@ export class ReviewComponent implements OnInit {
     private toastService: ToastService,
     private dialog: MatDialog,
     private logger: LoggerService
-  ) {
-    this.disabledAgreement = true;
-  }
+  ) { }
 
   public onSubmit() {
     if (this.enrolmentStateService.isEnrolmentValid()) {
@@ -73,10 +70,6 @@ export class ReviewComponent implements OnInit {
       console.log('DECLARATION', this.enrolmentStateService.isSelfDeclarationValid());
       console.log('ACCESS', this.enrolmentStateService.isOrganizationValid());
     }
-  }
-
-  public onConfirmAccuracy(event: MatCheckboxChange) {
-    this.disabledAgreement = !event.checked;
   }
 
   public showYesNo(declared: boolean) {
