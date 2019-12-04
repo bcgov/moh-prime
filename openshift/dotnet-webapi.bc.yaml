@@ -104,7 +104,7 @@ objects:
         type: Git
         secrets:
           - secret:
-              name: hibc
+              name: hibc-cert
             destinationDir: /etc
       strategy:
         dockerStrategy: 
