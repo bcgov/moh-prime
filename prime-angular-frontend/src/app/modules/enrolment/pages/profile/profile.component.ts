@@ -164,7 +164,7 @@ export class ProfileComponent implements OnInit {
     this.createFormInstance();
 
     const enrolment = this.enrolmentService.enrolment;
-    this.hasInitialStatus = enrolment.initialStatus;
+    this.hasInitialStatus = (enrolment) ? enrolment.initialStatus : true;
 
     if (enrolment) {
       this.isNewEnrolment = false;
