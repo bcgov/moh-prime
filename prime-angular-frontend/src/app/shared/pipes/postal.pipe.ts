@@ -4,7 +4,11 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'postal'
 })
 export class PostalPipe implements PipeTransform {
-  transform(value: string): string {
+  public transform(value: string): string {
+    return (value) ? this.postalValue(value) : '';
+  }
+
+  private postalValue(value: string) {
     return `${value.toUpperCase().slice(0, 3)} ${value.toUpperCase().slice(3)}`;
   }
 }
