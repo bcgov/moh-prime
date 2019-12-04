@@ -14,12 +14,12 @@ namespace Prime.Migrations
                 {
                     Code = table.Column<short>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    Name = table.Column<string>(nullable: false),
+                    Prefix = table.Column<string>(nullable: true),
                     CreatedUserId = table.Column<Guid>(nullable: false),
                     CreatedTimeStamp = table.Column<DateTime>(nullable: false),
                     UpdatedUserId = table.Column<Guid>(nullable: false),
-                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Prefix = table.Column<string>(nullable: true)
+                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -31,11 +31,11 @@ namespace Prime.Migrations
                 columns: table => new
                 {
                     Code = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
                     CreatedUserId = table.Column<Guid>(nullable: false),
                     CreatedTimeStamp = table.Column<DateTime>(nullable: false),
                     UpdatedUserId = table.Column<Guid>(nullable: false),
                     UpdatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -48,10 +48,6 @@ namespace Prime.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    CreatedUserId = table.Column<Guid>(nullable: false),
-                    CreatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    UpdatedUserId = table.Column<Guid>(nullable: false),
-                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<Guid>(nullable: false),
                     LicensePlate = table.Column<string>(maxLength: 20, nullable: true),
                     FirstName = table.Column<string>(nullable: false),
@@ -74,7 +70,11 @@ namespace Prime.Migrations
                     HasDisciplinaryAction = table.Column<bool>(nullable: true),
                     HasDisciplinaryActionDetails = table.Column<string>(nullable: true),
                     HasPharmaNetSuspended = table.Column<bool>(nullable: true),
-                    HasPharmaNetSuspendedDetails = table.Column<string>(nullable: true)
+                    HasPharmaNetSuspendedDetails = table.Column<string>(nullable: true),
+                    CreatedUserId = table.Column<Guid>(nullable: false),
+                    CreatedTimeStamp = table.Column<DateTime>(nullable: false),
+                    UpdatedUserId = table.Column<Guid>(nullable: false),
+                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -87,11 +87,11 @@ namespace Prime.Migrations
                 {
                     Code = table.Column<short>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    Name = table.Column<string>(nullable: false),
                     CreatedUserId = table.Column<Guid>(nullable: false),
                     CreatedTimeStamp = table.Column<DateTime>(nullable: false),
                     UpdatedUserId = table.Column<Guid>(nullable: false),
                     UpdatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -104,11 +104,11 @@ namespace Prime.Migrations
                 {
                     Code = table.Column<short>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    Name = table.Column<string>(nullable: false),
                     CreatedUserId = table.Column<Guid>(nullable: false),
                     CreatedTimeStamp = table.Column<DateTime>(nullable: false),
                     UpdatedUserId = table.Column<Guid>(nullable: false),
-                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: false)
+                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -121,11 +121,11 @@ namespace Prime.Migrations
                 {
                     Code = table.Column<short>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    Name = table.Column<string>(nullable: false),
                     CreatedUserId = table.Column<Guid>(nullable: false),
                     CreatedTimeStamp = table.Column<DateTime>(nullable: false),
                     UpdatedUserId = table.Column<Guid>(nullable: false),
-                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: false)
+                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -138,11 +138,11 @@ namespace Prime.Migrations
                 {
                     Code = table.Column<short>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    Name = table.Column<string>(nullable: false),
                     CreatedUserId = table.Column<Guid>(nullable: false),
                     CreatedTimeStamp = table.Column<DateTime>(nullable: false),
                     UpdatedUserId = table.Column<Guid>(nullable: false),
-                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: false)
+                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -155,11 +155,11 @@ namespace Prime.Migrations
                 {
                     Code = table.Column<short>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    Name = table.Column<string>(nullable: true),
                     CreatedUserId = table.Column<Guid>(nullable: false),
                     CreatedTimeStamp = table.Column<DateTime>(nullable: false),
                     UpdatedUserId = table.Column<Guid>(nullable: false),
-                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: true)
+                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -172,11 +172,11 @@ namespace Prime.Migrations
                 {
                     Code = table.Column<short>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    Name = table.Column<string>(nullable: true),
                     CreatedUserId = table.Column<Guid>(nullable: false),
                     CreatedTimeStamp = table.Column<DateTime>(nullable: false),
                     UpdatedUserId = table.Column<Guid>(nullable: false),
-                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: true)
+                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -188,12 +188,12 @@ namespace Prime.Migrations
                 columns: table => new
                 {
                     Code = table.Column<string>(nullable: false),
+                    CountryCode = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
                     CreatedUserId = table.Column<Guid>(nullable: false),
                     CreatedTimeStamp = table.Column<DateTime>(nullable: false),
                     UpdatedUserId = table.Column<Guid>(nullable: false),
-                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    CountryCode = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(nullable: false)
+                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -211,13 +211,13 @@ namespace Prime.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    EnrolleeId = table.Column<int>(nullable: false),
+                    ViewCount = table.Column<int>(nullable: false),
+                    Active = table.Column<bool>(nullable: false),
                     CreatedUserId = table.Column<Guid>(nullable: false),
                     CreatedTimeStamp = table.Column<DateTime>(nullable: false),
                     UpdatedUserId = table.Column<Guid>(nullable: false),
-                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    EnrolleeId = table.Column<int>(nullable: false),
-                    ViewCount = table.Column<int>(nullable: false),
-                    Active = table.Column<bool>(nullable: false)
+                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -236,12 +236,12 @@ namespace Prime.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    EnrolleeId = table.Column<int>(nullable: false),
+                    Title = table.Column<string>(nullable: false),
                     CreatedUserId = table.Column<Guid>(nullable: false),
                     CreatedTimeStamp = table.Column<DateTime>(nullable: false),
                     UpdatedUserId = table.Column<Guid>(nullable: false),
-                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    EnrolleeId = table.Column<int>(nullable: false),
-                    Title = table.Column<string>(nullable: false)
+                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -288,12 +288,12 @@ namespace Prime.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    EnrolleeId = table.Column<int>(nullable: false),
+                    OrganizationTypeCode = table.Column<short>(nullable: false),
                     CreatedUserId = table.Column<Guid>(nullable: false),
                     CreatedTimeStamp = table.Column<DateTime>(nullable: false),
                     UpdatedUserId = table.Column<Guid>(nullable: false),
-                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    EnrolleeId = table.Column<int>(nullable: false),
-                    OrganizationTypeCode = table.Column<short>(nullable: false)
+                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -318,16 +318,16 @@ namespace Prime.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    CreatedUserId = table.Column<Guid>(nullable: false),
-                    CreatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    UpdatedUserId = table.Column<Guid>(nullable: false),
-                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false),
                     EnrolleeId = table.Column<int>(nullable: false),
                     CollegeCode = table.Column<short>(nullable: false),
                     LicenseNumber = table.Column<string>(maxLength: 5, nullable: false),
                     LicenseCode = table.Column<short>(nullable: false),
                     RenewalDate = table.Column<DateTime>(nullable: false),
-                    PracticeCode = table.Column<short>(nullable: true)
+                    PracticeCode = table.Column<short>(nullable: true),
+                    CreatedUserId = table.Column<Guid>(nullable: false),
+                    CreatedTimeStamp = table.Column<DateTime>(nullable: false),
+                    UpdatedUserId = table.Column<Guid>(nullable: false),
+                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -392,14 +392,14 @@ namespace Prime.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    EnrolleeId = table.Column<int>(nullable: false),
+                    StatusCode = table.Column<short>(nullable: false),
+                    StatusDate = table.Column<DateTime>(nullable: false),
+                    PharmaNetStatus = table.Column<bool>(nullable: false),
                     CreatedUserId = table.Column<Guid>(nullable: false),
                     CreatedTimeStamp = table.Column<DateTime>(nullable: false),
                     UpdatedUserId = table.Column<Guid>(nullable: false),
                     UpdatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    EnrolleeId = table.Column<int>(nullable: false),
-                    StatusCode = table.Column<short>(nullable: false),
-                    StatusDate = table.Column<DateTime>(nullable: false),
-                    PharmaNetStatus = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -424,10 +424,6 @@ namespace Prime.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    CreatedUserId = table.Column<Guid>(nullable: false),
-                    CreatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    UpdatedUserId = table.Column<Guid>(nullable: false),
-                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false),
                     EnrolleeId = table.Column<int>(nullable: false),
                     CountryCode = table.Column<string>(nullable: true),
                     ProvinceCode = table.Column<string>(nullable: true),
@@ -435,7 +431,11 @@ namespace Prime.Migrations
                     Street2 = table.Column<string>(nullable: true),
                     City = table.Column<string>(nullable: true),
                     Postal = table.Column<string>(nullable: true),
-                    AddressType = table.Column<int>(nullable: false)
+                    AddressType = table.Column<int>(nullable: false),
+                    CreatedUserId = table.Column<Guid>(nullable: false),
+                    CreatedTimeStamp = table.Column<DateTime>(nullable: false),
+                    UpdatedUserId = table.Column<Guid>(nullable: false),
+                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
