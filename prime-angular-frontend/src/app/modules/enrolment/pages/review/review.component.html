@@ -15,7 +15,7 @@
 
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Enrollee</ng-container>
-        <mat-icon (click)="redirect(EnrolmentRoutes.PROFILE)"
+        <mat-icon (click)="onRoute(EnrolmentRoutes.PROFILE)"
                   matTooltip="Edit Enrollee">edit</mat-icon>
       </app-page-subheader>
 
@@ -83,7 +83,7 @@
 
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Contact</ng-container>
-        <mat-icon (click)="redirect(EnrolmentRoutes.PROFILE)"
+        <mat-icon (click)="onRoute(EnrolmentRoutes.PROFILE)"
                   matTooltip="Edit Contact">edit</mat-icon>
       </app-page-subheader>
 
@@ -115,7 +115,7 @@
 
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Self Declaration</ng-container>
-        <mat-icon (click)="redirect(EnrolmentRoutes.SELF_DECLARATION)"
+        <mat-icon (click)="onRoute(EnrolmentRoutes.SELF_DECLARATION)"
                   matTooltip="Edit Self Declaration">edit</mat-icon>
       </app-page-subheader>
 
@@ -170,7 +170,7 @@
 
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Professional Information</ng-container>
-        <mat-icon (click)="redirect(EnrolmentRoutes.REGULATORY)"
+        <mat-icon (click)="onRoute(EnrolmentRoutes.REGULATORY)"
                   matTooltip="Edit Professional Information">edit</mat-icon>
       </app-page-subheader>
 
@@ -230,7 +230,7 @@
 
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Organization Information</ng-container>
-        <mat-icon (click)="redirect(EnrolmentRoutes.ORGANIZATION)"
+        <mat-icon (click)="onRoute(EnrolmentRoutes.ORGANIZATION)"
                   matTooltip="Edit Organization Information">edit</mat-icon>
       </app-page-subheader>
 
@@ -255,28 +255,17 @@
   </div>
 
   <div class="footer">
-    <mat-checkbox class="mr-4"
+    <mat-checkbox #accept
+                  class="mr-4"
                   (change)="onConfirmAccuracy($event)">
       I confirm that all information provided is accurate.
     </mat-checkbox>
   </div>
 
-  <div class="row justify-content-between">
-    <div class="col pt-4">
-
-      <button mat-stroked-button
-              type="button"
-              [routerLink]="['..', EnrolmentRoutes.ORGANIZATION]">Back</button>
-
-    </div>
-    <div class="col pt-4 text-right">
-
-      <button mat-raised-button
-              color="primary"
-              [disabled]="disabledAgreement"
-              (click)="onSubmit()">Submit Enrolment</button>
-
-    </div>
-  </div>
+  <app-page-footer [hasInitialStatus]="enrolment.initialStatus"
+                   [disableSave]="!accept.checked"
+                   (save)="onSubmit()"
+                   (continue)="onSubmit()"
+                   (back)="onRoute(EnrolmentRoutes.ORGANIZATION)"></app-page-footer>
 
 </app-busy-overlay>

@@ -85,13 +85,14 @@ export class ReviewComponent implements OnInit {
         ? 'Yes' : 'No';
   }
 
-  public redirect(route: string) {
-    this.router.navigate([EnrolmentRoutes.ENROLMENT, route]);
+  public onRoute(routePath: EnrolmentRoutes) {
+    this.router.navigate([routePath], { relativeTo: this.route.parent });
   }
 
   public ngOnInit() {
     const enrolment = this.enrolmentService.enrolment;
     this.enrolment = enrolment;
+
     this.enrolmentStateService.enrolment = enrolment;
   }
 }
