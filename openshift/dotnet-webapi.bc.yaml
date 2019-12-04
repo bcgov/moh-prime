@@ -58,16 +58,6 @@ objects:
               value: 'prime-web-api'
             - name: JWT_WELL_KNOWN_CONFIG 
               value: 'https://sso-${OC_APP}.pathfinder.gov.bc.ca/auth/realms/v4mbqqas/.well-known/openid-configuration' 
-        volumeMounts:
-          - name: certs-volume
-            mountPath: /etc/certs
-            readOnly: true
-      volumes:
-        - name: certs-volume
-          secret:
-            secretKeyRef:
-              name: hibc
-              key: SSL_CERT
       tags:
         - annotations: null
           from:
