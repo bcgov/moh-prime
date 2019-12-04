@@ -10,6 +10,8 @@ import { PrimeHttpResponse } from '@core/models/prime-http-response.model';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 
+import { Address } from '@enrolment/shared/models/address.model';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -27,7 +29,7 @@ export class AdjudicationResource {
       .pipe(
         map((response: PrimeHttpResponse) => response.result),
         tap((enrollees: HttpEnrollee[]) => this.logger.info('ENROLLEES', enrollees)),
-        map((enrollees: HttpEnrollee[]) => this.enrolmentsAdapter(enrollees))
+        map((enrollees: HttpEnrollee[]) => this.enrolleesAdapterResponse(enrollees))
       );
   }
 
@@ -37,7 +39,7 @@ export class AdjudicationResource {
       .pipe(
         map((response: PrimeHttpResponse) => response.result),
         tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
-        map((enrollee: HttpEnrollee) => this.enrolmentAdapter(enrollee))
+        map((enrollee: HttpEnrollee) => this.enrolleeAdapterResponse(enrollee))
       );
   }
 
@@ -62,6 +64,30 @@ export class AdjudicationResource {
   // ---
   // Enrollee and Enrolment Adapters
   // ---
+
+  private enrolleesAdapterResponse(enrollees: HttpEnrollee[]): Enrolment[] {
+    return enrollees.map((enrollee: HttpEnrollee): Enrolment => this.enrolleeAdapterResponse(enrollee));
+  }
+
+  private enrolleeAdapterResponse(enrollee: HttpEnrollee): Enrolment {
+    if (!enrollee.mailingAddress) {
+      enrollee.mailingAddress = new Address();
+    }
+
+    if (!enrollee.certifications) {
+      enrollee.certifications = [];
+    }
+
+    if (!enrollee.jobs) {
+      enrollee.jobs = [];
+    }
+
+    if (!enrollee.organizations) {
+      enrollee.organizations = [];
+    }
+
+    return this.enrolmentAdapter(enrollee);
+  }
 
   private enrolmentsAdapter(enrollees: HttpEnrollee[]): Enrolment[] {
     return enrollees.map((enrollee: HttpEnrollee): Enrolment => this.enrolmentAdapter(enrollee));
