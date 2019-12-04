@@ -9,7 +9,7 @@ import { Enrolment } from '@shared/models/enrolment.model';
   styleUrls: ['./page-footer.component.scss']
 })
 export class PageFooterComponent implements OnInit {
-  @Input() isInitialApplication: boolean;
+  @Input() hasInitialStatus: boolean;
   @Input() hasSecondaryAction: boolean;
   @Output() save: EventEmitter<void>;
   @Output() continue: EventEmitter<void>;
@@ -19,7 +19,7 @@ export class PageFooterComponent implements OnInit {
   public secondaryActionButtonLabel: string;
 
   constructor() {
-    this.isInitialApplication = false;
+    this.hasInitialStatus = false;
     this.hasSecondaryAction = true;
 
     this.save = new EventEmitter<void>();
@@ -32,13 +32,13 @@ export class PageFooterComponent implements OnInit {
   }
 
   public onSecondaryAction() {
-    (this.isInitialApplication)
+    (this.hasInitialStatus)
       ? this.back.emit()
       : this.continue.emit();
   }
 
   public ngOnInit() {
-    if (this.isInitialApplication) {
+    if (this.hasInitialStatus) {
       this.saveButtonLabel = 'Save and Continue';
       this.secondaryActionButtonLabel = 'Back';
     } else {

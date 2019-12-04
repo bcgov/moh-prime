@@ -1,5 +1,5 @@
 <div class="row justify-content-between">
-  <div *ngIf="(isInitialApplication && hasSecondaryAction) || !isInitialApplication"
+  <div *ngIf="(hasInitialStatus && hasSecondaryAction) || !hasInitialStatus"
        class="col pt-2">
 
     <button mat-stroked-button
