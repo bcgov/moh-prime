@@ -120,6 +120,14 @@ objects:
                 - containerPort: 8080
                 - containerPort: 5001
               resources: {}
+              volumeMounts:
+                - name: cert-volume
+                  mountPath: /AAAAA
+                  readOnly: true
+          volumes:
+            - name: cert-volume
+              secret:
+                secretName: hibc-cert
           restartPolicy: Always
       test: false
       triggers:
