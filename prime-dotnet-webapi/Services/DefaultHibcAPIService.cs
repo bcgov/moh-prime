@@ -24,9 +24,16 @@ namespace Prime.Services
             };
             using (var client = new HttpClient(httpClientHandler))
             {
-                var resp = await client.PostAsJsonAsync(PrimeConstants.HIBC_API_URL, new { });
+                var values = new
+                {
+                    applicationUUID = "b7a2993a-e55a-4455-b8c2-fcd12e57ce61",
+                    programArea = "PRIME",
+                    licenceNumber = "2I8R1",
+                    collegeReferenceId = "91"
+                };
+                var resp = await client.PostAsJsonAsync(PrimeConstants.HIBC_API_URL, values);
                 string content = await resp.Content.ReadAsStringAsync();
-                return $"status code:[{resp.StatusCode}], headers:[{resp.Content.Headers}], content:[{content}]";
+                return $"status code:[{(int)resp.StatusCode}], headers:[{resp.Content.Headers}], content:[{content}]";
             };
         }
     }
