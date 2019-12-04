@@ -32,6 +32,7 @@ export class ProfileComponent implements OnInit {
   public hasPreferredName: boolean;
   public hasMailingAddress: boolean;
   public subheadings: { [key: string]: { subheader: string, help: string } };
+  public hasInitialStatus: boolean;
   public EnrolmentRoutes = EnrolmentRoutes;
 
   private isNewEnrolment: boolean;
@@ -163,11 +164,14 @@ export class ProfileComponent implements OnInit {
     this.createFormInstance();
 
     const enrolment = this.enrolmentService.enrolment;
+    this.hasInitialStatus = enrolment.initialStatus;
+
     if (enrolment) {
       this.isNewEnrolment = false;
       this.enrolmentStateService.enrolment = enrolment;
     }
 
+    // TODO is this still needed?
     this.form.markAsPristine();
 
     this.initForm();

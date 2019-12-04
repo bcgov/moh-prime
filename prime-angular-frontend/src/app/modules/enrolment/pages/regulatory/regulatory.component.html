@@ -35,7 +35,10 @@
       </div>
     </div>
 
-    <!-- <app-page-footer [backRoute]="EnrolmentRoutes.PROFILE"></app-page-footer> -->
+    <app-page-footer [hasInitialStatus]="hasInitialStatus"
+                     (save)="onSubmit()"
+                     (continue)="onSubmit()"
+                     (back)="onRoute(EnrolmentRoutes.PROFILE)"></app-page-footer>
 
   </form>
 
