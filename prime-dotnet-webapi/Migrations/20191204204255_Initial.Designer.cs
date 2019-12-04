@@ -11,7 +11,7 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20191204203640_Initial")]
+    [Migration("20191204204255_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -132,31 +132,31 @@ namespace Prime.Migrations
                         new
                         {
                             Code = (short)1,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "College of Physicians and Surgeons of BC (CPSBC)",
                             Prefix = "91",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)2,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "College of Pharmacists of BC (CPBC)",
                             Prefix = "P1",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)3,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "BC College of Nursing Professionals (BCCNP)",
                             Prefix = "96",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
@@ -186,504 +186,504 @@ namespace Prime.Migrations
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)1,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)2,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)3,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)4,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)5,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)6,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)7,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)8,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)9,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)10,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)11,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)12,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)13,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)14,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)15,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)16,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)17,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)18,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)19,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)20,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)21,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)22,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)23,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)24,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)2,
                             LicenseCode = (short)25,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)2,
                             LicenseCode = (short)26,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)2,
                             LicenseCode = (short)27,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)2,
                             LicenseCode = (short)28,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)2,
                             LicenseCode = (short)29,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)2,
                             LicenseCode = (short)30,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)2,
                             LicenseCode = (short)31,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)32,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)33,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)34,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)35,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)36,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)37,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)38,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)39,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)40,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)41,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)42,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)43,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)44,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)45,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)46,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)47,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)48,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)49,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)50,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)51,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)52,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)53,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)54,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)55,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)56,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
@@ -713,36 +713,36 @@ namespace Prime.Migrations
                         {
                             CollegeCode = (short)3,
                             PracticeCode = (short)1,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             PracticeCode = (short)2,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             PracticeCode = (short)3,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             PracticeCode = (short)4,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
@@ -771,19 +771,19 @@ namespace Prime.Migrations
                         new
                         {
                             Code = "CA",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Canada",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "United States",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
@@ -988,37 +988,37 @@ namespace Prime.Migrations
                         new
                         {
                             Code = (short)1,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Medical Office Assistant",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)2,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Pharmacy Assistant",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)3,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Registration Clerk",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)4,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Ward Clerk",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
@@ -1047,505 +1047,505 @@ namespace Prime.Migrations
                         new
                         {
                             Code = (short)1,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Full - Family",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)2,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Full - Specialty",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)3,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Special",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)4,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Osteopathic",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)5,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Provisional - Family",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)6,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Provisional - Speciality",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)7,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Academic",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)8,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Conditional - Practice Limitations",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)9,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Conditional - Practice Setting",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)10,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Conditional - Disciplined",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)11,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Educational - Medical Student",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)12,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Educational - Postgraduate Resident",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)13,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Educational - Postgraduate Resident Elective",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)14,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Educational - Postgraduate Fellow",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)15,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Educational - Postgraduate Trainee",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)16,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Clinical Observership",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)17,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Visitor",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)18,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Emergency - Family",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)19,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Emergency - Specialty",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)20,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Retired - Life ",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)21,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Temporarily Inactive",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)22,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Surgical Assistant",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)23,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Administrative",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)24,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Assessment",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)25,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Full Pharmacist",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)26,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Limited Pharmacist",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)27,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Temporary Pharmacist",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)28,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Student Pharmacist",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)29,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Pharmacy Technician",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)30,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Non-Practicing Pharmacist",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)31,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Non-Practicing Pharmacy Technician",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)32,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Practicing Registered Nurse",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)33,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Provisional Registered Nurse",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)34,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Non-Practicing Registered Nurse",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)35,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Practicing Licensed Graduate Nurse",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)36,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Provisional Licensed Graduate Nurse",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)37,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Non-Practicing Licensed Graduate Nurse",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)38,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Temporary Registered Nurse (Special Event)",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)39,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Temporary Registered Nurse (Emergency)",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)40,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Employed Student Nurse",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)41,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Practicing Registered Psychiatric Nurse",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)42,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Provisional Registered Psychiatric Nurse",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)43,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Non-Practicing Registered Psychiatric Nurse",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)44,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Temporary Registered Psychiatric Nurse (Special Event)",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)45,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Temporary Registered Psychiatric Nurse (Emergency)",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)46,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Employed Student Psychiatric Nurse",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)47,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Practicing Nurse Practitioner",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)48,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Provisional Nurse Practitioner",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)49,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Non-practicing Nurse Practitioner",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)50,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Temporary Nurse Practitioner (Special Event)",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)51,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Temporary Nurse Practitioner (Emergency)",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)52,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Practicing Licensed Practical Nurse",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)53,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Provisional Licensed Practical Nurse",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)54,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Non-Practicing Licensed Practical Nurse",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)55,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Temporary Licensed Practical Nurse (Emergency)",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)56,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Temporary Licensed Practical Nurse (Special Event)",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
@@ -1600,46 +1600,46 @@ namespace Prime.Migrations
                         new
                         {
                             Code = (short)1,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Community Health Practice Access to PharmaNet (ComPAP)",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)2,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Health Authority",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)3,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Community Practice",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)4,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Community Pharmacy",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)5,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Primary Care Network",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
@@ -1668,37 +1668,37 @@ namespace Prime.Migrations
                         new
                         {
                             Code = (short)1,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Remote Practice",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)2,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Reproductive Health - STI",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)3,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Reproductive health - Contraceptive Management",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)4,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "First Call",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
@@ -1733,700 +1733,700 @@ namespace Prime.Migrations
                         {
                             Code = "AB",
                             CountryCode = "CA",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Alberta",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "BC",
                             CountryCode = "CA",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "British Columbia",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "MB",
                             CountryCode = "CA",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Manitoba",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "NB",
                             CountryCode = "CA",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "New Brunswick",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "NL",
                             CountryCode = "CA",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Newfoundland and Labrador",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "NS",
                             CountryCode = "CA",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Nova Scotia",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "ON",
                             CountryCode = "CA",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Ontario",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "PE",
                             CountryCode = "CA",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Prince Edward Island",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "QC",
                             CountryCode = "CA",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Quebec",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "SK",
                             CountryCode = "CA",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Saskatchewan",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "NT",
                             CountryCode = "CA",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Northwest Territories",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "NU",
                             CountryCode = "CA",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Nunavut",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "YT",
                             CountryCode = "CA",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Yukon",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "AL",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Alabama",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "AK",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Alaska",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "AS",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "American Samoa",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "AZ",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Arizona",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "AR",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Arkansas",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "CA",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "California",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "CO",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Colorado",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "CT",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Connecticut",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "DE",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Delaware",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "DC",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "District of Columbia",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "FL",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Florida",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "GA",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Georgia",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "GU",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Guam",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "HI",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Hawaii",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "ID",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Idaho",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "IL",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Illinois",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "IN",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Indiana",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "IA",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Iowa",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "KS",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Kansas",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "KY",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Kentucky",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "LA",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Louisiana",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "ME",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Maine",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "MD",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Maryland",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "MA",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Massachusetts",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "MI",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Michigan",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "MN",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Minnesota",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "MS",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Mississippi",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "MO",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Missouri",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "MT",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Montana",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "NE",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Nebraska",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "NV",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Nevada",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "NH",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "New Hampshire",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "NJ",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "New Jersey",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "NM",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "New Mexico",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "NY",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "New York",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "NC",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "North Carolina",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "ND",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "North Dakota",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "MP",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Northern Mariana Islands",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "OH",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Ohio",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "OK",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Oklahoma",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "OR",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Oregon",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "PA",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Pennsylvania",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "PR",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Puerto Rico",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "RI",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Rhode Island",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "SC",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "South Carolina",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "SD",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "South Dakota",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "TN",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Tennessee",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "TX",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Texas",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "UM",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "United States Minor Outlying Islands",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "UT",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Utah",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "VT",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Vermont",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "VI",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Virgin Islands, U.S.",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "VA",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Virginia",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "WA",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Washington",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "WV",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "West Virginia",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "WI",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Wisconsin",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "WY",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Wyoming",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
@@ -2454,55 +2454,55 @@ namespace Prime.Migrations
                         new
                         {
                             Code = (short)1,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "In Progress",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)2,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Submitted",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)3,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Adjudicated/Approved",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)4,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Declined",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)5,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Accepted Access Agreement",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)6,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Declined Access Agreement",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
@@ -2530,73 +2530,73 @@ namespace Prime.Migrations
                         new
                         {
                             Code = (short)1,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Automatic",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)2,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Manual",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)3,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Name Discrepancy",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)4,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Not in PharmaNet",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)5,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Insulin Pump Provider",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)6,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Licence Class",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)7,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Self Declaration",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)8,
-                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            CreatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Contact address or Identity Address Out of British Columbia",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 36, 40, 251, DateTimeKind.Local).AddTicks(148),
+                            UpdatedTimeStamp = new DateTime(2019, 12, 4, 12, 42, 55, 233, DateTimeKind.Local).AddTicks(4946),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
