@@ -35,6 +35,7 @@ import { DialogContentDirective } from '@shared/components/dialogs/dialog-conten
 import { ClipboardIconComponent } from './components/clipboard-icon/clipboard-icon.component';
 import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
 import { AlertComponent } from '@shared/components/alert/alert.component';
+import { EnrolleeReviewComponent } from '@shared/components/enrollee-review/enrollee-review.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { AlertComponent } from '@shared/components/alert/alert.component';
     PostalPipe,
     EnrolmentPipe,
     DefaultPipe,
+    CertificatePipe,
     AddressComponent,
     DashboardComponent,
     ConfirmDialogComponent,
@@ -59,12 +61,13 @@ import { AlertComponent } from '@shared/components/alert/alert.component';
     FormIconGroupComponent,
     AlertComponent,
     ClipboardIconComponent,
-    CertificatePipe
+    EnrolleeReviewComponent
   ],
   imports: [
     CommonModule,
     RouterModule,
     ClipboardModule,
+    ConfigModule,
     NgxBusyModule,
     NgxContextualHelpModule,
     NgxMaskModule.forRoot(),
@@ -89,6 +92,7 @@ import { AlertComponent } from '@shared/components/alert/alert.component';
     PostalPipe,
     ReplacePipe,
     DefaultPipe,
+    CertificatePipe,
     AddressComponent,
     DashboardComponent,
     EnrolmentStatusReasonsComponent,
@@ -101,7 +105,7 @@ import { AlertComponent } from '@shared/components/alert/alert.component';
     FormIconGroupComponent,
     AlertComponent,
     ClipboardIconComponent,
-    CertificatePipe
+    EnrolleeReviewComponent
   ],
   entryComponents: [
     ConfirmDialogComponent,
