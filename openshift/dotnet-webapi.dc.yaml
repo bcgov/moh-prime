@@ -120,7 +120,17 @@ objects:
                 - containerPort: 8080
                 - containerPort: 5001
               resources: {}
+              volumeMounts:
+                - name: certs-volume
+                  mountPath: /etc/certs
+                  readOnly: true
           restartPolicy: Always
+          volumes:
+            - name: certs-volume
+              secret:
+                secretKeyRef:
+                  name: hibc
+                  key: SSL_CERT
       test: false
       triggers:
         - type: ConfigChange
