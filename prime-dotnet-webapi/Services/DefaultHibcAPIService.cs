@@ -25,7 +25,7 @@ namespace Prime.Services
             using (var client = new HttpClient(httpClientHandler))
             {
                 var resp = await client.PostAsJsonAsync(PrimeConstants.HIBC_API_URL, new { });
-                string headers = resp.Headers.ToString();
+                string headers = resp.Content.Headers.ToString();
                 string content = await resp.Content.ReadAsStringAsync();
                 return $"headers:[{headers}], content:[{content}]";
             };
