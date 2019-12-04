@@ -11,6 +11,7 @@ import { Enrolment } from '@shared/models/enrolment.model';
 export class PageFooterComponent implements OnInit {
   @Input() hasInitialStatus: boolean;
   @Input() hasSecondaryAction: boolean;
+  @Input() disableSave: boolean;
   @Output() save: EventEmitter<void>;
   @Output() continue: EventEmitter<void>;
   @Output() back: EventEmitter<void>;
