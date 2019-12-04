@@ -43,13 +43,30 @@ namespace Prime.Services
                 Status DECLINED_TOS = _context.Statuses.Single(s => s.Code == Status.DECLINED_TOS_CODE);
 
                 _workflowStateMap = new Dictionary<Status, StatusWrapper[]>();
-                _workflowStateMap.Add(NULL_STATUS, new[] { new StatusWrapper { Status = IN_PROGRESS, AdminOnly = false } });
-                _workflowStateMap.Add(IN_PROGRESS, new[] { new StatusWrapper { Status = SUBMITTED, AdminOnly = false } });
-                _workflowStateMap.Add(SUBMITTED, new[] { new StatusWrapper { Status = APPROVED, AdminOnly = true }, new StatusWrapper { Status = DECLINED, AdminOnly = true } });
-                _workflowStateMap.Add(APPROVED, new[] { new StatusWrapper { Status = ACCEPTED_TOS, AdminOnly = false }, new StatusWrapper { Status = DECLINED_TOS, AdminOnly = false } });
-                _workflowStateMap.Add(DECLINED, new StatusWrapper[0]);
-                _workflowStateMap.Add(ACCEPTED_TOS, new StatusWrapper[0]);
-                _workflowStateMap.Add(DECLINED_TOS, new StatusWrapper[0]);
+                _workflowStateMap.Add(NULL_STATUS, new[] {
+                    new StatusWrapper { Status = IN_PROGRESS, AdminOnly = false }
+                });
+                _workflowStateMap.Add(IN_PROGRESS, new[] {
+                    new StatusWrapper { Status = SUBMITTED, AdminOnly = false }
+                });
+                _workflowStateMap.Add(SUBMITTED, new[] {
+                    new StatusWrapper { Status = IN_PROGRESS, AdminOnly = false },
+                    new StatusWrapper { Status = APPROVED, AdminOnly = true },
+                    new StatusWrapper { Status = DECLINED, AdminOnly = true }
+                });
+                _workflowStateMap.Add(APPROVED, new[] {
+                    new StatusWrapper { Status = ACCEPTED_TOS, AdminOnly = false },
+                    new StatusWrapper { Status = DECLINED_TOS, AdminOnly = false }
+                });
+                _workflowStateMap.Add(DECLINED, new[] {
+                    new StatusWrapper { Status = IN_PROGRESS, AdminOnly = false }
+                });
+                _workflowStateMap.Add(ACCEPTED_TOS, new[] {
+                    new StatusWrapper { Status = IN_PROGRESS, AdminOnly = false }
+                });
+                _workflowStateMap.Add(DECLINED_TOS, new[] {
+                    new StatusWrapper { Status = IN_PROGRESS, AdminOnly = false }
+                });
             }
 
             return _workflowStateMap;
@@ -295,19 +312,6 @@ namespace Prime.Services
             // Make sure the status change is allowed
             if (IsStatusChangeAllowed(currentStatus ?? NULL_STATUS, status))
             {
-                // Update all of the existing statuses to not be current, and then create a new current status
-                if (currentStatus != null)
-                {
-                    enrollee.CurrentStatus.PharmaNetStatus = false;
-                }
-
-                var existingEnrolmentStatuses = await this.GetEnrolmentStatusesAsync(enrolleeId);
-
-                foreach (var enrolmentStatus in existingEnrolmentStatuses)
-                {
-                    enrolmentStatus.PharmaNetStatus = false;
-                }
-
                 // Create a new enrolment status
                 var createdEnrolmentStatus = new EnrolmentStatus { EnrolleeId = enrolleeId, StatusCode = status.Code, StatusDate = DateTime.Now, PharmaNetStatus = false };
 
@@ -334,13 +338,16 @@ namespace Prime.Services
                         createdEnrolmentStatus.EnrolmentStatusReasons = new List<EnrolmentStatusReason> { new EnrolmentStatusReason { EnrolmentStatus = createdEnrolmentStatus, StatusReasonCode = StatusReason.MANUAL_CODE } };
                         break;
                     case Status.DECLINED_CODE:
+                        await setAllPharmaNetStatusesFalseAsync(enrolleeId);
                         createdEnrolmentStatus.PharmaNetStatus = true;
                         break;
                     case Status.ACCEPTED_TOS_CODE:
+                        await setAllPharmaNetStatusesFalseAsync(enrolleeId);
                         enrollee.LicensePlate = this.GenerateLicensePlate();
                         createdEnrolmentStatus.PharmaNetStatus = true;
                         break;
                     case Status.DECLINED_TOS_CODE:
+                        await setAllPharmaNetStatusesFalseAsync(enrolleeId);
                         createdEnrolmentStatus.PharmaNetStatus = true;
                         break;
                 }
@@ -361,6 +368,16 @@ namespace Prime.Services
             }
 
             throw new InvalidOperationException("Could not create enrolment status, status change is not allowed.");
+        }
+
+        private async Task setAllPharmaNetStatusesFalseAsync(int enrolleeId)
+        {
+            var existingEnrolmentStatuses = await this.GetEnrolmentStatusesAsync(enrolleeId);
+
+            foreach (var enrolmentStatus in existingEnrolmentStatuses)
+            {
+                enrolmentStatus.PharmaNetStatus = false;
+            }
         }
 
         private string GenerateLicensePlate()
