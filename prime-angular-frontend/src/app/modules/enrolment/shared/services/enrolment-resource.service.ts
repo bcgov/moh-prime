@@ -101,21 +101,6 @@ export class EnrolmentResource {
     return this.enrolmentAdapter(enrollee);
   }
 
-  private enrolmentAdapterRequest(enrolment: Enrolment): HttpEnrollee {
-    if (enrolment.enrollee.physicalAddress.postal) {
-      enrolment.enrollee.physicalAddress.postal = enrolment.enrollee.physicalAddress.postal.toUpperCase();
-    }
-    if (enrolment.enrollee.mailingAddress.postal) {
-      enrolment.enrollee.mailingAddress.postal = enrolment.enrollee.mailingAddress.postal.toUpperCase();
-    }
-
-    enrolment.certifications = this.removeIncompleteCollegeCertifications(enrolment.certifications);
-    enrolment.jobs = this.removeIncompleteJobs(enrolment.jobs);
-    enrolment.organizations = this.removeIncompleteOrganizations(enrolment.organizations);
-
-    return this.enrolleeAdapter(enrolment);
-  }
-
   private enrolmentAdapter(enrollee: HttpEnrollee): Enrolment {
     const {
       userId,
@@ -156,6 +141,21 @@ export class EnrolmentResource {
       },
       ...remainder
     };
+  }
+
+  private enrolmentAdapterRequest(enrolment: Enrolment): HttpEnrollee {
+    if (enrolment.enrollee.physicalAddress.postal) {
+      enrolment.enrollee.physicalAddress.postal = enrolment.enrollee.physicalAddress.postal.toUpperCase();
+    }
+    if (enrolment.enrollee.mailingAddress.postal) {
+      enrolment.enrollee.mailingAddress.postal = enrolment.enrollee.mailingAddress.postal.toUpperCase();
+    }
+
+    enrolment.certifications = this.removeIncompleteCollegeCertifications(enrolment.certifications);
+    enrolment.jobs = this.removeIncompleteJobs(enrolment.jobs);
+    enrolment.organizations = this.removeIncompleteOrganizations(enrolment.organizations);
+
+    return this.enrolleeAdapter(enrolment);
   }
 
   private enrolleeAdapter(enrolment: Enrolment): HttpEnrollee {

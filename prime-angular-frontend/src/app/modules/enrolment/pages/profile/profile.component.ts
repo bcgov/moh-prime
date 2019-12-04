@@ -32,6 +32,7 @@ export class ProfileComponent implements OnInit {
   public hasPreferredName: boolean;
   public hasMailingAddress: boolean;
   public subheadings: { [key: string]: { subheader: string, help: string } };
+  public EnrolmentRoutes = EnrolmentRoutes;
 
   private isNewEnrolment: boolean;
 
@@ -141,6 +142,10 @@ export class ProfileComponent implements OnInit {
   public onMailingAddressChange() {
     this.hasMailingAddress = !this.hasMailingAddress;
     this.toggleValidators(this.mailingAddress, ['street2']);
+  }
+
+  public onRoute(routePath: EnrolmentRoutes) {
+    this.router.navigate([routePath], { relativeTo: this.route.parent });
   }
 
   public isRequired(path: string) {
