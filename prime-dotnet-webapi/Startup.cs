@@ -149,6 +149,7 @@ namespace Prime
             );
 
             services.AddHealthChecks()
+                .AddDbContextCheck<ApiDbContext>("DbContextHealthCheck")
                 .AddNpgSql(connectionString);
         }
 
