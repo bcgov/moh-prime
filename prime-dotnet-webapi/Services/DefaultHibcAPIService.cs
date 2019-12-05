@@ -26,7 +26,7 @@ namespace Prime.Services
             Console.WriteLine($"licence:[{licenceNumber}], collref:[{collegeReferenceId}]");
             using (var client = new HttpClient(CreateClientHandler()))
             {
-                var requestParams = new CollegeLicenceRequestParams(licenceNumber, collegeReferenceId);
+                var requestParams = CreateCollegeLicenceRequestParams(licenceNumber, collegeReferenceId);
                 System.Console.WriteLine($"---params:[{requestParams.ToString()}]");
                 var response = await client.PostAsJsonAsync(PrimeConstants.HIBC_API_URL, requestParams);
                 System.Console.WriteLine($"---status code[{(int)response.StatusCode}]");
@@ -52,20 +52,15 @@ namespace Prime.Services
             };
         }
 
-        private class CollegeLicenceRequestParams
+        private object CreateCollegeLicenceRequestParams(string licenceNumber, string collegeReferenceId)
         {
-            Guid applicationUUID { get; }
-            string programArea { get; }
-            string licenceNumber { get; }
-            string collegeReferenceId { get; }
-
-            public CollegeLicenceRequestParams(string licenceNumber, string collegeReferenceId)
+            return new
             {
-                applicationUUID = Guid.NewGuid();
-                programArea = "PRIME";
-                this.licenceNumber = licenceNumber;
-                this.collegeReferenceId = collegeReferenceId;
-            }
+                applicationUUID = Guid.NewGuid(),
+                programArea = "PRIME",
+                licenceNumber = licenceNumber,
+                collegeReferenceId = collegeReferenceId,
+            };
         }
 
         private class CollegeLicenceResponseParams
