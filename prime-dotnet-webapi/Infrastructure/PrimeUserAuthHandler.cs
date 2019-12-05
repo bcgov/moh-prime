@@ -16,7 +16,7 @@ namespace Prime.Infrastructure
 
             if (context.User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE)
                     || (context.User.IsInRole(PrimeConstants.PRIME_ENROLMENT_ROLE)
-                            && PrimeUtils.UserHasAssuranceLevel(context.User, 3)))
+                            && context.User.HasAssuranceLevel(3)))
             {
                 context.Succeed(requirement);
             }

@@ -42,7 +42,7 @@ namespace Prime.Controllers
             }
             else
             {
-                var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(PrimeUtils.PrimeUserId(User));
+                var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(User.GetPrimeUserId());
                 enrollees = new[] { enrollee };
             }
 

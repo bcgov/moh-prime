@@ -36,7 +36,7 @@ namespace Prime.Controllers
             if (!belongsToEnrollee)
             {
                 // get the prime user id from the logged in user - note: this returns 'Guid.Empty' if there is no logged in user
-                Guid PrimeUserId = PrimeUtils.PrimeUserId(User);
+                Guid PrimeUserId = User.GetPrimeUserId();
 
                 // check to see if the logged in user id is not 'Guid.Empty', and matches the one in the enrolment
                 belongsToEnrollee = !PrimeUserId.Equals(Guid.Empty)
@@ -67,7 +67,7 @@ namespace Prime.Controllers
             else
             {
                 enrolments = await _enrolmentService.GetEnrolmentsForUserIdAsync(
-                                        PrimeUtils.PrimeUserId(User));
+                                        User.GetPrimeUserId());
             }
 
             return Ok(new ApiOkResponse<IEnumerable<Enrolment>>(enrolments.ToList()));
