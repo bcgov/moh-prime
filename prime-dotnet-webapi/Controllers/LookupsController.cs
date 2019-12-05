@@ -11,7 +11,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    // User needs at least the ADMIN or ENROLMENT role to use this controller
+    // User needs at least the ADMIN or ENROLLEE role to use this controller
     [Authorize(Policy = PrimeConstants.PRIME_USER_POLICY)]
     public class LookupsController : ControllerBase
     {

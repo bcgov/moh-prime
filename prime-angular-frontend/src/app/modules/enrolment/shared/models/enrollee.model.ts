@@ -1,8 +1,11 @@
 import { Address } from './address.model';
 
-export class Enrollee {
+// TODO rename to something other than Enrollee
+export interface Enrollee {
   id?: number;
   userId: string;
+
+  // TODO duplicated in EnrolmentCertification
   firstName: string;
   middleName: string;
   lastName: string;
@@ -10,11 +13,12 @@ export class Enrollee {
   preferredMiddleName: string;
   preferredLastName: string;
   dateOfBirth: string;
+  licensePlate: string;
+
   physicalAddress: Address;
   mailingAddress?: Address;
   contactEmail: string;
   contactPhone: string;
   voicePhone: string;
   voiceExtension: string;
-  licensePlate: string;
 }

@@ -18,6 +18,7 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { FormUtilsService } from '@enrolment/shared/services/form-utils.service';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 @Component({
   selector: 'app-profile',
@@ -41,6 +42,7 @@ export class ProfileComponent implements OnInit {
     private authService: AuthService,
     private enrolmentStateService: EnrolmentStateService,
     private enrolmentResource: EnrolmentResource,
+    private enrolmentService: EnrolmentService,
     private formUtilsService: FormUtilsService,
     private toastService: ToastService,
     private viewportService: ViewportService,
@@ -102,12 +104,12 @@ export class ProfileComponent implements OnInit {
     if (this.form.valid) {
       const payload = this.enrolmentStateService.enrolment;
       const request$ = (this.isNewEnrolment)
-        ? this.enrolmentResource.createEnrolment(payload)
+        ? this.enrolmentResource.createEnrollee(payload)
           .pipe(
             tap(() => this.isNewEnrolment = false),
             map((enrolment: Enrolment) => this.enrolmentStateService.enrolment = enrolment)
           )
-        : this.enrolmentResource.updateEnrolment(payload);
+        : this.enrolmentResource.updateEnrollee(payload);
 
       this.busy = request$
         .subscribe(
@@ -155,23 +157,15 @@ export class ProfileComponent implements OnInit {
   public ngOnInit() {
     this.createFormInstance();
 
-    this.busy = this.enrolmentResource.enrolments()
-      .subscribe(
-        async (enrolment: Enrolment) => {
-          if (enrolment) {
-            this.isNewEnrolment = false;
-            this.enrolmentStateService.enrolment = enrolment;
-          }
+    const enrolment = this.enrolmentService.enrolment;
+    if (enrolment) {
+      this.isNewEnrolment = false;
+      this.enrolmentStateService.enrolment = enrolment;
+    }
 
-          this.form.markAsPristine();
+    this.form.markAsPristine();
 
-          this.initForm();
-        },
-        (error: any) => {
-          this.toastService.openErrorToast('Enrolment could not be retrieved');
-          this.logger.error('[Enrolment] Profile::getEnrolment error has occurred: ', error);
-        }
-      );
+    this.initForm();
   }
 
   private createFormInstance() {

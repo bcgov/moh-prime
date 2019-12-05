@@ -36,7 +36,7 @@ export class EnrolmentGuard extends BaseGuard {
    * status.
    */
   protected checkAccess(routePath: string = null): Observable<boolean> | Promise<boolean> {
-    return this.enrolmentResource.enrolments()
+    return this.enrolmentResource.enrollee()
       .pipe(
         map((enrolment: Enrolment) => {
           // Store the enrolment for access throughout enrolment

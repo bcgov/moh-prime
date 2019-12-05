@@ -40,6 +40,9 @@
       ],
       "@adjudication/*": [
         "./app/modules/adjudication/*"
+      ],
+      "@certificate/*": [
+        "./app/modules/enrolment-certificate/*"
       ]
     }
   },
