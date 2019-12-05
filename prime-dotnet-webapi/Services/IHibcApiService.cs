@@ -6,6 +6,6 @@ namespace Prime.Services
 {
     public interface IHibcApiService
     {
-        Task<bool> ValidCollegeLicense(string licenceNumber, string collegeReferenceId);
+        Task<string> ValidCollegeLicense(string licenceNumber, string collegeReferenceId);
     }
 }

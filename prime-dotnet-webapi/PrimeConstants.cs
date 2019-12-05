@@ -43,6 +43,8 @@ namespace Prime
         public readonly static string HIBC_API_URL = System.Environment.GetEnvironmentVariable("HIBC_API_URL") ?? "";
         public readonly static string HIBC_API_USERNAME = System.Environment.GetEnvironmentVariable("HIBC_API_USERNAME") ?? "";
         public readonly static string HIBC_API_PASSWORD = System.Environment.GetEnvironmentVariable("HIBC_API_PASSWORD") ?? "";
+        // TODO environmentalize
+        public readonly static string HIBC_SSL_CERT_FILENAME = @"/opt/app-root/etc/certs/hibc-api-cert.pfx";
         public readonly static string HIBC_SSL_CERT_PASSWORD = System.Environment.GetEnvironmentVariable("HIBC_SSL_CERT_PASSWORD") ?? "";
     }
 }

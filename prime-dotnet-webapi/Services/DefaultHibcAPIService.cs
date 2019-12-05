@@ -14,43 +14,55 @@ namespace Prime.Services
             : base(context, httpContext)
         { }
 
-        public async Task<bool> ValidCollegeLicense(string licenceNumber, string collegeReferenceId)
+        public async Task<string> ValidCollegeLicense(string licenceNumber, string collegeReferenceId)
         {
-            throw new NotImplementedException();
+            var par = await CallPharmanetCollegeLicenceService(licenceNumber, collegeReferenceId);
+            return par.ToString();
         }
 
-        private async Task<HibcApiResponse> GetCollegeLicenceHibc()
+        private async Task<CollegeLicenceResponseParams> CallPharmanetCollegeLicenceService(string licenceNumber, string collegeReferenceId)
         {
-            X509Certificate2 certificate = new X509Certificate2(@"/opt/app-root/etc/certs/hibc-api-cert.pfx", PrimeConstants.HIBC_SSL_CERT_PASSWORD);
-            var httpClientHandler = new HttpClientHandler
+            using (var client = new HttpClient(CreateClientHandler()))
+            {
+                var requestParams = new CollegeLicenceRequestParams(licenceNumber, collegeReferenceId);
+
+                var response = await client.PostAsJsonAsync(PrimeConstants.HIBC_API_URL, requestParams);
+                return await response.Content.ReadAsAsync<CollegeLicenceResponseParams>();
+            };
+        }
+
+        private HttpClientHandler CreateClientHandler()
+        {
+            if (PrimeConstants.ENVIRONMENT_NAME == "local")
+            {
+                return new HttpClientHandler();
+            }
+
+            X509Certificate2 certificate = new X509Certificate2(PrimeConstants.HIBC_SSL_CERT_FILENAME, PrimeConstants.HIBC_SSL_CERT_PASSWORD);
+            return new HttpClientHandler
             {
                 ClientCertificateOptions = ClientCertificateOption.Manual,
                 ClientCertificates = { certificate }
             };
-            using (var client = new HttpClient(httpClientHandler))
-            {
-                var values = new
-                {
-                    applicationUUID = "b7a2993a-e55a-4455-b8c2-fcd12e57ce66",
-                    programArea = "PRIME",
-                    licenceNumber = "2036P",
-                    collegeReferenceId = "P1"
-                };
-                var resp = await client.PostAsJsonAsync(PrimeConstants.HIBC_API_URL, values);
-                string content = await resp.Content.ReadAsStringAsync();
-                return $"status code:[{(int)resp.StatusCode}], headers:[{resp.Content.Headers}], content:[{content}]";
-            };
         }
 
-        private class HibcApiRequest
+        private class CollegeLicenceRequestParams
         {
-            Guid applicationUUID { get; set; }
-            string programArea { get { return "PRIME"; } }
-            string licenceNumber { get; set; }
-            string collegeReferenceId { get; set; }
+            Guid applicationUUID { get; }
+            string programArea { get  }
+            string licenceNumber { get; }
+            string collegeReferenceId { get; }
+
+            public CollegeLicenceRequestParams(string licenceNumber, string collegeReferenceId)
+            {
+                applicationUUID = Guid.NewGuid();
+                programArea = "PRIME";
+                this.licenceNumber = licenceNumber;
+                this.collegeReferenceId = collegeReferenceId;
+            }
         }
 
-        private class HibcApiResponse
+        private class CollegeLicenceResponseParams
         {
             Guid applicationUUID { get; set; }
             string firstName { get; set; }

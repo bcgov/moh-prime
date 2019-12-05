@@ -203,7 +203,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiOkResponse<Enrolment>), StatusCodes.Status200OK)]
         public async Task<ActionResult<string>> DeleteEnrolment(int enrolmentId)
         {
-            string resp = await _hibcApiService.ValidateCollegeLicense();
+            string resp = await _hibcApiService.ValidCollegeLicense("2036P", "P1");
 
             return Ok(new ApiOkResponse<string>(resp));
         }
