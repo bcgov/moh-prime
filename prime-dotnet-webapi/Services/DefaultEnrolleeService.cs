@@ -354,7 +354,7 @@ namespace Prime.Services
                 }
 
                 // Enrollee just left manual adjudication, inform the enrollee
-                if (currentStatus.Code == Status.SUBMITTED_CODE && !string.IsNullOrWhiteSpace(enrollee.ContactEmail))
+                if (currentStatus.Code == Status.SUBMITTED_CODE)
                 {
                     _emailService.SendReminderEmail(enrollee);
                 }
