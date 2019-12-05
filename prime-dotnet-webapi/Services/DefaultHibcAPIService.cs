@@ -14,7 +14,12 @@ namespace Prime.Services
             : base(context, httpContext)
         { }
 
-        public async Task<string> ValidateCollegeLicense()
+        public async Task<bool> ValidCollegeLicense(string licenceNumber, string collegeReferenceId)
+        {
+            throw new NotImplementedException();
+        }
+
+        private async Task<HibcApiResponse> GetCollegeLicenceHibc()
         {
             X509Certificate2 certificate = new X509Certificate2(@"/opt/app-root/etc/certs/hibc-api-cert.pfx", PrimeConstants.HIBC_SSL_CERT_PASSWORD);
             var httpClientHandler = new HttpClientHandler
@@ -35,6 +40,25 @@ namespace Prime.Services
                 string content = await resp.Content.ReadAsStringAsync();
                 return $"status code:[{(int)resp.StatusCode}], headers:[{resp.Content.Headers}], content:[{content}]";
             };
+        }
+
+        private class HibcApiRequest
+        {
+            Guid applicationUUID { get; set; }
+            string programArea { get { return "PRIME"; } }
+            string licenceNumber { get; set; }
+            string collegeReferenceId { get; set; }
+        }
+
+        private class HibcApiResponse
+        {
+            Guid applicationUUID { get; set; }
+            string firstName { get; set; }
+            string middleInitial { get; set; }
+            string lastName { get; set; }
+            string dateofBirth { get; set; }
+            string status { get; set; }
+            string effectiveDate { get; set; }
         }
     }
 }
