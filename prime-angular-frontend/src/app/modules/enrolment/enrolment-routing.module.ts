@@ -47,7 +47,7 @@ const routes: Routes = [
         component: RegulatoryComponent,
         canDeactivate: [CanDeactivateFormGuard]
       },
-      // TODO Remove Device Provider link until feature is needed
+      // TODO Temporary removal of Device Provider for ComPAP
       // {
       //   path: EnrolmentRoutes.DEVICE_PROVIDER,
       //   component: DeviceProviderComponent,

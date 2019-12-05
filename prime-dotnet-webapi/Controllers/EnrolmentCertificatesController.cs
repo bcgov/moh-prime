@@ -14,16 +14,16 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/enrolment-certificates")]
     [ApiController]
-    // User needs at least the ADMIN or ENROLMENT role to use this controller
+    // User needs at least the ADMIN or ENROLLEE role to use this controller
     [Authorize(Policy = PrimeConstants.PRIME_USER_POLICY)]
     public class EnrolmentCertificatesController : ControllerBase
     {
-        private readonly IEnrolmentService _enrolmentService;
+        private readonly IEnrolleeService _enrolleeService;
         private readonly IEnrolmentCertificateService _certificateService;
 
-        public EnrolmentCertificatesController(IEnrolmentService enrolmentService, IEnrolmentCertificateService enrolmentCertificateService)
+        public EnrolmentCertificatesController(IEnrolleeService enrolleeService, IEnrolmentCertificateService enrolmentCertificateService)
         {
-            _enrolmentService = enrolmentService;
+            _enrolleeService = enrolleeService;
             _certificateService = enrolmentCertificateService;
         }
 
@@ -67,7 +67,7 @@ namespace Prime.Controllers
 
         // POST: api/enrolment-certificates/access
         /// <summary>
-        /// Creates an EnrolmentCertificateAccessToken for the user if the user has a finished Enrolment.
+        /// Creates an EnrolmentCertificateAccessToken for the user if the user has a finished enrolment.
         /// </summary>
         [HttpPost("access", Name = nameof(CreateEnrolmentCertificateAccessToken))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -76,19 +76,19 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiOkResponse<EnrolmentCertificateAccessToken>), StatusCodes.Status201Created)]
         public async Task<ActionResult<EnrolmentCertificateAccessToken>> CreateEnrolmentCertificateAccessToken()
         {
-            var enrolment = await _enrolmentService.GetEnrolmentForUserIdAsync(PrimeUtils.PrimeUserId(User));
-            if (enrolment == null)
+            var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(PrimeUtils.PrimeUserId(User));
+            if (enrollee == null)
             {
-                this.ModelState.AddModelError("Enrollee.UserId", "No enrolment exists for this User Id.");
+                this.ModelState.AddModelError("Enrollee.UserId", "No enrollee exists for this User Id.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
-            if (enrolment.CurrentStatus?.Status.Code != Status.ACCEPTED_TOS_CODE)
+            if (enrollee.CurrentStatus?.Status.Code != Status.ACCEPTED_TOS_CODE)
             {
-                this.ModelState.AddModelError("Enrollee.UserId", "The enrolment for this User Id is not in a finished state.");
+                this.ModelState.AddModelError("Enrollee.UserId", "The enrollee for this User Id is not in a finished state.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrolment.Enrollee);
+            var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrollee);
 
             return CreatedAtAction(nameof(GetEnrolmentCertificate), new { accessTokenId = createdToken.Id }, new ApiCreatedResponse<EnrolmentCertificateAccessToken>(createdToken));
         }

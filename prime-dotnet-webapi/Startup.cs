@@ -31,7 +31,6 @@ namespace Prime
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<ILookupService, DefaultLookupService>();
-            services.AddScoped<IEnrolmentService, DefaultEnrolmentService>();
             services.AddScoped<IEnrolleeService, DefaultEnrolleeService>();
             services.AddScoped<IAutomaticAdjudicationService, DefaultAutomaticAdjudicationService>();
             services.AddScoped<IEnrolmentCertificateService, DefaultEnrolmentCertificateService>();
@@ -114,8 +113,10 @@ namespace Prime
                 connectionString = Configuration.GetConnectionString("PrimeDatabase");
             }
             services.AddDbContext<ApiDbContext>(options =>
-                options.UseNpgsql(connectionString)
-            );
+            {
+                options.UseNpgsql(connectionString);
+                options.EnableSensitiveDataLogging(sensitiveDataLoggingEnabled: false);
+            });
         }
 
         public virtual void UpdateDatabase(IApplicationBuilder app)
