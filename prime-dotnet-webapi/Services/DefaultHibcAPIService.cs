@@ -28,8 +28,8 @@ namespace Prime.Services
                 {
                     applicationUUID = "b7a2993a-e55a-4455-b8c2-fcd12e57ce66",
                     programArea = "PRIME",
-                    licenceNumber = "2I8R1",
-                    collegeReferenceId = "91"
+                    licenceNumber = "2036P",
+                    collegeReferenceId = "P1"
                 };
                 var resp = await client.PostAsJsonAsync(PrimeConstants.HIBC_API_URL, values);
                 string content = await resp.Content.ReadAsStringAsync();
