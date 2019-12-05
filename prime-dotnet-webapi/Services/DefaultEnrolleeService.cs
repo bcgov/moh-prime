@@ -201,6 +201,7 @@ namespace Prime.Services
             if (profileCompleted == true)
             {
                 _enrolleeDb.ProfileCompleted = true;
+                enrollee.ProfileCompleted = true;
             }
 
             _context.Entry(enrollee).State = EntityState.Modified;

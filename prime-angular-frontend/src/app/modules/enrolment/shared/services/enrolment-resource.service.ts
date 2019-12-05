@@ -49,9 +49,9 @@ export class EnrolmentResource {
 
   public updateEnrollee(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<any> {
     const { id } = enrolment;
-    const params = new HttpParams();
+    let params = new HttpParams();
     if (beenThroughTheWizard) {
-      params.set('beenThroughTheWizard', `${beenThroughTheWizard}`);
+      params = params.set('beenThroughTheWizard', `${beenThroughTheWizard}`);
     }
     return this.http.put(`${this.config.apiEndpoint}/enrollees/${id}`, this.enrolmentAdapterRequest(enrolment), { params });
   }

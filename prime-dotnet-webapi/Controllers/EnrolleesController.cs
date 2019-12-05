@@ -149,7 +149,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateEnrollee(int enrolleeId, Enrollee enrollee, string beenThroughTheWizard = "false")
+        public async Task<IActionResult> UpdateEnrollee(int enrolleeId, Enrollee enrollee, [FromQuery]bool beenThroughTheWizard)
         {
             if (enrollee == null)
             {
@@ -188,7 +188,7 @@ namespace Prime.Controllers
             }
 
             //Check if BeenThroughTheWizard has been set to true, and update ProfileCompleted in database
-            if (beenThroughTheWizard == "true")
+            if (beenThroughTheWizard == true)
             {
                 await _enrolleeService.UpdateEnrolleeAsync(enrollee, true);
             }

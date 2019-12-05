@@ -77,6 +77,10 @@ namespace PrimeTests.Mocks
                 {
                     updated = 1;
                 }
+                if (profileCompleted)
+                {
+                    enrollee.ProfileCompleted = true;
+                }
                 this.GetHolder<int, Enrollee>().Add((int)enrolleeId, enrollee);
             }
             return Task.FromResult(updated);
