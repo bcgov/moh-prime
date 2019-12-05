@@ -6,6 +6,6 @@ namespace Prime.Services
     {
         void Send(string from, string to, string subject, string body);
 
-        void SendReminderEmail(Enrollee enrollee)
+        void SendReminderEmail(Enrollee enrollee);
     }
 }
