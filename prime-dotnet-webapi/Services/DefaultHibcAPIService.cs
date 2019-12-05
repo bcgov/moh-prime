@@ -22,12 +22,11 @@ namespace Prime.Services
 
         private async Task<string> CallPharmanetCollegeLicenceService(string licenceNumber, string collegeReferenceId)
         {
-            Console.WriteLine("-------------------in method----------------");
-            Console.WriteLine($"licence:[{licenceNumber}], collref:[{collegeReferenceId}]");
+            Console.WriteLine(">>>>>------------in method----------------");
             using (var client = new HttpClient(CreateClientHandler()))
             {
                 var requestParams = CreateCollegeLicenceRequestParams(licenceNumber, collegeReferenceId);
-                System.Console.WriteLine($"---params:[{requestParams.ToString()}]");
+                System.Console.WriteLine($"---url:[{PrimeConstants.HIBC_API_URL}]");
                 var response = await client.PostAsJsonAsync(PrimeConstants.HIBC_API_URL, requestParams);
                 System.Console.WriteLine($"---status code[{(int)response.StatusCode}]");
                 var srt = await response.Content.ReadAsStringAsync();
@@ -41,6 +40,7 @@ namespace Prime.Services
         {
             if (PrimeConstants.ENVIRONMENT_NAME == "local")
             {
+                System.Console.WriteLine("-------local handler");
                 return new HttpClientHandler();
             }
 
@@ -56,7 +56,7 @@ namespace Prime.Services
         {
             return new
             {
-                applicationUUID = Guid.NewGuid(),
+                applicationUUID = Guid.NewGuid().ToString(),
                 programArea = "PRIME",
                 licenceNumber = licenceNumber,
                 collegeReferenceId = collegeReferenceId,
