@@ -9,6 +9,16 @@
 }
 
 //
+// Forms
+//
+
+.mat-checkbox-layout {
+  // Force checkbox labels to line wrap if required
+  // instead of overflowing their container
+  white-space: normal !important;
+}
+
+//
 // Sidenav
 //
 
@@ -43,7 +53,9 @@
   .active:focus,
   .mat-list-item:focus {
     background-color: theme-palette(grey, lighter) !important;
+  }
 
+  .active {
     .mat-list-item-content {
       border-right: 5px solid theme-palette(yellow) !important;
     }

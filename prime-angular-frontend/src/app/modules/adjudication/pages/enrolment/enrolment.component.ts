@@ -27,11 +27,6 @@ export class EnrolmentComponent implements OnInit {
     private logger: LoggerService
   ) { }
 
-  public showYesNo(declared: boolean) {
-    return (declared === null) ? 'N/A'
-      : (declared) ? 'Yes' : 'No';
-  }
-
   public ngOnInit() {
     this.getEnrollee(this.route.snapshot.params.id);
   }
