@@ -51,11 +51,30 @@ namespace Prime.Services
 
         public void SendReminderEmail(Enrollee enrollee)
         {
-            string from = "Prime@noreply.gov.bc.ca";
+            if (!IsValidEmail(enrollee.ContactEmail))
+            {
+                // TODO Log invalid email, cannot send?
+                return;
+            }
+
+            string from = "noreply@prime.gov.bc.ca";
             string subject = "Prime requires your attention";
-            string body = "Your application status has changed since you last viewed it. Please click <a href=\"www.google.ca\">here</a> to log into Prime and view your status.";
+            string body = "Your Prime application status has changed since you last viewed it. Please click <a href=\"www.google.ca\">here</a> to log into Prime and view your status.";
 
             Send(from, enrollee.ContactEmail, subject, body);
+        }
+
+        private bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }
