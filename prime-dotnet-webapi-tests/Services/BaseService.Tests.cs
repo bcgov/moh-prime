@@ -24,7 +24,11 @@ namespace PrimeTests.Services
 
             var options = new DbContextOptionsBuilder<ApiDbContext>()
                         .UseInMemoryDatabase(databaseName: _databaseName)
+                        .EnableSensitiveDataLogging (sensitiveDataLoggingEnabled :false)
                       .Options;
+
+
+
 
             _httpContext = new HttpContextAccessor();
             _httpContext.HttpContext = new DefaultHttpContext();

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 
@@ -7,6 +7,7 @@ import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 @Component({
@@ -20,22 +21,26 @@ export class EnrolmentComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private adjudicationResource: AdjudicationResource,
     private toastService: ToastService,
     private logger: LoggerService
   ) { }
 
   public ngOnInit() {
-    this.getEnrolment(this.route.snapshot.params.id);
+    this.getEnrollee(this.route.snapshot.params.id);
   }
 
-  private getEnrolment(id: number, statusCode?: number) {
-    this.busy = this.adjudicationResource.enrolment(id, statusCode)
+  private getEnrollee(id: number, statusCode?: number) {
+    this.busy = this.adjudicationResource.enrollee(id, statusCode)
       .subscribe(
         (enrolment: Enrolment) => this.enrolment = enrolment,
         (error: any) => {
           this.toastService.openErrorToast('Enrolment could not be found');
           this.logger.error('[Adjudication] Enrolment::getEnrolment error has occurred: ', error);
+
+          const routePath = AdjudicationRoutes.routePath(AdjudicationRoutes.ENROLMENTS);
+          this.router.navigate([routePath]);
         }
       );
   }

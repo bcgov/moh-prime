@@ -22,7 +22,6 @@ export class EnrolmentStateService {
   public selfDeclarationForm: FormGroup;
   public organizationForm: FormGroup;
 
-  private enrolmentId: number;
   private enrolleeId: number;
   private userId: string;
 
@@ -41,8 +40,7 @@ export class EnrolmentStateService {
    * Store the enrolment JSON and populate the enrolment form.
    */
   public set enrolment(enrolment: Enrolment) {
-    this.enrolmentId = enrolment.id;
-    this.enrolleeId = enrolment.enrollee.id;
+    this.enrolleeId = enrolment.id;
     this.userId = enrolment.enrollee.userId;
 
     this.patchEnrolment(enrolment);
@@ -52,8 +50,7 @@ export class EnrolmentStateService {
    * Get the enrolment as JSON for submission.
    */
   public get enrolment() {
-    const id = this.enrolmentId;
-    const enrolleeId = this.enrolleeId;
+    const id = this.enrolleeId;
     const userId = this.userId;
 
     const profile = this.profileForm.getRawValue();
@@ -66,7 +63,6 @@ export class EnrolmentStateService {
     return {
       id,
       enrollee: {
-        id: enrolleeId,
         userId,
         ...profile
       },
@@ -164,7 +160,7 @@ export class EnrolmentStateService {
     return this.fb.group({
       userId: [{ value: null, disabled: true }, [Validators.required]],
       firstName: [{ value: null, disabled: true }, [Validators.required]],
-      middleName: [{ value: null, disabled: false }, []],
+      middleName: [{ value: null, disabled: true }, []],
       lastName: [{ value: null, disabled: true }, [Validators.required]],
       dateOfBirth: [{ value: null, disabled: true }, [Validators.required]],
       preferredFirstName: [null, []],
