@@ -12,6 +12,7 @@ namespace Prime.Services
     public class DefaultEnrolleeService : BaseService, IEnrolleeService
     {
         private readonly IAutomaticAdjudicationService _automaticAdjudicationService;
+        private readonly IEmailService _emailService;
 
         private class StatusWrapper
         {
@@ -24,10 +25,11 @@ namespace Prime.Services
         private static Status NULL_STATUS = new Status { Code = -1, Name = "No Status" };
 
         public DefaultEnrolleeService(
-            ApiDbContext context, IHttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService)
+            ApiDbContext context, IHttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService, IEmailService emailService)
             : base(context, httpContext)
         {
             _automaticAdjudicationService = automaticAdjudicationService;
+            _emailService = emailService;
         }
 
         private Dictionary<Status, StatusWrapper[]> GetWorkFlowStateMap()
@@ -349,6 +351,12 @@ namespace Prime.Services
                 if (created < 1)
                 {
                     throw new InvalidOperationException("Could not create enrolment status.");
+                }
+
+                // Enrollee just left manual adjudication, inform the enrollee
+                if (currentStatus.Code == Status.SUBMITTED_CODE && !string.IsNullOrWhiteSpace(enrollee.ContactEmail))
+                {
+                    _emailService.SendReminderEmail(enrollee);
                 }
 
                 return createdEnrolmentStatus;
