@@ -49,7 +49,7 @@ namespace Prime.Services
         private class CollegeLicenceRequestParams
         {
             Guid applicationUUID { get; }
-            string programArea { get  }
+            string programArea { get; }
             string licenceNumber { get; }
             string collegeReferenceId { get; }
 
