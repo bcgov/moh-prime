@@ -17,17 +17,18 @@ namespace Prime.Services
         public async Task<string> ValidCollegeLicense(string licenceNumber, string collegeReferenceId)
         {
             var par = await CallPharmanetCollegeLicenceService(licenceNumber, collegeReferenceId);
-            return par.ToString();
+            return par;
         }
 
-        private async Task<CollegeLicenceResponseParams> CallPharmanetCollegeLicenceService(string licenceNumber, string collegeReferenceId)
+        private async Task<string> CallPharmanetCollegeLicenceService(string licenceNumber, string collegeReferenceId)
         {
             using (var client = new HttpClient(CreateClientHandler()))
             {
                 var requestParams = new CollegeLicenceRequestParams(licenceNumber, collegeReferenceId);
 
                 var response = await client.PostAsJsonAsync(PrimeConstants.HIBC_API_URL, requestParams);
-                return await response.Content.ReadAsAsync<CollegeLicenceResponseParams>();
+                return await response.Content.ReadAsStringAsync();
+                // return await response.Content.ReadAsAsync<CollegeLicenceResponseParams>();
             };
         }
 
@@ -64,7 +65,7 @@ namespace Prime.Services
 
         private class CollegeLicenceResponseParams
         {
-            Guid applicationUUID { get; set; }
+            string applicationUUID { get; set; }
             string firstName { get; set; }
             string middleInitial { get; set; }
             string lastName { get; set; }
