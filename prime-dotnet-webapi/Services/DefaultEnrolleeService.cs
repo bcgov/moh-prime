@@ -177,7 +177,7 @@ namespace Prime.Services
             return enrollee.Id;
         }
 
-        public async Task<int> UpdateEnrolleeAsync(Enrollee enrollee)
+        public async Task<int> UpdateEnrolleeAsync(Enrollee enrollee, bool profileCompleted = false)
         {
             var _enrolleeDb = _context.Enrollees
                                 .Include(e => e.PhysicalAddress)
@@ -196,6 +196,13 @@ namespace Prime.Services
             this.ReplaceExistingItems(_enrolleeDb.Jobs, enrollee.Jobs, enrollee);
             this.ReplaceExistingItems(_enrolleeDb.Organizations, enrollee.Organizations, enrollee);
 
+            // If profileCompleted is true, this is the first time the enrollee has completed their profile
+            // by going through the wizard
+            if (profileCompleted == true)
+            {
+                _enrolleeDb.ProfileCompleted = true;
+            }
+
             _context.Entry(enrollee).State = EntityState.Modified;
 
             try
@@ -207,6 +214,7 @@ namespace Prime.Services
                 return 0;
             }
         }
+
 
         private void ReplaceExistingAddress(Address dbAddress, Address newAddress, Enrollee enrollee)
         {

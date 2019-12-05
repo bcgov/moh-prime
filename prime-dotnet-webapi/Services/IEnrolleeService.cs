@@ -18,7 +18,7 @@ namespace Prime.Services
 
         Task<int?> CreateEnrolleeAsync(Enrollee enrollee);
 
-        Task<int> UpdateEnrolleeAsync(Enrollee enrollee);
+        Task<int> UpdateEnrolleeAsync(Enrollee enrollee, bool profileCompleted = false);
 
         Task DeleteEnrolleeAsync(int enrolleeId);
 

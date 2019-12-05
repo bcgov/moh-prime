@@ -89,8 +89,7 @@ namespace Prime.Models
         [NotMapped]
         public EnrolmentStatus PharmaNetStatus { get => this.EnrolmentStatuses?.SingleOrDefault(es => es.PharmaNetStatus); }
 
-        [NotMapped]
-        public Boolean InitialStatus { get => this.EnrolmentStatuses?.Count() == 1; }
+        public bool? ProfileCompleted { get; set; } = false;
 
         [NotMapped]
         public ICollection<Status> AvailableStatuses { get; set; }
