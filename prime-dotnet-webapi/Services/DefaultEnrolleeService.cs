@@ -129,11 +129,6 @@ namespace Prime.Services
 
             return enrollee;
         }
-                // Enrollee just left manual adjudication, inform the enrollee
-                if (currentStatus.Code == Status.SUBMITTED_CODE)
-                {
-                    _emailService.SendReminderEmail(enrollee);
-                }
 
         public Task<int?> CreateEnrolleeAsync(Enrollee enrollee)
         {
