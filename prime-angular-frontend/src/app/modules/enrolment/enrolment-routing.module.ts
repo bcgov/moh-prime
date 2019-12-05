@@ -85,7 +85,7 @@ const routes: Routes = [
         component: SummaryComponent
       },
       {
-        path: '', // Equivalent to `/` and alias for `profile`
+        path: '', // Equivalent to `/` and alias for `review`
         redirectTo: EnrolmentRoutes.REVIEW,
         pathMatch: 'full'
       }
