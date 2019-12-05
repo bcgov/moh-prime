@@ -9,10 +9,10 @@ namespace Prime.Models
     [Table("EnrolmentStatuses")]
     public class EnrolmentStatus : BaseAuditable
     {
-        public int EnrolmentId { get; set; }
+        public int EnrolleeId { get; set; }
 
         [JsonIgnore]
-        public Enrolment Enrolment { get; set; }
+        public Enrollee Enrollee { get; set; }
 
         public short StatusCode { get; set; }
 
