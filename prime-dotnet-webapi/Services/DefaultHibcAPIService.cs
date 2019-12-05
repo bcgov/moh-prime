@@ -22,6 +22,7 @@ namespace Prime.Services
 
         private async Task<string> CallPharmanetCollegeLicenceService(string licenceNumber, string collegeReferenceId)
         {
+            Console.Write("-------------------in method----------------");
             using (var client = new HttpClient(CreateClientHandler()))
             {
                 var requestParams = new CollegeLicenceRequestParams(licenceNumber, collegeReferenceId);
