@@ -2,12 +2,12 @@ using Newtonsoft.Json;
 
 namespace Prime.Models
 {
-    public interface IEnrolmentNavigationProperty
+    public interface IEnrolleeNavigationProperty
     {
         [JsonIgnore]
-        int EnrolmentId { get; set; }
+        int EnrolleeId { get; set; }
 
         [JsonIgnore]
-        Enrolment Enrolment { get; set; }
+        Enrollee Enrollee { get; set; }
     }
 }

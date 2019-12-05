@@ -51,7 +51,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
   public onSubmit() {
     if (this.form.valid) {
       const payload = this.enrolmentStateService.enrolment;
-      this.busy = this.enrolmentResource.updateEnrolment(payload)
+      this.busy = this.enrolmentResource.updateEnrollee(payload)
         .subscribe(
           () => {
             this.form.markAsPristine();

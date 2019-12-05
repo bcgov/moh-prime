@@ -80,13 +80,7 @@ export class EnrolmentsComponent implements OnInit {
             ? this.adjudicationResource.updateEnrolmentStatus(id, EnrolmentStatus.ADJUDICATED_APPROVED)
             : EMPTY
         ),
-        // TODO show success/error for enrolment status
-        // map(() => { })
-        // catchError(() => { })
-        exhaustMap(() => this.adjudicationResource.enrolment(id))
-        // TODO attempt replay getting enrolment for update
-        // retry(3),
-        // catchError(() => { })
+        exhaustMap(() => this.adjudicationResource.enrollee(id))
       )
       .subscribe(
         (enrolment: Enrolment) => {
@@ -115,13 +109,7 @@ export class EnrolmentsComponent implements OnInit {
             ? this.adjudicationResource.updateEnrolmentStatus(id, EnrolmentStatus.DECLINED)
             : EMPTY
         ),
-        // TODO show success/error for enrolment status change
-        // map(() => { })
-        // catchError(() => { })
-        exhaustMap(() => this.adjudicationResource.enrolment(id)),
-        // TODO and attempt replay getting enrolment for update
-        // retry(3),
-        // catchError(() => { })
+        exhaustMap(() => this.adjudicationResource.enrollee(id)),
       )
       .subscribe(
         (enrolment: Enrolment) => {
@@ -168,7 +156,7 @@ export class EnrolmentsComponent implements OnInit {
   }
 
   private getEnrolments(statusCode?: number) {
-    this.busy = this.adjudicationResource.enrolments(statusCode)
+    this.busy = this.adjudicationResource.enrollees(statusCode)
       .subscribe(
         (enrolments: Enrolment[]) => {
           this.logger.info('ENROLMENTS', enrolments);

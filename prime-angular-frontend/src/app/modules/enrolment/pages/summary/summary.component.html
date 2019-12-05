@@ -17,15 +17,13 @@
       <dl class="row mb-4">
         <dt class="col-sm-12 col-md-6 py-1">Name</dt>
         <dd class="col-sm-12 col-md-6 py-1">
-          {{ enrolment | enrolment:'fullName' }}&nbsp;
+          {{ enrolment | enrolment: 'fullName' }}&nbsp;
         </dd>
 
         <ng-container
                       *ngIf="enrolment.enrollee.preferredFirstName || enrolment.enrollee.preferredMiddleName || enrolment.enrollee.preferredLastName">
           <dt class="col-sm-12 col-md-6 py-1">Preferred Name</dt>
-          <dd class="col-sm-12 col-md-6 py-1">
-            {{ enrolment | enrolment:'preferredName' }} &nbsp;
-          </dd>
+          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment | enrolment: 'preferredName' }}&nbsp;</dd>
         </ng-container>
         <dt class="col-sm-12 col-md-6 py-1">Date of Birth</dt>
         <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.dateOfBirth | formatDate }}&nbsp;</dd>
@@ -36,10 +34,12 @@
       <dl class="row mb-4">
         <dt class="col-sm-12 col-md-6 py-1">Country</dt>
         <dd class="col-sm-12 col-md-6 py-1">
-          {{ enrolment.enrollee.physicalAddress.countryCode | configCode: 'countries' }}&nbsp;</dd>
+          {{ enrolment.enrollee.physicalAddress.countryCode | configCode: 'countries' }}&nbsp;
+        </dd>
         <dt class="col-sm-12 col-md-6 py-1">Province</dt>
         <dd class="col-sm-12 col-md-6 py-1">
-          {{ enrolment.enrollee.physicalAddress.provinceCode | configCode: 'provinces' }}&nbsp;</dd>
+          {{ enrolment.enrollee.physicalAddress.provinceCode | configCode: 'provinces' }}&nbsp;
+        </dd>
         <dt class="col-sm-12 col-md-6 py-1">Street Address</dt>
         <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.street }}&nbsp;</dd>
         <ng-container *ngIf="enrolment.enrollee.physicalAddress.street2">

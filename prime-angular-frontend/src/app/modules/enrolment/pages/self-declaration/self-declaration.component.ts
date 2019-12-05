@@ -78,7 +78,7 @@ export class SelfDeclarationComponent implements OnInit {
 
     if (this.form.valid) {
       const payload = this.enrolmentStateService.enrolment;
-      this.busy = this.enrolmentResource.updateEnrolment(payload)
+      this.busy = this.enrolmentResource.updateEnrollee(payload)
         .subscribe(
           () => {
             this.toastService.openSuccessToast('Self declaration has been saved');
