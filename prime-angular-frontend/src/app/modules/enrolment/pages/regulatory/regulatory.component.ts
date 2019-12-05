@@ -26,7 +26,7 @@ export class RegulatoryComponent implements OnInit, OnDestroy {
   public form: FormGroup;
   public colleges: Config<number>[];
   public licenses: Config<number>[];
-  public hasInitialStatus: boolean;
+  public profileCompleted: boolean;
   public EnrolmentRoutes = EnrolmentRoutes;
 
   constructor(
@@ -125,7 +125,7 @@ export class RegulatoryComponent implements OnInit, OnDestroy {
   private initForm() {
 
     const enrolment = this.enrolmentService.enrolment;
-    this.hasInitialStatus = enrolment.initialStatus;
+    this.profileCompleted = enrolment.profileCompleted;
 
     this.enrolmentStateService.enrolment = enrolment;
 

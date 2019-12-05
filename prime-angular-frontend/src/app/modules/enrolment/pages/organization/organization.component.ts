@@ -28,7 +28,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
   public organizationCtrl: FormControl;
   public organizationTypes: Config<number>[];
   public filteredOrganizationTypes: Config<number>[];
-  public hasInitialStatus: boolean;
+  public profileCompleted: boolean;
   public EnrolmentRoutes = EnrolmentRoutes;
 
   constructor(
@@ -139,7 +139,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
 
   private initForm() {
     const enrolment = this.enrolmentService.enrolment;
-    this.hasInitialStatus = enrolment.initialStatus;
+    this.profileCompleted = enrolment.profileCompleted;
 
     this.enrolmentStateService.enrolment = enrolment;
 

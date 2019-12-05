@@ -24,7 +24,7 @@ export class DeviceProviderComponent implements OnInit {
   public decisions: { code: boolean, name: string }[] = [
     { code: false, name: 'No' }, { code: true, name: 'Yes' }
   ];
-  public hasInitialStatus: boolean;
+  public profileCompleted: boolean;
   public EnrolmentRoutes = EnrolmentRoutes;
 
   constructor(
@@ -90,7 +90,7 @@ export class DeviceProviderComponent implements OnInit {
     this.initForm();
 
     const enrolment = this.enrolmentService.enrolment;
-    this.hasInitialStatus = enrolment.initialStatus;
+    this.profileCompleted = enrolment.profileCompleted;
 
     this.enrolmentStateService.enrolment = enrolment;
   }

@@ -80,7 +80,7 @@ export class MockEnrolmentService implements IEnrolmentService {
       },
       availableStatuses: null,
       enrolleeClassification: EnrolleeClassification.MOA,
-      initialStatus: true
+      profileCompleted: true
     });
   }
 

@@ -261,7 +261,7 @@
     </mat-checkbox>
   </div>
 
-  <app-page-footer [hasInitialStatus]="enrolment.initialStatus"
+  <app-page-footer [profileCompleted]="enrolment.profileCompleted"
                    [disableSave]="!accept.checked"
                    (save)="onSubmit()"
                    (continue)="onSubmit()"

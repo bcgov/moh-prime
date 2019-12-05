@@ -10,7 +10,8 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./collection-notice.component.scss']
 })
 export class CollectionNoticeComponent implements OnInit {
-  public hasInitialStatus: boolean;
+  public profileCompleted: boolean;
+
   constructor(
     private enrolmentService: EnrolmentService,
     private router: Router,
@@ -21,13 +22,14 @@ export class CollectionNoticeComponent implements OnInit {
 
   public ngOnInit() {
     const enrolment = this.enrolmentService.enrolment;
-    this.hasInitialStatus = (enrolment) ? enrolment.initialStatus : true;
-
+    this.profileCompleted = enrolment.profileCompleted;
   }
 
-  public onClick() {
+  public onAccept() {
+    const route = (!this.profileCompleted)
+      ? EnrolmentRoutes.PROFILE
+      : EnrolmentRoutes.REVIEW;
 
-    const route = this.hasInitialStatus ? EnrolmentRoutes.PROFILE : EnrolmentRoutes.REVIEW;
     this.router.navigate([route], { relativeTo: this.route.parent });
   }
 }

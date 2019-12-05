@@ -29,7 +29,7 @@ export class JobComponent implements OnInit, OnDestroy {
   public filteredJobNames: BehaviorSubject<Config<number>[]>;
   public allowDefaultOption: boolean;
   public defaultOptionLabel: string;
-  public hasInitialStatus: boolean;
+  public profileCompleted: boolean;
   public EnrolmentRoutes = EnrolmentRoutes;
 
   constructor(
@@ -125,7 +125,7 @@ export class JobComponent implements OnInit, OnDestroy {
       .subscribe(({ jobs }: { jobs: Job[] }) => this.filterJobNames(jobs));
 
     const enrolment = this.enrolmentService.enrolment;
-    this.hasInitialStatus = enrolment.initialStatus;
+    this.profileCompleted = enrolment.profileCompleted;
 
     this.enrolmentStateService.enrolment = enrolment;
 

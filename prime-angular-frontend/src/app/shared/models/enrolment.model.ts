@@ -29,7 +29,7 @@ export interface HttpEnrollee extends Enrollee {
   availableStatuses: Config<number>[];
   enrolleeClassification: EnrolleeClassification;
   // Indicates whether this is the enrollees initial application
-  initialStatus: boolean;
+  profileCompleted: boolean;
 }
 
 // TODO outgoing enrolment model
@@ -56,5 +56,5 @@ export interface Enrolment {
   availableStatuses: Config<number>[];
   enrolleeClassification: EnrolleeClassification;
   // Indicates whether this is the enrollees initial application
-  initialStatus: boolean;
+  profileCompleted: boolean;
 }
