@@ -76,7 +76,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiOkResponse<EnrolmentCertificateAccessToken>), StatusCodes.Status201Created)]
         public async Task<ActionResult<EnrolmentCertificateAccessToken>> CreateEnrolmentCertificateAccessToken()
         {
-            var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(PrimeUtils.PrimeUserId(User));
+            var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(User.GetPrimeUserId());
             if (enrollee == null)
             {
                 this.ModelState.AddModelError("Enrollee.UserId", "No enrollee exists for this User Id.");
