@@ -22,12 +22,14 @@ namespace Prime.Services
 
         private async Task<string> CallPharmanetCollegeLicenceService(string licenceNumber, string collegeReferenceId)
         {
-            Console.Write("-------------------in method----------------");
+            Console.WriteLine("-------------------in method----------------");
             using (var client = new HttpClient(CreateClientHandler()))
             {
                 var requestParams = new CollegeLicenceRequestParams(licenceNumber, collegeReferenceId);
-
+                System.Console.WriteLine($"---params:[{requestParams}]");
                 var response = await client.PostAsJsonAsync(PrimeConstants.HIBC_API_URL, requestParams);
+                System.Console.WriteLine($"---status code[{(int)response.StatusCode}]");
+                System.Console.WriteLine($"---content:[{response.Content}]");
                 return await response.Content.ReadAsStringAsync();
                 // return await response.Content.ReadAsAsync<CollegeLicenceResponseParams>();
             };
