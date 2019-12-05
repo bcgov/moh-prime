@@ -66,9 +66,13 @@ export class EnrolmentGuard extends BaseGuard {
           const postEnrolmentRoutes = EnrolmentRoutes.postEnrolmentRoutes();
           const route = routePath.split('/').pop();
 
+          const redirectionRoute = enrolment.initialStatus
+            ? EnrolmentRoutes.PROFILE
+            : EnrolmentRoutes.REVIEW;
+
           return (postEnrolmentRoutes.includes(route))
             // Prevent access to post enrolment routes
-            ? this.navigate(routePath, EnrolmentRoutes.PROFILE)
+            ? this.navigate(routePath, redirectionRoute)
             // Otherwise, allow the route to resolve
             : true;
         case EnrolmentStatus.SUBMITTED:

@@ -86,7 +86,7 @@ const routes: Routes = [
       },
       {
         path: '', // Equivalent to `/` and alias for `profile`
-        redirectTo: EnrolmentRoutes.PROFILE,
+        redirectTo: EnrolmentRoutes.REVIEW,
         pathMatch: 'full'
       }
     ]
