@@ -4,6 +4,8 @@ namespace Prime
     {
         public readonly static string ENVIRONMENT_NAME = System.Environment.GetEnvironmentVariable("OC_APP") ?? "local";
 
+        public readonly static string FRONTEND_URL = System.Environment.GetEnvironmentVariable("FRONTEND_URL") ?? "localhost:4200";
+
         public readonly static string PRIME_ACCESS_TOKEN_KEY = "prime-access-token";
 
         public readonly static string PRIME_ADMIN_CLIENT = System.Environment.GetEnvironmentVariable("JWT_ADMIN_CLIENT") ?? Startup.StaticConfig["Jwt:AdminClient"];
