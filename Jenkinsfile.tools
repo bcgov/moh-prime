@@ -17,10 +17,13 @@ pipeline {
                 echo "Building ..."
                 //sh "./player.sh toolbelt sonar tools"
                 //sh "./player.sh toolbelt mailhog test"
-                sh "./player.sh toolbelt schemaspy dev
+                sh "./player.sh toolbelt schemaspy dev"
             }
         }
         stage('Cleanup Branch') {
+        options {
+            timeout(time: 5, unit: 'MINUTES')   // timeout on this stage
+        }
         when { expression { ( GIT_BRANCH == 'develop' ) } }
             agent { label 'master' }
             steps {

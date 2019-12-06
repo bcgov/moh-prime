@@ -1,8 +1,5 @@
 pipeline {
     agent none
-    options {
-        disableResume()
-    }
     stages {
         stage('Promote Master to Test') {
             when { expression { ( GIT_BRANCH == 'master' ) } }
@@ -17,30 +14,38 @@ pipeline {
                     sh "./player.sh deploy frontend test"
             }
         }
-        stage('Promote Master to Production') {
-        options {
-            timeout(time: 60, unit: 'MINUTES')   // timeout on this stage
-        }
-            when { expression { ( GIT_BRANCH == 'master' ) } }
-            agent { label 'master' }
+        stage('Approve Promotion of Master') {
+            options {
+                timeout(time: 24, unit: 'HOURS')   // timeout on this stage
+            }
+            when { expression { ( BRANCH_NAME == 'master' ) } }
             steps {
                 script {
-                        def IS_APPROVED = input(
-                            id: 'IS_APPROVED', message: "Deploy to Production?", ok: "yes", parameters: [
-                                string(name: 'IS_APPROVED', defaultValue: 'yes', description: 'Deploy to Production?')
-                                ])
-                        if (IS_APPROVED != 'yes') {
-                            currentBuild.result = "SUCCESS"
-                            echo "User cancelled deployment"
-                        }
-                    echo "Deploy to Production..."
-                    sh "./player.sh build database prod"
-                    sh "./player.sh build api prod"
-                    sh "./player.sh build frontend prod"
-                    sh "./player.sh deploy database prod"
-                    sh "./player.sh deploy api prod"
-                    sh "./player.sh deploy frontend prod"
+                    def IS_APPROVED = input(
+                        id: 'IS_APPROVED', message: "Deploy to Production?", ok: "yes", parameters: [
+                            string(name: 'IS_APPROVED', defaultValue: 'yes', description: 'Deploy to Production?')
+                            ])
+                    if (IS_APPROVED != 'yes') {
+                        currentBuild.result = "SUCCESS"
+                        echo "User cancelled deployment"
+                    }
                 }
+            }
+        }
+        stage('Promote Master to Production') {
+            options {
+                timeout(time: 1, unit: 'HOURS')   // timeout on this stage
+            }
+            when { expression { ( BRANCH_NAME == 'master' ) } }
+            agent { label 'master' }
+            steps {
+                echo "Deploy to Production..."
+                sh "./player.sh build database prod"
+                sh "./player.sh build api prod"
+                sh "./player.sh build frontend prod"
+                sh "./player.sh deploy database prod"
+                sh "./player.sh deploy api prod"
+                sh "./player.sh deploy frontend prod"
             }
         }
     }
