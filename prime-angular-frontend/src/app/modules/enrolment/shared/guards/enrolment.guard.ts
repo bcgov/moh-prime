@@ -67,15 +67,17 @@ export class EnrolmentGuard extends BaseGuard {
           const route = routePath.split('/').pop();
 
           const redirectionRoute = (!enrolment.profileCompleted)
-            ? EnrolmentRoutes.PROFILE
+            ? EnrolmentRoutes.PROFILE // Only for new enrolments with incomplete profiles
             : EnrolmentRoutes.REVIEW;
 
           if (!enrolment.profileCompleted && [...postEnrolmentRoutes, EnrolmentRoutes.REVIEW].includes(route)) {
             this.navigate(routePath, redirectionRoute);
           }
 
-          return (
-            postEnrolmentRoutes.includes(route))
+          const hasNotCompletedProfile = !enrolment.profileCompleted && EnrolmentRoutes.REVIEW === route;
+          const hasNotSubmittedEnrolment = postEnrolmentRoutes.includes(route);
+
+          return (hasNotCompletedProfile || hasNotSubmittedEnrolment)
             // Prevent access to post enrolment routes
             ? this.navigate(routePath, redirectionRoute)
             // Otherwise, allow the route to resolve
