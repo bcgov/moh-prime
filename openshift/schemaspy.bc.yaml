@@ -6,11 +6,11 @@ metadata:
     tags: schema-spy
   name: "${APP_NAME}-bc"
 parameters:
-  - name: APP_NAME
+  - name: NAME
     displayName: Name
     description: The name assigned to all of the objects defined in this template.
     required: true
-    value: schema-spy
+    value: "${APP_NAME}"
   - name: GIT_REPO_URL
     displayName: Git Repo URL
     description: The URL to the Git repository.

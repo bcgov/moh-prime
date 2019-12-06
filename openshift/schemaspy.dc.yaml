@@ -7,11 +7,11 @@ metadata:
     description: "SchemaSpy deployment template."
     tags: "schema-spy"
 parameters:
-  - name: "APP_NAME"
+  - name: "NAME"
     displayName: "Name"
     description: "The name assigned to all objects defined in this template."
     required: true
-    value: "schema-spy"
+    value: "${APP_NAME}"
   - name: "IMAGE_NAMESPACE"
     displayName: "Image Namespace"
     required: true
