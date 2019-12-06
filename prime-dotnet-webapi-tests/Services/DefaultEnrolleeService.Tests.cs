@@ -16,13 +16,13 @@ namespace PrimeTests.Services
     {
         private static EnrolleeSearchOptions EMPTY_ENROLLEE_SEARCH_OPTIONS = new EnrolleeSearchOptions();
 
-        public DefaultEnrolleeServiceTests() : base(new object[] { new AutomaticAdjudicationServiceMock() })
+        public DefaultEnrolleeServiceTests() : base(new object[] { new AutomaticAdjudicationServiceMock(), new EmailServiceMock() })
         { }
 
         [Fact]
         public async void testGetEnrollees()
         {
-             // make sure there are no enrollees
+            // make sure there are no enrollees
             Assert.False(_dbContext.Enrollees.Any());
             await _dbContext.SaveChangesAsync();
 
