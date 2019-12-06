@@ -36,6 +36,7 @@ import { ClipboardIconComponent } from './components/clipboard-icon/clipboard-ic
 import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
 import { AlertComponent } from '@shared/components/alert/alert.component';
 import { EnrolleeReviewComponent } from '@shared/components/enrollee-review/enrollee-review.component';
+import { ProgressIndicatorComponent } from '@shared/components/progress-indicator/progress-indicator.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,9 @@ import { EnrolleeReviewComponent } from '@shared/components/enrollee-review/enro
     FormIconGroupComponent,
     AlertComponent,
     ClipboardIconComponent,
-    EnrolleeReviewComponent
+    EnrolleeReviewComponent,
+    CertificatePipe,
+    ProgressIndicatorComponent
   ],
   imports: [
     CommonModule,
@@ -105,7 +108,9 @@ import { EnrolleeReviewComponent } from '@shared/components/enrollee-review/enro
     FormIconGroupComponent,
     AlertComponent,
     ClipboardIconComponent,
-    EnrolleeReviewComponent
+    EnrolleeReviewComponent,
+    CertificatePipe,
+    ProgressIndicatorComponent
   ],
   entryComponents: [
     ConfirmDialogComponent,
