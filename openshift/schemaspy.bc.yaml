@@ -1,10 +1,10 @@
 kind: Template
 apiVersion: v1
 metadata:
+  name: schemaspy-bc
   annotations:
     description: SchemaSpy build template.
     tags: schema-spy
-  name: "schemaspy-bc"
 parameters:
   - name: NAME
     displayName: Name

@@ -1,8 +1,8 @@
 ---
-kind: "Template"
-apiVersion: "v1"
+kind: Template
+apiVersion: v1
 metadata:
-  name: "schemaspy-dc"
+  name: schemaspy-dc
   annotations:
     description: "SchemaSpy deployment template."
     tags: "schema-spy"
@@ -11,7 +11,7 @@ parameters:
     displayName: "Name"
     description: "The name assigned to all objects defined in this template."
     required: true
-    value: "${APP_NAME}"
+    value: "schemaspy"
   - name: "IMAGE_NAMESPACE"
     displayName: "Image Namespace"
     required: true
