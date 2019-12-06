@@ -1,4 +1,3 @@
----
 kind: Template
 apiVersion: v1
 metadata:
@@ -10,13 +9,12 @@ parameters:
   - name: "NAME"
     displayName: "Name"
     description: "The name assigned to all objects defined in this template."
-    required: true
     value: "schemaspy"
-  - name: "IMAGE_NAMESPACE"
-    displayName: "Image Namespace"
     required: true
-    description: "The namespace of the OpenShift project containing the imagestream for the application."
-    value: "devex-von-tools"
+  - name: OC_NAMESPACE
+    required: true
+  - name: OC_APP
+    required: true
   - name: "CPU_LIMIT"
     displayName: "CPU Limit"
     required: true
@@ -105,8 +103,8 @@ objects:
         - "${APP_NAME}"
         from:
           kind: "ImageStreamTag"
-          namespace: "${IMAGE_NAMESPACE}"
-          name: "${APP_NAME}:${TAG_NAME}"
+          namespace: "${OC_NAMESPACE}"
+          name: "${NAME}${SUFFIX}:latest"
     replicas: "1"
     selector:
       name: "${APP_NAME}"
