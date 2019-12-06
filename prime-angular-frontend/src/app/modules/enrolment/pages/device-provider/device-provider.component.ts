@@ -24,6 +24,7 @@ export class DeviceProviderComponent implements OnInit {
   public decisions: { code: boolean, name: string }[] = [
     { code: false, name: 'No' }, { code: true, name: 'Yes' }
   ];
+  public profileCompleted: boolean;
   public EnrolmentRoutes = EnrolmentRoutes;
 
   constructor(
@@ -44,6 +45,10 @@ export class DeviceProviderComponent implements OnInit {
 
   public get isInsulinPumpProvider(): FormControl {
     return this.form.get('isInsulinPumpProvider') as FormControl;
+  }
+
+  public onRoute(routePath: EnrolmentRoutes) {
+    this.router.navigate([routePath], { relativeTo: this.route.parent });
   }
 
   public onSubmit() {
@@ -83,7 +88,11 @@ export class DeviceProviderComponent implements OnInit {
     this.createFormInstance();
     // Initialize form changes before patching
     this.initForm();
-    this.enrolmentStateService.enrolment = this.enrolmentService.enrolment;
+
+    const enrolment = this.enrolmentService.enrolment;
+    this.profileCompleted = enrolment.profileCompleted;
+
+    this.enrolmentStateService.enrolment = enrolment;
   }
 
   private createFormInstance() {

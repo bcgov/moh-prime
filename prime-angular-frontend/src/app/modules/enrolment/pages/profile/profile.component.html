@@ -232,7 +232,11 @@
       </div>
     </div>
 
-    <app-page-footer [hideBack]="true"></app-page-footer>
+    <app-page-footer [profileCompleted]="profileCompleted"
+                     [hasSecondaryAction]="false"
+                     (save)="onSubmit()"
+                     (continue)="onSubmit()"
+                     (back)="onRoute(EnrolmentRoutes.PROFILE)"></app-page-footer>
 
   </form>
 

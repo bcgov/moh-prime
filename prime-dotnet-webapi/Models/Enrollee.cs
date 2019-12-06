@@ -81,16 +81,24 @@ namespace Prime.Models
         public ICollection<EnrolmentStatus> EnrolmentStatuses { get; set; }
 
         [NotMapped]
-        public EnrolmentStatus CurrentStatus { get { return this.EnrolmentStatuses?.SingleOrDefault(es => es.IsCurrent); } }
+        public EnrolmentStatus CurrentStatus
+        {
+            get => this.EnrolmentStatuses?.SingleOrDefault(es => es.StatusDate == this.EnrolmentStatuses.Max(x => x.StatusDate));
+        }
+
+        [NotMapped]
+        public EnrolmentStatus PharmaNetStatus { get => this.EnrolmentStatuses?.SingleOrDefault(es => es.PharmaNetStatus); }
+
+        public bool? ProfileCompleted { get; set; } = false;
 
         [NotMapped]
         public ICollection<Status> AvailableStatuses { get; set; }
 
         [NotMapped]
-        public DateTime? AppliedDate { get { return this.EnrolmentStatuses?.SingleOrDefault(es => es.StatusCode == Status.SUBMITTED_CODE)?.StatusDate; } }
+        public DateTime? AppliedDate { get => this.EnrolmentStatuses?.SingleOrDefault(es => es.StatusCode == Status.SUBMITTED_CODE)?.StatusDate; }
 
         [NotMapped]
-        public DateTime? ApprovedDate { get { return this.EnrolmentStatuses?.SingleOrDefault(es => es.StatusCode == Status.APPROVED_CODE)?.StatusDate; } }
+        public DateTime? ApprovedDate { get => this.EnrolmentStatuses?.SingleOrDefault(es => es.StatusCode == Status.APPROVED_CODE)?.StatusDate; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

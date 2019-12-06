@@ -6,12 +6,15 @@ namespace Prime.Models
     [Table("EnrolmentStatusReasons")]
     public class EnrolmentStatusReason : BaseAuditable
     {
-        public int EnrolmentId { get; set; }
-
-        public short StatusCode { get; set; }
+        public int EnrolmentStatusId { get; set; }
 
         [JsonIgnore]
         public EnrolmentStatus EnrolmentStatus { get; set; }
+
+        // TODO Remove uneccesary statusCode
+        public short StatusCode { get; set; }
+
+
 
         public short StatusReasonCode { get; set; }
 

@@ -64,7 +64,7 @@ namespace PrimeTests.Utils
               .RuleFor(es => es.StatusCode, f => Status.IN_PROGRESS_CODE)
               .RuleFor(es => es.Status, f => new Status { Code = Status.IN_PROGRESS_CODE, Name = "In Progress" })
               .RuleFor(es => es.StatusDate, f => DateTime.Now)
-              .RuleFor(es => es.IsCurrent, f => true)
+              .RuleFor(es => es.PharmaNetStatus, f => false)
               ;
 
         public static Faker<Enrollee> EnrolleeFaker = new Faker<Enrollee>()

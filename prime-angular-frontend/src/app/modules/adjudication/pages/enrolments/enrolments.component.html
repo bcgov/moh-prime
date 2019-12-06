@@ -117,6 +117,12 @@
         <span>Decline Enrolment</span>
       </button>
       <button mat-menu-item
+              *ngIf="canAllowEditing(enrolment.currentStatus.status.code)"
+              (click)="markAsInProgress(enrolment.id)">
+        <mat-icon>undo</mat-icon>
+        <span>Enable Editing</span>
+      </button>
+      <button mat-menu-item
               (click)="deleteEnrolment(enrolment.id)">
         <mat-icon>delete</mat-icon>
         <span>Delete Enrolment</span>
