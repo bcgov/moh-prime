@@ -2,7 +2,7 @@
 kind: "Template"
 apiVersion: "v1"
 metadata:
-  name: "${APP_NAME}-dc"
+  name: "schemaspy-dc"
   annotations:
     description: "SchemaSpy deployment template."
     tags: "schema-spy"

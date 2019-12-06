@@ -4,7 +4,7 @@ metadata:
   annotations:
     description: SchemaSpy build template.
     tags: schema-spy
-  name: "${APP_NAME}-bc"
+  name: "schemaspy-bc"
 parameters:
   - name: NAME
     displayName: Name
