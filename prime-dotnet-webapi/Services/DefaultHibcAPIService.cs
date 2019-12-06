@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Http;
 using System.Security.Cryptography.X509Certificates;
+using Newtonsoft.Json;
 
 namespace Prime.Services
 {
@@ -22,18 +23,10 @@ namespace Prime.Services
 
         private async Task<string> CallPharmanetCollegeLicenceService(string licenceNumber, string collegeReferenceId)
         {
-            Console.WriteLine(">>>>>------------in method----------------");
+            Console.WriteLine(">>>>>>>>>-------------------in method----------------");
             using (var client = new HttpClient(CreateClientHandler()))
             {
-                // var requestParams = CreateCollegeLicenceRequestParams(licenceNumber, collegeReferenceId);
-                var requestParams = new
-                {
-                    applicationUUID = Guid.NewGuid().ToString(),
-                    programArea = "PRIME",
-                    licenceNumber = licenceNumber,
-                    collegeReferenceId = collegeReferenceId,
-                };
-                var response = await client.PostAsJsonAsync(PrimeConstants.HIBC_API_URL, requestParams);
+                var response = await client.PostAsync(PrimeConstants.HIBC_API_URL, CreateCollegeLicenceRequestContent(licenceNumber, collegeReferenceId));
                 System.Console.WriteLine($"---status code[{(int)response.StatusCode}]");
                 var srt = await response.Content.ReadAsStringAsync();
                 System.Console.WriteLine($"---content:[{srt}]");
@@ -46,7 +39,6 @@ namespace Prime.Services
         {
             if (PrimeConstants.ENVIRONMENT_NAME == "local")
             {
-                System.Console.WriteLine("-------local handler");
                 return new HttpClientHandler();
             }
 
@@ -58,15 +50,27 @@ namespace Prime.Services
             };
         }
 
-        private object CreateCollegeLicenceRequestParams(string licenceNumber, string collegeReferenceId)
+        private StringContent CreateCollegeLicenceRequestContent(string licenceNumber, string collegeReferenceId)
         {
-            return new
+            var parameters = new CollegeLicenceRequestParams(licenceNumber, collegeReferenceId);
+
+            return new StringContent(JsonConvert.SerializeObject(parameters));
+        }
+
+        private class CollegeLicenceRequestParams
+        {
+            Guid applicationUUID { get; set; }
+            string programArea { get; set; }
+            string licenceNumber { get; set; }
+            string collegeReferenceId { get; set; }
+
+            public CollegeLicenceRequestParams(string licenceNumber, string collegeReferenceId)
             {
-                applicationUUID = Guid.NewGuid().ToString(),
-                programArea = "PRIME",
-                licenceNumber = licenceNumber,
-                collegeReferenceId = collegeReferenceId,
-            };
+                applicationUUID = Guid.NewGuid();
+                programArea = "PRIME";
+                this.licenceNumber = licenceNumber;
+                this.collegeReferenceId = collegeReferenceId;
+            }
         }
 
         private class CollegeLicenceResponseParams
