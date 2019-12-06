@@ -1,18 +1,21 @@
 <app-page-subheader>
   <ng-container appPageSubheaderTitle>Enrollee</ng-container>
+  <mat-icon *ngIf="isEnrolling"
+            matTooltip="Edit Enrollee"
+            (click)="onRoute(EnrolmentRoutes.PROFILE)">edit</mat-icon>
 </app-page-subheader>
 
 <dl class="row mb-2">
   <dt class="col-6">Name</dt>
   <dd class="col-6 text-right">{{ enrolment | enrolment: 'fullName' | default }}</dd>
   <dt class="col-6">Preferred First Name</dt>
-  <dd class="col-6 text-right">{{ enrollee.preferredFirstName | default }}</dd>
+  <dd class="col-6 text-right">{{ enrollee?.preferredFirstName | default }}</dd>
   <dt class="col-6">Preferred Middle Name</dt>
-  <dd class="col-6 text-right">{{ enrollee.preferredMiddleName | default }}</dd>
+  <dd class="col-6 text-right">{{ enrollee?.preferredMiddleName | default }}</dd>
   <dt class="col-6">Preferred Last Name</dt>
-  <dd class="col-6 text-right">{{ enrollee.preferredLastName | default }}</dd>
+  <dd class="col-6 text-right">{{ enrollee?.preferredLastName | default }}</dd>
   <dt class="col-6">Date of Birth</dt>
-  <dd class="col-6 text-right">{{ enrollee.dateOfBirth | formatDate | default }}</dd>
+  <dd class="col-6 text-right">{{ enrollee?.dateOfBirth | formatDate | default }}</dd>
 </dl>
 
 <div class="font-italic mb-3">Address</div>
@@ -65,22 +68,25 @@
 
 <dl class="row mb-3">
   <dt class="col-6">Voice Phone</dt>
-  <dd class="col-6 text-right">{{ enrollee.voicePhone | phone | default }}</dd>
+  <dd class="col-6 text-right">{{ enrollee?.voicePhone | phone | default }}</dd>
   <dt class="col-6">Extension</dt>
-  <dd class="col-6 text-right">{{ enrollee.voiceExtension | default }}</dd>
+  <dd class="col-6 text-right">{{ enrollee?.voiceExtension | default }}</dd>
 </dl>
 
 <div class="font-italic mb-3">Notification Information</div>
 
 <dl class="row mb-3">
   <dt class="col-6">Email Notification</dt>
-  <dd class="col-6 text-right">{{ enrollee.contactEmail | default }}</dd>
+  <dd class="col-6 text-right">{{ enrollee?.contactEmail | default }}</dd>
   <dt class="col-6">Text Notification (SMS)</dt>
-  <dd class="col-6 text-right">{{ enrollee.contactPhone | phone | default }}</dd>
+  <dd class="col-6 text-right">{{ enrollee?.contactPhone | phone | default }}</dd>
 </dl>
 
 <app-page-subheader>
   <ng-container appPageSubheaderTitle>College Certifications</ng-container>
+  <mat-icon *ngIf="isEnrolling"
+            matTooltip="Edit Enrollee"
+            (click)="onRoute(EnrolmentRoutes.REGULATORY)">edit</mat-icon>
 </app-page-subheader>
 
 <ng-container *ngIf="hasCertifications; else hasNone">
@@ -105,14 +111,17 @@
 
 <app-page-subheader>
   <ng-container appPageSubheaderTitle>Device Provider</ng-container>
+  <mat-icon *ngIf="isEnrolling"
+            matTooltip="Edit Enrollee"
+            (click)="onRoute(EnrolmentRoutes.DEVICE_PROVIDER)">edit</mat-icon>
 </app-page-subheader>
 
 <dl class="row mb-3">
   <dt class="col-6">Device Provider Number</dt>
-  <dd class="col-6 text-right">{{ enrolment.deviceProviderNumber | default }}</dd>
+  <dd class="col-6 text-right">{{ enrolment?.deviceProviderNumber | default }}</dd>
   <dt class="col-6">Are you an insulin pump provider?</dt>
   <dd class="col-6 text-right">
-    <ng-container *ngIf="enrolment.deviceProviderNumber; else notDeviceProvider">
+    <ng-container *ngIf="enrolment?.deviceProviderNumber; else notDeviceProvider">
       {{ showYesNo(enrolment.isInsulinPumpProvider) }}
     </ng-container>
 
@@ -122,6 +131,9 @@
 
 <app-page-subheader>
   <ng-container appPageSubheaderTitle>Job Information</ng-container>
+  <mat-icon *ngIf="isEnrolling"
+            matTooltip="Edit Enrollee"
+            (click)="onRoute(EnrolmentRoutes.JOB)">edit</mat-icon>
 </app-page-subheader>
 
 <ng-container *ngIf="hasJobs; else hasNone">
@@ -141,7 +153,63 @@
 </ng-container>
 
 <app-page-subheader>
+  <ng-container appPageSubheaderTitle>Self Declaration</ng-container>
+  <mat-icon *ngIf="isEnrolling"
+            matTooltip="Edit Enrollee"
+            (click)="onRoute(EnrolmentRoutes.SELF_DECLARATION)">edit</mat-icon>
+</app-page-subheader>
+
+<dl class="row mb-4">
+  <dt class="col-10">
+    Have you ever been the subject of an order or a conviction for an information contravention?
+  </dt>
+  <dd class="col-2 text-right">{{ showYesNo(enrolment?.hasConviction) }}</dd>
+  <ng-container *ngIf="enrolment?.hasConviction">
+    <dt class="col-12 my-2">Details</dt>
+    <dd class="col-12">{{ enrolment?.hasConvictionDetails }}</dd>
+  </ng-container>
+</dl>
+
+<dl class="row mb-4">
+  <dt class="col-10">
+    Have you ever been the subject of an order or a conviction for an information contravention?
+  </dt>
+  <dd class="col-2 text-right">{{ showYesNo(enrolment?.hasRegistrationSuspended) }}</dd>
+  <ng-container *ngIf="enrolment?.hasRegistrationSuspended">
+    <dt class="col-12 my-2">Details</dt>
+    <dd class="col-12">{{ enrolment?.hasRegistrationSuspendedDetails }}</dd>
+  </ng-container>
+</dl>
+
+<dl class="row mb-4">
+  <dt class="col-10">
+    Have you ever had Terms and Conditions imposed on your licence as a result of disciplinary actions taken
+    by a governing body?
+  </dt>
+  <dd class="col-2 text-right">{{ showYesNo(enrolment?.hasDisciplinaryAction) }}</dd>
+  <ng-container *ngIf="enrolment?.hasDisciplinaryAction">
+    <dt class="col-12 my-2">Details</dt>
+    <dd class="col-12">{{ enrolment?.hasDisciplinaryActionDetails }}</dd>
+  </ng-container>
+</dl>
+
+<dl class="row mb-4">
+  <dt class="col-10">
+    Have you ever had Terms and Conditions imposed on your licence as a result of disciplinary actions taken
+    by a governing body?
+  </dt>
+  <dd class="col-2 text-right">{{ showYesNo(enrolment?.hasPharmaNetSuspended) }}</dd>
+  <ng-container *ngIf="enrolment?.hasPharmaNetSuspended">
+    <dt class="col-12 my-2">Details</dt>
+    <dd class="col-12">{{ enrolment?.hasPharmaNetSuspendedDetails }}</dd>
+  </ng-container>
+</dl>
+
+<app-page-subheader>
   <ng-container appPageSubheaderTitle>Organization Information</ng-container>
+  <mat-icon *ngIf="isEnrolling"
+            matTooltip="Edit Enrollee"
+            (click)="onRoute(EnrolmentRoutes.ORGANIZATION)">edit</mat-icon>
 </app-page-subheader>
 
 <ng-container *ngIf="hasOrganizations; else hasNone">
@@ -159,56 +227,6 @@
   </dl>
 
 </ng-container>
-
-<app-page-subheader>
-  <ng-container appPageSubheaderTitle>Self Declaration</ng-container>
-</app-page-subheader>
-
-<dl class="row mb-4">
-  <dt class="col-10">
-    Have you ever been the subject of an order or a conviction for an information contravention?
-  </dt>
-  <dd class="col-2 text-right">{{ showYesNo(enrolment.hasConviction) }}</dd>
-  <ng-container *ngIf="enrolment.hasConviction">
-    <dt class="col-12 my-2">Details</dt>
-    <dd class="col-12">{{ enrolment.hasConvictionDetails }}</dd>
-  </ng-container>
-</dl>
-
-<dl class="row mb-4">
-  <dt class="col-10">
-    Have you ever been the subject of an order or a conviction for an information contravention?
-  </dt>
-  <dd class="col-2 text-right">{{ showYesNo(enrolment.hasRegistrationSuspended) }}</dd>
-  <ng-container *ngIf="enrolment.hasRegistrationSuspended">
-    <dt class="col-12 my-2">Details</dt>
-    <dd class="col-12">{{ enrolment.hasRegistrationSuspendedDetails }}</dd>
-  </ng-container>
-</dl>
-
-<dl class="row mb-4">
-  <dt class="col-10">
-    Have you ever had Terms and Conditions imposed on your licence as a result of disciplinary actions taken
-    by a governing body?
-  </dt>
-  <dd class="col-2 text-right">{{ showYesNo(enrolment.hasDisciplinaryAction) }}</dd>
-  <ng-container *ngIf="enrolment.hasDisciplinaryAction">
-    <dt class="col-12 my-2">Details</dt>
-    <dd class="col-12">{{ enrolment.hasDisciplinaryActionDetails }}</dd>
-  </ng-container>
-</dl>
-
-<dl class="row mb-4">
-  <dt class="col-10">
-    Have you ever had Terms and Conditions imposed on your licence as a result of disciplinary actions taken
-    by a governing body?
-  </dt>
-  <dd class="col-2 text-right">{{ showYesNo(enrolment.hasPharmaNetSuspended) }}</dd>
-  <ng-container *ngIf="enrolment.hasPharmaNetSuspended">
-    <dt class="col-12 my-2">Details</dt>
-    <dd class="col-12">{{ enrolment.hasPharmaNetSuspendedDetails }}</dd>
-  </ng-container>
-</dl>
 
 <ng-template #hasNone>
 

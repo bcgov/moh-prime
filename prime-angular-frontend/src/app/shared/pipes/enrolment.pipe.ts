@@ -7,16 +7,19 @@ import { Enrolment } from '@shared/models/enrolment.model';
 export class EnrolmentPipe implements PipeTransform {
 
   transform(enrolment: Enrolment, display: string): string {
-    const enrollee = enrolment.enrollee;
+    if (enrolment) {
+      const enrollee = enrolment.enrollee;
 
-    if (enrollee) {
-      switch (display) {
-        case 'preferredName':
-          return this.getPreferredName(enrollee);
-        case 'fullName':
-          return this.getFullName(enrollee);
+      if (enrollee) {
+        switch (display) {
+          case 'preferredName':
+            return this.getPreferredName(enrollee);
+          case 'fullName':
+            return this.getFullName(enrollee);
+        }
       }
     }
+
     return null;
   }
 

@@ -8,18 +8,20 @@ import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
 import { ReviewComponent } from './review.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { ConfigCodePipe } from '@config/config-code.pipe';
 import { ConfigService } from '@config/config.service';
+import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
-import { ConfigCodePipe } from '@config/config-code.pipe';
-import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
-import { PhonePipe } from '@shared/pipes/phone.pipe';
-import { PostalPipe } from '@shared/pipes/postal.pipe';
-import { EnrolmentPipe } from '@shared/pipes/enrolment.pipe';
-import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
+import { EnrolleeReviewComponent } from '@shared/components/enrollee-review/enrollee-review.component';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { DefaultPipe } from '@shared/pipes/default.pipe';
+import { EnrolmentPipe } from '@shared/pipes/enrolment.pipe';
+import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
+import { PostalPipe } from '@shared/pipes/postal.pipe';
+import { PhonePipe } from '@shared/pipes/phone.pipe';
 
 describe('ReviewComponent', () => {
   let component: ReviewComponent;
@@ -40,11 +42,13 @@ describe('ReviewComponent', () => {
           ReviewComponent,
           PageHeaderComponent,
           PageSubheaderComponent,
+          EnrolleeReviewComponent,
           ConfigCodePipe,
           EnrolmentPipe,
           FormatDatePipe,
           PhonePipe,
-          PostalPipe
+          PostalPipe,
+          DefaultPipe
         ],
         providers: [
           {

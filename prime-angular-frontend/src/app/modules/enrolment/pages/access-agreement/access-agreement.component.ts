@@ -87,7 +87,7 @@ export class AccessAgreementComponent implements OnInit {
     if (this.currentPage > 0) {
       this.agree.reset();
       this.disabled = true;
-      this.utilsService.scrollTop();
+      this.utilsService.scrollTo();
       this.currentPage--;
       this.hasReadAgreement = false;
     }
@@ -95,7 +95,7 @@ export class AccessAgreementComponent implements OnInit {
 
   public onNextPage() {
     if (!this.hasReadAgreement) {
-      this.utilsService.scrollTop();
+      this.utilsService.scrollTo();
       this.currentPage++;
     }
   }

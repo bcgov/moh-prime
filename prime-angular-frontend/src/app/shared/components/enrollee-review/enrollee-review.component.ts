@@ -1,6 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { Enrolment } from '@shared/models/enrolment.model';
+import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 
 @Component({
   selector: 'app-enrollee-review',
@@ -10,9 +11,13 @@ import { Enrolment } from '@shared/models/enrolment.model';
 export class EnrolleeReviewComponent implements OnInit {
   @Input() public isEnrolling: boolean;
   @Input() public enrolment: Enrolment;
+  @Output() public route: EventEmitter<string>;
+
+  public EnrolmentRoutes = EnrolmentRoutes;
 
   constructor() {
     this.isEnrolling = true;
+    this.route = new EventEmitter<string>();
   }
 
   public get enrollee() {
@@ -52,8 +57,13 @@ export class EnrolleeReviewComponent implements OnInit {
   }
 
   public showYesNo(declared: boolean) {
-    return (declared === null) ? 'N/A'
-      : (declared) ? 'Yes' : 'No';
+    return (declared === null)
+      ? 'N/A' : (declared)
+        ? 'Yes' : 'No';
+  }
+
+  public onRoute(routePath: string) {
+    this.route.emit(routePath);
   }
 
   public ngOnInit() { }

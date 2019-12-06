@@ -14,6 +14,8 @@ import { PhonePipe } from '@shared/pipes/phone.pipe';
 import { EnrolmentPipe } from '@shared/pipes/enrolment.pipe';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { PostalPipe } from '@shared/pipes/postal.pipe';
+import { EnrolleeReviewComponent } from '@shared/components/enrollee-review/enrollee-review.component';
+import { DefaultPipe } from '@shared/pipes/default.pipe';
 
 describe('EnrolmentComponent', () => {
   let component: EnrolmentComponent;
@@ -33,11 +35,13 @@ describe('EnrolmentComponent', () => {
           EnrolmentComponent,
           PageHeaderComponent,
           PageSubheaderComponent,
+          EnrolleeReviewComponent,
           ConfigCodePipe,
           EnrolmentPipe,
           FormatDatePipe,
           PhonePipe,
-          PostalPipe
+          PostalPipe,
+          DefaultPipe
         ],
         providers: [
           {
