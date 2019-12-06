@@ -88,7 +88,7 @@ export class DashboardComponent implements OnInit {
       .subscribe((device: string) => this.setSideNavProps(device));
 
     const user = await this.authService.getUser();
-    this.username = `${user.firstName} ${user.firstName}`;
+    this.username = `${user.firstName} ${user.lastName}`;
   }
 
   private getSideNavSections() {
