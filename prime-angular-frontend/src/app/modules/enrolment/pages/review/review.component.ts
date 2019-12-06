@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MatDialog, MatCheckboxChange } from '@angular/material';
+import { MatDialog } from '@angular/material';
 
-import { map, exhaustMap } from 'rxjs/operators';
+import { exhaustMap } from 'rxjs/operators';
 import { EMPTY, Subscription } from 'rxjs';
 
 import { ToastService } from '@core/services/toast.service';
