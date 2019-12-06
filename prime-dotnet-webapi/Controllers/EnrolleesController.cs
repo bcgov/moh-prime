@@ -19,10 +19,12 @@ namespace Prime.Controllers
     public class EnrolleesController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
+        private readonly IHibcApiService _hibcApiService;
 
-        public EnrolleesController(IEnrolleeService enrolleeService)
+        public EnrolleesController(IEnrolleeService enrolleeService, IHibcApiService hibcApiService)
         {
             _enrolleeService = enrolleeService;
+            _hibcApiService = hibcApiService;
         }
 
         private bool BelongsToEnrollee(Enrollee enrollee)
@@ -203,21 +205,9 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiOkResponse<Enrollee>), StatusCodes.Status200OK)]
         public async Task<ActionResult<Enrollee>> DeleteEnrollee(int enrolleeId)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-            if (enrollee == null)
-            {
-                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
-            }
+            string resp = await _hibcApiService.ValidCollegeLicense("2036P", "P1");
 
-            // if the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
-            if (!BelongsToEnrollee(enrollee))
-            {
-                return Forbid();
-            }
-
-            await _enrolleeService.DeleteEnrolleeAsync(enrolleeId);
-
-            return Ok(new ApiOkResponse<Enrollee>(enrollee));
+            return Ok();
         }
 
         // GET: api/Enrollees/5/availableStatuses
