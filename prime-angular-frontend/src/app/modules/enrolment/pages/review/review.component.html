@@ -1,7 +1,7 @@
 <app-busy-overlay [busy]="busy">
 
   <div class="row">
-    <div class="col-sm-8 offset-sm-2">
+    <div class="col-sm-12 col-lg-10 offset-lg-1 col-xl-8">
 
       <app-page-header>Application Enrolment</app-page-header>
 
@@ -14,12 +14,12 @@
       </app-page-subheader>
 
       <app-enrollee-review *ngIf="enrolment"
-                           [isEnrolling]="false"
-                           [enrolment]="enrolment"></app-enrollee-review>
+                           [enrolment]="enrolment"
+                           (route)="onRoute($event)"></app-enrollee-review>
 
       <div class="footer">
-        <mat-checkbox class="mr-4"
-                      (change)="onConfirmAccuracy($event)">
+        <mat-checkbox #accept
+                      class="mr-4">
           I confirm that all information provided is accurate.
         </mat-checkbox>
       </div>
@@ -36,7 +36,7 @@
 
           <button mat-raised-button
                   color="primary"
-                  [disabled]="disabledAgreement"
+                  [disabled]="!accept.checked"
                   (click)="onSubmit()">Submit Enrolment</button>
 
         </div>
