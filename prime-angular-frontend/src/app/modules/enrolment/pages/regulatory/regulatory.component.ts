@@ -26,6 +26,7 @@ export class RegulatoryComponent implements OnInit, OnDestroy {
   public form: FormGroup;
   public colleges: Config<number>[];
   public licenses: Config<number>[];
+  public profileCompleted: boolean;
   public EnrolmentRoutes = EnrolmentRoutes;
 
   constructor(
@@ -94,6 +95,10 @@ export class RegulatoryComponent implements OnInit, OnDestroy {
     this.certifications.removeAt(index);
   }
 
+  public onRoute(routePath: EnrolmentRoutes) {
+    this.router.navigate([routePath], { relativeTo: this.route.parent });
+  }
+
   public canDeactivate(): Observable<boolean> | boolean {
     const data = 'unsaved';
     return (this.form.dirty)
@@ -118,7 +123,11 @@ export class RegulatoryComponent implements OnInit, OnDestroy {
   }
 
   private initForm() {
-    this.enrolmentStateService.enrolment = this.enrolmentService.enrolment;
+
+    const enrolment = this.enrolmentService.enrolment;
+    this.profileCompleted = enrolment.profileCompleted;
+
+    this.enrolmentStateService.enrolment = enrolment;
 
     // Always have at least one certification ready for
     // the enrollee to fill out

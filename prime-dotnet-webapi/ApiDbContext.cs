@@ -416,9 +416,6 @@ namespace Prime
                 .HasOne(cp => cp.Practice)
                 .WithMany(p => p.CollegePractices)
                 .HasForeignKey(cp => cp.PracticeCode);
-
-            modelBuilder.Entity<EnrolmentStatus>()
-                .HasKey(es => new { es.EnrolleeId, es.StatusCode });
             modelBuilder.Entity<EnrolmentStatus>()
                 .HasOne(es => es.Enrollee)
                 .WithMany(e => e.EnrolmentStatuses)
@@ -429,11 +426,11 @@ namespace Prime
                 .HasForeignKey(es => es.StatusCode);
 
             modelBuilder.Entity<EnrolmentStatusReason>()
-                .HasKey(esr => new { esr.EnrolmentId, esr.StatusCode, esr.StatusReasonCode });
+                .HasKey(esr => new { esr.EnrolmentStatusId, esr.StatusCode, esr.StatusReasonCode });
             modelBuilder.Entity<EnrolmentStatusReason>()
                 .HasOne(esr => esr.EnrolmentStatus)
                 .WithMany(es => es.EnrolmentStatusReasons)
-                .HasForeignKey(esr => new { esr.EnrolmentId, esr.StatusCode });
+                .HasForeignKey(esr => esr.EnrolmentStatusId);
             modelBuilder.Entity<EnrolmentStatusReason>()
                 .HasOne(esr => esr.StatusReason)
                 .WithMany(sr => sr.EnrolmentStatusReasons)

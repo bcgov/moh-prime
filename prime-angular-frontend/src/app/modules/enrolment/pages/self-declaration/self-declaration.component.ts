@@ -25,6 +25,7 @@ export class SelfDeclarationComponent implements OnInit {
   public decisions: { code: boolean, name: string }[] = [
     { code: false, name: 'No' }, { code: true, name: 'Yes' }
   ];
+  public profileCompleted: boolean;
   public EnrolmentRoutes = EnrolmentRoutes;
   public error = false;
 
@@ -73,7 +74,6 @@ export class SelfDeclarationComponent implements OnInit {
   }
 
   public onSubmit() {
-
     this.error = (this.allRadioButtonsSelected()) ? false : true;
 
     if (this.form.valid) {
@@ -94,13 +94,12 @@ export class SelfDeclarationComponent implements OnInit {
     }
   }
 
-  public handleBack() {
-    const currentEnrolment = this.enrolmentStateService.enrolment;
-    if (currentEnrolment.certifications.length === 0) {
-      this.router.navigate([EnrolmentRoutes.JOB], { relativeTo: this.route.parent });
-    } else {
-      this.router.navigate([EnrolmentRoutes.REGULATORY], { relativeTo: this.route.parent });
-    }
+  public onRoute() {
+    const routePath = (this.enrolmentStateService.enrolment.certifications.length)
+      ? EnrolmentRoutes.REGULATORY
+      : EnrolmentRoutes.JOB;
+
+    this.router.navigate([routePath], { relativeTo: this.route.parent });
   }
 
   public isRequired(path: string) {
@@ -116,7 +115,12 @@ export class SelfDeclarationComponent implements OnInit {
 
   public ngOnInit() {
     this.createFormInstance();
-    this.enrolmentStateService.enrolment = this.enrolmentService.enrolment;
+
+    const enrolment = this.enrolmentService.enrolment;
+    this.profileCompleted = enrolment.profileCompleted;
+
+    this.enrolmentStateService.enrolment = enrolment;
+
     this.initForm();
   }
 

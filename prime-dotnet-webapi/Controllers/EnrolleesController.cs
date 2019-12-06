@@ -142,13 +142,14 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="enrollee"></param>
+        /// <param name="beenThroughTheWizard"></param>
         [HttpPut("{enrolleeId}", Name = nameof(UpdateEnrollee))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateEnrollee(int enrolleeId, Enrollee enrollee)
+        public async Task<IActionResult> UpdateEnrollee(int enrolleeId, Enrollee enrollee, [FromQuery]bool beenThroughTheWizard)
         {
             if (enrollee == null)
             {
@@ -186,7 +187,17 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            await _enrolleeService.UpdateEnrolleeAsync(enrollee);
+            //Check if BeenThroughTheWizard has been set to true, and update ProfileCompleted in database
+            if (beenThroughTheWizard == true)
+            {
+                await _enrolleeService.UpdateEnrolleeAsync(enrollee, true);
+            }
+            else
+            {
+                await _enrolleeService.UpdateEnrolleeAsync(enrollee);
+            }
+
+
 
             return NoContent();
         }

@@ -32,6 +32,8 @@ export class ProfileComponent implements OnInit {
   public hasPreferredName: boolean;
   public hasMailingAddress: boolean;
   public subheadings: { [key: string]: { subheader: string, help: string } };
+  public profileCompleted: boolean;
+  public EnrolmentRoutes = EnrolmentRoutes;
 
   private isNewEnrolment: boolean;
 
@@ -143,6 +145,10 @@ export class ProfileComponent implements OnInit {
     this.toggleValidators(this.mailingAddress, ['street2']);
   }
 
+  public onRoute(routePath: EnrolmentRoutes) {
+    this.router.navigate([routePath], { relativeTo: this.route.parent });
+  }
+
   public isRequired(path: string) {
     this.formUtilsService.isRequired(this.form, path);
   }
@@ -158,11 +164,14 @@ export class ProfileComponent implements OnInit {
     this.createFormInstance();
 
     const enrolment = this.enrolmentService.enrolment;
+    this.profileCompleted = (enrolment) ? enrolment.profileCompleted : true;
+
     if (enrolment) {
       this.isNewEnrolment = false;
       this.enrolmentStateService.enrolment = enrolment;
     }
 
+    // TODO is this still needed?
     this.form.markAsPristine();
 
     this.initForm();

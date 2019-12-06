@@ -9,6 +9,10 @@ namespace Prime.Models
     [Table("EnrolmentStatuses")]
     public class EnrolmentStatus : BaseAuditable
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+
         public int EnrolleeId { get; set; }
 
         [JsonIgnore]
@@ -22,7 +26,7 @@ namespace Prime.Models
         public DateTime StatusDate { get; set; }
 
         [Required]
-        public bool IsCurrent { get; set; }
+        public bool PharmaNetStatus { get; set; }
 
         public ICollection<EnrolmentStatusReason> EnrolmentStatusReasons { get; set; }
     }
