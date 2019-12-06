@@ -148,3 +148,7 @@ parameters:
     description: "The name associated to the database deployment resources.  In particular, this is used to wrie up the credentials associated to the database."
     required: "true"
     value: "postgresql"
+  - name: "SOURCE_REPOSITORY_REF"
+    required: "false"
+  - name: "SOURCE_REPOSITORY_URL"
+    required: "false"

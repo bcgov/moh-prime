@@ -54,3 +54,7 @@ parameters:
     description: The source context directory.
     required: false
     value: ''
+  - name: "SOURCE_REPOSITORY_REF"
+    required: "false"
+  - name: "SOURCE_REPOSITORY_URL"
+    required: "false"
