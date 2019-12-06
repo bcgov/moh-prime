@@ -22,7 +22,7 @@ export class CollectionNoticeComponent implements OnInit {
 
   public ngOnInit() {
     const enrolment = this.enrolmentService.enrolment;
-    this.profileCompleted = enrolment.profileCompleted;
+    this.profileCompleted = (enrolment) ? enrolment.profileCompleted : false;
   }
 
   public onAccept() {

@@ -70,7 +70,12 @@ export class EnrolmentGuard extends BaseGuard {
             ? EnrolmentRoutes.PROFILE
             : EnrolmentRoutes.REVIEW;
 
-          return (postEnrolmentRoutes.includes(route))
+          if (!enrolment.profileCompleted && [...postEnrolmentRoutes, EnrolmentRoutes.REVIEW].includes(route)) {
+            this.navigate(routePath, redirectionRoute);
+          }
+
+          return (
+            postEnrolmentRoutes.includes(route))
             // Prevent access to post enrolment routes
             ? this.navigate(routePath, redirectionRoute)
             // Otherwise, allow the route to resolve
