@@ -6,10 +6,21 @@ metadata:
     description: "SchemaSpy deployment template."
     tags: "schema-spy"
 parameters:
-  - name: "NAME"
-    displayName: "Name"
-    description: "The name assigned to all objects defined in this template."
-    value: "schemaspy"
+  - name: NAME
+    displayName: Name
+    description: A prefix appended to all objects
+    required: true
+  - name: SUFFIX
+    displayName: Name Suffix
+    description: A suffix appended to all objects
+    required: false
+  - name: VERSION
+    required: true
+  - name: SOURCE_CONTEXT_DIR
+    required: true
+  - name: SOURCE_REPOSITORY_URL
+    required: true
+  - name: SOURCE_REPOSITORY_REF
     required: true
   - name: OC_NAMESPACE
     required: true
@@ -29,6 +40,7 @@ parameters:
     displayName: "Application Hostname"
     description: "The exposed hostname that will route to the service, if left blank a value will be defaulted."
     value: ""
+    required: false
   - name: "DATABASE_HOST"
     displayName: "The host name (or ip address) for the database server; override to match your environment.  In the case of Oracle databases this must be a <hostname|ipaddress>:<port> pair even if using the default Oracle port; a requirement of the Oracle Thin SchemaSpy process."
     required: true
@@ -48,10 +60,6 @@ parameters:
     description: "The name associated to the database deployment resources.  In particular, this is used to wrie up the credentials associated to the database."
     required: true
     value: "postgresql"
-  - name: "SOURCE_REPOSITORY_REF"
-    required: "false"
-  - name: "SOURCE_REPOSITORY_URL"
-    required: "false"
 objects:
 - kind: "Service"
   apiVersion: "v1"

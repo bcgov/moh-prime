@@ -25,7 +25,7 @@ parameters:
     displayName: Source Context Directory
     description: The source context directory.
     required: false
-    value: ''
+    value: '.'
   - name: OC_NAMESPACE
     required: true
   - name: OC_APP
