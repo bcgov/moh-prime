@@ -194,10 +194,10 @@
                   formControlName="hasContactPhone">Text Notification (SMS)</mat-checkbox>
 
     <div class="row">
-      <div class="col-sm-12"
-           *ngIf="contactEmail.value || hasContactEmail.value">
+      <div class="col-sm-12">
 
-        <div class="row">
+        <div *ngIf="contactEmail.value || hasContactEmail.value"
+             class="row">
           <div class="col-sm-12 col-md-6 col-xl-5">
             <mat-form-field class="w-100">
               <input matInput
@@ -211,9 +211,9 @@
           </div>
         </div>
 
-        <div class="row">
-          <div class="col-sm-12 col-md-6 col-xl-5"
-               *ngIf="contactPhone.value || hasContactPhone.value">
+        <div *ngIf="contactPhone.value || hasContactPhone.value"
+             class="row">
+          <div class="col-sm-12 col-md-6 col-xl-5">
 
             <mat-form-field class="w-100">
               <input matInput
