@@ -78,9 +78,7 @@ export class DashboardComponent implements OnInit {
       // Listen for enrolment status changes to update the side navigation
       // based on user progression
       this.enrolmentService.enrolment$
-        .subscribe(() => {
-          this.sideNavSections = this.getSideNavSections();
-        });
+        .subscribe(() => this.sideNavSections = this.getSideNavSections());
     }
 
     // Initialize the sidenav with properties based on current viewport
