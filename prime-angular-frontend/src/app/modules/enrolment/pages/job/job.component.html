@@ -4,7 +4,8 @@
         [formGroup]="form"
         novalidate>
 
-    <app-progress-indicator [currentPage]="3"></app-progress-indicator>
+    <app-progress-indicator *ngIf="!profileCompleted"
+                            [currentPage]="3"></app-progress-indicator>
 
     <app-page-header>Application Enrolment</app-page-header>
 
