@@ -30,6 +30,10 @@ namespace Prime.Services
                 System.Console.WriteLine($"---status code[{(int)response.StatusCode}]");
                 var srt = await response.Content.ReadAsStringAsync();
                 System.Console.WriteLine($"---content:[{srt}]");
+
+                CollegeLicenceResponse data = JsonConvert.DeserializeObject<CollegeLicenceResponse>(srt);
+                System.Console.WriteLine($"-----data:[{data.ToString()}]");
+
                 return srt;
                 // return await response.Content.ReadAsAsync<CollegeLicenceResponseParams>();
             };
@@ -73,15 +77,15 @@ namespace Prime.Services
             }
         }
 
-        private class CollegeLicenceResponseParams
+        private class CollegeLicenceResponse
         {
-            string applicationUUID { get; set; }
+            Guid applicationUUID { get; set; }
             string firstName { get; set; }
             string middleInitial { get; set; }
             string lastName { get; set; }
-            string dateofBirth { get; set; }
+            DateTime dateofBirth { get; set; }
             string status { get; set; }
-            string effectiveDate { get; set; }
+            DateTime effectiveDate { get; set; }
         }
     }
 }
