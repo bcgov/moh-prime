@@ -2,6 +2,7 @@ using System.IO;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,7 @@ namespace PrimeTests
 {
     public class TestStartup : Startup
     {
-        public TestStartup(IHostingEnvironment env, IConfiguration configuration) 
+        public TestStartup(IHostingEnvironment env, IConfiguration configuration)
             : base(env, TestHelper.GetIConfigurationRoot(Directory.GetCurrentDirectory()))
         {}
 
@@ -22,13 +23,18 @@ namespace PrimeTests
             services.AddDbContext<ApiDbContext>(options =>
                 options.UseInMemoryDatabase(databaseName: "PrimeTests")
             );
-            
+
             object p = services.AddMvc().AddApplicationPart(Assembly.Load(new AssemblyName("Prime")));
         }
 
-        public override void UpdateDatabase(IApplicationBuilder app)
+        protected override void UpdateDatabase(IApplicationBuilder app)
         {
-            //noop, since the tests are using the InMemoryDatabase
+            // Noop, since the tests are using the InMemoryDatabase
+        }
+
+        protected override void ConfigureHealthCheck(IApplicationBuilder app)
+        {
+            // Noop, since health checks aren't needed in tests
         }
     }
 

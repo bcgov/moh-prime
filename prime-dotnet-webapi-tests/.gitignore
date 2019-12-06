@@ -5,8 +5,12 @@ project.lock.json
 *.pyc
 nupkg/
 
-# Visual Studio Code
-.vscode
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 
 # Rider
 .idea
