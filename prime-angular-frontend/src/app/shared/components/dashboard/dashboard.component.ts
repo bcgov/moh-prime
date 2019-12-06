@@ -121,7 +121,8 @@ export class DashboardComponent implements OnInit {
             name: 'Access Agreement',
             icon: statusIcons.accessAgreement,
             route: EnrolmentRoutes.ACCESS_AGREEMENT,
-            showItem: true
+            showItem: true,
+            forceActive: (statusCode === EnrolmentStatus.SUBMITTED)
           },
           {
             name: 'Status',
