@@ -12,6 +12,10 @@ export class ConfigCodePipe implements PipeTransform {
   ) { }
 
   public transform<T>(code: T, configKey: string, key: string = 'name'): string {
+    return (code) ? this.configValue<T>(code, configKey, key) : '';
+  }
+
+  private configValue<T>(code: T, configKey: string, key: string): string {
     return this.config[configKey].find((c: Config<T>) => c.code === code)[key];
   }
 }

@@ -1,6 +1,6 @@
 namespace Prime.Models
 {
-    public class EnrolmentSearchOptions
+    public class EnrolleeSearchOptions
     {
         public short? StatusCode { get; set; }
     }

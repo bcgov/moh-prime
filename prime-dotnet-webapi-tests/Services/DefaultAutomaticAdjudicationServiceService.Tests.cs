@@ -10,32 +10,32 @@ namespace PrimeTests.Services
 {
     public class DefaultAutomaticAdjudicationServiceServiceTests : BaseServiceTests<DefaultAutomaticAdjudicationService>
     {
-        private void UpdateCertifications(Enrolment enrolment, bool hasCertification = false)
+        private void UpdateCertifications(Enrollee enrollee, bool hasCertification = false)
         {
             // update certification information
             if (hasCertification)
             {
-                enrolment.Certifications = TestUtils.CertificationFaker.Generate(1);
+                enrollee.Certifications = TestUtils.CertificationFaker.Generate(1);
             }
             else
             {
-                enrolment.Certifications.Clear();
+                enrollee.Certifications.Clear();
             }
         }
 
-        private void UpdateDeviceProvider(Enrolment enrolment, bool provider = false, bool pumpProvider = false)
+        private void UpdateDeviceProvider(Enrollee enrollee, bool provider = false, bool pumpProvider = false)
         {
             // update device provider information
-            // enrolment.IsDeviceProvider = provider;
+            // enrollee.IsDeviceProvider = provider;
             if (provider)
             {
-                enrolment.DeviceProviderNumber = TestUtils.RandomDeviceProviderNumber();
-                enrolment.IsInsulinPumpProvider = pumpProvider;
+                enrollee.DeviceProviderNumber = TestUtils.RandomDeviceProviderNumber();
+                enrollee.IsInsulinPumpProvider = pumpProvider;
             }
             else
             {
-                enrolment.DeviceProviderNumber = null;
-                enrolment.IsInsulinPumpProvider = false;
+                enrollee.DeviceProviderNumber = null;
+                enrollee.IsInsulinPumpProvider = false;
             }
         }
 
@@ -53,28 +53,28 @@ namespace PrimeTests.Services
             PHARMANET_SUSPENDED = 4,
             REGISTRATION_SUSPENDED = 8
         }
-        private void UpdateSelfDeclaration(Enrolment enrolment, SelfDeclaration bitmask = SelfDeclaration.NONE)
+        private void UpdateSelfDeclaration(Enrollee enrollee, SelfDeclaration bitmask = SelfDeclaration.NONE)
         {
             // update all self-declaration questions
-            enrolment.HasConviction = (bitmask & SelfDeclaration.CONVICTION) == SelfDeclaration.CONVICTION;
-            enrolment.HasDisciplinaryAction = (bitmask & SelfDeclaration.DISCIPLINARY) == SelfDeclaration.DISCIPLINARY;
-            enrolment.HasPharmaNetSuspended = (bitmask & SelfDeclaration.PHARMANET_SUSPENDED) == SelfDeclaration.PHARMANET_SUSPENDED;
-            enrolment.HasRegistrationSuspended = (bitmask & SelfDeclaration.REGISTRATION_SUSPENDED) == SelfDeclaration.REGISTRATION_SUSPENDED;
+            enrollee.HasConviction = (bitmask & SelfDeclaration.CONVICTION) == SelfDeclaration.CONVICTION;
+            enrollee.HasDisciplinaryAction = (bitmask & SelfDeclaration.DISCIPLINARY) == SelfDeclaration.DISCIPLINARY;
+            enrollee.HasPharmaNetSuspended = (bitmask & SelfDeclaration.PHARMANET_SUSPENDED) == SelfDeclaration.PHARMANET_SUSPENDED;
+            enrollee.HasRegistrationSuspended = (bitmask & SelfDeclaration.REGISTRATION_SUSPENDED) == SelfDeclaration.REGISTRATION_SUSPENDED;
         }
 
-        private void UpdateAddresses(Enrolment enrolment, bool outsideBC = false)
+        private void UpdateAddresses(Enrollee enrollee, bool outsideBC = false)
         {
             // update all addresses to 'BC', or a random province outside BC
-            if (enrolment.Enrollee?.PhysicalAddress?.ProvinceCode != null)
+            if (enrollee.PhysicalAddress?.ProvinceCode != null)
             {
-                enrolment.Enrollee.PhysicalAddress.ProvinceCode = outsideBC ? TestUtils.RandomProvince(new[] { Province.BRITISH_COLUMBIA_CODE }) : Province.BRITISH_COLUMBIA_CODE;
+                enrollee.PhysicalAddress.ProvinceCode = outsideBC ? TestUtils.RandomProvince(new[] { Province.BRITISH_COLUMBIA_CODE }) : Province.BRITISH_COLUMBIA_CODE;
             }
-            if (enrolment.Enrollee?.MailingAddress?.ProvinceCode != null)
+            if (enrollee.MailingAddress?.ProvinceCode != null)
             {
-                enrolment.Enrollee.MailingAddress.ProvinceCode = outsideBC ? TestUtils.RandomProvince(new[] { Province.BRITISH_COLUMBIA_CODE }) : Province.BRITISH_COLUMBIA_CODE;
+                enrollee.MailingAddress.ProvinceCode = outsideBC ? TestUtils.RandomProvince(new[] { Province.BRITISH_COLUMBIA_CODE }) : Province.BRITISH_COLUMBIA_CODE;
             }
         }
-        
+
         private void AssertReasonCodes(ICollection<EnrolmentStatusReason> enrolmentStatusReasons, short[] expectedReasonCodes = null)
         {
             if (expectedReasonCodes == null)
@@ -95,235 +95,235 @@ namespace PrimeTests.Services
         [Fact]
         public async void testQualifiesForAutomaticAdjudication()
         {
-            // make sure there are no enrolments
-            Assert.False(_dbContext.Enrolments.Any());
+            // make sure there are no enrollees
+            Assert.False(_dbContext.Enrollees.Any());
             await _dbContext.SaveChangesAsync();
 
-            // create an enrolment directly to the context
-            _dbContext.Enrolments.Add(TestUtils.EnrolmentFaker.Generate());
+            // create an enrollee directly to the context
+            _dbContext.Enrollees.Add(TestUtils.EnrolleeFaker.Generate());
             await _dbContext.SaveChangesAsync();
 
-            // pick of the enrolment to use
-            var enrolment = _dbContext.Enrolments.FirstOrDefault();
-            Assert.NotNull(enrolment);
+            // pick of the enrollee to use
+            var enrollee = _dbContext.Enrollees.FirstOrDefault();
+            Assert.NotNull(enrollee);
 
-            // change the values in the enrolment so that it will qualify for automatic adjudication
-            this.UpdateAddresses(enrolment);
-            this.UpdateCertifications(enrolment);
-            this.UpdateDeviceProvider(enrolment);
-            this.UpdateSelfDeclaration(enrolment);
+            // change the values in the enrollee so that it will qualify for automatic adjudication
+            this.UpdateAddresses(enrollee);
+            this.UpdateCertifications(enrollee);
+            this.UpdateDeviceProvider(enrollee);
+            this.UpdateSelfDeclaration(enrollee);
 
             // check that this qualifies for automatic adjudication
-            Assert.True(_service.QualifiesForAutomaticAdjudication(enrolment));
-            AssertReasonCodes(enrolment.CurrentStatus?.EnrolmentStatusReasons);
+            Assert.True(_service.QualifiesForAutomaticAdjudication(enrollee));
+            AssertReasonCodes(enrollee.CurrentStatus?.EnrolmentStatusReasons);
         }
 
         [Fact]
         public async void testQualifiesForAutomaticAdjudication_SelfDeclaration_All()
         {
-            // make sure there are no enrolments
-            Assert.False(_dbContext.Enrolments.Any());
+            // make sure there are no enrollees
+            Assert.False(_dbContext.Enrollees.Any());
             await _dbContext.SaveChangesAsync();
 
-            // create an enrolment directly to the context
-            _dbContext.Enrolments.Add(TestUtils.EnrolmentFaker.Generate());
+            // create an enrollee directly to the context
+            _dbContext.Enrollees.Add(TestUtils.EnrolleeFaker.Generate());
             await _dbContext.SaveChangesAsync();
 
-            // pick of the enrolment to use
-            var enrolment = _dbContext.Enrolments.FirstOrDefault();
-            Assert.NotNull(enrolment);
+            // pick of the enrollee to use
+            var enrollee = _dbContext.Enrollees.FirstOrDefault();
+            Assert.NotNull(enrollee);
 
-            // change the values in the enrolment so that it will qualify for automatic adjudication
-            this.UpdateAddresses(enrolment);
-            this.UpdateCertifications(enrolment);
-            this.UpdateDeviceProvider(enrolment);
+            // change the values in the enrollee so that it will qualify for automatic adjudication
+            this.UpdateAddresses(enrollee);
+            this.UpdateCertifications(enrollee);
+            this.UpdateDeviceProvider(enrollee);
 
             // check that this does not qualify for automatic adjudication
-            this.UpdateSelfDeclaration(enrolment, (SelfDeclaration.CONVICTION | SelfDeclaration.DISCIPLINARY | SelfDeclaration.PHARMANET_SUSPENDED | SelfDeclaration.REGISTRATION_SUSPENDED));
-            Assert.False(_service.QualifiesForAutomaticAdjudication(enrolment));
-            AssertReasonCodes(enrolment.CurrentStatus.EnrolmentStatusReasons, new short[] { StatusReason.SELF_DECLARATION_CODE });
+            this.UpdateSelfDeclaration(enrollee, (SelfDeclaration.CONVICTION | SelfDeclaration.DISCIPLINARY | SelfDeclaration.PHARMANET_SUSPENDED | SelfDeclaration.REGISTRATION_SUSPENDED));
+            Assert.False(_service.QualifiesForAutomaticAdjudication(enrollee));
+            AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, new short[] { StatusReason.SELF_DECLARATION_CODE });
         }
 
         [Fact]
         public async void testQualifiesForAutomaticAdjudication_SelfDeclaration_Conviction()
         {
-            // make sure there are no enrolments
-            Assert.False(_dbContext.Enrolments.Any());
+            // make sure there are no enrollees
+            Assert.False(_dbContext.Enrollees.Any());
             await _dbContext.SaveChangesAsync();
 
-            // create an enrolment directly to the context
-            _dbContext.Enrolments.Add(TestUtils.EnrolmentFaker.Generate());
+            // create an enrollee directly to the context
+            _dbContext.Enrollees.Add(TestUtils.EnrolleeFaker.Generate());
             await _dbContext.SaveChangesAsync();
 
-            // pick of the enrolment to use
-            var enrolment = _dbContext.Enrolments.FirstOrDefault();
-            Assert.NotNull(enrolment);
+            // pick of the enrollee to use
+            var enrollee = _dbContext.Enrollees.FirstOrDefault();
+            Assert.NotNull(enrollee);
 
-            // change the values in the enrolment so that it will qualify for automatic adjudication
-            this.UpdateAddresses(enrolment);
-            this.UpdateCertifications(enrolment);
-            this.UpdateDeviceProvider(enrolment);
+            // change the values in the enrollee so that it will qualify for automatic adjudication
+            this.UpdateAddresses(enrollee);
+            this.UpdateCertifications(enrollee);
+            this.UpdateDeviceProvider(enrollee);
 
             // check that this does not qualify for automatic adjudication
-            this.UpdateSelfDeclaration(enrolment, (SelfDeclaration.CONVICTION));
-            Assert.False(_service.QualifiesForAutomaticAdjudication(enrolment));
-            AssertReasonCodes(enrolment.CurrentStatus.EnrolmentStatusReasons, new short[] { StatusReason.SELF_DECLARATION_CODE });
+            this.UpdateSelfDeclaration(enrollee, (SelfDeclaration.CONVICTION));
+            Assert.False(_service.QualifiesForAutomaticAdjudication(enrollee));
+            AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, new short[] { StatusReason.SELF_DECLARATION_CODE });
         }
 
         [Fact]
         public async void testQualifiesForAutomaticAdjudication_SelfDeclaration_Disciplinary()
         {
-            // make sure there are no enrolments
-            Assert.False(_dbContext.Enrolments.Any());
+            // make sure there are no enrollees
+            Assert.False(_dbContext.Enrollees.Any());
             await _dbContext.SaveChangesAsync();
 
-            // create an enrolment directly to the context
-            _dbContext.Enrolments.Add(TestUtils.EnrolmentFaker.Generate());
+            // create an enrollee directly to the context
+            _dbContext.Enrollees.Add(TestUtils.EnrolleeFaker.Generate());
             await _dbContext.SaveChangesAsync();
 
-            // pick of the enrolment to use
-            var enrolment = _dbContext.Enrolments.FirstOrDefault();
-            Assert.NotNull(enrolment);
+            // pick of the enrollee to use
+            var enrollee = _dbContext.Enrollees.FirstOrDefault();
+            Assert.NotNull(enrollee);
 
-            // change the values in the enrolment so that it will qualify for automatic adjudication
-            this.UpdateAddresses(enrolment);
-            this.UpdateCertifications(enrolment);
-            this.UpdateDeviceProvider(enrolment);
+            // change the values in the enrollee so that it will qualify for automatic adjudication
+            this.UpdateAddresses(enrollee);
+            this.UpdateCertifications(enrollee);
+            this.UpdateDeviceProvider(enrollee);
 
             // check that this does not qualify for automatic adjudication
-            this.UpdateSelfDeclaration(enrolment, (SelfDeclaration.DISCIPLINARY));
-            Assert.False(_service.QualifiesForAutomaticAdjudication(enrolment));
-            AssertReasonCodes(enrolment.CurrentStatus.EnrolmentStatusReasons, new short[] { StatusReason.SELF_DECLARATION_CODE });
+            this.UpdateSelfDeclaration(enrollee, (SelfDeclaration.DISCIPLINARY));
+            Assert.False(_service.QualifiesForAutomaticAdjudication(enrollee));
+            AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, new short[] { StatusReason.SELF_DECLARATION_CODE });
         }
 
         [Fact]
         public async void testQualifiesForAutomaticAdjudication_SelfDeclaration_Pharmanet_Suspended()
         {
-            // make sure there are no enrolments
-            Assert.False(_dbContext.Enrolments.Any());
+            // make sure there are no enrollees
+            Assert.False(_dbContext.Enrollees.Any());
             await _dbContext.SaveChangesAsync();
 
-            // create an enrolment directly to the context
-            _dbContext.Enrolments.Add(TestUtils.EnrolmentFaker.Generate());
+            // create an enrollee directly to the context
+            _dbContext.Enrollees.Add(TestUtils.EnrolleeFaker.Generate());
             await _dbContext.SaveChangesAsync();
 
-            // pick of the enrolment to use
-            var enrolment = _dbContext.Enrolments.FirstOrDefault();
-            Assert.NotNull(enrolment);
+            // pick of the enrollee to use
+            var enrollee = _dbContext.Enrollees.FirstOrDefault();
+            Assert.NotNull(enrollee);
 
-            // change the values in the enrolment so that it will qualify for automatic adjudication
-            this.UpdateAddresses(enrolment);
-            this.UpdateCertifications(enrolment);
-            this.UpdateDeviceProvider(enrolment);
+            // change the values in the enrollee so that it will qualify for automatic adjudication
+            this.UpdateAddresses(enrollee);
+            this.UpdateCertifications(enrollee);
+            this.UpdateDeviceProvider(enrollee);
 
             // check that this does not qualify for automatic adjudication
-            this.UpdateSelfDeclaration(enrolment, (SelfDeclaration.PHARMANET_SUSPENDED));
-            Assert.False(_service.QualifiesForAutomaticAdjudication(enrolment));
-            AssertReasonCodes(enrolment.CurrentStatus.EnrolmentStatusReasons, new short[] { StatusReason.SELF_DECLARATION_CODE });
+            this.UpdateSelfDeclaration(enrollee, (SelfDeclaration.PHARMANET_SUSPENDED));
+            Assert.False(_service.QualifiesForAutomaticAdjudication(enrollee));
+            AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, new short[] { StatusReason.SELF_DECLARATION_CODE });
         }
 
         [Fact]
         public async void testQualifiesForAutomaticAdjudication_SelfDeclaration_Registration_Suspended()
         {
-            // make sure there are no enrolments
-            Assert.False(_dbContext.Enrolments.Any());
+            // make sure there are no enrollees
+            Assert.False(_dbContext.Enrollees.Any());
             await _dbContext.SaveChangesAsync();
 
-            // create an enrolment directly to the context
-            _dbContext.Enrolments.Add(TestUtils.EnrolmentFaker.Generate());
+            // create an enrollee directly to the context
+            _dbContext.Enrollees.Add(TestUtils.EnrolleeFaker.Generate());
             await _dbContext.SaveChangesAsync();
 
-            // pick of the enrolment to use
-            var enrolment = _dbContext.Enrolments.FirstOrDefault();
-            Assert.NotNull(enrolment);
+            // pick of the enrollee to use
+            var enrollee = _dbContext.Enrollees.FirstOrDefault();
+            Assert.NotNull(enrollee);
 
-            // change the values in the enrolment so that it will qualify for automatic adjudication
-            this.UpdateAddresses(enrolment);
-            this.UpdateCertifications(enrolment);
-            this.UpdateDeviceProvider(enrolment);
+            // change the values in the enrollee so that it will qualify for automatic adjudication
+            this.UpdateAddresses(enrollee);
+            this.UpdateCertifications(enrollee);
+            this.UpdateDeviceProvider(enrollee);
 
             // check that this does not qualify for automatic adjudication
-            this.UpdateSelfDeclaration(enrolment, (SelfDeclaration.REGISTRATION_SUSPENDED));
-            Assert.False(_service.QualifiesForAutomaticAdjudication(enrolment));
-            AssertReasonCodes(enrolment.CurrentStatus.EnrolmentStatusReasons, new short[] { StatusReason.SELF_DECLARATION_CODE });
+            this.UpdateSelfDeclaration(enrollee, (SelfDeclaration.REGISTRATION_SUSPENDED));
+            Assert.False(_service.QualifiesForAutomaticAdjudication(enrollee));
+            AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, new short[] { StatusReason.SELF_DECLARATION_CODE });
         }
 
         [Fact]
         public async void testQualifiesForAutomaticAdjudication_Address()
         {
-            // make sure there are no enrolments
-            Assert.False(_dbContext.Enrolments.Any());
+            // make sure there are no enrollees
+            Assert.False(_dbContext.Enrollees.Any());
             await _dbContext.SaveChangesAsync();
 
-            // create an enrolment directly to the context
-            _dbContext.Enrolments.Add(TestUtils.EnrolmentFaker.Generate());
+            // create an enrollee directly to the context
+            _dbContext.Enrollees.Add(TestUtils.EnrolleeFaker.Generate());
             await _dbContext.SaveChangesAsync();
 
-            // pick of the enrolment to use
-            var enrolment = _dbContext.Enrolments.FirstOrDefault();
-            Assert.NotNull(enrolment);
+            // pick of the enrollee to use
+            var enrollee = _dbContext.Enrollees.FirstOrDefault();
+            Assert.NotNull(enrollee);
 
-            // change the values in the enrolment so that it will not qualify for automatic adjudication
-            this.UpdateAddresses(enrolment, true);
-            this.UpdateCertifications(enrolment);
-            this.UpdateDeviceProvider(enrolment);
-            this.UpdateSelfDeclaration(enrolment);
+            // change the values in the enrollee so that it will not qualify for automatic adjudication
+            this.UpdateAddresses(enrollee, true);
+            this.UpdateCertifications(enrollee);
+            this.UpdateDeviceProvider(enrollee);
+            this.UpdateSelfDeclaration(enrollee);
 
             // check that this does not qualify for automatic adjudication
-            Assert.False(_service.QualifiesForAutomaticAdjudication(enrolment));
-            AssertReasonCodes(enrolment.CurrentStatus.EnrolmentStatusReasons, new short[] { StatusReason.ADDRESS_CODE });
+            Assert.False(_service.QualifiesForAutomaticAdjudication(enrollee));
+            AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, new short[] { StatusReason.ADDRESS_CODE });
         }
 
         [Fact]
         public async void testQualifiesForAutomaticAdjudication_Certification()
         {
-            // make sure there are no enrolments
-            Assert.False(_dbContext.Enrolments.Any());
+            // make sure there are no enrollees
+            Assert.False(_dbContext.Enrollees.Any());
             await _dbContext.SaveChangesAsync();
 
-            // create an enrolment directly to the context
-            _dbContext.Enrolments.Add(TestUtils.EnrolmentFaker.Generate());
+            // create an enrollee directly to the context
+            _dbContext.Enrollees.Add(TestUtils.EnrolleeFaker.Generate());
             await _dbContext.SaveChangesAsync();
 
-            // pick of the enrolment to use
-            var enrolment = _dbContext.Enrolments.FirstOrDefault();
-            Assert.NotNull(enrolment);
+            // pick of the enrollee to use
+            var enrollee = _dbContext.Enrollees.FirstOrDefault();
+            Assert.NotNull(enrollee);
 
-            // change the values in the enrolment so that it will not qualify for automatic adjudication
-            this.UpdateAddresses(enrolment);
-            this.UpdateCertifications(enrolment, true);
-            this.UpdateDeviceProvider(enrolment);
-            this.UpdateSelfDeclaration(enrolment);
+            // change the values in the enrollee so that it will not qualify for automatic adjudication
+            this.UpdateAddresses(enrollee);
+            this.UpdateCertifications(enrollee, true);
+            this.UpdateDeviceProvider(enrollee);
+            this.UpdateSelfDeclaration(enrollee);
 
             // check that this does not qualify for automatic adjudication
-            Assert.False(_service.QualifiesForAutomaticAdjudication(enrolment));
-            AssertReasonCodes(enrolment.CurrentStatus.EnrolmentStatusReasons, new short[] { StatusReason.NAME_DISCREPANCY_CODE, StatusReason.NOT_IN_PHARMANET_CODE, StatusReason.LICENCE_CLASS_CODE });
+            Assert.False(_service.QualifiesForAutomaticAdjudication(enrollee));
+            AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, new short[] { StatusReason.NAME_DISCREPANCY_CODE, StatusReason.NOT_IN_PHARMANET_CODE, StatusReason.LICENCE_CLASS_CODE });
         }
 
         [Fact]
         public async void testQualifiesForAutomaticAdjudication_PumpProvider()
         {
-            // make sure there are no enrolments
-            Assert.False(_dbContext.Enrolments.Any());
+            // make sure there are no enrollees
+            Assert.False(_dbContext.Enrollees.Any());
             await _dbContext.SaveChangesAsync();
 
-            // create an enrolment directly to the context
-            _dbContext.Enrolments.Add(TestUtils.EnrolmentFaker.Generate());
+            // create an enrollee directly to the context
+            _dbContext.Enrollees.Add(TestUtils.EnrolleeFaker.Generate());
             await _dbContext.SaveChangesAsync();
 
-            // pick of the enrolment to use
-            var enrolment = _dbContext.Enrolments.FirstOrDefault();
-            Assert.NotNull(enrolment);
+            // pick of the enrollee to use
+            var enrollee = _dbContext.Enrollees.FirstOrDefault();
+            Assert.NotNull(enrollee);
 
-            // change the values in the enrolment so that it will not qualify for automatic adjudication
-            this.UpdateAddresses(enrolment);
-            this.UpdateCertifications(enrolment);
-            this.UpdateDeviceProvider(enrolment, true, true);
-            this.UpdateSelfDeclaration(enrolment);
+            // change the values in the enrollee so that it will not qualify for automatic adjudication
+            this.UpdateAddresses(enrollee);
+            this.UpdateCertifications(enrollee);
+            this.UpdateDeviceProvider(enrollee, true, true);
+            this.UpdateSelfDeclaration(enrollee);
 
             // check that this does not qualify for automatic adjudication
-            Assert.False(_service.QualifiesForAutomaticAdjudication(enrolment));
-            AssertReasonCodes(enrolment.CurrentStatus.EnrolmentStatusReasons, new short[] { StatusReason.PUMP_PROVIDER_CODE });
+            Assert.False(_service.QualifiesForAutomaticAdjudication(enrollee));
+            AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, new short[] { StatusReason.PUMP_PROVIDER_CODE });
         }
     }
 }

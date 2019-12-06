@@ -24,6 +24,7 @@ import { PhonePipe } from '@shared/pipes/phone.pipe';
 import { PostalPipe } from '@shared/pipes/postal.pipe';
 import { ReplacePipe } from '@shared/pipes/replace.pipe';
 import { CertificatePipe } from '@shared/pipes/certificate.pipe';
+import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 import { HeaderComponent } from '@shared/components/header/header.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
@@ -34,6 +35,7 @@ import { DialogContentDirective } from '@shared/components/dialogs/dialog-conten
 import { ClipboardIconComponent } from './components/clipboard-icon/clipboard-icon.component';
 import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
 import { AlertComponent } from '@shared/components/alert/alert.component';
+import { EnrolleeReviewComponent } from '@shared/components/enrollee-review/enrollee-review.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +46,8 @@ import { AlertComponent } from '@shared/components/alert/alert.component';
     FormatDatePipe,
     PostalPipe,
     EnrolmentPipe,
+    DefaultPipe,
+    CertificatePipe,
     AddressComponent,
     DashboardComponent,
     ConfirmDialogComponent,
@@ -57,12 +61,13 @@ import { AlertComponent } from '@shared/components/alert/alert.component';
     FormIconGroupComponent,
     AlertComponent,
     ClipboardIconComponent,
-    CertificatePipe
+    EnrolleeReviewComponent
   ],
   imports: [
     CommonModule,
     RouterModule,
     ClipboardModule,
+    ConfigModule,
     NgxBusyModule,
     NgxContextualHelpModule,
     NgxMaskModule.forRoot(),
@@ -86,6 +91,8 @@ import { AlertComponent } from '@shared/components/alert/alert.component';
     PhonePipe,
     PostalPipe,
     ReplacePipe,
+    DefaultPipe,
+    CertificatePipe,
     AddressComponent,
     DashboardComponent,
     EnrolmentStatusReasonsComponent,
@@ -98,7 +105,7 @@ import { AlertComponent } from '@shared/components/alert/alert.component';
     FormIconGroupComponent,
     AlertComponent,
     ClipboardIconComponent,
-    CertificatePipe
+    EnrolleeReviewComponent
   ],
   entryComponents: [
     ConfirmDialogComponent,

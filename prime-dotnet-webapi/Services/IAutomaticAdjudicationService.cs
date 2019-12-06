@@ -4,6 +4,6 @@ namespace Prime.Services
 {
     public interface IAutomaticAdjudicationService
     {            
-        bool QualifiesForAutomaticAdjudication(Enrolment enrolment);
+        bool QualifiesForAutomaticAdjudication(Enrollee enrollee);
     }
 }
