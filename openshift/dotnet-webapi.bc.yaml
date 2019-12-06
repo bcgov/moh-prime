@@ -102,12 +102,8 @@ objects:
           ref: '${SOURCE_REPOSITORY_REF}'
           uri: '${SOURCE_REPOSITORY_URL}'
         type: Git
-        secrets:
-          - secret:
-              name: hibc-cert
-            destinationDir: /etc
       strategy:
-        dockerStrategy: 
+        dockerStrategy:
           dockerfilePath: openshift.dockerfile
         type: Docker
       triggers:
