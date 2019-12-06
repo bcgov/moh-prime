@@ -25,7 +25,6 @@ namespace Prime
             _context = context;
         }
 
-        public DbSet<Enrolment> Enrolments { get; set; }
         public DbSet<Certification> Certifications { get; set; }
         public DbSet<Job> Jobs { get; set; }
         public DbSet<Organization> Organizations { get; set; }
@@ -56,7 +55,7 @@ namespace Prime
 
             var created = ChangeTracker.Entries().Where(x => x.State == EntityState.Added);
             var modified = ChangeTracker.Entries().Where(x => x.State == EntityState.Modified);
-            var currentUser = PrimeUtils.PrimeUserId(_context?.HttpContext?.User);  //note: defaults to Guid.Empty if there is no user
+            var currentUser = _context?.HttpContext?.User.GetPrimeUserId() ?? Guid.Empty;
             var currentDateTime = SEEDING_DATE;
 
             foreach (var item in created)
@@ -393,10 +392,6 @@ namespace Prime
             modelBuilder.Entity<Enrollee>()
                 .HasIndex("UserId")
                 .IsUnique();
-
-            modelBuilder.Entity<Enrolment>()
-                .HasIndex("EnrolleeId")
-                .IsUnique();
             #endregion
 
             #region Relationships
@@ -421,24 +416,21 @@ namespace Prime
                 .HasOne(cp => cp.Practice)
                 .WithMany(p => p.CollegePractices)
                 .HasForeignKey(cp => cp.PracticeCode);
-
             modelBuilder.Entity<EnrolmentStatus>()
-                .HasKey(es => new { es.EnrolmentId, es.StatusCode });
-            modelBuilder.Entity<EnrolmentStatus>()
-                .HasOne(es => es.Enrolment)
+                .HasOne(es => es.Enrollee)
                 .WithMany(e => e.EnrolmentStatuses)
-                .HasForeignKey(es => es.EnrolmentId);
+                .HasForeignKey(es => es.EnrolleeId);
             modelBuilder.Entity<EnrolmentStatus>()
                 .HasOne(es => es.Status)
                 .WithMany(s => s.EnrolmentStatuses)
                 .HasForeignKey(es => es.StatusCode);
 
             modelBuilder.Entity<EnrolmentStatusReason>()
-                .HasKey(esr => new { esr.EnrolmentId, esr.StatusCode, esr.StatusReasonCode });
+                .HasKey(esr => new { esr.EnrolmentStatusId, esr.StatusCode, esr.StatusReasonCode });
             modelBuilder.Entity<EnrolmentStatusReason>()
                 .HasOne(esr => esr.EnrolmentStatus)
                 .WithMany(es => es.EnrolmentStatusReasons)
-                .HasForeignKey(esr => new { esr.EnrolmentId, esr.StatusCode });
+                .HasForeignKey(esr => esr.EnrolmentStatusId);
             modelBuilder.Entity<EnrolmentStatusReason>()
                 .HasOne(esr => esr.StatusReason)
                 .WithMany(sr => sr.EnrolmentStatusReasons)

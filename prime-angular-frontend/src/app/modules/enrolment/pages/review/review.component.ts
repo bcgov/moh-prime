@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MatDialog, MatCheckboxChange } from '@angular/material';
+import { MatDialog } from '@angular/material';
 
-import { map, exhaustMap } from 'rxjs/operators';
+import { exhaustMap } from 'rxjs/operators';
 import { EMPTY, Subscription } from 'rxjs';
 
 import { ToastService } from '@core/services/toast.service';
@@ -24,7 +24,6 @@ import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-stat
 export class ReviewComponent implements OnInit {
   public busy: Subscription;
   public enrolment: Enrolment;
-  public disabledAgreement: boolean;
   public EnrolmentRoutes = EnrolmentRoutes;
 
   constructor(
@@ -36,9 +35,7 @@ export class ReviewComponent implements OnInit {
     private toastService: ToastService,
     private dialog: MatDialog,
     private logger: LoggerService
-  ) {
-    this.disabledAgreement = true;
-  }
+  ) { }
 
   public onSubmit() {
     if (this.enrolmentStateService.isEnrolmentValid()) {
@@ -75,23 +72,20 @@ export class ReviewComponent implements OnInit {
     }
   }
 
-  public onConfirmAccuracy(event: MatCheckboxChange) {
-    this.disabledAgreement = !event.checked;
-  }
-
   public showYesNo(declared: boolean) {
     return (declared === null)
       ? 'N/A' : (declared)
         ? 'Yes' : 'No';
   }
 
-  public redirect(route: string) {
-    this.router.navigate([EnrolmentRoutes.ENROLMENT, route]);
+  public onRoute(routePath: EnrolmentRoutes) {
+    this.router.navigate([routePath], { relativeTo: this.route.parent });
   }
 
   public ngOnInit() {
     const enrolment = this.enrolmentService.enrolment;
     this.enrolment = enrolment;
+
     this.enrolmentStateService.enrolment = enrolment;
   }
 }

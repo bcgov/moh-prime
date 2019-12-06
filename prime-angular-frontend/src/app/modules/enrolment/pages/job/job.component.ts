@@ -29,6 +29,7 @@ export class JobComponent implements OnInit, OnDestroy {
   public filteredJobNames: BehaviorSubject<Config<number>[]>;
   public allowDefaultOption: boolean;
   public defaultOptionLabel: string;
+  public profileCompleted: boolean;
   public EnrolmentRoutes = EnrolmentRoutes;
 
   constructor(
@@ -62,7 +63,7 @@ export class JobComponent implements OnInit, OnDestroy {
       payload.jobs = payload.jobs
         .map((job: Job) => (job.title === this.defaultOptionLabel) ? { ...job, title: '' } : job);
 
-      this.busy = this.enrolmentResource.updateEnrolment(payload)
+      this.busy = this.enrolmentResource.updateEnrollee(payload)
         .subscribe(
           () => {
             this.toastService.openSuccessToast('Job information has been saved');
@@ -89,6 +90,10 @@ export class JobComponent implements OnInit, OnDestroy {
 
   public removeJob(index: number) {
     this.jobs.removeAt(index);
+  }
+
+  public onRoute(routePath: EnrolmentRoutes) {
+    this.router.navigate([routePath], { relativeTo: this.route.parent });
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
@@ -119,7 +124,10 @@ export class JobComponent implements OnInit, OnDestroy {
     this.form.valueChanges
       .subscribe(({ jobs }: { jobs: Job[] }) => this.filterJobNames(jobs));
 
-    this.enrolmentStateService.enrolment = this.enrolmentService.enrolment;
+    const enrolment = this.enrolmentService.enrolment;
+    this.profileCompleted = enrolment.profileCompleted;
+
+    this.enrolmentStateService.enrolment = enrolment;
 
     // Always have at least one job ready for
     // the enrollee to fill out

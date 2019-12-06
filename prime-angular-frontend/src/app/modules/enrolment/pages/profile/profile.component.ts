@@ -18,6 +18,7 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { FormUtilsService } from '@enrolment/shared/services/form-utils.service';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 @Component({
   selector: 'app-profile',
@@ -31,6 +32,8 @@ export class ProfileComponent implements OnInit {
   public hasPreferredName: boolean;
   public hasMailingAddress: boolean;
   public subheadings: { [key: string]: { subheader: string, help: string } };
+  public profileCompleted: boolean;
+  public EnrolmentRoutes = EnrolmentRoutes;
 
   private isNewEnrolment: boolean;
 
@@ -41,6 +44,7 @@ export class ProfileComponent implements OnInit {
     private authService: AuthService,
     private enrolmentStateService: EnrolmentStateService,
     private enrolmentResource: EnrolmentResource,
+    private enrolmentService: EnrolmentService,
     private formUtilsService: FormUtilsService,
     private toastService: ToastService,
     private viewportService: ViewportService,
@@ -102,12 +106,12 @@ export class ProfileComponent implements OnInit {
     if (this.form.valid) {
       const payload = this.enrolmentStateService.enrolment;
       const request$ = (this.isNewEnrolment)
-        ? this.enrolmentResource.createEnrolment(payload)
+        ? this.enrolmentResource.createEnrollee(payload)
           .pipe(
             tap(() => this.isNewEnrolment = false),
             map((enrolment: Enrolment) => this.enrolmentStateService.enrolment = enrolment)
           )
-        : this.enrolmentResource.updateEnrolment(payload);
+        : this.enrolmentResource.updateEnrollee(payload);
 
       this.busy = request$
         .subscribe(
@@ -141,6 +145,10 @@ export class ProfileComponent implements OnInit {
     this.toggleValidators(this.mailingAddress, ['street2']);
   }
 
+  public onRoute(routePath: EnrolmentRoutes) {
+    this.router.navigate([routePath], { relativeTo: this.route.parent });
+  }
+
   public isRequired(path: string) {
     this.formUtilsService.isRequired(this.form, path);
   }
@@ -155,23 +163,18 @@ export class ProfileComponent implements OnInit {
   public ngOnInit() {
     this.createFormInstance();
 
-    this.busy = this.enrolmentResource.enrolments()
-      .subscribe(
-        async (enrolment: Enrolment) => {
-          if (enrolment) {
-            this.isNewEnrolment = false;
-            this.enrolmentStateService.enrolment = enrolment;
-          }
+    const enrolment = this.enrolmentService.enrolment;
+    this.profileCompleted = (enrolment) ? enrolment.profileCompleted : true;
 
-          this.form.markAsPristine();
+    if (enrolment) {
+      this.isNewEnrolment = false;
+      this.enrolmentStateService.enrolment = enrolment;
+    }
 
-          this.initForm();
-        },
-        (error: any) => {
-          this.toastService.openErrorToast('Enrolment could not be retrieved');
-          this.logger.error('[Enrolment] Profile::getEnrolment error has occurred: ', error);
-        }
-      );
+    // TODO is this still needed?
+    this.form.markAsPristine();
+
+    this.initForm();
   }
 
   private createFormInstance() {

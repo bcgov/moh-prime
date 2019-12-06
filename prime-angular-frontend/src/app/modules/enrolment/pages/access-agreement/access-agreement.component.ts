@@ -56,7 +56,6 @@ export class AccessAgreementComponent implements OnInit {
 
   public onSubmit() {
     if (this.hasReadAgreement) {
-      const enrolment = this.enrolmentStateService.enrolment;
       const data: DialogOptions = {
         title: 'Access Agreement',
         message: 'Are you sure you want to accept the access agreement?',
@@ -67,7 +66,7 @@ export class AccessAgreementComponent implements OnInit {
         .pipe(
           exhaustMap((result: boolean) =>
             (result)
-              ? this.enrolmentResource.updateEnrolmentStatus(enrolment.id, EnrolmentStatus.ACCEPTED_TOS)
+              ? this.enrolmentResource.updateEnrolmentStatus(this.enrolment.id, EnrolmentStatus.ACCEPTED_TOS)
               : EMPTY
           )
         )
@@ -88,7 +87,7 @@ export class AccessAgreementComponent implements OnInit {
     if (this.currentPage > 0) {
       this.agree.reset();
       this.disabled = true;
-      this.utilsService.scrollTop();
+      this.utilsService.scrollTo();
       this.currentPage--;
       this.hasReadAgreement = false;
     }
@@ -96,7 +95,7 @@ export class AccessAgreementComponent implements OnInit {
 
   public onNextPage() {
     if (!this.hasReadAgreement) {
-      this.utilsService.scrollTop();
+      this.utilsService.scrollTo();
       this.currentPage++;
     }
   }

@@ -40,7 +40,10 @@
 
     </ng-container>
 
-    <app-page-footer [backRoute]="EnrolmentRoutes.REGULATORY"></app-page-footer>
+    <app-page-footer [profileCompleted]="profileCompleted"
+                     (save)="onSubmit()"
+                     (continue)="onSubmit()"
+                     (back)="onRoute(EnrolmentRoutes.REGULATORY)"></app-page-footer>
 
   </form>
 

@@ -44,16 +44,6 @@ namespace PrimeTests.Utils
                                 .RuleFor(a => a.Postal, f => f.Address.ZipCode("?#?#?#"))
                                 ;
 
-        public static Faker<Enrollee> EnrolleeFaker = new Faker<Enrollee>()
-                                .RuleFor(e => e.UserId, f => Guid.NewGuid())
-                                .RuleFor(e => e.FirstName, f => f.Name.FirstName())
-                                .RuleFor(e => e.MiddleName, f => f.Name.FirstName())
-                                .RuleFor(e => e.LastName, f => f.Name.LastName())
-                                .RuleFor(e => e.DateOfBirth, f => f.Date.Past(20, DateTime.Now.AddYears(-18)))
-                                .RuleFor(e => e.PhysicalAddress, f => PhysicalAddressFaker.Generate())
-                                .RuleFor(e => e.MailingAddress, f => MailingAddressFaker.Generate())
-                                ;
-
         public static Faker<Certification> CertificationFaker = new Faker<Certification>()
                                 .RuleFor(c => c.CollegeCode, f => f.Random.Short(1, 5))
                                 .RuleFor(c => c.LicenseNumber, f => f.Random.Int(100000, 999999).ToString().Substring(1))
@@ -74,29 +64,32 @@ namespace PrimeTests.Utils
               .RuleFor(es => es.StatusCode, f => Status.IN_PROGRESS_CODE)
               .RuleFor(es => es.Status, f => new Status { Code = Status.IN_PROGRESS_CODE, Name = "In Progress" })
               .RuleFor(es => es.StatusDate, f => DateTime.Now)
-              .RuleFor(es => es.IsCurrent, f => true)
+              .RuleFor(es => es.PharmaNetStatus, f => false)
               ;
 
-        public static Faker<Enrolment> EnrolmentFaker = new Faker<Enrolment>()
-                                    .RuleFor(e => e.Enrollee, f => EnrolleeFaker.Generate())
-                                    // .RuleFor(e => e.HasCertification, f => f.Random.Bool())
-                                    .RuleFor(e => e.Certifications, f => CertificationFaker.Generate(2))
-                                    // .RuleFor(e => e.IsDeviceProvider, f => f.Random.Bool())
-                                    .RuleFor(e => e.DeviceProviderNumber, TestUtils.RandomDeviceProviderNumber())
-                                    .RuleFor(e => e.IsInsulinPumpProvider, f => f.Random.Bool())
-                                    // .RuleFor(e => e.IsAccessingPharmaNetOnBehalfOf, f => f.Random.Bool())
-                                    .RuleFor(e => e.Jobs, f => JobFaker.Generate(2))
-                                    .RuleFor(e => e.HasConviction, f => f.Random.Bool())
-                                    .RuleFor(e => e.HasConvictionDetails, f => f.Lorem.Paragraphs(2))
-                                    .RuleFor(e => e.HasRegistrationSuspended, f => f.Random.Bool())
-                                    .RuleFor(e => e.HasRegistrationSuspendedDetails, f => f.Lorem.Paragraphs(2))
-                                    .RuleFor(e => e.HasDisciplinaryAction, f => f.Random.Bool())
-                                    .RuleFor(e => e.HasDisciplinaryActionDetails, f => f.Lorem.Paragraphs(2))
-                                    .RuleFor(e => e.HasPharmaNetSuspended, f => f.Random.Bool())
-                                    .RuleFor(e => e.HasPharmaNetSuspendedDetails, f => f.Lorem.Paragraphs(2))
-                                    .RuleFor(e => e.Organizations, f => OrganizationFaker.Generate(2))
-                                    .RuleFor(e => e.EnrolmentStatuses, f => EnrolmentStatusFaker.Generate(1))
-                                    ;
+        public static Faker<Enrollee> EnrolleeFaker = new Faker<Enrollee>()
+                                .RuleFor(e => e.UserId, f => Guid.NewGuid())
+                                .RuleFor(e => e.FirstName, f => f.Name.FirstName())
+                                .RuleFor(e => e.MiddleName, f => f.Name.FirstName())
+                                .RuleFor(e => e.LastName, f => f.Name.LastName())
+                                .RuleFor(e => e.DateOfBirth, f => f.Date.Past(20, DateTime.Now.AddYears(-18)))
+                                .RuleFor(e => e.PhysicalAddress, f => PhysicalAddressFaker.Generate())
+                                .RuleFor(e => e.MailingAddress, f => MailingAddressFaker.Generate())
+                                .RuleFor(e => e.Certifications, f => CertificationFaker.Generate(2))
+                                .RuleFor(e => e.DeviceProviderNumber, TestUtils.RandomDeviceProviderNumber())
+                                .RuleFor(e => e.IsInsulinPumpProvider, f => f.Random.Bool())
+                                .RuleFor(e => e.Jobs, f => JobFaker.Generate(2))
+                                .RuleFor(e => e.HasConviction, f => f.Random.Bool())
+                                .RuleFor(e => e.HasConvictionDetails, f => f.Lorem.Paragraphs(2))
+                                .RuleFor(e => e.HasRegistrationSuspended, f => f.Random.Bool())
+                                .RuleFor(e => e.HasRegistrationSuspendedDetails, f => f.Lorem.Paragraphs(2))
+                                .RuleFor(e => e.HasDisciplinaryAction, f => f.Random.Bool())
+                                .RuleFor(e => e.HasDisciplinaryActionDetails, f => f.Lorem.Paragraphs(2))
+                                .RuleFor(e => e.HasPharmaNetSuspended, f => f.Random.Bool())
+                                .RuleFor(e => e.HasPharmaNetSuspendedDetails, f => f.Lorem.Paragraphs(2))
+                                .RuleFor(e => e.Organizations, f => OrganizationFaker.Generate(2))
+                                .RuleFor(e => e.EnrolmentStatuses, f => EnrolmentStatusFaker.Generate(1))
+                                ;
 
         public static string RandomProvince(string[] excluded = null)
         {
@@ -127,19 +120,19 @@ namespace PrimeTests.Utils
             identity.RemoveClaim(claim);
         }
 
-        public static int? CreateEnrolment(ApiDbContext apiDbContext, HttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService)
+        public static int? CreateEnrollee(ApiDbContext apiDbContext, HttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService)
         {
-            return new DefaultEnrolmentService(apiDbContext, httpContext, automaticAdjudicationService).CreateEnrolmentAsync(TestUtils.EnrolmentFaker.Generate()).Result;
+            return new DefaultEnrolleeService(apiDbContext, httpContext, automaticAdjudicationService).CreateEnrolleeAsync(TestUtils.EnrolleeFaker.Generate()).Result;
         }
 
-        public static Enrolment GetEnrolmentById(ApiDbContext apiDbContext, HttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService, int enrolmentId)
+        public static Enrollee GetEnrolleeById(ApiDbContext apiDbContext, HttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService, int enrolmentId)
         {
-            return new DefaultEnrolmentService(apiDbContext, httpContext, automaticAdjudicationService).GetEnrolmentAsync(enrolmentId).Result;
+            return new DefaultEnrolleeService(apiDbContext, httpContext, automaticAdjudicationService).GetEnrolleeAsync(enrolmentId).Result;
         }
 
         public static void InitializeDbForTests(ApiDbContext db)
         {
-            // db.Enrolments.AddRange(EnrolmentFaker.Generate(5));
+            // db.Enrollees.AddRange(EnrolleeFaker.Generate(5));
 
             if (!db.Set(typeof(College)).Any())
             {
@@ -239,7 +232,7 @@ namespace PrimeTests.Utils
 
         public static void ReinitializeDbForTests(ApiDbContext db)
         {
-            // db.Enrolments.RemoveRange(db.Enrolments);
+            // db.Enrollees.RemoveRange(db.Enrollees);
             InitializeDbForTests(db);
         }
 
@@ -314,7 +307,7 @@ namespace PrimeTests.Utils
             var _token = TestUtils.TokenBuilder()
                 .ForAudience(Startup.StaticConfig["Jwt:Audience"])
                 .ForSubject(subject.ToString())
-                .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_ENROLMENT_ROLE)
+                .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_ENROLLEE_ROLE)
                 .WithClaim(PrimeConstants.ASSURANCE_LEVEL_CLAIM_TYPE, "3")
                 .BuildToken();
 

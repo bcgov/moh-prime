@@ -52,6 +52,10 @@ export class EnrolmentsComponent implements OnInit {
     return (currentStatusCode === EnrolmentStatus.SUBMITTED);
   }
 
+  public canAllowEditing(currentStatusCode: number) {
+    return (currentStatusCode !== EnrolmentStatus.ADJUDICATED_APPROVED);
+  }
+
   public reviewStatusReasons(enrolment: Enrolment) {
     const data: DialogOptions = {
       title: 'Review Status Reasons',
@@ -80,13 +84,7 @@ export class EnrolmentsComponent implements OnInit {
             ? this.adjudicationResource.updateEnrolmentStatus(id, EnrolmentStatus.ADJUDICATED_APPROVED)
             : EMPTY
         ),
-        // TODO show success/error for enrolment status
-        // map(() => { })
-        // catchError(() => { })
-        exhaustMap(() => this.adjudicationResource.enrolment(id))
-        // TODO attempt replay getting enrolment for update
-        // retry(3),
-        // catchError(() => { })
+        exhaustMap(() => this.adjudicationResource.enrollee(id))
       )
       .subscribe(
         (enrolment: Enrolment) => {
@@ -115,13 +113,7 @@ export class EnrolmentsComponent implements OnInit {
             ? this.adjudicationResource.updateEnrolmentStatus(id, EnrolmentStatus.DECLINED)
             : EMPTY
         ),
-        // TODO show success/error for enrolment status change
-        // map(() => { })
-        // catchError(() => { })
-        exhaustMap(() => this.adjudicationResource.enrolment(id)),
-        // TODO and attempt replay getting enrolment for update
-        // retry(3),
-        // catchError(() => { })
+        exhaustMap(() => this.adjudicationResource.enrollee(id)),
       )
       .subscribe(
         (enrolment: Enrolment) => {
@@ -131,6 +123,35 @@ export class EnrolmentsComponent implements OnInit {
         (error: any) => {
           this.toastService.openErrorToast('Enrolment could not be declined');
           this.logger.error('[Adjudication] Enrolments::declineEnrolment error has occurred: ', error);
+        }
+      );
+  }
+
+  public markAsInProgress(id: number) {
+    const data: DialogOptions = {
+      title: 'Enable Editing',
+      message: 'When enabled the enrollee will be marked as In-Progress, and able to update their enrolment. Are you sure you want to enable editing?',
+      actionType: 'warn',
+      actionText: 'Enable Editing'
+    };
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result: boolean) =>
+          (result)
+            ? this.adjudicationResource.updateEnrolmentStatus(id, EnrolmentStatus.IN_PROGRESS)
+            : EMPTY
+        ),
+        exhaustMap(() => this.adjudicationResource.enrollee(id))
+      )
+      .subscribe(
+        (enrolment: Enrolment) => {
+          this.toastService.openSuccessToast('Enrolment status was reverted to In-Progress');
+          this.updateEnrolment(enrolment);
+        },
+        (error: any) => {
+          this.toastService.openErrorToast('Enrolment status could not be reverted to In-Progress');
+          this.logger.error('[Adjudication] Enrolments::markAsInProgress error has occurred: ', error);
         }
       );
   }
@@ -168,7 +189,7 @@ export class EnrolmentsComponent implements OnInit {
   }
 
   private getEnrolments(statusCode?: number) {
-    this.busy = this.adjudicationResource.enrolments(statusCode)
+    this.busy = this.adjudicationResource.enrollees(statusCode)
       .subscribe(
         (enrolments: Enrolment[]) => {
           this.logger.info('ENROLMENTS', enrolments);

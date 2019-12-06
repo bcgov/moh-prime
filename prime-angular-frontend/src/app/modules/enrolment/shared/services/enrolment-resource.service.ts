@@ -1,19 +1,19 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { Config } from '@config/config.model';
 import { PrimeHttpResponse } from '@core/models/prime-http-response.model';
 import { LoggerService } from '@core/services/logger.service';
-import { Enrolment } from '@shared/models/enrolment.model';
+import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
+import { EnrolmentCertificateAccessToken } from '@shared/models/enrolment-certificate-access-token.model';
 import { Address } from '@enrolment/shared/models/address.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
 import { Organization } from '@enrolment/shared/models/organization.model';
-import { EnrolmentCertificateAccessToken } from '@shared/models/enrolment-certificate-access-token.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,57 +26,42 @@ export class EnrolmentResource {
     private logger: LoggerService
   ) { }
 
-  public enrolments(): Observable<Enrolment> {
-    return this.http.get(`${this.config.apiEndpoint}/enrolments`)
+  public enrollee(): Observable<Enrolment> {
+    return this.http.get(`${this.config.apiEndpoint}/enrollees`)
       .pipe(
         map((response: PrimeHttpResponse) => response.result),
-        map((enrolments: Enrolment[]) => {
-          this.logger.info('ENROLMENTS', enrolments);
-          const enrolment = (enrolments.length)
-            ? this.enrolmentAdapterResponse(enrolments.shift())
-            : null;
-
-          return enrolment;
-        })
+        tap((enrollees: HttpEnrollee[]) => this.logger.info('ENROLLEES', enrollees)),
+        map((enrollees: HttpEnrollee[]) =>
+          // Only a single enrollee will be provided
+          (enrollees.length) ? this.enrolleeAdapterResponse(enrollees.pop()) : null
+        )
       );
   }
 
-  public createEnrolment(payload: Enrolment): Observable<Enrolment> {
-    return this.http.post(`${this.config.apiEndpoint}/enrolments`, this.enrolmentAdapterRequest(payload))
+  public createEnrollee(payload: Enrolment): Observable<Enrolment> {
+    return this.http.post(`${this.config.apiEndpoint}/enrollees`, this.enrolmentAdapterRequest(payload))
       .pipe(
         map((response: PrimeHttpResponse) => response.result),
-        map((enrolment: Enrolment) => {
-          this.logger.info('ENROLMENT', enrolment);
-          return this.enrolmentAdapterResponse(enrolment);
-        })
+        tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
+        map((enrollee: HttpEnrollee) => this.enrolleeAdapterResponse(enrollee))
       );
   }
 
-  public updateEnrolment(enrolment: Enrolment): Observable<any> {
+  public updateEnrollee(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<any> {
     const { id } = enrolment;
-    return this.http.put(`${this.config.apiEndpoint}/enrolments/${id}`, this.enrolmentAdapterRequest(enrolment));
+    let params = new HttpParams();
+    if (beenThroughTheWizard) {
+      params = params.set('beenThroughTheWizard', `${beenThroughTheWizard}`);
+    }
+    return this.http.put(`${this.config.apiEndpoint}/enrollees/${id}`, this.enrolmentAdapterRequest(enrolment), { params });
   }
 
   public updateEnrolmentStatus(id: number, statusCode: number): Observable<Config<number>[]> {
     const payload = { code: statusCode };
-    return this.http.post(`${this.config.apiEndpoint}/enrolments/${id}/statuses`, payload)
+    return this.http.post(`${this.config.apiEndpoint}/enrollees/${id}/statuses`, payload)
       .pipe(
-        map((response: PrimeHttpResponse) => response.result),
-        map((statuses: Config<number>[]) => {
-          this.logger.info('ENROLMENT_STATUSES', statuses);
-          return statuses;
-        })
-      );
-  }
-
-  public createEnrolmentCertificateAccessToken(): Observable<EnrolmentCertificateAccessToken> {
-    return this.http.post(`${this.config.apiEndpoint}/enrolment-certificates/access`, {})
-      .pipe(
-        map((response: PrimeHttpResponse) => response.result),
-        map((token: EnrolmentCertificateAccessToken) => {
-          this.logger.info('ACCESS_TOKEN', token);
-          return token;
-        })
+        map((response: PrimeHttpResponse) => response.result as Config<number>[]),
+        tap((statuses: Config<number>[]) => this.logger.info('ENROLMENT_STATUSES', statuses))
       );
   }
 
@@ -84,22 +69,85 @@ export class EnrolmentResource {
     return this.http.get(`${this.config.apiEndpoint}/enrolment-certificates/access`)
       .pipe(
         map((response: PrimeHttpResponse) => response.result),
-        map((tokens: EnrolmentCertificateAccessToken[]) => {
-          this.logger.info('ACCESS_TOKENS', tokens);
-          return tokens;
-        })
+        tap((tokens: EnrolmentCertificateAccessToken[]) => this.logger.info('ACCESS_TOKENS', tokens))
       );
   }
 
-  private enrolmentAdapterResponse(enrolment: Enrolment): Enrolment {
-    if (!enrolment.enrollee.mailingAddress) {
-      enrolment.enrollee.mailingAddress = new Address();
-    }
-
-    return enrolment;
+  public createEnrolmentCertificateAccessToken(): Observable<EnrolmentCertificateAccessToken> {
+    return this.http.post(`${this.config.apiEndpoint}/enrolment-certificates/access`, {})
+      .pipe(
+        map((response: PrimeHttpResponse) => response.result as EnrolmentCertificateAccessToken),
+        tap((token: EnrolmentCertificateAccessToken) => this.logger.info('ACCESS_TOKEN', token))
+      );
   }
 
-  private enrolmentAdapterRequest(enrolment: Enrolment): Enrolment {
+  // ---
+  // Enrollee and Enrolment Adapters
+  // ---
+
+  private enrolleeAdapterResponse(enrollee: HttpEnrollee): Enrolment {
+    if (!enrollee.mailingAddress) {
+      enrollee.mailingAddress = new Address();
+    }
+
+    if (!enrollee.certifications) {
+      enrollee.certifications = [];
+    }
+
+    if (!enrollee.jobs) {
+      enrollee.jobs = [];
+    }
+
+    if (!enrollee.organizations) {
+      enrollee.organizations = [];
+    }
+
+    return this.enrolmentAdapter(enrollee);
+  }
+
+  private enrolmentAdapter(enrollee: HttpEnrollee): Enrolment {
+    const {
+      userId,
+      firstName,
+      middleName,
+      lastName,
+      preferredFirstName,
+      preferredMiddleName,
+      preferredLastName,
+      dateOfBirth,
+      licensePlate,
+      physicalAddress,
+      mailingAddress,
+      contactEmail,
+      contactPhone,
+      voicePhone,
+      voiceExtension,
+      ...remainder
+    } = enrollee;
+
+    return {
+      enrollee: {
+        userId,
+        firstName,
+        middleName,
+        lastName,
+        preferredFirstName,
+        preferredMiddleName,
+        preferredLastName,
+        dateOfBirth,
+        licensePlate,
+        physicalAddress,
+        mailingAddress,
+        contactEmail,
+        contactPhone,
+        voicePhone,
+        voiceExtension
+      },
+      ...remainder
+    };
+  }
+
+  private enrolmentAdapterRequest(enrolment: Enrolment): HttpEnrollee {
     if (enrolment.enrollee.physicalAddress.postal) {
       enrolment.enrollee.physicalAddress.postal = enrolment.enrollee.physicalAddress.postal.toUpperCase();
     }
@@ -111,11 +159,23 @@ export class EnrolmentResource {
     enrolment.jobs = this.removeIncompleteJobs(enrolment.jobs);
     enrolment.organizations = this.removeIncompleteOrganizations(enrolment.organizations);
 
-    return enrolment;
+    return this.enrolleeAdapter(enrolment);
+  }
+
+  private enrolleeAdapter(enrolment: Enrolment): HttpEnrollee {
+    const {
+      enrollee,
+      ...remainder
+    } = enrolment;
+
+    return {
+      ...enrollee,
+      ...remainder
+    };
   }
 
   // ---
-  // Sanitizer Helpers
+  // Sanitization Helpers
   // ---
 
   private removeIncompleteCollegeCertifications(certifications: CollegeCertification[]) {

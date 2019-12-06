@@ -11,6 +11,11 @@ using Microsoft.OpenApi.Models;
 
 using Prime.Services;
 using Prime.Infrastructure;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using System.Net.Mime;
+using Newtonsoft.Json;
+using System.Linq;
+using Microsoft.AspNetCore.Http;
 
 namespace Prime
 {
@@ -31,7 +36,6 @@ namespace Prime
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<ILookupService, DefaultLookupService>();
-            services.AddScoped<IEnrolmentService, DefaultEnrolmentService>();
             services.AddScoped<IEnrolleeService, DefaultEnrolleeService>();
             services.AddScoped<IAutomaticAdjudicationService, DefaultAutomaticAdjudicationService>();
             services.AddScoped<IEnrolmentCertificateService, DefaultEnrolmentCertificateService>();
@@ -85,6 +89,31 @@ namespace Prime
             // update the DB if necessary with new migrations
             this.UpdateDatabase(app);
 
+            // Health check output
+            var healthCheckOptions = new HealthCheckOptions
+            {
+                ResponseWriter = async (c, r) =>
+                {
+                    c.Response.ContentType = MediaTypeNames.Application.Json;
+                    var result = JsonConvert.SerializeObject(
+                new
+                {
+                    checks = r.Entries.Select(e =>
+                new
+                {
+                    description = e.Key,
+                    status = e.Value.Status.ToString(),
+                    responseTime = e.Value.Duration.TotalMilliseconds
+                }),
+                    totalResponseTime = r.TotalDuration.TotalMilliseconds
+                });
+                    await c.Response.WriteAsync(result);
+                }
+            };
+
+            // Enable healthchecks for an single endpoint
+            app.UseHealthChecks("/healthcheck", healthCheckOptions);
+
             // TODO - disable always using https - probably want this turned back on though once have actual certs
             //app.UseHttpsRedirection();
 
@@ -113,9 +142,16 @@ namespace Prime
             {
                 connectionString = Configuration.GetConnectionString("PrimeDatabase");
             }
+
             services.AddDbContext<ApiDbContext>(options =>
-                options.UseNpgsql(connectionString)
-            );
+            {
+                options.UseNpgsql(connectionString);
+                options.EnableSensitiveDataLogging(sensitiveDataLoggingEnabled: false);
+            });
+
+            services.AddHealthChecks()
+                .AddDbContextCheck<ApiDbContext>("DbContextHealthCheck")
+                .AddNpgSql(connectionString);
         }
 
         public virtual void UpdateDatabase(IApplicationBuilder app)

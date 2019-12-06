@@ -1,0 +1,237 @@
+<app-page-subheader>
+  <ng-container appPageSubheaderTitle>Enrollee</ng-container>
+  <mat-icon *ngIf="isEnrolling"
+            matTooltip="Edit Enrollee"
+            (click)="onRoute(EnrolmentRoutes.PROFILE)">edit</mat-icon>
+</app-page-subheader>
+
+<dl class="row mb-2">
+  <dt class="col-6">Name</dt>
+  <dd class="col-6 text-right">{{ enrolment | enrolment: 'fullName' | default }}</dd>
+  <dt class="col-6">Preferred First Name</dt>
+  <dd class="col-6 text-right">{{ enrollee?.preferredFirstName | default }}</dd>
+  <dt class="col-6">Preferred Middle Name</dt>
+  <dd class="col-6 text-right">{{ enrollee?.preferredMiddleName | default }}</dd>
+  <dt class="col-6">Preferred Last Name</dt>
+  <dd class="col-6 text-right">{{ enrollee?.preferredLastName | default }}</dd>
+  <dt class="col-6">Date of Birth</dt>
+  <dd class="col-6 text-right">{{ enrollee?.dateOfBirth | formatDate | default }}</dd>
+</dl>
+
+<div class="font-italic mb-3">Address</div>
+
+<dl class="row mb-2">
+  <dt class="col-6">Country</dt>
+  <dd class="col-6 text-right">
+    {{ physicalAddress?.countryCode | configCode: 'countries' | default }}
+  </dd>
+  <dt class="col-6">Province</dt>
+  <dd class="col-6 text-right">
+    {{ physicalAddress?.provinceCode | configCode: 'provinces' | default }}
+  </dd>
+  <dt class="col-6">Street Address</dt>
+  <dd class="col-6 text-right">{{ physicalAddress?.street | default }}</dd>
+  <ng-container *ngIf="physicalAddress?.street2">
+    <dt class="col-6">Street Address 2</dt>
+    <dd class="col-6 text-right">{{ physicalAddress?.street2 | default }}</dd>
+  </ng-container>
+  <dt class="col-6">City</dt>
+  <dd class="col-6 text-right">{{ physicalAddress?.city | default }}</dd>
+  <dt class="col-6">Postal Code</dt>
+  <dd class="col-6 text-right">{{ physicalAddress?.postal | postal | default }}</dd>
+</dl>
+
+<div class="font-italic mb-3">Mailing Address</div>
+
+<dl class="row mb-2">
+  <dt class="col-6">Country</dt>
+  <dd class="col-6 text-right">
+    {{ mailingAddress?.countryCode | configCode: 'countries' | default }}
+  </dd>
+  <dt class="col-6">Province</dt>
+  <dd class="col-6 text-right">
+    {{ mailingAddress?.provinceCode | configCode: 'provinces' | default }}
+  </dd>
+  <dt class="col-6">Street Address</dt>
+  <dd class="col-6 text-right">{{ mailingAddress?.street | default }}</dd>
+  <ng-container *ngIf="mailingAddress?.street2">
+    <dt class="col-6">Street Address 2</dt>
+    <dd class="col-6 text-right">{{ mailingAddress?.street2 | default }}</dd>
+  </ng-container>
+  <dt class="col-6">City</dt>
+  <dd class="col-6 text-right">{{ mailingAddress?.city | default }}</dd>
+  <dt class="col-6">Postal Code</dt>
+  <dd class="col-6 text-right">{{ mailingAddress?.postal | postal | default }}</dd>
+</dl>
+
+<div class="font-italic mb-2">Contact Information</div>
+
+<dl class="row mb-3">
+  <dt class="col-6">Voice Phone</dt>
+  <dd class="col-6 text-right">{{ enrollee?.voicePhone | phone | default }}</dd>
+  <dt class="col-6">Extension</dt>
+  <dd class="col-6 text-right">{{ enrollee?.voiceExtension | default }}</dd>
+</dl>
+
+<div class="font-italic mb-3">Notification Information</div>
+
+<dl class="row mb-3">
+  <dt class="col-6">Email Notification</dt>
+  <dd class="col-6 text-right">{{ enrollee?.contactEmail | default }}</dd>
+  <dt class="col-6">Text Notification (SMS)</dt>
+  <dd class="col-6 text-right">{{ enrollee?.contactPhone | phone | default }}</dd>
+</dl>
+
+<app-page-subheader>
+  <ng-container appPageSubheaderTitle>College Certifications</ng-container>
+  <mat-icon *ngIf="isEnrolling"
+            matTooltip="Edit Enrollee"
+            (click)="onRoute(EnrolmentRoutes.REGULATORY)">edit</mat-icon>
+</app-page-subheader>
+
+<ng-container *ngIf="hasCertifications; else hasNone">
+
+  <dl *ngFor="let certification of certifications; let i = index"
+      class="row mb-3">
+    <dt class="col-6">College Certification</dt>
+    <dd class="col-6 text-right">{{ certification.collegeCode | configCode: 'colleges' | default }}</dd>
+    <dt class="col-6">License Number</dt>
+    <dd class="col-6 text-right">
+      {{ certification.collegeCode | configCode: 'colleges' : 'prefix' }}{{ certification.licenseNumber | default }}
+    </dd>
+    <dt class="col-6">License Class</dt>
+    <dd class="col-6 text-right">{{ certification.licenseCode | configCode: 'licenses' | default }}</dd>
+    <dt class="col-6">Renewal Date</dt>
+    <dd class="col-6 text-right">{{ certification.renewalDate | formatDate | default }}</dd>
+    <dt class="col-6">Advanced Practices</dt>
+    <dd class="col-6 text-right">{{ certification.practiceCode | configCode: 'practices' | default }}</dd>
+  </dl>
+
+</ng-container>
+
+<app-page-subheader>
+  <ng-container appPageSubheaderTitle>Device Provider</ng-container>
+  <mat-icon *ngIf="isEnrolling"
+            matTooltip="Edit Enrollee"
+            (click)="onRoute(EnrolmentRoutes.DEVICE_PROVIDER)">edit</mat-icon>
+</app-page-subheader>
+
+<dl class="row mb-3">
+  <dt class="col-6">Device Provider Number</dt>
+  <dd class="col-6 text-right">{{ enrolment?.deviceProviderNumber | default }}</dd>
+  <dt class="col-6">Are you an insulin pump provider?</dt>
+  <dd class="col-6 text-right">
+    <ng-container *ngIf="enrolment?.deviceProviderNumber; else notDeviceProvider">
+      {{ showYesNo(enrolment.isInsulinPumpProvider) }}
+    </ng-container>
+
+    <ng-template #notDeviceProvider>-</ng-template>
+  </dd>
+</dl>
+
+<app-page-subheader>
+  <ng-container appPageSubheaderTitle>Job Information</ng-container>
+  <mat-icon *ngIf="isEnrolling"
+            matTooltip="Edit Enrollee"
+            (click)="onRoute(EnrolmentRoutes.JOB)">edit</mat-icon>
+</app-page-subheader>
+
+<ng-container *ngIf="hasJobs; else hasNone">
+
+  <dl class="row mb-3">
+    <dt class="col-12">Job Titles</dt>
+    <dd class="col-12 text-right">
+      <ul class="list-unstyled">
+        <li *ngFor="let job of jobs; let i = index"
+            class="text-right">
+          {{ job.title }}
+        </li>
+      </ul>
+    </dd>
+  </dl>
+
+</ng-container>
+
+<app-page-subheader>
+  <ng-container appPageSubheaderTitle>Self Declaration</ng-container>
+  <mat-icon *ngIf="isEnrolling"
+            matTooltip="Edit Enrollee"
+            (click)="onRoute(EnrolmentRoutes.SELF_DECLARATION)">edit</mat-icon>
+</app-page-subheader>
+
+<dl class="row mb-4">
+  <dt class="col-10">
+    Have you ever been the subject of an order or a conviction for an information contravention?
+  </dt>
+  <dd class="col-2 text-right">{{ showYesNo(enrolment?.hasConviction) }}</dd>
+  <ng-container *ngIf="enrolment?.hasConviction">
+    <dt class="col-12 my-2">Details</dt>
+    <dd class="col-12">{{ enrolment?.hasConvictionDetails }}</dd>
+  </ng-container>
+</dl>
+
+<dl class="row mb-4">
+  <dt class="col-10">
+    Have you ever been the subject of an order or a conviction for an information contravention?
+  </dt>
+  <dd class="col-2 text-right">{{ showYesNo(enrolment?.hasRegistrationSuspended) }}</dd>
+  <ng-container *ngIf="enrolment?.hasRegistrationSuspended">
+    <dt class="col-12 my-2">Details</dt>
+    <dd class="col-12">{{ enrolment?.hasRegistrationSuspendedDetails }}</dd>
+  </ng-container>
+</dl>
+
+<dl class="row mb-4">
+  <dt class="col-10">
+    Have you ever had Terms and Conditions imposed on your licence as a result of disciplinary actions taken
+    by a governing body?
+  </dt>
+  <dd class="col-2 text-right">{{ showYesNo(enrolment?.hasDisciplinaryAction) }}</dd>
+  <ng-container *ngIf="enrolment?.hasDisciplinaryAction">
+    <dt class="col-12 my-2">Details</dt>
+    <dd class="col-12">{{ enrolment?.hasDisciplinaryActionDetails }}</dd>
+  </ng-container>
+</dl>
+
+<dl class="row mb-4">
+  <dt class="col-10">
+    Have you ever had Terms and Conditions imposed on your licence as a result of disciplinary actions taken
+    by a governing body?
+  </dt>
+  <dd class="col-2 text-right">{{ showYesNo(enrolment?.hasPharmaNetSuspended) }}</dd>
+  <ng-container *ngIf="enrolment?.hasPharmaNetSuspended">
+    <dt class="col-12 my-2">Details</dt>
+    <dd class="col-12">{{ enrolment?.hasPharmaNetSuspendedDetails }}</dd>
+  </ng-container>
+</dl>
+
+<app-page-subheader>
+  <ng-container appPageSubheaderTitle>Organization Information</ng-container>
+  <mat-icon *ngIf="isEnrolling"
+            matTooltip="Edit Enrollee"
+            (click)="onRoute(EnrolmentRoutes.ORGANIZATION)">edit</mat-icon>
+</app-page-subheader>
+
+<ng-container *ngIf="hasOrganizations; else hasNone">
+
+  <dl class="row mb-3">
+    <dt class="col-12">Organization Types</dt>
+    <dd class="col-12 text-right">
+      <ul class="list-unstyled">
+        <li *ngFor="let organization of organizations; let i = index"
+            class="text-right">
+          {{ organization.organizationTypeCode | configCode: 'organizationTypes' }}
+        </li>
+      </ul>
+    </dd>
+  </dl>
+
+</ng-container>
+
+<ng-template #hasNone>
+
+  <div class="mb-4">
+    <strong>None</strong>
+  </div>
+
+</ng-template>

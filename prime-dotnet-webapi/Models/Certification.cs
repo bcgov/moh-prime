@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
@@ -9,16 +8,16 @@ namespace Prime.Models
 {
 
     [Table("Certification")]
-    public class Certification : BaseAuditable, IEnrolmentNavigationProperty
+    public class Certification : BaseAuditable, IEnrolleeNavigationProperty
     {
         [Key]
         public int? Id { get; set; }
 
         [JsonIgnore]
-        public int EnrolmentId { get; set; }
+        public int EnrolleeId { get; set; }
 
         [JsonIgnore]
-        public Enrolment Enrolment { get; set; }
+        public Enrollee Enrollee { get; set; }
 
         [Required]
         public short CollegeCode { get; set; }

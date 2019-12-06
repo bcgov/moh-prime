@@ -28,6 +28,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
   public organizationCtrl: FormControl;
   public organizationTypes: Config<number>[];
   public filteredOrganizationTypes: Config<number>[];
+  public profileCompleted: boolean;
   public EnrolmentRoutes = EnrolmentRoutes;
 
   constructor(
@@ -51,7 +52,9 @@ export class OrganizationComponent implements OnInit, OnDestroy {
   public onSubmit() {
     if (this.form.valid) {
       const payload = this.enrolmentStateService.enrolment;
-      this.busy = this.enrolmentResource.updateEnrolment(payload)
+      // Indicate that the enrolment process has reached the terminal view, or
+      // "Been Through The Wizard - Heidi G. 2019"
+      this.busy = this.enrolmentResource.updateEnrollee(payload, true)
         .subscribe(
           () => {
             this.form.markAsPristine();
@@ -107,6 +110,10 @@ export class OrganizationComponent implements OnInit, OnDestroy {
     return this.organizationTypes;
   }
 
+  public onRoute(routePath: EnrolmentRoutes) {
+    this.router.navigate([routePath], { relativeTo: this.route.parent });
+  }
+
   public canDeactivate(): Observable<boolean> | boolean {
     const data = 'unsaved';
     return (this.form.dirty)
@@ -131,7 +138,10 @@ export class OrganizationComponent implements OnInit, OnDestroy {
   }
 
   private initForm() {
-    this.enrolmentStateService.enrolment = this.enrolmentService.enrolment;
+    const enrolment = this.enrolmentService.enrolment;
+    this.profileCompleted = enrolment.profileCompleted;
+
+    this.enrolmentStateService.enrolment = enrolment;
 
     // Always have at least one organization ready for
     // the enrollee to fill out
