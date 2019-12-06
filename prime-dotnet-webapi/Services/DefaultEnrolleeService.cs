@@ -216,7 +216,6 @@ namespace Prime.Services
             }
         }
 
-
         private void ReplaceExistingAddress(Address dbAddress, Address newAddress, Enrollee enrollee)
         {
             // Remove existing addresses

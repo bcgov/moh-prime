@@ -55,7 +55,7 @@ namespace Prime
 
             var created = ChangeTracker.Entries().Where(x => x.State == EntityState.Added);
             var modified = ChangeTracker.Entries().Where(x => x.State == EntityState.Modified);
-            var currentUser = PrimeUtils.PrimeUserId(_context?.HttpContext?.User);  //note: defaults to Guid.Empty if there is no user
+            var currentUser = _context?.HttpContext?.User.GetPrimeUserId() ?? Guid.Empty;
             var currentDateTime = SEEDING_DATE;
 
             foreach (var item in created)

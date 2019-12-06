@@ -66,7 +66,7 @@ namespace PrimeTests.Mocks
             return Task.FromResult((IEnumerable<Enrollee>)this.GetHolder<int, Enrollee>().Values?.ToList());
         }
 
-        public Task<int> UpdateEnrolleeAsync(Enrollee enrollee, bool profileCompleted = false)
+        public Task<int> UpdateEnrolleeAsync(Enrollee enrollee)
         {
             int updated = 0;
             int? enrolleeId = enrollee.Id;
@@ -76,10 +76,6 @@ namespace PrimeTests.Mocks
                 if (found)
                 {
                     updated = 1;
-                }
-                if (profileCompleted)
-                {
-                    enrollee.ProfileCompleted = true;
                 }
                 this.GetHolder<int, Enrollee>().Add((int)enrolleeId, enrollee);
             }
@@ -126,9 +122,9 @@ namespace PrimeTests.Mocks
                 {
                     foreach (var item in enrollee.EnrolmentStatuses)
                     {
-                        item.PharmaNetStatus = false;
+                        item.IsCurrent = false;
                     }
-                    createdEnrolmentStatus = new EnrolmentStatus { Enrollee = enrollee, EnrolleeId = (int)enrollee.Id, Status = status, StatusCode = status.Code, StatusDate = DateTime.Now, PharmaNetStatus = false };
+                    createdEnrolmentStatus = new EnrolmentStatus { Enrollee = enrollee, EnrolleeId = (int)enrollee.Id, Status = status, StatusCode = status.Code, StatusDate = DateTime.Now, IsCurrent = true };
                     enrollee.EnrolmentStatuses.Add(createdEnrolmentStatus);
                 }
             }

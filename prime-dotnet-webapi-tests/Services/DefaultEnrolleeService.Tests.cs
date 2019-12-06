@@ -22,7 +22,7 @@ namespace PrimeTests.Services
         [Fact]
         public async void testGetEnrollees()
         {
-            // make sure there are no enrollees
+             // make sure there are no enrollees
             Assert.False(_dbContext.Enrollees.Any());
             await _dbContext.SaveChangesAsync();
 
