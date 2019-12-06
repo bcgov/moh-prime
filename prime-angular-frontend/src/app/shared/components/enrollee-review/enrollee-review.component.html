@@ -1,5 +1,8 @@
 <app-page-subheader>
   <ng-container appPageSubheaderTitle>Enrollee</ng-container>
+  <mat-icon *ngIf="isEnrolling"
+            matTooltip="Edit Enrollee"
+            (click)="onRoute(EnrolmentRoutes.PROFILE)">edit</mat-icon>
 </app-page-subheader>
 
 <dl class="row mb-2">
@@ -81,6 +84,9 @@
 
 <app-page-subheader>
   <ng-container appPageSubheaderTitle>College Certifications</ng-container>
+  <mat-icon *ngIf="isEnrolling"
+            matTooltip="Edit Enrollee"
+            (click)="onRoute(EnrolmentRoutes.REGULATORY)">edit</mat-icon>
 </app-page-subheader>
 
 <ng-container *ngIf="hasCertifications; else hasNone">
@@ -105,6 +111,9 @@
 
 <app-page-subheader>
   <ng-container appPageSubheaderTitle>Device Provider</ng-container>
+  <mat-icon *ngIf="isEnrolling"
+            matTooltip="Edit Enrollee"
+            (click)="onRoute(EnrolmentRoutes.DEVICE_PROVIDER)">edit</mat-icon>
 </app-page-subheader>
 
 <dl class="row mb-3">
@@ -122,6 +131,9 @@
 
 <app-page-subheader>
   <ng-container appPageSubheaderTitle>Job Information</ng-container>
+  <mat-icon *ngIf="isEnrolling"
+            matTooltip="Edit Enrollee"
+            (click)="onRoute(EnrolmentRoutes.JOB)">edit</mat-icon>
 </app-page-subheader>
 
 <ng-container *ngIf="hasJobs; else hasNone">
@@ -141,27 +153,10 @@
 </ng-container>
 
 <app-page-subheader>
-  <ng-container appPageSubheaderTitle>Organization Information</ng-container>
-</app-page-subheader>
-
-<ng-container *ngIf="hasOrganizations; else hasNone">
-
-  <dl class="row mb-3">
-    <dt class="col-12">Organization Types</dt>
-    <dd class="col-12 text-right">
-      <ul class="list-unstyled">
-        <li *ngFor="let organization of organizations; let i = index"
-            class="text-right">
-          {{ organization.organizationTypeCode | configCode: 'organizationTypes' }}
-        </li>
-      </ul>
-    </dd>
-  </dl>
-
-</ng-container>
-
-<app-page-subheader>
   <ng-container appPageSubheaderTitle>Self Declaration</ng-container>
+  <mat-icon *ngIf="isEnrolling"
+            matTooltip="Edit Enrollee"
+            (click)="onRoute(EnrolmentRoutes.SELF_DECLARATION)">edit</mat-icon>
 </app-page-subheader>
 
 <dl class="row mb-4">
@@ -209,6 +204,29 @@
     <dd class="col-12">{{ enrolment?.hasPharmaNetSuspendedDetails }}</dd>
   </ng-container>
 </dl>
+
+<app-page-subheader>
+  <ng-container appPageSubheaderTitle>Organization Information</ng-container>
+  <mat-icon *ngIf="isEnrolling"
+            matTooltip="Edit Enrollee"
+            (click)="onRoute(EnrolmentRoutes.ORGANIZATION)">edit</mat-icon>
+</app-page-subheader>
+
+<ng-container *ngIf="hasOrganizations; else hasNone">
+
+  <dl class="row mb-3">
+    <dt class="col-12">Organization Types</dt>
+    <dd class="col-12 text-right">
+      <ul class="list-unstyled">
+        <li *ngFor="let organization of organizations; let i = index"
+            class="text-right">
+          {{ organization.organizationTypeCode | configCode: 'organizationTypes' }}
+        </li>
+      </ul>
+    </dd>
+  </dl>
+
+</ng-container>
 
 <ng-template #hasNone>
 

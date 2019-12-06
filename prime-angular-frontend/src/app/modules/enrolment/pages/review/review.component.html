@@ -14,7 +14,8 @@
       </app-page-subheader>
 
       <app-enrollee-review *ngIf="enrolment"
-                           [enrolment]="enrolment"></app-enrollee-review>
+                           [enrolment]="enrolment"
+                           (route)="onRoute($event)"></app-enrollee-review>
 
       <div class="footer">
         <mat-checkbox class="mr-4"

@@ -85,8 +85,8 @@ export class ReviewComponent implements OnInit {
         ? 'Yes' : 'No';
   }
 
-  public redirect(route: string) {
-    this.router.navigate([EnrolmentRoutes.ENROLMENT, route]);
+  public onRoute(routePath: string) {
+    this.router.navigate([EnrolmentRoutes.ENROLMENT, routePath]);
   }
 
   public ngOnInit() {
