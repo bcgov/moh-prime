@@ -1,4 +1,4 @@
---- kind: "Template"
+kind: "Template"
 apiVersion: "v1"
 metadata:
   name: "${APP_NAME}-dc"
@@ -103,7 +103,10 @@ objects:
           resources:
             limits:
               cpu: "${CPU_LIMIT}"
-              memory: "${MEMORY_LIMIT}"
+              memory: "${MEMORY_LIMIT}"  - name: "SOURCE_REPOSITORY_REF"
+    required: "false"
+  - name: "SOURCE_REPOSITORY_URL"
+    required: "false"
 parameters:
   - name: "APP_NAME"
     displayName: "Name"
