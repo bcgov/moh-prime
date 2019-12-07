@@ -17,7 +17,8 @@ export class ProgressIndicatorComponent implements OnInit {
 
   public get percentComplete() {
     const page = this.currentPage - 1;
-    return Math.trunc(page / this.totalPages * 100);
+    const totalPages = this.totalPages - 1;
+    return Math.trunc(page / totalPages * 100);
   }
 
   public ngOnInit() { }

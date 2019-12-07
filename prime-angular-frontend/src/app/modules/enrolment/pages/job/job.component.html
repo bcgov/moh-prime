@@ -6,6 +6,9 @@
       <form (ngSubmit)="onSubmit()"
             [formGroup]="form"
             novalidate>
+            
+    <app-progress-indicator *ngIf="!profileCompleted"
+                            [currentPage]="3"></app-progress-indicator>
 
         <app-page-header>PharmaNet Enrolment</app-page-header>
 
