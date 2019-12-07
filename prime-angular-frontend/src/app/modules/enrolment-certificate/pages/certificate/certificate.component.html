@@ -1,38 +1,45 @@
 <app-busy-overlay [busy]="busy">
-  <ng-container>
-    <div class="app-print-layout">
+
+  <div class="row">
+    <div class="col-sm-12 col-lg-10 offset-lg-1 col-xl-8 app-print-layout">
+
       <app-page-header>Enrolment Certificate</app-page-header>
 
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>PharmaNet ID</ng-container>
         <ng-container appPageSubheaderSummary>
-          This page contains your PharmaNet ID. You will need to provide this ID to any administrator or vendor who is
-          setting up your PharmaNet access account. This ID will be recorded on all your PharmaNet transactions.
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae architecto debitis doloribus numquam
+          voluptates. Accusantium, blanditiis.
         </ng-container>
       </app-page-subheader>
 
       <ng-container *ngIf="certificate">
-        <dl class="row mb-4">
-          <dt class="col-sm-12 col-md-6 py-1">Name</dt>
-          <dd class="col-sm-12 col-md-6 py-1"> {{ certificate | certificate:'fullName' }}&nbsp; </dd>
 
-          <ng-container
-                        *ngIf="certificate.preferredFirstName || certificate.preferredMiddleName || certificate.preferredLastName">
-            <dt class="col-sm-12 col-md-6 py-1">Preferred Name</dt>
-            <dd class="col-sm-12 col-md-6 py-1">
-              {{ certificate | certificate:'preferredName' }}&nbsp;
-            </dd>
+        <dl class="row mb-4">
+          <dt class="col-6">Name</dt>
+          <dd class="col-6 text-right">{{ certificate | certificate: 'fullName' | default }}</dd>
+
+          <ng-container *ngIf="hasPreferredName">
+            <dt class="col-6">Preferred First Name</dt>
+            <dd class="col-6 text-right">{{ certificate?.preferredFirstName | default }}</dd>
+            <dt class="col-6">Preferred Middle Name</dt>
+            <dd class="col-6 text-right">{{ certificate?.preferredMiddleName | default }}</dd>
+            <dt class="col-6">Preferred Last Name</dt>
+            <dd class="col-6 text-right">{{ certificate?.preferredLastName | default }}</dd>
           </ng-container>
 
-          <dt class="col-sm-12 col-md-6 py-1">Date of Birth</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ certificate.dateOfBirth | formatDate }}&nbsp;</dd>
-
-          <dt class="col-sm-12 col-md-6 py-1">PharmaNet ID</dt>
-          <dd class="col-sm-12 col-md-6 py-1">
-            <app-clipboard-icon [message]="certificate.licensePlate"></app-clipboard-icon>
-          </dd>
+          <dt class="col-6">Date of Birth</dt>
+          <dd class="col-6 text-right">{{ certificate?.dateOfBirth | formatDate | default }}</dd>
         </dl>
+
+        <dl class="row mb-4">
+          <dt class="col-6">PharmaNet ID</dt>
+          <dd class="col-6 text-right">{{ certificate?.licensePlate | default }}</dd>
+        </dl>
+
       </ng-container>
+
     </div>
-  </ng-container>
+  </div>
+
 </app-busy-overlay>

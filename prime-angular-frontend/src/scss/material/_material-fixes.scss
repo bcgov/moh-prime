@@ -18,6 +18,12 @@
   white-space: normal !important;
 }
 
+.mat-form-field {
+  // Provide a bit more spacing under form fields so error
+  // messages are not resting on underlying field labels
+  margin-bottom: 0.3rem;
+}
+
 //
 // Sidenav
 //

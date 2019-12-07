@@ -109,7 +109,7 @@
 
 </ng-container>
 
-<app-page-subheader>
+<!-- <app-page-subheader>
   <ng-container appPageSubheaderTitle>Device Provider</ng-container>
   <mat-icon *ngIf="isEnrolling"
             matTooltip="Edit Enrollee"
@@ -127,7 +127,7 @@
 
     <ng-template #notDeviceProvider>-</ng-template>
   </dd>
-</dl>
+</dl> -->
 
 <app-page-subheader>
   <ng-container appPageSubheaderTitle>Job Information</ng-container>
@@ -139,7 +139,7 @@
 <ng-container *ngIf="hasJobs; else hasNone">
 
   <dl class="row mb-3">
-    <dt class="col-12">Job Titles</dt>
+    <dt class="col-12 mb-1">Job Titles</dt>
     <dd class="col-12 text-right">
       <ul class="list-unstyled">
         <li *ngFor="let job of jobs; let i = index"
@@ -159,46 +159,55 @@
             (click)="onRoute(EnrolmentRoutes.SELF_DECLARATION)">edit</mat-icon>
 </app-page-subheader>
 
-<dl class="row mb-4">
-  <dt class="col-10">
+<dl class="row"
+    [ngClass]="{ 'mb-3': enrolment?.hasConviction }">
+  <dt class="col-10 mb-3 mb-sm-0">
     Have you ever been the subject of an order or a conviction for an information contravention?
   </dt>
-  <dd class="col-2 text-right">{{ showYesNo(enrolment?.hasConviction) }}</dd>
+  <dd class="col-sm-2 text-sm-right"
+      [ngClass]="{ 'mb-0': !enrolment?.hasConviction }">{{ showYesNo(enrolment?.hasConviction) }}</dd>
   <ng-container *ngIf="enrolment?.hasConviction">
     <dt class="col-12 my-2">Details</dt>
     <dd class="col-12">{{ enrolment?.hasConvictionDetails }}</dd>
   </ng-container>
 </dl>
 
-<dl class="row mb-4">
-  <dt class="col-10">
+<dl class="row"
+    [ngClass]="{ 'mb-3': enrolment?.hasRegistrationSuspended }">
+  <dt class="col-10 mb-3 mb-sm-0">
     Have you ever been the subject of an order or a conviction for an information contravention?
   </dt>
-  <dd class="col-2 text-right">{{ showYesNo(enrolment?.hasRegistrationSuspended) }}</dd>
+  <dd class="col-sm-2 text-sm-right"
+      [ngClass]="{ 'mb-0': !enrolment?.hasRegistrationSuspended }">{{ showYesNo(enrolment?.hasRegistrationSuspended) }}
+  </dd>
   <ng-container *ngIf="enrolment?.hasRegistrationSuspended">
     <dt class="col-12 my-2">Details</dt>
     <dd class="col-12">{{ enrolment?.hasRegistrationSuspendedDetails }}</dd>
   </ng-container>
 </dl>
 
-<dl class="row mb-4">
-  <dt class="col-10">
+<dl class="row"
+    [ngClass]="{ 'mb-3': enrolment?.hasDisciplinaryAction }">
+  <dt class="col-10 mb-3 mb-sm-0">
     Have you ever had Terms and Conditions imposed on your licence as a result of disciplinary actions taken
     by a governing body?
   </dt>
-  <dd class="col-2 text-right">{{ showYesNo(enrolment?.hasDisciplinaryAction) }}</dd>
+  <dd class="col-sm-2 text-sm-right"
+      [ngClass]="{ 'mb-0': !enrolment?.hasDisciplinaryAction }">{{ showYesNo(enrolment?.hasDisciplinaryAction) }}</dd>
   <ng-container *ngIf="enrolment?.hasDisciplinaryAction">
     <dt class="col-12 my-2">Details</dt>
     <dd class="col-12">{{ enrolment?.hasDisciplinaryActionDetails }}</dd>
   </ng-container>
 </dl>
 
-<dl class="row mb-4">
-  <dt class="col-10">
+<dl class="row"
+    [ngClass]="{ 'mb-3': enrolment?.hasPharmaNetSuspendedDetails }">
+  <dt class="col-10 mb-3 mb-sm-0">
     Have you ever had Terms and Conditions imposed on your licence as a result of disciplinary actions taken
     by a governing body?
   </dt>
-  <dd class="col-2 text-right">{{ showYesNo(enrolment?.hasPharmaNetSuspended) }}</dd>
+  <dd class="col-sm-2 text-sm-right"
+      [ngClass]="{ 'mb-0': !enrolment?.hasPharmaNetSuspended }">{{ showYesNo(enrolment?.hasPharmaNetSuspended) }}</dd>
   <ng-container *ngIf="enrolment?.hasPharmaNetSuspended">
     <dt class="col-12 my-2">Details</dt>
     <dd class="col-12">{{ enrolment?.hasPharmaNetSuspendedDetails }}</dd>
@@ -215,7 +224,7 @@
 <ng-container *ngIf="hasOrganizations; else hasNone">
 
   <dl class="row mb-3">
-    <dt class="col-12">Organization Types</dt>
+    <dt class="col-12 mb-1">Organization Types</dt>
     <dd class="col-12 text-right">
       <ul class="list-unstyled">
         <li *ngFor="let organization of organizations; let i = index"
