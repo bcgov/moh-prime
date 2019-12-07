@@ -6,26 +6,18 @@ metadata:
     description: "SchemaSpy deployment template."
     tags: "schema-spy"
 parameters:
-  - name: NAME
-    displayName: Name
-    description: A prefix appended to all objects
-    required: true
-  - name: SUFFIX
-    displayName: Name Suffix
-    description: A suffix appended to all objects
-    required: false
-  - name: VERSION
-    required: true
-  - name: SOURCE_CONTEXT_DIR
-    required: true
   - name: SOURCE_REPOSITORY_URL
     required: true
+    value: 'https://github.com/bcgov/moh-prime'
   - name: SOURCE_REPOSITORY_REF
     required: true
+    value: 'develop'
   - name: OC_NAMESPACE
     required: true
+    value: 'dqszvc'
   - name: OC_APP
     required: true
+    value: 'tools'
   - name: "CPU_LIMIT"
     displayName: "CPU Limit"
     required: true
@@ -64,7 +56,7 @@ objects:
 - kind: "Service"
   apiVersion: "v1"
   metadata:
-    name: "${APP_NAME}"
+    name: "schemaspy"
     annotations:
       description: "Exposes and load balances the application pods"
   spec:
@@ -74,11 +66,11 @@ objects:
       port: "8080"
       targetPort: "8080"
     selector:
-      name: "${APP_NAME}"
+      name: "schemaspy"
 - kind: "Route"
   apiVersion: "v1"
   metadata:
-    name: "${APP_NAME}"
+    name: "schemaspy"
   spec:
     host: "${APPLICATION_DOMAIN}"
     tls:
@@ -86,11 +78,11 @@ objects:
       termination: "edge"
     to:
       kind: "Service"
-      name: "${APP_NAME}"
+      name: "schemaspy"
 - kind: "DeploymentConfig"
   apiVersion: "v1"
   metadata:
-    name: "${APP_NAME}"
+    name: "schemaspy"
     annotations:
       description: "Defines how to deploy the container."
   spec:
@@ -108,22 +100,21 @@ objects:
       imageChangeParams:
         automatic: true
         containerNames:
-        - "${APP_NAME}"
+        - "schemaspy"
         from:
           kind: "ImageStreamTag"
-          namespace: "${OC_NAMESPACE}"
-          name: "${NAME}${SUFFIX}:latest"
+          name: "schemaspy:latest"
     replicas: "1"
     selector:
-      name: "${APP_NAME}"
+      name: "schemaspy"
     template:
       metadata:
-        name: "${APP_NAME}"
+        name: "schemaspy"
         labels:
-          name: "${APP_NAME}"
+          name: "schemaspy"
       spec:
         containers:
-        - name: "${APP_NAME}"
+        - name: "schemaspy"
           image: " "
           ports:
           - containerPort: "8080"
