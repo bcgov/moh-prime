@@ -30,6 +30,26 @@ export class SummaryComponent implements OnInit {
     private logger: LoggerService
   ) { }
 
+
+  public get enrollee() {
+    return (this.enrolment) ? this.enrolment.enrollee : null;
+  }
+
+  public get hasPreferredName(): boolean {
+    return (
+      this.enrollee &&
+      (!!this.enrollee.preferredFirstName || !!this.enrollee.preferredMiddleName || !!this.enrollee.preferredLastName)
+    );
+  }
+
+  public get physicalAddress() {
+    return (this.enrollee) ? this.enrollee.physicalAddress : null;
+  }
+
+  public showYesNo(isActive: boolean) {
+    return (isActive) ? 'Yes' : 'No';
+  }
+
   public generateProvisionerLink() {
     this.enrolmentResource.createEnrolmentCertificateAccessToken()
       .subscribe((token) => this.tokens.push(token));
@@ -47,7 +67,7 @@ export class SummaryComponent implements OnInit {
         (tokens: EnrolmentCertificateAccessToken[]) => this.tokens = tokens,
         (error: any) => {
           this.toastService.openErrorToast('Access tokens could be found.');
-          this.logger.error('[EnrolmentCertificate]Summary::OnInitAccess error has occurred: ', error);
+          this.logger.error('[EnrolmentCertificate]Summary::ngOnInit error has occurred: ', error);
         });
   }
 }

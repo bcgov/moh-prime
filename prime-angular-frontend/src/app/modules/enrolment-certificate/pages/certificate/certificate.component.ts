@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+
 import { Subscription } from 'rxjs';
+
 import { EnrolmentCertificate } from '../../shared/models/enrolment-certificate.model';
 import { EnrolmentCertificateResource } from '../../shared/services/enrolment-certificate-resource.service';
 
@@ -18,9 +20,15 @@ export class CertificateComponent implements OnInit {
     private enrolmentCertificateResource: EnrolmentCertificateResource,
   ) { }
 
-  ngOnInit() {
-    this.busy = this.enrolmentCertificateResource
-      .getCertificate(this.route.snapshot.params.tokenId)
+  public get hasPreferredName(): boolean {
+    return (
+      this.certificate &&
+      (!!this.certificate.preferredFirstName || !!this.certificate.preferredMiddleName || !!this.certificate.preferredLastName)
+    );
+  }
+
+  public ngOnInit() {
+    this.busy = this.enrolmentCertificateResource.getCertificate(this.route.snapshot.params.tokenId)
       .subscribe((certificate: EnrolmentCertificate) => this.certificate = certificate);
   }
 }
