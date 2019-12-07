@@ -22,14 +22,14 @@ objects:
   - kind: ImageStream
     apiVersion: v1
     metadata:
-      name: "${NAME}${SUFFIX}"
+      name: "schemaspy"
   - kind: BuildConfig
     apiVersion: v1
     metadata:
-      name: "${NAME}${SUFFIX}"
+      name: "schemaspy"
       labels:
-        app: "${NAME}${SUFFIX}"
-        buildconfig: "${NAME}${SUFFIX}"
+        app: "schemaspy"
+        buildconfig: "schemaspy"
     spec:
       source:
         type: Git
@@ -42,7 +42,7 @@ objects:
       output:
         to:
           kind: ImageStreamTag
-          name: "${NAME}${SUFFIX}:latest"
+          name: "schemaspy:latest"
       triggers:
       - type: ConfigChange
       - type: ImageChange
