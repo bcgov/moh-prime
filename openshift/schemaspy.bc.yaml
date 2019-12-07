@@ -36,7 +36,7 @@ objects:
         git:
           uri: "${SOURCE_REPOSITORY_URL}"
           ref: "${SOURCE_REPOSITORY_REF}"
-        contextDir: "${SOURCE_CONTEXT_DIR}"
+        contextDir: "schemaspy"
       strategy:
         type: Docker
       output:
