@@ -18,7 +18,7 @@ export class EnrolleeProfileComponent {
 
   public get fullname(): string {
     return (this.enrollee)
-      ? `${this.enrollee.firstName} ${this.enrollee.middleName} ${this.enrollee.lastName}`
+      ? `${this.enrollee.firstName || ''} ${this.enrollee.middleName || ''} ${this.enrollee.lastName || ''}`
       : '';
   }
 
