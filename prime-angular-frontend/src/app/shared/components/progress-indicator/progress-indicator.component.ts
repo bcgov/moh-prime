@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 
 @Component({
   selector: 'app-progress-indicator',
@@ -6,20 +7,18 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./progress-indicator.component.scss']
 })
 export class ProgressIndicatorComponent implements OnInit {
-  @Input() public currentPage: number;
+  @Input() public currentRoute: EnrolmentRoutes;
 
-  public totalPages: number;
+  public percentComplete: number;
 
-  constructor() {
-    this.currentPage = 0;
-    this.totalPages = 5;
+  constructor() { }
+
+  public ngOnInit() {
+    const enrolmentRoutes = EnrolmentRoutes.enrolmentRouteOrder();
+    const currentRoute = enrolmentRoutes.findIndex(er => er === this.currentRoute);
+    const currentPage = (currentRoute > -1) ? currentRoute : 0;
+    const totalPages = enrolmentRoutes.length - 1;
+
+    this.percentComplete = Math.trunc(currentPage / totalPages * 100);
   }
-
-  public get percentComplete() {
-    const page = this.currentPage - 1;
-    const totalPages = this.totalPages - 1;
-    return Math.trunc(page / totalPages * 100);
-  }
-
-  public ngOnInit() { }
 }
