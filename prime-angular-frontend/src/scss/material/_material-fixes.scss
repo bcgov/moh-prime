@@ -12,8 +12,9 @@
 // Forms
 //
 
-.mat-checkbox-layout {
-  // Force checkbox labels to line wrap if required
+.mat-checkbox-layout,
+.mat-slide-toggle-content {
+  // Force checkbox and slide labels to line wrap if required
   // instead of overflowing their container
   white-space: normal !important;
 }
