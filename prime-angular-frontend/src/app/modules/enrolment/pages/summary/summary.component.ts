@@ -56,7 +56,8 @@ export class SummaryComponent extends BaseEnrolmentPage implements OnInit {
 
   public ngOnInit() {
     // Only shown the first time the enrollee reaches the summary
-    this.showProgressBar = this.windowRef.nativeWindow.history.state.showProgressBar;
+    const routeState = this.windowRef.nativeWindow.history.state;
+    this.showProgressBar = (routeState && routeState.showProgressBar) ? routeState.showProgressBar : false;
 
     this.enrolment = this.enrolmentService.enrolment;
 

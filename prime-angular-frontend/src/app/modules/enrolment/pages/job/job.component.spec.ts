@@ -16,6 +16,7 @@ import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.mod
 import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
+import { ProgressIndicatorComponent } from '@shared/components/progress-indicator/progress-indicator.component';
 import { PageFooterComponent } from '@enrolment/shared/components/page-footer/page-footer.component';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { JobFormComponent } from '@enrolment/shared/components/job-form/job-form.component';
@@ -42,7 +43,8 @@ describe('JobComponent', () => {
         JobFormComponent,
         PageHeaderComponent,
         PageSubheaderComponent,
-        PageFooterComponent
+        PageFooterComponent,
+        ProgressIndicatorComponent
       ],
       providers: [
         {
