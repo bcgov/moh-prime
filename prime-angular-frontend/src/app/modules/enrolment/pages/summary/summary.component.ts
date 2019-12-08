@@ -1,42 +1,39 @@
-import { Component, OnInit, Inject } from '@angular/core';
-
-import { Subscription } from 'rxjs';
+import { Component, OnInit, Inject, ChangeDetectionStrategy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentCertificateAccessToken } from '@shared/models/enrolment-certificate-access-token.model';
+import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 
 @Component({
   selector: 'app-summary',
   templateUrl: './summary.component.html',
-  styleUrls: ['./summary.component.scss']
+  styleUrls: ['./summary.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SummaryComponent implements OnInit {
-  public busy: Subscription;
+export class SummaryComponent extends BaseEnrolmentPage implements OnInit {
   public enrolment: Enrolment;
   public tokens: EnrolmentCertificateAccessToken[];
 
   constructor(
+    protected route: ActivatedRoute,
+    protected router: Router,
     @Inject(APP_CONFIG) private config: AppConfig,
     private enrolmentResource: EnrolmentResource,
     private enrolmentService: EnrolmentService,
     private toastService: ToastService,
     private logger: LoggerService
-  ) { }
+  ) {
+    super(route, router);
+  }
 
   public get enrollee() {
     return (this.enrolment) ? this.enrolment.enrollee : null;
-  }
-
-  public get hasPreferredName(): boolean {
-    return (
-      this.enrollee &&
-      (!!this.enrollee.preferredFirstName || !!this.enrollee.preferredMiddleName || !!this.enrollee.preferredLastName)
-    );
   }
 
   public get physicalAddress() {
@@ -50,10 +47,6 @@ export class SummaryComponent implements OnInit {
   public generateProvisionerLink() {
     this.enrolmentResource.createEnrolmentCertificateAccessToken()
       .subscribe((token) => this.tokens.push(token));
-  }
-
-  public showYesNo(isActive: boolean) {
-    return (isActive) ? 'Yes' : 'No';
   }
 
   public ngOnInit() {

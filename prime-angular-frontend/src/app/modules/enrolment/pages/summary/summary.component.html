@@ -3,6 +3,9 @@
   <div class="row">
     <div class="col-sm-12 col-lg-8 offset-lg-1 offset-xl-0 app-print-layout">
 
+      <app-progress-indicator *ngIf="hasInitialStatus"
+                              [currentRoute]="EnrolmentRoutes.SUMMARY"></app-progress-indicator>
+
       <app-page-header>Enrolment Summary</app-page-header>
 
       <app-page-subheader>
@@ -15,45 +18,9 @@
 
       <ng-container *ngIf="enrolment">
 
-        <dl class="row mb-4">
-          <dt class="col-6">Name</dt>
-          <dd class="col-6 text-right">{{ enrolment | enrolment: 'fullName' | default }}</dd>
+        <app-enrollee-profile [enrollee]="enrollee"></app-enrollee-profile>
 
-          <ng-container *ngIf="hasPreferredName">
-            <dt class="col-6">Preferred First Name</dt>
-            <dd class="col-6 text-right">{{ enrollee?.preferredFirstName | default }}</dd>
-            <dt class="col-6">Preferred Middle Name</dt>
-            <dd class="col-6 text-right">{{ enrollee?.preferredMiddleName | default }}</dd>
-            <dt class="col-6">Preferred Last Name</dt>
-            <dd class="col-6 text-right">{{ enrollee?.preferredLastName | default }}</dd>
-          </ng-container>
-
-          <dt class="col-6">Date of Birth</dt>
-          <dd class="col-6 text-right">{{ enrollee?.dateOfBirth | formatDate | default }}</dd>
-        </dl>
-
-        <div class="font-italic mb-3">Address</div>
-
-        <dl class="row mb-4">
-          <dt class="col-6">Country</dt>
-          <dd class="col-6 text-right">
-            {{ enrolment.enrollee.physicalAddress.countryCode | configCode: 'countries' | default }}
-          </dd>
-          <dt class="col-6">Province</dt>
-          <dd class="col-6 text-right">
-            {{ enrolment.enrollee.physicalAddress.provinceCode | configCode: 'provinces' | default }}
-          </dd>
-          <dt class="col-6">Street Address</dt>
-          <dd class="col-6 text-right">{{ enrolment.enrollee.physicalAddress.street | default }}</dd>
-          <ng-container *ngIf="enrolment.enrollee.physicalAddress.street2">
-            <dt class="col-6">Street Address 2</dt>
-            <dd class="col-6 text-right">{{ enrolment.enrollee.physicalAddress.street2 | default }}</dd>
-          </ng-container>
-          <dt class="col-6">City</dt>
-          <dd class="col-6 text-right">{{ enrolment.enrollee.physicalAddress.city | default }}</dd>
-          <dt class="col-6">Postal Code</dt>
-          <dd class="col-6 text-right">{{ enrolment.enrollee.physicalAddress.postal | postal | default }}</dd>
-        </dl>
+        <app-enrollee-address [address]="physicalAddress"></app-enrollee-address>
 
         <dl class="row mb-4">
           <dt class="col-6">PharmaNet ID</dt>
@@ -92,7 +59,7 @@
             <tbody>
               <tr *ngFor="let token of tokens">
                 <td>{{ token.id }}</td>
-                <td>{{ showYesNo(token.active) }}</td>
+                <td>{{ token.active | yesNo }}</td>
                 <td>{{ token.viewCount }}</td>
                 <td>
                   <app-clipboard-icon [content]="getTokenUrl(token.id)"></app-clipboard-icon>
