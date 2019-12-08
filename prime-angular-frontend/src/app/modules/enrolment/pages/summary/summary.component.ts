@@ -1,15 +1,13 @@
 import { Component, OnInit, Inject } from '@angular/core';
 
-import { Subscription, Observable, forkJoin } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
+import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
-import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { EnrolmentCertificateAccessToken } from '@shared/models/enrolment-certificate-access-token.model';
-import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 @Component({
@@ -30,7 +28,6 @@ export class SummaryComponent implements OnInit {
     private logger: LoggerService
   ) { }
 
-
   public get enrollee() {
     return (this.enrolment) ? this.enrolment.enrollee : null;
   }
@@ -46,8 +43,8 @@ export class SummaryComponent implements OnInit {
     return (this.enrollee) ? this.enrollee.physicalAddress : null;
   }
 
-  public showYesNo(isActive: boolean) {
-    return (isActive) ? 'Yes' : 'No';
+  public getTokenUrl(tokenId: string): string {
+    return `${this.config.loginRedirectUrl}/enrolment-certificate/${tokenId}`;
   }
 
   public generateProvisionerLink() {
@@ -55,8 +52,8 @@ export class SummaryComponent implements OnInit {
       .subscribe((token) => this.tokens.push(token));
   }
 
-  public generateTokenUrl(tokenId: string): string {
-    return `${this.config.loginRedirectUrl}/enrolment-certificate/${tokenId}`;
+  public showYesNo(isActive: boolean) {
+    return (isActive) ? 'Yes' : 'No';
   }
 
   public ngOnInit() {
@@ -67,7 +64,7 @@ export class SummaryComponent implements OnInit {
         (tokens: EnrolmentCertificateAccessToken[]) => this.tokens = tokens,
         (error: any) => {
           this.toastService.openErrorToast('Access tokens could be found.');
-          this.logger.error('[EnrolmentCertificate]Summary::ngOnInit error has occurred: ', error);
+          this.logger.error('[EnrolmentCertificate] Summary::ngOnInit error has occurred: ', error);
         });
   }
 }

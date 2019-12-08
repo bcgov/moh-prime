@@ -1,7 +1,10 @@
 <app-busy-overlay [busy]="busy">
 
   <div class="row">
-    <div class="col-sm-12 col-lg-8 offset-lg-1">
+    <div class="col-sm-12 col-lg-8 offset-lg-1 offset-xl-0">
+
+      <app-progress-indicator *ngIf="hasInitialStatus"
+                              [currentRoute]="EnrolmentRoutes.CONFIRMATION"></app-progress-indicator>
 
       <app-page-header>Enrolment Confirmation</app-page-header>
 

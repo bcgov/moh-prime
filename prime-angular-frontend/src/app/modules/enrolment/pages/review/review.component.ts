@@ -12,6 +12,7 @@ import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
+import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
@@ -21,21 +22,22 @@ import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-stat
   templateUrl: './review.component.html',
   styleUrls: ['./review.component.scss']
 })
-export class ReviewComponent implements OnInit {
+export class ReviewComponent extends BaseEnrolmentPage implements OnInit {
   public busy: Subscription;
   public enrolment: Enrolment;
-  public EnrolmentRoutes = EnrolmentRoutes;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
+    protected route: ActivatedRoute,
+    protected router: Router,
+    private dialog: MatDialog,
     private enrolmentService: EnrolmentService,
     private enrolmentResource: EnrolmentResource,
     private enrolmentStateService: EnrolmentStateService,
     private toastService: ToastService,
-    private dialog: MatDialog,
     private logger: LoggerService
-  ) { }
+  ) {
+    super(route, router);
+  }
 
   public onSubmit() {
     if (this.enrolmentStateService.isEnrolmentValid()) {
@@ -72,20 +74,10 @@ export class ReviewComponent implements OnInit {
     }
   }
 
-  public showYesNo(declared: boolean) {
-    return (declared === null)
-      ? 'N/A' : (declared)
-        ? 'Yes' : 'No';
-  }
-
-  public onRoute(routePath: EnrolmentRoutes) {
-    this.router.navigate([routePath], { relativeTo: this.route.parent });
-  }
-
   public ngOnInit() {
     const enrolment = this.enrolmentService.enrolment;
-    this.enrolment = enrolment;
 
+    this.enrolment = enrolment;
     this.enrolmentStateService.enrolment = enrolment;
   }
 }

@@ -1,10 +1,10 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MatDialog, MatCheckboxChange } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { FormControl } from '@angular/forms';
 
 import { exhaustMap } from 'rxjs/operators';
-import { EMPTY, Subscription } from 'rxjs';
+import { EMPTY } from 'rxjs';
 
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
@@ -15,43 +15,45 @@ import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
+import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
-import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
-
 
 @Component({
   selector: 'app-access-agreement',
   templateUrl: './access-agreement.component.html',
   styleUrls: ['./access-agreement.component.scss']
 })
-export class AccessAgreementComponent implements OnInit {
-  public busy: Subscription;
-  public isAutomatic: boolean;
+export class AccessAgreementComponent extends BaseEnrolmentPage implements OnInit {
   public enrolment: Enrolment;
+  public isAutomatic: boolean;
   public currentPage: number;
-  public agree: FormControl;
-  public disabled: boolean;
   public hasReadAgreement: boolean;
+  public agreed: FormControl;
+
+  // Allow the use of enum in the component template
   public EnrolleeClassification = EnrolleeClassification;
 
-
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private enrolmentService: EnrolmentService,
-    private enrolmentResource: EnrolmentResource,
-    private enrolmentStateService: EnrolmentStateService,
-    private toastService: ToastService,
+    protected route: ActivatedRoute,
+    protected router: Router,
     private dialog: MatDialog,
     private changeDetectorRef: ChangeDetectorRef,
+    private enrolmentResource: EnrolmentResource,
+    private enrolmentService: EnrolmentService,
+    private toastService: ToastService,
     private utilsService: UtilsService,
     private logger: LoggerService
   ) {
+    super(route, router);
+
     this.currentPage = 0;
-    this.agree = new FormControl(false);
-    this.disabled = true;
     this.hasReadAgreement = false;
+    this.agreed = new FormControl(false);
+  }
+
+  public get hasAgreed(): boolean {
+    return this.agreed.value;
   }
 
   public onSubmit() {
@@ -85,11 +87,10 @@ export class AccessAgreementComponent implements OnInit {
 
   public onPrevPage() {
     if (this.currentPage > 0) {
-      this.agree.reset();
-      this.disabled = true;
       this.utilsService.scrollTo();
       this.currentPage--;
       this.hasReadAgreement = false;
+      this.agreed.reset(false);
     }
   }
 
@@ -98,10 +99,6 @@ export class AccessAgreementComponent implements OnInit {
       this.utilsService.scrollTo();
       this.currentPage++;
     }
-  }
-
-  public onConfirmAgreement(value: MatCheckboxChange) {
-    this.disabled = !value.checked;
   }
 
   public onPageChange(agreement: { atEnd: boolean }) {

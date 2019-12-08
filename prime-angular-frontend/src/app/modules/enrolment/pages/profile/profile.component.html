@@ -1,14 +1,14 @@
 <app-busy-overlay [busy]="busy">
 
   <div class="row">
-    <div class="col-sm-12 col-lg-8 offset-lg-1 col-xl-5">
+    <div class="col-sm-12 col-lg-8 offset-lg-1 col-xl-6 offset-xl-0">
 
       <form (ngSubmit)="onSubmit()"
             [formGroup]="form"
             novalidate>
-            
-    <app-progress-indicator *ngIf="!profileCompleted"
-                            [currentPage]="1"></app-progress-indicator>
+
+        <app-progress-indicator *ngIf="hasInitialStatus"
+                                [currentRoute]="EnrolmentRoutes.PROFILE"></app-progress-indicator>
 
         <app-page-header>PharmaNet Enrolment</app-page-header>
 
@@ -24,8 +24,7 @@
               <mat-form-field class="w-100">
                 <input matInput
                        placeholder="First Name"
-                       formControlName="firstName"
-                       [required]="isRequired('firstName')">
+                       formControlName="firstName">
                 <mat-error>Required</mat-error>
               </mat-form-field>
 
@@ -37,8 +36,7 @@
               <mat-form-field class="w-100">
                 <input matInput
                        placeholder="Middle Name"
-                       formControlName="middleName"
-                       [required]="isRequired('middleName')">
+                       formControlName="middleName">
               </mat-form-field>
 
             </div>
@@ -49,8 +47,7 @@
               <mat-form-field class="w-100">
                 <input matInput
                        placeholder="Last Name"
-                       formControlName="lastName"
-                       [required]="isRequired('lastName')">
+                       formControlName="lastName">
                 <mat-error>Required</mat-error>
               </mat-form-field>
 
@@ -63,14 +60,11 @@
                 <input matInput
                        placeholder="Date of Birth"
                        [matDatepicker]="picker"
-                       formControlName="dateOfBirth"
-                       [max]="maxBirthDate"
-                       [required]="isRequired('dateOfBirth')">
+                       formControlName="dateOfBirth">
                 <mat-datepicker-toggle matSuffix
                                        [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker
-                                startView="multi-year"
-                                [touchUi]="isMobile"></mat-datepicker>
+                                startView="multi-year"></mat-datepicker>
                 <mat-error>Required</mat-error>
               </mat-form-field>
 
@@ -105,8 +99,8 @@
                 <mat-form-field class="w-100">
                   <input matInput
                          placeholder="Preferred First Name"
-                         formControlName="preferredFirstName"
-                         [required]="isRequired('preferredFirstName')">
+                         formControlName="preferredFirstName">
+                  <mat-error>Required</mat-error>
                 </mat-form-field>
 
               </div>
@@ -117,8 +111,7 @@
                 <mat-form-field class="w-100">
                   <input matInput
                          placeholder="Preferred Middle Name (Optional)"
-                         formControlName="preferredMiddleName"
-                         [required]="isRequired('preferredMiddleName')">
+                         formControlName="preferredMiddleName">
                 </mat-form-field>
 
               </div>
@@ -129,8 +122,8 @@
                 <mat-form-field class="w-100">
                   <input matInput
                          placeholder="Preferred Last Name"
-                         formControlName="preferredLastName"
-                         [required]="isRequired('preferredLastName')">
+                         formControlName="preferredLastName">
+                  <mat-error>Required</mat-error>
                 </mat-form-field>
 
               </div>
@@ -188,8 +181,7 @@
                        placeholder="Phone Number for Voice Contact"
                        formControlName="voicePhone"
                        mask="(000) 000-0000"
-                       [showMaskTyped]="false"
-                       [required]="isRequired('voicePhone')">
+                       [showMaskTyped]="false">
                 <mat-error *ngIf="voicePhone.hasError('required')">Required</mat-error>
                 <mat-error *ngIf="voicePhone.hasError('phone')">Must be a valid phone number</mat-error>
               </mat-form-field>
@@ -200,8 +192,7 @@
               <mat-form-field class="w-100">
                 <input matInput
                        placeholder="Extension Number (Optional)"
-                       formControlName="voiceExtension"
-                       [required]="isRequired('voiceExtension')">
+                       formControlName="voiceExtension">
                 <mat-error *ngIf="voiceExtension.hasError('required')">Required</mat-error>
                 <mat-error *ngIf="voiceExtension.hasError('numeric')">Must contain only numbers</mat-error>
               </mat-form-field>
@@ -238,8 +229,7 @@
                   <mat-form-field class="w-100">
                     <input matInput
                            placeholder="Email"
-                           formControlName="contactEmail"
-                           [required]="isRequired('contactEmail')">
+                           formControlName="contactEmail">
                     <mat-error *ngIf="contactEmail.hasError('required')">Required</mat-error>
                     <mat-error *ngIf="contactEmail.hasError('email')">Must be a valid email address</mat-error>
                   </mat-form-field>
@@ -256,8 +246,7 @@
                            placeholder="Mobile Phone"
                            formControlName="contactPhone"
                            mask="(000) 000-0000"
-                           [showMaskTyped]="false"
-                           [required]="isRequired('contactPhone')">
+                           [showMaskTyped]="false">
                     <mat-error *ngIf="contactPhone.hasError('required')">Required</mat-error>
                     <mat-error *ngIf="contactPhone.hasError('phone')">Must be a valid phone number</mat-error>
                   </mat-form-field>
@@ -270,11 +259,10 @@
 
         </section>
 
-        <app-page-footer [profileCompleted]="profileCompleted"
+        <app-page-footer [profileCompleted]="isProfileComplete"
                          [hasSecondaryAction]="false"
                          (save)="onSubmit()"
-                         (continue)="onSubmit()"
-                         (back)="onRoute(EnrolmentRoutes.PROFILE)"></app-page-footer>
+                         (continue)="onSubmit()"></app-page-footer>
 
       </form>
 

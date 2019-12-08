@@ -3,17 +3,14 @@ import { FormGroup, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
-import { Observable, Subscription } from 'rxjs';
-import { tap } from 'rxjs/operators';
-
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
-import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 
 @Component({
@@ -21,25 +18,23 @@ import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-stat
   templateUrl: './regulatory.component.html',
   styleUrls: ['./regulatory.component.scss']
 })
-export class RegulatoryComponent implements OnInit, OnDestroy {
-  public busy: Subscription;
-  public form: FormGroup;
+export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnInit, OnDestroy {
   public colleges: Config<number>[];
   public licenses: Config<number>[];
-  public profileCompleted: boolean;
-  public EnrolmentRoutes = EnrolmentRoutes;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private dialog: MatDialog,
+    protected route: ActivatedRoute,
+    protected router: Router,
+    protected dialog: MatDialog,
     private configService: ConfigService,
-    private enrolmentService: EnrolmentService,
     private enrolmentResource: EnrolmentResource,
+    private enrolmentService: EnrolmentService,
     private enrolmentStateService: EnrolmentStateService,
     private toastService: ToastService,
     private logger: LoggerService
   ) {
+    super(route, router, dialog);
+
     this.colleges = this.configService.colleges;
     this.licenses = this.configService.licenses;
   }
@@ -95,22 +90,9 @@ export class RegulatoryComponent implements OnInit, OnDestroy {
     this.certifications.removeAt(index);
   }
 
-  public onRoute(routePath: EnrolmentRoutes) {
-    this.router.navigate([routePath], { relativeTo: this.route.parent });
-  }
-
-  public canDeactivate(): Observable<boolean> | boolean {
-    const data = 'unsaved';
-    return (this.form.dirty)
-      ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
-        .pipe(
-          tap(() => this.removeIncompleteCertifications())
-        )
-      : true;
-  }
-
   public ngOnInit() {
     this.createFormInstance();
+    this.patchForm();
     this.initForm();
   }
 
@@ -118,22 +100,23 @@ export class RegulatoryComponent implements OnInit, OnDestroy {
     this.removeIncompleteCertifications();
   }
 
-  private createFormInstance() {
+  protected createFormInstance() {
     this.form = this.enrolmentStateService.regulatoryForm;
   }
 
-  private initForm() {
-
-    const enrolment = this.enrolmentService.enrolment;
-    this.profileCompleted = enrolment.profileCompleted;
-
-    this.enrolmentStateService.enrolment = enrolment;
-
+  protected initForm() {
     // Always have at least one certification ready for
     // the enrollee to fill out
     if (!this.certifications.length) {
       this.addCertification();
     }
+  }
+
+  protected patchForm() {
+    const enrolment = this.enrolmentService.enrolment;
+
+    this.enrolmentStateService.enrolment = enrolment;
+    this.isProfileComplete = enrolment.profileCompleted;
   }
 
   /**

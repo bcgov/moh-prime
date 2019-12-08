@@ -1,19 +1,15 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
-import * as moment from 'moment';
-
-import { Observable, Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
-import { ViewportService } from '@core/services/viewport.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
-import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
@@ -25,45 +21,28 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent implements OnInit {
-  public busy: Subscription;
-  public form: FormGroup;
-  public maxBirthDate: moment.Moment;
+export class ProfileComponent extends BaseEnrolmentProfilePage implements OnInit {
   public hasPreferredName: boolean;
   public hasMailingAddress: boolean;
-  public subheadings: { [key: string]: { subheader: string, help: string } };
-  public profileCompleted: boolean;
-  public EnrolmentRoutes = EnrolmentRoutes;
 
-  private isNewEnrolment: boolean;
+  // Whether a profile exists for an enrollee
+  private isNewProfile: boolean;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private dialog: MatDialog,
+    protected route: ActivatedRoute,
+    protected router: Router,
+    protected dialog: MatDialog,
     private authService: AuthService,
-    private enrolmentStateService: EnrolmentStateService,
     private enrolmentResource: EnrolmentResource,
     private enrolmentService: EnrolmentService,
+    private enrolmentStateService: EnrolmentStateService,
     private formUtilsService: FormUtilsService,
     private toastService: ToastService,
-    private viewportService: ViewportService,
-    private logger: LoggerService,
+    private logger: LoggerService
   ) {
-    this.maxBirthDate = moment();
-    this.isNewEnrolment = true;
-  }
+    super(route, router, dialog);
 
-  public get firstName(): FormControl {
-    return this.form.get('firstName') as FormControl;
-  }
-
-  public get lastName(): FormControl {
-    return this.form.get('lastName') as FormControl;
-  }
-
-  public get dateOfBirth(): FormControl {
-    return this.form.get('dateOfBirth') as FormControl;
+    this.isNewProfile = false;
   }
 
   public get physicalAddress(): FormGroup {
@@ -98,17 +77,13 @@ export class ProfileComponent implements OnInit {
     return this.form.get('contactPhone') as FormControl;
   }
 
-  public get isMobile() {
-    return this.viewportService.isMobile;
-  }
-
   public onSubmit() {
     if (this.form.valid) {
       const payload = this.enrolmentStateService.enrolment;
-      const request$ = (this.isNewEnrolment)
+      const request$ = (this.isNewProfile)
         ? this.enrolmentResource.createEnrollee(payload)
           .pipe(
-            tap(() => this.isNewEnrolment = false),
+            tap(() => this.isNewProfile = false),
             map((enrolment: Enrolment) => this.enrolmentStateService.enrolment = enrolment)
           )
         : this.enrolmentResource.updateEnrollee(payload);
@@ -118,7 +93,7 @@ export class ProfileComponent implements OnInit {
           () => {
             this.toastService.openSuccessToast('Profile information has been saved');
             this.form.markAsPristine();
-            this.router.navigate([EnrolmentRoutes.REGULATORY], { relativeTo: this.route.parent });
+            this.routeTo(EnrolmentRoutes.REGULATORY);
           },
           (error: any) => {
             this.toastService.openErrorToast('Profile information could not be saved');
@@ -142,46 +117,21 @@ export class ProfileComponent implements OnInit {
 
   public onMailingAddressChange() {
     this.hasMailingAddress = !this.hasMailingAddress;
-    this.toggleValidators(this.mailingAddress, ['street2']);
-  }
 
-  public onRoute(routePath: EnrolmentRoutes) {
-    this.router.navigate([routePath], { relativeTo: this.route.parent });
-  }
-
-  public isRequired(path: string) {
-    this.formUtilsService.isRequired(this.form, path);
-  }
-
-  public canDeactivate(): Observable<boolean> | boolean {
-    const data = 'unsaved';
-    return (this.form.dirty)
-      ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
-      : true;
+    this.toggleMailingAddressValidators(this.mailingAddress, ['street2']);
   }
 
   public ngOnInit() {
     this.createFormInstance();
-
-    const enrolment = this.enrolmentService.enrolment;
-    this.profileCompleted = (enrolment) ? enrolment.profileCompleted : true;
-
-    if (enrolment) {
-      this.isNewEnrolment = false;
-      this.enrolmentStateService.enrolment = enrolment;
-    }
-
-    // TODO is this still needed?
-    this.form.markAsPristine();
-
+    this.patchForm();
     this.initForm();
   }
 
-  private createFormInstance() {
+  protected createFormInstance() {
     this.form = this.enrolmentStateService.profileForm;
   }
 
-  private initForm() {
+  protected initForm() {
     // Show preferred name if it exists
     this.hasPreferredName = !!(
       this.form.get('preferredFirstName').value ||
@@ -199,10 +149,17 @@ export class ProfileComponent implements OnInit {
       this.mailingAddress.get('postal').value
     );
 
-    this.toggleValidators(this.mailingAddress, ['street2']);
+    this.toggleMailingAddressValidators(this.mailingAddress, ['street2']);
 
-    this.hasContactEmail.valueChanges.subscribe((value: boolean) => this.toggleContactValidators(value, this.contactEmail));
-    this.hasContactPhone.valueChanges.subscribe((value: boolean) => this.toggleContactValidators(value, this.contactPhone));
+    this.hasContactEmail.valueChanges
+      .subscribe((value: boolean) =>
+        this.toggleContactValidators(value, this.contactEmail)
+      );
+
+    this.hasContactPhone.valueChanges
+      .subscribe((value: boolean) =>
+        this.toggleContactValidators(value, this.contactPhone)
+      );
 
     if (this.contactEmail.value) {
       this.form.get('hasContactEmail').patchValue(true);
@@ -211,12 +168,26 @@ export class ProfileComponent implements OnInit {
     if (this.contactPhone.value) {
       this.form.get('hasContactPhone').patchValue(true);
     }
-
-    this.patchForm();
   }
 
-  private async patchForm() {
-    if (this.isNewEnrolment) {
+  protected patchForm() {
+    const enrolment = this.enrolmentService.enrolment;
+
+    if (enrolment) {
+      this.enrolmentStateService.enrolment = enrolment;
+      this.hasInitialStatus = enrolment.initialStatus;
+      this.isProfileComplete = enrolment.profileCompleted;
+    } else {
+      this.isNewProfile = true;
+      this.hasInitialStatus = true;
+      this.isProfileComplete = false;
+
+      this.patchFormWithUser();
+    }
+  }
+
+  private async patchFormWithUser() {
+    if (this.isNewProfile) {
       const user = await this.authService.getUser();
 
       this.logger.info('USER', user);
@@ -225,7 +196,7 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  private toggleValidators(mailingAddress: FormGroup, blacklist: string[] = []) {
+  private toggleMailingAddressValidators(mailingAddress: FormGroup, blacklist: string[] = []) {
     if (!this.hasMailingAddress) {
       this.formUtilsService.resetAndClearValidators(mailingAddress);
     } else {
