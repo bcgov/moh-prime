@@ -9,6 +9,7 @@ import { EnrolmentCertificateAccessToken } from '@shared/models/enrolment-certif
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
+import { WindowRefService } from '@core/services/window-ref.service';
 
 @Component({
   selector: 'app-summary',
@@ -19,6 +20,7 @@ import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 export class SummaryComponent extends BaseEnrolmentPage implements OnInit {
   public enrolment: Enrolment;
   public tokens: EnrolmentCertificateAccessToken[];
+  public showProgressBar: boolean;
 
   constructor(
     protected route: ActivatedRoute,
@@ -27,9 +29,12 @@ export class SummaryComponent extends BaseEnrolmentPage implements OnInit {
     private enrolmentResource: EnrolmentResource,
     private enrolmentService: EnrolmentService,
     private toastService: ToastService,
-    private logger: LoggerService
+    private logger: LoggerService,
+    private windowRef: WindowRefService
   ) {
     super(route, router);
+
+    this.showProgressBar = false;
   }
 
   public get enrollee() {
@@ -50,6 +55,9 @@ export class SummaryComponent extends BaseEnrolmentPage implements OnInit {
   }
 
   public ngOnInit() {
+    // Only shown the first time the enrollee reaches the summary
+    this.showProgressBar = this.windowRef.nativeWindow.history.state.showProgressBar;
+
     this.enrolment = this.enrolmentService.enrolment;
 
     this.busy = this.enrolmentResource.enrolmentCertificateAccessTokens()

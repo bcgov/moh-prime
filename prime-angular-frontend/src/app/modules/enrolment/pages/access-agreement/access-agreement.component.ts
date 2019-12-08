@@ -75,7 +75,7 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
         .subscribe(
           () => {
             this.toastService.openSuccessToast('Access agreement has been accepted');
-            this.router.navigate([EnrolmentRoutes.SUMMARY], { relativeTo: this.route.parent });
+            this.routeTo(EnrolmentRoutes.SUMMARY, { state: { showProgressBar: this.hasInitialStatus } });
           },
           (error: any) => {
             this.toastService.openErrorToast('Access agreement could not be accepted');

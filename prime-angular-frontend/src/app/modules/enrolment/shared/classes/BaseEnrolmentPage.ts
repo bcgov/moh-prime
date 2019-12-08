@@ -1,4 +1,4 @@
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 
@@ -9,7 +9,7 @@ export interface IBaseEnrolmentPage {
   isProfileComplete: boolean;
   hasInitialStatus: boolean;
   EnrolmentRoutes: EnrolmentRoutes;
-  routeTo(routePath: EnrolmentRoutes): void;
+  routeTo(routePath: EnrolmentRoutes, navigationExtras: NavigationExtras): void;
 }
 
 export abstract class BaseEnrolmentPage implements IBaseEnrolmentPage {
@@ -33,8 +33,10 @@ export abstract class BaseEnrolmentPage implements IBaseEnrolmentPage {
     this.isProfileComplete = true;
   }
 
-  public routeTo(routePath: EnrolmentRoutes, isRelative: boolean = true) {
-    const relativeTo = (isRelative) ? { relativeTo: this.route.parent } : null;
-    this.router.navigate([routePath], relativeTo);
+  public routeTo(routePath: EnrolmentRoutes, navigationExtras: NavigationExtras = {}) {
+    this.router.navigate([routePath], {
+      relativeTo: this.route.parent,
+      ...navigationExtras
+    });
   }
 }
