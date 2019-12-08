@@ -1,5 +1,4 @@
-export interface EnrolmentCertificate {
-  // TODO duplicate of EnrolleeProfile
+export interface EnrolleeProfile {
   firstName: string;
   middleName: string;
   lastName: string;

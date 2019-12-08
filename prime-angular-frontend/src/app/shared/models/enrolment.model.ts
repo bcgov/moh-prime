@@ -1,10 +1,10 @@
 import { Config } from '@config/config.model';
-import { CollegeCertification } from '../../modules/enrolment/shared/models/college-certification.model';
-import { Job } from '../../modules/enrolment/shared/models/job.model';
-import { Organization } from '../../modules/enrolment/shared/models/organization.model';
-import { Enrollee } from '../../modules/enrolment/shared/models/enrollee.model';
-import { EnrolmentStatus } from './enrolment-status.model';
+import { Enrollee } from '@shared/models/enrollee.model';
+import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
 import { EnrolleeClassification } from '@shared/enums/enrollee-classification.enum';
+import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
+import { Job } from '@enrolment/shared/models/job.model';
+import { Organization } from '@enrolment/shared/models/organization.model';
 
 // TODO incoming transitional Enrollee model, eventually will be Enrollee
 export interface HttpEnrollee extends Enrollee {
