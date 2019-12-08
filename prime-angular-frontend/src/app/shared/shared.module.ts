@@ -17,6 +17,7 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 import {
   EnrolmentStatusReasonsComponent
 } from '@shared/components/dialogs/content/enrolment-status-reasons/enrolment-status-reasons.component';
+import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
 import { EnrolmentPipe } from '@shared/pipes/enrolment.pipe';
 import { FirstKeyPipe } from '@shared/pipes/first-key.pipe';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
@@ -47,6 +48,7 @@ import { EnrolleeSelfDeclarationComponent } from '@shared/components/enrollee-se
     CapitalizePipe,
     CertificatePipe,
     DefaultPipe,
+    EnrolleePipe,
     EnrolmentPipe,
     FirstKeyPipe,
     FormatDatePipe,
@@ -98,6 +100,7 @@ import { EnrolleeSelfDeclarationComponent } from '@shared/components/enrollee-se
     CapitalizePipe,
     CertificatePipe,
     DefaultPipe,
+    EnrolleePipe,
     EnrolmentPipe,
     FirstKeyPipe,
     FormatDatePipe,

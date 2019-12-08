@@ -1,6 +1,6 @@
 <dl class="row mb-3">
   <dt class="col-6">Name</dt>
-  <dd class="col-6 text-right">{{ fullname | default }}</dd>
+  <dd class="col-6 text-right">{{ enrollee | enrollee: 'fullName' | default }}</dd>
 
   <ng-container *ngIf="showPreferredName && hasPreferredName">
     <dt class="col-6">Preferred First Name</dt>

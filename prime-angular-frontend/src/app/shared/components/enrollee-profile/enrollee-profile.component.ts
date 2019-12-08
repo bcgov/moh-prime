@@ -16,12 +16,6 @@ export class EnrolleeProfileComponent {
     this.showPreferredName = true;
   }
 
-  public get fullname(): string {
-    return (this.enrollee)
-      ? `${this.enrollee.firstName || ''} ${this.enrollee.middleName || ''} ${this.enrollee.lastName || ''}`
-      : '';
-  }
-
   public get hasPreferredName(): boolean {
     return (
       this.enrollee &&
