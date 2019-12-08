@@ -23,7 +23,11 @@ export class CertificateComponent implements OnInit {
   public get hasPreferredName(): boolean {
     return (
       this.certificate &&
-      (!!this.certificate.preferredFirstName || !!this.certificate.preferredMiddleName || !!this.certificate.preferredLastName)
+      (
+        !!this.certificate.preferredFirstName ||
+        !!this.certificate.preferredMiddleName ||
+        !!this.certificate.preferredLastName
+      )
     );
   }
 

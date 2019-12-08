@@ -56,14 +56,12 @@ export class EnrolleeReviewComponent implements OnInit {
     return (this.hasOrganizations) ? this.enrolment.organizations : [];
   }
 
-  public showYesNo(declared: boolean) {
-    return (declared === null)
-      ? 'N/A' : (declared)
-        ? 'Yes' : 'No';
-  }
-
   public onRoute(routePath: string) {
     this.route.emit(routePath);
+  }
+
+  public showYesNo(isActive: boolean) {
+    return (isActive) ? 'Yes' : 'No';
   }
 
   public ngOnInit() { }
