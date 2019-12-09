@@ -1,7 +1,7 @@
 using System;
-using System.Text;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 
 using Microsoft.AspNetCore.Http;
@@ -36,7 +36,7 @@ namespace Prime.Services
                 var srt = await response.Content.ReadAsStringAsync();
                 System.Console.WriteLine($"---content:[{srt}]");
 
-                CollegeLicenceResponse[] data = JsonConvert.DeserializeObject<CollegeLicenceResponse[]>(srt);
+                List<CollegeLicenceResponse> data = JsonConvert.DeserializeObject<List<CollegeLicenceResponse>>(srt);
                 System.Console.WriteLine($"-----data:[{data[0].ToString()}]");
 
                 return srt;
