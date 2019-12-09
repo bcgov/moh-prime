@@ -36,8 +36,8 @@ namespace Prime.Services
                 var srt = await response.Content.ReadAsStringAsync();
                 System.Console.WriteLine($"---content:[{srt}]");
 
-                List<CollegeLicenceResponse> data = JsonConvert.DeserializeObject<List<CollegeLicenceResponse>>(srt);
-                System.Console.WriteLine($"-----data:[{data[0].ToString()}]");
+                // List<CollegeLicenceResponse> data = JsonConvert.DeserializeObject<List<CollegeLicenceResponse>>(srt);
+                // System.Console.WriteLine($"-----data:[{data[0].ToString()}]");
 
                 return srt;
                 // return await response.Content.ReadAsAsync<CollegeLicenceResponseParams>();
