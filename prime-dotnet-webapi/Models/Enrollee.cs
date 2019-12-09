@@ -103,6 +103,12 @@ namespace Prime.Models
         [NotMapped]
         public DateTime? ApprovedDate { get => this.EnrolmentStatuses?.SingleOrDefault(es => es.StatusCode == Status.APPROVED_CODE)?.StatusDate; }
 
+        public ICollection<AdjudicatorNote> AdjudicatorNotes { get; set; }
+
+        public AccessAgreementNote AccessAgreementNote { get; set; }
+
+        public EnrolmentCertificateNote EnrolmentCertificateNote { get; set; }
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (Guid.Empty.Equals(this.UserId))

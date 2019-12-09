@@ -435,9 +435,13 @@ namespace Prime
                 .HasOne(esr => esr.StatusReason)
                 .WithMany(sr => sr.EnrolmentStatusReasons)
                 .HasForeignKey(esr => esr.StatusReasonCode);
+
+            modelBuilder.Entity<AdjudicatorNote>()
+                .HasOne(an => an.Enrollee)
+                .WithMany(e => e.AdjudicatorNotes)
+                .HasForeignKey(an => an.EnrolleeId);
             #endregion
         }
-
     }
 
     public static class ApiDbContextExtensions
