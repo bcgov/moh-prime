@@ -1,11 +1,14 @@
 <app-busy-overlay [busy]="busy">
 
   <div class="row">
-    <div class="col-sm-12 col-lg-8 offset-lg-1 col-xl-5">
+    <div class="col-sm-12 col-lg-8 offset-lg-1 col-xl-6 offset-xl-0">
 
       <form (ngSubmit)="onSubmit()"
             [formGroup]="form"
             novalidate>
+
+        <app-progress-indicator *ngIf="hasInitialStatus"
+                                [currentRoute]="EnrolmentRoutes.ORGANIZATION"></app-progress-indicator>
 
         <app-page-header>PharmaNet Enrolment</app-page-header>
 
@@ -58,10 +61,10 @@
           </div>
         </div>
 
-        <app-page-footer [profileCompleted]="profileCompleted"
+        <app-page-footer [profileCompleted]="isProfileComplete"
                          (save)="onSubmit()"
                          (continue)="onSubmit()"
-                         (back)="onRoute(EnrolmentRoutes.SELF_DECLARATION)"></app-page-footer>
+                         (back)="routeTo(EnrolmentRoutes.SELF_DECLARATION)"></app-page-footer>
 
       </form>
 

@@ -13,6 +13,7 @@ import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.mod
 import { AlertComponent } from '@shared/components/alert/alert.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
+import { ProgressIndicatorComponent } from '@shared/components/progress-indicator/progress-indicator.component';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { PageFooterComponent } from '@enrolment/shared/components/page-footer/page-footer.component';
 
@@ -36,6 +37,7 @@ describe('SelfDeclarationComponent', () => {
           PageHeaderComponent,
           PageSubheaderComponent,
           SelfDeclarationComponent,
+          ProgressIndicatorComponent,
           PageFooterComponent
         ],
         providers: [

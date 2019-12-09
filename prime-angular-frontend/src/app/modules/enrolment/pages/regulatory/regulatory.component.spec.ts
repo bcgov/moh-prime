@@ -18,6 +18,7 @@ import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.mod
 import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
+import { ProgressIndicatorComponent } from '@shared/components/progress-indicator/progress-indicator.component';
 import {
   CollegeCertificationFormComponent
 } from '@enrolment/shared/components/college-certification-form/college-certification-form.component';
@@ -47,6 +48,7 @@ describe('RegulatoryComponent', () => {
           RegulatoryComponent,
           PageHeaderComponent,
           PageSubheaderComponent,
+          ProgressIndicatorComponent,
           CollegeCertificationFormComponent,
           PageFooterComponent
         ],
