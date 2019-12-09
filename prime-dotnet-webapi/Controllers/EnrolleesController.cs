@@ -207,7 +207,7 @@ namespace Prime.Controllers
         {
             string resp = await _hibcApiService.ValidateCollegeLicense("2036P", "P1");
 
-            return Ok();
+            return Ok(new ApiOkResponse<string>(resp));
         }
 
         // GET: api/Enrollees/5/availableStatuses

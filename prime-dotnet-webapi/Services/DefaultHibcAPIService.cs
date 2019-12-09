@@ -16,12 +16,12 @@ namespace Prime.Services
             : base(context, httpContext)
         { }
 
-        public async Task<bool> ValidateCollegeLicense(string licenceNumber, string collegeReferenceId)
+        public async Task<string> ValidateCollegeLicense(string licenceNumber, string collegeReferenceId)
         {
             var par = await CallPharmanetCollegeLicenceService(licenceNumber, collegeReferenceId);
 
 
-            return true;
+            return JsonConvert.SerializeObject(par);
         }
 
         private async Task<CollegePracticionerRecord> CallPharmanetCollegeLicenceService(string licenceNumber, string collegeReferenceId)
