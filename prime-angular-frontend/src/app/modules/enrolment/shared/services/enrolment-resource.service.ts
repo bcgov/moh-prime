@@ -28,7 +28,7 @@ export class EnrolmentResource {
 
   // TODO X
   public api(): Observable<any> {
-    return this.http.delete(`${this.config.apiEndpoint}/enrollees/4`);
+    return this.http.delete(`${this.config.apiEndpoint}/enrollees/2036P/aaa/P1`);
   }
 
   public enrollee(): Observable<Enrolment> {

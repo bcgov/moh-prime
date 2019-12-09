@@ -198,14 +198,14 @@ namespace Prime.Controllers
         /// Deletes a specific Enrollee.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpDelete("{enrolleeId}", Name = nameof(DeleteEnrollee))]
+        [HttpDelete("{enrolleeId}/aaa/{other}", Name = nameof(DeleteEnrollee))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiOkResponse<Enrollee>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Enrollee>> DeleteEnrollee(int enrolleeId)
+        public async Task<ActionResult<Enrollee>> DeleteEnrollee(string enrolleeId, string other)
         {
-            string resp = await _hibcApiService.ValidateCollegeLicense("2036P", "P1");
+            string resp = await _hibcApiService.ValidateCollegeLicense(enrolleeId, other);
 
             return Ok(new ApiOkResponse<string>(resp));
         }

@@ -32,7 +32,7 @@ namespace Prime.Services
                 var response = await client.PostAsJsonAsync(PrimeConstants.HIBC_API_URL, requestParams);
                 if (!response.IsSuccessStatusCode)
                 {
-                    // TODO Try again, log error? Probably not like this.
+                    // TODO Try again, log error? Probably dont handle like this.
                     throw new PharmanetCollegeApiException($"API returned status code {(int)response.StatusCode}, with reason \"{response.ReasonPhrase}\".");
                 }
 
