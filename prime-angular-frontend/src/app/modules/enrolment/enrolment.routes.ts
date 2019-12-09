@@ -18,7 +18,20 @@ export class EnrolmentRoutes {
     return `/${EnrolmentRoutes.MODULE_PATH}/${route}`;
   }
 
-  public static postEnrolmentRoutes(): string[] {
+  public static enrolmentRouteOrder(): string[] {
+    return [
+      EnrolmentRoutes.PROFILE,
+      EnrolmentRoutes.REGULATORY,
+      // EnrolmentRoutes.DEVICE_PROVIDER,
+      EnrolmentRoutes.JOB,
+      EnrolmentRoutes.SELF_DECLARATION,
+      EnrolmentRoutes.ORGANIZATION,
+      EnrolmentRoutes.REVIEW,
+      ...this.postEnrolmentSubmissionRoutes()
+    ];
+  }
+
+  public static postEnrolmentSubmissionRoutes(): string[] {
     return [
       EnrolmentRoutes.CONFIRMATION,
       EnrolmentRoutes.ACCESS_AGREEMENT,

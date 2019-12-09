@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
@@ -9,6 +10,7 @@ import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.mod
 import { AlertComponent } from '@shared/components/alert/alert.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
+import { ProgressIndicatorComponent } from '@shared/components/progress-indicator/progress-indicator.component';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 describe('ConfirmationComponent', () => {
@@ -21,13 +23,15 @@ describe('ConfirmationComponent', () => {
         imports: [
           NgxBusyModule,
           NgxContextualHelpModule,
-          NgxMaterialModule
+          NgxMaterialModule,
+          RouterTestingModule,
         ],
         declarations: [
           AlertComponent,
           ConfirmationComponent,
           PageHeaderComponent,
-          PageSubheaderComponent
+          PageSubheaderComponent,
+          ProgressIndicatorComponent
         ],
         providers: [
           {

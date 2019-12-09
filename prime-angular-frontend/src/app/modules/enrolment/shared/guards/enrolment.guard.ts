@@ -63,7 +63,7 @@ export class EnrolmentGuard extends BaseGuard {
     } else if (enrolment) {
       switch (enrolment.currentStatus.status.code) {
         case EnrolmentStatus.IN_PROGRESS:
-          const postEnrolmentRoutes = EnrolmentRoutes.postEnrolmentRoutes();
+          const postEnrolmentRoutes = EnrolmentRoutes.postEnrolmentSubmissionRoutes();
           const route = routePath.split('/').pop();
 
           const redirectionRoute = (!enrolment.profileCompleted)

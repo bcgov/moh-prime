@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { EnrolmentCertificate } from 'app/modules/enrolment-certificate/shared/models/enrolment-certificate.model';
+
+import { EnrolmentCertificate } from '@certificate/shared/models/enrolment-certificate.model';
 
 @Pipe({
   name: 'certificate'
@@ -19,15 +20,16 @@ export class CertificatePipe implements PipeTransform {
   }
 
   private getFullName(certificate: any) {
-    const firstName = certificate.firstName ? certificate.firstName : '';
-    const middleName = certificate.middleName ? certificate.middleName : '';
-    const lastName = certificate.lastName ? certificate.lastName : '';
+    const firstName = (certificate.firstName) ? certificate.firstName : '';
+    const middleName = (certificate.middleName) ? certificate.middleName : '';
+    const lastName = (certificate.lastName) ? certificate.lastName : '';
     return ` ${firstName} ${middleName} ${lastName} `;
   }
 
   private getPreferredName(certificate: any) {
-    return ` ${certificate.preferredFirstName ? certificate.preferredFirstName : ''}
-        ${certificate.preferredMiddleName ? certificate.preferredMiddleName : ''}
-        ${ certificate.preferredLastName ? certificate.preferredLastName : ''} `;
+    const preferredFirstName = (certificate.preferredFirstName) ? certificate.preferredFirstName : '';
+    const preferredMiddleName = (certificate.preferredMiddleName) ? certificate.preferredMiddleName : '';
+    const preferredLastName = (certificate.preferredLastName) ? certificate.preferredLastName : '';
+    return ` ${preferredFirstName} ${preferredMiddleName} ${preferredLastName} `;
   }
 }

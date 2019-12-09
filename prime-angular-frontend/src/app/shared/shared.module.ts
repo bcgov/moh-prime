@@ -17,6 +17,7 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 import {
   EnrolmentStatusReasonsComponent
 } from '@shared/components/dialogs/content/enrolment-status-reasons/enrolment-status-reasons.component';
+import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
 import { EnrolmentPipe } from '@shared/pipes/enrolment.pipe';
 import { FirstKeyPipe } from '@shared/pipes/first-key.pipe';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
@@ -25,6 +26,7 @@ import { PostalPipe } from '@shared/pipes/postal.pipe';
 import { ReplacePipe } from '@shared/pipes/replace.pipe';
 import { CertificatePipe } from '@shared/pipes/certificate.pipe';
 import { DefaultPipe } from '@shared/pipes/default.pipe';
+import { YesNoPipe } from '@shared/pipes/yes-no.pipe';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 import { HeaderComponent } from '@shared/components/header/header.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
@@ -36,18 +38,24 @@ import { ClipboardIconComponent } from './components/clipboard-icon/clipboard-ic
 import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
 import { AlertComponent } from '@shared/components/alert/alert.component';
 import { EnrolleeReviewComponent } from '@shared/components/enrollee-review/enrollee-review.component';
+import { ProgressIndicatorComponent } from '@shared/components/progress-indicator/progress-indicator.component';
+import { EnrolleeProfileComponent } from '@shared/components/enrollee-profile/enrollee-profile.component';
+import { EnrolleeAddressComponent } from '@shared/components/enrollee-address/enrollee-address.component';
+import { EnrolleeSelfDeclarationComponent } from '@shared/components/enrollee-self-declaration/enrollee-self-declaration.component';
 
 @NgModule({
   declarations: [
     CapitalizePipe,
-    PhonePipe,
-    ReplacePipe,
+    CertificatePipe,
+    DefaultPipe,
+    EnrolleePipe,
+    EnrolmentPipe,
     FirstKeyPipe,
     FormatDatePipe,
+    PhonePipe,
     PostalPipe,
-    EnrolmentPipe,
-    DefaultPipe,
-    CertificatePipe,
+    ReplacePipe,
+    YesNoPipe,
     AddressComponent,
     DashboardComponent,
     ConfirmDialogComponent,
@@ -61,7 +69,12 @@ import { EnrolleeReviewComponent } from '@shared/components/enrollee-review/enro
     FormIconGroupComponent,
     AlertComponent,
     ClipboardIconComponent,
-    EnrolleeReviewComponent
+    EnrolleeReviewComponent,
+    CertificatePipe,
+    ProgressIndicatorComponent,
+    EnrolleeProfileComponent,
+    EnrolleeAddressComponent,
+    EnrolleeSelfDeclarationComponent
   ],
   imports: [
     CommonModule,
@@ -85,14 +98,16 @@ import { EnrolleeReviewComponent } from '@shared/components/enrollee-review/enro
     NgxProgressModule,
     ReactiveFormsModule,
     CapitalizePipe,
+    CertificatePipe,
+    DefaultPipe,
+    EnrolleePipe,
     EnrolmentPipe,
     FirstKeyPipe,
     FormatDatePipe,
     PhonePipe,
     PostalPipe,
     ReplacePipe,
-    DefaultPipe,
-    CertificatePipe,
+    YesNoPipe,
     AddressComponent,
     DashboardComponent,
     EnrolmentStatusReasonsComponent,
@@ -105,7 +120,12 @@ import { EnrolleeReviewComponent } from '@shared/components/enrollee-review/enro
     FormIconGroupComponent,
     AlertComponent,
     ClipboardIconComponent,
-    EnrolleeReviewComponent
+    EnrolleeReviewComponent,
+    CertificatePipe,
+    ProgressIndicatorComponent,
+    EnrolleeProfileComponent,
+    EnrolleeAddressComponent,
+    EnrolleeSelfDeclarationComponent
   ],
   entryComponents: [
     ConfirmDialogComponent,

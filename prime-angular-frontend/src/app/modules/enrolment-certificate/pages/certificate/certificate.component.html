@@ -1,7 +1,7 @@
 <app-busy-overlay [busy]="busy">
 
   <div class="row">
-    <div class="col-sm-12 col-lg-10 offset-lg-1 col-xl-8 app-print-layout">
+    <div class="col-sm-12 col-lg-8 offset-lg-1 offset-xl-0 app-print-layout">
 
       <app-page-header>Enrolment Certificate</app-page-header>
 
@@ -15,22 +15,8 @@
 
       <ng-container *ngIf="certificate">
 
-        <dl class="row mb-4">
-          <dt class="col-6">Name</dt>
-          <dd class="col-6 text-right">{{ certificate | certificate: 'fullName' | default }}</dd>
-
-          <ng-container *ngIf="hasPreferredName">
-            <dt class="col-6">Preferred First Name</dt>
-            <dd class="col-6 text-right">{{ certificate?.preferredFirstName | default }}</dd>
-            <dt class="col-6">Preferred Middle Name</dt>
-            <dd class="col-6 text-right">{{ certificate?.preferredMiddleName | default }}</dd>
-            <dt class="col-6">Preferred Last Name</dt>
-            <dd class="col-6 text-right">{{ certificate?.preferredLastName | default }}</dd>
-          </ng-container>
-
-          <dt class="col-6">Date of Birth</dt>
-          <dd class="col-6 text-right">{{ certificate?.dateOfBirth | formatDate | default }}</dd>
-        </dl>
+        <app-enrollee-profile [showPreferredName]="false"
+                              [enrollee]="certificate"></app-enrollee-profile>
 
         <dl class="row mb-4">
           <dt class="col-6">PharmaNet ID</dt>
