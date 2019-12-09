@@ -29,11 +29,13 @@ namespace Prime.Services
             {
                 var response = await client.PostAsync(PrimeConstants.HIBC_API_URL, CreateCollegeLicenceRequestContent(licenceNumber, collegeReferenceId));
                 System.Console.WriteLine($"---status code[{(int)response.StatusCode}]");
+                System.Console.WriteLine($"---status code[{JsonConvert.SerializeObject(response)}]");
+
                 var srt = await response.Content.ReadAsStringAsync();
                 System.Console.WriteLine($"---content:[{srt}]");
 
-                CollegeLicenceResponse data = JsonConvert.DeserializeObject<CollegeLicenceResponse>(srt);
-                System.Console.WriteLine($"-----data:[{data.ToString()}]");
+                // CollegeLicenceResponse data = JsonConvert.DeserializeObject<CollegeLicenceResponse>(srt);
+                // System.Console.WriteLine($"-----data:[{data.ToString()}]");
 
                 return srt;
                 // return await response.Content.ReadAsAsync<CollegeLicenceResponseParams>();
