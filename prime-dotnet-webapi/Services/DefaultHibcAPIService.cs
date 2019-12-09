@@ -39,7 +39,7 @@ namespace Prime.Services
                 System.Console.WriteLine($"---cont:[{JsonConvert.SerializeObject(cont)}]");
 
 
-                var response = await client.PostAsJsonAsync(PrimeConstants.HIBC_API_URL, stuff);
+                var response = await client.PostAsJsonAsync(PrimeConstants.HIBC_API_URL, new CollegeLicenceRequestParams(licenceNumber, collegeReferenceId));
                 // var response = await client.PostAsync(PrimeConstants.HIBC_API_URL, CreateCollegeLicenceRequestContent(licenceNumber, collegeReferenceId));
                 System.Console.WriteLine($"---status code:[{(int)response.StatusCode}]");
                 System.Console.WriteLine($"---resp:[{JsonConvert.SerializeObject(response)}]");
@@ -79,14 +79,14 @@ namespace Prime.Services
 
         private class CollegeLicenceRequestParams
         {
-            Guid applicationUUID { get; set; }
+            string applicationUUID { get; set; }
             string programArea { get; set; }
             string licenceNumber { get; set; }
             string collegeReferenceId { get; set; }
 
             public CollegeLicenceRequestParams(string licenceNumber, string collegeReferenceId)
             {
-                applicationUUID = Guid.NewGuid();
+                applicationUUID = Guid.NewGuid().ToString();
                 programArea = "PRIME";
                 this.licenceNumber = licenceNumber;
                 this.collegeReferenceId = collegeReferenceId;
