@@ -27,9 +27,22 @@ namespace Prime.Services
             Console.WriteLine(">>>>>>>>>-------------------in method----------------");
             using (var client = new HttpClient(CreateClientHandler()))
             {
-                var response = await client.PostAsync(PrimeConstants.HIBC_API_URL, CreateCollegeLicenceRequestContent(licenceNumber, collegeReferenceId));
-                System.Console.WriteLine($"---status code[{(int)response.StatusCode}]");
-                System.Console.WriteLine($"---status code[{JsonConvert.SerializeObject(response)}]");
+                var stuff = new
+                {
+                    applicationUUID = Guid.NewGuid().ToString(),
+                    programArea = "PRIME",
+                    licenceNumber = licenceNumber,
+                    collegeReferenceId = collegeReferenceId
+                };
+                StringContent cont = CreateCollegeLicenceRequestContent(licenceNumber, collegeReferenceId);
+                System.Console.WriteLine($"---stuff:[{JsonConvert.SerializeObject(stuff)}]");
+                System.Console.WriteLine($"---cont:[{JsonConvert.SerializeObject(cont)}]");
+
+
+                var response = await client.PostAsJsonAsync(PrimeConstants.HIBC_API_URL, stuff);
+                // var response = await client.PostAsync(PrimeConstants.HIBC_API_URL, CreateCollegeLicenceRequestContent(licenceNumber, collegeReferenceId));
+                System.Console.WriteLine($"---status code:[{(int)response.StatusCode}]");
+                System.Console.WriteLine($"---resp:[{JsonConvert.SerializeObject(response)}]");
 
                 var srt = await response.Content.ReadAsStringAsync();
                 System.Console.WriteLine($"---content:[{srt}]");
