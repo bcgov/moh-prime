@@ -1,9 +1,10 @@
 using System;
+using System.Text;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Security.Cryptography.X509Certificates;
 
 using Microsoft.AspNetCore.Http;
-using System.Security.Cryptography.X509Certificates;
 using Newtonsoft.Json;
 
 namespace Prime.Services
@@ -58,7 +59,7 @@ namespace Prime.Services
         {
             var parameters = new CollegeLicenceRequestParams(licenceNumber, collegeReferenceId);
 
-            return new StringContent(JsonConvert.SerializeObject(parameters));
+            return new StringContent(JsonConvert.SerializeObject(parameters), Encoding.UTF8, "application/json");
         }
 
         private class CollegeLicenceRequestParams
