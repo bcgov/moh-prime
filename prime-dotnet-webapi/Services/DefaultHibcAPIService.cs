@@ -88,9 +88,20 @@ namespace Prime.Services
             string firstName { get; set; }
             string middleInitial { get; set; }
             string lastName { get; set; }
-            string dateofBirth { get; set; }
+            DateTime dateofBirth { get; set; }
             string status { get; set; }
-            string effectiveDate { get; set; }
+            DateTime effectiveDate { get; set; }
+
+            public override string ToString()
+            {
+                System.ComponentModel.PropertyDescriptorCollection coll = System.ComponentModel.TypeDescriptor.GetProperties(this);
+                System.Text.StringBuilder builder = new System.Text.StringBuilder();
+                foreach (System.ComponentModel.PropertyDescriptor pd in coll)
+                {
+                    builder.Append(string.Format("{0} : {1}", pd.Name, pd.GetValue(this).ToString()));
+                }
+                return builder.ToString();
+            }
         }
     }
 }
