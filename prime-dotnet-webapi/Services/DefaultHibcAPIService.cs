@@ -84,13 +84,13 @@ namespace Prime.Services
 
         private class CollegeLicenceResponse
         {
-            string applicationUUID { get; set; }
-            string firstName { get; set; }
-            string middleInitial { get; set; }
-            string lastName { get; set; }
-            DateTime dateofBirth { get; set; }
-            string status { get; set; }
-            DateTime effectiveDate { get; set; }
+            public string applicationUUID { get; set; }
+            public string firstName { get; set; }
+            public string middleInitial { get; set; }
+            public string lastName { get; set; }
+            public DateTime dateofBirth { get; set; }
+            public string status { get; set; }
+            public DateTime effectiveDate { get; set; }
 
             public override string ToString()
             {
