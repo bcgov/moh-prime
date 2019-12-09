@@ -81,14 +81,14 @@ namespace Prime.Services
 
         private class CollegeLicenceRequestParams
         {
-            public Guid applicationUUID { get; set; }
+            public string applicationUUID { get; set; }
             public string programArea { get; set; }
             public string licenceNumber { get; set; }
             public string collegeReferenceId { get; set; }
 
             public CollegeLicenceRequestParams(string licenceNumber, string collegeReferenceId)
             {
-                applicationUUID = Guid.NewGuid();
+                applicationUUID = Guid.NewGuid().ToString();
                 programArea = "PRIME";
                 this.licenceNumber = licenceNumber;
                 this.collegeReferenceId = collegeReferenceId;
