@@ -27,16 +27,18 @@ namespace Prime.Services
             Console.WriteLine(">>>>>>>>>-------------------in method----------------");
             using (var client = new HttpClient(CreateClientHandler()))
             {
-                var stuff = new
-                {
-                    applicationUUID = Guid.NewGuid().ToString(),
-                    programArea = "PRIME",
-                    licenceNumber = licenceNumber,
-                    collegeReferenceId = collegeReferenceId
-                };
-                StringContent cont = CreateCollegeLicenceRequestContent(licenceNumber, collegeReferenceId);
-                System.Console.WriteLine($"---stuff:[{JsonConvert.SerializeObject(stuff)}]");
-                System.Console.WriteLine($"---cont:[{JsonConvert.SerializeObject(cont)}]");
+                // var stuff = new
+                // {
+                //     applicationUUID = Guid.NewGuid().ToString(),
+                //     programArea = "PRIME",
+                //     licenceNumber = licenceNumber,
+                //     collegeReferenceId = collegeReferenceId
+                // };
+                // var cont = new CollegeLicenceRequestParams(licenceNumber, collegeReferenceId);
+                // var strrrr = JsonConvert.SerializeObject(cont);
+
+                // System.Console.WriteLine($"---stuff:[{JsonConvert.SerializeObject(stuff)}]");
+                // System.Console.WriteLine($"---cont:[{JsonConvert.SerializeObject(cont)}]");
 
 
                 var response = await client.PostAsJsonAsync(PrimeConstants.HIBC_API_URL, new CollegeLicenceRequestParams(licenceNumber, collegeReferenceId));
@@ -79,14 +81,14 @@ namespace Prime.Services
 
         private class CollegeLicenceRequestParams
         {
-            string applicationUUID { get; set; }
-            string programArea { get; set; }
-            string licenceNumber { get; set; }
-            string collegeReferenceId { get; set; }
+            public Guid applicationUUID { get; set; }
+            public string programArea { get; set; }
+            public string licenceNumber { get; set; }
+            public string collegeReferenceId { get; set; }
 
             public CollegeLicenceRequestParams(string licenceNumber, string collegeReferenceId)
             {
-                applicationUUID = Guid.NewGuid().ToString();
+                applicationUUID = Guid.NewGuid();
                 programArea = "PRIME";
                 this.licenceNumber = licenceNumber;
                 this.collegeReferenceId = collegeReferenceId;
