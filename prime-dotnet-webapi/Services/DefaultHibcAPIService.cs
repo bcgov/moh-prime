@@ -28,9 +28,16 @@ namespace Prime.Services
             using (var client = new HttpClient(CreateClientHandler()))
             {
 
+                //var stuff = new CollegeLicenceRequestParams(licenceNumber, collegeReferenceId);
+                var stuff = new
+                {
+                    applicationUUID = Guid.NewGuid().ToString(),
+                    programArea = "PRIME",
+                    licenceNumber = licenceNumber,
+                    collegeReferenceId = collegeReferenceId
+                };
 
-
-                var response = await client.PostAsJsonAsync(PrimeConstants.HIBC_API_URL, new CollegeLicenceRequestParams(licenceNumber, collegeReferenceId));
+                var response = await client.PostAsJsonAsync(PrimeConstants.HIBC_API_URL, stuff);
                 System.Console.WriteLine($"---status code:[{(int)response.StatusCode}]");
 
                 var srt = await response.Content.ReadAsStringAsync();
