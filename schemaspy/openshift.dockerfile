@@ -1,5 +1,5 @@
 FROM openjdk:jre-alpine
-USER root
+
 RUN apk update && \
     apk upgrade
 
@@ -30,14 +30,11 @@ RUN apk del devs
 COPY Caddyfile /etc/Caddyfile
 
 ENTRYPOINT ["/sbin/tini"]
-# Local POSTGRES_DB
-
-
 # ===================================================================================================================================================================
 
 # ===================================================================================================================================================================
 # Update with OpenShifty Stuff
-# Refs:
+# Refs: 
 # - https://github.com/BCDevOps/s2i-caddy
 # -------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Create the location where we will store our content, and fiddle the permissions so we will be able to write to it.
@@ -53,7 +50,7 @@ EXPOSE 8080
 
 # ===================================================================================================================================================================
 # Install SchemaSpy
-# Refs:
+# Refs: 
 # - https://github.com/cywolf/schemaspy-docker
 # - https://github.com/schemaspy/schemaspy
 # - http://schemaspy.readthedocs.io/en/latest/index.html
@@ -85,7 +82,7 @@ RUN apk update && \
         librsvg \
         graphviz \
         ttf-ubuntu-font-family && \
-    mkdir -p lib && \
+    mkdir lib && \
     wget -nv -O lib/schemaspy-$SCHEMA_SPY_VERSION.jar https://github.com/schemaspy/schemaspy/releases/download/v$SCHEMA_SPY_VERSION/schemaspy-$SCHEMA_SPY_VERSION.jar && \
     cp lib/schemaspy-$SCHEMA_SPY_VERSION.jar lib/schemaspy.jar && \
     wget -nv -O lib/pgsql-jdbc.jar http://central.maven.org/maven2/org/postgresql/postgresql/$POSTGRESQL_VERSION/postgresql-$POSTGRESQL_VERSION.jar && \

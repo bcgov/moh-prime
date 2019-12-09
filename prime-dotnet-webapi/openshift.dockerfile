@@ -4,7 +4,7 @@ SHELL [ "/bin/bash" , "-c" ]
 ENV PATH "$PATH:/opt/rh/rh-dotnet22/root/usr/lib64/dotnet"
 ENV ASPNETCORE_ENVIRONMENT Development
 COPY *.csproj /opt/app-root/app
-RUN dotnet restore 
+RUN dotnet restore
 COPY . /opt/app-root/app/
 RUN dotnet publish -c Release -o /opt/app-root/app/out /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
 FROM docker-registry.default.svc:5000/dqszvc-dev/dotnet-22-runtime-rhel7 AS runtime

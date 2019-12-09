@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+######################################################### Sign-in #
+  schemaspy:
+    build:
+      context: .
+    container_name: schemaspy
+    image: openjdk:jre-alpine
+    ports:
+      - "8069:8069"
+      - "80:8069"
+    environment:
+      DATABASE_HOST: "schemaspy-db"
+      DATABASE_USER: "postgres"
+      DATABASE_PASSWORD: "postgres"
+      DATABASE_NAME: "default"
+    depends_on:
+      - schemaspy-db
+######################################################### Database #
+  schemaspy-db:
+    container_name: schemaspy-db
+    image: postgres:12
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USERNAME: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
