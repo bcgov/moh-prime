@@ -205,7 +205,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiOkResponse<Enrollee>), StatusCodes.Status200OK)]
         public async Task<ActionResult<Enrollee>> DeleteEnrollee(int enrolleeId)
         {
-            string resp = await _hibcApiService.ValidCollegeLicense("2036P", "P1");
+            string resp = await _hibcApiService.ValidateCollegeLicense("2036P", "P1");
 
             return Ok();
         }

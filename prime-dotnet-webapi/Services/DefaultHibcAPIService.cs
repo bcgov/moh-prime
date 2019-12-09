@@ -16,38 +16,33 @@ namespace Prime.Services
             : base(context, httpContext)
         { }
 
-        public async Task<string> ValidCollegeLicense(string licenceNumber, string collegeReferenceId)
+        public async Task<bool> ValidateCollegeLicense(string licenceNumber, string collegeReferenceId)
         {
             var par = await CallPharmanetCollegeLicenceService(licenceNumber, collegeReferenceId);
-            return par;
+
+
+            return true;
         }
 
-        private async Task<string> CallPharmanetCollegeLicenceService(string licenceNumber, string collegeReferenceId)
+        private async Task<CollegePracticionerRecord> CallPharmanetCollegeLicenceService(string licenceNumber, string collegeReferenceId)
         {
-            Console.WriteLine(">>>>>>>>>-------------------in method----------------");
             using (var client = new HttpClient(CreateClientHandler()))
             {
-
-                //var stuff = new CollegeLicenceRequestParams(licenceNumber, collegeReferenceId);
-                var stuff = new
+                var requestParams = new CollegeLicenceRequestParams(licenceNumber, collegeReferenceId);
+                var response = await client.PostAsJsonAsync(PrimeConstants.HIBC_API_URL, requestParams);
+                if (!response.IsSuccessStatusCode)
                 {
-                    applicationUUID = Guid.NewGuid().ToString(),
-                    programArea = "PRIME",
-                    licenceNumber = licenceNumber,
-                    collegeReferenceId = collegeReferenceId
-                };
+                    // TODO Try again, log error? Probably not like this.
+                    throw new PharmanetCollegeApiException($"API returned status code {(int)response.StatusCode}, with reason \"{response.ReasonPhrase}\".");
+                }
 
-                var response = await client.PostAsJsonAsync(PrimeConstants.HIBC_API_URL, stuff);
-                System.Console.WriteLine($"---status code:[{(int)response.StatusCode}]");
+                var practicionerRecord = await CollegePracticionerRecord.FromResponseContentAsync(response.Content);
+                if (practicionerRecord.applicationUUID != requestParams.applicationUUID)
+                {
+                    throw new PharmanetCollegeApiException($"Expected matching applicationUUIDs between request and response. Request was\"{requestParams.applicationUUID}\", response was \"{practicionerRecord.applicationUUID}\".");
+                }
 
-                var srt = await response.Content.ReadAsStringAsync();
-                System.Console.WriteLine($"---content:[{srt}]");
-
-                List<CollegeLicenceResponse> data = JsonConvert.DeserializeObject<List<CollegeLicenceResponse>>(srt);
-                System.Console.WriteLine($"-----data:[{data[0].ToString()}]");
-
-                return srt;
-                // return await response.Content.ReadAsAsync<CollegeLicenceResponseParams>();
+                return practicionerRecord;
             };
         }
 
@@ -82,7 +77,7 @@ namespace Prime.Services
             }
         }
 
-        private class CollegeLicenceResponse
+        private class CollegePracticionerRecord
         {
             public string applicationUUID { get; set; }
             public string firstName { get; set; }
@@ -92,15 +87,30 @@ namespace Prime.Services
             public string status { get; set; }
             public DateTime effectiveDate { get; set; }
 
-            public override string ToString()
+            public static async Task<CollegePracticionerRecord> FromResponseContentAsync(HttpContent content)
             {
-                System.ComponentModel.PropertyDescriptorCollection coll = System.ComponentModel.TypeDescriptor.GetProperties(this);
-                System.Text.StringBuilder builder = new System.Text.StringBuilder();
-                foreach (System.ComponentModel.PropertyDescriptor pd in coll)
+                var stringContent = await content.ReadAsStringAsync();
+                List<CollegePracticionerRecord> data = JsonConvert.DeserializeObject<List<CollegePracticionerRecord>>(stringContent);
+
+                if (data.Count != 1)
                 {
-                    builder.Append(string.Format("{0} : {1}", pd.Name, pd.GetValue(this).ToString()));
+                    throw new PharmanetCollegeApiException($"API response contained {data.Count} items, expected 1.");
                 }
-                return builder.ToString();
+
+                return data[0];
+            }
+        }
+
+        public class PharmanetCollegeApiException : Exception
+        {
+            public PharmanetCollegeApiException(string message)
+                : base(message)
+            {
+            }
+
+            public PharmanetCollegeApiException(string message, Exception inner)
+                : base(message, inner)
+            {
             }
         }
     }
