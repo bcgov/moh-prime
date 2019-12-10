@@ -36,10 +36,6 @@ namespace Prime.Services
 
         private async Task<PharmanetCollegeRecord> CallPharmanetCollegeLicenceService(string licenceNumber, string collegeReferenceId)
         {
-            System.Console.WriteLine();
-            System.Console.WriteLine($">>>>Params[{licenceNumber},{collegeReferenceId}]");
-            System.Console.WriteLine();
-
             var requestParams = new CollegeRecordRequestParams(licenceNumber, collegeReferenceId);
             var response = await Client.PostAsJsonAsync(PrimeConstants.HIBC_API_URL, requestParams);
             if (!response.IsSuccessStatusCode)
@@ -59,10 +55,7 @@ namespace Prime.Services
 
         private async Task<PharmanetCollegeRecord> CollegeRecordFromResponseAsync(HttpResponseMessage response)
         {
-            // var stringContent = await response.Content.ReadAsStringAsync();
             var content = await response.Content.ReadAsAsync<List<PharmanetCollegeRecord>>();
-            //List<PharmanetCollegeRecord> data = JsonConvert.DeserializeObject<List<PharmanetCollegeRecord>>(stringContent);
-
             return content.SingleOrDefault();
         }
 
@@ -85,13 +78,10 @@ namespace Prime.Services
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
                 "Basic", Convert.ToBase64String(
                     System.Text.ASCIIEncoding.ASCII.GetBytes(
-                        $"{PrimeConstants.HIBC_API_USERNAME}:{PrimeConstants.HIBC_API_PASSWORD}"
+                        $"{PrimeConstants.HIBC_API_USERNAME}:{PrimeConstants.HIBC_API_PASSWORD}r"
                     )
                 )
             );
-
-            // var sp = ServicePointManager.FindServicePoint(new Uri(PrimeConstants.HIBC_API_URL));
-            // sp.ConnectionLeaseTimeout = 60 * 1000; // 1 minute
 
             return client;
         }
