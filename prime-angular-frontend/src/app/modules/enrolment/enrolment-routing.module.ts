@@ -57,7 +57,7 @@ const routes: Routes = [
       //   path: EnrolmentRoutes.DEVICE_PROVIDER,
       //   component: DeviceProviderComponent,
       //   canDeactivate: [CanDeactivateFormGuard],
-      //   data: { title: 'Device Provider' }
+      //   data: { title: 'PharmaNet Enrolment' }
       // },
       {
         path: EnrolmentRoutes.JOB,

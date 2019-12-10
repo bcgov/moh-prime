@@ -127,7 +127,12 @@ export class DashboardComponent implements OnInit {
             icon: statusIcons.status,
             route: EnrolmentRoutes.SUMMARY,
             showItem: true,
-            forceActive: ([EnrolmentStatus.DECLINED, EnrolmentStatus.DECLINED_TOS].includes(statusCode))
+            forceActive: (
+              [
+                EnrolmentStatus.DECLINED,
+                EnrolmentStatus.DECLINED_TOS
+              ].includes(statusCode)
+            )
           }
         ]
       }
