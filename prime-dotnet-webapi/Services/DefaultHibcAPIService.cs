@@ -22,6 +22,12 @@ namespace Prime.Services
 
         public async Task<string> ValidateCollegeLicense(string licenceNumber, string collegeReferenceId)
         {
+            if (PrimeConstants.ENVIRONMENT_NAME == "local")
+            {
+                // TODO handle local dev
+                return null;
+            }
+
             var par = await CallPharmanetCollegeLicenceService(licenceNumber, collegeReferenceId);
 
 
@@ -51,7 +57,7 @@ namespace Prime.Services
         {
             if (PrimeConstants.ENVIRONMENT_NAME == "local")
             {
-                return new HttpClient();
+                return null;
             }
 
             X509Certificate2 certificate = new X509Certificate2(PrimeConstants.HIBC_SSL_CERT_FILENAME, PrimeConstants.HIBC_SSL_CERT_PASSWORD);
