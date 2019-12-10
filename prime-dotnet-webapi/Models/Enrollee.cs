@@ -83,7 +83,13 @@ namespace Prime.Models
         [NotMapped]
         public EnrolmentStatus CurrentStatus
         {
-            get => this.EnrolmentStatuses?.SingleOrDefault(es => es.StatusDate == this.EnrolmentStatuses.Max(x => x.StatusDate));
+            get
+            {
+                return this.EnrolmentStatuses?
+                .OrderByDescending(es => es.StatusDate)
+                .ThenByDescending(es => es.Id)
+                .FirstOrDefault();
+            }
         }
 
         [NotMapped]
