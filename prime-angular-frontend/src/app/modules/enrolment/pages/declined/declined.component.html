@@ -1,21 +1,29 @@
-<app-alert type="danger"
-           icon="warning">
-  <ng-container #alertTitle
-                class="alert-title">
-    Your Enrolment Has Not Been Approved
-  </ng-container>
-  <ng-container #alertContent
-                class="alert-content">
-    You have not been approved for PharmaNet access for direct patient care.
-  </ng-container>
-</app-alert>
+<div class="row">
+  <div class="col-sm-12 col-lg-8 offset-lg-1 offset-xl-0">
 
-<p>
-  Your enrolment application to gain access to PharmaNet has not been approved. Questions about your enrolment should be
-  directed to:
-</p>
+    <app-page-header>Enrolment Summary</app-page-header>
 
-<ul>
-  <li><a href="tel:+1800XXXXXXX">1-800-XXX-XXXX</a></li>
-  <li><a href="mailto:prime@example.com">prime@example.com</a></li>
-</ul>
+    <app-alert type="danger"
+               icon="warning">
+      <ng-container #alertTitle
+                    class="alert-title">
+        Your Enrolment Has Not Been Approved
+      </ng-container>
+      <ng-container #alertContent
+                    class="alert-content">
+        You have not been approved for PharmaNet access for direct patient care.
+      </ng-container>
+    </app-alert>
+
+    <p>
+      Your enrolment application to gain access to PharmaNet has not been approved. Questions about your enrolment
+      should be directed to:
+    </p>
+
+    <ul class="list-unstyled">
+      <li><a href="tel:+1800XXXXXXX">1-800-XXX-XXXX</a></li>
+      <li><a href="mailto:prime@example.com">prime@example.com</a></li>
+    </ul>
+
+  </div>
+</div>
