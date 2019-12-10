@@ -92,7 +92,7 @@ namespace Prime.Models
         [NotMapped]
         public bool InitialStatus { get => this.EnrolmentStatuses?.Count() == 1; }
 
-        public bool? ProfileCompleted { get; set; } = false;
+        public bool ProfileCompleted { get; set; }
 
         [NotMapped]
         public ICollection<Status> AvailableStatuses { get; set; }
