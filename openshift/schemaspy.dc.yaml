@@ -11,7 +11,7 @@ parameters:
     value: 'https://github.com/bcgov/moh-prime'
   - name: SOURCE_REPOSITORY_REF
     required: true
-    value: 'PR-148'
+    value: 'develop'
   - name: OC_NAMESPACE
     required: true
     value: 'dqszvc'
