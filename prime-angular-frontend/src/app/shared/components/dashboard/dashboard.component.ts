@@ -126,7 +126,8 @@ export class DashboardComponent implements OnInit {
             name: 'Status',
             icon: statusIcons.status,
             route: EnrolmentRoutes.SUMMARY,
-            showItem: true
+            showItem: true,
+            forceActive: ([EnrolmentStatus.DECLINED, EnrolmentStatus.DECLINED_TOS].includes(statusCode))
           }
         ]
       }
@@ -189,12 +190,16 @@ export class DashboardComponent implements OnInit {
       case EnrolmentStatus.ADJUDICATED_APPROVED:
         accessAgreement = 'assignment';
         break;
-      // case EnrolmentStatus.DECLINED:
+      case EnrolmentStatus.DECLINED:
+        enrolment = 'highlight_off';
+        break;
       case EnrolmentStatus.ACCEPTED_TOS:
         accessAgreement = 'assignment_turned_in';
         status = 'assignment_turned_in';
         break;
-      // case EnrolmentStatus.DECLINED_TOS:
+      case EnrolmentStatus.DECLINED_TOS:
+        accessAgreement = 'highlight_off';
+        break;
     }
 
     return { enrolment, accessAgreement, status };
