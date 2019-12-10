@@ -41,8 +41,8 @@ export class SummaryComponent extends BaseEnrolmentPage implements OnInit {
     return (this.enrolment) ? this.enrolment.enrollee : null;
   }
 
-  public get physicalAddress() {
-    return (this.enrollee) ? this.enrollee.physicalAddress : null;
+  public get mailingAddress() {
+    return (this.enrollee) ? this.enrollee.mailingAddress : null;
   }
 
   public getTokenUrl(tokenId: string): string {

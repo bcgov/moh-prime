@@ -3,6 +3,8 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
+
 import { AccessAgreementComponent } from './access-agreement.component';
 import { MoaAccessAgreementComponent } from './components/moa-access-agreement/moa-access-agreement.component';
 import { RuAccessAgreementComponent } from './components/ru-access-agreement/ru-access-agreement.component';
@@ -14,6 +16,7 @@ import { AlertComponent } from '@shared/components/alert/alert.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
 import { ProgressIndicatorComponent } from '@shared/components/progress-indicator/progress-indicator.component';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 describe('AccessAgreementComponent', () => {
   let component: AccessAgreementComponent;
@@ -43,6 +46,10 @@ describe('AccessAgreementComponent', () => {
           {
             provide: APP_CONFIG,
             useValue: APP_DI_CONFIG
+          },
+          {
+            provide: EnrolmentService,
+            useClass: MockEnrolmentService
           }
         ]
       }
