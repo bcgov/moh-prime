@@ -68,11 +68,11 @@ objects:
     selector:
       name: "schemaspy"
 - kind: "Route"
-  apiVersion: "v1"
+  apiVersion: v1
   metadata:
     name: "schemaspy"
   spec:
-    host: "${APPLICATION_DOMAIN}"
+    host: "schemaspy-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca"
     tls:
       insecureEdgeTerminationPolicy: "Redirect"
       termination: "edge"
