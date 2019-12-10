@@ -18,7 +18,7 @@
            [ngClass]="{ 'is-deskop': isDesktop }">
     </div>
 
-    <mat-nav-list *ngFor="let sideNavSection of sideNavSections"
+    <mat-nav-list *ngFor="let sideNavSection of sideNavSections; let last = last"
                   [disableRipple]="true">
       <h3 mat-subheader
           *ngIf="sideNavSection.showHeader && sideNavProps.showText">
@@ -45,7 +45,7 @@
 
       </div>
 
-      <mat-divider *ngIf="sideNavSection.showHeader"></mat-divider>
+      <mat-divider *ngIf="!last"></mat-divider>
     </mat-nav-list>
 
   </mat-sidenav>
