@@ -17,7 +17,7 @@ pipeline {
                 echo "Building ..."
                 //sh "./player.sh toolbelt sonar tools"
                 //sh "./player.sh toolbelt mailhog test"
-                sh "./player.sh toolbelt schemaspy dev"
+                //sh "./player.sh toolbelt schemaspy dev"
             }
         }
         stage('Cleanup Branch') {
