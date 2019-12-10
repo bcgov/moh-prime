@@ -21,6 +21,8 @@ import { ConfirmationComponent } from './pages/confirmation/confirmation.compone
 import { AccessAgreementComponent } from './pages/access-agreement/access-agreement.component';
 import { SummaryComponent } from './pages/summary/summary.component';
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
+import { DeclinedComponent } from './pages/declined/declined.component';
+import { DeclinedAccessAgreementComponent } from './pages/declined-access-agreement/declined-access-agreement.component';
 
 const routes: Routes = [
   {
@@ -83,6 +85,14 @@ const routes: Routes = [
       {
         path: EnrolmentRoutes.SUMMARY,
         component: SummaryComponent
+      },
+      {
+        path: EnrolmentRoutes.DECLINED,
+        component: DeclinedComponent
+      },
+      {
+        path: EnrolmentRoutes.DECLINED_ACCESS_AGREEMENT,
+        component: DeclinedAccessAgreementComponent
       },
       {
         path: '', // Equivalent to `/` and alias for `review`
