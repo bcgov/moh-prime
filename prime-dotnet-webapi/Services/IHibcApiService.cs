@@ -1,11 +1,12 @@
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
+
+using Prime.Models;
 
 namespace Prime.Services
 {
     public interface IHibcApiService
     {
-        Task<string> ValidateCollegeLicense(string licenceNumber, string collegeReferenceId);
+        Task<PharmanetCollegeRecord> GetCollegeRecord(string licenceNumber, string collegeReferenceId);
     }
+
 }

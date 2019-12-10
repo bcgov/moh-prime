@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+
 
 using Prime.Models;
 using Prime.Services;
@@ -203,11 +205,11 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiOkResponse<Enrollee>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Enrollee>> DeleteEnrollee(string enrolleeId, string other)
+        public async Task<ActionResult<PharmanetCollegeRecord>> DeleteEnrollee(string enrolleeId, string other)
         {
-            string resp = await _hibcApiService.ValidateCollegeLicense(enrolleeId, other);
+            PharmanetCollegeRecord resp = await _hibcApiService.GetCollegeRecord(enrolleeId, other);
 
-            return Ok(new ApiOkResponse<string>(resp));
+            return Ok(new ApiOkResponse<PharmanetCollegeRecord>(resp));
         }
 
         // GET: api/Enrollees/5/availableStatuses

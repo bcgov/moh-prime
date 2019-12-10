@@ -10,6 +10,8 @@ using System.Security.Cryptography.X509Certificates;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
+using Prime.Models;
+
 namespace Prime.Services
 {
     public class DefaultHibcApiService : BaseService, IHibcApiService
@@ -21,7 +23,7 @@ namespace Prime.Services
             : base(context, httpContext)
         { }
 
-        public async Task<string> ValidateCollegeLicense(string licenceNumber, string collegeReferenceId)
+        public async Task<PharmanetCollegeRecord> GetCollegeRecord(string licenceNumber, string collegeReferenceId)
         {
             if (PrimeConstants.ENVIRONMENT_NAME == "local")
             {
@@ -29,13 +31,10 @@ namespace Prime.Services
                 throw new NotImplementedException();
             }
 
-            var par = await CallPharmanetCollegeLicenceService(licenceNumber, collegeReferenceId);
-
-
-            return JsonConvert.SerializeObject(par);
+            return await CallPharmanetCollegeLicenceService(licenceNumber, collegeReferenceId);
         }
 
-        private async Task<CollegePracticionerRecord> CallPharmanetCollegeLicenceService(string licenceNumber, string collegeReferenceId)
+        private async Task<PharmanetCollegeRecord> CallPharmanetCollegeLicenceService(string licenceNumber, string collegeReferenceId)
         {
             var requestParams = new CollegeLicenceRequestParams(licenceNumber, collegeReferenceId);
             var response = await Client.PostAsJsonAsync(PrimeConstants.HIBC_API_URL, requestParams);
@@ -45,13 +44,21 @@ namespace Prime.Services
                 throw new PharmanetCollegeApiException($"API returned status code {(int)response.StatusCode}, with reason \"{response.ReasonPhrase}\".");
             }
 
-            var practicionerRecord = await CollegePracticionerRecord.FromResponseContentAsync(response.Content);
+            var practicionerRecord = await CollegeRecordFromResponseAsync(response);
             if (practicionerRecord.applicationUUID != requestParams.applicationUUID)
             {
                 throw new PharmanetCollegeApiException($"Expected matching applicationUUIDs between request and response. Request was\"{requestParams.applicationUUID}\", response was \"{practicionerRecord.applicationUUID}\".");
             }
 
             return practicionerRecord;
+        }
+
+        private async Task<PharmanetCollegeRecord> CollegeRecordFromResponseAsync(HttpResponseMessage response)
+        {
+            var stringContent = await response.Content.ReadAsStringAsync();
+            List<PharmanetCollegeRecord> data = JsonConvert.DeserializeObject<List<PharmanetCollegeRecord>>(stringContent);
+
+            return data.SingleOrDefault();
         }
 
         private static HttpClient InitHttpClient()
@@ -78,8 +85,8 @@ namespace Prime.Services
                 )
             );
 
-            var sp = ServicePointManager.FindServicePoint(new Uri(PrimeConstants.HIBC_API_URL));
-            sp.ConnectionLeaseTimeout = 60 * 1000; // 1 minute
+            // var sp = ServicePointManager.FindServicePoint(new Uri(PrimeConstants.HIBC_API_URL));
+            // sp.ConnectionLeaseTimeout = 60 * 1000; // 1 minute
 
             return client;
         }
@@ -100,24 +107,7 @@ namespace Prime.Services
             }
         }
 
-        private class CollegePracticionerRecord
-        {
-            public string applicationUUID { get; set; }
-            public string firstName { get; set; }
-            public string middleInitial { get; set; }
-            public string lastName { get; set; }
-            public DateTime dateofBirth { get; set; }
-            public string status { get; set; }
-            public DateTime effectiveDate { get; set; }
 
-            public static async Task<CollegePracticionerRecord> FromResponseContentAsync(HttpContent content)
-            {
-                var stringContent = await content.ReadAsStringAsync();
-                List<CollegePracticionerRecord> data = JsonConvert.DeserializeObject<List<CollegePracticionerRecord>>(stringContent);
-
-                return data.SingleOrDefault();
-            }
-        }
 
         public class PharmanetCollegeApiException : Exception
         {
