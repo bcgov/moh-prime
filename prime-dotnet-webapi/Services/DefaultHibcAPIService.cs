@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -105,12 +106,7 @@ namespace Prime.Services
                 var stringContent = await content.ReadAsStringAsync();
                 List<CollegePracticionerRecord> data = JsonConvert.DeserializeObject<List<CollegePracticionerRecord>>(stringContent);
 
-                if (data.Count > 1)
-                {
-                    throw new PharmanetCollegeApiException($"API response contained {data.Count} items, expected zero or 1.");
-                }
-
-                return data[0];
+                return data.SingleOrDefault();
             }
         }
 
