@@ -1,5 +1,6 @@
 using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
@@ -26,7 +27,7 @@ namespace Prime.Services
 
         private async Task<CollegePracticionerRecord> CallPharmanetCollegeLicenceService(string licenceNumber, string collegeReferenceId)
         {
-            using (var client = new HttpClient(CreateClientHandler()))
+            using (var client = CreateHttpClient())
             {
                 var requestParams = new CollegeLicenceRequestParams(licenceNumber, collegeReferenceId);
                 var response = await client.PostAsJsonAsync(PrimeConstants.HIBC_API_URL, requestParams);
@@ -46,19 +47,31 @@ namespace Prime.Services
             };
         }
 
-        private HttpClientHandler CreateClientHandler()
+        private HttpClient CreateHttpClient()
         {
             if (PrimeConstants.ENVIRONMENT_NAME == "local")
             {
-                return new HttpClientHandler();
+                return new HttpClient();
             }
 
             X509Certificate2 certificate = new X509Certificate2(PrimeConstants.HIBC_SSL_CERT_FILENAME, PrimeConstants.HIBC_SSL_CERT_PASSWORD);
-            return new HttpClientHandler
-            {
-                ClientCertificateOptions = ClientCertificateOption.Manual,
-                ClientCertificates = { certificate }
-            };
+            var client = new HttpClient(
+                new HttpClientHandler
+                {
+                    ClientCertificateOptions = ClientCertificateOption.Manual,
+                    ClientCertificates = { certificate }
+                }
+            );
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+                "Basic", Convert.ToBase64String(
+                    System.Text.ASCIIEncoding.ASCII.GetBytes(
+                        $"{PrimeConstants.HIBC_API_USERNAME}:{PrimeConstants.HIBC_API_PASSWORD}"
+                    )
+                )
+            );
+
+            return client;
         }
 
         private class CollegeLicenceRequestParams
