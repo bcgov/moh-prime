@@ -6,6 +6,7 @@ import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { ViewportService } from '@core/services/viewport.service';
 import { LoggerService } from '@core/services/logger.service';
 import { DeviceResolution } from '@shared/enums/device-resolution.enum';
+import { DashboardNavSection } from '@shared/models/dashboard.model';
 
 import { AuthRoutes } from '@auth/auth.routes';
 import { AuthService } from '@auth/shared/services/auth.service';
@@ -97,15 +98,25 @@ export class DashboardComponent implements OnInit {
       : this.getEnrolleeSideNavSections();
   }
 
-  private getEnrolleeSideNavSections() {
-    const statusCode = (this.enrolmentService.enrolment)
-      ? this.enrolmentService.enrolment.currentStatus.status.code
+  private getEnrolleeSideNavSections(): DashboardNavSection[] {
+    const enrolment = this.enrolmentService.enrolment;
+    const statusCode = (enrolment)
+      ? enrolment.currentStatus.status.code
       : EnrolmentStatus.IN_PROGRESS;
     const statusIcons = this.getEnrolmentStatusIcons(statusCode);
 
+    return (enrolment.initialStatus)
+      ? this.getInitialEnrolmentSideNavSections(statusCode, statusIcons)
+      : this.getEnrolmentSideNavSections(statusCode, statusIcons);
+  }
+
+  private getInitialEnrolmentSideNavSections(
+    statusCode: EnrolmentStatus,
+    statusIcons: { enrolment: string, accessAgreement: string, status: string }
+  ): DashboardNavSection[] {
     return [
       {
-        header: 'Application Enrolment',
+        header: 'Enrolment',
         showHeader: false,
         items: [
           {
@@ -133,7 +144,51 @@ export class DashboardComponent implements OnInit {
     ];
   }
 
-  private getAdjudicationSideNavSections() {
+  private getEnrolmentSideNavSections(
+    statusCode: EnrolmentStatus,
+    statusIcons: { enrolment: string, accessAgreement: string, status: string }
+  ): DashboardNavSection[] {
+    return [
+      {
+        header: 'Enrolment',
+        showHeader: false,
+        items: [
+          {
+            name: 'PRIME Profile',
+            icon: statusIcons.enrolment,
+            route: EnrolmentRoutes.PROFILE,
+            showItem: true
+          },
+          {
+            name: 'Access Agreement History',
+            icon: statusIcons.accessAgreement,
+            route: EnrolmentRoutes.ACCESS_AGREEMENT,
+            showItem: true
+          },
+          {
+            name: 'PharmaNet Enrolment Certificate',
+            icon: statusIcons.status,
+            route: EnrolmentRoutes.SUMMARY,
+            showItem: true
+          },
+          {
+            name: 'PharmaNet Transactions',
+            icon: statusIcons.status,
+            route: EnrolmentRoutes.SUMMARY,
+            showItem: true
+          },
+          {
+            name: 'Enrolment Log History',
+            icon: statusIcons.status,
+            route: EnrolmentRoutes.SUMMARY,
+            showItem: true
+          }
+        ]
+      }
+    ];
+  }
+
+  private getAdjudicationSideNavSections(): DashboardNavSection[] {
     return [
       {
         header: 'Pharmacist Enrolments',
@@ -175,7 +230,7 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  private getEnrolmentStatusIcons(statusCode: number) {
+  private getEnrolmentStatusIcons(statusCode: number): { enrolment: string, accessAgreement: string, status: string } {
     let enrolment = 'assignment_turned_in';
     let accessAgreement = 'lock';
     let status = 'lock';
