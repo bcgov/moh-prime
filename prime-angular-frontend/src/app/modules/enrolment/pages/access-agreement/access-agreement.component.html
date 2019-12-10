@@ -89,7 +89,13 @@
             <button mat-raised-button
                     color="primary"
                     [disabled]="!hasAgreed"
-                    (click)="onSubmit()">Accept Agreement</button>
+                    (click)="onSubmit(EnrolmentStatus.ACCEPTED_TOS)">Accept Agreement</button>
+
+
+            <button mat-raised-button
+                    color="primary"
+                    [disabled]="!hasAgreed"
+                    (click)="onSubmit(EnrolmentStatus.DECLINED_TOS)">Decline Agreement</button>
 
           </ng-container>
 
