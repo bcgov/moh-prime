@@ -36,6 +36,10 @@ namespace Prime.Services
 
         private async Task<PharmanetCollegeRecord> CallPharmanetCollegeLicenceService(string licenceNumber, string collegeReferenceId)
         {
+            System.Console.WriteLine();
+            System.Console.WriteLine($"Params[{licenceNumber},{collegeReferenceId}]");
+            System.Console.WriteLine();
+
             var requestParams = new CollegeLicenceRequestParams(licenceNumber, collegeReferenceId);
             var response = await Client.PostAsJsonAsync(PrimeConstants.HIBC_API_URL, requestParams);
             if (!response.IsSuccessStatusCode)
@@ -45,7 +49,7 @@ namespace Prime.Services
             }
 
             var practicionerRecord = await CollegeRecordFromResponseAsync(response);
-            if (practicionerRecord.applicationUUID != requestParams.applicationUUID)
+            if (practicionerRecord != null && practicionerRecord.applicationUUID != requestParams.applicationUUID)
             {
                 throw new PharmanetCollegeApiException($"Expected matching applicationUUIDs between request and response. Request was\"{requestParams.applicationUUID}\", response was \"{practicionerRecord.applicationUUID}\".");
             }
