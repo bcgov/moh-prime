@@ -12,6 +12,7 @@ pipeline {
                     sh "./player.sh deploy database test"
                     sh "./player.sh deploy api test"
                     sh "./player.sh deploy frontend test"
+                    sh "./player.sh toolbelt schemaspy test"
             }
         }
         stage('Approve Promotion of Master') {
@@ -46,6 +47,7 @@ pipeline {
                 sh "./player.sh deploy database prod"
                 sh "./player.sh deploy api prod"
                 sh "./player.sh deploy frontend prod"
+                sh "./player.sh toolbelt schemaspy prod"
             }
         }
     }
