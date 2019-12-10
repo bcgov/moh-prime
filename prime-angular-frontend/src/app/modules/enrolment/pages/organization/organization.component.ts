@@ -58,7 +58,7 @@ export class OrganizationComponent extends BaseEnrolmentProfilePage implements O
           () => {
             this.form.markAsPristine();
             this.toastService.openSuccessToast('PharmaNet access has been saved');
-            this.router.navigate([EnrolmentRoutes.REVIEW], { relativeTo: this.route.parent });
+            this.routeTo(EnrolmentRoutes.REVIEW);
           },
           (error: any) => {
             this.toastService.openErrorToast('PharmaNet access could not be saved');

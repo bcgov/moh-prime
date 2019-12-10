@@ -91,7 +91,10 @@ export class ProfileComponent extends BaseEnrolmentProfilePage implements OnInit
           () => {
             this.toastService.openSuccessToast('Profile information has been saved');
             this.form.markAsPristine();
-            this.routeTo(EnrolmentRoutes.REGULATORY);
+            const routePath = (!this.isProfileComplete)
+              ? EnrolmentRoutes.REGULATORY
+              : EnrolmentRoutes.REVIEW;
+            this.routeTo(routePath);
           },
           (error: any) => {
             this.toastService.openErrorToast('Profile information could not be saved');

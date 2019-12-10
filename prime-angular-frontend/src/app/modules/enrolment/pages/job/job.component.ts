@@ -10,7 +10,6 @@ import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
-import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { Job } from '@enrolment/shared/models/job.model';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
@@ -67,7 +66,11 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
           () => {
             this.toastService.openSuccessToast('Job information has been saved');
             this.form.markAsPristine();
-            this.router.navigate([EnrolmentRoutes.SELF_DECLARATION], { relativeTo: this.route.parent });
+
+            const routePath = (!this.isProfileComplete)
+              ? EnrolmentRoutes.SELF_DECLARATION
+              : EnrolmentRoutes.REVIEW;
+            this.routeTo(routePath);
           },
           (error: any) => {
             this.toastService.openErrorToast('Job information could not be saved');

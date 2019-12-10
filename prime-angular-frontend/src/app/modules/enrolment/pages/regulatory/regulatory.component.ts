@@ -57,11 +57,13 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
 
             this.removeIncompleteCertifications(true);
 
-            let route = EnrolmentRoutes.SELF_DECLARATION;
-            if (this.certifications.length === 0) {
-              route = EnrolmentRoutes.JOB;
-            }
-            this.router.navigate([route], { relativeTo: this.route.parent });
+            const nextRoutePath = (!this.certifications.length)
+              ? EnrolmentRoutes.JOB
+              : EnrolmentRoutes.SELF_DECLARATION;
+            const routePath = (!this.isProfileComplete)
+              ? nextRoutePath
+              : EnrolmentRoutes.REVIEW;
+            this.routeTo(routePath);
           },
           (error: any) => {
             this.toastService.openErrorToast('Regulatory information could not be saved');
