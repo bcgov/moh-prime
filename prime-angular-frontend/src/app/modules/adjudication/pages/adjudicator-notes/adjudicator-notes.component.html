@@ -1,24 +1,8 @@
 <app-busy-overlay [busy]="busy">
 
-  <app-page-header>PharmaNet Enrolments</app-page-header>
+  <app-page-header>Global Adjudicator Notes</app-page-header>
 
-  <div class="row justify-content-end">
-    <div class="col text-right">
-
-      <mat-form-field>
-        <mat-label>Filter By Status</mat-label>
-        <mat-select value=""
-                    (selectionChange)="filterByStatus($event)">
-          <mat-option value="">All</mat-option>
-          <mat-option *ngFor="let status of statuses"
-                      [value]="status.code">
-            {{ status.name }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-
-    </div>
-  </div>
+  <p>Ensure you verify your notes before saving since notes can not be edited or deleted after they have been saved</p>
 
   <table mat-table
          [dataSource]="dataSource"
