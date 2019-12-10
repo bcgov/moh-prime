@@ -34,7 +34,7 @@ ENTRYPOINT ["/sbin/tini"]
 
 # ===================================================================================================================================================================
 # Update with OpenShifty Stuff
-# Refs: 
+# Refs:
 # - https://github.com/BCDevOps/s2i-caddy
 # -------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Create the location where we will store our content, and fiddle the permissions so we will be able to write to it.
@@ -50,7 +50,7 @@ EXPOSE 8080
 
 # ===================================================================================================================================================================
 # Install SchemaSpy
-# Refs: 
+# Refs:
 # - https://github.com/cywolf/schemaspy-docker
 # - https://github.com/schemaspy/schemaspy
 # - http://schemaspy.readthedocs.io/en/latest/index.html
@@ -62,7 +62,7 @@ ENV LC_ALL C
 ENV OUTPUT_PATH=/var/www/html
 
 # Define the default versions for the image
-ENV SCHEMA_SPY_VERSION=6.0.0
+ENV SCHEMA_SPY_VERSION=6.1.0
 ENV POSTGRESQL_VERSION=42.2.1
 ENV MYSQL_VERSION=6.0.6
 ENV SQL_LITE_VERSION=3.18.0
