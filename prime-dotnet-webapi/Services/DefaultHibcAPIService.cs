@@ -36,12 +36,30 @@ namespace Prime.Services
 
         private async Task<CollegePracticionerRecord> CallPharmanetCollegeLicenceService(string licenceNumber, string collegeReferenceId)
         {
-            System.Console.WriteLine();
-            System.Console.WriteLine($">>>>>>>>>>{Client.DefaultRequestHeaders.Authorization}");
-            System.Console.WriteLine();
-
             var requestParams = new CollegeLicenceRequestParams(licenceNumber, collegeReferenceId);
-            var response = await Client.PostAsJsonAsync(PrimeConstants.HIBC_API_URL, requestParams);
+            // var response = await Client.PostAsJsonAsync(PrimeConstants.HIBC_API_URL, requestParams);
+            HttpResponseMessage response;
+            X509Certificate2 certificate = new X509Certificate2(PrimeConstants.HIBC_SSL_CERT_FILENAME, PrimeConstants.HIBC_SSL_CERT_PASSWORD);
+            using (var client = new HttpClient(
+                new HttpClientHandler
+                {
+                    ClientCertificateOptions = ClientCertificateOption.Manual,
+                    ClientCertificates = { certificate }
+                }
+            ))
+            {
+
+
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+                    "Basic", Convert.ToBase64String(
+                        System.Text.ASCIIEncoding.ASCII.GetBytes(
+                            $"{PrimeConstants.HIBC_API_USERNAME}:{PrimeConstants.HIBC_API_PASSWORD}"
+                        )
+                    )
+                );
+
+                response = await Client.PostAsJsonAsync(PrimeConstants.HIBC_API_URL, requestParams);
+            }
             if (!response.IsSuccessStatusCode)
             {
                 // TODO Try again, log error? Probably dont handle like this.
