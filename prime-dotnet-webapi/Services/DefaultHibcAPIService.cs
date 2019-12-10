@@ -77,7 +77,7 @@ namespace Prime.Services
                 )
             );
 
-            System.Console.WriteLine(PrimeConstants.HIBC_API_USERNAME);
+            System.Console.WriteLine($">>>>>>>>>>>>>>[{PrimeConstants.HIBC_API_USERNAME}]");
 
             return client;
         }
