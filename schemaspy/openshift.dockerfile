@@ -49,7 +49,7 @@ RUN apk update && \
         wget \
         ca-certificates
 
-COPY start.sh conf ./
+COPY start.sh ./
 
 RUN chown -R 1001:0 /app && \
     chmod -R ug+rwx /app

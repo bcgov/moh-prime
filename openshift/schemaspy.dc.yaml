@@ -41,7 +41,7 @@ parameters:
     displayName: "Database Name"
     required: true
     description: "Name of the deployed database (see environment variables in deployed database)."
-    value: "TheOrgBook_Database"
+    value: "postgresql"
   - name: "TAG_NAME"
     displayName: "Environment TAG name"
     description: "The TAG name for this environment, e.g., dev, test, prod"
