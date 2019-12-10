@@ -36,6 +36,10 @@ namespace Prime.Services
 
         private async Task<CollegePracticionerRecord> CallPharmanetCollegeLicenceService(string licenceNumber, string collegeReferenceId)
         {
+            System.Console.WriteLine();
+            System.Console.WriteLine($">>>>>>>>>>{Client.DefaultRequestHeaders.Authorization}");
+            System.Console.WriteLine();
+
             var requestParams = new CollegeLicenceRequestParams(licenceNumber, collegeReferenceId);
             var response = await Client.PostAsJsonAsync(PrimeConstants.HIBC_API_URL, requestParams);
             if (!response.IsSuccessStatusCode)
@@ -76,8 +80,6 @@ namespace Prime.Services
                     )
                 )
             );
-
-            System.Console.WriteLine($">>>>>>>>>>>>>>[{PrimeConstants.HIBC_API_USERNAME}]");
 
             return client;
         }
