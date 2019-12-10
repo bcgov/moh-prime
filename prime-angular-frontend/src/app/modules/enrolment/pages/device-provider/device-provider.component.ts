@@ -53,11 +53,14 @@ export class DeviceProviderComponent extends BaseEnrolmentProfilePage implements
           () => {
             this.toastService.openSuccessToast('Device Provider information has been saved');
             this.form.markAsPristine();
-            if (payload.certifications.length > 0) {
-              this.router.navigate([EnrolmentRoutes.SELF_DECLARATION], { relativeTo: this.route.parent });
-            } else {
-              this.router.navigate([EnrolmentRoutes.JOB], { relativeTo: this.route.parent });
-            }
+
+            const nextRoutePath = (!payload.certifications.length)
+              ? EnrolmentRoutes.JOB
+              : EnrolmentRoutes.SELF_DECLARATION;
+            const routePath = (!this.isProfileComplete)
+              ? nextRoutePath
+              : EnrolmentRoutes.REVIEW;
+            this.routeTo(routePath);
           },
           (error: any) => {
             this.toastService.openErrorToast('Device Provider information could not be saved');
@@ -94,5 +97,6 @@ export class DeviceProviderComponent extends BaseEnrolmentProfilePage implements
 
     this.isProfileComplete = enrolment.profileCompleted;
     this.enrolmentStateService.enrolment = enrolment;
+    this.hasInitialStatus = enrolment.initialStatus;
   }
 }

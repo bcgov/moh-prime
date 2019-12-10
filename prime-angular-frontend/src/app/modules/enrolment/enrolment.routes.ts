@@ -11,6 +11,8 @@ export class EnrolmentRoutes {
   public static CONFIRMATION = 'confirmation';
   public static ACCESS_AGREEMENT = 'access-agreement';
   public static SUMMARY = 'summary';
+  public static DECLINED = 'declined';
+  public static DECLINED_ACCESS_AGREEMENT = 'declined-access-agreement';
 
   public static MODULE_PATH = EnrolmentRoutes.ENROLMENT;
 
@@ -35,7 +37,9 @@ export class EnrolmentRoutes {
     return [
       EnrolmentRoutes.CONFIRMATION,
       EnrolmentRoutes.ACCESS_AGREEMENT,
-      EnrolmentRoutes.SUMMARY
+      EnrolmentRoutes.SUMMARY,
+      EnrolmentRoutes.DECLINED,
+      EnrolmentRoutes.DECLINED_ACCESS_AGREEMENT
     ];
   }
 }

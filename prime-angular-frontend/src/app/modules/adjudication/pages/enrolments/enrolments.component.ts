@@ -130,7 +130,7 @@ export class EnrolmentsComponent implements OnInit {
   public markAsInProgress(id: number) {
     const data: DialogOptions = {
       title: 'Enable Editing',
-      message: 'When enabled the enrollee will be marked as In-Progress, and able to update their enrolment. Are you sure you want to enable editing?',
+      message: 'When enabled the enrollee will be able to update their enrolment. Are you sure you want to enable editing?',
       actionType: 'warn',
       actionText: 'Enable Editing'
     };

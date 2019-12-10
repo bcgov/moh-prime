@@ -32,6 +32,7 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
   public agreed: FormControl;
 
   // Allow the use of enum in the component template
+  public EnrolmentStatus = EnrolmentStatus;
   public EnrolleeClassification = EnrolleeClassification;
 
   constructor(
@@ -56,33 +57,53 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
     return this.agreed.value;
   }
 
-  public onSubmit() {
+  public onSubmit(enrolmentStatus: EnrolmentStatus) {
     if (this.hasReadAgreement) {
+      const status = (enrolmentStatus === EnrolmentStatus.ACCEPTED_TOS)
+        ? { verb: 'Accept', adjective: 'accepted' }
+        : { verb: 'Decline', adjective: 'declined' };
+
       const data: DialogOptions = {
         title: 'Access Agreement',
-        message: 'Are you sure you want to accept the access agreement?',
-        actionText: 'Accept Agreement'
+        message: `Are you sure you want to ${status.verb.toLowerCase()} the access agreement?`,
+        actionText: `${status.verb} Agreement`
       };
       this.busy = this.dialog.open(ConfirmDialogComponent, { data })
         .afterClosed()
         .pipe(
           exhaustMap((result: boolean) =>
             (result)
-              ? this.enrolmentResource.updateEnrolmentStatus(this.enrolment.id, EnrolmentStatus.ACCEPTED_TOS)
+              ? this.enrolmentResource.updateEnrolmentStatus(this.enrolment.id, enrolmentStatus)
               : EMPTY
           )
         )
         .subscribe(
           () => {
-            this.toastService.openSuccessToast('Access agreement has been accepted');
+            this.toastService.openSuccessToast(`Access agreement has been ${status.adjective}`);
             this.routeTo(EnrolmentRoutes.SUMMARY, { state: { showProgressBar: this.hasInitialStatus } });
           },
           (error: any) => {
-            this.toastService.openErrorToast('Access agreement could not be accepted');
+            this.toastService.openErrorToast(`Access agreement could not be ${status.adjective}`);
             this.logger.error('[Enrolment] AccessAgreement::onSubmit error has occurred: ', error);
           }
         );
     }
+  }
+
+  public onAcceptedAgreement() {
+    const data: DialogOptions = {
+      title: 'Access Agreement',
+      message: 'Are you sure you want to accept the access agreement?',
+      actionText: 'Accept Agreement'
+    };
+  }
+
+  public onDeclinedAgreement() {
+    const data: DialogOptions = {
+      title: 'Access Agreement',
+      message: 'Are you sure you want to decline the access agreement?',
+      actionText: 'Decline Agreement'
+    };
   }
 
   public onPrevPage() {
@@ -110,5 +131,6 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
 
   public ngOnInit() {
     this.enrolment = this.enrolmentService.enrolment;
+    this.hasInitialStatus = this.enrolment.initialStatus;
   }
 }

@@ -29,7 +29,9 @@ export abstract class BaseEnrolmentPage implements IBaseEnrolmentPage {
     protected route: ActivatedRoute,
     protected router: Router
   ) {
-    this.hasInitialStatus = true;
+    // Defaults are for enrollees that have been approved at
+    // least once, which represents the majority
+    this.hasInitialStatus = false;
     this.isProfileComplete = true;
   }
 

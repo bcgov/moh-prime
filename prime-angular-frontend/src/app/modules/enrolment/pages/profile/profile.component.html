@@ -260,7 +260,7 @@
         </section>
 
         <app-page-footer [profileCompleted]="isProfileComplete"
-                         [hasSecondaryAction]="false"
+                         [hasSecondaryAction]="isProfileComplete"
                          (save)="onSubmit()"
                          (continue)="onSubmit()"></app-page-footer>
 

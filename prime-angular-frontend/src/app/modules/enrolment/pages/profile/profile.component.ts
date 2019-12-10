@@ -24,9 +24,7 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 export class ProfileComponent extends BaseEnrolmentProfilePage implements OnInit {
   public hasPreferredName: boolean;
   public hasMailingAddress: boolean;
-
-  // Whether a profile exists for an enrollee
-  private isNewProfile: boolean;
+  public isNewProfile: boolean;
 
   constructor(
     protected route: ActivatedRoute,
@@ -93,7 +91,10 @@ export class ProfileComponent extends BaseEnrolmentProfilePage implements OnInit
           () => {
             this.toastService.openSuccessToast('Profile information has been saved');
             this.form.markAsPristine();
-            this.routeTo(EnrolmentRoutes.REGULATORY);
+            const routePath = (!this.isProfileComplete)
+              ? EnrolmentRoutes.REGULATORY
+              : EnrolmentRoutes.REVIEW;
+            this.routeTo(routePath);
           },
           (error: any) => {
             this.toastService.openErrorToast('Profile information could not be saved');
