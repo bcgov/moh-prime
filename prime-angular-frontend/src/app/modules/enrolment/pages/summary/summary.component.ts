@@ -60,6 +60,7 @@ export class SummaryComponent extends BaseEnrolmentPage implements OnInit {
     this.showProgressBar = (routeState && routeState.showProgressBar) ? routeState.showProgressBar : false;
 
     this.enrolment = this.enrolmentService.enrolment;
+    this.hasInitialStatus = this.enrolment.initialStatus;
 
     this.busy = this.enrolmentResource.enrolmentCertificateAccessTokens()
       .subscribe(

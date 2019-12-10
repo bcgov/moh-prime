@@ -190,7 +190,7 @@ namespace Prime.Services
                                 .Include(e => e.Organizations)
                                 .AsNoTracking()
                                 .Where(e => e.Id == enrollee.Id)
-                                .FirstOrDefault();
+                                .SingleOrDefault();
 
             // Remove existing, and recreate if necessary
             this.ReplaceExistingAddress(_enrolleeDb.PhysicalAddress, enrollee.PhysicalAddress, enrollee);
@@ -199,13 +199,10 @@ namespace Prime.Services
             this.ReplaceExistingItems(_enrolleeDb.Jobs, enrollee.Jobs, enrollee);
             this.ReplaceExistingItems(_enrolleeDb.Organizations, enrollee.Organizations, enrollee);
 
-            // If profileCompleted is true, this is the first time the enrollee has completed their profile
-            // by going through the wizard
-            if (profileCompleted == true)
-            {
-                _enrolleeDb.ProfileCompleted = true;
-                enrollee.ProfileCompleted = true;
-            }
+            // If profileCompleted is true, this is the first time the enrollee
+            // has completed their profile by traversing the wizard, and indicates
+            // a change in routing for the enrollee
+            enrollee.ProfileCompleted = _enrolleeDb.ProfileCompleted || profileCompleted;
 
             _context.Entry(enrollee).State = EntityState.Modified;
 
@@ -423,7 +420,6 @@ namespace Prime.Services
 
             return statusCodeToCheck.Equals(currentStatusCode);
         }
-
 
         private IQueryable<Enrollee> GetBaseEnrolleeQuery()
         {

@@ -131,5 +131,6 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
 
   public ngOnInit() {
     this.enrolment = this.enrolmentService.enrolment;
+    this.hasInitialStatus = this.enrolment.initialStatus;
   }
 }
