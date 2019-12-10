@@ -38,61 +38,74 @@ const routes: Routes = [
       {
         path: EnrolmentRoutes.COLLECTION_NOTICE,
         component: CollectionNoticeComponent,
+        data: { title: 'Collection Notice' }
       },
       {
         path: EnrolmentRoutes.PROFILE,
         component: ProfileComponent,
-        canDeactivate: [CanDeactivateFormGuard]
+        canDeactivate: [CanDeactivateFormGuard],
+        data: { title: 'PharmaNet Enrolment' }
       },
       {
         path: EnrolmentRoutes.REGULATORY,
         component: RegulatoryComponent,
-        canDeactivate: [CanDeactivateFormGuard]
+        canDeactivate: [CanDeactivateFormGuard],
+        data: { title: 'PharmaNet Enrolment' }
       },
       // TODO Temporary removal of Device Provider for ComPAP
       // {
       //   path: EnrolmentRoutes.DEVICE_PROVIDER,
       //   component: DeviceProviderComponent,
-      //   canDeactivate: [CanDeactivateFormGuard]
+      //   canDeactivate: [CanDeactivateFormGuard],
+      //   data: { title: 'Device Provider' }
       // },
       {
         path: EnrolmentRoutes.JOB,
         component: JobComponent,
-        canDeactivate: [CanDeactivateFormGuard]
+        canDeactivate: [CanDeactivateFormGuard],
+        data: { title: 'PharmaNet Enrolment' }
       },
       {
         path: EnrolmentRoutes.SELF_DECLARATION,
         component: SelfDeclarationComponent,
-        canDeactivate: [CanDeactivateFormGuard]
+        canDeactivate: [CanDeactivateFormGuard],
+        data: { title: 'PharmaNet Enrolment' }
       },
       {
         path: EnrolmentRoutes.ORGANIZATION,
         component: OrganizationComponent,
-        canDeactivate: [CanDeactivateFormGuard]
+        canDeactivate: [CanDeactivateFormGuard],
+        data: { title: 'PharmaNet Enrolment' }
       },
       {
         path: EnrolmentRoutes.REVIEW,
-        component: ReviewComponent
+        component: ReviewComponent,
+        data: { title: 'PharmaNet Enrolment' }
       },
       {
         path: EnrolmentRoutes.CONFIRMATION,
-        component: ConfirmationComponent
+        component: ConfirmationComponent,
+        data: { title: 'Enrolment Confirmation' }
       },
       {
         path: EnrolmentRoutes.ACCESS_AGREEMENT,
-        component: AccessAgreementComponent
+        component: AccessAgreementComponent,
+        data: { title: 'Enrolment Access Agreement' }
       },
       {
         path: EnrolmentRoutes.SUMMARY,
-        component: SummaryComponent
+        component: SummaryComponent,
+        data: { title: 'Enrolment Summary' }
       },
       {
         path: EnrolmentRoutes.DECLINED,
-        component: DeclinedComponent
+        component: DeclinedComponent,
+        data: { title: 'Enrolment Summary' }
       },
       {
         path: EnrolmentRoutes.DECLINED_ACCESS_AGREEMENT,
-        component: DeclinedAccessAgreementComponent
+        component: DeclinedAccessAgreementComponent,
+        data: { title: 'Enrolment Summary' }
       },
       {
         path: '', // Equivalent to `/` and alias for `review`
