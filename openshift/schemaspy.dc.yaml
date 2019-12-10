@@ -17,7 +17,7 @@ parameters:
     value: 'dqszvc'
   - name: OC_APP
     required: true
-    value: 'tools'
+    value: 'dev'
   - name: "CPU_LIMIT"
     displayName: "CPU Limit"
     required: true
@@ -63,8 +63,8 @@ objects:
     ports:
     - name: "8080-tcp"
       protocol: "TCP"
-      port: "8080"
-      targetPort: "8080"
+      port: 8080
+      targetPort: 8080
     selector:
       name: "schemaspy"
 - kind: "Route"
