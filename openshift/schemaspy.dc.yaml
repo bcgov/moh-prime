@@ -11,7 +11,7 @@ parameters:
     value: 'https://github.com/bcgov/moh-prime'
   - name: SOURCE_REPOSITORY_REF
     required: true
-    value: 'develop'
+    value: 'PR-148'
   - name: OC_NAMESPACE
     required: true
     value: 'dqszvc'
@@ -115,16 +115,16 @@ objects:
       spec:
         containers:
         - name: "schemaspy"
-          image: " "
+          image: "docker-registry.default.svc:5000/${OC_NAMESPACE}-${OC_APP}/schemaspy"
           ports:
           - containerPort: "8080"
             protocol: "TCP"
           env:
-          - name: "DATABASE_HOST"
-            value: "${DATABASE_HOST}"
-          - name: "DATABASE_NAME"
-            value: "${DATABASE_NAME}"
-          - name: "DATABASE_USER"
+            - name: "DATABASE_HOST"
+              value: "${DATABASE_HOST}"
+            - name: "DATABASE_NAME"
+              value: "${DATABASE_NAME}"
+            - name: "DATABASE_USER"
             valueFrom:
               secretKeyRef:
                 name: "${DATABASE_DEPLOYMENT_NAME}"
