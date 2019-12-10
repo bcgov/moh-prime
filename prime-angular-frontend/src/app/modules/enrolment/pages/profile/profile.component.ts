@@ -24,9 +24,7 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 export class ProfileComponent extends BaseEnrolmentProfilePage implements OnInit {
   public hasPreferredName: boolean;
   public hasMailingAddress: boolean;
-
-  // Whether a profile exists for an enrollee
-  private isNewProfile: boolean;
+  public isNewProfile: boolean;
 
   constructor(
     protected route: ActivatedRoute,
