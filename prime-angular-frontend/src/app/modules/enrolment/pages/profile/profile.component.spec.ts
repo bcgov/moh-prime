@@ -20,6 +20,7 @@ import { PageSubheaderComponent } from '@shared/components/page-subheader/page-s
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AddressComponent } from '@shared/components/forms/address/address.component';
 import { PageFooterComponent } from '@enrolment/shared/components/page-footer/page-footer.component';
+import { ProgressIndicatorComponent } from '@shared/components/progress-indicator/progress-indicator.component';
 
 describe('ProfileComponent', () => {
   let component: ProfileComponent;
@@ -43,6 +44,7 @@ describe('ProfileComponent', () => {
           AddressComponent,
           PageHeaderComponent,
           PageSubheaderComponent,
+          ProgressIndicatorComponent,
           PageFooterComponent
         ],
         providers: [

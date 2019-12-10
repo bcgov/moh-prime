@@ -86,9 +86,33 @@ namespace Prime
                 app.UseDeveloperExceptionPage();
             }
 
+            this.ConfigureHealthCheck(app);
+
             // update the DB if necessary with new migrations
             this.UpdateDatabase(app);
 
+            // TODO - disable always using https - probably want this turned back on though once have actual certs
+            //app.UseHttpsRedirection();
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Prime Web API V1");
+            });
+
+            app.UseCors("AllowAll");
+
+            app.UseAuthentication();
+
+            app.UseMvc();
+        }
+
+        protected virtual void ConfigureHealthCheck(IApplicationBuilder app)
+        {
             // Health check output
             var healthCheckOptions = new HealthCheckOptions
             {
@@ -113,25 +137,6 @@ namespace Prime
 
             // Enable healthchecks for an single endpoint
             app.UseHealthChecks("/healthcheck", healthCheckOptions);
-
-            // TODO - disable always using https - probably want this turned back on though once have actual certs
-            //app.UseHttpsRedirection();
-
-            // Enable middleware to serve generated Swagger as a JSON endpoint.
-            app.UseSwagger();
-
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
-            // specifying the Swagger JSON endpoint.
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Prime Web API V1");
-            });
-
-            app.UseCors("AllowAll");
-
-            app.UseAuthentication();
-
-            app.UseMvc();
         }
 
         protected virtual void ConfigureDatabase(IServiceCollection services)
@@ -154,7 +159,7 @@ namespace Prime
                 .AddNpgSql(connectionString);
         }
 
-        public virtual void UpdateDatabase(IApplicationBuilder app)
+        protected virtual void UpdateDatabase(IApplicationBuilder app)
         {
             if (app == null)
             {

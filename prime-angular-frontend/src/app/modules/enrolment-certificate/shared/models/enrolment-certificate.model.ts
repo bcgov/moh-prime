@@ -1,4 +1,5 @@
-export class EnrolmentCertificate {
+export interface EnrolmentCertificate {
+  // TODO duplicate of EnrolleeProfile
   firstName: string;
   middleName: string;
   lastName: string;

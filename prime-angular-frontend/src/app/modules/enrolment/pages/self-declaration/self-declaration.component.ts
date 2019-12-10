@@ -13,33 +13,38 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { FormUtilsService } from '@enrolment/shared/services/form-utils.service';
+import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
 
 @Component({
   selector: 'app-self-declaration',
   templateUrl: './self-declaration.component.html',
   styleUrls: ['./self-declaration.component.scss']
 })
-export class SelfDeclarationComponent implements OnInit {
-  public busy: Subscription;
-  public form: FormGroup;
-  public decisions: { code: boolean, name: string }[] = [
-    { code: false, name: 'No' }, { code: true, name: 'Yes' }
-  ];
-  public profileCompleted: boolean;
-  public EnrolmentRoutes = EnrolmentRoutes;
-  public error = false;
+export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implements OnInit {
+  public decisions: { code: boolean, name: string }[];
+  public hasAttemptedFormSubmission: boolean;
+  public showUnansweredQuestionsError: boolean;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private dialog: MatDialog,
-    private enrolmentService: EnrolmentService,
+    protected route: ActivatedRoute,
+    protected router: Router,
+    protected dialog: MatDialog,
     private enrolmentResource: EnrolmentResource,
+    private enrolmentService: EnrolmentService,
     private enrolmentStateService: EnrolmentStateService,
     private formUtilsService: FormUtilsService,
     private toastService: ToastService,
     private logger: LoggerService
-  ) { }
+  ) {
+    super(route, router, dialog);
+
+    this.decisions = [
+      { code: false, name: 'No' },
+      { code: true, name: 'Yes' }
+    ];
+    this.hasAttemptedFormSubmission = false;
+    this.showUnansweredQuestionsError = false;
+  }
 
   public get hasConviction(): FormControl {
     return this.form.get('hasConviction') as FormControl;
@@ -74,7 +79,7 @@ export class SelfDeclarationComponent implements OnInit {
   }
 
   public onSubmit() {
-    this.error = (this.allRadioButtonsSelected()) ? false : true;
+    this.hasAttemptedFormSubmission = true;
 
     if (this.form.valid) {
       const payload = this.enrolmentStateService.enrolment;
@@ -83,7 +88,11 @@ export class SelfDeclarationComponent implements OnInit {
           () => {
             this.toastService.openSuccessToast('Self declaration has been saved');
             this.form.markAsPristine();
-            this.router.navigate([EnrolmentRoutes.ORGANIZATION], { relativeTo: this.route.parent });
+
+            const routePath = (!this.isProfileComplete)
+              ? EnrolmentRoutes.ORGANIZATION
+              : EnrolmentRoutes.REVIEW;
+            this.routeTo(routePath);
           },
           (error: any) => {
             this.toastService.openErrorToast('Self declaration could not be saved');
@@ -94,53 +103,60 @@ export class SelfDeclarationComponent implements OnInit {
     }
   }
 
-  public onRoute() {
+  public routeBackTo() {
     const routePath = (this.enrolmentStateService.enrolment.certifications.length)
       ? EnrolmentRoutes.REGULATORY
       : EnrolmentRoutes.JOB;
 
-    this.router.navigate([routePath], { relativeTo: this.route.parent });
-  }
-
-  public isRequired(path: string) {
-    return this.formUtilsService.isRequired(this.form, path);
-  }
-
-  public canDeactivate(): Observable<boolean> | boolean {
-    const data = 'unsaved';
-    return (this.form.dirty)
-      ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
-      : true;
+    this.routeTo(routePath);
   }
 
   public ngOnInit() {
     this.createFormInstance();
-
-    const enrolment = this.enrolmentService.enrolment;
-    this.profileCompleted = enrolment.profileCompleted;
-
-    this.enrolmentStateService.enrolment = enrolment;
-
+    this.patchForm();
     this.initForm();
   }
 
-  private createFormInstance() {
+  protected createFormInstance() {
     this.form = this.enrolmentStateService.selfDeclarationForm;
   }
 
-  private initForm() {
+  protected initForm() {
     // TODO: make YES/NO into own component to encapsulate toggling and markup
     this.hasConviction.valueChanges
-      .subscribe((value: boolean) => this.toggleValidators(value, this.hasConvictionDetails));
+      .subscribe((value: boolean) => {
+        this.toggleSelfDeclarationValidators(value, this.hasConvictionDetails);
+        this.showUnansweredQuestionsError = this.showUnansweredQuestions();
+      });
+
     this.hasRegistrationSuspended.valueChanges
-      .subscribe((value: boolean) => this.toggleValidators(value, this.hasRegistrationSuspendedDetails));
+      .subscribe((value: boolean) => {
+        this.toggleSelfDeclarationValidators(value, this.hasRegistrationSuspendedDetails);
+        this.showUnansweredQuestionsError = this.showUnansweredQuestions();
+      });
+
     this.hasDisciplinaryAction.valueChanges
-      .subscribe((value: boolean) => this.toggleValidators(value, this.hasDisciplinaryActionDetails));
+      .subscribe((value: boolean) => {
+        this.toggleSelfDeclarationValidators(value, this.hasDisciplinaryActionDetails);
+        this.showUnansweredQuestionsError = this.showUnansweredQuestions();
+      });
+
     this.hasPharmaNetSuspended.valueChanges
-      .subscribe((value: boolean) => this.toggleValidators(value, this.hasPharmaNetSuspendedDetails));
+      .subscribe((value: boolean) => {
+        this.toggleSelfDeclarationValidators(value, this.hasPharmaNetSuspendedDetails);
+        this.showUnansweredQuestionsError = this.showUnansweredQuestions();
+      });
   }
 
-  private toggleValidators(value: boolean, control: FormControl) {
+  protected patchForm() {
+    const enrolment = this.enrolmentService.enrolment;
+
+    this.isProfileComplete = enrolment.profileCompleted;
+    this.enrolmentStateService.enrolment = enrolment;
+    this.hasInitialStatus = enrolment.initialStatus;
+  }
+
+  private toggleSelfDeclarationValidators(value: boolean, control: FormControl) {
     if (!value) {
       this.formUtilsService.resetAndClearValidators(control);
     } else {
@@ -148,10 +164,16 @@ export class SelfDeclarationComponent implements OnInit {
     }
   }
 
-  private allRadioButtonsSelected() {
-    return this.hasConviction.value !== null
-      && this.hasRegistrationSuspended.value !== null
-      && this.hasDisciplinaryAction.value !== null
-      && this.hasPharmaNetSuspended.value !== null;
+  private showUnansweredQuestions(): boolean {
+    let shouldShowUnansweredQuestions = false;
+
+    if (this.hasAttemptedFormSubmission) {
+      shouldShowUnansweredQuestions = this.hasConviction.value !== null
+        && this.hasRegistrationSuspended.value !== null
+        && this.hasDisciplinaryAction.value !== null
+        && this.hasPharmaNetSuspended.value !== null;
+    }
+
+    return shouldShowUnansweredQuestions;
   }
 }

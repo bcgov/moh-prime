@@ -63,7 +63,7 @@ export class EnrolmentGuard extends BaseGuard {
     } else if (enrolment) {
       switch (enrolment.currentStatus.status.code) {
         case EnrolmentStatus.IN_PROGRESS:
-          const postEnrolmentRoutes = EnrolmentRoutes.postEnrolmentRoutes();
+          const postEnrolmentRoutes = EnrolmentRoutes.postEnrolmentSubmissionRoutes();
           const route = routePath.split('/').pop();
 
           const redirectionRoute = (!enrolment.profileCompleted)
@@ -86,10 +86,12 @@ export class EnrolmentGuard extends BaseGuard {
           return this.navigate(routePath, EnrolmentRoutes.CONFIRMATION);
         case EnrolmentStatus.ADJUDICATED_APPROVED:
           return this.navigate(routePath, EnrolmentRoutes.ACCESS_AGREEMENT);
-        // case EnrolmentStatus.DECLINED:
+        case EnrolmentStatus.DECLINED:
+          return this.navigate(routePath, EnrolmentRoutes.DECLINED);
         case EnrolmentStatus.ACCEPTED_TOS:
           return this.navigate(routePath, EnrolmentRoutes.SUMMARY);
-        // case EnrolmentStatus.DECLINED_TOS:
+        case EnrolmentStatus.DECLINED_TOS:
+          return this.navigate(routePath, EnrolmentRoutes.DECLINED_ACCESS_AGREEMENT);
       }
     }
 

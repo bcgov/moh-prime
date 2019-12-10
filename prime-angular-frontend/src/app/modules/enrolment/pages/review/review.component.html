@@ -1,37 +1,32 @@
 <app-busy-overlay [busy]="busy">
 
   <div class="row">
-    <div class="col-sm-12 col-lg-10 offset-lg-1 col-xl-8">
+    <div class="col-sm-12 col-lg-8 offset-lg-1 offset-xl-0">
+
+      <app-progress-indicator *ngIf="hasInitialStatus"
+                              [currentRoute]="EnrolmentRoutes.REVIEW"></app-progress-indicator>
 
       <app-page-header>Application Enrolment</app-page-header>
 
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Application Review</ng-container>
         <ng-container appPageSubheaderSummary>
-          Please review all the information to ensure it is accurate. If you need to edit any section click the pencil
-          icon.
+          Review all the information to ensure it is accurate. If you need to edit any section use the pencil icon to
+          navigate to that section of the enrolment.
         </ng-container>
       </app-page-subheader>
 
       <app-enrollee-review *ngIf="enrolment"
                            [enrolment]="enrolment"
-                           (route)="onRoute($event)"></app-enrollee-review>
+                           (route)="routeTo($event)"></app-enrollee-review>
 
       <div class="footer">
-        <mat-checkbox #accept
-                      class="mr-4">
+        <mat-checkbox #accept>
           I confirm that all information provided is accurate.
         </mat-checkbox>
       </div>
 
-      <div class="row justify-content-between">
-        <div class="col pt-4">
-
-          <button mat-stroked-button
-                  type="button"
-                  [routerLink]="['..', EnrolmentRoutes.ORGANIZATION]">Back</button>
-
-        </div>
+      <div class="row justify-content-end">
         <div class="col pt-4 text-right">
 
           <button mat-raised-button

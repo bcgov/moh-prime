@@ -1,77 +1,77 @@
 <app-busy-overlay [busy]="busy">
 
-  <div class="app-print-layout">
+  <div class="row">
+    <div class="col-sm-12 col-lg-8 offset-lg-1 offset-xl-0 app-print-layout">
 
-    <app-page-header>Enrolment Summary</app-page-header>
+      <app-progress-indicator *ngIf="showProgressBar"
+                              [currentRoute]="EnrolmentRoutes.SUMMARY"></app-progress-indicator>
 
-    <app-page-subheader>
-      <ng-container appPageSubheaderTitle>PRIME Enrolment Details</ng-container>
-      <ng-container appPageSubheaderSummary>
-        This page contains your PharmaNet ID. You will need to provide this ID to any administrator or vendor who is
-        setting up your PharmaNet access account. This ID will be recorded on all your PharmaNet transactions.
+      <app-page-header>Enrolment Summary</app-page-header>
+
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>PRIME Enrolment Details</ng-container>
+        <ng-container appPageSubheaderSummary>
+          This page contains your PharmaNet ID. You will need to provide this ID to any administrator or vendor who is
+          setting up your PharmaNet access account. This ID will be recorded on all your PharmaNet transactions.
+        </ng-container>
+      </app-page-subheader>
+
+      <ng-container *ngIf="enrolment">
+
+        <app-enrollee-profile [enrollee]="enrollee"></app-enrollee-profile>
+
+        <app-enrollee-address [address]="physicalAddress"></app-enrollee-address>
+
+        <dl class="row mb-4">
+          <dt class="col-6">PharmaNet ID</dt>
+          <dd class="col-6 text-right">{{ enrolment.enrollee.licensePlate | default }}</dd>
+        </dl>
+
+        <app-page-subheader>
+          <ng-container appPageSubheaderTitle>Provisioner Links</ng-container>
+          <ng-container appPageSubheaderSummary>
+            Generate provisioner links to facilitate your access into PharmaNet.
+          </ng-container>
+        </app-page-subheader>
+
+        <div class="text-right mb-3">
+
+          <button mat-flat-button
+                  color="primary"
+                  (click)="generateProvisionerLink()">
+            <mat-icon class="add-icon">add</mat-icon>
+            Generate Provisioner Link
+          </button>
+
+        </div>
+
+        <div *ngIf="tokens?.length"
+             class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Provisioner ID</th>
+                <th scope="col">Active</th>
+                <th scope="col">Views</th>
+                <th scope="col">&nbsp;</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let token of tokens">
+                <td>{{ token.id }}</td>
+                <td>{{ token.active | yesNo }}</td>
+                <td>{{ token.viewCount }}</td>
+                <td>
+                  <app-clipboard-icon [content]="getTokenUrl(token.id)"></app-clipboard-icon>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
       </ng-container>
-    </app-page-subheader>
 
-    <ng-container *ngIf="enrolment">
-
-      <dl class="row mb-4">
-        <dt class="col-sm-12 col-md-6 py-1">Name</dt>
-        <dd class="col-sm-12 col-md-6 py-1">
-          {{ enrolment | enrolment: 'fullName' }}&nbsp;
-        </dd>
-
-        <ng-container
-                      *ngIf="enrolment.enrollee.preferredFirstName || enrolment.enrollee.preferredMiddleName || enrolment.enrollee.preferredLastName">
-          <dt class="col-sm-12 col-md-6 py-1">Preferred Name</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment | enrolment: 'preferredName' }}&nbsp;</dd>
-        </ng-container>
-        <dt class="col-sm-12 col-md-6 py-1">Date of Birth</dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.dateOfBirth | formatDate }}&nbsp;</dd>
-      </dl>
-
-      <h3 class="lead">Address</h3>
-
-      <dl class="row mb-4">
-        <dt class="col-sm-12 col-md-6 py-1">Country</dt>
-        <dd class="col-sm-12 col-md-6 py-1">
-          {{ enrolment.enrollee.physicalAddress.countryCode | configCode: 'countries' }}&nbsp;
-        </dd>
-        <dt class="col-sm-12 col-md-6 py-1">Province</dt>
-        <dd class="col-sm-12 col-md-6 py-1">
-          {{ enrolment.enrollee.physicalAddress.provinceCode | configCode: 'provinces' }}&nbsp;
-        </dd>
-        <dt class="col-sm-12 col-md-6 py-1">Street Address</dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.street }}&nbsp;</dd>
-        <ng-container *ngIf="enrolment.enrollee.physicalAddress.street2">
-          <dt class="col-sm-12 col-md-6 py-1">Street Address 2</dt>
-          <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.street2 }}&nbsp;</dd>
-        </ng-container>
-        <dt class="col-sm-12 col-md-6 py-1">City</dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.city }}&nbsp;</dd>
-        <dt class="col-sm-12 col-md-6 py-1">Postal Code</dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.physicalAddress.postal | postal }}&nbsp;</dd>
-      </dl>
-
-      <h3 class="lead">PharmaNet ID</h3>
-      <dl class="row mb-4">
-        <dt class="col-sm-12 col-md-6 py-1">PharmaNet ID</dt>
-        <dd class="col-sm-12 col-md-6 py-1">{{ enrolment.enrollee.licensePlate }}&nbsp;</dd>
-      </dl>
-
-      <button mat-raised-button
-              color="primary"
-              (click)="generateProvisionerLink()">Generate Provisioner Link</button>
-      <app-contextual-help>
-        <ng-container appContextualContent>
-          These links to your enrolment information can be given to provisioners to facilitate your access into
-          PharmaNet.
-        </ng-container>
-      </app-contextual-help>
-
-      <div *ngFor="let token of tokens">
-        <app-clipboard-icon [message]="generateTokenUrl(token.id)"></app-clipboard-icon>
-      </div>
-
-    </ng-container>
+    </div>
   </div>
+
 </app-busy-overlay>

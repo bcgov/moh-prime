@@ -15,6 +15,7 @@ import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
 import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
+import { ProgressIndicatorComponent } from '@shared/components/progress-indicator/progress-indicator.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { PageFooterComponent } from '@enrolment/shared/components/page-footer/page-footer.component';
@@ -40,6 +41,7 @@ describe('OrganizationComponent', () => {
           OrganizationComponent,
           PageHeaderComponent,
           PageSubheaderComponent,
+          ProgressIndicatorComponent,
           PageFooterComponent
         ],
         providers: [

@@ -13,6 +13,9 @@ import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.mod
 import { RouterTestingModule } from '@angular/router/testing';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { EnrolleeProfileComponent } from '@shared/components/enrollee-profile/enrollee-profile.component';
+import { DefaultPipe } from '@shared/pipes/default.pipe';
+import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
 
 describe('CertificateComponent', () => {
   let component: CertificateComponent;
@@ -38,9 +41,12 @@ describe('CertificateComponent', () => {
         CertificateComponent,
         PageHeaderComponent,
         PageSubheaderComponent,
+        EnrolleeProfileComponent,
         ClipboardIconComponent,
         CertificatePipe,
-        FormatDatePipe
+        FormatDatePipe,
+        DefaultPipe,
+        EnrolleePipe
       ]
     })
       .compileComponents();

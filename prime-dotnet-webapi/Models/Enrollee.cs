@@ -83,22 +83,40 @@ namespace Prime.Models
         [NotMapped]
         public EnrolmentStatus CurrentStatus
         {
-            get => this.EnrolmentStatuses?.SingleOrDefault(es => es.StatusDate == this.EnrolmentStatuses.Max(x => x.StatusDate));
+            get => this.EnrolmentStatuses?
+                .OrderByDescending(es => es.StatusDate)
+                .ThenByDescending(es => es.Id)
+                .FirstOrDefault();
         }
 
         [NotMapped]
         public EnrolmentStatus PharmaNetStatus { get => this.EnrolmentStatuses?.SingleOrDefault(es => es.PharmaNetStatus); }
 
-        public bool? ProfileCompleted { get; set; } = false;
+        [NotMapped]
+        public bool InitialStatus { get => this.EnrolmentStatuses?.Count() == 1; }
+
+        public bool ProfileCompleted { get; set; }
 
         [NotMapped]
         public ICollection<Status> AvailableStatuses { get; set; }
 
         [NotMapped]
-        public DateTime? AppliedDate { get => this.EnrolmentStatuses?.SingleOrDefault(es => es.StatusCode == Status.SUBMITTED_CODE)?.StatusDate; }
+        public DateTime? AppliedDate
+        {
+            get => this.EnrolmentStatuses?
+                .OrderByDescending(en => en.StatusDate)
+                .FirstOrDefault(es => es.StatusCode == Status.SUBMITTED_CODE)?
+                .StatusDate;
+        }
 
         [NotMapped]
-        public DateTime? ApprovedDate { get => this.EnrolmentStatuses?.SingleOrDefault(es => es.StatusCode == Status.APPROVED_CODE)?.StatusDate; }
+        public DateTime? ApprovedDate
+        {
+            get => this.EnrolmentStatuses?
+                .OrderByDescending(en => en.StatusDate)
+                .FirstOrDefault(es => es.StatusCode == Status.APPROVED_CODE)?
+                .StatusDate;
+        }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

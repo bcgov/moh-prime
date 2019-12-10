@@ -13,6 +13,7 @@ import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.mod
 import { AlertComponent } from '@shared/components/alert/alert.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
+import { ProgressIndicatorComponent } from '@shared/components/progress-indicator/progress-indicator.component';
 
 describe('AccessAgreementComponent', () => {
   let component: AccessAgreementComponent;
@@ -35,6 +36,7 @@ describe('AccessAgreementComponent', () => {
           MoaAccessAgreementComponent,
           PageHeaderComponent,
           PageSubheaderComponent,
+          ProgressIndicatorComponent,
           RuAccessAgreementComponent
         ],
         providers: [

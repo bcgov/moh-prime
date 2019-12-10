@@ -120,14 +120,14 @@ namespace PrimeTests.Utils
             identity.RemoveClaim(claim);
         }
 
-        public static int? CreateEnrollee(ApiDbContext apiDbContext, HttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService)
+        public static int? CreateEnrollee(ApiDbContext apiDbContext, HttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService, IEmailService emailService)
         {
-            return new DefaultEnrolleeService(apiDbContext, httpContext, automaticAdjudicationService).CreateEnrolleeAsync(TestUtils.EnrolleeFaker.Generate()).Result;
+            return new DefaultEnrolleeService(apiDbContext, httpContext, automaticAdjudicationService, emailService).CreateEnrolleeAsync(TestUtils.EnrolleeFaker.Generate()).Result;
         }
 
-        public static Enrollee GetEnrolleeById(ApiDbContext apiDbContext, HttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService, int enrolmentId)
+        public static Enrollee GetEnrolleeById(ApiDbContext apiDbContext, HttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService, int enrolmentId, IEmailService emailService)
         {
-            return new DefaultEnrolleeService(apiDbContext, httpContext, automaticAdjudicationService).GetEnrolleeAsync(enrolmentId).Result;
+            return new DefaultEnrolleeService(apiDbContext, httpContext, automaticAdjudicationService, emailService).GetEnrolleeAsync(enrolmentId).Result;
         }
 
         public static void InitializeDbForTests(ApiDbContext db)
