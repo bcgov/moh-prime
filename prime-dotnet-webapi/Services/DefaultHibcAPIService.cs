@@ -25,7 +25,7 @@ namespace Prime.Services
             if (PrimeConstants.ENVIRONMENT_NAME == "local")
             {
                 // TODO handle local dev
-                return null;
+                throw new NotImplementedException();
             }
 
             var par = await CallPharmanetCollegeLicenceService(licenceNumber, collegeReferenceId);
@@ -76,6 +76,8 @@ namespace Prime.Services
                     )
                 )
             );
+
+            System.Console.WriteLine(PrimeConstants.HIBC_API_USERNAME);
 
             return client;
         }
