@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/shared.module';
 import { EnrolmentRoutingModule } from './enrolment-routing.module';
 
+import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
 import { DeviceProviderComponent } from './pages/device-provider/device-provider.component';
@@ -17,13 +18,15 @@ import { MoaAccessAgreementComponent } from './pages/access-agreement/components
 import { RuAccessAgreementComponent } from './pages/access-agreement/components/ru-access-agreement/ru-access-agreement.component';
 import { PageFooterComponent } from './shared/components/page-footer/page-footer.component';
 import { SummaryComponent } from './pages/summary/summary.component';
-import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
+import { DeclinedComponent } from './pages/declined/declined.component';
+import { DeclinedAccessAgreementComponent } from './pages/declined-access-agreement/declined-access-agreement.component';
 
 import { CollegeCertificationFormComponent } from './shared/components/college-certification-form/college-certification-form.component';
 import { JobFormComponent } from './shared/components/job-form/job-form.component';
 
 @NgModule({
   declarations: [
+    CollectionNoticeComponent,
     ProfileComponent,
     RegulatoryComponent,
     DeviceProviderComponent,
@@ -38,9 +41,10 @@ import { JobFormComponent } from './shared/components/job-form/job-form.componen
     PageFooterComponent,
     PageRefDirective,
     SummaryComponent,
+    DeclinedComponent,
+    DeclinedAccessAgreementComponent,
     CollegeCertificationFormComponent,
-    JobFormComponent,
-    CollectionNoticeComponent
+    JobFormComponent
   ],
   imports: [
     SharedModule,
