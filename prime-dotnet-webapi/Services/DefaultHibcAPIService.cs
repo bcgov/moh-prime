@@ -37,10 +37,10 @@ namespace Prime.Services
         private async Task<PharmanetCollegeRecord> CallPharmanetCollegeLicenceService(string licenceNumber, string collegeReferenceId)
         {
             System.Console.WriteLine();
-            System.Console.WriteLine($"Params[{licenceNumber},{collegeReferenceId}]");
+            System.Console.WriteLine($">>>>Params[{licenceNumber},{collegeReferenceId}]");
             System.Console.WriteLine();
 
-            var requestParams = new CollegeLicenceRequestParams(licenceNumber, collegeReferenceId);
+            var requestParams = new CollegeRecordRequestParams(licenceNumber, collegeReferenceId);
             var response = await Client.PostAsJsonAsync(PrimeConstants.HIBC_API_URL, requestParams);
             if (!response.IsSuccessStatusCode)
             {
@@ -51,7 +51,7 @@ namespace Prime.Services
             var practicionerRecord = await CollegeRecordFromResponseAsync(response);
             if (practicionerRecord != null && practicionerRecord.applicationUUID != requestParams.applicationUUID)
             {
-                throw new PharmanetCollegeApiException($"Expected matching applicationUUIDs between request and response. Request was\"{requestParams.applicationUUID}\", response was \"{practicionerRecord.applicationUUID}\".");
+                throw new PharmanetCollegeApiException($"Expected matching applicationUUIDs between request data and response data. Request was\"{requestParams.applicationUUID}\", response was \"{practicionerRecord.applicationUUID}\".");
             }
 
             return practicionerRecord;
@@ -59,10 +59,11 @@ namespace Prime.Services
 
         private async Task<PharmanetCollegeRecord> CollegeRecordFromResponseAsync(HttpResponseMessage response)
         {
-            var stringContent = await response.Content.ReadAsStringAsync();
-            List<PharmanetCollegeRecord> data = JsonConvert.DeserializeObject<List<PharmanetCollegeRecord>>(stringContent);
+            // var stringContent = await response.Content.ReadAsStringAsync();
+            var content = await response.Content.ReadAsAsync<List<PharmanetCollegeRecord>>();
+            //List<PharmanetCollegeRecord> data = JsonConvert.DeserializeObject<List<PharmanetCollegeRecord>>(stringContent);
 
-            return data.SingleOrDefault();
+            return content.SingleOrDefault();
         }
 
         private static HttpClient InitHttpClient()
@@ -95,14 +96,14 @@ namespace Prime.Services
             return client;
         }
 
-        private class CollegeLicenceRequestParams
+        private class CollegeRecordRequestParams
         {
             public string applicationUUID { get; set; }
             public string programArea { get; set; }
             public string licenceNumber { get; set; }
             public string collegeReferenceId { get; set; }
 
-            public CollegeLicenceRequestParams(string licenceNumber, string collegeReferenceId)
+            public CollegeRecordRequestParams(string licenceNumber, string collegeReferenceId)
             {
                 applicationUUID = Guid.NewGuid().ToString();
                 programArea = "PRIME";
