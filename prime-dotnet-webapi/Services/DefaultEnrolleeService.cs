@@ -119,7 +119,8 @@ namespace Prime.Services
 
             if (searchOptions?.StatusCode != null)
             {
-                query = query.Where(e => e.CurrentStatus.StatusCode == (short)searchOptions.StatusCode);
+                query.Load();
+                query = _context.Enrollees.Where(e => e.CurrentStatus.StatusCode == (short)searchOptions.StatusCode);
             }
 
             var items = await query.ToListAsync();
