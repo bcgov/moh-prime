@@ -29,6 +29,7 @@ export class ConfirmationComponent extends BaseEnrolmentPage implements OnInit {
         // Only automatic if the enrolment reason is `Automatic`
         this.isAutomatic = enrolment.currentStatus.enrolmentStatusReasons
           .every((reason: EnrolmentStatusReason) => reason.statusReasonCode === EnrolmentStatusReasonEnum.AUTOMATIC);
+        this.hasInitialStatus = enrolment.initialStatus;
       });
   }
 }

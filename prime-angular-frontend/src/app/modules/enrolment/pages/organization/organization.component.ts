@@ -144,6 +144,7 @@ export class OrganizationComponent extends BaseEnrolmentProfilePage implements O
 
     this.isProfileComplete = enrolment.profileCompleted;
     this.enrolmentStateService.enrolment = enrolment;
+    this.hasInitialStatus = enrolment.initialStatus;
   }
 
   private removeIncompleteOrganizations() {

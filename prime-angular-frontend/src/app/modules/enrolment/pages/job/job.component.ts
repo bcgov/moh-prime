@@ -134,6 +134,7 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
 
     this.isProfileComplete = enrolment.profileCompleted;
     this.enrolmentStateService.enrolment = enrolment;
+    this.hasInitialStatus = enrolment.initialStatus;
   }
 
   private filterJobNames(jobs: Job[]) {

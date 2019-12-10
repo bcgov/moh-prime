@@ -79,5 +79,6 @@ export class ReviewComponent extends BaseEnrolmentPage implements OnInit {
 
     this.enrolment = enrolment;
     this.enrolmentStateService.enrolment = enrolment;
+    this.hasInitialStatus = enrolment.initialStatus;
   }
 }

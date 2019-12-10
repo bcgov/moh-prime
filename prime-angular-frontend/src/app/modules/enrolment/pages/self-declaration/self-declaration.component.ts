@@ -153,6 +153,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
 
     this.isProfileComplete = enrolment.profileCompleted;
     this.enrolmentStateService.enrolment = enrolment;
+    this.hasInitialStatus = enrolment.initialStatus;
   }
 
   private toggleSelfDeclarationValidators(value: boolean, control: FormControl) {

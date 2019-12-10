@@ -119,6 +119,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
 
     this.enrolmentStateService.enrolment = enrolment;
     this.isProfileComplete = enrolment.profileCompleted;
+    this.hasInitialStatus = enrolment.initialStatus;
   }
 
   /**

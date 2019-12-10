@@ -97,5 +97,6 @@ export class DeviceProviderComponent extends BaseEnrolmentProfilePage implements
 
     this.isProfileComplete = enrolment.profileCompleted;
     this.enrolmentStateService.enrolment = enrolment;
+    this.hasInitialStatus = enrolment.initialStatus;
   }
 }
