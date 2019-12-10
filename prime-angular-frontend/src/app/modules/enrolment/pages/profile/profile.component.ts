@@ -166,8 +166,11 @@ export class ProfileComponent implements OnInit {
     this.form.markAsPristine();
 
     this.initForm();
-          // TODO X
-          this.enrolmentResource.api().subscribe((response) => { console.log(response) });
+  }
+
+  // TODO X
+  public TEST() {
+    this.enrolmentResource.api().subscribe((response) => { console.log(response) });
   }
 
   private createFormInstance() {
