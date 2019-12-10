@@ -105,9 +105,9 @@ namespace Prime.Services
                 var stringContent = await content.ReadAsStringAsync();
                 List<CollegePracticionerRecord> data = JsonConvert.DeserializeObject<List<CollegePracticionerRecord>>(stringContent);
 
-                if (data.Count != 1)
+                if (data.Count > 1)
                 {
-                    throw new PharmanetCollegeApiException($"API response contained {data.Count} items, expected 1.");
+                    throw new PharmanetCollegeApiException($"API response contained {data.Count} items, expected zero or 1.");
                 }
 
                 return data[0];
