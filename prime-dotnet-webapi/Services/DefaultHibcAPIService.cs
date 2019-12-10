@@ -13,6 +13,8 @@ namespace Prime.Services
 {
     public class DefaultHibcApiService : BaseService, IHibcApiService
     {
+        private static HttpClient Client = InitHttpClient();
+
         public DefaultHibcApiService(
             ApiDbContext context, IHttpContextAccessor httpContext)
             : base(context, httpContext)
@@ -28,27 +30,24 @@ namespace Prime.Services
 
         private async Task<CollegePracticionerRecord> CallPharmanetCollegeLicenceService(string licenceNumber, string collegeReferenceId)
         {
-            using (var client = CreateHttpClient())
+            var requestParams = new CollegeLicenceRequestParams(licenceNumber, collegeReferenceId);
+            var response = await Client.PostAsJsonAsync(PrimeConstants.HIBC_API_URL, requestParams);
+            if (!response.IsSuccessStatusCode)
             {
-                var requestParams = new CollegeLicenceRequestParams(licenceNumber, collegeReferenceId);
-                var response = await client.PostAsJsonAsync(PrimeConstants.HIBC_API_URL, requestParams);
-                if (!response.IsSuccessStatusCode)
-                {
-                    // TODO Try again, log error? Probably dont handle like this.
-                    throw new PharmanetCollegeApiException($"API returned status code {(int)response.StatusCode}, with reason \"{response.ReasonPhrase}\".");
-                }
+                // TODO Try again, log error? Probably dont handle like this.
+                throw new PharmanetCollegeApiException($"API returned status code {(int)response.StatusCode}, with reason \"{response.ReasonPhrase}\".");
+            }
 
-                var practicionerRecord = await CollegePracticionerRecord.FromResponseContentAsync(response.Content);
-                if (practicionerRecord.applicationUUID != requestParams.applicationUUID)
-                {
-                    throw new PharmanetCollegeApiException($"Expected matching applicationUUIDs between request and response. Request was\"{requestParams.applicationUUID}\", response was \"{practicionerRecord.applicationUUID}\".");
-                }
+            var practicionerRecord = await CollegePracticionerRecord.FromResponseContentAsync(response.Content);
+            if (practicionerRecord.applicationUUID != requestParams.applicationUUID)
+            {
+                throw new PharmanetCollegeApiException($"Expected matching applicationUUIDs between request and response. Request was\"{requestParams.applicationUUID}\", response was \"{practicionerRecord.applicationUUID}\".");
+            }
 
-                return practicionerRecord;
-            };
+            return practicionerRecord;
         }
 
-        private HttpClient CreateHttpClient()
+        private static HttpClient InitHttpClient()
         {
             if (PrimeConstants.ENVIRONMENT_NAME == "local")
             {
