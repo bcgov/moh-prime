@@ -456,5 +456,25 @@ namespace Prime.Services
 
             return entity;
         }
+
+        public async Task<ICollection<AdjudicatorNote>> GetEnrolleeAdjudicatorNotesAsync(Enrollee enrollee)
+        {
+            return await _context.AdjudicatorNotes.Where(an => an.EnrolleeId == enrollee.Id).ToListAsync();
+        }
+
+        public async Task<AdjudicatorNote> CreateAdjudicatorNoteAsync(Enrollee enrollee, AdjudicatorNote adjudicatorNote)
+        {
+            AdjudicatorNote newAdjudicatorNote = new AdjudicatorNote { Enrollee = enrollee, Note = adjudicatorNote.Note };
+
+            _context.AdjudicatorNotes.Add(adjudicatorNote);
+
+            var created = await _context.SaveChangesAsync();
+            if (created < 1)
+            {
+                throw new InvalidOperationException("Could not create adjudicator note.");
+            }
+
+            return adjudicatorNote;
+        }
     }
 }

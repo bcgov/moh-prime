@@ -133,7 +133,11 @@ namespace Prime.Controllers
 
             var createdEnrolleeId = await _enrolleeService.CreateEnrolleeAsync(enrollee);
 
-            return CreatedAtAction(nameof(GetEnrolleeById), new { enrolleeId = createdEnrolleeId }, new ApiCreatedResponse<Enrollee>(enrollee));
+            return CreatedAtAction(
+                nameof(GetEnrolleeById),
+                new { enrolleeId = createdEnrolleeId },
+                new ApiCreatedResponse<Enrollee>(enrollee)
+            );
         }
 
         // PUT: api/Enrollees/5
@@ -333,6 +337,66 @@ namespace Prime.Controllers
             var enrolmentStatus = await _enrolleeService.CreateEnrolmentStatusAsync(enrolleeId, status);
 
             return Ok(new ApiOkResponse<EnrolmentStatus>(enrolmentStatus));
+        }
+
+        // GET: api/Enrollees/5/adjudicator-notes
+        /// <summary>
+        /// Gets all of the adjudicator notes for a specific Enrollee.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpGet("{enrolleeId}/adjudicator-notes", Name = nameof(GetAdjudicatorNotes))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiOkResponse<IEnumerable<Status>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<EnrolmentStatus>>> GetAdjudicatorNotes(int enrolleeId)
+        {
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+
+            if (enrollee == null)
+            {
+                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
+            }
+
+            // If the user is not an ADMIN, make sure the enrollee ID matches the user, otherwise return not authorized
+            if (!BelongsToEnrollee(enrollee))
+            {
+                return Forbid();
+            }
+
+            var adjudicationNotes = await _enrolleeService.GetEnrolleeAdjudicatorNotesAsync(enrollee);
+
+            return Ok(new ApiOkResponse<ICollection<AdjudicatorNote>>(adjudicationNotes));
+        }
+
+        // POST: api/Enrollees/5/adjudicator-notes
+        /// <summary>
+        /// Creates a new adjudicator note on an enrollee.
+        /// </summary>
+        [HttpPost("{enrolleeId}/adjudicator-notes", Name = nameof(CreateAdjudicatorNote))]
+        [Authorize(Policy = PrimeConstants.PRIME_ADMIN_POLICY)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiCreatedResponse<AdjudicatorNote>), StatusCodes.Status201Created)]
+        public async Task<ActionResult<AdjudicatorNote>> CreateAdjudicatorNote(int enrolleeId, AdjudicatorNote adjudicatorNote)
+        {
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+
+            if (enrollee == null)
+            {
+                this.ModelState.AddModelError("Enrollee", "Could not create an adjudicator note, the passed in Enrollee cannot be null.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
+
+            var createdAdjudicatorNote = await _enrolleeService.CreateAdjudicatorNoteAsync(enrollee, adjudicatorNote);
+
+            return CreatedAtAction(
+                nameof(GetAdjudicatorNotes),
+                new { enrolleeId = enrollee.Id },
+                new ApiCreatedResponse<AdjudicatorNote>(createdAdjudicatorNote)
+            );
         }
     }
 }
