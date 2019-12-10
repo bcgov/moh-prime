@@ -121,19 +121,19 @@ objects:
             protocol: "TCP"
           env:
             - name: "DATABASE_HOST"
-              value: "${DATABASE_HOST}"
+              value: "postgresql"
             - name: "DATABASE_NAME"
-              value: "${DATABASE_NAME}"
+              value: "postgres"
             - name: "DATABASE_USER"
-            valueFrom:
-              secretKeyRef:
-                name: "${DATABASE_DEPLOYMENT_NAME}"
-                key: "database-user"
-          - name: "DATABASE_PASSWORD"
-            valueFrom:
-              secretKeyRef:
-                name: "${DATABASE_DEPLOYMENT_NAME}"
-                key: "database-password"
+              valueFrom:
+                secretKeyRef:
+                  name: "postgresql-secret"
+                  key: "database-user"
+            - name: "DATABASE_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: "postgresql-secret"
+                  key: "database-password"
           readinessProbe:
             timeoutSeconds: "300"
             initialDelaySeconds: "60"
