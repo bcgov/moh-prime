@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource, MatSelectChange, MatDialog } from '@angular/material';
+import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatTableDataSource, MatDialog } from '@angular/material';
 
 import { exhaustMap } from 'rxjs/operators';
 import { EMPTY, Subscription } from 'rxjs';
 
-import { Config } from '@config/config.model';
-import { ConfigService } from '@config/config.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
@@ -17,6 +17,7 @@ import {
 } from '@shared/components/dialogs/content/enrolment-status-reasons/enrolment-status-reasons.component';
 
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
   selector: 'app-enrolment-certificate-notes',
@@ -25,27 +26,25 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 })
 export class EnrolmentCertificateNotesComponent implements OnInit {
   public busy: Subscription;
+  public form: FormGroup;
   public columns: string[];
-  public statuses: Config<number>[];
-  public filteredStatus: Config<number>;
   public dataSource: MatTableDataSource<Enrolment>;
+  public enrolment: Enrolment;
 
   constructor(
-    private configService: ConfigService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private fb: FormBuilder,
     private adjudicationResource: AdjudicationResource,
     private toastService: ToastService,
     private dialog: MatDialog,
     private logger: LoggerService
   ) {
     this.columns = ['appliedDate', 'name', 'status', 'approvedDate', 'actions'];
-    this.statuses = this.configService.statuses;
-    this.filteredStatus = null;
   }
 
-  public filterByStatus(selection: MatSelectChange) {
-    const statusCode = selection.value;
-    this.filteredStatus = this.statuses.find(s => s.code === statusCode);
-    this.getEnrolments(statusCode);
+  public get note(): FormControl {
+    return this.form.get('note') as FormControl;
   }
 
   public canApproveOrDeny(currentStatusCode: number) {
@@ -54,6 +53,25 @@ export class EnrolmentCertificateNotesComponent implements OnInit {
 
   public canAllowEditing(currentStatusCode: number) {
     return (currentStatusCode !== EnrolmentStatus.ADJUDICATED_APPROVED);
+  }
+
+  public onSubmit() {
+    if (this.form.valid) {
+      const enrolment = this.enrolment;
+      enrolment.enrolmentCertificateNote = { enrolleeId: enrolment.id, note: this.note.value };
+      this.busy = this.adjudicationResource
+        .updateEnrollee(enrolment)
+        .subscribe(
+          () => {
+            this.toastService.openSuccessToast(`Enrolment certificate note has been saved.`);
+            this.note.reset();
+          },
+          (error: any) => {
+            this.toastService.openErrorToast(`Enrolment certificate note could not be saved`);
+            this.logger.error('[Adjudication] EnrolmentCertificateNote::onSubmit error has occurred: ', error);
+          }
+        );
+    }
   }
 
   public reviewStatusReasons(enrolment: Enrolment) {
@@ -185,19 +203,34 @@ export class EnrolmentCertificateNotesComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.getEnrolments();
+    this.createFormInstance();
+    this.getEnrollee(this.route.snapshot.params.id);
   }
 
-  private getEnrolments(statusCode?: number) {
-    this.busy = this.adjudicationResource.enrollees(statusCode)
+  protected createFormInstance() {
+    this.form = this.fb.group({
+      note: [
+        {
+          value: '',
+          disabled: false
+        },
+        [Validators.required]
+      ]
+    });
+  }
+
+  private getEnrollee(enrolleeId: number, statusCode?: number) {
+    this.busy = this.adjudicationResource.enrollee(enrolleeId, statusCode)
       .subscribe(
-        (enrolments: Enrolment[]) => {
-          this.logger.info('ENROLMENTS', enrolments);
-          this.dataSource = new MatTableDataSource<Enrolment>(enrolments);
+        (enrolment: Enrolment) => {
+          this.logger.info('ENROLMENT', enrolment);
+          this.dataSource = new MatTableDataSource<Enrolment>([enrolment]);
+          this.enrolment = enrolment;
         },
         (error: any) => {
-          this.toastService.openErrorToast('Enrolments could not be retrieved');
-          this.logger.error('[Adjudication] Enrolments::getEnrolments error has occurred: ', error);
+          this.toastService.openErrorToast('Enrollee could not be retrieved');
+          this.logger.error('[Adjudication] UserAgreementNotes::getEnrollee error has occurred: ', error);
+          this.router.navigate([AdjudicationRoutes.ENROLMENTS]);
         }
       );
   }

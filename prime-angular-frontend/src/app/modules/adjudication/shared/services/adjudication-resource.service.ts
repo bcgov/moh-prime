@@ -11,7 +11,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 
 import { Address } from '@enrolment/shared/models/address.model';
-import { AdjudicatorNote } from '@adjudication/shared/models/adjudicator-note.model';
+import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
 
 @Injectable({
   providedIn: 'root'
@@ -71,20 +71,20 @@ export class AdjudicationResource {
       );
   }
 
-  public adjudicatorNotes(id: number): Observable<AdjudicatorNote[]> {
+  public adjudicatorNotes(id: number): Observable<AdjudicationNote[]> {
     return this.http.get(`${this.config.apiEndpoint}/enrollees/${id}/adjudicator-notes`)
       .pipe(
-        map((response: PrimeHttpResponse) => response.result as AdjudicatorNote[]),
-        tap((adjudicatorNotes: AdjudicatorNote[]) => this.logger.info('ADJUDICATOR_NOTES', adjudicatorNotes))
+        map((response: PrimeHttpResponse) => response.result as AdjudicationNote[]),
+        tap((adjudicatorNotes: AdjudicationNote[]) => this.logger.info('ADJUDICATOR_NOTES', adjudicatorNotes))
       );
   }
 
-  public addAdjudicatorNote(enrolleeId: number, note: string): Observable<AdjudicatorNote> {
+  public addAdjudicatorNote(enrolleeId: number, note: string): Observable<AdjudicationNote> {
     const payload = { enrolleeId, note };
     return this.http.post(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/adjudicator-notes`, payload)
       .pipe(
-        map((response: PrimeHttpResponse) => response.result as AdjudicatorNote),
-        tap((adjudicatorNote: AdjudicatorNote) => this.logger.info('ADJUDICATOR_NOTE', adjudicatorNote))
+        map((response: PrimeHttpResponse) => response.result as AdjudicationNote),
+        tap((adjudicatorNote: AdjudicationNote) => this.logger.info('ADJUDICATOR_NOTE', adjudicatorNote))
       );
   }
 

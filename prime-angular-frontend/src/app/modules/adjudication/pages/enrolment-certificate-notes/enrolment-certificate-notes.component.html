@@ -2,7 +2,7 @@
 
   <app-page-header>Enrolment Certificate Notes</app-page-header>
 
-  <p></p>
+  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate debitis, non atque vel distinctio digbias.</p>
 
   <table mat-table
          [dataSource]="dataSource"
@@ -73,7 +73,7 @@
 
     <mat-menu #menu="matMenu">
       <button mat-menu-item
-              [routerLink]="[enrolment.id]">
+              [routerLink]="['../../', enrolment.id]">
         <mat-icon>remove_red_eye</mat-icon>
         <span>View Enrolment</span>
       </button>
@@ -124,23 +124,29 @@
     </mat-menu>
   </ng-template>
 
-  <div class="row">
-    <div class="col-sm-12 col-lg-8">
+  <form (ngSubmit)="onSubmit()"
+        [formGroup]="form"
+        novalidate>
 
-      <mat-form-field class="w-100">
-        <textarea matInput
-                  placeholder="Write Note Here"
-                  rows="10"></textarea>
-        <mat-error>Required</mat-error>
-      </mat-form-field>
+    <div class="row mb-4">
+      <div class="col-sm-12 col-lg-8">
 
+        <mat-form-field class="w-100">
+          <textarea matInput
+                    placeholder="Write Note Here"
+                    rows="10"
+                    formControlName="note"></textarea>
+          <mat-error>Required</mat-error>
+        </mat-form-field>
+
+        <div class="text-right">
+          <button mat-raised-button
+                  color="primary">Save Note</button>
+        </div>
+
+      </div>
     </div>
-    <div class="col-sm-12 col-lg-8 text-right">
 
-      <button mat-raised-button
-              color="primary">Save</button>
-
-    </div>
-  </div>
+  </form>
 
 </app-busy-overlay>
