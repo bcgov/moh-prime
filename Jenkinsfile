@@ -31,5 +31,12 @@ pipeline {
                 sh "./player.sh scan"
             }
         }
+        stage('SchemaSpy Database Investigation') {
+            when { expression { ( GIT_BRANCH == 'develop' ) } }
+            agent { label 'master' }
+            steps {
+                sh "./player.sh toolbelt schemaspy dev"
+            }
+        }
     }
 }
