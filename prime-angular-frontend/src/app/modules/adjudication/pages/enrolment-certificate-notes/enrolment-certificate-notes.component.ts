@@ -55,6 +55,7 @@ export class EnrolmentCertificateNotesComponent implements OnInit {
     return (currentStatusCode !== EnrolmentStatus.ADJUDICATED_APPROVED);
   }
 
+  // TODO can overwrite other peoples edits, should these be single endpoints?
   public onSubmit() {
     if (this.form.valid) {
       const enrolment = this.enrollee;
@@ -226,7 +227,7 @@ export class EnrolmentCertificateNotesComponent implements OnInit {
           this.dataSource = new MatTableDataSource<Enrolment>([enrolment]);
           this.enrollee = enrolment;
           if (enrolment.enrolmentCertificateNote) {
-            this.note.patchValue(this.enrollee.accessAgreementNote.note);
+            this.note.patchValue(this.enrollee.enrolmentCertificateNote.note);
           }
         },
         (error: any) => {
