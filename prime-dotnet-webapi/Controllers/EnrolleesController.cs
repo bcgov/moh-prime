@@ -153,7 +153,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateEnrollee(int enrolleeId, Enrollee enrollee, [FromQuery]bool beenThroughTheWizard = false)
+        public async Task<IActionResult> UpdateEnrollee(int enrolleeId, Enrollee enrollee, [FromQuery]bool beenThroughTheWizard)
         {
             if (enrollee == null)
             {
