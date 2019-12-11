@@ -24,42 +24,6 @@ namespace Prime.Services
             : base(context, httpContext)
         { }
 
-        public async Task<PharmanetCollegeRecord> GetCollegeRecord(string licenceNumber, string collegeReferenceId)
-        {
-            if (PrimeConstants.ENVIRONMENT_NAME == "local")
-            {
-                // TODO handle local dev
-                return null;
-            }
-
-            return await CallPharmanetCollegeLicenceService(licenceNumber, collegeReferenceId);
-        }
-
-        private async Task<PharmanetCollegeRecord> CallPharmanetCollegeLicenceService(string licenceNumber, string collegeReferenceId)
-        {
-            var requestParams = new CollegeRecordRequestParams(licenceNumber, collegeReferenceId);
-            var response = await Client.PostAsJsonAsync(PrimeConstants.HIBC_API_URL, requestParams);
-            if (!response.IsSuccessStatusCode)
-            {
-                // TODO Try again, log error? Probably dont handle like this.
-                throw new PharmanetCollegeApiException($"API returned status code {(int)response.StatusCode}, with reason \"{response.ReasonPhrase}\".");
-            }
-
-            var practicionerRecord = await CollegeRecordFromResponseAsync(response);
-            if (practicionerRecord != null && practicionerRecord.applicationUUID != requestParams.applicationUUID)
-            {
-                throw new PharmanetCollegeApiException($"Expected matching applicationUUIDs between request data and response data. Request was\"{requestParams.applicationUUID}\", response was \"{practicionerRecord.applicationUUID}\".");
-            }
-
-            return practicionerRecord;
-        }
-
-        private async Task<PharmanetCollegeRecord> CollegeRecordFromResponseAsync(HttpResponseMessage response)
-        {
-            var content = await response.Content.ReadAsAsync<List<PharmanetCollegeRecord>>();
-            return content.SingleOrDefault();
-        }
-
         private static HttpClient InitHttpClient()
         {
             if (PrimeConstants.ENVIRONMENT_NAME == "local")
@@ -82,6 +46,64 @@ namespace Prime.Services
             return client;
         }
 
+        public async Task<PharmanetCollegeRecord> GetCollegeRecord(Certification certification)
+        {
+            if (string.IsNullOrWhiteSpace(certification.LicenseNumber) || certification.College == null)
+            {
+                return null;
+            }
+
+            if (PrimeConstants.ENVIRONMENT_NAME == "local")
+            {
+                // TODO handle local dev
+                return null;
+            }
+
+            return await CallPharmanetCollegeLicenceService(certification.LicenseNumber, certification.College.Prefix);
+        }
+
+        private async Task<PharmanetCollegeRecord> CallPharmanetCollegeLicenceService(string licenceNumber, string collegeReferenceId)
+        {
+            var requestParams = new CollegeRecordRequestParams(licenceNumber, collegeReferenceId);
+            HttpResponseMessage response;
+            try
+            {
+                response = await Client.PostAsJsonAsync(PrimeConstants.HIBC_API_URL, requestParams);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    // TODO log error? Client error probably means bad licence number or college ref.
+                    return null;
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new PharmanetCollegeApiException($"Pharmanet API returned an error.", ex);
+            }
+
+            var content = await response.Content.ReadAsAsync<List<PharmanetCollegeRecord>>();
+            var practicionerRecord = content.SingleOrDefault();
+            if (practicionerRecord != null && practicionerRecord.applicationUUID != requestParams.applicationUUID)
+            {
+                throw new PharmanetCollegeApiException($"Expected matching applicationUUIDs between request data and response data. Request was\"{requestParams.applicationUUID}\", response was \"{practicionerRecord.applicationUUID}\".");
+            }
+
+            return practicionerRecord;
+        }
+
+        public class PharmanetCollegeApiException : Exception
+        {
+            public PharmanetCollegeApiException(string message)
+                : base(message)
+            {
+            }
+
+            public PharmanetCollegeApiException(string message, Exception inner)
+                : base(message, inner)
+            {
+            }
+        }
+
         private class CollegeRecordRequestParams
         {
             public string applicationUUID { get; set; }
@@ -95,21 +117,6 @@ namespace Prime.Services
                 programArea = "PRIME";
                 this.licenceNumber = licenceNumber;
                 this.collegeReferenceId = collegeReferenceId;
-            }
-        }
-
-
-
-        public class PharmanetCollegeApiException : Exception
-        {
-            public PharmanetCollegeApiException(string message)
-                : base(message)
-            {
-            }
-
-            public PharmanetCollegeApiException(string message, Exception inner)
-                : base(message, inner)
-            {
             }
         }
     }

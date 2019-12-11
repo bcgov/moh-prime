@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 
 using Prime.Models;
@@ -21,12 +20,10 @@ namespace Prime.Controllers
     public class EnrolleesController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
-        private readonly IHibcApiService _hibcApiService;
 
-        public EnrolleesController(IEnrolleeService enrolleeService, IHibcApiService hibcApiService)
+        public EnrolleesController(IEnrolleeService enrolleeService)
         {
             _enrolleeService = enrolleeService;
-            _hibcApiService = hibcApiService;
         }
 
         private bool BelongsToEnrollee(Enrollee enrollee)
@@ -200,16 +197,29 @@ namespace Prime.Controllers
         /// Deletes a specific Enrollee.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpDelete("{enrolleeId}/aaa/{other}", Name = nameof(DeleteEnrollee))]
+        [HttpDelete("{enrolleeId}", Name = nameof(DeleteEnrollee))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiOkResponse<Enrollee>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<PharmanetCollegeRecord>> DeleteEnrollee(string enrolleeId, string other)
+        public async Task<ActionResult<Enrollee>> DeleteEnrollee(int enrolleeId)
         {
-            PharmanetCollegeRecord resp = await _hibcApiService.GetCollegeRecord(enrolleeId, other);
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+            if (enrollee == null)
+            {
+                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
+            }
 
-            return Ok(new ApiOkResponse<PharmanetCollegeRecord>(resp));
+            // if the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
+            if (!BelongsToEnrollee(enrollee))
+            {
+                return Forbid();
+            }
+
+            await _enrolleeService.DeleteEnrolleeAsync(enrolleeId);
+
+
+            return Ok(new ApiOkResponse<Enrollee>(enrollee));
         }
 
         // GET: api/Enrollees/5/availableStatuses

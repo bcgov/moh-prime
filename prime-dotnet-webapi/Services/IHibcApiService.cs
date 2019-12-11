@@ -6,7 +6,6 @@ namespace Prime.Services
 {
     public interface IHibcApiService
     {
-        Task<PharmanetCollegeRecord> GetCollegeRecord(string licenceNumber, string collegeReferenceId);
+        Task<PharmanetCollegeRecord> GetCollegeRecord(Certification certification);
     }
-
 }

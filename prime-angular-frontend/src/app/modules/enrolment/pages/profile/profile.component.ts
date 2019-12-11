@@ -168,11 +168,6 @@ export class ProfileComponent implements OnInit {
     this.initForm();
   }
 
-  // TODO X
-  public TEST() {
-    this.enrolmentResource.api().subscribe((response) => { console.log(response) });
-  }
-
   private createFormInstance() {
     this.form = this.enrolmentStateService.profileForm;
   }
