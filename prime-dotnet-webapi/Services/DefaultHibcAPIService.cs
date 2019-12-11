@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Text;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -28,7 +29,7 @@ namespace Prime.Services
             if (PrimeConstants.ENVIRONMENT_NAME == "local")
             {
                 // TODO handle local dev
-                throw new NotImplementedException();
+                return null;
             }
 
             return await CallPharmanetCollegeLicenceService(licenceNumber, collegeReferenceId);
@@ -75,13 +76,8 @@ namespace Prime.Services
                 }
             );
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
-                "Basic", Convert.ToBase64String(
-                    System.Text.ASCIIEncoding.ASCII.GetBytes(
-                        $"{PrimeConstants.HIBC_API_USERNAME}:{PrimeConstants.HIBC_API_PASSWORD}r"
-                    )
-                )
-            );
+            var authBytes = ASCIIEncoding.ASCII.GetBytes($"{PrimeConstants.HIBC_API_USERNAME}:{PrimeConstants.HIBC_API_PASSWORD}");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(authBytes));
 
             return client;
         }
