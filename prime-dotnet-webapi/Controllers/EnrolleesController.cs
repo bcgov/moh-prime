@@ -19,10 +19,12 @@ namespace Prime.Controllers
     public class EnrolleesController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
+        private readonly IPharmanetApiService _parm;
 
-        public EnrolleesController(IEnrolleeService enrolleeService)
+        public EnrolleesController(IEnrolleeService enrolleeService, IPharmanetApiService parm)
         {
             _enrolleeService = enrolleeService;
+            _parm = parm;
         }
 
         private bool BelongsToEnrollee(Enrollee enrollee)
@@ -197,28 +199,38 @@ namespace Prime.Controllers
         /// Deletes a specific Enrollee.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpDelete("{enrolleeId}", Name = nameof(DeleteEnrollee))]
+        [HttpDelete("{enrolleeId}/aaa/{other}", Name = nameof(DeleteEnrollee))]
+        // [HttpDelete("{enrolleeId}", Name = nameof(DeleteEnrollee))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiOkResponse<Enrollee>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Enrollee>> DeleteEnrollee(int enrolleeId)
+        public async Task<ActionResult<PharmanetCollegeRecord>> DeleteEnrollee(string enrolleeId, string other)
+        // public async Task<ActionResult<Enrollee>> DeleteEnrollee(int enrolleeId)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-            if (enrollee == null)
-            {
-                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
-            }
+            var cert = new Certification{
+                LicenseNumber = enrolleeId,
+                CollegeCode = 1
+            };
+            var ttt = await _parm.GetCollegeRecord(cert);
 
-            // if the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
-            if (!BelongsToEnrollee(enrollee))
-            {
-                return Forbid();
-            }
+            return Ok(new ApiOkResponse<PharmanetCollegeRecord>(ttt));
 
-            await _enrolleeService.DeleteEnrolleeAsync(enrolleeId);
+            // var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+            // if (enrollee == null)
+            // {
+            //     return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
+            // }
 
-            return Ok(new ApiOkResponse<Enrollee>(enrollee));
+            // // if the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
+            // if (!BelongsToEnrollee(enrollee))
+            // {
+            //     return Forbid();
+            // }
+
+            // await _enrolleeService.DeleteEnrolleeAsync(enrolleeId);
+
+            // return Ok(new ApiOkResponse<Enrollee>(enrollee));
         }
 
         // GET: api/Enrollees/5/availableStatuses
