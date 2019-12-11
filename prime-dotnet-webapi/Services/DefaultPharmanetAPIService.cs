@@ -46,7 +46,7 @@ namespace Prime.Services
 
         public async Task<PharmanetCollegeRecord> GetCollegeRecord(Certification certification)
         {
-            if (string.IsNullOrWhiteSpace(certification.LicenseNumber) || certification.College == null)
+            if (string.IsNullOrWhiteSpace(certification.LicenseNumber))
             {
                 return null;
             }
@@ -57,7 +57,8 @@ namespace Prime.Services
                 return null;
             }
 
-            return await CallPharmanetCollegeLicenceService(certification.LicenseNumber, certification.College.Prefix);
+            College college = _context.Certifications.Where(c => c.CollegeCode == certification.CollegeCode).Single().College;
+            return await CallPharmanetCollegeLicenceService(certification.LicenseNumber.Remove(4) + "P", college.Prefix);
         }
 
         private async Task<PharmanetCollegeRecord> CallPharmanetCollegeLicenceService(string licenceNumber, string collegeReferenceId)
