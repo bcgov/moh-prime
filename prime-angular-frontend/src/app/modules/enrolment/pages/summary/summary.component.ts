@@ -33,7 +33,7 @@ export class SummaryComponent extends BaseEnrolmentPage implements OnInit {
     private windowRef: WindowRefService
   ) {
     super(route, router);
-
+    this.tokens = [];
     this.showProgressBar = false;
   }
 
@@ -51,7 +51,7 @@ export class SummaryComponent extends BaseEnrolmentPage implements OnInit {
 
   public generateProvisionerLink() {
     this.enrolmentResource.createEnrolmentCertificateAccessToken()
-      .subscribe((token) => this.tokens.push(token));
+      .subscribe((token: EnrolmentCertificateAccessToken) => this.tokens.push(token));
   }
 
   public ngOnInit() {
