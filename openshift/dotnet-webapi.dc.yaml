@@ -127,13 +127,19 @@ objects:
           type: ImageChange
     status: {}
   - apiVersion: v1
+    kind: Route
+    metadata:
+      name: "${NAME}${SUFFIX}"
+    spec:
+      host: "${NAME}${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca"
+      port:
+        targetPort: '8080'
+      to:
+        kind: Service
+        name: "${NAME}${SUFFIX}"
+  - apiVersion: v1
     kind: Service
     metadata:
-      annotations:
-        kompose.cmd: >-
-          kompose convert --provider=openshift --build=build-config
-          --build-repo=https://github.com/bcgov/moh-prime.git
-        kompose.version: 1.18.0 (06a2e56)
       creationTimestamp: null
       labels:
         io.kompose.service: '${NAME}${SUFFIX}'
