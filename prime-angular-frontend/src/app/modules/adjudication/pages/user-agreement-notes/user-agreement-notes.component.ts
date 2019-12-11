@@ -64,7 +64,6 @@ export class UserAgreementNotesComponent implements OnInit {
         .subscribe(
           () => {
             this.toastService.openSuccessToast(`Access agreement note has been saved.`);
-            this.note.reset();
           },
           (error: any) => {
             this.toastService.openErrorToast(`Access agreement note could not be saved`);
@@ -226,6 +225,9 @@ export class UserAgreementNotesComponent implements OnInit {
           this.logger.info('ENROLMENT', enrolment);
           this.dataSource = new MatTableDataSource<Enrolment>([enrolment]);
           this.enrolment = enrolment;
+          if (enrolment.accessAgreementNote) {
+            this.note.patchValue(this.enrolment.accessAgreementNote);
+          }
         },
         (error: any) => {
           this.toastService.openErrorToast('Enrollee could not be retrieved');

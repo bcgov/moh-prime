@@ -64,7 +64,6 @@ export class EnrolmentCertificateNotesComponent implements OnInit {
         .subscribe(
           () => {
             this.toastService.openSuccessToast(`Enrolment certificate note has been saved.`);
-            this.note.reset();
           },
           (error: any) => {
             this.toastService.openErrorToast(`Enrolment certificate note could not be saved`);
@@ -226,6 +225,9 @@ export class EnrolmentCertificateNotesComponent implements OnInit {
           this.logger.info('ENROLMENT', enrolment);
           this.dataSource = new MatTableDataSource<Enrolment>([enrolment]);
           this.enrolment = enrolment;
+          if (enrolment.enrolmentCertificateNote) {
+            this.note.patchValue(this.enrolment.accessAgreementNote);
+          }
         },
         (error: any) => {
           this.toastService.openErrorToast('Enrollee could not be retrieved');
