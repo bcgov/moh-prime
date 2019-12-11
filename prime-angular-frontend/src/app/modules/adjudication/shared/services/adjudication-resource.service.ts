@@ -70,7 +70,7 @@ export class AdjudicationResource {
       );
   }
 
-  public addAdjudicatorNotes(enrolleeId: number, note: string): Observable<AdjudicatorNote> {
+  public addAdjudicatorNote(enrolleeId: number, note: string): Observable<AdjudicatorNote> {
     const payload = { enrolleeId, note };
     return this.http.post(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/adjudicator-notes`, payload)
       .pipe(
