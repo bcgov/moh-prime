@@ -1,0 +1,102 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    kubernetes.io/limit-ranger: >-
+      LimitRanger plugin set: cpu, memory request for container schemaspy; cpu,
+      memory limit for container schemaspy
+    openshift.io/deployment-config.latest-version: '1'
+    openshift.io/deployment-config.name: schemaspy
+    openshift.io/deployment.name: schemaspy-1
+    openshift.io/generated-by: OpenShiftNewApp
+    openshift.io/scc: restricted
+  creationTimestamp: null
+  generateName: schemaspy-1-
+  labels:
+    app: schemaspy
+    deployment: schemaspy-1
+    deploymentconfig: schemaspy
+  name: schemaspy-1-xz7vd
+  namespace: dqszvc-dev
+  ownerReferences:
+    - apiVersion: v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicationController
+      name: schemaspy-1
+      uid: 47fd84ae-1b02-11ea-876a-0050568379a2
+  resourceVersion: '1230193833'
+  selfLink: /api/v1/namespaces/dqszvc-dev/pods/schemaspy-1-xz7vd
+  uid: 4b7e68ac-1b02-11ea-a90b-0050568348cc
+spec:
+  containers:
+    - env:
+        - name: DATABASE_HOST
+          value: postgresql
+        - name: DATABASE_NAME
+          value: postgres
+        - name: DATABASE_PASSWORD
+          value: postgres
+        - name: DATABASE_TYPE
+          value: pgsql
+        - name: DATABASE_USER
+          value: postgres
+      image: >-
+        docker-registry.default.svc:5000/dqszvc-dev/schemaspy@sha256:d463ef48ad0839b58a2903c5aac20879916c8d14f6b3be5551e0e54119566338
+      imagePullPolicy: Always
+      name: schemaspy
+      ports:
+        - containerPort: 8080
+          protocol: TCP
+      resources:
+        limits:
+          cpu: 250m
+          memory: 1Gi
+        requests:
+          cpu: 100m
+          memory: 256Mi
+      securityContext:
+        capabilities:
+          drop:
+            - KILL
+            - MKNOD
+            - SETGID
+            - SETUID
+        runAsUser: 1001810000
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+        - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+          name: default-token-nf7m8
+          readOnly: true
+  dnsPolicy: ClusterFirst
+  imagePullSecrets:
+    - name: redhat-connect
+    - name: 12566624-183794-service-pull-secret
+    - name: paul-rhel-account
+    - name: rhel
+    - name: paul-registry-credentials
+    - name: default-dockercfg-fwc89
+    - name: redhat-images
+  nodeName: ociopf-p-195.dmz
+  nodeSelector:
+    region: app
+  priority: 0
+  restartPolicy: Always
+  schedulerName: default-scheduler
+  securityContext:
+    fsGroup: 1001810000
+    seLinuxOptions:
+      level: 's0:c43,c2'
+  serviceAccount: default
+  serviceAccountName: default
+  terminationGracePeriodSeconds: 30
+  tolerations:
+    - effect: NoSchedule
+      key: node.kubernetes.io/memory-pressure
+      operator: Exists
+  volumes:
+    - name: default-token-nf7m8
+      secret:
+        defaultMode: 420
+        secretName: default-token-nf7m8
