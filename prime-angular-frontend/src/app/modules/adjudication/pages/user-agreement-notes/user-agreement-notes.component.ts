@@ -29,7 +29,7 @@ export class UserAgreementNotesComponent implements OnInit {
   public form: FormGroup;
   public columns: string[];
   public dataSource: MatTableDataSource<Enrolment>;
-  public enrolment: Enrolment;
+  public enrollee: Enrolment;
 
   constructor(
     private route: ActivatedRoute,
@@ -57,7 +57,7 @@ export class UserAgreementNotesComponent implements OnInit {
 
   public onSubmit() {
     if (this.form.valid) {
-      const enrolment = this.enrolment;
+      const enrolment = this.enrollee;
       enrolment.accessAgreementNote = { enrolleeId: enrolment.id, note: this.note.value };
       this.busy = this.adjudicationResource
         .updateEnrollee(enrolment)
@@ -224,9 +224,9 @@ export class UserAgreementNotesComponent implements OnInit {
         (enrolment: Enrolment) => {
           this.logger.info('ENROLMENT', enrolment);
           this.dataSource = new MatTableDataSource<Enrolment>([enrolment]);
-          this.enrolment = enrolment;
+          this.enrollee = enrolment;
           if (enrolment.accessAgreementNote) {
-            this.note.patchValue(this.enrolment.accessAgreementNote);
+            this.note.patchValue(this.enrollee.accessAgreementNote.note);
           }
         },
         (error: any) => {
