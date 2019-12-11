@@ -456,12 +456,20 @@ namespace Prime.Services
 
         public async Task<ICollection<AdjudicatorNote>> GetEnrolleeAdjudicatorNotesAsync(Enrollee enrollee)
         {
-            return await _context.AdjudicatorNotes.Where(an => an.EnrolleeId == enrollee.Id).ToListAsync();
+            return await _context.AdjudicatorNotes
+                .Where(an => an.EnrolleeId == enrollee.Id)
+                .OrderByDescending(an => an.NoteDate)
+                .ToListAsync();
         }
 
         public async Task<AdjudicatorNote> CreateAdjudicatorNoteAsync(Enrollee enrollee, AdjudicatorNote adjudicatorNote)
         {
-            AdjudicatorNote newAdjudicatorNote = new AdjudicatorNote { Enrollee = enrollee, Note = adjudicatorNote.Note };
+            AdjudicatorNote newAdjudicatorNote = new AdjudicatorNote
+            {
+                Enrollee = enrollee,
+                Note = adjudicatorNote.Note,
+                NoteDate = DateTime.Now
+            }
 
             _context.AdjudicatorNotes.Add(adjudicatorNote);
 
