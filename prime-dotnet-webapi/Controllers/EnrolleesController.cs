@@ -178,7 +178,7 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
 
-            // If the enrollee is not in the status of 'In Progress', it can only be updated by an ADMIN
+            // If the enrollee is not in the status of 'In Progress', enrollee can only be updated by an ADMIN
             if (!User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE) && !(await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.IN_PROGRESS_CODE)))
             {
                 this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee can not be updated when the current status is not 'In Progress'.");

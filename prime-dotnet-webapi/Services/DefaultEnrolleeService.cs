@@ -188,6 +188,8 @@ namespace Prime.Services
                                 .Include(e => e.Certifications)
                                 .Include(e => e.Jobs)
                                 .Include(e => e.Organizations)
+                                .Include(e => e.AccessAgreementNote)
+                                .Include(e => e.EnrolmentCertificateNote)
                                 .AsNoTracking()
                                 .Where(e => e.Id == enrollee.Id)
                                 .SingleOrDefault();
@@ -198,6 +200,8 @@ namespace Prime.Services
             this.ReplaceExistingItems(_enrolleeDb.Certifications, enrollee.Certifications, enrollee);
             this.ReplaceExistingItems(_enrolleeDb.Jobs, enrollee.Jobs, enrollee);
             this.ReplaceExistingItems(_enrolleeDb.Organizations, enrollee.Organizations, enrollee);
+            this.ReplaceExistingNote(_enrolleeDb.AccessAgreementNote, enrollee.AccessAgreementNote, enrollee);
+            this.ReplaceExistingNote(_enrolleeDb.EnrolmentCertificateNote, enrollee.EnrolmentCertificateNote, enrollee);
 
             // If profileCompleted is true, this is the first time the enrollee
             // has completed their profile by traversing the wizard, and indicates
@@ -213,6 +217,27 @@ namespace Prime.Services
             catch (DbUpdateConcurrencyException)
             {
                 return 0;
+            }
+        }
+
+        private void ReplaceExistingNote(INote dbNote, INote newNote, Enrollee enrollee)
+        {
+            if (dbNote != null)
+            {
+                if (newNote.Note.Equals(""))
+                {
+                    _context.Entry(dbNote).State = EntityState.Deleted;
+                }
+                else if (newNote != null)
+                {
+                    dbNote.Note = newNote.Note;
+                    _context.Entry(dbNote).State = EntityState.Modified;
+                }
+            }
+            else if (dbNote == null && newNote != null)
+            {
+                newNote.EnrolleeId = (int)enrollee.Id;
+                _context.Entry(newNote).State = EntityState.Added;
             }
         }
 
@@ -430,7 +455,9 @@ namespace Prime.Services
                     .Include(e => e.Jobs)
                     .Include(e => e.Organizations)
                     .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.Status)
-                    .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.EnrolmentStatusReasons).ThenInclude(esr => esr.StatusReason);
+                    .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.EnrolmentStatusReasons).ThenInclude(esr => esr.StatusReason)
+                    .Include(e => e.AccessAgreementNote)
+                    .Include(e => e.EnrolmentCertificateNote);
         }
 
         public bool EnrolleeExists(int enrolleeId)
