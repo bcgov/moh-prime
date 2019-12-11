@@ -13,6 +13,7 @@ namespace Prime.Models
         [Required]
         public Guid CreatedUserId { get; set; }
 
+
         [JsonIgnore]
         [Required]
         public DateTime CreatedTimeStamp { get; set; }
