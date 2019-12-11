@@ -99,13 +99,13 @@ objects:
               image: ' '
               name: primeapi
               ports:
-                - containerPort: 8080
+                - containerPort: 5000
                 - containerPort: 5001
               readinessProbe:
                 failureThreshold: 3
                 httpGet:
                   path: /healthcheck
-                  port: 8080
+                  port: 5000
                   scheme: HTTP
                 initialDelaySeconds: 5
                 periodSeconds: 10
