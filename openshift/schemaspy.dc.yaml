@@ -17,7 +17,6 @@ parameters:
     value: 'dqszvc'
   - name: OC_APP
     required: true
-    value: 'dev'
   - name: "CPU_LIMIT"
     displayName: "CPU Limit"
     required: true
@@ -45,7 +44,7 @@ parameters:
   - name: "TAG_NAME"
     displayName: "Environment TAG name"
     description: "The TAG name for this environment, e.g., dev, test, prod"
-    value: "dev"
+    value: "${OC_APP}"
     required: true
   - name: "DATABASE_DEPLOYMENT_NAME"
     displayName: "Database Deployment Name"
