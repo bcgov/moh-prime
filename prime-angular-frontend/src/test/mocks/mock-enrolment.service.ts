@@ -80,6 +80,8 @@ export class MockEnrolmentService implements IEnrolmentService {
       },
       availableStatuses: null,
       enrolleeClassification: EnrolleeClassification.MOA,
+      enrolmentCertificateNote: null,
+      accessAgreementNote: null,
       profileCompleted: true,
       initialStatus: true
     });
