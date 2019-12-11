@@ -73,7 +73,7 @@
 
     <mat-menu #menu="matMenu">
       <button mat-menu-item
-              [routerLink]="[enrolment.id]">
+              [routerLink]="['../../', enrolment.id]">
         <mat-icon>remove_red_eye</mat-icon>
         <span>View Enrolment</span>
       </button>
@@ -128,7 +128,7 @@
         [formGroup]="form"
         novalidate>
 
-    <div class="row">
+    <div class="row mb-4">
       <div class="col-sm-12 col-lg-8">
 
         <mat-form-field class="w-100">
@@ -139,19 +139,38 @@
           <mat-error>Required</mat-error>
         </mat-form-field>
 
-      </div>
-      <div class="col-sm-12 col-lg-8 text-right">
+        <div class="text-right">
+          <button mat-raised-button
+                  color="primary">Save Note</button>
+        </div>
 
-        <button mat-raised-button
-                color="primary">Save</button>
+      </div>
+    </div>
+
+    <div class="row mb-4">
+      <div class="col-sm-12 col-lg-8">
+
+        <div *ngIf="adjudicatorNotes.value.length"
+             class="table-responsive">
+          <table class="table">
+            <!-- <thead>
+              <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Note</th>
+              </tr>
+            </thead> -->
+            <tbody>
+              <tr *ngFor="let adjudicatorNote of adjudicatorNotes | async">
+                <th class="text-nowrap">{{ adjudicatorNote.noteDate | formatDate }}</th>
+                <td>{{ adjudicatorNote.note }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
       </div>
     </div>
 
   </form>
-
-  <ng-container *ngFor="let adjudicatorNote of adjudicatorNotes | async">
-    {{ adjudicatorNote.note }}
-  </ng-container>
 
 </app-busy-overlay>

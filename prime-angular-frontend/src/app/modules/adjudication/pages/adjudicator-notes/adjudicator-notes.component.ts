@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource, MatDialog } from '@angular/material';
 
 import { exhaustMap } from 'rxjs/operators';
@@ -18,6 +18,7 @@ import {
 
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { AdjudicatorNote } from '@adjudication/shared/models/adjudicator-note.model';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
   selector: 'app-adjudicator-notes',
@@ -33,6 +34,7 @@ export class AdjudicatorNotesComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private fb: FormBuilder,
     private adjudicationResource: AdjudicationResource,
     private toastService: ToastService,
@@ -58,17 +60,17 @@ export class AdjudicatorNotesComponent implements OnInit {
   public onSubmit() {
     if (this.form.valid) {
       this.busy = this.adjudicationResource
-        .addAdjudicatorNote(this.route.snapshot.params.id, this.form.get('note').value)
+        .addAdjudicatorNote(this.route.snapshot.params.id, this.note.value)
         .subscribe(
           (adjudicatorNote: AdjudicatorNote) => {
             this.toastService.openSuccessToast(`Adjudication note has been saved.`);
-            const notes = [...this.adjudicatorNotes.value, adjudicatorNote];
+            const notes = [adjudicatorNote, ...this.adjudicatorNotes.value];
             this.adjudicatorNotes.next(notes);
-
+            this.note.reset();
           },
           (error: any) => {
             this.toastService.openErrorToast(`Adjudication note could not be saved`);
-            this.logger.error('[Enrolment] AdjudicatorNotes::onSubmit error has occurred: ', error);
+            this.logger.error('[Adjudication] AdjudicatorNotes::onSubmit error has occurred: ', error);
           }
         );
     }
@@ -231,8 +233,9 @@ export class AdjudicatorNotesComponent implements OnInit {
         this.adjudicatorNotes.next(adjudicatorNotes);
       },
       (error: any) => {
-        this.toastService.openErrorToast('Enrolments could not be retrieved');
-        this.logger.error('[Adjudication] Enrolments::getEnrollee error has occurred: ', error);
+        this.toastService.openErrorToast('Enrollee could not be retrieved');
+        this.logger.error('[Adjudication] AdjudicatorNotes::getEnrollee error has occurred: ', error);
+        this.router.navigate([AdjudicationRoutes.ENROLMENTS]);
       }
     );
   }
