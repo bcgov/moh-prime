@@ -74,20 +74,20 @@ namespace Prime.Services
                     // TODO log error? Client error probably means bad licence number or college ref.
                     return null;
                 }
+
+                var content = await response.Content.ReadAsAsync<List<PharmanetCollegeRecord>>();
+                var practicionerRecord = content.SingleOrDefault();
+                if (practicionerRecord != null && practicionerRecord.applicationUUID != requestParams.applicationUUID)
+                {
+                    throw new PharmanetCollegeApiException($"Expected matching applicationUUIDs between request data and response data. Request was\"{requestParams.applicationUUID}\", response was \"{practicionerRecord.applicationUUID}\".");
+                }
+
+                return practicionerRecord;
             }
             catch (Exception ex)
             {
                 throw new PharmanetCollegeApiException($"Pharmanet API returned an error. transactionid:[{requestParams.applicationUUID}]", ex);
             }
-
-            var content = await response.Content.ReadAsAsync<List<PharmanetCollegeRecord>>();
-            var practicionerRecord = content.SingleOrDefault();
-            if (practicionerRecord != null && practicionerRecord.applicationUUID != requestParams.applicationUUID)
-            {
-                throw new PharmanetCollegeApiException($"Expected matching applicationUUIDs between request data and response data. Request was\"{requestParams.applicationUUID}\", response was \"{practicionerRecord.applicationUUID}\".");
-            }
-
-            return practicionerRecord;
         }
 
         public class PharmanetCollegeApiException : Exception
