@@ -77,7 +77,7 @@ namespace Prime.Services
             }
             catch (HttpRequestException ex)
             {
-                throw new PharmanetCollegeApiException($"Pharmanet API returned an error.", ex);
+                throw new PharmanetCollegeApiException($"Pharmanet API returned an error. transactionid:[{requestParams.applicationUUID}]", ex);
             }
 
             var content = await response.Content.ReadAsAsync<List<PharmanetCollegeRecord>>();
