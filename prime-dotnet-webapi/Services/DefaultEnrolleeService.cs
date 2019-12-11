@@ -224,17 +224,17 @@ namespace Prime.Services
         {
             if (dbNote != null)
             {
-                if (newNote.Note.Equals(""))
+                if (newNote.Note == null)
                 {
                     _context.Entry(dbNote).State = EntityState.Deleted;
                 }
-                else if (newNote != null)
+                else
                 {
                     dbNote.Note = newNote.Note;
                     _context.Entry(dbNote).State = EntityState.Modified;
                 }
             }
-            else if (dbNote == null && newNote != null)
+            else if (newNote != null)
             {
                 newNote.EnrolleeId = (int)enrollee.Id;
                 _context.Entry(newNote).State = EntityState.Added;
