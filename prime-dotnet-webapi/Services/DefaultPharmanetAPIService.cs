@@ -75,7 +75,7 @@ namespace Prime.Services
                     return null;
                 }
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
                 throw new PharmanetCollegeApiException($"Pharmanet API returned an error. transactionid:[{requestParams.applicationUUID}]", ex);
             }
