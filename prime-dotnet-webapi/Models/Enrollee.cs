@@ -81,16 +81,42 @@ namespace Prime.Models
         public ICollection<EnrolmentStatus> EnrolmentStatuses { get; set; }
 
         [NotMapped]
-        public EnrolmentStatus CurrentStatus { get { return this.EnrolmentStatuses?.SingleOrDefault(es => es.IsCurrent); } }
+        public EnrolmentStatus CurrentStatus
+        {
+            get => this.EnrolmentStatuses?
+                .OrderByDescending(es => es.StatusDate)
+                .ThenByDescending(es => es.Id)
+                .FirstOrDefault();
+        }
+
+        [NotMapped]
+        public EnrolmentStatus PharmaNetStatus { get => this.EnrolmentStatuses?.SingleOrDefault(es => es.PharmaNetStatus); }
+
+        [NotMapped]
+        public bool InitialStatus { get => this.EnrolmentStatuses?.Count() == 1; }
+
+        public bool ProfileCompleted { get; set; }
 
         [NotMapped]
         public ICollection<Status> AvailableStatuses { get; set; }
 
         [NotMapped]
-        public DateTime? AppliedDate { get { return this.EnrolmentStatuses?.SingleOrDefault(es => es.StatusCode == Status.SUBMITTED_CODE)?.StatusDate; } }
+        public DateTime? AppliedDate
+        {
+            get => this.EnrolmentStatuses?
+                .OrderByDescending(en => en.StatusDate)
+                .FirstOrDefault(es => es.StatusCode == Status.SUBMITTED_CODE)?
+                .StatusDate;
+        }
 
         [NotMapped]
-        public DateTime? ApprovedDate { get { return this.EnrolmentStatuses?.SingleOrDefault(es => es.StatusCode == Status.APPROVED_CODE)?.StatusDate; } }
+        public DateTime? ApprovedDate
+        {
+            get => this.EnrolmentStatuses?
+                .OrderByDescending(en => en.StatusDate)
+                .FirstOrDefault(es => es.StatusCode == Status.APPROVED_CODE)?
+                .StatusDate;
+        }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

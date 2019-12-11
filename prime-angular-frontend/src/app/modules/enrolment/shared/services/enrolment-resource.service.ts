@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -52,9 +52,13 @@ export class EnrolmentResource {
       );
   }
 
-  public updateEnrollee(enrolment: Enrolment): Observable<any> {
+  public updateEnrollee(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<any> {
     const { id } = enrolment;
-    return this.http.put(`${this.config.apiEndpoint}/enrollees/${id}`, this.enrolmentAdapterRequest(enrolment));
+    let params = new HttpParams();
+    if (beenThroughTheWizard) {
+      params = params.set('beenThroughTheWizard', `${beenThroughTheWizard}`);
+    }
+    return this.http.put(`${this.config.apiEndpoint}/enrollees/${id}`, this.enrolmentAdapterRequest(enrolment), { params });
   }
 
   public updateEnrolmentStatus(id: number, statusCode: number): Observable<Config<number>[]> {

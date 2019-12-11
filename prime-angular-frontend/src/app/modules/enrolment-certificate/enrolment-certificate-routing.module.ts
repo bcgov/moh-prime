@@ -14,6 +14,7 @@ const routes: Routes = [
       {
         path: ':tokenId',
         component: CertificateComponent,
+        data: { title: 'Enrolment Certificate' }
       },
       {
         path: '',

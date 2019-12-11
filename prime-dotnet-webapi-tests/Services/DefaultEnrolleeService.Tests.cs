@@ -16,13 +16,13 @@ namespace PrimeTests.Services
     {
         private static EnrolleeSearchOptions EMPTY_ENROLLEE_SEARCH_OPTIONS = new EnrolleeSearchOptions();
 
-        public DefaultEnrolleeServiceTests() : base(new object[] { new AutomaticAdjudicationServiceMock() })
+        public DefaultEnrolleeServiceTests() : base(new object[] { new AutomaticAdjudicationServiceMock(), new EmailServiceMock() })
         { }
 
         [Fact]
         public async void testGetEnrollees()
         {
-             // make sure there are no enrollees
+            // make sure there are no enrollees
             Assert.False(_dbContext.Enrollees.Any());
             await _dbContext.SaveChangesAsync();
 
@@ -131,44 +131,6 @@ namespace PrimeTests.Services
             Assert.Equal(expectedUserId, enrollee.UserId);
         }
 
-        // [Fact]
-        // public async void testGetEnrolleeForUserId()
-        // {
-        //     var testEnrollee = TestUtils.EnrolleeFaker.Generate();
-        //     Guid expectedUserId = testEnrollee.UserId;
-
-        //     // create the enrollee directly to the context
-        //     _dbContext.Enrollees.Add(testEnrollee);
-        //     await _dbContext.SaveChangesAsync();
-        //     int expectedEnrolleeId = (int)testEnrollee.Id;
-
-        //     // get the enrollee through the service layer code
-        //     Enrollee enrollee = await _service.GetEnrolleeForUserIdAsync(expectedUserId);
-        //     Assert.NotNull(enrollee);
-        //     Assert.Equal(expectedEnrolleeId, enrollee.Id);
-        //     Assert.Equal(expectedUserId, enrollee.UserId);
-        // }
-
-        // [Fact]
-        // public async void testGetEnrollees()
-        // {
-        //     // make sure there are no enrollees
-        //     Assert.False(_dbContext.Enrollees.Any());
-        //     await _dbContext.SaveChangesAsync();
-
-        //     // create some enrollees directly to the context
-        //     _dbContext.Enrollees.Add(TestUtils.EnrolleeFaker.Generate());
-        //     _dbContext.Enrollees.Add(TestUtils.EnrolleeFaker.Generate());
-        //     _dbContext.Enrollees.Add(TestUtils.EnrolleeFaker.Generate());
-
-        //     await _dbContext.SaveChangesAsync();
-
-        //     // get the enrollees through the service layer code
-        //     var enrollees = await _service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
-        //     Assert.NotNull(enrollees);
-        //     Assert.Equal(3, enrollees.Count());
-        // }
-
         [Fact]
         public async void testGetEnrollees_Filtered()
         {
@@ -193,28 +155,6 @@ namespace PrimeTests.Services
             Assert.NotNull(enrolleesSubmitted);
             Assert.Empty(enrolleesSubmitted);
         }
-
-        // [Fact]
-        // public async void testGetEnrolleesForUserId()
-        // {
-        //     // make sure there are no enrollees
-        //     Assert.False(_dbContext.Enrollees.Any());
-        //     await _dbContext.SaveChangesAsync();
-
-        //     // create some enrollees directly to the context
-        //     var testEnrollee = TestUtils.EnrolleeFaker.Generate();
-        //     Guid expectedUserId = testEnrollee.UserId;
-        //     _dbContext.Enrollees.Add(testEnrollee);
-        //     _dbContext.Enrollees.Add(TestUtils.EnrolleeFaker.Generate());
-        //     _dbContext.Enrollees.Add(TestUtils.EnrolleeFaker.Generate());
-
-        //     await _dbContext.SaveChangesAsync();
-
-        //     // get the enrollees through the service layer code
-        //     var enrollees = await _service.GetEnrolleeForUserIdAsync(expectedUserId);
-        //     Assert.NotNull(enrollees);
-        //     Assert.Single(enrollees);
-        // }
 
         [Fact]
         public async void testUpdateEnrollee()
@@ -320,7 +260,7 @@ namespace PrimeTests.Services
         }
 
         [Fact]
-        public async void testCreateEnrolmentStatuses()
+        public async void testCreateEnrolmentStatus()
         {
             var testEnrollee = TestUtils.EnrolleeFaker.Generate();
             Guid expectedUserId = testEnrollee.UserId;
@@ -336,8 +276,9 @@ namespace PrimeTests.Services
             Assert.Equal(_dbContext.Statuses.Single(s => s.Code == Status.SUBMITTED_CODE), enrolmentStatus.Status);
         }
 
+
         [Fact]
-        public async void testCreateEnrolmentStatuses_Generate_LicensePlate()
+        public async void testCreateEnrolmentStatus_Generate_LicensePlate()
         {
             var testEnrollee = TestUtils.EnrolleeFaker.Generate();
             // manually change the status to approved
@@ -359,6 +300,24 @@ namespace PrimeTests.Services
             Assert.NotNull(enrollee);
             Assert.NotNull(enrollee.LicensePlate);
             Assert.Equal(20, enrollee.LicensePlate.Length);
+        }
+
+        [Fact]
+        public async void testCreateEnrolmentStatus_AcceptedTOS_to_InProgress()
+        {
+            var testEnrollee = TestUtils.EnrolleeFaker.Generate();
+            testEnrollee.CurrentStatus.StatusCode = Status.ACCEPTED_TOS_CODE;
+            Guid expectedUserId = testEnrollee.UserId;
+
+            // create the enrollee directly to the context
+            _dbContext.Enrollees.Add(testEnrollee);
+            await _dbContext.SaveChangesAsync();
+            int expectedEnrolleeId = (int)testEnrollee.Id;
+
+            // create the enrolment status through the service layer code
+            var enrolmentStatusInProgress = await _service.CreateEnrolmentStatusAsync((int)expectedEnrolleeId, _dbContext.Statuses.Single(s => s.Code == Status.IN_PROGRESS_CODE));
+            Assert.NotNull(enrolmentStatusInProgress);
+            Assert.Equal(_dbContext.Statuses.Single(s => s.Code == Status.IN_PROGRESS_CODE), enrolmentStatusInProgress.Status);
         }
 
         [Fact]
@@ -388,7 +347,7 @@ namespace PrimeTests.Services
             Assert.False(_service.IsStatusChangeAllowed(IN_PROGRESS, DECLINED_TOS));
 
             Assert.False(_service.IsStatusChangeAllowed(SUBMITTED, null));
-            Assert.False(_service.IsStatusChangeAllowed(SUBMITTED, IN_PROGRESS));
+            Assert.True(_service.IsStatusChangeAllowed(SUBMITTED, IN_PROGRESS));
             Assert.False(_service.IsStatusChangeAllowed(SUBMITTED, SUBMITTED));
             Assert.False(_service.IsStatusChangeAllowed(SUBMITTED, APPROVED));
             Assert.False(_service.IsStatusChangeAllowed(SUBMITTED, DECLINED));
@@ -404,7 +363,7 @@ namespace PrimeTests.Services
             Assert.True(_service.IsStatusChangeAllowed(APPROVED, DECLINED_TOS));
 
             Assert.False(_service.IsStatusChangeAllowed(DECLINED, null));
-            Assert.False(_service.IsStatusChangeAllowed(DECLINED, IN_PROGRESS));
+            Assert.True(_service.IsStatusChangeAllowed(DECLINED, IN_PROGRESS));
             Assert.False(_service.IsStatusChangeAllowed(DECLINED, SUBMITTED));
             Assert.False(_service.IsStatusChangeAllowed(DECLINED, APPROVED));
             Assert.False(_service.IsStatusChangeAllowed(DECLINED, DECLINED));
@@ -412,7 +371,7 @@ namespace PrimeTests.Services
             Assert.False(_service.IsStatusChangeAllowed(DECLINED, DECLINED_TOS));
 
             Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, null));
-            Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, IN_PROGRESS));
+            Assert.True(_service.IsStatusChangeAllowed(ACCEPTED_TOS, IN_PROGRESS));
             Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, SUBMITTED));
             Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, APPROVED));
             Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, DECLINED));
@@ -420,7 +379,7 @@ namespace PrimeTests.Services
             Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, DECLINED_TOS));
 
             Assert.False(_service.IsStatusChangeAllowed(DECLINED_TOS, null));
-            Assert.False(_service.IsStatusChangeAllowed(DECLINED_TOS, IN_PROGRESS));
+            Assert.True(_service.IsStatusChangeAllowed(DECLINED_TOS, IN_PROGRESS));
             Assert.False(_service.IsStatusChangeAllowed(DECLINED_TOS, SUBMITTED));
             Assert.False(_service.IsStatusChangeAllowed(DECLINED_TOS, APPROVED));
             Assert.False(_service.IsStatusChangeAllowed(DECLINED_TOS, DECLINED));
@@ -458,7 +417,7 @@ namespace PrimeTests.Services
             Assert.False(_service.IsStatusChangeAllowed(IN_PROGRESS, DECLINED_TOS));
 
             Assert.False(_service.IsStatusChangeAllowed(SUBMITTED, null));
-            Assert.False(_service.IsStatusChangeAllowed(SUBMITTED, IN_PROGRESS));
+            Assert.True(_service.IsStatusChangeAllowed(SUBMITTED, IN_PROGRESS));
             Assert.False(_service.IsStatusChangeAllowed(SUBMITTED, SUBMITTED));
             Assert.True(_service.IsStatusChangeAllowed(SUBMITTED, APPROVED));
             Assert.True(_service.IsStatusChangeAllowed(SUBMITTED, DECLINED));
@@ -474,7 +433,7 @@ namespace PrimeTests.Services
             Assert.True(_service.IsStatusChangeAllowed(APPROVED, DECLINED_TOS));
 
             Assert.False(_service.IsStatusChangeAllowed(DECLINED, null));
-            Assert.False(_service.IsStatusChangeAllowed(DECLINED, IN_PROGRESS));
+            Assert.True(_service.IsStatusChangeAllowed(DECLINED, IN_PROGRESS));
             Assert.False(_service.IsStatusChangeAllowed(DECLINED, SUBMITTED));
             Assert.False(_service.IsStatusChangeAllowed(DECLINED, APPROVED));
             Assert.False(_service.IsStatusChangeAllowed(DECLINED, DECLINED));
@@ -482,7 +441,7 @@ namespace PrimeTests.Services
             Assert.False(_service.IsStatusChangeAllowed(DECLINED, DECLINED_TOS));
 
             Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, null));
-            Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, IN_PROGRESS));
+            Assert.True(_service.IsStatusChangeAllowed(ACCEPTED_TOS, IN_PROGRESS));
             Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, SUBMITTED));
             Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, APPROVED));
             Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, DECLINED));
@@ -490,7 +449,7 @@ namespace PrimeTests.Services
             Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, DECLINED_TOS));
 
             Assert.False(_service.IsStatusChangeAllowed(DECLINED_TOS, null));
-            Assert.False(_service.IsStatusChangeAllowed(DECLINED_TOS, IN_PROGRESS));
+            Assert.True(_service.IsStatusChangeAllowed(DECLINED_TOS, IN_PROGRESS));
             Assert.False(_service.IsStatusChangeAllowed(DECLINED_TOS, SUBMITTED));
             Assert.False(_service.IsStatusChangeAllowed(DECLINED_TOS, APPROVED));
             Assert.False(_service.IsStatusChangeAllowed(DECLINED_TOS, DECLINED));

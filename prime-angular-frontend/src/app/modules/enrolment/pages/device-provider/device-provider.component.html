@@ -1,47 +1,61 @@
 <app-busy-overlay [busy]="busy">
 
-  <form (ngSubmit)="onSubmit()"
-        [formGroup]="form"
-        novalidate>
+  <div class="row">
+    <div class="col-sm-12 col-lg-8 offset-lg-1 col-xl-6 offset-xl-0">
 
-    <app-page-subheader>
-      <ng-container appPageSubheaderTitle>Device Provider Information</ng-container>
-    </app-page-subheader>
+      <form (ngSubmit)="onSubmit()"
+            [formGroup]="form"
+            novalidate>
 
-    <div class="row">
-      <div class="col-sm-12 col-md-6 col-xl-5">
+        <app-progress-indicator *ngIf="hasInitialStatus"
+                                [currentRoute]="EnrolmentRoutes.DEVICE_PROVIDER"></app-progress-indicator>
 
-        <mat-form-field class="w-100">
-          <span matPrefix>D1&nbsp;</span>
-          <input matInput
-                 placeholder="Device Provider Number"
-                 formControlName="deviceProviderNumber">
-          <mat-error *ngIf="deviceProviderNumber.hasError('length') || deviceProviderNumber.hasError('numeric')">
-            Must be a 5 digit number
-          </mat-error>
-        </mat-form-field>
+        <app-page-header>PharmaNet Enrolment</app-page-header>
 
-      </div>
+        <app-page-subheader>
+          <ng-container appPageSubheaderTitle>Device Provider Information</ng-container>
+        </app-page-subheader>
+
+        <div class="row">
+          <div class="col">
+
+            <mat-form-field class="w-100">
+              <span matPrefix>D1&nbsp;</span>
+              <input matInput
+                     placeholder="Device Provider Number"
+                     formControlName="deviceProviderNumber">
+              <mat-error *ngIf="deviceProviderNumber.hasError('length') || deviceProviderNumber.hasError('numeric')">
+                Must be a 5 digit number
+              </mat-error>
+            </mat-form-field>
+
+          </div>
+        </div>
+
+        <ng-container *ngIf="deviceProviderNumber.value">
+
+          <p>Are you an insulin pump provider?</p>
+
+          <mat-radio-group aria-labelledby="example-radio-group-label"
+                           class="example-radio-group"
+                           formControlName="isInsulinPumpProvider">
+            <mat-radio-button class="mr-4"
+                              *ngFor="let decision of decisions"
+                              [value]="decision.code">
+              {{ decision.name }}
+            </mat-radio-button>
+          </mat-radio-group>
+
+        </ng-container>
+
+        <app-page-footer [profileCompleted]="isProfileComplete"
+                         (save)="onSubmit()"
+                         (continue)="onSubmit()"
+                         (back)="routeTo(EnrolmentRoutes.REGULATORY)"></app-page-footer>
+
+      </form>
+
     </div>
-
-    <ng-container *ngIf="deviceProviderNumber.value">
-
-      <p>Are you an insulin pump provider?</p>
-
-      <mat-radio-group aria-labelledby="example-radio-group-label"
-                       class="example-radio-group"
-                       formControlName="isInsulinPumpProvider">
-        <mat-radio-button class="mr-4"
-                          *ngFor="let decision of decisions"
-                          [value]="decision.code">
-          {{ decision.name }}
-        </mat-radio-button>
-      </mat-radio-group>
-
-    </ng-container>
-
-    <app-page-footer [backRoute]="EnrolmentRoutes.REGULATORY"></app-page-footer>
-
-  </form>
+  </div>
 
 </app-busy-overlay>

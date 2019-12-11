@@ -78,9 +78,7 @@ export class DashboardComponent implements OnInit {
       // Listen for enrolment status changes to update the side navigation
       // based on user progression
       this.enrolmentService.enrolment$
-        .subscribe(() => {
-          this.sideNavSections = this.getSideNavSections();
-        });
+        .subscribe(() => this.sideNavSections = this.getSideNavSections());
     }
 
     // Initialize the sidenav with properties based on current viewport
@@ -90,7 +88,7 @@ export class DashboardComponent implements OnInit {
       .subscribe((device: string) => this.setSideNavProps(device));
 
     const user = await this.authService.getUser();
-    this.username = `${user.firstName} ${user.firstName}`;
+    this.username = `${user.firstName} ${user.lastName}`;
   }
 
   private getSideNavSections() {
@@ -128,7 +126,13 @@ export class DashboardComponent implements OnInit {
             name: 'Status',
             icon: statusIcons.status,
             route: EnrolmentRoutes.SUMMARY,
-            showItem: true
+            showItem: true,
+            forceActive: (
+              [
+                EnrolmentStatus.DECLINED,
+                EnrolmentStatus.DECLINED_TOS
+              ].includes(statusCode)
+            )
           }
         ]
       }
@@ -191,12 +195,16 @@ export class DashboardComponent implements OnInit {
       case EnrolmentStatus.ADJUDICATED_APPROVED:
         accessAgreement = 'assignment';
         break;
-      // case EnrolmentStatus.DECLINED:
+      case EnrolmentStatus.DECLINED:
+        enrolment = 'highlight_off';
+        break;
       case EnrolmentStatus.ACCEPTED_TOS:
         accessAgreement = 'assignment_turned_in';
         status = 'assignment_turned_in';
         break;
-      // case EnrolmentStatus.DECLINED_TOS:
+      case EnrolmentStatus.DECLINED_TOS:
+        accessAgreement = 'highlight_off';
+        break;
     }
 
     return { enrolment, accessAgreement, status };

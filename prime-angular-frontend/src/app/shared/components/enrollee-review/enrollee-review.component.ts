@@ -1,18 +1,24 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 
 import { Enrolment } from '@shared/models/enrolment.model';
+import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 
 @Component({
   selector: 'app-enrollee-review',
   templateUrl: './enrollee-review.component.html',
-  styleUrls: ['./enrollee-review.component.scss']
+  styleUrls: ['./enrollee-review.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EnrolleeReviewComponent implements OnInit {
+export class EnrolleeReviewComponent {
   @Input() public isEnrolling: boolean;
   @Input() public enrolment: Enrolment;
+  @Output() public route: EventEmitter<string>;
+
+  public EnrolmentRoutes = EnrolmentRoutes;
 
   constructor() {
     this.isEnrolling = true;
+    this.route = new EventEmitter<string>();
   }
 
   public get enrollee() {
@@ -51,10 +57,7 @@ export class EnrolleeReviewComponent implements OnInit {
     return (this.hasOrganizations) ? this.enrolment.organizations : [];
   }
 
-  public showYesNo(declared: boolean) {
-    return (declared === null) ? 'N/A'
-      : (declared) ? 'Yes' : 'No';
+  public onRoute(routePath: string) {
+    this.route.emit(routePath);
   }
-
-  public ngOnInit() { }
 }

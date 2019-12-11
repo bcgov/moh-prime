@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MatDialog, MatCheckboxChange } from '@angular/material';
+import { MatDialog } from '@angular/material';
 
-import { map, exhaustMap } from 'rxjs/operators';
+import { exhaustMap } from 'rxjs/operators';
 import { EMPTY, Subscription } from 'rxjs';
 
 import { ToastService } from '@core/services/toast.service';
@@ -12,6 +12,7 @@ import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
+import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
@@ -21,23 +22,21 @@ import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-stat
   templateUrl: './review.component.html',
   styleUrls: ['./review.component.scss']
 })
-export class ReviewComponent implements OnInit {
+export class ReviewComponent extends BaseEnrolmentPage implements OnInit {
   public busy: Subscription;
   public enrolment: Enrolment;
-  public disabledAgreement: boolean;
-  public EnrolmentRoutes = EnrolmentRoutes;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
+    protected route: ActivatedRoute,
+    protected router: Router,
+    private dialog: MatDialog,
     private enrolmentService: EnrolmentService,
     private enrolmentResource: EnrolmentResource,
     private enrolmentStateService: EnrolmentStateService,
     private toastService: ToastService,
-    private dialog: MatDialog,
     private logger: LoggerService
   ) {
-    this.disabledAgreement = true;
+    super(route, router);
   }
 
   public onSubmit() {
@@ -75,23 +74,11 @@ export class ReviewComponent implements OnInit {
     }
   }
 
-  public onConfirmAccuracy(event: MatCheckboxChange) {
-    this.disabledAgreement = !event.checked;
-  }
-
-  public showYesNo(declared: boolean) {
-    return (declared === null)
-      ? 'N/A' : (declared)
-        ? 'Yes' : 'No';
-  }
-
-  public redirect(route: string) {
-    this.router.navigate([EnrolmentRoutes.ENROLMENT, route]);
-  }
-
   public ngOnInit() {
     const enrolment = this.enrolmentService.enrolment;
+
     this.enrolment = enrolment;
     this.enrolmentStateService.enrolment = enrolment;
+    this.hasInitialStatus = enrolment.initialStatus;
   }
 }

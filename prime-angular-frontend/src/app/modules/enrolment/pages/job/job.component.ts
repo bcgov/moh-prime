@@ -3,16 +3,16 @@ import { FormGroup, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
-import { Subscription, BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
-import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { Job } from '@enrolment/shared/models/job.model';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
+import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
@@ -22,19 +22,16 @@ import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-stat
   templateUrl: './job.component.html',
   styleUrls: ['./job.component.scss']
 })
-export class JobComponent implements OnInit, OnDestroy {
-  public busy: Subscription;
-  public form: FormGroup;
+export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, OnDestroy {
   public jobNames: Config<number>[];
   public filteredJobNames: BehaviorSubject<Config<number>[]>;
   public allowDefaultOption: boolean;
   public defaultOptionLabel: string;
-  public EnrolmentRoutes = EnrolmentRoutes;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private dialog: MatDialog,
+    protected route: ActivatedRoute,
+    protected router: Router,
+    protected dialog: MatDialog,
     private configService: ConfigService,
     private enrolmentService: EnrolmentService,
     private enrolmentResource: EnrolmentResource,
@@ -42,6 +39,8 @@ export class JobComponent implements OnInit, OnDestroy {
     private toastService: ToastService,
     private logger: LoggerService
   ) {
+    super(route, router, dialog);
+
     this.jobNames = this.configService.jobNames;
     this.filteredJobNames = new BehaviorSubject<Config<number>[]>(this.jobNames);
     this.allowDefaultOption = true;
@@ -67,7 +66,11 @@ export class JobComponent implements OnInit, OnDestroy {
           () => {
             this.toastService.openSuccessToast('Job information has been saved');
             this.form.markAsPristine();
-            this.router.navigate([EnrolmentRoutes.SELF_DECLARATION], { relativeTo: this.route.parent });
+
+            const routePath = (!this.isProfileComplete)
+              ? EnrolmentRoutes.SELF_DECLARATION
+              : EnrolmentRoutes.REVIEW;
+            this.routeTo(routePath);
           },
           (error: any) => {
             this.toastService.openErrorToast('Job information could not be saved');
@@ -92,13 +95,11 @@ export class JobComponent implements OnInit, OnDestroy {
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
-    const data = 'unsaved';
-    return (this.form.dirty)
-      ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
-        .pipe(
-          tap(() => this.removeIncompleteJobs())
-        )
-      : true;
+    const canDeactivate = super.canDeactivate();
+
+    return (canDeactivate instanceof Observable)
+      ? canDeactivate.pipe(tap(() => this.removeIncompleteJobs()))
+      : canDeactivate;
   }
 
   public ngOnInit() {
@@ -110,22 +111,30 @@ export class JobComponent implements OnInit, OnDestroy {
     this.removeIncompleteJobs();
   }
 
-  private createFormInstance() {
+  protected createFormInstance() {
     this.form = this.enrolmentStateService.jobsForm;
   }
 
-  private initForm() {
+  protected initForm() {
     // Initialize listeners before patching
     this.form.valueChanges
       .subscribe(({ jobs }: { jobs: Job[] }) => this.filterJobNames(jobs));
 
-    this.enrolmentStateService.enrolment = this.enrolmentService.enrolment;
+    this.patchForm();
 
     // Always have at least one job ready for
     // the enrollee to fill out
     if (!this.jobs.length) {
       this.addJob();
     }
+  }
+
+  protected patchForm() {
+    const enrolment = this.enrolmentService.enrolment;
+
+    this.isProfileComplete = enrolment.profileCompleted;
+    this.enrolmentStateService.enrolment = enrolment;
+    this.hasInitialStatus = enrolment.initialStatus;
   }
 
   private filterJobNames(jobs: Job[]) {

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-collection-notice',
@@ -8,9 +10,26 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
   styleUrls: ['./collection-notice.component.scss']
 })
 export class CollectionNoticeComponent implements OnInit {
-  constructor() { }
+  public profileCompleted: boolean;
+
+  constructor(
+    private enrolmentService: EnrolmentService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) { }
 
   public EnrolmentRoutes = EnrolmentRoutes;
 
-  public ngOnInit() { }
+  public ngOnInit() {
+    const enrolment = this.enrolmentService.enrolment;
+    this.profileCompleted = (enrolment) ? enrolment.profileCompleted : false;
+  }
+
+  public onAccept() {
+    const route = (!this.profileCompleted)
+      ? EnrolmentRoutes.PROFILE
+      : EnrolmentRoutes.REVIEW;
+
+    this.router.navigate([route], { relativeTo: this.route.parent });
+  }
 }

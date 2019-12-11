@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
+import { Enrolment } from '@shared/models/enrolment.model';
 
 
 @Component({
@@ -8,30 +9,42 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
   styleUrls: ['./page-footer.component.scss']
 })
 export class PageFooterComponent implements OnInit {
+  @Input() profileCompleted: boolean;
+  @Input() hasSecondaryAction: boolean;
+  @Input() disableSave: boolean;
+  @Output() save: EventEmitter<void>;
+  @Output() continue: EventEmitter<void>;
+  @Output() back: EventEmitter<void>;
 
-  @Input() backRoute: EnrolmentRoutes;
-  @Input() hideBack: boolean;
-  @Input() hasBackAction: boolean;
-
-  @Output() handleBack: EventEmitter<void>;
-
-  public justifyContent = 'between';
+  public saveButtonLabel: string;
+  public secondaryActionButtonLabel: string;
 
   constructor() {
-    this.handleBack = new EventEmitter<void>();
+    this.profileCompleted = true;
+    this.hasSecondaryAction = true;
+
+    this.save = new EventEmitter<void>();
+    this.continue = new EventEmitter<void>();
+    this.back = new EventEmitter<void>();
   }
 
-  public handleBackClick() {
-    this.handleBack.emit();
+  public onSave() {
+    this.save.emit();
   }
 
-  public getJustifyContent(justifyContent: string) {
-    return `justify-content${justifyContent}`;
+  public onSecondaryAction() {
+    (!this.profileCompleted)
+      ? this.back.emit()
+      : this.continue.emit();
   }
 
   public ngOnInit() {
-    if (this.hideBack === true) {
-      this.justifyContent = 'end';
+    if (!this.profileCompleted) {
+      this.saveButtonLabel = 'Save and Continue';
+      this.secondaryActionButtonLabel = 'Back';
+    } else {
+      this.saveButtonLabel = 'Save and Submit';
+      this.secondaryActionButtonLabel = 'Save and Continue Editing';
     }
   }
 }

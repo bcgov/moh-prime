@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+
 import { ToastService } from '@core/services/toast.service';
 
 @Component({
@@ -7,16 +8,18 @@ import { ToastService } from '@core/services/toast.service';
   styleUrls: ['./clipboard-icon.component.scss']
 })
 export class ClipboardIconComponent implements OnInit {
-  @Input() public message: string;
+  @Input() public iconOnly: boolean;
+  @Input() public content: string;
 
   constructor(
     private toastService: ToastService
-  ) { }
-
-  ngOnInit() {
+  ) {
+    this.iconOnly = true;
   }
 
-  public copyToast() {
+  public ngOnInit() { }
+
+  public onCopy() {
     this.toastService.openSuccessToast('Copied to Clipboard');
   }
 }

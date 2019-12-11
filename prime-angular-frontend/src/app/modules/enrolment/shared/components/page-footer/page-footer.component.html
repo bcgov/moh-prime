@@ -1,25 +1,23 @@
-<div class="row"
-     [ngClass]="getJustifyContent">
-  <div class="col pt-2">
+<div class="row justify-content-between mb-4">
+  <div *ngIf="hasSecondaryAction"
+       class="col pt-2">
 
-    <ng-container *ngIf="hideBack !== true">
-      <button *ngIf="backRoute"
-              mat-stroked-button
-              type="button"
-              [routerLink]="['..', backRoute]">Back</button>
-      <button *ngIf='hasBackAction'
-              mat-stroked-button
-              type="button"
-              (click)="handleBackClick()">Back</button>
-    </ng-container>
+    <button mat-stroked-button
+            type="button"
+            (click)="onSecondaryAction()">
+      {{ secondaryActionButtonLabel }}
+    </button>
 
   </div>
-  <div class="col
-              pt-2
-              text-right">
+  <div class="col pt-2 text-right">
 
     <button mat-raised-button
-            color="primary">Save and Continue</button>
+            type="button"
+            color="primary"
+            [disabled]="disableSave"
+            (click)="onSave()">
+      {{ saveButtonLabel }}
+    </button>
 
   </div>
 </div>

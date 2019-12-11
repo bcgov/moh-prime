@@ -16,31 +16,31 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { Organization } from '@enrolment/shared/models/organization.model';
+import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
 
 @Component({
   selector: 'app-organization',
   templateUrl: './organization.component.html',
   styleUrls: ['./organization.component.scss']
 })
-export class OrganizationComponent implements OnInit, OnDestroy {
-  public busy: Subscription;
-  public form: FormGroup;
+export class OrganizationComponent extends BaseEnrolmentProfilePage implements OnInit, OnDestroy {
   public organizationCtrl: FormControl;
   public organizationTypes: Config<number>[];
   public filteredOrganizationTypes: Config<number>[];
-  public EnrolmentRoutes = EnrolmentRoutes;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private dialog: MatDialog,
+    protected route: ActivatedRoute,
+    protected router: Router,
+    protected dialog: MatDialog,
     private configService: ConfigService,
-    private enrolmentStateService: EnrolmentStateService,
     private enrolmentResource: EnrolmentResource,
     private enrolmentService: EnrolmentService,
+    private enrolmentStateService: EnrolmentStateService,
     private toastService: ToastService,
     private logger: LoggerService
   ) {
+    super(route, router, dialog);
+
     this.organizationTypes = this.configService.organizationTypes;
   }
 
@@ -51,12 +51,14 @@ export class OrganizationComponent implements OnInit, OnDestroy {
   public onSubmit() {
     if (this.form.valid) {
       const payload = this.enrolmentStateService.enrolment;
-      this.busy = this.enrolmentResource.updateEnrollee(payload)
+      // Indicate that the enrolment process has reached the terminal view, or
+      // "Been Through The Wizard - Heidi G. 2019"
+      this.busy = this.enrolmentResource.updateEnrollee(payload, true)
         .subscribe(
           () => {
             this.form.markAsPristine();
             this.toastService.openSuccessToast('PharmaNet access has been saved');
-            this.router.navigate([EnrolmentRoutes.REVIEW], { relativeTo: this.route.parent });
+            this.routeTo(EnrolmentRoutes.REVIEW);
           },
           (error: any) => {
             this.toastService.openErrorToast('PharmaNet access could not be saved');
@@ -108,17 +110,16 @@ export class OrganizationComponent implements OnInit, OnDestroy {
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
-    const data = 'unsaved';
-    return (this.form.dirty)
-      ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
-        .pipe(
-          tap(() => this.removeIncompleteOrganizations())
-        )
-      : true;
+    const canDeactivate = super.canDeactivate();
+
+    return (canDeactivate instanceof Observable)
+      ? canDeactivate.pipe(tap(() => this.removeIncompleteOrganizations()))
+      : canDeactivate;
   }
 
   public ngOnInit() {
     this.createFormInstance();
+    this.patchForm();
     this.initForm();
   }
 
@@ -126,18 +127,24 @@ export class OrganizationComponent implements OnInit, OnDestroy {
     this.removeIncompleteOrganizations();
   }
 
-  private createFormInstance() {
+  protected createFormInstance() {
     this.form = this.enrolmentStateService.organizationForm;
   }
 
-  private initForm() {
-    this.enrolmentStateService.enrolment = this.enrolmentService.enrolment;
-
+  protected initForm() {
     // Always have at least one organization ready for
     // the enrollee to fill out
     if (!this.organizations.length) {
       this.addOrganization();
     }
+  }
+
+  protected patchForm() {
+    const enrolment = this.enrolmentService.enrolment;
+
+    this.isProfileComplete = enrolment.profileCompleted;
+    this.enrolmentStateService.enrolment = enrolment;
+    this.hasInitialStatus = enrolment.initialStatus;
   }
 
   private removeIncompleteOrganizations() {

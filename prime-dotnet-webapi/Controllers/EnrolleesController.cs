@@ -143,13 +143,14 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="enrollee"></param>
+        /// <param name="beenThroughTheWizard"></param>
         [HttpPut("{enrolleeId}", Name = nameof(UpdateEnrollee))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateEnrollee(int enrolleeId, Enrollee enrollee)
+        public async Task<IActionResult> UpdateEnrollee(int enrolleeId, Enrollee enrollee, [FromQuery]bool beenThroughTheWizard = false)
         {
             if (enrollee == null)
             {
@@ -174,20 +175,20 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
 
-            // if the enrollee is not in the status of 'In Progress', it cannot be updated
+            // If the enrollee is not in the status of 'In Progress', it cannot be updated
             if (!(await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.IN_PROGRESS_CODE)))
             {
                 this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee can not be updated when the current status is not 'In Progress'.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            // if the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
+            // If the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
             if (!BelongsToEnrollee(enrollee))
             {
                 return Forbid();
             }
 
-            await _enrolleeService.UpdateEnrolleeAsync(enrollee);
+            await _enrolleeService.UpdateEnrolleeAsync(enrollee, beenThroughTheWizard);
 
             return NoContent();
         }

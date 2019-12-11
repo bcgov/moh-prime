@@ -63,22 +63,35 @@ export class EnrolmentGuard extends BaseGuard {
     } else if (enrolment) {
       switch (enrolment.currentStatus.status.code) {
         case EnrolmentStatus.IN_PROGRESS:
-          const postEnrolmentRoutes = EnrolmentRoutes.postEnrolmentRoutes();
+          const postEnrolmentRoutes = EnrolmentRoutes.postEnrolmentSubmissionRoutes();
           const route = routePath.split('/').pop();
 
-          return (postEnrolmentRoutes.includes(route))
+          const redirectionRoute = (!enrolment.profileCompleted)
+            ? EnrolmentRoutes.PROFILE // Only for new enrolments with incomplete profiles
+            : EnrolmentRoutes.REVIEW;
+
+          if (!enrolment.profileCompleted && [...postEnrolmentRoutes, EnrolmentRoutes.REVIEW].includes(route)) {
+            this.navigate(routePath, redirectionRoute);
+          }
+
+          const hasNotCompletedProfile = !enrolment.profileCompleted && EnrolmentRoutes.REVIEW === route;
+          const hasNotSubmittedEnrolment = postEnrolmentRoutes.includes(route);
+
+          return (hasNotCompletedProfile || hasNotSubmittedEnrolment)
             // Prevent access to post enrolment routes
-            ? this.navigate(routePath, EnrolmentRoutes.PROFILE)
+            ? this.navigate(routePath, redirectionRoute)
             // Otherwise, allow the route to resolve
             : true;
         case EnrolmentStatus.SUBMITTED:
           return this.navigate(routePath, EnrolmentRoutes.CONFIRMATION);
         case EnrolmentStatus.ADJUDICATED_APPROVED:
           return this.navigate(routePath, EnrolmentRoutes.ACCESS_AGREEMENT);
-        // case EnrolmentStatus.DECLINED:
+        case EnrolmentStatus.DECLINED:
+          return this.navigate(routePath, EnrolmentRoutes.DECLINED);
         case EnrolmentStatus.ACCEPTED_TOS:
           return this.navigate(routePath, EnrolmentRoutes.SUMMARY);
-        // case EnrolmentStatus.DECLINED_TOS:
+        case EnrolmentStatus.DECLINED_TOS:
+          return this.navigate(routePath, EnrolmentRoutes.DECLINED_ACCESS_AGREEMENT);
       }
     }
 

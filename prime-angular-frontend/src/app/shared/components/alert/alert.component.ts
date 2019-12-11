@@ -1,12 +1,4 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  ContentChildren,
-  QueryList,
-  AfterContentInit,
-  TemplateRef
-} from '@angular/core';
+import { Component, Input, ContentChildren, QueryList, TemplateRef } from '@angular/core';
 
 @Component({
   selector: 'app-alert',
@@ -14,7 +6,7 @@ import {
   styleUrls: ['./alert.component.scss']
 })
 export class AlertComponent {
-  @Input() type: string;
+  @Input() type: 'info' | 'warn' | 'danger';
   @Input() icon: string;
 
   @ContentChildren('alertTitle', { descendants: true })
@@ -24,7 +16,7 @@ export class AlertComponent {
 
   constructor() {
     this.type = 'info';
-    this.icon = 'info';
+    this.icon = null;
   }
 
   public hasTitle(): boolean {

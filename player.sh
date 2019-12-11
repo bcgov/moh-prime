@@ -21,11 +21,11 @@ case "$1" in
     zap)
         zap $2 $3
         ;;
-    cleanup)
-        cleanup $2
-        ;;
     occleanup)
         occleanup
+        ;;
+    nukenpave)
+        nukenpave $2 $3
         ;;
     *)
     echo "You\'re doing it wrong..."
