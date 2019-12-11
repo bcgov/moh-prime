@@ -4,7 +4,7 @@ using Prime.Models;
 
 namespace Prime.Services
 {
-    public interface IHibcApiService
+    public interface IPharmanetApiService
     {
         Task<PharmanetCollegeRecord> GetCollegeRecord(Certification certification);
     }

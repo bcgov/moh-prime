@@ -96,26 +96,26 @@ objects:
                   value: 'prime-web-api'
                 - name: JWT_WELL_KNOWN_CONFIG
                   value: 'https://sso-${OC_APP}.pathfinder.gov.bc.ca/auth/realms/v4mbqqas/.well-known/openid-configuration'
-                - name: HIBC_API_URL
+                - name: PHARMANET_API_URL
                   valueFrom:
                     secretKeyRef:
                       key: API_URL
-                      name: 'hibc-api'
-                - name: HIBC_API_USERNAME
+                      name: 'pharmanet-api'
+                - name: PHARMANET_API_USERNAME
                   valueFrom:
                     secretKeyRef:
                       key: API_USERNAME
-                      name: 'hibc-api'
-                - name: HIBC_API_PASSWORD
+                      name: 'pharmanet-api'
+                - name: PHARMANET_API_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       key: API_PASSWORD
-                      name: 'hibc-api'
-                - name: HIBC_SSL_CERT_PASSWORD
+                      name: 'pharmanet-api'
+                - name: PHARMANET_SSL_CERT_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       key: SSL_CERT_PASSWORD
-                      name: 'hibc-api'
+                      name: 'pharmanet-api'
               image: ' '
               name: primeapi
               ports:

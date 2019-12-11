@@ -41,12 +41,12 @@ namespace Prime
         public readonly static string MAIL_SERVER_URL = System.Environment.GetEnvironmentVariable("MAIL_SERVER_URL") ?? "localhost";
         public readonly static int MAIL_SERVER_PORT = int.Parse(System.Environment.GetEnvironmentVariable("MAIL_SERVER_PORT") ?? "1025");
 
-        // HIBC API
-        public readonly static string HIBC_API_URL = System.Environment.GetEnvironmentVariable("HIBC_API_URL") ?? "";
-        public readonly static string HIBC_API_USERNAME = System.Environment.GetEnvironmentVariable("HIBC_API_USERNAME") ?? "";
-        public readonly static string HIBC_API_PASSWORD = System.Environment.GetEnvironmentVariable("HIBC_API_PASSWORD") ?? "";
+        // Pharmanet college validation API
+        public readonly static string PHARMANET_API_URL = System.Environment.GetEnvironmentVariable("PHARMANET_API_URL") ?? "";
+        public readonly static string PHARMANET_API_USERNAME = System.Environment.GetEnvironmentVariable("PHARMANET_API_USERNAME") ?? "";
+        public readonly static string PHARMANET_API_PASSWORD = System.Environment.GetEnvironmentVariable("PHARMANET_API_PASSWORD") ?? "";
         // TODO environmentalize
-        public readonly static string HIBC_SSL_CERT_FILENAME = @"/opt/app-root/etc/certs/hibc-api-cert.pfx";
-        public readonly static string HIBC_SSL_CERT_PASSWORD = System.Environment.GetEnvironmentVariable("HIBC_SSL_CERT_PASSWORD") ?? "";
+        public readonly static string PHARMANET_SSL_CERT_FILENAME = @"/opt/app-root/etc/certs/pharmanet-api-cert.pfx";
+        public readonly static string PHARMANET_SSL_CERT_PASSWORD = System.Environment.GetEnvironmentVariable("PHARMANET_SSL_CERT_PASSWORD") ?? "";
     }
 }

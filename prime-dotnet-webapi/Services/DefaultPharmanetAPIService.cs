@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using System.Text;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -9,17 +8,16 @@ using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 
 using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
 
 using Prime.Models;
 
 namespace Prime.Services
 {
-    public class DefaultHibcApiService : BaseService, IHibcApiService
+    public class DefaultPharmanetApiService : BaseService, IPharmanetApiService
     {
         private static HttpClient Client = InitHttpClient();
 
-        public DefaultHibcApiService(
+        public DefaultPharmanetApiService(
             ApiDbContext context, IHttpContextAccessor httpContext)
             : base(context, httpContext)
         { }
@@ -31,7 +29,7 @@ namespace Prime.Services
                 return null;
             }
 
-            X509Certificate2 certificate = new X509Certificate2(PrimeConstants.HIBC_SSL_CERT_FILENAME, PrimeConstants.HIBC_SSL_CERT_PASSWORD);
+            X509Certificate2 certificate = new X509Certificate2(PrimeConstants.PHARMANET_SSL_CERT_FILENAME, PrimeConstants.PHARMANET_SSL_CERT_PASSWORD);
             var client = new HttpClient(
                 new HttpClientHandler
                 {
@@ -40,7 +38,7 @@ namespace Prime.Services
                 }
             );
 
-            var authBytes = ASCIIEncoding.ASCII.GetBytes($"{PrimeConstants.HIBC_API_USERNAME}:{PrimeConstants.HIBC_API_PASSWORD}");
+            var authBytes = ASCIIEncoding.ASCII.GetBytes($"{PrimeConstants.PHARMANET_API_USERNAME}:{PrimeConstants.PHARMANET_API_PASSWORD}");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(authBytes));
 
             return client;
@@ -68,7 +66,7 @@ namespace Prime.Services
             HttpResponseMessage response;
             try
             {
-                response = await Client.PostAsJsonAsync(PrimeConstants.HIBC_API_URL, requestParams);
+                response = await Client.PostAsJsonAsync(PrimeConstants.PHARMANET_API_URL, requestParams);
 
                 if (!response.IsSuccessStatusCode)
                 {
