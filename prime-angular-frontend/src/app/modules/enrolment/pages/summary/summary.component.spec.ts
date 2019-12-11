@@ -3,6 +3,8 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
+
 import { ClipboardModule } from 'ngx-clipboard';
 
 import { SummaryComponent } from './summary.component';
@@ -23,6 +25,7 @@ import { ProgressIndicatorComponent } from '@shared/components/progress-indicato
 import { EnrolleeAddressComponent } from '@shared/components/enrollee-address/enrollee-address.component';
 import { EnrolleeProfileComponent } from '@shared/components/enrollee-profile/enrollee-profile.component';
 import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 describe('SummaryComponent', () => {
   let component: SummaryComponent;
@@ -60,6 +63,10 @@ describe('SummaryComponent', () => {
           {
             provide: APP_CONFIG,
             useValue: APP_DI_CONFIG
+          },
+          {
+            provide: EnrolmentService,
+            useClass: MockEnrolmentService
           }
         ]
       }
