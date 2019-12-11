@@ -2,11 +2,11 @@
 
   <app-page-header>Global Adjudicator Notes</app-page-header>
 
-  <p>Ensure you verify your notes before saving since notes can not be edited or deleted after they have been saved</p>
+  <p>Ensure you verify your notes before saving since notes can not be edited or deleted after they have been saved.</p>
 
   <table mat-table
          [dataSource]="dataSource"
-         class="w-100">
+         class="w-100 mb-5">
 
     <!-- Applied Date Column -->
     <ng-container matColumnDef="appliedDate">
@@ -64,11 +64,6 @@
         *matRowDef="let row; columns: columns;"></tr>
   </table>
 
-  <p *ngIf="!dataSource?.data.length"
-     class="px-4 py-2 text-muted">
-    No {{ filteredStatus?.name }} Enrolments
-  </p>
-
   <ng-template #menu
                let-enrolment="enrolment">
     <button mat-icon-button
@@ -101,17 +96,17 @@
         <span>Decline Enrolment</span>
       </button>
       <button mat-menu-item
-              [routerLink]="[enrolment.id, 'adjudicator-notes']">
+              [routerLink]="['../', 'adjudicator-notes']">
         <mat-icon>message</mat-icon>
         <span>Global Adjudicator Notes</span>
       </button>
       <button mat-menu-item
-              [routerLink]="[enrolment.id, 'user-agreement-notes']">
+              [routerLink]="['../', 'user-agreement-notes']">
         <mat-icon>description</mat-icon>
         <span>User Agreement Notes</span>
       </button>
       <button mat-menu-item
-              [routerLink]="[enrolment.id, 'enrolment-certificate-notes']">
+              [routerLink]="['../', 'enrolment-certificate-notes']">
         <mat-icon>assignment_turned_in</mat-icon>
         <span>Enrolment Certificate Notes</span>
       </button>
@@ -128,5 +123,35 @@
       </button>
     </mat-menu>
   </ng-template>
+
+  <form (ngSubmit)="onSubmit()"
+        [formGroup]="form"
+        novalidate>
+
+    <div class="row">
+      <div class="col-sm-12 col-lg-8">
+
+        <mat-form-field class="w-100">
+          <textarea matInput
+                    placeholder="Write Note Here"
+                    rows="10"
+                    formControlName="note"></textarea>
+          <mat-error>Required</mat-error>
+        </mat-form-field>
+
+      </div>
+      <div class="col-sm-12 col-lg-8 text-right">
+
+        <button mat-raised-button
+                color="primary">Save</button>
+
+      </div>
+    </div>
+
+  </form>
+
+  <ng-container *ngFor="let adjudicatorNote of adjudicatorNotes | async">
+    {{ adjudicatorNote.note }}
+  </ng-container>
 
 </app-busy-overlay>
