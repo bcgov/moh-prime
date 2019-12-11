@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-
 using Prime.Models;
 using Prime.Services;
 
@@ -218,7 +217,6 @@ namespace Prime.Controllers
             }
 
             await _enrolleeService.DeleteEnrolleeAsync(enrolleeId);
-
 
             return Ok(new ApiOkResponse<Enrollee>(enrollee));
         }
