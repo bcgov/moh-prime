@@ -19,12 +19,10 @@ namespace Prime.Controllers
     public class EnrolleesController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
-        private readonly IPharmanetApiService _parm;
 
-        public EnrolleesController(IEnrolleeService enrolleeService, IPharmanetApiService parm)
+        public EnrolleesController(IEnrolleeService enrolleeService)
         {
             _enrolleeService = enrolleeService;
-            _parm = parm;
         }
 
         private bool BelongsToEnrollee(Enrollee enrollee)
@@ -151,7 +149,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult<PharmanetCollegeRecord>> UpdateEnrollee(int enrolleeId, Enrollee enrollee, [FromQuery]bool beenThroughTheWizard = false)
+        public async Task<IActionResult> UpdateEnrollee(int enrolleeId, Enrollee enrollee, [FromQuery]bool beenThroughTheWizard = false)
         {
             if (enrollee == null)
             {
@@ -191,11 +189,7 @@ namespace Prime.Controllers
 
             await _enrolleeService.UpdateEnrolleeAsync(enrollee, beenThroughTheWizard);
 
-            var ttt = await _parm.GetCollegeRecord(enrollee.Certifications.First());
-
-            return Ok(new ApiOkResponse<PharmanetCollegeRecord>(ttt));
-
-            // return NoContent();
+            return NoContent();
         }
 
         // DELETE: api/Enrollees/5
@@ -208,28 +202,23 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiOkResponse<Enrollee>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<PharmanetCollegeRecord>> DeleteEnrollee(int enrolleeId, Certification cert)
+        public async Task<ActionResult<Enrollee>> DeleteEnrollee(int enrolleeId)
         {
-            var ttt = await _parm.GetCollegeRecord(cert);
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+            if (enrollee == null)
+            {
+                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
+            }
 
-            return Ok(new ApiOkResponse<PharmanetCollegeRecord>(ttt));
+            // if the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
+            if (!BelongsToEnrollee(enrollee))
+            {
+                return Forbid();
+            }
 
+            await _enrolleeService.DeleteEnrolleeAsync(enrolleeId);
 
-            // var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-            // if (enrollee == null)
-            // {
-            //     return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
-            // }
-
-            // // if the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
-            // if (!BelongsToEnrollee(enrollee))
-            // {
-            //     return Forbid();
-            // }
-
-            // await _enrolleeService.DeleteEnrolleeAsync(enrolleeId);
-
-            // return Ok();
+            return Ok(new ApiOkResponse<Enrollee>(enrollee));
         }
 
         // GET: api/Enrollees/5/availableStatuses
