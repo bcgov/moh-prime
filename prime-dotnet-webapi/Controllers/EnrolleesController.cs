@@ -364,6 +364,8 @@ namespace Prime.Controllers
         /// <summary>
         /// Creates a new adjudicator note on an enrollee.
         /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="adjudicatorNote"></param>
         [HttpPost("{enrolleeId}/adjudicator-notes", Name = nameof(CreateAdjudicatorNote))]
         [Authorize(Policy = PrimeConstants.PRIME_ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
@@ -372,19 +374,16 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiCreatedResponse<AdjudicatorNote>), StatusCodes.Status201Created)]
         public async Task<ActionResult<AdjudicatorNote>> CreateAdjudicatorNote(int enrolleeId, AdjudicatorNote adjudicatorNote)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-
-            if (enrollee == null)
+            if (!_enrolleeService.EnrolleeExists(enrolleeId))
             {
-                this.ModelState.AddModelError("Enrollee", "Could not create an adjudicator note, the passed in Enrollee cannot be null.");
-                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
 
-            var createdAdjudicatorNote = await _enrolleeService.CreateAdjudicatorNoteAsync(enrollee, adjudicatorNote);
+            var createdAdjudicatorNote = await _enrolleeService.CreateAdjudicatorNoteAsync(enrolleeId, adjudicatorNote);
 
             return CreatedAtAction(
                 nameof(GetAdjudicatorNotes),
-                new { enrolleeId = enrollee.Id },
+                new { enrolleeId = enrolleeId },
                 new ApiCreatedResponse<AdjudicatorNote>(createdAdjudicatorNote)
             );
         }

@@ -34,6 +34,6 @@ namespace Prime.Services
 
         Task<ICollection<AdjudicatorNote>> GetEnrolleeAdjudicatorNotesAsync(Enrollee enrollee);
 
-        Task<AdjudicatorNote> CreateAdjudicatorNoteAsync(Enrollee enrollee, AdjudicatorNote adjudicatorNote);
+        Task<AdjudicatorNote> CreateAdjudicatorNoteAsync(int enrolleeId, AdjudicatorNote adjudicatorNote);
     }
 }

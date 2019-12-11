@@ -489,11 +489,11 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task<AdjudicatorNote> CreateAdjudicatorNoteAsync(Enrollee enrollee, AdjudicatorNote adjudicatorNote)
+        public async Task<AdjudicatorNote> CreateAdjudicatorNoteAsync(int enrolleeId, AdjudicatorNote adjudicatorNote)
         {
             AdjudicatorNote newAdjudicatorNote = new AdjudicatorNote
             {
-                Enrollee = enrollee,
+                EnrolleeId = enrolleeId,
                 Note = adjudicatorNote.Note,
                 NoteDate = DateTime.Now
             };
