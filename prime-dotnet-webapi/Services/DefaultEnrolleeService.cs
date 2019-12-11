@@ -469,7 +469,7 @@ namespace Prime.Services
                 Enrollee = enrollee,
                 Note = adjudicatorNote.Note,
                 NoteDate = DateTime.Now
-            }
+            };
 
             _context.AdjudicatorNotes.Add(adjudicatorNote);
 
@@ -477,7 +477,7 @@ namespace Prime.Services
             if (created < 1)
             {
                 throw new InvalidOperationException("Could not create adjudicator note.");
-            }
+            };
 
             return adjudicatorNote;
         }
