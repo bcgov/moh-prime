@@ -17,10 +17,8 @@ namespace Prime.Models
         [JsonIgnore]
         public Enrollee Enrollee { get; set; }
 
-        [Required]
         public string Note { get; set; }
 
-        [Required]
         public DateTime NoteDate { get; set; }
     }
 }
