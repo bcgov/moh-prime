@@ -17,7 +17,7 @@ import {
 } from '@shared/components/dialogs/content/enrolment-status-reasons/enrolment-status-reasons.component';
 
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
-import { AdjudicatorNote } from '@adjudication/shared/models/adjudicator-note.model';
+import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
@@ -30,7 +30,7 @@ export class AdjudicatorNotesComponent implements OnInit {
   public form: FormGroup;
   public columns: string[];
   public dataSource: MatTableDataSource<Enrolment>;
-  public adjudicatorNotes: BehaviorSubject<AdjudicatorNote[]>;
+  public adjudicatorNotes: BehaviorSubject<AdjudicationNote[]>;
 
   constructor(
     private route: ActivatedRoute,
@@ -42,7 +42,7 @@ export class AdjudicatorNotesComponent implements OnInit {
     private logger: LoggerService
   ) {
     this.columns = ['appliedDate', 'name', 'status', 'approvedDate', 'actions'];
-    this.adjudicatorNotes = new BehaviorSubject<AdjudicatorNote[]>([]);
+    this.adjudicatorNotes = new BehaviorSubject<AdjudicationNote[]>([]);
   }
 
   public get note(): FormControl {
@@ -62,7 +62,7 @@ export class AdjudicatorNotesComponent implements OnInit {
       this.busy = this.adjudicationResource
         .addAdjudicatorNote(this.route.snapshot.params.id, this.note.value)
         .subscribe(
-          (adjudicatorNote: AdjudicatorNote) => {
+          (adjudicatorNote: AdjudicationNote) => {
             this.toastService.openSuccessToast(`Adjudication note has been saved.`);
             const notes = [adjudicatorNote, ...this.adjudicatorNotes.value];
             this.adjudicatorNotes.next(notes);
@@ -226,7 +226,7 @@ export class AdjudicatorNotesComponent implements OnInit {
       this.adjudicationResource.enrollee(enrolleeId, statusCode),
       this.adjudicationResource.adjudicatorNotes(enrolleeId)
     ).subscribe(
-      ([enrolment, adjudicatorNotes]: [Enrolment, AdjudicatorNote[]]) => {
+      ([enrolment, adjudicatorNotes]: [Enrolment, AdjudicationNote[]]) => {
         this.logger.info('ENROLMENT', enrolment);
         this.logger.info('ADJUDICATOR_NOTES', adjudicatorNotes);
         this.dataSource = new MatTableDataSource<Enrolment>([enrolment]);
