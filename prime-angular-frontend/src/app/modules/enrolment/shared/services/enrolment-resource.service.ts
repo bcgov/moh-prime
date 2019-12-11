@@ -58,7 +58,10 @@ export class EnrolmentResource {
     if (beenThroughTheWizard) {
       params = params.set('beenThroughTheWizard', `${beenThroughTheWizard}`);
     }
-    return this.http.put(`${this.config.apiEndpoint}/enrollees/${id}`, this.enrolmentAdapterRequest(enrolment), { params });
+    return this.http.put(`${this.config.apiEndpoint}/enrollees/${id}`, this.enrolmentAdapterRequest(enrolment), { params })
+      .pipe(
+        tap((response: any) => this.logger.info('PHARMANET_API_RESPONSE', response.result))
+      );
   }
 
   public updateEnrolmentStatus(id: number, statusCode: number): Observable<Config<number>[]> {
