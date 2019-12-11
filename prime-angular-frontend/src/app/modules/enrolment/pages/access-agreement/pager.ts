@@ -21,6 +21,15 @@ export abstract class Pager implements OnChanges, AfterViewInit {
     this.changed = new EventEmitter<{ atEnd: boolean }>();
   }
 
+
+
+
+
+
+
+
+
+
   public get isLastPage(): boolean {
     return (this.currentPage - 1 >= this.pages.length - 1);
   }
