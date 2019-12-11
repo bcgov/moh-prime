@@ -40,7 +40,7 @@ namespace Prime
             services.AddScoped<IAutomaticAdjudicationService, DefaultAutomaticAdjudicationService>();
             services.AddScoped<IEnrolmentCertificateService, DefaultEnrolmentCertificateService>();
             services.AddScoped<IEmailService, DefaultEmailService>();
-            services.AddScoped<IHibcApiService, DefaultHibcApiService>();
+            services.AddScoped<IPharmanetApiService, DefaultPharmanetApiService>();
 
             services
                 .AddMvc()
