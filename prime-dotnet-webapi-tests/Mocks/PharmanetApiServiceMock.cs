@@ -13,7 +13,7 @@ namespace PrimeTests.Mocks
 
         public override void SeedData()
         {
-            // no data to seed, as it is done in the base class
+            throw new NotImplementedException();
         }
 
         public Task<PharmanetCollegeRecord> GetCollegeRecord(Certification certification)
