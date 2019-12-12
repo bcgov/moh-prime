@@ -105,7 +105,7 @@ namespace Prime.Services
             // If we get a record back, it should have the same transaction UUID as our request.
             if (practicionerRecord != null && practicionerRecord.applicationUUID != requestParams.applicationUUID)
             {
-                throw new PharmanetCollegeApiException($"Expected matching applicationUUIDs between request data and response data. Request was\"{requestParams.applicationUUID}\", response was \"{practicionerRecord.applicationUUID}\".");
+                throw new PharmanetCollegeApiException($"Expected matching applicationUUIDs between request data and response data. Request was \"{requestParams.applicationUUID}\", response was \"{practicionerRecord.applicationUUID}\".");
             }
 
             return practicionerRecord;
