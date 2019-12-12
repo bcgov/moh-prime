@@ -205,14 +205,11 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiOkResponse<Enrollee>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<PharmanetCollegeRecord>> DeleteEnrollee(string enrolleeId)
         // public async Task<ActionResult<Enrollee>> DeleteEnrollee(int enrolleeId)
+        public async Task<ActionResult<PharmanetCollegeRecord>> DeleteEnrollee(string enrolleeId)
         {
-            var cert = new Certification{
-                LicenseNumber = "12345",
-                CollegeCode = 1
-            };
-            var ttt = await _parm.GetCollegeRecord(cert, enrolleeId);
+
+            var ttt = await _parm.GetCollegeRecord(null, enrolleeId);
 
             return Ok(new ApiOkResponse<PharmanetCollegeRecord>(ttt));
 

@@ -47,16 +47,16 @@ namespace Prime.Services
 
         public async Task<PharmanetCollegeRecord> GetCollegeRecord(Certification certification, string uuid)
         {
-            if (string.IsNullOrWhiteSpace(certification.LicenseNumber))
-            {
-                return null;
-            }
+            // if (string.IsNullOrWhiteSpace(certification.LicenseNumber))
+            // {
+            //     return null;
+            // }
 
-            if (PrimeConstants.ENVIRONMENT_NAME == "local")
-            {
-                // TODO handle local dev
-                return null;
-            }
+            // if (PrimeConstants.ENVIRONMENT_NAME == "local")
+            // {
+            //     // TODO handle local dev
+            //     return null;
+            // }
 
             //Certification college = await _context.Certifications.SingleOrDefaultAsync(c => c.CollegeCode == certification.CollegeCode);
             return await CallPharmanetCollegeLicenceService("2036P", "91", uuid);
