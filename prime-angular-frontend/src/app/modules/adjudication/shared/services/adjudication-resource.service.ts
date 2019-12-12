@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -81,9 +81,10 @@ export class AdjudicationResource {
   }
 
   public updateEnrolleeNote(enrolleeId: number, note: string, noteType: NoteType): Observable<AdjudicationNote> {
-    const payload = { enrolleeId, note };
     const params = new HttpParams({ fromObject: { noteType: `${noteType}` } });
-    return this.http.put(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/enrollee-notes`, payload, { params })
+    // Required in order to send a native data type and have it picked up by [FromBody] on the server
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.put(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/enrollee-notes`, note, { params, headers })
       .pipe(
         map((response: PrimeHttpResponse) => response.result as AdjudicationNote),
         tap((adjudicatorNote: AdjudicationNote) => this.logger.info('ADJUDICATOR_NOTE', adjudicatorNote))
