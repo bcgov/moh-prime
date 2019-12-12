@@ -19,10 +19,14 @@ namespace Prime.Services
     {
         private static HttpClient Client = InitHttpClient();
 
+        private ILookupService _lookupService;
+
         public DefaultPharmanetApiService(
-            ApiDbContext context, IHttpContextAccessor httpContext)
+            ApiDbContext context, IHttpContextAccessor httpContext, ILookupService lookupService)
             : base(context, httpContext)
-        { }
+        {
+            _lookupService = lookupService;
+        }
 
         private static HttpClient InitHttpClient()
         {
@@ -48,19 +52,29 @@ namespace Prime.Services
 
         public async Task<PharmanetCollegeRecord> GetCollegeRecord(Certification certification)
         {
-            // if (string.IsNullOrWhiteSpace(certification.LicenseNumber))
-            // {
-            //     return null;
-            // }
+            if (string.IsNullOrWhiteSpace(certification.LicenseNumber) || certification.CollegeCode == 0)
+            {
+                return null;
+            }
 
-            // if (PrimeConstants.ENVIRONMENT_NAME == "local")
-            // {
-            //     // TODO handle local dev
-            //     return null;
-            // }
+            if (PrimeConstants.ENVIRONMENT_NAME == "local")
+            {
+                // TODO handle local dev
+                return null;
+            }
 
-            //Certification college = await _context.Certifications.SingleOrDefaultAsync(c => c.CollegeCode == certification.CollegeCode);
-            return await CallPharmanetCollegeLicenceService("20111", "91");
+            College college;
+            if (certification.College != null)
+            {
+                college = certification.College;
+            }
+            else
+            {
+                var colleges = await _lookupService.GetLookupsAsync<short, College>();
+                college = colleges.Single(c => c.Code == certification.CollegeCode);
+            }
+
+            return await CallPharmanetCollegeLicenceService(certification.LicenseNumber, college.Prefix);
         }
 
         private async Task<PharmanetCollegeRecord> CallPharmanetCollegeLicenceService(string licenceNumber, string collegeReferenceId)
