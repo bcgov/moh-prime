@@ -2,6 +2,13 @@ using System;
 
 namespace Prime.Models
 {
+    public enum NoteType
+    {
+        AdjudicatorNote,
+        AccessAgreementNote,
+        EnrolmentCertificateNote
+    };
+
     public interface INote
     {
         int? Id { get; set; }
