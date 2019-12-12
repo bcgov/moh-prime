@@ -56,8 +56,8 @@ objects:
               value: 'prime-application-${OC_APP}'
             - name: JWT_AUDIENCE
               value: 'prime-web-api'
-            - name: JWT_WELL_KNOWN_CONFIG
-              value: 'https://sso-${OC_APP}.pathfinder.gov.bc.ca/auth/realms/v4mbqqas/.well-known/openid-configuration'
+            - name: JWT_WELL_KNOWN_CONFIG 
+              value: 'https://sso-${OC_APP}.pathfinder.gov.bc.ca/auth/realms/v4mbqqas/.well-known/openid-configuration' 
       tags:
         - annotations: null
           from:
@@ -103,7 +103,7 @@ objects:
           uri: '${SOURCE_REPOSITORY_URL}'
         type: Git
       strategy:
-        dockerStrategy:
+        dockerStrategy: 
           dockerfilePath: openshift.dockerfile
         type: Docker
       triggers:
