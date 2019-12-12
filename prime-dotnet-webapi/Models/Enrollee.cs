@@ -104,18 +104,18 @@ namespace Prime.Models
         public DateTime? AppliedDate
         {
             get => this.EnrolmentStatuses?
-                .OrderByDescending(en => en.StatusDate)
-                .FirstOrDefault(es => es.StatusCode == Status.SUBMITTED_CODE)?
-                .StatusDate;
+                .Where(es => es.StatusCode == Status.SUBMITTED_CODE)
+                .Select(es => es.StatusDate)
+                .Max();
         }
 
         [NotMapped]
         public DateTime? ApprovedDate
         {
             get => this.EnrolmentStatuses?
-                .OrderByDescending(en => en.StatusDate)
-                .FirstOrDefault(es => es.StatusCode == Status.APPROVED_CODE)?
-                .StatusDate;
+                .Where(es => es.StatusCode == Status.APPROVED_CODE)
+                .Select(es => es.StatusDate)
+                .Max();
         }
 
         public ICollection<AdjudicatorNote> AdjudicatorNotes { get; set; }

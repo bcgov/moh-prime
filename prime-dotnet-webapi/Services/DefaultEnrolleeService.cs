@@ -119,6 +119,7 @@ namespace Prime.Services
 
             if (searchOptions?.StatusCode != null)
             {
+                // TODO refactor see Jira PRIME-251
                 query.Load();
                 query = _context.Enrollees.Where(e => e.CurrentStatus.StatusCode == (short)searchOptions.StatusCode);
             }
