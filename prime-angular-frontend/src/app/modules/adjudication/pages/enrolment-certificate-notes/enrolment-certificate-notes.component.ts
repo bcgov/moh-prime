@@ -18,6 +18,7 @@ import {
 
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { NoteType } from '@adjudication/shared/enums/note-type.enum';
 
 @Component({
   selector: 'app-enrolment-certificate-notes',
@@ -55,13 +56,10 @@ export class EnrolmentCertificateNotesComponent implements OnInit {
     return (currentStatusCode !== EnrolmentStatus.ADJUDICATED_APPROVED);
   }
 
-  // TODO can overwrite other peoples edits, should these be single endpoints?
   public onSubmit() {
     if (this.form.valid) {
-      const enrolment = this.enrollee;
-      enrolment.enrolmentCertificateNote = { enrolleeId: enrolment.id, note: this.note.value };
       this.busy = this.adjudicationResource
-        .updateEnrollee(enrolment)
+        .updateEnrolleeNote(this.enrollee.id, this.note.value, NoteType.EnrolmentCertificateNote)
         .subscribe(
           () => {
             this.toastService.openSuccessToast(`Enrolment certificate note has been saved.`);

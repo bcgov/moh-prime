@@ -83,7 +83,7 @@ export class AdjudicationResource {
   public updateEnrolleeNote(enrolleeId: number, note: string, noteType: NoteType): Observable<AdjudicationNote> {
     const payload = { enrolleeId, note };
     const params = new HttpParams({ fromObject: { noteType: `${noteType}` } });
-    return this.http.post(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/enrollee-notes`, payload, { params })
+    return this.http.put(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/enrollee-notes`, payload, { params })
       .pipe(
         map((response: PrimeHttpResponse) => response.result as AdjudicationNote),
         tap((adjudicatorNote: AdjudicationNote) => this.logger.info('ADJUDICATOR_NOTE', adjudicatorNote))
