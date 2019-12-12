@@ -161,7 +161,13 @@ namespace Prime.Services
         private async Task<int?> CreateEnrolleeInternalAsync(Enrollee enrollee)
         {
             // Create a status history record
-            EnrolmentStatus enrolmentStatus = new EnrolmentStatus { Enrollee = enrollee, StatusCode = Status.IN_PROGRESS_CODE, StatusDate = DateTime.Now, PharmaNetStatus = false };
+            EnrolmentStatus enrolmentStatus = new EnrolmentStatus
+            {
+                Enrollee = enrollee,
+                StatusCode = Status.IN_PROGRESS_CODE,
+                StatusDate = DateTime.Now,
+                PharmaNetStatus = false
+            };
 
             if (enrollee.EnrolmentStatuses == null)
             {
@@ -547,8 +553,6 @@ namespace Prime.Services
                     _context.EnrolmentCertificateNotes.Add(newNote);
                 }
             }
-
-            System.Console.WriteLine($"DATE: {DateTime.Now}");
 
             var updated = await _context.SaveChangesAsync();
             if (updated < 1)
