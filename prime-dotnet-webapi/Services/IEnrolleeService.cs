@@ -36,5 +36,6 @@ namespace Prime.Services
 
         Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, AdjudicatorNote adjudicatorNote);
 
+        Task<int> UpdateEnrolleeNoteAsync(int enrolleeId, INote note, NoteType noteType);
     }
 }

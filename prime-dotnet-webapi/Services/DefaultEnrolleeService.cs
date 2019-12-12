@@ -484,5 +484,52 @@ namespace Prime.Services
 
             return adjudicatorNote;
         }
+
+        public async Task<int> UpdateEnrolleeNoteAsync(int enrolleeId, INote newNote, NoteType noteType)
+        {
+            var enrollee = await _context.Enrollees
+                .Include(e => e.AccessAgreementNote)
+                .Include(e => e.EnrolmentCertificateNote)
+                .AsNoTracking()
+                .Where(e => e.Id == enrolleeId)
+                .SingleOrDefaultAsync();
+
+            INote dbNote = null;
+
+            if (noteType == NoteType.AccessAgreementNote)
+            {
+                dbNote = enrollee.AccessAgreementNote;
+            }
+            else if (noteType == NoteType.EnrolmentCertificateNote)
+            {
+                dbNote = enrollee.EnrolmentCertificateNote;
+            }
+
+            if (dbNote != null)
+            {
+                if (newNote.Note == null)
+                {
+                    _context.Entry(dbNote).State = EntityState.Deleted;
+                }
+                else
+                {
+                    dbNote.Note = newNote.Note;
+                    _context.Entry(dbNote).State = EntityState.Modified;
+                }
+            }
+            else if (newNote != null)
+            {
+                newNote.EnrolleeId = (int)dbNote.Id;
+                _context.Entry(newNote).State = EntityState.Added;
+            }
+
+            var updated = await _context.SaveChangesAsync();
+            if (updated < 1)
+            {
+                throw new InvalidOperationException($"Could not create {newNote.GetType()}.");
+            }
+
+            return enrolleeId;
+        }
     }
 }

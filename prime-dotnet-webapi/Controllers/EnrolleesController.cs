@@ -402,5 +402,42 @@ namespace Prime.Controllers
                 new ApiCreatedResponse<AdjudicatorNote>(createdAdjudicatorNote)
             );
         }
+
+        // PUT: api/Enrollees/5
+        /// <summary>
+        /// Updates a specific note on an Enrollee.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="note"></param>
+        /// <param name="noteType"></param>
+        [HttpPut("{enrolleeId}/enrollee-notes", Name = nameof(UpdateEnrolleeNote))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> UpdateEnrolleeNote(int enrolleeId, INote note, [FromQuery]NoteType noteType)
+        {
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+
+            if (enrollee == null)
+            {
+                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}."));
+            }
+
+            if (enrollee.Id != note.EnrolleeId)
+            {
+                return Forbid();
+            }
+
+            if (!Enum.IsDefined(typeof(NoteType), noteType) && !noteType.Equals(NoteType.AdjudicatorNote))
+            {
+                return BadRequest(new ApiResponse(400, $"Note can not be updated."));
+            }
+
+            await _enrolleeService.UpdateEnrolleeNoteAsync(enrolleeId, note, noteType);
+
+            return Ok(new ApiOkResponse<INote>(note));
+        }
     }
 }
