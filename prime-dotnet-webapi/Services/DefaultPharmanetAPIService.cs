@@ -68,7 +68,7 @@ namespace Prime.Services
             HttpResponseMessage response;
             try
             {
-                response = await Client.PostAsJsonAsync(PrimeConstants.PHARMANET_API_URL, requestParams).ConfigureAwait(false);
+                response = await Client.PostAsJsonAsync(PrimeConstants.PHARMANET_API_URL, requestParams);
 
                 if (!response.IsSuccessStatusCode)
                 {
