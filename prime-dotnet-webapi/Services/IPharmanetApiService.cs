@@ -6,6 +6,6 @@ namespace Prime.Services
 {
     public interface IPharmanetApiService
     {
-        Task<PharmanetCollegeRecord> GetCollegeRecord(Certification certification, string uuid);
+        Task<PharmanetCollegeRecord> GetCollegeRecord(Certification certification);
     }
 }

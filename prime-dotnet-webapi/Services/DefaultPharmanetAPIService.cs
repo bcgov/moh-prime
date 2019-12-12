@@ -46,7 +46,7 @@ namespace Prime.Services
             return client;
         }
 
-        public async Task<PharmanetCollegeRecord> GetCollegeRecord(Certification certification, string uuid)
+        public async Task<PharmanetCollegeRecord> GetCollegeRecord(Certification certification)
         {
             // if (string.IsNullOrWhiteSpace(certification.LicenseNumber))
             // {
@@ -60,39 +60,41 @@ namespace Prime.Services
             // }
 
             //Certification college = await _context.Certifications.SingleOrDefaultAsync(c => c.CollegeCode == certification.CollegeCode);
-            return await CallPharmanetCollegeLicenceService("20111", "91", uuid);
+            return await CallPharmanetCollegeLicenceService("20111", "91");
         }
 
-        private async Task<PharmanetCollegeRecord> CallPharmanetCollegeLicenceService(string licenceNumber, string collegeReferenceId, string uuid)
+        private async Task<PharmanetCollegeRecord> CallPharmanetCollegeLicenceService(string licenceNumber, string collegeReferenceId)
         {
             var requestParams = new CollegeRecordRequestParams(licenceNumber, collegeReferenceId);
-            requestParams.applicationUUID = uuid;
+            var requestContent = new StringContent(JsonConvert.SerializeObject(requestParams));
+
             HttpResponseMessage response;
             try
             {
-                // response = await Client.PostAsJsonAsync(PrimeConstants.PHARMANET_API_URL, requestParams);
-                StringContent req = new StringContent(JsonConvert.SerializeObject(requestParams));
-                response = await Client.PostAsync(PrimeConstants.PHARMANET_API_URL, req);
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    // TODO log error? Client error probably means bad licence number or college ref.
-                    return null;
-                }
-
-                var content = await response.Content.ReadAsAsync<List<PharmanetCollegeRecord>>();
-                var practicionerRecord = content.SingleOrDefault();
-                if (practicionerRecord != null && practicionerRecord.applicationUUID != requestParams.applicationUUID)
-                {
-                    throw new PharmanetCollegeApiException($"Expected matching applicationUUIDs between request data and response data. Request was\"{requestParams.applicationUUID}\", response was \"{practicionerRecord.applicationUUID}\".");
-                }
-
-                return practicionerRecord;
+                response = await Client.PostAsync(PrimeConstants.PHARMANET_API_URL, requestContent);
             }
             catch (Exception ex)
             {
-                throw new PharmanetCollegeApiException($"Pharmanet API returned an error. transactionid:[{requestParams.applicationUUID}]", ex);
+                // TODO HTTP error. Log error? Retry?
+                throw new PharmanetCollegeApiException($"Calling Pharmanet API caused an error. Try again.", ex);
             }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                // TODO log error? Client error probably means bad licence number or college ref.
+                return null;
+            }
+
+            var content = await response.Content.ReadAsAsync<List<PharmanetCollegeRecord>>();
+            var practicionerRecord = content.SingleOrDefault();
+
+            // If we get a record back, it should have the same transaction UUID as our request.
+            if (practicionerRecord != null && practicionerRecord.applicationUUID != requestParams.applicationUUID)
+            {
+                throw new PharmanetCollegeApiException($"Expected matching applicationUUIDs between request data and response data. Request was\"{requestParams.applicationUUID}\", response was \"{practicionerRecord.applicationUUID}\".");
+            }
+
+            return practicionerRecord;
         }
 
         public class PharmanetCollegeApiException : Exception

@@ -208,7 +208,7 @@ namespace Prime.Controllers
         public async Task<ActionResult<PharmanetCollegeRecord>> DeleteEnrollee(string enrolleeId)
         {
 
-            var ttt = await _parm.GetCollegeRecord(null, enrolleeId);
+            var ttt = await _parm.GetCollegeRecord(null);
 
             return Ok(new ApiOkResponse<PharmanetCollegeRecord>(ttt));
 
