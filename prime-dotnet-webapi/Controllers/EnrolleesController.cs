@@ -335,6 +335,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}/adjudicator-notes", Name = nameof(GetAdjudicatorNotes))]
+        [Authorize(Policy = PrimeConstants.PRIME_ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -374,12 +375,26 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiCreatedResponse<AdjudicatorNote>), StatusCodes.Status201Created)]
         public async Task<ActionResult<AdjudicatorNote>> CreateAdjudicatorNote(int enrolleeId, AdjudicatorNote adjudicatorNote)
         {
-            if (!_enrolleeService.EnrolleeExists(enrolleeId))
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+
+            if (!await _enrolleeService.EnrolleeExists(enrolleeId))
             {
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
 
-            var createdAdjudicatorNote = await _enrolleeService.CreateAdjudicatorNoteAsync(enrolleeId, adjudicatorNote);
+            // If the user is not an ADMIN, make sure the enrollee ID matches the user, otherwise return not authorized
+            if (!BelongsToEnrollee(enrollee))
+            {
+                return Forbid();
+            }
+
+            if (enrolleeId != adjudicatorNote.EnrolleeId)
+            {
+                this.ModelState.AddModelError("Enrollee.Id", "Enrollee Id is required to make updates.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
+
+            var createdAdjudicatorNote = await _enrolleeService.CreateEnrolleeAdjudicatorNoteAsync(enrolleeId, adjudicatorNote);
 
             return CreatedAtAction(
                 nameof(GetAdjudicatorNotes),
