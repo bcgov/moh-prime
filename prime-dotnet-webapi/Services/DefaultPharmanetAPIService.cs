@@ -9,6 +9,7 @@ using System.Security.Cryptography.X509Certificates;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 using Prime.Models;
 
@@ -69,7 +70,9 @@ namespace Prime.Services
             HttpResponseMessage response;
             try
             {
-                response = await Client.PostAsJsonAsync(PrimeConstants.PHARMANET_API_URL, requestParams);
+                // response = await Client.PostAsJsonAsync(PrimeConstants.PHARMANET_API_URL, requestParams);
+                StringContent req = new StringContent(JsonConvert.SerializeObject(requestParams));
+                response = await Client.PostAsync(PrimeConstants.PHARMANET_API_URL, req);
 
                 if (!response.IsSuccessStatusCode)
                 {
