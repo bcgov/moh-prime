@@ -204,29 +204,23 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiOkResponse<Enrollee>), StatusCodes.Status200OK)]
-        // public async Task<ActionResult<Enrollee>> DeleteEnrollee(int enrolleeId)
-        public async Task<ActionResult<PharmanetCollegeRecord>> DeleteEnrollee(string enrolleeId)
+        public async Task<ActionResult<Enrollee>> DeleteEnrollee(int enrolleeId)
         {
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+            if (enrollee == null)
+            {
+                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
+            }
 
-            var ttt = await _parm.GetCollegeRecord(null);
+            // if the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
+            if (!BelongsToEnrollee(enrollee))
+            {
+                return Forbid();
+            }
 
-            return Ok(new ApiOkResponse<PharmanetCollegeRecord>(ttt));
+            await _enrolleeService.DeleteEnrolleeAsync(enrolleeId);
 
-            // var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-            // if (enrollee == null)
-            // {
-            //     return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
-            // }
-
-            // // if the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
-            // if (!BelongsToEnrollee(enrollee))
-            // {
-            //     return Forbid();
-            // }
-
-            // await _enrolleeService.DeleteEnrolleeAsync(enrolleeId);
-
-            // return Ok(new ApiOkResponse<Enrollee>(enrollee));
+            return Ok(new ApiOkResponse<Enrollee>(enrollee));
         }
 
         // GET: api/Enrollees/5/availableStatuses
