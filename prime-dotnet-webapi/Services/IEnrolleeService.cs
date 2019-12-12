@@ -10,7 +10,7 @@ namespace Prime.Services
     {
         Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId);
 
-        bool EnrolleeExists(int enrolleeId);
+        Task<bool> EnrolleeExists(int enrolleeId);
 
         Task<Enrollee> GetEnrolleeAsync(int enrolleeId);
 
@@ -34,6 +34,7 @@ namespace Prime.Services
 
         Task<ICollection<AdjudicatorNote>> GetEnrolleeAdjudicatorNotesAsync(Enrollee enrollee);
 
-        Task<AdjudicatorNote> CreateAdjudicatorNoteAsync(int enrolleeId, AdjudicatorNote adjudicatorNote);
+        Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, AdjudicatorNote adjudicatorNote);
+
     }
 }

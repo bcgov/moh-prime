@@ -182,7 +182,7 @@ namespace Prime.Services
 
         public async Task<int> UpdateEnrolleeAsync(Enrollee enrollee, bool profileCompleted = false)
         {
-            var _enrolleeDb = _context.Enrollees
+            var _enrolleeDb = await _context.Enrollees
                                 .Include(e => e.PhysicalAddress)
                                 .Include(e => e.MailingAddress)
                                 .Include(e => e.Certifications)
@@ -192,7 +192,7 @@ namespace Prime.Services
                                 .Include(e => e.EnrolmentCertificateNote)
                                 .AsNoTracking()
                                 .Where(e => e.Id == enrollee.Id)
-                                .SingleOrDefault();
+                                .SingleOrDefaultAsync();
 
             // Remove existing, and recreate if necessary
             this.ReplaceExistingAddress(_enrolleeDb.PhysicalAddress, enrollee.PhysicalAddress, enrollee);
@@ -200,8 +200,6 @@ namespace Prime.Services
             this.ReplaceExistingItems(_enrolleeDb.Certifications, enrollee.Certifications, enrollee);
             this.ReplaceExistingItems(_enrolleeDb.Jobs, enrollee.Jobs, enrollee);
             this.ReplaceExistingItems(_enrolleeDb.Organizations, enrollee.Organizations, enrollee);
-            this.ReplaceExistingNote(_enrolleeDb.AccessAgreementNote, enrollee.AccessAgreementNote, enrollee);
-            this.ReplaceExistingNote(_enrolleeDb.EnrolmentCertificateNote, enrollee.EnrolmentCertificateNote, enrollee);
 
             // If profileCompleted is true, this is the first time the enrollee
             // has completed their profile by traversing the wizard, and indicates
@@ -217,27 +215,6 @@ namespace Prime.Services
             catch (DbUpdateConcurrencyException)
             {
                 return 0;
-            }
-        }
-
-        private void ReplaceExistingNote(INote dbNote, INote newNote, Enrollee enrollee)
-        {
-            if (dbNote != null)
-            {
-                if (newNote.Note == null)
-                {
-                    _context.Entry(dbNote).State = EntityState.Deleted;
-                }
-                else
-                {
-                    dbNote.Note = newNote.Note;
-                    _context.Entry(dbNote).State = EntityState.Modified;
-                }
-            }
-            else if (newNote != null)
-            {
-                newNote.EnrolleeId = (int)enrollee.Id;
-                _context.Entry(newNote).State = EntityState.Added;
             }
         }
 
@@ -460,11 +437,10 @@ namespace Prime.Services
                     .Include(e => e.EnrolmentCertificateNote);
         }
 
-        public bool EnrolleeExists(int enrolleeId)
+        public async Task<bool> EnrolleeExists(int enrolleeId)
         {
-            return _context.Enrollees
-                .Where(e => e.Id == enrolleeId)
-                .Any();
+            return await _context.Enrollees
+                .AnyAsync(e => e.Id == enrolleeId);
         }
 
         public async Task<Enrollee> GetEnrolleeAsync(int enrolleeId)
@@ -489,7 +465,7 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task<AdjudicatorNote> CreateAdjudicatorNoteAsync(int enrolleeId, AdjudicatorNote adjudicatorNote)
+        public async Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, AdjudicatorNote adjudicatorNote)
         {
             AdjudicatorNote newAdjudicatorNote = new AdjudicatorNote
             {

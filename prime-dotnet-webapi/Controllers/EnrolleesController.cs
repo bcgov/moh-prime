@@ -173,7 +173,7 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            if (!_enrolleeService.EnrolleeExists(enrolleeId))
+            if (!await _enrolleeService.EnrolleeExists(enrolleeId))
             {
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
