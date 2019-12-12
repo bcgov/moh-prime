@@ -199,20 +199,20 @@ namespace Prime.Controllers
         /// Deletes a specific Enrollee.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpDelete("{enrolleeId}/aaa/{other}", Name = nameof(DeleteEnrollee))]
+        [HttpDelete("{enrolleeId}", Name = nameof(DeleteEnrollee))]
         // [HttpDelete("{enrolleeId}", Name = nameof(DeleteEnrollee))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiOkResponse<Enrollee>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<PharmanetCollegeRecord>> DeleteEnrollee(string enrolleeId, string other)
+        public async Task<ActionResult<PharmanetCollegeRecord>> DeleteEnrollee(string enrolleeId)
         // public async Task<ActionResult<Enrollee>> DeleteEnrollee(int enrolleeId)
         {
             var cert = new Certification{
-                LicenseNumber = enrolleeId,
+                LicenseNumber = "12345",
                 CollegeCode = 1
             };
-            var ttt = await _parm.GetCollegeRecord(cert);
+            var ttt = await _parm.GetCollegeRecord(cert, enrolleeId);
 
             return Ok(new ApiOkResponse<PharmanetCollegeRecord>(ttt));
 

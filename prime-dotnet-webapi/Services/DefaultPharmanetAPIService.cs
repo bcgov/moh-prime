@@ -45,7 +45,7 @@ namespace Prime.Services
             return client;
         }
 
-        public async Task<PharmanetCollegeRecord> GetCollegeRecord(Certification certification)
+        public async Task<PharmanetCollegeRecord> GetCollegeRecord(Certification certification, string uuid)
         {
             if (string.IsNullOrWhiteSpace(certification.LicenseNumber))
             {
@@ -59,12 +59,13 @@ namespace Prime.Services
             }
 
             //Certification college = await _context.Certifications.SingleOrDefaultAsync(c => c.CollegeCode == certification.CollegeCode);
-            return await CallPharmanetCollegeLicenceService(certification.LicenseNumber.Remove(4) + "P", "91");
+            return await CallPharmanetCollegeLicenceService("2036P", "91", uuid);
         }
 
-        private async Task<PharmanetCollegeRecord> CallPharmanetCollegeLicenceService(string licenceNumber, string collegeReferenceId)
+        private async Task<PharmanetCollegeRecord> CallPharmanetCollegeLicenceService(string licenceNumber, string collegeReferenceId, string uuid)
         {
             var requestParams = new CollegeRecordRequestParams(licenceNumber, collegeReferenceId);
+            requestParams.applicationUUID = uuid;
             HttpResponseMessage response;
             try
             {

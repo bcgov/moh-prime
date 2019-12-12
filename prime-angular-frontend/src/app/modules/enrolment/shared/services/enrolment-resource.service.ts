@@ -28,7 +28,12 @@ export class EnrolmentResource {
 
   // TODO X
   public api(): Observable<any> {
-    return this.http.delete(`${this.config.apiEndpoint}/enrollees/2036P/aaa/P1`);
+    const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+    console.log(uuid);
+    return this.http.delete(`${this.config.apiEndpoint}/enrollees/${uuid}`);
   }
 
   public enrollee(): Observable<Enrolment> {
