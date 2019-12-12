@@ -58,8 +58,8 @@ namespace Prime.Services
                 return null;
             }
 
-            Certification college = await _context.Certifications.SingleOrDefaultAsync(c => c.CollegeCode == certification.CollegeCode);
-            return await CallPharmanetCollegeLicenceService(certification.LicenseNumber.Remove(4) + "P", college.College.Prefix);
+            //Certification college = await _context.Certifications.SingleOrDefaultAsync(c => c.CollegeCode == certification.CollegeCode);
+            return await CallPharmanetCollegeLicenceService(certification.LicenseNumber.Remove(4) + "P", "91");
         }
 
         private async Task<PharmanetCollegeRecord> CallPharmanetCollegeLicenceService(string licenceNumber, string collegeReferenceId)
