@@ -19,12 +19,10 @@ namespace Prime.Controllers
     public class EnrolleesController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
-        private readonly IPharmanetApiService _parm;
 
-        public EnrolleesController(IEnrolleeService enrolleeService, IPharmanetApiService parm)
+        public EnrolleesController(IEnrolleeService enrolleeService)
         {
             _enrolleeService = enrolleeService;
-            _parm = parm;
         }
 
         private bool BelongsToEnrollee(Enrollee enrollee)
