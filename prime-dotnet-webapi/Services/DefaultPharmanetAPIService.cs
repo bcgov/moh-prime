@@ -50,7 +50,7 @@ namespace Prime.Services
             return client;
         }
 
-        public async Task<PharmanetCollegeRecord> GetCollegeRecord(Certification certification)
+        public async Task<PharmanetCollegeRecord> GetCollegeRecordAsync(Certification certification)
         {
             if (string.IsNullOrWhiteSpace(certification.LicenseNumber) || certification.CollegeCode == 0)
             {
