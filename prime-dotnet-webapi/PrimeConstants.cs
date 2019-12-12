@@ -45,8 +45,7 @@ namespace Prime
         public readonly static string PHARMANET_API_URL = System.Environment.GetEnvironmentVariable("PHARMANET_API_URL") ?? "";
         public readonly static string PHARMANET_API_USERNAME = System.Environment.GetEnvironmentVariable("PHARMANET_API_USERNAME") ?? "";
         public readonly static string PHARMANET_API_PASSWORD = System.Environment.GetEnvironmentVariable("PHARMANET_API_PASSWORD") ?? "";
-        // TODO environmentalize
-        public readonly static string PHARMANET_SSL_CERT_FILENAME = @"/opt/app-root/etc/certs/pharmanet-api-cert.pfx";
+        public readonly static string PHARMANET_SSL_CERT_FILENAME = System.Environment.GetEnvironmentVariable("PHARMANET_SSL_CERT_FILENAME") ?? "";
         public readonly static string PHARMANET_SSL_CERT_PASSWORD = System.Environment.GetEnvironmentVariable("PHARMANET_SSL_CERT_PASSWORD") ?? "";
     }
 }

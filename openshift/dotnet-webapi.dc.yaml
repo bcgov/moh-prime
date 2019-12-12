@@ -111,6 +111,8 @@ objects:
                     secretKeyRef:
                       key: API_PASSWORD
                       name: 'pharmanet-api'
+                - name: PHARMANET_SSL_CERT_FILENAME
+                  value: '/opt/app-root/etc/certs/pharmanet-api-cert.pfx'
                 - name: PHARMANET_SSL_CERT_PASSWORD
                   valueFrom:
                     secretKeyRef:
