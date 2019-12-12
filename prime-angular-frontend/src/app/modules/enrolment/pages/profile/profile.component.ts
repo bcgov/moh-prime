@@ -106,10 +106,6 @@ export class ProfileComponent extends BaseEnrolmentProfilePage implements OnInit
     }
   }
 
-  public API(){
-    this.enrolmentResource.api().subscribe((ret) => this.logger.log(ret));
-  }
-
   public onPreferredNameChange() {
     this.hasPreferredName = !this.hasPreferredName;
 

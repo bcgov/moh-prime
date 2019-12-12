@@ -26,16 +26,6 @@ export class EnrolmentResource {
     private logger: LoggerService
   ) { }
 
-  // TODO X
-  public api(): Observable<any> {
-    const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-      return v.toString(16);
-    });
-    console.log(uuid);
-    return this.http.delete(`${this.config.apiEndpoint}/enrollees/${uuid}`);
-  }
-
   public enrollee(): Observable<Enrolment> {
     return this.http.get(`${this.config.apiEndpoint}/enrollees`)
       .pipe(
