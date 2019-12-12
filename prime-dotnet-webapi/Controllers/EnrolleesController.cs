@@ -200,7 +200,6 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpDelete("{enrolleeId}", Name = nameof(DeleteEnrollee))]
-        // [HttpDelete("{enrolleeId}", Name = nameof(DeleteEnrollee))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
