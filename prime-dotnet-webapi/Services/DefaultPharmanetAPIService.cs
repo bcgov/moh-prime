@@ -90,7 +90,7 @@ namespace Prime.Services
             catch (Exception ex)
             {
                 // TODO HTTP error. Log error? Retry?
-                throw new PharmanetCollegeApiException($"Calling Pharmanet API caused an error. Try again.", ex);
+                throw new PharmanetCollegeApiException("Error occurred when calling Pharmanet API. Try again later.", ex);
             }
 
             if (!response.IsSuccessStatusCode)
