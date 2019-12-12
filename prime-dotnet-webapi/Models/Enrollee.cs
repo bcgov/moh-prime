@@ -8,6 +8,13 @@ using Prime.Infrastructure;
 
 namespace Prime.Models
 {
+    public enum NoteType
+    {
+        AdjudicatorNote,
+        AccessAgreementNote,
+        EnrolmentCertificateNote
+    };
+
     [Table("Enrollee")]
     public class Enrollee : BaseAuditable, IValidatableObject
     {
