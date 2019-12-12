@@ -15,7 +15,7 @@ namespace Prime.Controllers
     [Route("api/[controller]")]
     [ApiController]
     // User needs at least the ADMIN or ENROLLEE role to use this controller
-    [Authorize(Policy = PrimeConstants.PRIME_USER_POLICY)]
+    // [Authorize(Policy = PrimeConstants.PRIME_USER_POLICY)]
     public class EnrolleesController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
@@ -411,12 +411,13 @@ namespace Prime.Controllers
         /// <param name="note"></param>
         /// <param name="noteType"></param>
         [HttpPut("{enrolleeId}/enrollee-notes", Name = nameof(UpdateEnrolleeNote))]
+        // [Authorize(Policy = PrimeConstants.PRIME_ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateEnrolleeNote(int enrolleeId, INote note, [FromQuery]NoteType noteType)
+        public async Task<IActionResult> UpdateEnrolleeNote(int enrolleeId, string note, [FromQuery]NoteType noteType)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
@@ -425,19 +426,14 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}."));
             }
 
-            if (enrollee.Id != note.EnrolleeId)
-            {
-                return Forbid();
-            }
-
             if (!Enum.IsDefined(typeof(NoteType), noteType) && !noteType.Equals(NoteType.AdjudicatorNote))
             {
-                return BadRequest(new ApiResponse(400, $"Note can not be updated."));
+                return BadRequest(new ApiResponse(400, $"Note type can not be updated."));
             }
 
             await _enrolleeService.UpdateEnrolleeNoteAsync(enrolleeId, note, noteType);
 
-            return Ok(new ApiOkResponse<INote>(note));
+            return NoContent();
         }
     }
 }

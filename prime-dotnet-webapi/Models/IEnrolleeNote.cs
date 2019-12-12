@@ -1,4 +1,6 @@
 using System;
+using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
 namespace Prime.Models
 {
@@ -9,7 +11,7 @@ namespace Prime.Models
         EnrolmentCertificateNote
     };
 
-    public interface INote
+    public interface IEnrolleeNote
     {
         int? Id { get; set; }
 

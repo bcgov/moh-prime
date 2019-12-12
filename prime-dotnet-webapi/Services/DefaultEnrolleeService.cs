@@ -485,7 +485,7 @@ namespace Prime.Services
             return adjudicatorNote;
         }
 
-        public async Task<int> UpdateEnrolleeNoteAsync(int enrolleeId, INote newNote, NoteType noteType)
+        public async Task<int> UpdateEnrolleeNoteAsync(int enrolleeId, string note, NoteType noteType)
         {
             var enrollee = await _context.Enrollees
                 .Include(e => e.AccessAgreementNote)
@@ -494,7 +494,7 @@ namespace Prime.Services
                 .Where(e => e.Id == enrolleeId)
                 .SingleOrDefaultAsync();
 
-            INote dbNote = null;
+            IEnrolleeNote dbNote = null;
 
             if (noteType == NoteType.AccessAgreementNote)
             {
@@ -504,29 +504,56 @@ namespace Prime.Services
             {
                 dbNote = enrollee.EnrolmentCertificateNote;
             }
+            else
+            {
+                throw new ArgumentException("Enrollee note type is not recognized.");
+            }
 
             if (dbNote != null)
             {
-                if (newNote.Note == null)
+                if (note == null)
                 {
                     _context.Entry(dbNote).State = EntityState.Deleted;
                 }
                 else
                 {
-                    dbNote.Note = newNote.Note;
+                    dbNote.Note = note;
+                    dbNote.NoteDate = DateTime.Now;
                     _context.Entry(dbNote).State = EntityState.Modified;
                 }
             }
-            else if (newNote != null)
+            else if (note != null)
             {
-                newNote.EnrolleeId = (int)dbNote.Id;
-                _context.Entry(newNote).State = EntityState.Added;
+                if (noteType == NoteType.AccessAgreementNote)
+                {
+                    var newNote = new AccessAgreementNote
+                    {
+                        EnrolleeId = enrolleeId,
+                        Note = note,
+                        NoteDate = DateTime.Now
+                    };
+
+                    _context.AccessAgreementNotes.Add(newNote);
+                }
+                else
+                {
+                    var newNote = new EnrolmentCertificateNote
+                    {
+                        EnrolleeId = enrolleeId,
+                        Note = note,
+                        NoteDate = DateTime.Now
+                    };
+
+                    _context.EnrolmentCertificateNotes.Add(newNote);
+                }
             }
+
+            System.Console.WriteLine($"DATE: {DateTime.Now}");
 
             var updated = await _context.SaveChangesAsync();
             if (updated < 1)
             {
-                throw new InvalidOperationException($"Could not create {newNote.GetType()}.");
+                throw new InvalidOperationException($"Could not create the enrollee note.");
             }
 
             return enrolleeId;
