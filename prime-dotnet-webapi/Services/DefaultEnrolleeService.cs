@@ -514,7 +514,7 @@ namespace Prime.Services
                 throw new InvalidOperationException("Could not create adjudicator note.");
             };
 
-            return adjudicatorNote;
+            return newAdjudicatorNote;
         }
 
         public async Task<int> UpdateEnrolleeNoteAsync(int enrolleeId, string note, NoteType noteType)
