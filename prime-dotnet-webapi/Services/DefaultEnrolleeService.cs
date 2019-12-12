@@ -329,7 +329,13 @@ namespace Prime.Services
             if (IsStatusChangeAllowed(currentStatus ?? NULL_STATUS, status))
             {
                 // Create a new enrolment status
-                var createdEnrolmentStatus = new EnrolmentStatus { EnrolleeId = enrolleeId, StatusCode = status.Code, StatusDate = DateTime.Now, PharmaNetStatus = false };
+                var createdEnrolmentStatus = new EnrolmentStatus
+                {
+                    EnrolleeId = enrolleeId,
+                    StatusCode = status.Code,
+                    StatusDate = DateTime.Now,
+                    PharmaNetStatus = false
+                };
 
                 enrollee.EnrolmentStatuses.Add(createdEnrolmentStatus);
 
@@ -342,8 +348,21 @@ namespace Prime.Services
                             // Change the status to adjudicated/approved
                             createdEnrolmentStatus.PharmaNetStatus = false;
                             // Create a new approved enrolment status
-                            var adjudicatedEnrolmentStatus = new EnrolmentStatus { EnrolleeId = enrolleeId, StatusCode = Status.APPROVED_CODE, StatusDate = DateTime.Now, PharmaNetStatus = false };
-                            adjudicatedEnrolmentStatus.EnrolmentStatusReasons = new List<EnrolmentStatusReason> { new EnrolmentStatusReason { EnrolmentStatus = adjudicatedEnrolmentStatus, StatusReasonCode = StatusReason.AUTOMATIC_CODE } };
+                            var adjudicatedEnrolmentStatus = new EnrolmentStatus
+                            {
+                                EnrolleeId = enrolleeId,
+                                StatusCode = Status.APPROVED_CODE,
+                                StatusDate = DateTime.Now,
+                                PharmaNetStatus = false
+                            };
+                            adjudicatedEnrolmentStatus.EnrolmentStatusReasons = new List<EnrolmentStatusReason>
+                            {
+                                new EnrolmentStatusReason
+                                {
+                                    EnrolmentStatus = adjudicatedEnrolmentStatus,
+                                    StatusReasonCode = StatusReason.AUTOMATIC_CODE
+                                }
+                            };
                             enrollee.EnrolmentStatuses.Add(adjudicatedEnrolmentStatus);
                             // Flip to the object that will get returned
                             createdEnrolmentStatus = adjudicatedEnrolmentStatus;
@@ -351,7 +370,14 @@ namespace Prime.Services
                         break;
                     case Status.APPROVED_CODE:
                         // Add the manual reason code
-                        createdEnrolmentStatus.EnrolmentStatusReasons = new List<EnrolmentStatusReason> { new EnrolmentStatusReason { EnrolmentStatus = createdEnrolmentStatus, StatusReasonCode = StatusReason.MANUAL_CODE } };
+                        createdEnrolmentStatus.EnrolmentStatusReasons = new List<EnrolmentStatusReason>
+                        {
+                            new EnrolmentStatusReason
+                            {
+                                EnrolmentStatus = createdEnrolmentStatus,
+                                StatusReasonCode = StatusReason.MANUAL_CODE
+                            }
+                        };
                         break;
                     case Status.DECLINED_CODE:
                         await setAllPharmaNetStatusesFalseAsync(enrolleeId);
