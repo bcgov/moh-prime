@@ -489,7 +489,7 @@ namespace Prime.Services
             return entity;
         }
 
-        public async Task<ICollection<AdjudicatorNote>> GetEnrolleeAdjudicatorNotesAsync(Enrollee enrollee)
+        public async Task<IEnumerable<AdjudicatorNote>> GetEnrolleeAdjudicatorNotesAsync(Enrollee enrollee)
         {
             return await _context.AdjudicatorNotes
                 .Where(an => an.EnrolleeId == enrollee.Id)
@@ -506,7 +506,7 @@ namespace Prime.Services
                 NoteDate = DateTime.Now
             };
 
-            _context.AdjudicatorNotes.Add(adjudicatorNote);
+            _context.AdjudicatorNotes.Add(newAdjudicatorNote);
 
             var created = await _context.SaveChangesAsync();
             if (created < 1)
