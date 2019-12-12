@@ -12,6 +12,7 @@ import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 
 import { Address } from '@enrolment/shared/models/address.model';
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
+import { NoteType } from '../enums/note-type.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -44,15 +45,6 @@ export class AdjudicationResource {
       );
   }
 
-  public updateEnrollee(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<any> {
-    const { id } = enrolment;
-    let params = new HttpParams();
-    if (beenThroughTheWizard) {
-      params = params.set('beenThroughTheWizard', `${beenThroughTheWizard}`);
-    }
-    return this.http.put(`${this.config.apiEndpoint}/enrollees/${id}`, this.enrolmentAdapterRequest(enrolment), { params });
-  }
-
   public updateEnrolmentStatus(id: number, statusCode: number): Observable<Config<number>[]> {
     const payload = { code: statusCode };
     return this.http.post(`${this.config.apiEndpoint}/enrollees/${id}/statuses`, payload)
@@ -82,6 +74,16 @@ export class AdjudicationResource {
   public addAdjudicatorNote(enrolleeId: number, note: string): Observable<AdjudicationNote> {
     const payload = { enrolleeId, note };
     return this.http.post(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/adjudicator-notes`, payload)
+      .pipe(
+        map((response: PrimeHttpResponse) => response.result as AdjudicationNote),
+        tap((adjudicatorNote: AdjudicationNote) => this.logger.info('ADJUDICATOR_NOTE', adjudicatorNote))
+      );
+  }
+
+  public updateEnrolleeNote(enrolleeId: number, note: string, noteType: NoteType): Observable<AdjudicationNote> {
+    const payload = { enrolleeId, note };
+    const params = new HttpParams({ fromObject: { noteType: `${noteType}` } });
+    return this.http.post(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/enrollee-notes`, payload, { params })
       .pipe(
         map((response: PrimeHttpResponse) => response.result as AdjudicationNote),
         tap((adjudicatorNote: AdjudicationNote) => this.logger.info('ADJUDICATOR_NOTE', adjudicatorNote))
