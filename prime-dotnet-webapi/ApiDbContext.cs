@@ -441,6 +441,10 @@ namespace Prime
                 .HasOne(an => an.Enrollee)
                 .WithMany(e => e.AdjudicatorNotes)
                 .HasForeignKey(an => an.EnrolleeId);
+            modelBuilder.Entity<AccessAgreementNote>()
+                .HasOne(aan => aan.Enrollee);
+            modelBuilder.Entity<EnrolmentCertificateNote>()
+                .HasOne(ec => ec.Enrollee);
             #endregion
         }
     }
