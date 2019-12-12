@@ -16,7 +16,7 @@ namespace PrimeTests.Mocks
             throw new NotImplementedException();
         }
 
-        public Task<PharmanetCollegeRecord> GetCollegeRecord(Certification certification)
+        public Task<PharmanetCollegeRecord> GetCollegeRecordAsync(Certification certification)
         {
             throw new NotImplementedException();
         }
