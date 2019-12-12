@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 using Prime.Models;
 
@@ -57,8 +58,8 @@ namespace Prime.Services
                 return null;
             }
 
-            College college = _context.Certifications.Where(c => c.CollegeCode == certification.CollegeCode).Single().College;
-            return await CallPharmanetCollegeLicenceService(certification.LicenseNumber.Remove(4) + "P", college.Prefix);
+            Certification college = await _context.Certifications.SingleOrDefaultAsync(c => c.CollegeCode == certification.CollegeCode);
+            return await CallPharmanetCollegeLicenceService(certification.LicenseNumber.Remove(4) + "P", college.College.Prefix);
         }
 
         private async Task<PharmanetCollegeRecord> CallPharmanetCollegeLicenceService(string licenceNumber, string collegeReferenceId)
