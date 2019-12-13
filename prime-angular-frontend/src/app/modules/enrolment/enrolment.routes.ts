@@ -13,6 +13,10 @@ export class EnrolmentRoutes {
   public static SUMMARY = 'summary';
   public static DECLINED = 'declined';
   public static DECLINED_ACCESS_AGREEMENT = 'declined-access-agreement';
+  public static ACCESS_AGREEMENT_HISTORY = 'access-agreement-history';
+  public static PHARMANET_ENROLMENT_CERTIFICATE = 'pharmanet-enrolment-certificate';
+  public static PHARMANET_TRANSACTIONS = 'pharmanet-transactions';
+  public static ENROLMENT_LOG_HISTORY = 'enrolment-log-history';
 
   public static MODULE_PATH = EnrolmentRoutes.ENROLMENT;
 
@@ -39,7 +43,11 @@ export class EnrolmentRoutes {
       EnrolmentRoutes.ACCESS_AGREEMENT,
       EnrolmentRoutes.SUMMARY,
       EnrolmentRoutes.DECLINED,
-      EnrolmentRoutes.DECLINED_ACCESS_AGREEMENT
+      EnrolmentRoutes.DECLINED_ACCESS_AGREEMENT,
+      EnrolmentRoutes.ACCESS_AGREEMENT_HISTORY,
+      EnrolmentRoutes.PHARMANET_ENROLMENT_CERTIFICATE,
+      EnrolmentRoutes.PHARMANET_TRANSACTIONS,
+      EnrolmentRoutes.ENROLMENT_LOG_HISTORY
     ];
   }
 }
