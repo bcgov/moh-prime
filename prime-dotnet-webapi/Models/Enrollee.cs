@@ -8,10 +8,11 @@ using Prime.Infrastructure;
 
 namespace Prime.Models
 {
-    public enum EnrolmentStatusType
+    public enum ProgressStatusType
     {
-        INITIAL = 1,
-        FINAL
+        STARTED,
+        SUBMITTED,
+        FINISHED
     }
 
     [Table("Enrollee")]
@@ -99,7 +100,7 @@ namespace Prime.Models
         public EnrolmentStatus PharmaNetStatus { get => this.EnrolmentStatuses?.SingleOrDefault(es => es.PharmaNetStatus); }
 
         [NotMapped]
-        public EnrolmentStatusType ProcessStatus
+        public ProgressStatusType ProgressStatus
         {
             get
             {
@@ -107,8 +108,10 @@ namespace Prime.Models
                 // provides a status hook with greater granularity than the enrolment statuses
                 var statuses = this.EnrolmentStatuses?.Select(es => es.StatusCode);
                 return (statuses != null && statuses.Contains(Status.ACCEPTED_TOS_CODE))
-                    ? EnrolmentStatusType.FINAL
-                    : EnrolmentStatusType.INITIAL;
+                    ? ProgressStatusType.FINISHED
+                    : (statuses != null && statuses.Contains(Status.SUBMITTED_CODE))
+                        ? ProgressStatusType.SUBMITTED
+                        : ProgressStatusType.STARTED;
             }
         }
 
