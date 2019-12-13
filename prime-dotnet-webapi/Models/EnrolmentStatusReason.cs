@@ -11,13 +11,10 @@ namespace Prime.Models
         [JsonIgnore]
         public EnrolmentStatus EnrolmentStatus { get; set; }
 
-        // TODO Remove uneccesary statusCode
-        public short StatusCode { get; set; }
-
-
-
         public short StatusReasonCode { get; set; }
 
         public StatusReason StatusReason { get; set; }
+
+        public string ReasonNote { get; set; }
     }
 }
