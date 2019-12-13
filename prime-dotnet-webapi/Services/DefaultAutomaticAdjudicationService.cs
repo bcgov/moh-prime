@@ -150,8 +150,7 @@ namespace Prime.Services
             {
                 var result = new List<StatusReason>(0);
                 // check to see if the enrollee has a particular licence class
-                if (enrollee.Certifications != null
-                        && enrollee.Certifications.Any())
+                if (enrollee.Certifications?.Any() == true)
                 {
                     // TODO - properly implement this check
                     foreach (var item in enrollee.Certifications)
@@ -176,8 +175,7 @@ namespace Prime.Services
             {
                 var result = new List<StatusReason>(0);
                 // check to see if the enrollee has an inactive license number
-                if (enrollee.Certifications != null
-                        && enrollee.Certifications.Any())
+                if (enrollee.Certifications?.Any() == true)
                 {
                     foreach (var item in enrollee.Certifications)
                     {
