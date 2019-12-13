@@ -162,32 +162,32 @@ export class DashboardComponent implements OnInit {
         items: [
           {
             name: 'PRIME Profile',
-            icon: statusIcons.enrolment,
-            route: EnrolmentRoutes.PROFILE,
+            icon: 'assignment_ind',
+            route: EnrolmentRoutes.REVIEW,
             showItem: true
           },
           {
             name: 'Access Agreement History',
-            icon: statusIcons.accessAgreement,
-            route: EnrolmentRoutes.ACCESS_AGREEMENT,
+            icon: 'assignment',
+            route: EnrolmentRoutes.ACCESS_AGREEMENT_HISTORY,
             showItem: true
           },
           {
             name: 'PharmaNet Enrolment Certificate',
-            icon: statusIcons.status,
-            route: EnrolmentRoutes.SUMMARY,
+            icon: 'card_membership',
+            route: EnrolmentRoutes.PHARMANET_ENROLMENT_CERTIFICATE,
             showItem: true
           },
           {
             name: 'PharmaNet Transactions',
-            icon: statusIcons.status,
-            route: EnrolmentRoutes.SUMMARY,
+            icon: 'event',
+            route: EnrolmentRoutes.PHARMANET_TRANSACTIONS,
             showItem: true
           },
           {
             name: 'Enrolment Log History',
-            icon: statusIcons.status,
-            route: EnrolmentRoutes.SUMMARY,
+            icon: 'history',
+            route: EnrolmentRoutes.ENROLMENT_LOG_HISTORY,
             showItem: true
           }
         ]
