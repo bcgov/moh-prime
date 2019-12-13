@@ -346,16 +346,16 @@ namespace Prime.Services
                         createdEnrolmentStatus.EnrolmentStatusReasons = new List<EnrolmentStatusReason> { new EnrolmentStatusReason { EnrolmentStatus = createdEnrolmentStatus, StatusReasonCode = StatusReason.MANUAL_CODE } };
                         break;
                     case Status.DECLINED_CODE:
-                        await setAllPharmaNetStatusesFalseAsync(enrolleeId);
+                        await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
                         createdEnrolmentStatus.PharmaNetStatus = true;
                         break;
                     case Status.ACCEPTED_TOS_CODE:
-                        await setAllPharmaNetStatusesFalseAsync(enrolleeId);
+                        await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
                         enrollee.LicensePlate = this.GenerateLicensePlate();
                         createdEnrolmentStatus.PharmaNetStatus = true;
                         break;
                     case Status.DECLINED_TOS_CODE:
-                        await setAllPharmaNetStatusesFalseAsync(enrolleeId);
+                        await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
                         createdEnrolmentStatus.PharmaNetStatus = true;
                         break;
                 }
@@ -384,7 +384,7 @@ namespace Prime.Services
             throw new InvalidOperationException("Could not create enrolment status, status change is not allowed.");
         }
 
-        private async Task setAllPharmaNetStatusesFalseAsync(int enrolleeId)
+        private async Task SetAllPharmaNetStatusesFalseAsync(int enrolleeId)
         {
             var existingEnrolmentStatuses = await this.GetEnrolmentStatusesAsync(enrolleeId);
 
