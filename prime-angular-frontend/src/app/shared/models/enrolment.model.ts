@@ -5,6 +5,7 @@ import { EnrolleeClassification } from '@shared/enums/enrollee-classification.en
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
 import { Organization } from '@enrolment/shared/models/organization.model';
+import { EnrolmentProcessStatus } from '@enrolment/shared/enums/enrolment-process-status.enum';
 
 // TODO incoming transitional Enrollee model, eventually will be Enrollee
 export interface HttpEnrollee extends Enrollee {
@@ -30,8 +31,8 @@ export interface HttpEnrollee extends Enrollee {
   enrolleeClassification: EnrolleeClassification;
   // Indicates enrollee has not completed all profile information
   profileCompleted: boolean;
-  // Indicates whether this is the enrollees initial application
-  initialStatus: boolean;
+  // Status hook for where the enrollee is in the initial enrolment
+  processStatus: EnrolmentProcessStatus;
 }
 
 // TODO outgoing enrolment model
@@ -59,6 +60,6 @@ export interface Enrolment {
   enrolleeClassification: EnrolleeClassification;
   // Indicates enrollee has not completed all profile information
   profileCompleted: boolean;
-  // Indicates whether this is the enrollees initial application
-  initialStatus: boolean;
+  // Status hook for where the enrollee is in the initial enrolment
+  processStatus: EnrolmentProcessStatus;
 }
