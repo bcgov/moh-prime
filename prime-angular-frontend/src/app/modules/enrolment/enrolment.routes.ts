@@ -24,6 +24,7 @@ export class EnrolmentRoutes {
     return `/${EnrolmentRoutes.MODULE_PATH}/${route}`;
   }
 
+  // TODO accessible when progressStatus is FINISHED
   public static enrolmentRouteOrder(): string[] {
     return [
       EnrolmentRoutes.PROFILE,
@@ -40,14 +41,16 @@ export class EnrolmentRoutes {
   public static postEnrolmentSubmissionRoutes(): string[] {
     return [
       EnrolmentRoutes.CONFIRMATION,
-      EnrolmentRoutes.ACCESS_AGREEMENT,
-      EnrolmentRoutes.SUMMARY,
       EnrolmentRoutes.DECLINED,
+      EnrolmentRoutes.ACCESS_AGREEMENT,
       EnrolmentRoutes.DECLINED_ACCESS_AGREEMENT,
-      EnrolmentRoutes.ACCESS_AGREEMENT_HISTORY,
+      // EnrolmentRoutes.ACCESS_AGREEMENT_HISTORY,
+      // TODO this is enrolment cert
+      EnrolmentRoutes.SUMMARY,
+      // TODO this is summary
       EnrolmentRoutes.PHARMANET_ENROLMENT_CERTIFICATE,
-      EnrolmentRoutes.PHARMANET_TRANSACTIONS,
-      EnrolmentRoutes.ENROLMENT_LOG_HISTORY
+      // EnrolmentRoutes.PHARMANET_TRANSACTIONS,
+      // EnrolmentRoutes.ENROLMENT_LOG_HISTORY
     ];
   }
 }
