@@ -35,6 +35,7 @@ pipeline {
             agent { label 'zap' }
             checkout scm
             steps {
+                echo "Scanning..."
                 sh "./player.sh zap frontend http://${APP_NAME}${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca"
             }
         }
