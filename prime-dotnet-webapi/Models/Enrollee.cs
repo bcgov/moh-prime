@@ -8,6 +8,12 @@ using Prime.Infrastructure;
 
 namespace Prime.Models
 {
+    public enum EnrolmentStatusType
+    {
+        INITIAL = 1,
+        FINAL
+    }
+
     [Table("Enrollee")]
     public class Enrollee : BaseAuditable, IValidatableObject
     {
@@ -93,7 +99,18 @@ namespace Prime.Models
         public EnrolmentStatus PharmaNetStatus { get => this.EnrolmentStatuses?.SingleOrDefault(es => es.PharmaNetStatus); }
 
         [NotMapped]
-        public bool InitialStatus { get => this.EnrolmentStatuses?.Count() == 1; }
+        public EnrolmentStatusType ProcessStatus
+        {
+            get
+            {
+                // Indicates the position of the enrollee within their initial enrolment, which
+                // provides a status hook with greater granularity than the enrolment statuses
+                var statuses = this.EnrolmentStatuses?.Select(es => es.StatusCode);
+                return (statuses != null && statuses.Contains(Status.ACCEPTED_TOS_CODE))
+                    ? EnrolmentStatusType.FINAL
+                    : EnrolmentStatusType.INITIAL;
+            }
+        }
 
         public bool ProfileCompleted { get; set; }
 
