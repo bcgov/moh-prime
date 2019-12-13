@@ -61,5 +61,5 @@ export interface Enrolment {
   // Indicates enrollee has not completed all profile information
   profileCompleted: boolean;
   // Status hook for where the enrollee is in the initial enrolment
-  processStatus: ProgressStatusType;
+  progressStatus: ProgressStatusType;
 }
