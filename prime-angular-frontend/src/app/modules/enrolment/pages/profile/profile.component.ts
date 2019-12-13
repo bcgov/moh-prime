@@ -15,6 +15,7 @@ import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-stat
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { FormUtilsService } from '@enrolment/shared/services/form-utils.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { ProgressStatusType } from '@enrolment/shared/enums/progress-status-type.enum';
 
 @Component({
   selector: 'app-profile',
@@ -176,11 +177,11 @@ export class ProfileComponent extends BaseEnrolmentProfilePage implements OnInit
 
     if (enrolment) {
       this.enrolmentStateService.enrolment = enrolment;
-      this.hasInitialStatus = enrolment.initialStatus;
+      this.isInitialEnrolment = enrolment.progressStatus !== ProgressStatusType.FINISHED;
       this.isProfileComplete = enrolment.profileCompleted;
     } else {
       this.isNewProfile = true;
-      this.hasInitialStatus = true;
+      this.isInitialEnrolment = true;
       this.isProfileComplete = false;
 
       this.patchFormWithUser();

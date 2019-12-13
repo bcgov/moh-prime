@@ -6,6 +6,7 @@ import { EnrolmentStatusReason } from '@shared/models/enrolment-status-reason.mo
 import { EnrolmentStatusReason as EnrolmentStatusReasonEnum } from '@shared/enums/enrolment-status-reason.enum';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { ProgressStatusType } from '@enrolment/shared/enums/progress-status-type.enum';
 
 @Component({
   selector: 'app-confirmation',
@@ -29,7 +30,7 @@ export class ConfirmationComponent extends BaseEnrolmentPage implements OnInit {
         // Only automatic if the enrolment reason is `Automatic`
         this.isAutomatic = enrolment.currentStatus.enrolmentStatusReasons
           .every((reason: EnrolmentStatusReason) => reason.statusReasonCode === EnrolmentStatusReasonEnum.AUTOMATIC);
-        this.hasInitialStatus = enrolment.initialStatus;
+        this.isInitialEnrolment = enrolment.progressStatus !== ProgressStatusType.FINISHED;
       });
   }
 }

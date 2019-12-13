@@ -17,6 +17,7 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { Organization } from '@enrolment/shared/models/organization.model';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
+import { ProgressStatusType } from '@enrolment/shared/enums/progress-status-type.enum';
 
 @Component({
   selector: 'app-organization',
@@ -144,7 +145,7 @@ export class OrganizationComponent extends BaseEnrolmentProfilePage implements O
 
     this.isProfileComplete = enrolment.profileCompleted;
     this.enrolmentStateService.enrolment = enrolment;
-    this.hasInitialStatus = enrolment.initialStatus;
+    this.isInitialEnrolment = enrolment.progressStatus !== ProgressStatusType.FINISHED;
   }
 
   private removeIncompleteOrganizations() {

@@ -14,6 +14,7 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { FormUtilsService } from '@enrolment/shared/services/form-utils.service';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
+import { ProgressStatusType } from '@enrolment/shared/enums/progress-status-type.enum';
 
 @Component({
   selector: 'app-self-declaration',
@@ -153,7 +154,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
 
     this.isProfileComplete = enrolment.profileCompleted;
     this.enrolmentStateService.enrolment = enrolment;
-    this.hasInitialStatus = enrolment.initialStatus;
+    this.isInitialEnrolment = enrolment.progressStatus !== ProgressStatusType.FINISHED;
   }
 
   private toggleSelfDeclarationValidators(value: boolean, control: FormControl) {

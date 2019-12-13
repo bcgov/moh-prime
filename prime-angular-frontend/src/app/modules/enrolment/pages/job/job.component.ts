@@ -16,6 +16,7 @@ import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmen
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { ProgressStatusType } from '@enrolment/shared/enums/progress-status-type.enum';
 
 @Component({
   selector: 'app-job',
@@ -134,7 +135,7 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
 
     this.isProfileComplete = enrolment.profileCompleted;
     this.enrolmentStateService.enrolment = enrolment;
-    this.hasInitialStatus = enrolment.initialStatus;
+    this.isInitialEnrolment = enrolment.progressStatus !== ProgressStatusType.FINISHED;
   }
 
   private filterJobNames(jobs: Job[]) {

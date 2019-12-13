@@ -16,6 +16,7 @@ import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { ProgressStatusType } from '@enrolment/shared/enums/progress-status-type.enum';
 
 @Component({
   selector: 'app-review',
@@ -79,6 +80,6 @@ export class ReviewComponent extends BaseEnrolmentPage implements OnInit {
 
     this.enrolment = enrolment;
     this.enrolmentStateService.enrolment = enrolment;
-    this.hasInitialStatus = enrolment.initialStatus;
+    this.isInitialEnrolment = enrolment.progressStatus !== ProgressStatusType.FINISHED;
   }
 }

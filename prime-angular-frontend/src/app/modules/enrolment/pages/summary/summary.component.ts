@@ -10,12 +10,12 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { WindowRefService } from '@core/services/window-ref.service';
+import { ProgressStatusType } from '@enrolment/shared/enums/progress-status-type.enum';
 
 @Component({
   selector: 'app-summary',
   templateUrl: './summary.component.html',
-  styleUrls: ['./summary.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./summary.component.scss']
 })
 export class SummaryComponent extends BaseEnrolmentPage implements OnInit {
   public enrolment: Enrolment;
@@ -51,16 +51,18 @@ export class SummaryComponent extends BaseEnrolmentPage implements OnInit {
 
   public generateProvisionerLink() {
     this.enrolmentResource.createEnrolmentCertificateAccessToken()
-      .subscribe((token) => this.tokens.push(token));
+      .subscribe((token: EnrolmentCertificateAccessToken) => this.tokens.push(token));
   }
 
   public ngOnInit() {
     // Only shown the first time the enrollee reaches the summary
     const routeState = this.windowRef.nativeWindow.history.state;
-    this.showProgressBar = (routeState && routeState.showProgressBar) ? routeState.showProgressBar : false;
+    this.showProgressBar = (routeState && routeState.showProgressBar)
+      ? routeState.showProgressBar
+      : false;
 
     this.enrolment = this.enrolmentService.enrolment;
-    this.hasInitialStatus = this.enrolment.initialStatus;
+    this.isInitialEnrolment = this.enrolment.progressStatus !== ProgressStatusType.FINISHED;
 
     this.busy = this.enrolmentResource.enrolmentCertificateAccessTokens()
       .subscribe(

@@ -8,6 +8,7 @@ import { IEnrolmentService } from '@enrolment/shared/services/enrolment.service'
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { EnrolleeClassification } from '@shared/enums/enrollee-classification.enum';
 import { Address } from '@enrolment/shared/models/address.model';
+import { ProgressStatusType } from '@enrolment/shared/enums/progress-status-type.enum';
 
 export class MockEnrolmentService implements IEnrolmentService {
   // tslint:disable-next-line: variable-name
@@ -81,7 +82,7 @@ export class MockEnrolmentService implements IEnrolmentService {
       availableStatuses: null,
       enrolleeClassification: EnrolleeClassification.MOA,
       profileCompleted: true,
-      initialStatus: true
+      progressStatus: ProgressStatusType.STARTED
     });
   }
 
