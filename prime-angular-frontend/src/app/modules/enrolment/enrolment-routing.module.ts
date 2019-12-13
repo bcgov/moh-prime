@@ -23,6 +23,10 @@ import { SummaryComponent } from './pages/summary/summary.component';
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
 import { DeclinedComponent } from './pages/declined/declined.component';
 import { DeclinedAccessAgreementComponent } from './pages/declined-access-agreement/declined-access-agreement.component';
+import { AccessAgreementHistoryComponent } from './pages/access-agreement-history/access-agreement-history.component';
+import { PharmanetEnrolmentCertificateComponent } from './pages/pharmanet-enrolment-certificate/pharmanet-enrolment-certificate.component';
+import { PharmanetTransactionsComponent } from './pages/pharmanet-transactions/pharmanet-transactions.component';
+import { EnrolmentLogHistoryComponent } from './pages/enrolment-log-history/enrolment-log-history.component';
 
 const routes: Routes = [
   {
@@ -88,24 +92,52 @@ const routes: Routes = [
         data: { title: 'Enrolment Confirmation' }
       },
       {
-        path: EnrolmentRoutes.ACCESS_AGREEMENT,
-        component: AccessAgreementComponent,
-        data: { title: 'Enrolment Access Agreement' }
-      },
-      {
-        path: EnrolmentRoutes.SUMMARY,
-        component: SummaryComponent,
-        data: { title: 'Enrolment Summary' }
-      },
-      {
         path: EnrolmentRoutes.DECLINED,
         component: DeclinedComponent,
         data: { title: 'Enrolment Summary' }
       },
       {
+        path: EnrolmentRoutes.ACCESS_AGREEMENT,
+        component: AccessAgreementComponent,
+        data: { title: 'Enrolment Access Agreement' }
+      },
+      {
         path: EnrolmentRoutes.DECLINED_ACCESS_AGREEMENT,
         component: DeclinedAccessAgreementComponent,
         data: { title: 'Enrolment Summary' }
+      },
+      // TODO only review after initial enrolment?
+      // {
+      //   path: EnrolmentRoutes.REVIEW,
+      //   component: ReviewComponent,
+      //   data: { title: 'PharmaNet Enrolment' }
+      // },
+      // TODO what should this be?
+      {
+        path: EnrolmentRoutes.SUMMARY,
+        component: SummaryComponent,
+        data: { title: 'Enrolment Summary' }
+      },
+      // TODO when should these appear? seems jarring to switch
+      {
+        path: EnrolmentRoutes.ACCESS_AGREEMENT_HISTORY,
+        component: AccessAgreementHistoryComponent,
+        data: { title: 'Access Agreement History' }
+      },
+      {
+        path: EnrolmentRoutes.PHARMANET_ENROLMENT_CERTIFICATE,
+        component: PharmanetEnrolmentCertificateComponent,
+        data: { title: 'PharmaNet Enrolment Certificate' }
+      },
+      {
+        path: EnrolmentRoutes.PHARMANET_TRANSACTIONS,
+        component: PharmanetTransactionsComponent,
+        data: { title: 'PharmaNet Transactions' }
+      },
+      {
+        path: EnrolmentRoutes.ENROLMENT_LOG_HISTORY,
+        component: EnrolmentLogHistoryComponent,
+        data: { title: 'Enrolment Log History' }
       },
       {
         path: '', // Equivalent to `/` and alias for `review`

@@ -20,6 +20,10 @@ import { PageFooterComponent } from './shared/components/page-footer/page-footer
 import { SummaryComponent } from './pages/summary/summary.component';
 import { DeclinedComponent } from './pages/declined/declined.component';
 import { DeclinedAccessAgreementComponent } from './pages/declined-access-agreement/declined-access-agreement.component';
+import { AccessAgreementHistoryComponent } from './pages/access-agreement-history/access-agreement-history.component';
+import { PharmanetTransactionsComponent } from './pages/pharmanet-transactions/pharmanet-transactions.component';
+import { EnrolmentLogHistoryComponent } from './pages/enrolment-log-history/enrolment-log-history.component';
+import { PharmanetEnrolmentCertificateComponent } from './pages/pharmanet-enrolment-certificate/pharmanet-enrolment-certificate.component';
 
 import { CollegeCertificationFormComponent } from './shared/components/college-certification-form/college-certification-form.component';
 import { JobFormComponent } from './shared/components/job-form/job-form.component';
@@ -43,6 +47,10 @@ import { JobFormComponent } from './shared/components/job-form/job-form.componen
     SummaryComponent,
     DeclinedComponent,
     DeclinedAccessAgreementComponent,
+    AccessAgreementHistoryComponent,
+    PharmanetTransactionsComponent,
+    EnrolmentLogHistoryComponent,
+    PharmanetEnrolmentCertificateComponent,
     CollegeCertificationFormComponent,
     JobFormComponent
   ],
