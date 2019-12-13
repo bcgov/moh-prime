@@ -28,6 +28,13 @@ pipeline {
                 sh "./player.sh scan"
             }
         }
+        stage('ZAP') {
+            agent { label 'code-tests' }
+            checkout scm
+            steps {
+                sh "./player.sh zap frontend http://${APP_NAME}${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca"
+            }
+        }
         stage('Cleanup Branch') {
             when { expression { ( GIT_BRANCH != 'develop' ) } }
             agent { label 'master' }

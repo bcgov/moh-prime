@@ -21,3 +21,4 @@ function angularTests()
 echo "Beginning tests in container..."
 dotnetTests
 angularTests
+

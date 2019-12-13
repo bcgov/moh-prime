@@ -46,7 +46,7 @@ ENV PATH $PATH:$JAVA_HOME:/var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunne
 #COMMON
 RUN echo "Installing common, jenkins and Sonar Scanner prerequisites..." && \
     useradd default && \
-    apt-get -yqq install openjdk-8-jre  && \
+    apt-get -yqq install openjdk-8-jre wget && \
     wget -q http://sourceforge.net/projects/sonar-pkg/files/deb/binary/sonar_6.7.4_all.deb && \
     dpkg -i sonar_6.7.4_all.deb && \
     mkdir -p /var/lib/origin && \

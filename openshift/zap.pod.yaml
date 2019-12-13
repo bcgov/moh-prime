@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Template
+metadata: 
+  name: zap
+  creationTimestamp: null
+parameters: 
+  - name: NAME
+    displayName: "Name"
+    description: "A name used for all objects"
+    required: true
+    value: "zap"
+  - name: APP
+    displayName: "APP"
+    description: "A name used for all objects"
+    required: true
+    value: "zap"
+objects: 
+  - apiVersion: v1
+    kind: Pod
+    metadata: 
+      name: "${NAME}"
+      creationTimestamp: 
+      labels: 
+        run: "zap"
+        app: "${APP}"
+    spec: 
+      containers: 
+      - name: "zap"
+        image: "172.50.0.2:5000/openshift/jenkins-slave-zap"
+        command:
+        - "/bin/bash"
+        - "-c"
+        - 'export HOME=/home/jenkins; source /usr/local/bin/generate_container_user ; wget -q https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.2.0.1873-linux.zip ; unzip sonar-scanner-cli-4.2.0.1873-linux.zip ; mv sonar-scanner-4.2.0.1873-linux sonarscanner; rm -f sonar-scanner-cli-4.2.0.1873-linux.zip; wget -q http://jenkins-prod/jnlpJars/agent.jar; java -jar agent.jar -jnlpUrl http://jenkins-prod/computer/zap/slave-agent.jnlp -secret b4df5e25fa9b5f490ebf22535bef58d1e02d9867bc3661a6e097f95c4a545443 -workDir "/home/jenkins"'
+        resources: 
+          limits: 
+            cpu: "1.5"
+            memory: "3Gi"
+          requests: 
+            cpu: "500m"
+            memory: "1Gi"
+        imagePullPolicy: "IfNotPresent"
+      restartPolicy: "Always"
+      dnsPolicy: "ClusterFirst"
+    status: {}
