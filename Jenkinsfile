@@ -36,7 +36,7 @@ pipeline {
             steps {
                 checkout scm
                 echo "Scanning..."
-                sh './player.sh zap frontend http://${APP_NAME}${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca'
+                sh "./player.sh zap frontend"
             }
         }
         stage('SchemaSpy Database Investigation') {

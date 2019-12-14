@@ -17,8 +17,7 @@ RUN cat /usr/src/app/src/environments/environment.prod.ts && \
     npm install @angular/cli -g --silent && \ 
     npm install && \
     ng build --prod && \
-    echo "NPM packages installed..." && \
-    printenv
+    echo "NPM packages installed..." 
 
 FROM nginx:1.15-alpine
 COPY --from=build-deps /usr/src/app/dist/angular-frontend /usr/share/nginx/html
@@ -28,7 +27,8 @@ COPY --from=build-deps /usr/src/app/nginx.template.conf /etc/nginx/nginx.templat
 COPY --from=build-deps /usr/src/app/entrypoint.sh /home
 
 EXPOSE 8080
-RUN mkdir -p /var/cache/nginx && \ 
+RUN npm audit fix && \
+    mkdir -p /var/cache/nginx && \ 
     mkdir -p /var/cache/nginx/client_temp && \ 
     chown -R 1001:1001 /var/cache/nginx && \ 
     touch /etc/nginx/conf.d/default.conf && \
