@@ -16,6 +16,7 @@ RUN KEYCLOAK_URL=$(grep KEYCLOAK_URL /usr/src/app/src/environments/keycloak.env.
 RUN cat /usr/src/app/src/environments/environment.prod.ts && \
     npm install @angular/cli -g --silent && \ 
     npm install && \
+    npm audit fix && \
     ng build --prod && \
     echo "NPM packages installed..." 
 
@@ -27,8 +28,7 @@ COPY --from=build-deps /usr/src/app/nginx.template.conf /etc/nginx/nginx.templat
 COPY --from=build-deps /usr/src/app/entrypoint.sh /home
 
 EXPOSE 8080
-RUN npm audit fix && \
-    mkdir -p /var/cache/nginx && \ 
+RUN mkdir -p /var/cache/nginx && \ 
     mkdir -p /var/cache/nginx/client_temp && \ 
     chown -R 1001:1001 /var/cache/nginx && \ 
     touch /etc/nginx/conf.d/default.conf && \
