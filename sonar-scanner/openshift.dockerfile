@@ -11,7 +11,7 @@ LABEL Description="This is a base image, which provides the jenkins agent execut
 ENV HOME /home/jenkins
 ARG AGENT_WORKDIR=/home/jenkins/agent
 ENV AGENT_WORKDIR=${AGENT_WORKDIR}
-ENV DISPLAY :99
+ENV DISPLAY 1:0
 ENV TEMP /tmp
 
 WORKDIR /home/jenkins
@@ -46,7 +46,7 @@ COPY . $HOME
 
 # ENV JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64/jre/bin
 ENV PATH $PATH:$JAVA_HOME:/var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScanner/bin:/opt/sonar/bin
-#COMMON
+# COMMON
 RUN echo "Installing common, jenkins and Sonar Scanner prerequisites..." && \
     useradd default && \
     apt-get -yqq install openjdk-8-jre && \
@@ -58,6 +58,16 @@ RUN echo "Installing common, jenkins and Sonar Scanner prerequisites..." && \
     chown -R default:0 ${AGENT_WORKDIR} && \
     chmod -R a+rwx ${AGENT_WORKDIR} && \
     chmod 777 /etc/passwd
+
+# ZAP
+RUN echo "Installing ZAP" && \
+    wget https://github.com/zaproxy/zaproxy/releases/download/v2.8.1/ZAP_2.8.1_Linux.tar.gz && \
+    mkdir -p /zap && \
+    tar -zxf ZAP_2.8.1_Linux.tar.gz && \
+    mv ZAP_2.8.1 /zap && \
+    chmod -R a+rwx /zap && \
+    chown -R default:0 /zap && \
+    ln -s /zap/zap /usr/bin/zap
 
 # Headless Browsers
 RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \

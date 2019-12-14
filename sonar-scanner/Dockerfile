@@ -56,6 +56,16 @@ RUN echo "Installing common, jenkins and Sonar Scanner prerequisites..." && \
     chmod -R a+rwx ${AGENT_WORKDIR} && \
     chmod 777 /etc/passwd
 
+# ZAP
+RUN echo "Installing ZAP" && \
+    wget https://github.com/zaproxy/zaproxy/releases/download/v2.8.1/ZAP_2.8.1_Linux.tar.gz && \
+    mkdir -p /zap && \
+    tar -zxf ZAP_2.8.1_Linux.tar.gz && \
+    mv ZAP_2.8.1 /zap && \
+    chmod -R a+rwx /zap && \
+    chown -R default:0 /zap && \
+    ln -s /zap/zap /usr/bin/zap
+
 # Headless Browsers
 RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
     echo "deb [arch=amd64]  http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list && \
