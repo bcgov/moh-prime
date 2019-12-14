@@ -18,5 +18,7 @@ namespace Prime.Models
         public ICollection<Certification> Certifications { get; set; }
 
         public ICollection<CollegeLicense> CollegeLicenses { get; set; }
+
+        public ICollection<DefaultPrivilege> DefaultPrivileges { get; set; }
     }
 }
