@@ -30,6 +30,6 @@ function scan()
 function zap()
 {
     source $1.conf
-    zap-full-scan.py -x ${APP_NAME}.xml -t $2 
-    $HOME/sonarscanner/bin/sonar-scanner -Dsonar.projectName=${APP_NAME} -Dsonar.projectKey=${APP_NAME} -Dsonar.sources=. -Dsonar.host.url=http://sonarqube:9000 -Dsonar.zaproxy.reportPath=${APP_NAME}.xml
+    zap-full-scan.py -x ${APP_NAME}.xml -t ${ZAP_TARGET}
+    /var/lib/jenkins/sonarscanner/bin/sonar-scanner -Dsonar.projectName=${APP_NAME} -Dsonar.projectKey=${APP_NAME} -Dsonar.sources=. -Dsonar.host.url=http://sonarqube:9000 -Dsonar.zaproxy.reportPath=${APP_NAME}.xml
 }
