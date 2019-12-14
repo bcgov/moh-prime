@@ -36,8 +36,8 @@ pipeline {
             steps {
                 checkout scm
                 echo "Scanning..."
-                sh "./player.sh zap frontend"
-                sh "./player.sh zap api"
+                sh "./player.sh zap frontend baseline"
+                sh "./player.sh zap api baseline"
             }
         }
         stage('SchemaSpy Database Investigation') {
