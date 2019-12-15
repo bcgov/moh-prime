@@ -174,8 +174,10 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
 
-            // If the enrollee is not in the status of 'In Progress', it cannot be updated
-            if (!(await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.IN_PROGRESS_CODE)))
+            // If the enrollee is not in the status of 'In Progress' or 'Accepted TOA', it cannot be updated
+            if (!(await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.IN_PROGRESS_CODE)) &&
+                // TODO should be update to be EDITING and switched to EDITING immediately on ACCEPTED_TOS
+                !(await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.ACCEPTED_TOS_CODE)))
             {
                 this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee can not be updated when the current status is not 'In Progress'.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
