@@ -1,4 +1,4 @@
-export enum ProgressStatusType {
+export enum ProgressStatus {
   STARTED,
   SUBMITTED,
   FINISHED
