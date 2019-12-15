@@ -15,7 +15,6 @@ function dotnetTests()
     echo "Beginning .NET sonar scan..."
     dotnet sonarscanner begin /k:${APP_NAME} /d:sonar.projectName=${APP_NAME} /d:sonar.host.url=http://sonarqube:9000 /d:sonar.cs.opencover.reportsPaths="./BuildReports/Coverage/coverage.opencover.xml" /d:sonar.exclusions="**/Migrations/*" /d:sonar.coverage.exclusions="**Tests*.cs","**/Migrations/*","**/Program.cs" /d:sonar.cpd.exclusions="**/Migrations/*" /d:sonar.cs.vstest.reportsPaths="./BuildReports/UnitTests/TestResults.trx" /d:sonar.cs.nunit.reportsPaths="./BuildReports/UnitTests/TestResults.xml"
     dotnet build
-    /zap/zap.sh -cmd -quickurl http://$APP_NAME-$PROJECT_PREFIX-dev.pathfinder.gov.bc.ca -quickout /tmp/${APP_NAME} -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true -config spider.maxDuration=5 -addonupdate -addoninstall pscanrulesBeta -config connection.timeoutInSecs=600
     dotnet-sonarscanner end
 }
 
@@ -38,6 +37,6 @@ function zap()
 {
     source $1.conf
     #zap-$2.py -x /zap/wrk/${APP_NAME}.xml -t http://$APP_NAME-$PROJECT_PREFIX-dev.pathfinder.gov.bc.ca
-    /zap/zap.sh -cmd -quickurl http://$APP_NAME-$PROJECT_PREFIX-dev.pathfinder.gov.bc.ca -quickout /tmp/${APP_NAME} -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true -config spider.maxDuration=5 -addonupdate -addoninstall pscanrulesBeta -config connection.timeoutInSecs=600
-    sonar-scanner -Dsonar.projectName=${APP_NAME}.zap -Dsonar.projectKey=${APP_NAME}.zap -Dsonar.sources=. -Dsonar.host.url=http://sonarqube:9000 -Dsonar.zaproxy.reportPath=/tmp${APP_NAME}.xml
+    /zap/zap.sh -cmd -quickurl http://$APP_NAME-$PROJECT_PREFIX-dev.pathfinder.gov.bc.ca -quickout /tmp/${APP_NAME}.xml -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true -config spider.maxDuration=5 -addonupdate -addoninstall pscanrulesBeta -config connection.timeoutInSecs=600
+    sonar-scanner -Dsonar.projectName=${APP_NAME}.zap -Dsonar.projectKey=${APP_NAME}.zap -Dsonar.sources=${SOURCE_CONTEXT_DIR} -Dsonar.host.url=http://sonarqube:9000 -Dsonar.zaproxy.reportPath=/tmp${APP_NAME}.xml
 }
