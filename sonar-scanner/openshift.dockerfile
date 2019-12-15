@@ -46,10 +46,10 @@ COPY . $HOME
 
 # ENV JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64/jre/bin
 ENV PATH $PATH:$JAVA_HOME:/var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScanner/bin:/opt/sonar/bin
-# COMMON
+#COMMON
 RUN echo "Installing common, jenkins and Sonar Scanner prerequisites..." && \
     useradd default && \
-    apt-get -yqq install openjdk-8-jre && \
+    apt-get -yqq install openjdk-8-jre  && \
     wget -q http://sourceforge.net/projects/sonar-pkg/files/deb/binary/sonar_6.7.4_all.deb && \
     dpkg -i sonar_6.7.4_all.deb && \
     mkdir -p /var/lib/origin && \
@@ -57,6 +57,14 @@ RUN echo "Installing common, jenkins and Sonar Scanner prerequisites..." && \
     chmod -R a+rwx /home/jenkins && \
     chown -R default:0 ${AGENT_WORKDIR} && \
     chmod -R a+rwx ${AGENT_WORKDIR} && \
+    wget -q https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.2.0.1873-linux.zip && \
+    unzip sonar-scanner-cli-4.2.0.1873-linux.zip && \
+    mv sonar-scanner-4.2.0.1873-linux sonarscanner && \
+    mv sonarscanner / && \
+    chown -R default:0 /sonarscanner && \
+    chmod -R a+rwx /sonarscanner && \
+    rm -f sonar-scanner-cli-4.2.0.1873-linux.zip && \
+    ln -s /sonarscanner/sonar-scanner /usr/bin/sonar-scanner && \
     chmod 777 /etc/passwd
 
 # ZAP
@@ -64,15 +72,17 @@ RUN echo "Installing ZAP" && \
     wget https://github.com/zaproxy/zaproxy/releases/download/v2.8.1/ZAP_2.8.1_Linux.tar.gz && \
     mkdir -p /zap && \
     tar -zxf ZAP_2.8.1_Linux.tar.gz && \
-    mv ZAP_2.8.1 /zap && \
+    mv ZAP_2.8.1 zap && \
+    mv zap / && \
+    mkdir -p /zap/?/ZAP && \
     chmod -R a+rwx /zap && \
     chown -R default:0 /zap && \
-    ln -s /zap/zap /usr/bin/zap
+    ln -s /zap/zap.sh /usr/bin/zap.sh
 
 # Headless Browsers
 RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
     echo "deb [arch=amd64]  http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list && \
-    apt-get -yqq update && \
+    apt-get -yqq update && \openjdk:8-jdk
     apt-get -yqq install google-chrome-stable chromium && \
     wget -q https://chromedriver.storage.googleapis.com/2.41/chromedriver_linux64.zip && \
     unzip chromedriver_linux64.zip && \
@@ -82,16 +92,16 @@ RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-ke
 
 # Node
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD 1
-ENV CHROMEDRIVER_FILEPATH /usr/bin/chromedriver 
+ENV CHROMEDRIVER_FILEPATH /usr/bin/chromedriver
 RUN echo "Installing Node..." && \
     curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
     apt-get -yqq install nodejs && \
     echo 'kernel.unprivileged_userns_clone=1' > /etc/sysctl.d/userns.conf && \
     mkdir -p /usr/lib/node_modules/chromedriver/lib/chromedriver && \
     cp /usr/bin/chromedriver /usr/lib/node_modules/chromedriver/lib/chromedriver && \
-    chmod -R a+rwx /usr/lib/node_modules && \ 
-    chown -R default:0 /usr/lib/node_modules && \ 
-    chmod -R 777 /usr/lib/node_modules && \ 
+    chmod -R a+rwx /usr/lib/node_modules && \
+    chown -R default:0 /usr/lib/node_modules && \
+    chmod -R 777 /usr/lib/node_modules && \
     npm install -g --silent @angular/cli @angular/core && \
     echo n | npm install -g --silent @angular-devkit/build-angular @angular/compiler @angular/compiler-cli typescript jasmine karma karma-chrome-launcher karma-mocha karma-chai karma-jasmine karma-jasmine-html-reporter karma-coverage-istanbul-reporter
 
@@ -122,9 +132,9 @@ RUN echo "Installing .NET, coverlet, scanner..." && \
     mkdir -p /tmp/NuGetScratch/lock && \
     chown -R default:0 /tmp/NuGetScratch/ && \
     chmod -R a+rwx /tmp/NuGetScratch/ && \
-    chmod -R 777 /tmp/NuGetScratch/ 
+    chmod -R 777 /tmp/NuGetScratch/
 USER 0
-# All files in jenkins home need to be writable 
+# All files in jenkins home need to be writable
 RUN chown -R default:0 /home/jenkins && \
     chmod -R a+rwx /home/jenkins && \
     chmod -R 777 /home/jenkins && \

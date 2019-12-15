@@ -54,6 +54,14 @@ RUN echo "Installing common, jenkins and Sonar Scanner prerequisites..." && \
     chmod -R a+rwx /home/jenkins && \
     chown -R default:0 ${AGENT_WORKDIR} && \
     chmod -R a+rwx ${AGENT_WORKDIR} && \
+    wget -q https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.2.0.1873-linux.zip && \
+    unzip sonar-scanner-cli-4.2.0.1873-linux.zip && \
+    mv sonar-scanner-4.2.0.1873-linux sonarscanner && \
+    mv sonarscanner / && \
+    chown -R default:0 /sonarscanner && \
+    chmod -R a+rwx /sonarscanner && \
+    rm -f sonar-scanner-cli-4.2.0.1873-linux.zip && \
+    ln -s /sonarscanner/sonar-scanner /usr/bin/sonar-scanner && \
     chmod 777 /etc/passwd
 
 # ZAP
@@ -61,10 +69,12 @@ RUN echo "Installing ZAP" && \
     wget https://github.com/zaproxy/zaproxy/releases/download/v2.8.1/ZAP_2.8.1_Linux.tar.gz && \
     mkdir -p /zap && \
     tar -zxf ZAP_2.8.1_Linux.tar.gz && \
-    mv ZAP_2.8.1 /zap && \
+    mv ZAP_2.8.1 zap && \
+    mv zap / && \
+    mkdir -p /zap/?/ZAP && \
     chmod -R a+rwx /zap && \
     chown -R default:0 /zap && \
-    ln -s /zap/zap /usr/bin/zap
+    ln -s /zap/zap.sh /usr/bin/zap.sh
 
 # Headless Browsers
 RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
@@ -82,8 +92,8 @@ RUN echo "Installing Node..." && \
     curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
     apt-get -yqq install nodejs && \
     mkdir -p /usr/lib/node_modules/chromedriver/lib/chromedriver && \
-    chmod -R a+rwx /usr/lib/node_modules && \ 
-    chown -R default:0 /usr/lib/node_modules && \ 
+    chmod -R a+rwx /usr/lib/node_modules && \
+    chown -R default:0 /usr/lib/node_modules && \
     cp /usr/bin/chromedriver /usr/lib/node_modules/chromedriver/lib/chromedriver && \
     echo 'kernel.unprivileged_userns_clone=1' > /etc/sysctl.d/userns.conf && \
     export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 && \
@@ -118,9 +128,9 @@ RUN echo "Installing .NET, coverlet, scanner..." && \
     mkdir -p /tmp/NuGetScratch/lock && \
     chown -R default:0 /tmp/NuGetScratch/ && \
     chmod -R a+rwx /tmp/NuGetScratch/ && \
-    chmod -R 777 /tmp/NuGetScratch/ 
+    chmod -R 777 /tmp/NuGetScratch/
 USER 0
-# All files in jenkins home need to be writable 
+# All files in jenkins home need to be writable
 RUN chown -R default:0 /home/jenkins && \
     chmod -R a+rwx /home/jenkins && \
     chmod -R 777 /home/jenkins && \
