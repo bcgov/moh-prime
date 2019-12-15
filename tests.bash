@@ -21,10 +21,10 @@ function dotnetTests()
 function angularTests()
 {
     cd prime-angular-frontend
+    npm install @angular/core
     npm run sonar
     cd ..
 }
-
 function scan()
 {
     echo "Beginning tests on .NET ..."
