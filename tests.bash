@@ -4,6 +4,8 @@ then
     Xvfb :1 -screen 0 1024x768x16 -ac &
 fi
 
+uuid=$(cat /proc/sys/kernel/random/uuid)
+
 function dotnetTests()
 {
     source api.conf
@@ -36,7 +38,8 @@ function scan()
 function zap()
 {
     source $1.conf
-    #zap-$2.py -x /zap/wrk/${APP_NAME}.xml -t http://$APP_NAME-$PROJECT_PREFIX-dev.pathfinder.gov.bc.ca
-    /zap/zap.sh -cmd -quickurl http://$APP_NAME-$PROJECT_PREFIX-dev.pathfinder.gov.bc.ca -quickout /tmp/${APP_NAME}.xml -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true -config spider.maxDuration=5 -addonupdate -addoninstall pscanrulesBeta -config connection.timeoutInSecs=600
-    sonar-scanner -Dsonar.projectName=${APP_NAME}.zap -Dsonar.projectKey=${APP_NAME}.zap -Dsonar.sources=${SOURCE_CONTEXT_DIR} -Dsonar.host.url=http://sonarqube:9000 -Dsonar.zaproxy.reportPath=/tmp${APP_NAME}.xml
+    /zap/zap.sh -cmd -quickurl http://$APP_NAME-$PROJECT_PREFIX-dev.pathfinder.gov.bc.ca -quickout /tmp/${APP_NAME}.${uuid}.xml -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true -config spider.maxDuration=5 -addonupdate -addoninstall pscanrulesBeta -config connection.timeoutInSecs=600
+    /sonarscanner/bin/sonar-scanner -Dsonar.projectName=${APP_NAME}.zap -Dsonar.projectKey=${APP_NAME}.zap -Dsonar.sources=${SOURCE_CONTEXT_DIR} -Dsonar.host.url=http://sonarqube:9000 -Dsonar.zaproxy.reportPath=/tmp/${APP_NAME}.${uuid}.xml
+    rm -f /tmp/${APP_NAME}.${uuid}.xml
 }
+
