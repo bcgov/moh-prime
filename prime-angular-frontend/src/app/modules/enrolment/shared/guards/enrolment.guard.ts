@@ -59,37 +59,19 @@ export class EnrolmentGuard extends BaseGuard {
 
     // Otherwise, routes are directed based on enrolment status
     if (!enrolment) {
-      return this.navigate(routePath, EnrolmentRoutes.PROFILE);
+      return this.navigate(routePath, EnrolmentRoutes.DEMOGRAPHIC);
     } else if (enrolment) {
       switch (enrolment.currentStatus.status.code) {
         case EnrolmentStatus.IN_PROGRESS:
-          const postEnrolmentRoutes = EnrolmentRoutes.postEnrolmentSubmissionRoutes();
-          const route = routePath.split('/').pop();
-
-          const redirectionRoute = (!enrolment.profileCompleted)
-            ? EnrolmentRoutes.PROFILE // Only for new enrolments with incomplete profiles
-            : EnrolmentRoutes.REVIEW;
-
-          if (!enrolment.profileCompleted && [...postEnrolmentRoutes, EnrolmentRoutes.REVIEW].includes(route)) {
-            this.navigate(routePath, redirectionRoute);
-          }
-
-          const hasNotCompletedProfile = !enrolment.profileCompleted && EnrolmentRoutes.REVIEW === route;
-          const hasNotSubmittedEnrolment = postEnrolmentRoutes.includes(route);
-
-          return (hasNotCompletedProfile || hasNotSubmittedEnrolment)
-            // Prevent access to post enrolment routes
-            ? this.navigate(routePath, redirectionRoute)
-            // Otherwise, allow the route to resolve
-            : true;
+          return this.manageInProgressRouting(routePath, enrolment);
         case EnrolmentStatus.SUBMITTED:
-          return this.navigate(routePath, EnrolmentRoutes.CONFIRMATION);
+          return this.navigate(routePath, EnrolmentRoutes.SUBMISSION_CONFIRMATION);
         case EnrolmentStatus.ADJUDICATED_APPROVED:
-          return this.navigate(routePath, EnrolmentRoutes.ACCESS_AGREEMENT);
+          return this.manageApprovedRouting(routePath, enrolment);
         case EnrolmentStatus.DECLINED:
           return this.navigate(routePath, EnrolmentRoutes.DECLINED);
         case EnrolmentStatus.ACCEPTED_TOS:
-          return this.navigate(routePath, EnrolmentRoutes.SUMMARY);
+          return this.manageAcceptedTosRouting(routePath, enrolment);
         case EnrolmentStatus.DECLINED_TOS:
           return this.navigate(routePath, EnrolmentRoutes.DECLINED_ACCESS_AGREEMENT);
       }
@@ -97,6 +79,74 @@ export class EnrolmentGuard extends BaseGuard {
 
     // Otherwise, prevent the route from resolving
     return false;
+  }
+
+  /**
+   * @description
+   * Manages the routing for enrollees that are in-progress
+   * filling out their initial enrolment, which prevents
+   * access to post-enrolment routes.
+   */
+  private manageInProgressRouting(routePath: string, enrolment: Enrolment) {
+    // const postEnrolmentRoutes = EnrolmentRoutes.enrolmentSubmissionRoutes();
+    const enrolmentSubmissionRoutes = [
+      ...EnrolmentRoutes.enrolmentSubmissionRoutes()
+    ];
+    const route = routePath.split('/').pop();
+
+    const redirectionRoute = (!enrolment.profileCompleted)
+      ? EnrolmentRoutes.DEMOGRAPHIC // Only for new enrolments with incomplete profiles
+      : EnrolmentRoutes.OVERVIEW;
+
+    if (
+      !enrolment.profileCompleted &&
+      [...enrolmentSubmissionRoutes, EnrolmentRoutes.OVERVIEW].includes(route)
+    ) {
+      this.navigate(routePath, redirectionRoute);
+    }
+
+    const hasNotCompletedProfile = !enrolment.profileCompleted && EnrolmentRoutes.OVERVIEW === route;
+    const hasNotSubmittedEnrolment = enrolmentSubmissionRoutes.includes(route);
+
+    return (hasNotCompletedProfile || hasNotSubmittedEnrolment)
+      // Prevent access to post enrolment routes
+      ? this.navigate(routePath, redirectionRoute)
+      // Otherwise, allow the route to resolve
+      : true;
+  }
+
+  private manageApprovedRouting(routePath: string, enrolment: Enrolment) {
+    const whiteListedRoutes = [
+      EnrolmentRoutes.ACCESS_AGREEMENT,
+      EnrolmentRoutes.PHARMANET_TRANSACTIONS,
+      EnrolmentRoutes.ENROLMENT_LOG_HISTORY
+    ];
+    const route = routePath.split('/').pop();
+
+    console.log(whiteListedRoutes, route);
+
+
+    if (!whiteListedRoutes.includes(route)) {
+      return this.navigate(routePath, EnrolmentRoutes.ACCESS_AGREEMENT);
+    }
+
+    return true;
+  }
+
+  /**
+   * @description
+   * Manages the routing for enrollees
+   */
+  private manageAcceptedTosRouting(routePath: string, enrolment: Enrolment) {
+    const enrolmentSubmissionRoutes = [
+      ...EnrolmentRoutes.enrolmentSubmissionRoutes()
+    ];
+
+    if (enrolmentSubmissionRoutes.includes(routePath)) {
+      this.navigate(routePath, EnrolmentRoutes.OVERVIEW);
+    }
+
+    return true;
   }
 
   /**
