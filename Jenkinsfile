@@ -32,12 +32,12 @@ pipeline {
             }
         }
         stage('ZAP') {
-            agent { label 'zap' }
+            agent { label 'code-tests' }
             steps {
                 checkout scm
                 echo "Scanning..."
-                sh "./player.sh zap frontend baseline"
-                sh "./player.sh zap api baseline"
+                sh "./player.sh zap frontend"
+                sh "./player.sh zap api"
             }
         }
         stage('SchemaSpy Database Investigation') {
