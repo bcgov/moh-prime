@@ -16,7 +16,7 @@ import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmen
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
-import { ProgressStatusType } from '@enrolment/shared/enums/progress-status-type.enum';
+import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 
 @Component({
   selector: 'app-job',
@@ -70,7 +70,7 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
 
             const routePath = (!this.isProfileComplete)
               ? EnrolmentRoutes.SELF_DECLARATION
-              : EnrolmentRoutes.REVIEW;
+              : EnrolmentRoutes.OVERVIEW;
             this.routeTo(routePath);
           },
           (error: any) => {
@@ -135,7 +135,7 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
 
     this.isProfileComplete = enrolment.profileCompleted;
     this.enrolmentStateService.enrolment = enrolment;
-    this.isInitialEnrolment = enrolment.progressStatus !== ProgressStatusType.FINISHED;
+    this.isInitialEnrolment = enrolment.progressStatus !== ProgressStatus.FINISHED;
   }
 
   private filterJobNames(jobs: Job[]) {

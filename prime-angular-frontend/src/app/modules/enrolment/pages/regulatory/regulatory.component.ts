@@ -12,7 +12,7 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
-import { ProgressStatusType } from '@enrolment/shared/enums/progress-status-type.enum';
+import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 
 @Component({
   selector: 'app-regulatory',
@@ -63,7 +63,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
               : EnrolmentRoutes.SELF_DECLARATION;
             const routePath = (!this.isProfileComplete)
               ? nextRoutePath
-              : EnrolmentRoutes.REVIEW;
+              : EnrolmentRoutes.OVERVIEW;
             this.routeTo(routePath);
           },
           (error: any) => {
@@ -120,7 +120,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
 
     this.enrolmentStateService.enrolment = enrolment;
     this.isProfileComplete = enrolment.profileCompleted;
-    this.isInitialEnrolment = enrolment.progressStatus !== ProgressStatusType.FINISHED;
+    this.isInitialEnrolment = enrolment.progressStatus !== ProgressStatus.FINISHED;
   }
 
   /**

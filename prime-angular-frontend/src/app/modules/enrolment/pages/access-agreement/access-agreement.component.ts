@@ -18,7 +18,7 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
-import { ProgressStatusType } from '@enrolment/shared/enums/progress-status-type.enum';
+import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 import { ViewportService } from '@core/services/viewport.service';
 
 @Component({
@@ -87,7 +87,9 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
         .subscribe(
           () => {
             this.toastService.openSuccessToast(`Access agreement has been ${status.adjective}`);
-            this.routeTo(EnrolmentRoutes.SUMMARY, { state: { showProgressBar: this.isInitialEnrolment } });
+            this.routeTo(EnrolmentRoutes.PHARMANET_ENROLMENT_CERTIFICATE, {
+              state: { showProgressBar: this.isInitialEnrolment }
+            });
           },
           (error: any) => {
             this.toastService.openErrorToast(`Access agreement could not be ${status.adjective}`);
@@ -138,6 +140,6 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
 
   public ngOnInit() {
     this.enrolment = this.enrolmentService.enrolment;
-    this.isInitialEnrolment = this.enrolment.progressStatus === ProgressStatusType.FINISHED;
+    this.isInitialEnrolment = this.enrolment.progressStatus !== ProgressStatus.FINISHED;
   }
 }

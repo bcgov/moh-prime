@@ -1,20 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, Validators, FormControl } from '@angular/forms';
+import { Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
-import { Observable, Subscription } from 'rxjs';
-
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
-import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { FormUtilsService } from '@enrolment/shared/services/form-utils.service';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
-import { ProgressStatusType } from '@enrolment/shared/enums/progress-status-type.enum';
+import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 
 @Component({
   selector: 'app-self-declaration',
@@ -92,7 +89,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
 
             const routePath = (!this.isProfileComplete)
               ? EnrolmentRoutes.ORGANIZATION
-              : EnrolmentRoutes.REVIEW;
+              : EnrolmentRoutes.OVERVIEW;
             this.routeTo(routePath);
           },
           (error: any) => {
@@ -154,7 +151,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
 
     this.isProfileComplete = enrolment.profileCompleted;
     this.enrolmentStateService.enrolment = enrolment;
-    this.isInitialEnrolment = enrolment.progressStatus !== ProgressStatusType.FINISHED;
+    this.isInitialEnrolment = enrolment.progressStatus !== ProgressStatus.FINISHED;
   }
 
   private toggleSelfDeclarationValidators(value: boolean, control: FormControl) {
