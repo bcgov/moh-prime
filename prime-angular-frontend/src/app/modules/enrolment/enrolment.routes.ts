@@ -1,18 +1,23 @@
 export class EnrolmentRoutes {
   public static ENROLMENT = 'enrolment';
+  // TODO remove collection notice, yes... no... yes... no...???
   public static COLLECTION_NOTICE = 'collection-notice';
-  public static PROFILE = 'profile';
+  // Enrollee overview:
+  public static OVERVIEW = 'overview';
+  // Enrollee profile:
+  public static DEMOGRAPHIC = 'profile';
   public static REGULATORY = 'regulatory';
   public static DEVICE_PROVIDER = 'device-provider';
   public static JOB = 'job';
   public static SELF_DECLARATION = 'self-declaration';
   public static ORGANIZATION = 'organization';
-  public static REVIEW = 'review';
-  public static CONFIRMATION = 'confirmation';
+  // Enrolment submission:
+  public static SUBMISSION_CONFIRMATION = 'submission-confirmation';
   public static ACCESS_AGREEMENT = 'access-agreement';
-  public static SUMMARY = 'summary';
   public static DECLINED = 'declined';
   public static DECLINED_ACCESS_AGREEMENT = 'declined-access-agreement';
+  // Enrollee history and PharmaNet:
+  // Replaces access agreement after accepting the terms of access (TOA)
   public static ACCESS_AGREEMENT_HISTORY = 'access-agreement-history';
   public static PHARMANET_ENROLMENT_CERTIFICATE = 'pharmanet-enrolment-certificate';
   public static PHARMANET_TRANSACTIONS = 'pharmanet-transactions';
@@ -24,33 +29,52 @@ export class EnrolmentRoutes {
     return `/${EnrolmentRoutes.MODULE_PATH}/${route}`;
   }
 
-  // TODO accessible when progressStatus is FINISHED
-  public static enrolmentRouteOrder(): string[] {
+  public static initialEnrolmentRouteOrder(): string[] {
     return [
-      EnrolmentRoutes.PROFILE,
+      ...EnrolmentRoutes.enrolmentProfileRoutes(),
+      ...EnrolmentRoutes.enrolmentSubmissionRoutes()
+    ];
+  }
+
+  // Enrollee profile routes are ordered from the perspective of an
+  // "initial" enrolment.The order is important for directing the
+  // enrollee incrementally through creating their profile
+  public static enrolmentProfileRoutes(): string[] {
+    return [
+      EnrolmentRoutes.DEMOGRAPHIC,
       EnrolmentRoutes.REGULATORY,
       // EnrolmentRoutes.DEVICE_PROVIDER,
       EnrolmentRoutes.JOB,
       EnrolmentRoutes.SELF_DECLARATION,
       EnrolmentRoutes.ORGANIZATION,
-      EnrolmentRoutes.REVIEW,
-      ...this.postEnrolmentSubmissionRoutes()
+      EnrolmentRoutes.OVERVIEW
     ];
   }
 
-  public static postEnrolmentSubmissionRoutes(): string[] {
+  // Enrolment submission routes are ordered from the perspective
+  // of an initial or renewal enrolment that is submitted for manual
+  // or automatic adjudication
+  public static enrolmentSubmissionRoutes(): string[] {
     return [
-      EnrolmentRoutes.CONFIRMATION,
+      // Enrolment was flagged for manual adjudication
+      EnrolmentRoutes.SUBMISSION_CONFIRMATION,
       EnrolmentRoutes.DECLINED,
+      // ACCESS_AGREEMENT is synonymous with APPROVED
       EnrolmentRoutes.ACCESS_AGREEMENT,
-      EnrolmentRoutes.DECLINED_ACCESS_AGREEMENT,
-      // EnrolmentRoutes.ACCESS_AGREEMENT_HISTORY,
-      // TODO this is enrolment cert
-      EnrolmentRoutes.SUMMARY,
-      // TODO this is summary
+      EnrolmentRoutes.DECLINED_ACCESS_AGREEMENT
+    ];
+  }
+
+  // Accessible routes for an enrollee when they have been
+  // approved for PharmaNet access, or are editing an
+  // approved enrolment
+  public static enrolleeRoutes(): string[] {
+    return [
+      ...EnrolmentRoutes.enrolmentProfileRoutes(),
+      EnrolmentRoutes.ACCESS_AGREEMENT_HISTORY,
       EnrolmentRoutes.PHARMANET_ENROLMENT_CERTIFICATE,
-      // EnrolmentRoutes.PHARMANET_TRANSACTIONS,
-      // EnrolmentRoutes.ENROLMENT_LOG_HISTORY
+      EnrolmentRoutes.PHARMANET_TRANSACTIONS,
+      EnrolmentRoutes.ENROLMENT_LOG_HISTORY
     ];
   }
 }
