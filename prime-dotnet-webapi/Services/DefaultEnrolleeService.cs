@@ -37,6 +37,8 @@ namespace Prime.Services
             if (_workflowStateMap == null)
             {
                 // Construct the workflow map
+                // TODO need idea of new enrollee vs old enrollee baked into statuses
+                // TODO IN_PROGRESS should be NEW and potentiall prefix a duplicate set of enrolment lifecycle statuses
                 Status IN_PROGRESS = _context.Statuses.Single(s => s.Code == Status.IN_PROGRESS_CODE);
                 Status SUBMITTED = _context.Statuses.Single(s => s.Code == Status.SUBMITTED_CODE);
                 Status APPROVED = _context.Statuses.Single(s => s.Code == Status.APPROVED_CODE);
@@ -48,11 +50,13 @@ namespace Prime.Services
                 _workflowStateMap.Add(NULL_STATUS, new[] {
                     new StatusWrapper { Status = IN_PROGRESS, AdminOnly = false }
                 });
+                // TODO only for new enrollees
                 _workflowStateMap.Add(IN_PROGRESS, new[] {
                     new StatusWrapper { Status = SUBMITTED, AdminOnly = false }
                 });
                 _workflowStateMap.Add(SUBMITTED, new[] {
-                    new StatusWrapper { Status = IN_PROGRESS, AdminOnly = false },
+                    // TODO not possible after first ACCEPTED_TOS instead use EDITING
+                    new StatusWrapper { Status = IN_PROGRESS, AdminOnly = true },
                     new StatusWrapper { Status = APPROVED, AdminOnly = true },
                     new StatusWrapper { Status = DECLINED, AdminOnly = true }
                 });
@@ -61,13 +65,15 @@ namespace Prime.Services
                     new StatusWrapper { Status = DECLINED_TOS, AdminOnly = false }
                 });
                 _workflowStateMap.Add(DECLINED, new[] {
-                    new StatusWrapper { Status = IN_PROGRESS, AdminOnly = false }
+                    // TODO not possible after first ACCEPTED_TOS instead use EDITING
+                    new StatusWrapper { Status = IN_PROGRESS, AdminOnly = true }
                 });
                 _workflowStateMap.Add(ACCEPTED_TOS, new[] {
-                    new StatusWrapper { Status = IN_PROGRESS, AdminOnly = false }
+                    new StatusWrapper { Status = SUBMITTED, AdminOnly = false }
                 });
                 _workflowStateMap.Add(DECLINED_TOS, new[] {
-                    new StatusWrapper { Status = IN_PROGRESS, AdminOnly = false }
+                    // TODO not possible after first ACCEPTED_TOS instead use EDITING
+                    new StatusWrapper { Status = IN_PROGRESS, AdminOnly = true }
                 });
             }
 
