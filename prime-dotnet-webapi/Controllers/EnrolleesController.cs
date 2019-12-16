@@ -394,6 +394,13 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
+            // Notes can not be added to 'In Progress' enrolments
+            if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.IN_PROGRESS_CODE))
+            {
+                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Adjudicator notes can not be updated when the current status is 'In Progress'.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
+
             var createdAdjudicatorNote = await _enrolleeService.CreateEnrolleeAdjudicatorNoteAsync(enrolleeId, adjudicatorNote);
 
             return CreatedAtAction(
@@ -425,6 +432,22 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}."));
             }
 
+            System.Console.WriteLine(enrolleeId);
+            System.Console.WriteLine(accessAgreementNote.EnrolleeId);
+
+            // if (enrolleeId != accessAgreementNote.EnrolleeId)
+            // {
+            //     this.ModelState.AddModelError("Enrollee.Id", "Enrollee Id is required to make updates.");
+            //     return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            // }
+
+            // Notes can not be added to 'In Progress' enrolments
+            if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.IN_PROGRESS_CODE))
+            {
+                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Access agreement notes can not be updated when the current status is 'In Progress'.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
+
             var updatedNote = await _enrolleeService.UpdateEnrolleeNoteAsync(enrolleeId, accessAgreementNote);
 
             return Ok(new ApiOkResponse<IEnrolleeNote>(updatedNote));
@@ -432,7 +455,7 @@ namespace Prime.Controllers
 
         // PUT: api/Enrollees/5
         /// <summary>
-        /// Updates an access agreement note.
+        /// Updates an enrolment certificate note.
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="enrolmentCertNote"></param>
@@ -450,6 +473,22 @@ namespace Prime.Controllers
             if (enrollee == null)
             {
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}."));
+            }
+
+            System.Console.WriteLine(enrolleeId);
+            System.Console.WriteLine(enrolmentCertNote.EnrolleeId);
+
+            // if (enrolleeId != enrolmentCertNote.EnrolleeId)
+            // {
+            //     this.ModelState.AddModelError("Enrollee.Id", "Enrollee Id is required to make updates.");
+            //     return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            // }
+
+            // Notes can not be added to 'In Progress' enrolments
+            if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.IN_PROGRESS_CODE))
+            {
+                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrolment certificate notes can not be updated when the current status is 'In Progress'.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
             var updatedNote = await _enrolleeService.UpdateEnrolleeNoteAsync(enrolleeId, enrolmentCertNote);
