@@ -518,9 +518,8 @@ namespace Prime.Services
             return newAdjudicatorNote;
         }
 
-        public async Task<IEnrolleeNote> UpdateEnrolleeNoteAsync(int enrolleeId, IEnrolleeNote note)
+        public async Task<IEnrolleeNote> UpdateEnrolleeNoteAsync(int enrolleeId, IEnrolleeNote newNote)
         {
-            var noteType = note.GetType();
             var enrollee = await _context.Enrollees
                 .Include(e => e.AccessAgreementNote)
                 .Include(e => e.EnrolmentCertificateNote)
@@ -528,71 +527,47 @@ namespace Prime.Services
                 .Where(e => e.Id == enrolleeId)
                 .SingleOrDefaultAsync();
 
-            // IEnrolleeNote dbNote = null;
+            IEnrolleeNote dbNote = null;
 
-            System.Console.WriteLine($"{noteType}--------------------------------------------");
-            System.Console.WriteLine($"{noteType}--------------------------------------------");
-            System.Console.WriteLine($"{noteType}--------------------------------------------");
+            if (newNote.GetType() == typeof(AccessAgreementNote))
+            {
+                dbNote = enrollee.AccessAgreementNote;
+            }
+            else if (newNote.GetType() == typeof(EnrolmentCertificateNote))
+            {
+                dbNote = enrollee.EnrolmentCertificateNote;
+            }
+            else
+            {
+                throw new ArgumentException("Enrollee note type is not recognized, or not allowed.");
+            }
 
-            // if (noteType == NoteType.AccessAgreementNote)
-            // {
-            //     dbNote = enrollee.AccessAgreementNote;
-            // }
-            // else if (noteType == NoteType.EnrolmentCertificateNote)
-            // {
-            //     dbNote = enrollee.EnrolmentCertificateNote;
-            // }
-            // else
-            // {
-            //     throw new ArgumentException("Enrollee note type is not recognized.");
-            // }
+            if (dbNote != null)
+            {
+                if (newNote.Note == null)
+                {
+                    _context.Entry(dbNote).State = EntityState.Deleted;
+                }
+                else
+                {
+                    dbNote.Note = newNote.Note;
+                    dbNote.NoteDate = DateTime.Now;
+                    _context.Entry(dbNote).State = EntityState.Modified;
+                }
+            }
+            else if (newNote != null)
+            {
+                newNote.EnrolleeId = enrolleeId;
+                _context.Entry(newNote).State = EntityState.Added;
+            }
 
-            // if (dbNote != null)
-            // {
-            //     if (note == null)
-            //     {
-            //         _context.Entry(dbNote).State = EntityState.Deleted;
-            //     }
-            //     else
-            //     {
-            //         dbNote.Note = note;
-            //         dbNote.NoteDate = DateTime.Now;
-            //         _context.Entry(dbNote).State = EntityState.Modified;
-            //     }
-            // }
-            // else if (note != null)
-            // {
-            //     if (noteType == NoteType.AccessAgreementNote)
-            //     {
-            //         var newNote = new AccessAgreementNote
-            //         {
-            //             EnrolleeId = enrolleeId,
-            //             Note = note,
-            //             NoteDate = DateTime.Now
-            //         };
+            var updated = await _context.SaveChangesAsync();
+            if (updated < 1)
+            {
+                throw new InvalidOperationException($"Could not update the enrollee note.");
+            }
 
-            //         _context.AccessAgreementNotes.Add(newNote);
-            //     }
-            //     else
-            //     {
-            //         var newNote = new EnrolmentCertificateNote
-            //         {
-            //             EnrolleeId = enrolleeId,
-            //             Note = note,
-            //             NoteDate = DateTime.Now
-            //         };
-
-            //         _context.EnrolmentCertificateNotes.Add(newNote);
-            //     }
-            // }
-
-            // var updated = await _context.SaveChangesAsync();
-            // if (updated < 1)
-            // {
-            //     throw new InvalidOperationException($"Could not create the enrollee note.");
-            // }
-
-            return note;
+            return newNote;
         }
     }
 }
