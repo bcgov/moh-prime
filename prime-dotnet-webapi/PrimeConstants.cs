@@ -40,5 +40,12 @@ namespace Prime
         // Mail server
         public readonly static string MAIL_SERVER_URL = System.Environment.GetEnvironmentVariable("MAIL_SERVER_URL") ?? "localhost";
         public readonly static int MAIL_SERVER_PORT = int.Parse(System.Environment.GetEnvironmentVariable("MAIL_SERVER_PORT") ?? "1025");
+
+        // Pharmanet college validation API
+        public readonly static string PHARMANET_API_URL = System.Environment.GetEnvironmentVariable("PHARMANET_API_URL") ?? "";
+        public readonly static string PHARMANET_API_USERNAME = System.Environment.GetEnvironmentVariable("PHARMANET_API_USERNAME") ?? "";
+        public readonly static string PHARMANET_API_PASSWORD = System.Environment.GetEnvironmentVariable("PHARMANET_API_PASSWORD") ?? "";
+        public readonly static string PHARMANET_SSL_CERT_FILENAME = System.Environment.GetEnvironmentVariable("PHARMANET_SSL_CERT_FILENAME") ?? "";
+        public readonly static string PHARMANET_SSL_CERT_PASSWORD = System.Environment.GetEnvironmentVariable("PHARMANET_SSL_CERT_PASSWORD") ?? "";
     }
 }
