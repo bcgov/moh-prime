@@ -329,7 +329,7 @@ namespace Prime.Services
                 {
                     case Status.SUBMITTED_CODE:
                         // Check to see if this should be auto adjudicated
-                        if (_automaticAdjudicationService.QualifiesForAutomaticAdjudication(enrollee))
+                        if (await _automaticAdjudicationService.QualifiesForAutomaticAdjudication(enrollee))
                         {
                             // Change the status to adjudicated/approved
                             createdEnrolmentStatus.PharmaNetStatus = false;
