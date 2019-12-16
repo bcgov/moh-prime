@@ -142,8 +142,13 @@ export class DashboardComponent implements OnInit {
             // Will never be disabled, so has been explicitly set
             disabled: (
               progressStatus !== ProgressStatus.FINISHED ||
-              enrolmentStatus === EnrolmentStatus.SUBMITTED ||
-              enrolmentStatus === EnrolmentStatus.ADJUDICATED_APPROVED
+              [
+                EnrolmentStatus.IN_PROGRESS,
+                EnrolmentStatus.SUBMITTED,
+                EnrolmentStatus.ADJUDICATED_APPROVED,
+                EnrolmentStatus.DECLINED,
+                EnrolmentStatus.DECLINED_TOS
+              ].includes(enrolmentStatus)
             ),
             forceActive: (
               // Highlight the profile when in these states
@@ -160,8 +165,13 @@ export class DashboardComponent implements OnInit {
               : EnrolmentRoutes.ACCESS_AGREEMENT,
             showItem: true,
             disabled: (
-              enrolmentStatus === EnrolmentStatus.IN_PROGRESS ||
-              enrolmentStatus === EnrolmentStatus.SUBMITTED
+              [
+                EnrolmentStatus.IN_PROGRESS,
+                EnrolmentStatus.SUBMITTED,
+                EnrolmentStatus.ADJUDICATED_APPROVED,
+                EnrolmentStatus.DECLINED,
+                EnrolmentStatus.DECLINED_TOS
+              ].includes(enrolmentStatus)
             ),
             forceActive: (
               // Highlight the access agreement when in these states
@@ -174,9 +184,13 @@ export class DashboardComponent implements OnInit {
             route: EnrolmentRoutes.PHARMANET_ENROLMENT_CERTIFICATE,
             showItem: true,
             disabled: (
-              enrolmentStatus === EnrolmentStatus.IN_PROGRESS ||
-              enrolmentStatus === EnrolmentStatus.SUBMITTED ||
-              enrolmentStatus === EnrolmentStatus.ADJUDICATED_APPROVED
+              [
+                EnrolmentStatus.IN_PROGRESS,
+                EnrolmentStatus.SUBMITTED,
+                EnrolmentStatus.ADJUDICATED_APPROVED,
+                EnrolmentStatus.DECLINED,
+                EnrolmentStatus.DECLINED_TOS
+              ].includes(enrolmentStatus)
             )
           }
         ]
@@ -187,8 +201,10 @@ export class DashboardComponent implements OnInit {
             name: 'PharmaNet Transactions',
             icon: (
               progressStatus !== ProgressStatus.FINISHED ||
-              enrolmentStatus === EnrolmentStatus.DECLINED ||
-              enrolmentStatus === EnrolmentStatus.DECLINED_TOS
+              [
+                EnrolmentStatus.DECLINED,
+                EnrolmentStatus.DECLINED_TOS
+              ].includes(enrolmentStatus)
             )
               ? 'lock'
               : 'date_range',
@@ -196,16 +212,20 @@ export class DashboardComponent implements OnInit {
             showItem: true,
             disabled: (
               progressStatus !== ProgressStatus.FINISHED ||
-              enrolmentStatus === EnrolmentStatus.DECLINED ||
-              enrolmentStatus === EnrolmentStatus.DECLINED_TOS
+              [
+                EnrolmentStatus.DECLINED,
+                EnrolmentStatus.DECLINED_TOS
+              ].includes(enrolmentStatus)
             )
           },
           {
             name: 'Enrolment Log History',
             icon: (
               progressStatus !== ProgressStatus.FINISHED ||
-              enrolmentStatus === EnrolmentStatus.DECLINED ||
-              enrolmentStatus === EnrolmentStatus.DECLINED_TOS
+              [
+                EnrolmentStatus.DECLINED,
+                EnrolmentStatus.DECLINED_TOS
+              ].includes(enrolmentStatus)
             )
               ? 'lock'
               : 'history',
@@ -213,8 +233,10 @@ export class DashboardComponent implements OnInit {
             showItem: true,
             disabled: (
               progressStatus !== ProgressStatus.FINISHED ||
-              enrolmentStatus === EnrolmentStatus.DECLINED ||
-              enrolmentStatus === EnrolmentStatus.DECLINED_TOS
+              [
+                EnrolmentStatus.DECLINED,
+                EnrolmentStatus.DECLINED_TOS
+              ].includes(enrolmentStatus)
             )
           }
         ]
