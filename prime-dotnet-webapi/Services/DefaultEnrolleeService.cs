@@ -195,8 +195,6 @@ namespace Prime.Services
                                 .Include(e => e.Certifications)
                                 .Include(e => e.Jobs)
                                 .Include(e => e.Organizations)
-                                .Include(e => e.AccessAgreementNote)
-                                .Include(e => e.EnrolmentCertificateNote)
                                 .AsNoTracking()
                                 .Where(e => e.Id == enrollee.Id)
                                 .SingleOrDefaultAsync();
