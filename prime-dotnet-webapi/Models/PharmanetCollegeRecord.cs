@@ -13,5 +13,16 @@ namespace Prime.Models
         public DateTime dateofBirth { get; set; }
         public string status { get; set; }
         public DateTime effectiveDate { get; set; }
+
+        public bool MatchesEnrolleeNames(Enrollee enrollee)
+        {
+            if (string.IsNullOrWhiteSpace(firstName) || string.IsNullOrWhiteSpace(lastName))
+            {
+                throw new InvalidOperationException("PharmaNet college record is missing the first or last name, cannot be a valid record.");
+            }
+
+            return (firstName.Equals(enrollee.FirstName, StringComparison.CurrentCultureIgnoreCase) && lastName.Equals(enrollee.LastName, StringComparison.CurrentCultureIgnoreCase))
+                || (firstName.Equals(enrollee.PreferredFirstName, StringComparison.CurrentCultureIgnoreCase) && lastName.Equals(enrollee.PreferredLastName, StringComparison.CurrentCultureIgnoreCase));
+        }
     }
 }
