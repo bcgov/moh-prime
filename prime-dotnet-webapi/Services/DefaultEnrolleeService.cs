@@ -523,7 +523,6 @@ namespace Prime.Services
             var enrollee = await _context.Enrollees
                 .Include(e => e.AccessAgreementNote)
                 .Include(e => e.EnrolmentCertificateNote)
-                .AsNoTracking()
                 .Where(e => e.Id == enrolleeId)
                 .SingleOrDefaultAsync();
 
@@ -546,19 +545,19 @@ namespace Prime.Services
             {
                 if (newNote.Note == null)
                 {
-                    _context.Entry(dbNote).State = EntityState.Deleted;
+                    _context.Remove(dbNote);
                 }
                 else
                 {
                     dbNote.Note = newNote.Note;
                     dbNote.NoteDate = DateTime.Now;
-                    _context.Entry(dbNote).State = EntityState.Modified;
+                    _context.Update(dbNote);
                 }
             }
             else if (newNote != null)
             {
                 newNote.EnrolleeId = enrolleeId;
-                _context.Entry(newNote).State = EntityState.Added;
+                _context.Add(newNote);
             }
 
             var updated = await _context.SaveChangesAsync();

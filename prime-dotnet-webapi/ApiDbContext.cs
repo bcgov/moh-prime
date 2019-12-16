@@ -35,8 +35,8 @@ namespace Prime
         public DbSet<Status> Statuses { get; set; }
         public DbSet<EnrolmentCertificateAccessToken> EnrolmentCertificateAccessTokens { get; set; }
         public DbSet<AdjudicatorNote> AdjudicatorNotes { get; set; }
-        public DbSet<EnrolmentCertificateNote> EnrolmentCertificateNotes { get; set; }
         public DbSet<AccessAgreementNote> AccessAgreementNotes { get; set; }
+        public DbSet<EnrolmentCertificateNote> EnrolmentCertificateNotes { get; set; }
 
         public override int SaveChanges()
         {
