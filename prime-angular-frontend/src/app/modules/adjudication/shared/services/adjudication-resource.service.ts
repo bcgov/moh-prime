@@ -11,8 +11,8 @@ import { LoggerService } from '@core/services/logger.service';
 import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 
 import { Address } from '@enrolment/shared/models/address.model';
+import { NoteType } from '@adjudication/shared/enums/note-type.enum';
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
-import { NoteType } from '../enums/note-type.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -80,14 +80,19 @@ export class AdjudicationResource {
       );
   }
 
-  public updateEnrolleeNote(enrolleeId: number, note: string, noteType: NoteType): Observable<AdjudicationNote> {
-    const params = new HttpParams({ fromObject: { noteType: `${noteType}` } });
-    // Required in order to send a native data type and have it picked up by [FromBody] on the server
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.put(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/enrollee-notes`, note, { params, headers })
+  public updateAdjudicationNote(
+    enrolleeId: number,
+    note: string,
+    noteType: NoteType.AccessAgreementNote | NoteType.EnrolmentCertificateNote
+  ): Observable<AdjudicationNote> {
+    const payload = { enrolleeId, note };
+    const params = (noteType === NoteType.EnrolmentCertificateNote)
+      ? { path: 'enrolment-certificate-notes', message: 'ENROLMENT_CERTIFICATE_NOTE' }
+      : { path: 'access-agreement-notes', message: 'ACCESS_AGREEMENT_NOTE' };
+    return this.http.put(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/${params.path}`, payload)
       .pipe(
         map((response: PrimeHttpResponse) => response.result as AdjudicationNote),
-        tap((adjudicatorNote: AdjudicationNote) => this.logger.info('ADJUDICATOR_NOTE', adjudicatorNote))
+        tap((adjudicatorNote: AdjudicationNote) => this.logger.info(params.message, adjudicatorNote))
       );
   }
 

@@ -59,7 +59,7 @@ export class UserAgreementNotesComponent implements OnInit {
   public onSubmit() {
     if (this.form.valid) {
       this.busy = this.adjudicationResource
-        .updateEnrolleeNote(this.enrollee.id, this.note.value, NoteType.AccessAgreementNote)
+        .updateAdjudicationNote(this.enrollee.id, this.note.value, NoteType.AccessAgreementNote)
         .subscribe(
           () => {
             this.toastService.openSuccessToast(`Access agreement note has been saved.`);

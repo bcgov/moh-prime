@@ -59,7 +59,7 @@ export class EnrolmentCertificateNotesComponent implements OnInit {
   public onSubmit() {
     if (this.form.valid) {
       this.busy = this.adjudicationResource
-        .updateEnrolleeNote(this.enrollee.id, this.note.value, NoteType.EnrolmentCertificateNote)
+        .updateAdjudicationNote(this.enrollee.id, this.note.value, NoteType.EnrolmentCertificateNote)
         .subscribe(
           () => {
             this.toastService.openSuccessToast(`Enrolment certificate note has been saved.`);
