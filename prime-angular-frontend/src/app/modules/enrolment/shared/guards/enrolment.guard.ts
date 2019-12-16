@@ -88,7 +88,6 @@ export class EnrolmentGuard extends BaseGuard {
    * access to post-enrolment routes.
    */
   private manageInProgressRouting(routePath: string, enrolment: Enrolment) {
-    // const postEnrolmentRoutes = EnrolmentRoutes.enrolmentSubmissionRoutes();
     const enrolmentSubmissionRoutes = [
       ...EnrolmentRoutes.enrolmentSubmissionRoutes()
     ];
@@ -105,7 +104,7 @@ export class EnrolmentGuard extends BaseGuard {
       this.navigate(routePath, redirectionRoute);
     }
 
-    const hasNotCompletedProfile = !enrolment.profileCompleted && EnrolmentRoutes.OVERVIEW === route;
+    const hasNotCompletedProfile = !enrolment.profileCompleted && route === EnrolmentRoutes.OVERVIEW;
     const hasNotSubmittedEnrolment = enrolmentSubmissionRoutes.includes(route);
 
     return (hasNotCompletedProfile || hasNotSubmittedEnrolment)

@@ -141,16 +141,13 @@ export class DashboardComponent implements OnInit {
             showItem: true,
             // Will never be disabled, so has been explicitly set
             disabled: (
+              progressStatus !== ProgressStatus.FINISHED ||
               enrolmentStatus === EnrolmentStatus.SUBMITTED ||
               enrolmentStatus === EnrolmentStatus.ADJUDICATED_APPROVED
             ),
             forceActive: (
-              // TODO need to refactor routes to highlight without forcing
               // Highlight the profile when in these states
-              [
-                EnrolmentStatus.IN_PROGRESS,
-                EnrolmentStatus.SUBMITTED
-              ].includes(enrolmentStatus)
+              [EnrolmentStatus.IN_PROGRESS].includes(enrolmentStatus)
             )
           },
           {
@@ -165,6 +162,10 @@ export class DashboardComponent implements OnInit {
             disabled: (
               enrolmentStatus === EnrolmentStatus.IN_PROGRESS ||
               enrolmentStatus === EnrolmentStatus.SUBMITTED
+            ),
+            forceActive: (
+              // Highlight the access agreement when in these states
+              [EnrolmentStatus.SUBMITTED].includes(enrolmentStatus)
             )
           },
           {

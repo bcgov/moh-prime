@@ -117,7 +117,7 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
 
   public onPrevPage() {
     if (this.currentPage > 0) {
-      this.utilsService.scrollTo();
+      this.utilsService.scrollTop();
       this.currentPage--;
       this.hasReadAgreement = false;
       this.agreed.reset(false);
@@ -126,7 +126,7 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
 
   public onNextPage() {
     if (!this.hasReadAgreement) {
-      this.utilsService.scrollTo();
+      this.utilsService.scrollTop();
       this.currentPage++;
     }
   }

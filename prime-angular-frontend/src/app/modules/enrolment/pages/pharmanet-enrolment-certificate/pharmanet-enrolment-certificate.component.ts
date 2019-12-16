@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
