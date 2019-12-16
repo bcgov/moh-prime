@@ -1,16 +1,7 @@
 using System;
-using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
 
 namespace Prime.Models
 {
-    public enum NoteType
-    {
-        AdjudicatorNote,
-        AccessAgreementNote,
-        EnrolmentCertificateNote
-    };
-
     public interface IEnrolleeNote
     {
         int? Id { get; set; }
