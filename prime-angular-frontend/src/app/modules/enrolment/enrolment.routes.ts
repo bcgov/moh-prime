@@ -29,10 +29,14 @@ export class EnrolmentRoutes {
     return `/${EnrolmentRoutes.MODULE_PATH}/${route}`;
   }
 
+  // Use by the progress indicator to calculate percent completion
+  // of the enrolment process
   public static initialEnrolmentRouteOrder(): string[] {
     return [
       ...EnrolmentRoutes.enrolmentProfileRoutes(),
-      ...EnrolmentRoutes.enrolmentSubmissionRoutes()
+      ...EnrolmentRoutes.enrolmentSubmissionRoutes(),
+      // Allows progress indicator to calculate 100%
+      EnrolmentRoutes.PHARMANET_ENROLMENT_CERTIFICATE
     ];
   }
 
@@ -65,16 +69,22 @@ export class EnrolmentRoutes {
     ];
   }
 
+  public static enrolmentApprovedRoutes(): string[] {
+    return [
+      EnrolmentRoutes.ACCESS_AGREEMENT_HISTORY,
+      EnrolmentRoutes.PHARMANET_ENROLMENT_CERTIFICATE,
+      EnrolmentRoutes.PHARMANET_TRANSACTIONS,
+      EnrolmentRoutes.ENROLMENT_LOG_HISTORY
+    ];
+  }
+
   // Accessible routes for an enrollee when they have been
   // approved for PharmaNet access, or are editing an
   // approved enrolment
   public static enrolleeRoutes(): string[] {
     return [
       ...EnrolmentRoutes.enrolmentProfileRoutes(),
-      EnrolmentRoutes.ACCESS_AGREEMENT_HISTORY,
-      EnrolmentRoutes.PHARMANET_ENROLMENT_CERTIFICATE,
-      EnrolmentRoutes.PHARMANET_TRANSACTIONS,
-      EnrolmentRoutes.ENROLMENT_LOG_HISTORY
+      ...EnrolmentRoutes.enrolmentApprovedRoutes()
     ];
   }
 }
