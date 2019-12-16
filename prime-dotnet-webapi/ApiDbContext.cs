@@ -429,8 +429,6 @@ namespace Prime
                 .HasForeignKey(es => es.StatusCode);
 
             modelBuilder.Entity<EnrolmentStatusReason>()
-                .HasKey(esr => new { esr.EnrolmentStatusId, esr.StatusReasonCode });
-            modelBuilder.Entity<EnrolmentStatusReason>()
                 .HasOne(esr => esr.EnrolmentStatus)
                 .WithMany(es => es.EnrolmentStatusReasons)
                 .HasForeignKey(esr => esr.EnrolmentStatusId);
