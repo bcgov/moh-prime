@@ -78,6 +78,8 @@ namespace Prime.Models
 
         public string HasPharmaNetSuspendedDetails { get; set; }
 
+        public ICollection<AssignedPrivilege> AssignedPrivileges { get; set; }
+
         public ICollection<EnrolmentStatus> EnrolmentStatuses { get; set; }
 
         [NotMapped]
@@ -99,6 +101,7 @@ namespace Prime.Models
 
         [NotMapped]
         public ICollection<Status> AvailableStatuses { get; set; }
+
 
         [NotMapped]
         public DateTime? AppliedDate

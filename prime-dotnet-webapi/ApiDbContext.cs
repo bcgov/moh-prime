@@ -249,6 +249,8 @@ namespace Prime
                 );
             #endregion
 
+
+
             #region JobNameSeed
             modelBuilder.Entity<JobName>().HasData(
                 new JobName { Code = 1, Name = "Medical Office Assistant", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
@@ -373,6 +375,11 @@ namespace Prime
                 );
             #endregion
 
+            modelBuilder.ApplyConfiguration(new PrivilegeGroupConfiguration());
+            modelBuilder.ApplyConfiguration(new PrivilegeConfiguration());
+            modelBuilder.ApplyConfiguration(new DefaultPrivilegeConfiguration());
+            modelBuilder.ApplyConfiguration(new AssignedPrivilegeConfiguration());
+
             #region Indexes
             modelBuilder.Entity<MailingAddress>()
                 .HasIndex(a => a.EnrolleeId)
@@ -395,6 +402,7 @@ namespace Prime
             #endregion
 
             #region Relationships
+            // Colleges
             modelBuilder.Entity<CollegeLicense>()
                 .HasKey(cl => new { cl.CollegeCode, cl.LicenseCode });
             modelBuilder.Entity<CollegeLicense>()
@@ -416,6 +424,9 @@ namespace Prime
                 .HasOne(cp => cp.Practice)
                 .WithMany(p => p.CollegePractices)
                 .HasForeignKey(cp => cp.PracticeCode);
+
+
+            //EnrolmentStatuses
             modelBuilder.Entity<EnrolmentStatus>()
                 .HasOne(es => es.Enrollee)
                 .WithMany(e => e.EnrolmentStatuses)
