@@ -417,7 +417,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="accessAgreementNote"></param>
         [HttpPut("{enrolleeId}/access-agreement-notes", Name = nameof(UpdateAccessAgreementNote))]
-        // [Authorize(Policy = PrimeConstants.PRIME_ADMIN_POLICY)]
+        [Authorize(Policy = PrimeConstants.PRIME_ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -460,7 +460,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="enrolmentCertNote"></param>
         [HttpPut("{enrolleeId}/enrolment-certificate-notes", Name = nameof(UpdateEnrolmentCertNote))]
-        // [Authorize(Policy = PrimeConstants.PRIME_ADMIN_POLICY)]
+        [Authorize(Policy = PrimeConstants.PRIME_ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
