@@ -168,7 +168,6 @@ export class DashboardComponent implements OnInit {
               [
                 EnrolmentStatus.IN_PROGRESS,
                 EnrolmentStatus.SUBMITTED,
-                EnrolmentStatus.ADJUDICATED_APPROVED,
                 EnrolmentStatus.DECLINED,
                 EnrolmentStatus.DECLINED_TOS
               ].includes(enrolmentStatus)
