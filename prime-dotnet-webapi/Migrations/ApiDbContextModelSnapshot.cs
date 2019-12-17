@@ -20,6 +20,25 @@ namespace Prime.Migrations
                 .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
+            modelBuilder.Entity("Prime.Models.AccessAgreementNote", b =>
+                {
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("EnrolleeId");
+
+                    b.Property<string>("Note");
+
+                    b.Property<DateTime>("NoteDate");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnrolleeId")
+                        .IsUnique();
+
+                    b.ToTable("AccessAgreementNotes");
+                });
+
             modelBuilder.Entity("Prime.Models.Address", b =>
                 {
                     b.Property<int?>("Id")
@@ -62,6 +81,25 @@ namespace Prime.Migrations
                     b.ToTable("Address");
 
                     b.HasDiscriminator<int>("AddressType");
+                });
+
+            modelBuilder.Entity("Prime.Models.AdjudicatorNote", b =>
+                {
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("EnrolleeId");
+
+                    b.Property<string>("Note")
+                        .IsRequired();
+
+                    b.Property<DateTime>("NoteDate");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnrolleeId");
+
+                    b.ToTable("AdjudicatorNotes");
                 });
 
             modelBuilder.Entity("Prime.Models.AssignedPrivilege", b =>
@@ -6231,6 +6269,25 @@ namespace Prime.Migrations
                     b.ToTable("EnrolmentCertificateAccessToken");
                 });
 
+            modelBuilder.Entity("Prime.Models.EnrolmentCertificateNote", b =>
+                {
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("EnrolleeId");
+
+                    b.Property<string>("Note");
+
+                    b.Property<DateTime>("NoteDate");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnrolleeId")
+                        .IsUnique();
+
+                    b.ToTable("EnrolmentCertificateNotes");
+                });
+
             modelBuilder.Entity("Prime.Models.EnrolmentStatus", b =>
                 {
                     b.Property<int>("Id")
@@ -8263,6 +8320,14 @@ namespace Prime.Migrations
                     b.HasDiscriminator().HasValue(1);
                 });
 
+            modelBuilder.Entity("Prime.Models.AccessAgreementNote", b =>
+                {
+                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
+                        .WithOne("AccessAgreementNote")
+                        .HasForeignKey("Prime.Models.AccessAgreementNote", "EnrolleeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Prime.Models.Address", b =>
                 {
                     b.HasOne("Prime.Models.Country", "Country")
@@ -8353,6 +8418,14 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany()
                         .HasForeignKey("EnrolleeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Prime.Models.EnrolmentCertificateNote", b =>
+                {
+                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
+                        .WithOne("EnrolmentCertificateNote")
+                        .HasForeignKey("Prime.Models.EnrolmentCertificateNote", "EnrolleeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

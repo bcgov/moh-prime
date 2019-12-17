@@ -18,6 +18,8 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
+import { ViewportService } from '@core/services/viewport.service';
 
 @Component({
   selector: 'app-access-agreement',
@@ -44,6 +46,7 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
     private enrolmentService: EnrolmentService,
     private toastService: ToastService,
     private utilsService: UtilsService,
+    private viewportService: ViewportService,
     private logger: LoggerService
   ) {
     super(route, router);
@@ -51,6 +54,10 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
     this.currentPage = 0;
     this.hasReadAgreement = false;
     this.agreed = new FormControl(false);
+  }
+
+  public get isMobile(): boolean {
+    return this.viewportService.isMobile;
   }
 
   public get hasAgreed(): boolean {
@@ -80,7 +87,9 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
         .subscribe(
           () => {
             this.toastService.openSuccessToast(`Access agreement has been ${status.adjective}`);
-            this.routeTo(EnrolmentRoutes.SUMMARY, { state: { showProgressBar: this.hasInitialStatus } });
+            this.routeTo(EnrolmentRoutes.PHARMANET_ENROLMENT_CERTIFICATE, {
+              state: { showProgressBar: this.isInitialEnrolment }
+            });
           },
           (error: any) => {
             this.toastService.openErrorToast(`Access agreement could not be ${status.adjective}`);
@@ -108,7 +117,7 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
 
   public onPrevPage() {
     if (this.currentPage > 0) {
-      this.utilsService.scrollTo();
+      this.utilsService.scrollTop();
       this.currentPage--;
       this.hasReadAgreement = false;
       this.agreed.reset(false);
@@ -117,7 +126,7 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
 
   public onNextPage() {
     if (!this.hasReadAgreement) {
-      this.utilsService.scrollTo();
+      this.utilsService.scrollTop();
       this.currentPage++;
     }
   }
@@ -131,6 +140,6 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
 
   public ngOnInit() {
     this.enrolment = this.enrolmentService.enrolment;
-    this.hasInitialStatus = this.enrolment.initialStatus;
+    this.isInitialEnrolment = this.enrolment.progressStatus !== ProgressStatus.FINISHED;
   }
 }

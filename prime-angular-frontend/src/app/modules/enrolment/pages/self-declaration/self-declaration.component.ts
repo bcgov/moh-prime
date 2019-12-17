@@ -1,19 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, Validators, FormControl } from '@angular/forms';
+import { Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
-import { Observable, Subscription } from 'rxjs';
-
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
-import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { FormUtilsService } from '@enrolment/shared/services/form-utils.service';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
+import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 
 @Component({
   selector: 'app-self-declaration',
@@ -91,7 +89,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
 
             const routePath = (!this.isProfileComplete)
               ? EnrolmentRoutes.ORGANIZATION
-              : EnrolmentRoutes.REVIEW;
+              : EnrolmentRoutes.OVERVIEW;
             this.routeTo(routePath);
           },
           (error: any) => {
@@ -100,6 +98,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
           });
     } else {
       this.form.markAllAsTouched();
+      this.showUnansweredQuestionsError = this.showUnansweredQuestions();
     }
   }
 
@@ -122,7 +121,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
   }
 
   protected initForm() {
-    // TODO: make YES/NO into own component to encapsulate toggling and markup
+    // TODO make YES/NO into own component to encapsulate toggling and markup
     this.hasConviction.valueChanges
       .subscribe((value: boolean) => {
         this.toggleSelfDeclarationValidators(value, this.hasConvictionDetails);
@@ -153,7 +152,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
 
     this.isProfileComplete = enrolment.profileCompleted;
     this.enrolmentStateService.enrolment = enrolment;
-    this.hasInitialStatus = enrolment.initialStatus;
+    this.isInitialEnrolment = enrolment.progressStatus !== ProgressStatus.FINISHED;
   }
 
   private toggleSelfDeclarationValidators(value: boolean, control: FormControl) {
@@ -168,10 +167,10 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     let shouldShowUnansweredQuestions = false;
 
     if (this.hasAttemptedFormSubmission) {
-      shouldShowUnansweredQuestions = this.hasConviction.value !== null
-        && this.hasRegistrationSuspended.value !== null
-        && this.hasDisciplinaryAction.value !== null
-        && this.hasPharmaNetSuspended.value !== null;
+      shouldShowUnansweredQuestions = this.hasConviction.value === null
+        || this.hasRegistrationSuspended.value === null
+        || this.hasDisciplinaryAction.value === null
+        || this.hasPharmaNetSuspended.value === null;
     }
 
     return shouldShowUnansweredQuestions;

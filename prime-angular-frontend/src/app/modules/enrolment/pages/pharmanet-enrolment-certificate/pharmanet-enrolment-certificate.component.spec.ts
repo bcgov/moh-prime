@@ -7,7 +7,7 @@ import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
 import { ClipboardModule } from 'ngx-clipboard';
 
-import { SummaryComponent } from './summary.component';
+import { PharmanetEnrolmentCertificateComponent } from './pharmanet-enrolment-certificate.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigCodePipe } from '@config/config-code.pipe';
 import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
@@ -27,9 +27,9 @@ import { EnrolleeProfileComponent } from '@shared/components/enrollee-profile/en
 import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
-describe('SummaryComponent', () => {
-  let component: SummaryComponent;
-  let fixture: ComponentFixture<SummaryComponent>;
+describe('PharmanetEnrolmentCertificateComponent', () => {
+  let component: PharmanetEnrolmentCertificateComponent;
+  let fixture: ComponentFixture<PharmanetEnrolmentCertificateComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule(
@@ -44,7 +44,7 @@ describe('SummaryComponent', () => {
           ClipboardModule
         ],
         declarations: [
-          SummaryComponent,
+          PharmanetEnrolmentCertificateComponent,
           PageHeaderComponent,
           PageSubheaderComponent,
           EnrolleeProfileComponent,
@@ -74,7 +74,7 @@ describe('SummaryComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SummaryComponent);
+    fixture = TestBed.createComponent(PharmanetEnrolmentCertificateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

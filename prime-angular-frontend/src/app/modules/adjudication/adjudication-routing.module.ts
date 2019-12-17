@@ -10,6 +10,9 @@ import { AdjudicationGuard } from './shared/guards/adjudication.guard';
 
 import { EnrolmentsComponent } from './pages/enrolments/enrolments.component';
 import { EnrolmentComponent } from './pages/enrolment/enrolment.component';
+import { AdjudicatorNotesComponent } from './pages/adjudicator-notes/adjudicator-notes.component';
+import { UserAgreementNotesComponent } from './pages/user-agreement-notes/user-agreement-notes.component';
+import { EnrolmentCertificateNotesComponent } from './pages/enrolment-certificate-notes/enrolment-certificate-notes.component';
 
 const routes: Routes = [
   {
@@ -30,7 +33,28 @@ const routes: Routes = [
           },
           {
             path: ':id',
-            component: EnrolmentComponent
+            children: [
+              {
+                path: '',
+                component: EnrolmentComponent,
+                data: { title: 'Enrollee' }
+              },
+              {
+                path: 'adjudicator-notes',
+                component: AdjudicatorNotesComponent,
+                data: { title: 'Adjudicator Notes' }
+              },
+              {
+                path: 'user-agreement-notes',
+                component: UserAgreementNotesComponent,
+                data: { title: 'User Agreement Notes' }
+              },
+              {
+                path: 'enrolment-certificate-notes',
+                component: EnrolmentCertificateNotesComponent,
+                data: { title: 'Enrolment Certificate Notes' }
+              }
+            ]
           }
         ]
       },

@@ -36,6 +36,9 @@ namespace Prime
         public DbSet<EnrolmentCertificateAccessToken> EnrolmentCertificateAccessTokens { get; set; }
         public DbSet<DefaultPrivilege> DefaultPrivileges { get; set; }
         public DbSet<AssignedPrivilege> AssignedPrivileges { get; set; }
+        public DbSet<AdjudicatorNote> AdjudicatorNotes { get; set; }
+        public DbSet<AccessAgreementNote> AccessAgreementNotes { get; set; }
+        public DbSet<EnrolmentCertificateNote> EnrolmentCertificateNotes { get; set; }
 
         public override int SaveChanges()
         {
@@ -448,9 +451,13 @@ namespace Prime
                 .HasOne(esr => esr.StatusReason)
                 .WithMany(sr => sr.EnrolmentStatusReasons)
                 .HasForeignKey(esr => esr.StatusReasonCode);
+
+            modelBuilder.Entity<AdjudicatorNote>()
+                .HasOne(an => an.Enrollee)
+                .WithMany(e => e.AdjudicatorNotes)
+                .HasForeignKey(an => an.EnrolleeId);
             #endregion
         }
-
     }
 
     public static class ApiDbContextExtensions

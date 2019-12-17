@@ -2,17 +2,21 @@ import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSidenav } from '@angular/material';
 
+import { map, distinctUntilChanged, pairwise } from 'rxjs/operators';
+
 import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { ViewportService } from '@core/services/viewport.service';
 import { LoggerService } from '@core/services/logger.service';
 import { DeviceResolution } from '@shared/enums/device-resolution.enum';
-
+import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+import { DashboardNavSection } from '@shared/models/dashboard.model';
+import { Enrolment } from '@shared/models/enrolment.model';
 import { AuthRoutes } from '@auth/auth.routes';
 import { AuthService } from '@auth/shared/services/auth.service';
-import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
-import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
+import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,7 +26,7 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 export class DashboardComponent implements OnInit {
   @ViewChild('sidenav', { static: false }) public sideNav: MatSidenav;
 
-  public sideNavSections: {};
+  public dashboardNavSections: DashboardNavSection[];
   public sideNavProps: {
     mode: string,
     opened: boolean,
@@ -73,12 +77,26 @@ export class DashboardComponent implements OnInit {
 
   public async ngOnInit() {
     // Initialize the side navigation based on the type of user
-    this.sideNavSections = this.getSideNavSections();
+    this.dashboardNavSections = this.getSideNavSections();
+
     if (this.authService.isEnrollee()) {
-      // Listen for enrolment status changes to update the side navigation
-      // based on user progression
+      // Listen for changes to the current enrolment status to update
+      // the side navigation based on enrollee progression
       this.enrolmentService.enrolment$
-        .subscribe(() => this.sideNavSections = this.getSideNavSections());
+        .pipe(
+          // Reduce noise from enrollee profile updates, and
+          // only focus on the current status
+          map((enrolment: Enrolment) =>
+            (enrolment && enrolment.currentStatus)
+              ? enrolment.currentStatus.status.code
+              : null
+          ),
+          distinctUntilChanged(),
+          pairwise()
+        )
+        .subscribe(([prevCurrentStatus, nextCurrentStatus]) =>
+          this.dashboardNavSections = this.getSideNavSections()
+        );
     }
 
     // Initialize the sidenav with properties based on current viewport
@@ -91,47 +109,133 @@ export class DashboardComponent implements OnInit {
     this.username = `${user.firstName} ${user.lastName}`;
   }
 
-  private getSideNavSections() {
+  private getSideNavSections(): DashboardNavSection[] {
     return (this.authService.isAdjudicator() || this.authService.isAdmin())
       ? this.getAdjudicationSideNavSections()
       : this.getEnrolleeSideNavSections();
   }
 
-  private getEnrolleeSideNavSections() {
-    const statusCode = (this.enrolmentService.enrolment)
-      ? this.enrolmentService.enrolment.currentStatus.status.code
+  // TODO Refactor side nav sections and logic when the next set of
+  // status changes are implemented
+  private getEnrolleeSideNavSections(): DashboardNavSection[] {
+    const enrolment = this.enrolmentService.enrolment;
+    const enrolmentStatus = (enrolment)
+      ? enrolment.currentStatus.status.code
       : EnrolmentStatus.IN_PROGRESS;
-    const statusIcons = this.getEnrolmentStatusIcons(statusCode);
+    // Indicates the position of the enrollee within their initial enrolment, which
+    // provides a status hook with greater granularity than the enrolment statuses
+    const progressStatus = (enrolment)
+      ? enrolment.progressStatus
+      : ProgressStatus.STARTED;
+    const statusIcons = this.getEnrolmentStatusIcons(enrolmentStatus, progressStatus);
 
     return [
       {
-        header: 'Application Enrolment',
+        header: 'Enrolment',
         showHeader: false,
         items: [
           {
-            name: 'Enrolment',
-            icon: statusIcons.enrolment,
-            route: EnrolmentRoutes.PROFILE,
+            name: 'PRIME Profile',
+            icon: statusIcons.enrollee,
+            route: EnrolmentRoutes.OVERVIEW,
             showItem: true,
-            forceActive: (statusCode === EnrolmentStatus.IN_PROGRESS)
-          },
-          {
-            name: 'Access Agreement',
-            icon: statusIcons.accessAgreement,
-            route: EnrolmentRoutes.ACCESS_AGREEMENT,
-            showItem: true,
-            forceActive: (statusCode === EnrolmentStatus.SUBMITTED)
-          },
-          {
-            name: 'Status',
-            icon: statusIcons.status,
-            route: EnrolmentRoutes.SUMMARY,
-            showItem: true,
+            // Will never be disabled, so has been explicitly set
+            disabled: (
+              progressStatus !== ProgressStatus.FINISHED ||
+              [
+                EnrolmentStatus.IN_PROGRESS,
+                EnrolmentStatus.SUBMITTED,
+                EnrolmentStatus.ADJUDICATED_APPROVED,
+                EnrolmentStatus.DECLINED,
+                EnrolmentStatus.DECLINED_TOS
+              ].includes(enrolmentStatus)
+            ),
             forceActive: (
+              // Highlight the profile when in these states
+              [EnrolmentStatus.IN_PROGRESS].includes(enrolmentStatus)
+            )
+          },
+          {
+            name: (enrolmentStatus === EnrolmentStatus.ACCEPTED_TOS)
+              ? 'Access Agreement History'
+              : 'Access Agreement',
+            icon: statusIcons.accessAgreement,
+            route: (enrolmentStatus === EnrolmentStatus.ACCEPTED_TOS)
+              ? EnrolmentRoutes.ACCESS_AGREEMENT_HISTORY
+              : EnrolmentRoutes.ACCESS_AGREEMENT,
+            showItem: true,
+            disabled: (
+              [
+                EnrolmentStatus.IN_PROGRESS,
+                EnrolmentStatus.SUBMITTED,
+                EnrolmentStatus.DECLINED,
+                EnrolmentStatus.DECLINED_TOS
+              ].includes(enrolmentStatus)
+            ),
+            forceActive: (
+              // Highlight the access agreement when in these states
+              [EnrolmentStatus.SUBMITTED].includes(enrolmentStatus)
+            )
+          },
+          {
+            name: 'PharmaNet Enrolment Certificate',
+            icon: statusIcons.certificate,
+            route: EnrolmentRoutes.PHARMANET_ENROLMENT_CERTIFICATE,
+            showItem: true,
+            disabled: (
+              [
+                EnrolmentStatus.IN_PROGRESS,
+                EnrolmentStatus.SUBMITTED,
+                EnrolmentStatus.ADJUDICATED_APPROVED,
+                EnrolmentStatus.DECLINED,
+                EnrolmentStatus.DECLINED_TOS
+              ].includes(enrolmentStatus)
+            )
+          }
+        ]
+      },
+      {
+        items: [
+          {
+            name: 'PharmaNet Transactions',
+            icon: (
+              progressStatus !== ProgressStatus.FINISHED ||
               [
                 EnrolmentStatus.DECLINED,
                 EnrolmentStatus.DECLINED_TOS
-              ].includes(statusCode)
+              ].includes(enrolmentStatus)
+            )
+              ? 'lock'
+              : 'date_range',
+            route: EnrolmentRoutes.PHARMANET_TRANSACTIONS,
+            showItem: true,
+            disabled: (
+              progressStatus !== ProgressStatus.FINISHED ||
+              [
+                EnrolmentStatus.DECLINED,
+                EnrolmentStatus.DECLINED_TOS
+              ].includes(enrolmentStatus)
+            )
+          },
+          {
+            name: 'Enrolment Log History',
+            icon: (
+              progressStatus !== ProgressStatus.FINISHED ||
+              [
+                EnrolmentStatus.DECLINED,
+                EnrolmentStatus.DECLINED_TOS
+              ].includes(enrolmentStatus)
+            )
+              ? 'lock'
+              : 'history',
+            route: EnrolmentRoutes.ENROLMENT_LOG_HISTORY,
+            showItem: true,
+            disabled: (
+              progressStatus !== ProgressStatus.FINISHED ||
+              [
+                EnrolmentStatus.DECLINED,
+                EnrolmentStatus.DECLINED_TOS
+              ].includes(enrolmentStatus)
             )
           }
         ]
@@ -139,10 +243,62 @@ export class DashboardComponent implements OnInit {
     ];
   }
 
-  private getAdjudicationSideNavSections() {
+  private getEnrolmentStatusIcons(
+    enrolmentStatus: EnrolmentStatus,
+    progressStatus: ProgressStatus
+  ) {
+    let enrollee = 'assignment_ind';
+    let accessAgreement = 'assignment';
+    let certificate = 'card_membership';
+
+    if (progressStatus !== ProgressStatus.FINISHED) {
+      enrollee = 'assignment_turned_in';
+      accessAgreement = 'lock';
+      certificate = 'lock';
+
+      switch (enrolmentStatus) {
+        case EnrolmentStatus.IN_PROGRESS:
+          enrollee = 'assignment_ind';
+          break;
+        case EnrolmentStatus.SUBMITTED:
+          accessAgreement = 'schedule';
+          break;
+        case EnrolmentStatus.ADJUDICATED_APPROVED:
+          accessAgreement = 'assignment';
+          break;
+        case EnrolmentStatus.DECLINED:
+          enrollee = 'highlight_off';
+          break;
+        case EnrolmentStatus.DECLINED_TOS:
+          accessAgreement = 'highlight_off';
+          break;
+      }
+    } else {
+      switch (enrolmentStatus) {
+        case EnrolmentStatus.SUBMITTED:
+          accessAgreement = 'lock';
+          certificate = 'lock';
+          break;
+        case EnrolmentStatus.ADJUDICATED_APPROVED:
+          enrollee = 'lock';
+          certificate = 'lock';
+          break;
+        case EnrolmentStatus.DECLINED:
+        case EnrolmentStatus.DECLINED_TOS:
+          enrollee = 'lock';
+          accessAgreement = 'lock';
+          certificate = 'lock';
+          break;
+      }
+    }
+
+    return { enrollee, accessAgreement, certificate };
+  }
+
+  private getAdjudicationSideNavSections(): DashboardNavSection[] {
     return [
       {
-        header: 'Pharmacist Enrolments',
+        header: 'Enrolments',
         showHeader: false,
         items: [
           {
@@ -179,34 +335,5 @@ export class DashboardComponent implements OnInit {
         showText: true
       };
     }
-  }
-
-  private getEnrolmentStatusIcons(statusCode: number) {
-    let enrolment = 'assignment_turned_in';
-    let accessAgreement = 'lock';
-    let status = 'lock';
-    switch (statusCode) {
-      case EnrolmentStatus.IN_PROGRESS:
-        enrolment = 'assignment_ind';
-        break;
-      case EnrolmentStatus.SUBMITTED:
-        accessAgreement = 'schedule';
-        break;
-      case EnrolmentStatus.ADJUDICATED_APPROVED:
-        accessAgreement = 'assignment';
-        break;
-      case EnrolmentStatus.DECLINED:
-        enrolment = 'highlight_off';
-        break;
-      case EnrolmentStatus.ACCEPTED_TOS:
-        accessAgreement = 'assignment_turned_in';
-        status = 'assignment_turned_in';
-        break;
-      case EnrolmentStatus.DECLINED_TOS:
-        accessAgreement = 'highlight_off';
-        break;
-    }
-
-    return { enrolment, accessAgreement, status };
   }
 }
