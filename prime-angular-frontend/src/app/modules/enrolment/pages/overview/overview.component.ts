@@ -16,13 +16,14 @@ import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 
 @Component({
-  selector: 'app-review',
-  templateUrl: './review.component.html',
-  styleUrls: ['./review.component.scss']
+  selector: 'app-overview',
+  templateUrl: './overview.component.html',
+  styleUrls: ['./overview.component.scss']
 })
-export class ReviewComponent extends BaseEnrolmentPage implements OnInit {
+export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public busy: Subscription;
   public enrolment: Enrolment;
 
@@ -59,14 +60,14 @@ export class ReviewComponent extends BaseEnrolmentPage implements OnInit {
         .subscribe(
           () => {
             this.toastService.openSuccessToast('Enrolment has been submitted');
-            this.router.navigate([EnrolmentRoutes.CONFIRMATION], { relativeTo: this.route.parent });
+            this.router.navigate([EnrolmentRoutes.SUBMISSION_CONFIRMATION], { relativeTo: this.route.parent });
           },
           (error: any) => {
             this.toastService.openErrorToast('Enrolment could not be submitted');
             this.logger.error('[Enrolment] Review::onSubmit error has occurred: ', error);
           });
     } else {
-      console.log('PROFILE', this.enrolmentStateService.isProfileInfoValid());
+      console.log('DEMOGRAPHIC', this.enrolmentStateService.isProfileInfoValid());
       console.log('REGULATORY', this.enrolmentStateService.isRegulatoryValid());
       console.log('JOBS', this.enrolmentStateService.isJobsValid());
       console.log('DECLARATION', this.enrolmentStateService.isSelfDeclarationValid());
@@ -79,6 +80,6 @@ export class ReviewComponent extends BaseEnrolmentPage implements OnInit {
 
     this.enrolment = enrolment;
     this.enrolmentStateService.enrolment = enrolment;
-    this.hasInitialStatus = enrolment.initialStatus;
+    this.isInitialEnrolment = enrolment.progressStatus !== ProgressStatus.FINISHED;
   }
 }

@@ -17,6 +17,7 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { Organization } from '@enrolment/shared/models/organization.model';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
+import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 
 @Component({
   selector: 'app-organization',
@@ -58,7 +59,7 @@ export class OrganizationComponent extends BaseEnrolmentProfilePage implements O
           () => {
             this.form.markAsPristine();
             this.toastService.openSuccessToast('PharmaNet access has been saved');
-            this.routeTo(EnrolmentRoutes.REVIEW);
+            this.routeTo(EnrolmentRoutes.OVERVIEW);
           },
           (error: any) => {
             this.toastService.openErrorToast('PharmaNet access could not be saved');
@@ -144,7 +145,7 @@ export class OrganizationComponent extends BaseEnrolmentProfilePage implements O
 
     this.isProfileComplete = enrolment.profileCompleted;
     this.enrolmentStateService.enrolment = enrolment;
-    this.hasInitialStatus = enrolment.initialStatus;
+    this.isInitialEnrolment = enrolment.progressStatus !== ProgressStatus.FINISHED;
   }
 
   private removeIncompleteOrganizations() {
