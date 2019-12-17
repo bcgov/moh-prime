@@ -7,7 +7,7 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 export interface IBaseEnrolmentPage {
   busy: Subscription;
   isProfileComplete: boolean;
-  hasInitialStatus: boolean;
+  isInitialEnrolment: boolean;
   EnrolmentRoutes: EnrolmentRoutes;
   routeTo(routePath: EnrolmentRoutes, navigationExtras: NavigationExtras): void;
 }
@@ -19,8 +19,8 @@ export abstract class BaseEnrolmentPage implements IBaseEnrolmentPage {
   // has made it to enrolment review after completion
   public isProfileComplete: boolean;
 
-  // Whether the initial enrolment has been submitted for adjudication
-  public hasInitialStatus: boolean;
+  // Whether this is the enrollee's initial enrolment
+  public isInitialEnrolment: boolean;
 
   // Allow the use of enum in the component template
   public EnrolmentRoutes = EnrolmentRoutes;
@@ -31,7 +31,7 @@ export abstract class BaseEnrolmentPage implements IBaseEnrolmentPage {
   ) {
     // Defaults are for enrollees that have been approved at
     // least once, which represents the majority
-    this.hasInitialStatus = false;
+    this.isInitialEnrolment = false;
     this.isProfileComplete = true;
   }
 
