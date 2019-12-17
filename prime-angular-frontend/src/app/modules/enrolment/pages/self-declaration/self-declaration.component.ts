@@ -98,6 +98,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
           });
     } else {
       this.form.markAllAsTouched();
+      this.showUnansweredQuestionsError = this.showUnansweredQuestions();
     }
   }
 
@@ -120,7 +121,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
   }
 
   protected initForm() {
-    // TODO: make YES/NO into own component to encapsulate toggling and markup
+    // TODO make YES/NO into own component to encapsulate toggling and markup
     this.hasConviction.valueChanges
       .subscribe((value: boolean) => {
         this.toggleSelfDeclarationValidators(value, this.hasConvictionDetails);
@@ -166,10 +167,10 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     let shouldShowUnansweredQuestions = false;
 
     if (this.hasAttemptedFormSubmission) {
-      shouldShowUnansweredQuestions = this.hasConviction.value !== null
-        && this.hasRegistrationSuspended.value !== null
-        && this.hasDisciplinaryAction.value !== null
-        && this.hasPharmaNetSuspended.value !== null;
+      shouldShowUnansweredQuestions = this.hasConviction.value === null
+        || this.hasRegistrationSuspended.value === null
+        || this.hasDisciplinaryAction.value === null
+        || this.hasPharmaNetSuspended.value === null;
     }
 
     return shouldShowUnansweredQuestions;
