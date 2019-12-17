@@ -6,7 +6,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
-import { ReviewComponent } from './review.component';
+import { OverviewComponent } from './overview.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigCodePipe } from '@config/config-code.pipe';
 import { ConfigService } from '@config/config.service';
@@ -30,8 +30,8 @@ import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
 import { YesNoPipe } from '@shared/pipes/yes-no.pipe';
 
 describe('ReviewComponent', () => {
-  let component: ReviewComponent;
-  let fixture: ComponentFixture<ReviewComponent>;
+  let component: OverviewComponent;
+  let fixture: ComponentFixture<OverviewComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule(
@@ -45,7 +45,7 @@ describe('ReviewComponent', () => {
           RouterTestingModule
         ],
         declarations: [
-          ReviewComponent,
+          OverviewComponent,
           PageHeaderComponent,
           PageSubheaderComponent,
           EnrolleeReviewComponent,
@@ -81,7 +81,7 @@ describe('ReviewComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ReviewComponent);
+    fixture = TestBed.createComponent(OverviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

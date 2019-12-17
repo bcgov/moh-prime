@@ -18,19 +18,22 @@
            [ngClass]="{ 'is-deskop': isDesktop }">
     </div>
 
-    <mat-nav-list *ngFor="let sideNavSection of sideNavSections"
+    <mat-nav-list *ngFor="let dashboardNavSection of dashboardNavSections; let last = last"
                   [disableRipple]="true">
       <h3 mat-subheader
-          *ngIf="sideNavSection.showHeader && sideNavProps.showText">
-        {{ sideNavSection.header }}
+          *ngIf="dashboardNavSection.showHeader && sideNavProps.showText">
+        {{ dashboardNavSection.header }}
       </h3>
 
-      <div *ngFor="let item of sideNavSection.items">
+      <div *ngFor="let item of dashboardNavSection.items">
 
         <mat-list-item *ngIf="item.showItem"
                        [routerLink]="item.route"
                        routerLinkActive="active"
-                       [ngClass]="{ 'active': item.forceActive }"
+                       [ngClass]="{
+                         'active': item.forceActive,
+                         'disabled': item.disabled === true
+                       }"
                        (click)="onRoute()">
           <mat-icon mat-list-icon
                     [ngClass]="{ 'center-sidenav-icon': !isDesktop }">{{ item.icon }}</mat-icon>
@@ -45,7 +48,7 @@
 
       </div>
 
-      <mat-divider *ngIf="sideNavSection.showHeader"></mat-divider>
+      <mat-divider *ngIf="!last"></mat-divider>
     </mat-nav-list>
 
   </mat-sidenav>

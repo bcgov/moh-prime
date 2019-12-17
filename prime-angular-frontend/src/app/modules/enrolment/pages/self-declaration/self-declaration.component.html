@@ -7,7 +7,7 @@
             [formGroup]="form"
             novalidate>
 
-        <app-progress-indicator *ngIf="hasInitialStatus"
+        <app-progress-indicator *ngIf="isInitialEnrolment"
                                 [currentRoute]="EnrolmentRoutes.SELF_DECLARATION"></app-progress-indicator>
 
         <app-page-header>PharmaNet Enrolment</app-page-header>
