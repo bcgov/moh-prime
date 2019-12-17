@@ -85,6 +85,8 @@ namespace Prime.Models
 
         public string HasPharmaNetSuspendedDetails { get; set; }
 
+        public ICollection<AssignedPrivilege> AssignedPrivileges { get; set; }
+
         public ICollection<EnrolmentStatus> EnrolmentStatuses { get; set; }
 
         [NotMapped]
