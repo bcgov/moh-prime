@@ -3,7 +3,7 @@
   <div class="row">
     <div class="col-sm-12 col-lg-8 offset-lg-1 offset-xl-0">
 
-      <app-progress-indicator *ngIf="hasInitialStatus"
+      <app-progress-indicator *ngIf="isInitialEnrolment"
                               [currentRoute]="EnrolmentRoutes.ACCESS_AGREEMENT"></app-progress-indicator>
 
       <app-page-header>Access Agreement</app-page-header>
@@ -76,24 +76,25 @@
       </div>
 
       <div class="row justify-content-between pt-2">
-        <div class="col-6">
+        <div class="col-4">
 
           <button mat-stroked-button
                   (click)="onPrevPage()">Back</button>
 
         </div>
-        <div class="col-6 text-right">
+        <div class="col-8 text-right">
 
           <ng-container *ngIf="hasReadAgreement; else hasMorePages">
 
             <button mat-raised-button
-                    class="mr-2"
+                    [ngClass]="(!isMobile) ? 'mr-2' : 'w-100 mb-2'"
                     color="primary"
                     [disabled]="!hasAgreed"
                     (click)="onSubmit(EnrolmentStatus.ACCEPTED_TOS)">Accept Agreement</button>
 
 
             <button mat-raised-button
+                    [ngClass]="(!isMobile) ? 'mr-2' : 'w-100 mb-2'"
                     color="warn"
                     [disabled]="!hasAgreed"
                     (click)="onSubmit(EnrolmentStatus.DECLINED_TOS)">Decline Agreement</button>

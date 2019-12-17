@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
@@ -10,14 +10,14 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { WindowRefService } from '@core/services/window-ref.service';
+import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 
 @Component({
-  selector: 'app-summary',
-  templateUrl: './summary.component.html',
-  styleUrls: ['./summary.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'app-pharmanet-enrolment-certificate',
+  templateUrl: './pharmanet-enrolment-certificate.component.html',
+  styleUrls: ['./pharmanet-enrolment-certificate.component.scss']
 })
-export class SummaryComponent extends BaseEnrolmentPage implements OnInit {
+export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage implements OnInit {
   public enrolment: Enrolment;
   public tokens: EnrolmentCertificateAccessToken[];
   public showProgressBar: boolean;
@@ -57,10 +57,12 @@ export class SummaryComponent extends BaseEnrolmentPage implements OnInit {
   public ngOnInit() {
     // Only shown the first time the enrollee reaches the summary
     const routeState = this.windowRef.nativeWindow.history.state;
-    this.showProgressBar = (routeState && routeState.showProgressBar) ? routeState.showProgressBar : false;
+    this.showProgressBar = (routeState && routeState.showProgressBar)
+      ? routeState.showProgressBar
+      : false;
 
     this.enrolment = this.enrolmentService.enrolment;
-    this.hasInitialStatus = this.enrolment.initialStatus;
+    this.isInitialEnrolment = this.enrolment.progressStatus !== ProgressStatus.FINISHED;
 
     this.busy = this.enrolmentResource.enrolmentCertificateAccessTokens()
       .subscribe(

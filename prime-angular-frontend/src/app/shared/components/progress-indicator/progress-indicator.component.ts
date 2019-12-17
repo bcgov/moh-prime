@@ -14,7 +14,7 @@ export class ProgressIndicatorComponent implements OnInit {
   constructor() { }
 
   public ngOnInit() {
-    const enrolmentRoutes = EnrolmentRoutes.enrolmentRouteOrder();
+    const enrolmentRoutes = EnrolmentRoutes.initialEnrolmentRouteOrder();
     const currentRoute = enrolmentRoutes.findIndex(er => er === this.currentRoute);
     const currentPage = (currentRoute > -1) ? currentRoute : 0;
     const totalPages = enrolmentRoutes.length - 1;

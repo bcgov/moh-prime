@@ -6,6 +6,7 @@ import { CollegeCertification } from '@enrolment/shared/models/college-certifica
 import { Job } from '@enrolment/shared/models/job.model';
 import { Organization } from '@enrolment/shared/models/organization.model';
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
+import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 
 
 // TODO incoming transitional Enrollee model, eventually will be Enrollee
@@ -34,8 +35,8 @@ export interface HttpEnrollee extends Enrollee {
   accessAgreementNote: AdjudicationNote;
   // Indicates enrollee has not completed all profile information
   profileCompleted: boolean;
-  // Indicates whether this is the enrollees initial application
-  initialStatus: boolean;
+  // Status hook for where the enrollee is in the initial enrolment
+  progressStatus: ProgressStatus;
 }
 
 // TODO outgoing enrolment model
@@ -65,6 +66,6 @@ export interface Enrolment {
   accessAgreementNote: AdjudicationNote;
   // Indicates enrollee has not completed all profile information
   profileCompleted: boolean;
-  // Indicates whether this is the enrollees initial application
-  initialStatus: boolean;
+  // Status hook for where the enrollee is in the initial enrolment
+  progressStatus: ProgressStatus;
 }
