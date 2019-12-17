@@ -33,7 +33,7 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
     private windowRef: WindowRefService
   ) {
     super(route, router);
-
+    this.tokens = [];
     this.showProgressBar = false;
   }
 
