@@ -1,28 +1,12 @@
 <app-busy-overlay [busy]="busy">
 
-  <app-page-header>PharmaNet Enrolments</app-page-header>
+  <app-page-header>Enrolment Certificate Notes</app-page-header>
 
-  <div class="row justify-content-end">
-    <div class="col text-right">
-
-      <mat-form-field>
-        <mat-label>Filter By Status</mat-label>
-        <mat-select value=""
-                    (selectionChange)="filterByStatus($event)">
-          <mat-option value="">All</mat-option>
-          <mat-option *ngFor="let status of statuses"
-                      [value]="status.code">
-            {{ status.name }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-
-    </div>
-  </div>
+  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate debitis, non atque vel distinctio digbias.</p>
 
   <table mat-table
          [dataSource]="dataSource"
-         class="w-100">
+         class="w-100 mb-5">
 
     <!-- Applied Date Column -->
     <ng-container matColumnDef="appliedDate">
@@ -80,11 +64,6 @@
         *matRowDef="let row; columns: columns;"></tr>
   </table>
 
-  <p *ngIf="!dataSource?.data.length"
-     class="px-4 py-2 text-muted">
-    No {{ filteredStatus?.name }} Enrolments
-  </p>
-
   <ng-template #menu
                let-enrolment="enrolment">
     <button mat-icon-button
@@ -94,7 +73,7 @@
 
     <mat-menu #menu="matMenu">
       <button mat-menu-item
-              [routerLink]="[enrolment.id]">
+              [routerLink]="['../../', enrolment.id]">
         <mat-icon>remove_red_eye</mat-icon>
         <span>View Enrolment</span>
       </button>
@@ -117,17 +96,17 @@
         <span>Decline Enrolment</span>
       </button>
       <button mat-menu-item
-              [routerLink]="[enrolment.id, 'adjudicator-notes']">
+              [routerLink]="['../', 'adjudicator-notes']">
         <mat-icon>message</mat-icon>
         <span>Global Adjudicator Notes</span>
       </button>
       <button mat-menu-item
-              [routerLink]="[enrolment.id, 'user-agreement-notes']">
+              [routerLink]="['../', 'user-agreement-notes']">
         <mat-icon>description</mat-icon>
         <span>User Agreement Notes</span>
       </button>
       <button mat-menu-item
-              [routerLink]="[enrolment.id, 'enrolment-certificate-notes']">
+              [routerLink]="['../', 'enrolment-certificate-notes']">
         <mat-icon>assignment_turned_in</mat-icon>
         <span>Enrolment Certificate Notes</span>
       </button>
@@ -144,5 +123,30 @@
       </button>
     </mat-menu>
   </ng-template>
+
+  <form (ngSubmit)="onSubmit()"
+        [formGroup]="form"
+        novalidate>
+
+    <div class="row mb-4">
+      <div class="col-sm-12 col-lg-8">
+
+        <mat-form-field class="w-100">
+          <textarea matInput
+                    placeholder="Write Note Here"
+                    rows="10"
+                    formControlName="note"></textarea>
+          <mat-error>Required</mat-error>
+        </mat-form-field>
+
+        <div class="text-right">
+          <button mat-raised-button
+                  color="primary">Save Note</button>
+        </div>
+
+      </div>
+    </div>
+
+  </form>
 
 </app-busy-overlay>

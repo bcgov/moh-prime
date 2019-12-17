@@ -154,5 +154,18 @@ namespace PrimeTests.Mocks
             }
             return Task.FromResult(false);
         }
+
+        public async Task<ICollection<AdjudicatorNote>> GetEnrolleeAdjudicatorNotesAsync(Enrollee enrollee)
+        {
+            // TODO add proper tests, but need test spike
+            return new List<AdjudicatorNote>() { new AdjudicatorNote() };
+        }
+
+        public async Task<AdjudicatorNote> CreateAdjudicatorNoteAsync(Enrollee enrollee, AdjudicatorNote adjudicatorNote)
+        {
+            // TODO add proper tests, but need test spike
+            AdjudicatorNote newAdjudicatorNote = new AdjudicatorNote { Enrollee = enrollee, Note = adjudicatorNote.Note };
+            return newAdjudicatorNote;
+        }
     }
 }
