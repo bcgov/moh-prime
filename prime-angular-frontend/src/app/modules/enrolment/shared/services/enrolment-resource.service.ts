@@ -14,6 +14,7 @@ import { Address } from '@enrolment/shared/models/address.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
 import { Organization } from '@enrolment/shared/models/organization.model';
+import { EnrolleeNote } from '../models/enrollee-note.model';
 
 @Injectable({
   providedIn: 'root'
@@ -158,6 +159,9 @@ export class EnrolmentResource {
     enrolment.certifications = this.removeIncompleteCollegeCertifications(enrolment.certifications);
     enrolment.jobs = this.removeIncompleteJobs(enrolment.jobs);
     enrolment.organizations = this.removeIncompleteOrganizations(enrolment.organizations);
+
+    enrolment.accessAgreementNote = new EnrolleeNote();
+    enrolment.enrolmentCertificateNote = new EnrolleeNote();
 
     return this.enrolleeAdapter(enrolment);
   }
