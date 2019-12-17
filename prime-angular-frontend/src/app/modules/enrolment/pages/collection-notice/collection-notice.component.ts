@@ -27,8 +27,8 @@ export class CollectionNoticeComponent implements OnInit {
 
   public onAccept() {
     const route = (!this.profileCompleted)
-      ? EnrolmentRoutes.PROFILE
-      : EnrolmentRoutes.REVIEW;
+      ? EnrolmentRoutes.DEMOGRAPHIC
+      : EnrolmentRoutes.OVERVIEW;
 
     this.router.navigate([route], { relativeTo: this.route.parent });
   }

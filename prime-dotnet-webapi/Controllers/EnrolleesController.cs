@@ -15,7 +15,7 @@ namespace Prime.Controllers
     [Route("api/[controller]")]
     [ApiController]
     // User needs at least the ADMIN or ENROLLEE role to use this controller
-    [Authorize(Policy = PrimeConstants.PRIME_USER_POLICY)]
+    // [Authorize(Policy = PrimeConstants.PRIME_USER_POLICY)]
     public class EnrolleesController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
@@ -133,7 +133,11 @@ namespace Prime.Controllers
 
             var createdEnrolleeId = await _enrolleeService.CreateEnrolleeAsync(enrollee);
 
-            return CreatedAtAction(nameof(GetEnrolleeById), new { enrolleeId = createdEnrolleeId }, new ApiCreatedResponse<Enrollee>(enrollee));
+            return CreatedAtAction(
+                nameof(GetEnrolleeById),
+                new { enrolleeId = createdEnrolleeId },
+                new ApiCreatedResponse<Enrollee>(enrollee)
+            );
         }
 
         // PUT: api/Enrollees/5
@@ -149,7 +153,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateEnrollee(int enrolleeId, Enrollee enrollee, [FromQuery]bool beenThroughTheWizard = false)
+        public async Task<IActionResult> UpdateEnrollee(int enrolleeId, Enrollee enrollee, [FromQuery]bool beenThroughTheWizard)
         {
             if (enrollee == null)
             {
@@ -169,13 +173,15 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            if (!_enrolleeService.EnrolleeExists(enrolleeId))
+            if (!await _enrolleeService.EnrolleeExists(enrolleeId))
             {
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
 
-            // If the enrollee is not in the status of 'In Progress', it cannot be updated
-            if (!(await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.IN_PROGRESS_CODE)))
+            // If the enrollee is not in the status of 'In Progress' or 'Accepted TOA', it cannot be updated
+            if (!(await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.IN_PROGRESS_CODE)) &&
+                // TODO should be update to be EDITING and switched to EDITING immediately on ACCEPTED_TOS
+                !(await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.ACCEPTED_TOS_CODE)))
             {
                 this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee can not be updated when the current status is not 'In Progress'.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
@@ -323,6 +329,173 @@ namespace Prime.Controllers
             var enrolmentStatus = await _enrolleeService.CreateEnrolmentStatusAsync(enrolleeId, status);
 
             return Ok(new ApiOkResponse<EnrolmentStatus>(enrolmentStatus));
+        }
+
+        // GET: api/Enrollees/5/adjudicator-notes
+        /// <summary>
+        /// Gets all of the adjudicator notes for a specific Enrollee.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpGet("{enrolleeId}/adjudicator-notes", Name = nameof(GetAdjudicatorNotes))]
+        [Authorize(Policy = PrimeConstants.PRIME_ADMIN_POLICY)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiOkResponse<IEnumerable<Status>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<AdjudicatorNote>>> GetAdjudicatorNotes(int enrolleeId)
+        {
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+
+            if (enrollee == null)
+            {
+                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
+            }
+
+            // If the user is not an ADMIN, make sure the enrollee ID matches the user, otherwise return not authorized
+            if (!BelongsToEnrollee(enrollee))
+            {
+                return Forbid();
+            }
+
+            var adjudicationNotes = await _enrolleeService.GetEnrolleeAdjudicatorNotesAsync(enrollee);
+
+            return Ok(new ApiOkResponse<IEnumerable<AdjudicatorNote>>(adjudicationNotes));
+        }
+
+        // POST: api/Enrollees/5/adjudicator-notes
+        /// <summary>
+        /// Creates a new adjudicator note on an enrollee.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="adjudicatorNote"></param>
+        [HttpPost("{enrolleeId}/adjudicator-notes", Name = nameof(CreateAdjudicatorNote))]
+        [Authorize(Policy = PrimeConstants.PRIME_ADMIN_POLICY)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiCreatedResponse<AdjudicatorNote>), StatusCodes.Status201Created)]
+        public async Task<ActionResult<AdjudicatorNote>> CreateAdjudicatorNote(int enrolleeId, AdjudicatorNote adjudicatorNote)
+        {
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+
+            if (!await _enrolleeService.EnrolleeExists(enrolleeId))
+            {
+                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
+            }
+
+            // If the user is not an ADMIN, make sure the enrollee ID matches the user, otherwise return not authorized
+            if (!BelongsToEnrollee(enrollee))
+            {
+                return Forbid();
+            }
+
+            if (enrolleeId != adjudicatorNote.EnrolleeId)
+            {
+                this.ModelState.AddModelError("Enrollee.Id", "Enrollee Id is required to make updates.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
+
+            // Notes can not be added to 'In Progress' enrolments
+            if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.IN_PROGRESS_CODE))
+            {
+                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Adjudicator notes can not be updated when the current status is 'In Progress'.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
+
+            var createdAdjudicatorNote = await _enrolleeService.CreateEnrolleeAdjudicatorNoteAsync(enrolleeId, adjudicatorNote);
+
+            return CreatedAtAction(
+                nameof(GetAdjudicatorNotes),
+                new { enrolleeId = enrolleeId },
+                new ApiCreatedResponse<AdjudicatorNote>(createdAdjudicatorNote)
+            );
+        }
+
+        // PUT: api/Enrollees/5
+        /// <summary>
+        /// Updates an access agreement note.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="accessAgreementNote"></param>
+        [HttpPut("{enrolleeId}/access-agreement-notes", Name = nameof(UpdateAccessAgreementNote))]
+        // [Authorize(Policy = PrimeConstants.PRIME_ADMIN_POLICY)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult<AccessAgreementNote>> UpdateAccessAgreementNote(int enrolleeId, AccessAgreementNote accessAgreementNote)
+        {
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+
+            if (enrollee == null)
+            {
+                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}."));
+            }
+
+            System.Console.WriteLine(enrolleeId);
+            System.Console.WriteLine(accessAgreementNote.EnrolleeId);
+
+            // if (enrolleeId != accessAgreementNote.EnrolleeId)
+            // {
+            //     this.ModelState.AddModelError("Enrollee.Id", "Enrollee Id is required to make updates.");
+            //     return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            // }
+
+            // Notes can not be added to 'In Progress' enrolments
+            if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.IN_PROGRESS_CODE))
+            {
+                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Access agreement notes can not be updated when the current status is 'In Progress'.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
+
+            var updatedNote = await _enrolleeService.UpdateEnrolleeNoteAsync(enrolleeId, accessAgreementNote);
+
+            return Ok(new ApiOkResponse<IEnrolleeNote>(updatedNote));
+        }
+
+        // PUT: api/Enrollees/5
+        /// <summary>
+        /// Updates an enrolment certificate note.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="enrolmentCertNote"></param>
+        [HttpPut("{enrolleeId}/enrolment-certificate-notes", Name = nameof(UpdateEnrolmentCertNote))]
+        // [Authorize(Policy = PrimeConstants.PRIME_ADMIN_POLICY)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult<EnrolmentCertificateNote>> UpdateEnrolmentCertNote(int enrolleeId, EnrolmentCertificateNote enrolmentCertNote)
+        {
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+
+            if (enrollee == null)
+            {
+                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}."));
+            }
+
+            System.Console.WriteLine(enrolleeId);
+            System.Console.WriteLine(enrolmentCertNote.EnrolleeId);
+
+            // if (enrolleeId != enrolmentCertNote.EnrolleeId)
+            // {
+            //     this.ModelState.AddModelError("Enrollee.Id", "Enrollee Id is required to make updates.");
+            //     return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            // }
+
+            // Notes can not be added to 'In Progress' enrolments
+            if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.IN_PROGRESS_CODE))
+            {
+                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrolment certificate notes can not be updated when the current status is 'In Progress'.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
+
+            var updatedNote = await _enrolleeService.UpdateEnrolleeNoteAsync(enrolleeId, enrolmentCertNote);
+
+            return Ok(new ApiOkResponse<IEnrolleeNote>(updatedNote));
         }
     }
 }

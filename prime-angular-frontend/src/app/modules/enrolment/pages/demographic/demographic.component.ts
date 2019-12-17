@@ -15,13 +15,14 @@ import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-stat
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { FormUtilsService } from '@enrolment/shared/services/form-utils.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+  selector: 'app-demographic',
+  templateUrl: './demographic.component.html',
+  styleUrls: ['./demographic.component.scss']
 })
-export class ProfileComponent extends BaseEnrolmentProfilePage implements OnInit {
+export class DemographicComponent extends BaseEnrolmentProfilePage implements OnInit {
   public hasPreferredName: boolean;
   public hasMailingAddress: boolean;
   public isNewProfile: boolean;
@@ -93,7 +94,7 @@ export class ProfileComponent extends BaseEnrolmentProfilePage implements OnInit
             this.form.markAsPristine();
             const routePath = (!this.isProfileComplete)
               ? EnrolmentRoutes.REGULATORY
-              : EnrolmentRoutes.REVIEW;
+              : EnrolmentRoutes.OVERVIEW;
             this.routeTo(routePath);
           },
           (error: any) => {
@@ -176,11 +177,11 @@ export class ProfileComponent extends BaseEnrolmentProfilePage implements OnInit
 
     if (enrolment) {
       this.enrolmentStateService.enrolment = enrolment;
-      this.hasInitialStatus = enrolment.initialStatus;
+      this.isInitialEnrolment = enrolment.progressStatus !== ProgressStatus.FINISHED;
       this.isProfileComplete = enrolment.profileCompleted;
     } else {
       this.isNewProfile = true;
-      this.hasInitialStatus = true;
+      this.isInitialEnrolment = true;
       this.isProfileComplete = false;
 
       this.patchFormWithUser();
