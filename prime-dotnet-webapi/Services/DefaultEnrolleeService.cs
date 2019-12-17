@@ -99,9 +99,16 @@ namespace Prime.Services
             return availableStatuses;
         }
 
-        public bool EnrolleeExists(Guid userId)
+        public async Task<bool> EnrolleeExistsAsync(int enrolleeId)
         {
-            return _context.Enrollees.Any(e => e.UserId == userId);
+            return await _context.Enrollees
+                .AnyAsync(e => e.Id == enrolleeId);
+        }
+
+        public async Task<bool> EnrolleeUserIdExistsAsync(Guid userId)
+        {
+            return await _context.Enrollees
+                .AnyAsync(e => e.UserId == userId);
         }
 
         public async Task<Enrollee> GetEnrolleeAsync(Guid userId)
@@ -385,16 +392,16 @@ namespace Prime.Services
                         };
                         break;
                     case Status.DECLINED_CODE:
-                        await setAllPharmaNetStatusesFalseAsync(enrolleeId);
+                        await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
                         createdEnrolmentStatus.PharmaNetStatus = true;
                         break;
                     case Status.ACCEPTED_TOS_CODE:
-                        await setAllPharmaNetStatusesFalseAsync(enrolleeId);
+                        await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
                         enrollee.LicensePlate = this.GenerateLicensePlate();
                         createdEnrolmentStatus.PharmaNetStatus = true;
                         break;
                     case Status.DECLINED_TOS_CODE:
-                        await setAllPharmaNetStatusesFalseAsync(enrolleeId);
+                        await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
                         createdEnrolmentStatus.PharmaNetStatus = true;
                         break;
                 }
@@ -423,7 +430,7 @@ namespace Prime.Services
             throw new InvalidOperationException("Could not create enrolment status, status change is not allowed.");
         }
 
-        private async Task setAllPharmaNetStatusesFalseAsync(int enrolleeId)
+        private async Task SetAllPharmaNetStatusesFalseAsync(int enrolleeId)
         {
             var existingEnrolmentStatuses = await this.GetEnrolmentStatusesAsync(enrolleeId);
 
@@ -472,12 +479,6 @@ namespace Prime.Services
                     .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.EnrolmentStatusReasons).ThenInclude(esr => esr.StatusReason)
                     .Include(e => e.AccessAgreementNote)
                     .Include(e => e.EnrolmentCertificateNote);
-        }
-
-        public async Task<bool> EnrolleeExists(int enrolleeId)
-        {
-            return await _context.Enrollees
-                .AnyAsync(e => e.Id == enrolleeId);
         }
 
         public async Task<Enrollee> GetEnrolleeAsync(int enrolleeId)

@@ -10,7 +10,9 @@ namespace Prime.Services
     {
         Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId);
 
-        Task<bool> EnrolleeExists(int enrolleeId);
+        Task<bool> EnrolleeExistsAsync(int enrolleeId);
+
+        Task<bool> EnrolleeUserIdExistsAsync(Guid userId);
 
         Task<Enrollee> GetEnrolleeAsync(int enrolleeId);
 
