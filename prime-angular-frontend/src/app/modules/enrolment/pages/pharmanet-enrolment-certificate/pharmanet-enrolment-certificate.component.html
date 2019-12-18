@@ -23,6 +23,11 @@
         <app-enrollee-address [address]="mailingAddress"></app-enrollee-address>
 
         <dl class="row mb-4">
+          <dt class="col-6">Privileges</dt>
+          <dd class="col-6 text-right">{{ enrolment.enrollee.privileges | default }}</dd>
+        </dl>
+
+        <dl class="row mb-4">
           <dt class="col-6">PharmaNet ID</dt>
           <dd class="col-6 text-right">{{ enrolment.enrollee.licensePlate | default }}</dd>
         </dl>

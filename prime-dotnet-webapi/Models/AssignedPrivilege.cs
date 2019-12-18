@@ -11,13 +11,14 @@ namespace Prime.Models
     {
         public int EnrolleeId { get; set; }
 
-        [JsonIgnore]
+        // [JsonIgnore]
         public Enrollee Enrollee { get; set; }
 
         public int PrivilegeId { get; set; }
 
         [JsonIgnore]
-        public Privilege Privilege { get; set; }
+        public virtual Privilege Privilege { get; set; }
+
 
     }
 }

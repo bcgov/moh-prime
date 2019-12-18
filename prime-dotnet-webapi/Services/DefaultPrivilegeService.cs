@@ -85,10 +85,11 @@ namespace Prime.Services
                         .ToList();
         }
 
-        private ICollection<AssignedPrivilege> GetAssignedPrivilegesForEnrollee(int enrolleeId)
+        public ICollection<AssignedPrivilege> GetAssignedPrivilegesForEnrollee(int? enrolleeId)
         {
             return _context.AssignedPrivileges
                         .Where(ap => ap.EnrolleeId == enrolleeId)
+                        .Include(ap => ap.Privilege)
                         .ToList();
         }
 

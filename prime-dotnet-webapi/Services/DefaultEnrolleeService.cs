@@ -138,6 +138,19 @@ namespace Prime.Services
             {
                 // Add the available statuses to the enrolment
                 item.AvailableStatuses = this.GetAvailableStatuses(item.CurrentStatus?.Status);
+
+                ICollection<Privilege> privileges = new List<Privilege>();
+
+                if (item.AssignedPrivileges != null)
+                {
+                    foreach (AssignedPrivilege privilege in item.AssignedPrivileges)
+                    {
+                        Privilege newPrivilege = _context.Privileges.Where(p => p.Id == privilege.PrivilegeId).FirstOrDefault();
+                        privileges.Add(newPrivilege);
+                    }
+                }
+                item.Privileges = privileges;
+
             }
 
             return items;
@@ -471,10 +484,15 @@ namespace Prime.Services
                     .Include(e => e.Certifications)
                     .Include(e => e.Jobs)
                     .Include(e => e.Organizations)
-                    .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.Status)
-                    .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.EnrolmentStatusReasons).ThenInclude(esr => esr.StatusReason)
+                    .Include(e => e.EnrolmentStatuses)
+                        .ThenInclude(es => es.Status)
+                    .Include(e => e.EnrolmentStatuses)
+                        .ThenInclude(es => es.EnrolmentStatusReasons)
+                        .ThenInclude(esr => esr.StatusReason)
                     .Include(e => e.AccessAgreementNote)
-                    .Include(e => e.EnrolmentCertificateNote);
+                    .Include(e => e.EnrolmentCertificateNote)
+            .Include(e => e.AssignedPrivileges);
+            // .ThenInclude(AssignedPrivilege => AssignedPrivilege.Privilege);
         }
 
         public async Task<bool> EnrolleeExists(int enrolleeId)
