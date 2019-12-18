@@ -1,32 +1,33 @@
 using System.Linq;
+using System.Collections.Generic;
 using Xunit;
 
+using Prime.Models;
 using Prime.Services;
 using PrimeTests.Utils;
-using Prime.Models;
-using System.Collections.Generic;
+using PrimeTests.Mocks;
 
 namespace PrimeTests.Services
 {
     public class DefaultAutomaticAdjudicationServiceServiceTests : BaseServiceTests<DefaultAutomaticAdjudicationService>
     {
-        private void UpdateCertifications(Enrollee enrollee, bool hasCertification = false)
+        public DefaultAutomaticAdjudicationServiceServiceTests() : base(new object[] { new PharmanetApiServiceMock() })
+        { }
+
+        private void UpdateCertifications(Enrollee enrollee, int certCount = 0)
         {
-            // update certification information
-            if (hasCertification)
+            if (certCount == 0)
             {
-                enrollee.Certifications = TestUtils.CertificationFaker.Generate(1);
+                enrollee.Certifications.Clear();
             }
             else
             {
-                enrollee.Certifications.Clear();
+                enrollee.Certifications = TestUtils.CertificationFaker.Generate(certCount);
             }
         }
 
         private void UpdateDeviceProvider(Enrollee enrollee, bool provider = false, bool pumpProvider = false)
         {
-            // update device provider information
-            // enrollee.IsDeviceProvider = provider;
             if (provider)
             {
                 enrollee.DeviceProviderNumber = TestUtils.RandomDeviceProviderNumber();
@@ -75,20 +76,16 @@ namespace PrimeTests.Services
             }
         }
 
-        private void AssertReasonCodes(ICollection<EnrolmentStatusReason> enrolmentStatusReasons, short[] expectedReasonCodes = null)
+        private void AssertReasonCodes(ICollection<EnrolmentStatusReason> enrolmentStatusReasons, params short[] expectedReasonCodes)
         {
-            if (expectedReasonCodes == null)
+            if (expectedReasonCodes.Length == 0)
             {
                 Assert.Empty(enrolmentStatusReasons ?? new List<EnrolmentStatusReason>(0));
             }
             else
             {
-                Assert.NotEmpty(enrolmentStatusReasons);
-                Assert.Equal(expectedReasonCodes.Length, enrolmentStatusReasons.Count);
-                foreach (var enrolmentStatusReason in enrolmentStatusReasons)
-                {
-                    Assert.Contains(enrolmentStatusReason.StatusReasonCode, expectedReasonCodes);
-                }
+                var actualCodes = enrolmentStatusReasons.Select(r => r.StatusReasonCode);
+                Assert.Equal(expectedReasonCodes.OrderBy(c => c), actualCodes.OrderBy(c => c));
             }
         }
 
@@ -114,7 +111,7 @@ namespace PrimeTests.Services
             this.UpdateSelfDeclaration(enrollee);
 
             // check that this qualifies for automatic adjudication
-            Assert.True(_service.QualifiesForAutomaticAdjudication(enrollee));
+            Assert.True(await _service.QualifiesForAutomaticAdjudication(enrollee));
             AssertReasonCodes(enrollee.CurrentStatus?.EnrolmentStatusReasons);
         }
 
@@ -140,8 +137,8 @@ namespace PrimeTests.Services
 
             // check that this does not qualify for automatic adjudication
             this.UpdateSelfDeclaration(enrollee, (SelfDeclaration.CONVICTION | SelfDeclaration.DISCIPLINARY | SelfDeclaration.PHARMANET_SUSPENDED | SelfDeclaration.REGISTRATION_SUSPENDED));
-            Assert.False(_service.QualifiesForAutomaticAdjudication(enrollee));
-            AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, new short[] { StatusReason.SELF_DECLARATION_CODE });
+            Assert.False(await _service.QualifiesForAutomaticAdjudication(enrollee));
+            AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, StatusReason.SELF_DECLARATION_CODE);
         }
 
         [Fact]
@@ -166,8 +163,8 @@ namespace PrimeTests.Services
 
             // check that this does not qualify for automatic adjudication
             this.UpdateSelfDeclaration(enrollee, (SelfDeclaration.CONVICTION));
-            Assert.False(_service.QualifiesForAutomaticAdjudication(enrollee));
-            AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, new short[] { StatusReason.SELF_DECLARATION_CODE });
+            Assert.False(await _service.QualifiesForAutomaticAdjudication(enrollee));
+            AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, StatusReason.SELF_DECLARATION_CODE);
         }
 
         [Fact]
@@ -192,8 +189,8 @@ namespace PrimeTests.Services
 
             // check that this does not qualify for automatic adjudication
             this.UpdateSelfDeclaration(enrollee, (SelfDeclaration.DISCIPLINARY));
-            Assert.False(_service.QualifiesForAutomaticAdjudication(enrollee));
-            AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, new short[] { StatusReason.SELF_DECLARATION_CODE });
+            Assert.False(await _service.QualifiesForAutomaticAdjudication(enrollee));
+            AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, StatusReason.SELF_DECLARATION_CODE);
         }
 
         [Fact]
@@ -218,8 +215,8 @@ namespace PrimeTests.Services
 
             // check that this does not qualify for automatic adjudication
             this.UpdateSelfDeclaration(enrollee, (SelfDeclaration.PHARMANET_SUSPENDED));
-            Assert.False(_service.QualifiesForAutomaticAdjudication(enrollee));
-            AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, new short[] { StatusReason.SELF_DECLARATION_CODE });
+            Assert.False(await _service.QualifiesForAutomaticAdjudication(enrollee));
+            AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, StatusReason.SELF_DECLARATION_CODE);
         }
 
         [Fact]
@@ -244,8 +241,8 @@ namespace PrimeTests.Services
 
             // check that this does not qualify for automatic adjudication
             this.UpdateSelfDeclaration(enrollee, (SelfDeclaration.REGISTRATION_SUSPENDED));
-            Assert.False(_service.QualifiesForAutomaticAdjudication(enrollee));
-            AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, new short[] { StatusReason.SELF_DECLARATION_CODE });
+            Assert.False(await _service.QualifiesForAutomaticAdjudication(enrollee));
+            AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, StatusReason.SELF_DECLARATION_CODE);
         }
 
         [Fact]
@@ -270,8 +267,8 @@ namespace PrimeTests.Services
             this.UpdateSelfDeclaration(enrollee);
 
             // check that this does not qualify for automatic adjudication
-            Assert.False(_service.QualifiesForAutomaticAdjudication(enrollee));
-            AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, new short[] { StatusReason.ADDRESS_CODE });
+            Assert.False(await _service.QualifiesForAutomaticAdjudication(enrollee));
+            AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, StatusReason.ADDRESS_CODE);
         }
 
         [Fact]
@@ -291,13 +288,13 @@ namespace PrimeTests.Services
 
             // change the values in the enrollee so that it will not qualify for automatic adjudication
             this.UpdateAddresses(enrollee);
-            this.UpdateCertifications(enrollee, true);
+            this.UpdateCertifications(enrollee, 1);
             this.UpdateDeviceProvider(enrollee);
             this.UpdateSelfDeclaration(enrollee);
 
             // check that this does not qualify for automatic adjudication
-            Assert.False(_service.QualifiesForAutomaticAdjudication(enrollee));
-            AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, new short[] { StatusReason.NAME_DISCREPANCY_CODE, StatusReason.NOT_IN_PHARMANET_CODE, StatusReason.LICENCE_CLASS_CODE });
+            Assert.False(await _service.QualifiesForAutomaticAdjudication(enrollee));
+            AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, StatusReason.NOT_IN_PHARMANET_CODE, StatusReason.LICENCE_CLASS_CODE);
         }
 
         [Fact]
@@ -322,8 +319,8 @@ namespace PrimeTests.Services
             this.UpdateSelfDeclaration(enrollee);
 
             // check that this does not qualify for automatic adjudication
-            Assert.False(_service.QualifiesForAutomaticAdjudication(enrollee));
-            AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, new short[] { StatusReason.PUMP_PROVIDER_CODE });
+            Assert.False(await _service.QualifiesForAutomaticAdjudication(enrollee));
+            AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, StatusReason.PUMP_PROVIDER_CODE);
         }
     }
 }

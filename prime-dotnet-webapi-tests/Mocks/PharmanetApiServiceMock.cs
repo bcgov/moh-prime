@@ -13,12 +13,12 @@ namespace PrimeTests.Mocks
 
         public override void SeedData()
         {
-            throw new NotImplementedException();
+
         }
 
         public Task<PharmanetCollegeRecord> GetCollegeRecordAsync(Certification certification)
         {
-            throw new NotImplementedException();
+            return Task.FromResult<PharmanetCollegeRecord>(null);
         }
     }
 }
