@@ -92,7 +92,7 @@ namespace PrimeTests.Services
             int expectedEnrolleeId = (int)enrollee.Id;
 
             // check to see if the enrollee exists through the service layer
-            Assert.True(_service.EnrolleeExists(expectedEnrolleeId));
+            Assert.True(await _service.EnrolleeExistsAsync(expectedEnrolleeId));
         }
 
         [Fact]
@@ -303,21 +303,19 @@ namespace PrimeTests.Services
         }
 
         [Fact]
-        public async void testCreateEnrolmentStatus_AcceptedTOS_to_InProgress()
+        public async void testCreateEnrolmentStatus_AcceptedTOS_to_Submitted()
         {
             var testEnrollee = TestUtils.EnrolleeFaker.Generate();
             testEnrollee.CurrentStatus.StatusCode = Status.ACCEPTED_TOS_CODE;
-            Guid expectedUserId = testEnrollee.UserId;
 
             // create the enrollee directly to the context
             _dbContext.Enrollees.Add(testEnrollee);
             await _dbContext.SaveChangesAsync();
-            int expectedEnrolleeId = (int)testEnrollee.Id;
 
             // create the enrolment status through the service layer code
-            var enrolmentStatusInProgress = await _service.CreateEnrolmentStatusAsync((int)expectedEnrolleeId, _dbContext.Statuses.Single(s => s.Code == Status.IN_PROGRESS_CODE));
+            var enrolmentStatusInProgress = await _service.CreateEnrolmentStatusAsync(testEnrollee.Id.Value, _dbContext.Statuses.Single(s => s.Code == Status.SUBMITTED_CODE));
             Assert.NotNull(enrolmentStatusInProgress);
-            Assert.Equal(_dbContext.Statuses.Single(s => s.Code == Status.IN_PROGRESS_CODE), enrolmentStatusInProgress.Status);
+            Assert.Equal(_dbContext.Statuses.Single(s => s.Code == Status.SUBMITTED_CODE), enrolmentStatusInProgress.Status);
         }
 
         [Fact]
@@ -330,7 +328,6 @@ namespace PrimeTests.Services
             Status ACCEPTED_TOS = _dbContext.Statuses.Single(s => s.Code == Status.ACCEPTED_TOS_CODE);
             Status DECLINED_TOS = _dbContext.Statuses.Single(s => s.Code == Status.DECLINED_TOS_CODE);
 
-            // check all of the permutations for workflow state changes
             Assert.True(_service.IsStatusChangeAllowed(null, IN_PROGRESS));
             Assert.False(_service.IsStatusChangeAllowed(null, SUBMITTED));
             Assert.False(_service.IsStatusChangeAllowed(null, APPROVED));
@@ -347,7 +344,7 @@ namespace PrimeTests.Services
             Assert.False(_service.IsStatusChangeAllowed(IN_PROGRESS, DECLINED_TOS));
 
             Assert.False(_service.IsStatusChangeAllowed(SUBMITTED, null));
-            Assert.True(_service.IsStatusChangeAllowed(SUBMITTED, IN_PROGRESS));
+            Assert.False(_service.IsStatusChangeAllowed(SUBMITTED, IN_PROGRESS));
             Assert.False(_service.IsStatusChangeAllowed(SUBMITTED, SUBMITTED));
             Assert.False(_service.IsStatusChangeAllowed(SUBMITTED, APPROVED));
             Assert.False(_service.IsStatusChangeAllowed(SUBMITTED, DECLINED));
@@ -363,7 +360,7 @@ namespace PrimeTests.Services
             Assert.True(_service.IsStatusChangeAllowed(APPROVED, DECLINED_TOS));
 
             Assert.False(_service.IsStatusChangeAllowed(DECLINED, null));
-            Assert.True(_service.IsStatusChangeAllowed(DECLINED, IN_PROGRESS));
+            Assert.False(_service.IsStatusChangeAllowed(DECLINED, IN_PROGRESS));
             Assert.False(_service.IsStatusChangeAllowed(DECLINED, SUBMITTED));
             Assert.False(_service.IsStatusChangeAllowed(DECLINED, APPROVED));
             Assert.False(_service.IsStatusChangeAllowed(DECLINED, DECLINED));
@@ -371,15 +368,15 @@ namespace PrimeTests.Services
             Assert.False(_service.IsStatusChangeAllowed(DECLINED, DECLINED_TOS));
 
             Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, null));
-            Assert.True(_service.IsStatusChangeAllowed(ACCEPTED_TOS, IN_PROGRESS));
-            Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, SUBMITTED));
+            Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, IN_PROGRESS));
+            Assert.True(_service.IsStatusChangeAllowed(ACCEPTED_TOS, SUBMITTED));
             Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, APPROVED));
             Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, DECLINED));
             Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, ACCEPTED_TOS));
             Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, DECLINED_TOS));
 
             Assert.False(_service.IsStatusChangeAllowed(DECLINED_TOS, null));
-            Assert.True(_service.IsStatusChangeAllowed(DECLINED_TOS, IN_PROGRESS));
+            Assert.False(_service.IsStatusChangeAllowed(DECLINED_TOS, IN_PROGRESS));
             Assert.False(_service.IsStatusChangeAllowed(DECLINED_TOS, SUBMITTED));
             Assert.False(_service.IsStatusChangeAllowed(DECLINED_TOS, APPROVED));
             Assert.False(_service.IsStatusChangeAllowed(DECLINED_TOS, DECLINED));
@@ -397,10 +394,11 @@ namespace PrimeTests.Services
             Status ACCEPTED_TOS = _dbContext.Statuses.Single(s => s.Code == Status.ACCEPTED_TOS_CODE);
             Status DECLINED_TOS = _dbContext.Statuses.Single(s => s.Code == Status.DECLINED_TOS_CODE);
 
-            // add the admin role to the user
+            // TODO This is dangerous, as it sets the admin flag for this entire context.
+            // By default tests in the same test collection run sequentially but if they were run in parallel this could cause unintended side effects in other tests.
+            // Also, Assertions throw errors and stop the current test, so the RemoveAdminRoleFromUser method will not be called if any assertions fail.
             TestUtils.AddAdminRoleToUser(_httpContext?.HttpContext?.User);
 
-            // check all of the permutations for workflow state changes
             Assert.True(_service.IsStatusChangeAllowed(null, IN_PROGRESS));
             Assert.False(_service.IsStatusChangeAllowed(null, SUBMITTED));
             Assert.False(_service.IsStatusChangeAllowed(null, APPROVED));
@@ -441,8 +439,8 @@ namespace PrimeTests.Services
             Assert.False(_service.IsStatusChangeAllowed(DECLINED, DECLINED_TOS));
 
             Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, null));
-            Assert.True(_service.IsStatusChangeAllowed(ACCEPTED_TOS, IN_PROGRESS));
-            Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, SUBMITTED));
+            Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, IN_PROGRESS));
+            Assert.True(_service.IsStatusChangeAllowed(ACCEPTED_TOS, SUBMITTED));
             Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, APPROVED));
             Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, DECLINED));
             Assert.False(_service.IsStatusChangeAllowed(ACCEPTED_TOS, ACCEPTED_TOS));
@@ -456,7 +454,6 @@ namespace PrimeTests.Services
             Assert.False(_service.IsStatusChangeAllowed(DECLINED_TOS, ACCEPTED_TOS));
             Assert.False(_service.IsStatusChangeAllowed(DECLINED_TOS, DECLINED_TOS));
 
-            // remove the admin role from the user
             TestUtils.RemoveAdminRoleFromUser(_httpContext?.HttpContext?.User);
         }
     }
