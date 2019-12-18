@@ -20,8 +20,10 @@ namespace Prime.Models
         [JsonIgnore]
         public PrivilegeGroup PrivilegeGroup { get; set; }
 
+        [JsonIgnore]
         public ICollection<DefaultPrivilege> DefaultPrivileges { get; set; }
 
+        [JsonIgnore]
         public ICollection<AssignedPrivilege> AssignedPrivileges { get; set; }
 
     }

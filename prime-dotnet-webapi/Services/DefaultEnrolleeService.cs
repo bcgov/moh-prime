@@ -139,18 +139,6 @@ namespace Prime.Services
                 // Add the available statuses to the enrolment
                 item.AvailableStatuses = this.GetAvailableStatuses(item.CurrentStatus?.Status);
 
-                //     ICollection<Privilege> privileges = new List<Privilege>();
-
-                //     if (item.AssignedPrivileges != null)
-                //     {
-                //         foreach (AssignedPrivilege privilege in item.AssignedPrivileges)
-                //         {
-                //             Privilege newPrivilege = _context.Privileges.Where(p => p.Id == privilege.PrivilegeId).FirstOrDefault();
-                //             privileges.Add(newPrivilege);
-                //         }
-                //     }
-                //     item.Privileges = privileges;
-
             }
 
             return items;
