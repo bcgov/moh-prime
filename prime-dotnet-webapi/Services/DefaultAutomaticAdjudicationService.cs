@@ -26,11 +26,6 @@ namespace Prime.Services
 
         public async Task<bool> QualifiesForAutomaticAdjudication(Enrollee enrollee)
         {
-            foreach (var cert in enrollee.Certifications)
-            {
-                await _context.Entry(cert).Reference(c => c.College).LoadAsync();
-            }
-
             // All rules must pass for this enrollee to qualify to be automatically adjudicated.
             // Failing rules will add Status Reasons to the current status.
             bool passed = true;
@@ -59,26 +54,15 @@ namespace Prime.Services
                 return await ProcessRuleInternal(enrollee);
             }
 
-            protected void AddStatusReason(Enrollee enrollee, short statusReasonCode, string statusReasonNote = null)
+            protected void AddReason(Enrollee enrollee, short statusReasonCode, string statusReasonNote = null)
             {
                 var currentStatus = enrollee.CurrentStatus;
-                if (currentStatus == null || currentStatus.StatusCode != Status.SUBMITTED_CODE)
+                if (currentStatus == null)
                 {
                     throw new InvalidOperationException($"Could not add Status Reason for Enrollee with UserId \"{enrollee.UserId}\", Current Status is invalid.");
                 }
 
-                // add a enrolment status reason list if one doesn't already exist
-                if (currentStatus.EnrolmentStatusReasons == null)
-                {
-                    currentStatus.EnrolmentStatusReasons = new List<EnrolmentStatusReason>(0);
-                }
-
-                currentStatus.EnrolmentStatusReasons.Add(new EnrolmentStatusReason
-                {
-                    EnrolmentStatus = currentStatus,
-                    StatusReasonCode = statusReasonCode,
-                    ReasonNote = statusReasonNote
-                });
+                currentStatus.AddStatusReason(statusReasonCode, statusReasonNote);
             }
 
             protected abstract Task<bool> ProcessRuleInternal(Enrollee enrollee);
@@ -96,7 +80,7 @@ namespace Prime.Services
                     || enrollee.HasPharmaNetSuspended.GetValueOrDefault(true)
                     || enrollee.HasRegistrationSuspended.GetValueOrDefault(true))
                 {
-                    AddStatusReason(enrollee, StatusReason.SELF_DECLARATION_CODE);
+                    AddReason(enrollee, StatusReason.SELF_DECLARATION_CODE);
                     return Task.FromResult(false);
                 }
 
@@ -114,7 +98,7 @@ namespace Prime.Services
                 if (provinceCodes.Any(p => p != null
                     && !p.Equals(Province.BRITISH_COLUMBIA_CODE, StringComparison.OrdinalIgnoreCase)))
                 {
-                    AddStatusReason(enrollee, StatusReason.ADDRESS_CODE);
+                    AddReason(enrollee, StatusReason.ADDRESS_CODE);
                     return Task.FromResult(false);
                 }
 
@@ -131,7 +115,7 @@ namespace Prime.Services
                 // note: if for some reason the question was not answered, we will assume 'Yes'
                 if (enrollee.IsInsulinPumpProvider.GetValueOrDefault(true))
                 {
-                    AddStatusReason(enrollee, StatusReason.PUMP_PROVIDER_CODE);
+                    AddReason(enrollee, StatusReason.PUMP_PROVIDER_CODE);
                     return Task.FromResult(false);
                 }
 
@@ -152,7 +136,7 @@ namespace Prime.Services
                     {
                         if (item.LicenseCode > 0)
                         {
-                            AddStatusReason(enrollee, StatusReason.LICENCE_CLASS_CODE);
+                            AddReason(enrollee, StatusReason.LICENCE_CLASS_CODE);
                             passed = false;
                             break;
                         }
@@ -192,30 +176,30 @@ namespace Prime.Services
                     }
                     catch (DefaultPharmanetApiService.PharmanetCollegeApiException)
                     {
-                        AddStatusReason(enrollee, StatusReason.PHARMANET_ERROR_CODE, $"For {cert.FullLicenceNumber}");
+                        AddReason(enrollee, StatusReason.PHARMANET_ERROR_CODE, $"For {cert.FullLicenceNumber}");
                         passed = false;
                         continue;
                     }
                     if (record == null)
                     {
-                        AddStatusReason(enrollee, StatusReason.NOT_IN_PHARMANET_CODE, $"For {cert.FullLicenceNumber}");
+                        AddReason(enrollee, StatusReason.NOT_IN_PHARMANET_CODE, $"For {cert.FullLicenceNumber}");
                         passed = false;
                         continue;
                     }
 
                     if (!record.MatchesEnrolleeByName(enrollee))
                     {
-                        AddStatusReason(enrollee, StatusReason.NAME_DISCREPANCY_CODE, $"For {cert.FullLicenceNumber}, PharmaNet record has First Name: \"{record.firstName}\", Last Name: \"{record.lastName}\".");
+                        AddReason(enrollee, StatusReason.NAME_DISCREPANCY_CODE, $"For {cert.FullLicenceNumber}, PharmaNet record has First Name: \"{record.firstName}\", Last Name: \"{record.lastName}\".");
                         passed = false;
                     }
                     if (record.dateofBirth.Date != enrollee.DateOfBirth.Date)
                     {
-                        AddStatusReason(enrollee, StatusReason.BIRTHDATE_DISCREPANCY_CODE, $"For {cert.FullLicenceNumber}, Pharmanet record has Date of Birth: {record.dateofBirth.ToString()}");
+                        AddReason(enrollee, StatusReason.BIRTHDATE_DISCREPANCY_CODE, $"For {cert.FullLicenceNumber}, Pharmanet record has Date of Birth: {record.dateofBirth.ToString()}");
                         passed = false;
                     }
                     if (record.status != "P")
                     {
-                        AddStatusReason(enrollee, StatusReason.PRACTICING_CODE, $"For {cert.FullLicenceNumber}");
+                        AddReason(enrollee, StatusReason.PRACTICING_CODE, $"For {cert.FullLicenceNumber}");
                         passed = false;
                     }
                 }
