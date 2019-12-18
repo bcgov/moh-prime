@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+
 using Prime.Models;
 
 namespace PrimeTests.Mocks
@@ -7,11 +9,6 @@ namespace PrimeTests.Mocks
     {
         public const int DEFAULT_ENROLMENTS_SIZE = 5;
         public const int DEFAULT_ENROLLEES_SIZE = 5;
-        public const int MIN_ENROLMENT_ID = 1;
-        public const int MAX_ENROLMENT_ID = 1000000;
-        public const int MIN_ENROLLEE_ID = 1;
-        public const int MAX_ENROLLEE_ID = 1000000;
-
         protected static short NULL_STATUS_CODE = -1;
 
         private static Dictionary<short, Status> _statusMap = new Dictionary<short, Status> {
@@ -145,6 +142,11 @@ namespace PrimeTests.Mocks
         {
             string key = typeof(T).FullName;
             return _fakeDb[key] as Dictionary<TKey, T>;
+        }
+
+        protected static int GetNewId(ICollection<int> ids)
+        {
+            return ids.DefaultIfEmpty(0).Max() + 1;
         }
     }
 }

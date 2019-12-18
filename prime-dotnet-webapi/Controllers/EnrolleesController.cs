@@ -15,7 +15,7 @@ namespace Prime.Controllers
     [Route("api/[controller]")]
     [ApiController]
     // User needs at least the ADMIN or ENROLLEE role to use this controller
-    // [Authorize(Policy = PrimeConstants.PRIME_USER_POLICY)]
+    [Authorize(Policy = PrimeConstants.PRIME_USER_POLICY)]
     public class EnrolleesController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
@@ -23,25 +23,6 @@ namespace Prime.Controllers
         public EnrolleesController(IEnrolleeService enrolleeService)
         {
             _enrolleeService = enrolleeService;
-        }
-
-        private bool BelongsToEnrollee(Enrollee enrollee)
-        {
-            bool belongsToEnrollee = false;
-
-            // Check to see if the logged in user is an admin
-            belongsToEnrollee = User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE);
-
-            // If user is not ADMIN, check that user belongs to the enrolment
-            if (!belongsToEnrollee)
-            {
-                // Get the prime user id from the logged in user - note: this returns 'Guid.Empty' if there is no logged in user
-                Guid PrimeUserId = User.GetPrimeUserId();
-                // Check to see if the logged in user id is not 'Guid.Empty', and matches the one in the enrolment
-                belongsToEnrollee = !PrimeUserId.Equals(Guid.Empty) && PrimeUserId.Equals(enrollee.UserId);
-            }
-
-            return belongsToEnrollee;
         }
 
         // GET: api/Enrollees
@@ -65,12 +46,7 @@ namespace Prime.Controllers
             else
             {
                 var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(User.GetPrimeUserId());
-                enrollees = new List<Enrollee>();
-
-                if (enrollee != null)
-                {
-                    enrollees = enrollees.Append(enrollee);
-                }
+                enrollees = enrollee != null ? new[] { enrollee } : new Enrollee[0];
             }
 
             return Ok(new ApiOkResponse<IEnumerable<Enrollee>>(enrollees));
@@ -96,8 +72,7 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
 
-            // if the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
-            if (!BelongsToEnrollee(enrollee))
+            if (!User.CanAccess(enrollee))
             {
                 return Forbid();
             }
@@ -122,10 +97,13 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            // Check to see if this userId is already an enrollee, if so, reject creating another
-            var existingEnrolment = await _enrolleeService.GetEnrolleeForUserIdAsync(enrollee.UserId);
+            if (!User.CanAccess(enrollee))
+            {
+                return Forbid();
+            }
 
-            if (existingEnrolment != null)
+            // Check to see if this userId is already an enrollee, if so, reject creating another
+            if (await _enrolleeService.EnrolleeUserIdExistsAsync(enrollee.UserId))
             {
                 this.ModelState.AddModelError("Enrollee.UserId", "An enrollee already exists for this User Id, only one enrollee is allowed per User Id.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
@@ -161,7 +139,12 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            if (enrollee == null || enrollee.Id == null)
+            if (!User.CanAccess(enrollee))
+            {
+                return Forbid();
+            }
+
+            if (enrollee.Id == null)
             {
                 this.ModelState.AddModelError("Enrollee.Id", "Enrollee Id is required to make updates.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
@@ -173,7 +156,7 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            if (!await _enrolleeService.EnrolleeExists(enrolleeId))
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
@@ -185,12 +168,6 @@ namespace Prime.Controllers
             {
                 this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee can not be updated when the current status is not 'In Progress'.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
-            }
-
-            // If the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
-            if (!BelongsToEnrollee(enrollee))
-            {
-                return Forbid();
             }
 
             await _enrolleeService.UpdateEnrolleeAsync(enrollee, beenThroughTheWizard);
@@ -211,13 +188,13 @@ namespace Prime.Controllers
         public async Task<ActionResult<Enrollee>> DeleteEnrollee(int enrolleeId)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+
             if (enrollee == null)
             {
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
 
-            // if the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
-            if (!BelongsToEnrollee(enrollee))
+            if (!User.CanAccess(enrollee))
             {
                 return Forbid();
             }
@@ -247,8 +224,7 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
 
-            // if the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
-            if (!BelongsToEnrollee(enrollee))
+            if (!User.CanAccess(enrollee))
             {
                 return Forbid();
             }
@@ -278,8 +254,7 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
 
-            // if the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
-            if (!BelongsToEnrollee(enrollee))
+            if (!User.CanAccess(enrollee))
             {
                 return Forbid();
             }
@@ -308,16 +283,15 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
 
+            if (!User.CanAccess(enrollee))
+            {
+                return Forbid();
+            }
+
             if (status?.Code == null || status.Code < 1)
             {
                 this.ModelState.AddModelError("Status.Code", "Status Code is required to create statuses.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
-            }
-
-            // if the user is not an ADMIN, make sure the enrolleeId matches the user, otherwise return not authorized
-            if (!BelongsToEnrollee(enrollee))
-            {
-                return Forbid();
             }
 
             if (!_enrolleeService.IsStatusChangeAllowed(enrollee.CurrentStatus?.Status, status))
@@ -352,12 +326,6 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
 
-            // If the user is not an ADMIN, make sure the enrollee ID matches the user, otherwise return not authorized
-            if (!BelongsToEnrollee(enrollee))
-            {
-                return Forbid();
-            }
-
             var adjudicationNotes = await _enrolleeService.GetEnrolleeAdjudicatorNotesAsync(enrollee);
 
             return Ok(new ApiOkResponse<IEnumerable<AdjudicatorNote>>(adjudicationNotes));
@@ -379,20 +347,14 @@ namespace Prime.Controllers
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
-            if (!await _enrolleeService.EnrolleeExists(enrolleeId))
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
 
-            // If the user is not an ADMIN, make sure the enrollee ID matches the user, otherwise return not authorized
-            if (!BelongsToEnrollee(enrollee))
-            {
-                return Forbid();
-            }
-
             if (enrolleeId != adjudicatorNote.EnrolleeId)
             {
-                this.ModelState.AddModelError("Enrollee.Id", "Enrollee Id is required to make updates.");
+                this.ModelState.AddModelError("AdjudicatorNote.EnrolleeId", "Enrollee Id does not match with the payload.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
@@ -419,7 +381,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="accessAgreementNote"></param>
         [HttpPut("{enrolleeId}/access-agreement-notes", Name = nameof(UpdateAccessAgreementNote))]
-        // [Authorize(Policy = PrimeConstants.PRIME_ADMIN_POLICY)]
+        [Authorize(Policy = PrimeConstants.PRIME_ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -434,14 +396,11 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}."));
             }
 
-            System.Console.WriteLine(enrolleeId);
-            System.Console.WriteLine(accessAgreementNote.EnrolleeId);
-
-            // if (enrolleeId != accessAgreementNote.EnrolleeId)
-            // {
-            //     this.ModelState.AddModelError("Enrollee.Id", "Enrollee Id is required to make updates.");
-            //     return BadRequest(new ApiBadRequestResponse(this.ModelState));
-            // }
+            if (enrolleeId != accessAgreementNote.EnrolleeId)
+            {
+                this.ModelState.AddModelError("AccessAgreementNote.EnrolleeId", "Enrollee Id does not match with the payload.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
 
             // Notes can not be added to 'In Progress' enrolments
             if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.IN_PROGRESS_CODE))
@@ -462,7 +421,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="enrolmentCertNote"></param>
         [HttpPut("{enrolleeId}/enrolment-certificate-notes", Name = nameof(UpdateEnrolmentCertNote))]
-        // [Authorize(Policy = PrimeConstants.PRIME_ADMIN_POLICY)]
+        [Authorize(Policy = PrimeConstants.PRIME_ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -477,14 +436,11 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}."));
             }
 
-            System.Console.WriteLine(enrolleeId);
-            System.Console.WriteLine(enrolmentCertNote.EnrolleeId);
-
-            // if (enrolleeId != enrolmentCertNote.EnrolleeId)
-            // {
-            //     this.ModelState.AddModelError("Enrollee.Id", "Enrollee Id is required to make updates.");
-            //     return BadRequest(new ApiBadRequestResponse(this.ModelState));
-            // }
+            if (enrolleeId != enrolmentCertNote.EnrolleeId)
+            {
+                this.ModelState.AddModelError("EnrolmentCertificateNote.EnrolleeId", "Enrollee Id does not match with the payload.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
 
             // Notes can not be added to 'In Progress' enrolments
             if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.IN_PROGRESS_CODE))
