@@ -39,6 +39,7 @@ namespace Prime.Services
             if (_workflowStateMap == null)
             {
                 // Construct the workflow map
+                // TODO this should be async
                 // TODO need idea of new enrollee vs old enrollee baked into statuses
                 // TODO IN_PROGRESS should be NEW and potentiall prefix a duplicate set of enrolment lifecycle statuses
                 Status IN_PROGRESS = _context.Statuses.Single(s => s.Code == Status.IN_PROGRESS_CODE);
@@ -84,26 +85,25 @@ namespace Prime.Services
 
         private ICollection<Status> GetAvailableStatuses(Status currentStatus)
         {
-            ICollection<Status> availableStatuses = new List<Status>();
-            var results = this.GetWorkFlowStateMap()[currentStatus ?? NULL_STATUS];
-            var currentUser = _httpContext?.HttpContext?.User;
+            var userIsAdmin = _httpContext?.HttpContext?.User?.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE) ?? false;
+            var stateMap = this.GetWorkFlowStateMap()[currentStatus ?? NULL_STATUS];
 
-            foreach (var item in results)
-            {
-                if (!item.AdminOnly
-                        || (currentUser != null
-                                && currentUser.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE)))
-                {
-                    availableStatuses.Add(item.Status);
-                }
-            }
-
-            return availableStatuses;
+            return stateMap
+                .Where(m => userIsAdmin || !m.AdminOnly)
+                .Select(m => m.Status)
+                .ToList();
         }
 
-        public bool EnrolleeExists(Guid userId)
+        public async Task<bool> EnrolleeExistsAsync(int enrolleeId)
         {
-            return _context.Enrollees.Any(e => e.UserId == userId);
+            return await _context.Enrollees
+                .AnyAsync(e => e.Id == enrolleeId);
+        }
+
+        public async Task<bool> EnrolleeUserIdExistsAsync(Guid userId)
+        {
+            return await _context.Enrollees
+                .AnyAsync(e => e.UserId == userId);
         }
 
         public async Task<Enrollee> GetEnrolleeAsync(Guid userId)
@@ -387,17 +387,17 @@ namespace Prime.Services
                         };
                         break;
                     case Status.DECLINED_CODE:
-                        await setAllPharmaNetStatusesFalseAsync(enrolleeId);
+                        await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
                         createdEnrolmentStatus.PharmaNetStatus = true;
                         break;
                     case Status.ACCEPTED_TOS_CODE:
-                        await setAllPharmaNetStatusesFalseAsync(enrolleeId);
+                        await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
                         enrollee.LicensePlate = this.GenerateLicensePlate();
                         await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrolleeId, enrollee);
                         createdEnrolmentStatus.PharmaNetStatus = true;
                         break;
                     case Status.DECLINED_TOS_CODE:
-                        await setAllPharmaNetStatusesFalseAsync(enrolleeId);
+                        await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
                         createdEnrolmentStatus.PharmaNetStatus = true;
                         break;
                 }
@@ -426,7 +426,7 @@ namespace Prime.Services
             throw new InvalidOperationException("Could not create enrolment status, status change is not allowed.");
         }
 
-        private async Task setAllPharmaNetStatusesFalseAsync(int enrolleeId)
+        private async Task SetAllPharmaNetStatusesFalseAsync(int enrolleeId)
         {
             var existingEnrolmentStatuses = await this.GetEnrolmentStatusesAsync(enrolleeId);
 
@@ -475,12 +475,6 @@ namespace Prime.Services
                     .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.EnrolmentStatusReasons).ThenInclude(esr => esr.StatusReason)
                     .Include(e => e.AccessAgreementNote)
                     .Include(e => e.EnrolmentCertificateNote);
-        }
-
-        public async Task<bool> EnrolleeExists(int enrolleeId)
-        {
-            return await _context.Enrollees
-                .AnyAsync(e => e.Id == enrolleeId);
         }
 
         public async Task<Enrollee> GetEnrolleeAsync(int enrolleeId)

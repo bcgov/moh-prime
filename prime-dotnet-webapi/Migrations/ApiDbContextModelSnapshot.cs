@@ -83,23 +83,25 @@ namespace Prime.Migrations
                     b.HasDiscriminator<int>("AddressType");
                 });
 
-            modelBuilder.Entity("Prime.Models.AdjudicatorNote", b =>
+            modelBuilder.Entity("Prime.Models.AssignedPrivilege", b =>
                 {
-                    b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("PrivilegeId");
 
                     b.Property<int>("EnrolleeId");
 
-                    b.Property<string>("Note")
-                        .IsRequired();
+                    b.Property<DateTime>("CreatedTimeStamp");
 
-                    b.Property<DateTime>("NoteDate");
+                    b.Property<Guid>("CreatedUserId");
 
-                    b.HasKey("Id");
+                    b.Property<DateTime>("UpdatedTimeStamp");
+
+                    b.Property<Guid>("UpdatedUserId");
+
+                    b.HasKey("PrivilegeId", "EnrolleeId");
 
                     b.HasIndex("EnrolleeId");
 
-                    b.ToTable("AdjudicatorNotes");
+                    b.ToTable("AssignedPrivilege");
                 });
 
             modelBuilder.Entity("Prime.Models.AssignedPrivilege", b =>
