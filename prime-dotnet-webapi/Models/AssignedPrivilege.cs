@@ -16,8 +16,8 @@ namespace Prime.Models
 
         public int PrivilegeId { get; set; }
 
-        [JsonIgnore]
-        public virtual Privilege Privilege { get; set; }
+        // [JsonIgnore]
+        public Privilege Privilege { get; set; }
 
 
     }

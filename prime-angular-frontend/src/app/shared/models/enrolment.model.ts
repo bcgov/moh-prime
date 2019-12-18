@@ -28,7 +28,7 @@ export interface HttpEnrollee extends Enrollee {
   hasPharmaNetSuspended: boolean;
   hasPharmaNetSuspendedDetails: boolean;
   organizations: Organization[];
-  privileges: Privilege[];
+  assignedPrivileges: Privilege[];
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;
   availableStatuses: Config<number>[];
@@ -60,7 +60,7 @@ export interface Enrolment {
   hasPharmaNetSuspended: boolean;
   hasPharmaNetSuspendedDetails: boolean;
   organizations: Organization[];
-  privileges: Privilege[];
+  assignedPrivileges: Privilege[];
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;
   availableStatuses: Config<number>[];

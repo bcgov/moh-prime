@@ -34,7 +34,7 @@ namespace Prime
         public DbSet<EnrolmentStatusReason> EnrolmentStatusReasons { get; set; }
         public DbSet<Status> Statuses { get; set; }
         public DbSet<EnrolmentCertificateAccessToken> EnrolmentCertificateAccessTokens { get; set; }
-        public DbSet<Privilege> Privileges { get; set; }
+        // public DbSet<Privilege> Privileges { get; set; }
         public DbSet<DefaultPrivilege> DefaultPrivileges { get; set; }
         public DbSet<AssignedPrivilege> AssignedPrivileges { get; set; }
         public DbSet<AdjudicatorNote> AdjudicatorNotes { get; set; }

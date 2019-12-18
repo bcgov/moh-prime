@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Prime.Models
 {
+    [Table("Privilege")]
     public class Privilege : BaseAuditable
     {
         [Key]

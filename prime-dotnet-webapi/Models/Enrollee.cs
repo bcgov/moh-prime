@@ -87,7 +87,8 @@ namespace Prime.Models
 
         public ICollection<AssignedPrivilege> AssignedPrivileges { get; set; }
 
-
+        // [NotMapped]
+        // public ICollection<Privilege> Privileges { get; set; }
 
         public ICollection<EnrolmentStatus> EnrolmentStatuses { get; set; }
 
@@ -123,9 +124,6 @@ namespace Prime.Models
 
         [NotMapped]
         public ICollection<Status> AvailableStatuses { get; set; }
-
-        [NotMapped]
-        public ICollection<Privilege> Privileges { get; set; }
 
 
         [NotMapped]
