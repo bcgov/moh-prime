@@ -10,7 +10,6 @@ namespace Prime.Models
     public class EnrolmentStatus : BaseAuditable
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         public int EnrolleeId { get; set; }
