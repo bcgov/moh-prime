@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 using Prime.Models;
@@ -19,14 +18,10 @@ namespace Prime.Services
     {
         private static HttpClient Client = InitHttpClient();
 
-        private ILookupService _lookupService;
-
         public DefaultPharmanetApiService(
-            ApiDbContext context, IHttpContextAccessor httpContext, ILookupService lookupService)
+            ApiDbContext context, IHttpContextAccessor httpContext)
             : base(context, httpContext)
-        {
-            _lookupService = lookupService;
-        }
+        { }
 
         private static HttpClient InitHttpClient()
         {
@@ -52,7 +47,7 @@ namespace Prime.Services
 
         public async Task<PharmanetCollegeRecord> GetCollegeRecordAsync(Certification certification)
         {
-            if (string.IsNullOrWhiteSpace(certification.LicenseNumber) || certification.CollegeCode == 0)
+            if (string.IsNullOrWhiteSpace(certification.LicenseNumber))
             {
                 return null;
             }
@@ -63,18 +58,13 @@ namespace Prime.Services
                 return null;
             }
 
-            College college;
-            if (certification.College != null)
+            if (certification.College == null)
             {
-                college = certification.College;
-            }
-            else
-            {
-                var colleges = await _lookupService.GetLookupsAsync<short, College>();
-                college = colleges.Single(c => c.Code == certification.CollegeCode);
+                // TODO This feels rather bad, but the College is not loaded by default; we only have the collge code. This would go away with lazy loading.
+                await _context.Entry(certification).Reference(c => c.College).LoadAsync();
             }
 
-            return await CallPharmanetCollegeLicenceService(certification.LicenseNumber, college.Prefix);
+            return await CallPharmanetCollegeLicenceService(certification.LicenseNumber, certification.College.Prefix);
         }
 
         private async Task<PharmanetCollegeRecord> CallPharmanetCollegeLicenceService(string licenceNumber, string collegeReferenceId)
