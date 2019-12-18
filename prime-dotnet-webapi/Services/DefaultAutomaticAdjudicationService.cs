@@ -181,6 +181,8 @@ namespace Prime.Services
                     return true;
                 }
 
+                bool passed = true;
+
                 foreach (var cert in enrollee.Certifications)
                 {
                     PharmanetCollegeRecord record = null;
@@ -190,23 +192,35 @@ namespace Prime.Services
                     }
                     catch (DefaultPharmanetApiService.PharmanetCollegeApiException)
                     {
-                        AddStatusReason(enrollee, StatusReason.PHARMANET_ERROR_CODE, $"{cert.College.Prefix}{cert.LicenseNumber}");
-                        return false;
+                        AddStatusReason(enrollee, StatusReason.PHARMANET_ERROR_CODE, $"For {cert.FullLicenceNumber}");
+                        passed = false;
+                        continue;
                     }
-
                     if (record == null)
                     {
-                        AddStatusReason(enrollee, StatusReason.NOT_IN_PHARMANET_CODE, $"{cert.College.Prefix}{cert.LicenseNumber}");
-                        return false;
+                        AddStatusReason(enrollee, StatusReason.NOT_IN_PHARMANET_CODE, $"For {cert.FullLicenceNumber}");
+                        passed = false;
+                        continue;
                     }
 
-
-
+                    if (!record.MatchesEnrolleeByName(enrollee))
+                    {
+                        AddStatusReason(enrollee, StatusReason.NAME_DISCREPANCY_CODE, $"For {cert.FullLicenceNumber}, PharmaNet record has First Name: \"{record.firstName}\", Last Name: \"{record.lastName}\".");
+                        passed = false;
+                    }
+                    if (record.dateofBirth.Date != enrollee.DateOfBirth.Date)
+                    {
+                        AddStatusReason(enrollee, StatusReason.BIRTHDATE_DISCREPANCY_CODE, $"For {cert.FullLicenceNumber}, Pharmanet record has Date of Birth: {record.dateofBirth.ToString()}");
+                        passed = false;
+                    }
+                    if (record.status != "P")
+                    {
+                        AddStatusReason(enrollee, StatusReason.PRACTICING_CODE, $"For {cert.FullLicenceNumber}");
+                        passed = false;
+                    }
                 }
 
-
-
-                return false;
+                return passed;
             }
         }
     }
