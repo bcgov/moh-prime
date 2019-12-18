@@ -44,5 +44,9 @@ namespace Prime.Models
 
         [JsonIgnore]
         public Practice Practice { get; set; }
+
+        [NotMapped]
+        [JsonIgnore]
+        public string FullLicenceNumber { get { return $"{College?.Prefix}-{LicenseNumber}"; } }
     }
 }
