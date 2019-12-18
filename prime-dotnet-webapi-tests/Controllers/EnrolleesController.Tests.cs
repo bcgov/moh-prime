@@ -167,7 +167,7 @@ namespace PrimeTests.Controllers
                 Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
                 // get an enrollee id that does not exist
-                int notFoundEnrolleeId = EnrolleeServiceMock.MAX_ENROLLEE_ID + 1;
+                int notFoundEnrolleeId = enrollees.Max(e => e.Id.Value) + 1;
 
                 // create a request with an AUTH token
                 var request = TestUtils.CreateRequest(HttpMethod.Get, $"/api/enrollees/{notFoundEnrolleeId}", Guid.NewGuid());
@@ -259,7 +259,7 @@ namespace PrimeTests.Controllers
                 var testEnrollee = TestUtils.EnrolleeFaker.Generate();
 
                 // create a request with an AUTH token
-                var request = TestUtils.CreateRequest(HttpMethod.Post, "/api/enrollees", Guid.NewGuid(), testEnrollee);
+                var request = TestUtils.CreateRequest(HttpMethod.Post, "/api/enrollees", testEnrollee.UserId, testEnrollee);
 
                 // try to create the enrollee
                 var response = await _client.SendAsync(request);
@@ -381,7 +381,7 @@ namespace PrimeTests.Controllers
                 Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
                 // get an enrollee id that does not exist
-                int notFoundEnrolleeId = EnrolleeServiceMock.MAX_ENROLLEE_ID + 1;
+                int notFoundEnrolleeId = enrollees.Max(e => e.Id.Value) + 1;
 
                 // create a request with an AUTH token
                 var request = TestUtils.CreateRequest(HttpMethod.Delete, $"/api/enrollees/{notFoundEnrolleeId}", Guid.NewGuid());
@@ -421,7 +421,7 @@ namespace PrimeTests.Controllers
                 Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
 
                 // check that the enrollee was not removed
-                Assert.True(service.EnrolleeExists(expectedEnrolleeId));
+                Assert.True(await service.EnrolleeExistsAsync(expectedEnrolleeId));
                 enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
                 Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
             }
@@ -603,7 +603,7 @@ namespace PrimeTests.Controllers
                 Enrollee enrollee = enrollees.First();
 
                 // change the enrolleeId to one that will not be found
-                int notFoundEnrolleeId = EnrolleeServiceMock.MAX_ENROLLEE_ID + 1;
+                int notFoundEnrolleeId = enrollees.Max(e => e.Id.Value) + 1;
                 enrollee.Id = notFoundEnrolleeId;
 
                 // create a request with an AUTH token
@@ -745,7 +745,7 @@ namespace PrimeTests.Controllers
                 Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
                 // get an enrollee id that does not exist
-                int notFoundEnrolleeId = EnrolleeServiceMock.MAX_ENROLLEE_ID + 1;
+                int notFoundEnrolleeId = enrollees.Max(e => e.Id.Value) + 1;
 
                 // create a request with an AUTH token
                 var request = TestUtils.CreateRequest(HttpMethod.Get,
@@ -843,7 +843,7 @@ namespace PrimeTests.Controllers
                 Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
                 // get an enrollee id that does not exist
-                int notFoundEnrolleeId = EnrolleeServiceMock.MAX_ENROLLEE_ID + 1;
+                int notFoundEnrolleeId = enrollees.Max(e => e.Id.Value) + 1;
 
                 // create a request with an AUTH token
                 var request = TestUtils.CreateRequest(HttpMethod.Get,
@@ -940,7 +940,7 @@ namespace PrimeTests.Controllers
                 Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
                 // try to get an enrollee that does not exist
-                int notFoundEnrolleeId = EnrolleeServiceMock.MAX_ENROLLEE_ID + 1;
+                int notFoundEnrolleeId = enrollees.Max(e => e.Id.Value) + 1;
 
                 // create a request with an AUTH token
                 var request = TestUtils.CreateRequest<Status>(HttpMethod.Post,

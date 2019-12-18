@@ -113,10 +113,10 @@ namespace PrimeTests.Utils
 
         public static void RemoveAdminRoleFromUser(ClaimsPrincipal user)
         {
+            var claim = user.Claims
+                .Where(c => c.Value == PrimeConstants.PRIME_ADMIN_ROLE)
+                .Single();
             var identity = user.Identity as ClaimsIdentity;
-            var claim = (from c in user.Claims
-                         where c.Value == PrimeConstants.PRIME_ADMIN_ROLE
-                         select c).Single();
             identity.RemoveClaim(claim);
         }
 
