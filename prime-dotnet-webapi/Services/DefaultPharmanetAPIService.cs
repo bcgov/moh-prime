@@ -60,7 +60,8 @@ namespace Prime.Services
 
             if (certification.College == null)
             {
-                // TODO This feels rather bad, but the College is not loaded by default; we only have the collge code. This would go away with lazy loading.
+                // The College is not loaded by default in the base enrollee query.
+                // We expect this to be populated when called from CreateEnrolmentStatus but this could be called from elsewhere in the app.
                 await _context.Entry(certification).Reference(c => c.College).LoadAsync();
             }
 
