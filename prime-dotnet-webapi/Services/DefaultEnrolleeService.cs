@@ -37,6 +37,7 @@ namespace Prime.Services
             if (_workflowStateMap == null)
             {
                 // Construct the workflow map
+                // TODO this should be async
                 // TODO need idea of new enrollee vs old enrollee baked into statuses
                 // TODO IN_PROGRESS should be NEW and potentiall prefix a duplicate set of enrolment lifecycle statuses
                 Status IN_PROGRESS = _context.Statuses.Single(s => s.Code == Status.IN_PROGRESS_CODE);
@@ -82,21 +83,13 @@ namespace Prime.Services
 
         private ICollection<Status> GetAvailableStatuses(Status currentStatus)
         {
-            ICollection<Status> availableStatuses = new List<Status>();
-            var results = this.GetWorkFlowStateMap()[currentStatus ?? NULL_STATUS];
-            var currentUser = _httpContext?.HttpContext?.User;
+            var userIsAdmin = _httpContext?.HttpContext?.User?.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE) ?? false;
+            var stateMap = this.GetWorkFlowStateMap()[currentStatus ?? NULL_STATUS];
 
-            foreach (var item in results)
-            {
-                if (!item.AdminOnly
-                        || (currentUser != null
-                                && currentUser.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE)))
-                {
-                    availableStatuses.Add(item.Status);
-                }
-            }
-
-            return availableStatuses;
+            return stateMap
+                .Where(m => userIsAdmin || !m.AdminOnly)
+                .Select(m => m.Status)
+                .ToList();
         }
 
         public async Task<bool> EnrolleeExistsAsync(int enrolleeId)
