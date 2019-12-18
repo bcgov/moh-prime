@@ -18,5 +18,8 @@ namespace Prime.Models
         {
             get => "Milk and Cookies!";
         }
+
+        public ICollection<Enrollee> NaughtyList {get; set;}
+        public ICollection<Enrollee> NiceList {get; set;}
     }
 }
