@@ -1,9 +1,9 @@
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Prime.Models
 {
+    [NotMapped]
     public class SantaClaus : BaseAuditable
     {
         [Key]
