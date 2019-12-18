@@ -366,6 +366,7 @@ namespace Prime.Services
                         createdEnrolmentStatus = adjudicatedEnrolmentStatus;
                     }
                     break;
+
                 case Status.APPROVED_CODE:
                     createdEnrolmentStatus.AddStatusReason(StatusReason.MANUAL_CODE);
                     break;
