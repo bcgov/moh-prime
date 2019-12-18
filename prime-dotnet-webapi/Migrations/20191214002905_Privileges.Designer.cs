@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -10,34 +11,16 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191214002905_Privileges")]
+    partial class Privileges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
                 .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
-
-            modelBuilder.Entity("Prime.Models.AccessAgreementNote", b =>
-                {
-                    b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("EnrolleeId");
-
-                    b.Property<string>("Note");
-
-                    b.Property<DateTime>("NoteDate");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EnrolleeId")
-                        .IsUnique();
-
-                    b.ToTable("AccessAgreementNotes");
-                });
 
             modelBuilder.Entity("Prime.Models.Address", b =>
                 {
@@ -6250,25 +6233,6 @@ namespace Prime.Migrations
                     b.ToTable("EnrolmentCertificateAccessToken");
                 });
 
-            modelBuilder.Entity("Prime.Models.EnrolmentCertificateNote", b =>
-                {
-                    b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("EnrolleeId");
-
-                    b.Property<string>("Note");
-
-                    b.Property<DateTime>("NoteDate");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EnrolleeId")
-                        .IsUnique();
-
-                    b.ToTable("EnrolmentCertificateNotes");
-                });
-
             modelBuilder.Entity("Prime.Models.EnrolmentStatus", b =>
                 {
                     b.Property<int>("Id")
@@ -6301,26 +6265,21 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.EnrolmentStatusReason", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("EnrolmentStatusId");
+
+                    b.Property<short>("StatusCode");
+
+                    b.Property<short>("StatusReasonCode");
 
                     b.Property<DateTime>("CreatedTimeStamp");
 
                     b.Property<Guid>("CreatedUserId");
 
-                    b.Property<int>("EnrolmentStatusId");
-
-                    b.Property<string>("ReasonNote");
-
-                    b.Property<short>("StatusReasonCode");
-
                     b.Property<DateTime>("UpdatedTimeStamp");
 
                     b.Property<Guid>("UpdatedUserId");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("EnrolmentStatusId");
+                    b.HasKey("EnrolmentStatusId", "StatusCode", "StatusReasonCode");
 
                     b.HasIndex("StatusReasonCode");
 
@@ -8276,33 +8235,6 @@ namespace Prime.Migrations
                             Code = (short)8,
                             CreatedTimeStamp = new DateTime(2019, 12, 13, 16, 29, 4, 660, DateTimeKind.Local).AddTicks(4994),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Insulin Pump Provider",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 17, 18, 43, 34, 781, DateTimeKind.Local).AddTicks(7817),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Code = (short)9,
-                            CreatedTimeStamp = new DateTime(2019, 12, 17, 18, 43, 34, 781, DateTimeKind.Local).AddTicks(7817),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Licence Class",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 17, 18, 43, 34, 781, DateTimeKind.Local).AddTicks(7817),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Code = (short)10,
-                            CreatedTimeStamp = new DateTime(2019, 12, 17, 18, 43, 34, 781, DateTimeKind.Local).AddTicks(7817),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Self Declaration",
-                            UpdatedTimeStamp = new DateTime(2019, 12, 17, 18, 43, 34, 781, DateTimeKind.Local).AddTicks(7817),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Code = (short)11,
-                            CreatedTimeStamp = new DateTime(2019, 12, 17, 18, 43, 34, 781, DateTimeKind.Local).AddTicks(7817),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Contact address or Identity Address Out of British Columbia",
                             UpdatedTimeStamp = new DateTime(2019, 12, 13, 16, 29, 4, 660, DateTimeKind.Local).AddTicks(4994),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
@@ -8331,14 +8263,6 @@ namespace Prime.Migrations
                     b.ToTable("Address");
 
                     b.HasDiscriminator().HasValue(1);
-                });
-
-            modelBuilder.Entity("Prime.Models.AccessAgreementNote", b =>
-                {
-                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
-                        .WithOne("AccessAgreementNote")
-                        .HasForeignKey("Prime.Models.AccessAgreementNote", "EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Prime.Models.Address", b =>
@@ -8431,14 +8355,6 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany()
                         .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Prime.Models.EnrolmentCertificateNote", b =>
-                {
-                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
-                        .WithOne("EnrolmentCertificateNote")
-                        .HasForeignKey("Prime.Models.EnrolmentCertificateNote", "EnrolleeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
