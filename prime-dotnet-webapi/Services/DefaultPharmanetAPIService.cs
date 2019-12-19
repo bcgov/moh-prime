@@ -47,15 +47,9 @@ namespace Prime.Services
 
         public async Task<PharmanetCollegeRecord> GetCollegeRecordAsync(Certification certification)
         {
-            if (string.IsNullOrWhiteSpace(certification.LicenseNumber))
-            {
-                return null;
-            }
-
             if (PrimeConstants.ENVIRONMENT_NAME == "local")
             {
-                // TODO handle local dev
-                return null;
+                return LocalDevApiMock(certification.LicenseNumber);
             }
 
             if (certification.College == null)
@@ -102,17 +96,53 @@ namespace Prime.Services
             return practicionerRecord;
         }
 
-        public class PharmanetCollegeApiException : Exception
+        private PharmanetCollegeRecord LocalDevApiMock(string licenceNumber)
         {
-            public PharmanetCollegeApiException(string message)
-                : base(message)
+            if (licenceNumber == "99999")
             {
+                throw new PharmanetCollegeApiException();
             }
 
-            public PharmanetCollegeApiException(string message, Exception inner)
-                : base(message, inner)
+            // last two digits
+            var userNumber = Int32.Parse(licenceNumber.Substring(3));
+            if (userNumber < 1 || userNumber > 11)
             {
+                return null;
             }
+
+            var lookup = new[]
+            {
+                null,
+                new {Date = "2000-05-17", Name = "ONE"},
+                new {Date = "1998-08-07", Name = "TWO"},
+                new {Date = "1998-08-08", Name = "THREE"},
+                new {Date = "1999-10-01", Name = "FOUR"},
+                new {Date = "1999-01-31", Name = "FIVE"},
+                new {Date = "2000-02-25", Name = "SIX"},
+                new {Date = "1999-03-14", Name = "SEVEN"},
+                new {Date = "1999-01-04", Name = "EIGHT"},
+                new {Date = "1997-10-12", Name = "NINE"},
+                new {Date = "2000-05-30", Name = "TEN"},
+                new {Date = "2000-06-07", Name = "ELEVEN"}
+            };
+            var info = lookup[userNumber];
+
+            return new PharmanetCollegeRecord
+            {
+                applicationUUID = new Guid().ToString(),
+                firstName = "PRIMET",
+                lastName = info.Name,
+                dateofBirth = DateTime.Parse(info.Date),
+                status = "P",
+                effectiveDate = DateTime.Today
+            };
+        }
+
+        public class PharmanetCollegeApiException : Exception
+        {
+            public PharmanetCollegeApiException() : base() { }
+            public PharmanetCollegeApiException(string message) : base(message) { }
+            public PharmanetCollegeApiException(string message, Exception inner) : base(message, inner) { }
         }
 
         private class CollegeRecordRequestParams
