@@ -294,7 +294,7 @@ namespace PrimeTests.Services
 
             // check that this does not qualify for automatic adjudication
             Assert.False(await _service.QualifiesForAutomaticAdjudication(enrollee));
-            AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, StatusReason.NOT_IN_PHARMANET_CODE, StatusReason.LICENCE_CLASS_CODE);
+            AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, StatusReason.NOT_IN_PHARMANET_CODE);
         }
 
         [Fact]

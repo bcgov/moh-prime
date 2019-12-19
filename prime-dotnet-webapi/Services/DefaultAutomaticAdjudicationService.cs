@@ -20,7 +20,7 @@ namespace Prime.Services
             _rules.Add(new SelfDeclarationRule());
             _rules.Add(new AddressRule());
             _rules.Add(new PumpProviderRule());
-            _rules.Add(new LicenceClassRule());
+            // _rules.Add(new LicenceClassRule());
             _rules.Add(new PharmanetValidationRule(pharmanetApiService));
         }
 
