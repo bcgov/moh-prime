@@ -194,7 +194,7 @@ namespace Prime.Services
                     }
                     if (record.dateofBirth.Date != enrollee.DateOfBirth.Date)
                     {
-                        AddReason(enrollee, StatusReason.BIRTHDATE_DISCREPANCY_CODE, $"For {cert.FullLicenceNumber}, Pharmanet record has Date of Birth: {record.dateofBirth.ToString()}");
+                        AddReason(enrollee, StatusReason.BIRTHDATE_DISCREPANCY_CODE, $"For {cert.FullLicenceNumber}, Pharmanet record has Date of Birth: {record.dateofBirth.ToString("d MMM yyyy")}");
                         passed = false;
                     }
                     if (record.status != "P")
