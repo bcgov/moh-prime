@@ -21,7 +21,12 @@ namespace Prime.Models
             get => "Milk and Cookies!";
         }
 
-        public ICollection<Enrollee> NaughtyList {get; set;}
-        public ICollection<Enrollee> NiceList {get; set;}
+        public string WhoStoleChristmas
+        {
+            get => "The Grinch!";
+        }
+
+        public ICollection<Enrollee> NaughtyList { get; set; }
+        public ICollection<Enrollee> NiceList { get; set; }
     }
 }
