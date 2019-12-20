@@ -16,10 +16,13 @@ namespace Prime.Services
             ApiDbContext context, IHttpContextAccessor httpContext, IPharmanetApiService pharmanetApiService)
             : base(context, httpContext)
         {
-            _rules = new List<IAutomaticAdjudicationRule>();
-            _rules.Add(new SelfDeclarationRule());
-            _rules.Add(new AddressRule());
-            _rules.Add(new PharmanetValidationRule(pharmanetApiService));
+            _rules = new List<IAutomaticAdjudicationRule>
+            {
+                new SelfDeclarationRule(),
+                new AddressRule(),
+                new PharmanetValidationRule(pharmanetApiService),
+                new PumpProviderRule()
+            };
         }
 
         public async Task<bool> QualifiesForAutomaticAdjudication(Enrollee enrollee)
