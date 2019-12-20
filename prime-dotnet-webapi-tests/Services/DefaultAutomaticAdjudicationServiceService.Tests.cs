@@ -7,6 +7,7 @@ using Prime.Models;
 using Prime.Services;
 using PrimeTests.Utils;
 using PrimeTests.Mocks;
+using static PrimeTests.Mocks.PharmanetApiServiceMock;
 
 namespace PrimeTests.Services
 {
@@ -113,7 +114,6 @@ namespace PrimeTests.Services
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
             UpdateSelfDeclaration(enrollee, declaration);
-
             var rule = new DefaultAutomaticAdjudicationService.SelfDeclarationRule();
 
             Assert.Equal(expected, await rule.ProcessRule(enrollee));
@@ -131,7 +131,6 @@ namespace PrimeTests.Services
         public async void testAddressRule()
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
-
             var rule = new DefaultAutomaticAdjudicationService.AddressRule();
 
             UpdateAddresses(enrollee);
@@ -143,30 +142,79 @@ namespace PrimeTests.Services
             AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, StatusReason.ADDRESS_CODE);
         }
 
-        [Fact]
-        public async void testCertificationRule()
+        [Theory]
+        [MemberData(nameof(CertificationRuleData))]
+        public async void testCertificationRule(OperationMode[] apiModes, bool expected, short[] expectedReasonCodes)
         {
-            // make sure there are no enrollees
-            Assert.False(_dbContext.Enrollees.Any());
-            await _dbContext.SaveChangesAsync();
+            Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
+            UpdateCertifications(enrollee, apiModes.Length);
+            var rule = new DefaultAutomaticAdjudicationService.PharmanetValidationRule(new PharmanetApiServiceMock(enrollee, apiModes));
 
-            // create an enrollee directly to the context
-            _dbContext.Enrollees.Add(TestUtils.EnrolleeFaker.Generate());
-            await _dbContext.SaveChangesAsync();
+            Assert.Equal(expected, await rule.ProcessRule(enrollee));
+            AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, expectedReasonCodes);
+        }
 
-            // pick of the enrollee to use
-            var enrollee = _dbContext.Enrollees.FirstOrDefault();
-            Assert.NotNull(enrollee);
+        public static IEnumerable<object[]> CertificationRuleData()
+        {
+            yield return new object[] { new[] { OperationMode.MATCHING_RECORD }, true, null };
+            yield return new object[] { new[] { OperationMode.MATCHING_RECORD, OperationMode.MATCHING_RECORD }, true, null };
 
-            // change the values in the enrollee so that it will not qualify for automatic adjudication
-            this.UpdateAddresses(enrollee);
-            this.UpdateCertifications(enrollee, 1);
-            this.UpdateDeviceProvider(enrollee);
-            this.UpdateSelfDeclaration(enrollee);
+            var failingCases = new[]
+            {
+                new[] { OperationMode.ERROR },
+                new[] { OperationMode.NO_RECORD },
+                new[] { OperationMode.NAME_DISCREPANCY },
+                new[] { OperationMode.DATE_DISCREPANCY },
+                new[] { OperationMode.NOT_PRACTICING },
+                new[] { OperationMode.NAME_DISCREPANCY | OperationMode.DATE_DISCREPANCY },
+                new[] { OperationMode.NAME_DISCREPANCY | OperationMode.DATE_DISCREPANCY | OperationMode.NOT_PRACTICING },
+                new[] { OperationMode.MATCHING_RECORD, OperationMode.NO_RECORD },
+                new[] { OperationMode.MATCHING_RECORD, OperationMode.NAME_DISCREPANCY | OperationMode.DATE_DISCREPANCY },
+                new[] { OperationMode.NO_RECORD, OperationMode.NOT_PRACTICING },
+                new[] { OperationMode.ERROR, OperationMode.NAME_DISCREPANCY | OperationMode.DATE_DISCREPANCY }
+            };
 
-            // check that this does not qualify for automatic adjudication
-            Assert.False(await _service.QualifiesForAutomaticAdjudication(enrollee));
-            AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, StatusReason.NOT_IN_PHARMANET_CODE);
+            foreach (var modes in failingCases)
+            {
+                yield return new object[] { modes, false, GetExpectedReasonCodes(modes) };
+            }
+        }
+
+        private static short[] GetExpectedReasonCodes(OperationMode[] modes)
+        {
+            var codes = new List<short>();
+            foreach (var mode in modes)
+            {
+                if (mode == OperationMode.ERROR)
+                {
+                    codes.Add(StatusReason.PHARMANET_ERROR_CODE);
+                    continue;
+                }
+                if (mode == OperationMode.MATCHING_RECORD)
+                {
+                    continue;
+                }
+                if (mode.HasFlag(OperationMode.NO_RECORD))
+                {
+                    codes.Add(StatusReason.NOT_IN_PHARMANET_CODE);
+                    continue;
+                }
+
+                if (mode.HasFlag(OperationMode.NAME_DISCREPANCY))
+                {
+                    codes.Add(StatusReason.NAME_DISCREPANCY_CODE);
+                }
+                if (mode.HasFlag(OperationMode.DATE_DISCREPANCY))
+                {
+                    codes.Add(StatusReason.BIRTHDATE_DISCREPANCY_CODE);
+                }
+                if (mode.HasFlag(OperationMode.NOT_PRACTICING))
+                {
+                    codes.Add(StatusReason.PRACTICING_CODE);
+                }
+            }
+
+            return codes.ToArray();
         }
 
         [Theory]
