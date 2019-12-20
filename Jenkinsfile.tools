@@ -16,6 +16,7 @@ pipeline {
             steps {
                 echo "Building ..."
                 //sh "./player.sh toolbelt sonar tools"
+                //sh "./player.sh toolbelt zap tools"
                 //sh "./player.sh toolbelt mailhog test"
                 //sh "./player.sh toolbelt schemaspy dev"
             }

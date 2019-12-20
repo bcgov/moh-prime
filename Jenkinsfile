@@ -31,6 +31,15 @@ pipeline {
                 sh "./player.sh scan"
             }
         }
+        stage('ZAP') {
+            agent { label 'code-tests' }
+            steps {
+                checkout scm
+                echo "Scanning..."
+                sh "./player.sh zap frontend"
+                sh "./player.sh zap api"
+            }
+        }
         stage('SchemaSpy Database Investigation') {
             when { expression { ( GIT_BRANCH == 'develop' ) } }
             agent { label 'master' }
