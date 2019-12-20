@@ -16,9 +16,9 @@ RUN KEYCLOAK_URL=$(grep KEYCLOAK_URL /usr/src/app/src/environments/keycloak.env.
 RUN cat /usr/src/app/src/environments/environment.prod.ts && \
     npm install @angular/cli -g --silent && \ 
     npm install && \
+    npm audit fix && \
     ng build --prod && \
-    echo "NPM packages installed..." && \
-    printenv
+    echo "NPM packages installed..." 
 
 FROM nginx:1.15-alpine
 COPY --from=build-deps /usr/src/app/dist/angular-frontend /usr/share/nginx/html
