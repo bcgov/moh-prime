@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Prime.Models;
 using Prime.Services;
@@ -11,7 +12,9 @@ namespace PrimeTests.Mocks
 
         public Task AssignPrivilegesToEnrolleeAsync(int enrolleeId, Enrollee enrollee)
         {
-            throw new System.NotImplementedException();
+            // TODO Finish test, currently just sending enrollee back
+            // throw new System.NotImplementedException();
+            return Task.FromResult(this.GetHolder<int, Enrollee>().Values?.SingleOrDefault(e => e.UserId == enrollee.UserId));
         }
 
         public override void SeedData()
