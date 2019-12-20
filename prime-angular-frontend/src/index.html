@@ -1,3 +1,9 @@
+<cfscript>
+  cookie[ "XSRF-TOKEN" ] = lcase(
+      hash( "#session.cfid#-#session.cftoken#-#getTickCount()#" )
+  );
+</cfscript>
+
 <!DOCTYPE html>
 <html lang="en">
 
