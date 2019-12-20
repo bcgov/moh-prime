@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Prime.Models;
@@ -9,7 +11,7 @@ namespace PrimeTests.Mocks
     public class PharmanetApiServiceMock : BaseMockService, IPharmanetApiService
     {
         [Flags]
-        public enum Mode
+        public enum OperationMode
         {
             ERROR = 0,
             NO_RECORD = 1,
@@ -19,53 +21,67 @@ namespace PrimeTests.Mocks
             NOT_PRACTICING = 16
         }
 
-        public Mode OperationMode { get; set; }
-        public Enrollee ExpectedEnrollee { get; set; }
+        private Enrollee _expectedEnrollee;
+        private IEnumerator<OperationMode> _modeEnumerator;
 
-        public PharmanetApiServiceMock(Mode startingMode = Mode.NO_RECORD, Enrollee expectedEnrollee = null) : base()
+        public PharmanetApiServiceMock(Enrollee expectedEnrollee = null, params OperationMode[] modes) : base()
         {
-            OperationMode = startingMode;
-            ExpectedEnrollee = expectedEnrollee;
+            _modeEnumerator = modes.AsEnumerable().GetEnumerator();
+            _expectedEnrollee = expectedEnrollee;
         }
 
         public override void SeedData() { }
 
         public Task<PharmanetCollegeRecord> GetCollegeRecordAsync(Certification certification)
         {
-            if (OperationMode == Mode.ERROR)
+            OperationMode mode = GetNextMode();
+
+            if (mode == OperationMode.ERROR)
             {
-                throw new DefaultPharmanetApiService.PharmanetCollegeApiException();
+                throw new DefaultPharmanetApiService.PharmanetCollegeApiException("PharmaNet Mock is in error mode.");
             }
-            if (OperationMode.HasFlag(Mode.NO_RECORD))
+            if (mode.HasFlag(OperationMode.NO_RECORD))
             {
                 return Task.FromResult<PharmanetCollegeRecord>(null);
             }
 
-            if (ExpectedEnrollee == null)
+            if (_expectedEnrollee == null)
             {
-                throw new InvalidOperationException($"PharmaNet mock is in a mode that requires an enrollee to copy but {nameof(ExpectedEnrollee)} is null.");
+                throw new InvalidOperationException($"PharmaNet Mock is in a mode that requires an enrollee to copy but {nameof(_expectedEnrollee)} is null.");
             }
 
             var record = new PharmanetCollegeRecord
             {
                 applicationUUID = new Guid().ToString(),
-                firstName = ExpectedEnrollee.FirstName,
-                lastName = ExpectedEnrollee.LastName,
-                dateofBirth = ExpectedEnrollee.DateOfBirth,
-                status = OperationMode.HasFlag(Mode.NOT_PRACTICING) ? "N" : "P",
+                firstName = _expectedEnrollee.FirstName,
+                lastName = _expectedEnrollee.LastName,
+                dateofBirth = _expectedEnrollee.DateOfBirth,
+                status = mode.HasFlag(OperationMode.NOT_PRACTICING) ? "N" : "P",
                 effectiveDate = DateTime.Today
             };
 
-            if (OperationMode.HasFlag(Mode.NAME_DISCREPANCY))
+            if (mode.HasFlag(OperationMode.NAME_DISCREPANCY))
             {
                 record.lastName += "extracharacters";
             }
-            if (OperationMode.HasFlag(Mode.DATE_DISCREPANCY))
+            if (mode.HasFlag(OperationMode.DATE_DISCREPANCY))
             {
                 record.dateofBirth = record.dateofBirth.AddDays(1);
             }
 
             return Task.FromResult(record);
+        }
+
+        private OperationMode GetNextMode()
+        {
+            if (_modeEnumerator.MoveNext())
+            {
+                return _modeEnumerator.Current;
+            }
+            else
+            {
+                return OperationMode.ERROR;
+            }
         }
     }
 }
