@@ -72,12 +72,12 @@ const routes: Routes = [
         data: { title: 'PharmaNet Enrolment' }
       },
       // TODO Temporary removal of device provider for ComPAP
-      // {
-      //   path: EnrolmentRoutes.DEVICE_PROVIDER,
-      //   component: DeviceProviderComponent,
-      //   canDeactivate: [CanDeactivateFormGuard],
-      //   data: { title: 'PharmaNet Enrolment' }
-      // },
+      {
+        path: EnrolmentRoutes.DEVICE_PROVIDER,
+        component: DeviceProviderComponent,
+        canDeactivate: [CanDeactivateFormGuard],
+        data: { title: 'PharmaNet Enrolment' }
+      },
       {
         path: EnrolmentRoutes.JOB,
         component: JobComponent,
