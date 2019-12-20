@@ -30,7 +30,7 @@ namespace PrimeTests.Utils
 
         public static Faker<PhysicalAddress> PhysicalAddressFaker = new Faker<PhysicalAddress>()
                                 .RuleFor(a => a.CountryCode, f => f.PickRandom(countries))
-                                .RuleFor(a => a.ProvinceCode, TestUtils.RandomProvince())
+                                .RuleFor(a => a.ProvinceCode, TestUtils.RandomProvinceCode())
                                 .RuleFor(a => a.Street, f => f.Address.StreetAddress())
                                 .RuleFor(a => a.City, f => f.Address.City())
                                 .RuleFor(a => a.Postal, f => f.Address.ZipCode("?#?#?#"))
@@ -38,7 +38,7 @@ namespace PrimeTests.Utils
 
         public static Faker<MailingAddress> MailingAddressFaker = new Faker<MailingAddress>()
                                 .RuleFor(a => a.CountryCode, f => f.PickRandom(countries))
-                                .RuleFor(a => a.ProvinceCode, TestUtils.RandomProvince())
+                                .RuleFor(a => a.ProvinceCode, TestUtils.RandomProvinceCode())
                                 .RuleFor(a => a.Street, f => f.Address.StreetAddress())
                                 .RuleFor(a => a.City, f => f.Address.City())
                                 .RuleFor(a => a.Postal, f => f.Address.ZipCode("?#?#?#"))
@@ -88,16 +88,11 @@ namespace PrimeTests.Utils
                                 .RuleFor(e => e.HasPharmaNetSuspended, f => f.Random.Bool())
                                 .RuleFor(e => e.HasPharmaNetSuspendedDetails, f => f.Lorem.Paragraphs(2))
                                 .RuleFor(e => e.Organizations, f => OrganizationFaker.Generate(2))
-                                .RuleFor(e => e.EnrolmentStatuses, f => EnrolmentStatusFaker.Generate(1))
-                                ;
+                                .RuleFor(e => e.EnrolmentStatuses, f => EnrolmentStatusFaker.Generate(1));
 
-        public static string RandomProvince(string[] excluded = null)
+        public static string RandomProvinceCode(params string[] excludedProvinceCodes)
         {
-            if (excluded == null)
-            {
-                excluded = new string[0];
-            }
-            return new Faker().PickRandom(provinces.Except(excluded));
+            return new Faker().PickRandom(provinces.Except(excludedProvinceCodes));
         }
 
         public static string RandomDeviceProviderNumber()

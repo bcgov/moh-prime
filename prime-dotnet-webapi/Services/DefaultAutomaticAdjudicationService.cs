@@ -19,8 +19,6 @@ namespace Prime.Services
             _rules = new List<IAutomaticAdjudicationRule>();
             _rules.Add(new SelfDeclarationRule());
             _rules.Add(new AddressRule());
-            _rules.Add(new PumpProviderRule());
-            // _rules.Add(new LicenceClassRule());
             _rules.Add(new PharmanetValidationRule(pharmanetApiService));
         }
 
@@ -37,12 +35,12 @@ namespace Prime.Services
             return passed;
         }
 
-        private interface IAutomaticAdjudicationRule
+        public interface IAutomaticAdjudicationRule
         {
             Task<bool> ProcessRule(Enrollee enrollee);
         }
 
-        private abstract class BaseAutomaticAdjudicationRule : IAutomaticAdjudicationRule
+        public abstract class BaseAutomaticAdjudicationRule : IAutomaticAdjudicationRule
         {
             public async Task<bool> ProcessRule(Enrollee enrollee)
             {
@@ -69,7 +67,7 @@ namespace Prime.Services
         }
 
         // check to see if any of the self-declaration rules were answered as 'Yes'
-        private class SelfDeclarationRule : BaseAutomaticAdjudicationRule
+        public class SelfDeclarationRule : BaseAutomaticAdjudicationRule
         {
             protected override Task<bool> ProcessRuleInternal(Enrollee enrollee)
             {
@@ -89,7 +87,7 @@ namespace Prime.Services
         }
 
         // check to see if any of the addresses are outside of BC
-        private class AddressRule : BaseAutomaticAdjudicationRule
+        public class AddressRule : BaseAutomaticAdjudicationRule
         {
             protected override Task<bool> ProcessRuleInternal(Enrollee enrollee)
             {
@@ -106,49 +104,8 @@ namespace Prime.Services
             }
         }
 
-        // check to see if the enrollee is a pump provider
-        private class PumpProviderRule : BaseAutomaticAdjudicationRule
-        {
-            protected override Task<bool> ProcessRuleInternal(Enrollee enrollee)
-            {
-                // check to see if the enrollee is a pump provider
-                // note: if for some reason the question was not answered, we will assume 'Yes'
-                if (enrollee.IsInsulinPumpProvider.GetValueOrDefault(true))
-                {
-                    AddReason(enrollee, StatusReason.PUMP_PROVIDER_CODE);
-                    return Task.FromResult(false);
-                }
-
-                return Task.FromResult(true);
-            }
-        }
-
-        // If the enrollee has licence classes, validate them
-        private class LicenceClassRule : BaseAutomaticAdjudicationRule
-        {
-            protected override Task<bool> ProcessRuleInternal(Enrollee enrollee)
-            {
-                var passed = true;
-                if (enrollee.Certifications?.Any() == true)
-                {
-                    // TODO - properly implement this check
-                    foreach (var item in enrollee.Certifications)
-                    {
-                        if (item.LicenseCode > 0)
-                        {
-                            AddReason(enrollee, StatusReason.LICENCE_CLASS_CODE);
-                            passed = false;
-                            break;
-                        }
-                    }
-                }
-
-                return Task.FromResult(passed);
-            }
-        }
-
         // If enrollee has credentials, check to see if the college license is active in PharmaNet and matches the enrollee
-        private class PharmanetValidationRule : BaseAutomaticAdjudicationRule
+        public class PharmanetValidationRule : BaseAutomaticAdjudicationRule
         {
             private readonly IPharmanetApiService _pharmanetApiService;
 
@@ -205,6 +162,47 @@ namespace Prime.Services
                 }
 
                 return passed;
+            }
+        }
+
+        // check to see if the enrollee is a pump provider
+        public class PumpProviderRule : BaseAutomaticAdjudicationRule
+        {
+            protected override Task<bool> ProcessRuleInternal(Enrollee enrollee)
+            {
+                // check to see if the enrollee is a pump provider
+                // note: if for some reason the question was not answered, we will assume 'Yes'
+                if (enrollee.IsInsulinPumpProvider.GetValueOrDefault(true))
+                {
+                    AddReason(enrollee, StatusReason.PUMP_PROVIDER_CODE);
+                    return Task.FromResult(false);
+                }
+
+                return Task.FromResult(true);
+            }
+        }
+
+        // If the enrollee has licence classes, validate them
+        public class LicenceClassRule : BaseAutomaticAdjudicationRule
+        {
+            protected override Task<bool> ProcessRuleInternal(Enrollee enrollee)
+            {
+                var passed = true;
+                if (enrollee.Certifications?.Any() == true)
+                {
+                    // TODO - properly implement this check
+                    foreach (var item in enrollee.Certifications)
+                    {
+                        if (item.LicenseCode > 0)
+                        {
+                            AddReason(enrollee, StatusReason.LICENCE_CLASS_CODE);
+                            passed = false;
+                            break;
+                        }
+                    }
+                }
+
+                return Task.FromResult(passed);
             }
         }
     }
