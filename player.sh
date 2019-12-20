@@ -1,7 +1,7 @@
 #!/bin/bash
 source project.conf
-source tests.bash
 source functions.bash
+source tests.bash
 
 case "$1" in
     build)
