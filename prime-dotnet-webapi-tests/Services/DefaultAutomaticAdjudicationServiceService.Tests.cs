@@ -60,7 +60,6 @@ namespace PrimeTests.Services
         }
         private void UpdateSelfDeclaration(Enrollee enrollee, SelfDeclaration declarations = SelfDeclaration.NONE)
         {
-            // update all self-declaration questions
             enrollee.HasConviction = declarations.HasFlag(SelfDeclaration.CONVICTION);
             enrollee.HasDisciplinaryAction = declarations.HasFlag(SelfDeclaration.DISCIPLINARY);
             enrollee.HasPharmaNetSuspended = declarations.HasFlag(SelfDeclaration.PHARMANET_SUSPENDED);
@@ -99,13 +98,6 @@ namespace PrimeTests.Services
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
             QualifyEnrolleeForAuto(enrollee);
 
-            _dbContext.Enrollees.Add(enrollee);
-            if (await _dbContext.SaveChangesAsync() < 1)
-            {
-                throw new InvalidOperationException("Could not save to database");
-            }
-
-            // check that this qualifies for automatic adjudication
             Assert.True(await _service.QualifiesForAutomaticAdjudication(enrollee));
             AssertReasonCodes(enrollee.CurrentStatus?.EnrolmentStatusReasons);
         }
@@ -121,12 +113,6 @@ namespace PrimeTests.Services
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
             UpdateSelfDeclaration(enrollee, declaration);
-
-            _dbContext.Enrollees.Add(enrollee);
-            if (await _dbContext.SaveChangesAsync() < 1)
-            {
-                throw new InvalidOperationException("Could not save to database");
-            }
 
             var rule = new DefaultAutomaticAdjudicationService.SelfDeclarationRule();
 
@@ -145,11 +131,6 @@ namespace PrimeTests.Services
         public async void testAddressRule()
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
-            _dbContext.Enrollees.Add(enrollee);
-            if (await _dbContext.SaveChangesAsync() < 1)
-            {
-                throw new InvalidOperationException("Could not save to database");
-            }
 
             var rule = new DefaultAutomaticAdjudicationService.AddressRule();
 
@@ -196,12 +177,6 @@ namespace PrimeTests.Services
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
             UpdateDeviceProvider(enrollee, isProvider, isPumpProvider);
-
-            _dbContext.Enrollees.Add(enrollee);
-            if (await _dbContext.SaveChangesAsync() < 1)
-            {
-                throw new InvalidOperationException("Could not save to database");
-            }
 
             var rule = new DefaultAutomaticAdjudicationService.PumpProviderRule();
 
