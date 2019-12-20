@@ -212,14 +212,19 @@ namespace PrimeTests.Utils
 
             if (!db.Set(typeof(StatusReason)).Any())
             {
-                db.AddRange(new StatusReason { Code = 1, Name = "Automatic" });
-                db.AddRange(new StatusReason { Code = 2, Name = "Manual" });
-                db.AddRange(new StatusReason { Code = 3, Name = "Name Discrepancy" });
-                db.AddRange(new StatusReason { Code = 4, Name = "Not in PharmaNet" });
-                db.AddRange(new StatusReason { Code = 5, Name = "Insulin Pump Provider" });
-                db.AddRange(new StatusReason { Code = 6, Name = "Licence Class" });
-                db.AddRange(new StatusReason { Code = 7, Name = "Self Declaration" });
-                db.AddRange(new StatusReason { Code = 8, Name = "Contact address or Identity Address Out of British Columbia" });
+                db.AddRange(
+                    new StatusReason { Code = 1, Name = "Automatic" },
+                    new StatusReason { Code = 2, Name = "Manual" },
+                    new StatusReason { Code = 3, Name = "Could not verify College Licence with PharmaNet" },
+                    new StatusReason { Code = 4, Name = "Not in PharmaNet" },
+                    new StatusReason { Code = 5, Name = "Name Discrepancy with PharmaNet College Licence" },
+                    new StatusReason { Code = 6, Name = "Birthdate Discrepancy with PharmaNet College Licence" },
+                    new StatusReason { Code = 7, Name = "Listed as Non-Practicing on PharmaNet College Licence" },
+                    new StatusReason { Code = 8, Name = "Insulin Pump Provider" },
+                    new StatusReason { Code = 9, Name = "Licence Class" },
+                    new StatusReason { Code = 10, Name = "Self Declaration" },
+                    new StatusReason { Code = 11, Name = "Contact address or Identity Address Out of British Columbia" }
+                );
             }
 
             db.SaveChanges();
