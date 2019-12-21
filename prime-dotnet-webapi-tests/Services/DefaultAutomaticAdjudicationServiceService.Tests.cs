@@ -38,16 +38,8 @@ namespace PrimeTests.Services
 
         private void UpdateDeviceProvider(Enrollee enrollee, bool provider = false, bool pumpProvider = false)
         {
-            if (provider)
-            {
-                enrollee.DeviceProviderNumber = TestUtils.RandomDeviceProviderNumber();
-                enrollee.IsInsulinPumpProvider = pumpProvider;
-            }
-            else
-            {
-                enrollee.DeviceProviderNumber = null;
-                enrollee.IsInsulinPumpProvider = false;
-            }
+            enrollee.DeviceProviderNumber = provider ? TestUtils.RandomDeviceProviderNumber() : null;
+            enrollee.IsInsulinPumpProvider = pumpProvider;
         }
 
         [Flags]
@@ -219,14 +211,15 @@ namespace PrimeTests.Services
 
         [Theory]
         [InlineData(false, false, true)]
-        [InlineData(true, false, true)]
+        [InlineData(true, false, false)]
+        [InlineData(false, true, false)]
         [InlineData(true, true, false)]
         public async void testPumpProviderRule(bool isProvider, bool isPumpProvider, bool expected)
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
             UpdateDeviceProvider(enrollee, isProvider, isPumpProvider);
 
-            var rule = new DefaultAutomaticAdjudicationService.PumpProviderRule();
+            var rule = new DefaultAutomaticAdjudicationService.DeviceProviderRule();
 
             Assert.Equal(expected, await rule.ProcessRule(enrollee));
             if (expected)

@@ -21,7 +21,7 @@ namespace Prime.Services
                 new SelfDeclarationRule(),
                 new AddressRule(),
                 new PharmanetValidationRule(pharmanetApiService),
-                new PumpProviderRule()
+                new DeviceProviderRule()
             };
         }
 
@@ -168,14 +168,13 @@ namespace Prime.Services
             }
         }
 
-        // check to see if the enrollee is a pump provider
-        public class PumpProviderRule : BaseAutomaticAdjudicationRule
+        // Check to see if the enrollee is a device or pump provider
+        public class DeviceProviderRule : BaseAutomaticAdjudicationRule
         {
             protected override Task<bool> ProcessRuleInternal(Enrollee enrollee)
             {
-                // check to see if the enrollee is a pump provider
-                // note: if for some reason the question was not answered, we will assume 'Yes'
-                if (enrollee.IsInsulinPumpProvider.GetValueOrDefault(true))
+                if (!string.IsNullOrWhiteSpace(enrollee.DeviceProviderNumber)
+                    || enrollee.IsInsulinPumpProvider.GetValueOrDefault(true))
                 {
                     AddReason(enrollee, StatusReason.PUMP_PROVIDER_CODE);
                     return Task.FromResult(false);
