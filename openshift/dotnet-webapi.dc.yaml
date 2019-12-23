@@ -103,8 +103,8 @@ objects:
                   value: 'http://+:8080'
                 - name: FRONTEND_URL
                   value: http://angular-frontend${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca
-                #- name: DB_CONNECTION_STRING
-                #  value: "host=postgresql${SUFFIX};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_PASSWORD}"
+                - name: DB_CONNECTION_STRING
+                  value: "host=postgresql${SUFFIX};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_PASSWORD}"
                 - name: JWT_SIGNING_KEY
                   value: SdqlA0Y5e6HMAK1wm6iHHHz2u37XGtlo
                 - name: JWT_ADMIN_CLIENT

@@ -65,8 +65,8 @@ objects:
               value: '5001'
             - name: ASPNETCORE_URLS
               value: 'http://+:8080'
-            #- name: DB_CONNECTION_STRING
-            #  value: 'host=postgresql${SUFFIX};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_PASSWORD}'
+            - name: DB_CONNECTION_STRING
+              value: 'host=postgresql${SUFFIX};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_PASSWORD}'
             - name: JWT_SIGNING_KEY
               value: SdqlA0Y5e6HMAK1wm6iHHHz2u37XGtlo
             - name: JWT_ADMIN_CLIENT
