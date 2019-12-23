@@ -122,7 +122,10 @@ objects:
             - name: "DATABASE_HOST"
               value: "postgresql"
             - name: "DATABASE_NAME"
-              value: "postgres"
+              valueFrom:
+                secretKeyRef:
+                  key: database-name
+                  name: '${NAME}${SUFFIX}-secret'
             - name: "DATABASE_USER"
               valueFrom:
                 secretKeyRef:
