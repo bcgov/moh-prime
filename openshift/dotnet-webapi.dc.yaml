@@ -43,7 +43,7 @@ objects:
     spec:
       completionDeadlineSeconds: 1200
       replicas: 1
-      selector: 
+      selector:
         io.kompose.service: '${NAME}${SUFFIX}'
       strategy: null
       resources:
@@ -71,6 +71,26 @@ objects:
                     secretKeyRef:
                       key: MAIL_SERVER_PORT
                       name: 'mailserver'
+                - name: POSTGRESQL_USER
+                  valueFrom:
+                    secretKeyRef:
+                      key: database-user
+                      name: '${NAME}${SUFFIX}-secret'
+                - name: POSTGRESQL_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: database-password
+                      name: '${NAME}${SUFFIX}-secret'
+                - name: POSTGRESQL_ADMIN_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: database-admin-password
+                      name: '${NAME}${SUFFIX}-secret'
+                - name: POSTGRESQL_DATABASE
+                  valueFrom:
+                    secretKeyRef:
+                      key: database-name
+                  name: '${NAME}${SUFFIX}-secret'
                 - name: OC_APP
                   value: ${OC_APP}
                 - name: PATH
@@ -85,7 +105,7 @@ objects:
                   value: http://angular-frontend${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca
                 - name: DB_CONNECTION_STRING
                   value: >-
-                    host=postgresql${SUFFIX};port=5432;database=postgres;username=postgres;password=postgres
+                    host=postgresql${SUFFIX};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_PASSWORD}
                 - name: JWT_SIGNING_KEY
                   value: SdqlA0Y5e6HMAK1wm6iHHHz2u37XGtlo
                 - name: JWT_ADMIN_CLIENT
