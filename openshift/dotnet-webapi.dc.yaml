@@ -90,7 +90,7 @@ objects:
                   valueFrom:
                     secretKeyRef:
                       key: database-name
-                  name: '${NAME}${SUFFIX}-secret'
+                      name: '${NAME}${SUFFIX}-secret'
                 - name: OC_APP
                   value: ${OC_APP}
                 - name: PATH
