@@ -7,7 +7,7 @@ ENV POSTGRESQL_DATABASE "${POSTGRESQL_DATABASE}"
 ENV POSTGRESQL_USER "${POSTGRESQL_USER}"
 ENV DB_CONNECTION_STRING "host=postgresql${SUFFIX};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_PASSWORD}"
 ENV ASPNETCORE_ENVIRONMENT "${ASPNETCORE_ENVIRONMENT}"
-RUN printenv
+RUN printenv | sort -n
 COPY *.csproj /opt/app-root/app
 RUN dotnet restore
 COPY . /opt/app-root/app/
