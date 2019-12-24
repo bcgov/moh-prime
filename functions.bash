@@ -36,7 +36,7 @@ function build() {
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${BRANCH_NAME}" \
         -p OC_NAMESPACE="$PROJECT_PREFIX" \
-        -p OC_APP="$2" $@ | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$2"
+        -p OC_APP="$2" $3 | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$2"
     else
         echo "oc process -f ./${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE} -p NAME=${APP_NAME} -p VERSION=${BUILD_NUMBER} -p SUFFIX=-${BRANCH_LOWER} -p SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR} -p SOURCE_REPOSITORY_URL=${GIT_URL} -p SOURCE_REPOSITORY_REF=${BRANCH_NAME} -p OC_NAMESPACE=$PROJECT_PREFIX -p OC_APP=$2 | oc ${MODE} -f - --namespace=$PROJECT_PREFIX-$2"
         oc process -f ./"${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE}" \
@@ -47,7 +47,7 @@ function build() {
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
         -p OC_NAMESPACE="$PROJECT_PREFIX" \
-        -p OC_APP="$2" $@ | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$2"
+        -p OC_APP="$2" $3 | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$2"
     fi;
     if [ "$BUILD_REQUIRED" == true ];
     then
@@ -77,7 +77,7 @@ function deploy() {
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${BRANCH_NAME}" \
         -p OC_NAMESPACE="$PROJECT_PREFIX" \
-        -p OC_APP="$2" $@ | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$2"
+        -p OC_APP="$2" $3 | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$2"
     else
         oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
         -p NAME="${APP_NAME}" \
@@ -87,7 +87,7 @@ function deploy() {
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
         -p OC_NAMESPACE="$PROJECT_PREFIX" \
-        -p OC_APP="$2" $@ | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$2"
+        -p OC_APP="$2" $3 | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$2"
     fi;
 }
 
@@ -152,6 +152,6 @@ function nukenpave() {
     do
         oc delete -n $PROJECT_PREFIX-$2 $target
     done
-        build $1 $2 $@
-        deploy $1 $2 $@
+        build $1 $2 $3
+        deploy $1 $2 $3
 }
