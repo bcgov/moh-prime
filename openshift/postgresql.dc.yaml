@@ -165,7 +165,7 @@ objects:
                     - '-i'
                     - '-c'
                     - >-
-                      psql -h 127.0.0.1 -d $POSTGRESQL_DATABASE -U
+                      psql -h 127.0.0.1 -d postgres -U
                       $POSTGRESQL_USER -c 'SELECT 1'
                 initialDelaySeconds: 5
                 timeoutSeconds: 1
