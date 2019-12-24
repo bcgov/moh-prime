@@ -80,7 +80,7 @@ objects:
                   key: database-name
                   name: '${NAME}${SUFFIX}-secret'
             - name: DB_CONNECTION_STRING
-              value: 'host=postgresql${SUFFIX};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_PASSWORD}'
+              value: "host=postgresql${SUFFIX};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_PASSWORD}"
       tags:
         - annotations: null
           from:
