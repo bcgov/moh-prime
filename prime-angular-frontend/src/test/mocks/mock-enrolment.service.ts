@@ -57,7 +57,7 @@ export class MockEnrolmentService implements IEnrolmentService {
           organizationTypeCode: 1
         }
       ],
-      assignedPrivileges: [],
+      privileges: [],
       enrolmentStatuses: null,
       currentStatus: {
         enrolmentId,

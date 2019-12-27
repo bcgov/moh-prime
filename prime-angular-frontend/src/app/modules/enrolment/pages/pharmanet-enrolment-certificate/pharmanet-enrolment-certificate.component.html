@@ -23,14 +23,24 @@
         <app-enrollee-address [address]="mailingAddress"></app-enrollee-address>
 
         <dl class="row mb-4">
-          <dt class="col-6">Privileges</dt>
-          <dd class="col-6 text-right">{{ enrolment.enrollee.privileges | default }}</dd>
-        </dl>
-
-        <dl class="row mb-4">
           <dt class="col-6">PharmaNet ID</dt>
           <dd class="col-6 text-right">{{ enrolment.enrollee.licensePlate | default }}</dd>
         </dl>
+
+        <app-page-subheader>
+          <ng-container appPageSubheaderTitle>Privileges</ng-container>
+          <ng-container appPageSubheaderSummary>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam ipsum exercitationem aspernatur ea pariatur
+            eaque porro obcaecati. Laudantium maiores natus ut ipsum voluptatem eos tempora, officiis neque id placeat?
+            Architecto!
+          </ng-container>
+          <dl class="row mb-4"
+              *ngFor="let privilege of enrolment.enrollee.privileges">
+            <dt class="col-6">Privileges</dt>
+            <dd class="col-6 text-right">{{ privilege }}</dd>
+          </dl>
+
+        </app-page-subheader>
 
         <app-page-subheader>
           <ng-container appPageSubheaderTitle>Provisioner Links</ng-container>
