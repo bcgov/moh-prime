@@ -10,5 +10,7 @@ namespace Prime.Services
 
         ICollection<AssignedPrivilege> GetAssignedPrivilegesForEnrollee(int? enrolleeId);
 
+        ICollection<Privilege> GetPrivilegesForEnrollee(Enrollee enrollee);
+
     }
 }

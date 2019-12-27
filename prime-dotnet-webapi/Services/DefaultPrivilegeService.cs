@@ -74,8 +74,26 @@ namespace Prime.Services
                     }
                 }
 
+                _enrolleeDb.Privileges = this.GetPrivilegesForEnrollee(enrollee);
+                _context.Entry(_enrolleeDb).State = EntityState.Modified;
+
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public ICollection<Privilege> GetPrivilegesForEnrollee(Enrollee enrollee)
+        {
+            ICollection<Privilege> privileges = new List<Privilege>();
+            var results = this.GetPrivilegesForEnrolleeQuery(enrollee.Id);
+            var currentUser = _httpContext?.HttpContext?.User;
+
+            foreach (var item in results)
+            {
+
+                privileges.Add(item);
+            }
+
+            return privileges;
         }
 
         private ICollection<DefaultPrivilege> GetDefaultPrivilegesForLicenseCode(int licenseCode)
@@ -90,6 +108,14 @@ namespace Prime.Services
             return _context.AssignedPrivileges
                         .Where(ap => ap.EnrolleeId == enrolleeId)
                         .Include(ap => ap.Privilege)
+                        .ToList();
+        }
+
+        private ICollection<Privilege> GetPrivilegesForEnrolleeQuery(int? enrolleeId)
+        {
+            return _context.Privileges
+                        .Include(p => p.AssignedPrivileges)
+                        .Where(p => p.AssignedPrivileges.Any(ap => ap.EnrolleeId == enrolleeId))
                         .ToList();
         }
 
