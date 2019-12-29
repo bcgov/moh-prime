@@ -45,6 +45,10 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
     return (this.enrollee) ? this.enrollee.mailingAddress : null;
   }
 
+  public get privileges() {
+    return this.enrolment.privileges;
+  }
+
   public getTokenUrl(tokenId: string): string {
     return `${this.config.loginRedirectUrl}/enrolment-certificate/${tokenId}`;
   }
@@ -63,8 +67,6 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
 
     this.enrolment = this.enrolmentService.enrolment;
     this.isInitialEnrolment = this.enrolment.progressStatus !== ProgressStatus.FINISHED;
-
-    console.log(this.enrolment);
 
     this.busy = this.enrolmentResource.enrolmentCertificateAccessTokens()
       .subscribe(

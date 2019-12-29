@@ -42,6 +42,7 @@ import { ProgressIndicatorComponent } from '@shared/components/progress-indicato
 import { EnrolleeProfileComponent } from '@shared/components/enrollee-profile/enrollee-profile.component';
 import { EnrolleeAddressComponent } from '@shared/components/enrollee-address/enrollee-address.component';
 import { EnrolleeSelfDeclarationComponent } from '@shared/components/enrollee-self-declaration/enrollee-self-declaration.component';
+import { EnrolleePrivilegesComponent } from './components/enrollee-privileges/enrollee-privileges.component';
 
 @NgModule({
   declarations: [
@@ -74,7 +75,8 @@ import { EnrolleeSelfDeclarationComponent } from '@shared/components/enrollee-se
     ProgressIndicatorComponent,
     EnrolleeProfileComponent,
     EnrolleeAddressComponent,
-    EnrolleeSelfDeclarationComponent
+    EnrolleeSelfDeclarationComponent,
+    EnrolleePrivilegesComponent
   ],
   imports: [
     CommonModule,
@@ -125,7 +127,8 @@ import { EnrolleeSelfDeclarationComponent } from '@shared/components/enrollee-se
     ProgressIndicatorComponent,
     EnrolleeProfileComponent,
     EnrolleeAddressComponent,
-    EnrolleeSelfDeclarationComponent
+    EnrolleeSelfDeclarationComponent,
+    EnrolleePrivilegesComponent,
   ],
   entryComponents: [
     ConfirmDialogComponent,
