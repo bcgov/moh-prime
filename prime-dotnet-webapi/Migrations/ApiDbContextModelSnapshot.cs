@@ -123,6 +123,27 @@ namespace Prime.Migrations
                     b.ToTable("AssignedPrivilege");
                 });
 
+            modelBuilder.Entity("Prime.Models.AssignedPrivilege", b =>
+                {
+                    b.Property<int>("PrivilegeId");
+
+                    b.Property<int>("EnrolleeId");
+
+                    b.Property<DateTime>("CreatedTimeStamp");
+
+                    b.Property<Guid>("CreatedUserId");
+
+                    b.Property<DateTime>("UpdatedTimeStamp");
+
+                    b.Property<Guid>("UpdatedUserId");
+
+                    b.HasKey("PrivilegeId", "EnrolleeId");
+
+                    b.HasIndex("EnrolleeId");
+
+                    b.ToTable("AssignedPrivilege");
+                });
+
             modelBuilder.Entity("Prime.Models.Certification", b =>
                 {
                     b.Property<int?>("Id")
