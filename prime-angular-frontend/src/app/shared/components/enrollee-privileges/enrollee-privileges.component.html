@@ -8,7 +8,7 @@
 </app-page-subheader>
 
 
-<div *ngIf="privileges?.length"
+<div *ngIf="privileges?.length; else noPrivileges"
      class="table-responsive">
   <table class="table">
     <thead>
@@ -25,3 +25,12 @@
     </tbody>
   </table>
 </div>
+
+<ng-template #noPrivileges>
+  <div class="col-sm-12 col-lg-8 offset-lg-1 offset-xl-0">
+    <dl class="row mb-4">
+      <dt>No Privileges</dt>
+    </dl>
+
+  </div>
+</ng-template>
