@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 
 namespace Prime.Models
 {
+    [Table("AssignedPrivilege")]
     public class AssignedPrivilege : BaseAuditable
     {
         public int EnrolleeId { get; set; }

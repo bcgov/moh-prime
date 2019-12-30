@@ -16,7 +16,7 @@ namespace PrimeTests.Services
     {
         private static EnrolleeSearchOptions EMPTY_ENROLLEE_SEARCH_OPTIONS = new EnrolleeSearchOptions();
 
-        public DefaultEnrolleeServiceTests() : base(new object[] { new AutomaticAdjudicationServiceMock(), new EmailServiceMock() })
+        public DefaultEnrolleeServiceTests() : base(new object[] { new AutomaticAdjudicationServiceMock(), new EmailServiceMock(), new PrivilegeServiceMock() })
         { }
 
         [Fact]
