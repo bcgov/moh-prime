@@ -10,10 +10,14 @@ namespace Prime.Services
 {
     public class DefaultEnrolmentCertificateService : BaseService, IEnrolmentCertificateService
     {
+        private readonly IPrivilegeService _privilegeService;
+
         public DefaultEnrolmentCertificateService(
-            ApiDbContext context, IHttpContextAccessor httpContext)
+            ApiDbContext context, IHttpContextAccessor httpContext, IPrivilegeService privilegeService)
             : base(context, httpContext)
-        { }
+        {
+            _privilegeService = privilegeService;
+        }
 
         public async Task<EnrolmentCertificate> GetEnrolmentCertificateAsync(Guid accessTokenId)
         {
@@ -25,6 +29,9 @@ namespace Prime.Services
             {
                 return null;
             }
+
+            // Add privileges to Enrollee
+            enrollee.Privileges = _privilegeService.GetPrivilegesForEnrollee(enrollee);
 
             // TODO Refactor this shortcut. This is only for POC of this service.
             try
@@ -44,6 +51,9 @@ namespace Prime.Services
 
         public async Task<EnrolmentCertificateAccessToken> CreateCertificateAccessTokenAsync(Enrollee enrollee)
         {
+            // Add privileges to Enrollee
+            enrollee.Privileges = _privilegeService.GetPrivilegesForEnrollee(enrollee);
+
             EnrolmentCertificateAccessToken token = new EnrolmentCertificateAccessToken()
             {
                 Enrollee = enrollee,

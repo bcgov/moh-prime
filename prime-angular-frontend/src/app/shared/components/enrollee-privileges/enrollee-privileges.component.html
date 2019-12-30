@@ -5,18 +5,23 @@
     eaque porro obcaecati. Laudantium maiores natus ut ipsum voluptatem eos tempora, officiis neque id placeat?
     Architecto!
   </ng-container>
-
-  <ng-container *ngIf="privileges.length > 0">
-    <dl *ngFor="let privilege of privileges"
-        class="row mb-3">
-      <dt class="col-6">Privilege</dt>
-      <dt class="col-6">Transaction Type</dt>
-      <dd class="col-6 text-right">
-        {{ privilege.transactionType | default }}
-      </dd>
-      <dt class="col-6">Description</dt>
-      <dd class="col-6 text-right">{{ privilege.description | default }}</dd>
-    </dl>
-  </ng-container>
-
 </app-page-subheader>
+
+
+<div *ngIf="privileges?.length"
+     class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Transaction</th>
+        <th scope="col">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let privilege of privileges">
+        <td>{{ privilege.transactionType }}</td>
+        <td>{{ privilege.description }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
