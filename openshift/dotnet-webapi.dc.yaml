@@ -87,6 +87,8 @@ objects:
                   value: 'prime-web-api'
                 - name: JWT_WELL_KNOWN_CONFIG
                   value: 'https://sso-${OC_APP}.pathfinder.gov.bc.ca/auth/realms/v4mbqqas/.well-known/openid-configuration'
+                - name: DB_HOST
+                  value: 'postgresql${SUFFIX}'
                 - name: PHARMANET_API_URL
                   valueFrom:
                     secretKeyRef:
@@ -140,7 +142,7 @@ objects:
                       key: database-name
                       name: 'postgresql${SUFFIX}-secret'
                 - name: DB_CONNECTION_STRING
-                  value: 'host=postgresql${SUFFIX};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_PASSWORD}'
+                  value: 'host=${DB_HOST};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_PASSWORD}'
               image: ' '
               name: primeapi
               ports:
