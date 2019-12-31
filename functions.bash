@@ -147,7 +147,8 @@ function cleanOcArtifacts() {
 }
 
 function nukenpave() {
-    declare -p TARGET_ARTIFACTS=($(oc get all,pvc,route -n $PROJECT_PREFIX-$2 | grep -i "$1" | awk '{print $1}' | grep -Ev "(\-pr\-)") )
+    source $1.conf
+    declare -p TARGET_ARTIFACTS=($(oc get all,pvc,route -n $PROJECT_PREFIX-$2 | grep -i "$APP_NAME" | awk '{print $1}' | grep -Ev "(\-pr\-)") )
     for target in "${TARGET_ARTIFACTS[@]}"
     do
         oc delete -n $PROJECT_PREFIX-$2 $target
