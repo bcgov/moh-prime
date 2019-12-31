@@ -83,8 +83,6 @@ objects:
                 secretKeyRef:
                   key: database-name
                   name: '${NAME}${SUFFIX}-secret'
-            - name: DB_CONNECTION_STRING
-              value: 'host=${DB_HOST};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_PASSWORD}'
       tags:
         - annotations: null
           from:
