@@ -19,5 +19,6 @@ WORKDIR /opt/app-root/app
 ENV PATH "$PATH:/opt/rh/rh-dotnet22/root/usr/lib64/dotnet"
 COPY --from=build /opt/app-root/app/out /opt/app-root/app
 EXPOSE 8080 5001 1025
-
+ENV DB_HOST ${DB_HOST}
+ENV DB_CONNECTION_STRING="host=postgresql${SUFFIX};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_PASSWORD}"
 ENTRYPOINT ["/opt/rh/rh-dotnet22/root/usr/lib64/dotnet/dotnet", "prime.dll"]
