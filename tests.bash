@@ -1,13 +1,16 @@
-export DISPLAY=:1.0
-if [ ! -f /tmp/.X1-lock ]
-then
-    Xvfb :1 -screen 0 1024x768x16 -ac &
-fi
+export uuid=$(cat /proc/sys/kernel/random/uuid)
 
-uuid=$(cat /proc/sys/kernel/random/uuid)
+function headless(){
+    export DISPLAY=:1.0
+    if [ ! -f /tmp/.X1-lock ]
+    then
+        Xvfb :1 -screen 0 1024x768x16 -ac &
+    fi
+}
 
 function dotnetTests()
 {
+    headless
     source api.conf
     echo "Starting tests..."
     dotnet build
@@ -22,6 +25,7 @@ function dotnetTests()
 
 function angularTests()
 {
+    headless
     cd prime-angular-frontend
     npm install @angular/core
     npm run sonar
@@ -29,6 +33,7 @@ function angularTests()
 }
 function scan()
 {
+    headless
     echo "Beginning tests on .NET ..."
     dotnetTests > /dev/null 2>&1
     echo "Beginning tests on Angular ..."
@@ -37,6 +42,7 @@ function scan()
 
 function zap()
 {
+    headless
     source $1.conf
     /zap/zap.sh -cmd -quickurl http://$APP_NAME-$PROJECT_PREFIX-dev.pathfinder.gov.bc.ca -quickout /tmp/${APP_NAME}.${uuid}.xml -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true -config spider.maxDuration=5 -addonupdate -addoninstall pscanrulesBeta -config connection.timeoutInSecs=600 -port 8080 -host 127.0.0.1
     /sonarscanner/bin/sonar-scanner -Dsonar.projectName=${APP_NAME}.zap -Dsonar.projectKey=${APP_NAME}.zap -Dsonar.sources=${SOURCE_CONTEXT_DIR} -Dsonar.host.url=http://sonarqube:9000 -Dsonar.zaproxy.reportPath=/tmp/${APP_NAME}.${uuid}.xml
