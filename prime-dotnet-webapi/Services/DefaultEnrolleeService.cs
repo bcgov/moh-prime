@@ -13,6 +13,7 @@ namespace Prime.Services
     {
         private readonly IAutomaticAdjudicationService _automaticAdjudicationService;
         private readonly IEmailService _emailService;
+        private readonly IPrivilegeService _privilegeService;
 
         private class StatusWrapper
         {
@@ -25,11 +26,12 @@ namespace Prime.Services
         private static Status NULL_STATUS = new Status { Code = -1, Name = "No Status" };
 
         public DefaultEnrolleeService(
-            ApiDbContext context, IHttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService, IEmailService emailService)
+            ApiDbContext context, IHttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService, IEmailService emailService, IPrivilegeService privilegeService)
             : base(context, httpContext)
         {
             _automaticAdjudicationService = automaticAdjudicationService;
             _emailService = emailService;
+            _privilegeService = privilegeService;
         }
 
         private Dictionary<Status, StatusWrapper[]> GetWorkFlowStateMap()
@@ -391,6 +393,7 @@ namespace Prime.Services
                     case Status.ACCEPTED_TOS_CODE:
                         await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
                         enrollee.LicensePlate = this.GenerateLicensePlate();
+                        await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrolleeId, enrollee);
                         createdEnrolmentStatus.PharmaNetStatus = true;
                         break;
                     case Status.DECLINED_TOS_CODE:
