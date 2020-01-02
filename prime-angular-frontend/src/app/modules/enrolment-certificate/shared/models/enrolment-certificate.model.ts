@@ -1,4 +1,5 @@
 import { Privilege } from '@enrolment/shared/models/privilege.model';
+import { Organization } from '@enrolment/shared/models/organization.model';
 
 export interface EnrolmentCertificate {
   // TODO duplicate of EnrolleeProfile
@@ -11,4 +12,5 @@ export interface EnrolmentCertificate {
   dateOfBirth: string;
   licensePlate: string;
   privileges: Privilege[];
+  organizations: Organization[];
 }

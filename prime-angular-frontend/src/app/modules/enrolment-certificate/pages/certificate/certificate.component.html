@@ -23,6 +23,8 @@
           <dd class="col-6 text-right">{{ certificate?.licensePlate | default }}</dd>
         </dl>
 
+        <app-enrollee-organizations [organizations]="certificate?.organizations"></app-enrollee-organizations>
+
         <app-enrollee-privileges [privileges]="certificate?.privileges"></app-enrollee-privileges>
 
       </ng-container>

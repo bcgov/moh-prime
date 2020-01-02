@@ -23,7 +23,7 @@ namespace Prime.Services
         {
             var enrollee = await _context.EnrolmentCertificateAccessTokens
                 .Where(t => t.Id == accessTokenId && t.Active)
-                .Select(t => t.Enrollee)
+                .Select(t => t.Enrollee).Include(o => o.Organizations)
                 .SingleOrDefaultAsync();
             if (enrollee == null)
             {

@@ -27,6 +27,8 @@
         <dd class="col-6 text-right">{{ enrolment.enrollee.licensePlate | default }}</dd>
       </dl>
 
+      <app-enrollee-organizations [organizations]="organizations"></app-enrollee-organizations>
+
       <app-enrollee-privileges [privileges]="privileges"></app-enrollee-privileges>
 
       <app-page-subheader>
