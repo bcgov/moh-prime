@@ -25,9 +25,9 @@ pipeline {
             agent { label 'master' }
             steps {
                 echo "Nuking database ..."
-                //sh "./player.sh nukenpave postgres dev"
-                //sh "./player.sh nukenpave postgres test"
-                //sh "./player.sh nukenpave postgres prod"
+                //sh "./player.sh nukenpave database dev"
+                //sh "./player.sh nukenpave database test"
+                //sh "./player.sh nukenpave database prod"
             }
         }
         stage('Cleanup Branch') {

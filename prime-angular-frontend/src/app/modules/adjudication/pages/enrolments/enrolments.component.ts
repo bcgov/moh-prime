@@ -17,6 +17,7 @@ import {
 } from '@shared/components/dialogs/content/enrolment-status-reasons/enrolment-status-reasons.component';
 
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 
 @Component({
   selector: 'app-enrolments',
@@ -48,12 +49,14 @@ export class EnrolmentsComponent implements OnInit {
     this.getEnrolments(statusCode);
   }
 
-  public canApproveOrDeny(currentStatusCode: number) {
+  public canApproveOrDeny(currentStatusCode: EnrolmentStatus) {
+    // Admins can only approve or deny an enrollee in a SUBMITTED state
     return (currentStatusCode === EnrolmentStatus.SUBMITTED);
   }
 
-  public canAllowEditing(currentStatusCode: number) {
-    return (currentStatusCode !== EnrolmentStatus.ADJUDICATED_APPROVED);
+  public canAllowEditing(currentStatusCode: EnrolmentStatus) {
+    // Admins can only allow re-enable editing for an enrollee in a SUBMITTED state
+    return (currentStatusCode === EnrolmentStatus.SUBMITTED);
   }
 
   public reviewStatusReasons(enrolment: Enrolment) {
@@ -127,19 +130,31 @@ export class EnrolmentsComponent implements OnInit {
       );
   }
 
-  public markAsInProgress(id: number) {
+  public markForEditing(id: number, progressStatus: ProgressStatus) {
     const data: DialogOptions = {
       title: 'Enable Editing',
       message: 'When enabled the enrollee will be able to update their enrolment. Are you sure you want to enable editing?',
       actionType: 'warn',
       actionText: 'Enable Editing'
     };
+
+    // TODO Due to the lack of requirements on upcoming statuses the ACCEPTED_TOS
+    // is being treated as "EDITING" and IN_PROGRESS as "NEW" to reduce the amount
+    // of changes until the new set of statuses have been agreed upon
+    // NOTE: To enforce this from the front-end regarding enabling editing:
+    // 1) Enrolment status can never be IN_PROGRESS after an initial application has
+    // been completed and the enrollee has ACCEPTED_TOS
+    // 2) SUBMITTED can never be reached without being IN_PROGRESS or ACCEPTED_TOS
+    const editStatus = (progressStatus === ProgressStatus.FINISHED)
+      ? EnrolmentStatus.ACCEPTED_TOS
+      : EnrolmentStatus.IN_PROGRESS;
+
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
         exhaustMap((result: boolean) =>
           (result)
-            ? this.adjudicationResource.updateEnrolmentStatus(id, EnrolmentStatus.IN_PROGRESS)
+            ? this.adjudicationResource.updateEnrolmentStatus(id, editStatus)
             : EMPTY
         ),
         exhaustMap(() => this.adjudicationResource.enrollee(id))
