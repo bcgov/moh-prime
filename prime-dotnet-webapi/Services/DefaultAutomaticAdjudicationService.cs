@@ -136,30 +136,30 @@ namespace Prime.Services
                     }
                     catch (DefaultPharmanetApiService.PharmanetCollegeApiException)
                     {
-                        AddReason(enrollee, StatusReason.PHARMANET_ERROR_CODE, $"{cert.FullLicenceNumber}");
+                        AddReason(enrollee, StatusReason.PHARMANET_ERROR_CODE, $"{cert.FullLicenseNumber}");
                         passed = false;
                         continue;
                     }
                     if (record == null)
                     {
-                        AddReason(enrollee, StatusReason.NOT_IN_PHARMANET_CODE, $"{cert.FullLicenceNumber}");
+                        AddReason(enrollee, StatusReason.NOT_IN_PHARMANET_CODE, $"{cert.FullLicenseNumber}");
                         passed = false;
                         continue;
                     }
 
                     if (!record.MatchesEnrolleeByName(enrollee))
                     {
-                        AddReason(enrollee, StatusReason.NAME_DISCREPANCY_CODE, $"{cert.FullLicenceNumber} returned \"{record.firstName} {record.lastName}\".");
+                        AddReason(enrollee, StatusReason.NAME_DISCREPANCY_CODE, $"{cert.FullLicenseNumber} returned \"{record.firstName} {record.lastName}\".");
                         passed = false;
                     }
                     if (record.dateofBirth.Date != enrollee.DateOfBirth.Date)
                     {
-                        AddReason(enrollee, StatusReason.BIRTHDATE_DISCREPANCY_CODE, $"{cert.FullLicenceNumber} returned {record.dateofBirth.ToString("d MMM yyyy")}");
+                        AddReason(enrollee, StatusReason.BIRTHDATE_DISCREPANCY_CODE, $"{cert.FullLicenseNumber} returned {record.dateofBirth.ToString("d MMM yyyy")}");
                         passed = false;
                     }
                     if (record.status != "P")
                     {
-                        AddReason(enrollee, StatusReason.PRACTICING_CODE, $"{cert.FullLicenceNumber}");
+                        AddReason(enrollee, StatusReason.PRACTICING_CODE, $"{cert.FullLicenseNumber}");
                         passed = false;
                     }
                 }
