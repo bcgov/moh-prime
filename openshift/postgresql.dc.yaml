@@ -200,7 +200,7 @@ objects:
               - postgresql
             from:
               kind: ImageStreamTag
-              name: 'postgresql'
+              name: 'postgresql:latest'
               namespace: openshift
             lastTriggeredImage: ''
           type: ImageChange
