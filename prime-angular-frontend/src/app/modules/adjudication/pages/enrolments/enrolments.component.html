@@ -133,7 +133,7 @@
       </button>
       <button mat-menu-item
               *ngIf="canAllowEditing(enrolment.currentStatus.status.code)"
-              (click)="markAsInProgress(enrolment.id)">
+              (click)="markForEditing(enrolment.id, enrolment.progressStatus)">
         <mat-icon>undo</mat-icon>
         <span>Enable Editing</span>
       </button>

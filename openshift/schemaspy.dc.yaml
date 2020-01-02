@@ -122,16 +122,19 @@ objects:
             - name: "DATABASE_HOST"
               value: "postgresql"
             - name: "DATABASE_NAME"
-              value: "postgres"
+              valueFrom:
+                secretKeyRef:
+                  key: database-name
+                  name: '${NAME}${SUFFIX}-secret'
             - name: "DATABASE_USER"
               valueFrom:
                 secretKeyRef:
-                  name: "postgresql-secret"
+                  name: "${NAME}${SUFFIX}-secret"
                   key: "database-user"
             - name: "DATABASE_PASSWORD"
               valueFrom:
                 secretKeyRef:
-                  name: "postgresql-secret"
+                  name: "${NAME}${SUFFIX}-secret"
                   key: "database-password"
           readinessProbe:
             timeoutSeconds: "300"
