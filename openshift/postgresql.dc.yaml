@@ -94,6 +94,22 @@ objects:
       resources:
         requests:
           storage: '${VOLUME_CAPACITY}'
+  - apiVersion: v1
+    data:
+      database-admin-password: cG9zdGdyZXM=
+      database-name: cG9zdGdyZXM=
+      database-password: cG9zdGdyZXM=
+      database-user: cG9zdGdyZXM=
+    kind: Secret
+    metadata:
+      creationTimestamp: null
+      name: '${NAME}${SUFFIX}-secret'
+      namespace: '${OC_NAMESPACE}-${OC_APP}'
+      resourceVersion: null
+      selfLink: >-
+        /api/v1/namespaces/${OC_NAMESPACE}-${OC_APP}/secrets/${NAME}${SUFFIX}-secret
+      uid: null
+    type: Opaque
   - kind: ImageStream
     apiVersion: v1
     metadata:
@@ -165,7 +181,7 @@ objects:
                     - '-i'
                     - '-c'
                     - >-
-                      psql -h 127.0.0.1 -d postgres -U
+                      psql -h 127.0.0.1 -d $POSTGRESQL_DATABASE -U
                       $POSTGRESQL_USER -c 'SELECT 1'
                 initialDelaySeconds: 5
                 timeoutSeconds: 1
