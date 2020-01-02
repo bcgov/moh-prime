@@ -18,7 +18,7 @@ namespace Prime.Models
         public DateTime DateOfBirth { get; set; }
         public string LicensePlate { get; set; }
         public ICollection<Privilege> Privileges { get; set; }
-        public ICollection<Organization> Organizations { get; set; }
+        public ICollection<OrganizationType> OrganizationTypes { get; set; }
 
         public static EnrolmentCertificate Create(Enrollee enrollee)
         {
@@ -33,8 +33,15 @@ namespace Prime.Models
                 DateOfBirth = enrollee.DateOfBirth,
                 LicensePlate = enrollee.LicensePlate,
                 Privileges = enrollee.Privileges,
-                Organizations = enrollee.Organizations
-            };
-        }
+                OrganizationTypes = getOrganizationTypes();
+        };
     }
+
+    public ICollection<string> getOrganizationTypes()
+    {
+
+    }
+
+
+}
 }

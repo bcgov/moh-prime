@@ -13,9 +13,7 @@ export class EnrolleePrivilegesComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
-    console.log('PRIVILEGES', this.privileges);
-  }
+  ngOnInit() { }
 
 }
 
