@@ -22,6 +22,7 @@ namespace Prime.Models
 
         public static EnrolmentCertificate Create(Enrollee enrollee)
         {
+
             return new EnrolmentCertificate
             {
                 FirstName = enrollee.FirstName,
@@ -32,16 +33,9 @@ namespace Prime.Models
                 PreferredLastName = enrollee.PreferredLastName,
                 DateOfBirth = enrollee.DateOfBirth,
                 LicensePlate = enrollee.LicensePlate,
-                Privileges = enrollee.Privileges,
-                OrganizationTypes = getOrganizationTypes();
-        };
+                Privileges = enrollee.Privileges
+
+            };
+        }
     }
-
-    public ICollection<string> getOrganizationTypes()
-    {
-
-    }
-
-
-}
 }

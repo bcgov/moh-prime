@@ -9,6 +9,7 @@ import { Organization } from '@enrolment/shared/models/organization.model';
 export class EnrolleeOrganizationsComponent implements OnInit {
   @Input() public header: string;
   @Input() public organizations: Organization[];
+  @Input() public organizationTypes: [];
   constructor() { }
 
   ngOnInit() {

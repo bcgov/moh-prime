@@ -23,7 +23,7 @@ namespace Prime.Services
         {
             var enrollee = await _context.EnrolmentCertificateAccessTokens
                 .Where(t => t.Id == accessTokenId && t.Active)
-                .Select(t => t.Enrollee).Include(o => o.Organizations)
+                .Select(t => t.Enrollee)
                 .SingleOrDefaultAsync();
             if (enrollee == null)
             {
@@ -46,7 +46,12 @@ namespace Prime.Services
                 // ¯\_(ツ)_/¯
             }
 
-            return EnrolmentCertificate.Create(enrollee);
+            EnrolmentCertificate enrolmentCertificate = EnrolmentCertificate.Create(enrollee);
+
+            // Add organization types names to certificate to display organizations without lookup tables
+            enrolmentCertificate.OrganizationTypes = GetOrganizationTypesForEnrolleeQuery(enrollee.Id);
+
+            return enrolmentCertificate;
         }
 
         public async Task<EnrolmentCertificateAccessToken> CreateCertificateAccessTokenAsync(Enrollee enrollee)
@@ -76,6 +81,14 @@ namespace Prime.Services
             return await _context.EnrolmentCertificateAccessTokens
                 .Where(t => t.Enrollee.UserId == userId && t.Active)
                 .ToListAsync();
+        }
+
+        private ICollection<OrganizationType> GetOrganizationTypesForEnrolleeQuery(int? enrolleeId)
+        {
+            return _context.OrganizationTypes
+                        .Include(ot => ot.Organizations)
+                        .Where(ot => ot.Organizations.Any(o => o.EnrolleeId == enrolleeId))
+                        .ToList();
         }
     }
 }
