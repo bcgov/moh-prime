@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 
 namespace Prime.Models
 {
+    [Table("DefaultPrivilege")]
     public class DefaultPrivilege : BaseAuditable
     {
         public short LicenseCode { get; set; }

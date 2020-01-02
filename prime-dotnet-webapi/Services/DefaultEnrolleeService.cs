@@ -13,6 +13,7 @@ namespace Prime.Services
     {
         private readonly IAutomaticAdjudicationService _automaticAdjudicationService;
         private readonly IEmailService _emailService;
+        private readonly IPrivilegeService _privilegeService;
 
         private class StatusWrapper
         {
@@ -25,11 +26,12 @@ namespace Prime.Services
         private static Status NULL_STATUS = new Status { Code = -1, Name = "No Status" };
 
         public DefaultEnrolleeService(
-            ApiDbContext context, IHttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService, IEmailService emailService)
+            ApiDbContext context, IHttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService, IEmailService emailService, IPrivilegeService privilegeService)
             : base(context, httpContext)
         {
             _automaticAdjudicationService = automaticAdjudicationService;
             _emailService = emailService;
+            _privilegeService = privilegeService;
         }
 
         private Dictionary<Status, StatusWrapper[]> GetWorkFlowStateMap()
@@ -37,8 +39,8 @@ namespace Prime.Services
             if (_workflowStateMap == null)
             {
                 // Construct the workflow map
-                // TODO this should be async
-                // TODO need idea of new enrollee vs old enrollee baked into statuses
+                // TODO Should be async
+                // TODO Need idea of new enrollee vs old enrollee baked into statuses
                 // TODO IN_PROGRESS should be NEW and potentiall prefix a duplicate set of enrolment lifecycle statuses
                 Status IN_PROGRESS = _context.Statuses.Single(s => s.Code == Status.IN_PROGRESS_CODE);
                 Status SUBMITTED = _context.Statuses.Single(s => s.Code == Status.SUBMITTED_CODE);
@@ -51,12 +53,12 @@ namespace Prime.Services
                 _workflowStateMap.Add(NULL_STATUS, new[] {
                     new StatusWrapper { Status = IN_PROGRESS, AdminOnly = false }
                 });
-                // TODO only for new enrollees
+                // TODO Only for new enrollees should be treated as "NEW"
                 _workflowStateMap.Add(IN_PROGRESS, new[] {
                     new StatusWrapper { Status = SUBMITTED, AdminOnly = false }
                 });
                 _workflowStateMap.Add(SUBMITTED, new[] {
-                    // TODO not possible after first ACCEPTED_TOS instead use EDITING
+                    // TODO Should not be possible after first ACCEPTED_TOS instead use "EDITING"
                     new StatusWrapper { Status = IN_PROGRESS, AdminOnly = true },
                     new StatusWrapper { Status = APPROVED, AdminOnly = true },
                     new StatusWrapper { Status = DECLINED, AdminOnly = true }
@@ -66,14 +68,14 @@ namespace Prime.Services
                     new StatusWrapper { Status = DECLINED_TOS, AdminOnly = false }
                 });
                 _workflowStateMap.Add(DECLINED, new[] {
-                    // TODO not possible after first ACCEPTED_TOS instead use EDITING
+                    // TODO Should not be possible after first ACCEPTED_TOS instead use "EDITING"
                     new StatusWrapper { Status = IN_PROGRESS, AdminOnly = true }
                 });
                 _workflowStateMap.Add(ACCEPTED_TOS, new[] {
                     new StatusWrapper { Status = SUBMITTED, AdminOnly = false }
                 });
                 _workflowStateMap.Add(DECLINED_TOS, new[] {
-                    // TODO not possible after first ACCEPTED_TOS instead use EDITING
+                    // TODO Should not be possible after first ACCEPTED_TOS instead use "EDITING"
                     new StatusWrapper { Status = IN_PROGRESS, AdminOnly = true }
                 });
             }
