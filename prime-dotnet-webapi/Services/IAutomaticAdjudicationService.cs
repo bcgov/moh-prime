@@ -1,9 +1,11 @@
+using System.Threading.Tasks;
+
 using Prime.Models;
 
 namespace Prime.Services
 {
     public interface IAutomaticAdjudicationService
-    {            
-        bool QualifiesForAutomaticAdjudication(Enrollee enrollee);
+    {
+        Task<bool> QualifiesForAutomaticAdjudication(Enrollee enrollee);
     }
 }
