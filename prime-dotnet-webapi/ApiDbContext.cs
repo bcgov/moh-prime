@@ -155,7 +155,6 @@ namespace Prime
             #endregion
 
             #region Relationships
-            //EnrolmentStatuses
             modelBuilder.Entity<EnrolmentStatus>()
                 .HasOne(es => es.Enrollee)
                 .WithMany(e => e.EnrolmentStatuses)
@@ -180,6 +179,11 @@ namespace Prime
                 .HasOne(an => an.Enrollee)
                 .WithMany(e => e.AdjudicatorNotes)
                 .HasForeignKey(an => an.EnrolleeId);
+
+            modelBuilder.Entity<TermsOfAccessLicenseClassClauseXref>()
+                .HasKey(t => new { t.TermsOfAccessId, t.LicenseClassClauseId });
+            modelBuilder.Entity<TermsOfAccessLimitsAndConditionsClauseXref>()
+                .HasKey(t => new { t.TermsOfAccessId, t.LimitsConditionsClauseId });
             #endregion
         }
     }
