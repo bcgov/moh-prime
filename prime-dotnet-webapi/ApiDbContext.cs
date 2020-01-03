@@ -40,6 +40,12 @@ namespace Prime
         public DbSet<AccessAgreementNote> AccessAgreementNotes { get; set; }
         public DbSet<EnrolmentCertificateNote> EnrolmentCertificateNotes { get; set; }
 
+        public DbSet<TermsOfAccess> TermsOfAccess { get; set; }
+        public DbSet<GlobalClause> GlobalClauses { get; set; }
+        public DbSet<UserClause> UserClauses { get; set; }
+        public DbSet<LicenceClassClause> LicenceClassClauses { get; set; }
+        public DbSet<LimitsAndConditionsClause> LimitsAndConditionsClauses { get; set; }
+
         public override int SaveChanges()
         {
             this.ApplyAudits();
