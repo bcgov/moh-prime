@@ -171,5 +171,10 @@ namespace Prime.Models
                 }
             }
         }
+
+        public int TermsOfAccessId { get; set; }
+
+        [NotMapped]
+        public TermsOfAccess TermsOfAccess { get; set; }
     }
 }
