@@ -569,5 +569,19 @@ namespace Prime.Services
 
             return newNote;
         }
+
+        public async Task<TermsOfAccess> GetEnrolleeTermsOfAccessAsync(int enrolleeId)
+        { 
+            // TODO build out logic for extraction and storing
+
+            // Minimal extraction of terms of access for an enrollee to provide a response
+            return await _context.TermsOfAccess
+                .Include(t => t.GlobalClause)
+                .Include(t => t.UserClause)
+                .Include(t => t.LicenceClassClauses)
+                .Include(t => t.LimitsConditionsClauses)
+                .Where(t => t.EnrolleeId == enrolleeId)
+                .SingleOrDefaultAsync();
+        }
     }
 }
