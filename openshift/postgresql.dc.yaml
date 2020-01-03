@@ -217,8 +217,8 @@ objects:
               - postgresql
             from:
               kind: ImageStreamTag
-              name: 'postgresql:latest'
-              namespace: openshift
+              name: 'postgresql:9.6'
+              namespace: '${OC_NAMESPACE}-${OC_APP}'
             lastTriggeredImage: ''
           type: ImageChange
         - type: ConfigChange
