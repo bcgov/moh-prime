@@ -23,12 +23,10 @@ namespace Prime.Models
 
         public GlobalClause GlobalClauseId { get; set; }
 
-        [JsonIgnore]
         public GlobalClause GlobalClause { get; set; }
 
         public UserClause UserClauseId { get; set; }
 
-        [JsonIgnore]
         public UserClause UserClause { get; set; }
 
         public ICollection<LicenceClassClause> LicenceClassClauses { get; set; }
