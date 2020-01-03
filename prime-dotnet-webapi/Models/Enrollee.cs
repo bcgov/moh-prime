@@ -174,7 +174,7 @@ namespace Prime.Models
 
         public int TermsOfAccessId { get; set; }
 
-        [NotMapped]
+        [JsonIgnore]
         public TermsOfAccess TermsOfAccess { get; set; }
     }
 }
