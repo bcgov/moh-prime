@@ -30,7 +30,7 @@ namespace PrimeTests.Utils
 
         public static Faker<PhysicalAddress> PhysicalAddressFaker = new Faker<PhysicalAddress>()
                                 .RuleFor(a => a.CountryCode, f => f.PickRandom(countries))
-                                .RuleFor(a => a.ProvinceCode, TestUtils.RandomProvince())
+                                .RuleFor(a => a.ProvinceCode, TestUtils.RandomProvinceCode())
                                 .RuleFor(a => a.Street, f => f.Address.StreetAddress())
                                 .RuleFor(a => a.City, f => f.Address.City())
                                 .RuleFor(a => a.Postal, f => f.Address.ZipCode("?#?#?#"))
@@ -38,7 +38,7 @@ namespace PrimeTests.Utils
 
         public static Faker<MailingAddress> MailingAddressFaker = new Faker<MailingAddress>()
                                 .RuleFor(a => a.CountryCode, f => f.PickRandom(countries))
-                                .RuleFor(a => a.ProvinceCode, TestUtils.RandomProvince())
+                                .RuleFor(a => a.ProvinceCode, TestUtils.RandomProvinceCode())
                                 .RuleFor(a => a.Street, f => f.Address.StreetAddress())
                                 .RuleFor(a => a.City, f => f.Address.City())
                                 .RuleFor(a => a.Postal, f => f.Address.ZipCode("?#?#?#"))
@@ -88,16 +88,11 @@ namespace PrimeTests.Utils
                                 .RuleFor(e => e.HasPharmaNetSuspended, f => f.Random.Bool())
                                 .RuleFor(e => e.HasPharmaNetSuspendedDetails, f => f.Lorem.Paragraphs(2))
                                 .RuleFor(e => e.Organizations, f => OrganizationFaker.Generate(2))
-                                .RuleFor(e => e.EnrolmentStatuses, f => EnrolmentStatusFaker.Generate(1))
-                                ;
+                                .RuleFor(e => e.EnrolmentStatuses, f => EnrolmentStatusFaker.Generate(1));
 
-        public static string RandomProvince(string[] excluded = null)
+        public static string RandomProvinceCode(params string[] excludedProvinceCodes)
         {
-            if (excluded == null)
-            {
-                excluded = new string[0];
-            }
-            return new Faker().PickRandom(provinces.Except(excluded));
+            return new Faker().PickRandom(provinces.Except(excludedProvinceCodes));
         }
 
         public static string RandomDeviceProviderNumber()
@@ -219,14 +214,19 @@ namespace PrimeTests.Utils
 
             if (!db.Set(typeof(StatusReason)).Any())
             {
-                db.AddRange(new StatusReason { Code = 1, Name = "Automatic" });
-                db.AddRange(new StatusReason { Code = 2, Name = "Manual" });
-                db.AddRange(new StatusReason { Code = 3, Name = "Name Discrepancy" });
-                db.AddRange(new StatusReason { Code = 4, Name = "Not in PharmaNet" });
-                db.AddRange(new StatusReason { Code = 5, Name = "Insulin Pump Provider" });
-                db.AddRange(new StatusReason { Code = 6, Name = "Licence Class" });
-                db.AddRange(new StatusReason { Code = 7, Name = "Self Declaration" });
-                db.AddRange(new StatusReason { Code = 8, Name = "Contact address or Identity Address Out of British Columbia" });
+                db.AddRange(
+                    new StatusReason { Code = 1, Name = "Automatic" },
+                    new StatusReason { Code = 2, Name = "Manual" },
+                    new StatusReason { Code = 3, Name = "Could not verify College Licence with PharmaNet" },
+                    new StatusReason { Code = 4, Name = "Not in PharmaNet" },
+                    new StatusReason { Code = 5, Name = "Name Discrepancy with PharmaNet College Licence" },
+                    new StatusReason { Code = 6, Name = "Birthdate Discrepancy with PharmaNet College Licence" },
+                    new StatusReason { Code = 7, Name = "Listed as Non-Practicing on PharmaNet College Licence" },
+                    new StatusReason { Code = 8, Name = "Insulin Pump Provider" },
+                    new StatusReason { Code = 9, Name = "Licence Class" },
+                    new StatusReason { Code = 10, Name = "Self Declaration" },
+                    new StatusReason { Code = 11, Name = "Contact address or Identity Address Out of British Columbia" }
+                );
             }
 
             if (!db.Set(typeof(PrivilegeGroup)).Any())
