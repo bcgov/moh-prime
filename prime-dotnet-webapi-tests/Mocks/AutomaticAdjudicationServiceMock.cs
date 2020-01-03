@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+
 using Prime.Models;
 using Prime.Services;
 
@@ -13,11 +15,10 @@ namespace PrimeTests.Mocks
             // no data to seed, as it is done in the base class
         }
 
-        public bool QualifiesForAutomaticAdjudication(Enrollee enrollee)
+        public Task<bool> QualifiesForAutomaticAdjudication(Enrollee enrollee)
         {
             // TODO - make this have more logic to help testing
-            return false;
+            return Task.FromResult(false);
         }
-
     }
 }
