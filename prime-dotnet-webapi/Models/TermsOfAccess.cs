@@ -4,9 +4,15 @@ using Newtonsoft.Json;
 
 namespace Prime.Models
 {
-    // TODO: TermsOfAccess or AccessTerm so table name can be plural
     public class TermsOfAccess: BaseAuditable
     {
+        public TermsOfAccess()
+        {
+            // Create lists so they don't have be instantiated when items need to be added
+            LicenceClassClauses = new List<LicenceClassClause>();
+            LimitsConditionsClauses = new List<LimitsAndConditionsClause>();
+        }
+
         [Key]
         public int Id { get; set; }
 
