@@ -148,6 +148,8 @@ export class AdjudicationResource {
       ...remainder
     } = enrollee;
 
+    const collectionNoticeAccepted = false;
+
     return {
       enrollee: {
         userId,
@@ -166,6 +168,7 @@ export class AdjudicationResource {
         voicePhone,
         voiceExtension
       },
+      collectionNoticeAccepted,
       ...remainder
     };
   }

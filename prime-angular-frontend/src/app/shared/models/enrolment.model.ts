@@ -68,4 +68,6 @@ export interface Enrolment {
   profileCompleted: boolean;
   // Status hook for where the enrollee is in the initial enrolment
   progressStatus: ProgressStatus;
+  // Indicates enrollee has seen collection notice
+  collectionNoticeAccepted: boolean;
 }

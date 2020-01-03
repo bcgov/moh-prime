@@ -126,6 +126,8 @@ export class EnrolmentResource {
       ...remainder
     } = enrollee;
 
+    const collectionNoticeAccepted = false;
+
     return {
       enrollee: {
         userId,
@@ -144,6 +146,7 @@ export class EnrolmentResource {
         voicePhone,
         voiceExtension
       },
+      collectionNoticeAccepted,
       ...remainder
     };
   }
