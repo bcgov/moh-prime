@@ -89,6 +89,7 @@ objects:
         volume.beta.kubernetes.io/storage-class: netapp-file-standard
         volume.beta.kubernetes.io/storage-provisioner: netapp.io/trident
     spec:
+      storageClassName: netapp-file-standard
       accessModes:
         - ReadWriteMany
       resources:
