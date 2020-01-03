@@ -46,7 +46,7 @@ parameters:
     displayName: PostgreSQL Database Name
     name: POSTGRESQL_DATABASE
     required: true
-    value: postgresQL
+    value: postgresql
   - description: 'Volume space available for data, e.g. 512Mi, 2Gi.'
     displayName: Volume Capacity
     name: VOLUME_CAPACITY
@@ -86,8 +86,8 @@ objects:
     metadata:
       name: '${NAME}${SUFFIX}'
       annotations:
-        volume.beta.kubernetes.io/storage-class: gluster-file-db
-        volume.beta.kubernetes.io/storage-provisioner: kubernetes.io/glusterfs
+        volume.beta.kubernetes.io/storage-class: netapp-file-standard
+        volume.beta.kubernetes.io/storage-provisioner: netapp.io/trident
     spec:
       accessModes:
         - ReadWriteMany
