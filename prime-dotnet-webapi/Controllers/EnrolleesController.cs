@@ -345,8 +345,6 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiCreatedResponse<AdjudicatorNote>), StatusCodes.Status201Created)]
         public async Task<ActionResult<AdjudicatorNote>> CreateAdjudicatorNote(int enrolleeId, AdjudicatorNote adjudicatorNote)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
@@ -374,7 +372,7 @@ namespace Prime.Controllers
             );
         }
 
-        // PUT: api/Enrollees/5
+        // PUT: api/Enrollees/5/access-agreement-notes
         /// <summary>
         /// Updates an access agreement note.
         /// </summary>
@@ -414,7 +412,7 @@ namespace Prime.Controllers
             return Ok(new ApiOkResponse<IEnrolleeNote>(updatedNote));
         }
 
-        // PUT: api/Enrollees/5
+        // PUT: api/Enrollees/5/enrolment-certificate-notes
         /// <summary>
         /// Updates an enrolment certificate note.
         /// </summary>
@@ -452,6 +450,38 @@ namespace Prime.Controllers
             var updatedNote = await _enrolleeService.UpdateEnrolleeNoteAsync(enrolleeId, enrolmentCertNote);
 
             return Ok(new ApiOkResponse<IEnrolleeNote>(updatedNote));
+        }
+
+        // TODO immediately when approved the current terms of service should be set to the enrollee, and
+        // this endpoint is only the extraction for viewing
+
+        // GET: api/Enrollees/5/terms-of-access
+        /// <summary>
+        /// Get the enrolmee's terms of access.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpPut("{enrolleeId}/terms-of-access", Name = nameof(GetTermsOfAccess))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult<TermsOfAccess>> GetTermsOfAccess(int enrolleeId)
+        {
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
+            {
+                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
+            }
+
+            if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.APPROVED_CODE))
+            {
+                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrolee terms of service can not be retrieved when the current status is not 'APPROVED'.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
+
+            var termsOfAccess = await _enrolleeService.GetEnrolleeTermsOfAccessAsync(enrolleeId);
+
+            return Ok(new ApiOkResponse<TermsOfAccess>(termsOfAccess));
         }
     }
 }
