@@ -23,7 +23,7 @@ namespace Prime.Services
                                 .AsNoTracking()
                                 .SingleOrDefault();
 
-            ICollection<AssignedPrivilege> assignedPrivileges = this.GetAssignedPrivilegesForEnrollee(enrolleeId);
+            ICollection<AssignedPrivilege> assignedPrivileges = await this.GetAssignedPrivilegesForEnrolleeAsync(enrolleeId);
 
 
             if (assignedPrivileges != null)
@@ -49,7 +49,7 @@ namespace Prime.Services
                 ICollection<DefaultPrivilege> defaultPrivileges = new List<DefaultPrivilege>();
                 foreach (var cert in certifications)
                 {
-                    ICollection<DefaultPrivilege> result = this.GetDefaultPrivilegesForLicenseCode(cert.LicenseCode);
+                    ICollection<DefaultPrivilege> result = await this.GetDefaultPrivilegesForLicenseCodeAsync(cert.LicenseCode);
 
                     foreach (var p in result)
                     {
@@ -74,49 +74,48 @@ namespace Prime.Services
                     }
                 }
 
-                _enrolleeDb.Privileges = this.GetPrivilegesForEnrollee(enrollee);
+                _enrolleeDb.Privileges = await this.GetPrivilegesForEnrolleeAsync(enrollee);
                 _context.Entry(_enrolleeDb).State = EntityState.Modified;
 
                 await _context.SaveChangesAsync();
             }
         }
 
-        public ICollection<Privilege> GetPrivilegesForEnrollee(Enrollee enrollee)
+        public async Task<ICollection<Privilege>> GetPrivilegesForEnrolleeAsync(Enrollee enrollee)
         {
             ICollection<Privilege> privileges = new List<Privilege>();
-            var results = this.GetPrivilegesForEnrolleeQuery(enrollee.Id);
+            var results = await this.GetPrivilegesForEnrolleeQueryAsync(enrollee.Id);
             var currentUser = _httpContext?.HttpContext?.User;
 
             foreach (var item in results)
             {
-
                 privileges.Add(item);
             }
 
             return privileges;
         }
 
-        private ICollection<DefaultPrivilege> GetDefaultPrivilegesForLicenseCode(int licenseCode)
+        private async Task<ICollection<DefaultPrivilege>> GetDefaultPrivilegesForLicenseCodeAsync(int licenseCode)
         {
-            return _context.DefaultPrivileges
+            return await _context.DefaultPrivileges
                         .Where(df => df.LicenseCode == licenseCode)
-                        .ToList();
+                        .ToListAsync();
         }
 
-        public ICollection<AssignedPrivilege> GetAssignedPrivilegesForEnrollee(int? enrolleeId)
+        public async Task<ICollection<AssignedPrivilege>> GetAssignedPrivilegesForEnrolleeAsync(int? enrolleeId)
         {
-            return _context.AssignedPrivileges
+            return await _context.AssignedPrivileges
                         .Where(ap => ap.EnrolleeId == enrolleeId)
                         .Include(ap => ap.Privilege)
-                        .ToList();
+                        .ToListAsync();
         }
 
-        private ICollection<Privilege> GetPrivilegesForEnrolleeQuery(int? enrolleeId)
+        private async Task<ICollection<Privilege>> GetPrivilegesForEnrolleeQueryAsync(int? enrolleeId)
         {
-            return _context.Privileges
+            return await _context.Privileges
                         .Include(p => p.AssignedPrivileges)
                         .Where(p => p.AssignedPrivileges.Any(ap => ap.EnrolleeId == enrolleeId))
-                        .ToList();
+                        .ToListAsync();
         }
 
     }
