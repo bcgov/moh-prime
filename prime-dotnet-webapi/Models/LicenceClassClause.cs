@@ -12,7 +12,7 @@ namespace Prime.Models
         public LicenceClassClause()
         {
             // Create lists so they don't have be instantiated when items need to be added
-            TermsOfAccesses = new List<TermsOfAccess>();
+            TermsOfAccessLicenseClassClauses = new List<TermsOfAccessLicenseClassClause>();
         }
 
         [Key]
@@ -24,6 +24,6 @@ namespace Prime.Models
         [Required]
         public DateTime EffectiveDate { get; set; }
 
-        public ICollection<TermsOfAccess> TermsOfAccesses { get; set; }
+        public List<TermsOfAccessLicenseClassClause> TermsOfAccessLicenseClassClauses { get; set; }
     }
 }

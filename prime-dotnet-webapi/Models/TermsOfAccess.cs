@@ -11,8 +11,8 @@ namespace Prime.Models
         public TermsOfAccess()
         {
             // Create lists so they don't have be instantiated when items need to be added
-            LicenceClassClauses = new List<LicenceClassClause>();
-            LimitsConditionsClauses = new List<LimitsAndConditionsClause>();
+            TermsOfAccessLicenseClassClauses = new List<TermsOfAccessLicenseClassClause>();
+            TermsOfAccessLimitsAndConditionsClauses = new List<TermsOfAccessLimitsAndConditionsClause>();
         }
 
         [Key]
@@ -31,8 +31,8 @@ namespace Prime.Models
 
         public UserClause UserClause { get; set; }
 
-        public ICollection<LicenceClassClause> LicenceClassClauses { get; set; }
+        public List<TermsOfAccessLicenseClassClause> TermsOfAccessLicenseClassClauses { get; set; }
 
-        public ICollection<LimitsAndConditionsClause> LimitsConditionsClauses { get; set; }
+        public List<TermsOfAccessLimitsAndConditionsClause> TermsOfAccessLimitsAndConditionsClauses { get; set; }
     }
 }

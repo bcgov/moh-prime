@@ -36,6 +36,7 @@ namespace Prime
         public DbSet<EnrolmentCertificateAccessToken> EnrolmentCertificateAccessTokens { get; set; }
         public DbSet<DefaultPrivilege> DefaultPrivileges { get; set; }
         public DbSet<AssignedPrivilege> AssignedPrivileges { get; set; }
+
         public DbSet<AdjudicatorNote> AdjudicatorNotes { get; set; }
         public DbSet<AccessAgreementNote> AccessAgreementNotes { get; set; }
         public DbSet<EnrolmentCertificateNote> EnrolmentCertificateNotes { get; set; }
@@ -180,10 +181,27 @@ namespace Prime
                 .WithMany(e => e.AdjudicatorNotes)
                 .HasForeignKey(an => an.EnrolleeId);
 
-            modelBuilder.Entity<TermsOfAccessLicenseClassClauseXref>()
+            modelBuilder.Entity<TermsOfAccessLicenseClassClause>()
                 .HasKey(t => new { t.TermsOfAccessId, t.LicenseClassClauseId });
-            modelBuilder.Entity<TermsOfAccessLimitsAndConditionsClauseXref>()
+            modelBuilder.Entity<TermsOfAccessLicenseClassClause>()
+                .HasOne(tlic => tlic.TermsOfAccess)
+                .WithMany(toa => toa.TermsOfAccessLicenseClassClauses)
+                .HasForeignKey(tlic => tlic.TermsOfAccessId);
+            modelBuilder.Entity<TermsOfAccessLicenseClassClause>()
+                .HasOne(tlic => tlic.LicenseClassClause)
+                .WithMany(lcc => lcc.TermsOfAccessLicenseClassClauses)
+                .HasForeignKey(tlic => tlic.LicenseClassClauseId);
+
+            modelBuilder.Entity<TermsOfAccessLimitsAndConditionsClause>()
                 .HasKey(t => new { t.TermsOfAccessId, t.LimitsConditionsClauseId });
+            modelBuilder.Entity<TermsOfAccessLimitsAndConditionsClause>()
+                .HasOne(tlim => tlim.TermsOfAccess)
+                .WithMany(toa => toa.TermsOfAccessLimitsAndConditionsClauses)
+                .HasForeignKey(tlim => tlim.TermsOfAccessId);
+            modelBuilder.Entity<TermsOfAccessLimitsAndConditionsClause>()
+                .HasOne(tlim => tlim.LimitsConditionsClause)
+                .WithMany(lcc => lcc.TermsOfAccessLimitsAndConditionsClauses)
+                .HasForeignKey(tlim => tlim.LimitsConditionsClauseId);
             #endregion
         }
     }

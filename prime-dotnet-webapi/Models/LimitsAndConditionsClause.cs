@@ -12,7 +12,7 @@ namespace Prime.Models
         public LimitsAndConditionsClause()
         {
             // Create lists so they don't have be instantiated when items need to be added
-            TermsOfAccesses = new List<TermsOfAccess>();
+            TermsOfAccessLimitsAndConditionsClauses = new List<TermsOfAccessLimitsAndConditionsClause>();
         }
 
         [Key]
@@ -24,6 +24,6 @@ namespace Prime.Models
         [Required]
         public DateTime EffectiveDate { get; set; }
 
-        public ICollection<TermsOfAccess> TermsOfAccesses { get; set; }
+        public List<TermsOfAccessLimitsAndConditionsClause> TermsOfAccessLimitsAndConditionsClauses { get; set; }
     }
 }

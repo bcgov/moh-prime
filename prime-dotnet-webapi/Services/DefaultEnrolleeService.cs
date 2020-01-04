@@ -578,8 +578,8 @@ namespace Prime.Services
             return await _context.TermsOfAccess
                 .Include(t => t.GlobalClause)
                 .Include(t => t.UserClause)
-                .Include(t => t.LicenceClassClauses)
-                .Include(t => t.LimitsConditionsClauses)
+                .Include(t => t.TermsOfAccessLicenseClassClauses)
+                .Include(t => t.TermsOfAccessLimitsAndConditionsClauses)
                 .Where(t => t.EnrolleeId == enrolleeId)
                 .SingleOrDefaultAsync();
         }
