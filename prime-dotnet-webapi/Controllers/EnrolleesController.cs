@@ -384,7 +384,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ApiOkResponse<AccessAgreementNote>), StatusCodes.Status200OK)]
         public async Task<ActionResult<AccessAgreementNote>> UpdateAccessAgreementNote(int enrolleeId, AccessAgreementNote accessAgreementNote)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
@@ -424,7 +424,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ApiOkResponse<EnrolmentCertificateNote>), StatusCodes.Status200OK)]
         public async Task<ActionResult<EnrolmentCertificateNote>> UpdateEnrolmentCertNote(int enrolleeId, EnrolmentCertificateNote enrolmentCertNote)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
@@ -465,7 +465,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ApiOkResponse<TermsOfAccess>), StatusCodes.Status200OK)]
         public async Task<ActionResult<TermsOfAccess>> GetTermsOfAccess(int enrolleeId)
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))

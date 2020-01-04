@@ -165,10 +165,8 @@ namespace Prime.Models
                 {
                     return enrolmentStatusReasons.Any(r => r.StatusReason?.Code == 1) ? PrimeConstants.PRIME_MOA : PrimeConstants.PRIME_RU;
                 }
-                else
-                {
-                    return null;
-                }
+
+                return null;
             }
         }
 
