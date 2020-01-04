@@ -23,11 +23,11 @@ namespace Prime.Models
         [JsonIgnore]
         public Enrollee Enrollee { get; set; }
 
-        public GlobalClause GlobalClauseId { get; set; }
+        public int GlobalClauseId { get; set; }
 
         public GlobalClause GlobalClause { get; set; }
 
-        public UserClause UserClauseId { get; set; }
+        public int UserClauseId { get; set; }
 
         public UserClause UserClause { get; set; }
 
