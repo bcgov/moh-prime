@@ -18,6 +18,7 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { TermsOfAccess } from '@enrolment/shared/models/terms-of-access.model';
 import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 import { ViewportService } from '@core/services/viewport.service';
 
@@ -141,5 +142,16 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
   public ngOnInit() {
     this.enrolment = this.enrolmentService.enrolment;
     this.isInitialEnrolment = this.enrolment.progressStatus !== ProgressStatus.FINISHED;
+
+    this.enrolmentResource.getTermsOfAccess(this.enrolment.id)
+      .subscribe(
+        (termsOfAccess: TermsOfAccess) => {
+
+        },
+        (error: any) => {
+          this.toastService.openErrorToast(`Terms of access could not be found`);
+          this.logger.error('[Enrolment] AccessAgreement::ngOnInit error has occurred: ', error);
+        }
+      );
   }
 }
