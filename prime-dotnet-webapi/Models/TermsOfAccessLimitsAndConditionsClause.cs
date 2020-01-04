@@ -8,15 +8,15 @@ namespace Prime.Models
     public class TermsOfAccessLimitsAndConditionsClause
     {
         [Required]
-        public int TermsOfAccessId;
+        public int TermsOfAccessId { get; set; }
 
         [JsonIgnore]
-        public TermsOfAccess TermsOfAccess;
+        public TermsOfAccess TermsOfAccess { get; set; }
 
         [Required]
-        public int LimitsConditionsClauseId;
+        public int LimitsConditionsClauseId { get; set; }
 
         [JsonIgnore]
-        public LimitsAndConditionsClause LimitsConditionsClause;
+        public LimitsAndConditionsClause LimitsConditionsClause { get; set; }
     }
 }

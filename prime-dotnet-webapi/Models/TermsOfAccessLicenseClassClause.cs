@@ -8,15 +8,15 @@ namespace Prime.Models
     public class TermsOfAccessLicenseClassClause
     {
         [Required]
-        public int TermsOfAccessId;
+        public int TermsOfAccessId { get; set; }
 
         [JsonIgnore]
-        public TermsOfAccess TermsOfAccess;
+        public TermsOfAccess TermsOfAccess { get; set; }
 
         [Required]
-        public int LicenseClassClauseId;
+        public int LicenseClassClauseId { get; set; }
 
         [JsonIgnore]
-        public LicenceClassClause LicenseClassClause;
+        public LicenceClassClause LicenseClassClause { get; set; }
     }
 }

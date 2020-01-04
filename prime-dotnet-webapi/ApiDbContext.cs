@@ -182,7 +182,7 @@ namespace Prime
                 .HasForeignKey(an => an.EnrolleeId);
 
             modelBuilder.Entity<TermsOfAccessLicenseClassClause>()
-                .HasKey(t => new { t.TermsOfAccessId, t.LicenseClassClauseId });
+                .HasKey(tlic => new { tlic.TermsOfAccessId, tlic.LicenseClassClauseId });
             modelBuilder.Entity<TermsOfAccessLicenseClassClause>()
                 .HasOne(tlic => tlic.TermsOfAccess)
                 .WithMany(toa => toa.TermsOfAccessLicenseClassClauses)
@@ -193,7 +193,7 @@ namespace Prime
                 .HasForeignKey(tlic => tlic.LicenseClassClauseId);
 
             modelBuilder.Entity<TermsOfAccessLimitsAndConditionsClause>()
-                .HasKey(t => new { t.TermsOfAccessId, t.LimitsConditionsClauseId });
+                .HasKey(tlim => new { tlim.TermsOfAccessId, tlim.LimitsConditionsClauseId });
             modelBuilder.Entity<TermsOfAccessLimitsAndConditionsClause>()
                 .HasOne(tlim => tlim.TermsOfAccess)
                 .WithMany(toa => toa.TermsOfAccessLimitsAndConditionsClauses)
