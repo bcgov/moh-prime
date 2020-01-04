@@ -394,6 +394,8 @@ namespace Prime.Services
                     break;
             }
 
+            var created = await _context.SaveChangesAsync();
+
             // Enrollee just left manual adjudication, inform the enrollee
             if (oldStatus?.Code == Status.SUBMITTED_CODE)
             {
