@@ -170,8 +170,6 @@ namespace Prime.Models
             }
         }
 
-        public int TermsOfAccessId { get; set; }
-
         [JsonIgnore]
         public TermsOfAccess TermsOfAccess { get; set; }
     }
