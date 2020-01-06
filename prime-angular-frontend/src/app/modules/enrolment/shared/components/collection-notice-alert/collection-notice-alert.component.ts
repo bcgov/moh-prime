@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { AuthService } from '@auth/shared/services/auth.service';
+import { Enrolment } from '@shared/models/enrolment.model';
 
 @Component({
   selector: 'app-collection-notice-alert',
@@ -10,10 +12,11 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
   styleUrls: ['./collection-notice-alert.component.scss']
 })
 export class CollectionNoticeAlertComponent implements OnInit {
-  public showNotice: boolean;
   public profileCompleted: boolean;
+  public enrolment: Enrolment;
 
   constructor(
+    private authService: AuthService,
     private enrolmentService: EnrolmentService,
     private router: Router,
     private route: ActivatedRoute
@@ -22,13 +25,12 @@ export class CollectionNoticeAlertComponent implements OnInit {
   public EnrolmentRoutes = EnrolmentRoutes;
 
   public ngOnInit() {
-    this.showNotice = !!this.enrolmentService.enrolment.collectionNoticeAccepted;
-    const enrolment = this.enrolmentService.enrolment;
-    this.profileCompleted = (enrolment) ? enrolment.profileCompleted : false;
+    this.enrolment = this.enrolmentService.enrolment;
+    this.profileCompleted = (this.enrolment) ? this.enrolment.profileCompleted : false;
   }
 
   public show() {
-    return this.showNotice;
+    return this.authService.getHasJustLoggedIn();
   }
 
   public onAccept() {
@@ -36,8 +38,8 @@ export class CollectionNoticeAlertComponent implements OnInit {
       ? EnrolmentRoutes.DEMOGRAPHIC
       : EnrolmentRoutes.OVERVIEW;
 
+    this.authService.setHasJustLoggedIn(false);
+
     this.router.navigate([route], { relativeTo: this.route.parent });
-    this.enrolmentService.enrolment.collectionNoticeAccepted = true;
-    this.showNotice = false;
   }
 }

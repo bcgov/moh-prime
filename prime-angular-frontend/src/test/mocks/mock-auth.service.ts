@@ -6,10 +6,13 @@ import { IAuthService } from '@auth/shared/services/auth.service';
 import { User } from '@auth/shared/models/user.model';
 
 export class MockAuthService implements IAuthService {
+
   // tslint:disable-next-line: variable-name
   private _role: Role;
   // tslint:disable-next-line: variable-name
   private _loggedIn: boolean;
+
+  public hasJustLoggedIn: boolean;
 
   constructor(
   ) {
@@ -97,5 +100,13 @@ export class MockAuthService implements IAuthService {
 
   public clearToken(): void {
     throw new Error('Method not implemented.');
+  }
+
+  public setHasJustLoggedIn(hasJustLoggedIn: boolean) {
+    this.hasJustLoggedIn = hasJustLoggedIn;
+  }
+
+  public getHasJustLoggedIn(): boolean {
+    return this.hasJustLoggedIn;
   }
 }

@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { AuthService } from '@auth/shared/services/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Enrolment } from '@shared/models/enrolment.model';
 
 @Component({
   selector: 'app-collection-notice',
@@ -11,9 +13,25 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class CollectionNoticeComponent implements OnInit {
 
+  public profileCompleted: boolean;
+  public enrolment: Enrolment;
+
   constructor(
+    private authSerivce: AuthService,
+    private enrolmentService: EnrolmentService,
+    private router: Router,
+    private route: ActivatedRoute
   ) { }
 
   public ngOnInit() {
+    this.enrolment = this.enrolmentService.enrolment;
+    this.profileCompleted = (this.enrolment) ? this.enrolment.profileCompleted : false;
+    this.authSerivce.setHasJustLoggedIn(true);
+
+    if (this.profileCompleted) {
+      this.router.navigate([EnrolmentRoutes.OVERVIEW], { relativeTo: this.route.parent });
+    }
+
   }
+
 }
