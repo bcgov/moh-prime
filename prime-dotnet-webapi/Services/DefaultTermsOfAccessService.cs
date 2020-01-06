@@ -14,14 +14,14 @@ namespace Prime.Services
 
         public async Task<bool> SetEnrolleeTermsOfAccessAsync(Enrollee enrollee)
         {
+            var termsOfAccess = enrollee.TermsOfAccess;
+
             // TODO assign the most current global clause
-            var globalClause = _context.GlobalClauses
+            termsOfAccess.GlobalClause = await _context.GlobalClauses
                 .OrderByDescending(g => g.EffectiveDate)
-                .FirstOrDefault();
-
-
-
-            // TODO determine the enrollee user type (what are the rules?)
+                .FirstOrDefaultAsync();
+            
+            // TODO determine the enrollee user type
             // TODO assign the most recent user clause
             // TODO determine licence class clauses
             // TODO seed with lorem ipsum licence class clauses
@@ -42,12 +42,6 @@ namespace Prime.Services
                     .ThenInclude(talc => talc.LimitsConditionsClause)
                 .Where(t => t.EnrolleeId == enrolleeId)
                 .SingleOrDefaultAsync();
-        }
-
-        // TODO no need for removing or updating 
-        public async Task<bool> RemoveEnrolleeTermsOfAccessAsync(int enrolleeId)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

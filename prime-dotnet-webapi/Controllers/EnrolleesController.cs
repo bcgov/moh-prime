@@ -452,9 +452,6 @@ namespace Prime.Controllers
             return Ok(new ApiOkResponse<IEnrolleeNote>(updatedNote));
         }
 
-        // TODO immediately when approved the current terms of service should be set to the enrollee, and
-        // this endpoint is only the extraction for viewing
-
         // GET: api/Enrollees/5/terms-of-access
         /// <summary>
         /// Get the enrolmee's terms of access.
