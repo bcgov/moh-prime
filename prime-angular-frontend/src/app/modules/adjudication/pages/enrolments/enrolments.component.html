@@ -117,8 +117,23 @@
         <span>Decline Enrolment</span>
       </button>
       <button mat-menu-item
+              [routerLink]="[enrolment.id, 'adjudicator-notes']">
+        <mat-icon>message</mat-icon>
+        <span>Global Adjudicator Notes</span>
+      </button>
+      <button mat-menu-item
+              [routerLink]="[enrolment.id, 'user-agreement-notes']">
+        <mat-icon>description</mat-icon>
+        <span>User Agreement Notes</span>
+      </button>
+      <button mat-menu-item
+              [routerLink]="[enrolment.id, 'enrolment-certificate-notes']">
+        <mat-icon>assignment_turned_in</mat-icon>
+        <span>Enrolment Certificate Notes</span>
+      </button>
+      <button mat-menu-item
               *ngIf="canAllowEditing(enrolment.currentStatus.status.code)"
-              (click)="markAsInProgress(enrolment.id)">
+              (click)="markForEditing(enrolment.id, enrolment.progressStatus)">
         <mat-icon>undo</mat-icon>
         <span>Enable Editing</span>
       </button>

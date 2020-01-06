@@ -7,6 +7,7 @@ import { Job } from '../models/job.model';
 import { Organization } from '../models/organization.model';
 import { CollegeCertification } from '../models/college-certification.model';
 
+// TODO rename profile to demographic
 // TODO refactor into enrolment service and enrolment form service
 // TODO implement using NGXS to manage state
 @Injectable({

@@ -1,0 +1,272 @@
+<app-busy-overlay [busy]="busy">
+
+  <div class="row">
+    <div class="col-sm-12 col-lg-8 offset-lg-1 col-xl-6 offset-xl-0">
+
+      <form (ngSubmit)="onSubmit()"
+            [formGroup]="form"
+            novalidate>
+
+        <app-progress-indicator *ngIf="isInitialEnrolment"
+                                [currentRoute]="EnrolmentRoutes.DEMOGRAPHIC"></app-progress-indicator>
+
+        <app-page-header>PharmaNet Enrolment</app-page-header>
+
+        <section class="mb-3">
+
+          <app-page-subheader>
+            <ng-container appPageSubheaderTitle>Enrollee Information</ng-container>
+          </app-page-subheader>
+
+          <div class="row">
+            <div class="col">
+
+              <mat-form-field class="w-100">
+                <input matInput
+                       placeholder="First Name"
+                       formControlName="firstName">
+                <mat-error>Required</mat-error>
+              </mat-form-field>
+
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+
+              <mat-form-field class="w-100">
+                <input matInput
+                       placeholder="Middle Name"
+                       formControlName="middleName">
+              </mat-form-field>
+
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+
+              <mat-form-field class="w-100">
+                <input matInput
+                       placeholder="Last Name"
+                       formControlName="lastName">
+                <mat-error>Required</mat-error>
+              </mat-form-field>
+
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+
+              <mat-form-field class="w-100">
+                <input matInput
+                       placeholder="Date of Birth"
+                       [matDatepicker]="picker"
+                       formControlName="dateOfBirth">
+                <mat-datepicker-toggle matSuffix
+                                       [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker
+                                startView="multi-year"></mat-datepicker>
+                <mat-error>Required</mat-error>
+              </mat-form-field>
+
+            </div>
+          </div>
+
+          <mat-slide-toggle class="mb-3"
+                            color="primary"
+                            (change)="onPreferredNameChange()"
+                            [checked]="hasPreferredName">
+            I have a preferred name that is different than my legal name
+          </mat-slide-toggle>
+
+        </section>
+
+        <ng-container *ngIf="hasPreferredName">
+
+          <section class="mb-3">
+
+            <app-page-subheader>
+              <ng-container appPageSubheaderTitle>Preferred Name</ng-container>
+              <ng-container appPageSubheaderSummary>
+                If you have a name that is different than your legal name that people know you by, enter your full
+                preferred
+                name.
+              </ng-container>
+            </app-page-subheader>
+
+            <div class="row">
+              <div class="col">
+
+                <mat-form-field class="w-100">
+                  <input matInput
+                         placeholder="Preferred First Name"
+                         formControlName="preferredFirstName">
+                  <mat-error>Required</mat-error>
+                </mat-form-field>
+
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+
+                <mat-form-field class="w-100">
+                  <input matInput
+                         placeholder="Preferred Middle Name (Optional)"
+                         formControlName="preferredMiddleName">
+                </mat-form-field>
+
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+
+                <mat-form-field class="w-100">
+                  <input matInput
+                         placeholder="Preferred Last Name"
+                         formControlName="preferredLastName">
+                  <mat-error>Required</mat-error>
+                </mat-form-field>
+
+              </div>
+            </div>
+
+          </section>
+
+        </ng-container>
+
+        <section class="mb-3">
+
+          <app-page-subheader>
+            <ng-container appPageSubheaderTitle>Address</ng-container>
+          </app-page-subheader>
+
+          <app-address [form]="physicalAddress"></app-address>
+
+          <mat-slide-toggle class="mb-3"
+                            color="primary"
+                            (change)="onMailingAddressChange()"
+                            [checked]="hasMailingAddress">
+            My mailing address is different
+          </mat-slide-toggle>
+
+        </section>
+
+        <ng-container *ngIf="hasMailingAddress">
+
+          <section class="mb-3">
+
+            <app-page-subheader>
+              <ng-container appPageSubheaderTitle>Mailing Address</ng-container>
+            </app-page-subheader>
+
+            <app-address [form]="mailingAddress"></app-address>
+
+          </section>
+
+        </ng-container>
+
+        <section class="mb-3">
+
+          <app-page-subheader>
+            <ng-container appPageSubheaderTitle>Contact Information</ng-container>
+            <ng-container appPageSubheaderSummary>
+              Provide a phone number that may be used for voice contact.
+            </ng-container>
+          </app-page-subheader>
+
+          <div class="row">
+            <div class="col">
+
+              <mat-form-field class="w-100">
+                <input matInput
+                       placeholder="Phone Number for Voice Contact"
+                       formControlName="voicePhone"
+                       mask="(000) 000-0000"
+                       [showMaskTyped]="false">
+                <mat-error *ngIf="voicePhone.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="voicePhone.hasError('phone')">Must be a valid phone number</mat-error>
+              </mat-form-field>
+
+            </div>
+            <div class="col">
+
+              <mat-form-field class="w-100">
+                <input matInput
+                       placeholder="Extension Number (Optional)"
+                       formControlName="voiceExtension">
+                <mat-error *ngIf="voiceExtension.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="voiceExtension.hasError('numeric')">Must contain only numbers</mat-error>
+              </mat-form-field>
+
+            </div>
+          </div>
+
+        </section>
+
+        <section class="mb-3">
+
+          <app-page-subheader>
+            <ng-container appPageSubheaderTitle>Notification Information</ng-container>
+            <ng-container appPageSubheaderSummary>
+              Provide an email address and/or phone number that may be used for sending notifications from the PRIME
+              system.
+            </ng-container>
+          </app-page-subheader>
+
+          <div class="mb-3">
+            <mat-checkbox class="mr-4"
+                          formControlName="hasContactEmail">Email Notification</mat-checkbox>
+            <mat-checkbox class="mr-4"
+                          formControlName="hasContactPhone">Text Notification (SMS)</mat-checkbox>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-12">
+
+              <div *ngIf="contactEmail.value || hasContactEmail.value"
+                   class="row">
+                <div class="col">
+
+                  <mat-form-field class="w-100">
+                    <input matInput
+                           placeholder="Email"
+                           formControlName="contactEmail">
+                    <mat-error *ngIf="contactEmail.hasError('required')">Required</mat-error>
+                    <mat-error *ngIf="contactEmail.hasError('email')">Must be a valid email address</mat-error>
+                  </mat-form-field>
+
+                </div>
+              </div>
+
+              <div *ngIf="contactPhone.value || hasContactPhone.value"
+                   class="row">
+                <div class="col">
+
+                  <mat-form-field class="w-100">
+                    <input matInput
+                           placeholder="Mobile Phone"
+                           formControlName="contactPhone"
+                           mask="(000) 000-0000"
+                           [showMaskTyped]="false">
+                    <mat-error *ngIf="contactPhone.hasError('required')">Required</mat-error>
+                    <mat-error *ngIf="contactPhone.hasError('phone')">Must be a valid phone number</mat-error>
+                  </mat-form-field>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </section>
+
+        <app-page-footer [profileCompleted]="isProfileComplete"
+                         [hasSecondaryAction]="isProfileComplete"
+                         (save)="onSubmit()"
+                         (continue)="onSubmit()"></app-page-footer>
+
+      </form>
+
+    </div>
+  </div>
+
+</app-busy-overlay>

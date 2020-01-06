@@ -30,7 +30,7 @@ namespace PrimeTests.Utils
 
         public static Faker<PhysicalAddress> PhysicalAddressFaker = new Faker<PhysicalAddress>()
                                 .RuleFor(a => a.CountryCode, f => f.PickRandom(countries))
-                                .RuleFor(a => a.ProvinceCode, TestUtils.RandomProvince())
+                                .RuleFor(a => a.ProvinceCode, TestUtils.RandomProvinceCode())
                                 .RuleFor(a => a.Street, f => f.Address.StreetAddress())
                                 .RuleFor(a => a.City, f => f.Address.City())
                                 .RuleFor(a => a.Postal, f => f.Address.ZipCode("?#?#?#"))
@@ -38,7 +38,7 @@ namespace PrimeTests.Utils
 
         public static Faker<MailingAddress> MailingAddressFaker = new Faker<MailingAddress>()
                                 .RuleFor(a => a.CountryCode, f => f.PickRandom(countries))
-                                .RuleFor(a => a.ProvinceCode, TestUtils.RandomProvince())
+                                .RuleFor(a => a.ProvinceCode, TestUtils.RandomProvinceCode())
                                 .RuleFor(a => a.Street, f => f.Address.StreetAddress())
                                 .RuleFor(a => a.City, f => f.Address.City())
                                 .RuleFor(a => a.Postal, f => f.Address.ZipCode("?#?#?#"))
@@ -88,16 +88,11 @@ namespace PrimeTests.Utils
                                 .RuleFor(e => e.HasPharmaNetSuspended, f => f.Random.Bool())
                                 .RuleFor(e => e.HasPharmaNetSuspendedDetails, f => f.Lorem.Paragraphs(2))
                                 .RuleFor(e => e.Organizations, f => OrganizationFaker.Generate(2))
-                                .RuleFor(e => e.EnrolmentStatuses, f => EnrolmentStatusFaker.Generate(1))
-                                ;
+                                .RuleFor(e => e.EnrolmentStatuses, f => EnrolmentStatusFaker.Generate(1));
 
-        public static string RandomProvince(string[] excluded = null)
+        public static string RandomProvinceCode(params string[] excludedProvinceCodes)
         {
-            if (excluded == null)
-            {
-                excluded = new string[0];
-            }
-            return new Faker().PickRandom(provinces.Except(excluded));
+            return new Faker().PickRandom(provinces.Except(excludedProvinceCodes));
         }
 
         public static string RandomDeviceProviderNumber()
@@ -113,21 +108,23 @@ namespace PrimeTests.Utils
 
         public static void RemoveAdminRoleFromUser(ClaimsPrincipal user)
         {
+            var claim = user.Claims
+                .Where(c => c.Value == PrimeConstants.PRIME_ADMIN_ROLE)
+                .Single();
             var identity = user.Identity as ClaimsIdentity;
-            var claim = (from c in user.Claims
-                         where c.Value == PrimeConstants.PRIME_ADMIN_ROLE
-                         select c).Single();
             identity.RemoveClaim(claim);
         }
 
-        public static int? CreateEnrollee(ApiDbContext apiDbContext, HttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService, IEmailService emailService)
+        public static int? CreateEnrollee(ApiDbContext apiDbContext, HttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService, IEmailService emailService, IPrivilegeService privilegeService)
         {
-            return new DefaultEnrolleeService(apiDbContext, httpContext, automaticAdjudicationService, emailService).CreateEnrolleeAsync(TestUtils.EnrolleeFaker.Generate()).Result;
+            return new DefaultEnrolleeService(apiDbContext, httpContext, automaticAdjudicationService, emailService, privilegeService)
+                .CreateEnrolleeAsync(TestUtils.EnrolleeFaker.Generate()).Result;
         }
 
-        public static Enrollee GetEnrolleeById(ApiDbContext apiDbContext, HttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService, int enrolmentId, IEmailService emailService)
+        public static Enrollee GetEnrolleeById(ApiDbContext apiDbContext, HttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService, int enrolmentId, IEmailService emailService, IPrivilegeService privilegeService)
         {
-            return new DefaultEnrolleeService(apiDbContext, httpContext, automaticAdjudicationService, emailService).GetEnrolleeAsync(enrolmentId).Result;
+            return new DefaultEnrolleeService(apiDbContext, httpContext, automaticAdjudicationService, emailService, privilegeService)
+                .GetEnrolleeAsync(enrolmentId).Result;
         }
 
         public static void InitializeDbForTests(ApiDbContext db)
@@ -217,14 +214,75 @@ namespace PrimeTests.Utils
 
             if (!db.Set(typeof(StatusReason)).Any())
             {
-                db.AddRange(new StatusReason { Code = 1, Name = "Automatic" });
-                db.AddRange(new StatusReason { Code = 2, Name = "Manual" });
-                db.AddRange(new StatusReason { Code = 3, Name = "Name Discrepancy" });
-                db.AddRange(new StatusReason { Code = 4, Name = "Not in PharmaNet" });
-                db.AddRange(new StatusReason { Code = 5, Name = "Insulin Pump Provider" });
-                db.AddRange(new StatusReason { Code = 6, Name = "Licence Class" });
-                db.AddRange(new StatusReason { Code = 7, Name = "Self Declaration" });
-                db.AddRange(new StatusReason { Code = 8, Name = "Contact address or Identity Address Out of British Columbia" });
+                db.AddRange(
+                    new StatusReason { Code = 1, Name = "Automatic" },
+                    new StatusReason { Code = 2, Name = "Manual" },
+                    new StatusReason { Code = 3, Name = "Could not verify College Licence with PharmaNet" },
+                    new StatusReason { Code = 4, Name = "Not in PharmaNet" },
+                    new StatusReason { Code = 5, Name = "Name Discrepancy with PharmaNet College Licence" },
+                    new StatusReason { Code = 6, Name = "Birthdate Discrepancy with PharmaNet College Licence" },
+                    new StatusReason { Code = 7, Name = "Listed as Non-Practicing on PharmaNet College Licence" },
+                    new StatusReason { Code = 8, Name = "Insulin Pump Provider" },
+                    new StatusReason { Code = 9, Name = "Licence Class" },
+                    new StatusReason { Code = 10, Name = "Self Declaration" },
+                    new StatusReason { Code = 11, Name = "Contact address or Identity Address Out of British Columbia" }
+                );
+            }
+
+            if (!db.Set(typeof(PrivilegeGroup)).Any())
+            {
+                db.AddRange(new PrivilegeGroup { Id = 1, Name = "Submit and Access Claims" });
+                db.AddRange(new PrivilegeGroup { Id = 2, Name = "Record Medical History" });
+                db.AddRange(new PrivilegeGroup { Id = 3, Name = "Access Medical History" });
+                db.AddRange(new PrivilegeGroup { Id = 4, Name = "Can be RU (OBO)" });
+                db.AddRange(new PrivilegeGroup { Id = 5, Name = "Can be OBO (RU)" });
+            }
+
+            if (!db.Set(typeof(Privilege)).Any())
+            {
+                db.AddRange(new Privilege { Id = 1, PrivilegeGroupId = 1, TransactionType = "TAC", Description = "Update Claims History" });
+                db.AddRange(new Privilege { Id = 2, PrivilegeGroupId = 1, TransactionType = "TDT", Description = "Query Claims History" });
+                db.AddRange(new Privilege { Id = 3, PrivilegeGroupId = 1, TransactionType = "TPM", Description = "Pt Profile Mail Request" });
+                db.AddRange(new Privilege { Id = 4, PrivilegeGroupId = 1, TransactionType = "TCP", Description = "Maintain Pt Keyword" });
+                db.AddRange(new Privilege { Id = 5, PrivilegeGroupId = 2, TransactionType = "TPH", Description = "New PHN" });
+                db.AddRange(new Privilege { Id = 6, PrivilegeGroupId = 2, TransactionType = "TPA", Description = "Address Update" });
+                db.AddRange(new Privilege { Id = 7, PrivilegeGroupId = 2, TransactionType = "TMU", Description = "Medication Update" });
+                db.AddRange(new Privilege { Id = 8, PrivilegeGroupId = 3, TransactionType = "TDR", Description = "Drug Monograph" });
+                db.AddRange(new Privilege { Id = 9, PrivilegeGroupId = 3, TransactionType = "TID", Description = "Patient Details" });
+                db.AddRange(new Privilege { Id = 10, PrivilegeGroupId = 3, TransactionType = "TIL", Description = "Location Details" });
+                db.AddRange(new Privilege { Id = 11, PrivilegeGroupId = 3, TransactionType = "TIP", Description = "Prescriber Details" });
+                db.AddRange(new Privilege { Id = 12, PrivilegeGroupId = 3, TransactionType = "TPN", Description = "Name Search" });
+                db.AddRange(new Privilege { Id = 13, PrivilegeGroupId = 3, TransactionType = "TRP", Description = "Pt Profile Request" });
+                db.AddRange(new Privilege { Id = 14, PrivilegeGroupId = 3, TransactionType = "TBR", Description = "Most Recent Profile" });
+                db.AddRange(new Privilege { Id = 15, PrivilegeGroupId = 3, TransactionType = "TRS", Description = "Filled Elsewhere Profile" });
+                db.AddRange(new Privilege { Id = 16, PrivilegeGroupId = 3, TransactionType = "TDU", Description = "DUE Inquiry" });
+                db.AddRange(new Privilege { Id = 17, PrivilegeGroupId = 4, TransactionType = "RU", Description = "Can be RU (OBO)" });
+                db.AddRange(new Privilege { Id = 18, PrivilegeGroupId = 5, TransactionType = "OBO", Description = "Can be OBO (RU)" });
+            }
+
+            if (!db.Set(typeof(DefaultPrivilege)).Any())
+            {
+                // Non-practicing Licensed Practical Nurse
+                db.AddRange(new DefaultPrivilege { LicenseCode = 54, PrivilegeId = 18 });
+
+                // Full Pharmacist
+                db.AddRange(new DefaultPrivilege { LicenseCode = 25, PrivilegeId = 1 });
+                db.AddRange(new DefaultPrivilege { LicenseCode = 25, PrivilegeId = 2 });
+                db.AddRange(new DefaultPrivilege { LicenseCode = 25, PrivilegeId = 3 });
+                db.AddRange(new DefaultPrivilege { LicenseCode = 25, PrivilegeId = 4 });
+                db.AddRange(new DefaultPrivilege { LicenseCode = 25, PrivilegeId = 5 });
+                db.AddRange(new DefaultPrivilege { LicenseCode = 25, PrivilegeId = 6 });
+                db.AddRange(new DefaultPrivilege { LicenseCode = 25, PrivilegeId = 7 });
+                db.AddRange(new DefaultPrivilege { LicenseCode = 25, PrivilegeId = 8 });
+                db.AddRange(new DefaultPrivilege { LicenseCode = 25, PrivilegeId = 9 });
+                db.AddRange(new DefaultPrivilege { LicenseCode = 25, PrivilegeId = 10 });
+                db.AddRange(new DefaultPrivilege { LicenseCode = 25, PrivilegeId = 11 });
+                db.AddRange(new DefaultPrivilege { LicenseCode = 25, PrivilegeId = 12 });
+                db.AddRange(new DefaultPrivilege { LicenseCode = 25, PrivilegeId = 13 });
+                db.AddRange(new DefaultPrivilege { LicenseCode = 25, PrivilegeId = 14 });
+                db.AddRange(new DefaultPrivilege { LicenseCode = 25, PrivilegeId = 15 });
+                db.AddRange(new DefaultPrivilege { LicenseCode = 25, PrivilegeId = 16 });
+                db.AddRange(new DefaultPrivilege { LicenseCode = 25, PrivilegeId = 17 });
             }
 
             db.SaveChanges();

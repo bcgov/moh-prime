@@ -6,6 +6,5 @@ export interface EnrolmentStatus {
   statusCode: number;
   status: Config<number>;
   statusDate: string;
-  isCurrent: boolean;
   enrolmentStatusReasons: EnrolmentStatusReason[];
 }

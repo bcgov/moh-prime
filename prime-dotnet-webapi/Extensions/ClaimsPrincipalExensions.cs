@@ -2,6 +2,8 @@ using System;
 using System.Linq;
 using System.Security.Claims;
 
+using Prime.Models;
+
 namespace Prime
 {
     public static class ClaimsPrincipalExensions
@@ -13,6 +15,20 @@ namespace Prime
         {
             string userId = User?.Identity?.Name;
             return userId != null ? new Guid(userId) : Guid.Empty;
+        }
+
+        /// <summary>
+        /// Returns true if the logged in user is an admin, or if the user has the same UserId as the record
+        /// </summary>
+        public static bool CanAccess(this ClaimsPrincipal User, Enrollee enrollee)
+        {
+            if (User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE))
+            {
+                return true;
+            }
+
+            Guid PrimeUserId = User.GetPrimeUserId();
+            return !PrimeUserId.Equals(Guid.Empty) && PrimeUserId.Equals(enrollee.UserId);
         }
 
         public static bool HasAssuranceLevel(this ClaimsPrincipal User, int level)

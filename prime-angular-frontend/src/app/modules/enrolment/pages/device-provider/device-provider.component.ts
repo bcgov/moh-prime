@@ -10,6 +10,7 @@ import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmen
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 
 @Component({
   selector: 'app-device-provider',
@@ -59,7 +60,7 @@ export class DeviceProviderComponent extends BaseEnrolmentProfilePage implements
               : EnrolmentRoutes.SELF_DECLARATION;
             const routePath = (!this.isProfileComplete)
               ? nextRoutePath
-              : EnrolmentRoutes.REVIEW;
+              : EnrolmentRoutes.OVERVIEW;
             this.routeTo(routePath);
           },
           (error: any) => {
@@ -97,6 +98,6 @@ export class DeviceProviderComponent extends BaseEnrolmentProfilePage implements
 
     this.isProfileComplete = enrolment.profileCompleted;
     this.enrolmentStateService.enrolment = enrolment;
-    this.hasInitialStatus = enrolment.initialStatus;
+    this.isInitialEnrolment = enrolment.progressStatus !== ProgressStatus.FINISHED;
   }
 }

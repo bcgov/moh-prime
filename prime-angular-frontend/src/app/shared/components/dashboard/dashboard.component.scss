@@ -25,6 +25,17 @@
   }
 }
 
+.mat-nav-list {
+  &:not(:first-of-type) {
+    padding-top: 0;
+  }
+
+  .mat-list-item.disabled {
+    // Prevent interacting with the link
+    pointer-events: none;
+  }
+}
+
 @media print {
   .mat-sidenav-content {
     margin-left: 0 !important;

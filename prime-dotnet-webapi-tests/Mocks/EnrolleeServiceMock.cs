@@ -32,11 +32,10 @@ namespace PrimeTests.Mocks
 
         public Task<int?> CreateEnrolleeAsync(Enrollee enrollee)
         {
-            //add the ids, as this is just a fake implementation
-            int? enrolleeId = new Faker().Random.Int(MIN_ENROLMENT_ID, MAX_ENROLMENT_ID);
+            int? enrolleeId = GetNewId(this.GetHolder<int, Enrollee>().Keys);
             enrollee.Id = enrolleeId;
 
-            this.GetHolder<int, Enrollee>().Add((int)enrolleeId, enrollee);
+            this.GetHolder<int, Enrollee>().Add(enrolleeId.Value, enrollee);
             return Task.FromResult(enrolleeId);
         }
 
@@ -46,38 +45,43 @@ namespace PrimeTests.Mocks
             return Task.CompletedTask;
         }
 
-        public bool EnrolleeExists(int enrolleeId)
+        public Task<bool> EnrolleeExistsAsync(int enrolleeId)
         {
-            return this.GetHolder<int, Enrollee>().ContainsKey(enrolleeId);
+            return Task.FromResult(this.GetHolder<int, Enrollee>().ContainsKey(enrolleeId));
+        }
+
+        public Task<bool> EnrolleeUserIdExistsAsync(Guid userId)
+        {
+            var enrollees = this.GetHolder<int, Enrollee>().Values;
+            return Task.FromResult(enrollees.Any(e => e.UserId == userId));
         }
 
         public Task<Enrollee> GetEnrolleeAsync(int enrolleeId)
         {
             Enrollee enrollee = null;
-            if (this.GetHolder<int, Enrollee>().ContainsKey(enrolleeId))
-            {
-                enrollee = this.GetHolder<int, Enrollee>()[enrolleeId];
-            }
+            this.GetHolder<int, Enrollee>().TryGetValue(enrolleeId, out enrollee);
             return Task.FromResult(enrollee);
         }
 
         public Task<IEnumerable<Enrollee>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions)
         {
-            return Task.FromResult((IEnumerable<Enrollee>)this.GetHolder<int, Enrollee>().Values?.ToList());
+            IEnumerable<Enrollee> enrollees = this.GetHolder<int, Enrollee>().Values;
+            return Task.FromResult(enrollees);
         }
 
         public Task<int> UpdateEnrolleeAsync(Enrollee enrollee, bool profileCompleted)
         {
             int updated = 0;
-            int? enrolleeId = enrollee.Id;
-            if (enrolleeId != null)
+            if (enrollee.Id.HasValue)
             {
-                var found = this.GetHolder<int, Enrollee>().Remove((int)enrolleeId);
+                int id = enrollee.Id.Value;
+
+                var found = this.GetHolder<int, Enrollee>().Remove(id);
                 if (found)
                 {
                     updated = 1;
+                    this.GetHolder<int, Enrollee>().Add(id, enrollee);
                 }
-                this.GetHolder<int, Enrollee>().Add((int)enrolleeId, enrollee);
             }
             return Task.FromResult(updated);
         }
@@ -110,12 +114,10 @@ namespace PrimeTests.Mocks
 
         public Task<EnrolmentStatus> CreateEnrolmentStatusAsync(int enrolleeId, Status status)
         {
-            ICollection<Status> availableStatuses = new List<Status>();
-            Enrollee enrollee = null;
             EnrolmentStatus createdEnrolmentStatus = null;
             if (this.GetHolder<int, Enrollee>().ContainsKey(enrolleeId))
             {
-                enrollee = this.GetHolder<int, Enrollee>()[enrolleeId];
+                Enrollee enrollee = this.GetHolder<int, Enrollee>()[enrolleeId];
                 var currentStatusCode = enrollee.CurrentStatus?.StatusCode;
 
                 if (this.IsStatusChangeAllowed(this.GetHolder<short, Status>()[currentStatusCode ?? NULL_STATUS_CODE], status))
@@ -153,6 +155,46 @@ namespace PrimeTests.Mocks
                 return Task.FromResult(statusCodeToCheck.Equals(enrollee.CurrentStatus?.StatusCode));
             }
             return Task.FromResult(false);
+        }
+
+        public Task<IEnumerable<AdjudicatorNote>> GetEnrolleeAdjudicatorNotesAsync(Enrollee enrollee)
+        {
+            // TODO add proper tests, but need test spike. Add adjudicatorNote to fake db.
+            IEnumerable<AdjudicatorNote> notes = new[] { new AdjudicatorNote() };
+            return Task.FromResult(notes);
+        }
+
+        public Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, AdjudicatorNote adjudicatorNote)
+        {
+            // TODO add proper tests, but need test spike. Add adjudicatorNote to fake db.
+            return Task.FromResult(adjudicatorNote);
+        }
+
+        public Task<IEnrolleeNote> UpdateEnrolleeNoteAsync(int enrolleeId, IEnrolleeNote newNote)
+        {
+            // TODO add proper tests, but need test spike
+            IEnrolleeNote updatedNote = null;
+            if (this.GetHolder<int, Enrollee>().ContainsKey(enrolleeId))
+            {
+                var enrollee = this.GetHolder<int, Enrollee>()[enrolleeId];
+
+                if (newNote.GetType() == typeof(AccessAgreementNote))
+                {
+                    enrollee.AccessAgreementNote = (AccessAgreementNote)newNote;
+                }
+                else if (newNote.GetType() == typeof(EnrolmentCertificateNote))
+                {
+                    enrollee.EnrolmentCertificateNote = (EnrolmentCertificateNote)newNote;
+                }
+                else
+                {
+                    throw new ArgumentException("Enrollee note type is not recognized, or not allowed.");
+                }
+
+                updatedNote = newNote;
+            }
+
+            return Task.FromResult(updatedNote);
         }
     }
 }

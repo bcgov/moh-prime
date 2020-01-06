@@ -10,7 +10,9 @@ namespace Prime.Services
     {
         Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId);
 
-        bool EnrolleeExists(int enrolleeId);
+        Task<bool> EnrolleeExistsAsync(int enrolleeId);
+
+        Task<bool> EnrolleeUserIdExistsAsync(Guid userId);
 
         Task<Enrollee> GetEnrolleeAsync(int enrolleeId);
 
@@ -31,5 +33,11 @@ namespace Prime.Services
         bool IsStatusChangeAllowed(Status startingStatus, Status endingStatus);
 
         Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, short statusCodeToCheck);
+
+        Task<IEnumerable<AdjudicatorNote>> GetEnrolleeAdjudicatorNotesAsync(Enrollee enrollee);
+
+        Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, AdjudicatorNote adjudicatorNote);
+
+        Task<IEnrolleeNote> UpdateEnrolleeNoteAsync(int enrolleeId, IEnrolleeNote newNote);
     }
 }

@@ -16,6 +16,7 @@ pipeline {
             steps {
                 echo "Building ..."
                 //sh "./player.sh toolbelt sonar tools"
+                //sh "./player.sh toolbelt zap tools"
                 //sh "./player.sh toolbelt mailhog test"
                 //sh "./player.sh toolbelt schemaspy dev"
             }
@@ -24,9 +25,9 @@ pipeline {
             agent { label 'master' }
             steps {
                 echo "Nuking database ..."
-                //sh "./player.sh nukenpave postgres dev"
-                //sh "./player.sh nukenpave postgres test"
-                //sh "./player.sh nukenpave postgres prod"
+                //sh "./player.sh nukenpave database dev"
+                //sh "./player.sh nukenpave database test"
+                //sh "./player.sh nukenpave database prod"
             }
         }
         stage('Cleanup Branch') {
