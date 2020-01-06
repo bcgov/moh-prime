@@ -14,6 +14,7 @@ namespace Prime.Services
         private readonly IAutomaticAdjudicationService _automaticAdjudicationService;
         private readonly IEmailService _emailService;
         private readonly IPrivilegeService _privilegeService;
+        private readonly ITermsOfAccessService _termsOfAccessService;
 
         private class StatusWrapper
         {
@@ -26,12 +27,13 @@ namespace Prime.Services
         private static Status NULL_STATUS = new Status { Code = -1, Name = "No Status" };
 
         public DefaultEnrolleeService(
-            ApiDbContext context, IHttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService, IEmailService emailService, IPrivilegeService privilegeService)
+            ApiDbContext context, IHttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService, IEmailService emailService, IPrivilegeService privilegeService, ITermsOfAccessService termsOfAccessService)
             : base(context, httpContext)
         {
             _automaticAdjudicationService = automaticAdjudicationService;
             _emailService = emailService;
             _privilegeService = privilegeService;
+            _termsOfAccessService = termsOfAccessService;
         }
 
         private Dictionary<Status, StatusWrapper[]> GetWorkFlowStateMap()
@@ -41,7 +43,7 @@ namespace Prime.Services
                 // Construct the workflow map
                 // TODO Should be async
                 // TODO Need idea of new enrollee vs old enrollee baked into statuses
-                // TODO IN_PROGRESS should be NEW and potentiall prefix a duplicate set of enrolment lifecycle statuses
+                // TODO IN_PROGRESS should be NEW and potentially prefix a duplicate set of enrolment lifecycle statuses
                 Status IN_PROGRESS = _context.Statuses.Single(s => s.Code == Status.IN_PROGRESS_CODE);
                 Status SUBMITTED = _context.Statuses.Single(s => s.Code == Status.SUBMITTED_CODE);
                 Status APPROVED = _context.Statuses.Single(s => s.Code == Status.APPROVED_CODE);
@@ -385,6 +387,7 @@ namespace Prime.Services
                                 StatusReasonCode = StatusReason.MANUAL_CODE
                             }
                         };
+                        await _termsOfAccessService.SetEnrolleeTermsOfAccessAsync(enrollee);
                         break;
                     case Status.DECLINED_CODE:
                         await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
@@ -570,18 +573,10 @@ namespace Prime.Services
             return newNote;
         }
 
+        // TODO not required can invoke _termsOfAccessService directly in enrollee controller
         public async Task<TermsOfAccess> GetEnrolleeTermsOfAccessAsync(int enrolleeId)
-        { 
-            // TODO build out logic for extraction and storing
-
-            // Minimal extraction of terms of access for an enrollee to provide a response
-            return await _context.TermsOfAccess
-                .Include(t => t.GlobalClause)
-                .Include(t => t.UserClause)
-                .Include(t => t.TermsOfAccessLicenseClassClauses)
-                .Include(t => t.TermsOfAccessLimitsAndConditionsClauses)
-                .Where(t => t.EnrolleeId == enrolleeId)
-                .SingleOrDefaultAsync();
+        {
+            return await _termsOfAccessService.GetEnrolleeTermsOfAccessAsync(enrolleeId);
         }
     }
 }

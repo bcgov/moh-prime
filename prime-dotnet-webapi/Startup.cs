@@ -42,6 +42,7 @@ namespace Prime
             services.AddScoped<IEmailService, DefaultEmailService>();
             services.AddScoped<IPharmanetApiService, DefaultPharmanetApiService>();
             services.AddScoped<IPrivilegeService, DefaultPrivilegeService>();
+            services.AddScoped<ITermsOfAccessService, DefaultTermsOfAccessService>();
 
             services
                 .AddMvc()
