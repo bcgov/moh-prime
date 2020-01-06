@@ -27,12 +27,13 @@ namespace Prime.Services
 
         public async Task<TermsOfAccess> GetEnrolleeTermsOfAccessAsync(int enrolleeId)
         {
-            // TODO initially providing only minimal extraction of terms of access for API response
             return await _context.TermsOfAccess
                 .Include(t => t.GlobalClause)
                 .Include(t => t.UserClause)
                 .Include(t => t.TermsOfAccessLicenseClassClauses)
+                    .ThenInclude(tacc => tacc.LicenseClassClause)
                 .Include(t => t.TermsOfAccessLimitsAndConditionsClauses)
+                    .ThenInclude(talc => talc.LimitsConditionsClause)
                 .Where(t => t.EnrolleeId == enrolleeId)
                 .SingleOrDefaultAsync();
         }
