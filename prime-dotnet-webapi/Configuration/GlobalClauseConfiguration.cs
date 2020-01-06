@@ -5,13 +5,13 @@ using Prime.Models;
 
 namespace Prime.Configuration
 {
-    public class GlobalClauseConfiguration
+    public class GlobalClauseConfiguration : IEntityTypeConfiguration<GlobalClause>
     {
         private readonly Guid SYSTEM_USER = Guid.Empty;
 
         private readonly DateTime SEEDING_DATE = DateTime.Now;
 
-        public void Configure(EntityTypeBuilder<StatusReason> builder)
+        public void Configure(EntityTypeBuilder<GlobalClause> builder)
         {
             #region GlobalClauseSeed
             builder.HasData(

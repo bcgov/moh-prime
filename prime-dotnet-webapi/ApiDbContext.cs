@@ -133,6 +133,8 @@ namespace Prime
             modelBuilder.ApplyConfiguration(new PrivilegeConfiguration());
             modelBuilder.ApplyConfiguration(new DefaultPrivilegeConfiguration());
             modelBuilder.ApplyConfiguration(new AssignedPrivilegeConfiguration());
+            modelBuilder.ApplyConfiguration(new GlobalClauseConfiguration());
+            modelBuilder.ApplyConfiguration(new UserClauseConfiguration());
 
             #region Indexes
             modelBuilder.Entity<MailingAddress>()

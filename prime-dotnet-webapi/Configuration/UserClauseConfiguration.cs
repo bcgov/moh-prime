@@ -1,16 +1,17 @@
 using System;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Prime.Models;
 
 namespace Prime.Configuration
 {
-    public class UserClauseConfiguration
+    public class UserClauseConfiguration : IEntityTypeConfiguration<UserClause>
     {
         private readonly Guid SYSTEM_USER = Guid.Empty;
 
         private readonly DateTime SEEDING_DATE = DateTime.Now;
 
-        public void Configure(EntityTypeBuilder<StatusReason> builder)
+        public void Configure(EntityTypeBuilder<UserClause> builder)
         {
             #region UserClauseSeed
             builder.HasData(
