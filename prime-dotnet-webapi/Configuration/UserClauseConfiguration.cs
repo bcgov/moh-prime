@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Prime.Models;
 
-namespace Prime.Configuration
-{
     public class UserClauseConfiguration : IEntityTypeConfiguration<UserClause>
     {
         private readonly Guid SYSTEM_USER = Guid.Empty;
@@ -21,4 +19,3 @@ namespace Prime.Configuration
             #endregion
         }
     }
-}
