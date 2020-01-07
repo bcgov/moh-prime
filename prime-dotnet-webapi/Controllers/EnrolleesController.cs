@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -19,10 +17,12 @@ namespace Prime.Controllers
     public class EnrolleesController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
+        private readonly ITermsOfAccessService _termsOfAccessService;
 
-        public EnrolleesController(IEnrolleeService enrolleeService)
+        public EnrolleesController(IEnrolleeService enrolleeService, ITermsOfAccessService termsOfAccessService)
         {
             _enrolleeService = enrolleeService;
+            _termsOfAccessService = termsOfAccessService;
         }
 
         // GET: api/Enrollees
@@ -476,7 +476,7 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            var termsOfAccess = await _enrolleeService.GetEnrolleeTermsOfAccessAsync(enrolleeId);
+            var termsOfAccess = await _termsOfAccessService.GetEnrolleeTermsOfAccessAsync(enrolleeId);
 
             return Ok(new ApiOkResponse<TermsOfAccess>(termsOfAccess));
         }
