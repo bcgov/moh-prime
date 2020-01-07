@@ -15,7 +15,7 @@ namespace Prime.Configuration
         {
             #region GlobalClauseSeed
             builder.HasData(
-                new GlobalClause { Clause = "Global clause", EffectiveDate = DateTime.Now, CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE }
+                new GlobalClause { Id = 1, Clause = "Global clause", EffectiveDate = DateTime.Now, CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE }
             );
             #endregion
         }
