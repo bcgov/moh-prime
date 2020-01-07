@@ -3,12 +3,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Prime.Models.AccessAgreement;
 
-public enum UserType
-{
-    MOA,
-    OBO
-}
-
 namespace Prime.Models
 {
     [Table("UserClauses")]
@@ -23,8 +17,7 @@ namespace Prime.Models
         [Required]
         public DateTime EffectiveDate { get; set; }
 
-        // TODO temporary user type reference
         [Required]
-        public UserType UserType { get; set; }
+        public string EnrolleeClassification { get; set; }
     }
 }

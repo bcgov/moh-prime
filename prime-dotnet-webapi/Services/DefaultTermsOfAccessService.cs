@@ -53,24 +53,12 @@ namespace Prime.Services
 
         private async Task<UserClause> GetUserClause(Enrollee enrollee)
         {
-            // TODO should be based on user type
-            // var userType = DetermineEnrolleeUserType(enrollee);
+            var userType = enrollee.EnrolleeClassification;
 
             return await _context.UserClauses
-                // TODO add enum user type to UserClause
-                // .Where(g => g.UserType == userType)
+                .Where(g => g.EnrolleeClassification == enrollee.EnrolleeClassification)
                 .OrderByDescending(g => g.EffectiveDate)
                 .FirstOrDefaultAsync();
-        }
-
-        // TODO split this method out into the enrollee service
-        private string DetermineEnrolleeUserType(Enrollee enrollee)
-        {
-            // TODO what are the rules around user types outside of certifications?
-            return (enrollee.Certifications.Count > 0)
-                // TODO add enum for user types MOA and OBO strings found throughout application
-                ? "MOA"
-                : "OBO";
         }
 
         private async Task<IEnumerable<TermsOfAccessLicenseClassClause>> GetTermsOfAccessLicenseClassClauses(Enrollee enrollee, TermsOfAccess termsOfAccess)
