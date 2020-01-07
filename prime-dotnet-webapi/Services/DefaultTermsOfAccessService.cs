@@ -13,7 +13,6 @@ namespace Prime.Services
             ApiDbContext context, IHttpContextAccessor httpContext) : base(context, httpContext)
         { }
 
-        // TODO type of license classes needs to be added to the license clases clause for selection
         public async Task SetEnrolleeTermsOfAccessAsync(Enrollee enrollee)
         {
             var termsOfAccess = new TermsOfAccess { Enrollee = enrollee };
@@ -61,24 +60,28 @@ namespace Prime.Services
                 .FirstOrDefaultAsync();
         }
 
+        // TODO no logic for how license class clauses are chosen
         private async Task<IEnumerable<TermsOfAccessLicenseClassClause>> GetTermsOfAccessLicenseClassClauses(Enrollee enrollee, TermsOfAccess termsOfAccess)
         {
             var licenseClassClauses = await _context.LicenseClassClauses
-                // TODO how are these chosen?
                 .Take(2)
                 .ToListAsync();
 
             return licenseClassClauses.Select(lcc => new TermsOfAccessLicenseClassClause { TermsOfAccess = termsOfAccess, LicenseClassClause = lcc });
         }
 
+        // TODO no logic for how limits and conditions clauses are chosen
         private async Task<IEnumerable<TermsOfAccessLimitsAndConditionsClause>> GetTermsOfAccessLimitsAndConditionsClauses(Enrollee enrollee, TermsOfAccess termsOfAccess)
         {
             var limitsAndConditionsClauses = await _context.LimitsAndConditionsClauses
-                // TODO how are these chosen?
                 .Take(1)
                 .ToListAsync();
 
-            return limitsAndConditionsClauses.Select(lacc => new TermsOfAccessLimitsAndConditionsClause { TermsOfAccess = termsOfAccess, LimitsAndConditionsClause = lacc });
+            return limitsAndConditionsClauses.Select(lacc => new TermsOfAccessLimitsAndConditionsClause
+            {
+                TermsOfAccess = termsOfAccess,
+                LimitsAndConditionsClause = lacc
+            });
         }
     }
 }

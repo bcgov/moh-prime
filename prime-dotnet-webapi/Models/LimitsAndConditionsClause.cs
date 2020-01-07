@@ -6,7 +6,7 @@ using Prime.Models.AccessAgreement;
 
 namespace Prime.Models
 {
-    [Table("LimitsAndConditionsClauses")]
+    [Table("LimitsAndConditionsClause")]
     public class LimitsAndConditionsClause : BaseAuditable, IAccessClause
     {
         public LimitsAndConditionsClause()
