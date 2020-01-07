@@ -14,6 +14,8 @@ namespace Prime.Services
 
         public async Task<bool> SetEnrolleeTermsOfAccessAsync(Enrollee enrollee)
         {
+            // TODO seed with lorem ipsum global clause (DONE)
+            // TODO seed with lorem ipsum user clause (DONE)
             // TODO seed with lorem ipsum licence class clauses
             // TODO seed with lorem ipsum licence class clauses
             // TODO seed with lorem ipsum licence class clauses
