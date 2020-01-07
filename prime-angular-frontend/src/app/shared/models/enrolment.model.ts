@@ -6,6 +6,7 @@ import { CollegeCertification } from '@enrolment/shared/models/college-certifica
 import { Job } from '@enrolment/shared/models/job.model';
 import { Organization } from '@enrolment/shared/models/organization.model';
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
+import { Privilege } from '@enrolment/shared/models/privilege.model';
 import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 
 
@@ -27,6 +28,7 @@ export interface HttpEnrollee extends Enrollee {
   hasPharmaNetSuspended: boolean;
   hasPharmaNetSuspendedDetails: boolean;
   organizations: Organization[];
+  privileges: Privilege[];
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;
   availableStatuses: Config<number>[];
@@ -58,6 +60,7 @@ export interface Enrolment {
   hasPharmaNetSuspended: boolean;
   hasPharmaNetSuspendedDetails: boolean;
   organizations: Organization[];
+  privileges: Privilege[];
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;
   availableStatuses: Config<number>[];

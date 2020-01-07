@@ -13,10 +13,14 @@ namespace Prime.Services
         private static readonly TimeSpan TOKEN_LIFESPAN = TimeSpan.FromDays(7);
         private static readonly int MAX_VIEWS = 3;
 
+        private readonly IPrivilegeService _privilegeService;
+
         public DefaultEnrolmentCertificateService(
-            ApiDbContext context, IHttpContextAccessor httpContext)
+            ApiDbContext context, IHttpContextAccessor httpContext, IPrivilegeService privilegeService)
             : base(context, httpContext)
-        { }
+        {
+            _privilegeService = privilegeService;
+        }
 
         public async Task<EnrolmentCertificate> GetEnrolmentCertificateAsync(Guid accessTokenId)
         {
@@ -30,6 +34,7 @@ namespace Prime.Services
                 return null;
             }
 
+            enrollee.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(enrollee);
             await UpdateTokenMetadataAsync(token);
 
             if (token.Active)
