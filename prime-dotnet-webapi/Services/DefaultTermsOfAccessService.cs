@@ -63,13 +63,12 @@ namespace Prime.Services
                 .FirstOrDefaultAsync();
         }
 
-        // TODO split this out into a utility
+        // TODO split this method out into the enrollee service
         private string DetermineEnrolleeUserType(Enrollee enrollee)
         {
             // TODO what are the rules around user types outside of certifications?
             return (enrollee.Certifications.Count > 0)
-                // TODO add enum for user types MOA and OBO strings found throughout
-                // application since it is referenced throughout as strings
+                // TODO add enum for user types MOA and OBO strings found throughout application
                 ? "MOA"
                 : "OBO";
         }
