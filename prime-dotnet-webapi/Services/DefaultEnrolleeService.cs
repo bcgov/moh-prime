@@ -572,11 +572,5 @@ namespace Prime.Services
 
             return newNote;
         }
-
-        // TODO not required can invoke _termsOfAccessService directly in enrollee controller
-        public async Task<TermsOfAccess> GetEnrolleeTermsOfAccessAsync(int enrolleeId)
-        {
-            return await _termsOfAccessService.GetEnrolleeTermsOfAccessAsync(enrolleeId);
-        }
     }
 }
