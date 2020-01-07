@@ -18,35 +18,12 @@ namespace Prime.Services
         {
             var termsOfAccess = new TermsOfAccess { Enrollee = enrollee };
 
-            termsOfAccess.GlobalClause = await _context.GlobalClauses
-                .OrderByDescending(g => g.EffectiveDate)
-                .FirstOrDefaultAsync();
-
-            // TODO should be based on user type
-            // var userType = DetermineEnrolleeUserType(enrollee);
-            termsOfAccess.UserClause = await _context.UserClauses
-                // TODO add enum user type to UserClause
-                // .Where(g => g.UserType == userType)
-                .OrderByDescending(g => g.EffectiveDate)
-                .FirstOrDefaultAsync();
-
-            var licenseClassClauses = await _context.LicenseClassClauses
-                // TODO how are these chosen?
-                .Take(2)
-                .ToListAsync();
-            var termsOfAccessLicenseClassClauses = licenseClassClauses
-                .Select(lcc => new TermsOfAccessLicenseClassClause { TermsOfAccess = termsOfAccess, LicenseClassClause = lcc });
+            termsOfAccess.GlobalClause = await GetGlobalClause();
+            termsOfAccess.UserClause = await GetUserClause(enrollee);
             termsOfAccess.TermsOfAccessLicenseClassClauses
-                .AddRange(termsOfAccessLicenseClassClauses);
-
-            var limitsAndConditionsClauses = await _context.LimitsAndConditionsClauses
-                // TODO how are these chosen?
-                .Take(1)
-                .ToListAsync();
-            var termsOfAccessLimitsAndConditionsClauses = limitsAndConditionsClauses
-                .Select(lacc => new TermsOfAccessLimitsAndConditionsClause { TermsOfAccess = termsOfAccess, LimitsAndConditionsClause = lacc });
+                .AddRange(await GetTermsOfAccessLicenseClassClauses(enrollee, termsOfAccess));
             termsOfAccess.TermsOfAccessLimitsAndConditionsClauses
-                .AddRange(termsOfAccessLimitsAndConditionsClauses);
+                .AddRange(await GetTermsOfAccessLimitsAndConditionsClauses(enrollee, termsOfAccess));
 
             _context.Add(termsOfAccess);
 
@@ -66,6 +43,26 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
         }
 
+        private async Task<GlobalClause> GetGlobalClause()
+        {
+            return await _context.GlobalClauses
+                .OrderByDescending(g => g.EffectiveDate)
+                .FirstOrDefaultAsync();
+        }
+
+        private async Task<UserClause> GetUserClause(Enrollee enrollee)
+        {
+            // TODO should be based on user type
+            // var userType = DetermineEnrolleeUserType(enrollee);
+
+            return await _context.UserClauses
+                // TODO add enum user type to UserClause
+                // .Where(g => g.UserType == userType)
+                .OrderByDescending(g => g.EffectiveDate)
+                .FirstOrDefaultAsync();
+        }
+
+        // TODO split this out into a utility
         private string DetermineEnrolleeUserType(Enrollee enrollee)
         {
             // TODO what are the rules around user types outside of certifications?
@@ -75,7 +72,24 @@ namespace Prime.Services
                 : "OBO";
         }
 
-        // TODO private method to determine the license class clause(s)
-        // TODO private method to determine the limits and conditions clause(s)
+        private async Task<IEnumerable<TermsOfAccessLicenseClassClause>> GetTermsOfAccessLicenseClassClauses(Enrollee enrollee, TermsOfAccess termsOfAccess)
+        {
+            var licenseClassClauses = await _context.LicenseClassClauses
+                // TODO how are these chosen?
+                .Take(2)
+                .ToListAsync();
+
+            return licenseClassClauses.Select(lcc => new TermsOfAccessLicenseClassClause { TermsOfAccess = termsOfAccess, LicenseClassClause = lcc });
+        }
+
+        private async Task<IEnumerable<TermsOfAccessLimitsAndConditionsClause>> GetTermsOfAccessLimitsAndConditionsClauses(Enrollee enrollee, TermsOfAccess termsOfAccess)
+        {
+            var limitsAndConditionsClauses = await _context.LimitsAndConditionsClauses
+                // TODO how are these chosen?
+                .Take(1)
+                .ToListAsync();
+
+            return limitsAndConditionsClauses.Select(lacc => new TermsOfAccessLimitsAndConditionsClause { TermsOfAccess = termsOfAccess, LimitsAndConditionsClause = lacc });
+        }
     }
 }
