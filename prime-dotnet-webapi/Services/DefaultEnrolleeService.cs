@@ -447,7 +447,7 @@ namespace Prime.Services
             return statusCodeToCheck.Equals(currentStatusCode);
         }
 
-        // TODO refine so not 90% copy of original IsEnrolleeInStatusAsync
+        // TODO refine so not a 90% copy of original IsEnrolleeInStatusAsync
         public async Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, ICollection<short> statusCodesToCheck)
         {
             var enrollee = await _context.Enrollees
