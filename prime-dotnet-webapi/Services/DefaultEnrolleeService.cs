@@ -399,10 +399,6 @@ namespace Prime.Services
             }
 
             var created = await _context.SaveChangesAsync();
-            if (created < 1)
-            {
-                throw new InvalidOperationException("Could not create enrolment status.");
-            }
 
             // Enrollee just left manual adjudication, inform the enrollee
             if (oldStatus?.Code == Status.SUBMITTED_CODE)
