@@ -8,7 +8,7 @@
 
       <app-page-header>Access Agreement</app-page-header>
 
-      <ng-container *ngIf="currentPage > 0; else preamble">
+      <!-- <ng-container *ngIf="currentPage > 0; else preamble">
 
         <ng-container *ngIf="enrolment.enrolleeClassification === EnrolleeClassification.MOA">
           <app-moa-access-agreement [currentPage]="currentPage"
@@ -19,7 +19,12 @@
                                    (changed)="onPageChange($event)"></app-ru-access-agreement>
         </ng-container>
 
-      </ng-container>
+      </ng-container> -->
+
+      <app-global-clause clause=globalClause()></app-global-clause>
+      <app-user-clause></app-user-clause>
+      <app-licence-class-clause></app-licence-class-clause>
+      <app-limits-and-conditions-clause></app-limits-and-conditions-clause>
 
       <ng-template #preamble>
 

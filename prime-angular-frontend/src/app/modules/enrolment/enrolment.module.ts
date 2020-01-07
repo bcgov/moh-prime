@@ -26,6 +26,10 @@ import { EnrolmentLogHistoryComponent } from './pages/enrolment-log-history/enro
 import { PageFooterComponent } from './shared/components/page-footer/page-footer.component';
 import { CollegeCertificationFormComponent } from './shared/components/college-certification-form/college-certification-form.component';
 import { JobFormComponent } from './shared/components/job-form/job-form.component';
+import { GlobalClauseComponent } from './pages/access-agreement/components/global-clause/global-clause.component';
+import { LicenceClassClauseComponent } from './pages/access-agreement/components/licence-class-clause/licence-class-clause.component';
+import { LimitsAndConditionsClauseComponent } from './pages/access-agreement/components/limits-and-conditions-clause/limits-and-conditions-clause.component';
+import { UserClauseComponent } from './pages/access-agreement/components/user-clause/user-clause.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +54,11 @@ import { JobFormComponent } from './shared/components/job-form/job-form.componen
     EnrolmentLogHistoryComponent,
     PageFooterComponent,
     CollegeCertificationFormComponent,
-    JobFormComponent
+    JobFormComponent,
+    GlobalClauseComponent,
+    LicenceClassClauseComponent,
+    LimitsAndConditionsClauseComponent,
+    UserClauseComponent
   ],
   imports: [
     SharedModule,
