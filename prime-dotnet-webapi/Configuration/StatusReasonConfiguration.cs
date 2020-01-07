@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Prime.Models;
 
-namespace Prime
+namespace Prime.Configuration
 {
     public class StatusReasonConfiguration : IEntityTypeConfiguration<StatusReason>
     {

@@ -7,12 +7,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Prime.Models;
 
-namespace Prime 
+namespace Prime.Configuration
 {
     public class DefaultPrivilegeConfiguration : IEntityTypeConfiguration<DefaultPrivilege>
     {
         private readonly Guid SYSTEM_USER = Guid.Empty;
-
         private readonly DateTime SEEDING_DATE = DateTime.Now;
 
         public void Configure(EntityTypeBuilder<DefaultPrivilege> builder)
@@ -29,7 +28,6 @@ namespace Prime
                 .WithMany(l => l.DefaultPrivileges)
                 .HasForeignKey(dp => dp.LicenseCode);
 
-            #region DefaultPrivilegeSeed
             builder.HasData(
                 // Non-practicing pharmacist
                 new DefaultPrivilege { LicenseCode = 30, PrivilegeId = 18, CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
@@ -727,9 +725,7 @@ namespace Prime
                 new DefaultPrivilege { LicenseCode = 56, PrivilegeId = 15, CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
                 new DefaultPrivilege { LicenseCode = 56, PrivilegeId = 16, CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
                 new DefaultPrivilege { LicenseCode = 56, PrivilegeId = 17, CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE }
-
             );
-            #endregion
         }
     }
 

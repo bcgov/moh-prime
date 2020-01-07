@@ -6,22 +6,19 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Prime.Models;
-namespace Prime 
+namespace Prime.Configuration
 {
     public class PrivilegeConfiguration : IEntityTypeConfiguration<Privilege>
     {
         private readonly Guid SYSTEM_USER = Guid.Empty;
-
         private readonly DateTime SEEDING_DATE = DateTime.Now;
 
         public void Configure(EntityTypeBuilder<Privilege> builder)
         {
-            // Privileges
             builder.HasOne(p => p.PrivilegeGroup)
                     .WithMany(pg => pg.Privileges)
                     .HasForeignKey(p => p.PrivilegeGroupId);
 
-            #region PrivilegeSeed
             builder.HasData(
                 new Privilege { Id = 1, PrivilegeGroupId = 1, TransactionType = "TAC", Description = "Update Claims History", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
                 new Privilege { Id = 2, PrivilegeGroupId = 1, TransactionType = "TDT", Description = "Query Claims History", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
@@ -41,8 +38,7 @@ namespace Prime
                 new Privilege { Id = 16, PrivilegeGroupId = 3, TransactionType = "TDU", Description = "DUE Inquiry", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
                 new Privilege { Id = 17, PrivilegeGroupId = 4, TransactionType = "RU", Description = "Can be RU (OBO)", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
                 new Privilege { Id = 18, PrivilegeGroupId = 5, TransactionType = "OBO", Description = "Can be OBO (RU)", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE }
-                );
-            #endregion
+            );
         }
     }
 }

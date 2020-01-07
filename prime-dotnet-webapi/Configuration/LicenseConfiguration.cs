@@ -3,17 +3,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Prime.Models;
 
-namespace Prime 
+namespace Prime.Configuration
 {
     public class LicenseConfiguration : IEntityTypeConfiguration<License>
     {
         private readonly Guid SYSTEM_USER = Guid.Empty;
-
         private readonly DateTime SEEDING_DATE = DateTime.Now;
 
         public void Configure(EntityTypeBuilder<License> builder)
         {
-            #region LicenseSeed
             builder.HasData(
                 new License { Code = 1, Name = "Full - Family", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
                 new License { Code = 2, Name = "Full - Specialty", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
@@ -71,8 +69,7 @@ namespace Prime
                 new License { Code = 54, Name = "Non-Practicing Licensed Practical Nurse", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
                 new License { Code = 55, Name = "Temporary Licensed Practical Nurse (Emergency)", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
                 new License { Code = 56, Name = "Temporary Licensed Practical Nurse (Special Event)", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE }
-                );
-            #endregion
+            );
         }
     }
 }

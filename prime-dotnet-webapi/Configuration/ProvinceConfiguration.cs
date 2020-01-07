@@ -2,17 +2,15 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Prime.Models;
-namespace Prime
+namespace Prime.Configuration
 {
     public class ProvinceConfiguration : IEntityTypeConfiguration<Province>
     {
         private readonly Guid SYSTEM_USER = Guid.Empty;
-
         private readonly DateTime SEEDING_DATE = DateTime.Now;
 
         public void Configure(EntityTypeBuilder<Province> builder)
         {
-            #region ProvinceSeed
             builder.HasData(
                 new Province { Code = "AB", CountryCode = "CA", Name = "Alberta", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
                 new Province { Code = "BC", CountryCode = "CA", Name = "British Columbia", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
@@ -84,8 +82,7 @@ namespace Prime
                 new Province { Code = "WV", CountryCode = "US", Name = "West Virginia", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
                 new Province { Code = "WI", CountryCode = "US", Name = "Wisconsin", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
                 new Province { Code = "WY", CountryCode = "US", Name = "Wyoming", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE }
-                );
-            #endregion
+            );
         }
     }
 }

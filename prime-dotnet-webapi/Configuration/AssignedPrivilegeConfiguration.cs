@@ -6,11 +6,11 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Prime.Models;
-namespace Prime {
+namespace Prime.Configuration
+{
     public class AssignedPrivilegeConfiguration : IEntityTypeConfiguration<AssignedPrivilege>
     {
         private readonly Guid SYSTEM_USER = Guid.Empty;
-
         private readonly DateTime SEEDING_DATE = DateTime.Now;
 
         public void Configure(EntityTypeBuilder<AssignedPrivilege> builder)
