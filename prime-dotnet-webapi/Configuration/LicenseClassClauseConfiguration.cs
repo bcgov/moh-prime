@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Prime.Models;
 
-public class LicenceClassClauseConfiguration : IEntityTypeConfiguration<LicenseClassClause>
+public class LicenseClassClauseConfiguration : IEntityTypeConfiguration<LicenseClassClause>
 {
     private readonly Guid SYSTEM_USER = Guid.Empty;
 

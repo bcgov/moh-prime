@@ -14,7 +14,7 @@ namespace Prime.Services
         { }
 
         // TODO type of license classes needs to be added to the license clases clause for selection
-        public async Task CreateEnrolleeTermsOfAccessAsync(Enrollee enrollee)
+        public async Task SetEnrolleeTermsOfAccessAsync(Enrollee enrollee)
         {
             var termsOfAccess = new TermsOfAccess { Enrollee = enrollee };
 
@@ -30,11 +30,11 @@ namespace Prime.Services
                 .OrderByDescending(g => g.EffectiveDate)
                 .FirstOrDefaultAsync();
 
-            var licenceClassClauses = await _context.LicenceClassClauses
+            var licenseClassClauses = await _context.LicenseClassClauses
                 // TODO how are these chosen?
                 .Take(2)
                 .ToListAsync();
-            var termsOfAccessLicenseClassClauses = licenceClassClauses
+            var termsOfAccessLicenseClassClauses = licenseClassClauses
                 .Select(lcc => new TermsOfAccessLicenseClassClause { TermsOfAccess = termsOfAccess, LicenseClassClause = lcc });
             termsOfAccess.TermsOfAccessLicenseClassClauses
                 .AddRange(termsOfAccessLicenseClassClauses);
