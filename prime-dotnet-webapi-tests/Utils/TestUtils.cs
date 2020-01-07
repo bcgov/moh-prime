@@ -115,15 +115,15 @@ namespace PrimeTests.Utils
             identity.RemoveClaim(claim);
         }
 
-        public static int? CreateEnrollee(ApiDbContext apiDbContext, HttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService, IEmailService emailService, IPrivilegeService privilegeService)
+        public static int? CreateEnrollee(ApiDbContext apiDbContext, HttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService, IEmailService emailService, IPrivilegeService privilegeService, ITermsOfAccessService termsOfAccessService)
         {
-            return new DefaultEnrolleeService(apiDbContext, httpContext, automaticAdjudicationService, emailService, privilegeService)
+            return new DefaultEnrolleeService(apiDbContext, httpContext, automaticAdjudicationService, emailService, privilegeService, termsOfAccessService)
                 .CreateEnrolleeAsync(TestUtils.EnrolleeFaker.Generate()).Result;
         }
 
-        public static Enrollee GetEnrolleeById(ApiDbContext apiDbContext, HttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService, int enrolmentId, IEmailService emailService, IPrivilegeService privilegeService)
+        public static Enrollee GetEnrolleeById(ApiDbContext apiDbContext, HttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService, int enrolmentId, IEmailService emailService, IPrivilegeService privilegeService, ITermsOfAccessService termsOfAccessService)
         {
-            return new DefaultEnrolleeService(apiDbContext, httpContext, automaticAdjudicationService, emailService, privilegeService)
+            return new DefaultEnrolleeService(apiDbContext, httpContext, automaticAdjudicationService, emailService, privilegeService, termsOfAccessService)
                 .GetEnrolleeAsync(enrolmentId).Result;
         }
 
