@@ -25,11 +25,19 @@ namespace Prime.Migrations
                     b.Property<int?>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("CreatedTimeStamp");
+
+                    b.Property<Guid>("CreatedUserId");
+
                     b.Property<int>("EnrolleeId");
 
                     b.Property<string>("Note");
 
                     b.Property<DateTime>("NoteDate");
+
+                    b.Property<DateTime>("UpdatedTimeStamp");
+
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.HasKey("Id");
 
@@ -88,12 +96,20 @@ namespace Prime.Migrations
                     b.Property<int?>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("CreatedTimeStamp");
+
+                    b.Property<Guid>("CreatedUserId");
+
                     b.Property<int>("EnrolleeId");
 
                     b.Property<string>("Note")
                         .IsRequired();
 
                     b.Property<DateTime>("NoteDate");
+
+                    b.Property<DateTime>("UpdatedTimeStamp");
+
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.HasKey("Id");
 
@@ -189,31 +205,31 @@ namespace Prime.Migrations
                         new
                         {
                             Code = (short)1,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 567, DateTimeKind.Local).AddTicks(6503),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 943, DateTimeKind.Local).AddTicks(6660),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "College of Physicians and Surgeons of BC (CPSBC)",
                             Prefix = "91",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 567, DateTimeKind.Local).AddTicks(6503),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 943, DateTimeKind.Local).AddTicks(6660),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)2,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 567, DateTimeKind.Local).AddTicks(6503),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 943, DateTimeKind.Local).AddTicks(6660),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "College of Pharmacists of BC (CPBC)",
                             Prefix = "P1",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 567, DateTimeKind.Local).AddTicks(6503),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 943, DateTimeKind.Local).AddTicks(6660),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)3,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 567, DateTimeKind.Local).AddTicks(6503),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 943, DateTimeKind.Local).AddTicks(6660),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "BC College of Nursing Professionals (BCCNP)",
                             Prefix = "96",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 567, DateTimeKind.Local).AddTicks(6503),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 943, DateTimeKind.Local).AddTicks(6660),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
@@ -243,504 +259,504 @@ namespace Prime.Migrations
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)1,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)2,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)3,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)4,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)5,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)6,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)7,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)8,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)9,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)10,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)11,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)12,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)13,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)14,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)15,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)16,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)17,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)18,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)19,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)20,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)21,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)22,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)23,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)1,
                             LicenseCode = (short)24,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)2,
                             LicenseCode = (short)25,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)2,
                             LicenseCode = (short)26,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)2,
                             LicenseCode = (short)27,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)2,
                             LicenseCode = (short)28,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)2,
                             LicenseCode = (short)29,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)2,
                             LicenseCode = (short)30,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)2,
                             LicenseCode = (short)31,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)32,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)33,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)34,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)35,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)36,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)37,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)38,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)39,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)40,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)41,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)42,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)43,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)44,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)45,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)46,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)47,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)48,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)49,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)50,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)51,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)52,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)53,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)54,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)55,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             LicenseCode = (short)56,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 571, DateTimeKind.Local).AddTicks(4804),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 951, DateTimeKind.Local).AddTicks(6280),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
@@ -770,36 +786,36 @@ namespace Prime.Migrations
                         {
                             CollegeCode = (short)3,
                             PracticeCode = (short)1,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 577, DateTimeKind.Local).AddTicks(8148),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 965, DateTimeKind.Local).AddTicks(4700),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 577, DateTimeKind.Local).AddTicks(8148),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 965, DateTimeKind.Local).AddTicks(4700),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             PracticeCode = (short)2,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 577, DateTimeKind.Local).AddTicks(8148),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 965, DateTimeKind.Local).AddTicks(4700),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 577, DateTimeKind.Local).AddTicks(8148),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 965, DateTimeKind.Local).AddTicks(4700),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             PracticeCode = (short)3,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 577, DateTimeKind.Local).AddTicks(8148),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 965, DateTimeKind.Local).AddTicks(4700),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 577, DateTimeKind.Local).AddTicks(8148),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 965, DateTimeKind.Local).AddTicks(4700),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             CollegeCode = (short)3,
                             PracticeCode = (short)4,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 577, DateTimeKind.Local).AddTicks(8148),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 965, DateTimeKind.Local).AddTicks(4700),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 577, DateTimeKind.Local).AddTicks(8148),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 965, DateTimeKind.Local).AddTicks(4700),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
@@ -828,19 +844,19 @@ namespace Prime.Migrations
                         new
                         {
                             Code = "CA",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 583, DateTimeKind.Local).AddTicks(8341),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 976, DateTimeKind.Local).AddTicks(4260),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Canada",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 583, DateTimeKind.Local).AddTicks(8341),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 976, DateTimeKind.Local).AddTicks(4260),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 583, DateTimeKind.Local).AddTicks(8341),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 976, DateTimeKind.Local).AddTicks(4260),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "United States",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 583, DateTimeKind.Local).AddTicks(8341),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 976, DateTimeKind.Local).AddTicks(4260),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
@@ -870,5301 +886,5301 @@ namespace Prime.Migrations
                         {
                             PrivilegeId = 18,
                             LicenseCode = (short)30,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 18,
                             LicenseCode = (short)31,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 18,
                             LicenseCode = (short)20,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 18,
                             LicenseCode = (short)21,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 18,
                             LicenseCode = (short)23,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 18,
                             LicenseCode = (short)43,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 18,
                             LicenseCode = (short)49,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 18,
                             LicenseCode = (short)54,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 1,
                             LicenseCode = (short)25,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 2,
                             LicenseCode = (short)25,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 3,
                             LicenseCode = (short)25,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 4,
                             LicenseCode = (short)25,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)25,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)25,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)25,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)25,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)25,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)25,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)25,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)25,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)25,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)25,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)25,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)25,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)25,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 1,
                             LicenseCode = (short)26,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 2,
                             LicenseCode = (short)26,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 3,
                             LicenseCode = (short)26,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 4,
                             LicenseCode = (short)26,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)26,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)26,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)26,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)26,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)26,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)26,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)26,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)26,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)26,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)26,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)26,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)26,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)26,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 1,
                             LicenseCode = (short)27,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 2,
                             LicenseCode = (short)27,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 3,
                             LicenseCode = (short)27,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 4,
                             LicenseCode = (short)27,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)27,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)27,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)27,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)27,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)27,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)27,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)27,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)27,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)27,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)27,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)27,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)27,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)27,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 1,
                             LicenseCode = (short)28,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 2,
                             LicenseCode = (short)28,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 3,
                             LicenseCode = (short)28,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 4,
                             LicenseCode = (short)28,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)28,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)28,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)28,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)28,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)28,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)28,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)28,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)28,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)28,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)28,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)28,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)28,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)28,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 1,
                             LicenseCode = (short)29,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 2,
                             LicenseCode = (short)29,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 3,
                             LicenseCode = (short)29,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 4,
                             LicenseCode = (short)29,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)29,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)29,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)29,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)29,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)29,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)29,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)29,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)29,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)29,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)29,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)29,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)29,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)29,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)1,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)1,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)1,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)1,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)1,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)1,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)1,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)1,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)1,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)1,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)1,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)1,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)1,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)2,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)2,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)2,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)2,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)2,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)2,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)2,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)2,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)2,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)2,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)2,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)2,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)2,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)3,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)3,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)3,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)3,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)3,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)3,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)3,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)3,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)3,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)3,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)3,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)3,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)3,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)4,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)4,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)4,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)4,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)4,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)4,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)4,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)4,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)4,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)4,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)4,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)4,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)4,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)5,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)5,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)5,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)5,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)5,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)5,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)5,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)5,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)5,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)5,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)5,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)5,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)5,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)6,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)6,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)6,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)6,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)6,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)6,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)6,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)6,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)6,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)6,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)6,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)6,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)6,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)7,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)7,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)7,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)7,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)7,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)7,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)7,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)7,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)7,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)7,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)7,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)7,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)7,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)8,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)8,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)8,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)8,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)8,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)8,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)8,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)8,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)8,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)8,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)8,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)8,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)8,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)9,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)9,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)9,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)9,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)9,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)9,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)9,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)9,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)9,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)9,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)9,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)9,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)9,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)10,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)10,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)10,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)10,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)10,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)10,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)10,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)10,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)10,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)10,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)10,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)10,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)10,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)12,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)12,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)12,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)12,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)12,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)12,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)12,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)12,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)12,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)12,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)12,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)12,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)12,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)13,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)13,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)13,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)13,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)13,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)13,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)13,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)13,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)13,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)13,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)13,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)13,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)13,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)14,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)14,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)14,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)14,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)14,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)14,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)14,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)14,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)14,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)14,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)14,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)14,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)14,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)15,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)15,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)15,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)15,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)15,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)15,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)15,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)15,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)15,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)15,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)15,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)15,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)15,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)18,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)18,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)18,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)18,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)18,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)18,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)18,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)18,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)18,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)18,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)18,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)18,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)18,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)19,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)19,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)19,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)19,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)19,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)19,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)19,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)19,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)19,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)19,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)19,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)19,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)19,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)24,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)24,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)24,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)24,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)24,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)24,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)24,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)24,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)24,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)24,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)24,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)24,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)24,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)11,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)11,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)11,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)11,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)11,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)11,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)11,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)11,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)11,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)11,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)16,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)16,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)16,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)16,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)16,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)16,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)16,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)16,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)16,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)16,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)17,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)17,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)17,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)17,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)17,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)17,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)17,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)17,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)17,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)17,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)22,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)22,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)22,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)22,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)22,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)22,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)22,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)22,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)22,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)22,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)32,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)32,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)32,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)32,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)32,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)32,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)32,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)32,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)32,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)32,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)32,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)32,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)32,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)33,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)33,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)33,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)33,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)33,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)33,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)33,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)33,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)33,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)33,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)33,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)33,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)33,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)51,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)51,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)51,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)51,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)51,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)51,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)51,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)51,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)51,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)51,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)51,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)51,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)51,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)39,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)39,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)39,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)39,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)39,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)39,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)39,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)39,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)39,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)39,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)39,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)39,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)39,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)40,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)40,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)40,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)40,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)40,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)40,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)40,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)40,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)40,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)40,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)40,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)40,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)40,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)41,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)41,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)41,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)41,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)41,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)41,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)41,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)41,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)41,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)41,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)41,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)41,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)41,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)42,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)42,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)42,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)42,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)42,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)42,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)42,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)42,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)42,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)42,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)42,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)42,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)42,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)45,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)45,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)45,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)45,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)45,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)45,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)45,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)45,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)45,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)45,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)45,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)45,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)45,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)46,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)46,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)46,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)46,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)46,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)46,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)46,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)46,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)46,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)46,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)46,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)46,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)46,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)47,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)47,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)47,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)47,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)47,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)47,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)47,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)47,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)47,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)47,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)47,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)47,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)47,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)34,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)34,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)34,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)34,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)34,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)34,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)34,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)34,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)34,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)34,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)34,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)34,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)34,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)48,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)48,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)48,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)48,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)48,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)48,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)48,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)48,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)48,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)48,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)48,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)48,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)48,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)38,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)38,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)38,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)38,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)38,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)38,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)38,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)38,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)38,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)38,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)38,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)38,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)38,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)44,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)44,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)44,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)44,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)44,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)44,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)44,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)44,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)44,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)44,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)44,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)44,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)44,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 5,
                             LicenseCode = (short)50,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 6,
                             LicenseCode = (short)50,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 7,
                             LicenseCode = (short)50,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)50,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)50,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)50,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)50,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)50,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)50,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)50,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)50,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)50,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)50,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)52,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)52,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)52,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)52,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)52,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)52,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)52,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)52,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)52,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)52,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)53,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)53,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)53,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)53,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)53,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)53,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)53,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)53,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)53,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)53,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)55,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)55,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)55,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)55,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)55,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)55,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)55,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)55,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)55,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)55,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 8,
                             LicenseCode = (short)56,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 9,
                             LicenseCode = (short)56,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 10,
                             LicenseCode = (short)56,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 11,
                             LicenseCode = (short)56,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 12,
                             LicenseCode = (short)56,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 13,
                             LicenseCode = (short)56,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 14,
                             LicenseCode = (short)56,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 15,
                             LicenseCode = (short)56,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 16,
                             LicenseCode = (short)56,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             PrivilegeId = 17,
                             LicenseCode = (short)56,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 591, DateTimeKind.Local).AddTicks(88),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 991, DateTimeKind.Local).AddTicks(7080),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
@@ -6274,11 +6290,19 @@ namespace Prime.Migrations
                     b.Property<int?>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("CreatedTimeStamp");
+
+                    b.Property<Guid>("CreatedUserId");
+
                     b.Property<int>("EnrolleeId");
 
                     b.Property<string>("Note");
 
                     b.Property<DateTime>("NoteDate");
+
+                    b.Property<DateTime>("UpdatedTimeStamp");
+
+                    b.Property<Guid>("UpdatedUserId");
 
                     b.HasKey("Id");
 
@@ -6320,21 +6344,26 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.EnrolmentStatusReason", b =>
                 {
-                    b.Property<int>("EnrolmentStatusId");
-
-                    b.Property<short>("StatusCode");
-
-                    b.Property<short>("StatusReasonCode");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("CreatedTimeStamp");
 
                     b.Property<Guid>("CreatedUserId");
 
+                    b.Property<int>("EnrolmentStatusId");
+
+                    b.Property<string>("ReasonNote");
+
+                    b.Property<short>("StatusReasonCode");
+
                     b.Property<DateTime>("UpdatedTimeStamp");
 
                     b.Property<Guid>("UpdatedUserId");
 
-                    b.HasKey("EnrolmentStatusId", "StatusCode", "StatusReasonCode");
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnrolmentStatusId");
 
                     b.HasIndex("StatusReasonCode");
 
@@ -6368,10 +6397,10 @@ namespace Prime.Migrations
                         {
                             Id = 1,
                             Clause = "Global clause",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 632, DateTimeKind.Local).AddTicks(7052),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 19, 72, DateTimeKind.Local).AddTicks(7840),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2020, 1, 6, 16, 26, 10, 633, DateTimeKind.Local).AddTicks(5),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 632, DateTimeKind.Local).AddTicks(7052),
+                            EffectiveDate = new DateTime(2020, 1, 7, 0, 27, 19, 73, DateTimeKind.Local).AddTicks(4250),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 19, 72, DateTimeKind.Local).AddTicks(7840),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
@@ -6425,62 +6454,39 @@ namespace Prime.Migrations
                         new
                         {
                             Code = (short)1,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 580, DateTimeKind.Local).AddTicks(4214),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 969, DateTimeKind.Local).AddTicks(9240),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Medical Office Assistant",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 580, DateTimeKind.Local).AddTicks(4214),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 969, DateTimeKind.Local).AddTicks(9240),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)2,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 580, DateTimeKind.Local).AddTicks(4214),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 969, DateTimeKind.Local).AddTicks(9240),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Pharmacy Assistant",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 580, DateTimeKind.Local).AddTicks(4214),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 969, DateTimeKind.Local).AddTicks(9240),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)3,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 580, DateTimeKind.Local).AddTicks(4214),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 969, DateTimeKind.Local).AddTicks(9240),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Registration Clerk",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 580, DateTimeKind.Local).AddTicks(4214),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 969, DateTimeKind.Local).AddTicks(9240),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)4,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 580, DateTimeKind.Local).AddTicks(4214),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 969, DateTimeKind.Local).AddTicks(9240),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Ward Clerk",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 580, DateTimeKind.Local).AddTicks(4214),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 969, DateTimeKind.Local).AddTicks(9240),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
-                });
-
-            modelBuilder.Entity("Prime.Models.LicenceClassClause", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Clause")
-                        .IsRequired();
-
-                    b.Property<DateTime>("CreatedTimeStamp");
-
-                    b.Property<Guid>("CreatedUserId");
-
-                    b.Property<DateTime>("EffectiveDate");
-
-                    b.Property<DateTime>("UpdatedTimeStamp");
-
-                    b.Property<Guid>("UpdatedUserId");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("LicenceClassClauses");
                 });
 
             modelBuilder.Entity("Prime.Models.License", b =>
@@ -6507,505 +6513,550 @@ namespace Prime.Migrations
                         new
                         {
                             Code = (short)1,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Full - Family",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)2,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Full - Specialty",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)3,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Special",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)4,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Osteopathic",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)5,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Provisional - Family",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)6,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Provisional - Speciality",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)7,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Academic",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)8,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Conditional - Practice Limitations",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)9,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Conditional - Practice Setting",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)10,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Conditional - Disciplined",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)11,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Educational - Medical Student",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)12,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Educational - Postgraduate Resident",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)13,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Educational - Postgraduate Resident Elective",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)14,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Educational - Postgraduate Fellow",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)15,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Educational - Postgraduate Trainee",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)16,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Clinical Observership",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)17,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Visitor",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)18,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Emergency - Family",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)19,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Emergency - Specialty",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)20,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Retired - Life ",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)21,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Temporarily Inactive",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)22,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Surgical Assistant",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)23,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Administrative",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)24,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Assessment",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)25,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Full Pharmacist",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)26,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Limited Pharmacist",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)27,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Temporary Pharmacist",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)28,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Student Pharmacist",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)29,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Pharmacy Technician",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)30,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Non-Practicing Pharmacist",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)31,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Non-Practicing Pharmacy Technician",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)32,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Practicing Registered Nurse",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)33,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Provisional Registered Nurse",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)34,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Non-Practicing Registered Nurse",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)35,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Practicing Licensed Graduate Nurse",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)36,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Provisional Licensed Graduate Nurse",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)37,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Non-Practicing Licensed Graduate Nurse",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)38,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Temporary Registered Nurse (Special Event)",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)39,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Temporary Registered Nurse (Emergency)",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)40,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Employed Student Nurse",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)41,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Practicing Registered Psychiatric Nurse",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)42,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Provisional Registered Psychiatric Nurse",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)43,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Non-Practicing Registered Psychiatric Nurse",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)44,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Temporary Registered Psychiatric Nurse (Special Event)",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)45,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Temporary Registered Psychiatric Nurse (Emergency)",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)46,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Employed Student Psychiatric Nurse",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)47,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Practicing Nurse Practitioner",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)48,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Provisional Nurse Practitioner",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)49,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Non-practicing Nurse Practitioner",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)50,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Temporary Nurse Practitioner (Special Event)",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)51,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Temporary Nurse Practitioner (Emergency)",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)52,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Practicing Licensed Practical Nurse",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)53,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Provisional Licensed Practical Nurse",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)54,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Non-Practicing Licensed Practical Nurse",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)55,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Temporary Licensed Practical Nurse (Emergency)",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)56,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Temporary Licensed Practical Nurse (Special Event)",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 568, DateTimeKind.Local).AddTicks(3574),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 945, DateTimeKind.Local).AddTicks(3650),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        });
+                });
+
+            modelBuilder.Entity("Prime.Models.LicenseClassClause", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Clause")
+                        .IsRequired();
+
+                    b.Property<DateTime>("CreatedTimeStamp");
+
+                    b.Property<Guid>("CreatedUserId");
+
+                    b.Property<DateTime>("EffectiveDate");
+
+                    b.Property<DateTime>("UpdatedTimeStamp");
+
+                    b.Property<Guid>("UpdatedUserId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LicenseClassClauses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Clause = "Consectetur adipisicing elit. Doloremque sit, rerum assumenda sed facere quam vel soluta suscipit esse neque quod, pariatur ea excepturi atque delectus voluptatum, modi obcaecati aliquid!",
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 19, 74, DateTimeKind.Local).AddTicks(5310),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2020, 1, 7, 0, 27, 19, 75, DateTimeKind.Local).AddTicks(3820),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 19, 74, DateTimeKind.Local).AddTicks(5310),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Clause = "Rerum assumenda sed facere quam vel soluta suscipit esse neque quod, pariatur ea excepturi atque delectus voluptatum, modi obcaecati aliquid!",
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 19, 74, DateTimeKind.Local).AddTicks(5310),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2020, 1, 7, 0, 27, 19, 75, DateTimeKind.Local).AddTicks(4400),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 19, 74, DateTimeKind.Local).AddTicks(5310),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
@@ -7031,6 +7082,28 @@ namespace Prime.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("LimitsAndConditionsClauses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Clause = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque sit, rerum assumenda sed facere quam vel soluta suscipit esse neque quod.",
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 19, 75, DateTimeKind.Local).AddTicks(5500),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2020, 1, 7, 0, 27, 19, 76, DateTimeKind.Local).AddTicks(4090),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 19, 75, DateTimeKind.Local).AddTicks(5500),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Clause = "Adipisicing elit. Doloremque sit, rerum assumenda sed facere quam vel soluta suscipit esse neque quod.",
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 19, 75, DateTimeKind.Local).AddTicks(5500),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2020, 1, 7, 0, 27, 19, 76, DateTimeKind.Local).AddTicks(4690),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 19, 75, DateTimeKind.Local).AddTicks(5500),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        });
                 });
 
             modelBuilder.Entity("Prime.Models.Organization", b =>
@@ -7083,46 +7156,46 @@ namespace Prime.Migrations
                         new
                         {
                             Code = (short)1,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 581, DateTimeKind.Local).AddTicks(8201),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 972, DateTimeKind.Local).AddTicks(3500),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Community Health Practice Access to PharmaNet (ComPAP)",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 581, DateTimeKind.Local).AddTicks(8201),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 972, DateTimeKind.Local).AddTicks(3500),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)2,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 581, DateTimeKind.Local).AddTicks(8201),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 972, DateTimeKind.Local).AddTicks(3500),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Health Authority",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 581, DateTimeKind.Local).AddTicks(8201),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 972, DateTimeKind.Local).AddTicks(3500),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)3,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 581, DateTimeKind.Local).AddTicks(8201),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 972, DateTimeKind.Local).AddTicks(3500),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Community Practice",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 581, DateTimeKind.Local).AddTicks(8201),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 972, DateTimeKind.Local).AddTicks(3500),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)4,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 581, DateTimeKind.Local).AddTicks(8201),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 972, DateTimeKind.Local).AddTicks(3500),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Community Pharmacy",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 581, DateTimeKind.Local).AddTicks(8201),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 972, DateTimeKind.Local).AddTicks(3500),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)5,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 581, DateTimeKind.Local).AddTicks(8201),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 972, DateTimeKind.Local).AddTicks(3500),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Primary Care Network",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 581, DateTimeKind.Local).AddTicks(8201),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 972, DateTimeKind.Local).AddTicks(3500),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
@@ -7151,37 +7224,37 @@ namespace Prime.Migrations
                         new
                         {
                             Code = (short)1,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 577, DateTimeKind.Local).AddTicks(3213),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 964, DateTimeKind.Local).AddTicks(4090),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Remote Practice",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 577, DateTimeKind.Local).AddTicks(3213),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 964, DateTimeKind.Local).AddTicks(4090),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)2,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 577, DateTimeKind.Local).AddTicks(3213),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 964, DateTimeKind.Local).AddTicks(4090),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Reproductive Health - STI",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 577, DateTimeKind.Local).AddTicks(3213),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 964, DateTimeKind.Local).AddTicks(4090),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)3,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 577, DateTimeKind.Local).AddTicks(3213),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 964, DateTimeKind.Local).AddTicks(4090),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Reproductive Health - Contraceptive Management",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 577, DateTimeKind.Local).AddTicks(3213),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 964, DateTimeKind.Local).AddTicks(4090),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)4,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 577, DateTimeKind.Local).AddTicks(3213),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 964, DateTimeKind.Local).AddTicks(4090),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "First Call",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 577, DateTimeKind.Local).AddTicks(3213),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 964, DateTimeKind.Local).AddTicks(4090),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
@@ -7215,199 +7288,199 @@ namespace Prime.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Update Claims History",
                             PrivilegeGroupId = 1,
                             TransactionType = "TAC",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 2,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Query Claims History",
                             PrivilegeGroupId = 1,
                             TransactionType = "TDT",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 3,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Pt Profile Mail Request",
                             PrivilegeGroupId = 1,
                             TransactionType = "TPM",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 4,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Maintain Pt Keyword",
                             PrivilegeGroupId = 1,
                             TransactionType = "TCP",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 5,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "New PHN",
                             PrivilegeGroupId = 2,
                             TransactionType = "TPH",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 6,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Address Update",
                             PrivilegeGroupId = 2,
                             TransactionType = "TPA",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 7,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Medication Update",
                             PrivilegeGroupId = 2,
                             TransactionType = "TMU",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 8,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Drug Monograph",
                             PrivilegeGroupId = 3,
                             TransactionType = "TDR",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 9,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Patient Details",
                             PrivilegeGroupId = 3,
                             TransactionType = "TID",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 10,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Location Details",
                             PrivilegeGroupId = 3,
                             TransactionType = "TIL",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 11,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Prescriber Details",
                             PrivilegeGroupId = 3,
                             TransactionType = "TIP",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 12,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Name Search",
                             PrivilegeGroupId = 3,
                             TransactionType = "TPN",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 13,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Pt Profile Request",
                             PrivilegeGroupId = 3,
                             TransactionType = "TRP",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 14,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Most Recent Profile",
                             PrivilegeGroupId = 3,
                             TransactionType = "TBR",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 15,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Filled Elsewhere Profile",
                             PrivilegeGroupId = 3,
                             TransactionType = "TRS",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 16,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "DUE Inquiry",
                             PrivilegeGroupId = 3,
                             TransactionType = "TDU",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 17,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Can be RU (OBO)",
                             PrivilegeGroupId = 4,
                             TransactionType = "RU",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 18,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Can be OBO (RU)",
                             PrivilegeGroupId = 5,
                             TransactionType = "OBO",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(8424),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 987, DateTimeKind.Local).AddTicks(1860),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
@@ -7435,46 +7508,46 @@ namespace Prime.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(2477),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 985, DateTimeKind.Local).AddTicks(9540),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Submit and Access Claims",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(2477),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 985, DateTimeKind.Local).AddTicks(9540),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 2,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(2477),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 985, DateTimeKind.Local).AddTicks(9540),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Record Medical History",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(2477),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 985, DateTimeKind.Local).AddTicks(9540),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 3,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(2477),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 985, DateTimeKind.Local).AddTicks(9540),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Access Medical History",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(2477),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 985, DateTimeKind.Local).AddTicks(9540),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 4,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(2477),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 985, DateTimeKind.Local).AddTicks(9540),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Can be RU (OBO)",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(2477),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 985, DateTimeKind.Local).AddTicks(9540),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 5,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(2477),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 985, DateTimeKind.Local).AddTicks(9540),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Can be OBO (RU)",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 588, DateTimeKind.Local).AddTicks(2477),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 985, DateTimeKind.Local).AddTicks(9540),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
@@ -7509,700 +7582,700 @@ namespace Prime.Migrations
                         {
                             Code = "AB",
                             CountryCode = "CA",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Alberta",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "BC",
                             CountryCode = "CA",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "British Columbia",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "MB",
                             CountryCode = "CA",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Manitoba",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "NB",
                             CountryCode = "CA",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "New Brunswick",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "NL",
                             CountryCode = "CA",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Newfoundland and Labrador",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "NS",
                             CountryCode = "CA",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Nova Scotia",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "ON",
                             CountryCode = "CA",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Ontario",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "PE",
                             CountryCode = "CA",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Prince Edward Island",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "QC",
                             CountryCode = "CA",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Quebec",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "SK",
                             CountryCode = "CA",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Saskatchewan",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "NT",
                             CountryCode = "CA",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Northwest Territories",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "NU",
                             CountryCode = "CA",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Nunavut",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "YT",
                             CountryCode = "CA",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Yukon",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "AL",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Alabama",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "AK",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Alaska",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "AS",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "American Samoa",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "AZ",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Arizona",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "AR",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Arkansas",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "CA",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "California",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "CO",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Colorado",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "CT",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Connecticut",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "DE",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Delaware",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "DC",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "District of Columbia",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "FL",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Florida",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "GA",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Georgia",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "GU",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Guam",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "HI",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Hawaii",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "ID",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Idaho",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "IL",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Illinois",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "IN",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Indiana",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "IA",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Iowa",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "KS",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Kansas",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "KY",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Kentucky",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "LA",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Louisiana",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "ME",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Maine",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "MD",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Maryland",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "MA",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Massachusetts",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "MI",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Michigan",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "MN",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Minnesota",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "MS",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Mississippi",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "MO",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Missouri",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "MT",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Montana",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "NE",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Nebraska",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "NV",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Nevada",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "NH",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "New Hampshire",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "NJ",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "New Jersey",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "NM",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "New Mexico",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "NY",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "New York",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "NC",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "North Carolina",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "ND",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "North Dakota",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "MP",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Northern Mariana Islands",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "OH",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Ohio",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "OK",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Oklahoma",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "OR",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Oregon",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "PA",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Pennsylvania",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "PR",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Puerto Rico",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "RI",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Rhode Island",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "SC",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "South Carolina",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "SD",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "South Dakota",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "TN",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Tennessee",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "TX",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Texas",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "UM",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "United States Minor Outlying Islands",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "UT",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Utah",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "VT",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Vermont",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "VI",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Virgin Islands, U.S.",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "VA",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Virginia",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "WA",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Washington",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "WV",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "West Virginia",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "WI",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Wisconsin",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = "WY",
                             CountryCode = "US",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Wyoming",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 584, DateTimeKind.Local).AddTicks(2251),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 977, DateTimeKind.Local).AddTicks(3050),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
@@ -8230,55 +8303,55 @@ namespace Prime.Migrations
                         new
                         {
                             Code = (short)1,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 582, DateTimeKind.Local).AddTicks(4572),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 973, DateTimeKind.Local).AddTicks(4830),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "In Progress",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 582, DateTimeKind.Local).AddTicks(4572),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 973, DateTimeKind.Local).AddTicks(4830),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)2,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 582, DateTimeKind.Local).AddTicks(4572),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 973, DateTimeKind.Local).AddTicks(4830),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Submitted",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 582, DateTimeKind.Local).AddTicks(4572),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 973, DateTimeKind.Local).AddTicks(4830),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)3,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 582, DateTimeKind.Local).AddTicks(4572),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 973, DateTimeKind.Local).AddTicks(4830),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Adjudicated/Approved",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 582, DateTimeKind.Local).AddTicks(4572),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 973, DateTimeKind.Local).AddTicks(4830),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)4,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 582, DateTimeKind.Local).AddTicks(4572),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 973, DateTimeKind.Local).AddTicks(4830),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Declined",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 582, DateTimeKind.Local).AddTicks(4572),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 973, DateTimeKind.Local).AddTicks(4830),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)5,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 582, DateTimeKind.Local).AddTicks(4572),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 973, DateTimeKind.Local).AddTicks(4830),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Accepted Access Agreement",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 582, DateTimeKind.Local).AddTicks(4572),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 973, DateTimeKind.Local).AddTicks(4830),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)6,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 582, DateTimeKind.Local).AddTicks(4572),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 973, DateTimeKind.Local).AddTicks(4830),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Declined Access Agreement",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 582, DateTimeKind.Local).AddTicks(4572),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 973, DateTimeKind.Local).AddTicks(4830),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
@@ -8306,73 +8379,100 @@ namespace Prime.Migrations
                         new
                         {
                             Code = (short)1,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 583, DateTimeKind.Local).AddTicks(543),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 974, DateTimeKind.Local).AddTicks(7150),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Automatic",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 583, DateTimeKind.Local).AddTicks(543),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 974, DateTimeKind.Local).AddTicks(7150),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)2,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 583, DateTimeKind.Local).AddTicks(543),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 974, DateTimeKind.Local).AddTicks(7150),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Manual",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 583, DateTimeKind.Local).AddTicks(543),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 974, DateTimeKind.Local).AddTicks(7150),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)3,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 583, DateTimeKind.Local).AddTicks(543),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 974, DateTimeKind.Local).AddTicks(7150),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Name Discrepancy",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 583, DateTimeKind.Local).AddTicks(543),
+                            Name = "PharmaNet Error, Licence could not be Validated",
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 974, DateTimeKind.Local).AddTicks(7150),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)4,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 583, DateTimeKind.Local).AddTicks(543),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 974, DateTimeKind.Local).AddTicks(7150),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Not in PharmaNet",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 583, DateTimeKind.Local).AddTicks(543),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Code = (short)5,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 583, DateTimeKind.Local).AddTicks(543),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Insulin Pump Provider",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 583, DateTimeKind.Local).AddTicks(543),
+                            Name = "College Licence not in PharmaNet",
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 974, DateTimeKind.Local).AddTicks(7150),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)6,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 583, DateTimeKind.Local).AddTicks(543),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 974, DateTimeKind.Local).AddTicks(7150),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Licence Class",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 583, DateTimeKind.Local).AddTicks(543),
+                            Name = "Birthdate Discrepancy with PharmaNet College Licence",
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 974, DateTimeKind.Local).AddTicks(7150),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = (short)5,
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 974, DateTimeKind.Local).AddTicks(7150),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Name Discrepancy with PharmaNet College Licence",
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 974, DateTimeKind.Local).AddTicks(7150),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)7,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 583, DateTimeKind.Local).AddTicks(543),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 974, DateTimeKind.Local).AddTicks(7150),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Self Declaration",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 583, DateTimeKind.Local).AddTicks(543),
+                            Name = "Listed as Non-Practicing on PharmaNet College Licence",
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 974, DateTimeKind.Local).AddTicks(7150),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)8,
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 583, DateTimeKind.Local).AddTicks(543),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 974, DateTimeKind.Local).AddTicks(7150),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Contact Address or Identity Address Out of British Columbia",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 583, DateTimeKind.Local).AddTicks(543),
+                            Name = "Insulin Pump Provider",
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 974, DateTimeKind.Local).AddTicks(7150),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = (short)9,
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 974, DateTimeKind.Local).AddTicks(7150),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Licence Class",
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 974, DateTimeKind.Local).AddTicks(7150),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = (short)10,
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 974, DateTimeKind.Local).AddTicks(7150),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Answered one or more Self Declaration questions \"Yes\"",
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 974, DateTimeKind.Local).AddTicks(7150),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = (short)11,
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 974, DateTimeKind.Local).AddTicks(7150),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Contact Address or Identity Address not in British Columbia",
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 18, 974, DateTimeKind.Local).AddTicks(7150),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
@@ -8398,8 +8498,7 @@ namespace Prime.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EnrolleeId")
-                        .IsUnique();
+                    b.HasIndex("EnrolleeId");
 
                     b.HasIndex("GlobalClauseId");
 
@@ -8461,20 +8560,20 @@ namespace Prime.Migrations
                         {
                             Id = 1,
                             Clause = "MOA",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 633, DateTimeKind.Local).AddTicks(965),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 19, 73, DateTimeKind.Local).AddTicks(6040),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2020, 1, 6, 16, 26, 10, 633, DateTimeKind.Local).AddTicks(4329),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 633, DateTimeKind.Local).AddTicks(965),
+                            EffectiveDate = new DateTime(2020, 1, 7, 0, 27, 19, 74, DateTimeKind.Local).AddTicks(3490),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 19, 73, DateTimeKind.Local).AddTicks(6040),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Id = 2,
                             Clause = "OBO",
-                            CreatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 633, DateTimeKind.Local).AddTicks(965),
+                            CreatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 19, 73, DateTimeKind.Local).AddTicks(6040),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2020, 1, 6, 16, 26, 10, 633, DateTimeKind.Local).AddTicks(4594),
-                            UpdatedTimeStamp = new DateTime(2020, 1, 6, 16, 26, 10, 633, DateTimeKind.Local).AddTicks(965),
+                            EffectiveDate = new DateTime(2020, 1, 7, 0, 27, 19, 74, DateTimeKind.Local).AddTicks(4060),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 7, 0, 27, 19, 73, DateTimeKind.Local).AddTicks(6040),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
@@ -8686,8 +8785,8 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.TermsOfAccess", b =>
                 {
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
-                        .WithOne("TermsOfAccess")
-                        .HasForeignKey("Prime.Models.TermsOfAccess", "EnrolleeId")
+                        .WithMany()
+                        .HasForeignKey("EnrolleeId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Prime.Models.GlobalClause", "GlobalClause")
@@ -8703,7 +8802,7 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.TermsOfAccessLicenseClassClause", b =>
                 {
-                    b.HasOne("Prime.Models.LicenceClassClause", "LicenseClassClause")
+                    b.HasOne("Prime.Models.LicenseClassClause", "LicenseClassClause")
                         .WithMany("TermsOfAccessLicenseClassClauses")
                         .HasForeignKey("LicenseClassClauseId")
                         .OnDelete(DeleteBehavior.Cascade);

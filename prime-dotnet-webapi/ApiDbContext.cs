@@ -44,7 +44,7 @@ namespace Prime
         public DbSet<TermsOfAccess> TermsOfAccess { get; set; }
         public DbSet<GlobalClause> GlobalClauses { get; set; }
         public DbSet<UserClause> UserClauses { get; set; }
-        public DbSet<LicenceClassClause> LicenceClassClauses { get; set; }
+        public DbSet<LicenseClassClause> LicenseClassClauses { get; set; }
         public DbSet<LimitsAndConditionsClause> LimitsAndConditionsClauses { get; set; }
 
         public override int SaveChanges()
@@ -118,23 +118,21 @@ namespace Prime
             modelBuilder.ApplyConfiguration(new CollegeLicenseConfiguration());
             modelBuilder.ApplyConfiguration(new PracticeConfiguration());
             modelBuilder.ApplyConfiguration(new CollegePracticeConfiguration());
-
             modelBuilder.ApplyConfiguration(new JobNameConfiguration());
-
             modelBuilder.ApplyConfiguration(new OrganizationTypeConfiguration());
-
             modelBuilder.ApplyConfiguration(new StatusConfiguration());
             modelBuilder.ApplyConfiguration(new StatusReasonConfiguration());
-
             modelBuilder.ApplyConfiguration(new CountryConfiguration());
             modelBuilder.ApplyConfiguration(new ProvinceConfiguration());
-
             modelBuilder.ApplyConfiguration(new PrivilegeGroupConfiguration());
             modelBuilder.ApplyConfiguration(new PrivilegeConfiguration());
             modelBuilder.ApplyConfiguration(new DefaultPrivilegeConfiguration());
             modelBuilder.ApplyConfiguration(new AssignedPrivilegeConfiguration());
+
             modelBuilder.ApplyConfiguration(new GlobalClauseConfiguration());
             modelBuilder.ApplyConfiguration(new UserClauseConfiguration());
+            modelBuilder.ApplyConfiguration(new LicenseClassClauseConfiguration());
+            modelBuilder.ApplyConfiguration(new LimitsAndConditionsClauseConfiguration());
 
             #region Indexes
             modelBuilder.Entity<MailingAddress>()
@@ -168,8 +166,6 @@ namespace Prime
                 .HasForeignKey(es => es.StatusCode);
 
             modelBuilder.Entity<EnrolmentStatusReason>()
-                .HasKey(esr => new { esr.EnrolmentStatusId, esr.StatusCode, esr.StatusReasonCode });
-            modelBuilder.Entity<EnrolmentStatusReason>()
                 .HasOne(esr => esr.EnrolmentStatus)
                 .WithMany(es => es.EnrolmentStatusReasons)
                 .HasForeignKey(esr => esr.EnrolmentStatusId);
@@ -201,7 +197,7 @@ namespace Prime
                 .WithMany(toa => toa.TermsOfAccessLimitsAndConditionsClauses)
                 .HasForeignKey(tlim => tlim.TermsOfAccessId);
             modelBuilder.Entity<TermsOfAccessLimitsAndConditionsClause>()
-                .HasOne(tlim => tlim.LimitsConditionsClause)
+                .HasOne(tlim => tlim.LimitsAndConditionsClause)
                 .WithMany(lcc => lcc.TermsOfAccessLimitsAndConditionsClauses)
                 .HasForeignKey(tlim => tlim.LimitsConditionsClauseId);
             #endregion

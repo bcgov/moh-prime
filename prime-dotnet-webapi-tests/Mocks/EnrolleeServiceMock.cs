@@ -157,6 +157,17 @@ namespace PrimeTests.Mocks
             return Task.FromResult(false);
         }
 
+        public Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, ICollection<short> statusCodesToCheck)
+        {
+            Enrollee enrollee = null;
+            if (this.GetHolder<int, Enrollee>().ContainsKey(enrolleeId))
+            {
+                enrollee = this.GetHolder<int, Enrollee>()[enrolleeId];
+                return Task.FromResult(statusCodesToCheck.Contains(enrollee.CurrentStatus?.StatusCode));
+            }
+            return Task.FromResult(false);
+        }
+
         public Task<IEnumerable<AdjudicatorNote>> GetEnrolleeAdjudicatorNotesAsync(Enrollee enrollee)
         {
             // TODO add proper tests, but need test spike. Add adjudicatorNote to fake db.

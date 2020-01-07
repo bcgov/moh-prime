@@ -6,10 +6,10 @@ using Prime.Models.AccessAgreement;
 
 namespace Prime.Models
 {
-    [Table("LicenceClassClauses")]
-    public class LicenceClassClause : BaseAuditable, IAccessClause
+    [Table("LicenseClassClauses")]
+    public class LicenseClassClause : BaseAuditable, IAccessClause
     {
-        public LicenceClassClause()
+        public LicenseClassClause()
         {
             // Create lists so they don't have be instantiated when items need to be added
             TermsOfAccessLicenseClassClauses = new List<TermsOfAccessLicenseClassClause>();

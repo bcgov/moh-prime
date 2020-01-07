@@ -322,9 +322,11 @@ namespace Prime.Services
             return this.CreateEnrolmentStatusInternalAsync(enrolleeId, status);
         }
 
-        private async Task<EnrolmentStatus> CreateEnrolmentStatusInternalAsync(int enrolleeId, Status status)
+        private async Task<EnrolmentStatus> CreateEnrolmentStatusInternalAsync(int enrolleeId, Status newStatus)
         {
             var enrollee = await this.GetBaseEnrolleeQuery()
+                .Include(e => e.Certifications)
+                    .ThenInclude(cer => cer.College) // Needed for PharmaNet College auto-adjudication
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
             if (enrollee == null)
@@ -332,101 +334,83 @@ namespace Prime.Services
                 return null;
             }
 
-            var currentStatus = enrollee.CurrentStatus?.Status;
+            var oldStatus = enrollee.CurrentStatus?.Status;
 
-            // Make sure the status change is allowed
-            if (IsStatusChangeAllowed(currentStatus ?? NULL_STATUS, status))
+            if (!IsStatusChangeAllowed(oldStatus ?? NULL_STATUS, newStatus))
             {
-                // Create a new enrolment status
-                var createdEnrolmentStatus = new EnrolmentStatus
-                {
-                    EnrolleeId = enrolleeId,
-                    StatusCode = status.Code,
-                    StatusDate = DateTime.Now,
-                    PharmaNetStatus = false
-                };
-
-                enrollee.EnrolmentStatuses.Add(createdEnrolmentStatus);
-
-                switch (status?.Code)
-                {
-                    case Status.SUBMITTED_CODE:
-                        // Check to see if this should be auto adjudicated
-                        if (_automaticAdjudicationService.QualifiesForAutomaticAdjudication(enrollee))
-                        {
-                            // Change the status to adjudicated/approved
-                            createdEnrolmentStatus.PharmaNetStatus = false;
-                            // Create a new approved enrolment status
-                            var adjudicatedEnrolmentStatus = new EnrolmentStatus
-                            {
-                                EnrolleeId = enrolleeId,
-                                StatusCode = Status.APPROVED_CODE,
-                                StatusDate = DateTime.Now,
-                                PharmaNetStatus = false
-                            };
-                            adjudicatedEnrolmentStatus.EnrolmentStatusReasons = new List<EnrolmentStatusReason>
-                            {
-                                new EnrolmentStatusReason
-                                {
-                                    EnrolmentStatus = adjudicatedEnrolmentStatus,
-                                    StatusReasonCode = StatusReason.AUTOMATIC_CODE
-                                }
-                            };
-                            enrollee.EnrolmentStatuses.Add(adjudicatedEnrolmentStatus);
-                            // Flip to the object that will get returned
-                            createdEnrolmentStatus = adjudicatedEnrolmentStatus;
-                        }
-                        break;
-                    case Status.APPROVED_CODE:
-                        // Add the manual reason code
-                        createdEnrolmentStatus.EnrolmentStatusReasons = new List<EnrolmentStatusReason>
-                        {
-                            new EnrolmentStatusReason
-                            {
-                                EnrolmentStatus = createdEnrolmentStatus,
-                                StatusReasonCode = StatusReason.MANUAL_CODE
-                            }
-                        };
-                        await _termsOfAccessService.SetEnrolleeTermsOfAccessAsync(enrollee);
-                        break;
-                    case Status.DECLINED_CODE:
-                        await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
-                        createdEnrolmentStatus.PharmaNetStatus = true;
-                        break;
-                    case Status.ACCEPTED_TOS_CODE:
-                        await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
-                        enrollee.LicensePlate = this.GenerateLicensePlate();
-                        await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrolleeId, enrollee);
-                        createdEnrolmentStatus.PharmaNetStatus = true;
-                        break;
-                    case Status.DECLINED_TOS_CODE:
-                        await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
-                        createdEnrolmentStatus.PharmaNetStatus = true;
-                        break;
-                }
-
-                if (Status.ACCEPTED_TOS_CODE.Equals(status?.Code))
-                {
-                    enrollee.LicensePlate = this.GenerateLicensePlate();
-                }
-
-                var created = await _context.SaveChangesAsync();
-
-                if (created < 1)
-                {
-                    throw new InvalidOperationException("Could not create enrolment status.");
-                }
-
-                // Enrollee just left manual adjudication, inform the enrollee
-                if (currentStatus.Code == Status.SUBMITTED_CODE)
-                {
-                    _emailService.SendReminderEmail(enrollee);
-                }
-
-                return createdEnrolmentStatus;
+                throw new InvalidOperationException("Could not create enrolment status, status change is not allowed.");
             }
 
-            throw new InvalidOperationException("Could not create enrolment status, status change is not allowed.");
+            var createdEnrolmentStatus = new EnrolmentStatus
+            {
+                EnrolleeId = enrolleeId,
+                StatusCode = newStatus.Code,
+                StatusDate = DateTime.Now,
+                PharmaNetStatus = false
+            };
+            enrollee.EnrolmentStatuses.Add(createdEnrolmentStatus);
+
+            switch (newStatus.Code)
+            {
+                case Status.SUBMITTED_CODE:
+                    if (await _automaticAdjudicationService.QualifiesForAutomaticAdjudication(enrollee))
+                    {
+                        // Change the status to adjudicated/approved
+                        var adjudicatedEnrolmentStatus = new EnrolmentStatus
+                        {
+                            EnrolleeId = enrolleeId,
+                            StatusCode = Status.APPROVED_CODE,
+                            StatusDate = DateTime.Now,
+                            PharmaNetStatus = false
+                        };
+                        adjudicatedEnrolmentStatus.AddStatusReason(StatusReason.AUTOMATIC_CODE);
+
+                        enrollee.EnrolmentStatuses.Add(adjudicatedEnrolmentStatus);
+
+                        await _termsOfAccessService.SetEnrolleeTermsOfAccessAsync(enrollee);
+
+                        // Flip to the object that will get returned
+                        createdEnrolmentStatus = adjudicatedEnrolmentStatus;
+                    }
+                    break;
+
+                case Status.APPROVED_CODE:
+                    createdEnrolmentStatus.AddStatusReason(StatusReason.MANUAL_CODE);
+
+                    await _termsOfAccessService.SetEnrolleeTermsOfAccessAsync(enrollee);
+
+                    break;
+
+                case Status.DECLINED_CODE:
+                    await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
+                    createdEnrolmentStatus.PharmaNetStatus = true;
+                    break;
+
+                case Status.ACCEPTED_TOS_CODE:
+                    await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
+                    enrollee.LicensePlate = this.GenerateLicensePlate();
+                    createdEnrolmentStatus.PharmaNetStatus = true;
+                    break;
+
+                case Status.DECLINED_TOS_CODE:
+                    await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
+                    createdEnrolmentStatus.PharmaNetStatus = true;
+                    break;
+            }
+
+            var created = await _context.SaveChangesAsync();
+            if (created < 1)
+            {
+                throw new InvalidOperationException("Could not create enrolment status.");
+            }
+
+            // Enrollee just left manual adjudication, inform the enrollee
+            if (oldStatus?.Code == Status.SUBMITTED_CODE)
+            {
+                _emailService.SendReminderEmail(enrollee);
+            }
+
+            return createdEnrolmentStatus;
         }
 
         private async Task SetAllPharmaNetStatusesFalseAsync(int enrolleeId)
@@ -456,6 +440,7 @@ namespace Prime.Services
                 .AsNoTracking()
                 .Include(e => e.EnrolmentStatuses)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
             if (enrollee == null)
             {
                 return false;
@@ -464,6 +449,24 @@ namespace Prime.Services
             var currentStatusCode = enrollee.CurrentStatus?.StatusCode;
 
             return statusCodeToCheck.Equals(currentStatusCode);
+        }
+
+        // TODO refine so not 90% copy of original IsEnrolleeInStatusAsync
+        public async Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, ICollection<short> statusCodesToCheck)
+        {
+            var enrollee = await _context.Enrollees
+                .AsNoTracking()
+                .Include(e => e.EnrolmentStatuses)
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
+            if (enrollee == null)
+            {
+                return false;
+            }
+
+            var currentStatusCode = enrollee.CurrentStatus?.StatusCode;
+
+            return statusCodesToCheck.Contains(currentStatusCode.Value);
         }
 
         private IQueryable<Enrollee> GetBaseEnrolleeQuery()
@@ -571,12 +574,6 @@ namespace Prime.Services
             }
 
             return newNote;
-        }
-
-        // TODO not required can invoke _termsOfAccessService directly in enrollee controller
-        public async Task<TermsOfAccess> GetEnrolleeTermsOfAccessAsync(int enrolleeId)
-        {
-            return await _termsOfAccessService.GetEnrolleeTermsOfAccessAsync(enrolleeId);
         }
     }
 }

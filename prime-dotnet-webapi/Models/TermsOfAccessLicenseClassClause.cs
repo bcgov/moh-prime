@@ -17,6 +17,6 @@ namespace Prime.Models
         public int LicenseClassClauseId { get; set; }
 
         [JsonIgnore]
-        public LicenceClassClause LicenseClassClause { get; set; }
+        public LicenseClassClause LicenseClassClause { get; set; }
     }
 }

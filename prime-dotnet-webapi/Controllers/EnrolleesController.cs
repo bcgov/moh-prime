@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -19,10 +17,12 @@ namespace Prime.Controllers
     public class EnrolleesController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
+        private readonly ITermsOfAccessService _termsOfAccessService;
 
-        public EnrolleesController(IEnrolleeService enrolleeService)
+        public EnrolleesController(IEnrolleeService enrolleeService, ITermsOfAccessService termsOfAccessService)
         {
             _enrolleeService = enrolleeService;
+            _termsOfAccessService = termsOfAccessService;
         }
 
         // GET: api/Enrollees
@@ -457,7 +457,7 @@ namespace Prime.Controllers
         /// Get the enrolmee's terms of access.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpPut("{enrolleeId}/terms-of-access", Name = nameof(GetTermsOfAccess))]
+        [HttpGet("{enrolleeId}/terms-of-access", Name = nameof(GetTermsOfAccess))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -470,13 +470,15 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
 
-            if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.APPROVED_CODE))
+            // Prevent access to the enrollee's current terms of access based on status
+            var statuses = new[] { Status.IN_PROGRESS_CODE, Status.DECLINED_CODE, Status.DECLINED_TOS_CODE };
+            if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, statuses))
             {
-                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrolee terms of service can not be retrieved when the current status is not 'APPROVED'.");
+                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee terms of service can not be retrieved when the current status is 'IN_PROGRESS', 'DECLINED', or 'DECLINED_TOA'.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            var termsOfAccess = await _enrolleeService.GetEnrolleeTermsOfAccessAsync(enrolleeId);
+            var termsOfAccess = await _termsOfAccessService.GetEnrolleeTermsOfAccessAsync(enrolleeId);
 
             return Ok(new ApiOkResponse<TermsOfAccess>(termsOfAccess));
         }
