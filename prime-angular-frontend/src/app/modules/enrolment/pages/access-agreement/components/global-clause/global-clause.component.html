@@ -1,4 +1,9 @@
-<p>global-clause works!</p>
-<ng-container>
+<app-page-subheader>
+  <ng-container appPageSubheaderTitle>Global Clauses</ng-container>
+</app-page-subheader>
 
+<ng-container *ngIf="clause">
+  <p>
+    {{ clause.clause }}
+  </p>
 </ng-container>

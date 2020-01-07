@@ -11,6 +11,7 @@ export class GlobalClauseComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log('CLAUSE', this.clause);
   }
 
 }
