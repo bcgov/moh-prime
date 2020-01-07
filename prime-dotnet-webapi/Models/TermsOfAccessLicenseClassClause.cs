@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace Prime.Models
 {
-    [Table("TermsOfAccessLicenseClassClausesXref")]
+    [Table("TermsOfAccessLicenseClassClauseXref")]
     public class TermsOfAccessLicenseClassClause
     {
         [Required]

@@ -5,7 +5,7 @@ using Prime.Models.AccessAgreement;
 
 namespace Prime.Models
 {
-    [Table("GlobalClauses")]
+    [Table("GlobalClause")]
     public class GlobalClause : BaseAuditable, IAccessClause
     {
         [Key]

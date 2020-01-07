@@ -1,6 +1,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Prime;
 using Prime.Models;
 
 public class UserClauseConfiguration : IEntityTypeConfiguration<UserClause>
@@ -13,8 +14,8 @@ public class UserClauseConfiguration : IEntityTypeConfiguration<UserClause>
     {
         #region UserClauseSeed
         builder.HasData(
-            new UserClause { Id = 1, Clause = "MOA", EffectiveDate = DateTime.Now, CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
-            new UserClause { Id = 2, Clause = "OBO", EffectiveDate = DateTime.Now, CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE }
+            new UserClause { Id = 1, Clause = "MOA clause", EffectiveDate = DateTime.Now, EnrolleeClassification = PrimeConstants.PRIME_MOA, CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
+            new UserClause { Id = 2, Clause = "RU clause", EffectiveDate = DateTime.Now, EnrolleeClassification = PrimeConstants.PRIME_RU, CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE }
         );
         #endregion
     }

@@ -13,7 +13,6 @@ namespace Prime.Services
             ApiDbContext context, IHttpContextAccessor httpContext) : base(context, httpContext)
         { }
 
-        // TODO type of license classes needs to be added to the license clases clause for selection
         public async Task SetEnrolleeTermsOfAccessAsync(Enrollee enrollee)
         {
             var termsOfAccess = new TermsOfAccess { Enrollee = enrollee };
@@ -40,7 +39,8 @@ namespace Prime.Services
                 .Include(t => t.TermsOfAccessLimitsAndConditionsClauses)
                     .ThenInclude(talc => talc.LimitsAndConditionsClause)
                 .Where(t => t.EnrolleeId == enrolleeId)
-                .SingleOrDefaultAsync();
+                .OrderByDescending(t => t.EffectiveDate)
+                .FirstOrDefaultAsync();
         }
 
         private async Task<GlobalClause> GetGlobalClause()
@@ -52,45 +52,36 @@ namespace Prime.Services
 
         private async Task<UserClause> GetUserClause(Enrollee enrollee)
         {
-            // TODO should be based on user type
-            // var userType = DetermineEnrolleeUserType(enrollee);
+            var userType = enrollee.EnrolleeClassification;
 
             return await _context.UserClauses
-                // TODO add enum user type to UserClause
-                // .Where(g => g.UserType == userType)
+                .Where(g => g.EnrolleeClassification == enrollee.EnrolleeClassification)
                 .OrderByDescending(g => g.EffectiveDate)
                 .FirstOrDefaultAsync();
         }
 
-        // TODO split this out into a utility
-        private string DetermineEnrolleeUserType(Enrollee enrollee)
-        {
-            // TODO what are the rules around user types outside of certifications?
-            return (enrollee.Certifications.Count > 0)
-                // TODO add enum for user types MOA and OBO strings found throughout
-                // application since it is referenced throughout as strings
-                ? "MOA"
-                : "OBO";
-        }
-
+        // TODO no provided logic for how license class clauses are chosen
         private async Task<IEnumerable<TermsOfAccessLicenseClassClause>> GetTermsOfAccessLicenseClassClauses(Enrollee enrollee, TermsOfAccess termsOfAccess)
         {
             var licenseClassClauses = await _context.LicenseClassClauses
-                // TODO how are these chosen?
                 .Take(2)
                 .ToListAsync();
 
             return licenseClassClauses.Select(lcc => new TermsOfAccessLicenseClassClause { TermsOfAccess = termsOfAccess, LicenseClassClause = lcc });
         }
 
+        // TODO no provided logic for how limits and conditions clauses are chosen
         private async Task<IEnumerable<TermsOfAccessLimitsAndConditionsClause>> GetTermsOfAccessLimitsAndConditionsClauses(Enrollee enrollee, TermsOfAccess termsOfAccess)
         {
             var limitsAndConditionsClauses = await _context.LimitsAndConditionsClauses
-                // TODO how are these chosen?
                 .Take(1)
                 .ToListAsync();
 
-            return limitsAndConditionsClauses.Select(lacc => new TermsOfAccessLimitsAndConditionsClause { TermsOfAccess = termsOfAccess, LimitsAndConditionsClause = lacc });
+            return limitsAndConditionsClauses.Select(lacc => new TermsOfAccessLimitsAndConditionsClause
+            {
+                TermsOfAccess = termsOfAccess,
+                LimitsAndConditionsClause = lacc
+            });
         }
     }
 }

@@ -6,7 +6,7 @@ using Prime.Models.AccessAgreement;
 
 namespace Prime.Models
 {
-    [Table("LicenseClassClauses")]
+    [Table("LicenseClassClause")]
     public class LicenseClassClause : BaseAuditable, IAccessClause
     {
         public LicenseClassClause()

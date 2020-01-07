@@ -399,10 +399,6 @@ namespace Prime.Services
             }
 
             var created = await _context.SaveChangesAsync();
-            if (created < 1)
-            {
-                throw new InvalidOperationException("Could not create enrolment status.");
-            }
 
             // Enrollee just left manual adjudication, inform the enrollee
             if (oldStatus?.Code == Status.SUBMITTED_CODE)
@@ -451,7 +447,7 @@ namespace Prime.Services
             return statusCodeToCheck.Equals(currentStatusCode);
         }
 
-        // TODO refine so not 90% copy of original IsEnrolleeInStatusAsync
+        // TODO refine so not a 90% copy of original IsEnrolleeInStatusAsync
         public async Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, ICollection<short> statusCodesToCheck)
         {
             var enrollee = await _context.Enrollees

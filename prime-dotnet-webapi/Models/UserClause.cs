@@ -5,7 +5,7 @@ using Prime.Models.AccessAgreement;
 
 namespace Prime.Models
 {
-    [Table("UserClauses")]
+    [Table("UserClause")]
     public class UserClause : BaseAuditable, IAccessClause
     {
         [Key]
@@ -16,5 +16,8 @@ namespace Prime.Models
 
         [Required]
         public DateTime EffectiveDate { get; set; }
+
+        [Required]
+        public string EnrolleeClassification { get; set; }
     }
 }

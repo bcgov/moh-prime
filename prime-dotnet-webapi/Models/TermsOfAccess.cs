@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -5,8 +6,8 @@ using Newtonsoft.Json;
 
 namespace Prime.Models
 {
-    [Table("TermsOfAccesses")]
-    public class TermsOfAccess: BaseAuditable
+    [Table("TermsOfAccess")]
+    public class TermsOfAccess : BaseAuditable
     {
         public TermsOfAccess()
         {
@@ -34,5 +35,8 @@ namespace Prime.Models
         public List<TermsOfAccessLicenseClassClause> TermsOfAccessLicenseClassClauses { get; set; }
 
         public List<TermsOfAccessLimitsAndConditionsClause> TermsOfAccessLimitsAndConditionsClauses { get; set; }
+
+        [Required]
+        public DateTime EffectiveDate { get; set; }
     }
 }

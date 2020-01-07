@@ -179,6 +179,11 @@ namespace Prime
                 .WithMany(e => e.AdjudicatorNotes)
                 .HasForeignKey(an => an.EnrolleeId);
 
+            modelBuilder.Entity<TermsOfAccess>()
+                .HasOne(toa => toa.Enrollee)
+                .WithMany(e => e.TermsOfAccess)
+                .HasForeignKey(toa => toa.EnrolleeId);
+
             modelBuilder.Entity<TermsOfAccessLicenseClassClause>()
                 .HasKey(tlic => new { tlic.TermsOfAccessId, tlic.LicenseClassClauseId });
             modelBuilder.Entity<TermsOfAccessLicenseClassClause>()
