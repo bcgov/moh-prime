@@ -18,7 +18,7 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
-import { TermsOfAccess } from '@enrolment/shared/models/terms-of-access.model';
+import { TermsOfAccess, Clause } from '@enrolment/shared/models/terms-of-access.model';
 import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 import { ViewportService } from '@core/services/viewport.service';
 
@@ -37,6 +37,8 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
   // Allow the use of enum in the component template
   public EnrolmentStatus = EnrolmentStatus;
   public EnrolleeClassification = EnrolleeClassification;
+
+  public termsOfAccess: TermsOfAccess;
 
   constructor(
     protected route: ActivatedRoute,
@@ -63,6 +65,11 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
 
   public get hasAgreed(): boolean {
     return this.agreed.value;
+  }
+
+  public get globalClause(): Clause {
+    this.termsOfAccess.globalClause.clause = 'TEST GLOBAL CLAUSE';
+    return this.termsOfAccess.globalClause;
   }
 
   public onSubmit(enrolmentStatus: EnrolmentStatus) {
@@ -146,7 +153,8 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
     this.enrolmentResource.getTermsOfAccess(this.enrolment.id)
       .subscribe(
         (termsOfAccess: TermsOfAccess) => {
-
+          console.log('Terms of Access', termsOfAccess);
+          this.termsOfAccess = termsOfAccess;
         },
         (error: any) => {
           this.toastService.openErrorToast(`Terms of access could not be found`);
