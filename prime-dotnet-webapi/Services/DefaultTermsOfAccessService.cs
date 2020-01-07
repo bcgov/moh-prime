@@ -6,7 +6,7 @@ using Prime.Models;
 
 namespace Prime.Services
 {
-    public class DefaultTermsOfAccessService: BaseService,  ITermsOfAccessService
+    public class DefaultTermsOfAccessService : BaseService, ITermsOfAccessService
     {
         public DefaultTermsOfAccessService(
             ApiDbContext context, IHttpContextAccessor httpContext) : base(context, httpContext)
@@ -28,7 +28,7 @@ namespace Prime.Services
                 .OrderByDescending(g => g.EffectiveDate)
                 .FirstOrDefaultAsync();
 
-            // TODO determine the enrollee user type
+            // TODO determine the enrollee user typeohh
             // TODO assign the most recent user clause
             // TODO determine licence class clauses
             // TODO assign the licence class clause(s)
@@ -36,6 +36,8 @@ namespace Prime.Services
             // TODO assign the limits and conditions clause(s)
 
             _context.SaveChanges();
+
+            return true;
 
         }
 
