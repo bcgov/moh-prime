@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace Prime.Models
 {
-    [Table("EnrolmentStatuses")]
+    [Table("EnrolmentStatus")]
     public class EnrolmentStatus : BaseAuditable
     {
         [Key]
