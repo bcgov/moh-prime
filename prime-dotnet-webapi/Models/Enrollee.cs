@@ -171,6 +171,6 @@ namespace Prime.Models
         }
 
         [JsonIgnore]
-        public TermsOfAccess TermsOfAccess { get; set; }
+        public TermsOfAccess TermsOfAccess { get; }
     }
 }
