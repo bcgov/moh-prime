@@ -373,6 +373,7 @@ namespace Prime.Services
 
                 case Status.APPROVED_CODE:
                     createdEnrolmentStatus.AddStatusReason(StatusReason.MANUAL_CODE);
+                    await _termsOfAccessService.SetEnrolleeTermsOfAccessAsync(enrollee);
                     break;
 
                 case Status.DECLINED_CODE:
