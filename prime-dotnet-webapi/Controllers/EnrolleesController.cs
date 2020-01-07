@@ -470,11 +470,16 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
 
-            if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.APPROVED_CODE))
+            // TODO update TOS code to TOA code for accepted and declined
+            // TODO are there other statuses that shouldn't provide the most recent TOA like SUBMITTED?
+            var statuses = new[] { Status.IN_PROGRESS_CODE, Status.DECLINED_CODE, Status.DECLINED_TOS_CODE };
+            if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, statuses))
             {
-                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrolee terms of service can not be retrieved when the current status is not 'APPROVED'.");
+                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrolee terms of service can not be retrieved when the current status is not 'IN_PROGRESS', 'DECLINED', or 'DECLINED_TOA'.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
+
+            // TODO check whether terms of access exists for the enrollee, otherwise 404
 
             var termsOfAccess = await _termsOfAccessService.GetEnrolleeTermsOfAccessAsync(enrolleeId);
 

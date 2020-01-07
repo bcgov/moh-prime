@@ -451,6 +451,24 @@ namespace Prime.Services
             return statusCodeToCheck.Equals(currentStatusCode);
         }
 
+        // TODO refine so not 90% copy of original IsEnrolleeInStatusAsync
+        public async Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, ICollection<short> statusCodesToCheck)
+        {
+            var enrollee = await _context.Enrollees
+                .AsNoTracking()
+                .Include(e => e.EnrolmentStatuses)
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
+            if (enrollee == null)
+            {
+                return false;
+            }
+
+            var currentStatusCode = enrollee.CurrentStatus?.StatusCode;
+
+            return statusCodesToCheck.Contains(currentStatusCode.Value);
+        }
+
         private IQueryable<Enrollee> GetBaseEnrolleeQuery()
         {
             return _context.Enrollees
