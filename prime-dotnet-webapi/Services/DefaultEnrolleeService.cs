@@ -440,6 +440,7 @@ namespace Prime.Services
                 .AsNoTracking()
                 .Include(e => e.EnrolmentStatuses)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
             if (enrollee == null)
             {
                 return false;

@@ -457,7 +457,7 @@ namespace Prime.Controllers
         /// Get the enrolmee's terms of access.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpPut("{enrolleeId}/terms-of-access", Name = nameof(GetTermsOfAccess))]
+        [HttpGet("{enrolleeId}/terms-of-access", Name = nameof(GetTermsOfAccess))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
