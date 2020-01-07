@@ -55,7 +55,7 @@ namespace Prime.Services
         {
             // TODO what are the rules around user types outside of certifications?
             return (enrollee.Certifications.Count > 0)
-            // TODO add enum for user types MOA and OBO strings found throughout application
+                // TODO add enum for user types MOA and OBO strings found throughout application
                 ? "MOA"
                 : "OBO";
         }
