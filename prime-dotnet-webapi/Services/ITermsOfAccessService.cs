@@ -5,7 +5,7 @@ namespace Prime.Services
 {
     public interface ITermsOfAccessService
     {
-        Task SetEnrolleeTermsOfAccessAsync(Enrollee enrollee);
+        Task CreateEnrolleeTermsOfAccessAsync(Enrollee enrollee);
 
         Task<TermsOfAccess> GetEnrolleeTermsOfAccessAsync(int enrolleeId);
     }

@@ -17,6 +17,6 @@ namespace Prime.Models
         public int LimitsConditionsClauseId { get; set; }
 
         [JsonIgnore]
-        public LimitsAndConditionsClause LimitsConditionsClause { get; set; }
+        public LimitsAndConditionsClause LimitsAndConditionsClause { get; set; }
     }
 }

@@ -197,7 +197,7 @@ namespace Prime
                 .WithMany(toa => toa.TermsOfAccessLimitsAndConditionsClauses)
                 .HasForeignKey(tlim => tlim.TermsOfAccessId);
             modelBuilder.Entity<TermsOfAccessLimitsAndConditionsClause>()
-                .HasOne(tlim => tlim.LimitsConditionsClause)
+                .HasOne(tlim => tlim.LimitsAndConditionsClause)
                 .WithMany(lcc => lcc.TermsOfAccessLimitsAndConditionsClauses)
                 .HasForeignKey(tlim => tlim.LimitsConditionsClauseId);
             #endregion

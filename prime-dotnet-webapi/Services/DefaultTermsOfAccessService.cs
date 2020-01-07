@@ -13,9 +13,8 @@ namespace Prime.Services
             ApiDbContext context, IHttpContextAccessor httpContext) : base(context, httpContext)
         { }
 
-        // TODO type of user needs to be added to the user clause (MOA, OBO, etc) for selection
         // TODO type of license classes needs to be added to the license clases clause for selection
-        public async Task SetEnrolleeTermsOfAccessAsync(Enrollee enrollee)
+        public async Task CreateEnrolleeTermsOfAccessAsync(Enrollee enrollee)
         {
             var termsOfAccess = new TermsOfAccess { Enrollee = enrollee };
 
@@ -46,12 +45,11 @@ namespace Prime.Services
                 .Include(t => t.TermsOfAccessLicenseClassClauses)
                     .ThenInclude(tacc => tacc.LicenseClassClause)
                 .Include(t => t.TermsOfAccessLimitsAndConditionsClauses)
-                    .ThenInclude(talc => talc.LimitsConditionsClause)
+                    .ThenInclude(talc => talc.LimitsAndConditionsClause)
                 .Where(t => t.EnrolleeId == enrolleeId)
                 .SingleOrDefaultAsync();
         }
 
-        // TODO private method to determine the user type based of the enrollee
         private string DetermineEnrolleeUserType(Enrollee enrollee)
         {
             // TODO what are the rules around user types outside of certifications?
