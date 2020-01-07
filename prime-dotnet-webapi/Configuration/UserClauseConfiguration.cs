@@ -13,8 +13,8 @@ public class UserClauseConfiguration : IEntityTypeConfiguration<UserClause>
     {
         #region UserClauseSeed
         builder.HasData(
-            new UserClause { Id = 1, Clause = "MOA", EffectiveDate = DateTime.Now, CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
-            new UserClause { Id = 2, Clause = "OBO", EffectiveDate = DateTime.Now, CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE }
+            new UserClause { Id = 1, Clause = "MOA clause", EffectiveDate = DateTime.Now, UserType = UserType.MOA, CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
+            new UserClause { Id = 2, Clause = "OBO clause", EffectiveDate = DateTime.Now, UserType = UserType.OBO, CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE }
         );
         #endregion
     }
