@@ -15,7 +15,7 @@ import { CollegeCertification } from '@enrolment/shared/models/college-certifica
 import { Job } from '@enrolment/shared/models/job.model';
 import { Organization } from '@enrolment/shared/models/organization.model';
 import { EnrolleeNote } from '../models/enrollee-note.model';
-import { TermsOfAccess } from '../models/terms-of-access.model';
+import { TermsOfAccess, Clause } from '../models/terms-of-access.model';
 
 @Injectable({
   providedIn: 'root'
@@ -89,6 +89,45 @@ export class EnrolmentResource {
         map((response: PrimeHttpResponse) => response.result as TermsOfAccess),
         tap((termsOfAccess: TermsOfAccess) => this.logger.info('TERMS_OF_ACCESS', termsOfAccess))
       );
+
+    // const globalClause: Clause = {
+    //   id: 1,
+    //   clause: 'THIS IS THE GOBAL CLAUSE',
+    //   effectiveDate: 'Jan 2020'
+    // };
+
+    // const userClause: Clause = {
+    //   id: 1,
+    //   clause: 'THIS IS THE USER CLAUSE',
+    //   effectiveDate: 'Jan 2020'
+    // };
+
+    // const licenceClassClause: Clause[] = [{
+    //   id: 1,
+    //   clause: 'THIS IS THE LICENCE CLASS CLAUSE',
+    //   effectiveDate: 'Jan 2020'
+    // }];
+
+    // const limitsAndConditionsClause: Clause[] = [{
+    //   id: 1,
+    //   clause: 'THIS IS THE LIMITS AND CONDITIONS CLAUSE',
+    //   effectiveDate: 'Jan 2020'
+    // }];
+
+    // const termsOfAccess = {
+    //   id: 1,
+    //   enrolleeId: 1,
+    //   globalClauseId: 1,
+    //   globalClause,
+    //   userClauseId: 2,
+    //   userClause,
+    //   licenceClassClause,
+    //   limitsAndConditionsClause
+    // };
+
+    // console.log('Terms of Access', termsOfAccess);
+
+    // return new Observable(termsOfAccess);
   }
 
   // ---

@@ -150,55 +150,59 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
   public ngOnInit() {
     this.enrolment = this.enrolmentService.enrolment;
     this.isInitialEnrolment = this.enrolment.progressStatus !== ProgressStatus.FINISHED;
+    const globalClause: Clause = {
+      id: 1,
+      clause: 'THIS IS THE GOBAL CLAUSE',
+      effectiveDate: 'Jan 2020'
+    };
 
-    this.enrolmentResource.getTermsOfAccess(this.enrolment.id)
-      .subscribe(
-        (termsOfAccess: TermsOfAccess) => {
+    const userClause: Clause = {
+      id: 1,
+      clause: 'THIS IS THE USER CLAUSE',
+      effectiveDate: 'Jan 2020'
+    };
 
-          // this.termsOfAccess = termsOfAccess;
+    const licenceClassClause: Clause[] = [{
+      id: 1,
+      clause: 'THIS IS THE LICENCE CLASS CLAUSE',
+      effectiveDate: 'Jan 2020'
+    }];
 
-          const globalClause: Clause = {
-            id: 1,
-            clause: 'THIS IS THE GOBAL CLAUSE',
-            effectiveDate: 'Jan 2020'
-          };
+    const limitsAndConditionsClause: Clause[] = [{
+      id: 1,
+      clause: 'THIS IS THE LIMITS AND CONDITIONS CLAUSE',
+      effectiveDate: 'Jan 2020'
+    }];
 
-          const userClause: Clause = {
-            id: 1,
-            clause: 'THIS IS THE USER CLAUSE',
-            effectiveDate: 'Jan 2020'
-          };
+    const termsOfAccess = {
+      id: 1,
+      enrolleeId: 1,
+      globalClauseId: 1,
+      globalClause,
+      userClauseId: 2,
+      userClause,
+      licenceClassClause,
+      limitsAndConditionsClause
+    };
 
-          const licenceClassClause: Clause[] = [{
-            id: 1,
-            clause: 'THIS IS THE LICENCE CLASS CLAUSE',
-            effectiveDate: 'Jan 2020'
-          }];
+    console.log('Terms of Access', termsOfAccess);
 
-          const limitsAndConditionsClause: Clause[] = [{
-            id: 1,
-            clause: 'THIS IS THE LIMITS AND CONDITIONS CLAUSE',
-            effectiveDate: 'Jan 2020'
-          }];
+    // return new Observable(termsOfAccess);
+    this.termsOfAccess = termsOfAccess;
 
-          this.termsOfAccess = {
-            id: 1,
-            enrolleeId: 1,
-            globalClauseId: 1,
-            globalClause,
-            userClauseId: 2,
-            userClause,
-            licenceClassClause,
-            limitsAndConditionsClause
-          };
+    // this.enrolmentResource.getTermsOfAccess(this.enrolment.id)
+    //   .subscribe(
+    //     (termsOfAccess: TermsOfAccess) => {
 
-          console.log('Terms of Access', termsOfAccess);
+    //       // this.termsOfAccess = termsOfAccess;
 
-        },
-        (error: any) => {
-          this.toastService.openErrorToast(`Terms of access could not be found`);
-          this.logger.error('[Enrolment] AccessAgreement::ngOnInit error has occurred: ', error);
-        }
-      );
+
+
+    //     },
+    //     (error: any) => {
+    //       this.toastService.openErrorToast(`Terms of access could not be found`);
+    //       this.logger.error('[Enrolment] AccessAgreement::ngOnInit error has occurred: ', error);
+    //     }
+    //   );
   }
 }
