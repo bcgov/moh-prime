@@ -40,7 +40,8 @@ namespace Prime.Services
                 .Include(t => t.TermsOfAccessLimitsAndConditionsClauses)
                     .ThenInclude(talc => talc.LimitsAndConditionsClause)
                 .Where(t => t.EnrolleeId == enrolleeId)
-                .SingleOrDefaultAsync();
+                .OrderByDescending(t => t.EffectiveDate)
+                .FirstOrDefaultAsync();
         }
 
         private async Task<GlobalClause> GetGlobalClause()
