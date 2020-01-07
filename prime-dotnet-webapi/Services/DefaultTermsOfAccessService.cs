@@ -60,7 +60,7 @@ namespace Prime.Services
                 .FirstOrDefaultAsync();
         }
 
-        // TODO no logic for how license class clauses are chosen
+        // TODO no provided logic for how license class clauses are chosen
         private async Task<IEnumerable<TermsOfAccessLicenseClassClause>> GetTermsOfAccessLicenseClassClauses(Enrollee enrollee, TermsOfAccess termsOfAccess)
         {
             var licenseClassClauses = await _context.LicenseClassClauses
@@ -70,7 +70,7 @@ namespace Prime.Services
             return licenseClassClauses.Select(lcc => new TermsOfAccessLicenseClassClause { TermsOfAccess = termsOfAccess, LicenseClassClause = lcc });
         }
 
-        // TODO no logic for how limits and conditions clauses are chosen
+        // TODO no provided logic for how limits and conditions clauses are chosen
         private async Task<IEnumerable<TermsOfAccessLimitsAndConditionsClause>> GetTermsOfAccessLimitsAndConditionsClauses(Enrollee enrollee, TermsOfAccess termsOfAccess)
         {
             var limitsAndConditionsClauses = await _context.LimitsAndConditionsClauses
