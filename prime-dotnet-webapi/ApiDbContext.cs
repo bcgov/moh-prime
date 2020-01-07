@@ -44,7 +44,7 @@ namespace Prime
         public DbSet<TermsOfAccess> TermsOfAccess { get; set; }
         public DbSet<GlobalClause> GlobalClauses { get; set; }
         public DbSet<UserClause> UserClauses { get; set; }
-        public DbSet<LicenceClassClause> LicenceClassClauses { get; set; }
+        public DbSet<LicenseClassClause> LicenceClassClauses { get; set; }
         public DbSet<LimitsAndConditionsClause> LimitsAndConditionsClauses { get; set; }
 
         public override int SaveChanges()

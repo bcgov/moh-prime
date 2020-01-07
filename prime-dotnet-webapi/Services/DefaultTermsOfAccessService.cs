@@ -6,18 +6,22 @@ using Prime.Models;
 
 namespace Prime.Services
 {
-    public class DefaultTermsOfAccessService: BaseService,  ITermsOfAccessService
+    public class DefaultTermsOfAccessService : BaseService, ITermsOfAccessService
     {
         public DefaultTermsOfAccessService(
             ApiDbContext context, IHttpContextAccessor httpContext) : base(context, httpContext)
         { }
 
+        // TODO type of user needs to be added to the user clause (MOA, OBO, etc) for selection
+        // TODO type of license classes needs to be added to the license clases clause for selection
         public async Task SetEnrolleeTermsOfAccessAsync(Enrollee enrollee)
         {
-            var termsOfAccess = enrollee.TermsOfAccess;
+            var termsOfAccess = new TermsOfAccess { Enrollee = enrollee };
 
-            // TODO assign the most current global clause
             termsOfAccess.GlobalClause = await _context.GlobalClauses
+                .OrderByDescending(g => g.EffectiveDate)
+                .FirstOrDefaultAsync();
+            termsOfAccess.UserClause = await _context.UserClauses
                 .OrderByDescending(g => g.EffectiveDate)
                 .FirstOrDefaultAsync();
 
@@ -28,8 +32,7 @@ namespace Prime.Services
             // TODO determine licence class clauses
             // TODO assign the licence class clause(s)
 
-            // TODO determine limits and conditions clauses
-            // TODO assign the limits and conditions clause(s)
+            _context.Add(termsOfAccess);
 
             await _context.SaveChangesAsync();
         }
