@@ -118,17 +118,12 @@ namespace Prime
             modelBuilder.ApplyConfiguration(new CollegeLicenseConfiguration());
             modelBuilder.ApplyConfiguration(new PracticeConfiguration());
             modelBuilder.ApplyConfiguration(new CollegePracticeConfiguration());
-
             modelBuilder.ApplyConfiguration(new JobNameConfiguration());
-
             modelBuilder.ApplyConfiguration(new OrganizationTypeConfiguration());
-
             modelBuilder.ApplyConfiguration(new StatusConfiguration());
             modelBuilder.ApplyConfiguration(new StatusReasonConfiguration());
-
             modelBuilder.ApplyConfiguration(new CountryConfiguration());
             modelBuilder.ApplyConfiguration(new ProvinceConfiguration());
-
             modelBuilder.ApplyConfiguration(new PrivilegeGroupConfiguration());
             modelBuilder.ApplyConfiguration(new PrivilegeConfiguration());
             modelBuilder.ApplyConfiguration(new DefaultPrivilegeConfiguration());
@@ -170,8 +165,6 @@ namespace Prime
                 .WithMany(s => s.EnrolmentStatuses)
                 .HasForeignKey(es => es.StatusCode);
 
-            modelBuilder.Entity<EnrolmentStatusReason>()
-                .HasKey(esr => new { esr.EnrolmentStatusId, esr.StatusCode, esr.StatusReasonCode });
             modelBuilder.Entity<EnrolmentStatusReason>()
                 .HasOne(esr => esr.EnrolmentStatus)
                 .WithMany(es => es.EnrolmentStatusReasons)

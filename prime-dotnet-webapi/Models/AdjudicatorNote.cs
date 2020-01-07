@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 namespace Prime.Models
 {
     [Table("AdjudicatorNotes")]
-    public class AdjudicatorNote : IEnrolleeNote
+    public class AdjudicatorNote : BaseAuditable, IEnrolleeNote
     {
         [Key]
         public int? Id { get; set; }

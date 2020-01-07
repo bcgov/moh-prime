@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 
 import { Enrolment } from '@shared/models/enrolment.model';
 import { IDialogContent } from '../../dialog-content.model';
+import { EnrolmentStatusReason } from '@shared/models/enrolment-status-reason.model';
 
 @Component({
   selector: 'app-enrolment-status-reasons',
@@ -17,7 +18,7 @@ export class EnrolmentStatusReasonsComponent implements OnInit, IDialogContent {
     this.enrolment = enrolment;
   }
 
-  public get enrolmentStatusReasons() {
+  public get enrolmentStatusReasons(): EnrolmentStatusReason[] {
     return this.enrolment.currentStatus.enrolmentStatusReasons;
   }
 
