@@ -10,7 +10,8 @@
 
       <ng-container *ngIf="currentPage > 0; else preamble">
 
-        <app-terms-of-access-pager [currentPage]="currentPage"
+        <app-terms-of-access-pager [termsOfAccess]="termsOfAccess"
+                                   [currentPage]="currentPage"
                                    (changed)="onPageChange($event)"></app-terms-of-access-pager>
 
       </ng-container>
@@ -39,9 +40,8 @@
 
           <p>
             After you accept the User Access Agreement, you will receive your PharmaNet ID. Give this ID to the person
-            or
-            organization responsible for setting up your PharmaNet access account. This ID must be associated with your
-            transactions on any PharmaNet access.
+            or organization responsible for setting up your PharmaNet access account. This ID must be associated with
+            your transactions on any PharmaNet access.
           </p>
 
         </ng-container>
