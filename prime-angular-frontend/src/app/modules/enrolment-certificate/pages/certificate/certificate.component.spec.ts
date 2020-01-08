@@ -17,6 +17,8 @@ import { EnrolleeProfileComponent } from '@shared/components/enrollee-profile/en
 import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
 import { EnrolleePrivilegesComponent } from '@shared/components/enrollee-privileges/enrollee-privileges.component';
+import { ConfigService } from '@config/config.service';
+import { MockConfigService } from 'test/mocks/mock-config.service';
 
 describe('CertificateComponent', () => {
   let component: CertificateComponent;
@@ -49,6 +51,10 @@ describe('CertificateComponent', () => {
           {
             provide: APP_CONFIG,
             useValue: APP_DI_CONFIG
+          },
+          {
+            provide: ConfigService,
+            useClass: MockConfigService
           }
         ]
       }
