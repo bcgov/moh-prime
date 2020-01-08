@@ -86,8 +86,8 @@ objects:
     metadata:
       name: '${NAME}${SUFFIX}'
       annotations:
-        volume.beta.kubernetes.io/storage-class: gluster-file-db
-        volume.beta.kubernetes.io/storage-provisioner: kubernetes.io/glusterfs
+        volume.beta.kubernetes.io/storage-class: netapp-block-standard
+        volume.beta.kubernetes.io/storage-provisioner: netapp.io/trident
     spec:
       accessModes:
         - ReadWriteMany
