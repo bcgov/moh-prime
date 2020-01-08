@@ -68,10 +68,18 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
   }
 
   public get globalClause(): Clause {
-    // this.termsOfAccess.globalClause.clause = 'TEST GLOBAL CLAUSE';
-    // console.log('globalClause()', this.termsOfAccess.globalClause);
-    return this.termsOfAccess.globalClause;
+    return this.termsOfAccess ? this.termsOfAccess.globalClause : null;
   }
+  public get userClause(): Clause {
+    return this.termsOfAccess ? this.termsOfAccess.userClause : null;
+  }
+  public get licenceClassClauses(): Clause[] {
+    return this.termsOfAccess ? this.termsOfAccess.termsOfAccessLicenseClassClauses : null;
+  }
+  public get globalClauses(): Clause[] {
+    return this.termsOfAccess ? this.termsOfAccess.termsOfAccessLimitsAndConditionsClauses : null;
+  }
+
 
   public onSubmit(enrolmentStatus: EnrolmentStatus) {
     if (this.hasReadAgreement) {
@@ -150,54 +158,10 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
   public ngOnInit() {
     this.enrolment = this.enrolmentService.enrolment;
     this.isInitialEnrolment = this.enrolment.progressStatus !== ProgressStatus.FINISHED;
-    // const globalClause: Clause = {
-    //   id: 1,
-    //   clause: 'THIS IS THE GOBAL CLAUSE',
-    //   effectiveDate: 'Jan 2020'
-    // };
-
-    // const userClause: Clause = {
-    //   id: 1,
-    //   clause: 'THIS IS THE USER CLAUSE',
-    //   effectiveDate: 'Jan 2020'
-    // };
-
-    // const licenceClassClause: Clause[] = [{
-    //   id: 1,
-    //   clause: 'THIS IS THE LICENCE CLASS CLAUSE',
-    //   effectiveDate: 'Jan 2020'
-    // }];
-
-    // const limitsAndConditionsClause: Clause[] = [{
-    //   id: 1,
-    //   clause: 'THIS IS THE LIMITS AND CONDITIONS CLAUSE',
-    //   effectiveDate: 'Jan 2020'
-    // }];
-
-    // const termsOfAccess = {
-    //   id: 1,
-    //   enrolleeId: 1,
-    //   globalClauseId: 1,
-    //   globalClause,
-    //   userClauseId: 2,
-    //   userClause,
-    //   licenceClassClause,
-    //   limitsAndConditionsClause
-    // };
-
-    // console.log('Terms of Access', termsOfAccess);
-
-    // // return new Observable(termsOfAccess);
-    // this.termsOfAccess = termsOfAccess;
-
     this.enrolmentResource.getTermsOfAccess(this.enrolment.id)
       .subscribe(
         (termsOfAccess: TermsOfAccess) => {
-
           this.termsOfAccess = termsOfAccess;
-
-
-
         },
         (error: any) => {
           this.toastService.openErrorToast(`Terms of access could not be found`);

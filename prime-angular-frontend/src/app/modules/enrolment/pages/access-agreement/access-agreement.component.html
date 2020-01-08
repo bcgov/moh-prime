@@ -22,9 +22,9 @@
       </ng-container> -->
 
       <app-global-clause [clause]="globalClause"></app-global-clause>
-      <app-user-clause></app-user-clause>
-      <app-licence-class-clause></app-licence-class-clause>
-      <app-limits-and-conditions-clause></app-limits-and-conditions-clause>
+      <app-user-clause [clause]="userClause"></app-user-clause>
+      <app-licence-class-clause [clauses]="licenceClassClauses"></app-licence-class-clause>
+      <app-limits-and-conditions-clause [clauses]="limitsAndConditionsClauses"></app-limits-and-conditions-clause>
 
       <ng-template #preamble>
 

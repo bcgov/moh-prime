@@ -1,1 +1,9 @@
-<p>user-clause works!</p>
+<app-page-subheader>
+  <ng-container appPageSubheaderTitle>User Clause</ng-container>
+</app-page-subheader>
+
+<ng-container *ngIf="clause">
+  <p>
+    {{ clause.clause }}
+  </p>
+</ng-container>

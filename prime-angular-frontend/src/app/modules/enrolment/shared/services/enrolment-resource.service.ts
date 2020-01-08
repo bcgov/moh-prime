@@ -84,7 +84,7 @@ export class EnrolmentResource {
   }
 
   public getTermsOfAccess(id: number): Observable<TermsOfAccess> {
-    return this.http.get(`${this.config.apiEndpoint}/${id}/terms-of-access`)
+    return this.http.get(`${this.config.apiEndpoint}/enrollees/${id}/terms-of-access`)
       .pipe(
         map((response: PrimeHttpResponse) => response.result as TermsOfAccess),
         tap((termsOfAccess: TermsOfAccess) => this.logger.info('TERMS_OF_ACCESS', termsOfAccess))

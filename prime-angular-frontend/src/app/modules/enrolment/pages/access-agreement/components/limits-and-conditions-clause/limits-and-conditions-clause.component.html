@@ -1,1 +1,11 @@
-<p>limits-and-conditions-clause works!</p>
+<app-page-subheader>
+  <ng-container appPageSubheaderTitle>Limits and Conditions Clauses</ng-container>
+</app-page-subheader>
+
+<ng-container *ngIf="clauses">
+  <div *ngFor="let clause of clauses">
+    <p>
+      {{ clause.clause }}
+    </p>
+  </div>
+</ng-container>

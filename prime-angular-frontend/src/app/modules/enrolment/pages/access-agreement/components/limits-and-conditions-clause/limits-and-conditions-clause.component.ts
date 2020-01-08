@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Clause } from '@enrolment/shared/models/terms-of-access.model';
 
 @Component({
   selector: 'app-limits-and-conditions-clause',
@@ -6,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./limits-and-conditions-clause.component.scss']
 })
 export class LimitsAndConditionsClauseComponent implements OnInit {
-
+  @Input() clauses: Clause[];
   constructor() { }
 
   ngOnInit() {
