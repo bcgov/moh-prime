@@ -14,8 +14,13 @@ import { OverviewComponent } from './pages/overview/overview.component';
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 import { AccessAgreementComponent } from './pages/access-agreement/access-agreement.component';
 import { PageRefDirective } from './pages/access-agreement/page-ref.directive';
-import { MoaAccessAgreementComponent } from './pages/access-agreement/components/moa-access-agreement/moa-access-agreement.component';
-import { RuAccessAgreementComponent } from './pages/access-agreement/components/ru-access-agreement/ru-access-agreement.component';
+import { TermsOfAccessPagerComponent } from './pages/access-agreement/components/terms-of-access-pager/terms-of-access-pager.component';
+import { GlobalClauseComponent } from './pages/access-agreement/components/global-clause/global-clause.component';
+import { LicenceClassClauseComponent } from './pages/access-agreement/components/licence-class-clause/licence-class-clause.component';
+import {
+  LimitsAndConditionsClauseComponent
+} from './pages/access-agreement/components/limits-and-conditions-clause/limits-and-conditions-clause.component';
+import { UserClauseComponent } from './pages/access-agreement/components/user-clause/user-clause.component';
 import { PharmanetEnrolmentCertificateComponent } from './pages/pharmanet-enrolment-certificate/pharmanet-enrolment-certificate.component';
 import { DeclinedComponent } from './pages/declined/declined.component';
 import { DeclinedAccessAgreementComponent } from './pages/declined-access-agreement/declined-access-agreement.component';
@@ -26,11 +31,6 @@ import { EnrolmentLogHistoryComponent } from './pages/enrolment-log-history/enro
 import { PageFooterComponent } from './shared/components/page-footer/page-footer.component';
 import { CollegeCertificationFormComponent } from './shared/components/college-certification-form/college-certification-form.component';
 import { JobFormComponent } from './shared/components/job-form/job-form.component';
-import { GlobalClauseComponent } from './pages/access-agreement/components/global-clause/global-clause.component';
-import { LicenceClassClauseComponent } from './pages/access-agreement/components/licence-class-clause/licence-class-clause.component';
-import { LimitsAndConditionsClauseComponent } from './pages/access-agreement/components/limits-and-conditions-clause/limits-and-conditions-clause.component';
-import { UserClauseComponent } from './pages/access-agreement/components/user-clause/user-clause.component';
-import { TermsOfAccessPagerComponent } from './pages/access-agreement/components/terms-of-access-pager/terms-of-access-pager.component';
 
 @NgModule({
   declarations: [
@@ -44,9 +44,12 @@ import { TermsOfAccessPagerComponent } from './pages/access-agreement/components
     OverviewComponent,
     ConfirmationComponent,
     AccessAgreementComponent,
-    MoaAccessAgreementComponent,
-    RuAccessAgreementComponent,
     PageRefDirective,
+    TermsOfAccessPagerComponent,
+    GlobalClauseComponent,
+    LicenceClassClauseComponent,
+    LimitsAndConditionsClauseComponent,
+    UserClauseComponent,
     DeclinedComponent,
     DeclinedAccessAgreementComponent,
     AccessAgreementHistoryComponent,
@@ -55,12 +58,7 @@ import { TermsOfAccessPagerComponent } from './pages/access-agreement/components
     EnrolmentLogHistoryComponent,
     PageFooterComponent,
     CollegeCertificationFormComponent,
-    JobFormComponent,
-    GlobalClauseComponent,
-    LicenceClassClauseComponent,
-    LimitsAndConditionsClauseComponent,
-    UserClauseComponent,
-    TermsOfAccessPagerComponent
+    JobFormComponent
   ],
   imports: [
     SharedModule,
