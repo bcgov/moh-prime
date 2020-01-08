@@ -8,9 +8,9 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-RUN npm install @angular/cli -g && \ 
+RUN npm install @angular/cli -g && \
     npm install && \
-    ng build --prod 
+    ng build --prod --subresource-integrity
 
 FROM nginx
 
