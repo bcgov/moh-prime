@@ -168,7 +168,7 @@ namespace Prime.Models
 
                 if (enrolmentStatusReasons != null && enrolmentStatusReasons.Count > 0)
                 {
-                    return enrolmentStatusReasons.Any(r => r.StatusReason?.Code == 1)
+                    return (this.Certifications.Count > 0)
                         ? PrimeConstants.PRIME_MOA
                         : PrimeConstants.PRIME_RU;
                 }
