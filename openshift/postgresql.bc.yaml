@@ -40,7 +40,7 @@ objects:
           annotations: null
           from:
             kind: ImageStreamTag
-            name: 'postgresql'
+            name: 'postgresql:latest'
             namespace: openshift
           generation: 1
           importPolicy: {}
