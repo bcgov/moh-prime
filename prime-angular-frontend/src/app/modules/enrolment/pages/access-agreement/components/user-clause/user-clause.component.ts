@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Clause } from '@enrolment/shared/models/terms-of-access.model';
+import { UserClause } from '@enrolment/shared/models/terms-of-access.model';
 
 @Component({
   selector: 'app-user-clause',
@@ -7,7 +7,7 @@ import { Clause } from '@enrolment/shared/models/terms-of-access.model';
   styleUrls: ['./user-clause.component.scss']
 })
 export class UserClauseComponent implements OnInit {
-  @Input() clause: Clause;
+  @Input() clause: UserClause;
 
   constructor() { }
 

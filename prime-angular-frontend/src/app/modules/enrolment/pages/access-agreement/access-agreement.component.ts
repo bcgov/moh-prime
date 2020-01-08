@@ -18,7 +18,7 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
-import { TermsOfAccess, Clause } from '@enrolment/shared/models/terms-of-access.model';
+import { TermsOfAccess, Clause, UserClause } from '@enrolment/shared/models/terms-of-access.model';
 import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 import { ViewportService } from '@core/services/viewport.service';
 
@@ -68,18 +68,20 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
   }
 
   public get globalClause(): Clause {
-    return this.termsOfAccess ? this.termsOfAccess.globalClause : null;
-  }
-  public get userClause(): Clause {
-    return this.termsOfAccess ? this.termsOfAccess.userClause : null;
-  }
-  public get licenceClassClauses(): Clause[] {
-    return this.termsOfAccess ? this.termsOfAccess.termsOfAccessLicenseClassClauses : null;
-  }
-  public get globalClauses(): Clause[] {
-    return this.termsOfAccess ? this.termsOfAccess.termsOfAccessLimitsAndConditionsClauses : null;
+    return (this.termsOfAccess) ? this.termsOfAccess.globalClause : null;
   }
 
+  public get userClause(): UserClause {
+    return (this.termsOfAccess) ? this.termsOfAccess.userClause : null;
+  }
+
+  public get licenceClassClauses(): Clause[] {
+    return (this.termsOfAccess) ? this.termsOfAccess.licenseClassClauses : null;
+  }
+
+  public get limitsAndConditionsClauses(): Clause[] {
+    return (this.termsOfAccess) ? this.termsOfAccess.limitsAndConditionsClauses : null;
+  }
 
   public onSubmit(enrolmentStatus: EnrolmentStatus) {
     if (this.hasReadAgreement) {

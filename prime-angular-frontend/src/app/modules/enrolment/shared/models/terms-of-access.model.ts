@@ -6,9 +6,9 @@ export interface TermsOfAccess {
   globalClauseId: number;
   globalClause: Clause;
   userClauseId: number;
-  userClause: Clause;
-  termsOfAccessLicenseClassClauses: Clause[];
-  termsOfAccessLimitsAndConditionsClauses: Clause[];
+  userClause: UserClause;
+  licenseClassClauses: Clause[];
+  limitsAndConditionsClauses: Clause[];
   effectiveDate: string;
 }
 
