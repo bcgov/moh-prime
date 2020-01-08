@@ -30,6 +30,7 @@ import { GlobalClauseComponent } from './pages/access-agreement/components/globa
 import { LicenceClassClauseComponent } from './pages/access-agreement/components/licence-class-clause/licence-class-clause.component';
 import { LimitsAndConditionsClauseComponent } from './pages/access-agreement/components/limits-and-conditions-clause/limits-and-conditions-clause.component';
 import { UserClauseComponent } from './pages/access-agreement/components/user-clause/user-clause.component';
+import { TermsOfAccessPagerComponent } from './pages/access-agreement/components/terms-of-access-pager/terms-of-access-pager.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import { UserClauseComponent } from './pages/access-agreement/components/user-cl
     GlobalClauseComponent,
     LicenceClassClauseComponent,
     LimitsAndConditionsClauseComponent,
-    UserClauseComponent
+    UserClauseComponent,
+    TermsOfAccessPagerComponent
   ],
   imports: [
     SharedModule,

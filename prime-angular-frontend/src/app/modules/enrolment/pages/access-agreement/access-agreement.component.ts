@@ -67,22 +67,6 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
     return this.agreed.value;
   }
 
-  public get globalClause(): Clause {
-    return (this.termsOfAccess) ? this.termsOfAccess.globalClause : null;
-  }
-
-  public get userClause(): UserClause {
-    return (this.termsOfAccess) ? this.termsOfAccess.userClause : null;
-  }
-
-  public get licenceClassClauses(): Clause[] {
-    return (this.termsOfAccess) ? this.termsOfAccess.licenseClassClauses : null;
-  }
-
-  public get limitsAndConditionsClauses(): Clause[] {
-    return (this.termsOfAccess) ? this.termsOfAccess.limitsAndConditionsClauses : null;
-  }
-
   public onSubmit(enrolmentStatus: EnrolmentStatus) {
     if (this.hasReadAgreement) {
       const status = (enrolmentStatus === EnrolmentStatus.ACCEPTED_TOS)
@@ -162,9 +146,7 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
     this.isInitialEnrolment = this.enrolment.progressStatus !== ProgressStatus.FINISHED;
     this.enrolmentResource.getTermsOfAccess(this.enrolment.id)
       .subscribe(
-        (termsOfAccess: TermsOfAccess) => {
-          this.termsOfAccess = termsOfAccess;
-        },
+        (termsOfAccess: TermsOfAccess) => this.termsOfAccess = termsOfAccess,
         (error: any) => {
           this.toastService.openErrorToast(`Terms of access could not be found`);
           this.logger.error('[Enrolment] AccessAgreement::ngOnInit error has occurred: ', error);

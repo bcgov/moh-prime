@@ -10,37 +10,8 @@
 
       <ng-container *ngIf="currentPage > 0; else preamble">
 
-        <!-- <ng-container *ngIf="enrolment.enrolleeClassification === EnrolleeClassification.MOA">
-          <app-moa-access-agreement [currentPage]="currentPage"
-                                    (changed)="onPageChange($event)"></app-moa-access-agreement>
-        </ng-container>
-        <ng-container *ngIf="enrolment.enrolleeClassification === EnrolleeClassification.RU">
-          <app-ru-access-agreement [currentPage]="currentPage"
-                                   (changed)="onPageChange($event)"></app-ru-access-agreement>
-        </ng-container> -->
-
-        <ng-container [ngSwitch]="currentPage">
-          <ng-container *ngSwitchCase="1">
-
-            <app-global-clause [clause]="globalClause"></app-global-clause>
-
-          </ng-container>
-          <ng-container *ngSwitchCase="2">
-
-            <app-user-clause [clause]="userClause"></app-user-clause>
-
-          </ng-container>
-          <ng-container *ngSwitchCase="3">
-
-            <app-licence-class-clause [clauses]="licenceClassClauses"></app-licence-class-clause>
-
-          </ng-container>
-          <ng-container *ngSwitchCase="4">
-
-            <app-limits-and-conditions-clause [clauses]="limitsAndConditionsClauses"></app-limits-and-conditions-clause>
-
-          </ng-container>
-        </ng-container>
+        <app-terms-of-access-pager [currentPage]="currentPage"
+                                   (changed)="onPageChange($event)"></app-terms-of-access-pager>
 
       </ng-container>
 
