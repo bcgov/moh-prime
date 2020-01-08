@@ -23,6 +23,10 @@ export class AlertComponent {
     return !!this.alertTitleChildren.length || false;
   }
 
+  public hasIcon(): boolean {
+    return this.icon === null;
+  }
+
   public getType(): string {
     return `alert-${this.type}`;
   }

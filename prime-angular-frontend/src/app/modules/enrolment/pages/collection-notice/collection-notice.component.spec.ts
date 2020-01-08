@@ -1,8 +1,22 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
+import { MockConfigService } from 'test/mocks/mock-config.service';
+import { MockAuthService } from 'test/mocks/mock-auth.service';
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { ConfigService } from '@config/config.service';
+import { AuthService } from '@auth/shared/services/auth.service';
+
 import { CollectionNoticeComponent } from './collection-notice.component';
+
+import { CollectionNoticeAlertComponent } from '@enrolment/shared/components/collection-notice-alert/collection-notice-alert.component';
+import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
+import { AlertComponent } from '@shared/components/alert/alert.component';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
+
+
 
 describe('CollectionNoticeComponent', () => {
   let component: CollectionNoticeComponent;
@@ -12,11 +26,32 @@ describe('CollectionNoticeComponent', () => {
     TestBed.configureTestingModule(
       {
         imports: [
-          RouterTestingModule
+          RouterTestingModule,
+          NgxMaterialModule
         ],
         declarations: [
+          AlertComponent,
           CollectionNoticeComponent,
+          CollectionNoticeAlertComponent,
           PageHeaderComponent
+        ],
+        providers: [
+          {
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
+          },
+          {
+            provide: ConfigService,
+            useClass: MockConfigService
+          },
+          {
+            provide: EnrolmentService,
+            useClass: MockEnrolmentService
+          },
+          {
+            provide: AuthService,
+            useClass: MockAuthService
+          }
         ]
       }
     ).compileComponents();
