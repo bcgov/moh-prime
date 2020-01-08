@@ -3,8 +3,10 @@
      [ngClass]="getType()">
 
   <div class="d-flex">
-    <mat-icon [ngClass]="{ 'large mr-3': hasTitle(), 'mr-2': !hasTitle() }"
-              [inline]="hasTitle()">{{ icon }}</mat-icon>
+    <ng-container *ngIf="hasIcon()">
+      <mat-icon [ngClass]="{ 'large mr-3': hasTitle(), 'mr-2': !hasTitle() }"
+                [inline]="hasTitle()">{{ icon }}</mat-icon>
+    </ng-container>
 
     <div class="flex-grow-1">
       <ng-container *ngIf="hasTitle()">

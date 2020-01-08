@@ -31,6 +31,7 @@ import { EnrolmentLogHistoryComponent } from './pages/enrolment-log-history/enro
 import { PageFooterComponent } from './shared/components/page-footer/page-footer.component';
 import { CollegeCertificationFormComponent } from './shared/components/college-certification-form/college-certification-form.component';
 import { JobFormComponent } from './shared/components/job-form/job-form.component';
+import { CollectionNoticeAlertComponent } from './shared/components/collection-notice-alert/collection-notice-alert.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import { JobFormComponent } from './shared/components/job-form/job-form.componen
     EnrolmentLogHistoryComponent,
     PageFooterComponent,
     CollegeCertificationFormComponent,
-    JobFormComponent
+    JobFormComponent,
+    CollectionNoticeAlertComponent
   ],
   imports: [
     SharedModule,

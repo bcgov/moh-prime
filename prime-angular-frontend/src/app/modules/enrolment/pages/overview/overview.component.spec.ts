@@ -20,6 +20,10 @@ import { ProgressIndicatorComponent } from '@shared/components/progress-indicato
 import { EnrolleeProfileComponent } from '@shared/components/enrollee-profile/enrollee-profile.component';
 import { EnrolleeAddressComponent } from '@shared/components/enrollee-address/enrollee-address.component';
 import { EnrolleeSelfDeclarationComponent } from '@shared/components/enrollee-self-declaration/enrollee-self-declaration.component';
+import { CollectionNoticeAlertComponent } from '@enrolment/shared/components/collection-notice-alert/collection-notice-alert.component';
+import { AlertComponent } from '@shared/components/alert/alert.component';
+
+
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { EnrolmentPipe } from '@shared/pipes/enrolment.pipe';
@@ -28,6 +32,8 @@ import { PostalPipe } from '@shared/pipes/postal.pipe';
 import { PhonePipe } from '@shared/pipes/phone.pipe';
 import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
 import { YesNoPipe } from '@shared/pipes/yes-no.pipe';
+import { AuthService } from '@auth/shared/services/auth.service';
+import { MockAuthService } from 'test/mocks/mock-auth.service';
 
 describe('ReviewComponent', () => {
   let component: OverviewComponent;
@@ -53,6 +59,8 @@ describe('ReviewComponent', () => {
           EnrolleeAddressComponent,
           EnrolleeSelfDeclarationComponent,
           ProgressIndicatorComponent,
+          CollectionNoticeAlertComponent,
+          AlertComponent,
           ConfigCodePipe,
           EnrolmentPipe,
           FormatDatePipe,
@@ -74,6 +82,10 @@ describe('ReviewComponent', () => {
           {
             provide: EnrolmentService,
             useClass: MockEnrolmentService
+          },
+          {
+            provide: AuthService,
+            useClass: MockAuthService
           }
         ]
       }

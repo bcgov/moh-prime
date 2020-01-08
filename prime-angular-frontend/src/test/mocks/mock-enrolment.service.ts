@@ -84,7 +84,8 @@ export class MockEnrolmentService implements IEnrolmentService {
       enrolmentCertificateNote: null,
       accessAgreementNote: null,
       profileCompleted: true,
-      progressStatus: ProgressStatus.STARTED
+      progressStatus: ProgressStatus.STARTED,
+      collectionNoticeAccepted: false
     });
   }
 
