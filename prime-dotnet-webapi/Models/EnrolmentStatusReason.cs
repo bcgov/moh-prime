@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace Prime.Models
 {
-    [Table("EnrolmentStatusReasons")]
+    [Table("EnrolmentStatusReason")]
     public class EnrolmentStatusReason : BaseAuditable
     {
         [Key]

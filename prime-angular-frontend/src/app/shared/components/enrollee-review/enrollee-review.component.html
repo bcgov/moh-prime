@@ -136,21 +136,7 @@
             (click)="onRoute(EnrolmentRoutes.ORGANIZATION)">edit</mat-icon>
 </app-page-subheader>
 
-<ng-container *ngIf="hasOrganizations; else hasNone">
-
-  <dl class="row mb-3">
-    <dt class="col-12 mb-1">Organization Types</dt>
-    <dd class="col-12 text-right">
-      <ul class="list-unstyled">
-        <li *ngFor="let organization of organizations; let i = index"
-            class="text-right">
-          {{ organization.organizationTypeCode | configCode: 'organizationTypes' }}
-        </li>
-      </ul>
-    </dd>
-  </dl>
-
-</ng-container>
+<app-enrollee-organizations [organizations]="organizations"></app-enrollee-organizations>
 
 <ng-template #hasNone>
 

@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace Prime.Models
 {
-    [Table("AdjudicatorNotes")]
+    [Table("AdjudicatorNote")]
     public class AdjudicatorNote : BaseAuditable, IEnrolleeNote
     {
         [Key]
