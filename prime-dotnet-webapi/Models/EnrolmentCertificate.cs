@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
 
 namespace Prime.Models
 {
@@ -18,9 +19,11 @@ namespace Prime.Models
         public DateTime DateOfBirth { get; set; }
         public string LicensePlate { get; set; }
         public ICollection<Privilege> Privileges { get; set; }
+        public ICollection<OrganizationType> OrganizationTypes { get; set; }
 
         public static EnrolmentCertificate Create(Enrollee enrollee)
         {
+
             return new EnrolmentCertificate
             {
                 FirstName = enrollee.FirstName,
