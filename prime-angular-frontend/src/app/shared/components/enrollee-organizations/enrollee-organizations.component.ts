@@ -10,9 +10,8 @@ export class EnrolleeOrganizationsComponent implements OnInit {
   @Input() public header: string;
   @Input() public organizations: Organization[];
   @Input() public organizationTypes: [];
+
   constructor() { }
 
-  ngOnInit() {
-  }
-
+  public ngOnInit() { }
 }

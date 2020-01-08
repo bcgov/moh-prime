@@ -7,10 +7,13 @@ describe('EnrolleeOrganizationsComponent', () => {
   let fixture: ComponentFixture<EnrolleeOrganizationsComponent>;
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ EnrolleeOrganizationsComponent ]
-    })
-    .compileComponents();
+    TestBed.configureTestingModule(
+      {
+        declarations: [
+          EnrolleeOrganizationsComponent
+        ]
+      }
+    ).compileComponents();
   }));
 
   beforeEach(() => {
