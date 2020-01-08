@@ -15,6 +15,7 @@ import { CollegeCertification } from '@enrolment/shared/models/college-certifica
 import { Job } from '@enrolment/shared/models/job.model';
 import { Organization } from '@enrolment/shared/models/organization.model';
 import { EnrolleeNote } from '../models/enrollee-note.model';
+import { TermsOfAccess, Clause } from '../models/terms-of-access.model';
 
 @Injectable({
   providedIn: 'root'
@@ -79,6 +80,14 @@ export class EnrolmentResource {
       .pipe(
         map((response: PrimeHttpResponse) => response.result as EnrolmentCertificateAccessToken),
         tap((token: EnrolmentCertificateAccessToken) => this.logger.info('ACCESS_TOKEN', token))
+      );
+  }
+
+  public getTermsOfAccess(id: number): Observable<TermsOfAccess> {
+    return this.http.get(`${this.config.apiEndpoint}/enrollees/${id}/terms-of-access`)
+      .pipe(
+        map((response: PrimeHttpResponse) => response.result as TermsOfAccess),
+        tap((termsOfAccess: TermsOfAccess) => this.logger.info('TERMS_OF_ACCESS', termsOfAccess))
       );
   }
 

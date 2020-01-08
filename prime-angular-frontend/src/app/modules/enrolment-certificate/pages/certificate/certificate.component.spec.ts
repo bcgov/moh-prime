@@ -17,41 +17,48 @@ import { EnrolleeProfileComponent } from '@shared/components/enrollee-profile/en
 import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
 import { EnrolleePrivilegesComponent } from '@shared/components/enrollee-privileges/enrollee-privileges.component';
+import { ConfigService } from '@config/config.service';
+import { MockConfigService } from 'test/mocks/mock-config.service';
 
 describe('CertificateComponent', () => {
   let component: CertificateComponent;
   let fixture: ComponentFixture<CertificateComponent>;
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        NgxBusyModule,
-        NgxContextualHelpModule,
-        ClipboardModule,
-        NgxMaterialModule,
-        RouterTestingModule,
-        HttpClientTestingModule
-      ],
-      providers: [
-        {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
-        }
-      ],
-      declarations: [
-        CertificateComponent,
-        PageHeaderComponent,
-        PageSubheaderComponent,
-        EnrolleeProfileComponent,
-        ClipboardIconComponent,
-        EnrolleePrivilegesComponent,
-        CertificatePipe,
-        FormatDatePipe,
-        DefaultPipe,
-        EnrolleePipe
-      ]
-    })
-      .compileComponents();
+    TestBed.configureTestingModule(
+      {
+        imports: [
+          NgxBusyModule,
+          NgxContextualHelpModule,
+          ClipboardModule,
+          NgxMaterialModule,
+          RouterTestingModule,
+          HttpClientTestingModule
+        ],
+        declarations: [
+          CertificateComponent,
+          PageHeaderComponent,
+          PageSubheaderComponent,
+          EnrolleeProfileComponent,
+          ClipboardIconComponent,
+          EnrolleePrivilegesComponent,
+          CertificatePipe,
+          FormatDatePipe,
+          DefaultPipe,
+          EnrolleePipe
+        ],
+        providers: [
+          {
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
+          },
+          {
+            provide: ConfigService,
+            useClass: MockConfigService
+          }
+        ]
+      }
+    ).compileComponents();
   }));
 
   beforeEach(() => {

@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -19,10 +17,12 @@ namespace Prime.Controllers
     public class EnrolleesController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
+        private readonly ITermsOfAccessService _termsOfAccessService;
 
-        public EnrolleesController(IEnrolleeService enrolleeService)
+        public EnrolleesController(IEnrolleeService enrolleeService, ITermsOfAccessService termsOfAccessService)
         {
             _enrolleeService = enrolleeService;
+            _termsOfAccessService = termsOfAccessService;
         }
 
         // GET: api/Enrollees
@@ -162,9 +162,8 @@ namespace Prime.Controllers
             }
 
             // If the enrollee is not in the status of 'In Progress' or 'Accepted TOA', it cannot be updated
-            if (!(await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.IN_PROGRESS_CODE)) &&
-                // TODO should be update to be EDITING and switched to EDITING immediately on ACCEPTED_TOS
-                !(await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.ACCEPTED_TOS_CODE)))
+            // TODO should be update to be EDITING and switched to EDITING immediately on ACCEPTED_TOS
+            if (!(await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.IN_PROGRESS_CODE, Status.ACCEPTED_TOS_CODE)))
             {
                 this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee can not be updated when the current status is not 'In Progress'.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
@@ -345,8 +344,6 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiCreatedResponse<AdjudicatorNote>), StatusCodes.Status201Created)]
         public async Task<ActionResult<AdjudicatorNote>> CreateAdjudicatorNote(int enrolleeId, AdjudicatorNote adjudicatorNote)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
@@ -374,7 +371,7 @@ namespace Prime.Controllers
             );
         }
 
-        // PUT: api/Enrollees/5
+        // PUT: api/Enrollees/5/access-agreement-notes
         /// <summary>
         /// Updates an access agreement note.
         /// </summary>
@@ -386,7 +383,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ApiOkResponse<AccessAgreementNote>), StatusCodes.Status200OK)]
         public async Task<ActionResult<AccessAgreementNote>> UpdateAccessAgreementNote(int enrolleeId, AccessAgreementNote accessAgreementNote)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
@@ -414,7 +411,7 @@ namespace Prime.Controllers
             return Ok(new ApiOkResponse<IEnrolleeNote>(updatedNote));
         }
 
-        // PUT: api/Enrollees/5
+        // PUT: api/Enrollees/5/enrolment-certificate-notes
         /// <summary>
         /// Updates an enrolment certificate note.
         /// </summary>
@@ -426,7 +423,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ApiOkResponse<EnrolmentCertificateNote>), StatusCodes.Status200OK)]
         public async Task<ActionResult<EnrolmentCertificateNote>> UpdateEnrolmentCertNote(int enrolleeId, EnrolmentCertificateNote enrolmentCertNote)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
@@ -452,6 +449,36 @@ namespace Prime.Controllers
             var updatedNote = await _enrolleeService.UpdateEnrolleeNoteAsync(enrolleeId, enrolmentCertNote);
 
             return Ok(new ApiOkResponse<IEnrolleeNote>(updatedNote));
+        }
+
+        // GET: api/Enrollees/5/terms-of-access
+        /// <summary>
+        /// Get the enrolmee's terms of access.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpGet("{enrolleeId}/terms-of-access", Name = nameof(GetTermsOfAccess))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiOkResponse<TermsOfAccess>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<TermsOfAccess>> GetTermsOfAccess(int enrolleeId)
+        {
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
+            {
+                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
+            }
+
+            // Prevent access to the enrollee's current terms of access based on status
+            if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.IN_PROGRESS_CODE, Status.DECLINED_CODE, Status.DECLINED_TOS_CODE))
+            {
+                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee terms of service can not be retrieved when the current status is 'IN_PROGRESS', 'DECLINED', or 'DECLINED_TOA'.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
+
+            var termsOfAccess = await _termsOfAccessService.GetEnrolleeTermsOfAccessAsync(enrolleeId);
+
+            return Ok(new ApiOkResponse<TermsOfAccess>(termsOfAccess));
         }
     }
 }
