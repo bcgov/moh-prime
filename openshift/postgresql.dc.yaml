@@ -87,7 +87,7 @@ objects:
       name: '${NAME}${SUFFIX}'
       annotations:
         volume.beta.kubernetes.io/storage-class: netapp-block-standard
-        volume.beta.kubernetes.io/storage-provisioner: netapp.io/trident
+        trident.netapp.io/reclaimPolicy: Retain
     spec:
       accessModes:
         - ReadWriteMany
