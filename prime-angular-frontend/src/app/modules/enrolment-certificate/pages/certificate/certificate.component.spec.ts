@@ -16,6 +16,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { EnrolleeProfileComponent } from '@shared/components/enrollee-profile/enrollee-profile.component';
 import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
+import { EnrolleePrivilegesComponent } from '@shared/components/enrollee-privileges/enrollee-privileges.component';
 
 describe('CertificateComponent', () => {
   let component: CertificateComponent;
@@ -43,6 +44,7 @@ describe('CertificateComponent', () => {
         PageSubheaderComponent,
         EnrolleeProfileComponent,
         ClipboardIconComponent,
+        EnrolleePrivilegesComponent,
         CertificatePipe,
         FormatDatePipe,
         DefaultPipe,

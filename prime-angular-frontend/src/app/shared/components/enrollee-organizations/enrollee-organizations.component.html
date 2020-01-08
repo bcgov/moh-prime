@@ -1,0 +1,31 @@
+<ng-container *ngIf="organizations?.length || organizationTypes?.length; else hasNone">
+
+  <dl class="row mb-3">
+    <dt class="col-12 mb-1">Organization Types</dt>
+    <dd class="col-12 text-right">
+      <ul class="list-unstyled">
+        <ng-container *ngIf="organizations?.length">
+          <li *ngFor="let organization of organizations; let i = index"
+              class="text-right">
+            {{ organization.organizationTypeCode | configCode: 'organizationTypes' }}
+          </li>
+        </ng-container>
+        <ng-container *ngIf="organizationTypes?.length">
+          <li *ngFor="let organization of organizationTypes; let i = index"
+              class="text-right">
+            {{ organization.name }}
+          </li>
+        </ng-container>
+      </ul>
+    </dd>
+  </dl>
+
+</ng-container>
+
+<ng-template #hasNone>
+
+  <div class="mb-4">
+    <strong>None</strong>
+  </div>
+
+</ng-template>

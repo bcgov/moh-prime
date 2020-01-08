@@ -13,10 +13,12 @@ namespace Prime.Models
         public Guid Id { get; set; }
 
         [Required]
-        public int? EnrolleeId {get; set;}
+        public int? EnrolleeId { get; set; }
 
         [JsonIgnore]
         public Enrollee Enrollee { get; set; }
+
+        public DateTime Expires { get; set; }
 
         public int ViewCount { get; set; }
 

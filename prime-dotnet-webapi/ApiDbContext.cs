@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Prime.Models;
+using Prime.Configuration;
 
 namespace Prime
 {
@@ -28,12 +29,14 @@ namespace Prime
         public DbSet<Certification> Certifications { get; set; }
         public DbSet<Job> Jobs { get; set; }
         public DbSet<Organization> Organizations { get; set; }
+        public DbSet<OrganizationType> OrganizationTypes { get; set; }
         public DbSet<Enrollee> Enrollees { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<EnrolmentStatus> EnrolmentStatuses { get; set; }
         public DbSet<EnrolmentStatusReason> EnrolmentStatusReasons { get; set; }
         public DbSet<Status> Statuses { get; set; }
         public DbSet<EnrolmentCertificateAccessToken> EnrolmentCertificateAccessTokens { get; set; }
+        public DbSet<Privilege> Privileges { get; set; }
         public DbSet<DefaultPrivilege> DefaultPrivileges { get; set; }
         public DbSet<AssignedPrivilege> AssignedPrivileges { get; set; }
         public DbSet<AdjudicatorNote> AdjudicatorNotes { get; set; }

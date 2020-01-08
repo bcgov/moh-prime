@@ -24,6 +24,7 @@ import { ClipboardIconComponent } from '@shared/components/clipboard-icon/clipbo
 import { ProgressIndicatorComponent } from '@shared/components/progress-indicator/progress-indicator.component';
 import { EnrolleeAddressComponent } from '@shared/components/enrollee-address/enrollee-address.component';
 import { EnrolleeProfileComponent } from '@shared/components/enrollee-profile/enrollee-profile.component';
+import { EnrolleePrivilegesComponent } from '@shared/components/enrollee-privileges/enrollee-privileges.component';
 import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
@@ -49,6 +50,7 @@ describe('PharmanetEnrolmentCertificateComponent', () => {
           PageSubheaderComponent,
           EnrolleeProfileComponent,
           EnrolleeAddressComponent,
+          EnrolleePrivilegesComponent,
           ClipboardIconComponent,
           ProgressIndicatorComponent,
           ConfigCodePipe,

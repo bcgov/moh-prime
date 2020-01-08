@@ -115,6 +115,7 @@ namespace Prime.Services
             {
                 // Add the available statuses to the enrollee
                 entity.AvailableStatuses = this.GetAvailableStatuses(entity.CurrentStatus?.Status);
+                entity.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(entity);
             }
 
             return entity;
@@ -138,6 +139,7 @@ namespace Prime.Services
             {
                 // Add the available statuses to the enrolment
                 item.AvailableStatuses = this.GetAvailableStatuses(item.CurrentStatus?.Status);
+                item.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(item);
             }
 
             return items;
@@ -152,6 +154,7 @@ namespace Prime.Services
             {
                 // Add the available statuses to the enrolment
                 enrollee.AvailableStatuses = this.GetAvailableStatuses(enrollee?.CurrentStatus?.Status);
+                enrollee.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(enrollee);
             }
 
             return enrollee;
@@ -382,6 +385,7 @@ namespace Prime.Services
                     await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
                     enrollee.LicensePlate = this.GenerateLicensePlate();
                     createdEnrolmentStatus.PharmaNetStatus = true;
+                    await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrolleeId, enrollee);
                     break;
 
                 case Status.DECLINED_TOS_CODE:
@@ -390,11 +394,7 @@ namespace Prime.Services
                     break;
             }
 
-            var created = await _context.SaveChangesAsync();
-            if (created < 1)
-            {
-                throw new InvalidOperationException("Could not create enrolment status.");
-            }
+            await _context.SaveChangesAsync();
 
             // Enrollee just left manual adjudication, inform the enrollee
             if (oldStatus?.Code == Status.SUBMITTED_CODE)
@@ -450,10 +450,15 @@ namespace Prime.Services
                     .Include(e => e.Certifications)
                     .Include(e => e.Jobs)
                     .Include(e => e.Organizations)
-                    .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.Status)
-                    .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.EnrolmentStatusReasons).ThenInclude(esr => esr.StatusReason)
+                    .Include(e => e.EnrolmentStatuses)
+                        .ThenInclude(es => es.Status)
+                    .Include(e => e.EnrolmentStatuses)
+                        .ThenInclude(es => es.EnrolmentStatusReasons)
+                        .ThenInclude(esr => esr.StatusReason)
                     .Include(e => e.AccessAgreementNote)
-                    .Include(e => e.EnrolmentCertificateNote);
+                    .Include(e => e.EnrolmentCertificateNote)
+                    .Include(e => e.AssignedPrivileges)
+                        .ThenInclude(AssignedPrivilege => AssignedPrivilege.Privilege);
         }
 
         public async Task<Enrollee> GetEnrolleeAsync(int enrolleeId)
@@ -465,6 +470,7 @@ namespace Prime.Services
             {
                 // add the available statuses to the enrollee
                 entity.AvailableStatuses = this.GetAvailableStatuses(entity.CurrentStatus?.Status);
+                entity.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(entity);
             }
 
             return entity;
