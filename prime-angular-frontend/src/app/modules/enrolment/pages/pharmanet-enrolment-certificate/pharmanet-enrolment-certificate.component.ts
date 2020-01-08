@@ -45,6 +45,10 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
     return (this.enrollee) ? this.enrollee.mailingAddress : null;
   }
 
+  public get privileges() {
+    return this.enrolment.privileges;
+  }
+
   public getTokenUrl(tokenId: string): string {
     return `${this.config.loginRedirectUrl}/enrolment-certificate/${tokenId}`;
   }

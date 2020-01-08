@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Prime.Models;
@@ -15,6 +16,16 @@ namespace PrimeTests.Mocks
             // TODO Finish test, currently just sending enrollee back
             // throw new System.NotImplementedException();
             return Task.FromResult(this.GetHolder<int, Enrollee>().Values?.SingleOrDefault(e => e.UserId == enrollee.UserId));
+        }
+
+        public ICollection<AssignedPrivilege> GetAssignedPrivilegesForEnrollee(int? enrolleeId)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ICollection<Privilege> GetPrivilegesForEnrollee(Enrollee enrollee)
+        {
+            throw new System.NotImplementedException();
         }
 
         public override void SeedData()

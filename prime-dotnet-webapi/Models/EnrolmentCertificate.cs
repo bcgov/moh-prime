@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Prime.Models
@@ -14,6 +17,7 @@ namespace Prime.Models
         public string PreferredLastName { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string LicensePlate { get; set; }
+        public ICollection<Privilege> Privileges { get; set; }
 
         public static EnrolmentCertificate Create(Enrollee enrollee)
         {
@@ -26,7 +30,8 @@ namespace Prime.Models
                 PreferredMiddleName = enrollee.PreferredMiddleName,
                 PreferredLastName = enrollee.PreferredLastName,
                 DateOfBirth = enrollee.DateOfBirth,
-                LicensePlate = enrollee.LicensePlate
+                LicensePlate = enrollee.LicensePlate,
+                Privileges = enrollee.Privileges
             };
         }
     }

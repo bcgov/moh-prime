@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Prime.Models
 {
+    [Table("Privilege")]
     public class Privilege : BaseAuditable
     {
         [Key]
@@ -18,8 +20,10 @@ namespace Prime.Models
         [JsonIgnore]
         public PrivilegeGroup PrivilegeGroup { get; set; }
 
+        [JsonIgnore]
         public ICollection<DefaultPrivilege> DefaultPrivileges { get; set; }
 
+        [JsonIgnore]
         public ICollection<AssignedPrivilege> AssignedPrivileges { get; set; }
 
     }
