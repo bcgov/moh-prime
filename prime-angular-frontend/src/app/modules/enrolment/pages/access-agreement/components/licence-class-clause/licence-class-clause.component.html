@@ -1,0 +1,11 @@
+<app-page-subheader>
+  <ng-container appPageSubheaderTitle>Licence Class Clauses</ng-container>
+</app-page-subheader>
+
+<ng-container *ngIf="clauses">
+  <div *ngFor="let clause of clauses">
+    <p>
+      {{ clause.clause }}
+    </p>
+  </div>
+</ng-container>

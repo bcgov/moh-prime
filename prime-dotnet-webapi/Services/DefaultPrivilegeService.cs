@@ -25,7 +25,6 @@ namespace Prime.Services
 
             ICollection<AssignedPrivilege> assignedPrivileges = await this.GetAssignedPrivilegesForEnrolleeAsync(enrolleeId);
 
-
             if (assignedPrivileges != null)
             {
                 foreach (var privilege in assignedPrivileges)
