@@ -17,6 +17,10 @@ import { PageHeaderComponent } from '@shared/components/page-header/page-header.
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
 import { ProgressIndicatorComponent } from '@shared/components/progress-indicator/progress-indicator.component';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { GlobalClauseComponent } from './components/global-clause/global-clause.component';
+import { UserClauseComponent } from './components/user-clause/user-clause.component';
+import { LicenceClassClauseComponent } from './components/licence-class-clause/licence-class-clause.component';
+import { LimitsAndConditionsClauseComponent } from './components/limits-and-conditions-clause/limits-and-conditions-clause.component';
 
 describe('AccessAgreementComponent', () => {
   let component: AccessAgreementComponent;
@@ -40,7 +44,11 @@ describe('AccessAgreementComponent', () => {
           PageHeaderComponent,
           PageSubheaderComponent,
           ProgressIndicatorComponent,
-          RuAccessAgreementComponent
+          RuAccessAgreementComponent,
+          GlobalClauseComponent,
+          UserClauseComponent,
+          LicenceClassClauseComponent,
+          LimitsAndConditionsClauseComponent
         ],
         providers: [
           {
