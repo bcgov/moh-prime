@@ -18,6 +18,28 @@ pipeline {
                     sh "./player.sh toolbelt schemaspy test"
             }
         }
+        stage('SonarQube Code Check') {
+            options {
+                timeout(time: 90, unit: 'MINUTES')   // timeout on this stage
+            }
+            when { expression { ( GIT_BRANCH != 'master' ) } }
+            agent { label 'code-tests' }
+            steps {
+                sh "./player.sh scan"
+            }
+        }
+        stage('ZAP') {
+            options {
+                timeout(time: 90, unit: 'MINUTES')   // timeout on this stage
+            }
+            agent { label 'code-tests' }
+            steps {
+                checkout scm
+                echo "Scanning..."
+                sh "./player.sh zap frontend"
+                sh "./player.sh zap api"
+            }
+        }
         stage('Approve Promotion of Master') {
             options {
                 timeout(time: 24, unit: 'HOURS')   // timeout on this stage
