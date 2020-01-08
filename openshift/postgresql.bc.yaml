@@ -41,7 +41,7 @@ objects:
           from:
             kind: ImageStreamTag
             name: 'postgresql:latest'
-            namespace: 'openshift'
+            namespace: openshift
           generation: 1
           importPolicy: {}
           referencePolicy:

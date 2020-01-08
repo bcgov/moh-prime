@@ -13,4 +13,6 @@ export interface EnrolmentCertificate {
   licensePlate: string;
   privileges: Privilege[];
   organizations: Organization[];
+  // TODO should be an enum
+  organizationTypes: number;
 }
