@@ -31,7 +31,7 @@ namespace Prime.Services
 
         public async Task<TermsOfAccess> GetEnrolleeTermsOfAccessAsync(int enrolleeId)
         {
-            return await _context.TermsOfAccess
+            var termsOfAccess = await _context.TermsOfAccess
                 .Include(t => t.GlobalClause)
                 .Include(t => t.UserClause)
                 .Include(t => t.TermsOfAccessLicenseClassClauses)
@@ -41,6 +41,14 @@ namespace Prime.Services
                 .Where(t => t.EnrolleeId == enrolleeId)
                 .OrderByDescending(t => t.EffectiveDate)
                 .FirstOrDefaultAsync();
+
+            termsOfAccess.LicenseClassClauses = termsOfAccess.TermsOfAccessLicenseClassClauses
+                .Select(talc => talc.LicenseClassClause).ToList();
+
+            termsOfAccess.LimitsAndConditionsClauses = termsOfAccess.TermsOfAccessLimitsAndConditionsClauses
+                .Select(talc => talc.LimitsAndConditionsClause).ToList();
+
+            return termsOfAccess;
         }
 
         private async Task<GlobalClause> GetGlobalClause()

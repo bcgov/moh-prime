@@ -32,8 +32,18 @@ namespace Prime.Models
 
         public UserClause UserClause { get; set; }
 
+        [NotMapped]
+        // TODO use the get instead of using the service to populate
+        public List<LicenseClassClause> LicenseClassClauses { get; set; }
+
+        [NotMapped]
+        // TODO use the get instead of using the service to populate
+        public List<LimitsAndConditionsClause> LimitsAndConditionsClauses { get; set; }
+
+        [JsonIgnore]
         public List<TermsOfAccessLicenseClassClause> TermsOfAccessLicenseClassClauses { get; set; }
 
+        [JsonIgnore]
         public List<TermsOfAccessLimitsAndConditionsClause> TermsOfAccessLimitsAndConditionsClauses { get; set; }
 
         [Required]
