@@ -11,10 +11,8 @@ public class GlobalClauseConfiguration : IEntityTypeConfiguration<GlobalClause>
 
     public void Configure(EntityTypeBuilder<GlobalClause> builder)
     {
-        #region GlobalClauseSeed
         builder.HasData(
             new GlobalClause { Id = 1, Clause = "Global clause", EffectiveDate = DateTime.Now, CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE }
         );
-        #endregion
     }
 }
