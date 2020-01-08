@@ -10,65 +10,55 @@ namespace Prime.Services
 {
     public class DefaultEnrolmentCertificateService : BaseService, IEnrolmentCertificateService
     {
-        private readonly IPrivilegeService _privilegeService;
+        private static readonly TimeSpan TOKEN_LIFESPAN = TimeSpan.FromDays(7);
+        private static readonly int MAX_VIEWS = 3;
 
         public DefaultEnrolmentCertificateService(
-            ApiDbContext context, IHttpContextAccessor httpContext, IPrivilegeService privilegeService)
+            ApiDbContext context, IHttpContextAccessor httpContext)
             : base(context, httpContext)
-        {
-            _privilegeService = privilegeService;
-        }
+        { }
 
         public async Task<EnrolmentCertificate> GetEnrolmentCertificateAsync(Guid accessTokenId)
         {
-            var enrollee = await _context.EnrolmentCertificateAccessTokens
-                .Where(t => t.Id == accessTokenId && t.Active)
-                .Select(t => t.Enrollee)
+            var token = await _context.EnrolmentCertificateAccessTokens
+                .Where(t => t.Id == accessTokenId)
+                .Include(t => t.Enrollee)
+                    .ThenInclude(e => e.AssignedPrivileges)
+                        .ThenInclude(ap => ap.Privilege)
+                .Include(t => t.Enrollee)
+                    .ThenInclude(e => e.Organizations)
+                        .ThenInclude(org => org.OrganizationType)
                 .SingleOrDefaultAsync();
-            if (enrollee == null)
+
+            if (token == null || token.Enrollee == null)
             {
                 return null;
             }
 
-            // Add privileges to Enrollee
-            enrollee.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(enrollee);
+            await UpdateTokenMetadataAsync(token);
 
-            // TODO Refactor this shortcut. This is only for POC of this service.
-            try
+            if (token.Active)
             {
-                var token = await _context.EnrolmentCertificateAccessTokens
-                    .SingleOrDefaultAsync(t => t.Id == accessTokenId);
-                token.ViewCount++;
-                await _context.SaveChangesAsync();
+                return EnrolmentCertificate.Create(token.Enrollee);
             }
-            catch (DbUpdateConcurrencyException)
+            else
             {
-                // ¯\_(ツ)_/¯
+                return null;
             }
-
-            EnrolmentCertificate enrolmentCertificate = EnrolmentCertificate.Create(enrollee);
-
-            // Add organization types names to certificate to display organizations without lookup tables
-            enrolmentCertificate.OrganizationTypes = GetOrganizationTypesForEnrolleeQuery(enrollee.Id);
-
-            return enrolmentCertificate;
         }
 
         public async Task<EnrolmentCertificateAccessToken> CreateCertificateAccessTokenAsync(Enrollee enrollee)
         {
-            // Add privileges to Enrollee
-            enrollee.Privileges = _privilegeService.GetPrivilegesForEnrollee(enrollee);
-
             EnrolmentCertificateAccessToken token = new EnrolmentCertificateAccessToken()
             {
                 Enrollee = enrollee,
                 ViewCount = 0,
+                Expires = DateTime.Today.Add(TOKEN_LIFESPAN),
                 Active = true
             };
             _context.EnrolmentCertificateAccessTokens.Add(token);
 
-            var created = await _context.SaveChangesAsync();
-            if (created < 1)
+            if (await _context.SaveChangesAsync() < 1)
             {
                 throw new InvalidOperationException("Could not create Enrolment Certificate access token.");
             }
@@ -83,12 +73,27 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        private ICollection<OrganizationType> GetOrganizationTypesForEnrolleeQuery(int? enrolleeId)
+        private async Task UpdateTokenMetadataAsync(EnrolmentCertificateAccessToken token)
         {
-            return _context.OrganizationTypes
-                        .Include(ot => ot.Organizations)
-                        .Where(ot => ot.Organizations.Any(o => o.EnrolleeId == enrolleeId))
-                        .ToList();
+            if (!token.Active)
+            {
+                return;
+            }
+
+            if (token.ViewCount >= MAX_VIEWS
+                || DateTime.Today > token.Expires)
+            {
+                token.Active = false;
+            }
+            else
+            {
+                token.ViewCount++;
+            }
+
+            if (await _context.SaveChangesAsync() < 1)
+            {
+                throw new InvalidOperationException("Could not update Enrolment Certificate access token.");
+            }
         }
     }
 }
