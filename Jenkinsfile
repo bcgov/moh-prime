@@ -5,6 +5,9 @@ pipeline {
     }
     stages {
         stage('Build Branch') {
+            options {
+                timeout(time: 90, unit: 'MINUTES')   // timeout on this stage
+            }
             when { expression { ( GIT_BRANCH != 'master' ) } }
             agent { label 'master' }
             steps {
@@ -15,6 +18,9 @@ pipeline {
             }
         }
         stage('Deploy Branch') {
+            options {
+                timeout(time: 10, unit: 'MINUTES')   // timeout on this stage
+            }
             when { expression { ( GIT_BRANCH != 'master' ) } }
             agent { label 'master' }
             steps {
@@ -25,6 +31,9 @@ pipeline {
             }
         }
         stage('SonarQube Code Check') {
+            options {
+                timeout(time: 90, unit: 'MINUTES')   // timeout on this stage
+            }
             when { expression { ( GIT_BRANCH != 'master' ) } }
             agent { label 'code-tests' }
             steps {
@@ -32,6 +41,9 @@ pipeline {
             }
         }
         stage('ZAP') {
+            options {
+                timeout(time: 90, unit: 'MINUTES')   // timeout on this stage
+            }
             agent { label 'code-tests' }
             steps {
                 checkout scm
