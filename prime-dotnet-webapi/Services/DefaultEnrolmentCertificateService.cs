@@ -46,6 +46,9 @@ namespace Prime.Services
 
         public async Task<EnrolmentCertificateAccessToken> CreateCertificateAccessTokenAsync(Enrollee enrollee)
         {
+            // Add privileges to Enrollee
+            enrollee.Privileges = _privilegeService.GetPrivilegesForEnrollee(enrollee);
+
             EnrolmentCertificateAccessToken token = new EnrolmentCertificateAccessToken()
             {
                 Enrollee = enrollee,
