@@ -30,28 +30,6 @@ pipeline {
                 sh "./player.sh deploy frontend dev"
             }
         }
-        stage('SonarQube Code Check') {
-            options {
-                timeout(time: 90, unit: 'MINUTES')   // timeout on this stage
-            }
-            when { expression { ( GIT_BRANCH != 'master' ) } }
-            agent { label 'code-tests' }
-            steps {
-                sh "./player.sh scan"
-            }
-        }
-        stage('ZAP') {
-            options {
-                timeout(time: 90, unit: 'MINUTES')   // timeout on this stage
-            }
-            agent { label 'code-tests' }
-            steps {
-                checkout scm
-                echo "Scanning..."
-                sh "./player.sh zap frontend"
-                sh "./player.sh zap api"
-            }
-        }
         stage('SchemaSpy Database Investigation') {
             when { expression { ( GIT_BRANCH == 'develop' ) } }
             agent { label 'master' }
