@@ -3,6 +3,6 @@
 </p>
 <ol>
   <li *ngFor="let enrolment of enrolmentStatusReasons">
-    {{ enrolment.statusReason.name }}
+    {{ enrolment.statusReason.name }}{{ enrolment.reasonNote ? ": " + enrolment.reasonNote : "" }}
   </li>
 </ol>

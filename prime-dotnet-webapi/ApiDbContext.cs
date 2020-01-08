@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Prime.Models;
+using Prime.Configuration;
 
 namespace Prime
 {
@@ -28,12 +29,14 @@ namespace Prime
         public DbSet<Certification> Certifications { get; set; }
         public DbSet<Job> Jobs { get; set; }
         public DbSet<Organization> Organizations { get; set; }
+        public DbSet<OrganizationType> OrganizationTypes { get; set; }
         public DbSet<Enrollee> Enrollees { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<EnrolmentStatus> EnrolmentStatuses { get; set; }
         public DbSet<EnrolmentStatusReason> EnrolmentStatusReasons { get; set; }
         public DbSet<Status> Statuses { get; set; }
         public DbSet<EnrolmentCertificateAccessToken> EnrolmentCertificateAccessTokens { get; set; }
+        public DbSet<Privilege> Privileges { get; set; }
         public DbSet<DefaultPrivilege> DefaultPrivileges { get; set; }
         public DbSet<AssignedPrivilege> AssignedPrivileges { get; set; }
         public DbSet<AdjudicatorNote> AdjudicatorNotes { get; set; }
@@ -111,17 +114,12 @@ namespace Prime
             modelBuilder.ApplyConfiguration(new CollegeLicenseConfiguration());
             modelBuilder.ApplyConfiguration(new PracticeConfiguration());
             modelBuilder.ApplyConfiguration(new CollegePracticeConfiguration());
-
             modelBuilder.ApplyConfiguration(new JobNameConfiguration());
-
             modelBuilder.ApplyConfiguration(new OrganizationTypeConfiguration());
-
             modelBuilder.ApplyConfiguration(new StatusConfiguration());
             modelBuilder.ApplyConfiguration(new StatusReasonConfiguration());
-
             modelBuilder.ApplyConfiguration(new CountryConfiguration());
             modelBuilder.ApplyConfiguration(new ProvinceConfiguration());
-
             modelBuilder.ApplyConfiguration(new PrivilegeGroupConfiguration());
             modelBuilder.ApplyConfiguration(new PrivilegeConfiguration());
             modelBuilder.ApplyConfiguration(new DefaultPrivilegeConfiguration());
@@ -159,8 +157,6 @@ namespace Prime
                 .WithMany(s => s.EnrolmentStatuses)
                 .HasForeignKey(es => es.StatusCode);
 
-            modelBuilder.Entity<EnrolmentStatusReason>()
-                .HasKey(esr => new { esr.EnrolmentStatusId, esr.StatusCode, esr.StatusReasonCode });
             modelBuilder.Entity<EnrolmentStatusReason>()
                 .HasOne(esr => esr.EnrolmentStatus)
                 .WithMany(es => es.EnrolmentStatusReasons)

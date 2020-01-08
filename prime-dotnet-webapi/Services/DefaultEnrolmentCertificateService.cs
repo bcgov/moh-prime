@@ -10,6 +10,9 @@ namespace Prime.Services
 {
     public class DefaultEnrolmentCertificateService : BaseService, IEnrolmentCertificateService
     {
+        private static readonly TimeSpan TOKEN_LIFESPAN = TimeSpan.FromDays(7);
+        private static readonly int MAX_VIEWS = 3;
+
         public DefaultEnrolmentCertificateService(
             ApiDbContext context, IHttpContextAccessor httpContext)
             : base(context, httpContext)
@@ -17,29 +20,31 @@ namespace Prime.Services
 
         public async Task<EnrolmentCertificate> GetEnrolmentCertificateAsync(Guid accessTokenId)
         {
-            var enrollee = await _context.EnrolmentCertificateAccessTokens
-                .Where(t => t.Id == accessTokenId && t.Active)
-                .Select(t => t.Enrollee)
+            var token = await _context.EnrolmentCertificateAccessTokens
+                .Where(t => t.Id == accessTokenId)
+                .Include(t => t.Enrollee)
+                    .ThenInclude(e => e.AssignedPrivileges)
+                        .ThenInclude(ap => ap.Privilege)
+                .Include(t => t.Enrollee)
+                    .ThenInclude(e => e.Organizations)
+                        .ThenInclude(org => org.OrganizationType)
                 .SingleOrDefaultAsync();
-            if (enrollee == null)
+
+            if (token == null || token.Enrollee == null)
             {
                 return null;
             }
 
-            // TODO Refactor this shortcut. This is only for POC of this service.
-            try
-            {
-                var token = await _context.EnrolmentCertificateAccessTokens
-                    .SingleOrDefaultAsync(t => t.Id == accessTokenId);
-                token.ViewCount++;
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                // ¯\_(ツ)_/¯
-            }
+            await UpdateTokenMetadataAsync(token);
 
-            return EnrolmentCertificate.Create(enrollee);
+            if (token.Active)
+            {
+                return EnrolmentCertificate.Create(token.Enrollee);
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public async Task<EnrolmentCertificateAccessToken> CreateCertificateAccessTokenAsync(Enrollee enrollee)
@@ -48,12 +53,12 @@ namespace Prime.Services
             {
                 Enrollee = enrollee,
                 ViewCount = 0,
+                Expires = DateTime.Today.Add(TOKEN_LIFESPAN),
                 Active = true
             };
             _context.EnrolmentCertificateAccessTokens.Add(token);
 
-            var created = await _context.SaveChangesAsync();
-            if (created < 1)
+            if (await _context.SaveChangesAsync() < 1)
             {
                 throw new InvalidOperationException("Could not create Enrolment Certificate access token.");
             }
@@ -66,6 +71,29 @@ namespace Prime.Services
             return await _context.EnrolmentCertificateAccessTokens
                 .Where(t => t.Enrollee.UserId == userId && t.Active)
                 .ToListAsync();
+        }
+
+        private async Task UpdateTokenMetadataAsync(EnrolmentCertificateAccessToken token)
+        {
+            if (!token.Active)
+            {
+                return;
+            }
+
+            if (token.ViewCount >= MAX_VIEWS
+                || DateTime.Today > token.Expires)
+            {
+                token.Active = false;
+            }
+            else
+            {
+                token.ViewCount++;
+            }
+
+            if (await _context.SaveChangesAsync() < 1)
+            {
+                throw new InvalidOperationException("Could not update Enrolment Certificate access token.");
+            }
         }
     }
 }

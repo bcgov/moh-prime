@@ -78,9 +78,8 @@ namespace PrimeTests.Services
                 var results = await _service.GetLookupsAsync<short, StatusReason>();
                 Assert.NotNull(results);
                 Assert.NotEmpty(results);
-                Assert.Equal(8, results.Count);
+                Assert.Equal(11, results.Count);
             }
-
         }
     }
 }

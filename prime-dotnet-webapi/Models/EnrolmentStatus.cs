@@ -6,11 +6,10 @@ using Newtonsoft.Json;
 
 namespace Prime.Models
 {
-    [Table("EnrolmentStatuses")]
+    [Table("EnrolmentStatus")]
     public class EnrolmentStatus : BaseAuditable
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         public int EnrolleeId { get; set; }
@@ -29,5 +28,20 @@ namespace Prime.Models
         public bool PharmaNetStatus { get; set; }
 
         public ICollection<EnrolmentStatusReason> EnrolmentStatusReasons { get; set; }
+
+        public void AddStatusReason(short reasonCode, string reasonNote = null)
+        {
+            if (EnrolmentStatusReasons == null)
+            {
+                EnrolmentStatusReasons = new List<EnrolmentStatusReason>(1);
+            }
+
+            EnrolmentStatusReasons.Add(new EnrolmentStatusReason
+            {
+                EnrolmentStatus = this,
+                StatusReasonCode = reasonCode,
+                ReasonNote = reasonNote
+            });
+        }
     }
 }
