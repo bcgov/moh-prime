@@ -32,7 +32,7 @@ namespace Prime.Services
 
         bool IsStatusChangeAllowed(Status startingStatus, Status endingStatus);
 
-        Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, short statusCodeToCheck);
+        Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, params short[] statusCodesToCheck);
 
         Task<IEnumerable<AdjudicatorNote>> GetEnrolleeAdjudicatorNotesAsync(Enrollee enrollee);
 

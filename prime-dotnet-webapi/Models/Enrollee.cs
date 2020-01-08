@@ -165,15 +165,19 @@ namespace Prime.Models
             get
             {
                 ICollection<EnrolmentStatusReason> enrolmentStatusReasons = this.CurrentStatus?.EnrolmentStatusReasons;
+
                 if (enrolmentStatusReasons != null && enrolmentStatusReasons.Count > 0)
                 {
-                    return enrolmentStatusReasons.Any(r => r.StatusReason?.Code == 1) ? PrimeConstants.PRIME_MOA : PrimeConstants.PRIME_RU;
+                    return (this.Certifications.Count > 0)
+                        ? PrimeConstants.PRIME_MOA
+                        : PrimeConstants.PRIME_RU;
                 }
-                else
-                {
-                    return null;
-                }
+
+                return null;
             }
         }
+
+        [JsonIgnore]
+        public ICollection<TermsOfAccess> TermsOfAccess { get; set; }
     }
 }
