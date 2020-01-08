@@ -18,21 +18,19 @@ namespace PrimeTests.Mocks
             return Task.FromResult(this.GetHolder<int, Enrollee>().Values?.SingleOrDefault(e => e.UserId == enrollee.UserId));
         }
 
-        public ICollection<AssignedPrivilege> GetAssignedPrivilegesForEnrollee(int? enrolleeId)
+        public Task<ICollection<AssignedPrivilege>> GetAssignedPrivilegesForEnrolleeAsync(int? enrolleeId)
         {
-            throw new System.NotImplementedException();
+            return Task.FromResult<ICollection<AssignedPrivilege>>(null);
         }
 
-        public ICollection<Privilege> GetPrivilegesForEnrollee(Enrollee enrollee)
+        public Task<ICollection<Privilege>> GetPrivilegesForEnrolleeAsync(Enrollee enrollee)
         {
-            throw new System.NotImplementedException();
+            return Task.FromResult<ICollection<Privilege>>(null);
         }
 
         public override void SeedData()
         {
             // no data to seed, as it is done in the base class
         }
-
-
     }
 }
