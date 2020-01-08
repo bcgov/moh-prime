@@ -393,7 +393,7 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}."));
             }
 
-            if (enrolleeId != accessAgreementNote.EnrolleeId)
+            if (accessAgreementNote.EnrolleeId != 0 && enrolleeId != accessAgreementNote.EnrolleeId)
             {
                 this.ModelState.AddModelError("AccessAgreementNote.EnrolleeId", "Enrollee Id does not match with the payload.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
@@ -433,7 +433,7 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}."));
             }
 
-            if (enrolleeId != enrolmentCertNote.EnrolleeId)
+            if (enrolmentCertNote.EnrolleeId != 0 && enrolleeId != enrolmentCertNote.EnrolleeId)
             {
                 this.ModelState.AddModelError("EnrolmentCertificateNote.EnrolleeId", "Enrollee Id does not match with the payload.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
