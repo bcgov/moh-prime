@@ -446,9 +446,9 @@ namespace Prime.Services
                 return false;
             }
 
-            var currentStatusCode = enrollee.CurrentStatus?.StatusCode;
+            var currentStatusCode = enrollee.CurrentStatus?.StatusCode ?? -1;
 
-            return statusCodesToCheck.Contains(currentStatusCode.Value);
+            return statusCodesToCheck.Contains(currentStatusCode);
         }
 
         private IQueryable<Enrollee> GetBaseEnrolleeQuery()
