@@ -10,13 +10,11 @@ namespace Prime.Models
         [Required]
         public int TermsOfAccessId { get; set; }
 
-        [JsonIgnore]
         public TermsOfAccess TermsOfAccess { get; set; }
 
         [Required]
         public int LicenseClassClauseId { get; set; }
 
-        [JsonIgnore]
         public LicenseClassClause LicenseClassClause { get; set; }
     }
 }
