@@ -8,7 +8,7 @@ parameters:
     required: true
     value: 'https://github.com/bcgov/moh-prime'
   - name: SOURCE_REPOSITORY_REF
-    required: true
+    required: false
     value: 'develop'
 objects:
   - apiVersion: v1
@@ -40,6 +40,11 @@ objects:
                   value: 'default'
                 - name: GIT_COMMITTER_EMAIL
                   value: 'noreply@gov.bc.ca'
+                - name: NODE_SECRET 
+                  valueFrom:
+                    secretKeyRef:
+                      key: jenkins-node-secret
+                      name: NODE_SECRET
               image: ' '
               name: sonar-scanner
               resources:

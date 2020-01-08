@@ -8,7 +8,7 @@ parameters:
     required: true
     value: 'https://github.com/bcgov/moh-prime'
   - name: SOURCE_REPOSITORY_REF
-    required: true
+    required: false
     value: 'develop'
 objects:
   - apiVersion: v1
