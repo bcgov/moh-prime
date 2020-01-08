@@ -57,6 +57,7 @@ export class MockEnrolmentService implements IEnrolmentService {
           organizationTypeCode: 1
         }
       ],
+      privileges: [],
       enrolmentStatuses: null,
       currentStatus: {
         enrolmentId,
@@ -66,16 +67,15 @@ export class MockEnrolmentService implements IEnrolmentService {
           name: null
         },
         statusDate: null,
-        isCurrent: null,
         enrolmentStatusReasons: [
           {
             enrolmentId,
-            statusCode: null,
             statusReasonCode: null,
             statusReason: {
               code: null,
               name: faker.lorem.sentence(6)
-            }
+            },
+            reasonNote: null
           }
         ]
       },
