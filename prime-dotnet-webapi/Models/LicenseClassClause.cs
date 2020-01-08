@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Newtonsoft.Json;
 using Prime.Models.AccessAgreement;
 
 namespace Prime.Models
@@ -24,6 +25,7 @@ namespace Prime.Models
         [Required]
         public DateTime EffectiveDate { get; set; }
 
+        [JsonIgnore]
         public List<TermsOfAccessLicenseClassClause> TermsOfAccessLicenseClassClauses { get; set; }
     }
 }
