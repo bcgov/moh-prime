@@ -7,10 +7,13 @@ describe('TermsOfAccessPagerComponent', () => {
   let fixture: ComponentFixture<TermsOfAccessPagerComponent>;
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ TermsOfAccessPagerComponent ]
-    })
-    .compileComponents();
+    TestBed.configureTestingModule(
+      {
+        declarations: [
+          TermsOfAccessPagerComponent
+        ]
+      }
+    ).compileComponents();
   }));
 
   beforeEach(() => {
