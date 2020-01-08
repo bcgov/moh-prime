@@ -77,7 +77,7 @@ export class OrganizationComponent extends BaseEnrolmentProfilePage implements O
 
   public disableOrganization(organizationTypeCode: number): boolean {
     // Omit organizations types that are not "Community Practices" for ComPap
-    return (organizationTypeCode !== 1);
+    return (organizationTypeCode !== 1 && organizationTypeCode !== 4);
   }
 
   public removeOrganization(index: number) {
