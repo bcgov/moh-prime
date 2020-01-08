@@ -17,7 +17,5 @@ namespace Prime.Models
         public int PrivilegeId { get; set; }
 
         public Privilege Privilege { get; set; }
-
-
     }
 }
