@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LimitsAndConditionsClauseComponent } from './limits-and-conditions-clause.component';
+import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
 
 describe('LimitsAndConditionsClauseComponent', () => {
   let component: LimitsAndConditionsClauseComponent;
@@ -8,9 +9,12 @@ describe('LimitsAndConditionsClauseComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LimitsAndConditionsClauseComponent ]
+      declarations: [
+        LimitsAndConditionsClauseComponent,
+        PageSubheaderComponent
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

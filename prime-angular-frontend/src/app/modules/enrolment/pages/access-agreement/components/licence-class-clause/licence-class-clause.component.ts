@@ -8,9 +8,8 @@ import { Clause } from '@enrolment/shared/models/terms-of-access.model';
 })
 export class LicenceClassClauseComponent implements OnInit {
   @Input() clauses: Clause[];
+
   constructor() { }
 
-  ngOnInit() {
-  }
-
+  public ngOnInit() { }
 }

@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UserClauseComponent } from './user-clause.component';
+import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
 
 describe('UserClauseComponent', () => {
   let component: UserClauseComponent;
@@ -8,9 +9,12 @@ describe('UserClauseComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ UserClauseComponent ]
+      declarations: [
+        UserClauseComponent,
+        PageSubheaderComponent
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

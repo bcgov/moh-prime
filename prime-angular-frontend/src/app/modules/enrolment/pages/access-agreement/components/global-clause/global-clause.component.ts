@@ -8,10 +8,8 @@ import { Clause } from '@enrolment/shared/models/terms-of-access.model';
 })
 export class GlobalClauseComponent implements OnInit {
   @Input() clause: Clause;
+
   constructor() { }
 
-  ngOnInit() {
-    console.log('CLAUSE', this.clause);
-  }
-
+  public ngOnInit() { }
 }

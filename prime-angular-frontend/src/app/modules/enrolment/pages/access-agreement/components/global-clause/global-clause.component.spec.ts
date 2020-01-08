@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GlobalClauseComponent } from './global-clause.component';
+import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
 
 describe('GlobalClauseComponent', () => {
   let component: GlobalClauseComponent;
@@ -8,9 +9,12 @@ describe('GlobalClauseComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ GlobalClauseComponent ]
+      declarations: [
+        GlobalClauseComponent,
+        PageSubheaderComponent
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

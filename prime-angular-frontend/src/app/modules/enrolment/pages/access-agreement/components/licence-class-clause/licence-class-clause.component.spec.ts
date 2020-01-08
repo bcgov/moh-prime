@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LicenceClassClauseComponent } from './licence-class-clause.component';
+import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
 
 describe('LicenceClassClauseComponent', () => {
   let component: LicenceClassClauseComponent;
@@ -8,9 +9,12 @@ describe('LicenceClassClauseComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LicenceClassClauseComponent ]
+      declarations: [
+        LicenceClassClauseComponent,
+        PageSubheaderComponent
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
