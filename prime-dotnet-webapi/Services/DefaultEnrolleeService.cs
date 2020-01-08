@@ -14,6 +14,7 @@ namespace Prime.Services
         private readonly IAutomaticAdjudicationService _automaticAdjudicationService;
         private readonly IEmailService _emailService;
         private readonly IPrivilegeService _privilegeService;
+        private readonly ITermsOfAccessService _termsOfAccessService;
 
         private class StatusWrapper
         {
@@ -26,12 +27,13 @@ namespace Prime.Services
         private static Status NULL_STATUS = new Status { Code = -1, Name = "No Status" };
 
         public DefaultEnrolleeService(
-            ApiDbContext context, IHttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService, IEmailService emailService, IPrivilegeService privilegeService)
+            ApiDbContext context, IHttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService, IEmailService emailService, IPrivilegeService privilegeService, ITermsOfAccessService termsOfAccessService)
             : base(context, httpContext)
         {
             _automaticAdjudicationService = automaticAdjudicationService;
             _emailService = emailService;
             _privilegeService = privilegeService;
+            _termsOfAccessService = termsOfAccessService;
         }
 
         private Dictionary<Status, StatusWrapper[]> GetWorkFlowStateMap()
@@ -41,7 +43,7 @@ namespace Prime.Services
                 // Construct the workflow map
                 // TODO Should be async
                 // TODO Need idea of new enrollee vs old enrollee baked into statuses
-                // TODO IN_PROGRESS should be NEW and potentiall prefix a duplicate set of enrolment lifecycle statuses
+                // TODO IN_PROGRESS should be NEW and potentially prefix a duplicate set of enrolment lifecycle statuses
                 Status IN_PROGRESS = _context.Statuses.Single(s => s.Code == Status.IN_PROGRESS_CODE);
                 Status SUBMITTED = _context.Statuses.Single(s => s.Code == Status.SUBMITTED_CODE);
                 Status APPROVED = _context.Statuses.Single(s => s.Code == Status.APPROVED_CODE);
@@ -115,6 +117,7 @@ namespace Prime.Services
             {
                 // Add the available statuses to the enrollee
                 entity.AvailableStatuses = this.GetAvailableStatuses(entity.CurrentStatus?.Status);
+                entity.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(entity);
             }
 
             return entity;
@@ -138,6 +141,7 @@ namespace Prime.Services
             {
                 // Add the available statuses to the enrolment
                 item.AvailableStatuses = this.GetAvailableStatuses(item.CurrentStatus?.Status);
+                item.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(item);
             }
 
             return items;
@@ -152,6 +156,7 @@ namespace Prime.Services
             {
                 // Add the available statuses to the enrolment
                 enrollee.AvailableStatuses = this.GetAvailableStatuses(enrollee?.CurrentStatus?.Status);
+                enrollee.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(enrollee);
             }
 
             return enrollee;
@@ -364,6 +369,9 @@ namespace Prime.Services
                         adjudicatedEnrolmentStatus.AddStatusReason(StatusReason.AUTOMATIC_CODE);
 
                         enrollee.EnrolmentStatuses.Add(adjudicatedEnrolmentStatus);
+
+                        await _termsOfAccessService.SetEnrolleeTermsOfAccessAsync(enrollee);
+
                         // Flip to the object that will get returned
                         createdEnrolmentStatus = adjudicatedEnrolmentStatus;
                     }
@@ -371,6 +379,9 @@ namespace Prime.Services
 
                 case Status.APPROVED_CODE:
                     createdEnrolmentStatus.AddStatusReason(StatusReason.MANUAL_CODE);
+
+                    await _termsOfAccessService.SetEnrolleeTermsOfAccessAsync(enrollee);
+
                     break;
 
                 case Status.DECLINED_CODE:
@@ -382,6 +393,7 @@ namespace Prime.Services
                     await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
                     enrollee.LicensePlate = this.GenerateLicensePlate();
                     createdEnrolmentStatus.PharmaNetStatus = true;
+                    await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrolleeId, enrollee);
                     break;
 
                 case Status.DECLINED_TOS_CODE:
@@ -390,11 +402,7 @@ namespace Prime.Services
                     break;
             }
 
-            var created = await _context.SaveChangesAsync();
-            if (created < 1)
-            {
-                throw new InvalidOperationException("Could not create enrolment status.");
-            }
+            await _context.SaveChangesAsync();
 
             // Enrollee just left manual adjudication, inform the enrollee
             if (oldStatus?.Code == Status.SUBMITTED_CODE)
@@ -426,20 +434,21 @@ namespace Prime.Services
             return availableStatuses.Contains(endingStatus);
         }
 
-        public async Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, short statusCodeToCheck)
+        public async Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, params short[] statusCodesToCheck)
         {
             var enrollee = await _context.Enrollees
                 .AsNoTracking()
                 .Include(e => e.EnrolmentStatuses)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
             if (enrollee == null)
             {
                 return false;
             }
 
-            var currentStatusCode = enrollee.CurrentStatus?.StatusCode;
+            var currentStatusCode = enrollee.CurrentStatus?.StatusCode ?? -1;
 
-            return statusCodeToCheck.Equals(currentStatusCode);
+            return statusCodesToCheck.Contains(currentStatusCode);
         }
 
         private IQueryable<Enrollee> GetBaseEnrolleeQuery()
@@ -450,10 +459,15 @@ namespace Prime.Services
                     .Include(e => e.Certifications)
                     .Include(e => e.Jobs)
                     .Include(e => e.Organizations)
-                    .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.Status)
-                    .Include(e => e.EnrolmentStatuses).ThenInclude(es => es.EnrolmentStatusReasons).ThenInclude(esr => esr.StatusReason)
+                    .Include(e => e.EnrolmentStatuses)
+                        .ThenInclude(es => es.Status)
+                    .Include(e => e.EnrolmentStatuses)
+                        .ThenInclude(es => es.EnrolmentStatusReasons)
+                        .ThenInclude(esr => esr.StatusReason)
                     .Include(e => e.AccessAgreementNote)
-                    .Include(e => e.EnrolmentCertificateNote);
+                    .Include(e => e.EnrolmentCertificateNote)
+                    .Include(e => e.AssignedPrivileges)
+                        .ThenInclude(AssignedPrivilege => AssignedPrivilege.Privilege);
         }
 
         public async Task<Enrollee> GetEnrolleeAsync(int enrolleeId)
@@ -465,6 +479,7 @@ namespace Prime.Services
             {
                 // add the available statuses to the enrollee
                 entity.AvailableStatuses = this.GetAvailableStatuses(entity.CurrentStatus?.Status);
+                entity.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(entity);
             }
 
             return entity;

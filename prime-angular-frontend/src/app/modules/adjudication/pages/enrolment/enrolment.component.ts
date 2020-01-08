@@ -27,6 +27,11 @@ export class EnrolmentComponent implements OnInit {
     private logger: LoggerService
   ) { }
 
+  public routeToEnrolments() {
+    const routePath = AdjudicationRoutes.routePath(AdjudicationRoutes.ENROLMENTS);
+    this.router.navigate([routePath]);
+  }
+
   public ngOnInit() {
     this.getEnrollee(this.route.snapshot.params.id);
   }
@@ -39,8 +44,7 @@ export class EnrolmentComponent implements OnInit {
           this.toastService.openErrorToast('Enrolment could not be found');
           this.logger.error('[Adjudication] Enrolment::getEnrolment error has occurred: ', error);
 
-          const routePath = AdjudicationRoutes.routePath(AdjudicationRoutes.ENROLMENTS);
-          this.router.navigate([routePath]);
+          this.routeToEnrolments();
         }
       );
   }

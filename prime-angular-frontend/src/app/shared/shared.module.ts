@@ -34,7 +34,7 @@ import { PageSubheaderComponent } from './components/page-subheader/page-subhead
 import { PageSubheaderTitleDirective } from '@shared/components/page-subheader/page-subheader-title.directive';
 import { PageSubheaderSummaryDirective } from '@shared/components/page-subheader/page-subheader-summary.directive';
 import { DialogContentDirective } from '@shared/components/dialogs/dialog-content.directive';
-import { ClipboardIconComponent } from './components/clipboard-icon/clipboard-icon.component';
+import { ClipboardIconComponent } from '@shared/components/clipboard-icon/clipboard-icon.component';
 import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
 import { AlertComponent } from '@shared/components/alert/alert.component';
 import { EnrolleeReviewComponent } from '@shared/components/enrollee-review/enrollee-review.component';
@@ -42,6 +42,8 @@ import { ProgressIndicatorComponent } from '@shared/components/progress-indicato
 import { EnrolleeProfileComponent } from '@shared/components/enrollee-profile/enrollee-profile.component';
 import { EnrolleeAddressComponent } from '@shared/components/enrollee-address/enrollee-address.component';
 import { EnrolleeSelfDeclarationComponent } from '@shared/components/enrollee-self-declaration/enrollee-self-declaration.component';
+import { EnrolleePrivilegesComponent } from '@shared/components/enrollee-privileges/enrollee-privileges.component';
+import { EnrolleeOrganizationsComponent } from '@shared/components/enrollee-organizations/enrollee-organizations.component';
 
 @NgModule({
   declarations: [
@@ -74,7 +76,9 @@ import { EnrolleeSelfDeclarationComponent } from '@shared/components/enrollee-se
     ProgressIndicatorComponent,
     EnrolleeProfileComponent,
     EnrolleeAddressComponent,
-    EnrolleeSelfDeclarationComponent
+    EnrolleeSelfDeclarationComponent,
+    EnrolleePrivilegesComponent,
+    EnrolleeOrganizationsComponent
   ],
   imports: [
     CommonModule,
@@ -125,7 +129,9 @@ import { EnrolleeSelfDeclarationComponent } from '@shared/components/enrollee-se
     ProgressIndicatorComponent,
     EnrolleeProfileComponent,
     EnrolleeAddressComponent,
-    EnrolleeSelfDeclarationComponent
+    EnrolleeSelfDeclarationComponent,
+    EnrolleePrivilegesComponent,
+    EnrolleeOrganizationsComponent
   ],
   entryComponents: [
     ConfirmDialogComponent,

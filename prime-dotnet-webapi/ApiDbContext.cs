@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Prime.Models;
+using Prime.Configuration;
 
 namespace Prime
 {
@@ -28,17 +29,26 @@ namespace Prime
         public DbSet<Certification> Certifications { get; set; }
         public DbSet<Job> Jobs { get; set; }
         public DbSet<Organization> Organizations { get; set; }
+        public DbSet<OrganizationType> OrganizationTypes { get; set; }
         public DbSet<Enrollee> Enrollees { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<EnrolmentStatus> EnrolmentStatuses { get; set; }
         public DbSet<EnrolmentStatusReason> EnrolmentStatusReasons { get; set; }
         public DbSet<Status> Statuses { get; set; }
         public DbSet<EnrolmentCertificateAccessToken> EnrolmentCertificateAccessTokens { get; set; }
+        public DbSet<Privilege> Privileges { get; set; }
         public DbSet<DefaultPrivilege> DefaultPrivileges { get; set; }
         public DbSet<AssignedPrivilege> AssignedPrivileges { get; set; }
+
         public DbSet<AdjudicatorNote> AdjudicatorNotes { get; set; }
         public DbSet<AccessAgreementNote> AccessAgreementNotes { get; set; }
         public DbSet<EnrolmentCertificateNote> EnrolmentCertificateNotes { get; set; }
+
+        public DbSet<TermsOfAccess> TermsOfAccess { get; set; }
+        public DbSet<GlobalClause> GlobalClauses { get; set; }
+        public DbSet<UserClause> UserClauses { get; set; }
+        public DbSet<LicenseClassClause> LicenseClassClauses { get; set; }
+        public DbSet<LimitsAndConditionsClause> LimitsAndConditionsClauses { get; set; }
 
         public override int SaveChanges()
         {
@@ -122,6 +132,11 @@ namespace Prime
             modelBuilder.ApplyConfiguration(new DefaultPrivilegeConfiguration());
             modelBuilder.ApplyConfiguration(new AssignedPrivilegeConfiguration());
 
+            modelBuilder.ApplyConfiguration(new GlobalClauseConfiguration());
+            modelBuilder.ApplyConfiguration(new UserClauseConfiguration());
+            modelBuilder.ApplyConfiguration(new LicenseClassClauseConfiguration());
+            modelBuilder.ApplyConfiguration(new LimitsAndConditionsClauseConfiguration());
+
             #region Indexes
             modelBuilder.Entity<MailingAddress>()
                 .HasIndex(a => a.EnrolleeId)
@@ -144,7 +159,6 @@ namespace Prime
             #endregion
 
             #region Relationships
-            //EnrolmentStatuses
             modelBuilder.Entity<EnrolmentStatus>()
                 .HasOne(es => es.Enrollee)
                 .WithMany(e => e.EnrolmentStatuses)
@@ -167,6 +181,33 @@ namespace Prime
                 .HasOne(an => an.Enrollee)
                 .WithMany(e => e.AdjudicatorNotes)
                 .HasForeignKey(an => an.EnrolleeId);
+
+            modelBuilder.Entity<TermsOfAccess>()
+                .HasOne(toa => toa.Enrollee)
+                .WithMany(e => e.TermsOfAccess)
+                .HasForeignKey(toa => toa.EnrolleeId);
+
+            modelBuilder.Entity<TermsOfAccessLicenseClassClause>()
+                .HasKey(tlic => new { tlic.TermsOfAccessId, tlic.LicenseClassClauseId });
+            modelBuilder.Entity<TermsOfAccessLicenseClassClause>()
+                .HasOne(tlic => tlic.TermsOfAccess)
+                .WithMany(toa => toa.TermsOfAccessLicenseClassClauses)
+                .HasForeignKey(tlic => tlic.TermsOfAccessId);
+            modelBuilder.Entity<TermsOfAccessLicenseClassClause>()
+                .HasOne(tlic => tlic.LicenseClassClause)
+                .WithMany(lcc => lcc.TermsOfAccessLicenseClassClauses)
+                .HasForeignKey(tlic => tlic.LicenseClassClauseId);
+
+            modelBuilder.Entity<TermsOfAccessLimitsAndConditionsClause>()
+                .HasKey(tlim => new { tlim.TermsOfAccessId, tlim.LimitsConditionsClauseId });
+            modelBuilder.Entity<TermsOfAccessLimitsAndConditionsClause>()
+                .HasOne(tlim => tlim.TermsOfAccess)
+                .WithMany(toa => toa.TermsOfAccessLimitsAndConditionsClauses)
+                .HasForeignKey(tlim => tlim.TermsOfAccessId);
+            modelBuilder.Entity<TermsOfAccessLimitsAndConditionsClause>()
+                .HasOne(tlim => tlim.LimitsAndConditionsClause)
+                .WithMany(lcc => lcc.TermsOfAccessLimitsAndConditionsClauses)
+                .HasForeignKey(tlim => tlim.LimitsConditionsClauseId);
             #endregion
         }
     }
