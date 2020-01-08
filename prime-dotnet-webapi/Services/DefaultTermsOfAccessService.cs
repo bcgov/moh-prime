@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,6 +24,8 @@ namespace Prime.Services
                 .AddRange(await GetTermsOfAccessLicenseClassClauses(enrollee, termsOfAccess));
             termsOfAccess.TermsOfAccessLimitsAndConditionsClauses
                 .AddRange(await GetTermsOfAccessLimitsAndConditionsClauses(enrollee, termsOfAccess));
+
+            termsOfAccess.EffectiveDate = DateTime.Now;
 
             _context.Add(termsOfAccess);
 
