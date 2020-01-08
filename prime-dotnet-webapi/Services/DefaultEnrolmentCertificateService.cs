@@ -25,6 +25,9 @@ namespace Prime.Services
                 .Include(t => t.Enrollee)
                     .ThenInclude(e => e.AssignedPrivileges)
                         .ThenInclude(ap => ap.Privilege)
+                .Include(t => t.Enrollee)
+                    .ThenInclude(e => e.Organizations)
+                        .ThenInclude(org => org.OrganizationType)
                 .SingleOrDefaultAsync();
 
             if (token == null || token.Enrollee == null)
@@ -46,9 +49,6 @@ namespace Prime.Services
 
         public async Task<EnrolmentCertificateAccessToken> CreateCertificateAccessTokenAsync(Enrollee enrollee)
         {
-            // Add privileges to Enrollee
-            enrollee.Privileges = _privilegeService.GetPrivilegesForEnrollee(enrollee);
-
             EnrolmentCertificateAccessToken token = new EnrolmentCertificateAccessToken()
             {
                 Enrollee = enrollee,
