@@ -12,7 +12,7 @@ public class GlobalClauseConfiguration : IEntityTypeConfiguration<GlobalClause>
     public void Configure(EntityTypeBuilder<GlobalClause> builder)
     {
         builder.HasData(
-            new GlobalClause { Id = 1, Clause = "Global clause", EffectiveDate = DateTime.Now, CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE }
+            new GlobalClause { Id = 1, Clause = "Global clause lorem, ipsum dolor sit amet consectetur adipisicing elit. Modi nihil corporis, ex totam, eos sapiente quam, sit ea iure consequatur neque harum architecto debitis adipisci molestiae fuga sed nam vitae.", EffectiveDate = DateTime.Now, CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE }
         );
     }
 }
