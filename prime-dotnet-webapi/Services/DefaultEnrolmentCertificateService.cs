@@ -31,7 +31,7 @@ namespace Prime.Services
             }
 
             // Add privileges to Enrollee
-            enrollee.Privileges = _privilegeService.GetPrivilegesForEnrollee(enrollee);
+            enrollee.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(enrollee);
 
             // TODO Refactor this shortcut. This is only for POC of this service.
             try

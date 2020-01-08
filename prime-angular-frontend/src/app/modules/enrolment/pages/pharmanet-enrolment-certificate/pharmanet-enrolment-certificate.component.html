@@ -16,8 +16,6 @@
         </ng-container>
       </app-page-subheader>
 
-      <!-- <ng-container *ngIf="enrolment"> -->
-
       <app-enrollee-profile [enrollee]="enrollee"></app-enrollee-profile>
 
       <app-enrollee-address [address]="mailingAddress"></app-enrollee-address>
@@ -27,10 +25,9 @@
         <dd class="col-6 text-right">{{ enrolment.enrollee.licensePlate | default }}</dd>
       </dl>
 
-      <app-enrollee-organizations [organizations]="organizations"></app-enrollee-organizations>
-
       <app-enrollee-privileges [privileges]="privileges"></app-enrollee-privileges>
 
+      <app-enrollee-organizations [organizations]="organizations"></app-enrollee-organizations>
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Provisioner Links</ng-container>
         <ng-container appPageSubheaderSummary>
@@ -40,12 +37,51 @@
 
       <div class="text-right mb-3">
 
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Provisioner Links</ng-container>
+        <ng-container appPageSubheaderSummary>
+          Generate provisioner links to facilitate your access into PharmaNet.
+        </ng-container>
+      </app-page-subheader>
         <button mat-flat-button
                 color="primary"
                 (click)="generateProvisionerLink()">
           <mat-icon class="add-icon">add</mat-icon>
           Generate Provisioner Link
         </button>
+
+      <div class="text-right mb-3">
+      </div>
+
+        <button mat-flat-button
+                color="primary"
+                (click)="generateProvisionerLink()">
+          <mat-icon class="add-icon">add</mat-icon>
+          Generate Provisioner Link
+        </button>
+      <div *ngIf="tokens?.length"
+           class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Active</th>
+              <th scope="col">Views</th>
+              <th scope="col">&nbsp;</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let token of tokens">
+              <td>{{ token.id }}</td>
+              <td>{{ token.active | yesNo }}</td>
+              <td>{{ token.viewCount }}</td>
+              <td>
+                <app-clipboard-icon [content]="getTokenUrl(token.id)"></app-clipboard-icon>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       </div>
 
