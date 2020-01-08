@@ -147,6 +147,8 @@ objects:
                     secretKeyRef:
                       key: database-name
                       name: '${NAME}-secret'
+                - name: DB_HOST
+                  value: '${NAME}${SUFFIX}'
               image: ' '
               imagePullPolicy: IfNotPresent
               livenessProbe:
