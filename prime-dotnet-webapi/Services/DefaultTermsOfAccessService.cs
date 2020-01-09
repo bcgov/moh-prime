@@ -14,7 +14,10 @@ namespace Prime.Services
             ApiDbContext context, IHttpContextAccessor httpContext) : base(context, httpContext)
         { }
 
-        public async Task SetEnrolleeTermsOfAccessAsync(Enrollee enrollee)
+        /**
+         * Get the most recent terms of access for an enrollee.
+         */
+        public async Task<TermsOfAccess> GetTermsOfAccessAsync(Enrollee enrollee)
         {
             var termsOfAccess = new TermsOfAccess { Enrollee = enrollee };
 
@@ -25,6 +28,13 @@ namespace Prime.Services
             termsOfAccess.TermsOfAccessLimitsAndConditionsClauses
                 .AddRange(await GetTermsOfAccessLimitsAndConditionsClauses(enrollee, termsOfAccess));
 
+            return termsOfAccess;
+        }
+
+        public async Task SetEnrolleeTermsOfAccessAsync(Enrollee enrollee)
+        {
+            var termsOfAccess = await GetTermsOfAccessAsync(enrollee);
+
             termsOfAccess.EffectiveDate = DateTime.Now;
 
             _context.Add(termsOfAccess);
@@ -32,6 +42,9 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
+        /**
+         * Get the most recent terms ACCEPTED terms of access for an enrollee.
+         */
         public async Task<TermsOfAccess> GetEnrolleeTermsOfAccessAsync(int enrolleeId)
         {
             var termsOfAccess = await _context.TermsOfAccess
