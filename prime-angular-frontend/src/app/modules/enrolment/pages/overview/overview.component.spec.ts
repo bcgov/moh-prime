@@ -34,6 +34,7 @@ import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
 import { YesNoPipe } from '@shared/pipes/yes-no.pipe';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
+import { EnrolleeOrganizationsComponent } from '@shared/components/enrollee-organizations/enrollee-organizations.component';
 
 describe('ReviewComponent', () => {
   let component: OverviewComponent;
@@ -58,6 +59,7 @@ describe('ReviewComponent', () => {
           EnrolleeProfileComponent,
           EnrolleeAddressComponent,
           EnrolleeSelfDeclarationComponent,
+          EnrolleeOrganizationsComponent,
           ProgressIndicatorComponent,
           CollectionNoticeAlertComponent,
           AlertComponent,
