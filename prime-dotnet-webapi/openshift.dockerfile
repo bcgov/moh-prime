@@ -1,4 +1,4 @@
-FROM docker-registry.default.svc:5000/dqszvc-tools/dotnet-22-rhel7 AS build
+FROM docker-registry.default.svc:5000/dqszvc-prod/dotnet-22-rhel7 AS build
 WORKDIR /opt/app-root/app
 SHELL [ "/bin/bash" , "-c" ]
 ENV PATH "$PATH:/opt/rh/rh-dotnet22/root/usr/lib64/dotnet"
@@ -15,7 +15,7 @@ COPY *.csproj /opt/app-root/app
 RUN dotnet restore
 COPY . /opt/app-root/app/
 RUN dotnet publish -c Release -o /opt/app-root/app/out /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
-FROM docker-registry.default.svc:5000/dqszvc-tools/dotnet-22-runtime-rhel7 AS runtime
+FROM docker-registry.default.svc:5000/dqszvc-prod/dotnet-22-runtime-rhel7 AS runtime
 WORKDIR /opt/app-root/app
 ENV PATH "$PATH:/opt/rh/rh-dotnet22/root/usr/lib64/dotnet"
 COPY --from=build /opt/app-root/app/out /opt/app-root/app
