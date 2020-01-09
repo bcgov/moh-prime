@@ -72,6 +72,8 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
     this.enrolment = this.enrolmentService.enrolment;
     this.isInitialEnrolment = this.enrolment.progressStatus !== ProgressStatus.FINISHED;
 
+    console.log('ENROLMENT!!!', this.enrolment);
+
     this.busy = this.enrolmentResource.enrolmentCertificateAccessTokens()
       .subscribe(
         (tokens: EnrolmentCertificateAccessToken[]) => this.tokens = tokens,
