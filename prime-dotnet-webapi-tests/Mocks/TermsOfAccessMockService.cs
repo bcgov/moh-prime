@@ -10,6 +10,9 @@ namespace PrimeTests.Mocks
         public TermsOfAccessServiceMock() : base()
         { }
 
+        public override void SeedData()
+        { }
+
         public Task SetEnrolleeTermsOfAccessAsync(Enrollee enrollee)
         {
             throw new NotImplementedException();
@@ -18,11 +21,6 @@ namespace PrimeTests.Mocks
         public Task<TermsOfAccess> GetEnrolleeTermsOfAccessAsync(int enrolleeId)
         {
             throw new NotImplementedException();
-        }
-
-        public override void SeedData()
-        {
-            // no data to seed, as it is done in the base class
         }
     }
 }
