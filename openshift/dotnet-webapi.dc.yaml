@@ -180,17 +180,6 @@ objects:
           type: ImageChange
     status: {}
   - apiVersion: v1
-    kind: Route
-    metadata:
-      name: "${NAME}${SUFFIX}"
-    spec:
-      host: "${NAME}${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca"
-      port:
-        targetPort: '8080'
-      to:
-        kind: Service
-        name: "${NAME}${SUFFIX}"
-  - apiVersion: v1
     kind: Service
     metadata:
       creationTimestamp: null
