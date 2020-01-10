@@ -3,7 +3,6 @@
 #FROM docker-registry.default.svc:5000/dqszvc-${OC_APP}/dotnet-22-rhel7 AS build
 FROM registry.redhat.io/dotnet/dotnet-22-rhel7 AS build
 WORKDIR /opt/app-root/app
-COPY entrypoint.sh ${WORKDIR}
 SHELL [ "/bin/bash" , "-c" ]
 ENV PATH "$PATH:/opt/rh/rh-dotnet22/root/usr/lib64/dotnet"
 ENV ASPNETCORE_ENVIRONMENT "${ASPNETCORE_ENVIRONMENT}"
@@ -16,6 +15,7 @@ ENV DB_HOST "$DB_HOST"
 ARG DB_CONNECTION_STRING="host=postgresql${SUFFIX};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_PASSWORD}"
 RUN printenv | sort 
 COPY *.csproj /opt/app-root/app
+COPY entrypoint.sh /opt/app-root/app
 RUN dotnet restore
 COPY . /opt/app-root/app/
 RUN dotnet publish -c Release -o /opt/app-root/app/out /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
