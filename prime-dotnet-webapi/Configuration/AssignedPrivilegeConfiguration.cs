@@ -11,9 +11,6 @@ namespace Prime.Configuration
 {
     public class AssignedPrivilegeConfiguration : IEntityTypeConfiguration<AssignedPrivilege>
     {
-        private readonly Guid SYSTEM_USER = Guid.Empty;
-        private readonly DateTime SEEDING_DATE = DateTime.Now;
-
         public void Configure(EntityTypeBuilder<AssignedPrivilege> builder)
         {
             builder.HasKey(ap => new { ap.PrivilegeId, ap.EnrolleeId });

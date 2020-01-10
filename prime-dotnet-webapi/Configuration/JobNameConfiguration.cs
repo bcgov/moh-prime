@@ -6,9 +6,6 @@ namespace Prime.Configuration
 {
     public class JobNameConfiguration : IEntityTypeConfiguration<JobName>
     {
-        private readonly Guid SYSTEM_USER = Guid.Empty;
-        private readonly DateTime SEEDING_DATE = DateTime.Now;
-
         public void Configure(EntityTypeBuilder<JobName> builder)
         {
             builder.HasData(
