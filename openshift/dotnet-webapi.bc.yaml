@@ -150,8 +150,6 @@ objects:
                 key: database-name
                 name: "postgresql-secret"
         type: Docker
-        imagePullSecrets:
-        - name: redhat-connect
       triggers:
         - type: ConfigChange
         - type: ImageChange
