@@ -3,6 +3,7 @@
 #FROM docker-registry.default.svc:5000/dqszvc-${OC_APP}/dotnet-22-rhel7 AS build
 FROM registry.redhat.io/dotnet/dotnet-22-rhel7 AS build
 WORKDIR /opt/app-root/app
+COPY entrypoint.sh ${WORKDIR}
 SHELL [ "/bin/bash" , "-c" ]
 ENV PATH "$PATH:/opt/rh/rh-dotnet22/root/usr/lib64/dotnet"
 ENV ASPNETCORE_ENVIRONMENT "${ASPNETCORE_ENVIRONMENT}"
@@ -27,4 +28,5 @@ COPY --from=build /opt/app-root/app/out /opt/app-root/app
 EXPOSE 8080 5001 1025
 ENV DB_HOST ${DB_HOST}
 ENV DB_CONNECTION_STRING="host=postgresql${SUFFIX};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"
-ENTRYPOINT echo "Running .NET..."; export DB_CONNECTION_STRING="host=${DB_HOST};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"; /opt/rh/rh-dotnet22/root/usr/lib64/dotnet/dotnet prime.dll
+#ENTRYPOINT echo "Running .NET..."; export DB_CONNECTION_STRING="host=${DB_HOST};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"; /opt/rh/rh-dotnet22/root/usr/lib64/dotnet/dotnet prime.dll
+CMD ${WORKDIR}/entrypoint.sh
