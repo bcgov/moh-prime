@@ -5,11 +5,13 @@
 
 export DB_CONNECTION_STRING="host=${DB_HOST};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"
 echo "Running .NET..."
-/opt/rh/rh-dotnet22/root/usr/lib64/dotnet/dotnet prime.dll &dissown 
-until [ "$response" -eq "401" ]
-    echo "Waiting for the host ..."
-    sleep 1
+/opt/rh/rh-dotnet22/root/usr/lib64/dotnet/dotnet prime.dll &disown 
+until [[ "$response" -eq "401" ]]
+do
+    echo "Waiting for the host ..." ;
+    sleep 1 ;
     response=`curl -s -o /dev/null -w "%{http_code}" localhost:8080/api/enrollees`
+
 done
 echo -e "\nThe system is up."
 tail -f /dev/null
