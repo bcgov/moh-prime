@@ -27,7 +27,12 @@ namespace Prime.Services
         private static Status NULL_STATUS = new Status { Code = -1, Name = "No Status" };
 
         public DefaultEnrolleeService(
-            ApiDbContext context, IHttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService, IEmailService emailService, IPrivilegeService privilegeService, ITermsOfAccessService termsOfAccessService)
+            ApiDbContext context,
+            IHttpContextAccessor httpContext,
+            IAutomaticAdjudicationService automaticAdjudicationService,
+            IEmailService emailService,
+            IPrivilegeService privilegeService,
+            ITermsOfAccessService termsOfAccessService)
             : base(context, httpContext)
         {
             _automaticAdjudicationService = automaticAdjudicationService;
