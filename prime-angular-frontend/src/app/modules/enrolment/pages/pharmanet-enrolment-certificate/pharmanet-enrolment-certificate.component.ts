@@ -46,11 +46,15 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
   }
 
   public get privileges() {
-    return this.enrolment.privileges;
+    return (this.enrolment) ? this.enrolment.privileges : null;
   }
 
   public get organizations() {
-    return this.enrolment.organizations;
+    return (this.enrolment) ? this.enrolment.organizations : null;
+  }
+
+  public get enrolmentCertificateNote() {
+    return (this.enrolment.enrolmentCertificateNote) ? this.enrolment.enrolmentCertificateNote.note : null;
   }
 
   public getTokenUrl(tokenId: string): string {
