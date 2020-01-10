@@ -1,8 +1,9 @@
-#ARG OC_APP="${OC_APP}"
-#ENV OC_APP ${OC_APP}
+ARG OC_APP="${OC_APP}"
+ENV OC_APP "${OC_APP}"
 #FROM docker-registry.default.svc:5000/dqszvc-${OC_APP}/dotnet-22-rhel7 AS build
 #FROM registry.redhat.io/dotnet/dotnet-22-rhel7 AS build
-FROM dotnet-22-rhel7 AS build
+FROM docker-registry.default.svc:5000/dqszvc-${OC_APP}/dotnet-22-rhel7 AS build
+#FROM dotnet-22-rhel7 AS build
 WORKDIR /opt/app-root/app
 
 
@@ -24,9 +25,9 @@ RUN dotnet restore
 COPY . /opt/app-root/app/
 RUN dotnet publish -c Release -o /opt/app-root/app/out /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
 
-#FROM docker-registry.default.svc:5000/dqszvc-${OC_APP}/dotnet-22-runtime-rhel7 AS runtime
+FROM docker-registry.default.svc:5000/dqszvc-${OC_APP}/dotnet-22-runtime-rhel7 AS runtime
 #FROM registry.redhat.io/dotnet/dotnet-22-runtime-rhel7 AS runtime
-FROM dotnet-22-runtime-rhel7 AS runtime
+#FROM dotnet-22-runtime-rhel7 AS runtime
 WORKDIR /opt/app-root/app
 ENV PATH "$PATH:/opt/rh/rh-dotnet22/root/usr/lib64/dotnet"
 COPY --from=build /opt/app-root/app/out /opt/app-root/app
