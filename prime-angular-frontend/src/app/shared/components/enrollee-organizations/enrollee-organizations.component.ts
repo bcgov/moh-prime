@@ -9,7 +9,7 @@ import { Organization } from '@enrolment/shared/models/organization.model';
 export class EnrolleeOrganizationsComponent implements OnInit {
   @Input() public header: string;
   @Input() public organizations: Organization[];
-  // TODO should be an enum
+  // Organization Types instead of Organizations are sent from adjudicator link certificate so that a lookup table isnt needed
   @Input() public organizationTypes: number[];
 
   constructor() { }

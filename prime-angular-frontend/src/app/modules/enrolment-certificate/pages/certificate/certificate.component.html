@@ -27,6 +27,12 @@
 
         <app-enrollee-privileges [privileges]="certificate?.privileges"></app-enrollee-privileges>
 
+        <ng-container *ngIf="certificate?.enrolmentCertificateNote">
+          <dl class="row mb-4">
+            <dt class="col-6">Limits and Conditions</dt>
+            <dd class="col-6 text-right">{{ certificate?.enrolmentCertificateNote?.note | default }}</dd>
+          </dl>
+        </ng-container>
       </ng-container>
     </div>
   </div>

@@ -11,7 +11,7 @@ namespace Prime.Services
     public class DefaultEnrolmentCertificateService : BaseService, IEnrolmentCertificateService
     {
         private static readonly TimeSpan TOKEN_LIFESPAN = TimeSpan.FromDays(7);
-        private static readonly int MAX_VIEWS = 3;
+        private const int MAX_VIEWS = 3;
 
         public DefaultEnrolmentCertificateService(
             ApiDbContext context, IHttpContextAccessor httpContext)
@@ -22,6 +22,8 @@ namespace Prime.Services
         {
             var token = await _context.EnrolmentCertificateAccessTokens
                 .Where(t => t.Id == accessTokenId)
+                .Include(t => t.Enrollee)
+                    .ThenInclude(e => e.EnrolmentCertificateNote)
                 .Include(t => t.Enrollee)
                     .ThenInclude(e => e.AssignedPrivileges)
                         .ThenInclude(ap => ap.Privilege)

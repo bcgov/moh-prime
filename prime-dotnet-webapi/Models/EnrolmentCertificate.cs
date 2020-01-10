@@ -20,6 +20,8 @@ namespace Prime.Models
         public IEnumerable<Privilege> Privileges { get; set; }
         public IEnumerable<OrganizationType> OrganizationTypes { get; set; }
 
+        public EnrolmentCertificateNote EnrolmentCertificateNote { get; set; }
+
         public static EnrolmentCertificate Create(Enrollee enrollee)
         {
 
@@ -34,7 +36,8 @@ namespace Prime.Models
                 DateOfBirth = enrollee.DateOfBirth,
                 LicensePlate = enrollee.LicensePlate,
                 Privileges = enrollee.AssignedPrivileges.Select(ap => ap.Privilege),
-                OrganizationTypes = enrollee.Organizations.Select(org => org.OrganizationType)
+                OrganizationTypes = enrollee.Organizations.Select(org => org.OrganizationType),
+                EnrolmentCertificateNote = enrollee.EnrolmentCertificateNote
             };
         }
     }

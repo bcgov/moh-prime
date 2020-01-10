@@ -146,24 +146,12 @@ namespace PrimeTests.Mocks
             return availableStatuses.Contains(endingStatus);
         }
 
-        public Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, short statusCodeToCheck)
+        public Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, params short[] statusCodesToCheck)
         {
-            Enrollee enrollee = null;
             if (this.GetHolder<int, Enrollee>().ContainsKey(enrolleeId))
             {
-                enrollee = this.GetHolder<int, Enrollee>()[enrolleeId];
-                return Task.FromResult(statusCodeToCheck.Equals(enrollee.CurrentStatus?.StatusCode));
-            }
-            return Task.FromResult(false);
-        }
-
-        public Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, ICollection<short> statusCodesToCheck)
-        {
-            Enrollee enrollee = null;
-            if (this.GetHolder<int, Enrollee>().ContainsKey(enrolleeId))
-            {
-                enrollee = this.GetHolder<int, Enrollee>()[enrolleeId];
-                return Task.FromResult(statusCodesToCheck.Contains(enrollee.CurrentStatus?.StatusCode));
+                Enrollee enrollee = this.GetHolder<int, Enrollee>()[enrolleeId];
+                return Task.FromResult(statusCodesToCheck.Contains(enrollee.CurrentStatus.StatusCode));
             }
             return Task.FromResult(false);
         }
