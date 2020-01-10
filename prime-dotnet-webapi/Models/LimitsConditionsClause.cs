@@ -7,17 +7,21 @@ using Prime.Models.AccessAgreement;
 
 namespace Prime.Models
 {
-    [Table("LicenseClassClause")]
-    public class LicenseClassClause : BaseAuditable, IAccessClause
+    [Table("LimitsConditionsClause")]
+    public class LimitsConditionsClause : BaseAuditable, IAccessClause
     {
-        public LicenseClassClause()
-        {
-            // Create lists so they don't have be instantiated when items need to be added
-            AccessTermLicenseClassClauses = new List<AccessTermLicenseClassClause>();
-        }
-
         [Key]
         public int Id { get; set; }
+
+        [Required]
+        public int AccessTermId { get; set; }
+
+        [JsonIgnore]
+        public AccessTerm AccessTerm { get; set; }
+
+        public int EnrolleeId { get; set; }
+
+        public Enrollee Enrollee { get; set; }
 
         [Required]
         public string Clause { get; set; }
@@ -26,6 +30,6 @@ namespace Prime.Models
         public DateTime EffectiveDate { get; set; }
 
         [JsonIgnore]
-        public List<AccessTermLicenseClassClause> AccessTermLicenseClassClauses { get; set; }
+        public ICollection<AccessTerm> AccessTerms { get; set; }
     }
 }
