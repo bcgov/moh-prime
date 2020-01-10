@@ -35,7 +35,8 @@ ENV DB_CONNECTION_STRING="host=postgresql${SUFFIX};port=5432;database=${POSTGRES
 #ENTRYPOINT echo "Running .NET..."; export DB_CONNECTION_STRING="host=${DB_HOST};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"; /opt/rh/rh-dotnet22/root/usr/lib64/dotnet/dotnet prime.dll
 
 COPY entrypoint.sh /opt/app-root/app
-RUN chmod 777 /opt/app-root/app/entrypoint.sh  && \
+USER 0
+RUN chmod 777 /opt/app-root/app/entrypoint.sh && \
     chmod +x /opt/app-root/app/entrypoint.sh 
 
 CMD /opt/app-root/app/entrypoint.sh
