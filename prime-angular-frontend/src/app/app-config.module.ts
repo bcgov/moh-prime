@@ -11,6 +11,10 @@ export let APP_CONFIG = new InjectionToken<AppConfig>('app.config');
 export class AppConfig {
   apiEndpoint: string;
   loginRedirectUrl: string;
+  prime: {
+    phone: string;
+    email: string;
+  };
   routes: {
     auth: string;
     enrolment: string;
@@ -23,6 +27,10 @@ export class AppConfig {
 export const APP_DI_CONFIG: AppConfig = {
   apiEndpoint: environment.apiEndpoint,
   loginRedirectUrl: environment.loginRedirectUrl,
+  prime: {
+    phone: environment.prime.phone,
+    email: environment.prime.email,
+  },
   routes: {
     auth: EnrolmentRoutes.MODULE_PATH,
     enrolment: EnrolmentRoutes.MODULE_PATH,
