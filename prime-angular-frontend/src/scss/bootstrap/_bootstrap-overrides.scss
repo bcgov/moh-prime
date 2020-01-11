@@ -13,3 +13,7 @@ html, body {
 p {
   color: $paragraph-colour;
 }
+
+.table th {
+  border-top: 0;
+}

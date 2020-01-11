@@ -82,6 +82,7 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
         (error: any) => {
           this.toastService.openErrorToast('Access tokens could be found.');
           this.logger.error('[EnrolmentCertificate] Summary::ngOnInit error has occurred: ', error);
-        });
+        }
+      );
   }
 }

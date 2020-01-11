@@ -85,7 +85,7 @@
 
           <ng-container *ngIf="hasReadAgreement; else hasMorePages">
 
-            <button mat-raised-button
+            <button mat-flat-button
                     color="primary"
                     class="mb-2"
                     [ngClass]="(!isMobile) ? 'mr-2' : 'w-100'"
@@ -94,7 +94,7 @@
               Accept Agreement
             </button>
 
-            <button mat-raised-button
+            <button mat-flat-button
                     color="warn"
                     class="mb-2"
                     [ngClass]="(!isMobile) ? 'mr-2' : 'w-100'"
@@ -107,7 +107,7 @@
 
           <ng-template #hasMorePages>
 
-            <button mat-raised-button
+            <button mat-flat-button
                     color="primary"
                     (click)="onNextPage()">
               Continue
