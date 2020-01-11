@@ -7,17 +7,19 @@
                             message="Enrolment Declined"
                             [currentRoute]="EnrolmentRoutes.DECLINED"></app-progress-indicator>
 
-    <app-alert type="danger"
-               icon="warning">
-      <ng-container #alertTitle
-                    class="alert-title">
-        Your Enrolment Has Not Been Approved
-      </ng-container>
-      <ng-container #alertContent
-                    class="alert-content">
-        You have not been approved for PharmaNet access for direct patient care.
-      </ng-container>
-    </app-alert>
+    <div class="mb-4">
+      <app-alert type="danger"
+                 icon="warning">
+        <ng-container #alertTitle
+                      class="alert-title">
+          Your Enrolment Has Not Been Approved
+        </ng-container>
+        <ng-container #alertContent
+                      class="alert-content">
+          You have not been approved for PharmaNet access for direct patient care.
+        </ng-container>
+      </app-alert>
+    </div>
 
     <p>
       Your enrolment application to gain access to PharmaNet has not been approved. Questions about your enrolment

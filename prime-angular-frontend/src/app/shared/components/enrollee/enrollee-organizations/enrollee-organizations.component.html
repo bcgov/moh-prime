@@ -1,4 +1,4 @@
-<ng-container *ngIf="organizations?.length || organizationTypes?.length; else hasNone">
+<!-- <ng-container *ngIf="organizations?.length || organizationTypes?.length; else hasNone">
 
   <dl class="row mb-3">
     <dt class="col-12 mb-1">Organization Types</dt>
@@ -28,4 +28,25 @@
     <strong>None</strong>
   </div>
 
-</ng-template>
+</ng-template> -->
+
+<app-page-subheader>
+  <ng-container appPageSubheaderTitle>Organization Information</ng-container>
+  <ng-content select="mat-icon"
+              ngProjectAs="mat-icon"></ng-content>
+</app-page-subheader>
+
+<ng-container *ngFor="let organization of organizations">
+
+  <app-enrollee-property title="Organization Type"
+                         [makeBold]="true">
+    {{ organization.organizationTypeCode | configCode: 'organizationTypes' }}
+  </app-enrollee-property>
+
+</ng-container>
+
+<app-enrollee-property *ngIf="!hasOrganization"
+                       title="Organization Type"
+                       [makeBold]="true">
+  None
+</app-enrollee-property>
