@@ -10,20 +10,6 @@ import { Enrollee } from '@shared/models/enrollee.model';
 })
 export class EnrolleeProfileComponent {
   @Input() public enrollee: Enrollee;
-  @Input() public showPreferredName: boolean;
 
-  constructor() {
-    this.showPreferredName = true;
-  }
-
-  public get hasPreferredName(): boolean {
-    return (
-      this.enrollee &&
-      (
-        !!this.enrollee.preferredFirstName ||
-        !!this.enrollee.preferredMiddleName ||
-        !!this.enrollee.preferredLastName
-      )
-    );
-  }
+  constructor() { }
 }

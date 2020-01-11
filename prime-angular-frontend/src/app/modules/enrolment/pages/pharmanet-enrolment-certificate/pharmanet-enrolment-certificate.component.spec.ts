@@ -22,9 +22,9 @@ import { PageHeaderComponent } from '@shared/components/page-header/page-header.
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
 import { ClipboardIconComponent } from '@shared/components/clipboard-icon/clipboard-icon.component';
 import { ProgressIndicatorComponent } from '@shared/components/progress-indicator/progress-indicator.component';
-import { EnrolleeAddressComponent } from '@shared/components/enrollee-address/enrollee-address.component';
-import { EnrolleeProfileComponent } from '@shared/components/enrollee-profile/enrollee-profile.component';
-import { EnrolleePrivilegesComponent } from '@shared/components/enrollee-privileges/enrollee-privileges.component';
+import { EnrolleeAddressComponent } from '@shared/components/enrollee/enrollee-address/enrollee-address.component';
+import { EnrolleeProfileComponent } from '@shared/components/enrollee/enrollee-profile/enrollee-profile.component';
+import { EnrolleePrivilegesComponent } from '@shared/components/enrollee/enrollee-privileges/enrollee-privileges.component';
 import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 

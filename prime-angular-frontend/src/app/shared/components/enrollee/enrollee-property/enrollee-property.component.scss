@@ -1,0 +1,9 @@
+@import 'palette';
+
+.property-key {
+  color: theme-palette(blue, dark);
+}
+
+.property-value {
+  color: theme-palette(blue, light);
+}
