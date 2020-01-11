@@ -12,6 +12,6 @@ export interface EnrolmentCertificate {
   dateOfBirth: string;
   licensePlate: string;
   privileges: Privilege[];
-  organizationTypes: [];
+  organizationTypes: string[];
   enrolmentCertificateNote: AdjudicationNote;
 }
