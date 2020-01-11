@@ -19,6 +19,12 @@ import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
 import { EnrolleePrivilegesComponent } from '@shared/components/enrollee/enrollee-privileges/enrollee-privileges.component';
 import { ConfigService } from '@config/config.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
+import { EnrolleeOrganizationsComponent } from '@shared/components/enrollee-organizations/enrollee-organizations.component';
+import { ConfigCodePipe } from '@config/config-code.pipe';
+import { OrganizationComponent } from '@enrolment/pages/organization/organization.component';
+import { AuthService } from '@auth/shared/services/auth.service';
+import { MockAuthService } from 'test/mocks/mock-auth.service';
+import { ProgressIndicatorComponent } from '@shared/components/progress-indicator/progress-indicator.component';
 
 describe('CertificateComponent', () => {
   let component: CertificateComponent;
@@ -42,10 +48,13 @@ describe('CertificateComponent', () => {
           EnrolleeProfileComponent,
           ClipboardIconComponent,
           EnrolleePrivilegesComponent,
+          EnrolleeOrganizationsComponent,
+          ProgressIndicatorComponent,
           CertificatePipe,
           FormatDatePipe,
           DefaultPipe,
-          EnrolleePipe
+          EnrolleePipe,
+          ConfigCodePipe
         ],
         providers: [
           {
@@ -55,6 +64,10 @@ describe('CertificateComponent', () => {
           {
             provide: ConfigService,
             useClass: MockConfigService
+          },
+          {
+            provide: AuthService,
+            useClass: MockAuthService
           }
         ]
       }

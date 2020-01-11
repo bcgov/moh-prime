@@ -1,5 +1,5 @@
 import { Privilege } from '@enrolment/shared/models/privilege.model';
-import { Organization } from '@enrolment/shared/models/organization.model';
+import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
 
 export interface EnrolmentCertificate {
   // TODO duplicate of EnrolleeProfile
@@ -12,7 +12,6 @@ export interface EnrolmentCertificate {
   dateOfBirth: string;
   licensePlate: string;
   privileges: Privilege[];
-  organizations: Organization[];
-  // TODO should be an enum
-  organizationTypes: number;
+  organizationTypes: [];
+  enrolmentCertificateNote: AdjudicationNote;
 }

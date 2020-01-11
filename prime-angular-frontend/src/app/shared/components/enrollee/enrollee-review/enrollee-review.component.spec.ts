@@ -21,6 +21,7 @@ import { PostalPipe } from '@shared/pipes/postal.pipe';
 import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
 import { YesNoPipe } from '@shared/pipes/yes-no.pipe';
+import { EnrolleeOrganizationsComponent } from '../enrollee-organizations/enrollee-organizations.component';
 
 describe('EnrolleeReviewComponent', () => {
   let component: EnrolleeReviewComponent;
@@ -43,6 +44,7 @@ describe('EnrolleeReviewComponent', () => {
           EnrolleeProfileComponent,
           EnrolleeAddressComponent,
           EnrolleeSelfDeclarationComponent,
+          EnrolleeOrganizationsComponent,
           ConfigCodePipe,
           EnrolmentPipe,
           FormatDatePipe,
