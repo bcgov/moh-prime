@@ -11,9 +11,9 @@
           </li>
         </ng-container>
         <ng-container *ngIf="organizationTypes?.length">
-          <li *ngFor="let organization of organizationTypes; let i = index"
+          <li *ngFor="let organizationType of organizationTypes; let i = index"
               class="text-right">
-            {{ organization.name }}
+            {{ organizationType }}
           </li>
         </ng-container>
       </ul>
