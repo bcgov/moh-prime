@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Organization } from '@enrolment/shared/models/organization.model';
 import { ConfigCodePipe } from '@config/config-code.pipe';
+import { Config } from '@config/config.model';
 
 @Component({
   selector: 'app-enrollee-organizations',
@@ -12,7 +13,7 @@ export class EnrolleeOrganizationsComponent implements OnInit {
   @Input() public organizations: Organization[];
   // OrganizationTypes are sent instead of Organizations for a
   // certificate so the lookup table isn't required
-  @Input() public organizationTypes: string[];
+  @Input() public organizationTypes: Config<number>[];
 
   constructor(
     private configPipe: ConfigCodePipe
@@ -34,7 +35,8 @@ export class EnrolleeOrganizationsComponent implements OnInit {
         .map(o => this.configPipe.transform(o.organizationTypeCode, 'organizationTypes'));
     } else if (this.organizationTypes.length) {
       // Directly use the organization types
-      organizationTypes = this.organizationTypes;
+      organizationTypes = this.organizationTypes
+        .map(o => o.name);
     }
 
     return (organizationTypes.length)

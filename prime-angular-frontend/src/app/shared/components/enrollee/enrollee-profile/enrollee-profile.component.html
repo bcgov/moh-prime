@@ -1,7 +1,7 @@
 <div class="mb-4">
 
   <app-page-subheader>
-    <ng-container appPageSubheaderTitle>Personal Information from BC Services Card</ng-container>
+    <ng-container appPageSubheaderTitle>{{ title }}</ng-container>
     <ng-content select="mat-icon"
                 ngProjectAs="mat-icon"></ng-content>
   </app-page-subheader>
@@ -21,22 +21,26 @@
     </div>
   </div>
 
-  <div class="row">
+  <div *ngIf="enrollee.physicalAddress?.countryCode"
+       class="row">
     <div class="col-12 mb-3">
       <strong>Address</strong>
     </div>
+
     <div class="col-6 mb-3">
       Country
     </div>
     <div class="col-6 text-right mb-3">
       {{ enrollee.physicalAddress.countryCode | configCode: 'countries' | default }}
     </div>
+
     <div class="col-6 mb-3">
       Province
     </div>
     <div class="col-6 text-right mb-3">
       {{ enrollee.physicalAddress.provinceCode | configCode: 'provinces' | default }}
     </div>
+
     <div class="col-6 mb-3">
       Street Address
     </div>
@@ -44,7 +48,7 @@
       {{ enrollee.physicalAddress.street | default }}
     </div>
 
-    <ng-container *ngIf="enrollee.physicalAddress.street2">
+    <ng-container *ngIf="enrollee.physicalAddress?.street2">
 
       <div class="col-6 mb-3">
         Street Address 2
@@ -61,12 +65,13 @@
     <div class="col-6 text-right mb-3">
       {{ enrollee.physicalAddress.city | default }}
     </div>
+
     <div class="col-6 mb-3">
       Postal Code
     </div>
     <div class="col-6 text-right mb-3">
       {{ enrollee.physicalAddress.postal | postal | default }}
     </div>
-  </div>
 
+  </div>
 </div>

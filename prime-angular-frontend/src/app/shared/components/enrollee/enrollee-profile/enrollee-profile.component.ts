@@ -10,6 +10,9 @@ import { Enrollee } from '@shared/models/enrollee.model';
 })
 export class EnrolleeProfileComponent {
   @Input() public enrollee: Enrollee;
+  @Input() public title: string;
 
-  constructor() { }
+  constructor() {
+    this.title = 'Personal Information from BC Services Card';
+  }
 }
