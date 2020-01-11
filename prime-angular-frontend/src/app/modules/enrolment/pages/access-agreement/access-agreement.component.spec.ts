@@ -19,6 +19,7 @@ import { GlobalClauseComponent } from './components/global-clause/global-clause.
 import { UserClauseComponent } from './components/user-clause/user-clause.component';
 import { LicenceClassClauseComponent } from './components/licence-class-clause/licence-class-clause.component';
 import { LimitsAndConditionsClauseComponent } from './components/limits-and-conditions-clause/limits-and-conditions-clause.component';
+import { TermsOfAccessPagerComponent } from './components/terms-of-access-pager/terms-of-access-pager.component';
 
 describe('AccessAgreementComponent', () => {
   let component: AccessAgreementComponent;
@@ -44,7 +45,8 @@ describe('AccessAgreementComponent', () => {
           GlobalClauseComponent,
           UserClauseComponent,
           LicenceClassClauseComponent,
-          LimitsAndConditionsClauseComponent
+          LimitsAndConditionsClauseComponent,
+          TermsOfAccessPagerComponent
         ],
         providers: [
           {

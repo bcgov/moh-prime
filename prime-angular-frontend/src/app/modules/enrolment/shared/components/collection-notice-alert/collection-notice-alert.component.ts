@@ -1,37 +1,45 @@
 import { Component, OnInit } from '@angular/core';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { AuthService } from '@auth/shared/services/auth.service';
-import { Router, ActivatedRoute } from '@angular/router';
 import { Enrolment } from '@shared/models/enrolment.model';
 
 @Component({
-  selector: 'app-collection-notice',
-  templateUrl: './collection-notice.component.html',
-  styleUrls: ['./collection-notice.component.scss']
+  selector: 'app-collection-notice-alert',
+  templateUrl: './collection-notice-alert.component.html',
+  styleUrls: ['./collection-notice-alert.component.scss']
 })
-export class CollectionNoticeComponent implements OnInit {
-
+export class CollectionNoticeAlertComponent implements OnInit {
   public profileCompleted: boolean;
   public enrolment: Enrolment;
 
   constructor(
-    private authSerivce: AuthService,
+    private authService: AuthService,
     private enrolmentService: EnrolmentService,
     private router: Router,
     private route: ActivatedRoute
   ) { }
 
+  public EnrolmentRoutes = EnrolmentRoutes;
+
   public ngOnInit() {
     this.enrolment = this.enrolmentService.enrolment;
     this.profileCompleted = (this.enrolment) ? this.enrolment.profileCompleted : false;
-    this.authSerivce.setHasJustLoggedIn(true);
-
-    if (this.profileCompleted) {
-      this.router.navigate([EnrolmentRoutes.OVERVIEW], { relativeTo: this.route.parent });
-    }
-
   }
 
+  public show() {
+    return this.authService.getHasJustLoggedIn();
+  }
+
+  public onAccept() {
+    const route = (!this.profileCompleted)
+      ? EnrolmentRoutes.DEMOGRAPHIC
+      : EnrolmentRoutes.OVERVIEW;
+
+    this.authService.setHasJustLoggedIn(false);
+
+    this.router.navigate([route], { relativeTo: this.route.parent });
+  }
 }

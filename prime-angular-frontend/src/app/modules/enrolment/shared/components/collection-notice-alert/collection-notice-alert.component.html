@@ -1,0 +1,58 @@
+<ng-container *ngIf="show()">
+
+  <ng-container *ngIf="profileCompleted; else fullPage">
+    <app-alert type="info"
+               icon="none">
+      <ng-container #alertTitle
+                    class="alert-title">
+        Collection Notice
+      </ng-container>
+      <ng-container #alertContent
+                    class="alert-content">
+        The personal information you provide to the PRIME application is collected by the British Columbia Ministry of
+        Health under the authority of s. 26(a),(c) of the Freedom of Information and Protection of Privacy Act and s.
+        22(1)(b) of the Pharmaceutical Services Act for the purpose of managing your access to, and use of, PharmaNet.
+        If
+        you have any questions about the collection or use of this information, call Health Insurance BC toll free at
+        <p>1-844-397-7463 (844-39PRIME)</p>
+
+        <div class="col pt-2 text-right">
+
+          <button mat-raised-button
+                  type="button"
+                  color="primary"
+                  (click)="onAccept()">
+            Ok
+          </button>
+
+        </div>
+      </ng-container>
+
+    </app-alert>
+  </ng-container>
+
+</ng-container>
+
+<ng-template #fullPage>
+  <app-page-header>
+    Collection Notice
+  </app-page-header>
+
+  The personal information you provide to the PRIME application is collected by the British Columbia Ministry of
+  Health under the authority of s. 26(a),(c) of the Freedom of Information and Protection of Privacy Act and s.
+  22(1)(b) of the Pharmaceutical Services Act for the purpose of managing your access to, and use of, PharmaNet.
+  If
+  you have any questions about the collection or use of this information, call Health Insurance BC toll free at
+  <p>1-844-397-7463 (844-39PRIME)</p>
+
+  <div class="col pt-2 text-right">
+
+    <button mat-raised-button
+            type="button"
+            color="primary"
+            (click)="onAccept()">
+      Ok
+    </button>
+
+  </div>
+</ng-template>

@@ -25,9 +25,16 @@
         <dd class="col-6 text-right">{{ enrolment.enrollee.licensePlate | default }}</dd>
       </dl>
 
+      <app-enrollee-organizations [organizations]="organizations"></app-enrollee-organizations>
+
       <app-enrollee-privileges [privileges]="privileges"></app-enrollee-privileges>
 
-      <app-enrollee-organizations [organizations]="organizations"></app-enrollee-organizations>
+      <ng-container *ngIf="enrolmentCertificateNote">
+        <dl class="row mb-4">
+          <dt class="col-6">Limits and Conditions</dt>
+          <dd class="col-6 text-right">{{ enrolmentCertificateNote | default }}</dd>
+        </dl>
+      </ng-container>
 
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Provisioner Links</ng-container>
