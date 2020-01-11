@@ -1,3 +1,6 @@
+@import 'palette';
+@import 'variables';
+
 //
 // HTML Reset
 //
@@ -5,4 +8,8 @@
 html, body {
   // Not provided in Bootstrap Reboot
   height: 100%;
+}
+
+p {
+  color: $paragraph-colour;
 }

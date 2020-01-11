@@ -1,0 +1,10 @@
+@import 'palette';
+
+//
+// MATERIAL FORMS
+//
+
+.mat-input-element,
+.mat-select-value {
+  color: theme-palette(blue, light) !important;
+}

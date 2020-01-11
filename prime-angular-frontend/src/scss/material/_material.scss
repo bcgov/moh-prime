@@ -5,6 +5,8 @@
 @import './material-core';
 @import './material-palette';
 @import './material-theme';
-@import './material-fixes';
-@import './components/mat-sidenav';
+@import './material-overrides';
+@import './components/mat-button';
+@import './components/mat-forms';
 @import './components/mat-progress';
+@import './components/mat-sidenav';
