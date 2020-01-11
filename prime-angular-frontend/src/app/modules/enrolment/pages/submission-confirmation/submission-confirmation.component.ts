@@ -1,7 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { EnrolmentStatusReason } from '@shared/models/enrolment-status-reason.model';
 import { EnrolmentStatusReason as EnrolmentStatusReasonEnum } from '@shared/enums/enrolment-status-reason.enum';
@@ -20,14 +19,9 @@ export class SubmissionConfirmationComponent extends BaseEnrolmentPage implement
   constructor(
     protected route: ActivatedRoute,
     protected router: Router,
-    @Inject(APP_CONFIG) private config: AppConfig,
     private enrolmentService: EnrolmentService
   ) {
     super(route, router);
-  }
-
-  public get primeContact() {
-    return this.config.prime;
   }
 
   public ngOnInit() {
