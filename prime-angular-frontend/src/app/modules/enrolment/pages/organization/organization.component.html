@@ -1,26 +1,28 @@
 <app-busy-overlay [busy]="busy">
 
   <div class="row">
-    <div class="col-sm-12 col-lg-8 offset-lg-1 col-xl-6 offset-xl-0">
+    <div class="col-sm-12 col-md-8 offset-md-1 col-xl-6">
+
+      <app-page-header>PharmaNet Enrolment</app-page-header>
+
+      <div class="mb-5 w-75">
+        <app-progress-indicator *ngIf="isInitialEnrolment"
+                                [currentRoute]="EnrolmentRoutes.ORGANIZATION"></app-progress-indicator>
+      </div>
 
       <form (ngSubmit)="onSubmit()"
             [formGroup]="form"
             novalidate>
 
-        <app-page-header>PharmaNet Enrolment</app-page-header>
-
-        <app-progress-indicator *ngIf="isInitialEnrolment"
-                                [currentRoute]="EnrolmentRoutes.ORGANIZATION"></app-progress-indicator>
-
         <app-page-subheader>
           <ng-container appPageSubheaderTitle>Organization Information</ng-container>
           <ng-container appPageSubheaderSummary>
-            Identify the organization(s) for which you will be accessing PharmaNet.
+            Identify all the organizational types and work settings where you will be accessing PharmaNet.
           </ng-container>
         </app-page-subheader>
 
         <div class="row">
-          <div class="col py-3"
+          <div class="col col-sm-10 py-3"
                formArrayName="organizations">
 
             <ng-container *ngFor="let organization of organizations.controls; let i = index"
