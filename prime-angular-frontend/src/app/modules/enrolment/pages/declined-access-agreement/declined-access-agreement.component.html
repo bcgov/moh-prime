@@ -1,7 +1,13 @@
 <div class="row">
-  <div class="col-sm-12 col-lg-8 offset-lg-1 offset-xl-0">
+  <div class="col-sm-12 col-md-8 offset-md-1 col-xl-6">
 
     <app-page-header>Enrolment Summary</app-page-header>
+
+    <div class="mb-5 w-75">
+      <app-progress-indicator *ngIf="isInitialEnrolment"
+                              message="Enrolment Declined"
+                              [currentRoute]="EnrolmentRoutes.DECLINED"></app-progress-indicator>
+    </div>
 
     <app-alert type="danger"
                icon="warning">
@@ -20,10 +26,7 @@
       should be directed to:
     </p>
 
-    <ul class="list-unstyled">
-      <li><a href="tel:+1800XXXXXXX">1-800-XXX-XXXX</a></li>
-      <li><a href="mailto:prime@example.com">prime@example.com</a></li>
-    </ul>
+    <app-prime-contact></app-prime-contact>
 
   </div>
 </div>

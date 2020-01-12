@@ -5,8 +5,10 @@
 
       <app-page-header>Access Agreement</app-page-header>
 
-      <app-progress-indicator *ngIf="isInitialEnrolment"
-                              [currentRoute]="EnrolmentRoutes.ACCESS_AGREEMENT"></app-progress-indicator>
+      <div class="mb-5 w-75">
+        <app-progress-indicator *ngIf="isInitialEnrolment"
+                                [currentRoute]="EnrolmentRoutes.ACCESS_AGREEMENT"></app-progress-indicator>
+      </div>
 
       <ng-container *ngIf="currentPage > 0; else preamble">
 
@@ -35,7 +37,8 @@
         <ng-container *ngIf="isAutomatic">
 
           <p>
-            Your application can be automatically processed. Within a few minutes you should receive approval to access
+            Your application can be automatically processed. Within a few minutes you should receive approval to
+            access
             PharmaNet once you accept the PharmaNet User Access Agreement. Please read the agreement carefully before
             accepting.
           </p>
@@ -57,7 +60,8 @@
 
         <p>
           Please read the User Access Agreement carefully, and ensure that you are both willing and able to abide by
-          its terms with respect to your use of PharmaNet. You are encouraged to print or save a copy of the User Access
+          its terms with respect to your use of PharmaNet. You are encouraged to print or save a copy of the User
+          Access
           Agreement to keep for your reference.
         </p>
 
