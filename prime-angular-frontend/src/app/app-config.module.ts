@@ -12,6 +12,7 @@ export class AppConfig {
   apiEndpoint: string;
   loginRedirectUrl: string;
   prime: {
+    displayPhone: string;
     phone: string;
     email: string;
   };
@@ -28,6 +29,7 @@ export const APP_DI_CONFIG: AppConfig = {
   apiEndpoint: environment.apiEndpoint,
   loginRedirectUrl: environment.loginRedirectUrl,
   prime: {
+    displayPhone: environment.prime.displayPhone,
     phone: environment.prime.phone,
     email: environment.prime.email,
   },

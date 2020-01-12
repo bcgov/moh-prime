@@ -4,7 +4,8 @@ export const environment = {
   apiEndpoint: '/api/v1',
   loginRedirectUrl: 'http://localhost:4200',
   prime: {
-    phone: '1-844-39PRIME',
+    displayPhone: '1-844-397-7463 (844-39PRIME)',
+    phone: '18443977463',
     email: 'prime@gov.bc.ca',
   },
   keycloakConfig: {
