@@ -1,12 +1,15 @@
 <app-busy-overlay [busy]="busy">
 
   <div class="row">
-    <div class="col-sm-12 col-lg-8 offset-lg-1 offset-xl-0 app-print-layout">
+    <div class="col-sm-12 col-md-8 offset-md-1 col-xl-6 app-print-layout">
 
       <app-page-header>PharmaNet Enrolment Certificate</app-page-header>
 
-      <app-progress-indicator *ngIf="showProgressBar"
-                              [currentRoute]="EnrolmentRoutes.PHARMANET_ENROLMENT_CERTIFICATE"></app-progress-indicator>
+      <div class="mb-5 w-75">
+        <app-progress-indicator *ngIf="showProgressBar"
+                                [currentRoute]="EnrolmentRoutes.PHARMANET_ENROLMENT_CERTIFICATE">
+        </app-progress-indicator>
+      </div>
 
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Next Steps</ng-container>
@@ -88,7 +91,7 @@
       </div>
 
       <ng-container *ngIf="enrolmentCertificateNote">
-        <dl class="row mb-4">
+        <dl class="row mb-5">
           <dt class="col-6">Limits and Conditions</dt>
           <dd class="col-6 text-right">{{ enrolmentCertificateNote | default }}</dd>
         </dl>
