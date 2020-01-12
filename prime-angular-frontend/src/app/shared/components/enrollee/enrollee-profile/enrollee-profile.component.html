@@ -1,77 +1,70 @@
-<div class="mb-4">
+<div *ngIf="showPersonal"
+     class="row mb-3">
+  <div class="col-6 mb-3">
+    Name
+  </div>
+  <div class="col-6 text-right mb-3">
+    {{ enrollee | enrollee: 'fullName' | default }}
+  </div>
+  <div class="col-6 mb-3">
+    Date of Birth
+  </div>
+  <div class="col-6 text-right">
+    {{ enrollee?.dateOfBirth | formatDate | default }}
+  </div>
+</div>
 
-  <app-page-subheader>
-    <ng-container appPageSubheaderTitle>{{ title }}</ng-container>
-    <ng-content select="mat-icon"
-                ngProjectAs="mat-icon"></ng-content>
-  </app-page-subheader>
-
-  <div class="row mb-3">
-    <div class="col-6 mb-3">
-      Name
-    </div>
-    <div class="col-6 text-right mb-3">
-      {{ enrollee | enrollee: 'fullName' | default }}
-    </div>
-    <div class="col-6 mb-3">
-      Date of Birth
-    </div>
-    <div class="col-6 text-right mb-3">
-      {{ enrollee?.dateOfBirth | formatDate | default }}
-    </div>
+<div *ngIf="showAddress"
+     class="row mb-3">
+  <div *ngIf="hasAddressTitle"
+       class="col-12 mb-3">
+    <strong>Address</strong>
   </div>
 
-  <div *ngIf="enrollee.physicalAddress?.countryCode"
-       class="row">
-    <div class="col-12 mb-3">
-      <strong>Address</strong>
-    </div>
-
-    <div class="col-6 mb-3">
-      Country
-    </div>
-    <div class="col-6 text-right mb-3">
-      {{ enrollee.physicalAddress.countryCode | configCode: 'countries' | default }}
-    </div>
-
-    <div class="col-6 mb-3">
-      Province
-    </div>
-    <div class="col-6 text-right mb-3">
-      {{ enrollee.physicalAddress.provinceCode | configCode: 'provinces' | default }}
-    </div>
-
-    <div class="col-6 mb-3">
-      Street Address
-    </div>
-    <div class="col-6 text-right mb-3">
-      {{ enrollee.physicalAddress.street | default }}
-    </div>
-
-    <ng-container *ngIf="enrollee.physicalAddress?.street2">
-
-      <div class="col-6 mb-3">
-        Street Address 2
-      </div>
-      <div class="col-6 text-right mb-3">
-        {{ enrollee.physicalAddress.street2 | default }}
-      </div>
-
-    </ng-container>
-
-    <div class="col-6 mb-3">
-      City
-    </div>
-    <div class="col-6 text-right mb-3">
-      {{ enrollee.physicalAddress.city | default }}
-    </div>
-
-    <div class="col-6 mb-3">
-      Postal Code
-    </div>
-    <div class="col-6 text-right mb-3">
-      {{ enrollee.physicalAddress.postal | postal | default }}
-    </div>
-
+  <div class="col-6 mb-3">
+    Country
   </div>
+  <div class="col-6 text-right mb-3">
+    {{ physicalAddress?.countryCode | configCode: 'countries' | default }}
+  </div>
+
+  <div class="col-6 mb-3">
+    Province
+  </div>
+  <div class="col-6 text-right mb-3">
+    {{ physicalAddress?.provinceCode | configCode: 'provinces' | default }}
+  </div>
+
+  <div class="col-6 mb-3">
+    Street Address
+  </div>
+  <div class="col-6 text-right mb-3">
+    {{ physicalAddress?.street | default }}
+  </div>
+
+  <ng-container *ngIf="physicalAddress?.street2">
+
+    <div class="col-6 mb-3">
+      Street Address 2
+    </div>
+    <div class="col-6 text-right mb-3">
+      {{ physicalAddress?.street2 | default }}
+    </div>
+
+  </ng-container>
+
+  <div class="col-6 mb-3">
+    City
+  </div>
+  <div class="col-6 text-right mb-3">
+    {{ physicalAddress?.city | default }}
+  </div>
+
+  <div class="col-6 mb-3">
+    Postal Code
+  </div>
+  <div class="col-6 text-right mb-3">
+    {{ physicalAddress?.postal | postal | default }}
+  </div>
+
 </div>

@@ -10,9 +10,19 @@ import { Enrollee } from '@shared/models/enrollee.model';
 })
 export class EnrolleeProfileComponent {
   @Input() public enrollee: Enrollee;
-  @Input() public title: string;
+  @Input() public showPersonal: boolean;
+  @Input() public showAddress: boolean;
+  @Input() public hasAddressTitle: boolean;
 
   constructor() {
-    this.title = 'Personal Information from BC Services Card';
+    this.showPersonal = true;
+    this.showAddress = true;
+    this.hasAddressTitle = true;
+  }
+
+  public get physicalAddress() {
+    return (this.enrollee && this.enrollee.physicalAddress)
+      ? this.enrollee.physicalAddress
+      : null;
   }
 }
