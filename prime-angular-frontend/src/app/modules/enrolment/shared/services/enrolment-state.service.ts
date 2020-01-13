@@ -190,8 +190,8 @@ export class EnrolmentStateService {
       voiceExtension: [null, [FormControlValidators.numeric]],
       hasContactEmail: [false, []],
       contactEmail: [null, [FormControlValidators.email]],
-      hasContactPhone: [false, []],
-      contactPhone: [null, [FormControlValidators.phone]]
+      hasContactPhone: [{ value: false, disabled: true }, []],
+      contactPhone: [{ value: null, disabled: true }, [FormControlValidators.phone]]
     });
   }
 
