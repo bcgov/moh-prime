@@ -28,10 +28,11 @@ export class AppConfig {
 export const APP_DI_CONFIG: AppConfig = {
   apiEndpoint: environment.apiEndpoint,
   loginRedirectUrl: environment.loginRedirectUrl,
+  // TODO move back into environment file when Paul is available
   prime: {
-    displayPhone: environment.prime.displayPhone,
-    phone: environment.prime.phone,
-    email: environment.prime.email,
+    displayPhone: '1-844-397-7463 (844-39PRIME)',
+    phone: '18443977463',
+    email: 'prime@gov.bc.ca',
   },
   routes: {
     auth: EnrolmentRoutes.MODULE_PATH,

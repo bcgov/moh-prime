@@ -5,7 +5,6 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class YesNoPipe implements PipeTransform {
   transform(value: any, explicit: boolean = false): string {
-    console.log('yesNo', value);
     // Null check to allow for default pipe chaining, but allow
     // for an explicit yes or no if required
     return (value === null && !explicit)
