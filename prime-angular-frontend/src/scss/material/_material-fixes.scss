@@ -1,6 +1,9 @@
-// Angular Material
-// ----------------------------------------------------------------------------
-// Used to fix issues related to Angular Material
+//
+// MATERIAL FIXES
+//
+
+// NOTE: Used to fix issues OR augment Material components
+// that are not theme related
 
 // Remove all outlines from all elements.  This is very aggressive! and should
 // be removed once supported by Angular Material.
@@ -23,116 +26,4 @@
   // Provide a bit more spacing under form fields so error
   // messages are not resting on underlying field labels
   margin-bottom: 0.3rem;
-}
-
-//
-// Sidenav
-//
-
-// NOTE: Cannot be moved into dashboard component for use
-// in shadow DOM, since some of this won't work in the
-// component and has to be global.
-
-.mat-sidenav-container {
-  // Force the background to match busy loader
-  background-color: #fff !important;
-}
-
-.mat-sidenav {
-  background-color: theme-palette(grey, lightest);
-  border-right: 2px solid theme-palette(grey, light);
-
-  .mat-list-item {
-    color: theme-palette(blue) !important;
-
-    .extend-content-width {
-      // Force the link content to extend width of sidenav
-      padding-right: 3rem !important;
-    }
-  }
-
-  a,
-  .mat-icon {
-    color: theme-palette(blue) !important;
-  }
-
-  .active,
-  .active:focus,
-  .mat-list-item:focus {
-    background-color: theme-palette(grey, lighter) !important;
-  }
-
-  .active {
-    .mat-list-item-content {
-      border-right: 5px solid theme-palette(yellow) !important;
-    }
-  }
-
-  .mat-list-item-content {
-    border-right: 5px solid transparent !important;
-    padding-left: 25px !important;
-  }
-
-  .active {
-    .mat-list-item-content {
-      border-right: 5px solid theme-palette(yellow) !important;
-    }
-  }
-
-  .mat-list-item-content {
-    border-right: 5px solid transparent !important;
-    padding-left: 25px !important;
-  }
-
-  .active {
-    .mat-list-item-content {
-      border-right: 5px solid theme-palette(yellow) !important;
-    }
-  }
-
-  .mat-list-item-content {
-    border-right: 5px solid transparent !important;
-    padding-left: 25px !important;
-  }
-
-  .active {
-    .mat-list-item-content {
-      border-right: 5px solid theme-palette(yellow) !important;
-    }
-  }
-
-  .mat-list-item-content {
-    border-right: 5px solid transparent !important;
-    padding-left: 25px !important;
-  }
-
-  .active {
-    .mat-list-item-content {
-      border-right: 5px solid theme-palette(yellow) !important;
-    }
-  }
-
-  .mat-list-item-content {
-    border-right: 5px solid transparent !important;
-    padding-left: 25px !important;
-  }
-
-  .active {
-    .mat-list-item-content {
-      border-right: 5px solid theme-palette(yellow) !important;
-    }
-  }
-
-  .active a {
-    font-weight: bold !important;
-  }
-
-  // Force the mat-icon to be centered in the sidenav
-  // NOTE: used for mobile and tablet viewport sizes
-  .center-sidenav-icon {
-    display: block !important;
-    text-align: center !important;
-    padding: 0 !important;
-    width: 90% !important;
-  }
 }

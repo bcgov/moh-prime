@@ -7,10 +7,10 @@
             [formGroup]="form"
             novalidate>
 
+        <app-page-header>PharmaNet Enrolment</app-page-header>
+
         <app-progress-indicator *ngIf="isInitialEnrolment"
                                 [currentRoute]="EnrolmentRoutes.REGULATORY"></app-progress-indicator>
-
-        <app-page-header>PharmaNet Enrolment</app-page-header>
 
         <app-page-subheader>
           <ng-container appPageSubheaderTitle>Regulatory Information</ng-container>

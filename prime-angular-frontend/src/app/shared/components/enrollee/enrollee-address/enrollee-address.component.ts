@@ -9,10 +9,10 @@ import { Address } from '@enrolment/shared/models/address.model';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EnrolleeAddressComponent {
-  @Input() public header: string;
   @Input() public address: Address;
+  @Input() public showHeader: boolean;
 
   constructor() {
-    this.header = 'Address';
+    this.showHeader = true;
   }
 }

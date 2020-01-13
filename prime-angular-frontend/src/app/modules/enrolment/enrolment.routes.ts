@@ -5,7 +5,7 @@ export class EnrolmentRoutes {
   // Enrollee overview:
   public static OVERVIEW = 'overview';
   // Enrollee profile:
-  public static DEMOGRAPHIC = 'profile';
+  public static DEMOGRAPHIC = 'demographic';
   public static REGULATORY = 'regulatory';
   public static DEVICE_PROVIDER = 'device-provider';
   public static JOB = 'job';

@@ -1,4 +1,5 @@
 @import 'palette';
+@import 'variables';
 @import 'bootstrap/bootstrap-grid';
 
 .page-subheader {
@@ -7,13 +8,15 @@
   padding-bottom: 0.25rem;
 
   .title {
-    color: theme-palette(blue);
+    color: $h2-colour;
     display: flex;
     margin-bottom: .05rem;
   }
 
   .description {
-    color: lighten(black, 40%);
+    color: $paragraph-colour;
+    // When description exists increase the margin between the title and description
+    margin-top: .45rem;
     margin-bottom: 0;
   }
 

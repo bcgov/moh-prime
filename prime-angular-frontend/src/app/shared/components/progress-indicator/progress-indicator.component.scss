@@ -1,8 +1,9 @@
 @import 'palette';
 
+// NOTE: mat-progress-bar is modified globally
+// @see ./scss/material/components/_mat-progress.scss
+
 .progress-indicator {
-  border-radius: 5px;
-  background-color: lighten(theme-palette(grey, lightest), 4%);
-  margin-bottom: 1.5em;
-  padding: 2em;
+  color: theme-palette(blue);
+  margin-bottom: 3em;
 }
