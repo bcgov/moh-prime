@@ -44,9 +44,5 @@ export class EnrolleeOrganizationsComponent implements OnInit {
       : [];
   }
 
-  public get hasOrganization(): boolean {
-    return !!(this.organizations.length || this.organizationTypes.length);
-  }
-
   public ngOnInit() { }
 }
