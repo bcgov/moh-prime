@@ -17,6 +17,7 @@ metadata:
 parameters:
   - name: OC_NAMESPACE
     required: true
+    value: ${PROJECT_PREFIX}
   - name: OC_APP
     required: true
   - name: SOURCE_CONTEXT_DIR

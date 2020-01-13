@@ -2,25 +2,10 @@ apiVersion: v1
 kind: Template
 labels:
   template: metabase-postgresql-template
-message: |-
-  The following service(s) have been created in your project:
-    1. ${APP_NAME}
-    2. ${APP_NAME}-postgresql
-metadata:
-  name: metabase
-  annotations:
-    openshift.io/display-name: "Metabase backed by PostgreSQL"
-    openshift.io/long-description: >
-      This template provides a Metabase instance backed by a standalone PostgreSQL
-      server. The database is stored on persistent storage.
-    description: >
-      This is a PostgreSQL backed Metabase (http://www.metabase.com/) deployment. Metabase is the
-      easy, open source way for everyone in your company to ask questions and learn from data.
-    iconClass: "pficon-trend-up"
-    tags: analytics,database,metabase
 parameters:
   - name: OC_NAMESPACE
     required: true
+    value: ${PROJECT_PREFIX}
   - name: OC_APP
     required: true
   - name: SOURCE_CONTEXT_DIR
