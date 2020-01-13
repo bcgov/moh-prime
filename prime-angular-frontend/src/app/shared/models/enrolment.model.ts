@@ -9,7 +9,6 @@ import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.
 import { Privilege } from '@enrolment/shared/models/privilege.model';
 import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 
-
 // TODO incoming transitional Enrollee model, eventually will be Enrollee
 export interface HttpEnrollee extends Enrollee {
   id?: number;
@@ -39,6 +38,8 @@ export interface HttpEnrollee extends Enrollee {
   profileCompleted: boolean;
   // Status hook for where the enrollee is in the initial enrolment
   progressStatus: ProgressStatus;
+  // Indicates enrollee has seen the collection notice
+  collectionNoticeAccepted: boolean;
 }
 
 // TODO outgoing enrolment model
@@ -71,6 +72,6 @@ export interface Enrolment {
   profileCompleted: boolean;
   // Status hook for where the enrollee is in the initial enrolment
   progressStatus: ProgressStatus;
-  // Indicates enrollee has seen collection notice
+  // Indicates enrollee has seen the collection notice
   collectionNoticeAccepted: boolean;
 }
