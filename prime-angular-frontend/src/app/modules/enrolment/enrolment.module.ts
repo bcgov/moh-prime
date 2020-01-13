@@ -11,7 +11,7 @@ import { JobComponent } from './pages/job/job.component';
 import { SelfDeclarationComponent } from './pages/self-declaration/self-declaration.component';
 import { OrganizationComponent } from './pages/organization/organization.component';
 import { OverviewComponent } from './pages/overview/overview.component';
-import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
+import { SubmissionConfirmationComponent } from './pages/submission-confirmation/submission-confirmation.component';
 import { AccessAgreementComponent } from './pages/access-agreement/access-agreement.component';
 import { PageRefDirective } from './pages/access-agreement/page-ref.directive';
 import { TermsOfAccessPagerComponent } from './pages/access-agreement/components/terms-of-access-pager/terms-of-access-pager.component';
@@ -43,7 +43,7 @@ import { CollectionNoticeAlertComponent } from './shared/components/collection-n
     SelfDeclarationComponent,
     OrganizationComponent,
     OverviewComponent,
-    ConfirmationComponent,
+    SubmissionConfirmationComponent,
     AccessAgreementComponent,
     PageRefDirective,
     TermsOfAccessPagerComponent,

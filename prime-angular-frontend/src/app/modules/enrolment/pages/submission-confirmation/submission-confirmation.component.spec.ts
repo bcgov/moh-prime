@@ -3,7 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
-import { ConfirmationComponent } from './confirmation.component';
+import { SubmissionConfirmationComponent } from './submission-confirmation.component';
 import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
 import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
@@ -13,9 +13,9 @@ import { PageSubheaderComponent } from '@shared/components/page-subheader/page-s
 import { ProgressIndicatorComponent } from '@shared/components/progress-indicator/progress-indicator.component';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
-describe('ConfirmationComponent', () => {
-  let component: ConfirmationComponent;
-  let fixture: ComponentFixture<ConfirmationComponent>;
+describe('SubmissionConfirmationComponent', () => {
+  let component: SubmissionConfirmationComponent;
+  let fixture: ComponentFixture<SubmissionConfirmationComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule(
@@ -28,7 +28,7 @@ describe('ConfirmationComponent', () => {
         ],
         declarations: [
           AlertComponent,
-          ConfirmationComponent,
+          SubmissionConfirmationComponent,
           PageHeaderComponent,
           PageSubheaderComponent,
           ProgressIndicatorComponent
@@ -44,7 +44,7 @@ describe('ConfirmationComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ConfirmationComponent);
+    fixture = TestBed.createComponent(SubmissionConfirmationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
