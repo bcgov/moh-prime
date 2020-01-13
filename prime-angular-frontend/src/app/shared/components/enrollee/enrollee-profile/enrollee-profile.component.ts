@@ -12,12 +12,12 @@ export class EnrolleeProfileComponent {
   @Input() public enrollee: Enrollee;
   @Input() public showPersonal: boolean;
   @Input() public showAddress: boolean;
-  @Input() public hasAddressTitle: boolean;
+  @Input() public showAddressTitle: boolean;
 
   constructor() {
     this.showPersonal = true;
     this.showAddress = true;
-    this.hasAddressTitle = true;
+    this.showAddressTitle = true;
   }
 
   public get physicalAddress() {
