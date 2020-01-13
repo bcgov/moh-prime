@@ -205,6 +205,17 @@ export class MockConfigService extends ConfigService implements IConfigService {
           { code: 5, name: 'Insulin Pump Provider' },
           { code: 6, name: 'Licence Class' },
           { code: 8, name: 'Contact address or Identity Address Out of British Columbia' }
+        ],
+        privilegeGroups: [
+          { code: 1, privilegeTypeCode: 2, name: 'Submit and Access Claims' },
+          { code: 2, privilegeTypeCode: 2, name: 'Record Medical History' },
+          { code: 3, privilegeTypeCode: 2, name: 'Access Medical History' },
+          { code: 4, privilegeTypeCode: 1, name: 'Role' },
+          { code: 5, privilegeTypeCode: 1, name: 'RU That Can Have OBO\'s' }
+        ],
+        privilegeTypes: [
+          { code: 1, name: 'Allowable Role' },
+          { code: 2, name: 'Allowable Transaction' }
         ]
       };
 

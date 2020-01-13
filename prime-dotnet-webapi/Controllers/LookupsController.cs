@@ -41,6 +41,8 @@ namespace Prime.Controllers
             lookupEntity.Countries = await _lookupService.GetLookupsAsync<string, Country>();
             lookupEntity.Provinces = await _lookupService.GetLookupsAsync<string, Province>();
             lookupEntity.StatusReasons = await _lookupService.GetLookupsAsync<short, StatusReason>();
+            lookupEntity.PrivilegeGroups = await _lookupService.GetLookupsAsync<short, PrivilegeGroup>();
+            lookupEntity.PrivilegeTypes = await _lookupService.GetLookupsAsync<short, PrivilegeType>();
 
             return Ok(new ApiOkResponse<LookupEntity>(lookupEntity));
         }
