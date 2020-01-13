@@ -3,10 +3,10 @@
   <div class="row">
     <div class="col-sm-12 col-lg-8 offset-lg-1 offset-xl-0">
 
+      <app-page-header>Access Agreement</app-page-header>
+
       <app-progress-indicator *ngIf="isInitialEnrolment"
                               [currentRoute]="EnrolmentRoutes.ACCESS_AGREEMENT"></app-progress-indicator>
-
-      <app-page-header>Access Agreement</app-page-header>
 
       <ng-container *ngIf="currentPage > 0; else preamble">
 
@@ -18,17 +18,19 @@
 
       <ng-template #preamble>
 
-        <app-alert type="success"
-                   icon="check_circle_outline">
-          <ng-container #alertTitle
-                        class="alert-title">
-            You've Been Approved
-          </ng-container>
-          <ng-container #alertContent
-                        class="alert-content">
-            You’ve been approved for PharmaNet access for direct patient care.
-          </ng-container>
-        </app-alert>
+        <div class="mb-4">
+          <app-alert type="success"
+                     icon="check_circle_outline">
+            <ng-container #alertTitle
+                          class="alert-title">
+              You've Been Approved
+            </ng-container>
+            <ng-container #alertContent
+                          class="alert-content">
+              You’ve been approved for PharmaNet access for direct patient care.
+            </ng-container>
+          </app-alert>
+        </div>
 
         <ng-container *ngIf="isAutomatic">
 
@@ -72,7 +74,8 @@
       <div class="row justify-content-between pt-2">
         <div class="col-4">
 
-          <button mat-stroked-button
+          <button *ngIf="currentPage"
+                  mat-stroked-button
                   (click)="onPrevPage()">Back</button>
 
         </div>
