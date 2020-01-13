@@ -1,5 +1,17 @@
+@import 'palette';
+@import 'variables';
+
 .add-icon {
   margin-top: -3px;
+}
+
+p {
+  color: $paragraph-colour;
+}
+
+.renewal-date {
+  color: theme-palette(blue, light);
+  font-style: italic;
 }
 
 td {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Enrolment } from '@shared/models/enrolment.model';
@@ -9,11 +9,11 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 
 @Component({
-  selector: 'app-confirmation',
-  templateUrl: './confirmation.component.html',
-  styleUrls: ['./confirmation.component.scss']
+  selector: 'app-submission-confirmation',
+  templateUrl: './submission-confirmation.component.html',
+  styleUrls: ['./submission-confirmation.component.scss']
 })
-export class ConfirmationComponent extends BaseEnrolmentPage implements OnInit {
+export class SubmissionConfirmationComponent extends BaseEnrolmentPage implements OnInit {
   public isAutomatic: boolean;
 
   constructor(

@@ -2,7 +2,6 @@
  * Ministry of Health PRIME Project
  * Approved for Ministry of Health use only.
  */
-using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Prime.Models;
@@ -11,9 +10,6 @@ namespace Prime.Configuration
 {
     public class PrivilegeGroupConfiguration : IEntityTypeConfiguration<PrivilegeGroup>
     {
-        private readonly Guid SYSTEM_USER = Guid.Empty;
-        private readonly DateTime SEEDING_DATE = DateTime.Now;
-
         public void Configure(EntityTypeBuilder<PrivilegeGroup> builder)
         {
             builder.HasOne(pg => pg.PrivilegeType)

@@ -1,6 +1,9 @@
 @import 'palette';
 @import 'bootstrap/bootstrap-grid';
 
+// NOTE: mat-sidenav is modified globally
+// @see ./scss/material/components/_mat-sidenav.scss
+
 .prime-sidenav-container {
   position: absolute;
   // Compensate for the application header, and the
@@ -15,7 +18,7 @@
   text-align: center;
 
   img {
-    margin: 2em 0 1.5em;
+    margin: 4em 0 4.5em;
     width: 40px;
     height: auto;
 

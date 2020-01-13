@@ -11,6 +11,10 @@ export let APP_CONFIG = new InjectionToken<AppConfig>('app.config');
 export class AppConfig {
   apiEndpoint: string;
   loginRedirectUrl: string;
+  prime: {
+    phone: string;
+    email: string;
+  };
   routes: {
     auth: string;
     enrolment: string;
@@ -23,6 +27,11 @@ export class AppConfig {
 export const APP_DI_CONFIG: AppConfig = {
   apiEndpoint: environment.apiEndpoint,
   loginRedirectUrl: environment.loginRedirectUrl,
+  // TODO move back into environment file when Paul is available
+  prime: {
+    phone: '1-844-39PRIME',
+    email: 'prime@gov.bc.ca',
+  },
   routes: {
     auth: EnrolmentRoutes.MODULE_PATH,
     enrolment: EnrolmentRoutes.MODULE_PATH,

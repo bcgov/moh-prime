@@ -8,6 +8,7 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 })
 export class ProgressIndicatorComponent implements OnInit {
   @Input() public currentRoute: EnrolmentRoutes;
+  @Input() public message: string;
 
   public percentComplete: number;
 

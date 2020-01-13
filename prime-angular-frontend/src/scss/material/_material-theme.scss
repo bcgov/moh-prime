@@ -1,3 +1,7 @@
+//
+// MATERIAL THEME
+//
+
 @import './material-palette';
 @import '~@angular/material/theming';
 
@@ -21,17 +25,3 @@ $prime-app-theme: mat-light-theme($prime-app-primary, $prime-app-accent, $prime-
 
 // Create the dark theme object (a Sass map containing all of the palettes).
 $prime-dark-app-theme: mat-dark-theme($prime-app-primary, $prime-app-accent, $prime-app-warn);
-
-// body.dark {
-//   @include angular-material-theme($prime-dark-app-theme);
-// }
-
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
-//
-// Example:
-// @include mat-sidenav-theme($prime-dark-app-theme);
-// .mat-sidenav {
-//   @include angular-material-theme($prime-dark-app-theme);
-// }

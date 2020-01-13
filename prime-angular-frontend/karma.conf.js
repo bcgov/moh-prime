@@ -10,10 +10,11 @@ module.exports = function (config) {
       require('karma-chrome-launcher'),
       require('karma-jasmine-html-reporter'),
       require('karma-coverage-istanbul-reporter'),
-      require('@angular-devkit/build-angular/plugins/karma')
+      require('@angular-devkit/build-angular/plugins/karma'),
     ],
     client: {
-      clearContext: false // leave Jasmine Spec Runner output visible in browser
+      // leave Jasmine Spec Runner output visible in browser
+      clearContext: false,
     },
     coverageIstanbulReporter: {
       dir: require('path').join(__dirname, './coverage/angular-frontend'),
@@ -30,7 +31,8 @@ module.exports = function (config) {
       ChromeHeadlessNoSandbox: {
         base: 'ChromeHeadless',
         flags: [
-          '--no-sandbox', // required to run without privileges in docker
+          // required to run without privileges in docker
+          '--no-sandbox',
           '--user-data-dir=/tmp/chrome-test-profile',
           '--disable-web-security',
           '--disable-gpu',
@@ -53,11 +55,11 @@ module.exports = function (config) {
           '--disable-dev-shm-usage',
           '--disable-setuid-sandbox',
           '--disable-namespace-sandbox',
-          '--window-size=800x600'
-        ]
-      }
+          '--window-size=800x600',
+        ],
+      },
     },
     singleRun: false,
-    restartOnFileChange: true
+    restartOnFileChange: true,
   });
 };
