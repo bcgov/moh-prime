@@ -1,6 +1,6 @@
 #FROM docker-registry.default.svc:5000/dqszvc-${OC_APP}/dotnet-22-rhel7 AS build
 #FROM registry.redhat.io/dotnet/dotnet-22-rhel7 AS build
-FROM docker-registry.default.svc:5000/dqszvc-tools/dotnet-22-rhel7 AS build
+FROM docker-registry.default.svc:5000/dqszvc-tools/rhel8/dotnet-30 AS build
 #FROM dotnet-22-rhel7 AS build
 WORKDIR /opt/app-root/app
 
@@ -23,7 +23,7 @@ RUN dotnet restore
 COPY . /opt/app-root/app/
 RUN dotnet publish -c Release -o /opt/app-root/app/out /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
 
-FROM docker-registry.default.svc:5000/dqszvc-tools/dotnet-22-runtime-rhel7 AS runtime
+FROM docker-registry.default.svc:5000/dqszvc-tools/rhel8/dotnet-30 AS runtime
 #FROM registry.redhat.io/dotnet/dotnet-22-runtime-rhel7 AS runtime
 #FROM dotnet-22-runtime-rhel7 AS runtime
 WORKDIR /opt/app-root/app
