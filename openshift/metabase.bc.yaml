@@ -23,6 +23,8 @@ parameters:
     required: false
   - name: SOURCE_REPOSITORY_REF
     required: false
+  - name: SOURCE_REPOSITORY_URL
+    required: false
   - name: APP_NAME
     displayName: Metabase Service Name
     value: metabase
