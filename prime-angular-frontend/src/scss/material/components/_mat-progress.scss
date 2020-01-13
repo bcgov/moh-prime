@@ -1,0 +1,13 @@
+.mat-progress-bar {
+  height: 5px;
+  margin-bottom: 7px;
+
+  &,
+  .mat-progress-bar-buffer {
+    border-radius: 5px;
+  }
+
+  &.mat-accent .mat-progress-bar-buffer {
+    background-color: theme-palette(blue);
+  }
+}

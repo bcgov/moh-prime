@@ -1,0 +1,34 @@
+<div class="mb-4">
+
+  <app-page-subheader *ngIf="showHeader">
+    <ng-container appPageSubheaderTitle>Mailing Address</ng-container>
+    <ng-content select="mat-icon"
+                ngProjectAs="mat-icon"></ng-content>
+  </app-page-subheader>
+
+  <app-enrollee-property title="Country">
+    {{ address?.countryCode | configCode: 'countries' | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Province">
+    {{ address?.provinceCode | configCode: 'provinces' | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Street Address">
+    {{ address?.street | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property *ngIf="address?.street2"
+                         title="Street Address 2">
+    {{ address?.street2 | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="City">
+    {{ address?.city | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Postal Code">
+    {{ address?.postal | postal | default }}
+  </app-enrollee-property>
+
+</div>
