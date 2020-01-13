@@ -4,10 +4,10 @@ using Newtonsoft.Json;
 
 namespace Prime.Models
 {
-    public class PrivilegeGroup : BaseAuditable
+    public class PrivilegeGroup : BaseAuditable, ILookup<short>
     {
         [Key]
-        public int Id { get; set; }
+        public short Code { get; set; }
 
         public short PrivilegeTypeCode { get; set; }
 
@@ -16,6 +16,5 @@ namespace Prime.Models
         public string Name { get; set; }
 
         public ICollection<Privilege> Privileges { get; set; }
-
     }
 }
