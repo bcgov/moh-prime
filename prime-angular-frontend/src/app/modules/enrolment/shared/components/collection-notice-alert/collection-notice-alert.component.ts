@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { Enrolment } from '@shared/models/enrolment.model';

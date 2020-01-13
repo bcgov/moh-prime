@@ -10,6 +10,7 @@ const initializer = (config: ConfigService) => {
 @NgModule({
   providers: [
     ConfigService,
+    ConfigCodePipe
     // TODO keep initializer until testing completed using resolver
     // {
     //   provide: APP_INITIALIZER,

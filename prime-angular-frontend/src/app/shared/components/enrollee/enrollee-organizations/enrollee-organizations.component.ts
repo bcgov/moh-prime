@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Organization } from '@enrolment/shared/models/organization.model';
+import { ConfigCodePipe } from '@config/config-code.pipe';
+import { Config } from '@config/config.model';
 
 @Component({
   selector: 'app-enrollee-organizations',
@@ -9,10 +11,38 @@ import { Organization } from '@enrolment/shared/models/organization.model';
 export class EnrolleeOrganizationsComponent implements OnInit {
   @Input() public header: string;
   @Input() public organizations: Organization[];
-  // Organization Types instead of Organizations are sent from adjudicator link certificate so that a lookup table isnt needed
-  @Input() public organizationTypes: number[];
+  // OrganizationTypes are sent instead of Organizations for a
+  // certificate so the lookup table isn't required
+  @Input() public organizationTypes: Config<number>[];
 
-  constructor() { }
+  constructor(
+    private configPipe: ConfigCodePipe
+  ) {
+    this.organizations = [];
+    this.organizationTypes = [];
+  }
+
+  public get hasOrganization(): boolean {
+    return !![...this.organizations, ...this.organizationTypes].length;
+  }
+
+  public get normalizedOrganizationTypes(): string[] {
+    let organizationTypes = [];
+
+    if (this.organizations.length) {
+      // Convert the lookup organization type codes
+      organizationTypes = this.organizations
+        .map(o => this.configPipe.transform(o.organizationTypeCode, 'organizationTypes'));
+    } else if (this.organizationTypes.length) {
+      // Directly use the organization types
+      organizationTypes = this.organizationTypes
+        .map(o => o.name);
+    }
+
+    return (organizationTypes.length)
+      ? organizationTypes
+      : [];
+  }
 
   public ngOnInit() { }
 }

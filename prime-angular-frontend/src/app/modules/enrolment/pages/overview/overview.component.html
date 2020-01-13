@@ -7,8 +7,10 @@
 
       <app-page-header>PharmaNet Enrolment</app-page-header>
 
-      <app-progress-indicator *ngIf="isInitialEnrolment"
-                              [currentRoute]="EnrolmentRoutes.OVERVIEW"></app-progress-indicator>
+      <div class="mb-5">
+        <app-progress-indicator *ngIf="isInitialEnrolment"
+                                [currentRoute]="EnrolmentRoutes.OVERVIEW"></app-progress-indicator>
+      </div>
 
       <div class="mb-5">
         <app-page-subheader>
@@ -34,7 +36,7 @@
       <div class="row justify-content-end">
         <div class="col pt-4 text-right">
 
-          <button mat-raised-button
+          <button mat-flat-button
                   color="primary"
                   [disabled]="!accept.checked"
                   (click)="onSubmit()">Submit Enrolment</button>
