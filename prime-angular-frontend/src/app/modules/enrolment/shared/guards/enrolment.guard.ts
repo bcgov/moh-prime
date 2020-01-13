@@ -122,9 +122,6 @@ export class EnrolmentGuard extends BaseGuard {
     ];
     const route = routePath.split('/').pop();
 
-    console.log(whiteListedRoutes, route);
-
-
     if (!whiteListedRoutes.includes(route)) {
       return this.navigate(routePath, EnrolmentRoutes.ACCESS_AGREEMENT);
     }
