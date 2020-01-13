@@ -4,7 +4,10 @@
 #dotnet prime.dll
 
 export DB_CONNECTION_STRING="host=${DB_HOST};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"
+
+echo "Running database migrations..."
 /opt/rh/rh-dotnet22/root/usr/lib64/dotnet/dotnet ef database update
+
 echo "Running .NET..."
 /opt/rh/rh-dotnet22/root/usr/lib64/dotnet/dotnet prime.dll &disown 
 
