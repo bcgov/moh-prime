@@ -4,6 +4,7 @@ import { DeclinedAccessAgreementComponent } from './declined-access-agreement.co
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { AlertComponent } from '@shared/components/alert/alert.component';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
+import { ProgressIndicatorComponent } from '@shared/components/progress-indicator/progress-indicator.component';
 
 describe('DeclinedAccessAgreementComponent', () => {
   let component: DeclinedAccessAgreementComponent;
@@ -18,6 +19,7 @@ describe('DeclinedAccessAgreementComponent', () => {
         declarations: [
           DeclinedAccessAgreementComponent,
           PageHeaderComponent,
+          ProgressIndicatorComponent,
           AlertComponent
         ]
       }
