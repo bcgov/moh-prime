@@ -7,11 +7,6 @@ export const environment = {
   version: '1.0.0',
   apiEndpoint: 'http://localhost:5000/api',
   loginRedirectUrl: 'http://localhost:4200',
-  prime: {
-    displayPhone: '1-844-397-7463 (844-39PRIME)',
-    phone: '18443977463',
-    email: 'prime@gov.bc.ca',
-  },
   keycloakConfig: {
     config: {
       url: 'https://sso-dev.pathfinder.gov.bc.ca/auth',
