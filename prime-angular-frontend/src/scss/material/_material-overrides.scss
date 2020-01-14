@@ -1,5 +1,5 @@
 //
-// MATERIAL FIXES
+// MATERIAL OVERRIDES
 //
 
 // NOTE: Used to fix issues OR augment Material components
@@ -26,4 +26,9 @@
   // Provide a bit more spacing under form fields so error
   // messages are not resting on underlying field labels
   margin-bottom: 0.3rem;
+}
+
+.mat-checkbox label,
+.mat-radio-button label {
+  color: theme-palette(blue);
 }

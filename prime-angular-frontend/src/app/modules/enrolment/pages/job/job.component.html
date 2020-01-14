@@ -1,52 +1,58 @@
 <app-busy-overlay [busy]="busy">
 
   <div class="row">
-    <div class="col-sm-12 col-lg-8 offset-lg-1 col-xl-6 offset-xl-0">
+    <div class="col-sm-12 col-md-8 offset-md-1 col-xl-6">
+
+      <app-page-header>PharmaNet Enrolment</app-page-header>
+
+      <div class="mb-5 w-75">
+        <app-progress-indicator *ngIf="isInitialEnrolment"
+                                [currentRoute]="EnrolmentRoutes.JOB"></app-progress-indicator>
+      </div>
 
       <form (ngSubmit)="onSubmit()"
             [formGroup]="form"
             novalidate>
 
-        <app-page-header>PharmaNet Enrolment</app-page-header>
+        <section class="mb-3">
 
-        <app-progress-indicator *ngIf="isInitialEnrolment"
-                                [currentRoute]="EnrolmentRoutes.JOB"></app-progress-indicator>
-
-        <app-page-subheader>
-          <ng-container appPageSubheaderTitle>Job Information</ng-container>
-          <ng-container appPageSubheaderSummary>
-            If you have provided a Device Number you do not have to provide a job title unless you are going to be
-            accessing PharmaNet in a different position.
-          </ng-container>
-        </app-page-subheader>
-
-        <div class="row">
-          <div class="col py-3"
-               formArrayName="jobs">
-
-            <ng-container *ngFor="let job of jobs.controls; let i = index"
-                          [formGroupName]="i">
-
-              <app-job-form [form]="job"
-                            [index]="i"
-                            [total]="jobs.controls.length"
-                            [jobNames]="filteredJobNames"
-                            [allowDefaultOption]="allowDefaultOption"
-                            [defaultOptionLabel]="defaultOptionLabel"
-                            (remove)="removeJob($event)"></app-job-form>
-
+          <app-page-subheader>
+            <ng-container appPageSubheaderTitle>Job Information</ng-container>
+            <ng-container appPageSubheaderSummary>
+              Identify all of the Job Titles you have where you need access to PharmaNet. Select None if you are a
+              Device Provider.
             </ng-container>
+          </app-page-subheader>
 
-            <button mat-button
-                    type="button"
-                    color="primary"
-                    (click)="addJob()">
-              <mat-icon class="add-icon">add</mat-icon>
-              Add Additional Job Title
-            </button>
+          <div class="row">
+            <div class="col col-sm-10 py-3"
+                 formArrayName="jobs">
 
+              <ng-container *ngFor="let job of jobs.controls; let i = index"
+                            [formGroupName]="i">
+
+                <app-job-form [form]="job"
+                              [index]="i"
+                              [total]="jobs.controls.length"
+                              [jobNames]="filteredJobNames"
+                              [allowDefaultOption]="allowDefaultOption"
+                              [defaultOptionLabel]="defaultOptionLabel"
+                              (remove)="removeJob($event)"></app-job-form>
+
+              </ng-container>
+
+              <button mat-button
+                      type="button"
+                      color="primary"
+                      (click)="addJob()">
+                <mat-icon class="add-icon">add</mat-icon>
+                Add Additional Job Title
+              </button>
+
+            </div>
           </div>
-        </div>
+
+        </section>
 
         <app-page-footer [profileCompleted]="isProfileComplete"
                          (save)="onSubmit()"

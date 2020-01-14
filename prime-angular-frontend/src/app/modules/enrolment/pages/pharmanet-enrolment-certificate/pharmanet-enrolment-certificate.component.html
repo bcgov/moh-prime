@@ -69,7 +69,9 @@
                 <td>{{ token.active | yesNo }}</td>
                 <td>{{ token.viewCount }}</td>
                 <td>
+
                   <app-clipboard-icon [content]="getTokenUrl(token.id)"></app-clipboard-icon>
+
                 </td>
               </tr>
             </tbody>

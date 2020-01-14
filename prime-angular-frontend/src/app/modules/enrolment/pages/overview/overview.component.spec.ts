@@ -19,10 +19,9 @@ import { EnrolleeReviewComponent } from '@shared/components/enrollee/enrollee-re
 import { ProgressIndicatorComponent } from '@shared/components/progress-indicator/progress-indicator.component';
 import { EnrolleeProfileComponent } from '@shared/components/enrollee/enrollee-profile/enrollee-profile.component';
 import { EnrolleeAddressComponent } from '@shared/components/enrollee/enrollee-address/enrollee-address.component';
-import { EnrolleeSelfDeclarationComponent } from '@shared/components/enrollee/enrollee-self-declaration/enrollee-self-declaration.component';
-import { CollectionNoticeAlertComponent } from '@enrolment/shared/components/collection-notice-alert/collection-notice-alert.component';
+import { EnrolleeOrganizationsComponent } from '@shared/components/enrollee/enrollee-organizations/enrollee-organizations.component';
 import { AlertComponent } from '@shared/components/alert/alert.component';
-
+import { CollectionNoticeAlertComponent } from '@enrolment/shared/components/collection-notice-alert/collection-notice-alert.component';
 
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { DefaultPipe } from '@shared/pipes/default.pipe';
@@ -34,9 +33,10 @@ import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
 import { YesNoPipe } from '@shared/pipes/yes-no.pipe';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
-import { EnrolleeOrganizationsComponent } from '@shared/components/enrollee-organizations/enrollee-organizations.component';
+import { EnrolleePropertyComponent } from '@shared/components/enrollee/enrollee-property/enrollee-property.component';
+import { PrimeContactComponent } from '@shared/components/prime-contact/prime-contact.component';
 
-describe('ReviewComponent', () => {
+describe('OverviewComponent', () => {
   let component: OverviewComponent;
   let fixture: ComponentFixture<OverviewComponent>;
 
@@ -58,10 +58,11 @@ describe('ReviewComponent', () => {
           EnrolleeReviewComponent,
           EnrolleeProfileComponent,
           EnrolleeAddressComponent,
-          EnrolleeSelfDeclarationComponent,
           EnrolleeOrganizationsComponent,
           ProgressIndicatorComponent,
           CollectionNoticeAlertComponent,
+          EnrolleePropertyComponent,
+          PrimeContactComponent,
           AlertComponent,
           ConfigCodePipe,
           EnrolmentPipe,

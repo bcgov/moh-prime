@@ -4,11 +4,11 @@
               ngProjectAs="mat-icon"></ng-content>
 </app-page-subheader>
 
-<ng-container *ngFor="let organization of organizations">
+<ng-container *ngFor="let organizationType of normalizedOrganizationTypes">
 
   <app-enrollee-property title="Organization Type"
                          [makeBold]="true">
-    {{ organization.organizationTypeCode | configCode: 'organizationTypes' }}
+    {{ organizationType }}
   </app-enrollee-property>
 
 </ng-container>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, Input } from '@angular/core';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 
@@ -8,13 +8,22 @@ import { APP_CONFIG, AppConfig } from 'app/app-config.module';
   styleUrls: ['./prime-contact.component.scss']
 })
 export class PrimeContactComponent implements OnInit {
+  @Input() showPhone: boolean;
+  @Input() showEmail: boolean;
 
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig
-  ) { }
+  ) {
+    this.showPhone = true;
+    this.showEmail = true;
+  }
 
   public get primeContact() {
     return this.config.prime;
+  }
+
+  public get primePhoneDisplay() {
+    return this.config.prime.displayPhone;
   }
 
   public get primePhoneHref() {
