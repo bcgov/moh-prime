@@ -112,6 +112,8 @@ namespace Prime
             app.UseAuthentication();
 
             app.UseMvc();
+
+            TEST.DO_STUFF();
         }
 
         protected virtual void ConfigureHealthCheck(IApplicationBuilder app)
