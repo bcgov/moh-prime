@@ -1,4 +1,4 @@
 <ul class="list-unstyled">
-  <li *ngIf="showPhone"><a [href]="primePhoneHref">{{ primePhoneDisplay }}</a></li>
-  <li *ngIf="showEmail"><a [href]="primeEmailHref">{{ primeContact.email }}</a></li>
+  <li *ngIf="showPhone"><a [attr.href]="primePhoneHref">{{ primePhoneDisplay }}</a></li>
+  <li *ngIf="showEmail"><a [attr.href]="primeEmailHref">{{ primeContact.email }}</a></li>
 </ul>

@@ -27,12 +27,13 @@ import { EnrolleeProfileComponent } from '@shared/components/enrollee/enrollee-p
 import { EnrolleePrivilegesComponent } from '@shared/components/enrollee/enrollee-privileges/enrollee-privileges.component';
 import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { EnrolleeOrganizationsComponent } from '@shared/components/enrollee-organizations/enrollee-organizations.component';
+import { EnrolleeOrganizationsComponent } from '@shared/components/enrollee/enrollee-organizations/enrollee-organizations.component';
 import { OrganizationComponent } from '../organization/organization.component';
 import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
 import { PageFooterComponent } from '@enrolment/shared/components/page-footer/page-footer.component';
 import { ConfigService } from '@config/config.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
+import { EnrolleePropertyComponent } from '@shared/components/enrollee/enrollee-property/enrollee-property.component';
 
 describe('PharmanetEnrolmentCertificateComponent', () => {
   let component: PharmanetEnrolmentCertificateComponent;
@@ -59,6 +60,7 @@ describe('PharmanetEnrolmentCertificateComponent', () => {
           EnrolleeAddressComponent,
           EnrolleePrivilegesComponent,
           EnrolleeOrganizationsComponent,
+          EnrolleePropertyComponent,
           ClipboardIconComponent,
           ProgressIndicatorComponent,
           OrganizationComponent,
@@ -83,7 +85,8 @@ describe('PharmanetEnrolmentCertificateComponent', () => {
           {
             provide: ConfigService,
             useClass: MockConfigService
-          }
+          },
+          ConfigCodePipe
         ]
 
       }

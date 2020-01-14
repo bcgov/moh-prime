@@ -5,6 +5,9 @@ import { ConfigCodePipe } from '@config/config-code.pipe';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
+import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
+import { EnrolleePropertyComponent } from '@shared/components/enrollee/enrollee-property/enrollee-property.component';
+import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
 
 describe('EnrolleeOrganizationsComponent', () => {
   let component: EnrolleeOrganizationsComponent;
@@ -13,8 +16,13 @@ describe('EnrolleeOrganizationsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule(
       {
+        imports: [
+          NgxContextualHelpModule
+        ],
         declarations: [
           EnrolleeOrganizationsComponent,
+          PageSubheaderComponent,
+          EnrolleePropertyComponent,
           ConfigCodePipe
         ],
         providers: [
@@ -25,7 +33,8 @@ describe('EnrolleeOrganizationsComponent', () => {
           {
             provide: ConfigService,
             useClass: MockConfigService
-          }
+          },
+          ConfigCodePipe
         ]
       }
     ).compileComponents();
