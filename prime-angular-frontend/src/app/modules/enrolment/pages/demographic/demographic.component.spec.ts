@@ -24,6 +24,7 @@ import { ProgressIndicatorComponent } from '@shared/components/progress-indicato
 import { EnrolleeProfileComponent } from '@shared/components/enrollee/enrollee-profile/enrollee-profile.component';
 import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
+import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 
 describe('DemographicComponent', () => {
   let component: DemographicComponent;
@@ -51,7 +52,8 @@ describe('DemographicComponent', () => {
           EnrolleeProfileComponent,
           PageFooterComponent,
           DefaultPipe,
-          EnrolleePipe
+          EnrolleePipe,
+          FormatDatePipe
         ],
         providers: [
           {

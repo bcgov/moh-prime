@@ -7,6 +7,7 @@ import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
 import { ConfigCodePipe } from '@config/config-code.pipe';
 import { PostalPipe } from '@shared/pipes/postal.pipe';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('EnrolleeProfileComponent', () => {
   let component: EnrolleeProfileComponent;
@@ -15,6 +16,9 @@ describe('EnrolleeProfileComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule(
       {
+        imports: [
+          HttpClientTestingModule
+        ],
         declarations: [
           EnrolleeProfileComponent,
           ConfigCodePipe,
