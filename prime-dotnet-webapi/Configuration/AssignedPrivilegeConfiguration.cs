@@ -2,6 +2,7 @@
  * Ministry of Health PRIME Project
  * Approved for Ministry of Health use only.
  */
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Prime.Models;
