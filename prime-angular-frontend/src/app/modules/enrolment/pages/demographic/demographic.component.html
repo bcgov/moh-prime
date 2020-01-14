@@ -180,7 +180,8 @@
             </ng-container>
           </app-page-subheader>
 
-          <div class="mb-3">
+          <!-- TODO temporarily made invisible until SMS available -->
+          <!-- <div class="mb-3">
             <mat-checkbox class="mr-4"
                           formControlName="hasContactEmail">
               Email Notification
@@ -189,14 +190,16 @@
                           formControlName="hasContactPhone">
               Text Notification (SMS)
             </mat-checkbox>
-          </div>
+          </div> -->
 
           <div class="row">
             <div class="col-sm-12">
 
-              <div *ngIf="contactEmail.value || hasContactEmail.value"
-                   class="row">
-                <div class="col">
+              <!-- TODO temporarily made visible until SMS available -->
+              <!-- <ng-container *ngIf="contactEmail.value || hasContactEmail.value"> -->
+
+              <div class="row">
+                <div class="col-6">
 
                   <mat-form-field class="w-100">
                     <input matInput
@@ -209,22 +212,27 @@
                 </div>
               </div>
 
-              <div *ngIf="contactPhone.value || hasContactPhone.value"
-                   class="row">
-                <div class="col">
+              <!-- </ng-container> -->
 
-                  <mat-form-field class="w-100">
-                    <input matInput
-                           placeholder="Mobile Phone"
-                           formControlName="contactPhone"
-                           mask="(000) 000-0000"
-                           [showMaskTyped]="false">
-                    <mat-error *ngIf="contactPhone.hasError('required')">Required</mat-error>
-                    <mat-error *ngIf="contactPhone.hasError('phone')">Must be a valid phone number</mat-error>
-                  </mat-form-field>
+              <ng-container *ngIf="contactPhone.value || hasContactPhone.value">
 
+                <div class="row">
+                  <div class="col-6">
+
+                    <mat-form-field class="w-100">
+                      <input matInput
+                             placeholder="Mobile Phone"
+                             formControlName="contactPhone"
+                             mask="(000) 000-0000"
+                             [showMaskTyped]="false">
+                      <mat-error *ngIf="contactPhone.hasError('required')">Required</mat-error>
+                      <mat-error *ngIf="contactPhone.hasError('phone')">Must be a valid phone number</mat-error>
+                    </mat-form-field>
+
+                  </div>
                 </div>
-              </div>
+
+              </ng-container>
 
             </div>
           </div>
