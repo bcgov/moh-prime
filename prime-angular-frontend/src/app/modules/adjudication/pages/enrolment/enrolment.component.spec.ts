@@ -18,10 +18,9 @@ import { PageSubheaderComponent } from '@shared/components/page-subheader/page-s
 import { EnrolleeReviewComponent } from '@shared/components/enrollee/enrollee-review/enrollee-review.component';
 import { EnrolleeProfileComponent } from '@shared/components/enrollee/enrollee-profile/enrollee-profile.component';
 import { EnrolleeAddressComponent } from '@shared/components/enrollee/enrollee-address/enrollee-address.component';
-import { EnrolleeSelfDeclarationComponent } from '@shared/components/enrollee/enrollee-self-declaration/enrollee-self-declaration.component';
+import { EnrolleeOrganizationsComponent } from '@shared/components/enrollee/enrollee-organizations/enrollee-organizations.component';
 import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
 import { YesNoPipe } from '@shared/pipes/yes-no.pipe';
-import { EnrolleeOrganizationsComponent } from '@shared/components/enrollee-organizations/enrollee-organizations.component';
 
 describe('EnrolmentComponent', () => {
   let component: EnrolmentComponent;
@@ -44,7 +43,6 @@ describe('EnrolmentComponent', () => {
           EnrolleeReviewComponent,
           EnrolleeProfileComponent,
           EnrolleeAddressComponent,
-          EnrolleeSelfDeclarationComponent,
           EnrolleeOrganizationsComponent,
           ConfigCodePipe,
           EnrolmentPipe,
