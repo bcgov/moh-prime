@@ -30,11 +30,6 @@ parameters:
     displayName: Metabase Service Name
     value: metabase
     required: true
-  - name: METABASE_ROUTE_HOST
-    displayName: Metabase Route Host (FQDN)
-    description: The hostname to use when creating an OpenShift Route (Leave blank to use defaults.)
-    value: "${APP_NAME}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca"
-    required: false
   - name: METABASE_IMAGE
     displayName: Metabase Docker Image
     value: registry.hub.docker.com/metabase/metabase:latest
