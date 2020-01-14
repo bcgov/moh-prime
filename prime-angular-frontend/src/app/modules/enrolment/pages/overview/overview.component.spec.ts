@@ -33,8 +33,10 @@ import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
 import { YesNoPipe } from '@shared/pipes/yes-no.pipe';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
+import { EnrolleePropertyComponent } from '@shared/components/enrollee/enrollee-property/enrollee-property.component';
+import { PrimeContactComponent } from '@shared/components/prime-contact/prime-contact.component';
 
-describe('ReviewComponent', () => {
+describe('OverviewComponent', () => {
   let component: OverviewComponent;
   let fixture: ComponentFixture<OverviewComponent>;
 
@@ -56,10 +58,11 @@ describe('ReviewComponent', () => {
           EnrolleeReviewComponent,
           EnrolleeProfileComponent,
           EnrolleeAddressComponent,
-          EnrolleeSelfDeclarationComponent,
           EnrolleeOrganizationsComponent,
           ProgressIndicatorComponent,
           CollectionNoticeAlertComponent,
+          EnrolleePropertyComponent,
+          PrimeContactComponent,
           AlertComponent,
           ConfigCodePipe,
           EnrolmentPipe,

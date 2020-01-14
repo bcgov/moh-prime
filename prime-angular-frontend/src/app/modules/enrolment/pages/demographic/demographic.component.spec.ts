@@ -21,8 +21,11 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { AddressComponent } from '@shared/components/forms/address/address.component';
 import { PageFooterComponent } from '@enrolment/shared/components/page-footer/page-footer.component';
 import { ProgressIndicatorComponent } from '@shared/components/progress-indicator/progress-indicator.component';
+import { EnrolleeProfileComponent } from '@shared/components/enrollee/enrollee-profile/enrollee-profile.component';
+import { DefaultPipe } from '@shared/pipes/default.pipe';
+import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
 
-describe('ProfileComponent', () => {
+describe('DemographicComponent', () => {
   let component: DemographicComponent;
   let fixture: ComponentFixture<DemographicComponent>;
 
@@ -45,7 +48,10 @@ describe('ProfileComponent', () => {
           PageHeaderComponent,
           PageSubheaderComponent,
           ProgressIndicatorComponent,
-          PageFooterComponent
+          EnrolleeProfileComponent,
+          PageFooterComponent,
+          DefaultPipe,
+          EnrolleePipe
         ],
         providers: [
           {
