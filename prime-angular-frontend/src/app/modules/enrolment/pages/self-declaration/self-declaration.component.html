@@ -1,16 +1,18 @@
 <app-busy-overlay [busy]="busy">
 
   <div class="row">
-    <div class="col-sm-12 col-lg-8 offset-lg-1 col-xl-6 offset-xl-0">
+    <div class="col-sm-12 col-md-8 offset-md-1 col-xl-6">
+
+      <app-page-header>PharmaNet Enrolment</app-page-header>
+
+      <div class="mb-5 w-75">
+        <app-progress-indicator *ngIf="isInitialEnrolment"
+                                [currentRoute]="EnrolmentRoutes.SELF_DECLARATION"></app-progress-indicator>
+      </div>
 
       <form (ngSubmit)="onSubmit()"
             [formGroup]="form"
             novalidate>
-
-        <app-page-header>PharmaNet Enrolment</app-page-header>
-
-        <app-progress-indicator *ngIf="isInitialEnrolment"
-                                [currentRoute]="EnrolmentRoutes.SELF_DECLARATION"></app-progress-indicator>
 
         <app-page-subheader>
           <ng-container appPageSubheaderTitle>Self Declaration</ng-container>
@@ -18,7 +20,7 @@
             Self declaration information is collected under the authority of the Information Management Regulation of
             the Pharmaceutical Services Act and confidentiality is protected under the Freedom of Information and
             Protection of Privacy Act. Self declaration information is used to verify the applicant is in good standing
-            with their respective college and to determine PharmaNet access eligibility.
+            with their respective College and to determine PharmaNet access eligibility.
           </ng-container>
         </app-page-subheader>
 
@@ -34,11 +36,11 @@
 
         <section class="mb-3">
 
-          <p>Have you ever been the subject of an order or a conviction for an information contravention?</p>
+          <p class="question">
+            Have you ever been the subject of an order or a conviction for an information contravention?
+          </p>
 
-          <mat-radio-group aria-labelledby="example-radio-group-label"
-                           class="example-radio-group"
-                           formControlName="hasConviction">
+          <mat-radio-group formControlName="hasConviction">
             <mat-radio-button class="mr-4"
                               *ngFor="let decision of decisions"
                               [value]="decision.code">
@@ -46,9 +48,9 @@
             </mat-radio-button>
           </mat-radio-group>
 
-          <div class="row"
-               *ngIf="hasConviction.value">
-            <div class="col">
+          <div *ngIf="hasConviction.value"
+               class="row">
+            <div class="col pt-3">
 
               <mat-form-field class="w-100">
                 <textarea matInput
@@ -66,13 +68,11 @@
 
         <section class="mb-3">
 
-          <p>
+          <p class="question">
             Have you ever had your registration with a governing body of a health profession suspended or cancelled?
           </p>
 
-          <mat-radio-group aria-labelledby="example-radio-group-label"
-                           class="example-radio-group"
-                           formControlName="hasRegistrationSuspended">
+          <mat-radio-group formControlName="hasRegistrationSuspended">
             <mat-radio-button class="mr-4"
                               *ngFor="let decision of decisions"
                               [value]="decision.code">
@@ -80,9 +80,9 @@
             </mat-radio-button>
           </mat-radio-group>
 
-          <div class="row"
-               *ngIf="hasRegistrationSuspended.value">
-            <div class="col">
+          <div *ngIf="hasRegistrationSuspended.value"
+               class="row">
+            <div class="col pt-3">
 
               <mat-form-field class="w-100">
                 <textarea matInput
@@ -100,14 +100,12 @@
 
         <section class="mb-3">
 
-          <p>
+          <p class="question">
             Have you ever had Terms and Conditions imposed on your license as a result of disciplinary actions taken by
             a governing body?
           </p>
 
-          <mat-radio-group aria-labelledby="example-radio-group-label"
-                           class="example-radio-group"
-                           formControlName="hasDisciplinaryAction">
+          <mat-radio-group formControlName="hasDisciplinaryAction">
             <mat-radio-button class="mr-4"
                               *ngFor="let decision of decisions"
                               [value]="decision.code">
@@ -115,9 +113,9 @@
             </mat-radio-button>
           </mat-radio-group>
 
-          <div class="row"
-               *ngIf="hasDisciplinaryAction.value">
-            <div class="col">
+          <div *ngIf="hasDisciplinaryAction.value"
+               class="row">
+            <div class="col pt-3">
 
               <mat-form-field class="w-100">
                 <textarea matInput
@@ -135,11 +133,11 @@
 
         <section class="mb-3">
 
-          <p>Have you ever had your access to PharmaNet suspended or revoked?</p>
+          <p class="question">
+            Have you ever had your access to PharmaNet suspended or revoked?
+          </p>
 
-          <mat-radio-group aria-labelledby="example-radio-group-label"
-                           class="example-radio-group"
-                           formControlName="hasPharmaNetSuspended">
+          <mat-radio-group formControlName="hasPharmaNetSuspended">
             <mat-radio-button class="mr-4"
                               *ngFor="let decision of decisions"
                               [value]="decision.code">
@@ -147,9 +145,9 @@
             </mat-radio-button>
           </mat-radio-group>
 
-          <div class="row"
-               *ngIf="hasPharmaNetSuspended.value">
-            <div class="col">
+          <div *ngIf="hasPharmaNetSuspended.value"
+               class="row">
+            <div class="col pt-3">
 
               <mat-form-field class="w-100">
                 <textarea matInput
