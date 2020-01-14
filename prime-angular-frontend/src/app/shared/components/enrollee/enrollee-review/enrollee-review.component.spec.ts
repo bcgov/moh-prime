@@ -13,7 +13,6 @@ import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.mod
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
 import { EnrolleeProfileComponent } from '@shared/components/enrollee/enrollee-profile/enrollee-profile.component';
 import { EnrolleeAddressComponent } from '@shared/components/enrollee/enrollee-address/enrollee-address.component';
-import { EnrolleeSelfDeclarationComponent } from '@shared/components/enrollee/enrollee-self-declaration/enrollee-self-declaration.component';
 import { EnrolmentPipe } from '@shared/pipes/enrolment.pipe';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { PhonePipe } from '@shared/pipes/phone.pipe';
@@ -22,6 +21,7 @@ import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
 import { YesNoPipe } from '@shared/pipes/yes-no.pipe';
 import { EnrolleeOrganizationsComponent } from '../enrollee-organizations/enrollee-organizations.component';
+import { EnrolleePropertyComponent } from '../enrollee-property/enrollee-property.component';
 
 describe('EnrolleeReviewComponent', () => {
   let component: EnrolleeReviewComponent;
@@ -43,8 +43,8 @@ describe('EnrolleeReviewComponent', () => {
           EnrolleeReviewComponent,
           EnrolleeProfileComponent,
           EnrolleeAddressComponent,
-          EnrolleeSelfDeclarationComponent,
           EnrolleeOrganizationsComponent,
+          EnrolleePropertyComponent,
           ConfigCodePipe,
           EnrolmentPipe,
           FormatDatePipe,

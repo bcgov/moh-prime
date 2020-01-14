@@ -12,7 +12,6 @@ import { Enrolment } from '@shared/models/enrolment.model';
   styleUrls: ['./collection-notice.component.scss']
 })
 export class CollectionNoticeComponent implements OnInit {
-
   public profileCompleted: boolean;
   public enrolment: Enrolment;
 
