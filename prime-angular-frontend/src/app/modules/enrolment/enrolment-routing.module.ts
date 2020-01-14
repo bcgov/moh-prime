@@ -17,7 +17,7 @@ import { DeviceProviderComponent } from './pages/device-provider/device-provider
 import { JobComponent } from './pages/job/job.component';
 import { SelfDeclarationComponent } from './pages/self-declaration/self-declaration.component';
 import { OrganizationComponent } from './pages/organization/organization.component';
-import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
+import { SubmissionConfirmationComponent } from './pages/submission-confirmation/submission-confirmation.component';
 import { AccessAgreementComponent } from './pages/access-agreement/access-agreement.component';
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
 import { DeclinedComponent } from './pages/declined/declined.component';
@@ -101,8 +101,8 @@ const routes: Routes = [
       //
       {
         path: EnrolmentRoutes.SUBMISSION_CONFIRMATION,
-        component: ConfirmationComponent,
-        data: { title: 'Enrolment Confirmation' }
+        component: SubmissionConfirmationComponent,
+        data: { title: 'PharmaNet Enrolment' }
       },
       {
         path: EnrolmentRoutes.DECLINED,

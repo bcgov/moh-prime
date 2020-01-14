@@ -3,10 +3,10 @@
   <div class="row">
     <div class="col-sm-12 col-lg-8 offset-lg-1 offset-xl-0">
 
+      <app-page-header>Access Agreement</app-page-header>
+
       <app-progress-indicator *ngIf="isInitialEnrolment"
                               [currentRoute]="EnrolmentRoutes.ACCESS_AGREEMENT"></app-progress-indicator>
-
-      <app-page-header>Access Agreement</app-page-header>
 
       <ng-container *ngIf="currentPage > 0; else preamble">
 
@@ -18,17 +18,19 @@
 
       <ng-template #preamble>
 
-        <app-alert type="success"
-                   icon="check_circle_outline">
-          <ng-container #alertTitle
-                        class="alert-title">
-            You've Been Approved
-          </ng-container>
-          <ng-container #alertContent
-                        class="alert-content">
-            You’ve been approved for PharmaNet access for direct patient care.
-          </ng-container>
-        </app-alert>
+        <div class="mb-4">
+          <app-alert type="success"
+                     icon="check_circle_outline">
+            <ng-container #alertTitle
+                          class="alert-title">
+              You've Been Approved
+            </ng-container>
+            <ng-container #alertContent
+                          class="alert-content">
+              You’ve been approved for PharmaNet access for direct patient care.
+            </ng-container>
+          </app-alert>
+        </div>
 
         <ng-container *ngIf="isAutomatic">
 
@@ -72,34 +74,44 @@
       <div class="row justify-content-between pt-2">
         <div class="col-4">
 
-          <button mat-stroked-button
-                  (click)="onPrevPage()">Back</button>
+          <button *ngIf="currentPage"
+                  mat-stroked-button
+                  (click)="onPrevPage()">
+            Back
+          </button>
 
         </div>
         <div class="col-8 text-right">
 
           <ng-container *ngIf="hasReadAgreement; else hasMorePages">
 
-            <button mat-raised-button
-                    [ngClass]="(!isMobile) ? 'mr-2' : 'w-100 mb-2'"
+            <button mat-flat-button
                     color="primary"
+                    class="mb-2"
+                    [ngClass]="(!isMobile) ? 'mr-2' : 'w-100'"
                     [disabled]="!hasAgreed"
-                    (click)="onSubmit(EnrolmentStatus.ACCEPTED_TOS)">Accept Agreement</button>
+                    (click)="onSubmit(EnrolmentStatus.ACCEPTED_TOS)">
+              Accept Agreement
+            </button>
 
-
-            <button mat-raised-button
-                    [ngClass]="(!isMobile) ? 'mr-2' : 'w-100 mb-2'"
+            <button mat-flat-button
                     color="warn"
+                    class="mb-2"
+                    [ngClass]="(!isMobile) ? 'mr-2' : 'w-100'"
                     [disabled]="!hasAgreed"
-                    (click)="onSubmit(EnrolmentStatus.DECLINED_TOS)">Decline Agreement</button>
+                    (click)="onSubmit(EnrolmentStatus.DECLINED_TOS)">
+              Decline Agreement
+            </button>
 
           </ng-container>
 
           <ng-template #hasMorePages>
 
-            <button mat-raised-button
+            <button mat-flat-button
                     color="primary"
-                    (click)="onNextPage()">Continue</button>
+                    (click)="onNextPage()">
+              Continue
+            </button>
 
           </ng-template>
 

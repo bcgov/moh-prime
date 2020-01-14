@@ -5,34 +5,36 @@
 
       <app-page-header>Enrolment Certificate</app-page-header>
 
-      <app-page-subheader>
-        <ng-container appPageSubheaderTitle>PharmaNet ID</ng-container>
-        <ng-container appPageSubheaderSummary>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae architecto debitis doloribus numquam
-          voluptates. Accusantium, blanditiis.
-        </ng-container>
-      </app-page-subheader>
-
       <ng-container *ngIf="certificate">
 
-        <app-enrollee-profile [showPreferredName]="false"
-                              [enrollee]="certificate"></app-enrollee-profile>
+        <app-enrollee-profile [enrollee]="certificate"></app-enrollee-profile>
 
-        <dl class="row mb-4">
-          <dt class="col-6">PharmaNet ID</dt>
-          <dd class="col-6 text-right">{{ certificate?.licensePlate | default }}</dd>
-        </dl>
+        <app-page-subheader>
+          <ng-container appPageSubheaderTitle>PharmaNet ID</ng-container>
+        </app-page-subheader>
 
-        <app-enrollee-organizations [organizationTypes]="certificate?.organizationTypes"></app-enrollee-organizations>
+        <p class="font-weight-bold mb-5">
+          {{ certificate.licensePlate | uppercase }}
+        </p>
 
-        <app-enrollee-privileges [privileges]="certificate?.privileges"></app-enrollee-privileges>
+        <div class="mb-5">
+          <app-enrollee-organizations [organizationTypes]="certificate?.organizationTypes"></app-enrollee-organizations>
+        </div>
+
+        <div class="mb-5">
+          <app-enrollee-privileges [privileges]="certificate?.privileges"></app-enrollee-privileges>
+        </div>
 
         <ng-container *ngIf="certificate?.enrolmentCertificateNote">
-          <dl class="row mb-4">
-            <dt class="col-6">Limits and Conditions</dt>
-            <dd class="col-6 text-right">{{ certificate?.enrolmentCertificateNote?.note | default }}</dd>
-          </dl>
+          <app-page-subheader>
+            <ng-container appPageSubheaderTitle>Limits and Conditions</ng-container>
+          </app-page-subheader>
+
+          <p>
+            {{ certificate?.enrolmentCertificateNote?.note | default: 'None' }}
+          </p>
         </ng-container>
+
       </ng-container>
     </div>
   </div>

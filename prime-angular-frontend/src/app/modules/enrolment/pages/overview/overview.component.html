@@ -1,22 +1,27 @@
 <app-busy-overlay [busy]="busy">
 
   <div class="row">
-    <div class="col-sm-12 col-lg-8 offset-lg-1 offset-xl-0">
-
-      <app-progress-indicator *ngIf="isInitialEnrolment"
-                              [currentRoute]="EnrolmentRoutes.OVERVIEW"></app-progress-indicator>
+    <div class="col-sm-12 col-lg-8">
 
       <app-collection-notice-alert></app-collection-notice-alert>
 
-      <app-page-header>Application Enrolment</app-page-header>
+      <app-page-header>PharmaNet Enrolment</app-page-header>
 
-      <app-page-subheader>
-        <ng-container appPageSubheaderTitle>Application Review</ng-container>
-        <ng-container appPageSubheaderSummary>
-          Review all the information to ensure it is accurate. If you need to edit any section use the pencil icon to
-          navigate to that section of the enrolment.
-        </ng-container>
-      </app-page-subheader>
+      <div class="mb-5">
+        <app-progress-indicator *ngIf="isInitialEnrolment"
+                                [currentRoute]="EnrolmentRoutes.OVERVIEW"></app-progress-indicator>
+      </div>
+
+      <div class="mb-5">
+        <app-page-subheader>
+          <ng-container appPageSubheaderTitle>Enrolment Review</ng-container>
+          <ng-container appPageSubheaderSummary>
+            Review all the information to ensure it is accurate, you will not get approved if any of your information is
+            incorrect. If you need to edit your information use the pencil icon to navigate to the section of the
+            enrolment to make changes.
+          </ng-container>
+        </app-page-subheader>
+      </div>
 
       <app-enrollee-review *ngIf="enrolment"
                            [enrolment]="enrolment"
@@ -31,7 +36,7 @@
       <div class="row justify-content-end">
         <div class="col pt-4 text-right">
 
-          <button mat-raised-button
+          <button mat-flat-button
                   color="primary"
                   [disabled]="!accept.checked"
                   (click)="onSubmit()">Submit Enrolment</button>
