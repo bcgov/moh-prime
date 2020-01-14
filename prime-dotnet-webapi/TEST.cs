@@ -1,8 +1,11 @@
 using Plant;
 using Plant.Core;
-using Prime.Models;
+using FactoryGirl.NET;
+
 
 using System.Collections.Generic;
+using Prime.Models;
+
 
 namespace Prime
 {
@@ -10,42 +13,48 @@ namespace Prime
     {
         public static void DO_STUFF()
         {
-            // var plant = new BasePlant().WithBlueprintsFromAssemblyOf<PersonBlueprint>();
-            var plant = new BasePlant();
-            plant.DefinePropertiesOf<FakeEnrollee>(new
+            FactoryGirl.NET.FactoryGirl.Define(() =>
             {
-                FirstName = "Barbara",
-                Addresses = new LazyProperty<ICollection<FakeXref>>(() =>
+                var e = new FakeEnrollee
                 {
+                    FirstName = "John",
+                    Address = FactoryGirl.NET.FactoryGirl.Build<FakeAddress>()
+                };
+                e.Address.Occupant = e;
+                return e;
+            });
 
-                    return new List<FakeXref> { plant.Create<FakeXref>() };
-                })
-            });
-            plant.DefinePropertiesOf<FakeAddress>(new
+            FactoryGirl.NET.FactoryGirl.Define(() => new FakeAddress
             {
-                Id = new Sequence<int>((sequenceValue) => sequenceValue),
-                Street = new Sequence<string>((sequenceValue) => "street" + sequenceValue),
+                Street = "erer"
             });
-            plant.DefinePropertiesOf<FakeXref>(new { Occupant = new FakeEnrollee() });
-            // var address = plant.Create<FakeAddress>();
-            var enrollee = plant.Create<FakeEnrollee>();
+
+            var enrol = FactoryGirl.NET.FactoryGirl.Build<FakeEnrollee>();
+
             var t = 1;
         }
+        // public static void DO_STUFF()
+        // {
+        //     // var plant = new BasePlant().WithBlueprintsFromAssemblyOf<PersonBlueprint>();
+        //     var plant = new BasePlant();
+        //     plant.DefinePropertiesOf<FakeEnrollee>(new
+        //     {
+        //         FirstName = "Barbara",
+        //         Addresses = new LazyProperty<ICollection<FakeXref>>(() =>
+        //         {
+
+        //             return new List<FakeXref> { plant.Create<FakeXref>() };
+        //         })
+        //     });
+        //     plant.DefinePropertiesOf<FakeAddress>(new
+        //     {
+        //         Id = new Sequence<int>((sequenceValue) => sequenceValue),
+        //         Street = new Sequence<string>((sequenceValue) => "street" + sequenceValue),
+        //     });
+        //     plant.DefinePropertiesOf<FakeXref>(new { Occupant = new FakeEnrollee() });
+        //     // var address = plant.Create<FakeAddress>();
+        //     var enrollee = plant.Create<FakeEnrollee>();
+        //     var t = 1;
+        // }
     }
-
-    // class PersonBlueprint : IBlueprint
-    // {
-    //     public void SetupPlant(BasePlant plant)
-    //     {
-    //         plant.DefinePropertiesOf<Enrollee>(new { FirstName = "Barbara", });
-    //         plant.DefinePropertiesOf<PhysicalAddress>(new { Street = "A street" });
-    //     }
-    // }
-
-    // class AddrBlueprint : IBlueprint
-    // {
-    //     public void SetupPlant(BasePlant plant)
-    //     {
-    //     }
-    // }
 }

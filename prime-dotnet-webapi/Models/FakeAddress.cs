@@ -6,6 +6,7 @@ namespace Prime.Models
     {
         public int Id { get; set; }
         public string Street { get; set; }
-        public ICollection<FakeXref> Occupants { get; set; }
+        public FakeEnrollee Occupant { get; set; }
+        // public ICollection<FakeXref> Occupants { get; set; }
     }
 }
