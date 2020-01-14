@@ -1,6 +1,6 @@
 export interface Privilege {
   id?: number;
-  privilegeGroup: number;
+  privilegeGroupCode: number;
   transactionType: string;
   description: string;
 }
