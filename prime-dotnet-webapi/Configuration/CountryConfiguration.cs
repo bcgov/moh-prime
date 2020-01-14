@@ -1,19 +1,17 @@
-using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Prime.Models;
 
 namespace Prime.Configuration
 {
-    public class CountryConfiguration : SeededTable<Country>
+    public class CountryConfiguration : IEntityTypeConfiguration<Country>
     {
-        public override ICollection<Country> SeedData
+        public void Configure(EntityTypeBuilder<Country> builder)
         {
-            get
-            {
-                return new[] {
-                    new Country { Code = "CA", Name = "Canada", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new Country { Code = "US", Name = "United States", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE }
-                };
-            }
+            builder.HasData(
+                new Country { Code = "CA", Name = "Canada", CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
+                new Country { Code = "US", Name = "United States", CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE }
+            );
         }
     }
 }
