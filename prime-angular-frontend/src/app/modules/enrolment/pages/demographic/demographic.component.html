@@ -1,251 +1,243 @@
-<app-busy-overlay [busy]="busy">
+<app-page [busy]="busy">
 
-  <div class="row">
-    <div class="col-sm-12 col-md-8 offset-md-1 col-xl-6">
+  <app-page-header>PharmaNet Enrolment</app-page-header>
 
-      <app-page-header>PharmaNet Enrolment</app-page-header>
+  <app-progress-indicator message="Begin Enrolment"
+                          [inProgress]="isInitialEnrolment"
+                          [currentRoute]="EnrolmentRoutes.DEMOGRAPHIC"></app-progress-indicator>
 
-      <div class="mb-5 w-75">
-        <app-progress-indicator *ngIf="isInitialEnrolment"
-                                message="Begin Enrolment"
-                                [currentRoute]="EnrolmentRoutes.DEMOGRAPHIC"></app-progress-indicator>
-      </div>
+  <form (ngSubmit)="onSubmit()"
+        [formGroup]="form"
+        novalidate>
 
-      <form (ngSubmit)="onSubmit()"
-            [formGroup]="form"
-            novalidate>
+    <section class="mb-3">
 
-        <section class="mb-3">
-
-          <app-page-subheader>
-            <ng-container appPageSubheaderTitle>Enrollee Information</ng-container>
-            <ng-container appPageSubheaderSummary>
-              This information comes from your BC services Card. If you use a different name professionally, please
-              select "I have a preferred name."
-              <small class="font-italic d-block">
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Enrollee Information</ng-container>
+        <ng-container appPageSubheaderSummary>
+          This information comes from your BC services Card. If you use a different name professionally, please
+          select "I have a preferred name."
+          <small class="font-italic d-block">
                 Entering a preferred name is PRIME will not change your BC Services Card name.
               </small>
-            </ng-container>
-          </app-page-subheader>
-
-          <app-enrollee-profile [enrollee]="enrollee"
-                                [showAddress]="false"></app-enrollee-profile>
-
-          <mat-slide-toggle class="mb-3"
-                            color="primary"
-                            (change)="onPreferredNameChange()"
-                            [checked]="hasPreferredName">
-            I have a preferred name
-          </mat-slide-toggle>
-
-        </section>
-
-        <ng-container *ngIf="hasPreferredName">
-
-          <section class="mb-3">
-
-            <app-page-subheader>
-              <ng-container appPageSubheaderTitle>Preferred Name</ng-container>
-              <ng-container appPageSubheaderSummary>
-                If you have a name that is different than your legal name that people know you by, enter your full
-                preferred name.
-              </ng-container>
-            </app-page-subheader>
-
-            <div class="row">
-              <div class="col">
-
-                <mat-form-field class="w-100">
-                  <input matInput
-                         placeholder="Preferred First Name"
-                         formControlName="preferredFirstName">
-                  <mat-error>Required</mat-error>
-                </mat-form-field>
-
-              </div>
-            </div>
-            <div class="row">
-              <div class="col">
-
-                <mat-form-field class="w-100">
-                  <input matInput
-                         placeholder="Preferred Middle Name (Optional)"
-                         formControlName="preferredMiddleName">
-                </mat-form-field>
-
-              </div>
-            </div>
-            <div class="row">
-              <div class="col">
-
-                <mat-form-field class="w-100">
-                  <input matInput
-                         placeholder="Preferred Last Name"
-                         formControlName="preferredLastName">
-                  <mat-error>Required</mat-error>
-                </mat-form-field>
-
-              </div>
-            </div>
-
-          </section>
-
         </ng-container>
+      </app-page-subheader>
 
-        <section class="mb-3">
+      <app-enrollee-profile [enrollee]="enrollee"
+                            [showAddress]="false"></app-enrollee-profile>
 
-          <app-page-subheader>
-            <ng-container appPageSubheaderTitle>Address</ng-container>
-            <ng-container appPageSubheaderSummary>
-              This information comes from the your BC Services Card. If you would prefer to receive mail at a
-              professional or other address, select "I have a preferred address."
-              <small class="font-italic d-block">
+      <mat-slide-toggle class="mb-3"
+                        color="primary"
+                        (change)="onPreferredNameChange()"
+                        [checked]="hasPreferredName">
+        I have a preferred name
+      </mat-slide-toggle>
+
+    </section>
+
+    <ng-container *ngIf="hasPreferredName">
+
+      <section class="mb-3">
+
+        <app-page-subheader>
+          <ng-container appPageSubheaderTitle>Preferred Name</ng-container>
+          <ng-container appPageSubheaderSummary>
+            If you have a name that is different than your legal name that people know you by, enter your full
+            preferred name.
+          </ng-container>
+        </app-page-subheader>
+
+        <div class="row">
+          <div class="col">
+
+            <mat-form-field class="w-100">
+              <input matInput
+                     placeholder="Preferred First Name"
+                     formControlName="preferredFirstName">
+              <mat-error>Required</mat-error>
+            </mat-form-field>
+
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+
+            <mat-form-field class="w-100">
+              <input matInput
+                     placeholder="Preferred Middle Name (Optional)"
+                     formControlName="preferredMiddleName">
+            </mat-form-field>
+
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+
+            <mat-form-field class="w-100">
+              <input matInput
+                     placeholder="Preferred Last Name"
+                     formControlName="preferredLastName">
+              <mat-error>Required</mat-error>
+            </mat-form-field>
+
+          </div>
+        </div>
+
+      </section>
+
+    </ng-container>
+
+    <section class="mb-3">
+
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Address</ng-container>
+        <ng-container appPageSubheaderSummary>
+          This information comes from the your BC Services Card. If you would prefer to receive mail at a
+          professional or other address, select "I have a preferred address."
+          <small class="font-italic d-block">
                 Entering a preferred address is PRIME will not change your BC Services Card address.
               </small>
-            </ng-container>
-          </app-page-subheader>
-
-          <app-enrollee-profile [enrollee]="enrollee"
-                                [showPersonal]="false"
-                                [showAddressTitle]="false"></app-enrollee-profile>
-
-          <mat-slide-toggle class="mb-3"
-                            color="primary"
-                            (change)="onMailingAddressChange()"
-                            [checked]="hasMailingAddress">
-            My mailing address is different
-          </mat-slide-toggle>
-
-        </section>
-
-        <ng-container *ngIf="hasMailingAddress">
-
-          <section class="mb-3">
-
-            <app-page-subheader>
-              <ng-container appPageSubheaderTitle>Mailing Address</ng-container>
-            </app-page-subheader>
-
-            <app-address [form]="mailingAddress"></app-address>
-
-          </section>
-
         </ng-container>
+      </app-page-subheader>
 
-        <section class="mb-3">
+      <app-enrollee-profile [enrollee]="enrollee"
+                            [showPersonal]="false"
+                            [showAddressTitle]="false"></app-enrollee-profile>
 
-          <app-page-subheader>
-            <ng-container appPageSubheaderTitle>Contact Information</ng-container>
-            <ng-container appPageSubheaderSummary>
-              Provide a phone number that may be used to contact you.
-            </ng-container>
-          </app-page-subheader>
+      <mat-slide-toggle class="mb-3"
+                        color="primary"
+                        (change)="onMailingAddressChange()"
+                        [checked]="hasMailingAddress">
+        My mailing address is different
+      </mat-slide-toggle>
+
+    </section>
+
+    <ng-container *ngIf="hasMailingAddress">
+
+      <section class="mb-3">
+
+        <app-page-subheader>
+          <ng-container appPageSubheaderTitle>Mailing Address</ng-container>
+        </app-page-subheader>
+
+        <app-address [form]="mailingAddress"></app-address>
+
+      </section>
+
+    </ng-container>
+
+    <section class="mb-3">
+
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Contact Information</ng-container>
+        <ng-container appPageSubheaderSummary>
+          Provide a phone number that may be used to contact you.
+        </ng-container>
+      </app-page-subheader>
+
+      <div class="row">
+        <div class="col">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="Phone Number"
+                   formControlName="voicePhone"
+                   mask="(000) 000-0000"
+                   [showMaskTyped]="false">
+            <mat-error *ngIf="voicePhone.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="voicePhone.hasError('phone')">Must be a valid phone number</mat-error>
+          </mat-form-field>
+
+        </div>
+        <div class="col">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="Optional Extension Number"
+                   formControlName="voiceExtension">
+            <mat-error *ngIf="voiceExtension.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="voiceExtension.hasError('numeric')">Must contain only numbers</mat-error>
+          </mat-form-field>
+
+        </div>
+      </div>
+
+    </section>
+
+    <section class="mb-3">
+
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Notification Information</ng-container>
+        <ng-container appPageSubheaderSummary>
+          Provide an email address and/or phone number that may be used for sending notifications from the PRIME
+          system.
+        </ng-container>
+      </app-page-subheader>
+
+      <!-- TODO temporarily made invisible until SMS available -->
+      <!-- <div class="mb-3">
+        <mat-checkbox class="mr-4"
+                      formControlName="hasContactEmail">
+          Email Notification
+        </mat-checkbox>
+        <mat-checkbox class="mr-4"
+                      formControlName="hasContactPhone">
+          Text Notification (SMS)
+        </mat-checkbox>
+      </div> -->
+
+      <div class="row">
+        <div class="col-sm-12">
+
+          <!-- TODO temporarily made visible until SMS available -->
+          <!-- <ng-container *ngIf="contactEmail.value || hasContactEmail.value"> -->
 
           <div class="row">
-            <div class="col">
+            <div class="col-6">
 
               <mat-form-field class="w-100">
                 <input matInput
-                       placeholder="Phone Number"
-                       formControlName="voicePhone"
-                       mask="(000) 000-0000"
-                       [showMaskTyped]="false">
-                <mat-error *ngIf="voicePhone.hasError('required')">Required</mat-error>
-                <mat-error *ngIf="voicePhone.hasError('phone')">Must be a valid phone number</mat-error>
-              </mat-form-field>
-
-            </div>
-            <div class="col">
-
-              <mat-form-field class="w-100">
-                <input matInput
-                       placeholder="Optional Extension Number"
-                       formControlName="voiceExtension">
-                <mat-error *ngIf="voiceExtension.hasError('required')">Required</mat-error>
-                <mat-error *ngIf="voiceExtension.hasError('numeric')">Must contain only numbers</mat-error>
+                       placeholder="Email"
+                       formControlName="contactEmail">
+                <mat-error *ngIf="contactEmail.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="contactEmail.hasError('email')">Must be a valid email address</mat-error>
               </mat-form-field>
 
             </div>
           </div>
 
-        </section>
+          <!-- </ng-container> -->
 
-        <section class="mb-3">
+          <ng-container *ngIf="contactPhone.value || hasContactPhone.value">
 
-          <app-page-subheader>
-            <ng-container appPageSubheaderTitle>Notification Information</ng-container>
-            <ng-container appPageSubheaderSummary>
-              Provide an email address and/or phone number that may be used for sending notifications from the PRIME
-              system.
-            </ng-container>
-          </app-page-subheader>
+            <div class="row">
+              <div class="col-6">
 
-          <!-- TODO temporarily made invisible until SMS available -->
-          <!-- <div class="mb-3">
-            <mat-checkbox class="mr-4"
-                          formControlName="hasContactEmail">
-              Email Notification
-            </mat-checkbox>
-            <mat-checkbox class="mr-4"
-                          formControlName="hasContactPhone">
-              Text Notification (SMS)
-            </mat-checkbox>
-          </div> -->
+                <mat-form-field class="w-100">
+                  <input matInput
+                         placeholder="Mobile Phone"
+                         formControlName="contactPhone"
+                         mask="(000) 000-0000"
+                         [showMaskTyped]="false">
+                  <mat-error *ngIf="contactPhone.hasError('required')">Required</mat-error>
+                  <mat-error *ngIf="contactPhone.hasError('phone')">Must be a valid phone number</mat-error>
+                </mat-form-field>
 
-          <div class="row">
-            <div class="col-sm-12">
-
-              <!-- TODO temporarily made visible until SMS available -->
-              <!-- <ng-container *ngIf="contactEmail.value || hasContactEmail.value"> -->
-
-              <div class="row">
-                <div class="col-6">
-
-                  <mat-form-field class="w-100">
-                    <input matInput
-                           placeholder="Email"
-                           formControlName="contactEmail">
-                    <mat-error *ngIf="contactEmail.hasError('required')">Required</mat-error>
-                    <mat-error *ngIf="contactEmail.hasError('email')">Must be a valid email address</mat-error>
-                  </mat-form-field>
-
-                </div>
               </div>
-
-              <!-- </ng-container> -->
-
-              <ng-container *ngIf="contactPhone.value || hasContactPhone.value">
-
-                <div class="row">
-                  <div class="col-6">
-
-                    <mat-form-field class="w-100">
-                      <input matInput
-                             placeholder="Mobile Phone"
-                             formControlName="contactPhone"
-                             mask="(000) 000-0000"
-                             [showMaskTyped]="false">
-                      <mat-error *ngIf="contactPhone.hasError('required')">Required</mat-error>
-                      <mat-error *ngIf="contactPhone.hasError('phone')">Must be a valid phone number</mat-error>
-                    </mat-form-field>
-
-                  </div>
-                </div>
-
-              </ng-container>
-
             </div>
-          </div>
 
-        </section>
+          </ng-container>
 
-        <app-page-footer [profileCompleted]="isProfileComplete"
-                         [hasSecondaryAction]="isProfileComplete"
-                         (save)="onSubmit()"></app-page-footer>
+        </div>
+      </div>
 
-      </form>
+    </section>
 
-    </div>
-  </div>
+  </form>
 
-</app-busy-overlay>
+  <app-page-footer [profileCompleted]="isProfileComplete"
+                   [hasSecondaryAction]="isProfileComplete"
+                   (save)="onSubmit()"></app-page-footer>
+
+</app-page>
