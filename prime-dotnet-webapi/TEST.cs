@@ -1,7 +1,5 @@
-using Plant;
-using Plant.Core;
-using FactoryGirl.NET;
 
+using FactoryGirlCore;
 
 using System.Collections.Generic;
 using Prime.Models;
@@ -13,23 +11,8 @@ namespace Prime
     {
         public static void DO_STUFF()
         {
-            FactoryGirl.NET.FactoryGirl.Define(() =>
-            {
-                var e = new FakeEnrollee
-                {
-                    FirstName = "John",
-                    Address = FactoryGirl.NET.FactoryGirl.Build<FakeAddress>()
-                };
-                e.Address.Occupant = e;
-                return e;
-            });
 
-            FactoryGirl.NET.FactoryGirl.Define(() => new FakeAddress
-            {
-                Street = "erer"
-            });
-
-            var enrol = FactoryGirl.NET.FactoryGirl.Build<FakeEnrollee>();
+            var enrol = FactoryGirl.Build<Enrollee>();
 
             var t = 1;
         }
