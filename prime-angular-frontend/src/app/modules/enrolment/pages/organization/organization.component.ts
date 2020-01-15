@@ -53,7 +53,7 @@ export class OrganizationComponent extends BaseEnrolmentProfilePage implements O
       const payload = this.enrolmentStateService.enrolment;
       // Indicate that the enrolment process has reached the terminal view, or
       // "Been Through The Wizard - Heidi G. 2019"
-      this.busy = this.enrolmentResource.updateEnrollee(payload, true)
+      this.busy = this.enrolmentResource.updateEnrollee(payload)
         .subscribe(
           () => {
             this.form.markAsPristine();

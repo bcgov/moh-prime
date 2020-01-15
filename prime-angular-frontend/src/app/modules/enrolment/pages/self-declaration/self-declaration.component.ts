@@ -81,7 +81,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
 
     if (this.form.valid) {
       const payload = this.enrolmentStateService.enrolment;
-      this.busy = this.enrolmentResource.updateEnrollee(payload)
+      this.busy = this.enrolmentResource.updateEnrollee(payload, true)
         .subscribe(
           () => {
             this.toastService.openSuccessToast('Self declaration has been saved');
