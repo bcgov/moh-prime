@@ -1,64 +1,52 @@
 @import './palette';
 
-$header-height: 73px;
+.large-title {
+  font-size: 4.5rem;
+}
 
-.container-fluid {
-  // Pull the container up under the header
-  margin-top: -$header-height;
+.title {
+  font-size: 3.0rem;
+  text-align: center;
+}
 
-  .row:first-child {
-    // Make the container fill the height of the viewport
-    height: 100vh;
+.info {
+  text-align: left;
+  padding-left: 2rem;
+  padding-right: 2rem;
 
-    div:first-child {
-      // Adjust content down from under the header
-      margin-top: $header-height;
-    }
+  h3 {
+    color: theme-palette(blue, light);
+  }
+
+  p {
+    font-size: 1.5rem;
+    line-height: 1.30;
+  }
+
+  .anchor {
+    text-decoration: underline;
+    color: theme-palette(blue);
   }
 }
 
-.logo {
-  max-width: 150px;
-  margin-bottom: 5em;
+.mb-8 {
+  margin-bottom: 3.0rem;
 }
 
-.action,
-.content {
-  width: 245px;
-}
+.enrolment-container {
+  margin-bottom: 8rem;
+  margin-top: 8rem;
 
-.action {
-  margin-bottom: 2em;
-
-  button {
-    margin-bottom: .6em;
+  div:first-child {
+    text-align: end;
   }
 
-  a {
-    color: lighten(theme-palette(blue), 10%);
+  div:nth-child(2) {
+    padding-top: 2.75rem;
   }
 }
 
-.content {
-  .text-muted {
-    font-style: italic;
-  }
-
-  p:nth-child(2) {
-    margin-bottom: 0;
-  }
-
-  ul {
-    padding-left: 1.5em;
-  }
-}
-
-.action a,
-.content .text-muted {
-  font-size: .85rem;
-}
-
-.background {
-  background: no-repeat url('../../../../../assets/login-background.jpg');
-  z-index: -1;
+.accent {
+  font-style: italic;
+  // TODO: Look at if this text needs to be larger
 }

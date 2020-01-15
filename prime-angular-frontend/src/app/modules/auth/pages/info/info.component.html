@@ -1,42 +1,101 @@
-<div class="container-fluid">
-
-  <div class="row">
-    <div class="col-sm-7 col-md-6 col-lg-5 col-xl-3">
-
-      <div class="d-flex flex-column align-items-center">
-
-        <img src="/assets/prime_logo.svg"
-             class="logo"
-             alt="PRIME Logo">
-
-        <div class="action">
-          <button mat-flat-button
+<div>
+  <div class="row mt-4 enrolment-container">
+    <div class="col-md-3 col-sm-12">
+      <img src="/assets/prime-logo-textless.svg"
+           height="200"
+           width="200"
+           class="logo"
+           alt="PRIME Logo">
+    </div>
+    <div class="col-md-6 col-sm-12">
+      <span class="large-title mb-8"><strong>PRIME</strong></span>
+      <h2 class="mb-8"><strong>PharmaNet Enrolment</strong></h2>
+      <div class="ml-2">
+        <p class="h3 mb-0"><strong>As a Health Professional working in British Columbia, use PRIME to request approval from The
+        Ministry
+        of
+        Health
+        to access PharmaNet.</strong></p>
+        <p class="lead mb-4">PRIME provides approval for access to PharmaNet, but not access itself.</p>
+        <p class="lead mb-4 accent">To get started you will need:</p>
+        <span class="h3"><strong>BC Services Card, Mobile Device, and College Certification Information</strong>
+        </span>
+        <span class="lead ml-2">(for prescribers only)</span>
+        <div class="mt-4"><button mat-flat-button
+                  class="mr-4"
                   color="primary"
-                  (click)="loginUsingBCSC()">Log-in with your BC Services Card</button>
-
-          <a href="#">Learn more about your BC Services Card</a>
-        </div>
-
-        <div class="content">
-          <p class="paragraph text-muted">
-            In order to determine your access to PharmaNet, PRIME will gather basic information.
-          </p>
-
-          <p class="text-muted">
-            If applicable, this will include:
-          </p>
-
-          <ul class="text-muted">
-            <li>College Registration Number</li>
-            <li>Device Provider Number</li>
-            <li>Job Title</li>
-          </ul>
-        </div>
-
+                  (click)="loginUsingBCSC()">Log in with BC Services Card</button>
+          <button mat-flat-button
+                  color="accent"
+                  href="#">Learn More</button></div>
       </div>
 
     </div>
-    <div class="col d-none d-sm-block background"></div>
   </div>
-
+  <app-pill [variant]="1">
+    <div>
+      <div class="row">
+        <div class="col-sm-12 mb-4">
+          <span class="large-title mr-4"><strong>PRIME</strong></span>
+          <span class="title"><strong>Enrolment Steps</strong></span>
+        </div>
+      </div>
+      <div class="row mb-4">
+        <div class="col-sm-12 col-md-4 info mb-4">
+          <h3><strong>BC Services Card</strong></h3>
+          <p>Before you Log In to PRIME, make sure you have your BC Services Card digital credential set up on your
+            mobile device. We will use it to securely verify your identity, and retrieve your full name, date of birth
+            and mailing address (no other personal information is shared).</p>
+          <a class="anchor"  href=""><strong>SET UP MY BC SERVICES CARD</strong></a>
+        </div>
+        <div class="col-sm-12 col-md-4 info mb-4">
+          <h3><strong>PRIME Enrolment</strong></h3>
+          <p>Provide contact and Health Professional information. Answer a set of self-declaration questions, then
+            carefully read and accept the PharmaNet terms of access.</p>
+        </div>
+        <div class="col-sm-12 col-md-4 info mb-4">
+          <h3><strong>Enrolment Certificate</strong></h3>
+          <p>Once approved, to access PharmaNet, send your enrolment certificate to the PharmaNet provider used by your
+            place of work, or to your system administrator.</p>
+        </div>
+      </div>
+    </div>
+  </app-pill>
+  <app-pill [variant]="2">
+    <div>
+      <div class="row">
+        <div class="col-sm-12 mb-4">
+          <span class="title mb-4"><strong>BC Services Card</strong></span>
+        </div>
+      </div>
+      <div class="row mb-4">
+        <div class="col-md-3"></div>
+        <div class="col-sm-12 col-md-6 info mb-4">
+          <p>PRIME uses the BC Services Card to securely identify people who access PharmaNet. The Ministry of Health
+            wants to make sure patient information on PharmaNet is accessed appropriately, only by health professionals
+            who have a clinical need to do so.<br/><br/>If you do not have your BC Services Card digital credential set up on your
+          mobile device, you will need to do that first. This is a quick process and it usually only takes a few
+          minutes!<br/><br/>Visit the BC Services Card website for more information and instructions. </p>
+            <a class="anchor"  href=""><strong>SET UP MY BC SERVICES CARD</strong></a>
+        </div>
+      </div>
+    </div>
+  </app-pill>
+  <div>
+    <div class="row">
+      <div class="col-sm-12 mb-4 title">
+        <span class="mb-4"><strong>Get Support</strong></span>
+      </div>
+    </div>
+    <div class="row mb-4">
+      <div class="col-md-4"></div>
+      <div class="col-sm-12 col-md-5 info mb-4">
+        <p>
+          Questions about PRIME should be directed to:<br/>
+          1-844-39PRIME<br/>
+          <a href="mailto:prime@gov.bc.ca">prime@gov.bc.ca</a>
+        </p>
+      </div>
+    </div>
+  </div>
 </div>
