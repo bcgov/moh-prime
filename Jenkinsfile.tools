@@ -19,6 +19,7 @@ pipeline {
                 //sh "./player.sh toolbelt zap tools"
                 //sh "./player.sh toolbelt mailhog test"
                 //sh "./player.sh toolbelt schemaspy dev"
+                //sh "./player.sh toolbelt metabase dev"
             }
         }
         stage('Nuke Database') {
