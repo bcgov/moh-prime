@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PageComponent } from './page.component';
+import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
 
 describe('PageComponent', () => {
   let component: PageComponent;
@@ -9,6 +10,9 @@ describe('PageComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule(
       {
+        imports: [
+          NgxBusyModule
+        ],
         declarations: [
           PageComponent
         ]

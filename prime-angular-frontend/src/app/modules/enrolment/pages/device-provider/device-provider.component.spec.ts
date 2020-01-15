@@ -17,6 +17,7 @@ import { ProgressIndicatorComponent } from '@shared/components/progress-indicato
 import { PageComponent } from '@shared/components/page/page.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
+import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { PageFooterComponent } from '@enrolment/shared/components/page-footer/page-footer.component';
@@ -43,7 +44,8 @@ describe('DeviceProviderComponent', () => {
           PageSubheaderComponent,
           ProgressIndicatorComponent,
           PageComponent,
-          PageFooterComponent
+          PageFooterComponent,
+          FormIconGroupComponent
         ],
         providers: [
           {

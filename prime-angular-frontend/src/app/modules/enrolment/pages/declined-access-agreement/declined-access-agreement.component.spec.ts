@@ -10,6 +10,7 @@ import { ProgressIndicatorComponent } from '@shared/components/progress-indicato
 import { PrimeContactComponent } from '@shared/components/prime-contact/prime-contact.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { EnrolmentPipe } from '@shared/pipes/enrolment.pipe';
+import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
 
 describe('DeclinedAccessAgreementComponent', () => {
   let component: DeclinedAccessAgreementComponent;
@@ -20,7 +21,8 @@ describe('DeclinedAccessAgreementComponent', () => {
       {
         imports: [
           RouterTestingModule,
-          NgxMaterialModule
+          NgxMaterialModule,
+          NgxBusyModule
         ],
         declarations: [
           DeclinedAccessAgreementComponent,
