@@ -92,14 +92,14 @@
   <app-enrollee-property title="Email Notification">
     {{ enrollee?.contactEmail | default }}
   </app-enrollee-property>
-
-  <app-enrollee-property title="Text Notification (SMS)">
+  <!-- TODO removed until SMS is implemented -->
+  <!-- <app-enrollee-property title="Text Notification (SMS)">
     {{ enrollee?.contactPhone | phone | default }}
-  </app-enrollee-property>
+  </app-enrollee-property> -->
 
 </section>
 
-<section *ngIf="hasCertification"
+<section *ngIf="hasCertification || (!hasJob && !hasCertification)"
          class="mb-4">
 
   <app-page-subheader>
