@@ -3,6 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { SubmissionConfirmationComponent } from './submission-confirmation.component';
 import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
 import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
@@ -12,6 +13,7 @@ import { PageHeaderComponent } from '@shared/components/page-header/page-header.
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
 import { ProgressIndicatorComponent } from '@shared/components/progress-indicator/progress-indicator.component';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { PrimeContactComponent } from '@shared/components/prime-contact/prime-contact.component';
 
 describe('SubmissionConfirmationComponent', () => {
   let component: SubmissionConfirmationComponent;
@@ -31,9 +33,14 @@ describe('SubmissionConfirmationComponent', () => {
           SubmissionConfirmationComponent,
           PageHeaderComponent,
           PageSubheaderComponent,
-          ProgressIndicatorComponent
+          ProgressIndicatorComponent,
+          PrimeContactComponent
         ],
         providers: [
+          {
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
+          },
           {
             provide: EnrolmentService,
             useClass: MockEnrolmentService
