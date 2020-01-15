@@ -86,11 +86,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
           () => {
             this.toastService.openSuccessToast('Self declaration has been saved');
             this.form.markAsPristine();
-
-            const routePath = (!this.isProfileComplete)
-              ? EnrolmentRoutes.ORGANIZATION
-              : EnrolmentRoutes.OVERVIEW;
-            this.routeTo(routePath);
+            this.routeTo(EnrolmentRoutes.OVERVIEW);
           },
           (error: any) => {
             this.toastService.openErrorToast('Self declaration could not be saved');
@@ -100,14 +96,6 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
       this.form.markAllAsTouched();
       this.showUnansweredQuestionsError = this.showUnansweredQuestions();
     }
-  }
-
-  public routeBackTo() {
-    const routePath = (this.enrolmentStateService.enrolment.certifications.length)
-      ? EnrolmentRoutes.REGULATORY
-      : EnrolmentRoutes.JOB;
-
-    this.routeTo(routePath);
   }
 
   public ngOnInit() {

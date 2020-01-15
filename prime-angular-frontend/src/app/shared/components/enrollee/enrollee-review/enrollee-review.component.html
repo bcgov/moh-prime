@@ -1,7 +1,7 @@
 <app-enrollee-profile [enrollee]="enrollee"></app-enrollee-profile>
 
-<div *ngIf="hasPreferredName"
-     class="mb-4">
+<section *ngIf="hasPreferredName"
+         class="mb-4">
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Preferred Name</ng-container>
@@ -22,10 +22,10 @@
     {{ enrollee?.preferredLastName | default }}
   </app-enrollee-property>
 
-</div>
+</section>
 
-<div *ngIf="hasMailingAddress"
-     class="mb-4">
+<section *ngIf="hasMailingAddress"
+         class="mb-4">
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Mailing Address</ng-container>
@@ -59,9 +59,9 @@
     {{ enrollee.mailingAddress?.postal | postal | default }}
   </app-enrollee-property>
 
-</div>
+</section>
 
-<div class="mb-4">
+<section class="mb-4">
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Contact Information</ng-container>
@@ -78,9 +78,9 @@
     {{ enrollee?.voiceExtension | default }}
   </app-enrollee-property>
 
-</div>
+</section>
 
-<div class="mb-4">
+<section class="mb-4">
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Notification Information</ng-container>
@@ -97,10 +97,10 @@
     {{ enrollee?.contactPhone | phone | default }}
   </app-enrollee-property>
 
-</div>
+</section>
 
-<div *ngIf="hasCertification"
-     class="mb-4">
+<section *ngIf="hasCertification"
+         class="mb-4">
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>College Certification Information</ng-container>
@@ -140,10 +140,10 @@
     None
   </app-enrollee-property>
 
-</div>
+</section>
 
-<div *ngIf="enrolment?.deviceProviderNumber"
-     class="mb-4">
+<section *ngIf="enrolment?.deviceProviderNumber"
+         class="mb-4">
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Device Provider</ng-container>
@@ -160,10 +160,10 @@
     {{ enrolment.isInsulinPumpProvider | yesNo: true }}
   </app-enrollee-property>
 
-</div>
+</section>
 
-<div *ngIf="hasJob"
-     class="mb-4">
+<section *ngIf="hasJob"
+         class="mb-4">
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Job Information</ng-container>
@@ -187,9 +187,35 @@
     None
   </app-enrollee-property>
 
-</div>
+</section>
 
-<div class="mb-4">
+<section class="mb-4">
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Organization Information</ng-container>
+    <mat-icon *ngIf="isEnrollee"
+              matTooltip="Edit Organizations"
+              (click)="onRoute(EnrolmentRoutes.ORGANIZATION)">edit</mat-icon>
+  </app-page-subheader>
+
+  <ng-container *ngFor="let organization of organizations">
+
+    <app-enrollee-property title="Organization Type"
+                           [makeBold]="true">
+      {{ organization.organizationTypeCode | configCode: 'organizationTypes' }}
+    </app-enrollee-property>
+
+  </ng-container>
+
+  <app-enrollee-property *ngIf="!hasOrganization"
+                         title="Organization Type"
+                         [makeBold]="true">
+    None
+  </app-enrollee-property>
+
+</section>
+
+<section class="mb-4">
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Self Declaration</ng-container>
@@ -242,30 +268,4 @@
     {{ enrolment?.hasPharmaNetSuspendedDetails }}
   </app-enrollee-property>
 
-</div>
-
-<div class="mb-4">
-
-  <app-page-subheader>
-    <ng-container appPageSubheaderTitle>Organization Information</ng-container>
-    <mat-icon *ngIf="isEnrollee"
-              matTooltip="Edit Organizations"
-              (click)="onRoute(EnrolmentRoutes.ORGANIZATION)">edit</mat-icon>
-  </app-page-subheader>
-
-  <ng-container *ngFor="let organization of organizations">
-
-    <app-enrollee-property title="Organization Type"
-                           [makeBold]="true">
-      {{ organization.organizationTypeCode | configCode: 'organizationTypes' }}
-    </app-enrollee-property>
-
-  </ng-container>
-
-  <app-enrollee-property *ngIf="!hasOrganization"
-                         title="Organization Type"
-                         [makeBold]="true">
-    None
-  </app-enrollee-property>
-
-</div>
+</section>
