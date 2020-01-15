@@ -99,7 +99,7 @@
 
 </section>
 
-<section *ngIf="hasCertification || (!hasJob && !hasCertification)"
+<section *ngIf="hasCertification || (!hasCertification && !hasJob)"
          class="mb-4">
 
   <app-page-subheader>
@@ -162,7 +162,7 @@
 
 </section>
 
-<section *ngIf="hasJob"
+<section *ngIf="hasJob || (!hasJob && !hasCertification)"
          class="mb-4">
 
   <app-page-subheader>
