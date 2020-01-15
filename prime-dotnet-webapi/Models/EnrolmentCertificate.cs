@@ -43,10 +43,10 @@ namespace Prime.Models
                                 .Where(p => p.PrivilegeGroup.PrivilegeTypeCode == 2),
                 UserType = enrollee.AssignedPrivileges
                             .Select(ap => ap.Privilege)
-                            .Where(p => p.PrivilegeGroupCode == 4).FirstOrDefault(),
+                            .Where(p => p.PrivilegeGroupCode == 4).SingleOrDefault(),
                 CanHaveOBOs = enrollee.AssignedPrivileges
                             .Select(ap => ap.Privilege)
-                            .Where(p => p.PrivilegeGroupCode == 5).FirstOrDefault(),
+                            .Where(p => p.PrivilegeGroupCode == 5).SingleOrDefault(),
             };
         }
     }
