@@ -1,7 +1,11 @@
 <app-busy-overlay [busy]="busy">
 
   <div class="row">
-    <div class="col-sm-12 col-md-8 offset-md-1 col-xl-6">
+    <div class="col-sm-12 offset-md-1"
+         [ngClass]="{
+           'col-md-8 col-xl-6': mode === 'default',
+           'col-md-10': mode === 'full'
+         }">
 
       <ng-content select="app-page-header"></ng-content>
 
