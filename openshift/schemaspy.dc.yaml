@@ -134,8 +134,8 @@ objects:
             - name: "DATABASE_PASSWORD"
               valueFrom:
                 secretKeyRef:
-                  name: "${NAME}${SUFFIX}-secret"
-                  key: "database-password"
+                  name: "postgresql-secret"
+                  key: "database-admin-password"
           readinessProbe:
             timeoutSeconds: "300"
             initialDelaySeconds: "60"
