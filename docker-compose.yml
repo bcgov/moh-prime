@@ -37,20 +37,20 @@ services:
     networks:
       - primenet
 ###################################################### Web Frontend #
-  nginx-angular:
-    container_name: primeweb
-    build:
-        context: prime-angular-frontend/
-    command: "nginx -g 'daemon off;'"
-    restart: always
-    ports:
-      - "8080:8080"
-      - "4200:8080"
-    expose:
-      - "8080"
-      - "4200"
-    networks:
-      - primenet
+  # nginx-angular:
+  #   container_name: primeweb
+  #   build:
+  #       context: prime-angular-frontend/
+  #   command: "nginx -g 'daemon off;'"
+  #   restart: always
+  #   ports:
+  #     - "8080:8080"
+  #     - "4200:8080"
+  #   expose:
+  #     - "8080"
+  #     - "4200"
+  #   networks:
+  #     - primenet
 ################################################# Local SMTP Server #
   mailhog:
     container_name: mailhog

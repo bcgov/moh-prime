@@ -4,6 +4,8 @@ import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx
 import { EnrolleePrivilegesComponent } from './enrollee-privileges.component';
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
 import { DefaultPipe } from '@shared/pipes/default.pipe';
+import { EnrolleePropertyComponent } from '../enrollee-property/enrollee-property.component';
+import { MatAccordion } from '@angular/material';
 
 
 describe('EnrolleePrivilegesComponent', () => {
@@ -13,12 +15,14 @@ describe('EnrolleePrivilegesComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        NgxContextualHelpModule
+        NgxContextualHelpModule,
+        MatAccordion
       ],
       declarations: [
         EnrolleePrivilegesComponent,
         PageSubheaderComponent,
-        DefaultPipe
+        DefaultPipe,
+        EnrolleePropertyComponent
       ]
     })
       .compileComponents();
