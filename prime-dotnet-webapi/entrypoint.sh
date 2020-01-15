@@ -26,8 +26,8 @@ done
 echo "$1 responded $2"
 }
 
-waitForIt localhost:5000/api/enrollees 401
-waitForIt localhost:5000/api/lookups 401
+waitForIt localhost:${API_PORT}/api/enrollees 401
+waitForIt localhost:${API_PORT}/api/lookups 401
 
 echo -e "\nThe system is up."
 tail -f /dev/null

@@ -18,4 +18,5 @@ RUN apt update && \
     chmod +x entrypoint.sh && \
     chmod 777 entrypoint.sh
 ENV DB_CONNECTION_STRING "host=postgres;port=5432;database=postgres;username=postgres;password=postgres"
+ENV API_PORT 8080
 ENTRYPOINT [ "./entrypoint.sh" ]
