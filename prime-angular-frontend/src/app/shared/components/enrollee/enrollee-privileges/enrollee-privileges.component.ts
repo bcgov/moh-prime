@@ -32,7 +32,7 @@ export class EnrolleePrivilegesComponent implements OnInit {
   }
 
   public get transactionPrivileges() {
-    if (this.privileges) {
+    if (this.privileges.length) {
       const tPrivileges: Privilege[] = [];
       for (const privilege of this.privileges) {
         if (this.privilegeGroups
@@ -47,7 +47,7 @@ export class EnrolleePrivilegesComponent implements OnInit {
   }
 
   public get userTypePrivilege() {
-    if (this.privileges) {
+    if (this.privileges.length) {
       for (const privilege of this.privileges) {
         if (privilege.privilegeGroupCode === 4) {
           return privilege;
@@ -68,7 +68,7 @@ export class EnrolleePrivilegesComponent implements OnInit {
   }
 
   public get canHaveOBOsPrivilege() {
-    if (this.privileges) {
+    if (this.privileges.length) {
       return this.privileges.filter(p => p.privilegeGroupCode === 5).length > 0;
     }
     return this.canHaveOBOs;
@@ -76,7 +76,7 @@ export class EnrolleePrivilegesComponent implements OnInit {
 
 
   ngOnInit() {
-    if (this.privileges) {
+    if (this.privileges.length) {
       this.privilegeGroups = this.configService ? this.configService.privilegeGroups : null;
     }
   }
