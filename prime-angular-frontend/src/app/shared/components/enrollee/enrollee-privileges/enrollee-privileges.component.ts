@@ -22,7 +22,14 @@ export class EnrolleePrivilegesComponent implements OnInit {
 
   constructor(
     private configService: ConfigService
-  ) { }
+  ) {
+    this.privileges = [];
+    this.transactions = [];
+    this.userType = null;
+    this.canHaveOBOs = null;
+    this.privilegeGroups = [];
+    this.privilegeTypes = [];
+  }
 
   public get transactionPrivileges() {
     if (this.privileges) {

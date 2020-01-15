@@ -5,7 +5,12 @@ import { EnrolleePrivilegesComponent } from './enrollee-privileges.component';
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
 import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { EnrolleePropertyComponent } from '../enrollee-property/enrollee-property.component';
-import { MatAccordion } from '@angular/material';
+import { MatExpansionModule } from '@angular/material';
+import { PrimeContactComponent } from '@shared/components/prime-contact/prime-contact.component';
+import { APP_DI_CONFIG, APP_CONFIG } from 'app/app-config.module';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ConfigService } from '@config/config.service';
+import { MockConfigService } from 'test/mocks/mock-config.service';
 
 
 describe('EnrolleePrivilegesComponent', () => {
@@ -16,13 +21,26 @@ describe('EnrolleePrivilegesComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         NgxContextualHelpModule,
-        MatAccordion
+        MatExpansionModule,
+        HttpClientTestingModule
       ],
       declarations: [
         EnrolleePrivilegesComponent,
         PageSubheaderComponent,
         DefaultPipe,
-        EnrolleePropertyComponent
+        EnrolleePropertyComponent,
+        PrimeContactComponent
+      ],
+      providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        },
+        {
+          provide: ConfigService,
+          useClass: MockConfigService
+        },
+
       ]
     })
       .compileComponents();
