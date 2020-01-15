@@ -2,6 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DeclinedAccessAgreementComponent } from './declined-access-agreement.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { PageComponent } from '@shared/components/page/page.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { AlertComponent } from '@shared/components/alert/alert.component';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
@@ -23,6 +24,7 @@ describe('DeclinedAccessAgreementComponent', () => {
         ],
         declarations: [
           DeclinedAccessAgreementComponent,
+          PageComponent,
           PageHeaderComponent,
           ProgressIndicatorComponent,
           PrimeContactComponent,
