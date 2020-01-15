@@ -6,10 +6,26 @@ metadata:
 parameters:
   - name: SOURCE_REPOSITORY_URL
     required: true
-    value: 'https://github.com/bcgov/moh-prime'
+    value: "https://github.com/bcgov/moh-prime"
   - name: SOURCE_REPOSITORY_REF
     required: false
-    value: 'develop'
+    value: "develop"
+  - name: OC_NAMESPACE
+    required: true
+  - name: OC_APP
+    required: true
+    value: "tools"
+  - name: SOURCE_CONTEXT_DIR
+    required: false
+  - name: SOURCE_REPOSITORY_REF
+    required: false
+  - name: SOURCE_REPOSITORY_URL
+    required: false
+  - name: NAME
+    displayName: Name
+    description: A prefix appended to all objects
+    required: true
+    value: "sonar-scanner"
 objects:
   - apiVersion: v1
     kind: ImageStream
@@ -40,14 +56,14 @@ objects:
           cpu: 300m
           memory: 512Mi
         limits:
-          cpu: '1'
+          cpu: "1"
           memory: 1024Mi
       runPolicy: Serial
       source:
         contextDir: sonar-scanner/
         git:
-          ref: '${SOURCE_REPOSITORY_REF}'
-          uri: '${SOURCE_REPOSITORY_URL}'
+          ref: "${SOURCE_REPOSITORY_REF}"
+          uri: "${SOURCE_REPOSITORY_URL}"
         type: Git
       strategy:
         dockerStrategy:
