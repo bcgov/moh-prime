@@ -10,8 +10,8 @@ namespace Prime.Configuration
             get
             {
                 return new[]{
-               new PrivilegeType { Code = 1, Name = "Allowable Role", CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
-               new PrivilegeType { Code = 2, Name = "Allowable Transaction", CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE }
+                new PrivilegeType { Code = 1, Name = "Allowable Role", CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
+                new PrivilegeType { Code = 2, Name = "Allowable Transaction", CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE }
                 };
             }
         }
