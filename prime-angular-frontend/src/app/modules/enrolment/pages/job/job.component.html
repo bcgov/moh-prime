@@ -1,67 +1,59 @@
-<app-busy-overlay [busy]="busy">
+<app-page [busy]="busy">
 
-  <div class="row">
-    <div class="col-sm-12 col-md-8 offset-md-1 col-xl-6">
+  <app-page-header>PharmaNet Enrolment</app-page-header>
 
-      <app-page-header>PharmaNet Enrolment</app-page-header>
+  <app-progress-indicator *ngIf="isInitialEnrolment"
+                          [inProgress]="isInitialEnrolment"
+                          [currentRoute]="EnrolmentRoutes.JOB"></app-progress-indicator>
 
-      <div class="mb-5 w-75">
-        <app-progress-indicator *ngIf="isInitialEnrolment"
-                                [currentRoute]="EnrolmentRoutes.JOB"></app-progress-indicator>
+  <form (ngSubmit)="onSubmit()"
+        [formGroup]="form"
+        novalidate>
+
+    <section class="mb-3">
+
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Job Information</ng-container>
+        <ng-container appPageSubheaderSummary>
+          Identify all of the Job Titles you have where you need access to PharmaNet. Select None if you are a
+          Device Provider.
+        </ng-container>
+      </app-page-subheader>
+
+      <div class="row">
+        <div class="col col-sm-10 py-3"
+             formArrayName="jobs">
+
+          <ng-container *ngFor="let job of jobs.controls; let i = index"
+                        [formGroupName]="i">
+
+            <app-job-form [form]="job"
+                          [index]="i"
+                          [total]="jobs.controls.length"
+                          [jobNames]="filteredJobNames"
+                          [allowDefaultOption]="allowDefaultOption"
+                          [defaultOptionLabel]="defaultOptionLabel"
+                          (remove)="removeJob($event)"></app-job-form>
+
+          </ng-container>
+
+          <button mat-button
+                  type="button"
+                  color="primary"
+                  (click)="addJob()">
+            <mat-icon class="add-icon">add</mat-icon>
+            Add Additional Job Title
+          </button>
+
+        </div>
       </div>
 
-      <form (ngSubmit)="onSubmit()"
-            [formGroup]="form"
-            novalidate>
+    </section>
 
-        <section class="mb-3">
+  </form>
 
-          <app-page-subheader>
-            <ng-container appPageSubheaderTitle>Job Information</ng-container>
-            <ng-container appPageSubheaderSummary>
-              Identify all of the Job Titles you have where you need access to PharmaNet. Select None if you are a
-              Device Provider.
-            </ng-container>
-          </app-page-subheader>
+  <app-page-footer [profileCompleted]="isProfileComplete"
+                   (save)="onSubmit()"
+                   (back)="routeTo(EnrolmentRoutes.REGULATORY)"></app-page-footer>
 
-          <div class="row">
-            <div class="col col-sm-10 py-3"
-                 formArrayName="jobs">
-
-              <ng-container *ngFor="let job of jobs.controls; let i = index"
-                            [formGroupName]="i">
-
-                <app-job-form [form]="job"
-                              [index]="i"
-                              [total]="jobs.controls.length"
-                              [jobNames]="filteredJobNames"
-                              [allowDefaultOption]="allowDefaultOption"
-                              [defaultOptionLabel]="defaultOptionLabel"
-                              (remove)="removeJob($event)"></app-job-form>
-
-              </ng-container>
-
-              <button mat-button
-                      type="button"
-                      color="primary"
-                      (click)="addJob()">
-                <mat-icon class="add-icon">add</mat-icon>
-                Add Additional Job Title
-              </button>
-
-            </div>
-          </div>
-
-        </section>
-
-        <app-page-footer [profileCompleted]="isProfileComplete"
-                         (save)="onSubmit()"
-                         (continue)="onSubmit()"
-                         (back)="routeTo(EnrolmentRoutes.REGULATORY)"></app-page-footer>
-
-      </form>
-
-    </div>
-  </div>
-
-</app-busy-overlay>
+</app-page>

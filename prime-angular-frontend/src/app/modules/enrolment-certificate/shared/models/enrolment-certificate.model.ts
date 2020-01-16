@@ -12,7 +12,9 @@ export interface EnrolmentCertificate {
   preferredLastName: string;
   dateOfBirth: string;
   licensePlate: string;
-  privileges: Privilege[];
   organizationTypes: Config<number>[];
   enrolmentCertificateNote: AdjudicationNote;
+  transactions: Privilege[];
+  userType: Privilege;
+  canHaveOBOs: Privilege;
 }
