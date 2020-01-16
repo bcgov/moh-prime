@@ -18,11 +18,16 @@ namespace Prime.Controllers
     {
         private readonly IEnrolleeService _enrolleeService;
         private readonly ITermsOfAccessService _termsOfAccessService;
+        private readonly IEnrolleeProfileHistoryService _enrolleeProfileHistoryService;
 
-        public EnrolleesController(IEnrolleeService enrolleeService, ITermsOfAccessService termsOfAccessService)
+        public EnrolleesController(
+            IEnrolleeService enrolleeService,
+            ITermsOfAccessService termsOfAccessService,
+            IEnrolleeProfileHistoryService enrolleeProfileHistoryService)
         {
             _enrolleeService = enrolleeService;
             _termsOfAccessService = termsOfAccessService;
+            _enrolleeProfileHistoryService = enrolleeProfileHistoryService;
         }
 
         // GET: api/Enrollees
@@ -479,6 +484,53 @@ namespace Prime.Controllers
             var termsOfAccess = await _termsOfAccessService.GetEnrolleeTermsOfAccessAsync(enrolleeId);
 
             return Ok(new ApiOkResponse<TermsOfAccess>(termsOfAccess));
+        }
+
+        // GET: api/Enrollees/5/profile-histories
+        /// <summary>
+        /// Get a list of the enrolmee's profile history.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpGet("{enrolleeId}/profile-histories", Name = nameof(GetEnrolleeProfileHistories))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiOkResponse<EnrolleeProfileHistory>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<EnrolleeProfileHistory>>> GetEnrolleeProfileHistories(int enrolleeId)
+        {
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
+            {
+                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
+            }
+
+            var enrolleeProfileHistories = await _enrolleeProfileHistoryService.GetEnrolleeProfileHistoriesAsync(enrolleeId);
+
+            return Ok(new ApiOkResponse<IEnumerable<EnrolleeProfileHistory>>(enrolleeProfileHistories));
+        }
+
+        // GET: api/Enrollees/5/profile-histories
+        /// <summary>
+        /// Get a historical enrolmee profile.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="enrolleeProfileHistoryId"></param>
+        [HttpGet("{enrolleeId}/profile-histories/{enrolleeProfileHistoryId}", Name = nameof(GetEnrolleeProfileHistory))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiOkResponse<EnrolleeProfileHistory>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<EnrolleeProfileHistory>> GetEnrolleeProfileHistory(int enrolleeId, int enrolleeProfileHistoryId)
+        {
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
+            {
+                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
+            }
+
+            var enrolleeProfileHistory = await _enrolleeProfileHistoryService.GetEnrolleeProfileHistoryAsync(enrolleeId, enrolleeProfileHistoryId);
+
+            return Ok(new ApiOkResponse<EnrolleeProfileHistory>(enrolleeProfileHistory));
         }
     }
 }
