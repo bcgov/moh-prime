@@ -13,13 +13,13 @@
           *matHeaderCellDef> Name </th>
       <td mat-cell
           *matCellDef="let enrolmentProfileHistory">
-        {{ enrolmentProfileHistory.profileSnapshot.firstName }}&nbsp;
-        {{ enrolmentProfileHistory.profileSnapshot.lastName }}
+        {{ enrolmentProfileHistory?.profileSnapshot.enrollee.firstName }}&nbsp;
+        {{ enrolmentProfileHistory?.profileSnapshot.enrollee.lastName }}
       </td>
     </ng-container>
 
     <!-- Approved Date Column -->
-    <ng-container matColumnDef="approvedDate">
+    <ng-container matColumnDef="createdDate">
       <th mat-header-cell
           *matHeaderCellDef> Created Date </th>
       <td mat-cell

@@ -3,6 +3,7 @@
 
   <app-page-header>Enrollee Profile History</app-page-header>
 
-  <app-enrollee-profile [enrollee]="enrolmentProfileHistory.profileSnapshot"></app-enrollee-profile>
+  <app-enrollee-review [isEnrollee]="false"
+                       [enrolment]="enrolmentProfileHistory?.profileSnapshot"></app-enrollee-review>
 
 </app-page>
