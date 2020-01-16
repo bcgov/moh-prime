@@ -1,0 +1,70 @@
+<app-page [busy]="busy"
+          mode="full">
+
+  <app-page-header>Enrollee Profile History</app-page-header>
+
+  <table mat-table
+         [dataSource]="dataSource"
+         class="w-100">
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell
+          *matHeaderCellDef> Name </th>
+      <td mat-cell
+          *matCellDef="let enrolmentProfileHistory">
+        {{ enrolmentProfileHistory.profileSnapshot.firstName }}&nbsp;
+        {{ enrolmentProfileHistory.profileSnapshot.lastName }}
+      </td>
+    </ng-container>
+
+    <!-- Approved Date Column -->
+    <ng-container matColumnDef="approvedDate">
+      <th mat-header-cell
+          *matHeaderCellDef> Created Date </th>
+      <td mat-cell
+          *matCellDef="let enrolmentProfileHistory"> {{ enrolmentProfileHistory.createdDate | formatDate }} </td>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell
+          *matHeaderCellDef>&nbsp;</th>
+      <td mat-cell
+          *matCellDef="let enrolmentProfileHistory"
+          class="text-right">
+
+        <ng-container [ngTemplateOutlet]="menu"
+                      [ngTemplateOutletContext]="{ enrolmentProfileHistory: enrolmentProfileHistory }"></ng-container>
+
+      </td>
+    </ng-container>
+
+    <tr mat-header-row
+        *matHeaderRowDef="columns; sticky: true"></tr>
+    <tr mat-row
+        *matRowDef="let row; columns: columns;"></tr>
+  </table>
+
+  <p *ngIf="!dataSource?.data.length"
+     class="px-4 py-2 text-muted">
+    No Enrolment Profile History
+  </p>
+
+  <ng-template #menu
+               let-enrolmentProfileHistory="enrolmentProfileHistory">
+    <button mat-icon-button
+            [matMenuTriggerFor]="menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item
+              [routerLink]="[enrolmentProfileHistory.id]">
+        <mat-icon>remove_red_eye</mat-icon>
+        <span>View Enrollee History</span>
+      </button>
+    </mat-menu>
+  </ng-template>
+
+</app-page>
