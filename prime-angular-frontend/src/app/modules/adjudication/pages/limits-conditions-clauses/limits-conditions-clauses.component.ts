@@ -21,11 +21,11 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { NoteType } from '@adjudication/shared/enums/note-type.enum';
 
 @Component({
-  selector: 'app-user-agreement-notes',
-  templateUrl: './user-agreement-notes.component.html',
-  styleUrls: ['./user-agreement-notes.component.scss']
+  selector: 'app-limits-conditions-clauses',
+  templateUrl: './limits-conditions-clauses.component.html',
+  styleUrls: ['./limits-conditions-clauses.component.scss']
 })
-export class UserAgreementNotesComponent implements OnInit {
+export class LimitsConditionsClausesComponent implements OnInit {
   public busy: Subscription;
   public form: FormGroup;
   public columns: string[];
@@ -230,7 +230,7 @@ export class UserAgreementNotesComponent implements OnInit {
         },
         (error: any) => {
           this.toastService.openErrorToast('Enrollee could not be retrieved');
-          this.logger.error('[Adjudication] UserAgreementNotes::getEnrollee error has occurred: ', error);
+          this.logger.error('[Adjudication] LimitsConditionsClauses::getEnrollee error has occurred: ', error);
           this.router.navigate([AdjudicationRoutes.ENROLMENTS]);
         }
       );

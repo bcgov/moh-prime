@@ -21,11 +21,11 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { NoteType } from '@adjudication/shared/enums/note-type.enum';
 
 @Component({
-  selector: 'app-enrolment-certificate-notes',
-  templateUrl: './enrolment-certificate-notes.component.html',
-  styleUrls: ['./enrolment-certificate-notes.component.scss']
+  selector: 'app-certificate-limits-conditions',
+  templateUrl: './certificate-limits-conditions.component.html',
+  styleUrls: ['./certificate-limits-conditions.component.scss']
 })
-export class EnrolmentCertificateNotesComponent implements OnInit {
+export class CertificateLimitsConditionsComponent implements OnInit {
   public busy: Subscription;
   public form: FormGroup;
   public columns: string[];
