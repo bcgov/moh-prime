@@ -79,7 +79,6 @@ namespace Prime.Configuration
                 new DefaultPrivilege { LicenseCode = 26, PrivilegeId = 17, CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
                 new DefaultPrivilege { LicenseCode = 26, PrivilegeId = 19, CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
 
-
                 // Temporary Pharmacist
                 new DefaultPrivilege { LicenseCode = 27, PrivilegeId = 1, CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
                 new DefaultPrivilege { LicenseCode = 27, PrivilegeId = 2, CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
