@@ -5,7 +5,7 @@ namespace Prime.Configuration
 {
     public class CountryConfiguration : SeededTable<Country>
     {
-        public override ICollection<Country> SeedData
+        public static override ICollection<Country> SeedData
         {
             get
             {
