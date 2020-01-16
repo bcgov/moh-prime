@@ -15,6 +15,7 @@ namespace Prime.Services
         private readonly IEmailService _emailService;
         private readonly IPrivilegeService _privilegeService;
         private readonly ITermsOfAccessService _termsOfAccessService;
+        private readonly IEnrolleeProfileHistoryService _enroleeProfileHistoryService;
 
         private class StatusWrapper
         {
@@ -32,13 +33,15 @@ namespace Prime.Services
             IAutomaticAdjudicationService automaticAdjudicationService,
             IEmailService emailService,
             IPrivilegeService privilegeService,
-            ITermsOfAccessService termsOfAccessService)
+            ITermsOfAccessService termsOfAccessService,
+            IEnrolleeProfileHistoryService enroleeProfileHistoryService)
             : base(context, httpContext)
         {
             _automaticAdjudicationService = automaticAdjudicationService;
             _emailService = emailService;
             _privilegeService = privilegeService;
             _termsOfAccessService = termsOfAccessService;
+            _enroleeProfileHistoryService = enroleeProfileHistoryService;
         }
 
         private Dictionary<Status, StatusWrapper[]> GetWorkFlowStateMap()
@@ -361,6 +364,9 @@ namespace Prime.Services
             switch (newStatus.Code)
             {
                 case Status.SUBMITTED_CODE:
+                    // Store a copy of the submitted enrollee profile
+                    await _enroleeProfileHistoryService.CreateEnrolleeProfileHistoryAsync(enrollee);
+
                     if (await _automaticAdjudicationService.QualifiesForAutomaticAdjudication(enrollee))
                     {
                         // Change the status to adjudicated/approved
