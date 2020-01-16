@@ -5,8 +5,8 @@ using Newtonsoft.Json;
 
 namespace Prime.Models
 {
-    [Table("EnrolleeProfileHistory")]
-    public class EnrolleeProfileHistory : BaseAuditable
+    [Table("EnrolleeProfileVersion")]
+    public class EnrolleeProfileVersion : BaseAuditable
     {
         [Key]
         public int Id { get; set; }
@@ -18,5 +18,7 @@ namespace Prime.Models
         public Enrollee ProfileSnapshot { get; set; }
         [Required]
         public DateTime CreatedDate { get; set; }
+        [Required]
+        public int Version { get; set; }
     }
 }

@@ -4,13 +4,13 @@ using Newtonsoft.Json;
 using Prime.Models;
 namespace Prime.Configuration
 {
-    public class EnrolleeProfileHistoryConfiguration : IEntityTypeConfiguration<EnrolleeProfileHistory>
+    public class EnrolleeProfileVersionConfiguration : IEntityTypeConfiguration<EnrolleeProfileVersion>
     {
-        public void Configure(EntityTypeBuilder<EnrolleeProfileHistory> builder)
+        public void Configure(EntityTypeBuilder<EnrolleeProfileVersion> builder)
         {
             builder
                 .HasOne(epf => epf.Enrollee)
-                .WithMany(e => e.EnrolleeProfileHistory)
+                .WithMany(e => e.EnrolleeProfileVersions)
                 .HasForeignKey(epf => epf.EnrolleeId);
 
             builder

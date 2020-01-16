@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,12 +5,12 @@ using Prime.Models;
 
 namespace Prime.Services
 {
-    public interface IEnrolleeProfileHistoryService
+    public interface IEnrolleeProfileVersionService
     {
-        Task<IEnumerable<EnrolleeProfileHistory>> GetEnrolleeProfileHistoriesAsync(int enrolleeId);
+        Task<IEnumerable<EnrolleeProfileVersion>> GetEnrolleeProfileVersionsAsync(int enrolleeId);
 
-        Task<EnrolleeProfileHistory> GetEnrolleeProfileHistoryAsync(int enrolleeId, int enrolleeProfileHistoryId);
+        Task<EnrolleeProfileVersion> GetEnrolleeProfileVersionAsync(int enrolleeId, int enrolleeProfileHistoryId);
 
-        Task<int> CreateEnrolleeProfileHistoryAsync(Enrollee enrollee);
+        Task<int> CreateEnrolleeProfileVersionAsync(Enrollee enrollee);
     }
 }

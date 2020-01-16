@@ -18,16 +18,16 @@ namespace Prime.Controllers
     {
         private readonly IEnrolleeService _enrolleeService;
         private readonly ITermsOfAccessService _termsOfAccessService;
-        private readonly IEnrolleeProfileHistoryService _enrolleeProfileHistoryService;
+        private readonly IEnrolleeProfileVersionService _enrolleeProfileVersionService;
 
         public EnrolleesController(
             IEnrolleeService enrolleeService,
             ITermsOfAccessService termsOfAccessService,
-            IEnrolleeProfileHistoryService enrolleeProfileHistoryService)
+            IEnrolleeProfileVersionService enrolleeProfileVersionService)
         {
             _enrolleeService = enrolleeService;
             _termsOfAccessService = termsOfAccessService;
-            _enrolleeProfileHistoryService = enrolleeProfileHistoryService;
+            _enrolleeProfileVersionService = enrolleeProfileVersionService;
         }
 
         // GET: api/Enrollees
@@ -497,17 +497,17 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiOkResponse<EnrolleeProfileHistory>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<EnrolleeProfileHistory>>> GetEnrolleeProfileHistories(int enrolleeId)
+        [ProducesResponseType(typeof(ApiOkResponse<EnrolleeProfileVersion>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<EnrolleeProfileVersion>>> GetEnrolleeProfileHistories(int enrolleeId)
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
 
-            var enrolleeProfileHistories = await _enrolleeProfileHistoryService.GetEnrolleeProfileHistoriesAsync(enrolleeId);
+            var enrolleeProfileHistories = await _enrolleeProfileVersionService.GetEnrolleeProfileVersionsAsync(enrolleeId);
 
-            return Ok(new ApiOkResponse<IEnumerable<EnrolleeProfileHistory>>(enrolleeProfileHistories));
+            return Ok(new ApiOkResponse<IEnumerable<EnrolleeProfileVersion>>(enrolleeProfileHistories));
         }
 
         // TODO refactor naming of params, method, endpoint URI
@@ -522,17 +522,17 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiOkResponse<EnrolleeProfileHistory>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<EnrolleeProfileHistory>> GetEnrolleeProfileHistory(int enrolleeId, int enrolleeProfileHistoryId)
+        [ProducesResponseType(typeof(ApiOkResponse<EnrolleeProfileVersion>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<EnrolleeProfileVersion>> GetEnrolleeProfileHistory(int enrolleeId, int enrolleeProfileHistoryId)
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
 
-            var enrolleeProfileHistory = await _enrolleeProfileHistoryService.GetEnrolleeProfileHistoryAsync(enrolleeId, enrolleeProfileHistoryId);
+            var enrolleeProfileHistory = await _enrolleeProfileVersionService.GetEnrolleeProfileVersionAsync(enrolleeId, enrolleeProfileHistoryId);
 
-            return Ok(new ApiOkResponse<EnrolleeProfileHistory>(enrolleeProfileHistory));
+            return Ok(new ApiOkResponse<EnrolleeProfileVersion>(enrolleeProfileHistory));
         }
     }
 }
