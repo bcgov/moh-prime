@@ -231,33 +231,34 @@ namespace PrimeTests.Utils
 
             if (!db.Set(typeof(PrivilegeGroup)).Any())
             {
-                db.AddRange(new PrivilegeGroup { Id = 1, Name = "Submit and Access Claims" });
-                db.AddRange(new PrivilegeGroup { Id = 2, Name = "Record Medical History" });
-                db.AddRange(new PrivilegeGroup { Id = 3, Name = "Access Medical History" });
-                db.AddRange(new PrivilegeGroup { Id = 4, Name = "Can be RU (OBO)" });
-                db.AddRange(new PrivilegeGroup { Id = 5, Name = "Can be OBO (RU)" });
+                db.AddRange(new PrivilegeGroup { Code = 1, Name = "Submit and Access Claims" });
+                db.AddRange(new PrivilegeGroup { Code = 2, Name = "Record Medical History" });
+                db.AddRange(new PrivilegeGroup { Code = 3, Name = "Access Medical History" });
+                db.AddRange(new PrivilegeGroup { Code = 4, Name = "Role" });
+                db.AddRange(new PrivilegeGroup { Code = 5, Name = "RU with OBOs" });
             }
 
             if (!db.Set(typeof(Privilege)).Any())
             {
-                db.AddRange(new Privilege { Id = 1, PrivilegeGroupId = 1, TransactionType = "TAC", Description = "Update Claims History" });
-                db.AddRange(new Privilege { Id = 2, PrivilegeGroupId = 1, TransactionType = "TDT", Description = "Query Claims History" });
-                db.AddRange(new Privilege { Id = 3, PrivilegeGroupId = 1, TransactionType = "TPM", Description = "Pt Profile Mail Request" });
-                db.AddRange(new Privilege { Id = 4, PrivilegeGroupId = 1, TransactionType = "TCP", Description = "Maintain Pt Keyword" });
-                db.AddRange(new Privilege { Id = 5, PrivilegeGroupId = 2, TransactionType = "TPH", Description = "New PHN" });
-                db.AddRange(new Privilege { Id = 6, PrivilegeGroupId = 2, TransactionType = "TPA", Description = "Address Update" });
-                db.AddRange(new Privilege { Id = 7, PrivilegeGroupId = 2, TransactionType = "TMU", Description = "Medication Update" });
-                db.AddRange(new Privilege { Id = 8, PrivilegeGroupId = 3, TransactionType = "TDR", Description = "Drug Monograph" });
-                db.AddRange(new Privilege { Id = 9, PrivilegeGroupId = 3, TransactionType = "TID", Description = "Patient Details" });
-                db.AddRange(new Privilege { Id = 10, PrivilegeGroupId = 3, TransactionType = "TIL", Description = "Location Details" });
-                db.AddRange(new Privilege { Id = 11, PrivilegeGroupId = 3, TransactionType = "TIP", Description = "Prescriber Details" });
-                db.AddRange(new Privilege { Id = 12, PrivilegeGroupId = 3, TransactionType = "TPN", Description = "Name Search" });
-                db.AddRange(new Privilege { Id = 13, PrivilegeGroupId = 3, TransactionType = "TRP", Description = "Pt Profile Request" });
-                db.AddRange(new Privilege { Id = 14, PrivilegeGroupId = 3, TransactionType = "TBR", Description = "Most Recent Profile" });
-                db.AddRange(new Privilege { Id = 15, PrivilegeGroupId = 3, TransactionType = "TRS", Description = "Filled Elsewhere Profile" });
-                db.AddRange(new Privilege { Id = 16, PrivilegeGroupId = 3, TransactionType = "TDU", Description = "DUE Inquiry" });
-                db.AddRange(new Privilege { Id = 17, PrivilegeGroupId = 4, TransactionType = "RU", Description = "Can be RU (OBO)" });
-                db.AddRange(new Privilege { Id = 18, PrivilegeGroupId = 5, TransactionType = "OBO", Description = "Can be OBO (RU)" });
+                db.AddRange(new Privilege { Id = 1, PrivilegeGroupCode = 1, TransactionType = "TAC", Description = "Update Claims History" });
+                db.AddRange(new Privilege { Id = 2, PrivilegeGroupCode = 1, TransactionType = "TDT", Description = "Query Claims History" });
+                db.AddRange(new Privilege { Id = 3, PrivilegeGroupCode = 1, TransactionType = "TPM", Description = "Pt Profile Mail Request" });
+                db.AddRange(new Privilege { Id = 4, PrivilegeGroupCode = 1, TransactionType = "TCP", Description = "Maintain Pt Keyword" });
+                db.AddRange(new Privilege { Id = 5, PrivilegeGroupCode = 2, TransactionType = "TPH", Description = "New PHN" });
+                db.AddRange(new Privilege { Id = 6, PrivilegeGroupCode = 2, TransactionType = "TPA", Description = "Address Update" });
+                db.AddRange(new Privilege { Id = 7, PrivilegeGroupCode = 2, TransactionType = "TMU", Description = "Medication Update" });
+                db.AddRange(new Privilege { Id = 8, PrivilegeGroupCode = 3, TransactionType = "TDR", Description = "Drug Monograph" });
+                db.AddRange(new Privilege { Id = 9, PrivilegeGroupCode = 3, TransactionType = "TID", Description = "Patient Details" });
+                db.AddRange(new Privilege { Id = 10, PrivilegeGroupCode = 3, TransactionType = "TIL", Description = "Location Details" });
+                db.AddRange(new Privilege { Id = 11, PrivilegeGroupCode = 3, TransactionType = "TIP", Description = "Prescriber Details" });
+                db.AddRange(new Privilege { Id = 12, PrivilegeGroupCode = 3, TransactionType = "TPN", Description = "Name Search" });
+                db.AddRange(new Privilege { Id = 13, PrivilegeGroupCode = 3, TransactionType = "TRP", Description = "Pt Profile Request" });
+                db.AddRange(new Privilege { Id = 14, PrivilegeGroupCode = 3, TransactionType = "TBR", Description = "Most Recent Profile" });
+                db.AddRange(new Privilege { Id = 15, PrivilegeGroupCode = 3, TransactionType = "TRS", Description = "Filled Elsewhere Profile" });
+                db.AddRange(new Privilege { Id = 16, PrivilegeGroupCode = 3, TransactionType = "TDU", Description = "DUE Inquiry" });
+                db.AddRange(new Privilege { Id = 17, PrivilegeGroupCode = 4, TransactionType = "RU", Description = "Registered User" });
+                db.AddRange(new Privilege { Id = 18, PrivilegeGroupCode = 4, TransactionType = "OBO", Description = "On Behalf of User" });
+                db.AddRange(new Privilege { Id = 19, PrivilegeGroupCode = 5, TransactionType = "RU with OBOs", Description = "Registered User who can have OBOs" });
             }
 
             if (!db.Set(typeof(DefaultPrivilege)).Any())

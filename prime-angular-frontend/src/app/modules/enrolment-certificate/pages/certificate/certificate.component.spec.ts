@@ -27,6 +27,7 @@ import { ConfigCodePipe } from '@config/config-code.pipe';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { PostalPipe } from '@shared/pipes/postal.pipe';
+import { PageComponent } from '@shared/components/page/page.component';
 
 describe('CertificateComponent', () => {
   let component: CertificateComponent;
@@ -45,6 +46,7 @@ describe('CertificateComponent', () => {
         ],
         declarations: [
           CertificateComponent,
+          PageComponent,
           PageHeaderComponent,
           PageSubheaderComponent,
           EnrolleeProfileComponent,

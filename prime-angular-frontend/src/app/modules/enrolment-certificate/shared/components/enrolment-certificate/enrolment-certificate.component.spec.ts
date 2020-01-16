@@ -9,6 +9,7 @@ import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.mod
 import { NgxProgressModule } from '@shared/modules/ngx-progress/ngx-progress.module';
 import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { EnrolleePropertyComponent } from '@shared/components/enrollee/enrollee-property/enrollee-property.component';
 
 describe('EnrolmentCertificateComponent', () => {
   let component: EnrolmentCertificateComponent;
@@ -32,7 +33,8 @@ describe('EnrolmentCertificateComponent', () => {
         EnrolmentCertificateComponent,
         HeaderComponent,
         PageSubheaderComponent,
-        EnrolleePrivilegesComponent
+        EnrolleePrivilegesComponent,
+        EnrolleePropertyComponent
       ]
     })
       .compileComponents();
