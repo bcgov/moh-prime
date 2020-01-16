@@ -13,5 +13,7 @@ namespace Prime.Models
         public List<Country> Countries { get; set; }
         public List<Province> Provinces { get; set; }
         public List<StatusReason> StatusReasons { get; set; }
+        public List<PrivilegeGroup> PrivilegeGroups { get; set; }
+        public List<PrivilegeType> PrivilegeTypes { get; set; }
     }
 }

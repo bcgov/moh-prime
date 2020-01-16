@@ -22,10 +22,11 @@
       <app-enrollee-privileges [privileges]="certificate?.privileges"></app-enrollee-privileges>
     </div>
 
-    <ng-container *ngIf="certificate?.enrolmentCertificateNote">
-      <app-page-subheader>
-        <ng-container appPageSubheaderTitle>Limits and Conditions</ng-container>
-      </app-page-subheader>
+        <div class="mb-5">
+          <app-enrollee-privileges [transactions]="certificate?.transactions"
+                                   [userType]="certificate?.userType"
+                                   [canHaveOBOs]="certificate?.canHaveOBOs"></app-enrollee-privileges>
+        </div>
 
       <p>
         {{ certificate?.enrolmentCertificateNote?.note | default: 'None' }}
