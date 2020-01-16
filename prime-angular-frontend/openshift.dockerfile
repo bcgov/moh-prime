@@ -68,7 +68,7 @@ RUN rm -rf /var/cache/apk/*
 WORKDIR /
 
 COPY ./entrypoint.sh /
-RUN chmod a+x /run.sh
+RUN chmod a+x /entrypoint.sh
 
 EXPOSE 80 8080 4200:8080
 
