@@ -486,12 +486,13 @@ namespace Prime.Controllers
             return Ok(new ApiOkResponse<TermsOfAccess>(termsOfAccess));
         }
 
+        // TODO refactor naming of params, method, endpoint URI
         // GET: api/Enrollees/5/profile-histories
         /// <summary>
         /// Get a list of the enrolmee's profile history.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpGet("{enrolleeId}/profile-histories", Name = nameof(GetEnrolleeProfileHistories))]
+        [HttpGet("{enrolleeId}/history", Name = nameof(GetEnrolleeProfileHistories))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -509,13 +510,14 @@ namespace Prime.Controllers
             return Ok(new ApiOkResponse<IEnumerable<EnrolleeProfileHistory>>(enrolleeProfileHistories));
         }
 
+        // TODO refactor naming of params, method, endpoint URI
         // GET: api/Enrollees/5/profile-histories
         /// <summary>
         /// Get a historical enrolmee profile.
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="enrolleeProfileHistoryId"></param>
-        [HttpGet("{enrolleeId}/profile-histories/{enrolleeProfileHistoryId}", Name = nameof(GetEnrolleeProfileHistory))]
+        [HttpGet("{enrolleeId}/history/{enrolleeProfileHistoryId}", Name = nameof(GetEnrolleeProfileHistory))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]

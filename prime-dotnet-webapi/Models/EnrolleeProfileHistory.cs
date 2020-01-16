@@ -17,6 +17,6 @@ namespace Prime.Models
         [Required]
         public Enrollee ProfileSnapshot { get; set; }
         [Required]
-        public DateTime Created { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }
