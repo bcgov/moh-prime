@@ -179,5 +179,8 @@ namespace Prime.Models
 
         [JsonIgnore]
         public ICollection<TermsOfAccess> TermsOfAccess { get; set; }
+
+        [JsonIgnore]
+        public ICollection<EnrolleeProfileHistory> EnrolleeProfileHistory { get; set; }
     }
 }

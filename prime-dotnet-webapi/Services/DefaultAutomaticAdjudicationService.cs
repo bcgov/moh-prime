@@ -192,7 +192,7 @@ namespace Prime.Services
                 var passed = true;
                 if (enrollee.Certifications?.Any() == true)
                 {
-                    // TODO - properly implement this check
+                    // TODO properly implement this check
                     foreach (var item in enrollee.Certifications)
                     {
                         if (item.LicenseCode > 0)
