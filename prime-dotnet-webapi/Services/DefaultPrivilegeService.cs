@@ -106,6 +106,8 @@ namespace Prime.Services
             return await _context.AssignedPrivileges
                         .Where(ap => ap.EnrolleeId == enrolleeId)
                         .Include(ap => ap.Privilege)
+                            .ThenInclude(pg => pg.PrivilegeGroup)
+                                .ThenInclude(pt => pt.PrivilegeType)
                         .ToListAsync();
         }
 
@@ -113,6 +115,8 @@ namespace Prime.Services
         {
             return await _context.Privileges
                         .Include(p => p.AssignedPrivileges)
+                        .Include(pg => pg.PrivilegeGroup)
+                            .ThenInclude(pt => pt.PrivilegeType)
                         .Where(p => p.AssignedPrivileges.Any(ap => ap.EnrolleeId == enrolleeId))
                         .ToListAsync();
         }

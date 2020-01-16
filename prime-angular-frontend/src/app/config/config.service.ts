@@ -18,6 +18,8 @@ export interface IConfigService {
   organizationTypes: Config<number>[];
   provinces: ProvinceConfig[];
   statuses: Config<number>[];
+  privilegeGroups: Config<number>[];
+  privilegeTypes: Config<number>[];
   load(): Observable<Configuration>;
 }
 
@@ -79,6 +81,16 @@ export class ConfigService implements IConfigService {
 
   public get statusReasons() {
     return [...this.configuration.statusReasons]
+      .sort(this.sortConfig);
+  }
+
+  public get privilegeGroups() {
+    return [...this.configuration.privilegeGroups]
+      .sort(this.sortConfig);
+  }
+
+  public get privilegeTypes() {
+    return [...this.configuration.privilegeTypes]
       .sort(this.sortConfig);
   }
 
