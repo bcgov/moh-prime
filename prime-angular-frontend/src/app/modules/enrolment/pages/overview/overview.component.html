@@ -1,50 +1,57 @@
-<app-busy-overlay [busy]="busy">
+<app-page [busy]="busy">
 
-  <div class="row">
-    <div class="col-sm-12 col-lg-8">
+  <app-collection-notice-alert></app-collection-notice-alert>
 
-      <app-collection-notice-alert></app-collection-notice-alert>
+  <app-page-header>PharmaNet Enrolment</app-page-header>
 
-      <app-page-header>PharmaNet Enrolment</app-page-header>
+  <app-progress-indicator [inProgress]="isInitialEnrolment"
+                          [currentRoute]="EnrolmentRoutes.OVERVIEW"></app-progress-indicator>
 
-      <div class="mb-5">
-        <app-progress-indicator *ngIf="isInitialEnrolment"
-                                [currentRoute]="EnrolmentRoutes.OVERVIEW"></app-progress-indicator>
-      </div>
+  <div class="mb-5">
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>Enrolment Review</ng-container>
+      <ng-container appPageSubheaderSummary>
+        Review all the information to ensure it is accurate, you will not get approved if any of your information is
+        incorrect. If you need to edit your information use the pencil icon to navigate to the section of the
+        enrolment to make changes.
+      </ng-container>
+    </app-page-subheader>
+  </div>
 
-      <div class="mb-5">
-        <app-page-subheader>
-          <ng-container appPageSubheaderTitle>Enrolment Review</ng-container>
-          <ng-container appPageSubheaderSummary>
-            Review all the information to ensure it is accurate, you will not get approved if any of your information is
-            incorrect. If you need to edit your information use the pencil icon to navigate to the section of the
-            enrolment to make changes.
-          </ng-container>
-        </app-page-subheader>
-      </div>
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Personal Information from BC Services Card</ng-container>
+  </app-page-subheader>
 
-      <app-enrollee-review *ngIf="enrolment"
-                           [enrolment]="enrolment"
-                           (route)="routeTo($event)"></app-enrollee-review>
+  <div class="mb-5">
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>Enrolment Review</ng-container>
+      <ng-container appPageSubheaderSummary>
+        Review all the information to ensure it is accurate, you will not get approved if any of your information is
+        incorrect. If you need to edit your information use the pencil icon to navigate to the section of the
+        enrolment to make changes.
+      </ng-container>
+    </app-page-subheader>
+  </div>
 
-      <div class="footer">
-        <mat-checkbox #accept>
-          I confirm that all information provided is accurate.
-        </mat-checkbox>
-      </div>
+  <app-enrollee-review *ngIf="enrolment"
+                       [enrolment]="enrolment"
+                       (route)="routeTo($event)"></app-enrollee-review>
 
-      <div class="row justify-content-end">
-        <div class="col pt-4 text-right">
+  <div class="footer">
+    <mat-checkbox #accept>
+      I confirm that all information provided is accurate.
+    </mat-checkbox>
+  </div>
 
-          <button mat-flat-button
-                  color="primary"
-                  [disabled]="!accept.checked"
-                  (click)="onSubmit()">Submit Enrolment</button>
+  <div class="row justify-content-end">
+    <div class="col pt-4 text-right">
 
-        </div>
-      </div>
+      <button mat-flat-button
+              color="primary"
+              [disabled]="!accept.checked"
+              (click)="onSubmit()">Submit Enrolment</button>
 
     </div>
   </div>
 
-</app-busy-overlay>
+</app-page>

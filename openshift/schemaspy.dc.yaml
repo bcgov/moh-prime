@@ -135,7 +135,7 @@ objects:
               valueFrom:
                 secretKeyRef:
                   name: "postgresql-secret"
-                  key: "database-admin-password"
+                  key: "database-password"
           readinessProbe:
             timeoutSeconds: "300"
             initialDelaySeconds: "60"
