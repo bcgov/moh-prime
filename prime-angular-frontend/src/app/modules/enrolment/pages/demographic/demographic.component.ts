@@ -16,6 +16,7 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { FormUtilsService } from '@enrolment/shared/services/form-utils.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
+import { Enrollee } from '@shared/models/enrollee.model';
 
 @Component({
   selector: 'app-demographic',
@@ -26,6 +27,7 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
   public hasPreferredName: boolean;
   public hasMailingAddress: boolean;
   public isNewProfile: boolean;
+  public enrollee: Partial<Enrollee>;
 
   constructor(
     protected route: ActivatedRoute,
@@ -172,14 +174,32 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
     }
   }
 
-  protected patchForm() {
+  protected async patchForm() {
     const enrolment = this.enrolmentService.enrolment;
 
     if (enrolment) {
+      if (enrolment.enrollee) {
+        this.enrollee = enrolment.enrollee;
+      }
+
       this.enrolmentStateService.enrolment = enrolment;
       this.isInitialEnrolment = enrolment.progressStatus !== ProgressStatus.FINISHED;
       this.isProfileComplete = enrolment.profileCompleted;
     } else {
+      const {
+        firstName,
+        lastName,
+        dateOfBirth,
+        physicalAddress
+      } = await this.authService.getUser();
+
+      this.enrollee = {
+        firstName,
+        lastName,
+        dateOfBirth,
+        physicalAddress
+      };
+
       this.isNewProfile = true;
       this.isInitialEnrolment = true;
       this.isProfileComplete = false;

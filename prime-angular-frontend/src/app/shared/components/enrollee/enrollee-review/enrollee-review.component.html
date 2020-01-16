@@ -1,0 +1,271 @@
+<app-enrollee-profile [enrollee]="enrollee"></app-enrollee-profile>
+
+<div *ngIf="hasPreferredName"
+     class="mb-4">
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Preferred Name</ng-container>
+    <mat-icon *ngIf="isEnrollee"
+              matTooltip="Edit Preferred Name"
+              (click)="onRoute(EnrolmentRoutes.DEMOGRAPHIC)">edit</mat-icon>
+  </app-page-subheader>
+
+  <app-enrollee-property title="Preferred First Name">
+    {{ enrollee?.preferredFirstName | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Preferred Middle Name">
+    {{ enrollee?.preferredMiddleName | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Preferred Last Name">
+    {{ enrollee?.preferredLastName | default }}
+  </app-enrollee-property>
+
+</div>
+
+<div *ngIf="hasMailingAddress"
+     class="mb-4">
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Mailing Address</ng-container>
+    <mat-icon *ngIf="isEnrollee"
+              matTooltip="Edit Mailing Address"
+              (click)="onRoute(EnrolmentRoutes.DEMOGRAPHIC)">edit</mat-icon>
+  </app-page-subheader>
+
+  <app-enrollee-property title="Country">
+    {{ enrollee.mailingAddress?.countryCode | configCode: 'countries' | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Province">
+    {{ enrollee.mailingAddress?.provinceCode | configCode: 'provinces' | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Street Address">
+    {{ enrollee.mailingAddress?.street | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property *ngIf="enrollee.mailingAddress?.street2"
+                         title="Street Address 2">
+    {{ enrollee.mailingAddress?.street2 | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="City">
+    {{ enrollee.mailingAddress?.city | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Postal Code">
+    {{ enrollee.mailingAddress?.postal | postal | default }}
+  </app-enrollee-property>
+
+</div>
+
+<div class="mb-4">
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Contact Information</ng-container>
+    <mat-icon *ngIf="isEnrollee"
+              matTooltip="Edit Contact Information"
+              (click)="onRoute(EnrolmentRoutes.DEMOGRAPHIC)">edit</mat-icon>
+  </app-page-subheader>
+
+  <app-enrollee-property title="Voice Phone">
+    {{ enrollee?.voicePhone | phone | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Extension">
+    {{ enrollee?.voiceExtension | default }}
+  </app-enrollee-property>
+
+</div>
+
+<div class="mb-4">
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Notification Information</ng-container>
+    <mat-icon *ngIf="isEnrollee"
+              matTooltip="Edit Notification Information"
+              (click)="onRoute(EnrolmentRoutes.DEMOGRAPHIC)">edit</mat-icon>
+  </app-page-subheader>
+
+  <app-enrollee-property title="Email Notification">
+    {{ enrollee?.contactEmail | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Text Notification (SMS)">
+    {{ enrollee?.contactPhone | phone | default }}
+  </app-enrollee-property>
+
+</div>
+
+<div *ngIf="hasCertification"
+     class="mb-4">
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>College Certification Information</ng-container>
+    <mat-icon *ngIf="isEnrollee"
+              matTooltip="Edit College Certifications"
+              (click)="onRoute(EnrolmentRoutes.REGULATORY)">edit</mat-icon>
+  </app-page-subheader>
+
+  <ng-container *ngFor="let certification of certifications; let i = index">
+
+    <app-enrollee-property title="College Certification"
+                           [makeBold]="true">
+      {{ certification.collegeCode | configCode: 'colleges' | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="License Number">
+      {{ certification.collegeCode | configCode: 'colleges' : 'prefix' }}{{ certification.licenseNumber | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="License Class">
+      {{ certification.licenseCode | configCode: 'licenses' | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="Renewal Date">
+      {{ certification.renewalDate | formatDate | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="Advanced Practices">
+      {{ certification.practiceCode | configCode: 'practices' | default }}
+    </app-enrollee-property>
+
+  </ng-container>
+
+  <app-enrollee-property *ngIf="!hasCertification"
+                         title="College Certification"
+                         [makeBold]="true">
+    None
+  </app-enrollee-property>
+
+</div>
+
+<div *ngIf="enrolment?.deviceProviderNumber"
+     class="mb-4">
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Device Provider</ng-container>
+    <mat-icon *ngIf="isEnrollee"
+              matTooltip="Edit Device Provider"
+              (click)="onRoute(EnrolmentRoutes.DEVICE_PROVIDER)">edit</mat-icon>
+  </app-page-subheader>
+
+  <app-enrollee-property title="Device Provider Number">
+    {{ enrolment?.deviceProviderNumber | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Are you an insulin pump provider?">
+    {{ enrolment.isInsulinPumpProvider | yesNo: true }}
+  </app-enrollee-property>
+
+</div>
+
+<div *ngIf="hasJob"
+     class="mb-4">
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Job Information</ng-container>
+    <mat-icon *ngIf="isEnrollee"
+              matTooltip="Edit Job Information"
+              (click)="onRoute(EnrolmentRoutes.JOB)">edit</mat-icon>
+  </app-page-subheader>
+
+  <ng-container *ngFor="let job of jobs">
+
+    <app-enrollee-property title="Job Title"
+                           [makeBold]="true">
+      {{ job.title | default }}
+    </app-enrollee-property>
+
+  </ng-container>
+
+  <app-enrollee-property *ngIf="!hasJob"
+                         title="Job Title"
+                         [makeBold]="true">
+    None
+  </app-enrollee-property>
+
+</div>
+
+<div class="mb-4">
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Self Declaration</ng-container>
+    <mat-icon *ngIf="isEnrollee"
+              matTooltip="Edit Self Declaration"
+              (click)="onRoute(EnrolmentRoutes.SELF_DECLARATION)">edit</mat-icon>
+  </app-page-subheader>
+
+  <app-enrollee-property title="Have you ever been the subject of an order or a conviction for an information contravention?"
+                         [makeBold]="true">
+    {{ enrolment?.hasConviction | yesNo: true }}
+  </app-enrollee-property>
+
+  <app-enrollee-property *ngIf="enrolment?.hasConviction"
+                         title="Description"
+                         [makeBold]="true">
+    {{ enrolment?.hasConvictionDetails }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Have you ever had your registration with a governing body of a health profession suspended or cancelled?"
+                         [makeBold]="true">
+    {{ enrolment?.hasRegistrationSuspended | yesNo: true }}
+  </app-enrollee-property>
+
+  <app-enrollee-property *ngIf="enrolment?.hasRegistrationSuspended"
+                         title="Description"
+                         [makeBold]="true">
+    {{ enrolment?.hasRegistrationSuspendedDetails }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Have you ever had Terms and Conditions imposed on your licence as a result of disciplinary actions taken by a governing body?"
+                         [makeBold]="true">
+    {{ enrolment?.hasDisciplinaryAction | yesNo: true }}
+  </app-enrollee-property>
+
+  <app-enrollee-property *ngIf="enrolment?.hasDisciplinaryAction"
+                         title="Description"
+                         [makeBold]="true">
+    {{ enrolment?.hasDisciplinaryActionDetails }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Have you ever had your access to PharmaNet suspended or revoked?"
+                         [makeBold]="true">
+    {{ enrolment?.hasPharmaNetSuspended | yesNo: true }}
+  </app-enrollee-property>
+
+  <app-enrollee-property *ngIf="enrolment?.hasPharmaNetSuspended"
+                         title="Description"
+                         [makeBold]="true">
+    {{ enrolment?.hasPharmaNetSuspendedDetails }}
+  </app-enrollee-property>
+
+</div>
+
+<div class="mb-4">
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Organization Information</ng-container>
+    <mat-icon *ngIf="isEnrollee"
+              matTooltip="Edit Organizations"
+              (click)="onRoute(EnrolmentRoutes.ORGANIZATION)">edit</mat-icon>
+  </app-page-subheader>
+
+  <ng-container *ngFor="let organization of organizations">
+
+    <app-enrollee-property title="Organization Type"
+                           [makeBold]="true">
+      {{ organization.organizationTypeCode | configCode: 'organizationTypes' }}
+    </app-enrollee-property>
+
+  </ng-container>
+
+  <app-enrollee-property *ngIf="!hasOrganization"
+                         title="Organization Type"
+                         [makeBold]="true">
+    None
+  </app-enrollee-property>
+
+</div>

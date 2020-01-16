@@ -1,3 +1,4 @@
+import { Config } from '@config/config.model';
 import { Privilege } from '@enrolment/shared/models/privilege.model';
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
 
@@ -12,6 +13,6 @@ export interface EnrolmentCertificate {
   dateOfBirth: string;
   licensePlate: string;
   privileges: Privilege[];
-  organizationTypes: [];
+  organizationTypes: Config<number>[];
   enrolmentCertificateNote: AdjudicationNote;
 }

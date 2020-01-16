@@ -21,7 +21,8 @@ export class CertificateComponent implements OnInit {
   ) { }
 
   public ngOnInit() {
-    this.busy = this.enrolmentCertificateResource.getCertificate(this.route.snapshot.params.tokenId)
+    this.busy = this.enrolmentCertificateResource
+      .getCertificate(this.route.snapshot.params.tokenId)
       .subscribe((certificate: EnrolmentCertificate) => this.certificate = certificate);
   }
 }

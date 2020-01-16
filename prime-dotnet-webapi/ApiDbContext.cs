@@ -14,8 +14,6 @@ namespace Prime
 {
     public class ApiDbContext : DbContext
     {
-        private readonly Guid SYSTEM_USER = Guid.Empty;
-
         private readonly DateTime SEEDING_DATE = DateTime.Now;
 
         private readonly IHttpContextAccessor _context;

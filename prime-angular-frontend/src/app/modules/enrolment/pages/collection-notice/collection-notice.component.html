@@ -1,3 +1,7 @@
 <div class="row justify-content-center">
-  <app-collection-notice-alert></app-collection-notice-alert>
+  <div class="col">
+
+    <app-collection-notice-alert *ngIf="!profileCompleted"></app-collection-notice-alert>
+
+  </div>
 </div>

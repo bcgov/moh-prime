@@ -1,45 +1,55 @@
 <app-busy-overlay [busy]="busy">
 
   <div class="row">
-    <div class="col-sm-12 col-lg-8 offset-lg-1 col-xl-6 offset-xl-0">
+    <div class="col-sm-12 col-md-8 offset-md-1 col-xl-6">
+
+      <app-page-header>PharmaNet Enrolment</app-page-header>
+
+      <div class="mb-5 w-75">
+        <app-progress-indicator *ngIf="isInitialEnrolment"
+                                [currentRoute]="EnrolmentRoutes.REGULATORY"></app-progress-indicator>
+      </div>
 
       <form (ngSubmit)="onSubmit()"
             [formGroup]="form"
             novalidate>
 
-        <app-progress-indicator *ngIf="isInitialEnrolment"
-                                [currentRoute]="EnrolmentRoutes.REGULATORY"></app-progress-indicator>
+        <section class="mb-3">
 
-        <app-page-header>PharmaNet Enrolment</app-page-header>
-
-        <app-page-subheader>
-          <ng-container appPageSubheaderTitle>Regulatory Information</ng-container>
-        </app-page-subheader>
-
-        <div class="row">
-          <div class="col py-3"
-               formArrayName="certifications">
-
-            <ng-container *ngFor="let certificate of certifications.controls; let i = index"
-                          [formGroupName]="i">
-
-              <app-college-certification-form [form]="certificate"
-                                              [index]="i"
-                                              [total]="certifications.controls.length"
-                                              (remove)="removeCertification($event)"></app-college-certification-form>
-
+          <app-page-subheader>
+            <ng-container appPageSubheaderTitle>College Certification Information</ng-container>
+            <ng-container appPageSubheaderSummary>
+              Provide details for all your active College Certifications, or select none if you are not certified by a
+              College.
             </ng-container>
+          </app-page-subheader>
 
-            <button mat-button
-                    type="button"
-                    color="primary"
-                    (click)="addCertification()">
-              <mat-icon class="add-icon">add</mat-icon>
-              Add Additional Certification
-            </button>
+          <div class="row">
+            <div class="col col-sm-10 py-3"
+                 formArrayName="certifications">
 
+              <ng-container *ngFor="let certificate of certifications.controls; let i = index"
+                            [formGroupName]="i">
+
+                <app-college-certification-form [form]="certificate"
+                                                [index]="i"
+                                                [total]="certifications.controls.length"
+                                                (remove)="removeCertification($event)"></app-college-certification-form>
+
+              </ng-container>
+
+              <button mat-button
+                      type="button"
+                      color="primary"
+                      (click)="addCertification()">
+                <mat-icon class="add-icon">add</mat-icon>
+                Add Additional Certification
+              </button>
+
+            </div>
           </div>
-        </div>
+
+        </section>
 
         <app-page-footer [profileCompleted]="isProfileComplete"
                          (save)="onSubmit()"

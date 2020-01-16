@@ -1,0 +1,11 @@
+@import 'palette';
+
+//
+// MATERIAL BUTTON
+//
+
+.mat-stroked-button {
+  &.mat-button-base.mat-primary {
+    border-color: theme-palette(blue);
+  }
+}

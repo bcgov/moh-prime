@@ -12,12 +12,11 @@ import { Enrolment } from '@shared/models/enrolment.model';
   styleUrls: ['./collection-notice.component.scss']
 })
 export class CollectionNoticeComponent implements OnInit {
-
   public profileCompleted: boolean;
   public enrolment: Enrolment;
 
   constructor(
-    private authSerivce: AuthService,
+    private authService: AuthService,
     private enrolmentService: EnrolmentService,
     private router: Router,
     private route: ActivatedRoute
@@ -26,12 +25,10 @@ export class CollectionNoticeComponent implements OnInit {
   public ngOnInit() {
     this.enrolment = this.enrolmentService.enrolment;
     this.profileCompleted = (this.enrolment) ? this.enrolment.profileCompleted : false;
-    this.authSerivce.setHasJustLoggedIn(true);
+    this.authService.setHasJustLoggedIn(true);
 
     if (this.profileCompleted) {
       this.router.navigate([EnrolmentRoutes.OVERVIEW], { relativeTo: this.route.parent });
     }
-
   }
-
 }

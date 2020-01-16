@@ -20,6 +20,39 @@ COPY --from=build-deps /usr/src/app/dist/angular-frontend /usr/share/nginx/html
 RUN rm /etc/nginx/conf.d/default.conf
 COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/conf.d/default.conf
 
+RUN export CERTBOT_DEPS="py-pip \
+                         build-base \
+                         libffi-dev \
+                         python-dev \
+                         ca-certificates \
+                         openssl-dev \
+                         linux-headers \
+                         dialog \
+                         wget" && \
+            apk --update add openssl \
+                             augeas-libs \
+                             ${CERTBOT_DEPS}
+
+RUN pip install --upgrade --no-cache-dir pip virtualenv
+
+#RUN mkdir /letsencrypt
+#WORKDIR /letsencrypt
+
+# Get the certbot so we can use Lets Encrypt
+RUN wget https://dl.eff.org/certbot-auto
+RUN chmod a+x certbot-auto
+
+# Clean up
+RUN apk del ${CERTBOT_DEPS}
+RUN rm -rf /var/cache/apk/*
+
+WORKDIR /
+
+COPY ./run.sh /
+RUN chmod a+x /run.sh
+
 EXPOSE 80 8080 4200:8080
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["sh", "/run.sh"]
+
+#CMD ["nginx", "-g", "daemon off;"]

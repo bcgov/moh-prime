@@ -11,7 +11,7 @@ namespace Prime.Services
     public class DefaultEnrolmentCertificateService : BaseService, IEnrolmentCertificateService
     {
         private static readonly TimeSpan TOKEN_LIFESPAN = TimeSpan.FromDays(7);
-        private static readonly int MAX_VIEWS = 3;
+        private const int MAX_VIEWS = 3;
 
         public DefaultEnrolmentCertificateService(
             ApiDbContext context, IHttpContextAccessor httpContext)
