@@ -5,9 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
 using Prime.Models.AccessAgreement;
-
 namespace Prime.ModelFactories
-{
 
      class LicenseClassClause : IDefinable IAccessClause
     {
@@ -17,16 +15,11 @@ namespace Prime.ModelFactories
             TermsOfAccessLicenseClassClauses = new List<TermsOfAccessLicenseClassClause>();
         }
 
-
           Id
-
 
           Clause
 
-
          DateTime EffectiveDate
-
 
          List<TermsOfAccessLicenseClassClause> TermsOfAccessLicenseClassClauses
     }
-}

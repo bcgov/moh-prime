@@ -5,18 +5,13 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
 using FactoryGirlCore;
-
 using Bogus;
 using Bogus.Extensions;
-
 using Prime.Models;
-
 namespace Prime.ModelFactories
-{
     public class EnrolleeFaker : Faker<Enrollee>
     {
         private static int IdCounter = 1;
-
         public EnrolleeFaker()
         {
             RuleFor(e => e.Id, () => IdCounter++);
@@ -28,7 +23,6 @@ namespace Prime.ModelFactories
             //RuleFor(e => e.PhysicalAddress, f => PhysicalAddressFaker.Generate())
             //RuleFor(e => e.MailingAddress, f => MailingAddressFaker.Generate())
             //RuleFor(e => e.Certifications, f => CertificationFaker.Generate(2))
-
             //RuleFor(e => e.IsInsulinPumpProvider, f => f.Random.Bool())
             //RuleFor(e => e.Jobs, f => JobFaker.Generate(2))
             RuleFor(e => e.HasConviction, f => f.Random.Bool());
@@ -39,11 +33,9 @@ namespace Prime.ModelFactories
             RuleFor(e => e.HasDisciplinaryActionDetails, f => f.Lorem.Paragraphs(2));
             RuleFor(e => e.HasPharmaNetSuspended, f => f.Random.Bool());
             RuleFor(e => e.HasPharmaNetSuspendedDetails, f => f.Lorem.Paragraphs(2));
-
             RuleFor(e => e.AccessAgreementNote, (f, e) => new AccessAgreementNoteFactory(e).Generate());
         }
     }
-}
 
 // Id = 0,
 // UserId = Guid.NewGuid(),

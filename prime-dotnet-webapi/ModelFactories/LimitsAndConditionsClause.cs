@@ -5,9 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
 using Prime.Models.AccessAgreement;
-
 namespace Prime.ModelFactories
-{
 
      class LimitsAndConditionsClause : IDefinable IAccessClause
     {
@@ -17,16 +15,11 @@ namespace Prime.ModelFactories
             TermsOfAccessLimitsAndConditionsClauses = new List<TermsOfAccessLimitsAndConditionsClause>();
         }
 
-
           Id
-
 
           Clause
 
-
          DateTime EffectiveDate
-
 
          List<TermsOfAccessLimitsAndConditionsClause> TermsOfAccessLimitsAndConditionsClauses
     }
-}

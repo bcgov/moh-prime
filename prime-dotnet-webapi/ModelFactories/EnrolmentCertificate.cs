@@ -2,11 +2,8 @@ using FactoryGirlCore;
 using System;
 using System.Linq;
 using System.Collections.Generic;
-
 using System.ComponentModel.DataAnnotations.Schema;
-
 namespace Prime.ModelFactories
-{
 
      sealed class EnrolmentCertificate
     {
@@ -20,12 +17,9 @@ namespace Prime.ModelFactories
           LicensePlate
          IEnumerable<Privilege> Privileges
          IEnumerable<OrganizationType> OrganizationTypes
-
          EnrolmentCertificateNote EnrolmentCertificateNote
-
          static EnrolmentCertificate Create(Enrollee enrollee)
         {
-
             return new EnrolmentCertificate
             {
                 FirstName = enrollee.FirstName
@@ -42,4 +36,3 @@ namespace Prime.ModelFactories
             };
         }
     }
-}

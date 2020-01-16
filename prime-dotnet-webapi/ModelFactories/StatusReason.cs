@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
-
 namespace Prime.ModelFactories
-{
 
      sealed class StatusReason : IDefinable ILookup<short> IEquatable<StatusReason>
     {
@@ -22,29 +20,22 @@ namespace Prime.ModelFactories
          readonly static short SELF_DECLARATION_CODE = 10;
          readonly static short ADDRESS_CODE = 11;
 
-
          short Code
-
           Name
 
-
          ICollection<EnrolmentStatusReason> EnrolmentStatusReasons
-
          override bool Equals(object obj)
         {
             if (obj == null || GetType() != obj.GetType())
             {
                 return false;
             }
-
             return Equals(obj as StatusReason);
         }
-
          bool Equals(StatusReason other)
         {
             return other != null && Code == other.Code;
         }
-
          override  GetHashCode()
         {
             var hashCode = 1_655_539_742;
@@ -52,4 +43,3 @@ namespace Prime.ModelFactories
             return hashCode;
         }
     }
-}
