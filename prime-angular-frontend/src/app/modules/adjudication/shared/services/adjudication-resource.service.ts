@@ -13,6 +13,7 @@ import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { Address } from '@enrolment/shared/models/address.model';
 import { NoteType } from '@adjudication/shared/enums/note-type.enum';
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
+import { EnrolmentProfileHistory, HttpEnrolleeProfileHistory } from '@adjudication/shared/models/enrollee-profile-history.model';
 
 @Injectable({
   providedIn: 'root'
@@ -42,6 +43,48 @@ export class AdjudicationResource {
         map((response: PrimeHttpResponse) => response.result),
         tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
         map((enrollee: HttpEnrollee) => this.enrolleeAdapterResponse(enrollee))
+      );
+  }
+
+  // TODO refactor not efficient but too many questions outstanding
+  public enrolleeProfileHistories(enrolleeId: number): Observable<EnrolmentProfileHistory[]> {
+    return this.http.get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/history`)
+      .pipe(
+        map((response: PrimeHttpResponse) => response.result),
+        tap((enrolleeProfileHistories: HttpEnrolleeProfileHistory[]) =>
+          this.logger.info('ENROLLEE_PROFILE_HISTORY', enrolleeProfileHistories)
+        ),
+        map((enrolleeProfileHistories: HttpEnrolleeProfileHistory[]) => {
+          return enrolleeProfileHistories
+            .map(({ id, enrolleeId, profileSnapshot, createdDate }: HttpEnrolleeProfileHistory) => {
+              return {
+                id,
+                enrolleeId,
+                profileSnapshot: this.enrolleeAdapterResponse(profileSnapshot),
+                createdDate
+              } as EnrolmentProfileHistory;
+            });
+        })
+      );
+  }
+
+  // TODO refactor not efficient but too many questions outstanding
+  // TODO refactor to not require the enrollee prefix and only take /history/:id
+  public enrolleeProfileHistory(enrolleeId: number, enrolleeProfileHistoryId: number): Observable<EnrolmentProfileHistory> {
+    return this.http.get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/history/${enrolleeProfileHistoryId}`)
+      .pipe(
+        map((response: PrimeHttpResponse) => response.result),
+        tap((enrolleeProfileHistory: HttpEnrolleeProfileHistory) =>
+          this.logger.info('ENROLLEE_PROFILE_HISTORY', enrolleeProfileHistory)
+        ),
+        map(({ id, enrolleeId, profileSnapshot, createdDate }: HttpEnrolleeProfileHistory) => {
+          return {
+            id,
+            enrolleeId,
+            profileSnapshot: this.enrolleeAdapterResponse(profileSnapshot),
+            createdDate
+          } as EnrolmentProfileHistory;
+        })
       );
   }
 
