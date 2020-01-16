@@ -8,8 +8,8 @@ namespace Prime.Models
     [Table("PrivilegeGroupLookup")]
     public class PrivilegeGroup : BaseAuditable, ILookup<short>
     {
-        public readonly static short USER_TYPE_GROUP = 4;
-        public readonly static short CAN_HAVE_OBOS_GROUP = 5;
+        public readonly static short USER_TYPE = 4;
+        public readonly static short CAN_HAVE_OBOS = 5;
 
 
         [Key]

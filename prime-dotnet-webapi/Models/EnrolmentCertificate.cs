@@ -40,13 +40,15 @@ namespace Prime.Models
                 EnrolmentCertificateNote = enrollee.EnrolmentCertificateNote,
                 Transactions = enrollee.AssignedPrivileges
                                 .Select(ap => ap.Privilege)
-                                .Where(p => p.PrivilegeGroup.PrivilegeTypeCode == PrivilegeType.PHARMANET_TRANSACTIONS_TYPE),
+                                .Where(p => p.PrivilegeGroup.PrivilegeTypeCode == PrivilegeType.PHARMANET_TRANSACTIONS),
                 UserType = enrollee.AssignedPrivileges
                             .Select(ap => ap.Privilege)
-                            .Where(p => p.PrivilegeGroupCode == PrivilegeGroup.USER_TYPE_GROUP).SingleOrDefault(),
+                            .Where(p => p.PrivilegeGroupCode == PrivilegeGroup.USER_TYPE)
+                            .SingleOrDefault(),
                 CanHaveOBOs = enrollee.AssignedPrivileges
-                            .Select(ap => ap.Privilege)
-                            .Where(p => p.PrivilegeGroupCode == PrivilegeGroup.CAN_HAVE_OBOS_GROUP).SingleOrDefault(),
+                                .Select(ap => ap.Privilege)
+                                .Where(p => p.PrivilegeGroupCode == PrivilegeGroup.CAN_HAVE_OBOS)
+                                .SingleOrDefault(),
             };
         }
     }
