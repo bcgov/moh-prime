@@ -19,7 +19,7 @@ namespace Prime.Configuration
                 new PrivilegeGroup { Code = 2, PrivilegeTypeCode = 2, Name = "Record Medical History", CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
                 new PrivilegeGroup { Code = 3, PrivilegeTypeCode = 2, Name = "Access Medical History", CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
                 new PrivilegeGroup { Code = 4, PrivilegeTypeCode = 1, Name = "Role", CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
-                new PrivilegeGroup { Code = 5, PrivilegeTypeCode = 1, Name = "RU That Can Have OBOs", CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE }
+                new PrivilegeGroup { Code = 5, PrivilegeTypeCode = 1, Name = "RU That Can Have OBO's", CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE }
                 };
             }
         }
