@@ -7825,19 +7825,19 @@ namespace Prime.Migrations
                         new
                         {
                             Code = (short)1,
-                            CreatedTimeStamp = new DateTime(2020, 1, 14, 15, 48, 38, 321, DateTimeKind.Local).AddTicks(6486),
+                            CreatedTimeStamp = new DateTime(2020, 1, 16, 12, 23, 49, 295, DateTimeKind.Local).AddTicks(3104),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Allowable Role",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 14, 15, 48, 38, 321, DateTimeKind.Local).AddTicks(6486),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 16, 12, 23, 49, 295, DateTimeKind.Local).AddTicks(3104),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)2,
-                            CreatedTimeStamp = new DateTime(2020, 1, 14, 15, 48, 38, 321, DateTimeKind.Local).AddTicks(6486),
+                            CreatedTimeStamp = new DateTime(2020, 1, 16, 12, 23, 49, 295, DateTimeKind.Local).AddTicks(3104),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Allowable Transaction",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 14, 15, 48, 38, 321, DateTimeKind.Local).AddTicks(6486),
+                            UpdatedTimeStamp = new DateTime(2020, 1, 16, 12, 23, 49, 295, DateTimeKind.Local).AddTicks(3104),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
