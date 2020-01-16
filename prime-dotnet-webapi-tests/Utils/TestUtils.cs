@@ -115,16 +115,43 @@ namespace PrimeTests.Utils
             identity.RemoveClaim(claim);
         }
 
-        public static int? CreateEnrollee(ApiDbContext apiDbContext, HttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService, IEmailService emailService, IPrivilegeService privilegeService, ITermsOfAccessService termsOfAccessService)
+        public static int? CreateEnrollee(
+            ApiDbContext apiDbContext,
+            HttpContextAccessor httpContext,
+            IAutomaticAdjudicationService automaticAdjudicationService,
+            IEmailService emailService,
+            IPrivilegeService privilegeService,
+            IAccessTermService accessTermService
+        )
         {
-            return new DefaultEnrolleeService(apiDbContext, httpContext, automaticAdjudicationService, emailService, privilegeService, termsOfAccessService)
-                .CreateEnrolleeAsync(TestUtils.EnrolleeFaker.Generate()).Result;
+            return new DefaultEnrolleeService(
+                apiDbContext,
+                httpContext,
+                automaticAdjudicationService,
+                emailService,
+                privilegeService,
+                accessTermService
+            ).CreateEnrolleeAsync(TestUtils.EnrolleeFaker.Generate()).Result;
         }
 
-        public static Enrollee GetEnrolleeById(ApiDbContext apiDbContext, HttpContextAccessor httpContext, IAutomaticAdjudicationService automaticAdjudicationService, int enrolmentId, IEmailService emailService, IPrivilegeService privilegeService, ITermsOfAccessService termsOfAccessService)
+        public static Enrollee GetEnrolleeById(
+            ApiDbContext apiDbContext,
+            HttpContextAccessor httpContext,
+            IAutomaticAdjudicationService automaticAdjudicationService,
+            int enrolmentId,
+            IEmailService emailService,
+            IPrivilegeService privilegeService,
+            IAccessTermService accessTermService
+        )
         {
-            return new DefaultEnrolleeService(apiDbContext, httpContext, automaticAdjudicationService, emailService, privilegeService, termsOfAccessService)
-                .GetEnrolleeAsync(enrolmentId).Result;
+            return new DefaultEnrolleeService(
+                apiDbContext,
+                httpContext,
+                automaticAdjudicationService,
+                emailService,
+                privilegeService,
+                accessTermService
+            ).GetEnrolleeAsync(enrolmentId).Result;
         }
 
         public static void InitializeDbForTests(ApiDbContext db)

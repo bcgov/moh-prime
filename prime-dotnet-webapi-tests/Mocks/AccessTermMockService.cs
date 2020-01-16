@@ -5,20 +5,20 @@ using Prime.Services;
 
 namespace PrimeTests.Mocks
 {
-    public class TermsOfAccessServiceMock : BaseMockService, ITermsOfAccessService
+    public class AccessTermServiceMock : BaseMockService, IAccessTermService
     {
-        public TermsOfAccessServiceMock() : base()
+        public AccessTermServiceMock() : base()
         { }
 
         public override void SeedData()
         { }
 
-        public Task SetEnrolleeTermsOfAccessAsync(Enrollee enrollee)
+        public Task SetEnrolleeAccessTermsAsync(Enrollee enrollee)
         {
             throw new NotImplementedException();
         }
 
-        public Task<TermsOfAccess> GetEnrolleeTermsOfAccessAsync(int enrolleeId)
+        public Task<AccessTerm> GetEnrolleeAccessTermsAsync(int enrolleeId)
         {
             throw new NotImplementedException();
         }
