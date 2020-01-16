@@ -19,19 +19,14 @@
     </div>
 
     <div class="mb-5">
-      <app-enrollee-privileges [privileges]="certificate?.privileges"></app-enrollee-privileges>
+      <app-enrollee-privileges [transactions]="certificate?.transactions"
+                               [userType]="certificate?.userType"
+                               [canHaveOBOs]="certificate?.canHaveOBOs"></app-enrollee-privileges>
     </div>
 
-        <div class="mb-5">
-          <app-enrollee-privileges [transactions]="certificate?.transactions"
-                                   [userType]="certificate?.userType"
-                                   [canHaveOBOs]="certificate?.canHaveOBOs"></app-enrollee-privileges>
-        </div>
-
-      <p>
-        {{ certificate?.enrolmentCertificateNote?.note | default: 'None' }}
-      </p>
-    </ng-container>
+    <p>
+      {{ certificate?.enrolmentCertificateNote?.note | default: 'None' }}
+    </p>
 
   </ng-container>
 

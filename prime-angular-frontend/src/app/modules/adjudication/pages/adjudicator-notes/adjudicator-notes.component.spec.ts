@@ -14,6 +14,7 @@ import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
+import { PageComponent } from '@shared/components/page/page.component';
 
 describe('AdjudicatorNotesComponent', () => {
   let component: AdjudicatorNotesComponent;
@@ -33,6 +34,7 @@ describe('AdjudicatorNotesComponent', () => {
         ],
         declarations: [
           AdjudicatorNotesComponent,
+          PageComponent,
           PageHeaderComponent,
           FormatDatePipe
         ],
