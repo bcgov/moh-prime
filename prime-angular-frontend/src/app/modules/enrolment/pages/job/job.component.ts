@@ -69,7 +69,7 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
             this.form.markAsPristine();
 
             const routePath = (!this.isProfileComplete)
-              ? EnrolmentRoutes.SELF_DECLARATION
+              ? EnrolmentRoutes.ORGANIZATION
               : EnrolmentRoutes.OVERVIEW;
             this.routeTo(routePath);
           },

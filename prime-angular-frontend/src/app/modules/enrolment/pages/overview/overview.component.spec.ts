@@ -13,6 +13,7 @@ import { ConfigService } from '@config/config.service';
 import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
+import { PageComponent } from '@shared/components/page/page.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
 import { EnrolleeReviewComponent } from '@shared/components/enrollee/enrollee-review/enrollee-review.component';
@@ -53,6 +54,7 @@ describe('OverviewComponent', () => {
         ],
         declarations: [
           OverviewComponent,
+          PageComponent,
           PageHeaderComponent,
           PageSubheaderComponent,
           EnrolleeReviewComponent,

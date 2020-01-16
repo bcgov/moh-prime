@@ -11,6 +11,8 @@ import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
 import { CollectionNoticeComponent } from './collection-notice.component';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
+import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
+import { PageComponent } from '@shared/components/page/page.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { AlertComponent } from '@shared/components/alert/alert.component';
 import { PrimeContactComponent } from '@shared/components/prime-contact/prime-contact.component';
@@ -26,13 +28,15 @@ describe('CollectionNoticeComponent', () => {
       {
         imports: [
           RouterTestingModule,
-          NgxMaterialModule
+          NgxMaterialModule,
+          NgxBusyModule
         ],
         declarations: [
           AlertComponent,
           CollectionNoticeComponent,
           CollectionNoticeAlertComponent,
           PrimeContactComponent,
+          PageComponent,
           PageHeaderComponent
         ],
         providers: [

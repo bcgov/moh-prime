@@ -60,7 +60,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
 
             const nextRoutePath = (!this.certifications.length)
               ? EnrolmentRoutes.JOB
-              : EnrolmentRoutes.SELF_DECLARATION;
+              : EnrolmentRoutes.ORGANIZATION;
             const routePath = (!this.isProfileComplete)
               ? nextRoutePath
               : EnrolmentRoutes.OVERVIEW;
