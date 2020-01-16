@@ -404,6 +404,31 @@ namespace Prime.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "LimitsConditionsClause",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    CreatedUserId = table.Column<Guid>(nullable: false),
+                    CreatedTimeStamp = table.Column<DateTime>(nullable: false),
+                    UpdatedUserId = table.Column<Guid>(nullable: false),
+                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false),
+                    EnrolleeId = table.Column<int>(nullable: false),
+                    Clause = table.Column<string>(nullable: false),
+                    EffectiveDate = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LimitsConditionsClause", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_LimitsConditionsClause_Enrollee_EnrolleeId",
+                        column: x => x.EnrolleeId,
+                        principalTable: "Enrollee",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CollegeLicense",
                 columns: table => new
                 {
@@ -641,6 +666,51 @@ namespace Prime.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AccessTerm",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    CreatedUserId = table.Column<Guid>(nullable: false),
+                    CreatedTimeStamp = table.Column<DateTime>(nullable: false),
+                    UpdatedUserId = table.Column<Guid>(nullable: false),
+                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false),
+                    EnrolleeId = table.Column<int>(nullable: false),
+                    GlobalClauseId = table.Column<int>(nullable: false),
+                    UserClauseId = table.Column<int>(nullable: false),
+                    LimitsConditionsClauseId = table.Column<int>(nullable: false),
+                    EffectiveDate = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AccessTerm", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AccessTerm_Enrollee_EnrolleeId",
+                        column: x => x.EnrolleeId,
+                        principalTable: "Enrollee",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AccessTerm_GlobalClause_GlobalClauseId",
+                        column: x => x.GlobalClauseId,
+                        principalTable: "GlobalClause",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AccessTerm_LimitsConditionsClause_LimitsConditionsClauseId",
+                        column: x => x.LimitsConditionsClauseId,
+                        principalTable: "LimitsConditionsClause",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AccessTerm_UserClause_UserClauseId",
+                        column: x => x.UserClauseId,
+                        principalTable: "UserClause",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AssignedPrivilege",
                 columns: table => new
                 {
@@ -738,80 +808,15 @@ namespace Prime.Migrations
                 {
                     table.PrimaryKey("PK_AccessTermLicenseClassClause", x => new { x.AccessTermId, x.LicenseClassClauseId });
                     table.ForeignKey(
+                        name: "FK_AccessTermLicenseClassClause_AccessTerm_AccessTermId",
+                        column: x => x.AccessTermId,
+                        principalTable: "AccessTerm",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_AccessTermLicenseClassClause_LicenseClassClause_LicenseClas~",
                         column: x => x.LicenseClassClauseId,
                         principalTable: "LicenseClassClause",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "LimitsConditionsClause",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    CreatedUserId = table.Column<Guid>(nullable: false),
-                    CreatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    UpdatedUserId = table.Column<Guid>(nullable: false),
-                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    AccessTermId = table.Column<int>(nullable: false),
-                    EnrolleeId = table.Column<int>(nullable: false),
-                    Clause = table.Column<string>(nullable: false),
-                    EffectiveDate = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_LimitsConditionsClause", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_LimitsConditionsClause_Enrollee_EnrolleeId",
-                        column: x => x.EnrolleeId,
-                        principalTable: "Enrollee",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AccessTerm",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    CreatedUserId = table.Column<Guid>(nullable: false),
-                    CreatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    UpdatedUserId = table.Column<Guid>(nullable: false),
-                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    EnrolleeId = table.Column<int>(nullable: false),
-                    GlobalClauseId = table.Column<int>(nullable: false),
-                    UserClauseId = table.Column<int>(nullable: false),
-                    LimitsConditionsClauseId = table.Column<int>(nullable: false),
-                    EffectiveDate = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AccessTerm", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AccessTerm_Enrollee_EnrolleeId",
-                        column: x => x.EnrolleeId,
-                        principalTable: "Enrollee",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AccessTerm_GlobalClause_GlobalClauseId",
-                        column: x => x.GlobalClauseId,
-                        principalTable: "GlobalClause",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AccessTerm_LimitsConditionsClause_LimitsConditionsClauseId",
-                        column: x => x.LimitsConditionsClauseId,
-                        principalTable: "LimitsConditionsClause",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AccessTerm_UserClause_UserClauseId",
-                        column: x => x.UserClauseId,
-                        principalTable: "UserClause",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -1910,11 +1915,6 @@ namespace Prime.Migrations
                 column: "EnrolleeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LimitsConditionsClause_AccessTermId",
-                table: "LimitsConditionsClause",
-                column: "AccessTermId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_LimitsConditionsClause_EnrolleeId",
                 table: "LimitsConditionsClause",
                 column: "EnrolleeId");
@@ -1938,42 +1938,10 @@ namespace Prime.Migrations
                 name: "IX_ProvinceLookup_CountryCode",
                 table: "ProvinceLookup",
                 column: "CountryCode");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_AccessTermLicenseClassClause_AccessTerm_AccessTermId",
-                table: "AccessTermLicenseClassClause",
-                column: "AccessTermId",
-                principalTable: "AccessTerm",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_LimitsConditionsClause_AccessTerm_AccessTermId",
-                table: "LimitsConditionsClause",
-                column: "AccessTermId",
-                principalTable: "AccessTerm",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_AccessTerm_Enrollee_EnrolleeId",
-                table: "AccessTerm");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_LimitsConditionsClause_Enrollee_EnrolleeId",
-                table: "LimitsConditionsClause");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_AccessTerm_GlobalClause_GlobalClauseId",
-                table: "AccessTerm");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_AccessTerm_LimitsConditionsClause_LimitsConditionsClauseId",
-                table: "AccessTerm");
-
             migrationBuilder.DropTable(
                 name: "AccessAgreementNote");
 
@@ -2020,6 +1988,9 @@ namespace Prime.Migrations
                 name: "Organization");
 
             migrationBuilder.DropTable(
+                name: "AccessTerm");
+
+            migrationBuilder.DropTable(
                 name: "LicenseClassClause");
 
             migrationBuilder.DropTable(
@@ -2047,6 +2018,15 @@ namespace Prime.Migrations
                 name: "OrganizationTypeLookup");
 
             migrationBuilder.DropTable(
+                name: "GlobalClause");
+
+            migrationBuilder.DropTable(
+                name: "LimitsConditionsClause");
+
+            migrationBuilder.DropTable(
+                name: "UserClause");
+
+            migrationBuilder.DropTable(
                 name: "CountryLookup");
 
             migrationBuilder.DropTable(
@@ -2057,18 +2037,6 @@ namespace Prime.Migrations
 
             migrationBuilder.DropTable(
                 name: "Enrollee");
-
-            migrationBuilder.DropTable(
-                name: "GlobalClause");
-
-            migrationBuilder.DropTable(
-                name: "LimitsConditionsClause");
-
-            migrationBuilder.DropTable(
-                name: "AccessTerm");
-
-            migrationBuilder.DropTable(
-                name: "UserClause");
         }
     }
 }

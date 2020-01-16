@@ -185,11 +185,6 @@ namespace Prime
                 .WithMany(e => e.AccessTerms)
                 .HasForeignKey(toa => toa.EnrolleeId);
 
-            modelBuilder.Entity<AccessTerm>()
-                .HasOne(toa => toa.LimitsConditionsClause)
-                .WithMany(c => c.AccessTerms)
-                .HasForeignKey(toa => toa.LimitsConditionsClauseId);
-
             modelBuilder.Entity<AccessTermLicenseClassClause>()
                 .HasKey(tlic => new { tlic.AccessTermId, tlic.LicenseClassClauseId });
             modelBuilder.Entity<AccessTermLicenseClassClause>()

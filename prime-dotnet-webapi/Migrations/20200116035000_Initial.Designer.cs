@@ -11,7 +11,7 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20200116012218_Initial")]
+    [Migration("20200116035000_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -7119,8 +7119,6 @@ namespace Prime.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("AccessTermId");
-
                     b.Property<string>("Clause")
                         .IsRequired();
 
@@ -7137,8 +7135,6 @@ namespace Prime.Migrations
                     b.Property<Guid>("UpdatedUserId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AccessTermId");
 
                     b.HasIndex("EnrolleeId");
 
@@ -8611,7 +8607,7 @@ namespace Prime.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Prime.Models.LimitsConditionsClause", "LimitsConditionsClause")
-                        .WithMany("AccessTerms")
+                        .WithMany()
                         .HasForeignKey("LimitsConditionsClauseId")
                         .OnDelete(DeleteBehavior.Cascade);
 
@@ -8779,11 +8775,6 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.LimitsConditionsClause", b =>
                 {
-                    b.HasOne("Prime.Models.AccessTerm", "AccessTerm")
-                        .WithMany()
-                        .HasForeignKey("AccessTermId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany()
                         .HasForeignKey("EnrolleeId")

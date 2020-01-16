@@ -91,10 +91,38 @@ namespace Prime.Services
 
         private async Task<LimitsConditionsClause> GetAccessTermLimitsConditionsClause(Enrollee enrollee)
         {
-            return await _context.LimitsConditionsClauses
-                .Where(c => c.EnrolleeId == enrollee.Id)
-                .OrderByDescending(g => g.EffectiveDate)
-                .FirstOrDefaultAsync();
+
+            var lastNote = await _context.AccessAgreementNotes
+                                .Where(n => n.EnrolleeId == enrollee.Id)
+                                .OrderByDescending(n => n.CreatedTimeStamp)
+                                .FirstOrDefaultAsync();
+
+            var newClause = new LimitsConditionsClause
+            {
+                EnrolleeId = lastNote.EnrolleeId,
+                Clause = null,
+                EffectiveDate = new DateTime()
+            };
+
+            if (lastNote != null)
+            {
+                newClause = new LimitsConditionsClause
+                {
+                    EnrolleeId = lastNote.EnrolleeId,
+                    Clause = lastNote.Note,
+                    EffectiveDate = new DateTime()
+                };
+
+                _context.LimitsConditionsClauses.Add(newClause);
+                await _context.SaveChangesAsync();
+            }
+
+            // return await _context.LimitsConditionsClauses
+            //         .Where(c => c.EnrolleeId == enrollee.Id)
+            //         // .OrderByDescending(g => g.EffectiveDate)
+            //         .LastOrDefaultAsync();
+            return newClause;
+
         }
     }
 }

@@ -31,7 +31,7 @@ namespace Prime.Models
 
         public UserClause UserClause { get; set; }
 
-        public int LimitsConditionsClauseId { get; set; }
+        public int? LimitsConditionsClauseId { get; set; }
 
         public LimitsConditionsClause LimitsConditionsClause { get; set; }
 

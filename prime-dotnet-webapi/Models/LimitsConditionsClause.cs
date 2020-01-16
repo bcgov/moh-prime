@@ -13,12 +13,6 @@ namespace Prime.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
-        public int AccessTermId { get; set; }
-
-        [JsonIgnore]
-        public AccessTerm AccessTerm { get; set; }
-
         public int EnrolleeId { get; set; }
 
         public Enrollee Enrollee { get; set; }
@@ -29,7 +23,5 @@ namespace Prime.Models
         [Required]
         public DateTime EffectiveDate { get; set; }
 
-        [JsonIgnore]
-        public ICollection<AccessTerm> AccessTerms { get; set; }
     }
 }

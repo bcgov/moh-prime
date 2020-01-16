@@ -7,9 +7,9 @@ import { Clause } from '@enrolment/shared/models/terms-of-access.model';
   styleUrls: ['./limits-and-conditions-clause.component.scss']
 })
 export class LimitsAndConditionsClauseComponent implements OnInit {
-  @Input() clauses: Clause[];
+  @Input() clause: Clause[];
 
   constructor() { }
 
-  public ngOnInit() { }
+  public ngOnInit() { console.log('CLAUSE', this.clause); }
 }
