@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -10,9 +11,10 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200116191237_licenseNumber")]
+    partial class licenseNumber
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1108,15 +1110,6 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            PrivilegeId = 19,
-                            LicenseCode = (short)25,
-                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
                             PrivilegeId = 1,
                             LicenseCode = (short)26,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1270,15 +1263,6 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            PrivilegeId = 19,
-                            LicenseCode = (short)26,
-                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
                             PrivilegeId = 1,
                             LicenseCode = (short)27,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1424,15 +1408,6 @@ namespace Prime.Migrations
                         new
                         {
                             PrivilegeId = 17,
-                            LicenseCode = (short)27,
-                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            PrivilegeId = 19,
                             LicenseCode = (short)27,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -1864,15 +1839,6 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            PrivilegeId = 19,
-                            LicenseCode = (short)1,
-                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
                             PrivilegeId = 5,
                             LicenseCode = (short)2,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -1982,15 +1948,6 @@ namespace Prime.Migrations
                         new
                         {
                             PrivilegeId = 17,
-                            LicenseCode = (short)2,
-                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            PrivilegeId = 19,
                             LicenseCode = (short)2,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -2116,15 +2073,6 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            PrivilegeId = 19,
-                            LicenseCode = (short)3,
-                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
                             PrivilegeId = 5,
                             LicenseCode = (short)4,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -2242,15 +2190,6 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            PrivilegeId = 19,
-                            LicenseCode = (short)4,
-                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
                             PrivilegeId = 5,
                             LicenseCode = (short)5,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -2360,15 +2299,6 @@ namespace Prime.Migrations
                         new
                         {
                             PrivilegeId = 17,
-                            LicenseCode = (short)5,
-                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            PrivilegeId = 19,
                             LicenseCode = (short)5,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -2845,15 +2775,6 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            PrivilegeId = 19,
-                            LicenseCode = (short)9,
-                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
                             PrivilegeId = 5,
                             LicenseCode = (short)10,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -3088,15 +3009,6 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            PrivilegeId = 19,
-                            LicenseCode = (short)12,
-                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
                             PrivilegeId = 5,
                             LicenseCode = (short)13,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -3214,15 +3126,6 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            PrivilegeId = 19,
-                            LicenseCode = (short)13,
-                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
                             PrivilegeId = 5,
                             LicenseCode = (short)14,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -3332,15 +3235,6 @@ namespace Prime.Migrations
                         new
                         {
                             PrivilegeId = 17,
-                            LicenseCode = (short)14,
-                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            PrivilegeId = 19,
                             LicenseCode = (short)14,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -3583,15 +3477,6 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            PrivilegeId = 19,
-                            LicenseCode = (short)18,
-                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
                             PrivilegeId = 5,
                             LicenseCode = (short)19,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -3701,15 +3586,6 @@ namespace Prime.Migrations
                         new
                         {
                             PrivilegeId = 17,
-                            LicenseCode = (short)19,
-                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            PrivilegeId = 19,
                             LicenseCode = (short)19,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -4097,15 +3973,6 @@ namespace Prime.Migrations
                         new
                         {
                             PrivilegeId = 17,
-                            LicenseCode = (short)17,
-                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            PrivilegeId = 19,
                             LicenseCode = (short)17,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -4555,15 +4422,6 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            PrivilegeId = 19,
-                            LicenseCode = (short)51,
-                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
                             PrivilegeId = 5,
                             LicenseCode = (short)39,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -4673,15 +4531,6 @@ namespace Prime.Migrations
                         new
                         {
                             PrivilegeId = 17,
-                            LicenseCode = (short)39,
-                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            PrivilegeId = 19,
                             LicenseCode = (short)39,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -4924,15 +4773,6 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            PrivilegeId = 19,
-                            LicenseCode = (short)41,
-                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
                             PrivilegeId = 5,
                             LicenseCode = (short)42,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -5050,15 +4890,6 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            PrivilegeId = 19,
-                            LicenseCode = (short)42,
-                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
                             PrivilegeId = 5,
                             LicenseCode = (short)45,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -5168,15 +4999,6 @@ namespace Prime.Migrations
                         new
                         {
                             PrivilegeId = 17,
-                            LicenseCode = (short)45,
-                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            PrivilegeId = 19,
                             LicenseCode = (short)45,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -5419,15 +5241,6 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            PrivilegeId = 19,
-                            LicenseCode = (short)47,
-                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
                             PrivilegeId = 5,
                             LicenseCode = (short)34,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -5654,15 +5467,6 @@ namespace Prime.Migrations
                         new
                         {
                             PrivilegeId = 17,
-                            LicenseCode = (short)48,
-                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            PrivilegeId = 19,
                             LicenseCode = (short)48,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -7469,7 +7273,7 @@ namespace Prime.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<short>("PrivilegeGroupCode");
+                    b.Property<int>("PrivilegeGroupId");
 
                     b.Property<string>("TransactionType");
 
@@ -7479,7 +7283,7 @@ namespace Prime.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PrivilegeGroupCode");
+                    b.HasIndex("PrivilegeGroupId");
 
                     b.ToTable("Privilege");
 
@@ -7490,7 +7294,7 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Update Claims History",
-                            PrivilegeGroupCode = (short)1,
+                            PrivilegeGroupId = 1,
                             TransactionType = "TAC",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
@@ -7501,7 +7305,7 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Query Claims History",
-                            PrivilegeGroupCode = (short)1,
+                            PrivilegeGroupId = 1,
                             TransactionType = "TDT",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
@@ -7512,7 +7316,7 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Pt Profile Mail Request",
-                            PrivilegeGroupCode = (short)1,
+                            PrivilegeGroupId = 1,
                             TransactionType = "TPM",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
@@ -7523,7 +7327,7 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Maintain Pt Keyword",
-                            PrivilegeGroupCode = (short)1,
+                            PrivilegeGroupId = 1,
                             TransactionType = "TCP",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
@@ -7534,7 +7338,7 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "New PHN",
-                            PrivilegeGroupCode = (short)2,
+                            PrivilegeGroupId = 2,
                             TransactionType = "TPH",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
@@ -7545,7 +7349,7 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Address Update",
-                            PrivilegeGroupCode = (short)2,
+                            PrivilegeGroupId = 2,
                             TransactionType = "TPA",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
@@ -7556,7 +7360,7 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Medication Update",
-                            PrivilegeGroupCode = (short)2,
+                            PrivilegeGroupId = 2,
                             TransactionType = "TMU",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
@@ -7567,7 +7371,7 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Drug Monograph",
-                            PrivilegeGroupCode = (short)3,
+                            PrivilegeGroupId = 3,
                             TransactionType = "TDR",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
@@ -7578,7 +7382,7 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Patient Details",
-                            PrivilegeGroupCode = (short)3,
+                            PrivilegeGroupId = 3,
                             TransactionType = "TID",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
@@ -7589,7 +7393,7 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Location Details",
-                            PrivilegeGroupCode = (short)3,
+                            PrivilegeGroupId = 3,
                             TransactionType = "TIL",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
@@ -7600,7 +7404,7 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Prescriber Details",
-                            PrivilegeGroupCode = (short)3,
+                            PrivilegeGroupId = 3,
                             TransactionType = "TIP",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
@@ -7611,7 +7415,7 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Name Search",
-                            PrivilegeGroupCode = (short)3,
+                            PrivilegeGroupId = 3,
                             TransactionType = "TPN",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
@@ -7622,7 +7426,7 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Pt Profile Request",
-                            PrivilegeGroupCode = (short)3,
+                            PrivilegeGroupId = 3,
                             TransactionType = "TRP",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
@@ -7633,7 +7437,7 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Most Recent Profile",
-                            PrivilegeGroupCode = (short)3,
+                            PrivilegeGroupId = 3,
                             TransactionType = "TBR",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
@@ -7644,7 +7448,7 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Filled Elsewhere Profile",
-                            PrivilegeGroupCode = (short)3,
+                            PrivilegeGroupId = 3,
                             TransactionType = "TRS",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
@@ -7655,7 +7459,7 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "DUE Inquiry",
-                            PrivilegeGroupCode = (short)3,
+                            PrivilegeGroupId = 3,
                             TransactionType = "TDU",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
@@ -7665,8 +7469,8 @@ namespace Prime.Migrations
                             Id = 17,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Description = "Registered User",
-                            PrivilegeGroupCode = (short)4,
+                            Description = "Can be RU (OBO)",
+                            PrivilegeGroupId = 4,
                             TransactionType = "RU",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
@@ -7676,20 +7480,9 @@ namespace Prime.Migrations
                             Id = 18,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Description = "On Behalf of User",
-                            PrivilegeGroupCode = (short)4,
+                            Description = "Can be OBO (RU)",
+                            PrivilegeGroupId = 5,
                             TransactionType = "OBO",
-                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Id = 19,
-                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Description = "Registered User that can have OBO's",
-                            PrivilegeGroupCode = (short)5,
-                            TransactionType = "RU with OBO's",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
@@ -7697,7 +7490,7 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.PrivilegeGroup", b =>
                 {
-                    b.Property<short>("Code")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("CreatedTimeStamp");
@@ -7706,107 +7499,58 @@ namespace Prime.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<short>("PrivilegeTypeCode");
-
                     b.Property<DateTime>("UpdatedTimeStamp");
 
                     b.Property<Guid>("UpdatedUserId");
 
-                    b.HasKey("Code");
+                    b.HasKey("Id");
 
-                    b.HasIndex("PrivilegeTypeCode");
-
-                    b.ToTable("PrivilegeGroupLookup");
+                    b.ToTable("PrivilegeGroup");
 
                     b.HasData(
                         new
                         {
-                            Code = (short)1,
+                            Id = 1,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Submit and Access Claims",
-                            PrivilegeTypeCode = (short)2,
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
-                            Code = (short)2,
+                            Id = 2,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Record Medical History",
-                            PrivilegeTypeCode = (short)2,
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
-                            Code = (short)3,
+                            Id = 3,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Access Medical History",
-                            PrivilegeTypeCode = (short)2,
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
-                            Code = (short)4,
+                            Id = 4,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Role",
-                            PrivilegeTypeCode = (short)1,
+                            Name = "Can be RU (OBO)",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
-                            Code = (short)5,
+                            Id = 5,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "RU That Can Have OBO's",
-                            PrivilegeTypeCode = (short)1,
+                            Name = "Can be OBO (RU)",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        });
-                });
-
-            modelBuilder.Entity("Prime.Models.PrivilegeType", b =>
-                {
-                    b.Property<short>("Code")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("CreatedTimeStamp");
-
-                    b.Property<Guid>("CreatedUserId");
-
-                    b.Property<string>("Name");
-
-                    b.Property<DateTime>("UpdatedTimeStamp");
-
-                    b.Property<Guid>("UpdatedUserId");
-
-                    b.HasKey("Code");
-
-                    b.ToTable("PrivilegeTypeLookup");
-
-                    b.HasData(
-                        new
-                        {
-                            Code = (short)1,
-                            CreatedTimeStamp = new DateTime(2020, 1, 14, 15, 48, 38, 321, DateTimeKind.Local).AddTicks(6486),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Allowable Role",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 14, 15, 48, 38, 321, DateTimeKind.Local).AddTicks(6486),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Code = (short)2,
-                            CreatedTimeStamp = new DateTime(2020, 1, 14, 15, 48, 38, 321, DateTimeKind.Local).AddTicks(6486),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Allowable Transaction",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 14, 15, 48, 38, 321, DateTimeKind.Local).AddTicks(6486),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
@@ -9036,15 +8780,7 @@ namespace Prime.Migrations
                 {
                     b.HasOne("Prime.Models.PrivilegeGroup", "PrivilegeGroup")
                         .WithMany("Privileges")
-                        .HasForeignKey("PrivilegeGroupCode")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Prime.Models.PrivilegeGroup", b =>
-                {
-                    b.HasOne("Prime.Models.PrivilegeType", "PrivilegeType")
-                        .WithMany("PrivilegeGroups")
-                        .HasForeignKey("PrivilegeTypeCode")
+                        .HasForeignKey("PrivilegeGroupId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

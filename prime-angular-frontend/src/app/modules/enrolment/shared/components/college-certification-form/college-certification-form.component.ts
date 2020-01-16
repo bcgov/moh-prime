@@ -96,7 +96,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   }
 
   private setValidations() {
-    this.formUtilsService.setValidators(this.licenseNumber, [Validators.required, FormControlValidators.requiredLength(5)]);
+    this.formUtilsService.setValidators(this.licenseNumber, [Validators.required]);
     this.formUtilsService.setValidators(this.licenseCode, [Validators.required]);
     this.formUtilsService.setValidators(this.renewalDate, [Validators.required]);
   }
