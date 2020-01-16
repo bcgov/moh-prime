@@ -23,17 +23,6 @@
     <ng-container appPageSubheaderTitle>Personal Information from BC Services Card</ng-container>
   </app-page-subheader>
 
-  <div class="mb-5">
-    <app-page-subheader>
-      <ng-container appPageSubheaderTitle>Enrolment Review</ng-container>
-      <ng-container appPageSubheaderSummary>
-        Review all the information to ensure it is accurate, you will not get approved if any of your information is
-        incorrect. If you need to edit your information use the pencil icon to navigate to the section of the
-        enrolment to make changes.
-      </ng-container>
-    </app-page-subheader>
-  </div>
-
   <app-enrollee-review *ngIf="enrolment"
                        [enrolment]="enrolment"
                        (route)="routeTo($event)"></app-enrollee-review>
