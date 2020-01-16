@@ -544,6 +544,7 @@ namespace Prime.Configuration
                 new DefaultPrivilege { LicenseCode = 41, PrivilegeId = 15, CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
                 new DefaultPrivilege { LicenseCode = 41, PrivilegeId = 16, CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
                 new DefaultPrivilege { LicenseCode = 41, PrivilegeId = 17, CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
+                new DefaultPrivilege { LicenseCode = 41, PrivilegeId = 19, CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
 
                 // Provisional Registered Psychiatric Nurse
                 new DefaultPrivilege { LicenseCode = 42, PrivilegeId = 5, CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
