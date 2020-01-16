@@ -2,27 +2,35 @@
  * Ministry of Health PRIME Project
  * Approved for Ministry of Health use only.
  */
-using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Prime.Models;
 
 namespace Prime.Configuration
 {
-    public class PrivilegeGroupConfiguration : IEntityTypeConfiguration<PrivilegeGroup>
+    public class PrivilegeGroupConfiguration : SeededTable<PrivilegeGroup>
     {
-        public void Configure(EntityTypeBuilder<PrivilegeGroup> builder)
+        public override ICollection<PrivilegeGroup> SeedData
         {
-            builder.HasOne(pg => pg.PrivilegeType)
-                    .WithMany(pt => pt.PrivilegeGroups)
-                    .HasForeignKey(pg => pg.PrivilegeTypeCode);
-
-            builder.HasData(
+            get
+            {
+                return new[] {
                 new PrivilegeGroup { Code = 1, PrivilegeTypeCode = 2, Name = "Submit and Access Claims", CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
                 new PrivilegeGroup { Code = 2, PrivilegeTypeCode = 2, Name = "Record Medical History", CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
                 new PrivilegeGroup { Code = 3, PrivilegeTypeCode = 2, Name = "Access Medical History", CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
                 new PrivilegeGroup { Code = 4, PrivilegeTypeCode = 1, Name = "Role", CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
                 new PrivilegeGroup { Code = 5, PrivilegeTypeCode = 1, Name = "RU That Can Have OBO's", CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE }
-            );
+                };
+            }
+        }
+
+        public override void Configure(EntityTypeBuilder<PrivilegeGroup> builder)
+        {
+            builder.HasOne(pg => pg.PrivilegeType)
+                .WithMany(pt => pt.PrivilegeGroups)
+                .HasForeignKey(pg => pg.PrivilegeTypeCode);
+
+            builder.HasData(SeedData);
         }
     }
 }

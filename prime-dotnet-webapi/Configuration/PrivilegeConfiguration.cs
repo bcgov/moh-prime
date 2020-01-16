@@ -2,20 +2,19 @@
  * Ministry of Health PRIME Project
  * Approved for Ministry of Health use only.
  */
-using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Prime.Models;
+
 namespace Prime.Configuration
 {
-    public class PrivilegeConfiguration : IEntityTypeConfiguration<Privilege>
+    public class PrivilegeConfiguration : SeededTable<Privilege>
     {
-        public void Configure(EntityTypeBuilder<Privilege> builder)
+        public override ICollection<Privilege> SeedData
         {
-            builder.HasOne(p => p.PrivilegeGroup)
-                    .WithMany(pg => pg.Privileges)
-                    .HasForeignKey(p => p.PrivilegeGroupCode);
-
-            builder.HasData(
+            get
+            {
+                return new[] {
                 new Privilege { Id = 1, PrivilegeGroupCode = 1, TransactionType = "TAC", Description = "Update Claims History", CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
                 new Privilege { Id = 2, PrivilegeGroupCode = 1, TransactionType = "TDT", Description = "Query Claims History", CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
                 new Privilege { Id = 3, PrivilegeGroupCode = 1, TransactionType = "TPM", Description = "Pt Profile Mail Request", CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
@@ -35,7 +34,17 @@ namespace Prime.Configuration
                 new Privilege { Id = 17, PrivilegeGroupCode = 4, TransactionType = "RU", Description = "Registered User", CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
                 new Privilege { Id = 18, PrivilegeGroupCode = 4, TransactionType = "OBO", Description = "On Behalf of User", CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
                 new Privilege { Id = 19, PrivilegeGroupCode = 5, TransactionType = "RU with OBO's", Description = "Registered User that can have OBO's", CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE }
-            );
+                };
+            }
+        }
+
+        public override void Configure(EntityTypeBuilder<Privilege> builder)
+        {
+            builder.HasOne(p => p.PrivilegeGroup)
+                    .WithMany(pg => pg.Privileges)
+                    .HasForeignKey(p => p.PrivilegeGroupCode);
+
+            builder.HasData(SeedData);
         }
     }
 }
