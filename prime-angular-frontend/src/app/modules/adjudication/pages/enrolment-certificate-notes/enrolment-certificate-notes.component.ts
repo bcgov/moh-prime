@@ -72,6 +72,10 @@ export class EnrolmentCertificateNotesComponent implements OnInit {
     }
   }
 
+  public viewEnrolmentHistory(enrolmentId: number) {
+    this.router.navigate([enrolmentId, AdjudicationRoutes.PROFILE_HISTORY], { relativeTo: this.route.parent });
+  }
+
   public reviewStatusReasons(enrolment: Enrolment) {
     const data: DialogOptions = {
       title: 'Review Status Reasons',
