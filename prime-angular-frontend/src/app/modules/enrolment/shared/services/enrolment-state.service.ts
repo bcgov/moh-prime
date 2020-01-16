@@ -188,8 +188,10 @@ export class EnrolmentStateService {
         FormControlValidators.phone
       ]],
       voiceExtension: [null, [FormControlValidators.numeric]],
-      hasContactEmail: [false, []],
-      contactEmail: [null, [FormControlValidators.email]],
+      // TODO temporarily made visible until SMS available
+      hasContactEmail: [true, []],
+      // TODO temporarily made required until SMS available
+      contactEmail: [null, [Validators.required, FormControlValidators.email]],
       hasContactPhone: [{ value: false, disabled: true }, []],
       contactPhone: [{ value: null, disabled: true }, [FormControlValidators.phone]]
     });

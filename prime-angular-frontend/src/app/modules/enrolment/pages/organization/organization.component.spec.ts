@@ -14,6 +14,7 @@ import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
 import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
 import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
+import { PageComponent } from '@shared/components/page/page.component';
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
 import { ProgressIndicatorComponent } from '@shared/components/progress-indicator/progress-indicator.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
@@ -39,6 +40,7 @@ describe('OrganizationComponent', () => {
         declarations: [
           FormIconGroupComponent,
           OrganizationComponent,
+          PageComponent,
           PageHeaderComponent,
           PageSubheaderComponent,
           ProgressIndicatorComponent,
