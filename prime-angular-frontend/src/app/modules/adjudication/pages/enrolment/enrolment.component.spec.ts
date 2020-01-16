@@ -22,6 +22,7 @@ import { EnrolleeOrganizationsComponent } from '@shared/components/enrollee/enro
 import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
 import { YesNoPipe } from '@shared/pipes/yes-no.pipe';
 import { EnrolleePropertyComponent } from '@shared/components/enrollee/enrollee-property/enrollee-property.component';
+import { PageComponent } from '@shared/components/page/page.component';
 
 describe('EnrolmentComponent', () => {
   let component: EnrolmentComponent;
@@ -39,6 +40,7 @@ describe('EnrolmentComponent', () => {
         ],
         declarations: [
           EnrolmentComponent,
+          PageComponent,
           PageHeaderComponent,
           PageSubheaderComponent,
           EnrolleeReviewComponent,
