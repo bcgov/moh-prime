@@ -153,24 +153,6 @@ namespace Prime.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "LimitsAndConditionsClause",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    CreatedUserId = table.Column<Guid>(nullable: false),
-                    CreatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    UpdatedUserId = table.Column<Guid>(nullable: false),
-                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    Clause = table.Column<string>(nullable: false),
-                    EffectiveDate = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_LimitsAndConditionsClause", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "OrganizationTypeLookup",
                 columns: table => new
                 {
@@ -611,44 +593,6 @@ namespace Prime.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TermsOfAccess",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    CreatedUserId = table.Column<Guid>(nullable: false),
-                    CreatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    UpdatedUserId = table.Column<Guid>(nullable: false),
-                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    EnrolleeId = table.Column<int>(nullable: false),
-                    GlobalClauseId = table.Column<int>(nullable: false),
-                    UserClauseId = table.Column<int>(nullable: false),
-                    EffectiveDate = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TermsOfAccess", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_TermsOfAccess_Enrollee_EnrolleeId",
-                        column: x => x.EnrolleeId,
-                        principalTable: "Enrollee",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_TermsOfAccess_GlobalClause_GlobalClauseId",
-                        column: x => x.GlobalClauseId,
-                        principalTable: "GlobalClause",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_TermsOfAccess_UserClause_UserClauseId",
-                        column: x => x.UserClauseId,
-                        principalTable: "UserClause",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Address",
                 columns: table => new
                 {
@@ -784,49 +728,90 @@ namespace Prime.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TermsOfAccessLicenseClassClause",
+                name: "AccessTermLicenseClassClause",
                 columns: table => new
                 {
-                    TermsOfAccessId = table.Column<int>(nullable: false),
+                    AccessTermId = table.Column<int>(nullable: false),
                     LicenseClassClauseId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TermsOfAccessLicenseClassClause", x => new { x.TermsOfAccessId, x.LicenseClassClauseId });
+                    table.PrimaryKey("PK_AccessTermLicenseClassClause", x => new { x.AccessTermId, x.LicenseClassClauseId });
                     table.ForeignKey(
-                        name: "FK_TermsOfAccessLicenseClassClause_LicenseClassClause_LicenseC~",
+                        name: "FK_AccessTermLicenseClassClause_LicenseClassClause_LicenseClas~",
                         column: x => x.LicenseClassClauseId,
                         principalTable: "LicenseClassClause",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_TermsOfAccessLicenseClassClause_TermsOfAccess_TermsOfAccess~",
-                        column: x => x.TermsOfAccessId,
-                        principalTable: "TermsOfAccess",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "TermsOfAccessLimitsAndConditionsClause",
+                name: "LimitsConditionsClause",
                 columns: table => new
                 {
-                    TermsOfAccessId = table.Column<int>(nullable: false),
-                    LimitsConditionsClauseId = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    CreatedUserId = table.Column<Guid>(nullable: false),
+                    CreatedTimeStamp = table.Column<DateTime>(nullable: false),
+                    UpdatedUserId = table.Column<Guid>(nullable: false),
+                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false),
+                    AccessTermId = table.Column<int>(nullable: false),
+                    EnrolleeId = table.Column<int>(nullable: false),
+                    Clause = table.Column<string>(nullable: false),
+                    EffectiveDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TermsOfAccessLimitsAndConditionsClause", x => new { x.TermsOfAccessId, x.LimitsConditionsClauseId });
+                    table.PrimaryKey("PK_LimitsConditionsClause", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TermsOfAccessLimitsAndConditionsClause_LimitsAndConditionsC~",
-                        column: x => x.LimitsConditionsClauseId,
-                        principalTable: "LimitsAndConditionsClause",
+                        name: "FK_LimitsConditionsClause_Enrollee_EnrolleeId",
+                        column: x => x.EnrolleeId,
+                        principalTable: "Enrollee",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AccessTerm",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    CreatedUserId = table.Column<Guid>(nullable: false),
+                    CreatedTimeStamp = table.Column<DateTime>(nullable: false),
+                    UpdatedUserId = table.Column<Guid>(nullable: false),
+                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false),
+                    EnrolleeId = table.Column<int>(nullable: false),
+                    GlobalClauseId = table.Column<int>(nullable: false),
+                    UserClauseId = table.Column<int>(nullable: false),
+                    LimitsConditionsClauseId = table.Column<int>(nullable: false),
+                    EffectiveDate = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AccessTerm", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AccessTerm_Enrollee_EnrolleeId",
+                        column: x => x.EnrolleeId,
+                        principalTable: "Enrollee",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_TermsOfAccessLimitsAndConditionsClause_TermsOfAccess_TermsO~",
-                        column: x => x.TermsOfAccessId,
-                        principalTable: "TermsOfAccess",
+                        name: "FK_AccessTerm_GlobalClause_GlobalClauseId",
+                        column: x => x.GlobalClauseId,
+                        principalTable: "GlobalClause",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AccessTerm_LimitsConditionsClause_LimitsConditionsClauseId",
+                        column: x => x.LimitsConditionsClauseId,
+                        principalTable: "LimitsConditionsClause",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AccessTerm_UserClause_UserClauseId",
+                        column: x => x.UserClauseId,
+                        principalTable: "UserClause",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -890,7 +875,7 @@ namespace Prime.Migrations
                     { (short)38, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Temporary Registered Nurse (Special Event)", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
                     { (short)39, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Temporary Registered Nurse (Emergency)", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
                     { (short)40, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Employed Student Nurse", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
-                    { (short)41, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Practicing Registered Psychiatric Nurse", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
+                    { (short)42, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Provisional Registered Psychiatric Nurse", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
                     { (short)44, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Temporary Registered Psychiatric Nurse (Special Event)", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
                     { (short)50, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Temporary Nurse Practitioner (Special Event)", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
                     { (short)46, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Employed Student Psychiatric Nurse", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
@@ -906,7 +891,7 @@ namespace Prime.Migrations
                     { (short)56, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Temporary Licensed Practical Nurse (Special Event)", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
                     { (short)45, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Temporary Registered Psychiatric Nurse (Emergency)", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
                     { (short)30, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Non-Practicing Pharmacist", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
-                    { (short)42, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Provisional Registered Psychiatric Nurse", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
+                    { (short)41, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Practicing Registered Psychiatric Nurse", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
                     { (short)28, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Student Pharmacist", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
                     { (short)1, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Full - Family", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
                     { (short)2, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Full - Specialty", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
@@ -920,31 +905,22 @@ namespace Prime.Migrations
                     { (short)10, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Conditional - Disciplined", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
                     { (short)11, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Educational - Medical Student", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
                     { (short)12, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Educational - Postgraduate Resident", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
-                    { (short)29, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Pharmacy Technician", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
-                    { (short)14, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Educational - Postgraduate Fellow", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
                     { (short)13, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Educational - Postgraduate Resident Elective", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
+                    { (short)14, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Educational - Postgraduate Fellow", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
                     { (short)16, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Clinical Observership", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
-                    { (short)27, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Temporary Pharmacist", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
-                    { (short)26, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Limited Pharmacist", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
-                    { (short)25, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Full Pharmacist", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
-                    { (short)24, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Assessment", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
-                    { (short)15, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Educational - Postgraduate Trainee", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
+                    { (short)17, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Visitor", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
+                    { (short)18, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Emergency - Family", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
+                    { (short)19, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Emergency - Specialty", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
+                    { (short)20, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Retired - Life ", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
+                    { (short)21, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Temporarily Inactive", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
                     { (short)22, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Surgical Assistant", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
                     { (short)23, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Administrative", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
-                    { (short)20, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Retired - Life ", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
-                    { (short)19, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Emergency - Specialty", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
-                    { (short)18, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Emergency - Family", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
-                    { (short)17, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Visitor", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
-                    { (short)21, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Temporarily Inactive", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") }
-                });
-
-            migrationBuilder.InsertData(
-                table: "LimitsAndConditionsClause",
-                columns: new[] { "Id", "Clause", "CreatedTimeStamp", "CreatedUserId", "EffectiveDate", "UpdatedTimeStamp", "UpdatedUserId" },
-                values: new object[,]
-                {
-                    { 1, "Limit and condition 1 Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque sit, rerum assumenda sed facere quam vel soluta suscipit esse neque quod.", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
-                    { 2, "Limit and condition 2 Adipisicing elit. Doloremque sit, rerum assumenda sed facere quam vel soluta suscipit esse neque quod.", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") }
+                    { (short)24, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Assessment", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
+                    { (short)25, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Full Pharmacist", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
+                    { (short)26, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Limited Pharmacist", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
+                    { (short)27, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Temporary Pharmacist", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
+                    { (short)15, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Educational - Postgraduate Trainee", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
+                    { (short)29, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Pharmacy Technician", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") }
                 });
 
             migrationBuilder.InsertData(
@@ -952,10 +928,10 @@ namespace Prime.Migrations
                 columns: new[] { "Code", "CreatedTimeStamp", "CreatedUserId", "Name", "UpdatedTimeStamp", "UpdatedUserId" },
                 values: new object[,]
                 {
-                    { (short)5, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Primary Care Network", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
                     { (short)4, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Community Pharmacy", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
-                    { (short)1, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Community Health Practice Access to PharmaNet (ComPAP)", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
+                    { (short)5, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Primary Care Network", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
                     { (short)2, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Health Authority", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
+                    { (short)1, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Community Health Practice Access to PharmaNet (ComPAP)", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
                     { (short)3, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Community Practice", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") }
                 });
 
@@ -1801,6 +1777,31 @@ namespace Prime.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_AccessTerm_EnrolleeId",
+                table: "AccessTerm",
+                column: "EnrolleeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AccessTerm_GlobalClauseId",
+                table: "AccessTerm",
+                column: "GlobalClauseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AccessTerm_LimitsConditionsClauseId",
+                table: "AccessTerm",
+                column: "LimitsConditionsClauseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AccessTerm_UserClauseId",
+                table: "AccessTerm",
+                column: "UserClauseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AccessTermLicenseClassClause_LicenseClassClauseId",
+                table: "AccessTermLicenseClassClause",
+                column: "LicenseClassClauseId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Address_CountryCode",
                 table: "Address",
                 column: "CountryCode");
@@ -1909,6 +1910,16 @@ namespace Prime.Migrations
                 column: "EnrolleeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_LimitsConditionsClause_AccessTermId",
+                table: "LimitsConditionsClause",
+                column: "AccessTermId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LimitsConditionsClause_EnrolleeId",
+                table: "LimitsConditionsClause",
+                column: "EnrolleeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Organization_EnrolleeId",
                 table: "Organization",
                 column: "EnrolleeId");
@@ -1928,36 +1939,46 @@ namespace Prime.Migrations
                 table: "ProvinceLookup",
                 column: "CountryCode");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_TermsOfAccess_EnrolleeId",
-                table: "TermsOfAccess",
-                column: "EnrolleeId");
+            migrationBuilder.AddForeignKey(
+                name: "FK_AccessTermLicenseClassClause_AccessTerm_AccessTermId",
+                table: "AccessTermLicenseClassClause",
+                column: "AccessTermId",
+                principalTable: "AccessTerm",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
 
-            migrationBuilder.CreateIndex(
-                name: "IX_TermsOfAccess_GlobalClauseId",
-                table: "TermsOfAccess",
-                column: "GlobalClauseId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TermsOfAccess_UserClauseId",
-                table: "TermsOfAccess",
-                column: "UserClauseId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TermsOfAccessLicenseClassClause_LicenseClassClauseId",
-                table: "TermsOfAccessLicenseClassClause",
-                column: "LicenseClassClauseId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TermsOfAccessLimitsAndConditionsClause_LimitsConditionsClau~",
-                table: "TermsOfAccessLimitsAndConditionsClause",
-                column: "LimitsConditionsClauseId");
+            migrationBuilder.AddForeignKey(
+                name: "FK_LimitsConditionsClause_AccessTerm_AccessTermId",
+                table: "LimitsConditionsClause",
+                column: "AccessTermId",
+                principalTable: "AccessTerm",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_AccessTerm_Enrollee_EnrolleeId",
+                table: "AccessTerm");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_LimitsConditionsClause_Enrollee_EnrolleeId",
+                table: "LimitsConditionsClause");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_AccessTerm_GlobalClause_GlobalClauseId",
+                table: "AccessTerm");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_AccessTerm_LimitsConditionsClause_LimitsConditionsClauseId",
+                table: "AccessTerm");
+
             migrationBuilder.DropTable(
                 name: "AccessAgreementNote");
+
+            migrationBuilder.DropTable(
+                name: "AccessTermLicenseClassClause");
 
             migrationBuilder.DropTable(
                 name: "Address");
@@ -1999,10 +2020,7 @@ namespace Prime.Migrations
                 name: "Organization");
 
             migrationBuilder.DropTable(
-                name: "TermsOfAccessLicenseClassClause");
-
-            migrationBuilder.DropTable(
-                name: "TermsOfAccessLimitsAndConditionsClause");
+                name: "LicenseClassClause");
 
             migrationBuilder.DropTable(
                 name: "ProvinceLookup");
@@ -2029,15 +2047,6 @@ namespace Prime.Migrations
                 name: "OrganizationTypeLookup");
 
             migrationBuilder.DropTable(
-                name: "LicenseClassClause");
-
-            migrationBuilder.DropTable(
-                name: "LimitsAndConditionsClause");
-
-            migrationBuilder.DropTable(
-                name: "TermsOfAccess");
-
-            migrationBuilder.DropTable(
                 name: "CountryLookup");
 
             migrationBuilder.DropTable(
@@ -2051,6 +2060,12 @@ namespace Prime.Migrations
 
             migrationBuilder.DropTable(
                 name: "GlobalClause");
+
+            migrationBuilder.DropTable(
+                name: "LimitsConditionsClause");
+
+            migrationBuilder.DropTable(
+                name: "AccessTerm");
 
             migrationBuilder.DropTable(
                 name: "UserClause");

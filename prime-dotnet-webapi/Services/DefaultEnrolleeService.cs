@@ -32,7 +32,7 @@ namespace Prime.Services
             IAutomaticAdjudicationService automaticAdjudicationService,
             IEmailService emailService,
             IPrivilegeService privilegeService,
-            ITermsOfAccessService termsOfAccessService)
+            IAccessTermService accessTermService)
             : base(context, httpContext)
         {
             _automaticAdjudicationService = automaticAdjudicationService;
