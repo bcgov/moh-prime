@@ -13,6 +13,8 @@ import { EnrolmentComponent } from './pages/enrolment/enrolment.component';
 import { AdjudicatorNotesComponent } from './pages/adjudicator-notes/adjudicator-notes.component';
 import { UserAgreementNotesComponent } from './pages/user-agreement-notes/user-agreement-notes.component';
 import { EnrolmentCertificateNotesComponent } from './pages/enrolment-certificate-notes/enrolment-certificate-notes.component';
+import { EnrolleeProfileHistoriesComponent } from './pages/enrollee-profile-histories/enrollee-profile-histories.component';
+import { EnrolleeProfileHistoryComponent } from './pages/enrollee-profile-history/enrollee-profile-history.component';
 
 const routes: Routes = [
   {
@@ -53,6 +55,21 @@ const routes: Routes = [
                 path: 'enrolment-certificate-notes',
                 component: EnrolmentCertificateNotesComponent,
                 data: { title: 'Enrolment Certificate Notes' }
+              },
+              {
+                path: 'history',
+                children: [
+                  {
+                    path: '',
+                    component: EnrolleeProfileHistoriesComponent,
+                    data: { title: 'Enrolment Histories' }
+                  },
+                  {
+                    path: ':hid',
+                    component: EnrolleeProfileHistoryComponent,
+                    data: { title: 'Enrolment History' }
+                  }
+                ]
               }
             ]
           }
