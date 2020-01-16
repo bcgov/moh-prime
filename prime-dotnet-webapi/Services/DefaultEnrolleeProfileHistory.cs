@@ -39,7 +39,7 @@ namespace Prime.Services
             {
                 EnrolleeId = (int)enrollee.Id,
                 ProfileSnapshot = enrollee,
-                Created = DateTime.Now
+                CreatedDate = DateTime.Now
             };
 
             _context.EnrolleeProfileHistories.Add(enrolleeProfileHistory);
