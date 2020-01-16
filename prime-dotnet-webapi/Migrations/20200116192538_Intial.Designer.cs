@@ -11,8 +11,8 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20200116035000_Initial")]
-    partial class Initial
+    [Migration("20200116192538_Intial")]
+    partial class Intial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -64,7 +64,7 @@ namespace Prime.Migrations
 
                     b.Property<int>("GlobalClauseId");
 
-                    b.Property<int>("LimitsConditionsClauseId");
+                    b.Property<int?>("LimitsConditionsClauseId");
 
                     b.Property<DateTime>("UpdatedTimeStamp");
 
@@ -7119,8 +7119,7 @@ namespace Prime.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Clause")
-                        .IsRequired();
+                    b.Property<string>("Clause");
 
                     b.Property<DateTime>("CreatedTimeStamp");
 
@@ -8608,8 +8607,7 @@ namespace Prime.Migrations
 
                     b.HasOne("Prime.Models.LimitsConditionsClause", "LimitsConditionsClause")
                         .WithMany()
-                        .HasForeignKey("LimitsConditionsClauseId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("LimitsConditionsClauseId");
 
                     b.HasOne("Prime.Models.UserClause", "UserClause")
                         .WithMany()

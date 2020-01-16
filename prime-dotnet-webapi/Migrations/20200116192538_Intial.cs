@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Prime.Migrations
 {
-    public partial class Initial : Migration
+    public partial class Intial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -414,7 +414,7 @@ namespace Prime.Migrations
                     UpdatedUserId = table.Column<Guid>(nullable: false),
                     UpdatedTimeStamp = table.Column<DateTime>(nullable: false),
                     EnrolleeId = table.Column<int>(nullable: false),
-                    Clause = table.Column<string>(nullable: false),
+                    Clause = table.Column<string>(nullable: true),
                     EffectiveDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -678,7 +678,7 @@ namespace Prime.Migrations
                     EnrolleeId = table.Column<int>(nullable: false),
                     GlobalClauseId = table.Column<int>(nullable: false),
                     UserClauseId = table.Column<int>(nullable: false),
-                    LimitsConditionsClauseId = table.Column<int>(nullable: false),
+                    LimitsConditionsClauseId = table.Column<int>(nullable: true),
                     EffectiveDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -701,7 +701,7 @@ namespace Prime.Migrations
                         column: x => x.LimitsConditionsClauseId,
                         principalTable: "LimitsConditionsClause",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_AccessTerm_UserClause_UserClauseId",
                         column: x => x.UserClauseId,

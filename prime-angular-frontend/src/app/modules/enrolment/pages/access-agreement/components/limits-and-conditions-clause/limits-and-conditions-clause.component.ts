@@ -11,5 +11,5 @@ export class LimitsAndConditionsClauseComponent implements OnInit {
 
   constructor() { }
 
-  public ngOnInit() { console.log('CLAUSE', this.clause); }
+  public ngOnInit() { }
 }

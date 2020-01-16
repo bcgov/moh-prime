@@ -15,9 +15,9 @@ namespace Prime.Models
 
         public int EnrolleeId { get; set; }
 
+        [JsonIgnore]
         public Enrollee Enrollee { get; set; }
 
-        [Required]
         public string Clause { get; set; }
 
         [Required]

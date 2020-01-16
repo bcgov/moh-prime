@@ -117,10 +117,6 @@ namespace Prime.Services
                 await _context.SaveChangesAsync();
             }
 
-            // return await _context.LimitsConditionsClauses
-            //         .Where(c => c.EnrolleeId == enrollee.Id)
-            //         // .OrderByDescending(g => g.EffectiveDate)
-            //         .LastOrDefaultAsync();
             return newClause;
 
         }
