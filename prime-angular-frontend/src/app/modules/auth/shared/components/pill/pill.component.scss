@@ -1,3 +1,5 @@
+@import 'bootstrap';
+
 .pill-container {
   // Using the background pill asset and centering with no repeat
   background-image: url("/assets/pill-1.svg");
@@ -15,9 +17,12 @@
   text-align: center;
 
   // Margin spacing
-  margin-bottom: 8rem;
-  padding-left: 8rem;
-  padding-right: 8rem;
+  @include media-breakpoint-down(sm) {
+    margin-bottom: 4rem;
+  }
+  @include media-breakpoint-up(md) {
+    margin-bottom: 8rem;
+  }
 
 }
 
