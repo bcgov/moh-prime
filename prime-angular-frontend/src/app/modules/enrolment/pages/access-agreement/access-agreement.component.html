@@ -1,124 +1,120 @@
-<app-busy-overlay [busy]="busy">
+<app-page [busy]="busy">
 
-  <div class="row">
-    <div class="col-sm-12 col-lg-8 offset-lg-1 offset-xl-0">
+  <app-page-header>Access Agreement</app-page-header>
 
-      <app-page-header>Access Agreement</app-page-header>
+  <app-progress-indicator *ngIf="isInitialEnrolment"
+                          [currentRoute]="EnrolmentRoutes.ACCESS_AGREEMENT"></app-progress-indicator>
 
-      <app-progress-indicator *ngIf="isInitialEnrolment"
-                              [currentRoute]="EnrolmentRoutes.ACCESS_AGREEMENT"></app-progress-indicator>
+  <ng-container *ngIf="currentPage > 0; else preamble">
 
-      <ng-container *ngIf="currentPage > 0; else preamble">
+    <app-terms-of-access-pager [termsOfAccess]="termsOfAccess"
+                               [currentPage]="currentPage"
+                               (changed)="onPageChange($event)"></app-terms-of-access-pager>
 
-        <app-terms-of-access-pager [termsOfAccess]="termsOfAccess"
-                                   [currentPage]="currentPage"
-                                   (changed)="onPageChange($event)"></app-terms-of-access-pager>
+  </ng-container>
+
+  <ng-template #preamble>
+
+    <div class="mb-4">
+      <app-alert type="success"
+                 icon="check_circle_outline">
+        <ng-container #alertTitle
+                      class="alert-title">
+          You've Been Approved
+        </ng-container>
+        <ng-container #alertContent
+                      class="alert-content">
+          You’ve been approved for PharmaNet access for direct patient care.
+        </ng-container>
+      </app-alert>
+    </div>
+
+    <ng-container *ngIf="isAutomatic">
+
+      <p>
+        Your application can be automatically processed. Within a few minutes you should receive approval to
+        access
+        PharmaNet once you accept the PharmaNet User Access Agreement. Please read the agreement carefully before
+        accepting.
+      </p>
+
+      <p>
+        After you accept the User Access Agreement, you will receive your PharmaNet ID. Give this ID to the person
+        or organization responsible for setting up your PharmaNet access account. This ID must be associated with
+        your transactions on any PharmaNet access.
+      </p>
+
+    </ng-container>
+
+    <p>
+      To confirm your access, you must accept the PharmaNet User Access Agreement. This agreement is specific to
+      the type of access you have. If you request access as a different type of user or for a different type of
+      organization at any point in the future, you may be required to accept a different PharmaNet User Access
+      Agreement.
+    </p>
+
+    <p>
+      Please read the User Access Agreement carefully, and ensure that you are both willing and able to abide by
+      its terms with respect to your use of PharmaNet. You are encouraged to print or save a copy of the User
+      Access
+      Agreement to keep for your reference.
+    </p>
+
+  </ng-template>
+
+  <div *ngIf="hasReadAgreement"
+       class="footer my-3">
+    <mat-checkbox class="mr-4"
+                  [formControl]="agreed">
+      I have read and agree with this agreement.
+    </mat-checkbox>
+  </div>
+
+  <div class="row justify-content-between pt-2">
+    <div class="col-4">
+
+      <button *ngIf="currentPage"
+              mat-stroked-button
+              (click)="onPrevPage()">
+        Back
+      </button>
+
+    </div>
+    <div class="col-8 text-right">
+
+      <ng-container *ngIf="hasReadAgreement; else hasMorePages">
+
+        <button mat-flat-button
+                color="primary"
+                class="mb-2"
+                [ngClass]="(!isMobile) ? 'mr-2' : 'w-100'"
+                [disabled]="!hasAgreed"
+                (click)="onSubmit(EnrolmentStatus.ACCEPTED_TOS)">
+          Accept Agreement
+        </button>
+
+        <button mat-flat-button
+                color="warn"
+                class="mb-2"
+                [ngClass]="(!isMobile) ? 'mr-2' : 'w-100'"
+                [disabled]="!hasAgreed"
+                (click)="onSubmit(EnrolmentStatus.DECLINED_TOS)">
+          Decline Agreement
+        </button>
 
       </ng-container>
 
-      <ng-template #preamble>
+      <ng-template #hasMorePages>
 
-        <div class="mb-4">
-          <app-alert type="success"
-                     icon="check_circle_outline">
-            <ng-container #alertTitle
-                          class="alert-title">
-              You've Been Approved
-            </ng-container>
-            <ng-container #alertContent
-                          class="alert-content">
-              You’ve been approved for PharmaNet access for direct patient care.
-            </ng-container>
-          </app-alert>
-        </div>
-
-        <ng-container *ngIf="isAutomatic">
-
-          <p>
-            Your application can be automatically processed. Within a few minutes you should receive approval to access
-            PharmaNet once you accept the PharmaNet User Access Agreement. Please read the agreement carefully before
-            accepting.
-          </p>
-
-          <p>
-            After you accept the User Access Agreement, you will receive your PharmaNet ID. Give this ID to the person
-            or organization responsible for setting up your PharmaNet access account. This ID must be associated with
-            your transactions on any PharmaNet access.
-          </p>
-
-        </ng-container>
-
-        <p>
-          To confirm your access, you must accept the PharmaNet User Access Agreement. This agreement is specific to
-          the type of access you have. If you request access as a different type of user or for a different type of
-          organization at any point in the future, you may be required to accept a different PharmaNet User Access
-          Agreement.
-        </p>
-
-        <p>
-          Please read the User Access Agreement carefully, and ensure that you are both willing and able to abide by
-          its terms with respect to your use of PharmaNet. You are encouraged to print or save a copy of the User Access
-          Agreement to keep for your reference.
-        </p>
+        <button mat-flat-button
+                color="primary"
+                (click)="onNextPage()">
+          Continue
+        </button>
 
       </ng-template>
-
-      <div *ngIf="hasReadAgreement"
-           class="footer my-3">
-        <mat-checkbox class="mr-4"
-                      [formControl]="agreed">
-          I have read and agree with this agreement.
-        </mat-checkbox>
-      </div>
-
-      <div class="row justify-content-between pt-2">
-        <div class="col-4">
-
-          <button *ngIf="currentPage"
-                  mat-stroked-button
-                  (click)="onPrevPage()">
-            Back
-          </button>
-
-        </div>
-        <div class="col-8 text-right">
-
-          <ng-container *ngIf="hasReadAgreement; else hasMorePages">
-
-            <button mat-flat-button
-                    color="primary"
-                    class="mb-2"
-                    [ngClass]="(!isMobile) ? 'mr-2' : 'w-100'"
-                    [disabled]="!hasAgreed"
-                    (click)="onSubmit(EnrolmentStatus.ACCEPTED_TOS)">
-              Accept Agreement
-            </button>
-
-            <button mat-flat-button
-                    color="warn"
-                    class="mb-2"
-                    [ngClass]="(!isMobile) ? 'mr-2' : 'w-100'"
-                    [disabled]="!hasAgreed"
-                    (click)="onSubmit(EnrolmentStatus.DECLINED_TOS)">
-              Decline Agreement
-            </button>
-
-          </ng-container>
-
-          <ng-template #hasMorePages>
-
-            <button mat-flat-button
-                    color="primary"
-                    (click)="onNextPage()">
-              Continue
-            </button>
-
-          </ng-template>
-
-        </div>
-      </div>
 
     </div>
   </div>
 
-</app-busy-overlay>
+</app-page>
