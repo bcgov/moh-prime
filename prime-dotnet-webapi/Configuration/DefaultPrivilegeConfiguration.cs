@@ -2,27 +2,19 @@
  * Ministry of Health PRIME Project
  * Approved for Ministry of Health use only.
  */
-using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Prime.Models;
 
 namespace Prime.Configuration
 {
-    public class DefaultPrivilegeConfiguration : IEntityTypeConfiguration<DefaultPrivilege>
+    public class DefaultPrivilegeConfiguration : SeededTable<DefaultPrivilege>
     {
-        public void Configure(EntityTypeBuilder<DefaultPrivilege> builder)
+        public override ICollection<DefaultPrivilege> SeedData
         {
-            builder.HasKey(dp => new { dp.PrivilegeId, dp.LicenseCode });
-            builder
-                .HasOne<Privilege>(dp => dp.Privilege)
-                .WithMany(p => p.DefaultPrivileges)
-                .HasForeignKey(dp => dp.PrivilegeId);
-            builder
-                .HasOne<License>(dp => dp.License)
-                .WithMany(l => l.DefaultPrivileges)
-                .HasForeignKey(dp => dp.LicenseCode);
-
-            builder.HasData(
+            get
+            {
+                return new[] {
                 // Non-practicing pharmacist
                 new DefaultPrivilege { LicenseCode = 30, PrivilegeId = 18, CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
 
@@ -741,7 +733,23 @@ namespace Prime.Configuration
                 new DefaultPrivilege { LicenseCode = 56, PrivilegeId = 15, CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
                 new DefaultPrivilege { LicenseCode = 56, PrivilegeId = 16, CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
                 new DefaultPrivilege { LicenseCode = 56, PrivilegeId = 17, CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE }
-            );
+                };
+            }
+        }
+
+        public override void Configure(EntityTypeBuilder<DefaultPrivilege> builder)
+        {
+            builder.HasKey(dp => new { dp.PrivilegeId, dp.LicenseCode });
+            builder
+                .HasOne<Privilege>(dp => dp.Privilege)
+                .WithMany(p => p.DefaultPrivileges)
+                .HasForeignKey(dp => dp.PrivilegeId);
+            builder
+                .HasOne<License>(dp => dp.License)
+                .WithMany(l => l.DefaultPrivileges)
+                .HasForeignKey(dp => dp.LicenseCode);
+
+            builder.HasData(SeedData);
         }
     }
 }
