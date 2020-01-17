@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -46,45 +46,29 @@ export class AdjudicationResource {
       );
   }
 
-  // TODO refactor not efficient but too many questions outstanding
-  public enrolleeProfileHistories(enrolleeId: number): Observable<EnrolmentProfileVersion[]> {
-    return this.http.get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/history`)
+  public enrolleeProfileVersions(enrolleeId: number): Observable<EnrolmentProfileVersion[]> {
+    return this.http.get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/versions`)
       .pipe(
         map((response: PrimeHttpResponse) => response.result),
-        tap((enrolleeProfileHistories: HttpEnrolleeProfileVersion[]) =>
-          this.logger.info('ENROLLEE_PROFILE_HISTORY', enrolleeProfileHistories)
+        tap((enrolleeProfileVersions: HttpEnrolleeProfileVersion[]) =>
+          this.logger.info('ENROLLEE_PROFILE_VERSIONS', enrolleeProfileVersions)
         ),
         map((enrolleeProfileHistories: HttpEnrolleeProfileVersion[]) => {
           return enrolleeProfileHistories
-            .map(({ id, enrolleeId, profileSnapshot, createdDate }: HttpEnrolleeProfileVersion) => {
-              return {
-                id,
-                enrolleeId,
-                profileSnapshot: this.enrolleeAdapterResponse(profileSnapshot),
-                createdDate
-              } as EnrolmentProfileVersion;
-            });
+            .map(this.enrolleeVersionAdapterResponse);
         })
       );
   }
 
-  // TODO refactor not efficient but too many questions outstanding
-  // TODO refactor to not require the enrollee prefix and only take /history/:id
-  public enrolleeProfileHistory(enrolleeId: number, enrolleeProfileHistoryId: number): Observable<EnrolmentProfileVersion> {
-    return this.http.get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/history/${enrolleeProfileHistoryId}`)
+  // TODO located in EnrolleeController, which is prefixed with enrollee, but actually should just be /versions/${id}
+  public enrolleeProfileVersion(enrolleeId: number, enrolleeProfileVersionId: number): Observable<EnrolmentProfileVersion> {
+    return this.http.get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/versions/${enrolleeProfileVersionId}`)
       .pipe(
         map((response: PrimeHttpResponse) => response.result),
-        tap((enrolleeProfileHistory: HttpEnrolleeProfileVersion) =>
-          this.logger.info('ENROLLEE_PROFILE_HISTORY', enrolleeProfileHistory)
+        tap((enrolleeProfileVersion: HttpEnrolleeProfileVersion) =>
+          this.logger.info('ENROLLEE_PROFILE_VERSION', enrolleeProfileVersion)
         ),
-        map(({ id, enrolleeId, profileSnapshot, createdDate }: HttpEnrolleeProfileVersion) => {
-          return {
-            id,
-            enrolleeId,
-            profileSnapshot: this.enrolleeAdapterResponse(profileSnapshot),
-            createdDate
-          } as EnrolmentProfileVersion;
-        })
+        map(this.enrolleeVersionAdapterResponse)
       );
   }
 
@@ -142,6 +126,17 @@ export class AdjudicationResource {
   // ---
   // Enrollee and Enrolment Adapters
   // ---
+
+  private enrolleeVersionAdapterResponse(
+    { id, enrolleeId, profileSnapshot, createdDate }: HttpEnrolleeProfileVersion
+  ): EnrolmentProfileVersion {
+    return {
+      id,
+      enrolleeId,
+      profileSnapshot: this.enrolleeAdapterResponse(profileSnapshot),
+      createdDate
+    };
+  }
 
   private enrolleesAdapterResponse(enrollees: HttpEnrollee[]): Enrolment[] {
     return enrollees.map((enrollee: HttpEnrollee): Enrolment => this.enrolleeAdapterResponse(enrollee));

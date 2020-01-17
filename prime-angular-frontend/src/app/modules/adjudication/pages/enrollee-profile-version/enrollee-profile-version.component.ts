@@ -32,11 +32,11 @@ export class EnrolleeProfileVersionComponent implements OnInit {
 
   public ngOnInit() {
     const enrolleeId = this.route.snapshot.params.id;
-    const enrolleeHistoryId = this.route.snapshot.params.hid;
+    const enrolleeProfileVersionId = this.route.snapshot.params.hid;
     this.busy = this.adjudicationResource
-      .enrolleeProfileHistory(enrolleeId, enrolleeHistoryId)
+      .enrolleeProfileVersion(enrolleeId, enrolleeProfileVersionId)
       .subscribe(
-        (enrolmentProfileHistory: EnrolmentProfileVersion) => this.enrolmentProfileHistory = enrolmentProfileHistory,
+        (enrolmentProfileVersion: EnrolmentProfileVersion) => this.enrolmentProfileHistory = enrolmentProfileVersion,
         (error: any) => {
           this.toastService.openErrorToast('Enrollee history could not be retrieved');
           this.logger.error('[Adjudication] EnrolleeProfileHistory::ngOnInit error has occurred: ', error);

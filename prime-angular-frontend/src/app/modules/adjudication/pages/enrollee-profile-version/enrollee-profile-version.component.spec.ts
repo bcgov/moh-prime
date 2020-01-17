@@ -11,6 +11,13 @@ import { EnrolleeProfileComponent } from '@shared/components/enrollee/enrollee-p
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
 import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
+import { DefaultPipe } from '@shared/pipes/default.pipe';
+import { EnrolleePropertyComponent } from '@shared/components/enrollee/enrollee-property/enrollee-property.component';
+import { ConfigCodePipe } from '@config/config-code.pipe';
+import { PostalPipe } from '@shared/pipes/postal.pipe';
+import { PhonePipe } from '@shared/pipes/phone.pipe';
+import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
+import { YesNoPipe } from '@shared/pipes/yes-no.pipe';
 
 describe('EnrolleeProfileVersionComponent', () => {
   let component: EnrolleeProfileVersionComponent;
@@ -32,7 +39,15 @@ describe('EnrolleeProfileVersionComponent', () => {
           PageHeaderComponent,
           PageSubheaderComponent,
           EnrolleeReviewComponent,
-          EnrolleeProfileComponent]
+          EnrolleeProfileComponent,
+          EnrolleePropertyComponent,
+          DefaultPipe,
+          ConfigCodePipe,
+          PostalPipe,
+          PhonePipe,
+          FormatDatePipe,
+          YesNoPipe
+        ]
       }
     ).compileComponents();
   }));
