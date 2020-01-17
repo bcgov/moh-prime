@@ -26,8 +26,7 @@ namespace Prime.Models
         public College College { get; set; }
 
         [Required]
-        [RegularExpression(@"([0-9]+)", ErrorMessage = "License Number should not contain characters")]
-        [StringLength(5, MinimumLength = 5, ErrorMessage = "License Number must be 5 digits")]
+        [RegularExpression(@"([a-zA-Z0-9]+)", ErrorMessage = "License Number should be alpha numeric characters")]
         [JsonConverter(typeof(EmptyStringToNullJsonConverter))]
         public string LicenseNumber { get; set; }
 

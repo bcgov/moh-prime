@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, ValidatorFn } from '@angular/forms';
 
 import * as moment from 'moment';
 
@@ -96,7 +96,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   }
 
   private setValidations() {
-    this.formUtilsService.setValidators(this.licenseNumber, [Validators.required, FormControlValidators.requiredLength(5)]);
+    this.formUtilsService.setValidators(this.licenseNumber, [Validators.required, FormControlValidators.alphanumeric]);
     this.formUtilsService.setValidators(this.licenseCode, [Validators.required]);
     this.formUtilsService.setValidators(this.renewalDate, [Validators.required]);
   }
@@ -126,4 +126,5 @@ export class CollegeCertificationFormComponent implements OnInit {
   private filterPractices(collegeCode: number): PracticeConfig[] {
     return this.practices.filter(p => p.collegePractices.map(cl => cl.collegeCode).includes(collegeCode));
   }
+
 }
