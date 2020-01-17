@@ -1,17 +1,19 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Collections.Generic;
 using Prime.Models;
 
 namespace Prime.Configuration
 {
-    public class LimitsAndConditionsClauseConfiguration : IEntityTypeConfiguration<LimitsAndConditionsClause>
+    public class LimitsAndConditionsClauseConfiguration : SeededTable<LimitsAndConditionsClause>
     {
-        public void Configure(EntityTypeBuilder<LimitsAndConditionsClause> builder)
+        public override ICollection<LimitsAndConditionsClause> SeedData
         {
-            builder.HasData(
+            get
+            {
+                return new[] {
                 new LimitsAndConditionsClause { Id = 1, Clause = "Limit and condition 1 Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque sit, rerum assumenda sed facere quam vel soluta suscipit esse neque quod.", EffectiveDate = SeedConstants.SEEDING_DATE, CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
                 new LimitsAndConditionsClause { Id = 2, Clause = "Limit and condition 2 Adipisicing elit. Doloremque sit, rerum assumenda sed facere quam vel soluta suscipit esse neque quod.", EffectiveDate = SeedConstants.SEEDING_DATE, CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE }
-            );
+                };
+            }
         }
     }
 }

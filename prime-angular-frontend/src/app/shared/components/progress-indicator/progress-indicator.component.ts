@@ -7,6 +7,7 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
   styleUrls: ['./progress-indicator.component.scss']
 })
 export class ProgressIndicatorComponent implements OnInit {
+  @Input() public inProgress: boolean;
   @Input() public currentRoute: EnrolmentRoutes;
   @Input() public message: string;
 
@@ -20,6 +21,9 @@ export class ProgressIndicatorComponent implements OnInit {
     const currentPage = (currentRoute > -1) ? currentRoute : 0;
     const totalPages = enrolmentRoutes.length - 1;
 
-    this.percentComplete = Math.trunc(currentPage / totalPages * 100);
+    const percentComplete = Math.trunc(currentPage / totalPages * 100);
+    this.percentComplete = (this.inProgress)
+      ? percentComplete
+      : 100;
   }
 }

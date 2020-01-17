@@ -9,6 +9,8 @@ export interface Configuration {
   provinces: ProvinceConfig[];
   statuses: Config<number>[];
   statusReasons: Config<number>[];
+  privilegeGroups: PrivilegeGroupConfig[];
+  privilegeTypes: Config<number>[];
 }
 
 export class Config<T> {
@@ -40,4 +42,8 @@ export interface AssociatedCollegeConfig {
 
 export interface CollegeConfig extends LicenseConfig, PracticeConfig {
   prefix: string;
+}
+
+export interface PrivilegeGroupConfig extends Config<number> {
+  privilegeTypeCode: number;
 }

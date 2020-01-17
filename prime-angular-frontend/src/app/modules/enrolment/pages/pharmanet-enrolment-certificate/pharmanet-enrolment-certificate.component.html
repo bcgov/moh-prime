@@ -1,100 +1,95 @@
-<app-busy-overlay [busy]="busy">
+<div class="app-print-layout">
 
-  <div class="row">
-    <div class="col-sm-12 col-lg-8 offset-lg-1 offset-xl-0 app-print-layout">
+  <app-page [busy]="busy">
 
-      <app-page-header>PharmaNet Enrolment Certificate</app-page-header>
+    <app-page-header>PharmaNet Enrolment Certificate</app-page-header>
 
-      <app-progress-indicator *ngIf="showProgressBar"
-                              [currentRoute]="EnrolmentRoutes.PHARMANET_ENROLMENT_CERTIFICATE"></app-progress-indicator>
+    <app-progress-indicator *ngIf="showProgressBar"
+                            [currentRoute]="EnrolmentRoutes.PHARMANET_ENROLMENT_CERTIFICATE"></app-progress-indicator>
 
-      <app-page-subheader>
-        <ng-container appPageSubheaderTitle>Next Steps</ng-container>
-        <ng-container appPageSubheaderSummary>
-          <div class="renewal-date">Renew by January 2021</div>
-        </ng-container>
-      </app-page-subheader>
-
-      <p>
-        This page contains your PharmaNet ID. You will need to provide this ID to the vendor used by your
-        organization.
-      </p>
-
-      <p class="mb-5">
-        Care Connect, Excelleris, iClinic Inc, MediNet, Plexia, or other.
-      </p>
-
-      <app-page-subheader>
-        <ng-container appPageSubheaderTitle>Your PharmaNet ID</ng-container>
-      </app-page-subheader>
-
-      <p class="font-weight-bold mb-5">
-        {{ enrolment.enrollee.licensePlate | uppercase }}
-      </p>
-
-      <app-page-subheader>
-        <ng-container appPageSubheaderTitle>Provisioner Links</ng-container>
-        <ng-container appPageSubheaderSummary>
-          Generate provisioner links to facilitate your access into PharmaNet.
-        </ng-container>
-      </app-page-subheader>
-
-      <p class="mb-4">
-        Use the Provisioner Link to submit your PharmaNet ID to the vendor your organization uses. Copy and Paste the
-        Provisioner Link and send it to the vendor using a secured email.
-      </p>
-
-      <div class="mb-5">
-        <button mat-flat-button
-                color="primary"
-                (click)="generateProvisionerLink()">
-          <mat-icon class="add-icon">add</mat-icon>
-          Generate Provisioner Link
-        </button>
-
-        <div *ngIf="tokens?.length"
-             class="table-responsive">
-          <table class="table mt-4">
-            <thead>
-              <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Active</th>
-                <th scope="col">Views</th>
-                <th scope="col">&nbsp;</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let token of tokens">
-                <td>{{ token.id }}</td>
-                <td>{{ token.active | yesNo }}</td>
-                <td>{{ token.viewCount }}</td>
-                <td>
-
-                  <app-clipboard-icon [content]="getTokenUrl(token.id)"></app-clipboard-icon>
-
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="mb-5">
-        <app-enrollee-organizations [organizations]="organizations"></app-enrollee-organizations>
-      </div>
-
-      <div class="mb-5">
-        <app-enrollee-privileges [privileges]="privileges"></app-enrollee-privileges>
-      </div>
-
-      <ng-container *ngIf="enrolmentCertificateNote">
-        <dl class="row mb-4">
-          <dt class="col-6">Limits and Conditions</dt>
-          <dd class="col-6 text-right">{{ enrolmentCertificateNote | default }}</dd>
-        </dl>
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>Next Steps</ng-container>
+      <ng-container appPageSubheaderSummary>
+        <div class="renewal-date">Renew by January 2021</div>
       </ng-container>
+    </app-page-subheader>
 
+
+    <p class="mb-0">
+      This page contains your PharmaNet ID. You will need to provide this ID to the vendor used by your
+      organization.
+    </p>
+    <p class="mb-5">
+      Care Connect, Excelleris, iClinic Inc, MediNet, Plexia, or other.
+    </p>
+
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>Your PharmaNet ID</ng-container>
+    </app-page-subheader>
+
+    <p class="font-weight-bold mb-5">
+      {{ enrolment.enrollee.licensePlate | uppercase }}
+    </p>
+
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>Provisioner Links</ng-container>
+    </app-page-subheader>
+
+    <p class="mb-4">
+      Use the Provisioner Link to submit your PharmaNet ID to the vendor your organization uses. Copy and Paste the
+      Provisioner Link and send it to the vendor using a secured email.
+    </p>
+
+    <div class="mb-5">
+      <button mat-flat-button
+              color="primary"
+              (click)="generateProvisionerLink()">
+        <mat-icon class="add-icon">add</mat-icon>
+        Generate Provisioner Link
+      </button>
+
+      <div *ngIf="tokens?.length"
+           class="table-responsive">
+        <table class="table mt-4">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Active</th>
+              <th scope="col">Views</th>
+              <th scope="col">&nbsp;</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let token of tokens">
+              <td>{{ token.id }}</td>
+              <td>{{ token.active | yesNo }}</td>
+              <td>{{ token.viewCount }}</td>
+              <td>
+
+                <app-clipboard-icon [content]="getTokenUrl(token.id)"></app-clipboard-icon>
+
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
 
-</app-busy-overlay>
+    <div class="mb-5">
+      <app-enrollee-organizations [organizations]="organizations"></app-enrollee-organizations>
+    </div>
+
+    <div class="mb-5">
+      <app-enrollee-privileges [privileges]="privileges"></app-enrollee-privileges>
+    </div>
+
+    <ng-container *ngIf="enrolmentCertificateNote">
+      <dl class="row mb-5">
+        <dt class="col-6">Limits and Conditions</dt>
+        <dd class="col-6 text-right">{{ enrolmentCertificateNote | default }}</dd>
+      </dl>
+    </ng-container>
+
+  </app-page>
+
+</div>

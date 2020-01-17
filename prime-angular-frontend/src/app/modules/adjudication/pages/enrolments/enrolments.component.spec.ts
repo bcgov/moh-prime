@@ -14,6 +14,7 @@ import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.mod
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
+import { PageComponent } from '@shared/components/page/page.component';
 
 describe('EnrolmentsComponent', () => {
   let component: EnrolmentsComponent;
@@ -32,6 +33,7 @@ describe('EnrolmentsComponent', () => {
         ],
         declarations: [
           EnrolmentsComponent,
+          PageComponent,
           PageHeaderComponent,
           PageSubheaderComponent,
           FormatDatePipe

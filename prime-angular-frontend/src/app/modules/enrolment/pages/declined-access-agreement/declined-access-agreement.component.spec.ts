@@ -1,9 +1,16 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DeclinedAccessAgreementComponent } from './declined-access-agreement.component';
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { PageComponent } from '@shared/components/page/page.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { AlertComponent } from '@shared/components/alert/alert.component';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
+import { ProgressIndicatorComponent } from '@shared/components/progress-indicator/progress-indicator.component';
+import { PrimeContactComponent } from '@shared/components/prime-contact/prime-contact.component';
+import { RouterTestingModule } from '@angular/router/testing';
+import { EnrolmentPipe } from '@shared/pipes/enrolment.pipe';
+import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
 
 describe('DeclinedAccessAgreementComponent', () => {
   let component: DeclinedAccessAgreementComponent;
@@ -13,12 +20,24 @@ describe('DeclinedAccessAgreementComponent', () => {
     TestBed.configureTestingModule(
       {
         imports: [
-          NgxMaterialModule
+          RouterTestingModule,
+          NgxMaterialModule,
+          NgxBusyModule
         ],
         declarations: [
           DeclinedAccessAgreementComponent,
+          PageComponent,
           PageHeaderComponent,
-          AlertComponent
+          ProgressIndicatorComponent,
+          PrimeContactComponent,
+          AlertComponent,
+          EnrolmentPipe
+        ],
+        providers: [
+          {
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
+          }
         ]
       }
     ).compileComponents();

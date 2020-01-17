@@ -10,6 +10,11 @@
   font-style: italic;
 }
 
+p {
+  // TODO set this to be controlled globally
+  color: theme-palette(blue);
+}
+
 td {
   vertical-align: middle;
 }
