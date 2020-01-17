@@ -7,7 +7,7 @@ import { Clause } from '@enrolment/shared/models/terms-of-access.model';
   styleUrls: ['./limits-and-conditions-clause.component.scss']
 })
 export class LimitsAndConditionsClauseComponent implements OnInit {
-  @Input() clause: Clause[];
+  @Input() clause: Clause;
 
   constructor() { }
 
