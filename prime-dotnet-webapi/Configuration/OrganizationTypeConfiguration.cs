@@ -9,7 +9,7 @@ namespace Prime.Configuration
         {
             get
             {
-                return new []{
+                return new [] {
                 new OrganizationType { Code = 1, Name = "Health Authority", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                 new OrganizationType { Code = 2, Name = "Community Practice", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                 new OrganizationType { Code = 3, Name = "Community Pharmacy", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
