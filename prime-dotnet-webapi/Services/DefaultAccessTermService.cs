@@ -46,7 +46,7 @@ namespace Prime.Services
          */
         public async Task<AccessTerm> GetEnrolleeAccessTermsAsync(int enrolleeId)
         {
-            var accessTerms = await _context.AccessTerm
+            var accessTerms = await _context.AccessTerms
                 .Include(t => t.GlobalClause)
                 .Include(t => t.UserClause)
                 .Include(t => t.AccessTermLicenseClassClauses)

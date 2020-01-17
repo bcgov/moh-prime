@@ -42,7 +42,7 @@ namespace Prime
         public DbSet<AccessAgreementNote> AccessAgreementNotes { get; set; }
         public DbSet<EnrolmentCertificateNote> EnrolmentCertificateNotes { get; set; }
 
-        public DbSet<AccessTerm> AccessTerm { get; set; }
+        public DbSet<AccessTerm> AccessTerms { get; set; }
         public DbSet<GlobalClause> GlobalClauses { get; set; }
         public DbSet<UserClause> UserClauses { get; set; }
         public DbSet<LicenseClassClause> LicenseClassClauses { get; set; }
@@ -135,7 +135,6 @@ namespace Prime
             modelBuilder.ApplyConfiguration(new GlobalClauseConfiguration());
             modelBuilder.ApplyConfiguration(new UserClauseConfiguration());
             modelBuilder.ApplyConfiguration(new LicenseClassClauseConfiguration());
-            modelBuilder.ApplyConfiguration(new LimitsConditionsClauseConfiguration());
 
             #region Indexes
             modelBuilder.Entity<MailingAddress>()
