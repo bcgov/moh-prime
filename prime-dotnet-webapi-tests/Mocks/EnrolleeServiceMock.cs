@@ -196,7 +196,7 @@ namespace PrimeTests.Mocks
             return Task.FromResult(updatedNote);
         }
 
-        public Task<TermsOfAccess> GetEnrolleeTermsOfAccessAsync(int enrolleeId)
+        public Task<AccessTerm> GetEnrolleeTermsOfAccessAsync(int enrolleeId)
         {
             throw new NotImplementedException();
         }
