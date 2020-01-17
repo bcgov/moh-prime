@@ -1,13 +1,15 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Collections.Generic;
 using Prime.Models;
+
 namespace Prime.Configuration
 {
-    public class ProvinceConfiguration : IEntityTypeConfiguration<Province>
+    public class ProvinceConfiguration : SeededTable<Province>
     {
-        public void Configure(EntityTypeBuilder<Province> builder)
+        public override ICollection<Province> SeedData
         {
-            builder.HasData(
+            get
+            {
+                return new[] {
                 new Province { Code = "AB", CountryCode = "CA", Name = "Alberta", CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
                 new Province { Code = "BC", CountryCode = "CA", Name = "British Columbia", CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
                 new Province { Code = "MB", CountryCode = "CA", Name = "Manitoba", CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
@@ -78,7 +80,8 @@ namespace Prime.Configuration
                 new Province { Code = "WV", CountryCode = "US", Name = "West Virginia", CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
                 new Province { Code = "WI", CountryCode = "US", Name = "Wisconsin", CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
                 new Province { Code = "WY", CountryCode = "US", Name = "Wyoming", CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE }
-            );
+                };
+            }
         }
     }
 }
