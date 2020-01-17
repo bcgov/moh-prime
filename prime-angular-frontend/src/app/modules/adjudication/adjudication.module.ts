@@ -8,8 +8,8 @@ import { EnrolmentComponent } from './pages/enrolment/enrolment.component';
 import { AdjudicatorNotesComponent } from './pages/adjudicator-notes/adjudicator-notes.component';
 import { UserAgreementNotesComponent } from './pages/user-agreement-notes/user-agreement-notes.component';
 import { EnrolmentCertificateNotesComponent } from './pages/enrolment-certificate-notes/enrolment-certificate-notes.component';
-import { EnrolleeProfileHistoryComponent } from './pages/enrollee-profile-history/enrollee-profile-history.component';
-import { EnrolleeProfileHistoriesComponent } from './pages/enrollee-profile-histories/enrollee-profile-histories.component';
+import { EnrolleeProfileVersionComponent } from './pages/enrollee-profile-version/enrollee-profile-version.component';
+import { EnrolleeProfileVersionsComponent } from './pages/enrollee-profile-versions/enrollee-profile-versions.component';
 
 @NgModule({
   declarations: [
@@ -18,8 +18,8 @@ import { EnrolleeProfileHistoriesComponent } from './pages/enrollee-profile-hist
     AdjudicatorNotesComponent,
     UserAgreementNotesComponent,
     EnrolmentCertificateNotesComponent,
-    EnrolleeProfileHistoryComponent,
-    EnrolleeProfileHistoriesComponent
+    EnrolleeProfileVersionComponent,
+    EnrolleeProfileVersionsComponent
   ],
   imports: [
     SharedModule,

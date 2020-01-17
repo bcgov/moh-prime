@@ -5,20 +5,18 @@ import { Subscription } from 'rxjs';
 
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
-import { Enrolment } from '@shared/models/enrolment.model';
 
-import { EnrolmentProfileHistory } from '@adjudication/shared/models/enrollee-profile-history.model';
+import { EnrolmentProfileVersion } from '@adjudication/shared/models/enrollee-profile-history.model';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
-import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
-  selector: 'app-enrollee-profile-history',
-  templateUrl: './enrollee-profile-history.component.html',
-  styleUrls: ['./enrollee-profile-history.component.scss']
+  selector: 'app-enrollee-profile-version',
+  templateUrl: './enrollee-profile-version.component.html',
+  styleUrls: ['./enrollee-profile-version.component.scss']
 })
-export class EnrolleeProfileHistoryComponent implements OnInit {
+export class EnrolleeProfileVersionComponent implements OnInit {
   public busy: Subscription;
-  public enrolmentProfileHistory: EnrolmentProfileHistory;
+  public enrolmentProfileHistory: EnrolmentProfileVersion;
 
   constructor(
     private route: ActivatedRoute,
@@ -38,7 +36,7 @@ export class EnrolleeProfileHistoryComponent implements OnInit {
     this.busy = this.adjudicationResource
       .enrolleeProfileHistory(enrolleeId, enrolleeHistoryId)
       .subscribe(
-        (enrolmentProfileHistory: EnrolmentProfileHistory) => this.enrolmentProfileHistory = enrolmentProfileHistory,
+        (enrolmentProfileHistory: EnrolmentProfileVersion) => this.enrolmentProfileHistory = enrolmentProfileHistory,
         (error: any) => {
           this.toastService.openErrorToast('Enrollee history could not be retrieved');
           this.logger.error('[Adjudication] EnrolleeProfileHistory::ngOnInit error has occurred: ', error);

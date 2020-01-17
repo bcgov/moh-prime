@@ -1,13 +1,13 @@
 import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 
-export interface EnrolmentProfileHistory {
+export interface EnrolmentProfileVersion {
   id: number;
   enrolleeId: number;
   profileSnapshot: Enrolment;
   createdDate: string;
 }
 
-export interface HttpEnrolleeProfileHistory {
+export interface HttpEnrolleeProfileVersion {
   id: number;
   enrolleeId: number;
   profileSnapshot: HttpEnrollee;

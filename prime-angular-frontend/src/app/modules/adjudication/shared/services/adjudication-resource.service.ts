@@ -13,7 +13,7 @@ import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { Address } from '@enrolment/shared/models/address.model';
 import { NoteType } from '@adjudication/shared/enums/note-type.enum';
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
-import { EnrolmentProfileHistory, HttpEnrolleeProfileHistory } from '@adjudication/shared/models/enrollee-profile-history.model';
+import { EnrolmentProfileVersion, HttpEnrolleeProfileVersion } from '@adjudication/shared/models/enrollee-profile-history.model';
 
 @Injectable({
   providedIn: 'root'
@@ -47,22 +47,22 @@ export class AdjudicationResource {
   }
 
   // TODO refactor not efficient but too many questions outstanding
-  public enrolleeProfileHistories(enrolleeId: number): Observable<EnrolmentProfileHistory[]> {
+  public enrolleeProfileHistories(enrolleeId: number): Observable<EnrolmentProfileVersion[]> {
     return this.http.get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/history`)
       .pipe(
         map((response: PrimeHttpResponse) => response.result),
-        tap((enrolleeProfileHistories: HttpEnrolleeProfileHistory[]) =>
+        tap((enrolleeProfileHistories: HttpEnrolleeProfileVersion[]) =>
           this.logger.info('ENROLLEE_PROFILE_HISTORY', enrolleeProfileHistories)
         ),
-        map((enrolleeProfileHistories: HttpEnrolleeProfileHistory[]) => {
+        map((enrolleeProfileHistories: HttpEnrolleeProfileVersion[]) => {
           return enrolleeProfileHistories
-            .map(({ id, enrolleeId, profileSnapshot, createdDate }: HttpEnrolleeProfileHistory) => {
+            .map(({ id, enrolleeId, profileSnapshot, createdDate }: HttpEnrolleeProfileVersion) => {
               return {
                 id,
                 enrolleeId,
                 profileSnapshot: this.enrolleeAdapterResponse(profileSnapshot),
                 createdDate
-              } as EnrolmentProfileHistory;
+              } as EnrolmentProfileVersion;
             });
         })
       );
@@ -70,20 +70,20 @@ export class AdjudicationResource {
 
   // TODO refactor not efficient but too many questions outstanding
   // TODO refactor to not require the enrollee prefix and only take /history/:id
-  public enrolleeProfileHistory(enrolleeId: number, enrolleeProfileHistoryId: number): Observable<EnrolmentProfileHistory> {
+  public enrolleeProfileHistory(enrolleeId: number, enrolleeProfileHistoryId: number): Observable<EnrolmentProfileVersion> {
     return this.http.get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/history/${enrolleeProfileHistoryId}`)
       .pipe(
         map((response: PrimeHttpResponse) => response.result),
-        tap((enrolleeProfileHistory: HttpEnrolleeProfileHistory) =>
+        tap((enrolleeProfileHistory: HttpEnrolleeProfileVersion) =>
           this.logger.info('ENROLLEE_PROFILE_HISTORY', enrolleeProfileHistory)
         ),
-        map(({ id, enrolleeId, profileSnapshot, createdDate }: HttpEnrolleeProfileHistory) => {
+        map(({ id, enrolleeId, profileSnapshot, createdDate }: HttpEnrolleeProfileVersion) => {
           return {
             id,
             enrolleeId,
             profileSnapshot: this.enrolleeAdapterResponse(profileSnapshot),
             createdDate
-          } as EnrolmentProfileHistory;
+          } as EnrolmentProfileVersion;
         })
       );
   }

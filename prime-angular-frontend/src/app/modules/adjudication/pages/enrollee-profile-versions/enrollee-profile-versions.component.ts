@@ -7,18 +7,18 @@ import { Subscription } from 'rxjs';
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
 
-import { EnrolmentProfileHistory } from '@adjudication/shared/models/enrollee-profile-history.model';
+import { EnrolmentProfileVersion } from '@adjudication/shared/models/enrollee-profile-history.model';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 @Component({
-  selector: 'app-enrollee-profile-histories',
-  templateUrl: './enrollee-profile-histories.component.html',
-  styleUrls: ['./enrollee-profile-histories.component.scss']
+  selector: 'app-enrollee-profile-versions',
+  templateUrl: './enrollee-profile-versions.component.html',
+  styleUrls: ['./enrollee-profile-versions.component.scss']
 })
-export class EnrolleeProfileHistoriesComponent implements OnInit {
+export class EnrolleeProfileVersionsComponent implements OnInit {
   public busy: Subscription;
   public columns: string[];
-  public dataSource: MatTableDataSource<EnrolmentProfileHistory>;
+  public dataSource: MatTableDataSource<EnrolmentProfileVersion>;
 
   constructor(
     private route: ActivatedRoute,
@@ -34,8 +34,8 @@ export class EnrolleeProfileHistoriesComponent implements OnInit {
     this.busy = this.adjudicationResource
       .enrolleeProfileHistories(enrolleeId)
       .subscribe(
-        (enrolmentProfileHistories: EnrolmentProfileHistory[]) =>
-          this.dataSource = new MatTableDataSource<EnrolmentProfileHistory>(enrolmentProfileHistories),
+        (enrolmentProfileHistories: EnrolmentProfileVersion[]) =>
+          this.dataSource = new MatTableDataSource<EnrolmentProfileVersion>(enrolmentProfileHistories),
         (error: any) => {
           this.toastService.openErrorToast('Enrollee history could not be retrieved');
           this.logger.error('[Adjudication] EnrolleeProfileHistories::ngOnInit error has occurred: ', error);
