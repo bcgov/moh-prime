@@ -1,12 +1,11 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Collections.Generic;
 using Prime.Models;
 
 namespace Prime.Configuration
 {
-    public class OrganizationTypeConfiguration : IEntityTypeConfiguration<OrganizationType>
+    public class OrganizationTypeConfiguration : SeededTable<OrganizationType>
     {
-        public void Configure(EntityTypeBuilder<OrganizationType> builder)
+        public override ICollection<OrganizationType> SeedData
         {
             builder.HasData(
                 new OrganizationType { Code = 1, Name = "Health Authority", CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },

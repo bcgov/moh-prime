@@ -1,14 +1,15 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Collections.Generic;
 using Prime.Models;
 
 namespace Prime.Configuration
 {
-    public class LicenseConfiguration : IEntityTypeConfiguration<License>
+    public class LicenseConfiguration : SeededTable<License>
     {
-        public void Configure(EntityTypeBuilder<License> builder)
+        public override ICollection<License> SeedData
         {
-            builder.HasData(
+            get
+            {
+                return new[] {
                 new License { Code = 1, Name = "Full - Family", CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
                 new License { Code = 2, Name = "Full - Specialty", CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
                 new License { Code = 3, Name = "Special", CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
@@ -65,7 +66,8 @@ namespace Prime.Configuration
                 new License { Code = 54, Name = "Non-Practicing Licensed Practical Nurse", CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
                 new License { Code = 55, Name = "Temporary Licensed Practical Nurse (Emergency)", CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
                 new License { Code = 56, Name = "Temporary Licensed Practical Nurse (Special Event)", CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE }
-            );
+                };
+            }
         }
     }
 }
