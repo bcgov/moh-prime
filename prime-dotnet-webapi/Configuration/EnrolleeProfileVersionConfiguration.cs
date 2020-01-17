@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Prime.Models;
+
 namespace Prime.Configuration
 {
     public class EnrolleeProfileVersionConfiguration : IEntityTypeConfiguration<EnrolleeProfileVersion>
@@ -22,7 +24,7 @@ namespace Prime.Configuration
                     {
                         NullValueHandling = NullValueHandling.Ignore
                     }),
-                    ps => JsonConvert.DeserializeObject<Enrollee>(ps, new JsonSerializerSettings
+                    ps => JsonConvert.DeserializeObject<JObject>(ps, new JsonSerializerSettings
                     {
                         NullValueHandling = NullValueHandling.Ignore
                     })

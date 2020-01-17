@@ -43,7 +43,7 @@ namespace Prime
             services.AddScoped<IPharmanetApiService, DefaultPharmanetApiService>();
             services.AddScoped<IPrivilegeService, DefaultPrivilegeService>();
             services.AddScoped<ITermsOfAccessService, DefaultTermsOfAccessService>();
-            services.AddScoped<IEnrolleeProfileVersionService, DefaultEnrolleeProfileVersionService>();
+            services.AddScoped<IEnrolleeProfileVersionService, EnrolleeProfileVersionService>();
 
             services
                 .AddMvc()

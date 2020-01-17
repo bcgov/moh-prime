@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Prime.Models;
 
+// Strategy Pattern
+
 namespace Prime.Services
 {
     public class DefaultAutomaticAdjudicationService : BaseService, IAutomaticAdjudicationService

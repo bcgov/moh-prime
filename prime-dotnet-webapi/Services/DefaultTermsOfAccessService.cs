@@ -11,7 +11,9 @@ namespace Prime.Services
     public class DefaultTermsOfAccessService : BaseService, ITermsOfAccessService
     {
         public DefaultTermsOfAccessService(
-            ApiDbContext context, IHttpContextAccessor httpContext) : base(context, httpContext)
+            ApiDbContext context,
+            IHttpContextAccessor httpContext
+            ) : base(context, httpContext)
         { }
 
         public async Task SetEnrolleeTermsOfAccessAsync(Enrollee enrollee)

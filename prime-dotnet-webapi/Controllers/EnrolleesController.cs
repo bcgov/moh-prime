@@ -486,10 +486,9 @@ namespace Prime.Controllers
             return Ok(new ApiOkResponse<TermsOfAccess>(termsOfAccess));
         }
 
-        // TODO refactor naming of params, method, endpoint URI
-        // GET: api/Enrollees/5/profile-histories
+        // GET: api/Enrollees/5/versions
         /// <summary>
-        /// Get a list of the enrolmee's profile history.
+        /// Get a list of enrolmee profile versions.
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}/history", Name = nameof(GetEnrolleeProfileHistories))]
@@ -510,27 +509,27 @@ namespace Prime.Controllers
             return Ok(new ApiOkResponse<IEnumerable<EnrolleeProfileVersion>>(enrolleeProfileHistories));
         }
 
-        // TODO refactor naming of params, method, endpoint URI
-        // GET: api/Enrollees/5/profile-histories
+        // TODO located in EnrolleeController, which is prefixed with enrollee, but actually should just be /versions/${id}
+        // GET: api/Enrollees/5/versions/1
         /// <summary>
-        /// Get a historical enrolmee profile.
+        /// Get an enrollee profile version.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        /// <param name="enrolleeProfileHistoryId"></param>
+        /// <param name="enrolleeProfileVersionId"></param>
         [HttpGet("{enrolleeId}/history/{enrolleeProfileHistoryId}", Name = nameof(GetEnrolleeProfileHistory))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiOkResponse<EnrolleeProfileVersion>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<EnrolleeProfileVersion>> GetEnrolleeProfileHistory(int enrolleeId, int enrolleeProfileHistoryId)
+        public async Task<ActionResult<EnrolleeProfileVersion>> GetEnrolleeProfileHistory(int enrolleeId, int enrolleeProfileVersionId)
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
 
-            var enrolleeProfileHistory = await _enrolleeProfileVersionService.GetEnrolleeProfileVersionAsync(enrolleeId, enrolleeProfileHistoryId);
+            var enrolleeProfileHistory = await _enrolleeProfileVersionService.GetEnrolleeProfileVersionAsync(enrolleeProfileVersionId);
 
             return Ok(new ApiOkResponse<EnrolleeProfileVersion>(enrolleeProfileHistory));
         }

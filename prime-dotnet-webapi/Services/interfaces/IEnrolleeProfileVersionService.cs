@@ -9,7 +9,7 @@ namespace Prime.Services
     {
         Task<IEnumerable<EnrolleeProfileVersion>> GetEnrolleeProfileVersionsAsync(int enrolleeId);
 
-        Task<EnrolleeProfileVersion> GetEnrolleeProfileVersionAsync(int enrolleeId, int enrolleeProfileHistoryId);
+        Task<EnrolleeProfileVersion> GetEnrolleeProfileVersionAsync(int enrolleeProfileHistoryId);
 
         Task<int> CreateEnrolleeProfileVersionAsync(Enrollee enrollee);
     }

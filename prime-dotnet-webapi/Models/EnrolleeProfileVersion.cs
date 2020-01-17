@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Prime.Models
 {
@@ -15,7 +16,7 @@ namespace Prime.Models
         [JsonIgnore]
         public Enrollee Enrollee { get; set; }
         [Required]
-        public Enrollee ProfileSnapshot { get; set; }
+        public JObject ProfileSnapshot { get; set; }
         [Required]
         public DateTime CreatedDate { get; set; }
         [Required]
