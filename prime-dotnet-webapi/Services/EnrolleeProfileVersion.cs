@@ -24,17 +24,15 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task<EnrolleeProfileVersion> GetEnrolleeProfileVersionAsync(int enrolleeProfileHistoryId)
+        public async Task<EnrolleeProfileVersion> GetEnrolleeProfileVersionAsync(int enrolleeProfileVersionId)
         {
             return await _context.EnrolleeProfileVersions
-                .Where(epv => epv.Id == enrolleeProfileHistoryId)
+                .Where(epv => epv.Id == enrolleeProfileVersionId)
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<int> CreateEnrolleeProfileVersionAsync(Enrollee enrollee)
+        public async Task CreateEnrolleeProfileVersionAsync(Enrollee enrollee)
         {
-            // TODO should Object.Equals(previous, current) or save the profile each time?
-
             var mostRecentVersion = await _context.EnrolleeProfileVersions
                 .Where(epv => epv.EnrolleeId == enrollee.Id)
                 .OrderByDescending(epv => epv.CreatedDate)
@@ -42,19 +40,17 @@ namespace Prime.Services
 
             if (mostRecentVersion != null && !Object.Equals(mostRecentVersion, enrollee))
             {
-                return 0;
+                var enrolleeProfileVersion = new EnrolleeProfileVersion
+                {
+                    EnrolleeId = (int)enrollee.Id,
+                    ProfileSnapshot = JObject.FromObject(enrollee),
+                    CreatedDate = DateTime.Now
+                };
+
+                _context.EnrolleeProfileVersions.Add(enrolleeProfileVersion);
+
+                await _context.SaveChangesAsync();
             }
-
-            var enrolleeProfileHistory = new EnrolleeProfileVersion
-            {
-                EnrolleeId = (int)enrollee.Id,
-                ProfileSnapshot = JObject.FromObject(enrollee),
-                CreatedDate = DateTime.Now
-            };
-
-            _context.EnrolleeProfileVersions.Add(enrolleeProfileHistory);
-
-            return await _context.SaveChangesAsync();
         }
     }
 }

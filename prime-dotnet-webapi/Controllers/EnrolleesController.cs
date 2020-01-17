@@ -13,7 +13,7 @@ namespace Prime.Controllers
     [Route("api/[controller]")]
     [ApiController]
     // User needs at least the ADMIN or ENROLLEE role to use this controller
-    [Authorize(Policy = PrimeConstants.PRIME_USER_POLICY)]
+    // [Authorize(Policy = PrimeConstants.PRIME_USER_POLICY)]
     public class EnrolleesController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
@@ -491,13 +491,13 @@ namespace Prime.Controllers
         /// Get a list of enrolmee profile versions.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpGet("{enrolleeId}/history", Name = nameof(GetEnrolleeProfileHistories))]
+        [HttpGet("{enrolleeId}/versions", Name = nameof(GetEnrolleeProfileVersions))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiOkResponse<EnrolleeProfileVersion>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<EnrolleeProfileVersion>>> GetEnrolleeProfileHistories(int enrolleeId)
+        public async Task<ActionResult<IEnumerable<EnrolleeProfileVersion>>> GetEnrolleeProfileVersions(int enrolleeId)
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
@@ -509,29 +509,29 @@ namespace Prime.Controllers
             return Ok(new ApiOkResponse<IEnumerable<EnrolleeProfileVersion>>(enrolleeProfileHistories));
         }
 
-        // TODO located in EnrolleeController, which is prefixed with enrollee, but actually should just be /versions/${id}
         // GET: api/Enrollees/5/versions/1
         /// <summary>
         /// Get an enrollee profile version.
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="enrolleeProfileVersionId"></param>
-        [HttpGet("{enrolleeId}/history/{enrolleeProfileHistoryId}", Name = nameof(GetEnrolleeProfileHistory))]
+        // TODO located in EnrolleeController, which is prefixed with enrollee, but actually should just be /versions/${id}
+        [HttpGet("{enrolleeId}/versions/{enrolleeProfileVersionId}", Name = nameof(GetEnrolleeProfileVersion))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiOkResponse<EnrolleeProfileVersion>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<EnrolleeProfileVersion>> GetEnrolleeProfileHistory(int enrolleeId, int enrolleeProfileVersionId)
+        public async Task<ActionResult<EnrolleeProfileVersion>> GetEnrolleeProfileVersion(int enrolleeId, int enrolleeProfileVersionId)
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
 
-            var enrolleeProfileHistory = await _enrolleeProfileVersionService.GetEnrolleeProfileVersionAsync(enrolleeProfileVersionId);
+            var enrolleeProfileVersion = await _enrolleeProfileVersionService.GetEnrolleeProfileVersionAsync(enrolleeProfileVersionId);
 
-            return Ok(new ApiOkResponse<EnrolleeProfileVersion>(enrolleeProfileHistory));
+            return Ok(new ApiOkResponse<EnrolleeProfileVersion>(enrolleeProfileVersion));
         }
     }
 }

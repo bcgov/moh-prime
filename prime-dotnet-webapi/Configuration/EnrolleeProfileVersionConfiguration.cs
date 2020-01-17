@@ -19,7 +19,7 @@ namespace Prime.Configuration
                 .Property(epf => epf.ProfileSnapshot)
                 .HasColumnType("json")
                 .HasConversion(
-                    // Serialize and deserialize a snapshot of the Enrollee profile history
+                    // Serialize and deserialize a snapshot of the Enrollee profile version
                     ps => JsonConvert.SerializeObject(ps, new JsonSerializerSettings
                     {
                         NullValueHandling = NullValueHandling.Ignore
