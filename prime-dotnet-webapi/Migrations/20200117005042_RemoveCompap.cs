@@ -50,14 +50,28 @@ namespace Prime.Migrations
                 column: "Name",
                 value: "Primary Care Network");
 
+            migrationBuilder.UpdateData(
+                table: "Privilege",
+                keyColumn: "Id",
+                keyValue: 19,
+                columns: new[] { "Description", "TransactionType" },
+                values: new object[] { "Registered User that can have OBOs", "RU with OBOs" });
+
             migrationBuilder.InsertData(
                 table: "PrivilegeTypeLookup",
                 columns: new[] { "Code", "CreatedTimeStamp", "CreatedUserId", "Name", "UpdatedTimeStamp", "UpdatedUserId" },
                 values: new object[,]
                 {
-                    { (short)1, new DateTime(2020, 1, 16, 15, 31, 51, 555, DateTimeKind.Local).AddTicks(1715), new Guid("00000000-0000-0000-0000-000000000000"), "Allowable Role", new DateTime(2020, 1, 16, 15, 31, 51, 555, DateTimeKind.Local).AddTicks(1715), new Guid("00000000-0000-0000-0000-000000000000") },
-                    { (short)2, new DateTime(2020, 1, 16, 15, 31, 51, 555, DateTimeKind.Local).AddTicks(1715), new Guid("00000000-0000-0000-0000-000000000000"), "Allowable Transaction", new DateTime(2020, 1, 16, 15, 31, 51, 555, DateTimeKind.Local).AddTicks(1715), new Guid("00000000-0000-0000-0000-000000000000") }
+                    { (short)1, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Allowable Role", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
+                    { (short)2, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Allowable Transaction", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") }
                 });
+
+            migrationBuilder.UpdateData(
+                table: "PrivilegeGroupLookup",
+                keyColumn: "Code",
+                keyValue: (short)5,
+                column: "Name",
+                value: "RU That Can Have OBOs");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -94,6 +108,20 @@ namespace Prime.Migrations
                 table: "OrganizationTypeLookup",
                 columns: new[] { "Code", "CreatedTimeStamp", "CreatedUserId", "Name", "UpdatedTimeStamp", "UpdatedUserId" },
                 values: new object[] { (short)5, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Primary Care Network", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") });
+
+            migrationBuilder.UpdateData(
+                table: "Privilege",
+                keyColumn: "Id",
+                keyValue: 19,
+                columns: new[] { "Description", "TransactionType" },
+                values: new object[] { "Registered User that can have OBO's", "RU with OBO's" });
+
+            migrationBuilder.UpdateData(
+                table: "PrivilegeGroupLookup",
+                keyColumn: "Code",
+                keyValue: (short)5,
+                column: "Name",
+                value: "RU That Can Have OBO's");
 
             migrationBuilder.UpdateData(
                 table: "PrivilegeTypeLookup",
