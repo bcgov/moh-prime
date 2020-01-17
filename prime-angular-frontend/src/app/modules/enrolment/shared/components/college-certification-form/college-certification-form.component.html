@@ -36,7 +36,7 @@
                    placeholder="Licence Number"
                    formControlName="licenseNumber">
             <mat-error *ngIf="form.get('licenseNumber').hasError('required')">Required</mat-error>
-            <mat-error *ngIf="form.get('licenseNumber').hasError('alphanumeric')">Must contain only be alphanumeric
+            <mat-error *ngIf="form.get('licenseNumber').hasError('alphanumeric')">Must contain only alphanumeric
               characters
             </mat-error>
           </mat-form-field>

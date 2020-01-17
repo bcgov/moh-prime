@@ -96,7 +96,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   }
 
   private setValidations() {
-    this.formUtilsService.setValidators(this.licenseNumber, [Validators.required, this.alphaNumeric()]);
+    this.formUtilsService.setValidators(this.licenseNumber, [Validators.required, FormControlValidators.alphanumeric]);
     this.formUtilsService.setValidators(this.licenseCode, [Validators.required]);
     this.formUtilsService.setValidators(this.renewalDate, [Validators.required]);
   }
@@ -127,15 +127,4 @@ export class CollegeCertificationFormComponent implements OnInit {
     return this.practices.filter(p => p.collegePractices.map(cl => cl.collegeCode).includes(collegeCode));
   }
 
-  private alphaNumeric(): ValidatorFn {
-    return (c: FormControl): { [key: string]: boolean } | null => {
-      if (c.value) {
-        const regEx = new RegExp(/^[a-zA-Z0-9]*$/);
-        if (!regEx.test(c.value)) {
-          return { alphanumeric: true };
-        }
-      }
-      return null;
-    };
-  }
 }
