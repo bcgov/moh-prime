@@ -8,7 +8,7 @@ export interface TermsOfAccess {
   userClauseId: number;
   userClause: UserClause;
   licenseClassClauses: Clause[];
-  limitsAndConditionsClauses: Clause[];
+  limitsConditionsClause: Clause;
   effectiveDate: string;
 }
 

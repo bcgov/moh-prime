@@ -17,12 +17,12 @@ namespace Prime.Controllers
     public class EnrolleesController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
-        private readonly ITermsOfAccessService _termsOfAccessService;
+        private readonly IAccessTermService _accessTermService;
 
-        public EnrolleesController(IEnrolleeService enrolleeService, ITermsOfAccessService termsOfAccessService)
+        public EnrolleesController(IEnrolleeService enrolleeService, IAccessTermService accessTermService)
         {
             _enrolleeService = enrolleeService;
-            _termsOfAccessService = termsOfAccessService;
+            _accessTermService = accessTermService;
         }
 
         // GET: api/Enrollees
@@ -456,13 +456,13 @@ namespace Prime.Controllers
         /// Get the enrolmee's terms of access.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpGet("{enrolleeId}/terms-of-access", Name = nameof(GetTermsOfAccess))]
+        [HttpGet("{enrolleeId}/terms-of-access", Name = nameof(GetAccessTerms))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiOkResponse<TermsOfAccess>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<TermsOfAccess>> GetTermsOfAccess(int enrolleeId)
+        [ProducesResponseType(typeof(ApiOkResponse<AccessTerm>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<AccessTerm>> GetAccessTerms(int enrolleeId)
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
@@ -476,9 +476,9 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            var termsOfAccess = await _termsOfAccessService.GetEnrolleeTermsOfAccessAsync(enrolleeId);
+            var accessTerms = await _accessTermService.GetEnrolleeAccessTermsAsync(enrolleeId);
 
-            return Ok(new ApiOkResponse<TermsOfAccess>(termsOfAccess));
+            return Ok(new ApiOkResponse<AccessTerm>(accessTerms));
         }
     }
 }

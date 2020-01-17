@@ -14,7 +14,7 @@ namespace Prime.Services
         private readonly IAutomaticAdjudicationService _automaticAdjudicationService;
         private readonly IEmailService _emailService;
         private readonly IPrivilegeService _privilegeService;
-        private readonly ITermsOfAccessService _termsOfAccessService;
+        private readonly IAccessTermService _accessTermService;
 
         private class StatusWrapper
         {
@@ -32,13 +32,13 @@ namespace Prime.Services
             IAutomaticAdjudicationService automaticAdjudicationService,
             IEmailService emailService,
             IPrivilegeService privilegeService,
-            ITermsOfAccessService termsOfAccessService)
+            IAccessTermService accessTermService)
             : base(context, httpContext)
         {
             _automaticAdjudicationService = automaticAdjudicationService;
             _emailService = emailService;
             _privilegeService = privilegeService;
-            _termsOfAccessService = termsOfAccessService;
+            _accessTermService = accessTermService;
         }
 
         private Dictionary<Status, StatusWrapper[]> GetWorkFlowStateMap()
@@ -375,7 +375,7 @@ namespace Prime.Services
 
                         enrollee.EnrolmentStatuses.Add(adjudicatedEnrolmentStatus);
 
-                        await _termsOfAccessService.SetEnrolleeTermsOfAccessAsync(enrollee);
+                        await _accessTermService.SetEnrolleeAccessTermsAsync(enrollee);
 
                         // Flip to the object that will get returned
                         createdEnrolmentStatus = adjudicatedEnrolmentStatus;
@@ -385,7 +385,7 @@ namespace Prime.Services
                 case Status.APPROVED_CODE:
                     createdEnrolmentStatus.AddStatusReason(StatusReason.MANUAL_CODE);
 
-                    await _termsOfAccessService.SetEnrolleeTermsOfAccessAsync(enrollee);
+                    await _accessTermService.SetEnrolleeAccessTermsAsync(enrollee);
 
                     break;
 

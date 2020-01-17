@@ -6,7 +6,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
 
-import { EnrolmentCertificateNotesComponent } from './enrolment-certificate-notes.component';
+import { LimitsConditionsClausesComponent } from './limits-conditions-clauses.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
@@ -16,44 +16,43 @@ import { PageHeaderComponent } from '@shared/components/page-header/page-header.
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { PageComponent } from '@shared/components/page/page.component';
 
-describe('EnrolmentCertificateNotesComponent', () => {
-  let component: EnrolmentCertificateNotesComponent;
-  let fixture: ComponentFixture<EnrolmentCertificateNotesComponent>;
+describe('LimitsConditionsClausesComponent', () => {
+  let component: LimitsConditionsClausesComponent;
+  let fixture: ComponentFixture<LimitsConditionsClausesComponent>;
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule(
-      {
-        imports: [
-          BrowserAnimationsModule,
-          HttpClientTestingModule,
-          NgxBusyModule,
-          NgxContextualHelpModule,
-          NgxMaterialModule,
-          ReactiveFormsModule,
-          RouterTestingModule
-        ],
-        declarations: [
-          EnrolmentCertificateNotesComponent,
-          PageComponent,
-          PageHeaderComponent,
-          FormatDatePipe
-        ],
-        providers: [
-          {
-            provide: APP_CONFIG,
-            useValue: APP_DI_CONFIG
-          },
-          {
-            provide: ConfigService,
-            useValue: MockConfigService
-          }
-        ]
-      }
-    ).compileComponents();
+    TestBed.configureTestingModule({
+      imports: [
+        BrowserAnimationsModule,
+        HttpClientTestingModule,
+        NgxBusyModule,
+        NgxContextualHelpModule,
+        NgxMaterialModule,
+        ReactiveFormsModule,
+        RouterTestingModule
+      ],
+      declarations: [
+        LimitsConditionsClausesComponent,
+        PageComponent,
+        PageHeaderComponent,
+        FormatDatePipe
+      ],
+      providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        },
+        {
+          provide: ConfigService,
+          useValue: MockConfigService
+        }
+      ]
+    })
+      .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EnrolmentCertificateNotesComponent);
+    fixture = TestBed.createComponent(LimitsConditionsClausesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

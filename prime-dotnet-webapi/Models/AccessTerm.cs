@@ -6,14 +6,13 @@ using Newtonsoft.Json;
 
 namespace Prime.Models
 {
-    [Table("TermsOfAccess")]
-    public class TermsOfAccess : BaseAuditable
+    [Table("AccessTerm")]
+    public class AccessTerm : BaseAuditable
     {
-        public TermsOfAccess()
+        public AccessTerm()
         {
             // Create lists so they don't have be instantiated when items need to be added
-            TermsOfAccessLicenseClassClauses = new List<TermsOfAccessLicenseClassClause>();
-            TermsOfAccessLimitsAndConditionsClauses = new List<TermsOfAccessLimitsAndConditionsClause>();
+            AccessTermLicenseClassClauses = new List<AccessTermLicenseClassClause>();
         }
 
         [Key]
@@ -32,19 +31,17 @@ namespace Prime.Models
 
         public UserClause UserClause { get; set; }
 
+        public int? LimitsConditionsClauseId { get; set; }
+
+        public LimitsConditionsClause LimitsConditionsClause { get; set; }
+
         [NotMapped]
         // TODO use the get instead of using the service to populate
         public List<LicenseClassClause> LicenseClassClauses { get; set; }
 
-        [NotMapped]
-        // TODO use the get instead of using the service to populate
-        public List<LimitsAndConditionsClause> LimitsAndConditionsClauses { get; set; }
 
         [JsonIgnore]
-        public List<TermsOfAccessLicenseClassClause> TermsOfAccessLicenseClassClauses { get; set; }
-
-        [JsonIgnore]
-        public List<TermsOfAccessLimitsAndConditionsClause> TermsOfAccessLimitsAndConditionsClauses { get; set; }
+        public List<AccessTermLicenseClassClause> AccessTermLicenseClassClauses { get; set; }
 
         [Required]
         public DateTime EffectiveDate { get; set; }

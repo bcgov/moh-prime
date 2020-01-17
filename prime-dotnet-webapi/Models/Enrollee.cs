@@ -178,6 +178,6 @@ namespace Prime.Models
         }
 
         [JsonIgnore]
-        public ICollection<TermsOfAccess> TermsOfAccess { get; set; }
+        public ICollection<AccessTerm> AccessTerms { get; set; }
     }
 }
