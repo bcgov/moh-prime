@@ -32,8 +32,8 @@ RUN mkdir -p /var/cache/nginx && \
     mkdir -p /var/cache/nginx/client_temp && \ 
     chown -R 1001:1001 /var/cache/nginx && \ 
     touch /etc/nginx/conf.d/default.conf && \
-    chown -R 1001:1001 /etc/nginx/conf.d/ && \
-    chmod 777 /etc/nginx/conf.d/default.conf && \
+    chown -R 1001:1001 /etc/nginx && \
+    chmod -R 777 /etc/nginx && \
     chmod -R 777 /var/cache/nginx && \ 
     chmod -R 777 /var/run && \
     chmod +x /home/entrypoint.sh && \
@@ -66,7 +66,7 @@ RUN apk del ${CERTBOT_DEPS}
 RUN rm -rf /var/cache/apk/*
 
 WORKDIR /
-
+RUN envsubst '$SUFFIX' < /etc/nginx/nginx.template.conf > /etc/nginx/nginx.conf
 COPY ./entrypoint.sh /
 RUN chmod a+x /entrypoint.sh
 
