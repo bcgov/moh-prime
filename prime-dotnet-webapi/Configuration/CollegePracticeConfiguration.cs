@@ -11,10 +11,10 @@ namespace Prime.Configuration
             get
             {
                 return new[] {
-               new CollegePractice { CollegeCode = 3, PracticeCode = 1, CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
-               new CollegePractice { CollegeCode = 3, PracticeCode = 2, CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
-               new CollegePractice { CollegeCode = 3, PracticeCode = 3, CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
-               new CollegePractice { CollegeCode = 3, PracticeCode = 4, CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE }
+                    new CollegePractice { CollegeCode = 3, PracticeCode = 1, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new CollegePractice { CollegeCode = 3, PracticeCode = 2, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new CollegePractice { CollegeCode = 3, PracticeCode = 3, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new CollegePractice { CollegeCode = 3, PracticeCode = 4, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE }
                 };
             }
         }
