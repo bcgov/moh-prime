@@ -11,8 +11,8 @@ namespace Prime.ModelFactories
         {
             StrictMode(true);
             RuleFor(x => x.Id, () => IdCounter++);
-            RuleFor(x => x.EnrolleeId, () => owner.Id);
             RuleFor(x => x.Enrollee, () => owner);
+            RuleFor(x => x.EnrolleeId, () => owner.Id);
             RuleFor(x => x.CountryCode, f => f.PickRandom(countries));
             RuleFor(x => x.Country, f => f.PickRandom(CountryConfiguration));
             RuleFor(x => x.ProvinceCode, TestUtils.RandomProvinceCode());
