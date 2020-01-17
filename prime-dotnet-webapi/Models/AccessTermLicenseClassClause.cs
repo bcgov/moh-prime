@@ -4,14 +4,14 @@ using Newtonsoft.Json;
 
 namespace Prime.Models
 {
-    [Table("TermsOfAccessLicenseClassClause")]
-    public class TermsOfAccessLicenseClassClause
+    [Table("AccessTermLicenseClassClause")]
+    public class AccessTermLicenseClassClause
     {
         [Required]
-        public int TermsOfAccessId { get; set; }
+        public int AccessTermId { get; set; }
 
         [JsonIgnore]
-        public TermsOfAccess TermsOfAccess { get; set; }
+        public AccessTerm AccessTerm { get; set; }
 
         [Required]
         public int LicenseClassClauseId { get; set; }

@@ -11,8 +11,8 @@ import { AdjudicationGuard } from './shared/guards/adjudication.guard';
 import { EnrolmentsComponent } from './pages/enrolments/enrolments.component';
 import { EnrolmentComponent } from './pages/enrolment/enrolment.component';
 import { AdjudicatorNotesComponent } from './pages/adjudicator-notes/adjudicator-notes.component';
-import { UserAgreementNotesComponent } from './pages/user-agreement-notes/user-agreement-notes.component';
-import { EnrolmentCertificateNotesComponent } from './pages/enrolment-certificate-notes/enrolment-certificate-notes.component';
+import { LimitsConditionsClausesComponent } from './pages/limits-conditions-clauses/limits-conditions-clauses.component';
+import { CertificateLimitsConditionsComponent } from './pages/certificate-limits-conditions/certificate-limits-conditions.component';
 
 const routes: Routes = [
   {
@@ -45,14 +45,14 @@ const routes: Routes = [
                 data: { title: 'Adjudicator Notes' }
               },
               {
-                path: 'user-agreement-notes',
-                component: UserAgreementNotesComponent,
-                data: { title: 'User Agreement Notes' }
+                path: 'limits-conditions-clauses',
+                component: LimitsConditionsClausesComponent,
+                data: { title: 'Limits and Conditions Clauses' }
               },
               {
-                path: 'enrolment-certificate-notes',
-                component: EnrolmentCertificateNotesComponent,
-                data: { title: 'Enrolment Certificate Notes' }
+                path: 'certificate-limits-conditions',
+                component: CertificateLimitsConditionsComponent,
+                data: { title: 'Certificate Limits and Conditions' }
               }
             ]
           }
