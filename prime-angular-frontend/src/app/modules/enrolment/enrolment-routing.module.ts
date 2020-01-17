@@ -85,14 +85,14 @@ const routes: Routes = [
         data: { title: 'PharmaNet Enrolment' }
       },
       {
-        path: EnrolmentRoutes.SELF_DECLARATION,
-        component: SelfDeclarationComponent,
+        path: EnrolmentRoutes.ORGANIZATION,
+        component: OrganizationComponent,
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'PharmaNet Enrolment' }
       },
       {
-        path: EnrolmentRoutes.ORGANIZATION,
-        component: OrganizationComponent,
+        path: EnrolmentRoutes.SELF_DECLARATION,
+        component: SelfDeclarationComponent,
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'PharmaNet Enrolment' }
       },

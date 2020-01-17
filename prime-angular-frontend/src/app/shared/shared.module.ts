@@ -29,6 +29,7 @@ import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { YesNoPipe } from '@shared/pipes/yes-no.pipe';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 import { HeaderComponent } from '@shared/components/header/header.component';
+import { PageComponent } from '@shared/components/page/page.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { PageSubheaderComponent } from './components/page-subheader/page-subheader.component';
 import { PageSubheaderTitleDirective } from '@shared/components/page-subheader/page-subheader-title.directive';
@@ -64,6 +65,7 @@ import { PrimeContactComponent } from '@shared/components/prime-contact/prime-co
     ConfirmDialogComponent,
     EnrolmentStatusReasonsComponent,
     HeaderComponent,
+    PageComponent,
     PageHeaderComponent,
     PageSubheaderComponent,
     PageSubheaderTitleDirective,
@@ -118,6 +120,7 @@ import { PrimeContactComponent } from '@shared/components/prime-contact/prime-co
     DashboardComponent,
     EnrolmentStatusReasonsComponent,
     HeaderComponent,
+    PageComponent,
     PageHeaderComponent,
     PageSubheaderComponent,
     PageSubheaderTitleDirective,

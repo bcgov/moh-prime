@@ -51,6 +51,8 @@ namespace PrimeTests.Mocks
         private readonly string COUNTRY_KEY = typeof(Country).FullName;
         private readonly string PROVINCE_KEY = typeof(Province).FullName;
         private readonly string STATUS_REASON_KEY = typeof(StatusReason).FullName;
+        private readonly string PRIVILEGE_GROUP_KEY = typeof(PrivilegeGroup).FullName;
+        private readonly string PRIVILEGE_TYPE_KEY = typeof(PrivilegeType).FullName;
 
         public BaseMockService()
         {
@@ -131,6 +133,14 @@ namespace PrimeTests.Mocks
                 { 6, new StatusReason { Code = 2, Name = "Licence Class" } },
                 { 7, new StatusReason { Code = 2, Name = "Self Declaration" } },
                 { 8, new StatusReason { Code = 2, Name = "Contact address or Identity Address Out of British Columbia" } }
+            });
+
+            _fakeDb.Add(PRIVILEGE_GROUP_KEY, new Dictionary<short, PrivilegeGroup> {
+                { 1, new PrivilegeGroup { Code = 4, PrivilegeTypeCode = 1, Name = "Roles" } }
+            });
+
+            _fakeDb.Add(PRIVILEGE_TYPE_KEY, new Dictionary<short, PrivilegeType> {
+                { 1, new PrivilegeType { Code = 1, Name = "Role" } }
             });
 
             this.SeedData();

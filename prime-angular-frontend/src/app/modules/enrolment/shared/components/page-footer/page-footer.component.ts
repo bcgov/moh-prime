@@ -43,8 +43,8 @@ export class PageFooterComponent implements OnInit {
       this.saveButtonLabel = 'Save and Continue';
       this.secondaryActionButtonLabel = 'Back';
     } else {
-      this.saveButtonLabel = 'Save and Submit';
-      this.secondaryActionButtonLabel = 'Save and Continue Editing';
+      this.saveButtonLabel = 'Continue';
+      this.hasSecondaryAction = false;
     }
   }
 }

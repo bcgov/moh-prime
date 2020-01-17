@@ -1,21 +1,16 @@
-using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Prime.Models;
+
 namespace Prime.Configuration
 {
-    public class CollegeLicenseConfiguration : IEntityTypeConfiguration<CollegeLicense>
+    public class CollegeLicenseConfiguration : SeededTable<CollegeLicense>
     {
-        public void Configure(EntityTypeBuilder<CollegeLicense> builder)
+        public override ICollection<CollegeLicense> SeedData
         {
-            builder.HasKey(cl => new { cl.CollegeCode, cl.LicenseCode });
-            builder.HasOne(cl => cl.College)
-                .WithMany(c => c.CollegeLicenses)
-                .HasForeignKey(cl => cl.CollegeCode);
-            builder.HasOne(cl => cl.License)
-                .WithMany(l => l.CollegeLicenses)
-                .HasForeignKey(cl => cl.LicenseCode);
-
-            builder.HasData(
+            get
+            {
+                return new[] {
                 new CollegeLicense { CollegeCode = 1, LicenseCode = 1, CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
                 new CollegeLicense { CollegeCode = 1, LicenseCode = 2, CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
                 new CollegeLicense { CollegeCode = 1, LicenseCode = 3, CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
@@ -72,7 +67,21 @@ namespace Prime.Configuration
                 new CollegeLicense { CollegeCode = 3, LicenseCode = 54, CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
                 new CollegeLicense { CollegeCode = 3, LicenseCode = 55, CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE },
                 new CollegeLicense { CollegeCode = 3, LicenseCode = 56, CreatedTimeStamp = SeedConstants.SEEDING_DATE, UpdatedTimeStamp = SeedConstants.SEEDING_DATE }
-            );
+                };
+            }
+        }
+
+        public override void Configure(EntityTypeBuilder<CollegeLicense> builder)
+        {
+            builder.HasKey(cl => new { cl.CollegeCode, cl.LicenseCode });
+            builder.HasOne(cl => cl.College)
+                .WithMany(c => c.CollegeLicenses)
+                .HasForeignKey(cl => cl.CollegeCode);
+            builder.HasOne(cl => cl.License)
+                .WithMany(l => l.CollegeLicenses)
+                .HasForeignKey(cl => cl.LicenseCode);
+
+            builder.HasData(SeedData);
         }
     }
 }

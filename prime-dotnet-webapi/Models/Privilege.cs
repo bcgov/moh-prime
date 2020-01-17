@@ -15,7 +15,7 @@ namespace Prime.Models
 
         public string Description { get; set; }
 
-        public int PrivilegeGroupId { get; set; }
+        public short PrivilegeGroupCode { get; set; }
 
         [JsonIgnore]
         public PrivilegeGroup PrivilegeGroup { get; set; }
