@@ -4,12 +4,23 @@ using Prime.Models;
 
 namespace Prime.ModelFactories
 {
-    public class PhysicalAddressFactory : Faker<PhysicalAddress>
+    public class PhysicalAddressFactory : AddressFactory<PhysicalAddress>
+    {
+        public PhysicalAddressFactory(Enrollee owner) : base(owner) { }
+    }
+    public class MailingAddressFactory : AddressFactory<MailingAddress>
+    {
+        public MailingAddressFactory(Enrollee owner) : base(owner) { }
+    }
+
+    public abstract class AddressFactory<T> : Faker<T> where T : Address
     {
         private static int IdCounter = 1;
-        public PhysicalAddressFactory(Enrollee owner)
+
+        protected AddressFactory(Enrollee owner)
         {
-            //StrictMode(true);
+            this.SetBaseRules();
+
             RuleFor(x => x.Id, f => IdCounter++);
             RuleFor(x => x.Enrollee, f => owner);
             RuleFor(x => x.EnrolleeId, f => owner.Id);
