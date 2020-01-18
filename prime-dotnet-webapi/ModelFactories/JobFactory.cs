@@ -1,4 +1,5 @@
 using Bogus;
+using Bogus.Extensions;
 using Prime.Models;
 
 namespace Prime.ModelFactories
@@ -14,7 +15,7 @@ namespace Prime.ModelFactories
             RuleFor(x => x.Id, () => IdCounter++);
             RuleFor(x => x.Enrollee, () => owner);
             RuleFor(x => x.EnrolleeId, () => owner.Id);
-            RuleFor(x => x.Title, f => f.PickRandom(JobNameLookup.All).Name);
+            RuleFor(x => x.Title, f => f.Name.JobTitle().OrOther(f, f.PickRandom(JobNameLookup.All).Name));
         }
     }
 }
