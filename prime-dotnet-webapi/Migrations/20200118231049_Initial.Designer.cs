@@ -11,8 +11,8 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20200116202350_Intial")]
-    partial class Intial
+    [Migration("20200118231049_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -206,8 +206,7 @@ namespace Prime.Migrations
                     b.Property<short>("LicenseCode");
 
                     b.Property<string>("LicenseNumber")
-                        .IsRequired()
-                        .HasMaxLength(5);
+                        .IsRequired();
 
                     b.Property<short?>("PracticeCode");
 
@@ -7390,7 +7389,7 @@ namespace Prime.Migrations
                             Code = (short)1,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Community Health Practice Access to PharmaNet (ComPAP)",
+                            Name = "Health Authority",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -7399,7 +7398,7 @@ namespace Prime.Migrations
                             Code = (short)2,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Health Authority",
+                            Name = "Community Practice",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -7408,22 +7407,13 @@ namespace Prime.Migrations
                             Code = (short)3,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Community Practice",
-                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Code = (short)4,
-                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Community Pharmacy",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
-                            Code = (short)5,
+                            Code = (short)4,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Primary Care Network",
@@ -7720,9 +7710,9 @@ namespace Prime.Migrations
                             Id = 19,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Description = "Registered User that can have OBO's",
+                            Description = "Registered User that can have OBOs",
                             PrivilegeGroupCode = (short)5,
-                            TransactionType = "RU with OBO's",
+                            TransactionType = "RU with OBOs",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
@@ -7797,7 +7787,7 @@ namespace Prime.Migrations
                             Code = (short)5,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "RU That Can Have OBO's",
+                            Name = "RU That Can Have OBOs",
                             PrivilegeTypeCode = (short)1,
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
@@ -7827,19 +7817,19 @@ namespace Prime.Migrations
                         new
                         {
                             Code = (short)1,
-                            CreatedTimeStamp = new DateTime(2020, 1, 16, 12, 23, 49, 295, DateTimeKind.Local).AddTicks(3104),
+                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Allowable Role",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 16, 12, 23, 49, 295, DateTimeKind.Local).AddTicks(3104),
+                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)2,
-                            CreatedTimeStamp = new DateTime(2020, 1, 16, 12, 23, 49, 295, DateTimeKind.Local).AddTicks(3104),
+                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Allowable Transaction",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 16, 12, 23, 49, 295, DateTimeKind.Local).AddTicks(3104),
+                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
