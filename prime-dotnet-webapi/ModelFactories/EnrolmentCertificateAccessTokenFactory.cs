@@ -17,7 +17,7 @@ namespace Prime.ModelFactories
             RuleFor(x => x.ViewCount, 0);
             RuleFor(x => x.Active, true);
 
-            RuleSet("invalid", (set) =>
+            RuleSet("inactive", (set) =>
             {
                 set.RuleFor(x => x.Active, false);
             });

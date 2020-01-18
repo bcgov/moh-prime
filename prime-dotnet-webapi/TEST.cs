@@ -16,7 +16,7 @@ namespace Prime
         {
 
 
-            var p = new EnrolleeFaker().Generate(2);
+            // var p = new EnrolleeFaker().Generate(2);
             var t = 1;
         }
     }
