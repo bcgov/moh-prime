@@ -40,9 +40,8 @@ RUN mkdir -p /var/cache/nginx && \
     chmod 777 /home/entrypoint.sh && \
     echo "Build completed."
 
-
 WORKDIR /
-RUN envsubst '$SUFFIX' < /etc/nginx/nginx.template.conf > /etc/nginx/nginx.conf
+#RUN envsubst '$SUFFIX' < /etc/nginx/nginx.template.conf > /etc/nginx/nginx.conf
 RUN echo "${TLS_CHAIN}" > /etc/nginx/chained.crt
 RUN echo "${TLS_PRIVATE}" > /etc/nginx/private.key
 COPY ./entrypoint.sh /
