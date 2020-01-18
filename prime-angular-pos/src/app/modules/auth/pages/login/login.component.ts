@@ -4,6 +4,7 @@ import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 
 import { AuthProvider } from '@auth/shared/enum/auth-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { DataResource } from '@auth/shared/resources/data-resource.service';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,8 @@ import { AuthService } from '@auth/shared/services/auth.service';
 export class LoginComponent implements OnInit {
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
-    private authService: AuthService
+    private authService: AuthService,
+    private dataResource: DataResource
   ) { }
 
   public login() {

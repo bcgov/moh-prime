@@ -5,21 +5,11 @@ import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
-import { Configuration, Config, PracticeConfig, CollegeConfig, LicenseConfig, ProvinceConfig } from './config.model';
-import { PrimeHttpResponse } from '@core/models/prime-http-response.model';
+import { Configuration, Config } from '@config/config.model';
+import { AppHttpResponse } from '@core/models/app-http-response.model';
 
 export interface IConfigService {
-  practices: PracticeConfig[];
-  colleges: CollegeConfig[];
-  countries: Config<string>[];
-  jobNames: Config<number>[];
-  licenses: LicenseConfig[];
-  organizationNames: Config<number>[];
-  organizationTypes: Config<number>[];
-  provinces: ProvinceConfig[];
-  statuses: Config<number>[];
-  privilegeGroups: Config<number>[];
-  privilegeTypes: Config<number>[];
+  config: Config<number>[];
   load(): Observable<Configuration>;
 }
 
@@ -30,67 +20,12 @@ export class ConfigService implements IConfigService {
   protected configuration: Configuration;
 
   constructor(
-    @Inject(APP_CONFIG) protected config: AppConfig,
+    @Inject(APP_CONFIG) protected appConfig: AppConfig,
     protected http: HttpClient
   ) { }
 
-  public get practices(): PracticeConfig[] {
-    return [...this.configuration.practices]
-      .sort(this.sortConfig);
-  }
-
-  public get colleges(): CollegeConfig[] {
-    return [...this.configuration.colleges]
-      .sort(this.sortConfig);
-  }
-
-  public get countries(): Config<string>[] {
-    return [...this.configuration.countries]
-      .sort(this.sortConfig);
-  }
-
-  public get jobNames(): Config<number>[] {
-    return [...this.configuration.jobNames]
-      .sort(this.sortConfig);
-  }
-
-  public get licenses(): LicenseConfig[] {
-    return [...this.configuration.licenses]
-      .sort(this.sortConfig);
-  }
-
-  public get organizationNames(): Config<number>[] {
-    return [...this.configuration.organizationNames]
-      .sort(this.sortConfig);
-  }
-
-  public get organizationTypes(): Config<number>[] {
-    return [...this.configuration.organizationTypes]
-      .sort(this.sortConfig);
-  }
-
-  public get provinces(): ProvinceConfig[] {
-    return [...this.configuration.provinces]
-      .sort(this.sortConfig);
-  }
-
-  public get statuses(): Config<number>[] {
-    return [...this.configuration.statuses]
-      .sort(this.sortConfig);
-  }
-
-  public get statusReasons() {
-    return [...this.configuration.statusReasons]
-      .sort(this.sortConfig);
-  }
-
-  public get privilegeGroups() {
-    return [...this.configuration.privilegeGroups]
-      .sort(this.sortConfig);
-  }
-
-  public get privilegeTypes() {
-    return [...this.configuration.privilegeTypes]
+  public get config(): Config<number>[] {
+    return [...this.configuration.config]
       .sort(this.sortConfig);
   }
 
@@ -114,9 +49,9 @@ export class ConfigService implements IConfigService {
    * Get the configuration for bootstrapping the application.
    */
   private getConfiguration(): Observable<Configuration> {
-    return this.http.get<PrimeHttpResponse>(`${this.config.apiEndpoint}/lookups`)
+    return this.http.get<AppHttpResponse>(`${this.appConfig.apiEndpoint}/config`)
       .pipe(
-        map((response: PrimeHttpResponse) => response.result)
+        map((response: AppHttpResponse) => response.result)
       );
   }
 
