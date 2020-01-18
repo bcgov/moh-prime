@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppConfigModule } from './app-config.module';
@@ -13,8 +12,8 @@ import { ConfigModule } from '@config/config.module';
     AppComponent
   ],
   imports: [
-    BrowserModule,
     CoreModule,
+    // TODO not needed for POS and would also remove the mocks
     ConfigModule,
     AppConfigModule,
     AppRoutingModule // WARNING: MUST be the last routing module imported!!!

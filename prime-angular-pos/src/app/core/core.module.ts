@@ -1,4 +1,5 @@
 import { NgModule, Optional, SkipSelf, ErrorHandler } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
@@ -14,6 +15,7 @@ import { MaintenanceComponent } from '@core/components/maintenance/maintenance.c
 
 @NgModule({
   imports: [
+    BrowserModule,
     BrowserAnimationsModule,
     AuthHttpModule,
     KeycloakModule
@@ -35,6 +37,8 @@ import { MaintenanceComponent } from '@core/components/maintenance/maintenance.c
     MaintenanceComponent
   ],
   exports: [
+    BrowserModule,
+    BrowserAnimationsModule,
     AccessDeniedComponent,
     PageNotFoundComponent,
     MaintenanceComponent
