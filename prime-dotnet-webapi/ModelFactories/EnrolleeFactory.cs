@@ -1,19 +1,20 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Newtonsoft.Json;
-using FactoryGirlCore;
+
 using Bogus;
 using Bogus.Extensions;
 using Prime.Models;
+
 namespace Prime.ModelFactories
-    public class EnrolleeFaker : Faker<Enrollee>
+{
+    public class EnrolleeFactory : Faker<Enrollee>
     {
         private static int IdCounter = 1;
-        public EnrolleeFaker()
+
+        public EnrolleeFactory()
         {
+            this.SetBaseRules();
+
             RuleFor(e => e.Id, () => IdCounter++);
             RuleFor(e => e.UserId, () => Guid.NewGuid());
             RuleFor(e => e.FirstName, f => f.Name.FirstName());
@@ -36,6 +37,7 @@ namespace Prime.ModelFactories
             RuleFor(e => e.AccessAgreementNote, (f, e) => new AccessAgreementNoteFactory(e).Generate());
         }
     }
+}
 
 // Id = 0,
 // UserId = Guid.NewGuid(),
