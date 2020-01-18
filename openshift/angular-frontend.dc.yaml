@@ -118,20 +118,38 @@ objects:
       kind: Service
       name: "${NAME}${SUFFIX}"
 - apiVersion: v1
+    kind: Route
+    metadata:
+      name: "${NAME}${SUFFIX}-secure"
+    spec:
+      host: "${SUFFIX}.pharmanetenrolment.gov.bc.ca"
+      port:
+        targetPort: '8443'
+      to:
+        kind: Service
+        name: "${NAME}${SUFFIX}-secure"
+- apiVersion: v1
   kind: Service
   metadata:
-    annotations:
-      kompose.cmd: kompose convert --provider=openshift --build=build-config --build-repo=https://github.com/bcgov/moh-prime.git
-      kompose.version: 1.18.0 (06a2e56)
     creationTimestamp: 
     labels:
       io.kompose.service: "${NAME}${SUFFIX}"
     name: "${NAME}${SUFFIX}"
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: 
+    labels:
+      io.kompose.service: "${NAME}${SUFFIX}-secure"
+    name: "${NAME}${SUFFIX}-secure"
   spec:
     ports:
     - name: '8080'
       port: 8080
       targetPort: 8080
+    - name: '8443'
+      port: 8443
+      targetPort: 8443
     selector:
       io.kompose.service: "${NAME}${SUFFIX}"
   status:
