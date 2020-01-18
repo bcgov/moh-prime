@@ -1,5 +1,24 @@
 @import 'palette';
+@import 'font';
 
 $enable-validation-icons: false;
 
 $body-color: theme-palette(blue);
+
+// body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+$font-family-base: theme-font(body);
+
+// Font
+// Using a base font size of 24px
+$font-size-base:              1.5rem !default; // Assumes the browser default, typically `16px`
+
+$font-weight-light:           300 !default;
+$font-weight-normal:          400 !default;
+$font-weight-bold:            500 !default;
+$font-weight-bolder:          700 !default;
+
+$h1-font-size:                $font-size-base * 2 !default;
+$h2-font-size:                $font-size-base * 1.5 !default;
+$h3-font-size:                $font-size-base * 1.167 !default;
+
+$small-font-size:             $font-size-base * 0.833 !default;

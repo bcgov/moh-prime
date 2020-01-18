@@ -1,6 +1,10 @@
 @import 'palette';
 
 $h1-colour: theme-palette(blue, dark);
-$h2-colour: theme-palette(blue);
+$h2-colour: theme-palette(blue, base);
+$h3-colour: theme-palette(blue, light);
 
-$paragraph-colour: theme-palette(blue);
+// Bold
+$h3-font-weight: 700;
+
+$paragraph-colour: theme-palette(blue, base);
