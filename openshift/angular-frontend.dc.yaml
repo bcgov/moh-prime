@@ -72,7 +72,12 @@ objects:
             valueFrom:
               secretKeyRef:
                 key: private-key
-                name: 'frontend-tls-certificate' 
+                name: 'frontend-tls-certificate'
+          - name: TLS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database-admin-password
+                name: 'postgresql-secret'
           image: " "
           name: primeweb
           ports:
