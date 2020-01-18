@@ -15,7 +15,7 @@ const routes: Routes = [
         data: { title: 'Login' }
       },
       {
-        path: '', // Equivalent to `/` and alias for `info`
+        path: '', // Equivalent to `/` and alias for `login`
         redirectTo: AuthRoutes.LOGIN,
         pathMatch: 'full'
       }
