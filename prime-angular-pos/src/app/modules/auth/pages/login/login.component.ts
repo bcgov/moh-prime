@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
     private authService: AuthService
   ) { }
 
-  public loginUsingIDIR() {
+  public login() {
     this.authService.login({
       idpHint: AuthProvider.BCSC,
       redirectUri: this.config.loginRedirectUrl

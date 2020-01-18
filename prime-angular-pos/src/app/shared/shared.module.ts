@@ -9,8 +9,13 @@ import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.mod
   declarations: [],
   imports: [
     CommonModule,
-    ReactiveFormsModule,
     RouterModule,
+    ReactiveFormsModule,
+    NgxMaterialModule
+  ],
+  exports: [
+    CommonModule,
+    ReactiveFormsModule,
     NgxMaterialModule
   ]
 })
