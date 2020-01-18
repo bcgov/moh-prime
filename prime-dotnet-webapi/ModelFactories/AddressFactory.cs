@@ -15,13 +15,11 @@ namespace Prime.ModelFactories
 
     public abstract class AddressFactory<T> : Faker<T> where T : Address
     {
-        private static int IdCounter = 1;
-
         protected AddressFactory(Enrollee owner)
         {
             this.SetBaseRules();
 
-            RuleFor(x => x.Id, f => IdCounter++);
+            RuleFor(x => x.Id, f => IdCounter.Id++);
             RuleFor(x => x.Enrollee, f => owner);
             RuleFor(x => x.EnrolleeId, f => owner.Id);
             RuleFor(x => x.Province, f => ProvinceLookup.BC);
@@ -41,5 +39,10 @@ namespace Prime.ModelFactories
                 set.RuleFor(x => x.CountryCode, (f, x) => x.Country.Code);
             });
         }
+    }
+
+    internal class IdCounter
+    {
+        public static int Id = 1;
     }
 }
