@@ -42,8 +42,8 @@ RUN mkdir -p /var/cache/nginx && \
 
 WORKDIR /
 #RUN envsubst '$SUFFIX' < /etc/nginx/nginx.template.conf > /etc/nginx/nginx.conf
-RUN echo "${TLS_CHAIN}" > /etc/nginx/chained.crt
-RUN echo "${TLS_PRIVATE}" > /etc/nginx/private.key
+#RUN echo "${TLS_CHAIN}" > /etc/nginx/chained.crt
+#RUN echo "${TLS_PRIVATE}" > /etc/nginx/private.key
 COPY ./entrypoint.sh /
 RUN chmod a+x /entrypoint.sh
 
