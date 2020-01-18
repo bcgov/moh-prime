@@ -9,7 +9,8 @@ namespace Prime.ModelFactories
 
         public CertificationFactory(Enrollee owner)
         {
-            StrictMode(true);
+            this.SetBaseRules();
+
             RuleFor(x => x.Id, () => IdCounter++);
             RuleFor(x => x.Enrollee, () => owner);
             RuleFor(x => x.EnrolleeId, () => owner.Id);

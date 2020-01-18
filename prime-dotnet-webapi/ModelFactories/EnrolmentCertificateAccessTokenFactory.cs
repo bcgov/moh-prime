@@ -8,7 +8,8 @@ namespace Prime.ModelFactories
     {
         public EnrolmentCertificateAccessTokenFactory(Enrollee owner)
         {
-            StrictMode(true);
+            this.SetBaseRules();
+
             RuleFor(x => x.Id, f => Guid.NewGuid());
             RuleFor(x => x.Enrollee, f => owner);
             RuleFor(x => x.EnrolleeId, f => owner.Id);
