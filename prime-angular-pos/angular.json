@@ -96,10 +96,11 @@
             "karmaConfig": "karma.conf.js",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/robots.txt"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/scss/app.scss"
             ],
             "scripts": []
           }
