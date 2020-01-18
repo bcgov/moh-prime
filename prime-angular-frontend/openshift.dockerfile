@@ -39,34 +39,12 @@ RUN mkdir -p /var/cache/nginx && \
     chmod +x /home/entrypoint.sh && \
     chmod 777 /home/entrypoint.sh && \
     echo "Build completed."
-RUN export CERTBOT_DEPS="py-pip \
-                         build-base \
-                         libffi-dev \
-                         python-dev \
-                         ca-certificates \
-                         openssl-dev \
-                         linux-headers \
-                         dialog \
-                         wget" && \
-            apk --update add openssl \
-                             augeas-libs \
-                             ${CERTBOT_DEPS}
 
-RUN pip install --upgrade --no-cache-dir pip virtualenv
-
-#RUN mkdir /letsencrypt
-#WORKDIR /letsencrypt
-
-# Get the certbot so we can use Lets Encrypt
-RUN wget https://dl.eff.org/certbot-auto
-RUN chmod a+x certbot-auto
-
-# Clean up
-RUN apk del ${CERTBOT_DEPS}
-RUN rm -rf /var/cache/apk/*
 
 WORKDIR /
 RUN envsubst '$SUFFIX' < /etc/nginx/nginx.template.conf > /etc/nginx/nginx.conf
+RUN echo "${TLS_CHAIN}" > /etc/nginx/chained.crt
+RUN echo "${TLS_PRIVATE}" > /etc/nginx/private.key
 COPY ./entrypoint.sh /
 RUN chmod a+x /entrypoint.sh
 

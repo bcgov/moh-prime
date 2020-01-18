@@ -63,6 +63,16 @@ objects:
             value: ${OC_APP}
           - name: REDIRECT_URL
             value: http://angular-frontend${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca
+          - name: TLS_CHAIN
+            valueFrom:
+              secretKeyRef:
+                key: authority-chain
+                name: 'frontend-tls-certificate' 
+          - name: TLS_PRIVATE
+            valueFrom:
+              secretKeyRef:
+                key: private-key
+                name: 'frontend-tls-certificate' 
           image: " "
           name: primeweb
           ports:
