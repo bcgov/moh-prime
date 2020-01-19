@@ -43,11 +43,11 @@ namespace Prime
         public DbSet<AccessAgreementNote> AccessAgreementNotes { get; set; }
         public DbSet<EnrolmentCertificateNote> EnrolmentCertificateNotes { get; set; }
 
-        public DbSet<TermsOfAccess> TermsOfAccess { get; set; }
+        public DbSet<AccessTerm> AccessTerms { get; set; }
         public DbSet<GlobalClause> GlobalClauses { get; set; }
         public DbSet<UserClause> UserClauses { get; set; }
         public DbSet<LicenseClassClause> LicenseClassClauses { get; set; }
-        public DbSet<LimitsAndConditionsClause> LimitsAndConditionsClauses { get; set; }
+        public DbSet<LimitsConditionsClause> LimitsConditionsClauses { get; set; }
 
         public override int SaveChanges()
         {
@@ -137,7 +137,6 @@ namespace Prime
             modelBuilder.ApplyConfiguration(new GlobalClauseConfiguration());
             modelBuilder.ApplyConfiguration(new UserClauseConfiguration());
             modelBuilder.ApplyConfiguration(new LicenseClassClauseConfiguration());
-            modelBuilder.ApplyConfiguration(new LimitsAndConditionsClauseConfiguration());
 
             #region Indexes
             modelBuilder.Entity<MailingAddress>()
@@ -184,32 +183,21 @@ namespace Prime
                 .WithMany(e => e.AdjudicatorNotes)
                 .HasForeignKey(an => an.EnrolleeId);
 
-            modelBuilder.Entity<TermsOfAccess>()
+            modelBuilder.Entity<AccessTerm>()
                 .HasOne(toa => toa.Enrollee)
-                .WithMany(e => e.TermsOfAccess)
+                .WithMany(e => e.AccessTerms)
                 .HasForeignKey(toa => toa.EnrolleeId);
 
-            modelBuilder.Entity<TermsOfAccessLicenseClassClause>()
-                .HasKey(tlic => new { tlic.TermsOfAccessId, tlic.LicenseClassClauseId });
-            modelBuilder.Entity<TermsOfAccessLicenseClassClause>()
-                .HasOne(tlic => tlic.TermsOfAccess)
-                .WithMany(toa => toa.TermsOfAccessLicenseClassClauses)
-                .HasForeignKey(tlic => tlic.TermsOfAccessId);
-            modelBuilder.Entity<TermsOfAccessLicenseClassClause>()
+            modelBuilder.Entity<AccessTermLicenseClassClause>()
+                .HasKey(tlic => new { tlic.AccessTermId, tlic.LicenseClassClauseId });
+            modelBuilder.Entity<AccessTermLicenseClassClause>()
+                .HasOne(tlic => tlic.AccessTerm)
+                .WithMany(toa => toa.AccessTermLicenseClassClauses)
+                .HasForeignKey(tlic => tlic.AccessTermId);
+            modelBuilder.Entity<AccessTermLicenseClassClause>()
                 .HasOne(tlic => tlic.LicenseClassClause)
-                .WithMany(lcc => lcc.TermsOfAccessLicenseClassClauses)
+                .WithMany(lcc => lcc.AccessTermLicenseClassClauses)
                 .HasForeignKey(tlic => tlic.LicenseClassClauseId);
-
-            modelBuilder.Entity<TermsOfAccessLimitsAndConditionsClause>()
-                .HasKey(tlim => new { tlim.TermsOfAccessId, tlim.LimitsConditionsClauseId });
-            modelBuilder.Entity<TermsOfAccessLimitsAndConditionsClause>()
-                .HasOne(tlim => tlim.TermsOfAccess)
-                .WithMany(toa => toa.TermsOfAccessLimitsAndConditionsClauses)
-                .HasForeignKey(tlim => tlim.TermsOfAccessId);
-            modelBuilder.Entity<TermsOfAccessLimitsAndConditionsClause>()
-                .HasOne(tlim => tlim.LimitsAndConditionsClause)
-                .WithMany(lcc => lcc.TermsOfAccessLimitsAndConditionsClauses)
-                .HasForeignKey(tlim => tlim.LimitsConditionsClauseId);
             #endregion
         }
     }

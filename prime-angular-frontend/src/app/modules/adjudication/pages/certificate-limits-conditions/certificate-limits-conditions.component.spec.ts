@@ -6,7 +6,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
 
-import { UserAgreementNotesComponent } from './user-agreement-notes.component';
+import { CertificateLimitsConditionsComponent } from './certificate-limits-conditions.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
@@ -16,43 +16,44 @@ import { PageHeaderComponent } from '@shared/components/page-header/page-header.
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { PageComponent } from '@shared/components/page/page.component';
 
-describe('UserAgreementNotesComponent', () => {
-  let component: UserAgreementNotesComponent;
-  let fixture: ComponentFixture<UserAgreementNotesComponent>;
+describe('CertificateLimitsConditionsComponent', () => {
+  let component: CertificateLimitsConditionsComponent;
+  let fixture: ComponentFixture<CertificateLimitsConditionsComponent>;
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        BrowserAnimationsModule,
-        HttpClientTestingModule,
-        NgxBusyModule,
-        NgxContextualHelpModule,
-        NgxMaterialModule,
-        ReactiveFormsModule,
-        RouterTestingModule
-      ],
-      declarations: [
-        UserAgreementNotesComponent,
-        PageComponent,
-        PageHeaderComponent,
-        FormatDatePipe
-      ],
-      providers: [
-        {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
-        },
-        {
-          provide: ConfigService,
-          useValue: MockConfigService
-        }
-      ]
-    })
-      .compileComponents();
+    TestBed.configureTestingModule(
+      {
+        imports: [
+          BrowserAnimationsModule,
+          HttpClientTestingModule,
+          NgxBusyModule,
+          NgxContextualHelpModule,
+          NgxMaterialModule,
+          ReactiveFormsModule,
+          RouterTestingModule
+        ],
+        declarations: [
+          CertificateLimitsConditionsComponent,
+          PageComponent,
+          PageHeaderComponent,
+          FormatDatePipe
+        ],
+        providers: [
+          {
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
+          },
+          {
+            provide: ConfigService,
+            useValue: MockConfigService
+          }
+        ]
+      }
+    ).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UserAgreementNotesComponent);
+    fixture = TestBed.createComponent(CertificateLimitsConditionsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

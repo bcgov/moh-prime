@@ -47,6 +47,57 @@ namespace Prime.Migrations
                     b.ToTable("AccessAgreementNote");
                 });
 
+            modelBuilder.Entity("Prime.Models.AccessTerm", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime?>("AcceptedDate");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<DateTime>("CreatedTimeStamp");
+
+                    b.Property<Guid>("CreatedUserId");
+
+                    b.Property<int>("EnrolleeId");
+
+                    b.Property<int>("GlobalClauseId");
+
+                    b.Property<int?>("LimitsConditionsClauseId");
+
+                    b.Property<DateTime>("UpdatedTimeStamp");
+
+                    b.Property<Guid>("UpdatedUserId");
+
+                    b.Property<int>("UserClauseId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnrolleeId");
+
+                    b.HasIndex("GlobalClauseId");
+
+                    b.HasIndex("LimitsConditionsClauseId");
+
+                    b.HasIndex("UserClauseId");
+
+                    b.ToTable("AccessTerm");
+                });
+
+            modelBuilder.Entity("Prime.Models.AccessTermLicenseClassClause", b =>
+                {
+                    b.Property<int>("AccessTermId");
+
+                    b.Property<int>("LicenseClassClauseId");
+
+                    b.HasKey("AccessTermId", "LicenseClassClauseId");
+
+                    b.HasIndex("LicenseClassClauseId");
+
+                    b.ToTable("AccessTermLicenseClassClause");
+                });
+
             modelBuilder.Entity("Prime.Models.Address", b =>
                 {
                     b.Property<int?>("Id")
@@ -155,8 +206,7 @@ namespace Prime.Migrations
                     b.Property<short>("LicenseCode");
 
                     b.Property<string>("LicenseNumber")
-                        .IsRequired()
-                        .HasMaxLength(5);
+                        .IsRequired();
 
                     b.Property<short?>("PracticeCode");
 
@@ -7289,13 +7339,12 @@ namespace Prime.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Prime.Models.LimitsAndConditionsClause", b =>
+            modelBuilder.Entity("Prime.Models.LimitsConditionsClause", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Clause")
-                        .IsRequired();
+                    b.Property<string>("Clause");
 
                     b.Property<DateTime>("CreatedTimeStamp");
 
@@ -7303,35 +7352,17 @@ namespace Prime.Migrations
 
                     b.Property<DateTime>("EffectiveDate");
 
+                    b.Property<int>("EnrolleeId");
+
                     b.Property<DateTime>("UpdatedTimeStamp");
 
                     b.Property<Guid>("UpdatedUserId");
 
                     b.HasKey("Id");
 
-                    b.ToTable("LimitsAndConditionsClause");
+                    b.HasIndex("EnrolleeId");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Clause = "Limit and condition 1 Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque sit, rerum assumenda sed facere quam vel soluta suscipit esse neque quod.",
-                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Clause = "Limit and condition 2 Adipisicing elit. Doloremque sit, rerum assumenda sed facere quam vel soluta suscipit esse neque quod.",
-                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        });
+                    b.ToTable("LimitsConditionsClause");
                 });
 
             modelBuilder.Entity("Prime.Models.Organization", b =>
@@ -7386,7 +7417,7 @@ namespace Prime.Migrations
                             Code = (short)1,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Community Health Practice Access to PharmaNet (ComPAP)",
+                            Name = "Health Authority",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -7395,7 +7426,7 @@ namespace Prime.Migrations
                             Code = (short)2,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Health Authority",
+                            Name = "Community Practice",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -7404,22 +7435,13 @@ namespace Prime.Migrations
                             Code = (short)3,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Community Practice",
-                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Code = (short)4,
-                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Community Pharmacy",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
-                            Code = (short)5,
+                            Code = (short)4,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Primary Care Network",
@@ -8765,64 +8787,6 @@ namespace Prime.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Prime.Models.TermsOfAccess", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("CreatedTimeStamp");
-
-                    b.Property<Guid>("CreatedUserId");
-
-                    b.Property<DateTime>("EffectiveDate");
-
-                    b.Property<int>("EnrolleeId");
-
-                    b.Property<int>("GlobalClauseId");
-
-                    b.Property<DateTime>("UpdatedTimeStamp");
-
-                    b.Property<Guid>("UpdatedUserId");
-
-                    b.Property<int>("UserClauseId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EnrolleeId");
-
-                    b.HasIndex("GlobalClauseId");
-
-                    b.HasIndex("UserClauseId");
-
-                    b.ToTable("TermsOfAccess");
-                });
-
-            modelBuilder.Entity("Prime.Models.TermsOfAccessLicenseClassClause", b =>
-                {
-                    b.Property<int>("TermsOfAccessId");
-
-                    b.Property<int>("LicenseClassClauseId");
-
-                    b.HasKey("TermsOfAccessId", "LicenseClassClauseId");
-
-                    b.HasIndex("LicenseClassClauseId");
-
-                    b.ToTable("TermsOfAccessLicenseClassClause");
-                });
-
-            modelBuilder.Entity("Prime.Models.TermsOfAccessLimitsAndConditionsClause", b =>
-                {
-                    b.Property<int>("TermsOfAccessId");
-
-                    b.Property<int>("LimitsConditionsClauseId");
-
-                    b.HasKey("TermsOfAccessId", "LimitsConditionsClauseId");
-
-                    b.HasIndex("LimitsConditionsClauseId");
-
-                    b.ToTable("TermsOfAccessLimitsAndConditionsClause");
-                });
-
             modelBuilder.Entity("Prime.Models.UserClause", b =>
                 {
                     b.Property<int>("Id")
@@ -8902,6 +8866,41 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithOne("AccessAgreementNote")
                         .HasForeignKey("Prime.Models.AccessAgreementNote", "EnrolleeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Prime.Models.AccessTerm", b =>
+                {
+                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
+                        .WithMany("AccessTerms")
+                        .HasForeignKey("EnrolleeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Prime.Models.GlobalClause", "GlobalClause")
+                        .WithMany()
+                        .HasForeignKey("GlobalClauseId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Prime.Models.LimitsConditionsClause", "LimitsConditionsClause")
+                        .WithMany()
+                        .HasForeignKey("LimitsConditionsClauseId");
+
+                    b.HasOne("Prime.Models.UserClause", "UserClause")
+                        .WithMany()
+                        .HasForeignKey("UserClauseId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Prime.Models.AccessTermLicenseClassClause", b =>
+                {
+                    b.HasOne("Prime.Models.AccessTerm", "AccessTerm")
+                        .WithMany("AccessTermLicenseClassClauses")
+                        .HasForeignKey("AccessTermId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Prime.Models.LicenseClassClause", "LicenseClassClause")
+                        .WithMany("AccessTermLicenseClassClauses")
+                        .HasForeignKey("LicenseClassClauseId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -9056,6 +9055,14 @@ namespace Prime.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("Prime.Models.LimitsConditionsClause", b =>
+                {
+                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
+                        .WithMany()
+                        .HasForeignKey("EnrolleeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Prime.Models.Organization", b =>
                 {
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
@@ -9090,50 +9097,6 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Country", "Country")
                         .WithMany()
                         .HasForeignKey("CountryCode")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Prime.Models.TermsOfAccess", b =>
-                {
-                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
-                        .WithMany("TermsOfAccess")
-                        .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Prime.Models.GlobalClause", "GlobalClause")
-                        .WithMany()
-                        .HasForeignKey("GlobalClauseId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Prime.Models.UserClause", "UserClause")
-                        .WithMany()
-                        .HasForeignKey("UserClauseId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Prime.Models.TermsOfAccessLicenseClassClause", b =>
-                {
-                    b.HasOne("Prime.Models.LicenseClassClause", "LicenseClassClause")
-                        .WithMany("TermsOfAccessLicenseClassClauses")
-                        .HasForeignKey("LicenseClassClauseId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Prime.Models.TermsOfAccess", "TermsOfAccess")
-                        .WithMany("TermsOfAccessLicenseClassClauses")
-                        .HasForeignKey("TermsOfAccessId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Prime.Models.TermsOfAccessLimitsAndConditionsClause", b =>
-                {
-                    b.HasOne("Prime.Models.LimitsAndConditionsClause", "LimitsAndConditionsClause")
-                        .WithMany("TermsOfAccessLimitsAndConditionsClauses")
-                        .HasForeignKey("LimitsConditionsClauseId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Prime.Models.TermsOfAccess", "TermsOfAccess")
-                        .WithMany("TermsOfAccessLimitsAndConditionsClauses")
-                        .HasForeignKey("TermsOfAccessId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

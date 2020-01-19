@@ -107,14 +107,14 @@
         <span>Global Adjudicator Notes</span>
       </button>
       <button mat-menu-item
-              [routerLink]="['../', 'user-agreement-notes']">
+              [routerLink]="['../', 'limits-conditions-clauses']">
         <mat-icon>description</mat-icon>
-        <span>User Agreement Notes</span>
+        <span>Limits and Conditions Clauses</span>
       </button>
       <button mat-menu-item
-              [routerLink]="['../', 'enrolment-certificate-notes']">
+              [routerLink]="['../', 'certificate-limits-conditions']">
         <mat-icon>assignment_turned_in</mat-icon>
-        <span>Enrolment Certificate Notes</span>
+        <span>Certificate Limits and Conditions</span>
       </button>
       <button mat-menu-item
               *ngIf="canAllowEditing(enrolment.currentStatus.status.code)"

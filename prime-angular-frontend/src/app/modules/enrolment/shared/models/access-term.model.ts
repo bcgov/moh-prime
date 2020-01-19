@@ -1,6 +1,6 @@
 import { EnrolleeClassification } from '@shared/enums/enrollee-classification.enum';
 
-export interface TermsOfAccess {
+export interface AccessTerm {
   id: number;
   enrolleeId: number;
   globalClauseId: number;
@@ -8,7 +8,7 @@ export interface TermsOfAccess {
   userClauseId: number;
   userClause: UserClause;
   licenseClassClauses: Clause[];
-  limitsAndConditionsClauses: Clause[];
+  limitsConditionsClause: Clause;
   effectiveDate: string;
 }
 

@@ -17,16 +17,16 @@ namespace Prime.Controllers
     public class EnrolleesController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
-        private readonly ITermsOfAccessService _termsOfAccessService;
+        private readonly IAccessTermService _accessTermService;
         private readonly IEnrolleeProfileVersionService _enrolleeProfileVersionService;
 
         public EnrolleesController(
             IEnrolleeService enrolleeService,
-            ITermsOfAccessService termsOfAccessService,
+            IAccessTermService accessTermService,
             IEnrolleeProfileVersionService enrolleeProfileVersionService)
         {
             _enrolleeService = enrolleeService;
-            _termsOfAccessService = termsOfAccessService;
+            _accessTermService = accessTermService;
             _enrolleeProfileVersionService = enrolleeProfileVersionService;
         }
 
@@ -456,18 +456,18 @@ namespace Prime.Controllers
             return Ok(new ApiOkResponse<IEnrolleeNote>(updatedNote));
         }
 
-        // GET: api/Enrollees/5/terms-of-access
+        // GET: api/Enrollees/5/access-terms
         /// <summary>
         /// Get the enrolmee's terms of access.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpGet("{enrolleeId}/terms-of-access", Name = nameof(GetTermsOfAccess))]
+        [HttpGet("{enrolleeId}/access-terms", Name = nameof(GetAccessTerms))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiOkResponse<TermsOfAccess>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<TermsOfAccess>> GetTermsOfAccess(int enrolleeId)
+        [ProducesResponseType(typeof(ApiOkResponse<AccessTerm>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<AccessTerm>> GetAccessTerms(int enrolleeId)
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
@@ -481,9 +481,9 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            var termsOfAccess = await _termsOfAccessService.GetEnrolleeTermsOfAccessAsync(enrolleeId);
+            var accessTerms = await _accessTermService.GetEnrolleeAccessTermsAsync(enrolleeId);
 
-            return Ok(new ApiOkResponse<TermsOfAccess>(termsOfAccess));
+            return Ok(new ApiOkResponse<AccessTerm>(accessTerms));
         }
 
         // GET: api/Enrollees/5/versions

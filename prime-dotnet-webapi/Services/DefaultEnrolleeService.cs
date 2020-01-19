@@ -14,7 +14,7 @@ namespace Prime.Services
         private readonly IAutomaticAdjudicationService _automaticAdjudicationService;
         private readonly IEmailService _emailService;
         private readonly IPrivilegeService _privilegeService;
-        private readonly ITermsOfAccessService _termsOfAccessService;
+        private readonly IAccessTermService _accessTermService;
         private readonly IEnrolleeProfileVersionService _enroleeProfileVersionService;
 
         private class StatusWrapper
@@ -33,14 +33,14 @@ namespace Prime.Services
             IAutomaticAdjudicationService automaticAdjudicationService,
             IEmailService emailService,
             IPrivilegeService privilegeService,
-            ITermsOfAccessService termsOfAccessService,
+            IAccessTermService accessTermService,
             IEnrolleeProfileVersionService enroleeProfileVersionService)
             : base(context, httpContext)
         {
             _automaticAdjudicationService = automaticAdjudicationService;
             _emailService = emailService;
             _privilegeService = privilegeService;
-            _termsOfAccessService = termsOfAccessService;
+            _accessTermService = accessTermService;
             _enroleeProfileVersionService = enroleeProfileVersionService;
         }
 
@@ -381,7 +381,7 @@ namespace Prime.Services
 
                         enrollee.EnrolmentStatuses.Add(adjudicatedEnrolmentStatus);
 
-                        await _termsOfAccessService.SetEnrolleeTermsOfAccessAsync(enrollee);
+                        await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee);
 
                         // Flip to the object that will get returned
                         createdEnrolmentStatus = adjudicatedEnrolmentStatus;
@@ -389,9 +389,10 @@ namespace Prime.Services
                     break;
 
                 case Status.APPROVED_CODE:
+                    // Approved through manual processing
                     createdEnrolmentStatus.AddStatusReason(StatusReason.MANUAL_CODE);
 
-                    await _termsOfAccessService.SetEnrolleeTermsOfAccessAsync(enrollee);
+                    await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee);
 
                     break;
 
@@ -404,6 +405,7 @@ namespace Prime.Services
                     await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
                     enrollee.LicensePlate = this.GenerateLicensePlate();
                     createdEnrolmentStatus.PharmaNetStatus = true;
+                    await _accessTermService.SetAcceptedDateForAccessTermAsync(enrollee);
                     await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrolleeId, enrollee);
                     break;
 

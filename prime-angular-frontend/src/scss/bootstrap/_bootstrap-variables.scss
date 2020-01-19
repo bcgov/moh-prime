@@ -1,5 +1,29 @@
 @import 'palette';
+@import 'font';
 
 $enable-validation-icons: false;
 
+// Font
+
 $body-color: theme-palette(blue);
+
+$font-family-base: theme-font(body);
+
+// Using a base font size of 24px
+$font-size-base:              1.5rem !default; // Assumes the browser default, typically `16px`
+
+// Reference to material font weights used in mock-ups
+// Material light
+$font-weight-light:           300 !default;
+// Material regular
+$font-weight-normal:          400 !default;
+// Material Medium
+$font-weight-bold:            500 !default;
+// Material bold
+$font-weight-bolder:          700 !default;
+
+$h1-font-size:                $font-size-base * 2 !default;
+$h2-font-size:                $font-size-base * 1.5 !default;
+$h3-font-size:                $font-size-base * 1.167 !default;
+
+$small-font-size:             $font-size-base * 0.833 !default;

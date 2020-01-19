@@ -1,6 +1,21 @@
 version: "3"
 
 services:
+######################################################### Database #
+  postgres:
+    restart: always
+    container_name: primedb
+    image: postgres:9.6
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USERNAME: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - local_postgres_data:/var/lib/postgresql/data
+    networks:
+      - primenet
 ######################################################### Sign-in #
   dotnet-webapi:
     container_name: primeapi
@@ -21,21 +36,6 @@ services:
       - primenet
     depends_on:
       - postgres
-######################################################### Database #
-  postgres:
-    restart: always
-    container_name: primedb
-    image: postgres:9.6
-    environment:
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_USERNAME: postgres
-      POSTGRES_DB: postgres
-    ports:
-      - "5432:5432"
-    volumes:
-      - local_postgres_data:/var/lib/postgresql/data
-    networks:
-      - primenet
 ###################################################### Web Frontend #
   nginx-angular:
     container_name: primeweb
@@ -51,6 +51,8 @@ services:
       - "4200"
     networks:
       - primenet
+    depends_on:
+      - dotnet-webapi
 ################################################# Local SMTP Server #
   mailhog:
     container_name: mailhog
@@ -71,7 +73,9 @@ services:
     ports:
       - "8069:8069"
       - "80:8069"
-
+    depends_on:
+      - postgres
+      
 volumes:
   local_postgres_data:
 
