@@ -30,13 +30,25 @@ namespace Prime.Services
             return accessTerms;
         }
 
-        public async Task SetEnrolleeAccessTermsAsync(Enrollee enrollee)
+        public async Task CreateEnrolleeTermsOfAccessAsync(Enrollee enrollee)
         {
             var accessTerm = await GetAccessTermAsync(enrollee);
 
-            accessTerm.EffectiveDate = DateTime.Now;
+            accessTerm.CreatedDate = DateTime.Now;
 
             _context.Add(accessTerm);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task SetAcceptedDateForTermsOfAccessAsync(Enrollee enrollee)
+        {
+            var termsOfAccess = await _context.AccessTerms
+                .Where(toa => toa.EnrolleeId == enrollee.Id)
+                .OrderByDescending(toa => toa.AcceptedDate)
+                .FirstOrDefaultAsync();
+
+            termsOfAccess.AcceptedDate = DateTime.Now;
 
             await _context.SaveChangesAsync();
         }
@@ -53,7 +65,7 @@ namespace Prime.Services
                     .ThenInclude(tacc => tacc.LicenseClassClause)
                 .Include(t => t.LimitsConditionsClause)
                 .Where(t => t.EnrolleeId == enrolleeId)
-                .OrderByDescending(t => t.EffectiveDate)
+                .OrderByDescending(t => t.AcceptedDate)
                 .FirstOrDefaultAsync();
 
             accessTerms.LicenseClassClauses = accessTerms.AccessTermLicenseClassClauses
@@ -91,7 +103,6 @@ namespace Prime.Services
 
         private async Task<LimitsConditionsClause> GetAccessTermLimitsConditionsClause(Enrollee enrollee)
         {
-
             var lastNote = await _context.AccessAgreementNotes
                                 .Where(n => n.EnrolleeId == enrollee.Id)
                                 .OrderByDescending(n => n.CreatedTimeStamp)

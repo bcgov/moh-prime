@@ -375,7 +375,7 @@ namespace Prime.Services
 
                         enrollee.EnrolmentStatuses.Add(adjudicatedEnrolmentStatus);
 
-                        await _accessTermService.SetEnrolleeAccessTermsAsync(enrollee);
+                        await _accessTermService.CreateEnrolleeTermsOfAccessAsync(enrollee);
 
                         // Flip to the object that will get returned
                         createdEnrolmentStatus = adjudicatedEnrolmentStatus;
@@ -383,9 +383,10 @@ namespace Prime.Services
                     break;
 
                 case Status.APPROVED_CODE:
+                    // Approved through manual processing
                     createdEnrolmentStatus.AddStatusReason(StatusReason.MANUAL_CODE);
 
-                    await _accessTermService.SetEnrolleeAccessTermsAsync(enrollee);
+                    await _accessTermService.CreateEnrolleeTermsOfAccessAsync(enrollee);
 
                     break;
 
@@ -398,6 +399,7 @@ namespace Prime.Services
                     await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
                     enrollee.LicensePlate = this.GenerateLicensePlate();
                     createdEnrolmentStatus.PharmaNetStatus = true;
+                    await _accessTermService.SetAcceptedDateForTermsOfAccessAsync(enrollee);
                     await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrolleeId, enrollee);
                     break;
 
