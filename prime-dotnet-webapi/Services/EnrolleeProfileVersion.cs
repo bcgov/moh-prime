@@ -42,44 +42,18 @@ namespace Prime.Services
 
         public async Task CreateEnrolleeProfileVersionAsync(Enrollee enrollee)
         {
-            if (!await EqualsPreviousVersion(enrollee))
+            var enrolleeProfileVersion = new EnrolleeProfileVersion
             {
-                var enrolleeProfileVersion = new EnrolleeProfileVersion
-                {
-                    EnrolleeId = (int)enrollee.Id,
-                    ProfileSnapshot = ConvertEnrolleeToJObject(enrollee),
-                    CreatedDate = DateTime.Now
-                };
+                EnrolleeId = (int)enrollee.Id,
+                // TODO why doesn't this work in the entity configuration?
+                // ProfileSnapshot = JObject.FromObject(enrollee),
+                ProfileSnapshot = JObject.FromObject(enrollee, _camelCaseSerializer),
+                CreatedDate = DateTime.Now
+            };
 
-                _context.EnrolleeProfileVersions.Add(enrolleeProfileVersion);
+            _context.EnrolleeProfileVersions.Add(enrolleeProfileVersion);
 
-                await _context.SaveChangesAsync();
-            }
-        }
-
-        private JObject ConvertEnrolleeToJObject(Enrollee enrollee)
-        {
-            // TODO why doesn't this work in the entity configuration?
-            // return JObject.FromObject(enrollee);
-            return JObject.FromObject(enrollee, _camelCaseSerializer);
-        }
-
-        private async Task<Boolean> EqualsPreviousVersion(Enrollee enrollee)
-        {
-            var previousEnrolleeProfileVersion = await _context.EnrolleeProfileVersions
-                .Where(epv => epv.EnrolleeId == enrollee.Id)
-                .OrderByDescending(epv => epv.CreatedDate)
-                .FirstOrDefaultAsync();
-
-            if (previousEnrolleeProfileVersion != null)
-            {
-                var previousProfileSnapshot = previousEnrolleeProfileVersion.ProfileSnapshot;
-                var currentProfileSnapshot = ConvertEnrolleeToJObject(enrollee);
-
-                return JObject.DeepEquals(previousProfileSnapshot, currentProfileSnapshot);
-            }
-
-            return false;
+            await _context.SaveChangesAsync();
         }
     }
 }
