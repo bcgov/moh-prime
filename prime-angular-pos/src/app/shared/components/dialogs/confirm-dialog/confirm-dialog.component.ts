@@ -35,8 +35,6 @@ export class ConfirmDialogComponent implements OnInit {
   }
 
   private getOptions(dialogOptions: DialogOptions) {
-    console.log(dialogOptions);
-
     const options: DialogOptions = {
       actionType: 'primary',
       actionText: 'Confirm',
