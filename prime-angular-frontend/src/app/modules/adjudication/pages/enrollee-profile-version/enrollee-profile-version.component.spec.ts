@@ -3,6 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { EnrolleeProfileVersionComponent } from './enrollee-profile-version.component';
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { PageComponent } from '@shared/components/page/page.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { EnrolleeReviewComponent } from '@shared/components/enrollee/enrollee-review/enrollee-review.component';
@@ -18,6 +19,7 @@ import { PostalPipe } from '@shared/pipes/postal.pipe';
 import { PhonePipe } from '@shared/pipes/phone.pipe';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { YesNoPipe } from '@shared/pipes/yes-no.pipe';
+import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
 
 describe('EnrolleeProfileVersionComponent', () => {
   let component: EnrolleeProfileVersionComponent;
@@ -46,7 +48,14 @@ describe('EnrolleeProfileVersionComponent', () => {
           PostalPipe,
           PhonePipe,
           FormatDatePipe,
-          YesNoPipe
+          YesNoPipe,
+          EnrolleePipe
+        ],
+        providers: [
+          {
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
+          }
         ]
       }
     ).compileComponents();

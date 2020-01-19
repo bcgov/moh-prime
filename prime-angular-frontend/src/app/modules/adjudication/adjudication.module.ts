@@ -17,7 +17,7 @@ import { EnrolleeProfileVersionsComponent } from './pages/enrollee-profile-versi
     EnrolmentComponent,
     AdjudicatorNotesComponent,
     LimitsConditionsClausesComponent,
-    CertificateLimitsConditionsComponent
+    CertificateLimitsConditionsComponent,
     EnrolleeProfileVersionComponent,
     EnrolleeProfileVersionsComponent
   ],
