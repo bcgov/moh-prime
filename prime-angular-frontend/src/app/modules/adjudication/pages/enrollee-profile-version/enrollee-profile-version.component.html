@@ -1,6 +1,15 @@
 <app-page [busy]="busy">
 
-  <app-page-header>Enrollee Profile History</app-page-header>
+  <app-page-header>Enrolment History</app-page-header>
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>
+      Enrolment From {{ enrolmentProfileHistory?.createdDate | formatDate }}
+    </ng-container>
+    <ng-container appPageSubheaderSummary>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla neque, quidem autem fuga sapiente exercitationem.
+    </ng-container>
+  </app-page-subheader>
 
   <app-enrollee-review [isEnrollee]="false"
                        [enrolment]="enrolmentProfileHistory?.profileSnapshot"></app-enrollee-review>
