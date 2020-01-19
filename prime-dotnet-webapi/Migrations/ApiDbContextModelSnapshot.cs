@@ -6456,6 +6456,34 @@ namespace Prime.Migrations
                     b.ToTable("Enrollee");
                 });
 
+            modelBuilder.Entity("Prime.Models.EnrolleeProfileVersion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<DateTime>("CreatedTimeStamp");
+
+                    b.Property<Guid>("CreatedUserId");
+
+                    b.Property<int>("EnrolleeId");
+
+                    b.Property<string>("ProfileSnapshot")
+                        .IsRequired()
+                        .HasColumnType("json");
+
+                    b.Property<DateTime>("UpdatedTimeStamp");
+
+                    b.Property<Guid>("UpdatedUserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnrolleeId");
+
+                    b.ToTable("EnrolleeProfileVersion");
+                });
+
             modelBuilder.Entity("Prime.Models.EnrolmentCertificateAccessToken", b =>
                 {
                     b.Property<Guid>("Id")
@@ -7688,9 +7716,9 @@ namespace Prime.Migrations
                             Id = 19,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Description = "Registered User that can have OBO's",
+                            Description = "Registered User that can have OBOs",
                             PrivilegeGroupCode = (short)5,
-                            TransactionType = "RU with OBO's",
+                            TransactionType = "RU with OBOs",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
@@ -7765,7 +7793,7 @@ namespace Prime.Migrations
                             Code = (short)5,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "RU That Can Have OBO's",
+                            Name = "RU That Can Have OBOs",
                             PrivilegeTypeCode = (short)1,
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
@@ -7795,19 +7823,19 @@ namespace Prime.Migrations
                         new
                         {
                             Code = (short)1,
-                            CreatedTimeStamp = new DateTime(2020, 1, 14, 15, 48, 38, 321, DateTimeKind.Local).AddTicks(6486),
+                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Allowable Role",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 14, 15, 48, 38, 321, DateTimeKind.Local).AddTicks(6486),
+                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
                         new
                         {
                             Code = (short)2,
-                            CreatedTimeStamp = new DateTime(2020, 1, 14, 15, 48, 38, 321, DateTimeKind.Local).AddTicks(6486),
+                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Allowable Transaction",
-                            UpdatedTimeStamp = new DateTime(2020, 1, 14, 15, 48, 38, 321, DateTimeKind.Local).AddTicks(6486),
+                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
@@ -8967,6 +8995,14 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Privilege", "Privilege")
                         .WithMany("DefaultPrivileges")
                         .HasForeignKey("PrivilegeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Prime.Models.EnrolleeProfileVersion", b =>
+                {
+                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
+                        .WithMany("EnrolleeProfileVersions")
+                        .HasForeignKey("EnrolleeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

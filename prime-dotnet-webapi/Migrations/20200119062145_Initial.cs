@@ -348,6 +348,31 @@ namespace Prime.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "EnrolleeProfileVersion",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    CreatedUserId = table.Column<Guid>(nullable: false),
+                    CreatedTimeStamp = table.Column<DateTime>(nullable: false),
+                    UpdatedUserId = table.Column<Guid>(nullable: false),
+                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false),
+                    EnrolleeId = table.Column<int>(nullable: false),
+                    ProfileSnapshot = table.Column<string>(type: "json", nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EnrolleeProfileVersion", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EnrolleeProfileVersion_Enrollee_EnrolleeId",
+                        column: x => x.EnrolleeId,
+                        principalTable: "Enrollee",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "EnrolmentCertificateAccessToken",
                 columns: table => new
                 {
@@ -999,8 +1024,8 @@ namespace Prime.Migrations
                 columns: new[] { "Code", "CreatedTimeStamp", "CreatedUserId", "Name", "UpdatedTimeStamp", "UpdatedUserId" },
                 values: new object[,]
                 {
-                    { (short)1, new DateTime(2020, 1, 14, 15, 48, 38, 321, DateTimeKind.Local).AddTicks(6486), new Guid("00000000-0000-0000-0000-000000000000"), "Allowable Role", new DateTime(2020, 1, 14, 15, 48, 38, 321, DateTimeKind.Local).AddTicks(6486), new Guid("00000000-0000-0000-0000-000000000000") },
-                    { (short)2, new DateTime(2020, 1, 14, 15, 48, 38, 321, DateTimeKind.Local).AddTicks(6486), new Guid("00000000-0000-0000-0000-000000000000"), "Allowable Transaction", new DateTime(2020, 1, 14, 15, 48, 38, 321, DateTimeKind.Local).AddTicks(6486), new Guid("00000000-0000-0000-0000-000000000000") }
+                    { (short)1, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Allowable Role", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
+                    { (short)2, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Allowable Transaction", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") }
                 });
 
             migrationBuilder.InsertData(
@@ -1124,7 +1149,7 @@ namespace Prime.Migrations
                 {
                     { (short)3, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Access Medical History", (short)2, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
                     { (short)4, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Role", (short)1, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
-                    { (short)5, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "RU That Can Have OBO's", (short)1, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
+                    { (short)5, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "RU That Can Have OBOs", (short)1, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
                     { (short)1, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Submit and Access Claims", (short)2, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
                     { (short)2, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Record Medical History", (short)2, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") }
                 });
@@ -1226,7 +1251,7 @@ namespace Prime.Migrations
                     { 3, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Pt Profile Mail Request", (short)1, "TPM", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
                     { 2, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Query Claims History", (short)1, "TDT", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
                     { 1, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Update Claims History", (short)1, "TAC", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
-                    { 19, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Registered User that can have OBO's", (short)5, "RU with OBO's", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
+                    { 19, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Registered User that can have OBOs", (short)5, "RU with OBOs", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
                     { 18, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "On Behalf of User", (short)4, "OBO", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
                     { 6, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Address Update", (short)2, "TPA", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
                     { 16, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "DUE Inquiry", (short)3, "TDU", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") }
@@ -1929,6 +1954,11 @@ namespace Prime.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_EnrolleeProfileVersion_EnrolleeId",
+                table: "EnrolleeProfileVersion",
+                column: "EnrolleeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_EnrolmentCertificateAccessToken_EnrolleeId",
                 table: "EnrolmentCertificateAccessToken",
                 column: "EnrolleeId");
@@ -2040,6 +2070,9 @@ namespace Prime.Migrations
 
             migrationBuilder.DropTable(
                 name: "DefaultPrivilege");
+
+            migrationBuilder.DropTable(
+                name: "EnrolleeProfileVersion");
 
             migrationBuilder.DropTable(
                 name: "EnrolmentCertificateAccessToken");
