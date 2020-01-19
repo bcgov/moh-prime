@@ -678,7 +678,8 @@ namespace Prime.Migrations
                     GlobalClauseId = table.Column<int>(nullable: false),
                     UserClauseId = table.Column<int>(nullable: false),
                     LimitsConditionsClauseId = table.Column<int>(nullable: true),
-                    EffectiveDate = table.Column<DateTime>(nullable: false)
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    AcceptedDate = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
