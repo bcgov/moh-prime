@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import {
   MatDialogModule, MatIconModule, MatFormFieldDefaultOptions,
-  MatButtonModule,
+  MatButtonModule, MatToolbarModule,
   MAT_FORM_FIELD_DEFAULT_OPTIONS, MAT_DIALOG_DEFAULT_OPTIONS
 } from '@angular/material';
 
@@ -13,7 +13,8 @@ const matFormFieldCustomOptions: MatFormFieldDefaultOptions = {
   exports: [
     MatButtonModule,
     MatDialogModule,
-    MatIconModule
+    MatIconModule,
+    MatToolbarModule
   ],
   providers: [
     {
