@@ -30,11 +30,12 @@ namespace Prime.Services
             return accessTerms;
         }
 
-        public async Task CreateEnrolleeTermsOfAccessAsync(Enrollee enrollee)
+        public async Task CreateEnrolleeAccessTermAsync(Enrollee enrollee)
         {
             var accessTerm = await GetAccessTermAsync(enrollee);
 
             accessTerm.CreatedDate = DateTime.Now;
+            accessTerm.AcceptedDate = null;
 
             _context.Add(accessTerm);
 

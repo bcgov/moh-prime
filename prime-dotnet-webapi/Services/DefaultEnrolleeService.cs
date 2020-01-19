@@ -375,7 +375,7 @@ namespace Prime.Services
 
                         enrollee.EnrolmentStatuses.Add(adjudicatedEnrolmentStatus);
 
-                        await _accessTermService.CreateEnrolleeTermsOfAccessAsync(enrollee);
+                        await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee);
 
                         // Flip to the object that will get returned
                         createdEnrolmentStatus = adjudicatedEnrolmentStatus;
@@ -386,7 +386,7 @@ namespace Prime.Services
                     // Approved through manual processing
                     createdEnrolmentStatus.AddStatusReason(StatusReason.MANUAL_CODE);
 
-                    await _accessTermService.CreateEnrolleeTermsOfAccessAsync(enrollee);
+                    await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee);
 
                     break;
 
