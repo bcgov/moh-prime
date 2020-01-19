@@ -35,7 +35,6 @@ namespace Prime.Services
             var accessTerm = await GetAccessTermAsync(enrollee);
 
             accessTerm.CreatedDate = DateTime.Now;
-            accessTerm.AcceptedDate = null;
 
             _context.Add(accessTerm);
 

@@ -11,7 +11,7 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20200119042330_Initial")]
+    [Migration("20200119052048_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,7 +54,7 @@ namespace Prime.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("AcceptedDate");
+                    b.Property<DateTime?>("AcceptedDate");
 
                     b.Property<DateTime>("CreatedDate");
 

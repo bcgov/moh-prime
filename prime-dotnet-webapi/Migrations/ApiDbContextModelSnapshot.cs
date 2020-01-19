@@ -52,7 +52,7 @@ namespace Prime.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("AcceptedDate");
+                    b.Property<DateTime?>("AcceptedDate");
 
                     b.Property<DateTime>("CreatedDate");
 
