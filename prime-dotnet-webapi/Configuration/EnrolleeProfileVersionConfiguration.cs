@@ -2,12 +2,18 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using Prime.Models;
 
 namespace Prime.Configuration
 {
     public class EnrolleeProfileVersionConfiguration : IEntityTypeConfiguration<EnrolleeProfileVersion>
     {
+        // private DefaultContractResolver _contractResolver = new DefaultContractResolver
+        // {
+        //     NamingStrategy = new CamelCaseNamingStrategy()
+        // };
+
         public void Configure(EntityTypeBuilder<EnrolleeProfileVersion> builder)
         {
             builder
@@ -19,9 +25,10 @@ namespace Prime.Configuration
                 .Property(epf => epf.ProfileSnapshot)
                 .HasColumnType("json")
                 .HasConversion(
-                    // Serialize and deserialize a snapshot of the Enrollee profile version
                     ps => JsonConvert.SerializeObject(ps, new JsonSerializerSettings
                     {
+                        // ContractResolver = _contractResolver,
+                        // ContractResolver = new CamelCasePropertyNamesContractResolver(),
                         NullValueHandling = NullValueHandling.Ignore
                     }),
                     ps => JsonConvert.DeserializeObject<JObject>(ps, new JsonSerializerSettings
