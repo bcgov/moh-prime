@@ -9,13 +9,8 @@
 
   <span class="flex-fill"></span>
 
-  <span *ngIf="username && !isMobile"
-        class="username">
-    {{ username }}
-  </span>
-  <span *ngIf="username"
-        class="logout">
-    <mat-icon (click)="onLogout()">logout</mat-icon>
+  <span class="login">
+    <mat-icon (click)="onAction()">account_circle</mat-icon>
   </span>
 </mat-toolbar>
 
