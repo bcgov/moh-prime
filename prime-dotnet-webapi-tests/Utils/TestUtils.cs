@@ -121,7 +121,8 @@ namespace PrimeTests.Utils
             IAutomaticAdjudicationService automaticAdjudicationService,
             IEmailService emailService,
             IPrivilegeService privilegeService,
-            IAccessTermService accessTermService
+            IAccessTermService accessTermService,
+            IEnrolleeProfileVersionService enrolleeProfileVersionService
         )
         {
             return new DefaultEnrolleeService(
@@ -130,7 +131,8 @@ namespace PrimeTests.Utils
                 automaticAdjudicationService,
                 emailService,
                 privilegeService,
-                accessTermService
+                accessTermService,
+                enrolleeProfileVersionService
             ).CreateEnrolleeAsync(TestUtils.EnrolleeFaker.Generate()).Result;
         }
 
@@ -141,7 +143,8 @@ namespace PrimeTests.Utils
             int enrolmentId,
             IEmailService emailService,
             IPrivilegeService privilegeService,
-            IAccessTermService accessTermService
+            IAccessTermService accessTermService,
+            IEnrolleeProfileVersionService enrolleeProfileVersionService
         )
         {
             return new DefaultEnrolleeService(
@@ -150,7 +153,8 @@ namespace PrimeTests.Utils
                 automaticAdjudicationService,
                 emailService,
                 privilegeService,
-                accessTermService
+                accessTermService,
+                enrolleeProfileVersionService
             ).GetEnrolleeAsync(enrolmentId).Result;
         }
 
