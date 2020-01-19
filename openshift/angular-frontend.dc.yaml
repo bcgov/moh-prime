@@ -82,6 +82,7 @@ objects:
           name: primeweb
           ports:
           - containerPort: 8080
+          - containerPort: 8443
           readinessProbe:
             failureThreshold: 3
             httpGet:
@@ -128,13 +129,6 @@ objects:
     to:
       kind: Service
       name: "${NAME}${SUFFIX}-secure"
-- apiVersion: v1
-  kind: Service
-  metadata:
-    creationTimestamp: 
-    labels:
-      io.kompose.service: "${NAME}${SUFFIX}"
-    name: "${NAME}${SUFFIX}"
 - apiVersion: v1
   kind: Service
   metadata:
