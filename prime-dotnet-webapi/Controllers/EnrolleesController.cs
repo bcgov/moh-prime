@@ -451,12 +451,12 @@ namespace Prime.Controllers
             return Ok(new ApiOkResponse<IEnrolleeNote>(updatedNote));
         }
 
-        // GET: api/Enrollees/5/terms-of-access
+        // GET: api/Enrollees/5/access-terms
         /// <summary>
         /// Get the enrolmee's terms of access.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpGet("{enrolleeId}/terms-of-access", Name = nameof(GetAccessTerms))]
+        [HttpGet("{enrolleeId}/access-terms", Name = nameof(GetAccessTerms))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
