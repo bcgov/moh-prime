@@ -55,7 +55,7 @@ export class AdjudicationResource {
         ),
         map((enrolleeProfileHistories: HttpEnrolleeProfileVersion[]) => {
           return enrolleeProfileHistories
-            .map(this.enrolleeVersionAdapterResponse);
+            .map(this.enrolleeVersionAdapterResponse.bind(this));
         })
       );
   }
@@ -68,7 +68,7 @@ export class AdjudicationResource {
         tap((enrolleeProfileVersion: HttpEnrolleeProfileVersion) =>
           this.logger.info('ENROLLEE_PROFILE_VERSION', enrolleeProfileVersion)
         ),
-        map(this.enrolleeVersionAdapterResponse)
+        map(this.enrolleeVersionAdapterResponse.bind(this))
       );
   }
 
