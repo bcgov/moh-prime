@@ -30,29 +30,6 @@ namespace Prime.Services
             return accessTerms;
         }
 
-        public async Task CreateEnrolleeAccessTermAsync(Enrollee enrollee)
-        {
-            var accessTerm = await GetAccessTermAsync(enrollee);
-
-            accessTerm.CreatedDate = DateTime.Now;
-
-            _context.Add(accessTerm);
-
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task SetAcceptedDateForTermsOfAccessAsync(Enrollee enrollee)
-        {
-            var termsOfAccess = await _context.AccessTerms
-                .Where(toa => toa.EnrolleeId == enrollee.Id)
-                .OrderByDescending(toa => toa.AcceptedDate)
-                .FirstOrDefaultAsync();
-
-            termsOfAccess.AcceptedDate = DateTime.Now;
-
-            await _context.SaveChangesAsync();
-        }
-
         /**
          * Get the most recent terms ACCEPTED terms of access for an enrollee.
          */
@@ -72,6 +49,29 @@ namespace Prime.Services
                 .Select(talc => talc.LicenseClassClause).ToList();
 
             return accessTerms;
+        }
+
+        public async Task CreateEnrolleeAccessTermAsync(Enrollee enrollee)
+        {
+            var accessTerm = await GetAccessTermAsync(enrollee);
+
+            accessTerm.CreatedDate = DateTime.Now;
+
+            _context.Add(accessTerm);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task SetAcceptedDateForAccessTermAsync(Enrollee enrollee)
+        {
+            var termsOfAccess = await _context.AccessTerms
+                .Where(toa => toa.EnrolleeId == enrollee.Id)
+                .OrderByDescending(toa => toa.AcceptedDate)
+                .FirstOrDefaultAsync();
+
+            termsOfAccess.AcceptedDate = DateTime.Now;
+
+            await _context.SaveChangesAsync();
         }
 
         private async Task<GlobalClause> GetGlobalClause()

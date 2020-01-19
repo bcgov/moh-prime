@@ -399,7 +399,7 @@ namespace Prime.Services
                     await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
                     enrollee.LicensePlate = this.GenerateLicensePlate();
                     createdEnrolmentStatus.PharmaNetStatus = true;
-                    await _accessTermService.SetAcceptedDateForTermsOfAccessAsync(enrollee);
+                    await _accessTermService.SetAcceptedDateForAccessTermAsync(enrollee);
                     await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrolleeId, enrollee);
                     break;
 
