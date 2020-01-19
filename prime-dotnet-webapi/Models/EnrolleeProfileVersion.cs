@@ -19,7 +19,6 @@ namespace Prime.Models
         public JObject ProfileSnapshot { get; set; }
         [Required]
         public DateTime CreatedDate { get; set; }
-        [Required]
-        public int Version { get; set; }
+
     }
 }

@@ -515,7 +515,6 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="enrolleeProfileVersionId"></param>
-        // TODO located in EnrolleeController, which is prefixed with enrollee, but actually should just be /versions/${id}
         [HttpGet("{enrolleeId}/versions/{enrolleeProfileVersionId}", Name = nameof(GetEnrolleeProfileVersion))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
