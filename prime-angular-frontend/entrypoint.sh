@@ -3,6 +3,6 @@ envsubst '$SUFFIX' < /etc/nginx/nginx.template.conf > /etc/nginx/conf.d/default.
 echo "$TLS_PASSWORD" >  /etc/nginx/passwd.txt
 echo "$TLS_PRIVATE" > /etc/nginx/private.key
 echo "$TLS_CHAIN" >  /etc/nginx/chained.crt
-nginx 
-tail -f /dev/null
-#nginx -g "daemon-off;"
+#nginx 
+#tail -f /dev/null
+nginx -g "daemon-off;"
