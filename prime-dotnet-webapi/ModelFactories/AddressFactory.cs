@@ -21,11 +21,8 @@ namespace Prime.ModelFactories
 
             RuleFor(x => x.Id, f => IdCounter.Id++);
             RuleFor(x => x.Enrollee, f => owner);
-            RuleFor(x => x.EnrolleeId, f => owner.Id);
             RuleFor(x => x.Province, f => ProvinceLookup.BC);
-            RuleFor(x => x.ProvinceCode, (f, x) => x.Province.Code);
             RuleFor(x => x.Country, f => CountryLookup.Canada);
-            RuleFor(x => x.CountryCode, (f, x) => x.Country.Code);
             RuleFor(x => x.Street, f => f.Address.StreetAddress());
             RuleFor(x => x.Street2, f => f.Address.StreetAddress().OrNull(f));
             RuleFor(x => x.City, f => f.Address.City());
@@ -34,9 +31,14 @@ namespace Prime.ModelFactories
             RuleSet("notBC", (set) =>
             {
                 set.RuleFor(x => x.Province, f => f.PickRandom(ProvinceLookup.NotBC));
-                set.RuleFor(x => x.ProvinceCode, (f, x) => x.Province.Code);
                 set.RuleFor(x => x.Country, (f, x) => CountryLookup.ByCode(x.Province.CountryCode));
-                set.RuleFor(x => x.CountryCode, (f, x) => x.Country.Code);
+            });
+
+            FinishWith((f, x) =>
+            {
+                x.EnrolleeId = (int)x.Enrollee.Id;
+                x.CountryCode = x.Country.Code;
+                x.ProvinceCode = x.Province.Code;
             });
         }
     }
