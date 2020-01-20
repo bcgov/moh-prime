@@ -39,9 +39,19 @@ objects:
       - name: SUFFIX
         value: "${SUFFIX}"
       - name: REDIRECT_URL
-        value: http://angular-frontend${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca
+        value: https://angular-frontend${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca
       - name: OC_APP
         value: ${OC_APP}
+      - name: TLS_CHAIN
+        valueFrom:
+          secretKeyRef:
+            key: authority-chain
+            name: 'frontend-tls-certificate' 
+      - name: TLS_PRIVATE
+        valueFrom:
+          secretKeyRef:
+            key: private-key
+            name: 'frontend-tls-certificate'  
     tags:
     - annotations: 
       from:
@@ -71,6 +81,16 @@ objects:
         value: http://angular-frontend${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca
       - name: OC_APP
         value: ${OC_APP}
+      - name: TLS_CHAIN
+        valueFrom:
+          secretKeyRef:
+            key: authority-chain
+            name: 'frontend-tls-certificate' 
+      - name: TLS_PRIVATE
+        valueFrom:
+          secretKeyRef:
+            key: private-key
+            name: 'frontend-tls-certificate' 
     completionDeadlineSeconds: 6000
     nodeSelector: 
     output:
@@ -102,6 +122,16 @@ objects:
             value: http://angular-frontend${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca
           - name: OC_APP
             value: ${OC_APP}
+          - name: TLS_CHAIN
+            valueFrom:
+              secretKeyRef:
+                key: authority-chain
+                name: 'frontend-tls-certificate' 
+          - name: TLS_PRIVATE
+            valueFrom:
+              secretKeyRef:
+                key: private-key
+                name: 'frontend-tls-certificate' 
       type: Docker
     triggers:
     - type: ConfigChange

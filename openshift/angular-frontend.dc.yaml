@@ -25,6 +25,9 @@ parameters:
   required: true
 - name: OC_APP
   required: true
+- name: URL_PREFIX
+  required: false
+  value: "${NAME}${SUFFIX}."
 objects:
 - apiVersion: v1
   kind: DeploymentConfig
@@ -63,16 +66,32 @@ objects:
             value: ${OC_APP}
           - name: REDIRECT_URL
             value: http://angular-frontend${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca
+          - name: TLS_CHAIN
+            valueFrom:
+              secretKeyRef:
+                key: authority-chain
+                name: 'frontend-tls-certificate' 
+          - name: TLS_PRIVATE
+            valueFrom:
+              secretKeyRef:
+                key: private-key
+                name: 'frontend-tls-certificate'
+          - name: TLS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database-admin-password
+                name: 'postgresql-secret'
           image: " "
           name: primeweb
           ports:
           - containerPort: 8080
+          - containerPort: 8443
           readinessProbe:
             failureThreshold: 3
             httpGet:
-              path: /info
-              port: 8080
-              scheme: HTTP
+              path: /healthcheck
+              port: 8443
+              scheme: HTTPS
             initialDelaySeconds: 5
             periodSeconds: 10
             successThreshold: 1
@@ -94,29 +113,58 @@ objects:
 - apiVersion: v1
   kind: Route
   metadata:
-    name: "${NAME}${SUFFIX}"
+    name: "${NAME}${SUFFIX}-insecure"
   spec:
     host: "${NAME}${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca"
     port:
       targetPort: '8080'
     to:
       kind: Service
-      name: "${NAME}${SUFFIX}"
+      name: "${NAME}${SUFFIX}-insecure"
+- apiVersion: v1
+  kind: Route
+  metadata:
+    name: "${NAME}${SUFFIX}-secure"
+  spec:
+    host: "${URL_PREFIX}pharmanetenrolment.gov.bc.ca"
+    port:
+      targetPort: '8443'
+    to:
+      kind: Service
+      name: "${NAME}${SUFFIX}-secure"
 - apiVersion: v1
   kind: Service
   metadata:
-    annotations:
-      kompose.cmd: kompose convert --provider=openshift --build=build-config --build-repo=https://github.com/bcgov/moh-prime.git
-      kompose.version: 1.18.0 (06a2e56)
     creationTimestamp: 
     labels:
-      io.kompose.service: "${NAME}${SUFFIX}"
-    name: "${NAME}${SUFFIX}"
+      io.kompose.service: "${NAME}${SUFFIX}-secure"
+    name: "${NAME}${SUFFIX}-secure"
   spec:
     ports:
     - name: '8080'
       port: 8080
       targetPort: 8080
+    - name: '8443'
+      port: 8443
+      targetPort: 8443
+    selector:
+      io.kompose.service: "${NAME}${SUFFIX}"
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      io.kompose.service: "${NAME}${SUFFIX}"
+    name: "${NAME}${SUFFIX}"
+  spec:
+    ports:
+      - name: '8080'
+        port: 8080
+        protocol: TCP
+        targetPort: 8080
+      - name: '8443'
+        port: 8443
+        protocol: TCP
+        targetPort: 8443
     selector:
       io.kompose.service: "${NAME}${SUFFIX}"
   status:
