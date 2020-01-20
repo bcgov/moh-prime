@@ -137,8 +137,8 @@ objects:
   metadata:
     creationTimestamp: 
     labels:
-      io.kompose.service: "${NAME}${SUFFIX}-secure"
-    name: "${NAME}${SUFFIX}-secure"
+      io.kompose.service: "${NAME}${SUFFIX}"
+    name: "${NAME}${SUFFIX}"
   spec:
     ports:
     - name: '8080'
@@ -147,24 +147,6 @@ objects:
     - name: '8443'
       port: 8443
       targetPort: 8443
-    selector:
-      io.kompose.service: "${NAME}${SUFFIX}"
-- apiVersion: v1
-  kind: Service
-  metadata:
-    labels:
-      io.kompose.service: "${NAME}${SUFFIX}"
-    name: "${NAME}${SUFFIX}"
-  spec:
-    ports:
-      - name: '8080'
-        port: 8080
-        protocol: TCP
-        targetPort: 8080
-      - name: '8443'
-        port: 8443
-        protocol: TCP
-        targetPort: 8443
     selector:
       io.kompose.service: "${NAME}${SUFFIX}"
   status:
