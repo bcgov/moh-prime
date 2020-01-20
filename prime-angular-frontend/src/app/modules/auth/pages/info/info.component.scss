@@ -1,5 +1,26 @@
 @import './palette';
-@import 'bootstrap';
+@import 'bootstrap/bootstrap-grid';
+
+// Page overides for font sizing. Info page needs more oomph
+h1 {
+  font-size: 1.5rem * 2;
+}
+
+h2 {
+  font-size: 1.5rem * 1.5;
+}
+
+h3 {
+  font-size: 1.5rem * 1.167;
+}
+
+p, span, div {
+  font-size: 1.5rem;
+}
+
+small {
+  font-size: 1.5rem * 0.833;
+}
 
 .font-size-huge {
   font-size: 4.5rem;
@@ -22,11 +43,6 @@ a {
   text-align: left;
   padding-left: 2rem;
   padding-right: 2rem;
-
-  p {
-    font-size: 1.5rem;
-    line-height: 1.30;
-  }
 
   .anchor {
     border-bottom: 2px #003366 solid;
@@ -51,11 +67,11 @@ a {
     margin-bottom: 8rem;
   }
 
-  div:first-child {
+  > div:first-child {
     text-align: end;
   }
 
-  div:nth-child(2) {
+  > div:nth-child(2) {
     @include media-breakpoint-down(sm) {
       // Remove offset for logo line-up
       margin-top: 0;
@@ -69,5 +85,4 @@ a {
 
 .accent {
   font-style: italic;
-  // TODO: Look at if this text needs to be larger
 }
