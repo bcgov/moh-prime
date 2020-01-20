@@ -25,6 +25,9 @@ parameters:
   required: true
 - name: OC_APP
   required: true
+- name: URL_PREFIX
+  required: false
+  value: "${NAME}${SUFFIX}."
 objects:
 - apiVersion: v1
   kind: DeploymentConfig
@@ -110,20 +113,20 @@ objects:
 - apiVersion: v1
   kind: Route
   metadata:
-    name: "${NAME}${SUFFIX}"
+    name: "${NAME}${SUFFIX}-insecure"
   spec:
     host: "${NAME}${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca"
     port:
       targetPort: '8080'
     to:
       kind: Service
-      name: "${NAME}${SUFFIX}"
+      name: "${NAME}${SUFFIX}-insecure"
 - apiVersion: v1
   kind: Route
   metadata:
     name: "${NAME}${SUFFIX}-secure"
   spec:
-    host: "${NAME}${SUFFIX}.pharmanetenrolment.gov.bc.ca"
+    host: "${URL_PREFIX}pharmanetenrolment.gov.bc.ca"
     port:
       targetPort: '8443'
     to:
