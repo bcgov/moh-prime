@@ -86,9 +86,9 @@ objects:
           readinessProbe:
             failureThreshold: 3
             httpGet:
-              path: /info
-              port: 8080
-              scheme: HTTP
+              path: /healthcheck
+              port: 8443
+              scheme: HTTPS
             initialDelaySeconds: 5
             periodSeconds: 10
             successThreshold: 1
@@ -166,4 +166,3 @@ objects:
       io.kompose.service: "${NAME}${SUFFIX}"
   status:
     loadBalancer: {}
-
