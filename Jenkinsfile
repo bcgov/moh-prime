@@ -5,6 +5,7 @@ pipeline {
     }
 
     stages {
+
         stage('Build Branch') {
             options {
                 timeout(time: 90, unit: 'MINUTES')   // timeout on this stage
@@ -13,6 +14,7 @@ pipeline {
             agent { label 'master' }
             steps {
                 echo "Building ..."
+                echo "Branch Name='${BRANCH_NAME}'"
                 sh "./player.sh build database dev"
                 sh "./player.sh build api dev"
                 sh "./player.sh build frontend dev '-p URL_PREFIX=${BRANCH_NAME}'"

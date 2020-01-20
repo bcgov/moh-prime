@@ -11,10 +11,10 @@ pipeline {
                     echo "Test (DEV) ..."
                     sh "./player.sh build database test"
                     sh "./player.sh build api test '-p=ASPNETCORE_ENVIRONMENT=Release'"
-                    sh "./player.sh build frontend test"
+                    sh "./player.sh build frontend test '-p URL_PREFIX=test'"
                     sh "./player.sh deploy database test"
                     sh "./player.sh deploy api test '-p=ASPNETCORE_ENVIRONMENT=Release'"
-                    sh "./player.sh deploy frontend test"
+                    sh "./player.sh deploy frontend test '-p URL_PREFIX=test'"
                     sh "./player.sh toolbelt schemaspy test"
             }
         }
