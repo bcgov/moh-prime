@@ -9,22 +9,13 @@ pipeline {
             options {
                 timeout(time: 90, unit: 'MINUTES')   // timeout on this stage
             }
-            if (env.BRANCH_NAME == 'develop') {
-                environment {
-                    FRONTEND_ARGS = "-p URL_PREFIX=develop"
-                }
-            else {
-                environment {
-                    FRONTEND_ARGS = "-p URL_PREFIX=${BRANCH_LOWER}"
-                }
-            }
             when { expression { ( GIT_BRANCH != 'master' ) } }
             agent { label 'master' }
             steps {
                 echo "Building ..."
                 sh "./player.sh build database dev"
                 sh "./player.sh build api dev"
-                sh "./player.sh build frontend dev '${FRONTEND_ARGS}'"
+                sh "./player.sh build frontend dev '-p URL_PREFIX=${BRANCH_NAME}'"
             }
         }
         stage('Deploy Branch') {
@@ -37,7 +28,7 @@ pipeline {
                 echo "Deploy to dev..."
                 sh "./player.sh deploy database dev"
                 sh "./player.sh deploy api dev"
-                sh "./player.sh deploy frontend dev '${FRONTEND_ARGS}'"
+                sh "./player.sh deploy frontend dev '-p URL_PREFIX=${BRANCH_NAME}'"
             }
         }
         stage('SchemaSpy Database Investigation') {

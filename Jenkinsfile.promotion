@@ -68,10 +68,10 @@ pipeline {
                 echo "Deploy to Production..."
                 sh "./player.sh build database prod"
                 sh "./player.sh build api prod '-p=ASPNETCORE_ENVIRONMENT=Release'"
-                sh "./player.sh build frontend prod"
+                sh "./player.sh build frontend prod '-p URL_PREFIX='"
                 sh "./player.sh deploy database prod"
                 sh "./player.sh deploy api prod '-p=ASPNETCORE_ENVIRONMENT=Release'"
-                sh "./player.sh deploy frontend prod "
+                sh "./player.sh deploy frontend prod '-p URL_PREFIX='"
                 sh "./player.sh toolbelt schemaspy prod"
             }
         }
