@@ -1,64 +1,73 @@
 @import './palette';
+@import 'bootstrap';
 
-$header-height: 73px;
+.font-size-huge {
+  font-size: 4.5rem;
+}
 
-.container-fluid {
-  // Pull the container up under the header
-  margin-top: -$header-height;
+a {
+  color: theme-palette(blue);
+}
 
-  .row:first-child {
-    // Make the container fill the height of the viewport
-    height: 100vh;
+.center-text {
+  text-align: center;
+}
 
-    div:first-child {
-      // Adjust content down from under the header
-      margin-top: $header-height;
+.logo {
+  height: 200px;
+  width: 200px;
+}
+
+.info {
+  text-align: left;
+  padding-left: 2rem;
+  padding-right: 2rem;
+
+  p {
+    font-size: 1.5rem;
+    line-height: 1.30;
+  }
+
+  .anchor {
+    border-bottom: 2px #003366 solid;
+    font-size: 1rem;
+    color: theme-palette(blue);
+  }
+
+  a:hover {
+    text-decoration: none;
+  }
+}
+
+.mb-8 {
+  margin-bottom: 3.0rem;
+}
+
+.enrolment-container {
+  @include media-breakpoint-down(sm) {
+    margin-bottom: 4rem;
+  }
+  @include media-breakpoint-up(md) {
+    margin-bottom: 8rem;
+  }
+
+  div:first-child {
+    text-align: end;
+  }
+
+  div:nth-child(2) {
+    @include media-breakpoint-down(sm) {
+      // Remove offset for logo line-up
+      margin-top: 0;
+    }
+    @include media-breakpoint-up(md) {
+      // Margin for logo line-up
+      margin-top: 3.5rem;
     }
   }
 }
 
-.logo {
-  max-width: 150px;
-  margin-bottom: 5em;
-}
-
-.action,
-.content {
-  width: 245px;
-}
-
-.action {
-  margin-bottom: 2em;
-
-  button {
-    margin-bottom: .6em;
-  }
-
-  a {
-    color: lighten(theme-palette(blue), 10%);
-  }
-}
-
-.content {
-  .text-muted {
-    font-style: italic;
-  }
-
-  p:nth-child(2) {
-    margin-bottom: 0;
-  }
-
-  ul {
-    padding-left: 1.5em;
-  }
-}
-
-.action a,
-.content .text-muted {
-  font-size: .85rem;
-}
-
-.background {
-  background: no-repeat url('../../../../../assets/login-background.jpg');
-  z-index: -1;
+.accent {
+  font-style: italic;
+  // TODO: Look at if this text needs to be larger
 }
