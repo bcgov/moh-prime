@@ -2,7 +2,8 @@
     class="d-flex align-items-stretch">
   <mat-icon *ngIf="options.icon && !options.imageSrc"
             [color]="options.actionType">{{ options.icon }}</mat-icon>
-  <img [attr.src]="options.imageSrc"
+  <img *ngIf="options.imageSrc"
+       [attr.src]="options.imageSrc"
        alt="">
   <span class="flex-grow-1">
     {{ options.title }}
