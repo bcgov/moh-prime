@@ -123,7 +123,7 @@ objects:
   metadata:
     name: "${NAME}${SUFFIX}-secure"
   spec:
-    host: "${SUFFIX}.pharmanetenrolment.gov.bc.ca"
+    host: "${NAME}${SUFFIX}.pharmanetenrolment.gov.bc.ca"
     port:
       targetPort: '8443'
     to:
@@ -146,5 +146,24 @@ objects:
       targetPort: 8443
     selector:
       io.kompose.service: "${NAME}${SUFFIX}"
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      io.kompose.service: "${NAME}${SUFFIX}"
+    name: "${NAME}${SUFFIX}"
+  spec:
+    ports:
+      - name: '8080'
+        port: 8080
+        protocol: TCP
+        targetPort: 8080
+      - name: '8443'
+        port: 8443
+        protocol: TCP
+        targetPort: 8443
+    selector:
+      io.kompose.service: "${NAME}${SUFFIX}"
   status:
     loadBalancer: {}
+
