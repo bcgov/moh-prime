@@ -7,9 +7,9 @@
 
   <ng-container *ngIf="currentPage > 0; else preamble">
 
-    <app-terms-of-access-pager [termsOfAccess]="termsOfAccess"
-                               [currentPage]="currentPage"
-                               (changed)="onPageChange($event)"></app-terms-of-access-pager>
+    <app-access-terms-pager [termsOfAccess]="termsOfAccess"
+                            [currentPage]="currentPage"
+                            (changed)="onPageChange($event)"></app-access-terms-pager>
 
   </ng-container>
 

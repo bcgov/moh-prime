@@ -13,14 +13,24 @@ namespace PrimeTests.Mocks
         public override void SeedData()
         { }
 
-        public Task SetEnrolleeAccessTermsAsync(Enrollee enrollee)
+        public async Task<AccessTerm> GetAccessTermAsync(Enrollee enrollee)
         {
             throw new NotImplementedException();
         }
 
-        public Task<AccessTerm> GetEnrolleeAccessTermsAsync(int enrolleeId)
+        public async Task<AccessTerm> GetEnrolleeAccessTermsAsync(int enrolleeId)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task CreateEnrolleeAccessTermAsync(Enrollee enrollee)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task SetAcceptedDateForAccessTermAsync(Enrollee enrollee)
+        {
+            // throw new NotImplementedException();
         }
     }
 }
