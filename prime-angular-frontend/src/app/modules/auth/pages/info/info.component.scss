@@ -1,12 +1,15 @@
 @import './palette';
 @import 'bootstrap';
 
-.large-title {
+.font-size-huge {
   font-size: 4.5rem;
 }
 
-.title {
-  font-size: 3.0rem;
+a {
+  color: theme-palette(blue);
+}
+
+.center-text {
   text-align: center;
 }
 
@@ -15,18 +18,19 @@
   padding-left: 2rem;
   padding-right: 2rem;
 
-  h3 {
-    color: theme-palette(blue, light);
-  }
-
   p {
     font-size: 1.5rem;
     line-height: 1.30;
   }
 
   .anchor {
-    text-decoration: underline;
+    border-bottom: 2px #003366 solid;
+    font-size: 1rem;
     color: theme-palette(blue);
+  }
+
+  a:hover {
+    text-decoration: none;
   }
 }
 
@@ -53,7 +57,7 @@
     }
     @include media-breakpoint-up(md) {
       // Margin for logo line-up
-      margin-top: 2.75rem;
+      margin-top: 3.5rem;
     }
   }
 }

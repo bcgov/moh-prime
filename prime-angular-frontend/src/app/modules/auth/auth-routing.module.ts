@@ -13,7 +13,7 @@ const routes: Routes = [
   {
     path: AuthRoutes.MODULE_PATH,
     component: AuthComponent,
-    // canActivate: [AuthorizationRedirectGuard],
+    canActivate: [AuthorizationRedirectGuard],
     children: [
       {
         path: AuthRoutes.INFO,
