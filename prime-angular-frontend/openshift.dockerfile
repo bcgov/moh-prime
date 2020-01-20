@@ -24,6 +24,7 @@ FROM nginx:1.15-alpine
 COPY --from=build-deps /usr/src/app/dist/angular-frontend /usr/share/nginx/html
 RUN rm -f /etc/nginx/conf.d/default.conf 
 #COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/nginx.conf
 COPY --from=build-deps /usr/src/app/nginx.template.conf /etc/nginx/nginx.template.conf
 COPY --from=build-deps /usr/src/app/entrypoint.sh /home
 

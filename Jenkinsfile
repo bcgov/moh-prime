@@ -3,10 +3,20 @@ pipeline {
     options {
         disableResume()
     }
+
     stages {
         stage('Build Branch') {
             options {
                 timeout(time: 90, unit: 'MINUTES')   // timeout on this stage
+            }
+            if (env.BRANCH_NAME == 'develop') {
+                environment {
+                    FRONTEND_ARGS = "-p URL_PREFIX=develop"
+                }
+            else {
+                environment {
+                    FRONTEND_ARGS = "-p URL_PREFIX=${BRANCH_LOWER}"
+                }
             }
             when { expression { ( GIT_BRANCH != 'master' ) } }
             agent { label 'master' }
@@ -14,7 +24,7 @@ pipeline {
                 echo "Building ..."
                 sh "./player.sh build database dev"
                 sh "./player.sh build api dev"
-                sh "./player.sh build frontend dev"
+                sh "./player.sh build frontend dev '${FRONTEND_ARGS}'"
             }
         }
         stage('Deploy Branch') {
@@ -27,7 +37,7 @@ pipeline {
                 echo "Deploy to dev..."
                 sh "./player.sh deploy database dev"
                 sh "./player.sh deploy api dev"
-                sh "./player.sh deploy frontend dev"
+                sh "./player.sh deploy frontend dev '${FRONTEND_ARGS}'"
             }
         }
         stage('SchemaSpy Database Investigation') {
