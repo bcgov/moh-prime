@@ -11,7 +11,6 @@ import { AuthService } from '@auth/shared/services/auth.service';
   styleUrls: ['./admin.component.scss']
 })
 export class AdminComponent implements OnInit {
-
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService

@@ -4,8 +4,8 @@ import { KeycloakService } from 'keycloak-angular';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 import { LoggerService } from '@core/services/logger.service';
-import { Role } from '../enum/role.enum';
-import { User } from '../models/user.model';
+import { Role } from '@auth/shared/enum/role.enum';
+import { User } from '@auth/shared/models/user.model';
 
 export interface IAuthService {
   hasJustLoggedIn: boolean;
