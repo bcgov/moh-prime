@@ -25,6 +25,10 @@ namespace Prime.ModelFactories
             {
                 set.RuleFor(x => x.Expires, f => f.Date.Past());
             });
+            RuleSet("maxViews", (set) =>
+            {
+                set.RuleFor(x => x.ViewCount, 3);
+            });
         }
     }
 }

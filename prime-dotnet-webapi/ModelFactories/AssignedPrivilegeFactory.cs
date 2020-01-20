@@ -12,12 +12,8 @@ namespace Prime.ModelFactories
 
             RuleFor(x => x.Enrollee, f => owner);
             RuleFor(x => x.EnrolleeId, f => owner.Id);
+            RuleFor(x => x.Privilege, f => f.PickRandom(PrivilegeLookup.All));
+            RuleFor(x => x.PrivilegeId, (f, x) => x.Privilege.Id);
         }
     }
 }
-
-// TODO
-// Enrollee
-// EnrolleeId
-// Privilege
-// PrivilegeId

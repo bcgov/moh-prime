@@ -15,15 +15,8 @@ namespace Prime.ModelFactories
             RuleFor(x => x.Id, f => IdCounter++);
             RuleFor(x => x.Enrollee, f => owner);
             RuleFor(x => x.EnrolleeId, f => owner.Id);
-
+            RuleFor(x => x.OrganizationType, f => f.PickRandom(OrganizationTypeLookup.All));
+            RuleFor(x => x.OrganizationTypeCode, (f, x) => x.OrganizationType.Code);
         }
     }
 }
-//TODO
-//   Id
-//   EnrolleeId
-//   Enrollee
-//  OrganizationType
-//  OrganizationTypeCode
-
-
