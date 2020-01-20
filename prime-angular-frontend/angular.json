@@ -39,6 +39,9 @@
             "scripts": []
           },
           "configurations": {
+            "es5": {
+              "tsConfig": "./tsconfig.es5.json"
+            },
             "production": {
               "fileReplacements": [
                 {
@@ -78,6 +81,9 @@
           "configurations": {
             "production": {
               "browserTarget": "angular-frontend:build:production"
+            },
+            "es5": {
+              "browserTarget": "angular-frontend:build:es5"
             }
           }
         },
