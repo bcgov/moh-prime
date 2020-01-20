@@ -6,12 +6,14 @@ import { AuthRoutingModule } from './auth-routing.module';
 import { AuthComponent } from './shared/components/auth/auth.component';
 import { InfoComponent } from './pages/info/info.component';
 import { AdminComponent } from './pages/admin/admin.component';
+import { PillComponent } from './shared/components/pill/pill.component';
 
 @NgModule({
   declarations: [
     AdminComponent,
     AuthComponent,
-    InfoComponent
+    InfoComponent,
+    PillComponent
   ],
   imports: [
     SharedModule,

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { UserClause } from '@enrolment/shared/models/terms-of-access.model';
+import { UserClause } from '@enrolment/shared/models/access-term.model';
 
 @Component({
   selector: 'app-user-clause',
