@@ -15,14 +15,10 @@ namespace Prime.ModelFactories
 
             RuleFor(x => x.Id, f => IdCounter++);
             RuleFor(x => x.EnrolmentStatus, f => owner);
+            RuleFor(x => x.EnrolmentStatusId, f => owner.Id);
             RuleFor(x => x.StatusReason, f => f.PickRandom(StatusReasonLookup.All));
+            RuleFor(x => x.StatusReasonCode, (f, x) => x.StatusReason.Code);
             RuleFor(x => x.ReasonNote, f => f.Lorem.Paragraph(1).OrNull(f));
-
-            FinishWith((f, x) =>
-            {
-                x.EnrolmentStatusId = x.EnrolmentStatus.Id;
-                x.StatusReasonCode = x.StatusReason.Code;
-            });
         }
     }
 }
