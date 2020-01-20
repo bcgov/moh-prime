@@ -1,5 +1,6 @@
 <div>
   <div class="container-fluid">
+    <app-banner *ngIf="isIE == true"></app-banner>
     <div class="row mt-4 enrolment-container">
       <div class="col-md-3 d-none d-md-block">
         <img src="/assets/prime-logo-textless.svg"
@@ -23,6 +24,7 @@
             <button mat-flat-button
                     class="mr-4 mb-4"
                     color="primary"
+                    [disabled]="isIE"
                     (click)="loginUsingBCSC()">Log in with BC Services Card</button>
             <button mat-flat-button
                     color="accent"
