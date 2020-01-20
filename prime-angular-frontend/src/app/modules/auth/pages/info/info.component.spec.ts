@@ -8,6 +8,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
+import { PillComponent } from '@auth/shared/components/pill/pill.component';
 
 describe('InfoComponent', () => {
   let component: InfoComponent;
@@ -22,7 +23,8 @@ describe('InfoComponent', () => {
         declarations: [
           InfoComponent,
           PageHeaderComponent,
-          PageSubheaderComponent
+          PageSubheaderComponent,
+          PillComponent
         ],
         providers: [
           {
