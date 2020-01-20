@@ -12,12 +12,10 @@ import { AuthService } from '@auth/shared/services/auth.service';
 @Injectable({
   providedIn: 'root'
 })
-// TODO needs to be updated to reflect this application
 export class ErrorHandlerInterceptor {
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router,
-    private authService: AuthService,
     private logger: LoggerService
   ) { }
 
@@ -26,48 +24,21 @@ export class ErrorHandlerInterceptor {
    * Intercept 401 responses to redirect to login if a user
    * is not authenticated.
    */
-  // TODO split into separate interceptors 401, 422, and 500
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req)
       .pipe(
         catchError((error: any, caught) => {
-          // TODO use exception service to handle
           if (error instanceof HttpErrorResponse) {
             const status = error.status;
             if (status === 401) {
               this.logger.info('Unauthorized');
-              // TODO store the logout action for global reuse with auth service
-              // const isLogout = req.url.includes('logout');
-              // let navigationExtras: NavigationExtras = {};
-
-              // if (!isLogout) {
-              //   // Redirect to login for authentication, but create a
-              //   // redirect URL to continue at current point once
-              //   // re-authenticated for use when token expires
-              //   const url: string = this.router.url;
-              //   navigationExtras =
-              //     // Only if the redirect URL doesn't already exist or
-              //     // not transitioning to an auth route
-              //     (url.indexOf('redirectUrl') === -1 && url.indexOf('auth') === -1)
-              //       ? { queryParams: { redirectUrl: url } }
-              //       : { queryParamsHandling: 'preserve' };
-              // }
-
-              // this.router.navigate([this.config.routes.auth], navigationExtras);
+              // TODO handle unauthorized
             } else if (status === 422) {
-              // if (error.error.errors) {
-              // TODO use exception service?
-              // Convert the validation error bag into default error
-              // format, which only cares about a single error
-              // TODO configure to capture validation error(s)
-              // const message = error.error.errors[Object.keys(error.error.errors)[0]][0];
-              // error = { error: { message }, status };
-              // }
+              // TODO handle validation error messages
             } else if (status === 500) {
-              // Provide a default 500 error message
-              // TODO use exception service?
-              // const message = 'An internal server error has occurred, and has been reported.';
-              // error = { error: { message }, status };
+              // TODO handle internal server errors and messages
+            } else if (status === 503) {
+              this.router.navigate([this.config.routes.maintenance]);
             }
 
             return throwError(error);

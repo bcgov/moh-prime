@@ -1,0 +1,32 @@
+@import 'bootstrap';
+
+.pill-container {
+  // Using the background pill asset and centering with no repeat
+  background-image: url("/assets/pill-1.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+
+  // Using the height from the asset
+  min-height: 608px;
+  width: 100%;
+
+  // Center the content
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  // Margin spacing
+  @include media-breakpoint-down(sm) {
+    margin-bottom: 4rem;
+  }
+  @include media-breakpoint-up(md) {
+    margin-bottom: 8rem;
+  }
+
+}
+
+.yellow-blue {
+  // Variant of pill-2 : yellow-blue
+  background-image: url("/assets/pill-2.svg");
+}
