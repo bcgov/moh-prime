@@ -1,21 +1,24 @@
 using System;
 using System.IO;
 using System.Reflection;
+using System.Net.Mime;
+using System.Linq;
+
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 using Prime.Services;
-using Prime.Infrastructure;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using System.Net.Mime;
+
 using Newtonsoft.Json;
-using System.Linq;
-using Microsoft.AspNetCore.Http;
+using Prime.Infrastructure;
 
 namespace Prime
 {
@@ -46,9 +49,10 @@ namespace Prime
 
             services
                 .AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 // add a convertor <globally> to change empty strings into null on serialization
-                .AddJsonOptions(options => options.SerializerSettings.Converters.Add(new EmptyStringToNullJsonConverter()));
+                .AddNewtonsoftJson(options =>
+                    options.SerializerSettings.Converters.Add(new EmptyStringToNullJsonConverter()));
+
 
             services.AddCors(options =>
             {
@@ -75,6 +79,7 @@ namespace Prime
             });
 
             services.AddHttpContextAccessor();
+
 
             this.ConfigureDatabase(services);
 
@@ -110,6 +115,7 @@ namespace Prime
             app.UseCors("AllowAll");
 
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseMvc();
         }

@@ -5,14 +5,13 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
 using Newtonsoft.Json;
 using Prime.Infrastructure;
-
+using Microsoft.Extensions.Hosting;
 namespace Prime
 {
     public static class AuthenticationSetup

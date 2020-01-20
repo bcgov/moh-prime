@@ -107,9 +107,10 @@ namespace Prime
                 if (typeof(IAuditable).IsAssignableFrom(entityType.ClrType))
                 {
                     entityType.FindProperty(nameof(IAuditable.CreatedUserId))
-                        .AfterSaveBehavior = PropertySaveBehavior.Ignore;
+                        .SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
+
                     entityType.FindProperty(nameof(IAuditable.CreatedTimeStamp))
-                        .AfterSaveBehavior = PropertySaveBehavior.Ignore;
+                        .SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
                 }
             }
             #endregion
