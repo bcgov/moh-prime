@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Clause } from '@enrolment/shared/models/terms-of-access.model';
+import { Clause } from '@enrolment/shared/models/access-term.model';
 
 @Component({
   selector: 'app-limits-and-conditions-clause',

@@ -30,20 +30,19 @@ namespace Prime.Models
         public int UserClauseId { get; set; }
 
         public UserClause UserClause { get; set; }
+        [NotMapped]
+        public List<LicenseClassClause> LicenseClassClauses { get; set; }
+
+        [JsonIgnore]
+        public List<AccessTermLicenseClassClause> AccessTermLicenseClassClauses { get; set; }
 
         public int? LimitsConditionsClauseId { get; set; }
 
         public LimitsConditionsClause LimitsConditionsClause { get; set; }
 
-        [NotMapped]
-        // TODO use the get instead of using the service to populate
-        public List<LicenseClassClause> LicenseClassClauses { get; set; }
-
-
-        [JsonIgnore]
-        public List<AccessTermLicenseClassClause> AccessTermLicenseClassClauses { get; set; }
-
         [Required]
-        public DateTime EffectiveDate { get; set; }
+        public DateTime CreatedDate { get; set; }
+
+        public DateTime? AcceptedDate { get; set; }
     }
 }

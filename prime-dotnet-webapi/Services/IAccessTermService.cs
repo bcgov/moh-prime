@@ -5,8 +5,12 @@ namespace Prime.Services
 {
     public interface IAccessTermService
     {
-        Task SetEnrolleeAccessTermsAsync(Enrollee enrollee);
+        Task<AccessTerm> GetAccessTermAsync(Enrollee enrollee);
 
         Task<AccessTerm> GetEnrolleeAccessTermsAsync(int enrolleeId);
+
+        Task CreateEnrolleeAccessTermAsync(Enrollee enrollee);
+
+        Task SetAcceptedDateForAccessTermAsync(Enrollee enrollee);
     }
 }
