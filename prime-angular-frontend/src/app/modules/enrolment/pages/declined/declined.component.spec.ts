@@ -13,6 +13,8 @@ import { AlertComponent } from '@shared/components/alert/alert.component';
 import { ProgressIndicatorComponent } from '@shared/components/progress-indicator/progress-indicator.component';
 import { PrimeContactComponent } from '@shared/components/prime-contact/prime-contact.component';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { PrimeEmailComponent } from '@shared/components/prime-email/prime-email.component';
+import { PrimePhoneComponent } from '@shared/components/prime-phone/prime-phone.component';
 
 describe('DeclinedComponent', () => {
   let component: DeclinedComponent;
@@ -31,6 +33,8 @@ describe('DeclinedComponent', () => {
           PageComponent,
           PageHeaderComponent,
           PrimeContactComponent,
+          PrimeEmailComponent,
+          PrimePhoneComponent,
           ProgressIndicatorComponent,
           AlertComponent
         ],
