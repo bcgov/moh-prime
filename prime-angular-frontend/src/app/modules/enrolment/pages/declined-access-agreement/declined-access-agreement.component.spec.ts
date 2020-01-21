@@ -11,6 +11,8 @@ import { PrimeContactComponent } from '@shared/components/prime-contact/prime-co
 import { RouterTestingModule } from '@angular/router/testing';
 import { EnrolmentPipe } from '@shared/pipes/enrolment.pipe';
 import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
+import { PrimePhoneComponent } from '@shared/components/prime-phone/prime-phone.component';
+import { PrimeEmailComponent } from '@shared/components/prime-email/prime-email.component';
 
 describe('DeclinedAccessAgreementComponent', () => {
   let component: DeclinedAccessAgreementComponent;
@@ -30,6 +32,8 @@ describe('DeclinedAccessAgreementComponent', () => {
           PageHeaderComponent,
           ProgressIndicatorComponent,
           PrimeContactComponent,
+          PrimeEmailComponent,
+          PrimePhoneComponent,
           AlertComponent,
           EnrolmentPipe
         ],

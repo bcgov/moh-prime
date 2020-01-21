@@ -1,6 +1,7 @@
-<div class="page-subheader d-flex">
+<div class="page-subheader d-flex"
+     [ngClass]="{ 'divider': divider == true }">
   <div class="w-100">
-    <h2 class="title h4">
+    <h2 class="title">
       <ng-content select="[appPageSubheaderTitle]"></ng-content>
       <div *ngIf="hasContextualContent"
            class="help">

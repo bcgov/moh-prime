@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TermsOfAccessPagerComponent } from './terms-of-access-pager.component';
+import { AccessTermsPagerComponent } from './access-terms-pager.component';
 import { GlobalClauseComponent } from '../global-clause/global-clause.component';
 import { UserClauseComponent } from '../user-clause/user-clause.component';
 import { ConfigCodePipe } from '@config/config-code.pipe';
@@ -11,8 +11,8 @@ import { ContextualHelpComponent } from '@shared/modules/ngx-contextual-help/con
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
 
 describe('TermsOfAccessPagerComponent', () => {
-  let component: TermsOfAccessPagerComponent;
-  let fixture: ComponentFixture<TermsOfAccessPagerComponent>;
+  let component: AccessTermsPagerComponent;
+  let fixture: ComponentFixture<AccessTermsPagerComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule(
@@ -21,7 +21,7 @@ describe('TermsOfAccessPagerComponent', () => {
           NgxMaterialModule
         ],
         declarations: [
-          TermsOfAccessPagerComponent,
+          AccessTermsPagerComponent,
           PageSubheaderComponent,
           GlobalClauseComponent,
           UserClauseComponent,
@@ -35,7 +35,7 @@ describe('TermsOfAccessPagerComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TermsOfAccessPagerComponent);
+    fixture = TestBed.createComponent(AccessTermsPagerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -46,6 +46,8 @@ import { EnrolleeAddressComponent } from '@shared/components/enrollee/enrollee-a
 import { EnrolleePrivilegesComponent } from '@shared/components/enrollee/enrollee-privileges/enrollee-privileges.component';
 import { EnrolleeOrganizationsComponent } from '@shared/components/enrollee/enrollee-organizations/enrollee-organizations.component';
 import { PrimeContactComponent } from '@shared/components/prime-contact/prime-contact.component';
+import { PrimeEmailComponent } from './components/prime-email/prime-email.component';
+import { PrimePhoneComponent } from './components/prime-phone/prime-phone.component';
 
 @NgModule({
   declarations: [
@@ -82,7 +84,9 @@ import { PrimeContactComponent } from '@shared/components/prime-contact/prime-co
     EnrolleePrivilegesComponent,
     EnrolleeOrganizationsComponent,
     EnrolleePropertyComponent,
-    PrimeContactComponent
+    PrimeContactComponent,
+    PrimeEmailComponent,
+    PrimePhoneComponent
   ],
   imports: [
     CommonModule,
@@ -138,6 +142,8 @@ import { PrimeContactComponent } from '@shared/components/prime-contact/prime-co
     EnrolleeOrganizationsComponent,
     EnrolleePropertyComponent,
     PrimeContactComponent,
+    PrimeEmailComponent,
+    PrimePhoneComponent,
   ],
   entryComponents: [
     ConfirmDialogComponent,

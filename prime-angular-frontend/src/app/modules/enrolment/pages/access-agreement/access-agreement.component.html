@@ -1,5 +1,7 @@
 <app-page [busy]="busy">
 
+  <app-collection-notice-alert></app-collection-notice-alert>
+
   <app-page-header>Access Agreement</app-page-header>
 
   <app-progress-indicator *ngIf="isInitialEnrolment"
@@ -7,9 +9,9 @@
 
   <ng-container *ngIf="currentPage > 0; else preamble">
 
-    <app-terms-of-access-pager [termsOfAccess]="termsOfAccess"
-                               [currentPage]="currentPage"
-                               (changed)="onPageChange($event)"></app-terms-of-access-pager>
+    <app-access-terms-pager [termsOfAccess]="termsOfAccess"
+                            [currentPage]="currentPage"
+                            (changed)="onPageChange($event)"></app-access-terms-pager>
 
   </ng-container>
 

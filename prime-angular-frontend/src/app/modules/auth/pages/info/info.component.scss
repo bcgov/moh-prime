@@ -1,64 +1,88 @@
 @import './palette';
+@import 'bootstrap/bootstrap-grid';
 
-$header-height: 73px;
+// Page overides for font sizing. Info page needs more oomph
+h1 {
+  font-size: 1.5rem * 2;
+}
 
-.container-fluid {
-  // Pull the container up under the header
-  margin-top: -$header-height;
+h2 {
+  font-size: 1.5rem * 1.5;
+}
 
-  .row:first-child {
-    // Make the container fill the height of the viewport
-    height: 100vh;
+h3 {
+  font-size: 1.5rem * 1.167;
+}
 
-    div:first-child {
-      // Adjust content down from under the header
-      margin-top: $header-height;
+p, span, div {
+  font-size: 1.5rem;
+}
+
+small {
+  font-size: 1.5rem * 0.833;
+}
+
+.font-size-huge {
+  font-size: 4.5rem;
+}
+
+a {
+  color: theme-palette(blue);
+}
+
+.center-text {
+  text-align: center;
+}
+
+.logo {
+  height: 200px;
+  width: 200px;
+}
+
+.info {
+  text-align: left;
+  padding-left: 2rem;
+  padding-right: 2rem;
+
+  .anchor {
+    border-bottom: 2px #003366 solid;
+    font-size: 1rem;
+    color: theme-palette(blue);
+  }
+
+  a:hover {
+    text-decoration: none;
+  }
+}
+
+.mb-8 {
+  margin-bottom: 3.0rem;
+}
+
+.enrolment-container {
+  @include media-breakpoint-down(sm) {
+    margin-bottom: 4rem;
+  }
+  @include media-breakpoint-up(md) {
+    margin-bottom: 8rem;
+  }
+
+  > div:first-child {
+    text-align: end;
+  }
+
+  > div:nth-child(2) {
+    @include media-breakpoint-down(sm) {
+      // Remove offset for logo line-up
+      margin-top: 0;
+    }
+    @include media-breakpoint-up(md) {
+      // Margin for logo line-up
+      margin-top: 3.5rem;
     }
   }
 }
 
-.logo {
-  max-width: 150px;
-  margin-bottom: 5em;
-}
-
-.action,
-.content {
-  width: 245px;
-}
-
-.action {
-  margin-bottom: 2em;
-
-  button {
-    margin-bottom: .6em;
-  }
-
-  a {
-    color: lighten(theme-palette(blue), 10%);
-  }
-}
-
-.content {
-  .text-muted {
-    font-style: italic;
-  }
-
-  p:nth-child(2) {
-    margin-bottom: 0;
-  }
-
-  ul {
-    padding-left: 1.5em;
-  }
-}
-
-.action a,
-.content .text-muted {
-  font-size: .85rem;
-}
-
-.background {
-  background: no-repeat url('../../../../../assets/login-background.jpg');
-  z-index: -1;
+.accent {
+  font-style: italic;
 }
