@@ -102,13 +102,13 @@ objects:
     triggers:
       - type: ConfigChange
       - imageChangeParams:
-        automatic: true
-        containerNames:
-          - primeweb
-        from:
-          kind: ImageStreamTag
-          name: "${NAME}${SUFFIX}:latest"
-    type: ImageChange
+          automatic: true
+          containerNames:
+            - primeweb
+          from:
+            kind: ImageStreamTag
+            name: "${NAME}${SUFFIX}:latest"
+        type: ImageChange
   status: {}
 - apiVersion: v1
   kind: Route
