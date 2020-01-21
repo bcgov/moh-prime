@@ -13,9 +13,12 @@ namespace Prime.ModelFactories
 
         public static IEnumerable<Practice> AllowedFor(College college)
         {
-            return CollegePracticeLookup.All
-               .Where(x => x.College.Code == college.Code)
-               .Select(x => x.Practice);
+            var practices = CollegePracticeLookup.All
+                .Where(cp => cp.CollegeCode == college.Code)
+                .Select(cp => _seedData.Single(p => p.Code == cp.PracticeCode));
+
+            // Practice is always optional, so add the option of null
+            return practices.Append(null);
         }
     }
 }

@@ -21,7 +21,7 @@ namespace Prime.ModelFactories
             RuleFor(x => x.License, (f, x) => f.PickRandom(LicenseLookup.AllowedFor(x.College)));
             RuleFor(x => x.LicenseCode, (f, x) => x.License.Code);
             RuleFor(x => x.Practice, (f, x) => f.PickRandom(PracticeLookup.AllowedFor(x.College)));
-            RuleFor(x => x.PracticeCode, (f, x) => x.Practice.Code);
+            RuleFor(x => x.PracticeCode, (f, x) => x.Practice?.Code);
         }
     }
 }

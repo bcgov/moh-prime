@@ -14,8 +14,8 @@ namespace Prime.ModelFactories
         public static IEnumerable<License> AllowedFor(College college)
         {
             return CollegeLicenseLookup.All
-                .Where(x => x.College.Code == college.Code)
-                .Select(x => x.License);
+                .Where(cl => cl.CollegeCode == college.Code)
+                .Select(cl => _seedData.Single(l => l.Code == cl.LicenseCode));
         }
     }
 }
