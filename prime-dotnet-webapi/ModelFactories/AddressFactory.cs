@@ -37,6 +37,7 @@ namespace Prime.ModelFactories
                 set.RuleFor(x => x.ProvinceCode, (f, x) => x.Province.Code);
                 set.RuleFor(x => x.Country, (f, x) => CountryLookup.ByCode(x.Province.CountryCode));
                 set.RuleFor(x => x.CountryCode, (f, x) => x.Country.Code);
+                set.RuleFor(x => x.Postal, (f, x) => f.Address.ZipCode(x.CountryCode == Country.CANADA ? "?#?#?#" : null));
             });
         }
     }
