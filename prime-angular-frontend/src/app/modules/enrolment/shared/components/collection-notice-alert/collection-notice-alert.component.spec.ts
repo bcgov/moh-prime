@@ -15,6 +15,8 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { PrimeContactComponent } from '@shared/components/prime-contact/prime-contact.component';
+import { PrimeEmailComponent } from '@shared/components/prime-email/prime-email.component';
+import { PrimePhoneComponent } from '@shared/components/prime-phone/prime-phone.component';
 
 describe('CollectionNoticeAlertComponent', () => {
   let component: CollectionNoticeAlertComponent;
@@ -31,6 +33,8 @@ describe('CollectionNoticeAlertComponent', () => {
           AlertComponent,
           CollectionNoticeAlertComponent,
           PrimeContactComponent,
+          PrimeEmailComponent,
+          PrimePhoneComponent,
           PageHeaderComponent
         ],
         providers: [

@@ -8,12 +8,12 @@ using Prime.Models;
 
 namespace Prime.Services
 {
-    public class DefaultEnrolmentCertificateService : BaseService, IEnrolmentCertificateService
+    public class EnrolmentCertificateService : BaseService, IEnrolmentCertificateService
     {
         private static readonly TimeSpan TOKEN_LIFESPAN = TimeSpan.FromDays(7);
         private const int MAX_VIEWS = 3;
 
-        public DefaultEnrolmentCertificateService(
+        public EnrolmentCertificateService(
             ApiDbContext context, IHttpContextAccessor httpContext)
             : base(context, httpContext)
         { }

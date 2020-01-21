@@ -4,7 +4,7 @@ using Xunit;
 
 namespace PrimeTests.Services
 {
-    public class DefaultLookupServiceTests : BaseServiceTests<DefaultLookupService>
+    public class LookupServiceTests : BaseServiceTests<LookupService>
     {
         [Fact]
         public async void testGetLookups()
