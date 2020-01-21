@@ -9,10 +9,10 @@ using Prime.Models;
 
 namespace Prime.Services
 {
-    public class DefaultLookupService : BaseService, ILookupService
+    public class LookupService : BaseService, ILookupService
     {
-        public DefaultLookupService(
-            ApiDbContext context, IHttpContextAccessor httpContext) 
+        public LookupService(
+            ApiDbContext context, IHttpContextAccessor httpContext)
             : base(context, httpContext)
         { }
 

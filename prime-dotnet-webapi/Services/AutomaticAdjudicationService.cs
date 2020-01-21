@@ -10,11 +10,11 @@ using Prime.Models;
 
 namespace Prime.Services
 {
-    public class DefaultAutomaticAdjudicationService : BaseService, IAutomaticAdjudicationService
+    public class AutomaticAdjudicationService : BaseService, IAutomaticAdjudicationService
     {
         private readonly List<IAutomaticAdjudicationRule> _rules;
 
-        public DefaultAutomaticAdjudicationService(
+        public AutomaticAdjudicationService(
             ApiDbContext context, IHttpContextAccessor httpContext, IPharmanetApiService pharmanetApiService)
             : base(context, httpContext)
         {
@@ -136,7 +136,7 @@ namespace Prime.Services
                     {
                         record = await _pharmanetApiService.GetCollegeRecordAsync(cert);
                     }
-                    catch (DefaultPharmanetApiService.PharmanetCollegeApiException)
+                    catch (PharmanetApiService.PharmanetCollegeApiException)
                     {
                         AddReason(enrollee, StatusReason.PHARMANET_ERROR_CODE, $"{cert.FullLicenseNumber}");
                         passed = false;

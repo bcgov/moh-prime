@@ -125,7 +125,7 @@ namespace PrimeTests.Utils
             IEnrolleeProfileVersionService enrolleeProfileVersionService
         )
         {
-            return new DefaultEnrolleeService(
+            return new EnrolleeService(
                 apiDbContext,
                 httpContext,
                 automaticAdjudicationService,
@@ -147,7 +147,7 @@ namespace PrimeTests.Utils
             IEnrolleeProfileVersionService enrolleeProfileVersionService
         )
         {
-            return new DefaultEnrolleeService(
+            return new EnrolleeService(
                 apiDbContext,
                 httpContext,
                 automaticAdjudicationService,
