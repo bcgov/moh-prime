@@ -9,9 +9,9 @@ using Prime.Models;
 
 namespace PrimeTests.Services
 {
-    public class DefaultEnrolmentCertificateServiceTests : BaseServiceTests<DefaultEnrolmentCertificateService>
+    public class EnrolmentCertificateServiceTests : BaseServiceTests<EnrolmentCertificateService>
     {
-        public DefaultEnrolmentCertificateServiceTests() : base()
+        public EnrolmentCertificateServiceTests() : base()
         { }
 
         [Fact]
