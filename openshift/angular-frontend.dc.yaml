@@ -129,6 +129,9 @@ objects:
     host: "${URL_PREFIX}pharmanetenrolment.gov.bc.ca"
     port:
       targetPort: '8443'
+    tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: passthrough
     to:
       kind: Service
       name: "${NAME}${SUFFIX}"
