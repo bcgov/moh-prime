@@ -18,6 +18,8 @@ import { AlertComponent } from '@shared/components/alert/alert.component';
 import { PrimeContactComponent } from '@shared/components/prime-contact/prime-contact.component';
 import { CollectionNoticeAlertComponent } from '@enrolment/shared/components/collection-notice-alert/collection-notice-alert.component';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { PrimePhoneComponent } from '@shared/components/prime-phone/prime-phone.component';
+import { PrimeEmailComponent } from '@shared/components/prime-email/prime-email.component';
 
 describe('CollectionNoticeComponent', () => {
   let component: CollectionNoticeComponent;
@@ -36,6 +38,8 @@ describe('CollectionNoticeComponent', () => {
           CollectionNoticeComponent,
           CollectionNoticeAlertComponent,
           PrimeContactComponent,
+          PrimeEmailComponent,
+          PrimePhoneComponent,
           PageComponent,
           PageHeaderComponent
         ],
