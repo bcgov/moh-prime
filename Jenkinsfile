@@ -1,14 +1,14 @@
 pipeline {
     agent none
     environment {
-        FRONTEND_ARGS = "VANITY_URL=${BRANCH_NAME}.pathfinder.gov.bc.ca"
+        BRANCH_LOWER = BRANCH_NAME.toLowerCase()
+        FRONTEND_ARGS = "VANITY_URL=${BRANCH_LOWER}.pathfinder.gov.bc.ca"
     }
     options {
         disableResume()
     }
 
     stages {
-
         stage('Build Branch') {
             options {
                 timeout(time: 90, unit: 'MINUTES')   // timeout on this stage
