@@ -31,7 +31,8 @@ namespace Prime.ModelFactories
             RuleFor(x => x.ContactPhone, f => f.Phone.PhoneNumber().OrNull(f));
             RuleFor(x => x.DeviceProviderNumber, f => null);
             RuleFor(x => x.IsInsulinPumpProvider, f => null);
-            RuleFor(x => x.LicensePlate, (f, x) => x.ProgressStatus == ProgressStatusType.FINISHED ? f.Random.AlphaNumeric(12) : null);
+            RuleFor(x => x.LicensePlate, f => null);
+            RuleFor(x => x.ProfileCompleted, f => false);
 
             RuleFor(x => x.HasConviction, false);
             RuleFor(x => x.HasConvictionDetails, f => null);
@@ -42,6 +43,7 @@ namespace Prime.ModelFactories
             RuleFor(x => x.HasPharmaNetSuspended, false);
             RuleFor(x => x.HasPharmaNetSuspendedDetails, f => null);
 
+            RuleFor(x => x.EnrolmentStatuses, (f, x) => new EnrolmentStatusFactory(x).Generate(1, "inProgress"));
             RuleFor(x => x.PhysicalAddress, (f, x) => new PhysicalAddressFactory(x).Generate());
             RuleFor(x => x.MailingAddress, (f, x) => new MailingAddressFactory(x).Generate().OrNull(f));
             RuleFor(x => x.Certifications, (f, x) => new CertificationFactory(x).GenerateBetween(1, 2).OrNull(f, .75f));
@@ -51,25 +53,14 @@ namespace Prime.ModelFactories
             RuleFor(x => x.EnrolmentCertificateNote, (f, x) => new EnrolmentCertificateNoteFactory(x).Generate().OrNull(f));
             RuleFor(x => x.AdjudicatorNotes, (f, x) => new AdjudicatorNoteFactory(x).GenerateBetween(1, 4).OrNull(f));
             RuleFor(x => x.AccessTerms, f => null);
-            RuleFor(x => x.AssignedPrivileges, (f, x) =>
-            {
-                if (x.ProgressStatus != ProgressStatusType.FINISHED)
-                {
-                    return null;
-                }
+            RuleFor(x => x.AssignedPrivileges, f => null);
+            RuleFor(x => x.Privileges, f => null);
 
-                var licenceCodes = x.Certifications.Select(cert => cert.License.Code);
-                return DefaultPrivilegeLookup.All
-                    .Where(def => licenceCodes.Contains(def.LicenseCode))
-                    .Select(def => def.PrivilegeId)
-                    .Distinct()
-                    .Select(pi => new AssignedPrivilegeFactory(x, pi).Generate());
-            });
-            RuleFor(x => x.Privileges, (f, x) => x.AssignedPrivileges.Select(p => p.Privilege));
-
-            // TODO
-            // EnrolmentStatuses
-            RuleFor(x => x.ProfileCompleted, (f, x) => x.EnrolmentStatuses.Count > 1 ? true : f.Random.Bool());
+            // RuleSet("status.submitted", (set) =>
+            // {
+            //     set.RuleFor(x => x.DeviceProviderNumber, f => f.Random.Replace("#####"));
+            //     set.RuleFor(x => x.IsInsulinPumpProvider, f => f.Random.Bool());
+            // });
 
             RuleSet("deviceProvider", (set) =>
             {
@@ -86,6 +77,25 @@ namespace Prime.ModelFactories
                 set.RuleFor(x => x.HasRegistrationSuspendedDetails, (f, x) => x.HasRegistrationSuspended == true ? f.Lorem.Paragraphs(2) : null);
                 set.RuleFor(x => x.HasDisciplinaryActionDetails, (f, x) => x.HasDisciplinaryAction == true ? f.Lorem.Paragraphs(2) : null);
                 set.RuleFor(x => x.HasPharmaNetSuspendedDetails, (f, x) => x.HasPharmaNetSuspended == true ? f.Lorem.Paragraphs(2) : null);
+            });
+
+            FinishWith((f, x) =>
+            {
+                x.ProfileCompleted = x.EnrolmentStatuses.Count > 1 ? true : f.Random.Bool();
+
+                if (x.ProgressStatus == ProgressStatusType.FINISHED)
+                {
+                    x.LicensePlate = f.Random.AlphaNumeric(12);
+
+                    var licenceCodes = x.Certifications.Select(cert => cert.License.Code);
+                    x.AssignedPrivileges = DefaultPrivilegeLookup.All
+                        .Where(def => licenceCodes.Contains(def.LicenseCode))
+                        .Select(def => def.PrivilegeId)
+                        .Distinct()
+                        .Select(privilegeId => new AssignedPrivilegeFactory(x, privilegeId).Generate())
+                        .ToList();
+                    x.Privileges = x.AssignedPrivileges.Select(p => p.Privilege).ToList();
+                }
             });
         }
     }
