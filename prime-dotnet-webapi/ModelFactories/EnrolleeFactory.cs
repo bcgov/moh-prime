@@ -15,65 +15,76 @@ namespace Prime.ModelFactories
         {
             this.SetBaseRules();
 
-            RuleFor(e => e.Id, () => IdCounter++);
-            RuleFor(e => e.UserId, () => Guid.NewGuid());
-            RuleFor(e => e.FirstName, f => f.Name.FirstName());
-            RuleFor(e => e.MiddleName, f => f.Name.FirstName());
-            RuleFor(e => e.LastName, f => f.Name.LastName());
-            RuleFor(e => e.DateOfBirth, f => f.Date.Past(20, DateTime.Now.AddYears(-19)));
-            //RuleFor(e => e.PhysicalAddress, f => PhysicalAddressFaker.Generate())
-            //RuleFor(e => e.MailingAddress, f => MailingAddressFaker.Generate())
-            //RuleFor(e => e.Certifications, f => CertificationFaker.Generate(2))
-            //RuleFor(e => e.IsInsulinPumpProvider, f => f.Random.Bool())
-            //RuleFor(e => e.Jobs, f => JobFaker.Generate(2))
-            RuleFor(e => e.HasConviction, f => f.Random.Bool());
-            RuleFor(e => e.HasConvictionDetails, f => f.Lorem.Paragraphs(2));
-            RuleFor(e => e.HasRegistrationSuspended, f => f.Random.Bool());
-            RuleFor(e => e.HasRegistrationSuspendedDetails, f => f.Lorem.Paragraphs(2));
-            RuleFor(e => e.HasDisciplinaryAction, f => f.Random.Bool());
-            RuleFor(e => e.HasDisciplinaryActionDetails, f => f.Lorem.Paragraphs(2));
-            RuleFor(e => e.HasPharmaNetSuspended, f => f.Random.Bool());
-            RuleFor(e => e.HasPharmaNetSuspendedDetails, f => f.Lorem.Paragraphs(2));
-            RuleFor(e => e.AccessAgreementNote, (f, e) => new AccessAgreementNoteFactory(e).Generate());
+            RuleFor(x => x.Id, f => IdCounter++);
+            RuleFor(x => x.UserId, f => Guid.NewGuid());
+            RuleFor(x => x.FirstName, f => f.Name.FirstName());
+            RuleFor(x => x.MiddleName, f => f.Name.FirstName());
+            RuleFor(x => x.LastName, f => f.Name.LastName());
+            RuleFor(x => x.PreferredFirstName, f => f.Name.FirstName().OrNull(f));
+            RuleFor(x => x.PreferredMiddleName, (f, x) => x.PreferredFirstName == null ? null : f.Name.FirstName());
+            RuleFor(x => x.PreferredLastName, (f, x) => x.PreferredFirstName == null ? null : f.Name.LastName());
+            RuleFor(x => x.DateOfBirth, f => f.Date.Past(50, DateTime.Now.AddYears(-19)));
+            RuleFor(x => x.ContactEmail, f => f.Internet.Email());
+            RuleFor(x => x.VoicePhone, f => f.Phone.PhoneNumber());
+            RuleFor(x => x.VoiceExtension, f => f.Random.Replace("###").OrNull(f));
+            RuleFor(x => x.ContactPhone, f => f.Phone.PhoneNumber().OrNull(f));
+            RuleFor(x => x.DeviceProviderNumber, f => null);
+            RuleFor(x => x.IsInsulinPumpProvider, f => null);
+
+            RuleFor(x => x.HasConviction, false);
+            RuleFor(x => x.HasConvictionDetails, f => null);
+            RuleFor(x => x.HasRegistrationSuspended, false);
+            RuleFor(x => x.HasRegistrationSuspendedDetails, f => null);
+            RuleFor(x => x.HasDisciplinaryAction, false);
+            RuleFor(x => x.HasDisciplinaryActionDetails, f => null);
+            RuleFor(x => x.HasPharmaNetSuspended, false);
+            RuleFor(x => x.HasPharmaNetSuspendedDetails, f => null);
+
+            // statuses
+            RuleFor(x => x.ProfileCompleted, (f, x)=> x.stat);
+
+            RuleFor(x => x.PhysicalAddress, (f, x) => new PhysicalAddressFactory(x).Generate());
+            RuleFor(x => x.MailingAddress, (f, x) => new MailingAddressFactory(x).Generate().OrNull(f));
+            RuleFor(x => x.Certifications, (f, x) => new CertificationFactory(x).Generate(f.Random.Int(1, 2)).OrNull(f, .75f));
+            RuleFor(x => x.Jobs, (f, x) => x.Certifications == null ? new JobFactory(x).Generate(1) : null);
+
+            RuleFor(x => x.AccessAgreementNote, (f, x) => new AccessAgreementNoteFactory(x).Generate().OrNull(f));
+            RuleFor(x => x.EnrolmentCertificateNote, (f, x) => new EnrolmentCertificateNoteFactory(x).Generate().OrNull(f));
+            RuleFor(x => x.AdjudicatorNotes, (f, x) => new AdjudicatorNoteFactory(x).Generate(f.Random.Int(1, 4)).OrNull(f));
+
+
+
+            RuleSet("deviceProvider", (set) =>
+            {
+                set.RuleFor(x => x.DeviceProviderNumber, f => f.Random.Replace("#####"));
+                set.RuleFor(x => x.IsInsulinPumpProvider, f => f.Random.Bool());
+            });
+            RuleSet("selfDeclaration", (set) =>
+            {
+                RuleFor(x => x.HasConviction, f => f.Random.Bool());
+                RuleFor(x => x.HasRegistrationSuspended, f => f.Random.Bool());
+                RuleFor(x => x.HasDisciplinaryAction, f => f.Random.Bool());
+                RuleFor(x => x.HasPharmaNetSuspended, f => f.Random.Bool());
+                RuleFor(x => x.HasConvictionDetails, (f, x) => x.HasConviction == true ? f.Lorem.Paragraphs(2) : null);
+                RuleFor(x => x.HasRegistrationSuspendedDetails, (f, x) => x.HasRegistrationSuspended == true ? f.Lorem.Paragraphs(2) : null);
+                RuleFor(x => x.HasDisciplinaryActionDetails, (f, x) => x.HasDisciplinaryAction == true ? f.Lorem.Paragraphs(2) : null);
+                RuleFor(x => x.HasPharmaNetSuspendedDetails, (f, x) => x.HasPharmaNetSuspended == true ? f.Lorem.Paragraphs(2) : null);
+            });
         }
     }
 }
 
-// Id = 0,
-// UserId = Guid.NewGuid(),
-// LicensePlate ,
-// FirstName = "First",
-// MiddleName ,
-// LastName = "Last",
-// PreferredFirstName ,
-// PreferredMiddleName ,
-// PreferredLastName ,
-// DateOfBirth ,
-// PhysicalAddress PhysicalAddress ,
-// MailingAddress MailingAddress ,
-// ContactEmail ,
-// ContactPhone ,
-// VoicePhone ,
-// VoiceExtension ,
+
+
+
 // Certifications ,
 // Jobs ,
 // Organizations ,
-// DeviceProviderNumber ,
-// IsInsulinPumpProvider ,
-// HasConviction ,
-// HasConvictionDetails ,
-// HasRegistrationSuspended ,
-// HasRegistrationSuspendedDetails ,
-// HasDisciplinaryAction ,
-// HasDisciplinaryActionDetails ,
-// HasPharmaNetSuspended ,
-// HasPharmaNetSuspendedDetails ,
+
+
 // AssignedPrivileges ,
 // Privileges ,
 // EnrolmentStatuses ,
 // ProfileCompleted ,
-// AvailableStatuses ,
-// AdjudicatorNotes ,
-// AccessAgreementNote ,
-// EnrolmentCertificateNote ,
+
 // TermsOfAccess ,

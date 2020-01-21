@@ -22,6 +22,7 @@ namespace Prime.ModelFactories
             RuleFor(x => x.RenewalDate, f => f.Date.Future());
             RuleFor(x => x.Practice, f => f.PickRandom(PracticeLookup.All));
             RuleFor(x => x.PracticeCode, (f, x) => x.Practice.Code);
+            // TODO fix this
         }
     }
 }
