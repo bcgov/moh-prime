@@ -15,6 +15,10 @@ import { PageSubheaderComponent } from '@shared/components/page-subheader/page-s
 import { ProgressIndicatorComponent } from '@shared/components/progress-indicator/progress-indicator.component';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { PrimeContactComponent } from '@shared/components/prime-contact/prime-contact.component';
+import { CollectionNoticeAlertComponent } from '@enrolment/shared/components/collection-notice-alert/collection-notice-alert.component';
+import { PrimePhoneComponent } from '@shared/components/prime-phone/prime-phone.component';
+import { PrimeEmailComponent } from '@shared/components/prime-email/prime-email.component';
+import { KeycloakService } from 'keycloak-angular';
 
 describe('SubmissionConfirmationComponent', () => {
   let component: SubmissionConfirmationComponent;
@@ -35,8 +39,11 @@ describe('SubmissionConfirmationComponent', () => {
           PageComponent,
           PageHeaderComponent,
           PageSubheaderComponent,
+          PrimePhoneComponent,
+          PrimeEmailComponent,
           ProgressIndicatorComponent,
-          PrimeContactComponent
+          PrimeContactComponent,
+          CollectionNoticeAlertComponent
         ],
         providers: [
           {
@@ -46,7 +53,8 @@ describe('SubmissionConfirmationComponent', () => {
           {
             provide: EnrolmentService,
             useClass: MockEnrolmentService
-          }
+          },
+          KeycloakService
         ]
       }
     ).compileComponents();

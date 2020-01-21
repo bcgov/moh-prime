@@ -1,20 +1,16 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PrimeContactComponent } from './prime-contact.component';
+import { PrimePhoneComponent } from './prime-phone.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
-import { PrimeEmailComponent } from '../prime-email/prime-email.component';
-import { PrimePhoneComponent } from '../prime-phone/prime-phone.component';
 
-describe('PrimeContactComponent', () => {
-  let component: PrimeContactComponent;
-  let fixture: ComponentFixture<PrimeContactComponent>;
+describe('PrimePhoneComponent', () => {
+  let component: PrimePhoneComponent;
+  let fixture: ComponentFixture<PrimePhoneComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule(
       {
         declarations: [
-          PrimeContactComponent,
-          PrimeEmailComponent,
           PrimePhoneComponent
         ],
         providers: [
@@ -28,7 +24,7 @@ describe('PrimeContactComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PrimeContactComponent);
+    fixture = TestBed.createComponent(PrimePhoneComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
