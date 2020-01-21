@@ -17,7 +17,7 @@ namespace PrimeTests.Mocks
 
         public Task CreateEnrolleeProfileVersionAsync(Enrollee enrollee)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public Task<EnrolleeProfileVersion> GetEnrolleeProfileVersionAsync(int enrolleeProfileVersionId)
