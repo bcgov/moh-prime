@@ -28,6 +28,8 @@ parameters:
     required: true
   - name: ASPNETCORE_ENVIRONMENT
     value: Development
+  - name: VANITY_URL
+    required: true
 objects:
   - apiVersion: v1
     kind: DeploymentConfig
@@ -76,7 +78,7 @@ objects:
                 - name: ASPNETCORE_URLS
                   value: 'http://+:8080'
                 - name: FRONTEND_URL
-                  value: http://angular-frontend${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca
+                  value: 'https://${VANITY_URL}'
                 - name: JWT_SIGNING_KEY
                   value: SdqlA0Y5e6HMAK1wm6iHHHz2u37XGtlo
                 - name: JWT_ADMIN_CLIENT

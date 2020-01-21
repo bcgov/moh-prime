@@ -2,7 +2,10 @@ pipeline {
     agent none
     environment {
         TEST_FRONTEND_ARGS = "VANITY_URL=test.pathfinder.gov.bc.ca"
+        TEST_VANITY_URL=test.pathfinder.gov.bc.ca
         PROD_FRONTEND_ARGS = "VANITY_URL=pathfinder.gov.bc.ca"
+        PROD_VANITY_URL=pathfinder.gov.bc.ca
+        API_ARGS="ASPNETCORE_ENVIRONMENT=Release"
     }
     stages {
         stage('Promote Master to Test') {
@@ -14,10 +17,10 @@ pipeline {
             steps {
                     echo "Test (DEV) ..."
                     sh "./player.sh build database test"
-                    sh "./player.sh build api test '-p=ASPNETCORE_ENVIRONMENT=Release'"
+                    sh "./player.sh build api test '-p=ASPNETCORE_ENVIRONMENT=Release -p=${TEST_FRONTEND_ARGS}'"
                     sh "./player.sh build frontend test '${TEST_FRONTEND_ARGS}'"
                     sh "./player.sh deploy database test"
-                    sh "./player.sh deploy api test '-p=ASPNETCORE_ENVIRONMENT=Release'"
+                    sh "./player.sh deploy api test '-p=ASPNETCORE_ENVIRONMENT=Release -p=${TEST_FRONTEND_ARGS}'"
                     sh "./player.sh deploy frontend test '${TEST_FRONTEND_ARGS}'"
                     sh "./player.sh toolbelt schemaspy test"
             }
