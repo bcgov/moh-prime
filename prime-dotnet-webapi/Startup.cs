@@ -35,14 +35,14 @@ namespace Prime
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<ILookupService, DefaultLookupService>();
-            services.AddScoped<IEnrolleeService, DefaultEnrolleeService>();
-            services.AddScoped<IAutomaticAdjudicationService, DefaultAutomaticAdjudicationService>();
-            services.AddScoped<IEnrolmentCertificateService, DefaultEnrolmentCertificateService>();
-            services.AddScoped<IEmailService, DefaultEmailService>();
-            services.AddScoped<IPharmanetApiService, DefaultPharmanetApiService>();
-            services.AddScoped<IPrivilegeService, DefaultPrivilegeService>();
-            services.AddScoped<IAccessTermService, DefaultAccessTermService>();
+            services.AddScoped<ILookupService, LookupService>();
+            services.AddScoped<IEnrolleeService, EnrolleeService>();
+            services.AddScoped<IAutomaticAdjudicationService, AutomaticAdjudicationService>();
+            services.AddScoped<IEnrolmentCertificateService, EnrolmentCertificateService>();
+            services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IPharmanetApiService, PharmanetApiService>();
+            services.AddScoped<IPrivilegeService, PrivilegeService>();
+            services.AddScoped<IAccessTermService, AccessTermService>();
 
             services
                 .AddMvc()

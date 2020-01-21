@@ -9,7 +9,7 @@ using Prime.Models;
 
 namespace Prime.Services
 {
-    public class DefaultEnrolleeService : BaseService, IEnrolleeService
+    public class EnrolleeService : BaseService, IEnrolleeService
     {
         private readonly IAutomaticAdjudicationService _automaticAdjudicationService;
         private readonly IEmailService _emailService;
@@ -26,7 +26,7 @@ namespace Prime.Services
 
         private static Status NULL_STATUS = new Status { Code = -1, Name = "No Status" };
 
-        public DefaultEnrolleeService(
+        public EnrolleeService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
             IAutomaticAdjudicationService automaticAdjudicationService,

@@ -8,9 +8,9 @@ using Prime.Models;
 
 namespace Prime.Services
 {
-    public class DefaultAccessTermService : BaseService, IAccessTermService
+    public class AccessTermService : BaseService, IAccessTermService
     {
-        public DefaultAccessTermService(
+        public AccessTermService(
             ApiDbContext context, IHttpContextAccessor httpContext) : base(context, httpContext)
         { }
 

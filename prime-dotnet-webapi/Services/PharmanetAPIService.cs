@@ -14,11 +14,11 @@ using Prime.Models;
 
 namespace Prime.Services
 {
-    public class DefaultPharmanetApiService : BaseService, IPharmanetApiService
+    public class PharmanetApiService : BaseService, IPharmanetApiService
     {
         private static HttpClient Client = InitHttpClient();
 
-        public DefaultPharmanetApiService(
+        public PharmanetApiService(
             ApiDbContext context, IHttpContextAccessor httpContext)
             : base(context, httpContext)
         { }
