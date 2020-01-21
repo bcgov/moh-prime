@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using Bogus;
@@ -24,7 +25,7 @@ namespace Prime.ModelFactories
             RuleFor(x => x.EnrolleeId, f => owner.Id);
             RuleFor(x => x.Status, f => GetNextStatus() ?? f.PickRandom(StatusLookup.All));
             RuleFor(x => x.StatusCode, (f, x) => x.Status.Code);
-            RuleFor(x => x.StatusDate, f => f.Date.Past());
+            RuleFor(x => x.StatusDate, f => DateTime.Now);
             RuleFor(x => x.PharmaNetStatus, false);
             RuleFor(x => x.EnrolmentStatusReasons, f => null);
 
