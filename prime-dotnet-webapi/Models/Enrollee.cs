@@ -124,10 +124,6 @@ namespace Prime.Models
         public bool ProfileCompleted { get; set; }
 
         [NotMapped]
-        public ICollection<Status> AvailableStatuses { get; set; }
-
-
-        [NotMapped]
         public DateTime? AppliedDate
         {
             get => this.EnrolmentStatuses?

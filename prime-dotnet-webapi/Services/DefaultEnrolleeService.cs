@@ -120,8 +120,6 @@ namespace Prime.Services
 
             if (entity != null)
             {
-                // Add the available statuses to the enrollee
-                entity.AvailableStatuses = this.GetAvailableStatuses(entity.CurrentStatus?.Status);
                 entity.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(entity);
             }
 
@@ -144,8 +142,6 @@ namespace Prime.Services
 
             foreach (var item in items)
             {
-                // Add the available statuses to the enrolment
-                item.AvailableStatuses = this.GetAvailableStatuses(item.CurrentStatus?.Status);
                 item.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(item);
             }
 
@@ -159,8 +155,6 @@ namespace Prime.Services
 
             if (enrollee != null)
             {
-                // Add the available statuses to the enrolment
-                enrollee.AvailableStatuses = this.GetAvailableStatuses(enrollee?.CurrentStatus?.Status);
                 enrollee.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(enrollee);
             }
 
@@ -484,8 +478,6 @@ namespace Prime.Services
 
             if (entity != null)
             {
-                // add the available statuses to the enrollee
-                entity.AvailableStatuses = this.GetAvailableStatuses(entity.CurrentStatus?.Status);
                 entity.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(entity);
             }
 
