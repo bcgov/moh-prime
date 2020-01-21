@@ -23,6 +23,7 @@ import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
 import { YesNoPipe } from '@shared/pipes/yes-no.pipe';
 import { EnrolleePropertyComponent } from '@shared/components/enrollee/enrollee-property/enrollee-property.component';
 import { PageComponent } from '@shared/components/page/page.component';
+import { EnrolleePropertyErrorComponent } from '@shared/components/enrollee/enrollee-property-error/enrollee-property-error.component';
 
 describe('EnrolmentComponent', () => {
   let component: EnrolmentComponent;
@@ -55,7 +56,8 @@ describe('EnrolmentComponent', () => {
           PostalPipe,
           DefaultPipe,
           EnrolleePipe,
-          YesNoPipe
+          YesNoPipe,
+          EnrolleePropertyErrorComponent
         ],
         providers: [
           {

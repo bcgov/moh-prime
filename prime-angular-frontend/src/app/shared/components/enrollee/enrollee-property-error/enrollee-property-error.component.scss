@@ -1,0 +1,9 @@
+@import 'palette';
+
+.container-fluid {
+  display: flex;
+}
+
+.icon {
+  color: theme-palette(red);
+}
