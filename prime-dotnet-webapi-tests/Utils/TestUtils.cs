@@ -124,7 +124,7 @@ namespace PrimeTests.Utils
             IAccessTermService accessTermService
         )
         {
-            return new DefaultEnrolleeService(
+            return new EnrolleeService(
                 apiDbContext,
                 httpContext,
                 automaticAdjudicationService,
@@ -144,7 +144,7 @@ namespace PrimeTests.Utils
             IAccessTermService accessTermService
         )
         {
-            return new DefaultEnrolleeService(
+            return new EnrolleeService(
                 apiDbContext,
                 httpContext,
                 automaticAdjudicationService,

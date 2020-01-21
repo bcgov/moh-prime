@@ -112,20 +112,18 @@ namespace Prime.Models
             {
                 // Indicates the position of the enrollee within their initial enrolment, which
                 // provides a status hook with greater granularity than the enrolment statuses
-                var statuses = this.EnrolmentStatuses?.Select(es => es.StatusCode);
-                return (statuses != null && statuses.Contains(Status.ACCEPTED_TOS_CODE))
+                var codes = (EnrolmentStatuses ?? Enumerable.Empty<EnrolmentStatus>())
+                    .Select(es => es.StatusCode);
+
+                return codes.Contains(Status.ACCEPTED_TOS_CODE)
                     ? ProgressStatusType.FINISHED
-                    : (statuses != null && statuses.Contains(Status.SUBMITTED_CODE))
+                    : codes.Contains(Status.SUBMITTED_CODE)
                         ? ProgressStatusType.SUBMITTED
                         : ProgressStatusType.STARTED;
             }
         }
 
         public bool ProfileCompleted { get; set; }
-
-        [NotMapped]
-        public ICollection<Status> AvailableStatuses { get; set; }
-
 
         [NotMapped]
         public DateTime? AppliedDate

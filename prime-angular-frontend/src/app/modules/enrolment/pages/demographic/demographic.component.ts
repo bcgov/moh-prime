@@ -46,6 +46,14 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
     this.isNewProfile = false;
   }
 
+  public get preferredFirstName(): FormControl {
+    return this.form.get('preferredFirstName') as FormControl;
+  }
+
+  public get preferredLastName(): FormControl {
+    return this.form.get('preferredLastName') as FormControl;
+  }
+
   public get physicalAddress(): FormGroup {
     return this.form.get('physicalAddress') as FormGroup;
   }
@@ -113,10 +121,10 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
     this.hasPreferredName = !this.hasPreferredName;
 
     if (!this.hasPreferredName) {
-      this.form.get('preferredFirstName').reset();
       this.form.get('preferredMiddleName').reset();
-      this.form.get('preferredLastName').reset();
     }
+
+    this.togglePreferredNameValidators(this.preferredFirstName, this.preferredLastName);
   }
 
   public onMailingAddressChange() {
@@ -142,6 +150,8 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
       this.form.get('preferredMiddleName').value ||
       this.form.get('preferredLastName').value
     );
+
+    this.togglePreferredNameValidators(this.preferredFirstName, this.preferredLastName);
 
     // Show mailing address if it exists
     this.hasMailingAddress = !!(
@@ -215,6 +225,16 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
       this.logger.info('USER', user);
 
       this.form.patchValue(user);
+    }
+  }
+
+  private togglePreferredNameValidators(preferredFirstName: FormControl, preferredLastName: FormControl) {
+    if (!this.hasPreferredName) {
+      this.formUtilsService.resetAndClearValidators(preferredFirstName);
+      this.formUtilsService.resetAndClearValidators(preferredLastName);
+    } else {
+      this.formUtilsService.setValidators(preferredFirstName, [Validators.required]);
+      this.formUtilsService.setValidators(preferredLastName, [Validators.required]);
     }
   }
 
