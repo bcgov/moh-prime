@@ -18,8 +18,10 @@ pipeline {
             steps {
                 echo "Building ..."
                 sh "./player.sh build database dev"
-                sh "./player.sh build api dev '${FRONTEND_ARGS}'"
-                sh "./player.sh build frontend dev '${FRONTEND_ARGS}'"
+                sh "export PIPELINE_ARGS='${FRONTEND_ARGS}'"
+                sh "./player.sh build api dev"
+                sh "./player.sh build frontend dev"
+                sh "export PIPELINE_ARGS=''"
             }
         }
         stage('Deploy Branch') {
@@ -31,8 +33,10 @@ pipeline {
             steps {
                 echo "Deploy to dev..."
                 sh "./player.sh deploy database dev"
-                sh "./player.sh deploy api dev '${FRONTEND_ARGS}'"
-                sh "./player.sh deploy frontend dev '${FRONTEND_ARGS}'"
+                sh "export PIPELINE_ARGS='${FRONTEND_ARGS}'"
+                sh "./player.sh deploy api dev"
+                sh "./player.sh deploy frontend dev"
+                sh "export PIPELINE_ARGS=''"
             }
         }
         stage('SchemaSpy Database Investigation') {
