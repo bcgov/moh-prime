@@ -52,15 +52,25 @@ namespace Prime.ModelFactories
             RuleFor(x => x.AccessAgreementNote, (f, x) => new AccessAgreementNoteFactory(x).Generate().OrNull(f));
             RuleFor(x => x.EnrolmentCertificateNote, (f, x) => new EnrolmentCertificateNoteFactory(x).Generate().OrNull(f));
             RuleFor(x => x.AdjudicatorNotes, (f, x) => new AdjudicatorNoteFactory(x).GenerateBetween(1, 4).OrNull(f));
-            RuleFor(x => x.AccessTerms, f => null);
             RuleFor(x => x.AssignedPrivileges, f => null);
             RuleFor(x => x.Privileges, f => null);
+            Ignore(x => x.AccessTerms);
 
-            // RuleSet("status.submitted", (set) =>
-            // {
-            //     set.RuleFor(x => x.DeviceProviderNumber, f => f.Random.Replace("#####"));
-            //     set.RuleFor(x => x.IsInsulinPumpProvider, f => f.Random.Bool());
-            // });
+            RuleSet("status.submitted", (set) =>
+            {
+                var statuses = StatusLookup.SubmittedSequence;
+                set.RuleFor(x => x.EnrolmentStatuses, (f, x) => new EnrolmentStatusFactory(x, statuses).Generate(statuses.Count()));
+            });
+            RuleSet("status.approved", (set) =>
+            {
+                var statuses = StatusLookup.ApprovedSequence;
+                set.RuleFor(x => x.EnrolmentStatuses, (f, x) => new EnrolmentStatusFactory(x, statuses).Generate(statuses.Count()));
+            });
+            RuleSet("status.acceptedTos", (set) =>
+            {
+                var statuses = StatusLookup.AcceptedTosSequence;
+                set.RuleFor(x => x.EnrolmentStatuses, (f, x) => new EnrolmentStatusFactory(x, statuses).Generate(statuses.Count()));
+            });
 
             RuleSet("deviceProvider", (set) =>
             {
@@ -85,7 +95,7 @@ namespace Prime.ModelFactories
 
                 if (x.ProgressStatus == ProgressStatusType.FINISHED)
                 {
-                    x.LicensePlate = f.Random.AlphaNumeric(12);
+                    x.LicensePlate = f.Random.AlphaNumeric(20);
 
                     var licenceCodes = x.Certifications.Select(cert => cert.License.Code);
                     x.AssignedPrivileges = DefaultPrivilegeLookup.All
