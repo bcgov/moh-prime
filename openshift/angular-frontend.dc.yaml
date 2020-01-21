@@ -27,7 +27,7 @@ parameters:
   required: true
 - name: URL_PREFIX
   required: false
-  value: "${NAME}${SUFFIX}\."
+  value: '${NAME}${SUFFIX}.'
 objects:
 - apiVersion: v1
   kind: DeploymentConfig
@@ -99,14 +99,16 @@ objects:
           resources: {}
         restartPolicy: Always
     test: false 
-    - imageChangeParams:
-        automatic: true
-        containerNames:
-        - primeweb
-        from:
-          kind: ImageStreamTag
-          name: "${NAME}${SUFFIX}:latest"
-      type: ImageChange
+    triggers:
+        - type: ConfigChange
+        - imageChangeParams:
+          automatic: true
+          containerNames:
+           - primeweb
+          from:
+            kind: ImageStreamTag
+            name: "${NAME}${SUFFIX}:latest"
+    type: ImageChange
   status: {}
 - apiVersion: v1
   kind: Route
