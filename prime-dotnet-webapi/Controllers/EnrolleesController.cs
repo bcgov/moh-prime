@@ -492,6 +492,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}/versions", Name = nameof(GetEnrolleeProfileVersions))]
+        [Authorize(Policy = PrimeConstants.PRIME_ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -516,6 +517,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="enrolleeProfileVersionId"></param>
         [HttpGet("{enrolleeId}/versions/{enrolleeProfileVersionId}", Name = nameof(GetEnrolleeProfileVersion))]
+        [Authorize(Policy = PrimeConstants.PRIME_ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
