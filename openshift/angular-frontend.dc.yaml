@@ -27,9 +27,12 @@ parameters:
   required: true
 - name: VANITY_URL
   required: true
+- name: HTTP_SCHEMA
+  required: true
+  value: 'http'
 - name: TERMINATION_TYPE
-  required: false
-  value: 'edge'
+  required: true
+  value: 'passthrough'
 objects:
 - apiVersion: v1
   kind: DeploymentConfig
@@ -67,7 +70,7 @@ objects:
           - name: OC_APP
             value: ${OC_APP}
           - name: REDIRECT_URL
-            value: 'https://${VANITY_URL}'
+            value: '${HTTP_SCHEMA}://${VANITY_URL}'
           - name: TLS_CHAIN
             valueFrom:
               secretKeyRef:

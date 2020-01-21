@@ -28,6 +28,9 @@ parameters:
     required: true
   - name: ASPNETCORE_ENVIRONMENT
     value: Development
+  - name: HTTP_SCHEMA
+    required: true
+    value: 'http'
   - name: VANITY_URL
     required: true
 objects:
@@ -78,7 +81,7 @@ objects:
                 - name: ASPNETCORE_URLS
                   value: 'http://+:8080'
                 - name: FRONTEND_URL
-                  value: 'https://${VANITY_URL}'
+                  value: '${HTTP_SCHEMA}://${VANITY_URL}'
                 - name: JWT_SIGNING_KEY
                   value: SdqlA0Y5e6HMAK1wm6iHHHz2u37XGtlo
                 - name: JWT_ADMIN_CLIENT

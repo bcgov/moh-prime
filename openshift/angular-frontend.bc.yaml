@@ -27,6 +27,9 @@ parameters:
   required: true
 - name: VANITY_URL
   required: true
+- name: HTTP_SCHEMA
+  required: true
+  value: 'http'
 objects:
 - apiVersion: v1
   kind: ImageStream
@@ -41,7 +44,7 @@ objects:
       - name: SUFFIX
         value: "${SUFFIX}"
       - name: REDIRECT_URL
-        value: 'https://${VANITY_URL}'
+        value: '${HTTP_SCHEMA}://${VANITY_URL}'
       - name: OC_APP
         value: ${OC_APP}
       - name: TLS_CHAIN
@@ -80,7 +83,7 @@ objects:
       - name: SUFFIX
         value: "${SUFFIX}"
       - name: REDIRECT_URL
-        value: 'https://${VANITY_URL}'
+        value: '${HTTP_SCHEMA}://${VANITY_URL}'
       - name: OC_APP
         value: ${OC_APP}
       - name: TLS_CHAIN
@@ -121,7 +124,7 @@ objects:
           - name: SUFFIX
             value: "${SUFFIX}"
           - name: REDIRECT_URL
-            value: 'https://${VANITY_URL}'
+            value: '${HTTP_SCHEMA}://${VANITY_URL}'
           - name: OC_APP
             value: ${OC_APP}
           - name: TLS_CHAIN
