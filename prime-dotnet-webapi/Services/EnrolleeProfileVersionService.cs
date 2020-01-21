@@ -37,7 +37,7 @@ namespace Prime.Services
         {
             return await _context.EnrolleeProfileVersions
                 .Where(epv => epv.Id == enrolleeProfileVersionId)
-                .FirstOrDefaultAsync();
+                .SingleOrDefaultAsync();
         }
 
         public async Task CreateEnrolleeProfileVersionAsync(Enrollee enrollee)
