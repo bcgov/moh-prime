@@ -2,10 +2,10 @@ pipeline {
     agent none
     environment {
         VANITY_URL_BASE="pharmanetenrolment.gov.bc.ca"
-        TEST_VANITY_URL=test.${VANITY_URL_BASE}
+        TEST_VANITY_URL="pharmanetenrolment.pathfinder.gov.bc.ca"
         TEST_FRONTEND_ARGS = "VANITY_URL=${TEST_VANITY_URL_BASE}"
         PROD_VANITY_URL="${VANITY_URL_BASE}"
-        PROD_FRONTEND_ARGS = "VANITY_URL=$PROD_VANITY_URL"
+        PROD_FRONTEND_ARGS = "-p VANITY_URL=$PROD_VANITY_URL -p TERMINATION_TYPE=passthrough"
         API_ARGS="ASPNETCORE_ENVIRONMENT=Release"
     }
     stages {
@@ -18,10 +18,10 @@ pipeline {
             steps {
                     echo "Test (DEV) ..."
                     sh "./player.sh build database test"
-                    sh "./player.sh build api test '-p=ASPNETCORE_ENVIRONMENT=Release -p=${TEST_FRONTEND_ARGS}'"
+                    sh "./player.sh build api test '-p=ASPNETCORE_ENVIRONMENT=Release ${TEST_FRONTEND_ARGS}'"
                     sh "./player.sh build frontend test '${TEST_FRONTEND_ARGS}'"
                     sh "./player.sh deploy database test"
-                    sh "./player.sh deploy api test '-p=ASPNETCORE_ENVIRONMENT=Release -p=${TEST_FRONTEND_ARGS}'"
+                    sh "./player.sh deploy api test '-p=ASPNETCORE_ENVIRONMENT=Release ${TEST_FRONTEND_ARGS}'"
                     sh "./player.sh deploy frontend test '${TEST_FRONTEND_ARGS}'"
                     sh "./player.sh toolbelt schemaspy test"
             }
@@ -75,10 +75,10 @@ pipeline {
             steps {
                 echo "Deploy to Production..."
                 sh "./player.sh build database prod"
-                sh "./player.sh build api prod '-p=ASPNETCORE_ENVIRONMENT=Release'"
+                sh "./player.sh build api prod '-p ASPNETCORE_ENVIRONMENT=Release'"
                 sh "./player.sh build frontend prod '${PROD_FRONTEND_ARGS}'"
                 sh "./player.sh deploy database prod"
-                sh "./player.sh deploy api prod '-p=ASPNETCORE_ENVIRONMENT=Release'"
+                sh "./player.sh deploy api prod '-p ASPNETCORE_ENVIRONMENT=Release'"
                 sh "./player.sh deploy frontend prod '${PROD_FRONTEND_ARGS}'"
                 sh "./player.sh toolbelt schemaspy prod"
             }

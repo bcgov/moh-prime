@@ -27,6 +27,9 @@ parameters:
   required: true
 - name: VANITY_URL
   required: true
+- name: TERMINATION_TYPE
+  required: false
+  value: 'edge'
 objects:
 - apiVersion: v1
   kind: DeploymentConfig
@@ -114,7 +117,7 @@ objects:
   metadata:
     name: '${NAME}${SUFFIX}-insecure'
   spec:
-    host: "${NAME}${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca"
+    host: "${VANITY_URL}.pathfinder.gov.bc.ca"
     port:
       targetPort: '8080'
     to:
@@ -130,7 +133,7 @@ objects:
       targetPort: '8443'
     tls:
         insecureEdgeTerminationPolicy: Redirect
-        termination: passthrough
+        termination: '${TERMINATION_TYPE}'
     to:
       kind: Service
       name: "${NAME}${SUFFIX}"

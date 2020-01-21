@@ -2,8 +2,8 @@ pipeline {
     agent none
     environment {
         BRANCH_LOWER = BRANCH_NAME.toLowerCase()
-        FRONTEND_ARGS = "VANITY_URL=${BRANCH_LOWER}.pharmanetenrolment.gov.bc.ca"
-        VANITY_URL='${BRANCH_LOWER}.pharmanetenrolment.gov.bc.ca'
+        FRONTEND_ARGS = "VANITY_URL=${BRANCH_LOWER}.pharmanetenrolment.pathfinder.gov.bc.ca"
+        VANITY_URL='${BRANCH_LOWER}.pharmanetenrolment.pathfinder.gov.bc.ca'
     }
     options {
         disableResume()
