@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 using Bogus;
@@ -46,16 +47,16 @@ namespace Prime.ModelFactories
             RuleFor(x => x.Certifications, (f, x) => new CertificationFactory(x).GenerateBetween(1, 2).OrNull(f, .75f));
             RuleFor(x => x.Jobs, (f, x) => x.Certifications == null ? new JobFactory(x).Generate(1) : null);
             RuleFor(x => x.Organizations, (f, x) => new OrganizationFactory(x).Generate(1));
-            RuleFor(x => x.AccessTerms, f => null);
-
-            // TODO statuses
-            RuleFor(x => x.ProfileCompleted, (f, x) => x.EnrolmentStatuses.Count > 1 ? true : f.Random.Bool());
-
             RuleFor(x => x.AccessAgreementNote, (f, x) => new AccessAgreementNoteFactory(x).Generate().OrNull(f));
             RuleFor(x => x.EnrolmentCertificateNote, (f, x) => new EnrolmentCertificateNoteFactory(x).Generate().OrNull(f));
             RuleFor(x => x.AdjudicatorNotes, (f, x) => new AdjudicatorNoteFactory(x).GenerateBetween(1, 4).OrNull(f));
+            RuleFor(x => x.AccessTerms, f => null);
+            // AssignedPrivileges
+            RuleFor(x => x.Privileges, (f, x) => x.AssignedPrivileges.Select(p => p.Privilege));
 
-
+            // TODO
+            // EnrolmentStatuses
+            RuleFor(x => x.ProfileCompleted, (f, x) => x.EnrolmentStatuses.Count > 1 ? true : f.Random.Bool());
 
             RuleSet("deviceProvider", (set) =>
             {
@@ -76,12 +77,3 @@ namespace Prime.ModelFactories
         }
     }
 }
-
-
-
-
-
-// AssignedPrivileges ,
-// Privileges ,
-// EnrolmentStatuses ,
-
