@@ -100,14 +100,14 @@ objects:
         restartPolicy: Always
     test: false 
     triggers:
-        - type: ConfigChange
-        - imageChangeParams:
-          automatic: true
-          containerNames:
-           - primeweb
-          from:
-            kind: ImageStreamTag
-            name: "${NAME}${SUFFIX}:latest"
+      - type: ConfigChange
+      - imageChangeParams:
+        automatic: true
+        containerNames:
+          - primeweb
+        from:
+          kind: ImageStreamTag
+          name: "${NAME}${SUFFIX}:latest"
     type: ImageChange
   status: {}
 - apiVersion: v1

@@ -1,7 +1,7 @@
 pipeline {
     agent none
     environment {
-        FRONTEND_ARGS = '-p VANITY_URL=${BRANCH_NAME}.pathfinder.gov.bc.ca'
+        FRONTEND_ARGS = "VANITY_URL=${BRANCH_NAME}.pathfinder.gov.bc.ca"
     }
     options {
         disableResume()
@@ -17,11 +17,9 @@ pipeline {
             agent { label 'master' }
             steps {
                 echo "Building ..."
-                echo "Branch Name='${BRANCH_NAME}'"
-                echo "FRONTEND_ARGS='${FRONTEND_ARGS}'"
                 sh "./player.sh build database dev"
                 sh "./player.sh build api dev"
-                sh "./player.sh build frontend dev '${FRONTEND_ARGS}'"
+                sh "./player.sh build frontend dev"
             }
         }
         stage('Deploy Branch') {
@@ -34,7 +32,7 @@ pipeline {
                 echo "Deploy to dev..."
                 sh "./player.sh deploy database dev"
                 sh "./player.sh deploy api dev"
-                sh "./player.sh deploy frontend dev"
+                sh "./player.sh deploy frontend dev '${FRONTEND_ARGS}'"
             }
         }
         stage('SchemaSpy Database Investigation') {
