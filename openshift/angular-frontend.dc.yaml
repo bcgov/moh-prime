@@ -120,7 +120,7 @@ objects:
       targetPort: '8080'
     to:
       kind: Service
-      name: "${NAME}${SUFFIX}-insecure"
+      name: "${NAME}${SUFFIX}"
 - apiVersion: v1
   kind: Route
   metadata:
