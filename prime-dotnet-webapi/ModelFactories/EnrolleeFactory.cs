@@ -51,7 +51,20 @@ namespace Prime.ModelFactories
             RuleFor(x => x.EnrolmentCertificateNote, (f, x) => new EnrolmentCertificateNoteFactory(x).Generate().OrNull(f));
             RuleFor(x => x.AdjudicatorNotes, (f, x) => new AdjudicatorNoteFactory(x).GenerateBetween(1, 4).OrNull(f));
             RuleFor(x => x.AccessTerms, f => null);
-            // AssignedPrivileges
+            RuleFor(x => x.AssignedPrivileges, (f, x) =>
+            {
+                if (x.ProgressStatus != ProgressStatusType.FINISHED)
+                {
+                    return null;
+                }
+
+                var licenceCodes = x.Certifications.Select(cert => cert.License.Code);
+                return DefaultPrivilegeLookup.All
+                    .Where(def => licenceCodes.Contains(def.LicenseCode))
+                    .Select(def => def.PrivilegeId)
+                    .Distinct()
+                    .Select(pi => new AssignedPrivilegeFactory(x, pi).Generate());
+            });
             RuleFor(x => x.Privileges, (f, x) => x.AssignedPrivileges.Select(p => p.Privilege));
 
             // TODO
