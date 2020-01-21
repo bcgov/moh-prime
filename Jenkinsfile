@@ -1,5 +1,8 @@
 pipeline {
     agent none
+    environment {
+        FRONTEND_ARGS = '-p VANITY_URL=${BRANCH_NAME}.pathfinder.gov.bc.ca'
+    }
     options {
         disableResume()
     }
@@ -15,9 +18,10 @@ pipeline {
             steps {
                 echo "Building ..."
                 echo "Branch Name='${BRANCH_NAME}'"
+                echo "FRONTEND_ARGS='${FRONTEND_ARGS}'"
                 sh "./player.sh build database dev"
                 sh "./player.sh build api dev"
-                sh "./player.sh build frontend dev"
+                sh "./player.sh build frontend dev '${FRONTEND_ARGS}'"
             }
         }
         stage('Deploy Branch') {

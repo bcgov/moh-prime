@@ -25,9 +25,9 @@ parameters:
   required: true
 - name: OC_APP
   required: true
-- name: URL_PREFIX
+- name: VANITY_URL
   required: false
-  value: '${NAME}${SUFFIX}.'
+  value: 'pharmanetenrolment.gov.bc.ca'
 objects:
 - apiVersion: v1
   kind: DeploymentConfig
@@ -126,7 +126,7 @@ objects:
   metadata:
     name: '${NAME}${SUFFIX}-secure'
   spec:
-    host: "${URL_PREFIX}pharmanetenrolment.gov.bc.ca"
+    host: '${VANITY_URL}'
     port:
       targetPort: '8443'
     tls:
