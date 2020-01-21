@@ -30,6 +30,7 @@ namespace Prime.ModelFactories
             RuleFor(x => x.ContactPhone, f => f.Phone.PhoneNumber().OrNull(f));
             RuleFor(x => x.DeviceProviderNumber, f => null);
             RuleFor(x => x.IsInsulinPumpProvider, f => null);
+            RuleFor(x => x.LicensePlate, (f, x) => x.ProgressStatus == ProgressStatusType.FINISHED ? f.Random.AlphaNumeric(12) : null);
 
             RuleFor(x => x.HasConviction, false);
             RuleFor(x => x.HasConvictionDetails, f => null);
@@ -47,7 +48,7 @@ namespace Prime.ModelFactories
             RuleFor(x => x.Organizations, (f, x) => new OrganizationFactory(x).Generate(1));
             RuleFor(x => x.AccessTerms, f => null);
 
-            // statuses
+            // TODO statuses
             RuleFor(x => x.ProfileCompleted, (f, x) => x.EnrolmentStatuses.Count > 1 ? true : f.Random.Bool());
 
             RuleFor(x => x.AccessAgreementNote, (f, x) => new AccessAgreementNoteFactory(x).Generate().OrNull(f));
