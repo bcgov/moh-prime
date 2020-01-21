@@ -1,10 +1,11 @@
 pipeline {
     agent none
     environment {
-        TEST_FRONTEND_ARGS = "VANITY_URL=test.pathfinder.gov.bc.ca"
-        TEST_VANITY_URL=test.pathfinder.gov.bc.ca
-        PROD_FRONTEND_ARGS = "VANITY_URL=pathfinder.gov.bc.ca"
-        PROD_VANITY_URL=pathfinder.gov.bc.ca
+        VANITY_URL_BASE="pharmanetenrolment.gov.bc.ca"
+        TEST_VANITY_URL=test.${VANITY_URL_BASE}
+        TEST_FRONTEND_ARGS = "VANITY_URL=${TEST_VANITY_URL_BASE}"
+        PROD_VANITY_URL="${VANITY_URL_BASE}"
+        PROD_FRONTEND_ARGS = "VANITY_URL=$PROD_VANITY_URL"
         API_ARGS="ASPNETCORE_ENVIRONMENT=Release"
     }
     stages {
