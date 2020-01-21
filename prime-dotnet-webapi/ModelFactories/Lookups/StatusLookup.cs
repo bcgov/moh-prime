@@ -20,21 +20,20 @@ namespace Prime.ModelFactories
         {
             get { return _seedData.Single(x => x.Code == Status.IN_PROGRESS_CODE); }
         }
-        public static Status Submitted
+
+        public static IEnumerable<Status> SubmittedSequence
         {
-            get { return _seedData.Single(x => x.Code == Status.SUBMITTED_CODE); }
+            get { return new[] { Status.IN_PROGRESS_CODE, Status.SUBMITTED_CODE }.Select(ByCode); }
         }
-        public static Status Approved
+
+        public static IEnumerable<Status> ApprovedSequence
         {
-            get { return _seedData.Single(x => x.Code == Status.APPROVED_CODE); }
+            get { return new[] { Status.IN_PROGRESS_CODE, Status.SUBMITTED_CODE, Status.APPROVED_CODE }.Select(ByCode); }
         }
-        public static Status AcceptedTos
+
+        public static IEnumerable<Status> AcceptedTosSequence
         {
-            get { return _seedData.Single(x => x.Code == Status.ACCEPTED_TOS_CODE); }
-        }
-        public static Status DeclinedTos
-        {
-            get { return _seedData.Single(x => x.Code == Status.DECLINED_TOS_CODE); }
+            get { return new[] { Status.IN_PROGRESS_CODE, Status.SUBMITTED_CODE, Status.APPROVED_CODE, Status.ACCEPTED_TOS_CODE }.Select(ByCode); }
         }
     }
 }
