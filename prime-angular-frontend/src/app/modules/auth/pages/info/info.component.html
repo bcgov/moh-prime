@@ -7,13 +7,15 @@
              alt="PRIME Logo">
       </div>
       <div class="col-md-6 col-sm-12">
-        <app-page-header><span class="font-weight-bolder font-size-huge">PRIME</span></app-page-header>
-        <app-page-subheader>
+        <app-page-header><span class="font-weight-bolder font-size-huge">PRIME</span>
+        </app-page-header>
+        <app-page-subheader [divider]="false">
           <ng-container appPageSubheaderTitle>Request Access to PharmaNet</ng-container>
           <ng-container appPageSubheaderSummary>
             <small class="font-weight-light">PRIME provides approval for access to PharmaNet, but not access itself.</small>
           </ng-container>
         </app-page-subheader>
+
         <div class="ml-2">
           <p class="font-italic font-weight-light mb-4 accent">To get started you will need:</p>
           <div class="font-weight-bold">BC Services Card on Mobile Device</div>
@@ -33,6 +35,7 @@
       </div>
     </div>
   </div>
+
   <app-pill [variant]="1">
     <div class="container-fluid">
       <div class="row">
@@ -76,6 +79,7 @@
       </div>
     </div>
   </app-pill>
+
   <app-pill [variant]="2">
     <div class="container-fluid">
       <div class="row">
@@ -96,6 +100,7 @@
       </div>
     </div>
   </app-pill>
+
   <div>
     <div class="row">
       <div class="col-sm-12 mb-4 center-text">
@@ -112,4 +117,5 @@
       </div>
     </div>
   </div>
+
 </div>

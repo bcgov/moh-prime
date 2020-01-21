@@ -9,7 +9,7 @@ using Prime.Models;
 
 namespace Prime.Services
 {
-    public class DefaultEnrolleeService : BaseService, IEnrolleeService
+    public class EnrolleeService : BaseService, IEnrolleeService
     {
         private readonly IAutomaticAdjudicationService _automaticAdjudicationService;
         private readonly IEmailService _emailService;
@@ -26,7 +26,7 @@ namespace Prime.Services
 
         private static Status NULL_STATUS = new Status { Code = -1, Name = "No Status" };
 
-        public DefaultEnrolleeService(
+        public EnrolleeService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
             IAutomaticAdjudicationService automaticAdjudicationService,
@@ -120,8 +120,6 @@ namespace Prime.Services
 
             if (entity != null)
             {
-                // Add the available statuses to the enrollee
-                entity.AvailableStatuses = this.GetAvailableStatuses(entity.CurrentStatus?.Status);
                 entity.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(entity);
             }
 
@@ -144,8 +142,6 @@ namespace Prime.Services
 
             foreach (var item in items)
             {
-                // Add the available statuses to the enrolment
-                item.AvailableStatuses = this.GetAvailableStatuses(item.CurrentStatus?.Status);
                 item.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(item);
             }
 
@@ -159,8 +155,6 @@ namespace Prime.Services
 
             if (enrollee != null)
             {
-                // Add the available statuses to the enrolment
-                enrollee.AvailableStatuses = this.GetAvailableStatuses(enrollee?.CurrentStatus?.Status);
                 enrollee.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(enrollee);
             }
 
@@ -484,8 +478,6 @@ namespace Prime.Services
 
             if (entity != null)
             {
-                // add the available statuses to the enrollee
-                entity.AvailableStatuses = this.GetAvailableStatuses(entity.CurrentStatus?.Status);
                 entity.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(entity);
             }
 

@@ -5,9 +5,9 @@ using Prime.Models;
 
 namespace Prime.Services
 {
-    public class DefaultEmailService : BaseService, IEmailService
+    public class EmailService : BaseService, IEmailService
     {
-        public DefaultEmailService(
+        public EmailService(
             ApiDbContext context, IHttpContextAccessor httpContext)
             : base(context, httpContext)
         { }
