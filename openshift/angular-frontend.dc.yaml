@@ -124,14 +124,14 @@ objects:
 - apiVersion: v1
   kind: Route
   metadata:
-    name: "${NAME}${SUFFIX}-secure"
+    name: "${NAME}${SUFFIX}"
   spec:
     host: "${URL_PREFIX}pharmanetenrolment.gov.bc.ca"
     port:
       targetPort: '8443'
     to:
       kind: Service
-      name: "${NAME}${SUFFIX}-secure"
+      name: "${NAME}${SUFFIX}"
 - apiVersion: v1
   kind: Service
   metadata:
