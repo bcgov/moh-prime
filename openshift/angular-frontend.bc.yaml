@@ -25,6 +25,8 @@ parameters:
   required: true
 - name: OC_APP
   required: true
+- name: VANITY_URL
+  required: true
 objects:
 - apiVersion: v1
   kind: ImageStream
@@ -39,7 +41,7 @@ objects:
       - name: SUFFIX
         value: "${SUFFIX}"
       - name: REDIRECT_URL
-        value: https://angular-frontend${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca
+        value: 'https://${VANITY_URL}'
       - name: OC_APP
         value: ${OC_APP}
       - name: TLS_CHAIN
@@ -78,7 +80,7 @@ objects:
       - name: SUFFIX
         value: "${SUFFIX}"
       - name: REDIRECT_URL
-        value: http://angular-frontend${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca
+        value: 'https://${VANITY_URL}'
       - name: OC_APP
         value: ${OC_APP}
       - name: TLS_CHAIN
@@ -119,7 +121,7 @@ objects:
           - name: SUFFIX
             value: "${SUFFIX}"
           - name: REDIRECT_URL
-            value: http://angular-frontend${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca
+            value: 'https://${VANITY_URL}'
           - name: OC_APP
             value: ${OC_APP}
           - name: TLS_CHAIN

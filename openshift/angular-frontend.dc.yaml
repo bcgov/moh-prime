@@ -26,8 +26,7 @@ parameters:
 - name: OC_APP
   required: true
 - name: VANITY_URL
-  required: false
-  value: 'pharmanetenrolment.gov.bc.ca'
+  required: true
 objects:
 - apiVersion: v1
   kind: DeploymentConfig
@@ -65,7 +64,7 @@ objects:
           - name: OC_APP
             value: ${OC_APP}
           - name: REDIRECT_URL
-            value: http://angular-frontend${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca
+            value: 'https://${VANITY_URL}'
           - name: TLS_CHAIN
             valueFrom:
               secretKeyRef:
