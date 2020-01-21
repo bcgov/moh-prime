@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:ie": "ng serve --configuration es5",
     "build": "ng build --subresource-integrity",
     "test": "ng test",
     "lint": "ng lint",
