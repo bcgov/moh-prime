@@ -27,7 +27,7 @@ parameters:
   required: true
 - name: URL_PREFIX
   required: false
-  value: "${NAME}${SUFFIX}."
+  value: "${NAME}${SUFFIX}\."
 objects:
 - apiVersion: v1
   kind: DeploymentConfig
@@ -98,9 +98,7 @@ objects:
             timeoutSeconds: 1
           resources: {}
         restartPolicy: Always
-    test: false
-    triggers:
-    - type: ConfigChange
+    test: false 
     - imageChangeParams:
         automatic: true
         containerNames:
@@ -113,7 +111,7 @@ objects:
 - apiVersion: v1
   kind: Route
   metadata:
-    name: "${NAME}${SUFFIX}-insecure"
+    name: '${NAME}${SUFFIX}-insecure'
   spec:
     host: "${NAME}${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca"
     port:
@@ -124,7 +122,7 @@ objects:
 - apiVersion: v1
   kind: Route
   metadata:
-    name: "${NAME}${SUFFIX}"
+    name: '${NAME}${SUFFIX}-secure'
   spec:
     host: "${URL_PREFIX}pharmanetenrolment.gov.bc.ca"
     port:
