@@ -36,6 +36,8 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { EnrolleePropertyComponent } from '@shared/components/enrollee/enrollee-property/enrollee-property.component';
 import { PrimeContactComponent } from '@shared/components/prime-contact/prime-contact.component';
+import { PrimeEmailComponent } from '@shared/components/prime-email/prime-email.component';
+import { PrimePhoneComponent } from '@shared/components/prime-phone/prime-phone.component';
 
 describe('OverviewComponent', () => {
   let component: OverviewComponent;
@@ -65,6 +67,8 @@ describe('OverviewComponent', () => {
           CollectionNoticeAlertComponent,
           EnrolleePropertyComponent,
           PrimeContactComponent,
+          PrimeEmailComponent,
+          PrimePhoneComponent,
           AlertComponent,
           ConfigCodePipe,
           EnrolmentPipe,

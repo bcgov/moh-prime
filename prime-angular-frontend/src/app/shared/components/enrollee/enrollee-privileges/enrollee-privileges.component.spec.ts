@@ -11,6 +11,8 @@ import { APP_DI_CONFIG, APP_CONFIG } from 'app/app-config.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ConfigService } from '@config/config.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
+import { PrimeEmailComponent } from '@shared/components/prime-email/prime-email.component';
+import { PrimePhoneComponent } from '@shared/components/prime-phone/prime-phone.component';
 
 
 describe('EnrolleePrivilegesComponent', () => {
@@ -29,7 +31,9 @@ describe('EnrolleePrivilegesComponent', () => {
         PageSubheaderComponent,
         DefaultPipe,
         EnrolleePropertyComponent,
-        PrimeContactComponent
+        PrimeContactComponent,
+        PrimeEmailComponent,
+        PrimePhoneComponent
       ],
       providers: [
         {
