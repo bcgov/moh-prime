@@ -38,7 +38,7 @@ namespace PrimeTests.Mocks
 
             if (mode == OperationMode.ERROR)
             {
-                throw new DefaultPharmanetApiService.PharmanetCollegeApiException("PharmaNet Mock is in error mode.");
+                throw new PharmanetApiService.PharmanetCollegeApiException("PharmaNet Mock is in error mode.");
             }
             if (mode.HasFlag(OperationMode.NO_RECORD))
             {

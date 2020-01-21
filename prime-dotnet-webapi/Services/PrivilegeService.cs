@@ -8,9 +8,9 @@ using Prime.Models;
 
 namespace Prime.Services
 {
-    public class DefaultPrivilegeService : BaseService, IPrivilegeService
+    public class PrivilegeService : BaseService, IPrivilegeService
     {
-        public DefaultPrivilegeService(
+        public PrivilegeService(
             ApiDbContext context, IHttpContextAccessor httpContext)
             : base(context, httpContext)
         { }
