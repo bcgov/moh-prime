@@ -40,17 +40,19 @@ namespace Prime.ModelFactories
             RuleFor(x => x.HasPharmaNetSuspended, false);
             RuleFor(x => x.HasPharmaNetSuspendedDetails, f => null);
 
-            // statuses
-            RuleFor(x => x.ProfileCompleted, (f, x)=> x.stat);
-
             RuleFor(x => x.PhysicalAddress, (f, x) => new PhysicalAddressFactory(x).Generate());
             RuleFor(x => x.MailingAddress, (f, x) => new MailingAddressFactory(x).Generate().OrNull(f));
-            RuleFor(x => x.Certifications, (f, x) => new CertificationFactory(x).Generate(f.Random.Int(1, 2)).OrNull(f, .75f));
+            RuleFor(x => x.Certifications, (f, x) => new CertificationFactory(x).GenerateBetween(1, 2).OrNull(f, .75f));
             RuleFor(x => x.Jobs, (f, x) => x.Certifications == null ? new JobFactory(x).Generate(1) : null);
+            RuleFor(x => x.Organizations, (f, x) => new OrganizationFactory(x).Generate(1));
+            RuleFor(x => x.AccessTerms, f => null);
+
+            // statuses
+            RuleFor(x => x.ProfileCompleted, (f, x) => x.EnrolmentStatuses.Count > 1 ? true : f.Random.Bool());
 
             RuleFor(x => x.AccessAgreementNote, (f, x) => new AccessAgreementNoteFactory(x).Generate().OrNull(f));
             RuleFor(x => x.EnrolmentCertificateNote, (f, x) => new EnrolmentCertificateNoteFactory(x).Generate().OrNull(f));
-            RuleFor(x => x.AdjudicatorNotes, (f, x) => new AdjudicatorNoteFactory(x).Generate(f.Random.Int(1, 4)).OrNull(f));
+            RuleFor(x => x.AdjudicatorNotes, (f, x) => new AdjudicatorNoteFactory(x).GenerateBetween(1, 4).OrNull(f));
 
 
 
@@ -61,14 +63,14 @@ namespace Prime.ModelFactories
             });
             RuleSet("selfDeclaration", (set) =>
             {
-                RuleFor(x => x.HasConviction, f => f.Random.Bool());
-                RuleFor(x => x.HasRegistrationSuspended, f => f.Random.Bool());
-                RuleFor(x => x.HasDisciplinaryAction, f => f.Random.Bool());
-                RuleFor(x => x.HasPharmaNetSuspended, f => f.Random.Bool());
-                RuleFor(x => x.HasConvictionDetails, (f, x) => x.HasConviction == true ? f.Lorem.Paragraphs(2) : null);
-                RuleFor(x => x.HasRegistrationSuspendedDetails, (f, x) => x.HasRegistrationSuspended == true ? f.Lorem.Paragraphs(2) : null);
-                RuleFor(x => x.HasDisciplinaryActionDetails, (f, x) => x.HasDisciplinaryAction == true ? f.Lorem.Paragraphs(2) : null);
-                RuleFor(x => x.HasPharmaNetSuspendedDetails, (f, x) => x.HasPharmaNetSuspended == true ? f.Lorem.Paragraphs(2) : null);
+                set.RuleFor(x => x.HasConviction, f => f.Random.Bool());
+                set.RuleFor(x => x.HasRegistrationSuspended, f => f.Random.Bool());
+                set.RuleFor(x => x.HasDisciplinaryAction, f => f.Random.Bool());
+                set.RuleFor(x => x.HasPharmaNetSuspended, f => f.Random.Bool());
+                set.RuleFor(x => x.HasConvictionDetails, (f, x) => x.HasConviction == true ? f.Lorem.Paragraphs(2) : null);
+                set.RuleFor(x => x.HasRegistrationSuspendedDetails, (f, x) => x.HasRegistrationSuspended == true ? f.Lorem.Paragraphs(2) : null);
+                set.RuleFor(x => x.HasDisciplinaryActionDetails, (f, x) => x.HasDisciplinaryAction == true ? f.Lorem.Paragraphs(2) : null);
+                set.RuleFor(x => x.HasPharmaNetSuspendedDetails, (f, x) => x.HasPharmaNetSuspended == true ? f.Lorem.Paragraphs(2) : null);
             });
         }
     }
@@ -77,14 +79,8 @@ namespace Prime.ModelFactories
 
 
 
-// Certifications ,
-// Jobs ,
-// Organizations ,
-
 
 // AssignedPrivileges ,
 // Privileges ,
 // EnrolmentStatuses ,
-// ProfileCompleted ,
 
-// TermsOfAccess ,
