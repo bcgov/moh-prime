@@ -1301,7 +1301,7 @@
         "userInfoUrl": "https://idtest.gov.bc.ca/oauth2/userinfo",
         "uiLocales": "",
         "tokenUrl": "https://idtest.gov.bc.ca/oauth2/token",
-        "clientId": "urn.ca.bc.gov.health.prime.dev",
+        "clientId": "urn.ca.bc.gov.health.prime.test",
         "jwksUrl": "https://idtest.gov.bc.ca/oauth2/jwk.json",
         "backchannelSupported": "true",
         "issuer": "https://idtest.gov.bc.ca/oauth2/",
@@ -1311,6 +1311,7 @@
         "disableUserInfo": "",
         "logoutUrl": "https://idtest.gov.bc.ca/oauth2/revoke",
         "clientSecret": "**********",
+        "allowedClockSkew": "",
         "defaultScope": "openid profile address"
       }
     },
@@ -1328,9 +1329,9 @@
       "linkOnly": false,
       "firstBrokerLoginFlowAlias": "first broker login",
       "config": {
-        "hideOnLoginPage": "",
         "userInfoUrl": "https://sso-test.pathfinder.gov.bc.ca/auth/realms/_bceid/protocol/openid-connect/userinfo",
         "validateSignature": "true",
+        "hideOnLoginPage": "",
         "clientId": "https://sso-test.pathfinder.gov.bc.ca/auth/realms/v4mbqqas",
         "tokenUrl": "https://sso-test.pathfinder.gov.bc.ca/auth/realms/_bceid/protocol/openid-connect/token",
         "uiLocales": "",
