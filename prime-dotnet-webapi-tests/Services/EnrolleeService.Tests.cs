@@ -12,11 +12,11 @@ using PrimeTests.Mocks;
 
 namespace PrimeTests.Services
 {
-    public class DefaultEnrolleeServiceTests : BaseServiceTests<DefaultEnrolleeService>
+    public class EnrolleeServiceTests : BaseServiceTests<EnrolleeService>
     {
         private static EnrolleeSearchOptions EMPTY_ENROLLEE_SEARCH_OPTIONS = new EnrolleeSearchOptions();
 
-        public DefaultEnrolleeServiceTests() : base(new object[] { new AutomaticAdjudicationServiceMock(), new EmailServiceMock(), new PrivilegeServiceMock(), new AccessTermServiceMock() })
+        public EnrolleeServiceTests() : base(new object[] { new AutomaticAdjudicationServiceMock(), new EmailServiceMock(), new PrivilegeServiceMock(), new AccessTermServiceMock() })
         { }
 
         [Fact]
