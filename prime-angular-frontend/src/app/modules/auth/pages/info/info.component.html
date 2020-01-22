@@ -1,5 +1,5 @@
 <div>
-  <div class="container-fluid">
+  <div class="container">
     <app-banner *ngIf="isIE == true"></app-banner>
     <div class="row mt-4 enrolment-container">
       <div class="col-md-3 d-none d-md-block">
@@ -7,7 +7,7 @@
              class="logo"
              alt="PRIME Logo">
       </div>
-      <div class="col-md-6 col-sm-12">
+      <div class="col-md-7 col-sm-12">
         <app-page-header><span class="font-weight-bolder font-size-huge">PRIME</span>
         </app-page-header>
         <app-page-subheader [divider]="false">
@@ -39,19 +39,18 @@
   </div>
 
   <app-pill [variant]="1">
-    <div class="container-fluid">
+    <div>
       <div class="row">
         <div class="col-sm-12 mb-4">
           <h1 class="font-weight-bold">PRIME Enrolment Steps</h1>
         </div>
       </div>
-      <div class="row mb-4">
-        <p class="col-sm-12 col-md-6 offset-md-3 font-weight-bold">As a Health Professional working in British Columbia,
+      <div class="row mb-4 justify-content-center">
+        <p class="col-sm-12 col-md-6  font-weight-bold">As a Health Professional working in British Columbia,
           use PRIME to
           request approval from The Ministry of Health to access PharmaNet.</p>
       </div>
-      <div class="row mb-4">
-        <div class="col-md"></div>
+      <div class="row mb-4 justify-content-center">
         <div class="col-sm-12 col-md-3 info mb-4">
           <h3>BC Services Card</h3>
           <p>To get started you will need
@@ -77,29 +76,27 @@
             your place of work, or to your
             system administrator.</p>
         </div>
-        <div class="col-md"></div>
       </div>
     </div>
   </app-pill>
 
   <app-pill [variant]="2">
-    <div class="container-fluid">
+    <div>
       <div class="row">
         <div class="col-sm-12 mb-4">
           <h1 class="font-weight-bold">BC Services Card</h1>
         </div>
       </div>
-      <div class="row mb-4">
-        <div class="col-md-3"></div>
+      <div class="row mb-4 justify-content-center">
         <div class="col-sm-12 col-md-6 info mb-4">
           <p>PRIME uses the BC Services Card to securely identify people who access
             PharmaNet. PRIME will retrieve your full name, date of birth and mailing
             address (no other personal information is shared). The Ministry of Health
             wants to make sure patient information on PharmaNet is accessed
-            appropriately, only by health professionals who have a clinical need to do so.<br />
+            appropriately, only by health professionals who have a clinical need to do so.<br /><br />
             If you do not have your BC Services Card set up on your mobile device, you
             will need to do that first. This is a quick process and it usually only takes a
-            few minutes!<br/>
+            few minutes!<br/><br />
             Visit the BC Services Card website for more information and instructions.
           </p>
             <a class="anchor"  href=""><strong>HOW TO SET UP MOBILE CARD</strong></a>
@@ -114,8 +111,8 @@
         <h1 class="font-weight-bold">Get Support</h1>
       </div>
     </div>
-    <div class="row mb-4">
-      <div class="col-sm-12 col-md-5 offset-md-4 info mb-4">
+    <div class="row mb-4 justify-content-center">
+      <div class="col-sm-12 col-md-5 info mb-4">
         <p>
           Questions about PRIME should be directed to:<br/>
           1-844-39PRIME<br/>
