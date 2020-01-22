@@ -36,7 +36,7 @@ parameters:
     value: 'https'
   - name: HTTP_PORT
     required: true
-    value: 8443
+    value: "8443"
   - name: TERMINATION_TYPE
     required: true
     value: 'passthrough'

@@ -33,7 +33,7 @@ parameters:
   value: 'HTTPS'
 - name: HTTP_PORT
   required: true
-  value: 8443
+  value: "8443"
 - name: TERMINATION_TYPE
   required: true
   value: 'passthrough'
@@ -98,7 +98,7 @@ objects:
             failureThreshold: 3
             httpGet:
               path: /healthcheck
-              port: ${HTTP_PORT}
+              port: 8080
               scheme: "${HTTP_SCHEMA}"
             initialDelaySeconds: 5
             periodSeconds: 10
