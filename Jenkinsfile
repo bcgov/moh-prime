@@ -3,7 +3,8 @@ pipeline {
     environment {
         BRANCH_LOWER=BRANCH_NAME.toLowerCase()
         VANITY_URL='${BRANCH_LOWER}.pharmanetenrolment.pathfinder.gov.bc.ca'
-        FRONTEND_ARGS="-p VANITY_URL=${VANITY_URL} -p "
+        FRONTEND_ARGS="-p VANITY_URL=${VANITY_URL} -p HTTP_PORT=8080 -p HTTP_SCHEMA=http TERMINATION_TYPE=edge"
+        API_ARGS="-p ASPNETCORE_ENVIRONMENT=Development"
     }
     options {
         disableResume()
@@ -18,8 +19,9 @@ pipeline {
             steps {
                 echo "Building ..."
                 sh "./player.sh build database dev"
-                sh "./player.sh pipeline_args '${FRONTEND_ARGS}' "
+                sh "./player.sh pipeline_args '${API_ARGS} ${FRONTEND_ARGS}'"
                 sh "./player.sh build api dev"
+                sh "./player.sh pipeline_args '${FRONTEND_ARGS}'"
                 sh "./player.sh build frontend dev"
                 sh "./player.sh pipeline_args ''"
             }
@@ -33,8 +35,9 @@ pipeline {
             steps {
                 echo "Deploy to dev..."
                 sh "./player.sh deploy database dev"
-                sh "./player.sh pipeline_args '${FRONTEND_ARGS}'"
+                sh "./player.sh pipeline_args '${API_ARGS} ${FRONTEND_ARGS}'"
                 sh "./player.sh deploy api dev"
+                sh "./player.sh pipeline_args '${FRONTEND_ARGS}'"
                 sh "./player.sh deploy frontend dev"
                 sh "./player.sh pipeline_args ''"
             }

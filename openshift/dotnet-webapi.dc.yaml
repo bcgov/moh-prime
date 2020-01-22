@@ -27,13 +27,19 @@ parameters:
   - name: OC_APP
     required: true
   - name: ASPNETCORE_ENVIRONMENT
-    value: Development
-  - name: HTTP_SCHEMA
-    required: true
-    value: 'http'
+    value: Release
   - name: VANITY_URL
     required: true
-    value: ${NAME}${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca
+    value: 'pharmanetenrolment.gov.bc.ca'
+  - name: HTTP_SCHEMA
+    required: true
+    value: 'https'
+  - name: HTTP_PORT
+    required: true
+    value: '8443'
+  - name: TERMINATION_TYPE
+    required: true
+    value: 'passthrough'
 objects:
   - apiVersion: v1
     kind: DeploymentConfig

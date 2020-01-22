@@ -27,13 +27,13 @@ parameters:
   required: true
 - name: VANITY_URL
   required: true
-  value: ${NAME}${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca
+  value: 'pharmanetenrolment.gov.bc.ca'
 - name: HTTP_SCHEMA
   required: true
-  value: 'http'
+  value: 'https'
 - name: HTTP_PORT
   required: true
-  value: '8080'
+  value: '8443'
 - name: TERMINATION_TYPE
   required: true
   value: 'passthrough'
