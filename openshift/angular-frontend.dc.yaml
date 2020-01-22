@@ -74,7 +74,7 @@ objects:
           - name: OC_APP
             value: ${OC_APP}
           - name: REDIRECT_URL
-            value: '${HTTP_SCHEMA}://${VANITY_URL}'
+            value: ${HTTP_SCHEMA}://${VANITY_URL}
           - name: TLS_CHAIN
             valueFrom:
               secretKeyRef:
@@ -123,7 +123,7 @@ objects:
   metadata:
     name: '${NAME}${SUFFIX}-insecure'
   spec:
-    host: "${VANITY_URL}"
+    host: ${VANITY_URL}
     port:
       targetPort: '${HTTP_PORT}'
     to:
@@ -134,7 +134,7 @@ objects:
   metadata:
     name: '${NAME}${SUFFIX}-secure'
   spec:
-    host: '${VANITY_URL}'
+    host: ${VANITY_URL}
     port:
       targetPort: '8443'
     tls:
