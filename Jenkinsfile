@@ -1,9 +1,9 @@
 pipeline {
     agent none
     environment {
-        BRANCH_LOWER = BRANCH_NAME.toLowerCase()
+        BRANCH_LOWER=BRANCH_NAME.toLowerCase()
         VANITY_URL='${BRANCH_LOWER}.pharmanetenrolment.pathfinder.gov.bc.ca'
-        FRONTEND_ARGS = "-p VANITY_URL=${VANITY_URL}"
+        FRONTEND_ARGS="-p VANITY_URL=${VANITY_URL}"
     }
     options {
         disableResume()
@@ -18,10 +18,10 @@ pipeline {
             steps {
                 echo "Building ..."
                 sh "./player.sh build database dev"
-                sh "export PIPELINE_ARGS='${FRONTEND_ARGS}'"
+                sh "./player.sh pipeline_args '${FRONTEND_ARGS}'"
                 sh "./player.sh build api dev"
                 sh "./player.sh build frontend dev"
-                sh "export PIPELINE_ARGS=''"
+                sh "./player.sh pipeline_args ''"
             }
         }
         stage('Deploy Branch') {
@@ -33,10 +33,10 @@ pipeline {
             steps {
                 echo "Deploy to dev..."
                 sh "./player.sh deploy database dev"
-                sh "export PIPELINE_ARGS='${FRONTEND_ARGS}'"
+                sh "./player.sh pipeline_args '${FRONTEND_ARGS}'"
                 sh "./player.sh deploy api dev"
                 sh "./player.sh deploy frontend dev"
-                sh "export PIPELINE_ARGS=''"
+                sh "./player.sh pipeline_args ''"
             }
         }
         stage('SchemaSpy Database Investigation') {

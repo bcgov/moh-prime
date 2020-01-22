@@ -41,7 +41,7 @@ function build() {
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${BRANCH_NAME}" \
         -p OC_NAMESPACE="$PROJECT_PREFIX" \
-        -p OC_APP="$2" `echo ${PIPELINE_ARGS}` | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$2"
+        -p OC_APP="$2" ${PIPELINE_ARGS} | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$2"
     else
         echo "oc process -f ./${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE} -p NAME=${APP_NAME} -p VERSION=${BUILD_NUMBER} -p SUFFIX=-${BRANCH_LOWER} -p SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR} -p SOURCE_REPOSITORY_URL=${GIT_URL} -p SOURCE_REPOSITORY_REF=${BRANCH_NAME} -p OC_NAMESPACE=$PROJECT_PREFIX -p OC_APP=$2 `echo ${PIPELINE_ARGS}` | oc ${MODE} -f - --namespace=$PROJECT_PREFIX-$2"
         oc process -f ./"${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE}" \
@@ -52,7 +52,7 @@ function build() {
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
         -p OC_NAMESPACE="$PROJECT_PREFIX" \
-        -p OC_APP="$2" `echo ${PIPELINE_ARGS}` | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$2"
+        -p OC_APP="$2" ${PIPELINE_ARGS} | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$2"
     fi;
     if [ "$BUILD_REQUIRED" == true ];
     then
@@ -82,7 +82,7 @@ function deploy() {
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${BRANCH_NAME}" \
         -p OC_NAMESPACE="$PROJECT_PREFIX" \
-        -p OC_APP="$2" `echo ${PIPELINE_ARGS}` | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$2"
+        -p OC_APP="$2" ${PIPELINE_ARGS} | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$2"
     else
         oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
         -p NAME="${APP_NAME}" \
@@ -92,7 +92,7 @@ function deploy() {
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
         -p OC_NAMESPACE="$PROJECT_PREFIX" \
-        -p OC_APP="$2" `echo ${PIPELINE_ARGS}` | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$2"
+        -p OC_APP="$2" ${PIPELINE_ARGS} | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$2"
     fi;
 }
 
@@ -110,12 +110,12 @@ function toolbelt() {
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
         -p OC_NAMESPACE="$PROJECT_PREFIX" \
-        -p OC_APP="$2" `echo ${PIPELINE_ARGS}` | oc $MODE -f - --namespace="$PROJECT_PREFIX-$2"
+        -p OC_APP="$2" ${PIPELINE_ARGS} | oc $MODE -f - --namespace="$PROJECT_PREFIX-$2"
     oc process -f "${TEMPLATE_DIRECTORY}/$DEPLOY_CONFIG_TEMPLATE" \
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
         -p OC_NAMESPACE="$PROJECT_PREFIX" \
-        -p OC_APP="$2" `echo ${PIPELINE_ARGS}` | oc $MODE -f - --namespace="$PROJECT_PREFIX-$2"
+        -p OC_APP="$2" ${PIPELINE_ARGS} | oc $MODE -f - --namespace="$PROJECT_PREFIX-$2"
     if [ "$BUILD_REQUIRED" == true ];
     then
         echo "Building oc start-build $APP_NAME -n $PROJECT_PREFIX-${OC_APP} --wait --follow ..."
