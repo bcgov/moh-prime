@@ -73,6 +73,15 @@ function deploy() {
     else
         MODE="create"
     fi;
+    echo "Interpreted:"
+    oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
+        -p NAME="${APP_NAME}" \
+        -p VERSION="${BUILD_NUMBER}" \
+        -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
+        -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
+        -p SOURCE_REPOSITORY_REF="${BRANCH_NAME}" \
+        -p OC_NAMESPACE="$PROJECT_PREFIX" \
+        -p OC_APP="$3" ${@:4} --output="yaml"
     if [ "${BRANCH_LOWER}" == "develop" ] || [ "${BRANCH_LOWER}" == "master" ];
     then
         oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
@@ -82,7 +91,7 @@ function deploy() {
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${BRANCH_NAME}" \
         -p OC_NAMESPACE="$PROJECT_PREFIX" \
-        -p OC_APP="$3" ${@:4} | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$3"
+        -p OC_APP="$3" ${@:4} --output="yaml" | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$3" --output="yaml" --overwrite=true
     else
         oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
         -p NAME="${APP_NAME}" \
@@ -92,7 +101,7 @@ function deploy() {
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
         -p OC_NAMESPACE="$PROJECT_PREFIX" \
-        -p OC_APP="$3" ${@:4} | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$3"
+        -p OC_APP="$3" ${@:4} -o yaml | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$3" --output="yaml" --overwrite=true
     fi;
 }
 
