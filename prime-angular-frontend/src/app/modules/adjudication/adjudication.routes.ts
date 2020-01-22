@@ -1,6 +1,7 @@
 export class AdjudicationRoutes {
   public static ADJUDICATION = 'adjudication';
   public static ENROLMENTS = 'enrolments';
+  public static PROFILE_HISTORY = 'history';
 
   public static MODULE_PATH = AdjudicationRoutes.ADJUDICATION;
 
