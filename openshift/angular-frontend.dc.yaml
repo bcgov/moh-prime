@@ -30,7 +30,7 @@ parameters:
   value: 'pharmanetenrolment.gov.bc.ca'
 - name: HTTP_SCHEMA
   required: true
-  value: 'https'
+  value: 'HTTPS'
 - name: HTTP_PORT
   required: true
   value: '8443'
