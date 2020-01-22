@@ -3,7 +3,7 @@ pipeline {
     environment {
         BRANCH_LOWER=BRANCH_NAME.toLowerCase()
         VANITY_URL="${BRANCH_LOWER}.pharmanetenrolment.pathfinder.gov.bc.ca"
-        FRONTEND_ARGS="-p VANITY_URL=${VANITY_URL} -p HTTP_PORT='8080' -p HTTP_SCHEMA='HTTP' TERMINATION_TYPE='edge'"
+        FRONTEND_ARGS="-p VANITY_URL=${VANITY_URL} -p HTTP_PORT=8080 -p HTTP_SCHEMA=HTTP TERMINATION_TYPE='edge'"
         API_ARGS="-p ASPNETCORE_ENVIRONMENT=Development"
     }
     options {
@@ -19,8 +19,8 @@ pipeline {
             steps {
                 echo "Building ..."
                 sh "./player.sh build database dev"
-                sh "./player.sh build api dev '${API_ARGS} ${FRONTEND_ARGS}'"
-                sh "./player.sh build frontend dev '${FRONTEND_ARGS}'"
+                sh "./player.sh build api dev ${API_ARGS} ${FRONTEND_ARGS}"
+                sh "./player.sh build frontend dev ${FRONTEND_ARGS}"
             }
         }
         stage('Deploy Branch') {
@@ -32,8 +32,8 @@ pipeline {
             steps {
                 echo "Deploy to dev..."
                 sh "./player.sh deploy database dev"
-                sh "./player.sh deploy api dev '${API_ARGS} ${FRONTEND_ARGS}'"
-                sh "./player.sh deploy frontend dev '${FRONTEND_ARGS}'"
+                sh "./player.sh deploy api dev ${API_ARGS} ${FRONTEND_ARGS}"
+                sh "./player.sh deploy frontend dev ${FRONTEND_ARGS}"
             }
         }
         stage('SchemaSpy Database Investigation') {
