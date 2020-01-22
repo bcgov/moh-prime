@@ -98,7 +98,7 @@ objects:
             failureThreshold: 3
             httpGet:
               path: /healthcheck
-              port: "${HTTP_PORT}"
+              port: ${HTTP_PORT}
               scheme: "${HTTP_SCHEMA}"
             initialDelaySeconds: 5
             periodSeconds: 10
