@@ -32,6 +32,7 @@ case "$1" in
         ;;
     pipeline_args)
         pipeline_args $*
+        ;;
     *)
     echo "You\'re doing it wrong..."
 esac
