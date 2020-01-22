@@ -43,7 +43,7 @@ namespace Prime.ModelFactories
             RuleFor(x => x.HasPharmaNetSuspended, false);
             RuleFor(x => x.HasPharmaNetSuspendedDetails, f => null);
 
-            RuleFor(x => x.EnrolmentStatuses, (f, x) => new EnrolmentStatusFactory(x).Generate(1, "inProgress"));
+            RuleFor(x => x.EnrolmentStatuses, (f, x) => new EnrolmentStatusFactory(x).Generate(1, "default,inProgress"));
             RuleFor(x => x.PhysicalAddress, (f, x) => new PhysicalAddressFactory(x).Generate());
             RuleFor(x => x.MailingAddress, (f, x) => new MailingAddressFactory(x).Generate().OrNull(f));
             RuleFor(x => x.Certifications, (f, x) => new CertificationFactory(x).GenerateBetween(1, 2).OrNull(f, .75f));
@@ -54,22 +54,24 @@ namespace Prime.ModelFactories
             RuleFor(x => x.AdjudicatorNotes, (f, x) => new AdjudicatorNoteFactory(x).GenerateBetween(1, 4).OrNull(f));
             RuleFor(x => x.AssignedPrivileges, f => null);
             RuleFor(x => x.Privileges, f => null);
+            RuleFor(x => x.EnrolleeProfileVersions, f => null);
             Ignore(x => x.AccessTerms);
 
             RuleSet("status.submitted", (set) =>
             {
-                var statuses = StatusLookup.SubmittedSequence;
-                set.RuleFor(x => x.EnrolmentStatuses, (f, x) => new EnrolmentStatusFactory(x, statuses).Generate(statuses.Count()));
+                set.RuleFor(x => x.EnrolmentStatuses, (f, x) => new StatusStateFactory(x, StatusState.Submitted).Generate());
             });
             RuleSet("status.approved", (set) =>
             {
-                var statuses = StatusLookup.ApprovedSequence;
-                set.RuleFor(x => x.EnrolmentStatuses, (f, x) => new EnrolmentStatusFactory(x, statuses).Generate(statuses.Count()));
+                set.RuleFor(x => x.EnrolmentStatuses, (f, x) => new StatusStateFactory(x, StatusState.Approved).Generate());
             });
             RuleSet("status.acceptedTos", (set) =>
             {
-                var statuses = StatusLookup.AcceptedTosSequence;
-                set.RuleFor(x => x.EnrolmentStatuses, (f, x) => new EnrolmentStatusFactory(x, statuses).Generate(statuses.Count()));
+                set.RuleFor(x => x.EnrolmentStatuses, (f, x) => new StatusStateFactory(x, StatusState.AcceptedTos).Generate());
+            });
+            RuleSet("status.random", (set) =>
+            {
+                set.RuleFor(x => x.EnrolmentStatuses, (f, x) => new StatusStateFactory(x, f).Generate());
             });
 
             RuleSet("deviceProvider", (set) =>
@@ -97,14 +99,17 @@ namespace Prime.ModelFactories
                 {
                     x.LicensePlate = f.Random.AlphaNumeric(20);
 
-                    var licenceCodes = x.Certifications.Select(cert => cert.License.Code);
-                    x.AssignedPrivileges = DefaultPrivilegeLookup.All
-                        .Where(def => licenceCodes.Contains(def.LicenseCode))
-                        .Select(def => def.PrivilegeId)
-                        .Distinct()
-                        .Select(privilegeId => new AssignedPrivilegeFactory(x, privilegeId).Generate())
-                        .ToList();
-                    x.Privileges = x.AssignedPrivileges.Select(p => p.Privilege).ToList();
+                    if (x.Certifications != null)
+                    {
+                        var licenceCodes = x.Certifications.Select(cert => cert.LicenseCode);
+                        x.AssignedPrivileges = DefaultPrivilegeLookup.All
+                            .Where(def => licenceCodes.Contains(def.LicenseCode))
+                            .Select(def => def.PrivilegeId)
+                            .Distinct()
+                            .Select(privilegeId => new AssignedPrivilegeFactory(x, privilegeId).Generate())
+                            .ToList();
+                        x.Privileges = x.AssignedPrivileges.Select(p => p.Privilege).ToList();
+                    }
                 }
             });
         }
