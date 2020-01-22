@@ -19,6 +19,14 @@
     </app-page-subheader>
   </div>
 
+  <div *ngIf="!isAnyJobOrReg()"
+       class="mb-4 red">
+    <mat-icon matTooltip="Action Required"
+              matTooltipPosition="after"
+              class="red">warning</mat-icon>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+  </div>
+
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Personal Information from BC Services Card</ng-container>
   </app-page-subheader>
@@ -38,7 +46,7 @@
 
       <button mat-flat-button
               color="primary"
-              [disabled]="!accept.checked"
+              [disabled]="!accept.checked || !isAnyJobOrReg()"
               (click)="onSubmit()">Submit Enrolment</button>
 
     </div>
