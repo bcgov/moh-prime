@@ -5,33 +5,36 @@ source tests.bash
 
 case "$1" in
     build)
-        build $2 $3 $@
-        echo "Extra params= $@"
+        build $@
+        echo "Extra params= ${@:3}"
         #> /dev/null 2>&1
         ;;
     deploy)
-        deploy $2 $3 $@
-        echo "Extra params= $@"
+        deploy $@
+        echo "Extra params= ${@:3}"
         #> /dev/null 2>&1
         ;;
     toolbelt)
-        toolbelt $2 $3 $@
-        echo "Extra params= $@"
+        toolbelt $@
+        echo "Extra params= ${@:3}"
         ;;
     scan)
         scan
         ;;
     zap)
-        zap $2 $3 $@
+        zap $@
         ;;
     occleanup)
         occleanup
         ;;
     nukenpave)
-        nukenpave $2 $3 $@
+        nukenpave $@
         ;;
     pipeline_args)
-        pipeline_args $*
+        pipeline_args $@
+        ;;
+    functionTest)
+        functionTest $@
         ;;
     *)
     echo "You\'re doing it wrong..."
