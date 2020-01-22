@@ -2,7 +2,7 @@ pipeline {
     agent none
     environment {
         BRANCH_LOWER=BRANCH_NAME.toLowerCase()
-        VANITY_URL='${BRANCH_LOWER}.pharmanetenrolment.pathfinder.gov.bc.ca'
+        VANITY_URL="${BRANCH_LOWER}.pharmanetenrolment.pathfinder.gov.bc.ca"
         FRONTEND_ARGS="-p VANITY_URL=${VANITY_URL} -p HTTP_PORT='8080' -p HTTP_SCHEMA='HTTP' TERMINATION_TYPE='edge'"
         API_ARGS="-p ASPNETCORE_ENVIRONMENT=Development"
     }
