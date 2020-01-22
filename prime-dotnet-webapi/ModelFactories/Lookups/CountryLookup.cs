@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using Prime.Models;
 using Prime.Configuration;
 
-using Microsoft.EntityFrameworkCore;
-
 namespace Prime.ModelFactories
 {
     public static class CountryLookup
     {
-        private static ICollection<Country> _seedData = new CountryConfiguration().SeedData.AsQueryable().AsNoTracking().ToList();
+        private static ICollection<Country> _seedData = new CountryConfiguration().SeedData;
 
         public static ICollection<Country> All { get { return _seedData; } }
         public static Country Canada { get { return All.Single(c => c.Code == Country.CANADA); } }

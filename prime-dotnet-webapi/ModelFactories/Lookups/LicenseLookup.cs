@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using Prime.Models;
 using Prime.Configuration;
 
-using Microsoft.EntityFrameworkCore;
-
 namespace Prime.ModelFactories
 {
     public static class LicenseLookup
     {
-        private static ICollection<License> _seedData = new LicenseConfiguration().SeedData.AsQueryable().AsNoTracking().ToList();
+        private static ICollection<License> _seedData = new LicenseConfiguration().SeedData;
 
         public static ICollection<License> All { get { return _seedData; } }
 
