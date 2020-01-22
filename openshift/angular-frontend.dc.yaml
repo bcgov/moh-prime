@@ -27,16 +27,16 @@ parameters:
   required: true
 - name: VANITY_URL
   required: true
-  value: 'pharmanetenrolment.gov.bc.ca'
+  value: "pharmanetenrolment.gov.bc.ca"
 - name: HTTP_SCHEMA
   required: true
-  value: 'HTTPS'
+  value: "HTTPS"
 - name: HTTP_PORT
   required: true
   value: "8443"
 - name: TERMINATION_TYPE
   required: true
-  value: 'passthrough'
+  value: "Passthrough"
 objects:
 - apiVersion: v1
   kind: DeploymentConfig
@@ -59,7 +59,7 @@ objects:
         cpu: 300m
         memory: 512Mi
       limits:
-        cpu: '1'
+        cpu: "1"
         memory: 1024Mi
     template:
       metadata:
@@ -74,22 +74,22 @@ objects:
           - name: OC_APP
             value: ${OC_APP}
           - name: REDIRECT_URL
-            value: ${HTTP_SCHEMA}://${VANITY_URL}
+            value: "${HTTP_SCHEMA}://${VANITY_URL}"
           - name: TLS_CHAIN
             valueFrom:
               secretKeyRef:
                 key: authority-chain
-                name: 'frontend-tls-certificate' 
+                name: "frontend-tls-certificate" 
           - name: TLS_PRIVATE
             valueFrom:
               secretKeyRef:
                 key: private-key
-                name: 'frontend-tls-certificate'
+                name: "frontend-tls-certificate"
           - name: TLS_PASSWORD
             valueFrom:
               secretKeyRef:
                 key: database-admin-password
-                name: 'postgresql-secret'
+                name: "postgresql-secret"
           image: " "
           name: primeweb
           ports:
@@ -121,25 +121,25 @@ objects:
 - apiVersion: v1
   kind: Route
   metadata:
-    name: '${NAME}${SUFFIX}-insecure'
+    name: "${NAME}${SUFFIX}-insecure"
   spec:
-    host: ${VANITY_URL}
+    host: "insecure.${VANITY_URL}"
     port:
-      targetPort: '${HTTP_PORT}'
+      targetPort: "${HTTP_PORT}"
     to:
       kind: Service
       name: "${NAME}${SUFFIX}"
 - apiVersion: v1
   kind: Route
   metadata:
-    name: '${NAME}${SUFFIX}-secure'
+    name: "${NAME}${SUFFIX}-secure"
   spec:
-    host: ${VANITY_URL}
+    host: "${VANITY_URL}"
     port:
-      targetPort: '8443'
+      targetPort: "8443"
     tls:
         insecureEdgeTerminationPolicy: Redirect
-        termination: '${TERMINATION_TYPE}'
+        termination: "${TERMINATION_TYPE}"
     to:
       kind: Service
       name: "${NAME}${SUFFIX}"
@@ -152,10 +152,10 @@ objects:
     name: "${NAME}${SUFFIX}"
   spec:
     ports:
-    - name: '8080'
+    - name: "8080"
       port: 8080
       targetPort: 8080
-    - name: '8443'
+    - name: "8443"
       port: 8443
       targetPort: 8443
     selector:
