@@ -28,4 +28,14 @@ export class UtilsService {
     const contentContainer = this.document.querySelector('.mat-sidenav-content') || this.window;
     contentContainer.scroll({ top: 0, left: 0, behavior: 'smooth' });
   }
+
+  /**
+   * @description
+   * returns true if the browser is Internet Explorer
+   */
+  public isIE(): boolean {
+    const isIE = /msie\s|trident\//i.test(window.navigator.userAgent);
+    return isIE;
+  }
+
 }
