@@ -23,8 +23,7 @@ RUN cat /usr/src/app/src/environments/environment.prod.ts && \
 FROM nginx:1.15-alpine
 COPY --from=build-deps /usr/src/app/dist/angular-frontend /usr/share/nginx/html
 RUN rm -f /etc/nginx/conf.d/default.conf 
-#COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/nginx.conf
+COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/
 COPY --from=build-deps /usr/src/app/nginx.template.conf /etc/nginx/nginx.template.conf
 COPY --from=build-deps /usr/src/app/entrypoint.sh /home
 
@@ -43,8 +42,6 @@ RUN mkdir -p /var/cache/nginx && \
 
 WORKDIR /
 #RUN envsubst '$SUFFIX' < /etc/nginx/nginx.template.conf > /etc/nginx/nginx.conf
-#RUN echo "${TLS_CHAIN}" > /etc/nginx/chained.crt
-#RUN echo "${TLS_PRIVATE}" > /etc/nginx/private.key
 COPY ./entrypoint.sh /
 RUN chmod a+x /entrypoint.sh
 
