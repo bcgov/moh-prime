@@ -38,6 +38,7 @@ import { EnrolleePropertyComponent } from '@shared/components/enrollee/enrollee-
 import { PrimeContactComponent } from '@shared/components/prime-contact/prime-contact.component';
 import { PrimeEmailComponent } from '@shared/components/prime-email/prime-email.component';
 import { PrimePhoneComponent } from '@shared/components/prime-phone/prime-phone.component';
+import { EnrolleePropertyErrorComponent } from '@shared/components/enrollee/enrollee-property-error/enrollee-property-error.component';
 
 describe('OverviewComponent', () => {
   let component: OverviewComponent;
@@ -77,7 +78,8 @@ describe('OverviewComponent', () => {
           PostalPipe,
           DefaultPipe,
           EnrolleePipe,
-          YesNoPipe
+          YesNoPipe,
+          EnrolleePropertyErrorComponent
         ],
         providers: [
           {
