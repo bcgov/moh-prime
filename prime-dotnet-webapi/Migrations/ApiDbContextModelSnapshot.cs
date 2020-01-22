@@ -6506,6 +6506,34 @@ namespace Prime.Migrations
                     b.ToTable("Enrollee");
                 });
 
+            modelBuilder.Entity("Prime.Models.EnrolleeProfileVersion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<DateTime>("CreatedTimeStamp");
+
+                    b.Property<Guid>("CreatedUserId");
+
+                    b.Property<int>("EnrolleeId");
+
+                    b.Property<string>("ProfileSnapshot")
+                        .IsRequired()
+                        .HasColumnType("json");
+
+                    b.Property<DateTime>("UpdatedTimeStamp");
+
+                    b.Property<Guid>("UpdatedUserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnrolleeId");
+
+                    b.ToTable("EnrolleeProfileVersion");
+                });
+
             modelBuilder.Entity("Prime.Models.EnrolmentCertificateAccessToken", b =>
                 {
                     b.Property<Guid>("Id")
@@ -8966,6 +8994,14 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Privilege", "Privilege")
                         .WithMany("DefaultPrivileges")
                         .HasForeignKey("PrivilegeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Prime.Models.EnrolleeProfileVersion", b =>
+                {
+                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
+                        .WithMany("EnrolleeProfileVersions")
+                        .HasForeignKey("EnrolleeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

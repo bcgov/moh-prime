@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Prime.Models;
 
+// Strategy Pattern
+
 namespace Prime.Services
 {
     public class AutomaticAdjudicationService : BaseService, IAutomaticAdjudicationService
@@ -192,7 +194,7 @@ namespace Prime.Services
                 var passed = true;
                 if (enrollee.Certifications?.Any() == true)
                 {
-                    // TODO - properly implement this check
+                    // TODO properly implement this check
                     foreach (var item in enrollee.Certifications)
                     {
                         if (item.LicenseCode > 0)

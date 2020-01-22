@@ -37,6 +37,7 @@ namespace Prime
         public DbSet<Privilege> Privileges { get; set; }
         public DbSet<DefaultPrivilege> DefaultPrivileges { get; set; }
         public DbSet<AssignedPrivilege> AssignedPrivileges { get; set; }
+        public DbSet<EnrolleeProfileVersion> EnrolleeProfileVersions { get; set; }
 
         public DbSet<AdjudicatorNote> AdjudicatorNotes { get; set; }
         public DbSet<AccessAgreementNote> AccessAgreementNotes { get; set; }
@@ -131,6 +132,7 @@ namespace Prime
             modelBuilder.ApplyConfiguration(new PrivilegeConfiguration());
             modelBuilder.ApplyConfiguration(new DefaultPrivilegeConfiguration());
             modelBuilder.ApplyConfiguration(new AssignedPrivilegeConfiguration());
+            modelBuilder.ApplyConfiguration(new EnrolleeProfileVersionConfiguration());
 
             modelBuilder.ApplyConfiguration(new GlobalClauseConfiguration());
             modelBuilder.ApplyConfiguration(new UserClauseConfiguration());

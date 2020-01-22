@@ -43,11 +43,12 @@ namespace Prime
             services.AddScoped<IPharmanetApiService, PharmanetApiService>();
             services.AddScoped<IPrivilegeService, PrivilegeService>();
             services.AddScoped<IAccessTermService, AccessTermService>();
+            services.AddScoped<IEnrolleeProfileVersionService, EnrolleeProfileVersionService>();
 
             services
                 .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                // add a convertor <globally> to change empty strings into null on serialization
+                // Add a convertor <globally> to change empty strings into null on serialization
                 .AddJsonOptions(options => options.SerializerSettings.Converters.Add(new EmptyStringToNullJsonConverter()));
 
             services.AddCors(options =>

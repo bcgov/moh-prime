@@ -172,19 +172,19 @@
   </app-page-subheader>
 
   <ng-container *ngFor="let job of jobs">
-
     <app-enrollee-property title="Job Title"
                            [makeBold]="true">
       {{ job.title | default }}
     </app-enrollee-property>
-
   </ng-container>
 
-  <app-enrollee-property *ngIf="!hasJob"
-                         title="Job Title"
-                         [makeBold]="true">
-    None
-  </app-enrollee-property>
+  <app-enrollee-property-error message="If no College Certification is entered a Job Title is required."
+                               *ngIf="!hasJob">
+    <app-enrollee-property title="Job Title"
+                           [makeBold]="true">
+      None
+    </app-enrollee-property>
+  </app-enrollee-property-error>
 
 </section>
 
