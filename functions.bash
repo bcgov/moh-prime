@@ -16,10 +16,10 @@ function variablePopulation() {
 }
 
 variablePopulation
+
 function pipeline_args() {
     export PIPELINE_ARGS="$*"
 }
-
 
 function build() {
     source ./"$1.conf"
@@ -33,7 +33,7 @@ function build() {
     fi;
     if [ "${BRANCH_LOWER}" == "develop" ] || [ "${BRANCH_LOWER}" == "master" ];
     then
-        echo "oc process -f ./${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE} -p NAME=${APP_NAME} -p VERSION=${BUILD_NUMBER} -p SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR} -p SOURCE_REPOSITORY_URL=${GIT_URL} -p SOURCE_REPOSITORY_REF=${BRANCH_NAME} -p OC_NAMESPACE=$PROJECT_PREFIX -p OC_APP=$2 $3 | oc ${MODE} -f - --namespace=$PROJECT_PREFIX-$2"
+        echo "oc process -f ./${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE} -p NAME=${APP_NAME} -p VERSION=${BUILD_NUMBER} -p SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR} -p SOURCE_REPOSITORY_URL=${GIT_URL} -p SOURCE_REPOSITORY_REF=${BRANCH_NAME} -p OC_NAMESPACE=$PROJECT_PREFIX -p OC_APP=$2 `echo ${PIPELINE_ARGS}` | oc ${MODE} -f - --namespace=$PROJECT_PREFIX-$2"
         oc process -f ./"${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE}" \
         -p NAME="${APP_NAME}" \
         -p VERSION="${BUILD_NUMBER}" \
@@ -43,7 +43,7 @@ function build() {
         -p OC_NAMESPACE="$PROJECT_PREFIX" \
         -p OC_APP="$2" `echo ${PIPELINE_ARGS}` | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$2"
     else
-        echo "oc process -f ./${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE} -p NAME=${APP_NAME} -p VERSION=${BUILD_NUMBER} -p SUFFIX=-${BRANCH_LOWER} -p SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR} -p SOURCE_REPOSITORY_URL=${GIT_URL} -p SOURCE_REPOSITORY_REF=${BRANCH_NAME} -p OC_NAMESPACE=$PROJECT_PREFIX -p OC_APP=$2 $3 | oc ${MODE} -f - --namespace=$PROJECT_PREFIX-$2"
+        echo "oc process -f ./${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE} -p NAME=${APP_NAME} -p VERSION=${BUILD_NUMBER} -p SUFFIX=-${BRANCH_LOWER} -p SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR} -p SOURCE_REPOSITORY_URL=${GIT_URL} -p SOURCE_REPOSITORY_REF=${BRANCH_NAME} -p OC_NAMESPACE=$PROJECT_PREFIX -p OC_APP=$2 `echo ${PIPELINE_ARGS}` | oc ${MODE} -f - --namespace=$PROJECT_PREFIX-$2"
         oc process -f ./"${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE}" \
         -p NAME="${APP_NAME}" \
         -p VERSION="${BUILD_NUMBER}" \
@@ -164,8 +164,4 @@ function nukenpave() {
     done
         build $1 $2 $3
         deploy $1 $2 $3
-}
-
-function pipeline_args() {
-    export PIPELINE_ARGS="$*"
 }
