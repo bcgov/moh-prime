@@ -16,10 +16,7 @@ namespace Prime
         {
             var owner = new Enrollee { Id = 1 };
 
-            var a1 = new AdjudicatorNoteFactory(owner).Generate(2);
-            var a2 = new AccessAgreementNoteFactory(owner).Generate(2);
-            var a3 = new EnrolmentCertificateNoteFactory(owner).Generate(2);
-            var add = new PhysicalAddressFactory(owner).Generate();
+            var enrol = new EnrolleeFactory().Generate("default,status.random");
             var t = 1;
         }
     }
