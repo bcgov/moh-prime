@@ -20,7 +20,7 @@ pipeline {
                 echo "Building ..."
                 sh "./player.sh build database dev"
                 sh "./player.sh build api dev '${API_ARGS} ${FRONTEND_ARGS}'"
-                sh "./player.sh build frontend '${FRONTEND_ARGS}'"
+                sh "./player.sh build frontend dev '${FRONTEND_ARGS}'"
             }
         }
         stage('Deploy Branch') {
