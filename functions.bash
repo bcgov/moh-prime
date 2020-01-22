@@ -14,7 +14,12 @@ function variablePopulation() {
         export DOTNET_PHASE="Development"
     fi
 }
+
 variablePopulation
+function pipeline_args() {
+    export PIPELINE_ARGS="$*"
+}
+
 
 function build() {
     source ./"$1.conf"

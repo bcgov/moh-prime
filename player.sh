@@ -30,7 +30,7 @@ case "$1" in
     nukenpave)
         nukenpave $2 $3 $4
         ;;
-    pipeline_args_
+    pipeline_args)
         pipeline_args $*
     *)
     echo "You\'re doing it wrong..."
