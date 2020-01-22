@@ -164,7 +164,7 @@ objects:
                 httpGet:
                   path: /healthcheck
                   port: 8080
-                  scheme: "${HTTP_SCHEMA}"
+                  scheme: "HTTP"
                 initialDelaySeconds: 5
                 periodSeconds: 10
                 successThreshold: 1

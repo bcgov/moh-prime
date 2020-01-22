@@ -24,7 +24,8 @@ FROM nginx:1.15-alpine
 COPY --from=build-deps /usr/src/app/dist/angular-frontend /usr/share/nginx/html
 RUN rm -f /etc/nginx/conf.d/default.conf 
 COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/
-COPY --from=build-deps /usr/src/app/nginx${OC_APP}.conf /etc/nginx/nginx.template.conf
+COPY --from=build-deps /usr/src/app/nginx.template.conf /etc/nginx/nginx.template.conf
+#COPY --from=build-deps /usr/src/app/nginx${OC_APP}.conf /etc/nginx/nginx.template.conf
 COPY --from=build-deps /usr/src/app/entrypoint.sh /home
 
 EXPOSE 8080
@@ -41,7 +42,7 @@ RUN mkdir -p /var/cache/nginx && \
     echo "Build completed."
 
 WORKDIR /
-#RUN envsubst '$SUFFIX' < /etc/nginx/nginx.template.conf > /etc/nginx/nginx.conf
+RUN envsubst '$SUFFIX' < /etc/nginx/nginx.template.conf > /etc/nginx/nginx.conf
 COPY ./entrypoint.sh /
 RUN chmod a+x /entrypoint.sh
 
