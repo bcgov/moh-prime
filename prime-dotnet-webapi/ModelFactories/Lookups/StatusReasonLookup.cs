@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using Prime.Models;
 using Prime.Configuration;
 
+using Microsoft.EntityFrameworkCore;
+
 namespace Prime.ModelFactories
 {
     public static class StatusReasonLookup
     {
-        private static ICollection<StatusReason> _seedData = new StatusReasonConfiguration().SeedData;
+        private static ICollection<StatusReason> _seedData = new StatusReasonConfiguration().SeedData.AsQueryable().AsNoTracking().ToList();
 
         public static ICollection<StatusReason> All { get { return _seedData; } }
 

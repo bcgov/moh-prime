@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using Prime.Models;
 using Prime.Configuration;
 
+using Microsoft.EntityFrameworkCore;
+
 namespace Prime.ModelFactories
 {
     public static class ProvinceLookup
     {
-        private static ICollection<Province> _seedData = new ProvinceConfiguration().SeedData;
+        private static ICollection<Province> _seedData = new ProvinceConfiguration().SeedData.AsQueryable().AsNoTracking().ToList();
 
         public static Province BC
         {

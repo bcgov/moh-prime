@@ -1,12 +1,15 @@
+using System.Linq;
 using System.Collections.Generic;
 using Prime.Models;
 using Prime.Configuration;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace Prime.ModelFactories
 {
     public static class CollegeLookup
     {
-        private static ICollection<College> _seedData = new CollegeConfiguration().SeedData;
+        private static ICollection<College> _seedData = new CollegeConfiguration().SeedData.AsQueryable().AsNoTracking().ToList();
 
         public static ICollection<College> All { get { return _seedData; } }
     }
