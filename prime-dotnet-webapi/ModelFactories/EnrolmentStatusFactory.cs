@@ -35,6 +35,10 @@ namespace Prime.ModelFactories
                 RuleFor(x => x.StatusCode, (f, x) => x.Status.Code);
 
             });
+            RuleSet("pharmanet", (set) =>
+            {
+                RuleFor(x => x.PharmaNetStatus, true);
+            });
         }
 
         private Status GetNextStatus()
