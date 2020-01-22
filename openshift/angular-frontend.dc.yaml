@@ -27,9 +27,13 @@ parameters:
   required: true
 - name: VANITY_URL
   required: true
+  value: ${NAME}${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca
 - name: HTTP_SCHEMA
   required: true
   value: 'http'
+- name: HTTP_PORT
+  required: true
+  value: '8080'
 - name: TERMINATION_TYPE
   required: true
   value: 'passthrough'
@@ -89,14 +93,13 @@ objects:
           image: " "
           name: primeweb
           ports:
-          - containerPort: 8080
-          - containerPort: 8443
+          - containerPort: '${HTTP_PORT}'
           readinessProbe:
             failureThreshold: 3
             httpGet:
               path: /healthcheck
-              port: 8443
-              scheme: HTTPS
+              port: '${HTTP_PORT}'
+              scheme: '${HTTP_SCHEMA}'
             initialDelaySeconds: 5
             periodSeconds: 10
             successThreshold: 1
@@ -120,9 +123,9 @@ objects:
   metadata:
     name: '${NAME}${SUFFIX}-insecure'
   spec:
-    host: "${VANITY_URL}.pathfinder.gov.bc.ca"
+    host: "${VANITY_URL}"
     port:
-      targetPort: '8080'
+      targetPort: '${HTTP_PORT}'
     to:
       kind: Service
       name: "${NAME}${SUFFIX}"

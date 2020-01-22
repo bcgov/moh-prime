@@ -27,6 +27,7 @@ parameters:
   required: true
 - name: VANITY_URL
   required: true
+  value: ${NAME}${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca
 - name: HTTP_SCHEMA
   required: true
   value: 'http'

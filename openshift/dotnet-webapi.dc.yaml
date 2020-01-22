@@ -33,6 +33,7 @@ parameters:
     value: 'http'
   - name: VANITY_URL
     required: true
+    value: ${NAME}${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca
 objects:
   - apiVersion: v1
     kind: DeploymentConfig
@@ -156,8 +157,8 @@ objects:
                 failureThreshold: 3
                 httpGet:
                   path: /healthcheck
-                  port: 8080
-                  scheme: HTTP
+                  port: '${HTTP_PORT}'
+                  scheme: '${HTTP_SCHEMA}'
                 initialDelaySeconds: 5
                 periodSeconds: 10
                 successThreshold: 1

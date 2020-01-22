@@ -1,5 +1,5 @@
 #!/bin/sh
-envsubst '$SUFFIX' < /etc/nginx/nginx.template.conf > /etc/nginx/conf.d/default.conf 
+envsubst '$SUFFIX' < /etc/nginx/nginx$OC_APP.conf > /etc/nginx/conf.d/default.conf 
 echo "$TLS_PASSWORD" >  /etc/nginx/passwd.txt
 echo "$TLS_PRIVATE" > /etc/nginx/private.key
 echo "$TLS_CHAIN" >  /etc/nginx/chained.crt

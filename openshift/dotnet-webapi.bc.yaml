@@ -27,6 +27,12 @@ parameters:
   - name: ASPNETCORE_ENVIRONMENT
     required: true
     value: Development
+  - name: HTTP_SCHEMA
+    required: true
+    value: 'http'
+  - name: VANITY_URL
+    required: true
+    value: ${NAME}${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca
 objects:
   - apiVersion: v1
     kind: ImageStream

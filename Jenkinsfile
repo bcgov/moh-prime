@@ -3,7 +3,7 @@ pipeline {
     environment {
         BRANCH_LOWER=BRANCH_NAME.toLowerCase()
         VANITY_URL='${BRANCH_LOWER}.pharmanetenrolment.pathfinder.gov.bc.ca'
-        FRONTEND_ARGS="-p VANITY_URL=${VANITY_URL}"
+        FRONTEND_ARGS="-p VANITY_URL=${VANITY_URL} -p "
     }
     options {
         disableResume()
@@ -18,7 +18,7 @@ pipeline {
             steps {
                 echo "Building ..."
                 sh "./player.sh build database dev"
-                sh "./player.sh pipeline_args '${FRONTEND_ARGS}'"
+                sh "./player.sh pipeline_args '${FRONTEND_ARGS}' "
                 sh "./player.sh build api dev"
                 sh "./player.sh build frontend dev"
                 sh "./player.sh pipeline_args ''"
