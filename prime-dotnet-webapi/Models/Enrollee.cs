@@ -177,5 +177,8 @@ namespace Prime.Models
 
         [JsonIgnore]
         public ICollection<AccessTerm> AccessTerms { get; set; }
+
+        [JsonIgnore]
+        public ICollection<EnrolleeProfileVersion> EnrolleeProfileVersions { get; set; }
     }
 }

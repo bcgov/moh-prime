@@ -330,6 +330,31 @@ namespace Prime.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "EnrolleeProfileVersion",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    CreatedUserId = table.Column<Guid>(nullable: false),
+                    CreatedTimeStamp = table.Column<DateTime>(nullable: false),
+                    UpdatedUserId = table.Column<Guid>(nullable: false),
+                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false),
+                    EnrolleeId = table.Column<int>(nullable: false),
+                    ProfileSnapshot = table.Column<string>(type: "json", nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EnrolleeProfileVersion", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EnrolleeProfileVersion_Enrollee_EnrolleeId",
+                        column: x => x.EnrolleeId,
+                        principalTable: "Enrollee",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "EnrolmentCertificateAccessToken",
                 columns: table => new
                 {
@@ -1935,6 +1960,11 @@ namespace Prime.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_EnrolleeProfileVersion_EnrolleeId",
+                table: "EnrolleeProfileVersion",
+                column: "EnrolleeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_EnrolmentCertificateAccessToken_EnrolleeId",
                 table: "EnrolmentCertificateAccessToken",
                 column: "EnrolleeId");
@@ -2029,6 +2059,9 @@ namespace Prime.Migrations
 
             migrationBuilder.DropTable(
                 name: "DefaultPrivilege");
+
+            migrationBuilder.DropTable(
+                name: "EnrolleeProfileVersion");
 
             migrationBuilder.DropTable(
                 name: "EnrolmentCertificateAccessToken");

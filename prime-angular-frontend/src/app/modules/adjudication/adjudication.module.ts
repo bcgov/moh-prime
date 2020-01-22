@@ -8,6 +8,8 @@ import { EnrolmentComponent } from './pages/enrolment/enrolment.component';
 import { AdjudicatorNotesComponent } from './pages/adjudicator-notes/adjudicator-notes.component';
 import { LimitsConditionsClausesComponent } from './pages/limits-conditions-clauses/limits-conditions-clauses.component';
 import { CertificateLimitsConditionsComponent } from './pages/certificate-limits-conditions/certificate-limits-conditions.component';
+import { EnrolleeProfileVersionComponent } from './pages/enrollee-profile-version/enrollee-profile-version.component';
+import { EnrolleeProfileVersionsComponent } from './pages/enrollee-profile-versions/enrollee-profile-versions.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +17,9 @@ import { CertificateLimitsConditionsComponent } from './pages/certificate-limits
     EnrolmentComponent,
     AdjudicatorNotesComponent,
     LimitsConditionsClausesComponent,
-    CertificateLimitsConditionsComponent
+    CertificateLimitsConditionsComponent,
+    EnrolleeProfileVersionComponent,
+    EnrolleeProfileVersionsComponent
   ],
   imports: [
     SharedModule,
