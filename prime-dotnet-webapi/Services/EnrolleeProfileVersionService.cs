@@ -44,8 +44,6 @@ namespace Prime.Services
             var enrolleeProfileVersion = new EnrolleeProfileVersion
             {
                 EnrolleeId = (int)enrollee.Id,
-                // TODO why doesn't this work in the entity configuration? @see EnrolleeProfileVersionConfiguration
-                // ProfileSnapshot = JObject.FromObject(enrollee),
                 ProfileSnapshot = JObject.FromObject(enrollee, _camelCaseSerializer),
                 CreatedDate = DateTime.Now
             };
