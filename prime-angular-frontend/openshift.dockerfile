@@ -24,7 +24,8 @@ FROM nginx:1.15-alpine
 COPY --from=build-deps /usr/src/app/dist/angular-frontend /usr/share/nginx/html
 RUN rm -f /etc/nginx/conf.d/default.conf 
 COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/
-COPY --from=build-deps /usr/src/app/nginx.template.conf /etc/nginx/nginx.template.conf
+#COPY --from=build-deps /usr/src/app/nginx.template.conf /etc/nginx/nginx.template.conf
+COPY --from=build-deps /usr/src/app/nginx${OC_APP}.conf /etc/nginx/nginx.template.conf
 COPY --from=build-deps /usr/src/app/entrypoint.sh /home
 
 EXPOSE 8080
@@ -39,31 +40,6 @@ RUN mkdir -p /var/cache/nginx && \
     chmod +x /home/entrypoint.sh && \
     chmod 777 /home/entrypoint.sh && \
     echo "Build completed."
-RUN export CERTBOT_DEPS="py-pip \
-                         build-base \
-                         libffi-dev \
-                         python-dev \
-                         ca-certificates \
-                         openssl-dev \
-                         linux-headers \
-                         dialog \
-                         wget" && \
-            apk --update add openssl \
-                             augeas-libs \
-                             ${CERTBOT_DEPS}
-
-RUN pip install --upgrade --no-cache-dir pip virtualenv
-
-#RUN mkdir /letsencrypt
-#WORKDIR /letsencrypt
-
-# Get the certbot so we can use Lets Encrypt
-RUN wget https://dl.eff.org/certbot-auto
-RUN chmod a+x certbot-auto
-
-# Clean up
-RUN apk del ${CERTBOT_DEPS}
-RUN rm -rf /var/cache/apk/*
 
 WORKDIR /
 #RUN envsubst '$SUFFIX' < /etc/nginx/nginx.template.conf > /etc/nginx/nginx.conf
