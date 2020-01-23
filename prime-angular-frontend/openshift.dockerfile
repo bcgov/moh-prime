@@ -42,7 +42,7 @@ RUN mkdir -p /var/cache/nginx && \
     echo "Build completed."
 
 WORKDIR /
-RUN envsubst '$SUFFIX' < /etc/nginx/nginx.template.conf > /etc/nginx/nginx.conf
+#RUN envsubst '$SUFFIX' < /etc/nginx/nginx.template.conf > /etc/nginx/nginx.conf
 COPY ./entrypoint.sh /
 RUN chmod a+x /entrypoint.sh
 
