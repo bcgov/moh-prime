@@ -126,23 +126,9 @@ objects:
   metadata:
     name: "${NAME}${SUFFIX}-insecure"
   spec:
-    host: "insecure.${VANITY_URL}"
-    port:
-      targetPort: "${HTTP_PORT}"
-    to:
-      kind: Service
-      name: "${NAME}${SUFFIX}"
-- apiVersion: v1
-  kind: Route
-  metadata:
-    name: "${NAME}${SUFFIX}-secure"
-  spec:
     host: "${VANITY_URL}"
     port:
-      targetPort: "8443"
-    tls:
-        insecureEdgeTerminationPolicy: Redirect
-        termination: "${TERMINATION_TYPE}"
+      targetPort: "${HTTP_PORT}"
     to:
       kind: Service
       name: "${NAME}${SUFFIX}"
