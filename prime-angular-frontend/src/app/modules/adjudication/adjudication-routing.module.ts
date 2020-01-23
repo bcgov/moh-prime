@@ -13,6 +13,8 @@ import { EnrolmentComponent } from './pages/enrolment/enrolment.component';
 import { AdjudicatorNotesComponent } from './pages/adjudicator-notes/adjudicator-notes.component';
 import { LimitsConditionsClausesComponent } from './pages/limits-conditions-clauses/limits-conditions-clauses.component';
 import { CertificateLimitsConditionsComponent } from './pages/certificate-limits-conditions/certificate-limits-conditions.component';
+import { EnrolleeProfileVersionsComponent } from './pages/enrollee-profile-versions/enrollee-profile-versions.component';
+import { EnrolleeProfileVersionComponent } from './pages/enrollee-profile-version/enrollee-profile-version.component';
 
 const routes: Routes = [
   {
@@ -53,6 +55,21 @@ const routes: Routes = [
                 path: 'certificate-limits-conditions',
                 component: CertificateLimitsConditionsComponent,
                 data: { title: 'Certificate Limits and Conditions' }
+              },
+              {
+                path: 'history',
+                children: [
+                  {
+                    path: '',
+                    component: EnrolleeProfileVersionsComponent,
+                    data: { title: 'Enrolment Histories' }
+                  },
+                  {
+                    path: ':hid',
+                    component: EnrolleeProfileVersionComponent,
+                    data: { title: 'Enrolment History' }
+                  }
+                ]
               }
             ]
           }

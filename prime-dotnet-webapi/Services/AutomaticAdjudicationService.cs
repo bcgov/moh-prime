@@ -6,13 +6,15 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Prime.Models;
 
+// Strategy Pattern
+
 namespace Prime.Services
 {
-    public class DefaultAutomaticAdjudicationService : BaseService, IAutomaticAdjudicationService
+    public class AutomaticAdjudicationService : BaseService, IAutomaticAdjudicationService
     {
         private readonly List<IAutomaticAdjudicationRule> _rules;
 
-        public DefaultAutomaticAdjudicationService(
+        public AutomaticAdjudicationService(
             ApiDbContext context, IHttpContextAccessor httpContext, IPharmanetApiService pharmanetApiService)
             : base(context, httpContext)
         {
@@ -134,7 +136,7 @@ namespace Prime.Services
                     {
                         record = await _pharmanetApiService.GetCollegeRecordAsync(cert);
                     }
-                    catch (DefaultPharmanetApiService.PharmanetCollegeApiException)
+                    catch (PharmanetApiService.PharmanetCollegeApiException)
                     {
                         AddReason(enrollee, StatusReason.PHARMANET_ERROR_CODE, $"{cert.FullLicenseNumber}");
                         passed = false;
@@ -192,7 +194,7 @@ namespace Prime.Services
                 var passed = true;
                 if (enrollee.Certifications?.Any() == true)
                 {
-                    // TODO - properly implement this check
+                    // TODO properly implement this check
                     foreach (var item in enrollee.Certifications)
                     {
                         if (item.LicenseCode > 0)

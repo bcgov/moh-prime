@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource, MatSelectChange, MatDialog } from '@angular/material';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { exhaustMap } from 'rxjs/operators';
 import { EMPTY, Subscription } from 'rxjs';
@@ -18,6 +19,7 @@ import {
 
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
   selector: 'app-enrolments',
@@ -32,6 +34,8 @@ export class EnrolmentsComponent implements OnInit {
   public dataSource: MatTableDataSource<Enrolment>;
 
   constructor(
+    private route: ActivatedRoute,
+    private router: Router,
     private configService: ConfigService,
     private adjudicationResource: AdjudicationResource,
     private toastService: ToastService,
@@ -57,6 +61,10 @@ export class EnrolmentsComponent implements OnInit {
   public canAllowEditing(currentStatusCode: EnrolmentStatus) {
     // Admins can only allow re-enable editing for an enrollee in a SUBMITTED state
     return (currentStatusCode === EnrolmentStatus.SUBMITTED);
+  }
+
+  public viewEnrolmentHistory(enrolmentId: number) {
+    this.router.navigate([enrolmentId, AdjudicationRoutes.PROFILE_HISTORY], { relativeTo: this.route.parent });
   }
 
   public reviewStatusReasons(enrolment: Enrolment) {

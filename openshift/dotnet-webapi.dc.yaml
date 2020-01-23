@@ -19,7 +19,7 @@ parameters:
     value: prime-dotnet-webapi
   - name: SOURCE_REPOSITORY_URL
     required: true
-    value: 'https://github.com/bcgov/moh-prime'
+    value: "https://github.com/bcgov/moh-prime"
   - name: SOURCE_REPOSITORY_REF
     required: true
   - name: OC_NAMESPACE
@@ -27,7 +27,19 @@ parameters:
   - name: OC_APP
     required: true
   - name: ASPNETCORE_ENVIRONMENT
-    value: Development
+    value: Release
+  - name: VANITY_URL
+    required: true
+    value: "pharmanetenrolment.gov.bc.ca"
+  - name: HTTP_SCHEMA
+    required: true
+    value: "https"
+  - name: HTTP_PORT
+    required: true
+    value: "8443"
+  - name: TERMINATION_TYPE
+    required: true
+    value: "passthrough"
 objects:
   - apiVersion: v1
     kind: DeploymentConfig
@@ -40,108 +52,108 @@ objects:
         kompose.version: 1.18.0 (06a2e56)
       creationTimestamp: null
       labels:
-        io.kompose.service: '${NAME}${SUFFIX}'
-      name: '${NAME}${SUFFIX}'
+        io.kompose.service: "${NAME}${SUFFIX}"
+      name: "${NAME}${SUFFIX}"
     spec:
       completionDeadlineSeconds: 1200
       replicas: 1
       selector:
-        io.kompose.service: '${NAME}${SUFFIX}'
+        io.kompose.service: "${NAME}${SUFFIX}"
       strategy: null
       resources:
         requests:
           cpu: 300m
           memory: 512Mi
         limits:
-          cpu: '1'
+          cpu: "1"
           memory: 1024Mi
       template:
         metadata:
           creationTimestamp: null
           labels:
-            io.kompose.service: '${NAME}${SUFFIX}'
+            io.kompose.service: "${NAME}${SUFFIX}"
         spec:
           containers:
             - env:
                 - name: OC_APP
-                  value: '${OC_APP}'
+                  value: "${OC_APP}"
                 - name: SUFFIX
-                  value: '${SUFFIX}'
+                  value: "${SUFFIX}"
                 - name: PATH
-                  value: '/opt/rh/rh-dotnet22/root/usr/lib64/dotnet:/opt/app-root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+                  value: "/opt/rh/rh-dotnet22/root/usr/lib64/dotnet:/opt/app-root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
                 - name: ASPNETCORE_ENVIRONMENT
                   value: ${ASPNETCORE_ENVIRONMENT}
                 - name: ASPNETCORE_HTTPS_PORT
-                  value: '5001'
+                  value: "5001"
                 - name: ASPNETCORE_URLS
-                  value: 'http://+:8080'
+                  value: "http://+:8080"
                 - name: FRONTEND_URL
-                  value: http://angular-frontend${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca
+                  value: "${REDIRECT_URL}"
                 - name: JWT_SIGNING_KEY
                   value: SdqlA0Y5e6HMAK1wm6iHHHz2u37XGtlo
                 - name: JWT_ADMIN_CLIENT
-                  value: 'prime-admin-${OC_APP}'
+                  value: "prime-admin-${OC_APP}"
                 - name: JWT_USER_CLIENT
-                  value: 'prime-application-${OC_APP}'
+                  value: "prime-application-${OC_APP}"
                 - name: JWT_AUDIENCE
-                  value: 'prime-web-api'
+                  value: "prime-web-api"
                 - name: JWT_WELL_KNOWN_CONFIG
-                  value: 'https://sso-${OC_APP}.pathfinder.gov.bc.ca/auth/realms/v4mbqqas/.well-known/openid-configuration'
+                  value: "https://sso-${OC_APP}.pathfinder.gov.bc.ca/auth/realms/v4mbqqas/.well-known/openid-configuration"
                 - name: DB_HOST
-                  value: 'postgresql${SUFFIX}'
+                  value: "postgresql${SUFFIX}"
                 - name: PHARMANET_API_URL
                   valueFrom:
                     secretKeyRef:
                       key: API_URL
-                      name: 'pharmanet-api'
+                      name: "pharmanet-api"
                 - name: PHARMANET_API_USERNAME
                   valueFrom:
                     secretKeyRef:
                       key: API_USERNAME
-                      name: 'pharmanet-api'
+                      name: "pharmanet-api"
                 - name: PHARMANET_API_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       key: API_PASSWORD
-                      name: 'pharmanet-api'
+                      name: "pharmanet-api"
                 - name: PHARMANET_SSL_CERT_FILENAME
-                  value: '/opt/app-root/etc/certs/pharmanet-api-cert.pfx'
+                  value: "/opt/app-root/etc/certs/pharmanet-api-cert.pfx"
                 - name: PHARMANET_SSL_CERT_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       key: SSL_CERT_PASSWORD
-                      name: 'pharmanet-api'
+                      name: "pharmanet-api"
                 - name: MAIL_SERVER_URL
                   valueFrom:
                     secretKeyRef:
                       key: MAIL_SERVER_URL
-                      name: 'mailserver'
+                      name: "mailserver"
                 - name: MAIL_SERVER_PORT
                   valueFrom:
                     secretKeyRef:
                       key: MAIL_SERVER_PORT
-                      name: 'mailserver'
+                      name: "mailserver"
                 - name: POSTGRESQL_USER
                   valueFrom:
                     secretKeyRef:
                       key: database-user
-                      name: 'postgresql-secret'
+                      name: "postgresql-secret"
                 - name: POSTGRESQL_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       key: database-password
-                      name: 'postgresql-secret'
+                      name: "postgresql-secret"
                 - name: POSTGRESQL_ADMIN_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       key: database-admin-password
-                      name: 'postgresql-secret'
+                      name: "postgresql-secret"
                 - name: POSTGRESQL_DATABASE
                   valueFrom:
                     secretKeyRef:
                       key: database-name
-                      name: 'postgresql-secret'
-              image: ' '
+                      name: "postgresql-secret"
+              image: " "
               name: primeapi
               ports:
                 - containerPort: 5000
@@ -152,7 +164,7 @@ objects:
                 httpGet:
                   path: /healthcheck
                   port: 8080
-                  scheme: HTTP
+                  scheme: "HTTP"
                 initialDelaySeconds: 5
                 periodSeconds: 10
                 successThreshold: 1
@@ -176,7 +188,7 @@ objects:
               - primeapi
             from:
               kind: ImageStreamTag
-              name: '${NAME}${SUFFIX}:latest'
+              name: "${NAME}${SUFFIX}:latest"
           type: ImageChange
     status: {}
   - apiVersion: v1
@@ -184,20 +196,20 @@ objects:
     metadata:
       creationTimestamp: null
       labels:
-        io.kompose.service: '${NAME}${SUFFIX}'
-      name: '${NAME}${SUFFIX}'
+        io.kompose.service: "${NAME}${SUFFIX}"
+      name: "${NAME}${SUFFIX}"
     spec:
       ports:
-        - name: '8080'
+        - name: "8080"
           port: 8080
           targetPort: 8080
-        - name: '5000'
+        - name: "5000"
           port: 5000
           targetPort: 5000
-        - name: '5001'
+        - name: "5001"
           port: 5001
           targetPort: 5001
       selector:
-        io.kompose.service: '${NAME}${SUFFIX}'
+        io.kompose.service: "${NAME}${SUFFIX}"
     status:
       loadBalancer: {}

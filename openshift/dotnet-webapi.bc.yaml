@@ -26,7 +26,19 @@ parameters:
     required: true
   - name: ASPNETCORE_ENVIRONMENT
     required: true
-    value: Development
+    value: Release
+  - name: VANITY_URL
+    required: true
+    value: 'pharmanetenrolment.gov.bc.ca'
+  - name: HTTP_SCHEMA
+    required: true
+    value: 'https'
+  - name: HTTP_PORT
+    required: true
+    value: '8443'
+  - name: TERMINATION_TYPE
+    required: true
+    value: 'passthrough'
 objects:
   - apiVersion: v1
     kind: ImageStream

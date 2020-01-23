@@ -12,11 +12,17 @@ using PrimeTests.Mocks;
 
 namespace PrimeTests.Services
 {
-    public class DefaultEnrolleeServiceTests : BaseServiceTests<DefaultEnrolleeService>
+    public class EnrolleeServiceTests : BaseServiceTests<EnrolleeService>
     {
         private static EnrolleeSearchOptions EMPTY_ENROLLEE_SEARCH_OPTIONS = new EnrolleeSearchOptions();
 
-        public DefaultEnrolleeServiceTests() : base(new object[] { new AutomaticAdjudicationServiceMock(), new EmailServiceMock(), new PrivilegeServiceMock(), new AccessTermServiceMock() })
+        public EnrolleeServiceTests() : base(new object[] {
+            new AutomaticAdjudicationServiceMock(),
+            new EmailServiceMock(),
+            new PrivilegeServiceMock(),
+            new AccessTermServiceMock(),
+            new EnrolleeProfileVersionServiceMock()
+        })
         { }
 
         [Fact]
@@ -313,7 +319,10 @@ namespace PrimeTests.Services
             await _dbContext.SaveChangesAsync();
 
             // create the enrolment status through the service layer code
-            var enrolmentStatusInProgress = await _service.CreateEnrolmentStatusAsync(testEnrollee.Id.Value, _dbContext.Statuses.Single(s => s.Code == Status.SUBMITTED_CODE));
+            var enrolmentStatusInProgress = await _service
+                .CreateEnrolmentStatusAsync(testEnrollee.Id.Value, _dbContext.Statuses
+                .Single(s => s.Code == Status.SUBMITTED_CODE));
+
             Assert.NotNull(enrolmentStatusInProgress);
             Assert.Equal(_dbContext.Statuses.Single(s => s.Code == Status.SUBMITTED_CODE), enrolmentStatusInProgress.Status);
         }
