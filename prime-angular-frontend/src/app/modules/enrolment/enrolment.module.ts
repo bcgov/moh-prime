@@ -33,7 +33,7 @@ import { CollegeCertificationFormComponent } from './shared/components/college-c
 import { JobFormComponent } from './shared/components/job-form/job-form.component';
 import { CollectionNoticeAlertComponent } from './shared/components/collection-notice-alert/collection-notice-alert.component';
 import { RuAccessTermsComponent } from './pages/access-agreement/components/ru-access-terms/ru-access-terms.component';
-import { OboAccessTermsComponent } from './pages/access-agreement/components/moa-access-terms/obo-access-terms.component';
+import { OboAccessTermsComponent } from './pages/access-agreement/components/obo-access-terms/obo-access-terms.component';
 
 @NgModule({
   declarations: [
