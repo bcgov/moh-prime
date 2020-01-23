@@ -11,11 +11,11 @@ namespace Prime.ModelFactories
 
         public static ICollection<Practice> All { get { return _seedData; } }
 
-        public static IEnumerable<Practice> AllowedFor(College college)
+        public static IEnumerable<Practice> AllowedFor(short collegeCode)
         {
             var practices = CollegePracticeLookup.All
-                .Where(cp => cp.CollegeCode == college.Code)
-                .Select(cp => _seedData.Single(p => p.Code == cp.PracticeCode));
+                .Where(cp => cp.CollegeCode == collegeCode)
+                .Select(cp => All.Single(p => p.Code == cp.PracticeCode));
 
             // Practice is always optional, so add the option of null
             return practices.Append(null);

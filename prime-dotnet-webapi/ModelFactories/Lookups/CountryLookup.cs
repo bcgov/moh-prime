@@ -10,6 +10,7 @@ namespace Prime.ModelFactories
         private static ICollection<Country> _seedData = new CountryConfiguration().SeedData;
 
         public static ICollection<Country> All { get { return _seedData; } }
+
         public static Country Canada { get { return All.Single(c => c.Code == Country.CANADA); } }
 
         public static Country ByCode(string countryCode)

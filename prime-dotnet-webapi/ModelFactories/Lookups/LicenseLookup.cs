@@ -11,11 +11,11 @@ namespace Prime.ModelFactories
 
         public static ICollection<License> All { get { return _seedData; } }
 
-        public static IEnumerable<License> AllowedFor(College college)
+        public static IEnumerable<License> AllowedFor(short collegeCode)
         {
             return CollegeLicenseLookup.All
-                .Where(cl => cl.CollegeCode == college.Code)
-                .Select(cl => _seedData.Single(l => l.Code == cl.LicenseCode));
+                .Where(cl => cl.CollegeCode == collegeCode)
+                .Select(cl => All.Single(l => l.Code == cl.LicenseCode));
         }
     }
 }

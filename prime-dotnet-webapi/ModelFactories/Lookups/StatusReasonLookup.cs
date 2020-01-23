@@ -13,17 +13,17 @@ namespace Prime.ModelFactories
 
         public static IEnumerable<StatusReason> ManualReasons
         {
-            get { return _seedData.Where(x => x != Automatic && x != Manual); }
+            get { return All.Where(x => x != Automatic && x != Manual); }
         }
 
         public static StatusReason Automatic
         {
-            get { return _seedData.Single(x => x.Code == StatusReason.AUTOMATIC_CODE); }
+            get { return All.Single(x => x.Code == StatusReason.AUTOMATIC_CODE); }
         }
 
         public static StatusReason Manual
         {
-            get { return _seedData.Single(x => x.Code == StatusReason.MANUAL_CODE); }
+            get { return All.Single(x => x.Code == StatusReason.MANUAL_CODE); }
         }
     }
 }

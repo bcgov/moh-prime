@@ -13,7 +13,7 @@ namespace Prime.ModelFactories
 
         public static Privilege ById(int privilegeId)
         {
-            return _seedData.Single(p => p.Id == privilegeId);
+            return All.Single(p => p.Id == privilegeId);
         }
     }
 }

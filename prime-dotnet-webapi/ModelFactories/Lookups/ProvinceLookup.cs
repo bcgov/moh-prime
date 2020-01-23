@@ -9,13 +9,15 @@ namespace Prime.ModelFactories
     {
         private static ICollection<Province> _seedData = new ProvinceConfiguration().SeedData;
 
+        public static ICollection<Province> All {get {return _seedData;}}
+
         public static Province BC
         {
-            get { return _seedData.Single(p => p.Code == Province.BRITISH_COLUMBIA_CODE); }
+            get { return All.Single(p => p.Code == Province.BRITISH_COLUMBIA_CODE); }
         }
         public static IEnumerable<Province> NotBC
         {
-            get { return _seedData.Where(p => p.Code != Province.BRITISH_COLUMBIA_CODE); }
+            get { return All.Where(p => p.Code != Province.BRITISH_COLUMBIA_CODE); }
         }
     }
 }
