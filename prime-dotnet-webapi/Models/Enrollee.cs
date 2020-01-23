@@ -103,6 +103,16 @@ namespace Prime.Models
         }
 
         [NotMapped]
+        public EnrolmentStatus PreviousStatus
+        {
+            get => this.EnrolmentStatuses?
+                .OrderByDescending(es => es.StatusDate)
+                .ThenByDescending(es => es.Id)
+                .Skip(1)
+                .FirstOrDefault();
+        }
+
+        [NotMapped]
         public EnrolmentStatus PharmaNetStatus { get => this.EnrolmentStatuses?.SingleOrDefault(es => es.PharmaNetStatus); }
 
         [NotMapped]
@@ -115,9 +125,9 @@ namespace Prime.Models
                 var codes = (EnrolmentStatuses ?? Enumerable.Empty<EnrolmentStatus>())
                     .Select(es => es.StatusCode);
 
-                return codes.Contains(Status.ACCEPTED_TOS_CODE)
+                return codes.Contains(Status.ACTIVE_CODE)
                     ? ProgressStatusType.FINISHED
-                    : codes.Contains(Status.SUBMITTED_CODE)
+                    : codes.Contains(Status.UNDER_REVIEW_CODE)
                         ? ProgressStatusType.SUBMITTED
                         : ProgressStatusType.STARTED;
             }
