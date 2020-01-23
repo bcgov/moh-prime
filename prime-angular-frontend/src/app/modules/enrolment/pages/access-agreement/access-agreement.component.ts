@@ -38,7 +38,7 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
   public EnrolmentStatus = EnrolmentStatus;
   public EnrolleeClassification = EnrolleeClassification;
 
-  public termsOfAccess: AccessTerm;
+  public accessTerm: AccessTerm;
 
   constructor(
     protected route: ActivatedRoute,
@@ -156,7 +156,7 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
     this.isInitialEnrolment = this.enrolment.progressStatus !== ProgressStatus.FINISHED;
     this.enrolmentResource.getAccessTerm(this.enrolment.id)
       .subscribe(
-        (termsOfAccess: AccessTerm) => this.termsOfAccess = termsOfAccess,
+        (accessTerm: AccessTerm) => this.accessTerm = accessTerm,
         (error: any) => {
           this.toastService.openErrorToast(`Terms of access could not be found`);
           this.logger.error('[Enrolment] AccessAgreement::ngOnInit error has occurred: ', error);

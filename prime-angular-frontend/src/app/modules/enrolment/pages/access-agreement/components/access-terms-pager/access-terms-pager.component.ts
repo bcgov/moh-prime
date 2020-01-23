@@ -9,7 +9,7 @@ import { AccessTerm } from '@enrolment/shared/models/access-term.model';
   styleUrls: ['./access-terms-pager.component.scss']
 })
 export class AccessTermsPagerComponent extends Pager implements OnInit {
-  @Input() termsOfAccess: AccessTerm;
+  @Input() public accessTerm: AccessTerm;
 
   constructor(
     protected changeDetectorRef: ChangeDetectorRef

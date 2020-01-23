@@ -87,7 +87,7 @@ export class EnrolmentResource {
     return this.http.get(`${this.config.apiEndpoint}/enrollees/${id}/access-terms`)
       .pipe(
         map((response: PrimeHttpResponse) => response.result as AccessTerm),
-        tap((termsOfAccess: AccessTerm) => this.logger.info('TERMS_OF_ACCESS', termsOfAccess))
+        tap((accessTerm: AccessTerm) => this.logger.info('ACCESS_TERM', accessTerm))
       );
   }
 

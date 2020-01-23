@@ -10,7 +10,7 @@ import { PageSubheaderComponent } from '@shared/components/page-subheader/page-s
 import { ContextualHelpComponent } from '@shared/modules/ngx-contextual-help/contextual-help/contextual-help.component';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
 
-describe('TermsOfAccessPagerComponent', () => {
+describe('AccessTermPagerComponent', () => {
   let component: AccessTermsPagerComponent;
   let fixture: ComponentFixture<AccessTermsPagerComponent>;
 

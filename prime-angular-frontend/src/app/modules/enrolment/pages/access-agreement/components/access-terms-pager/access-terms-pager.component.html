@@ -1,26 +1,26 @@
 <ng-container *ngTemplateOutlet="currentTemplate"></ng-container>
 
-<ng-container *ngIf="termsOfAccess?.globalClause?.clause">
+<ng-container *ngIf="accessTerm?.globalClause?.clause">
   <ng-template appPageRef>
-    <app-global-clause [clause]="termsOfAccess?.globalClause"></app-global-clause>
+    <app-global-clause [clause]="accessTerm?.globalClause"></app-global-clause>
   </ng-template>
 </ng-container>
 
-<ng-container *ngIf="termsOfAccess?.userClause?.clause">
+<ng-container *ngIf="accessTerm?.userClause?.clause">
   <ng-template appPageRef>
-    <app-user-clause [clause]="termsOfAccess?.userClause"></app-user-clause>
+    <app-user-clause [clause]="accessTerm?.userClause"></app-user-clause>
   </ng-template>
 </ng-container>
 
-<ng-container *ngIf="termsOfAccess?.licenseClassClauses?.length">
+<ng-container *ngIf="accessTerm?.licenseClassClauses?.length">
   <ng-template appPageRef>
-    <app-licence-class-clause [clauses]="termsOfAccess?.licenseClassClauses"></app-licence-class-clause>
+    <app-licence-class-clause [clauses]="accessTerm?.licenseClassClauses"></app-licence-class-clause>
   </ng-template>
 </ng-container>
 
-<ng-container *ngIf="termsOfAccess?.limitsConditionsClause?.clause">
+<ng-container *ngIf="accessTerm?.limitsConditionsClause?.clause">
   <ng-template appPageRef>
-    <app-limits-and-conditions-clause [clause]="termsOfAccess?.limitsConditionsClause">
+    <app-limits-and-conditions-clause [clause]="accessTerm?.limitsConditionsClause">
     </app-limits-and-conditions-clause>
   </ng-template>
 </ng-container>
