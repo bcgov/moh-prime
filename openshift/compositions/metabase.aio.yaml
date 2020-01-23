@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Template
 labels:
-  template: metabase-postgresql-template
+  template: metabase-database-template
 message: |-
   The following service(s) have been created in your project:
     1. ${METABASE_SERVICE_NAME}
-    2. ${METABASE_SERVICE_NAME}-postgresql
+    2. ${METABASE_SERVICE_NAME}-database
 metadata:
   name: metabase
   annotations:
@@ -29,7 +29,7 @@ objects:
 - apiVersion: v1
   kind: Secret
   metadata:
-      name: ${METABASE_SERVICE_NAME}-postgresql-credentials
+      name: ${METABASE_SERVICE_NAME}-database-credentials
       labels:
         app: metabase
         service: ${METABASE_SERVICE_NAME}
@@ -41,7 +41,7 @@ objects:
 - apiVersion: v1
   kind: PersistentVolumeClaim
   metadata:
-    name: ${METABASE_SERVICE_NAME}-postgresql
+    name: ${METABASE_SERVICE_NAME}-database
     labels:
       app: metabase
       service: ${METABASE_SERVICE_NAME}
@@ -90,16 +90,16 @@ objects:
   kind: Service
   metadata:
     annotations:
-      template.openshift.io/expose-uri: postgres://{.spec.clusterIP}:{.spec.ports[?(.name=="${METABASE_SERVICE_NAME}-postgresql")].port}
-    name: ${METABASE_SERVICE_NAME}-postgresql
+      template.openshift.io/expose-uri: postgres://{.spec.clusterIP}:{.spec.ports[?(.name=="${METABASE_SERVICE_NAME}-database")].port}
+    name: ${METABASE_SERVICE_NAME}-database
   spec:
     ports:
-    - name: ${METABASE_SERVICE_NAME}-postgresql
+    - name: ${METABASE_SERVICE_NAME}-database
       port: 5432
       protocol: TCP
       targetPort: 5432
     selector:
-      name: ${METABASE_SERVICE_NAME}-postgresql
+      name: ${METABASE_SERVICE_NAME}-database
     sessionAffinity: None
     type: ClusterIP
 - apiVersion: v1
@@ -120,37 +120,37 @@ objects:
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
-    name: ${METABASE_SERVICE_NAME}-postgresql
+    name: ${METABASE_SERVICE_NAME}-database
   spec:
     replicas: 1
     selector:
-      name: ${METABASE_SERVICE_NAME}-postgresql
+      name: ${METABASE_SERVICE_NAME}-database
     strategy:
       type: Recreate
     template:
       metadata:
         labels:
-          name: ${METABASE_SERVICE_NAME}-postgresql
+          name: ${METABASE_SERVICE_NAME}-database
       spec:
         containers:
-        - name: ${METABASE_SERVICE_NAME}-postgresql
+        - name: ${METABASE_SERVICE_NAME}-database
           image: ' '
           imagePullPolicy: IfNotPresent
           env:
           - name: POSTGRESQL_DATABASE
             valueFrom:
               secretKeyRef:
-                name: ${METABASE_SERVICE_NAME}-postgresql-credentials
+                name: ${METABASE_SERVICE_NAME}-database-credentials
                 key: database
           - name: POSTGRESQL_USER
             valueFrom:
               secretKeyRef:
-                name: ${METABASE_SERVICE_NAME}-postgresql-credentials
+                name: ${METABASE_SERVICE_NAME}-database-credentials
                 key: username
           - name: POSTGRESQL_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: ${METABASE_SERVICE_NAME}-postgresql-credentials
+                name: ${METABASE_SERVICE_NAME}-database-credentials
                 key: password
           livenessProbe:
             exec:
@@ -177,20 +177,20 @@ objects:
           terminationMessagePath: /dev/termination-log
           volumeMounts:
           - mountPath: /var/lib/pgsql/data
-            name: ${METABASE_SERVICE_NAME}-postgresql-data
+            name: ${METABASE_SERVICE_NAME}-database-data
         dnsPolicy: ClusterFirst
         restartPolicy: Always
         volumes:
-        - name: ${METABASE_SERVICE_NAME}-postgresql-data
+        - name: ${METABASE_SERVICE_NAME}-database-data
           persistentVolumeClaim:
-            claimName: ${METABASE_SERVICE_NAME}-postgresql
+            claimName: ${METABASE_SERVICE_NAME}-database
     triggers:
     - type: ConfigChange
     - type: ImageChange
       imageChangeParams:
         automatic: true
         containerNames:
-        - ${METABASE_SERVICE_NAME}-postgresql
+        - ${METABASE_SERVICE_NAME}-database
         from:
           kind: ImageStreamTag
           name: postgresql:${POSTGRESQL_VERSION}
@@ -226,7 +226,7 @@ objects:
           - name: MB_DB_TYPE
             value: postgres
           - name: MB_DB_HOST
-            value: ${METABASE_SERVICE_NAME}-postgresql
+            value: ${METABASE_SERVICE_NAME}-database
           - name: MB_DB_PORT
             value: "5432"
           - name: MB_DB_DBNAME
@@ -234,12 +234,12 @@ objects:
           - name: MB_DB_USER
             valueFrom:
               secretKeyRef:
-                name: ${METABASE_SERVICE_NAME}-postgresql-credentials
+                name: ${METABASE_SERVICE_NAME}-database-credentials
                 key: username
           - name: MB_DB_PASS
             valueFrom:
               secretKeyRef:
-                name: ${METABASE_SERVICE_NAME}-postgresql-credentials
+                name: ${METABASE_SERVICE_NAME}-database-credentials
                 key: password
           command:
              - java
