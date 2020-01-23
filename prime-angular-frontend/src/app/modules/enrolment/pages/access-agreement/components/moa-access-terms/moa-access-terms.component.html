@@ -219,6 +219,17 @@
     </p>
 
   </li>
+  <li *ngIf="accessTerms?.limitsConditionsClause">
+
+    <p class="bold underline">
+      Limits and Conditions
+    </p>
+
+    <p>
+      {{ accessTerms.limitsConditionsClause.clause }}
+    </p>
+
+  </li>
   <li>
 
     <p class="bold underline">
@@ -234,17 +245,6 @@
       Unless otherwise specified, a reference to a statute or regulation by name means the statute or regulation of
       British Columbia of that name, as amended or replaced from time to time, and includes any enactment made under the
       authority of that statute or regulation.
-    </p>
-
-  </li>
-  <li *ngIf="accessTerms?.limitsConditionsClause">
-
-    <p class="bold underline">
-      Limits and Conditions
-    </p>
-
-    <p>
-      {{ accessTerms.limitsConditionsClause.clause }}
     </p>
 
   </li>
