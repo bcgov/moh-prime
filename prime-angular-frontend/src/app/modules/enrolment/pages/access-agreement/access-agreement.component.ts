@@ -63,8 +63,8 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
     return this.viewportService.isMobile;
   }
 
-  public get isMoa() {
-    return this.enrolment.enrolleeClassification === EnrolleeClassification.MOA;
+  public get isObo() {
+    return this.enrolment.enrolleeClassification === EnrolleeClassification.OBO;
   }
 
   public get isRu() {
