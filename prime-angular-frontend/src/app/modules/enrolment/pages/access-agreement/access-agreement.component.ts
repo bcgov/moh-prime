@@ -63,6 +63,14 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
     return this.viewportService.isMobile;
   }
 
+  public get isMoa() {
+    return this.enrolment.enrolleeClassification === EnrolleeClassification.MOA;
+  }
+
+  public get isRu() {
+    return this.enrolment.enrolleeClassification === EnrolleeClassification.RU;
+  }
+
   public get hasAgreed(): boolean {
     return this.agreed.value;
   }
@@ -131,6 +139,8 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
     if (!this.hasReadAgreement) {
       this.utilsService.scrollTop();
       this.currentPage++;
+
+      this.onPageChange({ atEnd: true });
     }
   }
 
@@ -144,7 +154,7 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
   public ngOnInit() {
     this.enrolment = this.enrolmentService.enrolment;
     this.isInitialEnrolment = this.enrolment.progressStatus !== ProgressStatus.FINISHED;
-    this.enrolmentResource.getTermsOfAccess(this.enrolment.id)
+    this.enrolmentResource.getAccessTerm(this.enrolment.id)
       .subscribe(
         (termsOfAccess: AccessTerm) => this.termsOfAccess = termsOfAccess,
         (error: any) => {

@@ -84,10 +84,12 @@
     </div>
 
     <ng-container *ngIf="enrolmentCertificateNote">
-      <dl class="row mb-5">
-        <dt class="col-6">Limits and Conditions</dt>
-        <dd class="col-6 text-right">{{ enrolmentCertificateNote | default }}</dd>
-      </dl>
+      <div class="mb-5">
+        <app-enrollee-property title="Limits and Conditions"
+                               [makeBold]="true">
+          {{ enrolmentCertificateNote | default }}
+        </app-enrollee-property>
+      </div>
     </ng-container>
 
   </app-page>
