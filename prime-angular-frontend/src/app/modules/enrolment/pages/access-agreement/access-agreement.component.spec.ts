@@ -26,6 +26,8 @@ import { UserClauseComponent } from './components/user-clause/user-clause.compon
 import { LicenceClassClauseComponent } from './components/licence-class-clause/licence-class-clause.component';
 import { LimitsAndConditionsClauseComponent } from './components/limits-and-conditions-clause/limits-and-conditions-clause.component';
 import { AccessTermsPagerComponent } from './components/access-terms-pager/access-terms-pager.component';
+import { RuAccessTermsComponent } from './components/ru-access-terms/ru-access-terms.component';
+import { MoaAccessTermsComponent } from './components/moa-access-terms/moa-access-terms.component';
 
 describe('AccessAgreementComponent', () => {
   let component: AccessAgreementComponent;
@@ -57,7 +59,9 @@ describe('AccessAgreementComponent', () => {
           LicenceClassClauseComponent,
           LimitsAndConditionsClauseComponent,
           AccessTermsPagerComponent,
-          CollectionNoticeAlertComponent
+          CollectionNoticeAlertComponent,
+          RuAccessTermsComponent,
+          MoaAccessTermsComponent
         ],
         providers: [
           {

@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+
+import { AccessTerm } from '@enrolment/shared/models/access-term.model';
 
 @Component({
   selector: 'app-ru-access-terms',
@@ -6,6 +8,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./ru-access-terms.component.scss']
 })
 export class RuAccessTermsComponent implements OnInit {
+  @Input() public accessTerms: AccessTerm;
+
   constructor() { }
 
   public ngOnInit() { }

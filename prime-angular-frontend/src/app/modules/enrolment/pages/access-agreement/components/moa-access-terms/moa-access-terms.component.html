@@ -237,4 +237,15 @@
     </p>
 
   </li>
+  <li *ngIf="accessTerms?.limitsConditionsClause">
+
+    <p class="bold underline">
+      Limits and Conditions
+    </p>
+
+    <p>
+      {{ accessTerms.limitsConditionsClause.clause }}
+    </p>
+
+  </li>
 </ol>
