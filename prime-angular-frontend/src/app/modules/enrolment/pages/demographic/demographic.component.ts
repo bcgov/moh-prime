@@ -16,6 +16,7 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { FormUtilsService } from '@enrolment/shared/services/form-utils.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
+import { Enrollee } from '@shared/models/enrollee.model';
 
 @Component({
   selector: 'app-demographic',
@@ -26,6 +27,7 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
   public hasPreferredName: boolean;
   public hasMailingAddress: boolean;
   public isNewProfile: boolean;
+  public enrollee: Partial<Enrollee>;
 
   constructor(
     protected route: ActivatedRoute,
@@ -42,6 +44,14 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
     super(route, router, dialog);
 
     this.isNewProfile = false;
+  }
+
+  public get preferredFirstName(): FormControl {
+    return this.form.get('preferredFirstName') as FormControl;
+  }
+
+  public get preferredLastName(): FormControl {
+    return this.form.get('preferredLastName') as FormControl;
   }
 
   public get physicalAddress(): FormGroup {
@@ -111,10 +121,10 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
     this.hasPreferredName = !this.hasPreferredName;
 
     if (!this.hasPreferredName) {
-      this.form.get('preferredFirstName').reset();
       this.form.get('preferredMiddleName').reset();
-      this.form.get('preferredLastName').reset();
     }
+
+    this.togglePreferredNameValidators(this.preferredFirstName, this.preferredLastName);
   }
 
   public onMailingAddressChange() {
@@ -140,6 +150,8 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
       this.form.get('preferredMiddleName').value ||
       this.form.get('preferredLastName').value
     );
+
+    this.togglePreferredNameValidators(this.preferredFirstName, this.preferredLastName);
 
     // Show mailing address if it exists
     this.hasMailingAddress = !!(
@@ -172,14 +184,32 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
     }
   }
 
-  protected patchForm() {
+  protected async patchForm() {
     const enrolment = this.enrolmentService.enrolment;
 
     if (enrolment) {
+      if (enrolment.enrollee) {
+        this.enrollee = enrolment.enrollee;
+      }
+
       this.enrolmentStateService.enrolment = enrolment;
       this.isInitialEnrolment = enrolment.progressStatus !== ProgressStatus.FINISHED;
       this.isProfileComplete = enrolment.profileCompleted;
     } else {
+      const {
+        firstName,
+        lastName,
+        dateOfBirth,
+        physicalAddress
+      } = await this.authService.getUser();
+
+      this.enrollee = {
+        firstName,
+        lastName,
+        dateOfBirth,
+        physicalAddress
+      };
+
       this.isNewProfile = true;
       this.isInitialEnrolment = true;
       this.isProfileComplete = false;
@@ -195,6 +225,16 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
       this.logger.info('USER', user);
 
       this.form.patchValue(user);
+    }
+  }
+
+  private togglePreferredNameValidators(preferredFirstName: FormControl, preferredLastName: FormControl) {
+    if (!this.hasPreferredName) {
+      this.formUtilsService.resetAndClearValidators(preferredFirstName);
+      this.formUtilsService.resetAndClearValidators(preferredLastName);
+    } else {
+      this.formUtilsService.setValidators(preferredFirstName, [Validators.required]);
+      this.formUtilsService.setValidators(preferredLastName, [Validators.required]);
     }
   }
 

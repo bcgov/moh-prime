@@ -29,6 +29,7 @@ import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { YesNoPipe } from '@shared/pipes/yes-no.pipe';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 import { HeaderComponent } from '@shared/components/header/header.component';
+import { PageComponent } from '@shared/components/page/page.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { PageSubheaderComponent } from './components/page-subheader/page-subheader.component';
 import { PageSubheaderTitleDirective } from '@shared/components/page-subheader/page-subheader-title.directive';
@@ -37,13 +38,17 @@ import { DialogContentDirective } from '@shared/components/dialogs/dialog-conten
 import { ClipboardIconComponent } from '@shared/components/clipboard-icon/clipboard-icon.component';
 import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
 import { AlertComponent } from '@shared/components/alert/alert.component';
-import { EnrolleeReviewComponent } from '@shared/components/enrollee-review/enrollee-review.component';
 import { ProgressIndicatorComponent } from '@shared/components/progress-indicator/progress-indicator.component';
-import { EnrolleeProfileComponent } from '@shared/components/enrollee-profile/enrollee-profile.component';
-import { EnrolleeAddressComponent } from '@shared/components/enrollee-address/enrollee-address.component';
-import { EnrolleeSelfDeclarationComponent } from '@shared/components/enrollee-self-declaration/enrollee-self-declaration.component';
-import { EnrolleePrivilegesComponent } from '@shared/components/enrollee-privileges/enrollee-privileges.component';
-import { EnrolleeOrganizationsComponent } from '@shared/components/enrollee-organizations/enrollee-organizations.component';
+import { EnrolleePropertyComponent } from '@shared/components/enrollee/enrollee-property/enrollee-property.component';
+import { EnrolleeReviewComponent } from '@shared/components/enrollee/enrollee-review/enrollee-review.component';
+import { EnrolleeProfileComponent } from '@shared/components/enrollee/enrollee-profile/enrollee-profile.component';
+import { EnrolleeAddressComponent } from '@shared/components/enrollee/enrollee-address/enrollee-address.component';
+import { EnrolleePrivilegesComponent } from '@shared/components/enrollee/enrollee-privileges/enrollee-privileges.component';
+import { EnrolleeOrganizationsComponent } from '@shared/components/enrollee/enrollee-organizations/enrollee-organizations.component';
+import { PrimeContactComponent } from '@shared/components/prime-contact/prime-contact.component';
+import { PrimeEmailComponent } from './components/prime-email/prime-email.component';
+import { PrimePhoneComponent } from './components/prime-phone/prime-phone.component';
+import { EnrolleePropertyErrorComponent } from './components/enrollee/enrollee-property-error/enrollee-property-error.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +68,7 @@ import { EnrolleeOrganizationsComponent } from '@shared/components/enrollee-orga
     ConfirmDialogComponent,
     EnrolmentStatusReasonsComponent,
     HeaderComponent,
+    PageComponent,
     PageHeaderComponent,
     PageSubheaderComponent,
     PageSubheaderTitleDirective,
@@ -76,9 +82,13 @@ import { EnrolleeOrganizationsComponent } from '@shared/components/enrollee-orga
     ProgressIndicatorComponent,
     EnrolleeProfileComponent,
     EnrolleeAddressComponent,
-    EnrolleeSelfDeclarationComponent,
     EnrolleePrivilegesComponent,
-    EnrolleeOrganizationsComponent
+    EnrolleeOrganizationsComponent,
+    EnrolleePropertyComponent,
+    PrimeContactComponent,
+    PrimeEmailComponent,
+    PrimePhoneComponent,
+    EnrolleePropertyErrorComponent
   ],
   imports: [
     CommonModule,
@@ -116,6 +126,7 @@ import { EnrolleeOrganizationsComponent } from '@shared/components/enrollee-orga
     DashboardComponent,
     EnrolmentStatusReasonsComponent,
     HeaderComponent,
+    PageComponent,
     PageHeaderComponent,
     PageSubheaderComponent,
     PageSubheaderTitleDirective,
@@ -129,9 +140,12 @@ import { EnrolleeOrganizationsComponent } from '@shared/components/enrollee-orga
     ProgressIndicatorComponent,
     EnrolleeProfileComponent,
     EnrolleeAddressComponent,
-    EnrolleeSelfDeclarationComponent,
     EnrolleePrivilegesComponent,
-    EnrolleeOrganizationsComponent
+    EnrolleeOrganizationsComponent,
+    EnrolleePropertyComponent,
+    PrimeContactComponent,
+    PrimeEmailComponent,
+    PrimePhoneComponent,
   ],
   entryComponents: [
     ConfirmDialogComponent,

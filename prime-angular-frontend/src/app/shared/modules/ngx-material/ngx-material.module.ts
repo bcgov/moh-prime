@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import {
   MatAutocompleteModule, MatButtonModule, MatCheckboxModule, MatChipsModule,
-  MatDatepickerModule, MatDialogModule, MatIconModule, MatInputModule,
-  MatListModule, MatMenuModule, MatProgressBarModule, MatSelectModule,
-  MatSidenavModule, MatSlideToggleModule, MatSnackBarModule, MatTableModule,
-  MatToolbarModule, MatTooltipModule, MatPaginatorModule, MatRadioModule,
-  DateAdapter, MAT_DATE_LOCALE, MAT_DIALOG_DEFAULT_OPTIONS, MAT_DATE_FORMATS,
-  MatFormFieldDefaultOptions, MAT_FORM_FIELD_DEFAULT_OPTIONS,
+  MatDatepickerModule, MatDialogModule, MatExpansionModule, MatFormFieldDefaultOptions,
+  MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatProgressBarModule,
+  MatSelectModule, MatSidenavModule, MatSlideToggleModule, MatSnackBarModule,
+  MatTableModule, MatToolbarModule, MatTooltipModule, MatPaginatorModule,
+  MatRadioModule, DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS,
+  MAT_DIALOG_DEFAULT_OPTIONS, MAT_FORM_FIELD_DEFAULT_OPTIONS,
   MAT_LABEL_GLOBAL_OPTIONS
 } from '@angular/material';
 import { MomentDateAdapter, MatMomentDateModule } from '@angular/material-moment-adapter';
@@ -37,6 +37,7 @@ const matFormFieldCustomOptions: MatFormFieldDefaultOptions = {
     MatChipsModule,
     MatDatepickerModule,
     MatDialogModule,
+    MatExpansionModule,
     MatIconModule,
     MatInputModule,
     MatListModule,

@@ -1,0 +1,21 @@
+<app-busy-overlay [busy]="busy">
+
+  <div class="row">
+    <div class="col-sm-12 offset-md-1"
+         [ngClass]="{
+           'col-md-8 col-xl-7': mode === 'default',
+           'col-md-10': mode === 'full'
+         }">
+
+      <ng-content select="app-page-header"></ng-content>
+
+      <ng-content select="app-progress-indicator"></ng-content>
+
+      <ng-content></ng-content>
+
+      <ng-content select="app-page-footer"></ng-content>
+
+    </div>
+  </div>
+
+</app-busy-overlay>

@@ -3,21 +3,20 @@ import { FormGroup, FormArray, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
-import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
+import { Organization } from '@enrolment/shared/models/organization.model';
+import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
+import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
+import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { Organization } from '@enrolment/shared/models/organization.model';
-import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
-import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 
 @Component({
   selector: 'app-organization',
@@ -54,12 +53,16 @@ export class OrganizationComponent extends BaseEnrolmentProfilePage implements O
       const payload = this.enrolmentStateService.enrolment;
       // Indicate that the enrolment process has reached the terminal view, or
       // "Been Through The Wizard - Heidi G. 2019"
-      this.busy = this.enrolmentResource.updateEnrollee(payload, true)
+      this.busy = this.enrolmentResource.updateEnrollee(payload)
         .subscribe(
           () => {
             this.form.markAsPristine();
             this.toastService.openSuccessToast('PharmaNet access has been saved');
-            this.routeTo(EnrolmentRoutes.OVERVIEW);
+
+            const routePath = (!this.isProfileComplete)
+              ? EnrolmentRoutes.SELF_DECLARATION
+              : EnrolmentRoutes.OVERVIEW;
+            this.routeTo(routePath);
           },
           (error: any) => {
             this.toastService.openErrorToast('PharmaNet access could not be saved');
@@ -77,7 +80,7 @@ export class OrganizationComponent extends BaseEnrolmentProfilePage implements O
 
   public disableOrganization(organizationTypeCode: number): boolean {
     // Omit organizations types that are not "Community Practices" for ComPap
-    return (organizationTypeCode !== 1 && organizationTypeCode !== 4);
+    return (organizationTypeCode !== 2);
   }
 
   public removeOrganization(index: number) {
@@ -164,5 +167,13 @@ export class OrganizationComponent extends BaseEnrolmentProfilePage implements O
     if (!this.organizations.controls.length) {
       this.addOrganization();
     }
+  }
+
+  public routeBackTo() {
+    const routePath = (this.enrolmentStateService.enrolment.certifications.length)
+      ? EnrolmentRoutes.REGULATORY
+      : EnrolmentRoutes.JOB;
+
+    this.routeTo(routePath);
   }
 }

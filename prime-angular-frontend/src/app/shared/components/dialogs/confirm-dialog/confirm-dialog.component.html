@@ -1,7 +1,10 @@
 <h2 mat-dialog-title
     class="d-flex align-items-stretch">
-  <mat-icon *ngIf="options.icon"
+  <mat-icon *ngIf="options.icon && !options.imageSrc"
             [color]="options.actionType">{{ options.icon }}</mat-icon>
+  <img *ngIf="options.imageSrc"
+       [attr.src]="options.imageSrc"
+       alt="">
   <span class="flex-grow-1">
     {{ options.title }}
   </span>
@@ -16,7 +19,7 @@
           [mat-dialog-close]="false"
           cdkFocusInitial
           class="my-2 mr-3">{{ options.cancelText }}</button>
-  <button mat-raised-button
+  <button mat-flat-button
           [color]="options.actionType"
           [mat-dialog-close]="true"
           class="my-2 mr-3">{{ options.actionText }}</button>

@@ -44,7 +44,7 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
 
     this.jobNames = this.configService.jobNames;
     this.filteredJobNames = new BehaviorSubject<Config<number>[]>(this.jobNames);
-    this.allowDefaultOption = true;
+    this.allowDefaultOption = false;
     this.defaultOptionLabel = 'None';
   }
 
@@ -69,7 +69,7 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
             this.form.markAsPristine();
 
             const routePath = (!this.isProfileComplete)
-              ? EnrolmentRoutes.SELF_DECLARATION
+              ? EnrolmentRoutes.ORGANIZATION
               : EnrolmentRoutes.OVERVIEW;
             this.routeTo(routePath);
           },

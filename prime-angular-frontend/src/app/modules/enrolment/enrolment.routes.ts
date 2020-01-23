@@ -5,12 +5,12 @@ export class EnrolmentRoutes {
   // Enrollee overview:
   public static OVERVIEW = 'overview';
   // Enrollee profile:
-  public static DEMOGRAPHIC = 'profile';
+  public static DEMOGRAPHIC = 'demographic';
   public static REGULATORY = 'regulatory';
   public static DEVICE_PROVIDER = 'device-provider';
   public static JOB = 'job';
-  public static SELF_DECLARATION = 'self-declaration';
   public static ORGANIZATION = 'organization';
+  public static SELF_DECLARATION = 'self-declaration';
   // Enrolment submission:
   public static SUBMISSION_CONFIRMATION = 'submission-confirmation';
   public static ACCESS_AGREEMENT = 'access-agreement';
@@ -49,8 +49,8 @@ export class EnrolmentRoutes {
       EnrolmentRoutes.REGULATORY,
       // EnrolmentRoutes.DEVICE_PROVIDER,
       EnrolmentRoutes.JOB,
-      EnrolmentRoutes.SELF_DECLARATION,
       EnrolmentRoutes.ORGANIZATION,
+      EnrolmentRoutes.SELF_DECLARATION,
       EnrolmentRoutes.OVERVIEW
     ];
   }

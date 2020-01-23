@@ -1,0 +1,24 @@
+@import 'palette';
+@import 'variables';
+
+//
+// HTML Reset
+//
+
+html, body {
+  // Not provided in Bootstrap Reboot
+  height: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+.table th {
+  border-top: 0;
+}
+
+h3 {
+  color: $h3-colour;
+  font-weight: $h3-font-weight;
+}

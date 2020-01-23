@@ -1,30 +1,28 @@
-using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Collections.Generic;
 using Prime.Models;
 
 namespace Prime.Configuration
 {
-    public class StatusReasonConfiguration : IEntityTypeConfiguration<StatusReason>
+    public class StatusReasonConfiguration : SeededTable<StatusReason>
     {
-        private readonly Guid SYSTEM_USER = Guid.Empty;
-        private readonly DateTime SEEDING_DATE = DateTime.Now;
-
-        public void Configure(EntityTypeBuilder<StatusReason> builder)
+        public override ICollection<StatusReason> SeedData
         {
-            builder.HasData(
-                new StatusReason { Code = 1, Name = "Automatic", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
-                new StatusReason { Code = 2, Name = "Manual", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
-                new StatusReason { Code = 3, Name = "PharmaNet Error, Licence could not be Validated", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
-                new StatusReason { Code = 4, Name = "College Licence not in PharmaNet", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
-                new StatusReason { Code = 6, Name = "Birthdate Discrepancy with PharmaNet College Licence", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
-                new StatusReason { Code = 5, Name = "Name Discrepancy with PharmaNet College Licence", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
-                new StatusReason { Code = 7, Name = "Listed as Non-Practicing on PharmaNet College Licence", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
-                new StatusReason { Code = 8, Name = "Insulin Pump Provider", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
-                new StatusReason { Code = 9, Name = "Licence Class", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
-                new StatusReason { Code = 10, Name = "Answered one or more Self Declaration questions \"Yes\"", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
-                new StatusReason { Code = 11, Name = "Contact Address or Identity Address not in British Columbia", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE }
-            );
+            get
+            {
+                return new[] {
+                    new StatusReason { Code = 1,  Name = "Automatic", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new StatusReason { Code = 2,  Name = "Manual", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new StatusReason { Code = 3,  Name = "PharmaNet Error, Licence could not be Validated", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new StatusReason { Code = 4,  Name = "College Licence not in PharmaNet", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new StatusReason { Code = 6,  Name = "Birthdate Discrepancy with PharmaNet College Licence", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new StatusReason { Code = 5,  Name = "Name Discrepancy with PharmaNet College Licence", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new StatusReason { Code = 7,  Name = "Listed as Non-Practicing on PharmaNet College Licence", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new StatusReason { Code = 8,  Name = "Insulin Pump Provider", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new StatusReason { Code = 9,  Name = "Licence Class", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new StatusReason { Code = 10, Name = "Answered one or more Self Declaration questions \"Yes\"", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new StatusReason { Code = 11, Name = "Contact Address or Identity Address not in British Columbia", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE }
+                };
+            }
         }
     }
 }

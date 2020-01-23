@@ -1,23 +1,21 @@
-using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Collections.Generic;
 using Prime.Models;
 
 namespace Prime.Configuration
 {
-    public class PracticeConfiguration : IEntityTypeConfiguration<Practice>
+    public class PracticeConfiguration : SeededTable<Practice>
     {
-        private readonly Guid SYSTEM_USER = Guid.Empty;
-        private readonly DateTime SEEDING_DATE = DateTime.Now;
-
-        public void Configure(EntityTypeBuilder<Practice> builder)
+        public override ICollection<Practice> SeedData
         {
-            builder.HasData(
-                new Practice { Code = 1, Name = "Remote Practice", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
-                new Practice { Code = 2, Name = "Reproductive Health - STI", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
-                new Practice { Code = 3, Name = "Reproductive Health - Contraceptive Management", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
-                new Practice { Code = 4, Name = "First Call", CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE }
-            );
+            get
+            {
+                return new[] {
+                    new Practice { Code = 1, Name = "Remote Practice", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new Practice { Code = 2, Name = "Reproductive Health - STI", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new Practice { Code = 3, Name = "Reproductive Health - Contraceptive Management", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new Practice { Code = 4, Name = "First Call", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE }
+                };
+            }
         }
     }
 }

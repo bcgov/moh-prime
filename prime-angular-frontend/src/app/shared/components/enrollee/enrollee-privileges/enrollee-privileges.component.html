@@ -1,0 +1,53 @@
+<app-page-subheader>
+  <ng-container appPageSubheaderTitle>PharmaNet Privileges</ng-container>
+  <ng-content select="mat-icon"
+              ngProjectAs="mat-icon"></ng-content>
+</app-page-subheader>
+
+<ng-container *ngIf="userTypePrivilege">
+  <div class="mb-3">
+    <app-enrollee-property [title]="userTypePrivilege?.description"
+                           [makeBold]="true">
+      {{ userTypeString }}
+    </app-enrollee-property>
+  </div>
+</ng-container>
+
+
+<mat-accordion>
+  <mat-expansion-panel *ngIf="transactionPrivileges.length; else noPrivileges">
+    <mat-expansion-panel-header>
+      <mat-panel-title class="table-title">
+        Allowable Transactions
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <div class="table-responsive">
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Transaction</th>
+            <th scope="col">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let privilege of transactionPrivileges">
+            <td>{{ privilege.transactionType }}</td>
+            <td>{{ privilege.description }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>
+
+<ng-template #noPrivileges>
+  <div class="col-sm-12 col-lg-8 offset-lg-1 offset-xl-0">
+    <dl class="row mb-4">
+      <dt>No Privileges</dt>
+    </dl>
+
+  </div>
+</ng-template>

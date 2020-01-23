@@ -1,0 +1,20 @@
+<app-page-subheader>
+  <ng-container appPageSubheaderTitle>Organization Information</ng-container>
+  <ng-content select="mat-icon"
+              ngProjectAs="mat-icon"></ng-content>
+</app-page-subheader>
+
+<ng-container *ngFor="let organizationType of normalizedOrganizationTypes">
+
+  <app-enrollee-property title="Organization Type"
+                         [makeBold]="true">
+    {{ organizationType }}
+  </app-enrollee-property>
+
+</ng-container>
+
+<app-enrollee-property *ngIf="!hasOrganization"
+                       title="Organization Type"
+                       [makeBold]="true">
+  None
+</app-enrollee-property>

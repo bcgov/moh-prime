@@ -1,6 +1,12 @@
-<div class="progress-indicator">
-  Enrolment Application {{ percentComplete }}% Completed
+<div class="progress-indicator mb-5 w-75">
   <mat-progress-bar mode="determinate"
-                    color="primary"
+                    color="accent"
                     [value]="percentComplete"></mat-progress-bar>
+  <ng-container *ngIf="message; else percentCompleted">
+    {{ message }}
+  </ng-container>
+
+  <ng-template #percentCompleted>
+    Enrolment {{ percentComplete }}% Completed
+  </ng-template>
 </div>

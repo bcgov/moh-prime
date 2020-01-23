@@ -82,8 +82,19 @@ export class EnrolmentStateService {
       this.isDeviceProviderValid() &&
       this.isJobsValid() &&
       this.isSelfDeclarationValid() &&
-      this.isOrganizationValid()
+      this.isOrganizationValid() &&
+      this.isAnyJobOrReg()
     );
+  }
+
+  /**
+   * Returns true if a Job or Regulatory has been entered.
+   */
+  public isAnyJobOrReg(): boolean {
+    const jobs = this.jobsForm.get('jobs') as FormArray;
+    const certifications = this.regulatoryForm.get('certifications') as FormArray;
+    // When you set cert to 'None' there still exists an item in FormArray, this checks for that state
+    return jobs.length > 0 || (certifications.length > 0 && (certifications.value[0].licenseNumber !== null));
   }
 
   public isProfileInfoValid(): boolean {
@@ -188,10 +199,12 @@ export class EnrolmentStateService {
         FormControlValidators.phone
       ]],
       voiceExtension: [null, [FormControlValidators.numeric]],
-      hasContactEmail: [false, []],
-      contactEmail: [null, [FormControlValidators.email]],
-      hasContactPhone: [false, []],
-      contactPhone: [null, [FormControlValidators.phone]]
+      // TODO temporarily made visible until SMS available
+      hasContactEmail: [true, []],
+      // TODO temporarily made required until SMS available
+      contactEmail: [null, [Validators.required, FormControlValidators.email]],
+      hasContactPhone: [{ value: false, disabled: true }, []],
+      contactPhone: [{ value: null, disabled: true }, [FormControlValidators.phone]]
     });
   }
 

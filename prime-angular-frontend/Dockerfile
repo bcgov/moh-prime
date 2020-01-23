@@ -48,11 +48,11 @@ RUN rm -rf /var/cache/apk/*
 
 WORKDIR /
 
-COPY ./run.sh /
-RUN chmod a+x /run.sh
+#COPY ./run.sh /
+#RUN chmod a+x /run.sh
 
 EXPOSE 80 8080 4200:8080
 
-CMD ["sh", "/run.sh"]
+#CMD ["sh", "/run.sh"]
 
-#CMD ["nginx", "-g", "daemon off;"]
+CMD ["nginx", "-g", "daemon off;"]

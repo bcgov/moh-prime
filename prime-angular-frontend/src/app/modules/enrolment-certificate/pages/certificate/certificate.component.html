@@ -1,39 +1,33 @@
-<app-busy-overlay [busy]="busy">
+<app-page [busy]="busy">
 
-  <div class="row">
-    <div class="col-sm-12 col-lg-8 offset-lg-1 offset-xl-0 app-print-layout">
+  <app-page-header>Enrolment Certificate</app-page-header>
 
-      <app-page-header>Enrolment Certificate</app-page-header>
+  <ng-container *ngIf="certificate">
 
-      <app-page-subheader>
-        <ng-container appPageSubheaderTitle>PharmaNet ID</ng-container>
-        <ng-container appPageSubheaderSummary>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae architecto debitis doloribus numquam
-          voluptates. Accusantium, blanditiis.
-        </ng-container>
-      </app-page-subheader>
+    <app-enrollee-profile [enrollee]="certificate"></app-enrollee-profile>
 
-      <ng-container *ngIf="certificate">
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>PharmaNet ID</ng-container>
+    </app-page-subheader>
 
-        <app-enrollee-profile [showPreferredName]="false"
-                              [enrollee]="certificate"></app-enrollee-profile>
+    <p class="font-weight-bold mb-5">
+      {{ certificate.licensePlate | uppercase }}
+    </p>
 
-        <dl class="row mb-4">
-          <dt class="col-6">PharmaNet ID</dt>
-          <dd class="col-6 text-right">{{ certificate?.licensePlate | default }}</dd>
-        </dl>
-
-        <app-enrollee-organizations [organizationTypes]="certificate?.organizationTypes"></app-enrollee-organizations>
-
-        <app-enrollee-privileges [privileges]="certificate?.privileges"></app-enrollee-privileges>
-
-        <ng-container *ngIf="certificate?.enrolmentCertificateNote">
-          <dl class="row mb-4">
-            <dt class="col-6">Limits and Conditions</dt>
-            <dd class="col-6 text-right">{{ certificate?.enrolmentCertificateNote?.note | default }}</dd>
-          </dl>
-        </ng-container>
-      </ng-container>
+    <div class="mb-5">
+      <app-enrollee-organizations [organizationTypes]="certificate?.organizationTypes"></app-enrollee-organizations>
     </div>
-  </div>
-</app-busy-overlay>
+
+    <div class="mb-5">
+      <app-enrollee-privileges [transactions]="certificate?.transactions"
+                               [userType]="certificate?.userType"
+                               [canHaveOBOs]="certificate?.canHaveOBOs"></app-enrollee-privileges>
+    </div>
+
+    <p>
+      {{ certificate?.enrolmentCertificateNote?.note | default: 'None' }}
+    </p>
+
+  </ng-container>
+
+</app-page>

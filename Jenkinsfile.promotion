@@ -1,5 +1,13 @@
 pipeline {
     agent none
+    environment {
+        VANITY_URL_BASE="pharmanetenrolment.gov.bc.ca"
+        TEST_VANITY_URL="test.pathfinder.gov.bc.ca"
+        TEST_FRONTEND_ARGS = "-p VANITY_URL=${TEST_VANITY_URL_BASE} "
+        PROD_VANITY_URL="${VANITY_URL_BASE}"
+        PROD_FRONTEND_ARGS = "-p VANITY_URL=$PROD_VANITY_URL"
+        API_ARGS="ASPNETCORE_ENVIRONMENT=Release"
+    }
     stages {
         stage('Promote Master to Test') {
             options {
@@ -10,11 +18,15 @@ pipeline {
             steps {
                     echo "Test (DEV) ..."
                     sh "./player.sh build database test"
-                    sh "./player.sh build api test '-p=ASPNETCORE_ENVIRONMENT=Release'"
+                    sh "export PIPELINE_ARGS='${API_ARGS} ${TEST_FRONTEND_ARGS}'"
+                    sh "./player.sh build api test"
                     sh "./player.sh build frontend test"
+                    sh "export PIPELINE_ARGS=''"
                     sh "./player.sh deploy database test"
-                    sh "./player.sh deploy api test '-p=ASPNETCORE_ENVIRONMENT=Release'"
+                    sh "export PIPELINE_ARGS='${API_ARGS} ${TEST_FRONTEND_ARGS}'"
+                    sh "./player.sh deploy api test"
                     sh "./player.sh deploy frontend test"
+                    sh "export PIPELINE_ARGS=''"
                     sh "./player.sh toolbelt schemaspy test"
             }
         }
@@ -67,11 +79,15 @@ pipeline {
             steps {
                 echo "Deploy to Production..."
                 sh "./player.sh build database prod"
-                sh "./player.sh build api prod '-p=ASPNETCORE_ENVIRONMENT=Release'"
+                sh "export PIPELINE_ARGS='${API_ARGS} ${PROD_FRONTNEND_ARGS}'"
+                sh "./player.sh build api prod"
                 sh "./player.sh build frontend prod"
+                sh "export PIPELINE_ARGS=''"
                 sh "./player.sh deploy database prod"
-                sh "./player.sh deploy api prod '-p=ASPNETCORE_ENVIRONMENT=Release'"
-                sh "./player.sh deploy frontend prod "
+                sh "export PIPELINE_ARGS='${API_ARGS} ${PROD_FRONTNEND_ARGS}'"
+                sh "./player.sh deploy api prod"
+                sh "./player.sh deploy frontend prod"
+                sh "export PIPELINE_ARGS=''"
                 sh "./player.sh toolbelt schemaspy prod"
             }
         }

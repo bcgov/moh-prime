@@ -1,17 +1,26 @@
-using System;
-using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Prime.Models;
+
 namespace Prime.Configuration
 {
-    public class CollegePracticeConfiguration : IEntityTypeConfiguration<CollegePractice>
+    public class CollegePracticeConfiguration : SeededTable<CollegePractice>
     {
-        private readonly Guid SYSTEM_USER = Guid.Empty;
-        private readonly DateTime SEEDING_DATE = DateTime.Now;
-
-        public void Configure(EntityTypeBuilder<CollegePractice> builder)
+        public override ICollection<CollegePractice> SeedData
         {
+            get
+            {
+                return new[] {
+                    new CollegePractice { CollegeCode = 3, PracticeCode = 1, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new CollegePractice { CollegeCode = 3, PracticeCode = 2, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new CollegePractice { CollegeCode = 3, PracticeCode = 3, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new CollegePractice { CollegeCode = 3, PracticeCode = 4, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE }
+                };
+            }
+        }
 
+        public override void Configure(EntityTypeBuilder<CollegePractice> builder)
+        {
             builder.HasKey(cp => new { cp.CollegeCode, cp.PracticeCode });
             builder.HasOne(cp => cp.College)
                 .WithMany(c => c.CollegePractices)
@@ -20,12 +29,7 @@ namespace Prime.Configuration
                 .WithMany(p => p.CollegePractices)
                 .HasForeignKey(cp => cp.PracticeCode);
 
-            builder.HasData(
-                new CollegePractice { CollegeCode = 3, PracticeCode = 1, CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
-                new CollegePractice { CollegeCode = 3, PracticeCode = 2, CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
-                new CollegePractice { CollegeCode = 3, PracticeCode = 3, CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE },
-                new CollegePractice { CollegeCode = 3, PracticeCode = 4, CreatedUserId = SYSTEM_USER, CreatedTimeStamp = SEEDING_DATE, UpdatedUserId = SYSTEM_USER, UpdatedTimeStamp = SEEDING_DATE }
-            );
+            builder.HasData(SeedData);
         }
     }
 }

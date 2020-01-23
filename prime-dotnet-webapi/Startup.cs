@@ -35,19 +35,20 @@ namespace Prime
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<ILookupService, DefaultLookupService>();
-            services.AddScoped<IEnrolleeService, DefaultEnrolleeService>();
-            services.AddScoped<IAutomaticAdjudicationService, DefaultAutomaticAdjudicationService>();
-            services.AddScoped<IEnrolmentCertificateService, DefaultEnrolmentCertificateService>();
-            services.AddScoped<IEmailService, DefaultEmailService>();
-            services.AddScoped<IPharmanetApiService, DefaultPharmanetApiService>();
-            services.AddScoped<IPrivilegeService, DefaultPrivilegeService>();
-            services.AddScoped<ITermsOfAccessService, DefaultTermsOfAccessService>();
+            services.AddScoped<ILookupService, LookupService>();
+            services.AddScoped<IEnrolleeService, EnrolleeService>();
+            services.AddScoped<IAutomaticAdjudicationService, AutomaticAdjudicationService>();
+            services.AddScoped<IEnrolmentCertificateService, EnrolmentCertificateService>();
+            services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IPharmanetApiService, PharmanetApiService>();
+            services.AddScoped<IPrivilegeService, PrivilegeService>();
+            services.AddScoped<IAccessTermService, AccessTermService>();
+            services.AddScoped<IEnrolleeProfileVersionService, EnrolleeProfileVersionService>();
 
             services
                 .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                // add a convertor <globally> to change empty strings into null on serialization
+                // Add a convertor <globally> to change empty strings into null on serialization
                 .AddJsonOptions(options => options.SerializerSettings.Converters.Add(new EmptyStringToNullJsonConverter()));
 
             services.AddCors(options =>

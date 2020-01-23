@@ -15,6 +15,17 @@ export class FormControlValidators {
 
   /**
    * @description
+   * Checks the form control value is letters or numerals.
+   */
+  static alphanumeric(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) { return null; }
+    const regExp = new RegExp(/^[a-zA-Z0-9]*$/);
+    const valid = (control.valid && regExp.test(control.value));
+    return (valid) ? null : { alphanumeric: true };
+  }
+
+  /**
+   * @description
    * Checks the form control value is a currency.
    *
    * 0?               The string can start with a zero if the value is zero, OR

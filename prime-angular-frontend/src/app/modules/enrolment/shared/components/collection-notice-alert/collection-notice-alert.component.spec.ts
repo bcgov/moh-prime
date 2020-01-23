@@ -14,47 +14,49 @@ import { PageHeaderComponent } from '@shared/components/page-header/page-header.
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 import { RouterTestingModule } from '@angular/router/testing';
-
-
-
-
-
+import { PrimeContactComponent } from '@shared/components/prime-contact/prime-contact.component';
+import { PrimeEmailComponent } from '@shared/components/prime-email/prime-email.component';
+import { PrimePhoneComponent } from '@shared/components/prime-phone/prime-phone.component';
 
 describe('CollectionNoticeAlertComponent', () => {
   let component: CollectionNoticeAlertComponent;
   let fixture: ComponentFixture<CollectionNoticeAlertComponent>;
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        NgxMaterialModule,
-        RouterTestingModule
-      ],
-      declarations: [
-        AlertComponent,
-        CollectionNoticeAlertComponent,
-        PageHeaderComponent
-      ],
-      providers: [
-        {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
-        },
-        {
-          provide: ConfigService,
-          useClass: MockConfigService
-        },
-        {
-          provide: EnrolmentService,
-          useClass: MockEnrolmentService
-        },
-        {
-          provide: AuthService,
-          useClass: MockAuthService
-        }
-      ]
-    })
-      .compileComponents();
+    TestBed.configureTestingModule(
+      {
+        imports: [
+          NgxMaterialModule,
+          RouterTestingModule
+        ],
+        declarations: [
+          AlertComponent,
+          CollectionNoticeAlertComponent,
+          PrimeContactComponent,
+          PrimeEmailComponent,
+          PrimePhoneComponent,
+          PageHeaderComponent
+        ],
+        providers: [
+          {
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
+          },
+          {
+            provide: ConfigService,
+            useClass: MockConfigService
+          },
+          {
+            provide: EnrolmentService,
+            useClass: MockEnrolmentService
+          },
+          {
+            provide: AuthService,
+            useClass: MockAuthService
+          }
+        ]
+      }
+    ).compileComponents();
   }));
 
   beforeEach(() => {

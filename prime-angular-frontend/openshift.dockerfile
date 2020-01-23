@@ -23,8 +23,9 @@ RUN cat /usr/src/app/src/environments/environment.prod.ts && \
 FROM nginx:1.15-alpine
 COPY --from=build-deps /usr/src/app/dist/angular-frontend /usr/share/nginx/html
 RUN rm -f /etc/nginx/conf.d/default.conf 
-#COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=build-deps /usr/src/app/nginx.template.conf /etc/nginx/nginx.template.conf
+COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/
+#COPY --from=build-deps /usr/src/app/nginx.template.conf /etc/nginx/nginx.template.conf
+COPY --from=build-deps /usr/src/app/nginx${OC_APP}.conf /etc/nginx/nginx.template.conf
 COPY --from=build-deps /usr/src/app/entrypoint.sh /home
 
 EXPOSE 8080
@@ -32,48 +33,23 @@ RUN mkdir -p /var/cache/nginx && \
     mkdir -p /var/cache/nginx/client_temp && \ 
     chown -R 1001:1001 /var/cache/nginx && \ 
     touch /etc/nginx/conf.d/default.conf && \
-    chown -R 1001:1001 /etc/nginx/conf.d/ && \
-    chmod 777 /etc/nginx/conf.d/default.conf && \
+    chown -R 1001:1001 /etc/nginx && \
+    chmod -R 777 /etc/nginx && \
     chmod -R 777 /var/cache/nginx && \ 
     chmod -R 777 /var/run && \
     chmod +x /home/entrypoint.sh && \
     chmod 777 /home/entrypoint.sh && \
     echo "Build completed."
-RUN export CERTBOT_DEPS="py-pip \
-                         build-base \
-                         libffi-dev \
-                         python-dev \
-                         ca-certificates \
-                         openssl-dev \
-                         linux-headers \
-                         dialog \
-                         wget" && \
-            apk --update add openssl \
-                             augeas-libs \
-                             ${CERTBOT_DEPS}
-
-RUN pip install --upgrade --no-cache-dir pip virtualenv
-
-#RUN mkdir /letsencrypt
-#WORKDIR /letsencrypt
-
-# Get the certbot so we can use Lets Encrypt
-RUN wget https://dl.eff.org/certbot-auto
-RUN chmod a+x certbot-auto
-
-# Clean up
-RUN apk del ${CERTBOT_DEPS}
-RUN rm -rf /var/cache/apk/*
 
 WORKDIR /
-
-COPY ./run.sh /
-RUN chmod a+x /run.sh
+#RUN envsubst '$SUFFIX' < /etc/nginx/nginx.template.conf > /etc/nginx/nginx.conf
+COPY ./entrypoint.sh /
+RUN chmod a+x /entrypoint.sh
 
 EXPOSE 80 8080 4200:8080
 
-CMD ["sh", "/run.sh"]
+#CMD ["sh", "/run.sh"]
 
 #CMD ["nginx", "-g", "daemon off;"]
 
-#CMD ["/home/entrypoint.sh"]
+CMD ["/entrypoint.sh"]

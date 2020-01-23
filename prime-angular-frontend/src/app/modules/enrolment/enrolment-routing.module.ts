@@ -17,7 +17,7 @@ import { DeviceProviderComponent } from './pages/device-provider/device-provider
 import { JobComponent } from './pages/job/job.component';
 import { SelfDeclarationComponent } from './pages/self-declaration/self-declaration.component';
 import { OrganizationComponent } from './pages/organization/organization.component';
-import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
+import { SubmissionConfirmationComponent } from './pages/submission-confirmation/submission-confirmation.component';
 import { AccessAgreementComponent } from './pages/access-agreement/access-agreement.component';
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
 import { DeclinedComponent } from './pages/declined/declined.component';
@@ -85,14 +85,14 @@ const routes: Routes = [
         data: { title: 'PharmaNet Enrolment' }
       },
       {
-        path: EnrolmentRoutes.SELF_DECLARATION,
-        component: SelfDeclarationComponent,
+        path: EnrolmentRoutes.ORGANIZATION,
+        component: OrganizationComponent,
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'PharmaNet Enrolment' }
       },
       {
-        path: EnrolmentRoutes.ORGANIZATION,
-        component: OrganizationComponent,
+        path: EnrolmentRoutes.SELF_DECLARATION,
+        component: SelfDeclarationComponent,
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'PharmaNet Enrolment' }
       },
@@ -101,8 +101,8 @@ const routes: Routes = [
       //
       {
         path: EnrolmentRoutes.SUBMISSION_CONFIRMATION,
-        component: ConfirmationComponent,
-        data: { title: 'Enrolment Confirmation' }
+        component: SubmissionConfirmationComponent,
+        data: { title: 'PharmaNet Enrolment' }
       },
       {
         path: EnrolmentRoutes.DECLINED,

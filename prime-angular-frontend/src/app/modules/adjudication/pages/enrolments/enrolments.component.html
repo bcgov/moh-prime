@@ -1,4 +1,5 @@
-<app-busy-overlay [busy]="busy">
+<app-page [busy]="busy"
+          mode="full">
 
   <app-page-header>PharmaNet Enrolments</app-page-header>
 
@@ -99,6 +100,11 @@
         <span>View Enrolment</span>
       </button>
       <button mat-menu-item
+              (click)="viewEnrolmentHistory(enrolment.id)">
+        <mat-icon>history</mat-icon>
+        <span>View Enrolment History</span>
+      </button>
+      <button mat-menu-item
               *ngIf="enrolment.currentStatus.enrolmentStatusReasons.length"
               (click)="reviewStatusReasons(enrolment)">
         <mat-icon>flag</mat-icon>
@@ -122,14 +128,14 @@
         <span>Global Adjudicator Notes</span>
       </button>
       <button mat-menu-item
-              [routerLink]="[enrolment.id, 'user-agreement-notes']">
+              [routerLink]="[enrolment.id, 'limits-conditions-clauses']">
         <mat-icon>description</mat-icon>
-        <span>User Agreement Notes</span>
+        <span>Limits and Conditions Clauses</span>
       </button>
       <button mat-menu-item
-              [routerLink]="[enrolment.id, 'enrolment-certificate-notes']">
+              [routerLink]="[enrolment.id, 'certificate-limits-conditions']">
         <mat-icon>assignment_turned_in</mat-icon>
-        <span>Enrolment Certificate Notes</span>
+        <span>Certificate Limits and Conditions</span>
       </button>
       <button mat-menu-item
               *ngIf="canAllowEditing(enrolment.currentStatus.status.code)"
@@ -145,4 +151,4 @@
     </mat-menu>
   </ng-template>
 
-</app-busy-overlay>
+</app-page>

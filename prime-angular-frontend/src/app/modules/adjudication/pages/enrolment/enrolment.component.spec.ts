@@ -15,13 +15,15 @@ import { PostalPipe } from '@shared/pipes/postal.pipe';
 import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
-import { EnrolleeReviewComponent } from '@shared/components/enrollee-review/enrollee-review.component';
-import { EnrolleeProfileComponent } from '@shared/components/enrollee-profile/enrollee-profile.component';
-import { EnrolleeAddressComponent } from '@shared/components/enrollee-address/enrollee-address.component';
-import { EnrolleeSelfDeclarationComponent } from '@shared/components/enrollee-self-declaration/enrollee-self-declaration.component';
+import { EnrolleeReviewComponent } from '@shared/components/enrollee/enrollee-review/enrollee-review.component';
+import { EnrolleeProfileComponent } from '@shared/components/enrollee/enrollee-profile/enrollee-profile.component';
+import { EnrolleeAddressComponent } from '@shared/components/enrollee/enrollee-address/enrollee-address.component';
+import { EnrolleeOrganizationsComponent } from '@shared/components/enrollee/enrollee-organizations/enrollee-organizations.component';
 import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
 import { YesNoPipe } from '@shared/pipes/yes-no.pipe';
-import { EnrolleeOrganizationsComponent } from '@shared/components/enrollee-organizations/enrollee-organizations.component';
+import { EnrolleePropertyComponent } from '@shared/components/enrollee/enrollee-property/enrollee-property.component';
+import { PageComponent } from '@shared/components/page/page.component';
+import { EnrolleePropertyErrorComponent } from '@shared/components/enrollee/enrollee-property-error/enrollee-property-error.component';
 
 describe('EnrolmentComponent', () => {
   let component: EnrolmentComponent;
@@ -39,13 +41,14 @@ describe('EnrolmentComponent', () => {
         ],
         declarations: [
           EnrolmentComponent,
+          PageComponent,
           PageHeaderComponent,
           PageSubheaderComponent,
           EnrolleeReviewComponent,
           EnrolleeProfileComponent,
           EnrolleeAddressComponent,
-          EnrolleeSelfDeclarationComponent,
           EnrolleeOrganizationsComponent,
+          EnrolleePropertyComponent,
           ConfigCodePipe,
           EnrolmentPipe,
           FormatDatePipe,
@@ -53,7 +56,8 @@ describe('EnrolmentComponent', () => {
           PostalPipe,
           DefaultPipe,
           EnrolleePipe,
-          YesNoPipe
+          YesNoPipe,
+          EnrolleePropertyErrorComponent
         ],
         providers: [
           {

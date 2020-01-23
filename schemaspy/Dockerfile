@@ -32,6 +32,10 @@ ENV LC_ALL C
 ENV OUTPUT_PATH=/var/www/html
 ENV SCHEMA_SPY_VERSION=6.1.0
 ENV POSTGRESQL_VERSION=42.2.1
+ENV DATABASE_HOST postgresql
+ENV DATABASE_USER postgres
+ENV DATABASE_PASSWORD postgres
+ENV DATABASE_NAME postgres
 
 RUN mkdir -p /app
 WORKDIR /app/
@@ -46,7 +50,7 @@ RUN apk update && \
     mkdir -p lib && \
     wget -nv -O lib/schemaspy-$SCHEMA_SPY_VERSION.jar https://github.com/schemaspy/schemaspy/releases/download/v$SCHEMA_SPY_VERSION/schemaspy-$SCHEMA_SPY_VERSION.jar && \
     cp lib/schemaspy-$SCHEMA_SPY_VERSION.jar lib/schemaspy.jar && \
-    wget -nv -O lib/pgsql-jdbc.jar http://central.maven.org/maven2/org/postgresql/postgresql/$POSTGRESQL_VERSION/postgresql-$POSTGRESQL_VERSION.jar && \
+    wget --no-check-certificate -nv -O lib/pgsql-jdbc.jar https://repo1.maven.org/maven2/org/postgresql/postgresql/$POSTGRESQL_VERSION/postgresql-$POSTGRESQL_VERSION.jar && \
     apk del \
         wget \
         ca-certificates

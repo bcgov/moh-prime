@@ -1,8 +1,12 @@
-<div class="row">
-  <div class="col-sm-12 col-lg-8 offset-lg-1 offset-xl-0">
+<app-page>
 
-    <app-page-header>Enrolment Summary</app-page-header>
+  <app-page-header>Enrolment Summary</app-page-header>
 
+  <app-progress-indicator *ngIf="isInitialEnrolment"
+                          message="Enrolment Declined"
+                          [currentRoute]="EnrolmentRoutes.DECLINED"></app-progress-indicator>
+
+  <div class="mb-4">
     <app-alert type="danger"
                icon="warning">
       <ng-container #alertTitle
@@ -14,16 +18,13 @@
         You have not been approved for PharmaNet access for direct patient care.
       </ng-container>
     </app-alert>
-
-    <p>
-      Your enrolment application to gain access to PharmaNet has not been approved. Questions about your enrolment
-      should be directed to:
-    </p>
-
-    <ul class="list-unstyled">
-      <li><a href="tel:+1800XXXXXXX">1-800-XXX-XXXX</a></li>
-      <li><a href="mailto:prime@example.com">prime@example.com</a></li>
-    </ul>
-
   </div>
-</div>
+
+  <p>
+    Your enrolment application to gain access to PharmaNet has not been approved. Questions about your enrolment
+    should be directed to:
+  </p>
+
+  <app-prime-contact></app-prime-contact>
+
+</app-page>

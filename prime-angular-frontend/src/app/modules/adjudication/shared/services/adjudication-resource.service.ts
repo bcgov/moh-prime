@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -13,6 +13,7 @@ import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { Address } from '@enrolment/shared/models/address.model';
 import { NoteType } from '@adjudication/shared/enums/note-type.enum';
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
+import { EnrolmentProfileVersion, HttpEnrolleeProfileVersion } from '@adjudication/shared/models/enrollee-profile-history.model';
 
 @Injectable({
   providedIn: 'root'
@@ -42,6 +43,32 @@ export class AdjudicationResource {
         map((response: PrimeHttpResponse) => response.result),
         tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
         map((enrollee: HttpEnrollee) => this.enrolleeAdapterResponse(enrollee))
+      );
+  }
+
+  public enrolleeProfileVersions(enrolleeId: number): Observable<EnrolmentProfileVersion[]> {
+    return this.http.get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/versions`)
+      .pipe(
+        map((response: PrimeHttpResponse) => response.result),
+        tap((enrolleeProfileVersions: HttpEnrolleeProfileVersion[]) =>
+          this.logger.info('ENROLLEE_PROFILE_VERSIONS', enrolleeProfileVersions)
+        ),
+        map((enrolleeProfileHistories: HttpEnrolleeProfileVersion[]) => {
+          return enrolleeProfileHistories
+            .map(this.enrolleeVersionAdapterResponse.bind(this));
+        })
+      );
+  }
+
+  // TODO located in EnrolleeController, which is prefixed with enrollee, but actually should just be /versions/${id}
+  public enrolleeProfileVersion(enrolleeId: number, enrolleeProfileVersionId: number): Observable<EnrolmentProfileVersion> {
+    return this.http.get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/versions/${enrolleeProfileVersionId}`)
+      .pipe(
+        map((response: PrimeHttpResponse) => response.result),
+        tap((enrolleeProfileVersion: HttpEnrolleeProfileVersion) =>
+          this.logger.info('ENROLLEE_PROFILE_VERSION', enrolleeProfileVersion)
+        ),
+        map(this.enrolleeVersionAdapterResponse.bind(this))
       );
   }
 
@@ -99,6 +126,17 @@ export class AdjudicationResource {
   // ---
   // Enrollee and Enrolment Adapters
   // ---
+
+  private enrolleeVersionAdapterResponse(
+    { id, enrolleeId, profileSnapshot, createdDate }: HttpEnrolleeProfileVersion
+  ): EnrolmentProfileVersion {
+    return {
+      id,
+      enrolleeId,
+      profileSnapshot: this.enrolleeAdapterResponse(profileSnapshot),
+      createdDate
+    };
+  }
 
   private enrolleesAdapterResponse(enrollees: HttpEnrollee[]): Enrolment[] {
     return enrollees.map((enrollee: HttpEnrollee): Enrolment => this.enrolleeAdapterResponse(enrollee));

@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AccessDeniedComponent } from './access-denied.component';
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 
 describe('AccessDeniedComponent', () => {
   let component: AccessDeniedComponent;
@@ -11,6 +12,12 @@ describe('AccessDeniedComponent', () => {
       {
         declarations: [
           AccessDeniedComponent
+        ],
+        providers: [
+          {
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
+          }
         ]
       }
     ).compileComponents();

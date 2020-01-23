@@ -13,16 +13,16 @@ import { ConfigService } from '@config/config.service';
 import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
+import { PageComponent } from '@shared/components/page/page.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
-import { EnrolleeReviewComponent } from '@shared/components/enrollee-review/enrollee-review.component';
+import { EnrolleeReviewComponent } from '@shared/components/enrollee/enrollee-review/enrollee-review.component';
 import { ProgressIndicatorComponent } from '@shared/components/progress-indicator/progress-indicator.component';
-import { EnrolleeProfileComponent } from '@shared/components/enrollee-profile/enrollee-profile.component';
-import { EnrolleeAddressComponent } from '@shared/components/enrollee-address/enrollee-address.component';
-import { EnrolleeSelfDeclarationComponent } from '@shared/components/enrollee-self-declaration/enrollee-self-declaration.component';
-import { CollectionNoticeAlertComponent } from '@enrolment/shared/components/collection-notice-alert/collection-notice-alert.component';
+import { EnrolleeProfileComponent } from '@shared/components/enrollee/enrollee-profile/enrollee-profile.component';
+import { EnrolleeAddressComponent } from '@shared/components/enrollee/enrollee-address/enrollee-address.component';
+import { EnrolleeOrganizationsComponent } from '@shared/components/enrollee/enrollee-organizations/enrollee-organizations.component';
 import { AlertComponent } from '@shared/components/alert/alert.component';
-
+import { CollectionNoticeAlertComponent } from '@enrolment/shared/components/collection-notice-alert/collection-notice-alert.component';
 
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { DefaultPipe } from '@shared/pipes/default.pipe';
@@ -34,9 +34,13 @@ import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
 import { YesNoPipe } from '@shared/pipes/yes-no.pipe';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
-import { EnrolleeOrganizationsComponent } from '@shared/components/enrollee-organizations/enrollee-organizations.component';
+import { EnrolleePropertyComponent } from '@shared/components/enrollee/enrollee-property/enrollee-property.component';
+import { PrimeContactComponent } from '@shared/components/prime-contact/prime-contact.component';
+import { PrimeEmailComponent } from '@shared/components/prime-email/prime-email.component';
+import { PrimePhoneComponent } from '@shared/components/prime-phone/prime-phone.component';
+import { EnrolleePropertyErrorComponent } from '@shared/components/enrollee/enrollee-property-error/enrollee-property-error.component';
 
-describe('ReviewComponent', () => {
+describe('OverviewComponent', () => {
   let component: OverviewComponent;
   let fixture: ComponentFixture<OverviewComponent>;
 
@@ -53,15 +57,19 @@ describe('ReviewComponent', () => {
         ],
         declarations: [
           OverviewComponent,
+          PageComponent,
           PageHeaderComponent,
           PageSubheaderComponent,
           EnrolleeReviewComponent,
           EnrolleeProfileComponent,
           EnrolleeAddressComponent,
-          EnrolleeSelfDeclarationComponent,
           EnrolleeOrganizationsComponent,
           ProgressIndicatorComponent,
           CollectionNoticeAlertComponent,
+          EnrolleePropertyComponent,
+          PrimeContactComponent,
+          PrimeEmailComponent,
+          PrimePhoneComponent,
           AlertComponent,
           ConfigCodePipe,
           EnrolmentPipe,
@@ -70,7 +78,8 @@ describe('ReviewComponent', () => {
           PostalPipe,
           DefaultPipe,
           EnrolleePipe,
-          YesNoPipe
+          YesNoPipe,
+          EnrolleePropertyErrorComponent
         ],
         providers: [
           {

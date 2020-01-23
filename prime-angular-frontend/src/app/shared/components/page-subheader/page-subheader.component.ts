@@ -1,4 +1,4 @@
-import { Component, OnInit, ContentChildren, QueryList } from '@angular/core';
+import { Component, OnInit, ContentChildren, QueryList, Input } from '@angular/core';
 
 import { PageSubheaderTitleDirective } from '../page-subheader/page-subheader-title.directive';
 import { PageSubheaderSummaryDirective } from '../page-subheader/page-subheader-summary.directive';
@@ -19,8 +19,11 @@ export class PageSubheaderComponent implements OnInit {
   public contextualTitleChildren: QueryList<ContextualTitleDirective>;
   @ContentChildren(ContextualContentDirective, { descendants: true })
   public contextualContentChildren: QueryList<ContextualContentDirective>;
+  @Input() public divider: boolean;
 
-  constructor() { }
+  constructor() {
+    this.divider = true;
+  }
 
   public get hasPageSubheaderTitle(): boolean {
     return !!this.pageSubheaderTitleChildren.length;
