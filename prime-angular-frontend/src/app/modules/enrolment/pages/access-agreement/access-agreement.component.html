@@ -9,9 +9,12 @@
 
   <ng-container *ngIf="currentPage > 0; else preamble">
 
-    <app-access-terms-pager [termsOfAccess]="termsOfAccess"
+    <!-- <app-access-terms-pager [accessTerm]="accessTerm"
                             [currentPage]="currentPage"
-                            (changed)="onPageChange($event)"></app-access-terms-pager>
+                            (changed)="onPageChange($event)"></app-access-terms-pager> -->
+
+    <app-ru-access-terms *ngIf="isRu"></app-ru-access-terms>
+    <app-moa-access-terms *ngIf="isMoa"></app-moa-access-terms>
 
   </ng-container>
 
@@ -34,8 +37,7 @@
     <ng-container *ngIf="isAutomatic">
 
       <p>
-        Your application can be automatically processed. Within a few minutes you should receive approval to
-        access
+        Your application can be automatically processed. Within a few minutes you should receive approval to access
         PharmaNet once you accept the PharmaNet User Access Agreement. Please read the agreement carefully before
         accepting.
       </p>
