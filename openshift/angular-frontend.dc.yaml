@@ -101,7 +101,7 @@ objects:
           readinessProbe:
             failureThreshold: 3
             httpGet:
-              path: /
+              path: /info
               port: 8080
               scheme: HTTP
             initialDelaySeconds: 5
