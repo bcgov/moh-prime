@@ -96,7 +96,8 @@ objects:
           image: " "
           name: primeweb
           ports:
-          - containerPort: "${HTTP_PORT}"
+          - containerPort: 8080
+          - containerPort: 8443
           readinessProbe:
             failureThreshold: 3
             httpGet:
