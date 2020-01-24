@@ -14,9 +14,9 @@ namespace PrimeTests
 {
     public class TestStartup : Startup
     {
-        public TestStartup(IHostingEnvironment env, IConfiguration configuration)
+        public TestStartup(IWebHostEnvironment env, IConfiguration configuration)
             : base(env, TestHelper.GetIConfigurationRoot(Directory.GetCurrentDirectory()))
-        {}
+        { }
 
         protected override void ConfigureDatabase(IServiceCollection services)
         {
