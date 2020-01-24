@@ -80,7 +80,7 @@ namespace Prime.Controllers
                 this.ModelState.AddModelError("Enrollee.UserId", "No enrollee exists for this User Id.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
-            if (enrollee.CurrentStatus?.Status.Code != Status.ACCEPTED_TOS_CODE)
+            if (enrollee.CurrentStatus?.Status.Code != Status.ACTIVE_CODE && enrollee.PreviousStatus.StatusCode != Status.REQUIRES_TOA_CODE)
             {
                 this.ModelState.AddModelError("Enrollee.UserId", "The enrollee for this User Id is not in a finished state.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));

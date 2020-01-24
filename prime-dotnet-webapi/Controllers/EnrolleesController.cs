@@ -168,7 +168,7 @@ namespace Prime.Controllers
 
             // If the enrollee is not in the status of 'In Progress' or 'Accepted TOA', it cannot be updated
             // TODO should be update to be EDITING and switched to EDITING immediately on ACCEPTED_TOS
-            if (!(await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.IN_PROGRESS_CODE, Status.ACCEPTED_TOS_CODE)))
+            if (!(await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.ACTIVE_CODE)))
             {
                 this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee can not be updated when the current status is not 'In Progress'.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
@@ -360,10 +360,11 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            // Notes can not be added to 'In Progress' enrolments
-            if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.IN_PROGRESS_CODE))
+            // Notes can not be added to 'Active' enrolments
+            // TODO Decide when ajudicators should be able to add notes
+            if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.ACTIVE_CODE))
             {
-                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Adjudicator notes can not be updated when the current status is 'In Progress'.");
+                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Adjudicator notes can not be updated when the current status is 'Active'.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
@@ -404,10 +405,11 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            // Notes can not be added to 'In Progress' enrolments
-            if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.IN_PROGRESS_CODE))
+            // Notes can not be added to 'Active' enrolments
+            // TODO Decide when ajudicators should be able to add notes
+            if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.ACTIVE_CODE))
             {
-                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Access agreement notes can not be updated when the current status is 'In Progress'.");
+                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Access agreement notes can not be updated when the current status is 'Active'.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
@@ -445,9 +447,10 @@ namespace Prime.Controllers
             }
 
             // Notes can not be added to 'In Progress' enrolments
-            if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.IN_PROGRESS_CODE))
+            // TODO Decide when ajudicators should be able to add notes
+            if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.ACTIVE_CODE))
             {
-                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrolment certificate notes can not be updated when the current status is 'In Progress'.");
+                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrolment certificate notes can not be updated when the current status is 'Active'.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
@@ -475,9 +478,9 @@ namespace Prime.Controllers
             }
 
             // Prevent access to the enrollee's current terms of access based on status
-            if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.IN_PROGRESS_CODE, Status.DECLINED_CODE, Status.DECLINED_TOS_CODE))
+            if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.DECLINED_CODE))
             {
-                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee terms of service can not be retrieved when the current status is 'IN_PROGRESS', 'DECLINED', or 'DECLINED_TOA'.");
+                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee terms of service can not be retrieved when the current status is 'DECLINED'.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
