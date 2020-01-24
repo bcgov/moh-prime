@@ -9,16 +9,17 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
+using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Prime.Infrastructure;
-using Microsoft.Extensions.Hosting;
+
 namespace Prime
 {
     public static class AuthenticationSetup
     {
         public static void Initialize(IServiceCollection services,
             IConfiguration configuration,
-            IHostingEnvironment environment)
+            IHostEnvironment environment)
         {
             if (services is null)
             {

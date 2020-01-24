@@ -5,8 +5,9 @@ using System.Net.Mime;
 using System.Linq;
 
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
 
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -15,16 +16,16 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
-using Prime.Services;
-
 using Newtonsoft.Json;
+
+using Prime.Services;
 using Prime.Infrastructure;
 
 namespace Prime
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env, IConfiguration configuration)
+        public Startup(IWebHostEnvironment env, IConfiguration configuration)
         {
             Configuration = configuration;
             StaticConfig = configuration;
@@ -33,7 +34,7 @@ namespace Prime
 
         public IConfiguration Configuration { get; }
         public static IConfiguration StaticConfig { get; private set; }
-        public IHostingEnvironment Environment { get; }
+        public IWebHostEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -49,11 +50,10 @@ namespace Prime
             services.AddScoped<IEnrolleeProfileVersionService, EnrolleeProfileVersionService>();
 
             services
-                .AddMvc()
-                // add a convertor <globally> to change empty strings into null on serialization
-                .AddNewtonsoftJson(options =>
-                    options.SerializerSettings.Converters.Add(new EmptyStringToNullJsonConverter()));
-
+                // Adds support for controllers and API-related features
+                .AddControllers()
+                // Add a convertor <globally> to change empty strings into null on serialization
+                .AddNewtonsoftJson(options => options.SerializerSettings.Converters.Add(new EmptyStringToNullJsonConverter()));
 
             services.AddCors(options =>
             {
@@ -61,10 +61,10 @@ namespace Prime
                     builder =>
                     {
                         builder
-                        .AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader()
-                        .AllowCredentials();
+                            .AllowAnyOrigin()
+                            .AllowAnyMethod()
+                            .AllowAnyHeader()
+                            .AllowCredentials();
                     });
             });
 
@@ -81,14 +81,13 @@ namespace Prime
 
             services.AddHttpContextAccessor();
 
-
             this.ConfigureDatabase(services);
 
             AuthenticationSetup.Initialize(services, Configuration, Environment);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -97,13 +96,13 @@ namespace Prime
 
             this.ConfigureHealthCheck(app);
 
-            // update the DB if necessary with new migrations
+            // Update the DB if necessary with new migrations
             this.UpdateDatabase(app);
 
-            // TODO - disable always using https - probably want this turned back on though once have actual certs
+            // TODO Turn on when there is an actual cert
             //app.UseHttpsRedirection();
 
-            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            // Enable middleware to serve generated Swagger as a JSON endpoint
             app.UseSwagger();
 
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
@@ -113,14 +112,21 @@ namespace Prime
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Prime Web API V1");
             });
 
+            // Matches request to an endpoint
+            app.UseRouting();
             app.UseCors("AllowAll");
 
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseMvc();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapHealthChecks("/health");
+            });
         }
 
+        // TODO reconfigure health checks for 3.0
         protected virtual void ConfigureHealthCheck(IApplicationBuilder app)
         {
             // Health check output
@@ -129,18 +135,20 @@ namespace Prime
                 ResponseWriter = async (c, r) =>
                 {
                     c.Response.ContentType = MediaTypeNames.Application.Json;
+
                     var result = JsonConvert.SerializeObject(
-                new
-                {
-                    checks = r.Entries.Select(e =>
-                new
-                {
-                    description = e.Key,
-                    status = e.Value.Status.ToString(),
-                    responseTime = e.Value.Duration.TotalMilliseconds
-                }),
-                    totalResponseTime = r.TotalDuration.TotalMilliseconds
-                });
+                        new
+                        {
+                            checks = r.Entries.Select(e =>
+                            new
+                            {
+                                description = e.Key,
+                                status = e.Value.Status.ToString(),
+                                responseTime = e.Value.Duration.TotalMilliseconds
+                            }),
+                            totalResponseTime = r.TotalDuration.TotalMilliseconds
+                        });
+
                     await c.Response.WriteAsync(result);
                 }
             };
@@ -164,7 +172,8 @@ namespace Prime
                 options.EnableSensitiveDataLogging(sensitiveDataLoggingEnabled: false);
             });
 
-            services.AddHealthChecks()
+            services
+                .AddHealthChecks()
                 .AddDbContextCheck<ApiDbContext>("DbContextHealthCheck")
                 .AddNpgSql(connectionString);
         }
