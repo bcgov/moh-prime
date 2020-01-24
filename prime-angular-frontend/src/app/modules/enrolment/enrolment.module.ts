@@ -32,6 +32,8 @@ import { PageFooterComponent } from './shared/components/page-footer/page-footer
 import { CollegeCertificationFormComponent } from './shared/components/college-certification-form/college-certification-form.component';
 import { JobFormComponent } from './shared/components/job-form/job-form.component';
 import { CollectionNoticeAlertComponent } from './shared/components/collection-notice-alert/collection-notice-alert.component';
+import { RuAccessTermsComponent } from './pages/access-agreement/components/ru-access-terms/ru-access-terms.component';
+import { OboAccessTermsComponent } from './pages/access-agreement/components/obo-access-terms/obo-access-terms.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +62,9 @@ import { CollectionNoticeAlertComponent } from './shared/components/collection-n
     PageFooterComponent,
     CollegeCertificationFormComponent,
     JobFormComponent,
-    CollectionNoticeAlertComponent
+    CollectionNoticeAlertComponent,
+    OboAccessTermsComponent,
+    RuAccessTermsComponent
   ],
   imports: [
     SharedModule,

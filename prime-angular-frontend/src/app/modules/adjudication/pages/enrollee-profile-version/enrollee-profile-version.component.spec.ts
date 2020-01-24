@@ -20,6 +20,7 @@ import { PhonePipe } from '@shared/pipes/phone.pipe';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { YesNoPipe } from '@shared/pipes/yes-no.pipe';
 import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
+import { EnrolleePropertyErrorComponent } from '@shared/components/enrollee/enrollee-property-error/enrollee-property-error.component';
 
 describe('EnrolleeProfileVersionComponent', () => {
   let component: EnrolleeProfileVersionComponent;
@@ -43,6 +44,7 @@ describe('EnrolleeProfileVersionComponent', () => {
           EnrolleeReviewComponent,
           EnrolleeProfileComponent,
           EnrolleePropertyComponent,
+          EnrolleePropertyErrorComponent,
           DefaultPipe,
           ConfigCodePipe,
           PostalPipe,
