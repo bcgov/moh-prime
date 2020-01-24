@@ -113,8 +113,6 @@ namespace Prime
             app.UseAuthentication();
 
             app.UseMvc();
-
-            // TEST.DO_STUFF();
         }
 
         protected virtual void ConfigureHealthCheck(IApplicationBuilder app)
@@ -179,10 +177,6 @@ namespace Prime
                 using (var context = serviceScope.ServiceProvider.GetService<ApiDbContext>())
                 {
                     context.Database.Migrate();
-
-                    var enrols = new Prime.ModelFactories.EnrolleeFactory().Generate(1000, "default,status.random");
-                    context.Enrollees.AddRange(enrols);
-                    context.SaveChanges();
                 }
             }
         }
