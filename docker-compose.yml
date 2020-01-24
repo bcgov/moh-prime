@@ -75,7 +75,7 @@ services:
       - "80:8069"
     depends_on:
       - postgres
-    
+      
 volumes:
   local_postgres_data:
 
