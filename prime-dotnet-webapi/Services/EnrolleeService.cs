@@ -474,7 +474,8 @@ namespace Prime.Services
                     .Include(e => e.AccessAgreementNote)
                     .Include(e => e.EnrolmentCertificateNote)
                     .Include(e => e.AssignedPrivileges)
-                        .ThenInclude(AssignedPrivilege => AssignedPrivilege.Privilege);
+                        .ThenInclude(AssignedPrivilege => AssignedPrivilege.Privilege)
+                    .Include(e => e.AccessTerms);
         }
 
         public async Task<Enrollee> GetEnrolleeAsync(int enrolleeId)

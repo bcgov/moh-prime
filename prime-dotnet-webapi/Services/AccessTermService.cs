@@ -64,12 +64,14 @@ namespace Prime.Services
 
         public async Task SetAcceptedDateForAccessTermAsync(Enrollee enrollee)
         {
-            var termsOfAccess = await _context.AccessTerms
+            var accessTerm = await _context.AccessTerms
                 .Where(toa => toa.EnrolleeId == enrollee.Id)
                 .OrderByDescending(toa => toa.AcceptedDate)
                 .FirstOrDefaultAsync();
 
-            termsOfAccess.AcceptedDate = DateTime.Now;
+            accessTerm.AcceptedDate = DateTime.Now;
+            // Add an Expiry Date of one year in the future.
+            accessTerm.ExpiryDate = DateTime.Now.AddYears(1);
 
             await _context.SaveChangesAsync();
         }

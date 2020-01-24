@@ -143,6 +143,15 @@ namespace Prime.Models
                 .StatusDate;
         }
 
+        [NotMapped]
+        public DateTime? ExpiryDate
+        {
+            get => this.AccessTerms?
+                .OrderByDescending(at => at.AcceptedDate)
+                .FirstOrDefault(at => at.ExpiryDate != null)?
+                .ExpiryDate;
+        }
+
         public ICollection<AdjudicatorNote> AdjudicatorNotes { get; set; }
 
         public AccessAgreementNote AccessAgreementNote { get; set; }
