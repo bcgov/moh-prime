@@ -215,7 +215,8 @@ export class DashboardComponent implements OnInit {
                 EnrolmentStatus.DECLINED,
                 EnrolmentStatus.DECLINED_TOS
               ].includes(enrolmentStatus)
-            )
+            ),
+            deemphasize: (!enrolment || (enrolment && !enrolment.profileCompleted)) ? true : false
           },
           {
             name: 'Enrolment Log History',
@@ -236,7 +237,8 @@ export class DashboardComponent implements OnInit {
                 EnrolmentStatus.DECLINED,
                 EnrolmentStatus.DECLINED_TOS
               ].includes(enrolmentStatus)
-            )
+            ),
+            deemphasize: (!enrolment || (enrolment && !enrolment.profileCompleted)) ? true : false
           }
         ]
       }
