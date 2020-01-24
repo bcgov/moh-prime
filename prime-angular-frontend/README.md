@@ -1,4 +1,4 @@
-# PharmaNet R... I... M... Enhancements (PRIME)
+# PharmaNet Revisions of Information Managment Enhancements (PRIME)
 
 ## Table of Contents
 
@@ -24,7 +24,7 @@ git clone https://github.com/bcgov/moh-prime
 
 #### Node
 
-[Download](https://nodejs.org/en/) and install **Node v12.x** 
+[Download](https://nodejs.org/en/) and install **Node v12.x**
 
 #### Yarn
 

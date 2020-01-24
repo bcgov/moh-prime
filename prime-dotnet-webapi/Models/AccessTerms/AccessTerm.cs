@@ -44,5 +44,7 @@ namespace Prime.Models
         public DateTime CreatedDate { get; set; }
 
         public DateTime? AcceptedDate { get; set; }
+
+        public DateTime? ExpiryDate { get; set; }
     }
 }
