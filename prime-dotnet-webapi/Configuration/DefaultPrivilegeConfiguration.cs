@@ -39,6 +39,12 @@ namespace Prime.Configuration
                     // Non-practicing Licensed Practical Nurse
                     new DefaultPrivilege { LicenseCode = 54, PrivilegeId = 18, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
+                    // Practicing Licensed Graduate Nurse
+                    new DefaultPrivilege { LicenseCode = 52, PrivilegeId = 18, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+
+                    // Provisional Licensed Graduate Nurse
+                    new DefaultPrivilege { LicenseCode = 53, PrivilegeId = 18, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+
                     // Full Pharmacist
                     new DefaultPrivilege { LicenseCode = 25, PrivilegeId = 1,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new DefaultPrivilege { LicenseCode = 25, PrivilegeId = 2,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
@@ -119,23 +125,7 @@ namespace Prime.Configuration
                     new DefaultPrivilege { LicenseCode = 28, PrivilegeId = 17, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Pharmacy Technician
-                    new DefaultPrivilege { LicenseCode = 29, PrivilegeId = 1,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 29, PrivilegeId = 2,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 29, PrivilegeId = 3,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 29, PrivilegeId = 4,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 29, PrivilegeId = 5,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 29, PrivilegeId = 6,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 29, PrivilegeId = 7,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 29, PrivilegeId = 8,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 29, PrivilegeId = 9,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 29, PrivilegeId = 10, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 29, PrivilegeId = 11, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 29, PrivilegeId = 12, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 29, PrivilegeId = 13, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 29, PrivilegeId = 14, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 29, PrivilegeId = 15, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 29, PrivilegeId = 16, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 29, PrivilegeId = 17, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 29, PrivilegeId = 18, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Full - family
                     new DefaultPrivilege { LicenseCode = 1, PrivilegeId = 5,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
@@ -231,6 +221,7 @@ namespace Prime.Configuration
                     new DefaultPrivilege { LicenseCode = 6, PrivilegeId = 15, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new DefaultPrivilege { LicenseCode = 6, PrivilegeId = 16, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new DefaultPrivilege { LicenseCode = 6, PrivilegeId = 17, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 6, PrivilegeId = 19, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Academic
                     new DefaultPrivilege { LicenseCode = 7, PrivilegeId = 5,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
@@ -404,28 +395,10 @@ namespace Prime.Configuration
                     new DefaultPrivilege { LicenseCode = 24, PrivilegeId = 17, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Educational - medical student
-                    new DefaultPrivilege { LicenseCode = 11, PrivilegeId = 8,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 11, PrivilegeId = 9,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 11, PrivilegeId = 10, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 11, PrivilegeId = 11, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 11, PrivilegeId = 12, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 11, PrivilegeId = 13, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 11, PrivilegeId = 14, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 11, PrivilegeId = 15, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 11, PrivilegeId = 16, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 11, PrivilegeId = 17, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 11, PrivilegeId = 18, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Clinical observership
-                    new DefaultPrivilege { LicenseCode = 16, PrivilegeId = 8,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 16, PrivilegeId = 9,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 16, PrivilegeId = 10, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 16, PrivilegeId = 11, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 16, PrivilegeId = 12, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 16, PrivilegeId = 13, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 16, PrivilegeId = 14, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 16, PrivilegeId = 15, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 16, PrivilegeId = 16, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 16, PrivilegeId = 17, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 16, PrivilegeId = 18,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Visitor
                     new DefaultPrivilege { LicenseCode = 17, PrivilegeId = 8,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
@@ -453,34 +426,10 @@ namespace Prime.Configuration
                     new DefaultPrivilege { LicenseCode = 22, PrivilegeId = 17, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Practicing Registered Nurse
-                    new DefaultPrivilege { LicenseCode = 32, PrivilegeId = 5,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 32, PrivilegeId = 6,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 32, PrivilegeId = 7,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 32, PrivilegeId = 8,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 32, PrivilegeId = 9,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 32, PrivilegeId = 10, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 32, PrivilegeId = 11, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 32, PrivilegeId = 12, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 32, PrivilegeId = 13, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 32, PrivilegeId = 14, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 32, PrivilegeId = 15, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 32, PrivilegeId = 16, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 32, PrivilegeId = 17, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 32, PrivilegeId = 18, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Provisional Registered Nurse
-                    new DefaultPrivilege { LicenseCode = 33, PrivilegeId = 5,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 33, PrivilegeId = 6,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 33, PrivilegeId = 7,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 33, PrivilegeId = 8,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 33, PrivilegeId = 9,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 33, PrivilegeId = 10, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 33, PrivilegeId = 11, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 33, PrivilegeId = 12, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 33, PrivilegeId = 13, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 33, PrivilegeId = 14, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 33, PrivilegeId = 15, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 33, PrivilegeId = 16, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 33, PrivilegeId = 17, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 33, PrivilegeId = 18, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Temporary Nurse Practitioner
                     new DefaultPrivilege { LicenseCode = 51, PrivilegeId = 5,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
@@ -499,98 +448,22 @@ namespace Prime.Configuration
                     new DefaultPrivilege { LicenseCode = 51, PrivilegeId = 19, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Temporary Registered Nurse (emergency)
-                    new DefaultPrivilege { LicenseCode = 39, PrivilegeId = 5,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 39, PrivilegeId = 6,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 39, PrivilegeId = 7,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 39, PrivilegeId = 8,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 39, PrivilegeId = 9,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 39, PrivilegeId = 10, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 39, PrivilegeId = 11, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 39, PrivilegeId = 12, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 39, PrivilegeId = 13, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 39, PrivilegeId = 14, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 39, PrivilegeId = 15, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 39, PrivilegeId = 16, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 39, PrivilegeId = 17, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 39, PrivilegeId = 19, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 39, PrivilegeId = 18, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Employed Student Nurse
-                    new DefaultPrivilege { LicenseCode = 40, PrivilegeId = 5,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 40, PrivilegeId = 6,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 40, PrivilegeId = 7,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 40, PrivilegeId = 8,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 40, PrivilegeId = 9,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 40, PrivilegeId = 10, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 40, PrivilegeId = 11, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 40, PrivilegeId = 12, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 40, PrivilegeId = 13, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 40, PrivilegeId = 14, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 40, PrivilegeId = 15, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 40, PrivilegeId = 16, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 40, PrivilegeId = 17, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 40, PrivilegeId = 18, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Practicing Registered Psychiatric Nurse
-                    new DefaultPrivilege { LicenseCode = 41, PrivilegeId = 5,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 41, PrivilegeId = 6,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 41, PrivilegeId = 7,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 41, PrivilegeId = 8,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 41, PrivilegeId = 9,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 41, PrivilegeId = 10, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 41, PrivilegeId = 11, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 41, PrivilegeId = 12, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 41, PrivilegeId = 13, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 41, PrivilegeId = 14, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 41, PrivilegeId = 15, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 41, PrivilegeId = 16, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 41, PrivilegeId = 17, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 41, PrivilegeId = 19, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 41, PrivilegeId = 18, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Provisional Registered Psychiatric Nurse
-                    new DefaultPrivilege { LicenseCode = 42, PrivilegeId = 5,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 42, PrivilegeId = 6,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 42, PrivilegeId = 7,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 42, PrivilegeId = 8,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 42, PrivilegeId = 9,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 42, PrivilegeId = 10, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 42, PrivilegeId = 11, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 42, PrivilegeId = 12, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 42, PrivilegeId = 13, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 42, PrivilegeId = 14, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 42, PrivilegeId = 15, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 42, PrivilegeId = 16, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 42, PrivilegeId = 17, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 42, PrivilegeId = 19, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 42, PrivilegeId = 18, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Temporary Registered Psychaitric Nurse (emergency)
-                    new DefaultPrivilege { LicenseCode = 45, PrivilegeId = 5,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 45, PrivilegeId = 6,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 45, PrivilegeId = 7,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 45, PrivilegeId = 8,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 45, PrivilegeId = 9,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 45, PrivilegeId = 10, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 45, PrivilegeId = 11, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 45, PrivilegeId = 12, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 45, PrivilegeId = 13, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 45, PrivilegeId = 14, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 45, PrivilegeId = 15, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 45, PrivilegeId = 16, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 45, PrivilegeId = 17, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 45, PrivilegeId = 19, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 45, PrivilegeId = 18, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Employed Student Psychiatric Nurse
-                    new DefaultPrivilege { LicenseCode = 46, PrivilegeId = 5,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 46, PrivilegeId = 6,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 46, PrivilegeId = 7,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 46, PrivilegeId = 8,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 46, PrivilegeId = 9,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 46, PrivilegeId = 10, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 46, PrivilegeId = 11, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 46, PrivilegeId = 12, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 46, PrivilegeId = 13, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 46, PrivilegeId = 14, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 46, PrivilegeId = 15, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 46, PrivilegeId = 16, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 46, PrivilegeId = 17, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 46, PrivilegeId = 18, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Practicing Nurse Practitioner
                     new DefaultPrivilege { LicenseCode = 47, PrivilegeId = 5,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
@@ -609,19 +482,7 @@ namespace Prime.Configuration
                     new DefaultPrivilege { LicenseCode = 47, PrivilegeId = 19, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Non-practicing Registered Nurse
-                    new DefaultPrivilege { LicenseCode = 34, PrivilegeId = 5,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 34, PrivilegeId = 6,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 34, PrivilegeId = 7,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 34, PrivilegeId = 8,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 34, PrivilegeId = 9,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 34, PrivilegeId = 10, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 34, PrivilegeId = 11, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 34, PrivilegeId = 12, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 34, PrivilegeId = 13, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 34, PrivilegeId = 14, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 34, PrivilegeId = 15, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 34, PrivilegeId = 16, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 34, PrivilegeId = 17, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 34, PrivilegeId = 18, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Provisional Nurse Practitioner
                     new DefaultPrivilege { LicenseCode = 48, PrivilegeId = 5,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
@@ -642,34 +503,10 @@ namespace Prime.Configuration
                     // (time-limited)   NO LICENSE ID
 
                     // Temporary Registered Nurse (special event)
-                    new DefaultPrivilege { LicenseCode = 38, PrivilegeId = 5,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 38, PrivilegeId = 6,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 38, PrivilegeId = 7,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 38, PrivilegeId = 8,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 38, PrivilegeId = 9,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 38, PrivilegeId = 10, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 38, PrivilegeId = 11, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 38, PrivilegeId = 12, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 38, PrivilegeId = 13, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 38, PrivilegeId = 14, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 38, PrivilegeId = 15, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 38, PrivilegeId = 16, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 38, PrivilegeId = 17, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 38, PrivilegeId = 18, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Temporary Registered Psychiatric Nurse (special event)
-                    new DefaultPrivilege { LicenseCode = 44, PrivilegeId = 5,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 44, PrivilegeId = 6,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 44, PrivilegeId = 7,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 44, PrivilegeId = 8,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 44, PrivilegeId = 9,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 44, PrivilegeId = 10, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 44, PrivilegeId = 11, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 44, PrivilegeId = 12, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 44, PrivilegeId = 13, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 44, PrivilegeId = 14, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 44, PrivilegeId = 15, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 44, PrivilegeId = 16, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 44, PrivilegeId = 17, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 44, PrivilegeId = 18, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Temporary Nurse Practitioner (special event)
                     new DefaultPrivilege { LicenseCode = 50, PrivilegeId = 5,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
@@ -686,53 +523,51 @@ namespace Prime.Configuration
                     new DefaultPrivilege { LicenseCode = 50, PrivilegeId = 16, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new DefaultPrivilege { LicenseCode = 50, PrivilegeId = 17, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
+                    // Temporary Nurse Practitioner (emergency)
+                    new DefaultPrivilege { LicenseCode = 51, PrivilegeId = 5,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 51, PrivilegeId = 6,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 51, PrivilegeId = 7,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 51, PrivilegeId = 8,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 51, PrivilegeId = 9,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 51, PrivilegeId = 10, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 51, PrivilegeId = 11, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 51, PrivilegeId = 12, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 51, PrivilegeId = 13, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 51, PrivilegeId = 14, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 51, PrivilegeId = 15, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 51, PrivilegeId = 16, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 51, PrivilegeId = 17, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 51, PrivilegeId = 19, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+
                     // Practicing Licensed Practical Nurse
-                    new DefaultPrivilege { LicenseCode = 52, PrivilegeId = 8,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 52, PrivilegeId = 9,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 52, PrivilegeId = 10, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 52, PrivilegeId = 11, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 52, PrivilegeId = 12, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 52, PrivilegeId = 13, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 52, PrivilegeId = 14, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 52, PrivilegeId = 15, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 52, PrivilegeId = 16, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 52, PrivilegeId = 17, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 52, PrivilegeId = 18, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Provisional Licensed Practical Nurse
-                    new DefaultPrivilege { LicenseCode = 53, PrivilegeId = 8,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 53, PrivilegeId = 9,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 53, PrivilegeId = 10, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 53, PrivilegeId = 11, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 53, PrivilegeId = 12, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 53, PrivilegeId = 13, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 53, PrivilegeId = 14, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 53, PrivilegeId = 15, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 53, PrivilegeId = 16, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 53, PrivilegeId = 17, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 53, PrivilegeId = 18, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Temporary Licensed Practical Nurse (emergency)
-                    new DefaultPrivilege { LicenseCode = 55, PrivilegeId = 8,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 55, PrivilegeId = 9,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 55, PrivilegeId = 10, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 55, PrivilegeId = 11, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 55, PrivilegeId = 12, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 55, PrivilegeId = 13, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 55, PrivilegeId = 14, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 55, PrivilegeId = 15, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 55, PrivilegeId = 16, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 55, PrivilegeId = 17, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 55, PrivilegeId = 18, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Temporary Licensed Practical Nurse (special event)
-                    new DefaultPrivilege { LicenseCode = 56, PrivilegeId = 8,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 56, PrivilegeId = 9,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 56, PrivilegeId = 10, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 56, PrivilegeId = 11, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 56, PrivilegeId = 12, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 56, PrivilegeId = 13, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 56, PrivilegeId = 14, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 56, PrivilegeId = 15, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 56, PrivilegeId = 16, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new DefaultPrivilege { LicenseCode = 56, PrivilegeId = 17, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE }
+                    new DefaultPrivilege { LicenseCode = 56, PrivilegeId = 18, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+
+                    // Non-practicing Licensed Nurse Practitioner
+                    new DefaultPrivilege { LicenseCode = 57, PrivilegeId = 18, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+
+                    // Temporary Nurse Practitioner (time-limited)
+                    new DefaultPrivilege { LicenseCode = 58, PrivilegeId = 5,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 58, PrivilegeId = 6,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 58, PrivilegeId = 7,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 58, PrivilegeId = 8,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 58, PrivilegeId = 9,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 58, PrivilegeId = 10, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 58, PrivilegeId = 11, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 58, PrivilegeId = 12, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 58, PrivilegeId = 13, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 58, PrivilegeId = 14, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 58, PrivilegeId = 15, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 58, PrivilegeId = 16, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 58, PrivilegeId = 17, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                 };
             }
         }
