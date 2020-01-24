@@ -2,7 +2,7 @@ using Bogus;
 using Bogus.Extensions;
 using Prime.Models;
 
-namespace PrimeTest.ModelFactories
+namespace PrimeTests.ModelFactories
 {
     public class PhysicalAddressFactory : AddressFactory<PhysicalAddress>
     {

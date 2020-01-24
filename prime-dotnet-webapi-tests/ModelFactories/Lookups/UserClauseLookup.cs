@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Prime.Models;
 using Prime.Configuration;
 
-namespace PrimeTest.ModelFactories
+namespace PrimeTests.ModelFactories
 {
     public static class UserClauseLookup
     {

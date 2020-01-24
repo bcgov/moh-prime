@@ -1,7 +1,7 @@
 using Bogus;
 using Prime.Models;
 
-namespace PrimeTest.ModelFactories
+namespace PrimeTests.ModelFactories
 {
     public class JobFactory : Faker<Job>
     {

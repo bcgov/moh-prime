@@ -2,7 +2,7 @@ using System;
 using Bogus;
 using Prime.Models;
 
-namespace PrimeTest.ModelFactories
+namespace PrimeTests.ModelFactories
 {
     public class AccessTermFactory : Faker<AccessTerm>
     {

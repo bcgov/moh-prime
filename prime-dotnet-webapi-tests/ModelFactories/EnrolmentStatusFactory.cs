@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Bogus;
 using Prime.Models;
 
-namespace PrimeTest.ModelFactories
+namespace PrimeTests.ModelFactories
 {
     public class EnrolmentStatusFactory : Faker<EnrolmentStatus>
     {
