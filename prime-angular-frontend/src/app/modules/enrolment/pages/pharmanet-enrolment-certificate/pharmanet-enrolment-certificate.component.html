@@ -35,9 +35,17 @@
       <ng-container appPageSubheaderTitle>Provisioner Links</ng-container>
     </app-page-subheader>
 
+    <p>
+      Clicking the button below will generate a unique, private URL which will display your name, PharmaNet access
+      privileges, and a unique identifying number.
+    </p>
+    <p>
+      Please share this URL with your organization’s system administrator for the purpose of provisioning your access to
+      PharmaNet. For your protection, the URL will expire after a certain number of views.
+    </p>
     <p class="mb-4">
-      Use the Provisioner Link to submit your PharmaNet ID to the vendor your organization uses. Copy and Paste the
-      Provisioner Link and send it to the vendor using a secured email.
+      If you have any questions about the collection or use of your personal information, please call Health Insurance
+      BC toll free at 1-800-39PRIME.
     </p>
 
     <div class="mb-5">
@@ -84,10 +92,12 @@
     </div>
 
     <ng-container *ngIf="enrolmentCertificateNote">
-      <dl class="row mb-5">
-        <dt class="col-6">Limits and Conditions</dt>
-        <dd class="col-6 text-right">{{ enrolmentCertificateNote | default }}</dd>
-      </dl>
+      <div class="mb-5">
+        <app-enrollee-property title="Limits and Conditions"
+                               [makeBold]="true">
+          {{ enrolmentCertificateNote | default }}
+        </app-enrollee-property>
+      </div>
     </ng-container>
 
   </app-page>
