@@ -3,8 +3,7 @@
 FROM docker-registry.default.svc:5000/dqszvc-tools/dotnet-30 AS build
 #FROM dotnet-22-rhel7 AS build
 WORKDIR /opt/app-root/app
-
-
+USER 0
 SHELL [ "/bin/bash" , "-c" ]
 
 ENV PATH "$PATH:/opt/rh/rh-dotnet22/root/usr/lib64/dotnet"
@@ -23,11 +22,17 @@ RUN dotnet restore
 COPY . /opt/app-root/app/
 RUN dotnet publish -c Release -o /opt/app-root/app/out /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
 
-FROM docker-registry.default.svc:5000/dqszvc-tools/dotnet-30 AS runtime
+ENV PATH="$PATH:/opt/app-root/.dotnet/tools"
+
+RUN dotnet publish -c Release -o /opt/app-root/app/out /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
+RUN dotnet tool install --global dotnet-ef --version 3.0.0 && \
+    dotnet ef migrations script --idempotent --output "${WORKDIR}/databaseMigrations.sql"
+
+
+FROM docker-registry.default.svc:5000/dqszvc-tools/dotnet-30-runtime-rhel7 AS runtime
 #FROM registry.redhat.io/dotnet/dotnet-22-runtime-rhel7 AS runtime
 #FROM dotnet-22-runtime-rhel7 AS runtime
 WORKDIR /opt/app-root/app
-ENV PATH "$PATH:/opt/rh/rh-dotnet22/root/usr/lib64/dotnet"
 COPY --from=build /opt/app-root/app/out /opt/app-root/app
 EXPOSE 8080 5001 1025
 ENV DB_HOST ${DB_HOST}
