@@ -12,6 +12,9 @@ namespace Prime.Models
         public short Code { get; set; }
 
         [Required]
+        public bool Manual { get; set; }
+
+        [Required]
         public string Name { get; set; }
 
         [JsonIgnore]
