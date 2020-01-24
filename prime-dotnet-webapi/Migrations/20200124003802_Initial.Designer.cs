@@ -11,7 +11,7 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20200122001001_Initial")]
+    [Migration("20200124003802_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -7718,7 +7718,7 @@ namespace Prime.Migrations
                             Id = 17,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Description = "Registered User",
+                            Description = "Regulated User",
                             PrivilegeGroupCode = (short)4,
                             TransactionType = "RU",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -7740,7 +7740,7 @@ namespace Prime.Migrations
                             Id = 19,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Description = "Registered User that can have OBOs",
+                            Description = "Regulated User that can have OBOs",
                             PrivilegeGroupCode = (short)5,
                             TransactionType = "RU with OBOs",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
