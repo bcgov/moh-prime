@@ -11,7 +11,7 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20200122001001_Initial")]
+    [Migration("20200124003802_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -7718,7 +7718,7 @@ namespace Prime.Migrations
                             Id = 17,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Description = "Registered User",
+                            Description = "Regulated User",
                             PrivilegeGroupCode = (short)4,
                             TransactionType = "RU",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -7740,7 +7740,7 @@ namespace Prime.Migrations
                             Id = 19,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Description = "Registered User that can have OBOs",
+                            Description = "Regulated User that can have OBOs",
                             PrivilegeGroupCode = (short)5,
                             TransactionType = "RU with OBOs",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -8818,11 +8818,11 @@ namespace Prime.Migrations
                         new
                         {
                             Id = 1,
-                            Clause = "MOA user clause lorem, ipsum dolor sit amet consectetur adipisicing elit. Modi nihil corporis, ex totam, eos sapiente quam, sit ea iure consequatur neque harum architecto debitis adipisci molestiae fuga sed nam vitae.",
+                            Clause = "OBO user clause lorem, ipsum dolor sit amet consectetur adipisicing elit. Modi nihil corporis, ex totam, eos sapiente quam, sit ea iure consequatur neque harum architecto debitis adipisci molestiae fuga sed nam vitae.",
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EnrolleeClassification = "MOA",
+                            EnrolleeClassification = "OBO",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
