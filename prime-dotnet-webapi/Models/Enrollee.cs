@@ -164,11 +164,11 @@ namespace Prime.Models
             {
                 ICollection<EnrolmentStatusReason> enrolmentStatusReasons = this.CurrentStatus?.EnrolmentStatusReasons;
 
-                if (enrolmentStatusReasons != null && enrolmentStatusReasons.Count > 0)
+                if (enrolmentStatusReasons != null)
                 {
                     return (this.Certifications.Count > 0)
-                        ? PrimeConstants.PRIME_OBO
-                        : PrimeConstants.PRIME_RU;
+                        ? PrimeConstants.PRIME_RU
+                        : PrimeConstants.PRIME_OBO;
                 }
 
                 return null;
