@@ -1,4 +1,3 @@
-using System;
 using Bogus;
 using Bogus.Extensions;
 using Prime.Models;

@@ -21,12 +21,12 @@ namespace Prime.ModelFactories
             RuleFor(x => x.LicenseCode, (f, x) => f.PickRandom(LicenseLookup.AllowedFor(x.CollegeCode)).Code);
             RuleFor(x => x.PracticeCode, (f, x) => f.PickRandom(PracticeLookup.AllowedFor(x.CollegeCode))?.Code);
 
-           // Ignore(x => x.College);
             Ignore(x => x.License);
             Ignore(x => x.Practice);
 
             FinishWith((f, x) =>
             {
+                // Clear lookup navigation properties
                 x.College = null;
             });
         }

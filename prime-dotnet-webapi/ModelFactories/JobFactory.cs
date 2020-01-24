@@ -1,5 +1,4 @@
 using Bogus;
-using Bogus.Extensions;
 using Prime.Models;
 
 namespace Prime.ModelFactories
