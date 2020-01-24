@@ -79,6 +79,11 @@
         <span>View Enrolment</span>
       </button>
       <button mat-menu-item
+              (click)="viewEnrolmentHistory(enrolment.id)">
+        <mat-icon>remove_red_eye</mat-icon>
+        <span>View Enrolment History</span>
+      </button>
+      <button mat-menu-item
               *ngIf="enrolment.currentStatus.enrolmentStatusReasons.length"
               (click)="reviewStatusReasons(enrolment)">
         <mat-icon>flag</mat-icon>
@@ -116,11 +121,6 @@
               (click)="markAsInProgress(enrolment.id)">
         <mat-icon>undo</mat-icon>
         <span>Enable Editing</span>
-      </button>
-      <button mat-menu-item
-              (click)="deleteEnrolment(enrolment.id)">
-        <mat-icon>delete</mat-icon>
-        <span>Delete Enrolment</span>
       </button>
     </mat-menu>
   </ng-template>

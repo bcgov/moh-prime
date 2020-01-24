@@ -19,6 +19,14 @@
     </app-page-subheader>
   </div>
 
+  <div *ngIf="!isAnyJobOrReg()"
+       class="mb-4 red">
+    <mat-icon matTooltip="Action Required"
+              matTooltipPosition="after"
+              class="red">warning</mat-icon>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+  </div>
+
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Personal Information from BC Services Card</ng-container>
   </app-page-subheader>
@@ -29,7 +37,10 @@
 
   <div class="footer">
     <mat-checkbox #accept>
-      I confirm that all information provided is accurate.
+      <div class="pl-3">
+        I certify that all information provided is true and complete. I understand it is an offence under the
+        Pharmaceutical Services Act to knowingly provide false or misleading information.
+      </div>
     </mat-checkbox>
   </div>
 
@@ -38,7 +49,7 @@
 
       <button mat-flat-button
               color="primary"
-              [disabled]="!accept.checked"
+              [disabled]="!accept.checked || !isAnyJobOrReg()"
               (click)="onSubmit()">Submit Enrolment</button>
 
     </div>

@@ -40,6 +40,10 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     super(route, router);
   }
 
+  public isAnyJobOrReg(): boolean {
+    return this.enrolmentStateService.isAnyJobOrReg();
+  }
+
   public onSubmit() {
     if (this.enrolmentStateService.isEnrolmentValid()) {
       const enrolment = this.enrolmentStateService.enrolment;
@@ -72,12 +76,12 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       console.log('JOBS', this.enrolmentStateService.isJobsValid());
       console.log('DECLARATION', this.enrolmentStateService.isSelfDeclarationValid());
       console.log('ACCESS', this.enrolmentStateService.isOrganizationValid());
+      console.log('ANY ( JOB || REGULATORY )', this.enrolmentStateService.isAnyJobOrReg());
     }
   }
 
   public ngOnInit() {
     const enrolment = this.enrolmentService.enrolment;
-
     this.enrolment = enrolment;
     this.enrolmentStateService.enrolment = enrolment;
     this.isInitialEnrolment = enrolment.progressStatus !== ProgressStatus.FINISHED;

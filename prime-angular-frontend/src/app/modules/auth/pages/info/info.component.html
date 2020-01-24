@@ -1,12 +1,13 @@
 <div>
-  <div class="container-fluid">
+  <div class="container">
+    <app-banner *ngIf="isIE == true"></app-banner>
     <div class="row mt-4 enrolment-container">
       <div class="col-md-3 d-none d-md-block">
         <img src="/assets/prime-logo-textless.svg"
              class="logo"
              alt="PRIME Logo">
       </div>
-      <div class="col-md-6 col-sm-12">
+      <div class="col-md-7 col-sm-12">
         <app-page-header><span class="font-weight-bolder font-size-huge">PRIME</span>
         </app-page-header>
         <app-page-subheader [divider]="false">
@@ -18,13 +19,14 @@
 
         <div class="ml-2">
           <p class="font-italic font-weight-light mb-4 accent">To get started you will need:</p>
-          <div class="font-weight-bold">BC Services Card on Mobile Device</div>
-          <span class="font-weight-bold">College Certification Information</span>
+          <div class="font-weight-bold">BC Services Card on your Mobile Device</div>
+          <span class="font-weight-bold">College Licence Information</span>
           <span><small class="font-italic font-weight-light ml-2">(for prescribers only)</small></span>
           <div class="mt-4">
             <button mat-flat-button
                     class="mr-4 mb-4"
                     color="primary"
+                    [disabled]="isIE"
                     (click)="loginUsingBCSC()">Log in with BC Services Card</button>
             <button mat-flat-button
                     color="accent"
@@ -37,65 +39,68 @@
   </div>
 
   <app-pill [variant]="1">
-    <div class="container-fluid">
+    <div>
       <div class="row">
         <div class="col-sm-12 mb-4">
           <h1 class="font-weight-bold">PRIME Enrolment Steps</h1>
         </div>
       </div>
-      <div class="row mb-4">
-        <p class="col-sm-12 col-md-6 offset-md-3 font-weight-bold">As a Health Professional working in British Columbia,
+      <div class="row mb-4 justify-content-center">
+        <p class="col-sm-12 col-md-6  font-weight-bold">As a Health Professional working in British Columbia,
           use PRIME to
           request approval from The Ministry of Health to access PharmaNet.</p>
       </div>
-      <div class="row mb-4">
-        <div class="col-md"></div>
+      <div class="row mb-4 justify-content-center">
         <div class="col-sm-12 col-md-3 info mb-4">
           <h3>BC Services Card</h3>
-          <p>To get started you will need
-            to set up your BC Services
-            card on your mobile device.</p>
-          <a href=""><small class="anchor font-weight-bold">SET UP MY BC SERVICES CARD</small></a>
+          <p>
+            To get started you will need to set up your BC Services card on your mobile device.
+          </p>
+          <a href=""><small class="anchor font-weight-bold">LEARN MORE ABOUT BC SERVICES CARD</small></a>
         </div>
         <div class="col-sm-12 col-md-3 info mb-4">
           <h3>PRIME Enrolment</h3>
-          <p>Provide contact and Health
-            Professional information.
-            Answer a set of self-declaration
-            questions, then
-            carefully read and accept the
-            PharmaNet terms of access.</p>
+          <p>
+            Provide contact and Health Professional information. Answer a set of self-declaration questions, then
+            carefully read and accept the PharmaNet terms of access.
+          </p>
         </div>
         <div class="col-sm-12 col-md-3 info mb-4">
           <h3>Enrolment Certificate</h3>
-          <p>Once approved, to access
-            PharmaNet, send your
-            enrolment certificate to the
-            PharmaNet provider used by
-            your place of work, or to your
-            system administrator.</p>
+          <p>
+            Once approved, to access PharmaNet, send your enrolment certificate to the PharmaNet provider used by your
+            place of work, or to your system administrator.
+          </p>
         </div>
-        <div class="col-md"></div>
       </div>
     </div>
   </app-pill>
 
   <app-pill [variant]="2">
-    <div class="container-fluid">
+    <div>
       <div class="row">
         <div class="col-sm-12 mb-4">
           <h1 class="font-weight-bold">BC Services Card</h1>
         </div>
       </div>
-      <div class="row mb-4">
-        <div class="col-md-3"></div>
+      <div class="row mb-4 justify-content-center">
         <div class="col-sm-12 col-md-6 info mb-4">
-          <p>PRIME uses the BC Services Card to securely identify people who access PharmaNet. The Ministry of Health
-            wants to make sure patient information on PharmaNet is accessed appropriately, only by health professionals
-            who have a clinical need to do so.<br />
-            If you do not have your BC Services Card digital credential set up on your mobile device, you will need to do that first. This is a quick process and it usually only takes a few minutes!<br/>
-            Visit the BC Services Card website for more information and instructions.</p>
-            <a class="anchor"  href=""><strong>SET UP MY BC SERVICES CARD</strong></a>
+          <p>
+            PRIME uses the BC Services Card to securely identify people who access PharmaNet. PRIME will retrieve your
+            full name, date of birth and mailing address (no other personal information is shared). The Ministry of
+            Health wants to make sure patient information on PharmaNet is accessed appropriately, only by health
+            professionals who have a clinical need to do so.
+
+            <br><br>
+
+            If you do not have your BC Services Card set up on your mobile device, you will need to do that first. This
+            is a quick process and it usually only takes a few minutes!
+
+            <br><br>
+
+            Visit the BC Services Card website for more information and instructions.
+          </p>
+            <a class="anchor" href=""><strong>HOW TO SET UP MOBILE CARD</strong></a>
         </div>
       </div>
     </div>
@@ -107,12 +112,12 @@
         <h1 class="font-weight-bold">Get Support</h1>
       </div>
     </div>
-    <div class="row mb-4">
-      <div class="col-sm-12 col-md-5 offset-md-4 info mb-4">
+    <div class="row mb-4 justify-content-center">
+      <div class="col-sm-12 col-md-5 info mb-4">
         <p>
-          Questions about PRIME should be directed to:<br/>
-          1-844-39PRIME<br/>
-          <a href="mailto:prime@gov.bc.ca">prime@gov.bc.ca</a>
+          Questions about PRIME should be directed to:<br>
+          <app-prime-phone></app-prime-phone><br>
+          <app-prime-email></app-prime-email>
         </p>
       </div>
     </div>

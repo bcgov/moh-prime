@@ -164,11 +164,11 @@ namespace Prime.Models
             {
                 ICollection<EnrolmentStatusReason> enrolmentStatusReasons = this.CurrentStatus?.EnrolmentStatusReasons;
 
-                if (enrolmentStatusReasons != null && enrolmentStatusReasons.Count > 0)
+                if (enrolmentStatusReasons != null)
                 {
                     return (this.Certifications.Count > 0)
-                        ? PrimeConstants.PRIME_MOA
-                        : PrimeConstants.PRIME_RU;
+                        ? PrimeConstants.PRIME_RU
+                        : PrimeConstants.PRIME_OBO;
                 }
 
                 return null;
@@ -177,5 +177,8 @@ namespace Prime.Models
 
         [JsonIgnore]
         public ICollection<AccessTerm> AccessTerms { get; set; }
+
+        [JsonIgnore]
+        public ICollection<EnrolleeProfileVersion> EnrolleeProfileVersions { get; set; }
     }
 }

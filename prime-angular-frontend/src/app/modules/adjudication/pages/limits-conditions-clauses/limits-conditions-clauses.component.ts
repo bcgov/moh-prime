@@ -62,14 +62,18 @@ export class LimitsConditionsClausesComponent implements OnInit {
         .updateAdjudicationNote(this.enrollee.id, this.note.value, NoteType.AccessAgreementNote)
         .subscribe(
           () => {
-            this.toastService.openSuccessToast(`Access agreement note has been saved.`);
+            this.toastService.openSuccessToast(`Terms of Access note has been saved.`);
           },
           (error: any) => {
-            this.toastService.openErrorToast(`Access agreement note could not be saved`);
+            this.toastService.openErrorToast(`Terms of Access note could not be saved`);
             this.logger.error('[Adjudication] AccessAgreementNotes::onSubmit error has occurred: ', error);
           }
         );
     }
+  }
+
+  public viewEnrolmentHistory(enrolmentId: number) {
+    this.router.navigate([enrolmentId, AdjudicationRoutes.PROFILE_HISTORY], { relativeTo: this.route.parent });
   }
 
   public reviewStatusReasons(enrolment: Enrolment) {

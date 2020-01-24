@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MaintenanceComponent } from './maintenance.component';
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 
 describe('MaintenanceComponent', () => {
   let component: MaintenanceComponent;
@@ -11,6 +12,12 @@ describe('MaintenanceComponent', () => {
       {
         declarations: [
           MaintenanceComponent
+        ],
+        providers: [
+          {
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
+          }
         ]
       }
     ).compileComponents();
