@@ -32,7 +32,7 @@ namespace Prime
         public const string PRIME_USER_POLICY = "prime-user-policy";
 
         // Enrollee Classifications
-        public const string PRIME_MOA = "MOA";
+        public const string PRIME_OBO = "OBO";
 
         public const string PRIME_RU = "RU";
 
