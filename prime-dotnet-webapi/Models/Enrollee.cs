@@ -167,8 +167,8 @@ namespace Prime.Models
                 if (enrolmentStatusReasons != null)
                 {
                     return (this.Certifications.Count > 0)
-                        ? PrimeConstants.PRIME_OBO
-                        : PrimeConstants.PRIME_RU;
+                        ? PrimeConstants.PRIME_RU
+                        : PrimeConstants.PRIME_OBO;
                 }
 
                 return null;
