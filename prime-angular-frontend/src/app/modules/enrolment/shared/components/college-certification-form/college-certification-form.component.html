@@ -27,19 +27,33 @@
       </div>
 
       <ng-container *ngIf="collegeCode.value">
-
         <div class="col-sm-12 pl-5">
 
-          <mat-form-field class="w-100">
-            <span matPrefix>{{ licensePrefix }}&nbsp;</span>
-            <input matInput
-                   placeholder="Licence Number"
-                   formControlName="licenseNumber">
-            <mat-error *ngIf="form.get('licenseNumber').hasError('required')">Required</mat-error>
-            <mat-error *ngIf="form.get('licenseNumber').hasError('alphanumeric')">Must contain only alphanumeric
-              characters
-            </mat-error>
-          </mat-form-field>
+          <div class="row">
+            <div class="col-4">
+
+              <mat-form-field class="w-100">
+                <input matInput
+                       placeholder="College Number"
+                       [value]="licensePrefix"
+                       disabled>
+              </mat-form-field>
+
+            </div>
+            <div class="col">
+
+              <mat-form-field class="w-100">
+                <input matInput
+                       placeholder="Licence Number"
+                       formControlName="licenseNumber">
+                <mat-error *ngIf="form.get('licenseNumber').hasError('required')">Required</mat-error>
+                <mat-error *ngIf="form.get('licenseNumber').hasError('alphanumeric')">Must contain only alphanumeric
+                  characters
+                </mat-error>
+              </mat-form-field>
+
+            </div>
+          </div>
 
         </div>
         <div class="col-sm-12 pl-5">

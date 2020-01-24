@@ -73,7 +73,7 @@ export class EnrolmentGuard extends BaseGuard {
         case EnrolmentStatus.ACCEPTED_TOS:
           return this.manageAcceptedTosRouting(routePath, enrolment);
         case EnrolmentStatus.DECLINED_TOS:
-          return this.navigate(routePath, EnrolmentRoutes.DECLINED_ACCESS_AGREEMENT);
+          return this.navigate(routePath, EnrolmentRoutes.DECLINED_TERMS_OF_ACCESS);
       }
     }
 
@@ -116,14 +116,14 @@ export class EnrolmentGuard extends BaseGuard {
 
   private manageApprovedRouting(routePath: string, enrolment: Enrolment) {
     const whiteListedRoutes = [
-      EnrolmentRoutes.ACCESS_AGREEMENT,
+      EnrolmentRoutes.TERMS_OF_ACCESS,
       EnrolmentRoutes.PHARMANET_TRANSACTIONS,
       EnrolmentRoutes.ENROLMENT_LOG_HISTORY
     ];
     const route = routePath.split('/').pop();
 
     if (!whiteListedRoutes.includes(route)) {
-      return this.navigate(routePath, EnrolmentRoutes.ACCESS_AGREEMENT);
+      return this.navigate(routePath, EnrolmentRoutes.TERMS_OF_ACCESS);
     }
 
     return true;
