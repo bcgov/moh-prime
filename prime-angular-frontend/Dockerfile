@@ -18,7 +18,7 @@ FROM nginx:1.15-alpine
 COPY --from=build-deps /usr/src/app/dist/angular-frontend /usr/share/nginx/html
 
 RUN rm /etc/nginx/conf.d/default.conf
-COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/nginx.conf
 
 RUN export CERTBOT_DEPS="py-pip \
                          build-base \
@@ -39,11 +39,11 @@ RUN pip install --upgrade --no-cache-dir pip virtualenv
 #WORKDIR /letsencrypt
 
 # Get the certbot so we can use Lets Encrypt
-RUN wget https://dl.eff.org/certbot-auto
-RUN chmod a+x certbot-auto
+#RUN wget https://dl.eff.org/certbot-auto
+#RUN chmod a+x certbot-auto
 
 # Clean up
-RUN apk del ${CERTBOT_DEPS}
+#RUN apk del ${CERTBOT_DEPS}
 RUN rm -rf /var/cache/apk/*
 
 WORKDIR /
