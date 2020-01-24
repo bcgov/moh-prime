@@ -2,10 +2,10 @@
 
   <app-collection-notice-alert></app-collection-notice-alert>
 
-  <app-page-header>Access Agreement</app-page-header>
+  <app-page-header>Terms Of Access</app-page-header>
 
   <app-progress-indicator *ngIf="isInitialEnrolment"
-                          [currentRoute]="EnrolmentRoutes.ACCESS_AGREEMENT"></app-progress-indicator>
+                          [currentRoute]="EnrolmentRoutes.TERMS_OF_ACCESS"></app-progress-indicator>
 
   <ng-container *ngIf="currentPage > 0; else preamble">
 
@@ -40,12 +40,12 @@
 
       <p>
         Your application can be automatically processed. Within a few minutes you should receive approval to access
-        PharmaNet once you accept the PharmaNet User Access Agreement. Please read the agreement carefully before
+        PharmaNet once you accept the PharmaNet Terms of Access Agreement. Please read the agreement carefully before
         accepting.
       </p>
 
       <p>
-        After you accept the User Access Agreement, you will receive your PharmaNet ID. Give this ID to the person
+        After you accept the Terms of Access Agreement, you will receive your PharmaNet ID. Give this ID to the person
         or organization responsible for setting up your PharmaNet access account. This ID must be associated with
         your transactions on any PharmaNet access.
       </p>
@@ -53,17 +53,16 @@
     </ng-container>
 
     <p>
-      To confirm your access, you must accept the PharmaNet User Access Agreement. This agreement is specific to
+      To confirm your access, you must accept the PharmaNet Terms of Access Agreement. This agreement is specific to
       the type of access you have. If you request access as a different type of user or for a different type of
       organization at any point in the future, you may be required to accept a different PharmaNet User Access
       Agreement.
     </p>
 
     <p>
-      Please read the User Access Agreement carefully, and ensure that you are both willing and able to abide by
-      its terms with respect to your use of PharmaNet. You are encouraged to print or save a copy of the User
-      Access
-      Agreement to keep for your reference.
+      Please read the Terms of Access Agreement carefully, and ensure that you are both willing and able to abide by
+      its terms with respect to your use of PharmaNet. You are encouraged to print or save a copy of the Terms of
+      Access Agreement to keep for your reference.
     </p>
 
   </ng-template>

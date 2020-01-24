@@ -157,12 +157,12 @@ export class DashboardComponent implements OnInit {
           },
           {
             name: (enrolmentStatus === EnrolmentStatus.ACCEPTED_TOS)
-              ? 'Access Agreement History'
-              : 'Access Agreement',
+              ? 'Terms of Access History'
+              : 'Terms of Access',
             icon: statusIcons.accessAgreement,
             route: (enrolmentStatus === EnrolmentStatus.ACCEPTED_TOS)
-              ? EnrolmentRoutes.ACCESS_AGREEMENT_HISTORY
-              : EnrolmentRoutes.ACCESS_AGREEMENT,
+              ? EnrolmentRoutes.TERMS_OF_ACCESS_HISTORY
+              : EnrolmentRoutes.TERMS_OF_ACCESS,
             showItem: true,
             disabled: (
               [
@@ -173,7 +173,7 @@ export class DashboardComponent implements OnInit {
               ].includes(enrolmentStatus)
             ),
             forceActive: (
-              // Highlight the access agreement when in these states
+              // Highlight the terms of access when in these states
               [EnrolmentStatus.SUBMITTED].includes(enrolmentStatus)
             )
           },

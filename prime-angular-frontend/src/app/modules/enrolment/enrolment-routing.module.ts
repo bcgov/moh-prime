@@ -110,12 +110,12 @@ const routes: Routes = [
         data: { title: 'Enrolment Summary' }
       },
       {
-        path: EnrolmentRoutes.ACCESS_AGREEMENT,
+        path: EnrolmentRoutes.TERMS_OF_ACCESS,
         component: AccessAgreementComponent,
-        data: { title: 'Enrolment Access Agreement' }
+        data: { title: 'Enrolment Terms of Access' }
       },
       {
-        path: EnrolmentRoutes.DECLINED_ACCESS_AGREEMENT,
+        path: EnrolmentRoutes.DECLINED_TERMS_OF_ACCESS,
         component: DeclinedAccessAgreementComponent,
         data: { title: 'Enrolment Summary' }
       },
@@ -123,9 +123,9 @@ const routes: Routes = [
       // Enrollee history and PharmaNet:
       //
       {
-        path: EnrolmentRoutes.ACCESS_AGREEMENT_HISTORY,
+        path: EnrolmentRoutes.TERMS_OF_ACCESS_HISTORY,
         component: AccessAgreementHistoryComponent,
-        data: { title: 'Access Agreement History' }
+        data: { title: 'Terms of Access History' }
       },
       {
         path: EnrolmentRoutes.PHARMANET_ENROLMENT_CERTIFICATE,
