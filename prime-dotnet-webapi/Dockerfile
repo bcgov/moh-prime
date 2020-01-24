@@ -1,14 +1,23 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.0 AS build
-#FROM registry.redhat.io/rhel8/dotnet-30 as build
+#FROM mcr.microsoft.com/dotnet/core/sdk:3.0 AS build
+FROM registry.redhat.io/rhel8/dotnet-30 as build
 WORKDIR /opt/app-root/app
+USER 0
+
 ENV ASPNETCORE_ENVIRONMENT Development
 RUN mkdir -p /opt/app-root/app
 COPY *.csproj /opt/app-root/app
 RUN dotnet restore
 COPY . /opt/app-root/app
+
+# Begin database migration setup 
+ENV PATH="$PATH:/opt/app-root/.dotnet/tools"
+
 RUN dotnet publish -c Release -o /opt/app-root/app/out /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.0 AS runtime
-#FROM registry.redhat.io/rhel8/dotnet-30 as runtime
+RUN dotnet tool install --global dotnet-ef --version 3.0.0 && \
+    dotnet ef migrations script --idempotent --output "${WORKDIR}/databaseMigrations.sql"
+
+#FROM mcr.microsoft.com/dotnet/core/aspnet:3.0 AS runtime
+FROM registry.redhat.io/dotnet/dotnet-30-runtime-rhel7 as runtime
 WORKDIR /opt/app-root/app
 COPY --from=build /opt/app-root/app/out /opt/app-root/app
 EXPOSE 8080 5001 1025
