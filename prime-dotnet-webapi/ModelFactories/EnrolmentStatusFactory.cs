@@ -23,17 +23,16 @@ namespace Prime.ModelFactories
             RuleFor(x => x.Id, f => IdCounter++);
             RuleFor(x => x.Enrollee, f => owner);
             RuleFor(x => x.EnrolleeId, f => owner.Id);
-            RuleFor(x => x.Status, f => GetNextStatus() ?? f.PickRandom(StatusLookup.All));
-            RuleFor(x => x.StatusCode, (f, x) => x.Status.Code);
+            RuleFor(x => x.StatusCode, f => (GetNextStatus() ?? f.PickRandom(StatusLookup.All)).Code);
             RuleFor(x => x.StatusDate, f => DateTime.Now);
             RuleFor(x => x.PharmaNetStatus, false);
             RuleFor(x => x.EnrolmentStatusReasons, f => null);
 
+            Ignore(x => x.Status);
+
             RuleSet("inProgress", (set) =>
             {
-                RuleFor(x => x.Status, f => StatusLookup.InProgress);
-                RuleFor(x => x.StatusCode, (f, x) => x.Status.Code);
-
+                RuleFor(x => x.StatusCode, f => StatusLookup.InProgress.Code);
             });
             RuleSet("pharmanet", (set) =>
             {

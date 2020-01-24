@@ -55,7 +55,7 @@ namespace Prime.ModelFactories
             RuleFor(x => x.AssignedPrivileges, f => null);
             RuleFor(x => x.Privileges, f => null);
             RuleFor(x => x.EnrolleeProfileVersions, f => null);
-            Ignore(x => x.AccessTerms);
+            Ignore(x => x.AccessTerms); // Awaiting finialization of access terms
 
             RuleSet("status.submitted", (set) =>
             {

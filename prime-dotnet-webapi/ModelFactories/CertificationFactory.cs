@@ -18,10 +18,17 @@ namespace Prime.ModelFactories
             RuleFor(x => x.RenewalDate, f => f.Date.Future());
             RuleFor(x => x.College, f => f.PickRandom(CollegeLookup.All));
             RuleFor(x => x.CollegeCode, (f, x) => x.College.Code);
-            RuleFor(x => x.License, (f, x) => f.PickRandom(LicenseLookup.AllowedFor(x.College)));
-            RuleFor(x => x.LicenseCode, (f, x) => x.License.Code);
-            RuleFor(x => x.Practice, (f, x) => f.PickRandom(PracticeLookup.AllowedFor(x.College)));
-            RuleFor(x => x.PracticeCode, (f, x) => x.Practice?.Code);
+            RuleFor(x => x.LicenseCode, (f, x) => f.PickRandom(LicenseLookup.AllowedFor(x.CollegeCode)).Code);
+            RuleFor(x => x.PracticeCode, (f, x) => f.PickRandom(PracticeLookup.AllowedFor(x.CollegeCode))?.Code);
+
+           // Ignore(x => x.College);
+            Ignore(x => x.License);
+            Ignore(x => x.Practice);
+
+            FinishWith((f, x) =>
+            {
+                x.College = null;
+            });
         }
     }
 }

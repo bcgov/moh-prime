@@ -11,21 +11,22 @@ namespace Prime.ModelFactories
         // TODO awaiting finalization of dynamic access agreement
         public AccessTermFactory(Enrollee owner)
         {
-            this.SetBaseRules();
+            throw new NotImplementedException("");
 
-            RuleFor(x => x.Id, f => IdCounter++);
-            RuleFor(x => x.Enrollee, f => owner);
-            RuleFor(x => x.EnrolleeId, f => owner.Id);
-            RuleFor(x => x.GlobalClause, f => f.PickRandom(GlobalClauseLookup.All));
-            RuleFor(x => x.GlobalClauseId, (f, x) => x.GlobalClause.Id);
-            RuleFor(x => x.UserClause, f => f.PickRandom(UserClauseLookup.All));
-            RuleFor(x => x.UserClauseId, (f, x) => x.UserClause.Id);
+            // this.SetBaseRules();
+
+            // RuleFor(x => x.Id, f => IdCounter++);
+            // RuleFor(x => x.Enrollee, f => owner);
+            // RuleFor(x => x.EnrolleeId, f => owner.Id);
+            // RuleFor(x => x.GlobalClause, f => f.PickRandom(GlobalClauseLookup.All));
+            // RuleFor(x => x.GlobalClauseId, (f, x) => x.GlobalClause.Id);
+            // RuleFor(x => x.UserClause, f => f.PickRandom(UserClauseLookup.All));
+            // RuleFor(x => x.UserClauseId, (f, x) => x.UserClause.Id);
             // RuleFor(x => x.AccessTermLicenseClassClauses,  => );
-            //  RuleFor(x => x.LimitsConditionsClause, f => );
-            //  LimitsConditionsClauseId
-            RuleFor(x => x.CreatedDate, f => f.Date.Past());
-            RuleFor(x => x.AcceptedDate, (f, x) => x.CreatedDate.AddDays(f.Random.Int(0, 5)));
-
+            // RuleFor(x => x.LimitsConditionsClause, f => );
+            // LimitsConditionsClauseId
+            // RuleFor(x => x.CreatedDate, f => f.Date.Past());
+            // RuleFor(x => x.AcceptedDate, (f, x) => x.CreatedDate.AddDays(f.Random.Int(0, 5)));
         }
     }
 }

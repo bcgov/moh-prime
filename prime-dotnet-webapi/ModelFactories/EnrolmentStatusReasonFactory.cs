@@ -16,24 +16,22 @@ namespace Prime.ModelFactories
             RuleFor(x => x.Id, f => IdCounter++);
             RuleFor(x => x.EnrolmentStatus, f => owner);
             RuleFor(x => x.EnrolmentStatusId, f => owner.Id);
-            RuleFor(x => x.StatusReason, f => f.PickRandom(StatusReasonLookup.All));
-            RuleFor(x => x.StatusReasonCode, (f, x) => x.StatusReason.Code);
+            RuleFor(x => x.StatusReasonCode, f => f.PickRandom(StatusReasonLookup.All).Code);
             RuleFor(x => x.ReasonNote, f => f.Lorem.Paragraph(1).OrNull(f));
+
+            Ignore(x => x.StatusReason);
 
             RuleSet("manualReason", (set) =>
             {
-                set.RuleFor(x => x.StatusReason, f => f.PickRandom(StatusReasonLookup.ManualReasons));
-                set.RuleFor(x => x.StatusReasonCode, (f, x) => x.StatusReason.Code);
+                set.RuleFor(x => x.StatusReasonCode, f => f.PickRandom(StatusReasonLookup.ManualReasons).Code);
             });
             RuleSet("manual", (set) =>
             {
-                set.RuleFor(x => x.StatusReason, f => StatusReasonLookup.Manual);
-                set.RuleFor(x => x.StatusReasonCode, (f, x) => x.StatusReason.Code);
+                set.RuleFor(x => x.StatusReasonCode, f => StatusReasonLookup.Manual.Code);
             });
             RuleSet("automatic", (set) =>
             {
-                set.RuleFor(x => x.StatusReason, f => StatusReasonLookup.Automatic);
-                set.RuleFor(x => x.StatusReasonCode, (f, x) => x.StatusReason.Code);
+                set.RuleFor(x => x.StatusReasonCode, f => StatusReasonLookup.Automatic.Code);
             });
         }
     }
