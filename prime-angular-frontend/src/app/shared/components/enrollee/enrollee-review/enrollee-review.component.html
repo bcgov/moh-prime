@@ -223,7 +223,7 @@
               (click)="onRoute(EnrolmentRoutes.SELF_DECLARATION)">edit</mat-icon>
   </app-page-subheader>
 
-  <app-enrollee-property title="Have you ever been the subject of an order or a conviction for an information contravention?"
+  <app-enrollee-property title="Are you, or have you ever been, subject to any limits, conditions or prohibitions imposed as a result of disciplinary actions taken by a governing body of a health profession in any jurisdiction, that involved improper access to, collection, use, or disclosure of personal information?"
                          [makeBold]="true">
     {{ enrolment?.hasConviction | yesNo: true }}
   </app-enrollee-property>
@@ -234,7 +234,7 @@
     {{ enrolment?.hasConvictionDetails }}
   </app-enrollee-property>
 
-  <app-enrollee-property title="Have you ever had your registration with a governing body of a health profession suspended or cancelled?"
+  <app-enrollee-property title="Are you or have you ever been the subject of an order or a conviction under legislation in any jurisdiction for a matter that involved improper access to, collection, use, or disclosure of personal information?"
                          [makeBold]="true">
     {{ enrolment?.hasRegistrationSuspended | yesNo: true }}
   </app-enrollee-property>
@@ -245,7 +245,7 @@
     {{ enrolment?.hasRegistrationSuspendedDetails }}
   </app-enrollee-property>
 
-  <app-enrollee-property title="Have you ever had Terms and Conditions imposed on your licence as a result of disciplinary actions taken by a governing body?"
+  <app-enrollee-property title="Have you ever been disciplined or fired by an employer, or had a contract for your services terminated, for a matter that involved improper access to, collection, use, or disclosure of personal information?"
                          [makeBold]="true">
     {{ enrolment?.hasDisciplinaryAction | yesNo: true }}
   </app-enrollee-property>
@@ -256,7 +256,7 @@
     {{ enrolment?.hasDisciplinaryActionDetails }}
   </app-enrollee-property>
 
-  <app-enrollee-property title="Have you ever had your access to PharmaNet suspended or revoked?"
+  <app-enrollee-property title="Have you ever had your access to an electronic health record system, electronic medical record system, pharmacy or laboratory record system, or any similar health information system, in any jurisdiction, suspended or cancelled?"
                          [makeBold]="true">
     {{ enrolment?.hasPharmaNetSuspended | yesNo: true }}
   </app-enrollee-property>
