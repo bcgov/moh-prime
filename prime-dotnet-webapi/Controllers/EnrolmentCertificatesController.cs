@@ -14,8 +14,6 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/enrolment-certificates")]
     [ApiController]
-    // User needs at least the ADMIN or ENROLLEE role to use this controller
-    [Authorize(Policy = PrimeConstants.USER_POLICY)]
     public class EnrolmentCertificatesController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
@@ -46,7 +44,6 @@ namespace Prime.Controllers
             return Ok(new ApiOkResponse<EnrolmentCertificate>(certificate));
         }
 
-
         // GET: api/enrolment-certificates/access
         /// <summary>
         /// Gets all of the access tokens for the user.
@@ -55,6 +52,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiOkResponse<IEnumerable<EnrolmentCertificateAccessToken>>), StatusCodes.Status200OK)]
+        [Authorize(Policy = PrimeConstants.USER_POLICY)]
         public async Task<ActionResult<IEnumerable<EnrolmentCertificateAccessToken>>> GetAccessTokens()
         {
             var tokens = await _certificateService.GetCertificateAccessTokensForUserIdAsync(User.GetPrimeUserId());
@@ -72,6 +70,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiOkResponse<EnrolmentCertificateAccessToken>), StatusCodes.Status201Created)]
+        [Authorize(Policy = PrimeConstants.USER_POLICY)]
         public async Task<ActionResult<EnrolmentCertificateAccessToken>> CreateEnrolmentCertificateAccessToken()
         {
             var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(User.GetPrimeUserId());
@@ -89,6 +88,21 @@ namespace Prime.Controllers
             var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrollee);
 
             return CreatedAtAction(nameof(GetEnrolmentCertificate), new { accessTokenId = createdToken.Id }, new ApiCreatedResponse<EnrolmentCertificateAccessToken>(createdToken));
+        }
+
+        // GET: api/enrolment-certificates/gpid
+        /// <summary>
+        /// Gets the GPID for the user. Only a valid token is required, no role is required.
+        /// </summary>
+        [HttpGet("gpid", Name = nameof(GetGpid))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ApiOkResponse<string>), StatusCodes.Status200OK)]
+        [Authorize]
+        public async Task<ActionResult<string>> GetGpid()
+        {
+            var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(User.GetPrimeUserId());
+
+            return Ok(new ApiOkResponse<string>(enrollee?.LicensePlate));
         }
     }
 }
