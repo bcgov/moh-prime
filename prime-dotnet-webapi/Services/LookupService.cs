@@ -12,7 +12,8 @@ namespace Prime.Services
     public class LookupService : BaseService, ILookupService
     {
         public LookupService(
-            ApiDbContext context, IHttpContextAccessor httpContext)
+            ApiDbContext context,
+            IHttpContextAccessor httpContext)
             : base(context, httpContext)
         { }
 

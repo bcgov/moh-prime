@@ -14,7 +14,8 @@ namespace Prime.Services
         private const int MAX_VIEWS = 3;
 
         public EnrolmentCertificateService(
-            ApiDbContext context, IHttpContextAccessor httpContext)
+            ApiDbContext context,
+            IHttpContextAccessor httpContext)
             : base(context, httpContext)
         { }
 

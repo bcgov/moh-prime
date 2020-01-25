@@ -172,10 +172,10 @@ namespace Prime
                 options.EnableSensitiveDataLogging(sensitiveDataLoggingEnabled: false);
             });
 
-            services
-                .AddHealthChecks()
-                .AddDbContextCheck<ApiDbContext>("DbContextHealthCheck")
-                .AddNpgSql(connectionString);
+            // services
+            // .AddHealthChecks()
+            // .AddDbContextCheck<ApiDbContext>("DbContextHealthCheck")
+            // .AddNpgSql(connectionString);
         }
 
         protected virtual void UpdateDatabase(IApplicationBuilder app)

@@ -1,4 +1,4 @@
-#FROM mcr.microsoft.com/dotnet/core/sdk:3.0 AS build
+# FROM mcr.microsoft.com/dotnet/core/sdk:3.0 AS build
 FROM registry.redhat.io/rhel8/dotnet-30 as build
 WORKDIR /opt/app-root/app
 USER 0
@@ -9,7 +9,7 @@ COPY *.csproj /opt/app-root/app
 RUN dotnet restore
 COPY . /opt/app-root/app
 
-# Begin database migration setup 
+# Begin database migration setup
 ENV PATH="$PATH:/opt/app-root/.dotnet/tools"
 
 RUN dotnet publish -c Release -o /opt/app-root/app/out /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
