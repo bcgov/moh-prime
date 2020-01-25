@@ -15,7 +15,7 @@ namespace Prime.Controllers
     [Route("api/enrolment-certificates")]
     [ApiController]
     // User needs at least the ADMIN or ENROLLEE role to use this controller
-    [Authorize(Policy = PrimeConstants.PRIME_USER_POLICY)]
+    [Authorize(Policy = PrimeConstants.USER_POLICY)]
     public class EnrolmentCertificatesController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;

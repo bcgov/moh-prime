@@ -85,8 +85,8 @@ namespace Prime
             services.AddAuthorization(
                 options =>
                 {
-                    options.AddPolicy(PrimeConstants.PRIME_USER_POLICY, policy => policy.Requirements.Add(new PrimeUserRequirement()));
-                    options.AddPolicy(PrimeConstants.PRIME_ADMIN_POLICY, policy => policy.RequireRole(PrimeConstants.PRIME_ADMIN_ROLE));
+                    options.AddPolicy(PrimeConstants.USER_POLICY, policy => policy.Requirements.Add(new PrimeUserRequirement()));
+                    options.AddPolicy(PrimeConstants.ADMIN_POLICY, policy => policy.RequireRole(PrimeConstants.PRIME_ADMIN_ROLE));
                 });
         }
 
