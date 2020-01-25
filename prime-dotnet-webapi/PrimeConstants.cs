@@ -21,7 +21,6 @@ namespace Prime
         public const string KEYCLOAK_REALM_ACCESS_KEY = "realm_access";
         public const string KEYCLOAK_RESOURCE_ACCESS_KEY = "resource_access";
         public const string KEYCLOAK_ROLES_KEY = "roles";
-        public const string ONLY_VALIDATE_POLICY = "only-validate-policy";
         public const string ADMIN_POLICY = "admin-policy";
         public const string USER_POLICY = "user-policy";
 
