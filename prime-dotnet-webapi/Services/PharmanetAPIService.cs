@@ -102,14 +102,13 @@ namespace Prime.Services
 
         private PharmanetCollegeRecord LocalDevApiMock(string licenceNumber)
         {
-            if (licenceNumber == "99999")
+            if (licenceNumber == "error")
             {
                 throw new PharmanetCollegeApiException();
             }
 
-            // last two digits
-            var userNumber = Int32.Parse(licenceNumber.Substring(3));
-            if (userNumber < 1 || userNumber > 11)
+            int parsed;
+            if (!Int32.TryParse(licenceNumber, out parsed) ||  parsed < 1 || parsed > 11)
             {
                 return null;
             }
@@ -129,7 +128,7 @@ namespace Prime.Services
                 new {Date = "2000-05-30", Name = "TEN"},
                 new {Date = "2000-06-07", Name = "ELEVEN"}
             };
-            var info = lookup[userNumber];
+            var info = lookup[parsed];
 
             return new PharmanetCollegeRecord
             {

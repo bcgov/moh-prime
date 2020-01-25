@@ -17,9 +17,11 @@ namespace Prime
 {
     public static class AuthenticationSetup
     {
-        public static void Initialize(IServiceCollection services,
-            IConfiguration configuration,
-            IHostEnvironment environment)
+        public static void Initialize(
+            IServiceCollection services, 
+            IConfiguration configuration, 
+            IHostEnvironment environment
+            )
         {
             if (services is null)
             {
@@ -39,55 +41,57 @@ namespace Prime
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
             services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                if (environment.IsDevelopment())
                 {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(options =>
-                {
-                    if (environment.IsDevelopment())
-                    {
-                        IdentityModelEventSource.ShowPII = true;
-                        options.RequireHttpsMetadata = false;
-                    }
-                    var audience = System.Environment.GetEnvironmentVariable("JWT_AUDIENCE");
-                    if (audience == null)
-                    {
-                        audience = configuration["Jwt:Audience"];
-                    }
-                    var wellKnownConfig = System.Environment.GetEnvironmentVariable("JWT_WELL_KNOWN_CONFIG");
-                    if (wellKnownConfig == null)
-                    {
-                        wellKnownConfig = configuration["Jwt:WellKnown"];
-                    }
-                    options.Audience = audience;
-                    options.MetadataAddress = wellKnownConfig;
-                    options.Events = new JwtBearerEvents
-                    {
-                        OnAuthenticationFailed = c =>
-                        {
-                            c.NoResult();
+                    IdentityModelEventSource.ShowPII = true;
+                    options.RequireHttpsMetadata = false;
+                }
 
-                            c.Response.StatusCode = 500;
-                            c.Response.ContentType = "text/plain";
-                            if (environment.IsDevelopment())
-                            {
-                                return c.Response.WriteAsync(c.Exception.ToString());
-                            }
-                            return c.Response.WriteAsync("An error occured processing your authentication.");
-                        },
-                        OnTokenValidated = async context => await OnTokenValidatedAsync(context)
-                    };
-                });
+                var audience = System.Environment.GetEnvironmentVariable("JWT_AUDIENCE");
+                if (audience == null)
+                {
+                    audience = configuration["Jwt:Audience"];
+                }
+
+                var wellKnownConfig = System.Environment.GetEnvironmentVariable("JWT_WELL_KNOWN_CONFIG");
+                if (wellKnownConfig == null)
+                {
+                    wellKnownConfig = configuration["Jwt:WellKnown"];
+                }
+
+                options.Audience = audience;
+                options.MetadataAddress = wellKnownConfig;
+                options.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = c =>
+                    {
+                        c.NoResult();
+
+                        c.Response.StatusCode = 500;
+                        c.Response.ContentType = "text/plain";
+                        if (environment.IsDevelopment())
+                        {
+                            return c.Response.WriteAsync(c.Exception.ToString());
+                        }
+                        return c.Response.WriteAsync("An error occured processing your authentication.");
+                    },
+                    OnTokenValidated = async context => await OnTokenValidatedAsync(context)
+                };
+            });
 
             services.AddSingleton<IAuthorizationHandler, PrimeUserAuthHandler>();
 
-            services.AddAuthorization(
-                options =>
-                {
-                    options.AddPolicy(PrimeConstants.PRIME_USER_POLICY, policy => policy.Requirements.Add(new PrimeUserRequirement()));
-                    options.AddPolicy(PrimeConstants.PRIME_ADMIN_POLICY, policy => policy.RequireRole(PrimeConstants.PRIME_ADMIN_ROLE));
-                });
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(PrimeConstants.USER_POLICY, policy => policy.Requirements.Add(new PrimeUserRequirement()));
+                options.AddPolicy(PrimeConstants.ADMIN_POLICY, policy => policy.RequireRole(PrimeConstants.PRIME_ADMIN_ROLE));
+            });
         }
 
         private static Task OnTokenValidatedAsync(TokenValidatedContext context)
