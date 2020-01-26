@@ -9,17 +9,40 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Prime.Models;
 using Prime.Configuration;
+using Microsoft.EntityFrameworkCore.Design;
 
 namespace Prime
 {
+    public class ApiDbContextFactory : IDesignTimeDbContextFactory<ApiDbContext>
+    {
+        public ApiDbContext CreateDbContext(string[] args)
+        {
+            // Connect to database
+            // var connectionString = System.Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+            var connectionString = "Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=postgres";
+            var optionsBuilder = new DbContextOptionsBuilder<ApiDbContext>();
+
+            optionsBuilder.UseNpgsql(connectionString);
+            optionsBuilder.EnableSensitiveDataLogging(sensitiveDataLoggingEnabled: false);
+
+            return new ApiDbContext(optionsBuilder.Options);
+        }
+    }
+
     public class ApiDbContext : DbContext
     {
         private readonly DateTime SEEDING_DATE = DateTime.Now;
 
         private readonly IHttpContextAccessor _context;
 
-        public ApiDbContext(DbContextOptions<ApiDbContext> options, IHttpContextAccessor context)
-            : base(options)
+        public ApiDbContext(DbContextOptions options) : base(options)
+        {
+        }
+
+        public ApiDbContext(
+            DbContextOptions<ApiDbContext> options,
+            IHttpContextAccessor context
+            ) : base(options)
         {
             _context = context;
         }

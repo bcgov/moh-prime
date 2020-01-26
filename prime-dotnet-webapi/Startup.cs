@@ -3,21 +3,16 @@ using System.IO;
 using System.Reflection;
 using System.Net.Mime;
 using System.Linq;
-
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
-
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-
 using Newtonsoft.Json;
-
 using Prime.Services;
 using Prime.Infrastructure;
 
@@ -172,10 +167,10 @@ namespace Prime
                 options.EnableSensitiveDataLogging(sensitiveDataLoggingEnabled: false);
             });
 
-            // services
-            // .AddHealthChecks()
-            // .AddDbContextCheck<ApiDbContext>("DbContextHealthCheck")
-            // .AddNpgSql(connectionString);
+            services
+                .AddHealthChecks()
+                .AddDbContextCheck<ApiDbContext>("DbContextHealthCheck")
+                .AddNpgSql(connectionString);
         }
 
         protected virtual void UpdateDatabase(IApplicationBuilder app)

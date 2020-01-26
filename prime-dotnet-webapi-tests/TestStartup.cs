@@ -24,7 +24,9 @@ namespace PrimeTests
                 options.UseInMemoryDatabase(databaseName: "PrimeTests")
             );
 
-            object p = services.AddMvc().AddApplicationPart(Assembly.Load(new AssemblyName("Prime")));
+            object p = services
+                .AddControllers()
+                .AddApplicationPart(Assembly.Load(new AssemblyName("Prime")));
         }
 
         protected override void UpdateDatabase(IApplicationBuilder app)
