@@ -11,7 +11,7 @@ export const environment = {
     config: {
       url: 'https://sso-dev.pathfinder.gov.bc.ca/auth',
       realm: 'v4mbqqas',
-      clientId: 'prime-application-local'
+      clientId: 'prime-pos-gpid'
     },
     initOptions: {
       onLoad: 'check-sso'
