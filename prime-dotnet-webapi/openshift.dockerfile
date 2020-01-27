@@ -25,8 +25,8 @@ RUN dotnet publish -c Release -o /opt/app-root/app/out /p:MicrosoftNETPlatformLi
 ENV PATH="$PATH:/opt/app-root/.dotnet/tools"
 
 RUN dotnet publish -c Release -o /opt/app-root/app/out /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
-RUN dotnet tool install --global dotnet-ef --version 3.0.0 && \
-    dotnet ef migrations script --idempotent --output "${WORKDIR}/databaseMigrations.sql"
+RUN dotnet tool install --global dotnet-ef --version 3.0.0
+RUN dotnet ef migrations script --idempotent --output "${WORKDIR}/databaseMigrations.sql"
 
 
 FROM docker-registry.default.svc:5000/dqszvc-tools/dotnet-30-runtime-rhel7 AS runtime
