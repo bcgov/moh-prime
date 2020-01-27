@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 
 import { CoreModule } from '@core/core.module';
 import { ConfigModule } from '@config/config.module';
-import { AuthModule } from '@auth/auth.module';
 
 @NgModule({
   declarations: [
@@ -14,7 +13,7 @@ import { AuthModule } from '@auth/auth.module';
   ],
   imports: [
     CoreModule,
-    // TODO not needed for POS and would also remove the mocks
+    // TODO not needed for POC and would also remove the mocks
     ConfigModule,
     AppConfigModule,
     AppRoutingModule // WARNING: MUST be the last routing module imported!!!
