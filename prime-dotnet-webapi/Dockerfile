@@ -13,8 +13,8 @@ COPY . /opt/app-root/app
 ENV PATH="$PATH:/opt/app-root/.dotnet/tools"
 
 RUN dotnet publish -c Release -o /opt/app-root/app/out /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
-RUN dotnet tool install --global dotnet-ef --version 3.0.0 && \
-    dotnet ef migrations script --idempotent --output "${WORKDIR}/databaseMigrations.sql"
+RUN dotnet tool install --global dotnet-ef --version 3.0.0
+RUN dotnet ef migrations script --idempotent --output "${WORKDIR}/databaseMigrations.sql"
 
 #FROM mcr.microsoft.com/dotnet/core/aspnet:3.0 AS runtime
 FROM registry.redhat.io/dotnet/dotnet-30-runtime-rhel7 as runtime
