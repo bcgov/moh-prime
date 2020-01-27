@@ -18,9 +18,6 @@ namespace Prime.Models
     [Table("Enrollee")]
     public class Enrollee : BaseAuditable, IValidatableObject
     {
-
-
-
         [Key]
         public int? Id { get; set; }
 
