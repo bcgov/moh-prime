@@ -1,0 +1,35 @@
+//
+// Busy
+//
+
+.ng-busy {
+  z-index: 9002;
+}
+
+.ng-busy,
+.ng-busy > *,
+.ng-busy > ng-component > * {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.ng-busy-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1001;
+  background: #ffffff;
+  opacity: .5;
+}
+
+.busy-container {
+  // Container that is blocked when busy loading to prevent the entire
+  // viewport from being unnecessarily blocked, not always required
+  // depending on the surrounding markup
+  position: relative;
+}

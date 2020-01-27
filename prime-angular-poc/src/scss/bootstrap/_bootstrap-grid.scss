@@ -1,0 +1,16 @@
+// ---
+// Bootstrap Component Grid Imports
+//
+// Description:
+// Used to import grid related mixins and variables into
+// components with ViewEncapsulation.Emulated (default)
+// or ShadowDom for, and avoid overwriting global
+// applied styles.
+//
+// If mixins or utilities are required outside the grid
+// @import 'bootstrap/bootstrap-imports'.
+// ---
+
+@import './bootstrap-variables';
+
+@import '~bootstrap/scss/bootstrap-grid';
