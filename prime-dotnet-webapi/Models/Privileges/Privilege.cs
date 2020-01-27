@@ -9,7 +9,7 @@ namespace Prime.Models
     public class Privilege : BaseAuditable
     {
         public const short RU_CODE = 17;
-        public const short OBO_CODE = 17;
+        public const short OBO_CODE = 18;
 
 
         [Key]
