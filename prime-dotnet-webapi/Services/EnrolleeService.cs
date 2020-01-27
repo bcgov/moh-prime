@@ -332,6 +332,8 @@ namespace Prime.Services
             var enrollee = await this.GetBaseEnrolleeQuery()
                 .Include(e => e.Certifications)
                     .ThenInclude(cer => cer.College) // Needed for PharmaNet College auto-adjudication
+                .Include(e => e.Certifications)
+                    .ThenInclude(l => l.License) // Needed for LicenceClass Rule
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
             if (enrollee == null)
