@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace Prime
 {
+    // Allow for design time creation of the ApiDbContext
     public class ApiDbContextFactory : IDesignTimeDbContextFactory<ApiDbContext>
     {
         public ApiDbContext CreateDbContext(string[] args)
