@@ -18,6 +18,9 @@ namespace Prime.Models
     [Table("Enrollee")]
     public class Enrollee : BaseAuditable, IValidatableObject
     {
+
+
+
         [Key]
         public int? Id { get; set; }
 
@@ -166,9 +169,11 @@ namespace Prime.Models
 
                 if (enrolmentStatusReasons != null)
                 {
-                    return (this.Certifications.Count > 0)
+                    return this.Certifications.Count > 0
+                    ? this.AssignedPrivileges.Where(a => a.Privilege.PrivilegeGroupCode == PrivilegeGroup.USER_TYPE).SingleOrDefault().PrivilegeId == Privilege.RU_CODE
                         ? PrimeConstants.PRIME_RU
-                        : PrimeConstants.PRIME_OBO;
+                        : PrimeConstants.PRIME_OBO
+                    : PrimeConstants.PRIME_OBO;
                 }
 
                 return null;

@@ -8,6 +8,10 @@ namespace Prime.Models
     [Table("Privilege")]
     public class Privilege : BaseAuditable
     {
+        public const short RU_CODE = 17;
+        public const short OBO_CODE = 17;
+
+
         [Key]
         public int Id { get; set; }
 
