@@ -1,0 +1,23 @@
+//
+// Theme Fonts
+//
+
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700');
+
+//
+// Fonts Palettes
+//
+
+$fonts: (
+  header: #{"Roboto, sans-serif"},
+  body: #{"Roboto, sans-serif"}
+);
+
+//
+// Font Mapping Extractor
+// Gets the font from the theme fonts.
+// @use theme-font( font );
+//
+@function theme-font($font) {
+  @return map-get($fonts, $font);
+}

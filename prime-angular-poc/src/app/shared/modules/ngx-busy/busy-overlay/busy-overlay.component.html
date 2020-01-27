@@ -1,0 +1,13 @@
+<div class="busy-container">
+  <div [ngBusy]="busy"
+       (busyStop)="onBusyStop($event)"
+       (busyStart)="onBusyStart($event)">
+
+    <div class="content">
+
+      <ng-content></ng-content>
+
+    </div>
+
+  </div>
+</div>

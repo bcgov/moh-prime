@@ -32,7 +32,8 @@
                        routerLinkActive="active"
                        [ngClass]="{
                          'active': item.forceActive,
-                         'disabled': item.disabled === true
+                         'disabled': item.disabled,
+                         'deemphasize': item.deemphasize
                        }"
                        (click)="onRoute()">
           <mat-icon mat-list-icon

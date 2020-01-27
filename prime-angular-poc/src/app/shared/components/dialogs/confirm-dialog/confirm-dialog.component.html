@@ -1,0 +1,25 @@
+<h2 mat-dialog-title
+    class="d-flex align-items-stretch">
+  <mat-icon *ngIf="options.icon && !options.imageSrc"
+            [color]="options.actionType">{{ options.icon }}</mat-icon>
+  <img [attr.src]="options.imageSrc"
+       alt="">
+  <span class="flex-grow-1">
+    {{ options.title }}
+  </span>
+</h2>
+<mat-dialog-content>
+  <p *ngIf="options.message">{{ options.message }}</p>
+  <ng-template appDialogContent></ng-template>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button *ngIf="!options.cancelHide"
+          mat-stroked-button
+          [mat-dialog-close]="false"
+          cdkFocusInitial
+          class="my-2 mr-3">{{ options.cancelText }}</button>
+  <button mat-flat-button
+          [color]="options.actionType"
+          [mat-dialog-close]="true"
+          class="my-2 mr-3">{{ options.actionText }}</button>
+</mat-dialog-actions>

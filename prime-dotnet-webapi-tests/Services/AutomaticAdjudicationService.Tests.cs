@@ -24,11 +24,15 @@ namespace PrimeTests.Services
             this.UpdateSelfDeclaration(enrollee);
         }
 
-        private void UpdateCertifications(Enrollee enrollee, int certCount = 0)
+        private void UpdateCertifications(Enrollee enrollee, int certCount = 0, bool manual = false)
         {
             if (certCount == 0)
             {
                 enrollee.Certifications.Clear();
+            }
+            if (manual)
+            {
+                enrollee.Certifications = TestUtils.ManualCertificationFaker.Generate(certCount);
             }
             else
             {
@@ -229,6 +233,29 @@ namespace PrimeTests.Services
             else
             {
                 AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, StatusReason.PUMP_PROVIDER_CODE);
+            }
+        }
+
+        [Theory]
+        [InlineData(0, false, true)]
+        // TODO Get Licence loaded onto Certificate
+        // [InlineData(1, false, true)]
+        // [InlineData(1, true, false)]
+        public async void testLicenceClassRule(int licenseCount, bool isManual, bool expected)
+        {
+            Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
+            UpdateCertifications(enrollee, licenseCount, isManual);
+
+            var rule = new AutomaticAdjudicationService.LicenceClassRule();
+
+            Assert.Equal(expected, await rule.ProcessRule(enrollee));
+            if (expected)
+            {
+                AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons);
+            }
+            else
+            {
+                AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, StatusReason.LICENCE_CLASS_CODE);
             }
         }
     }
