@@ -165,17 +165,20 @@ namespace Prime.Models
         {
             get
             {
-                ICollection<EnrolmentStatusReason> enrolmentStatusReasons = this.CurrentStatus?.EnrolmentStatusReasons;
-
-                if (enrolmentStatusReasons != null)
+                if (this.CurrentStatus?.EnrolmentStatusReasons != null)
                 {
-                    return this.Certifications.Count > 0
-                    ? this.AssignedPrivileges.Where(a => a.Privilege.PrivilegeGroupCode == PrivilegeGroup.USER_TYPE).SingleOrDefault().PrivilegeId == Privilege.RU_CODE
-                        ? PrimeConstants.PRIME_RU
-                        : PrimeConstants.PRIME_OBO
-                    : PrimeConstants.PRIME_OBO;
+                    if (this.Certifications.Count > 0)
+                    {
+                        foreach (var cert in this.Certifications)
+                        {
+                            if (cert.License.DefaultPrivileges.Any(dp => dp.PrivilegeId == Privilege.RU_CODE))
+                            {
+                                return PrimeConstants.PRIME_RU;
+                            }
+                        }
+                    }
+                    return PrimeConstants.PRIME_OBO;
                 }
-
                 return null;
             }
         }
