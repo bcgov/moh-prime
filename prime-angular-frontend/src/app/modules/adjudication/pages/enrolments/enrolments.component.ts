@@ -207,6 +207,35 @@ export class EnrolmentsComponent implements OnInit {
       );
   }
 
+  public toggleEnrolmentAlwaysManual(id: number) {
+    const data: DialogOptions = {
+      title: 'Decline Enrolment',
+      message: 'Are you sure you want to decline this enrolment?',
+      actionType: 'warn',
+      actionText: 'Decline Enrolment'
+    };
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result: boolean) =>
+          (result)
+            ? this.adjudicationResource.updateEnrolmentStatus(id, EnrolmentStatus.DECLINED)
+            : EMPTY
+        ),
+        exhaustMap(() => this.adjudicationResource.enrollee(id)),
+      )
+      .subscribe(
+        (enrolment: Enrolment) => {
+          this.toastService.openSuccessToast('Enrolment has been declined');
+          this.updateEnrolment(enrolment);
+        },
+        (error: any) => {
+          this.toastService.openErrorToast('Enrolment could not be declined');
+          this.logger.error('[Adjudication] Enrolments::declineEnrolment error has occurred: ', error);
+        }
+      );
+  }
+
   public ngOnInit() {
     this.getEnrolments();
   }

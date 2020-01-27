@@ -11,8 +11,8 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20200127214233_manuallyAdjudicate")]
-    partial class manuallyAdjudicate
+    [Migration("20200127222254_AlwaysManual")]
+    partial class AlwaysManual
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -4739,6 +4739,8 @@ namespace Prime.Migrations
                     b.Property<int?>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<bool>("AlwaysManual");
+
                     b.Property<string>("ContactEmail");
 
                     b.Property<string>("ContactPhone");
@@ -4778,8 +4780,6 @@ namespace Prime.Migrations
 
                     b.Property<string>("LicensePlate")
                         .HasMaxLength(20);
-
-                    b.Property<bool>("ManuallyAdjudicate");
 
                     b.Property<string>("MiddleName");
 
@@ -7163,6 +7163,15 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Contact Address or Identity Address not in British Columbia",
+                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = (short)12,
+                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Always Manual Rule Set",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });

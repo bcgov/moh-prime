@@ -570,5 +570,25 @@ namespace Prime.Services
 
             return newNote;
         }
+
+
+        public async Task<Enrollee> UpdateEnrolleeAlwaysManualAsync(int enrolleeId, bool alwaysManual)
+        {
+            var enrollee = await _context.Enrollees
+                .Where(e => e.Id == enrolleeId)
+                .SingleOrDefaultAsync();
+
+            enrollee.AlwaysManual = alwaysManual;
+
+            _context.Update(enrollee);
+
+            var updated = await _context.SaveChangesAsync();
+            if (updated < 1)
+            {
+                throw new InvalidOperationException($"Could not update the enrollee's alwaysManual flag.");
+            }
+
+            return enrollee;
+        }
     }
 }

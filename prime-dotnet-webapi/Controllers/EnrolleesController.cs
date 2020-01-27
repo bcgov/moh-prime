@@ -534,5 +534,39 @@ namespace Prime.Controllers
 
             return Ok(new ApiOkResponse<EnrolleeProfileVersion>(enrolleeProfileVersion));
         }
+
+
+        // PUT: api/Enrollees/5/alwaysManual
+        /// <summary>
+        /// Updates an enrollees AlwaysManual flag
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="alwaysManual"></param>
+        [HttpPut("{enrolleeId}/alwaysManual", Name = nameof(UpdateAlwaysManualFlag))]
+        [Authorize(Policy = PrimeConstants.ADMIN_POLICY)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiOkResponse<Enrollee>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<Enrollee>> UpdateAlwaysManualFlag(int enrolleeId, bool alwaysManual)
+        {
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+
+            if (enrollee == null)
+            {
+                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}."));
+            }
+
+            if (enrollee.AlwaysManual == alwaysManual)
+            {
+                this.ModelState.AddModelError("Enrollee.AlwaysManual", "Enrollee already set to this boolean value");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
+
+            var updatedEnrollee = await _enrolleeService.UpdateEnrolleeAlwaysManualAsync(enrolleeId, alwaysManual);
+
+            return Ok(new ApiOkResponse<Enrollee>(updatedEnrollee));
+        }
     }
 }

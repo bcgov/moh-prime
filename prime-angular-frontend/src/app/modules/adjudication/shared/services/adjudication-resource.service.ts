@@ -123,6 +123,15 @@ export class AdjudicationResource {
       );
   }
 
+  public updateAlwaysManualFlag(enrolleeId: number, alwaysManual: boolean): Observable<Config<boolean>[]> {
+    const payload = { enrolleeId, alwaysManual };
+    return this.http.post(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/alwaysManual`, payload)
+      .pipe(
+        map((response: PrimeHttpResponse) => response.result as Config<boolean>[]),
+        tap((alwaysManual: Config<boolean>[]) => this.logger.info('ALWAYS_MANUAL', alwaysManual))
+      );
+  }
+
   // ---
   // Enrollee and Enrolment Adapters
   // ---
