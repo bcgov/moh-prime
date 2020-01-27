@@ -9,6 +9,7 @@ import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
 import { ConfigCodePipe } from '@config/config-code.pipe';
 import { PostalPipe } from '@shared/pipes/postal.pipe';
+import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
 
 describe('EnrolleeProfileComponent', () => {
   let component: EnrolleeProfileComponent;
@@ -18,7 +19,8 @@ describe('EnrolleeProfileComponent', () => {
     TestBed.configureTestingModule(
       {
         imports: [
-          HttpClientTestingModule
+          HttpClientTestingModule,
+          NgxMaterialModule
         ],
         declarations: [
           EnrolleeProfileComponent,

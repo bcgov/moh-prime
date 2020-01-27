@@ -6,6 +6,8 @@ namespace Prime.Models
     [Table("CountryLookup")]
     public class Country : BaseAuditable, ILookup<string>
     {
+        public const string CANADA = "CA";
+
         [Key]
         public string Code { get; set; }
 
