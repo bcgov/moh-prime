@@ -157,29 +157,6 @@ namespace Prime.Models
             }
         }
 
-        [NotMapped]
-        public string EnrolleeClassification
-        {
-            get
-            {
-                if (this.CurrentStatus?.EnrolmentStatusReasons != null)
-                {
-                    if (this.Certifications.Count > 0)
-                    {
-                        foreach (var cert in this.Certifications)
-                        {
-                            if (cert.License.DefaultPrivileges.Any(dp => dp.PrivilegeId == Privilege.RU_CODE))
-                            {
-                                return PrimeConstants.PRIME_RU;
-                            }
-                        }
-                    }
-                    return PrimeConstants.PRIME_OBO;
-                }
-                return null;
-            }
-        }
-
         [JsonIgnore]
         public ICollection<AccessTerm> AccessTerms { get; set; }
 
