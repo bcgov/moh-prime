@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -79,6 +79,11 @@ export class AdjudicationResource {
         map((response: PrimeHttpResponse) => response.result as Config<number>[]),
         tap((statuses: Config<number>[]) => this.logger.info('ENROLMENT_STATUSES', statuses))
       );
+  }
+
+  public updateEnrollee(enrolment: Enrolment): Observable<any> {
+    const { id } = enrolment;
+    return this.http.put(`${this.config.apiEndpoint}/enrollees/${id}`, this.enrolmentAdapterRequest(enrolment));
   }
 
   public deleteEnrolment(id: number): Observable<Enrolment> {

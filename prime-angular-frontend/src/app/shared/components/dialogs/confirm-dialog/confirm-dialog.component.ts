@@ -15,6 +15,8 @@ import { DialogContentDirective } from '../dialog-content.directive';
 })
 export class ConfirmDialogComponent implements OnInit {
   public options: DialogOptions;
+  public dialogContentOutput: any;
+
   @ViewChild(DialogContentDirective, { static: true }) public dialogContentHost: DialogContentDirective;
 
   constructor(
@@ -26,6 +28,13 @@ export class ConfirmDialogComponent implements OnInit {
     this.options = (typeof customOptions === 'string')
       ? this.getOptions(defaultOptions[customOptions]())
       : this.getOptions(customOptions);
+  }
+
+  public onConfirm() {
+    const response = (this.dialogContentOutput !== null)
+      ? { output: this.dialogContentOutput }
+      : true;
+    this.dialogRef.close(response);
   }
 
   public ngOnInit() {
@@ -57,5 +66,9 @@ export class ConfirmDialogComponent implements OnInit {
 
     const componentRef = viewContainerRef.createComponent(componentFactory);
     (componentRef.instance as IDialogContent).data = data;
+    (componentRef.instance as IDialogContent).output.subscribe((value: any) => {
+      this.dialogContentOutput = value;
+    });
   }
+
 }

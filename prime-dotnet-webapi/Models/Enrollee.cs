@@ -181,7 +181,6 @@ namespace Prime.Models
         [JsonIgnore]
         public ICollection<EnrolleeProfileVersion> EnrolleeProfileVersions { get; set; }
 
-        [JsonIgnore]
         public bool AlwaysManual { get; set; }
     }
 }
