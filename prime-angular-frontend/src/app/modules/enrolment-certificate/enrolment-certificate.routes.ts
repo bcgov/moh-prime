@@ -1,5 +1,5 @@
 export class EnrolmentCertificateRoutes {
-  public static ENROLMENT_CERTIFICAE = 'enrolment-certificate';
+  public static PROVISIONER_ACCESS = 'provisioner-access';
 
-  public static MODULE_PATH = EnrolmentCertificateRoutes.ENROLMENT_CERTIFICAE;
+  public static MODULE_PATH = EnrolmentCertificateRoutes.PROVISIONER_ACCESS;
 }

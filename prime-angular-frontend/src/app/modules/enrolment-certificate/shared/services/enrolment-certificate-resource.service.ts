@@ -21,7 +21,7 @@ export class EnrolmentCertificateResource {
   ) { }
 
   public getCertificate(accessTokenId: string): Observable<EnrolmentCertificate> {
-    return this.http.get(`${this.config.apiEndpoint}/enrolment-certificates/certificate/${accessTokenId}`)
+    return this.http.get(`${this.config.apiEndpoint}/provisioner-access/certificate/${accessTokenId}`)
       .pipe(
         map((response: PrimeHttpResponse) => response.result as EnrolmentCertificate),
         tap((enrolmentCertificate: EnrolmentCertificate) => this.logger.info('ENROLMENT_CERTIFICATE', enrolmentCertificate))
