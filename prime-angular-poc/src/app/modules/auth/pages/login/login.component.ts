@@ -20,7 +20,7 @@ import { exhaustMap } from 'rxjs/operators';
 })
 export class LoginComponent implements OnInit {
   public busy: Subscription;
-  public data: any;
+  public gpid: string;
 
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
