@@ -3,8 +3,12 @@
   <app-page-header>Enrolment Certificate</app-page-header>
 
   <ng-container *ngIf="certificate">
-
-    <app-enrollee-profile [enrollee]="certificate"></app-enrollee-profile>
+    <div class="mb-5">
+      <app-enrollee-property title="Name"
+                             [makeBold]="true">
+        {{ certificate | certificate: 'fullName' | default }}
+      </app-enrollee-property>
+    </div>
 
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>PharmaNet ID</ng-container>
