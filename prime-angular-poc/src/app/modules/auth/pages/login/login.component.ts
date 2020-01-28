@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialog } from '@angular/material';
 
-import { Subscription, from } from 'rxjs';
+import { Subscription, from, Observable } from 'rxjs';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 
@@ -20,7 +20,7 @@ import { exhaustMap } from 'rxjs/operators';
 })
 export class LoginComponent implements OnInit {
   public busy: Subscription;
-  public gpid: string;
+  public gpid: Observable<string>;
 
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -34,14 +34,9 @@ export class LoginComponent implements OnInit {
   }
 
   public async ngOnInit() {
-    from(this.authService.isLoggedIn())
+    this.gpid = from(this.authService.isLoggedIn())
       .pipe(
         exhaustMap(() => this.gpidResource.getGpid())
-      )
-      .subscribe(
-        (response) => {
-          console.log(response);
-        }
       );
   }
 

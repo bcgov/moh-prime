@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { HttpClient } from '@angular/common/http';
 
+import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
 import { LoggerService } from '@core/services/logger.service';
@@ -18,11 +19,11 @@ export class GpidResource {
     private logger: LoggerService
   ) { }
 
-  public getGpid() {
+  public getGpid(): Observable<string> {
     return this.http.get(`${this.config.apiEndpoint}/enrolment-certificates/gpid`)
       .pipe(
-        map((response: AppHttpResponse) => response.result),
-        tap((response: any) => this.logger.info('GPID', response))
+        map((response: AppHttpResponse) => response.result as string),
+        tap((gpid: string) => this.logger.info('GPID', gpid))
       );
   }
 }
