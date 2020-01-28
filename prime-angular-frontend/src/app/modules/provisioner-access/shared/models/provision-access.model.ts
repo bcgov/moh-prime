@@ -10,7 +10,6 @@ export interface ProvisionerAccess {
   preferredFirstName: string;
   preferredMiddleName: string;
   preferredLastName: string;
-  dateOfBirth: string;
   licensePlate: string;
   organizationTypes: Config<number>[];
   enrolmentCertificateNote: AdjudicationNote;
