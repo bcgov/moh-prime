@@ -44,11 +44,11 @@ namespace Prime.Controllers
             return Ok(new ApiOkResponse<EnrolmentCertificate>(certificate));
         }
 
-        // GET: api/provisioner-access/access
+        // GET: api/provisioner-access/token
         /// <summary>
         /// Gets all of the access tokens for the user.
         /// </summary>
-        [HttpGet("access", Name = nameof(GetAccessTokens))]
+        [HttpGet("token", Name = nameof(GetAccessTokens))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiOkResponse<IEnumerable<EnrolmentCertificateAccessToken>>), StatusCodes.Status200OK)]
@@ -61,11 +61,11 @@ namespace Prime.Controllers
         }
 
 
-        // POST: api/provisioner-access/access
+        // POST: api/provisioner-access/token
         /// <summary>
         /// Creates an EnrolmentCertificateAccessToken for the user if the user has a finished enrolment.
         /// </summary>
-        [HttpPost("access", Name = nameof(CreateEnrolmentCertificateAccessToken))]
+        [HttpPost("token", Name = nameof(CreateEnrolmentCertificateAccessToken))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
