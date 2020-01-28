@@ -1,4 +1,4 @@
-# PharmaNet Revisions of Information Managment Enhancements (PRIME)
+# PRIME
 
 ## Table of Contents
 

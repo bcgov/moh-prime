@@ -85,10 +85,21 @@ namespace Prime.Services
 
         private async Task<UserClause> GetUserClause(Enrollee enrollee)
         {
-            var userType = enrollee.EnrolleeClassification;
+            var userType = PrimeConstants.PRIME_OBO;
+
+            if (enrollee.Certifications.Count > 0)
+            {
+                foreach (var cert in enrollee.Certifications)
+                {
+                    if (cert.License.DefaultPrivileges.Any(dp => dp.PrivilegeId == Privilege.RU_CODE))
+                    {
+                        userType = PrimeConstants.PRIME_RU;
+                    }
+                }
+            }
 
             return await _context.UserClauses
-                .Where(g => g.EnrolleeClassification == enrollee.EnrolleeClassification)
+                .Where(g => g.EnrolleeClassification == userType)
                 .OrderByDescending(g => g.EffectiveDate)
                 .FirstOrDefaultAsync();
         }

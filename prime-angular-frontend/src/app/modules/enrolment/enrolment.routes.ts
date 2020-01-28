@@ -13,12 +13,12 @@ export class EnrolmentRoutes {
   public static SELF_DECLARATION = 'self-declaration';
   // Enrolment submission:
   public static SUBMISSION_CONFIRMATION = 'submission-confirmation';
-  public static ACCESS_AGREEMENT = 'access-agreement';
+  public static TERMS_OF_ACCESS = 'terms-of-access';
   public static DECLINED = 'declined';
-  public static DECLINED_ACCESS_AGREEMENT = 'declined-access-agreement';
+  public static DECLINED_TERMS_OF_ACCESS = 'declined-terms-of-access';
   // Enrollee history and PharmaNet:
-  // Replaces access agreement after accepting the terms of access (TOA)
-  public static ACCESS_AGREEMENT_HISTORY = 'access-agreement-history';
+  // Replaces terms of access after accepting the terms of access (TOA)
+  public static TERMS_OF_ACCESS_HISTORY = 'terms-of-access-history';
   public static PHARMANET_ENROLMENT_CERTIFICATE = 'pharmanet-enrolment-certificate';
   public static PHARMANET_TRANSACTIONS = 'pharmanet-transactions';
   public static ENROLMENT_LOG_HISTORY = 'enrolment-log-history';
@@ -64,14 +64,14 @@ export class EnrolmentRoutes {
       EnrolmentRoutes.SUBMISSION_CONFIRMATION,
       EnrolmentRoutes.DECLINED,
       // ACCESS_AGREEMENT is synonymous with APPROVED
-      EnrolmentRoutes.ACCESS_AGREEMENT,
-      EnrolmentRoutes.DECLINED_ACCESS_AGREEMENT
+      EnrolmentRoutes.TERMS_OF_ACCESS,
+      EnrolmentRoutes.DECLINED_TERMS_OF_ACCESS
     ];
   }
 
   public static enrolmentApprovedRoutes(): string[] {
     return [
-      EnrolmentRoutes.ACCESS_AGREEMENT_HISTORY,
+      EnrolmentRoutes.TERMS_OF_ACCESS_HISTORY,
       EnrolmentRoutes.PHARMANET_ENROLMENT_CERTIFICATE,
       EnrolmentRoutes.PHARMANET_TRANSACTIONS,
       EnrolmentRoutes.ENROLMENT_LOG_HISTORY

@@ -37,6 +37,11 @@
     // Prevent interacting with the link
     pointer-events: none;
   }
+
+  .mat-list-item.deemphasize {
+    // De-emphasize the link
+    opacity: 0.4;
+  }
 }
 
 @media print {

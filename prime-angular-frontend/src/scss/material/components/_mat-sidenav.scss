@@ -12,7 +12,7 @@
 }
 
 .mat-sidenav {
-  background-color: theme-palette(grey, lightest);
+  background-color: theme-palette(blue, lightest);
   border-right: 1px solid theme-palette(blue);
 
   .mat-list-item {
@@ -32,7 +32,7 @@
   .active,
   .active:focus,
   .mat-list-item:focus {
-    background-color: theme-palette(grey, lighter) !important;
+    background-color: theme-palette(blue, lighter) !important;
   }
 
   .active {
