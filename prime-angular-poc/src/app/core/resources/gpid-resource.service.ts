@@ -20,7 +20,7 @@ export class GpidResource {
   ) { }
 
   public getGpid(): Observable<string> {
-    return this.http.get(`${this.config.apiEndpoint}/enrolment-certificates/gpid`)
+    return this.http.get(`${this.config.apiEndpoint}/provisioner-access/gpid`)
       .pipe(
         map((response: AppHttpResponse) => response.result as string),
         tap((gpid: string) => this.logger.info('GPID', gpid))
