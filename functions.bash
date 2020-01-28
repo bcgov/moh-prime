@@ -144,30 +144,28 @@ function getAllOpenPr () {
 function getOldPr () {
     ORPHANS=$(printf '%s\n' "${ROUTE_ARRAY[@]}" "${OPEN_PR_ARRAY[@]}" | sort | uniq -u)
 }
-
 function occleanup() {
-# Get Routes to determine which PRs have links
-    declare -p ROUTE_ARRAY=( $(oc get route -n $PROJECT_PREFIX-dev | awk '{print $2}' | grep "pr-" | sed 's/.pharmanetenrolment-dqszvc-dev.pathfinder.gov.bc.ca//g' | sed 's/pr-//g') )
-# Get Open PRs from GitHub
+    OPEN_PR_ARRAY=()
+    LIVE_BRANCH_ARRAY=()
+    ORPHANS=()
     curl -o openPRs.txt "https://api.github.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/pulls?status=open&sort=number"
-# Define open PRs
-    declare -p OPEN_PR_ARRAY=( $(grep '"number"' openPRs.txt | column -t | sed 's|[:,]||g' | awk '{print $2}') )
-# Define orphans    
-    ORPHANS=$(printf '%s\n' "${ROUTE_ARRAY[@]}" "${OPEN_PR_ARRAY[@]}" | sort | uniq -u)
-# Do the dirty work
+    declare -p OPEN_PR_ARRAY=( $(grep '"number":' openPRs.txt | column -t | sed 's|[:,]||g' | awk '{print $2}') )
+    declare -p LIVE_BRANCH_ARRAY=( $(oc get route -n $PROJECT_PREFIX-dev | awk '{print $2}' | grep -P "(pr\-\d+)" | sed 's/[^0-9]*//g' | sort -un) )
+    ORPHANS=$(echo ${OPEN_PR_ARRAY[@]} ${LIVE_BRANCH_ARRAY[@]} | tr ' ' '\n' | sort | uniq -u)
+    echo "ORPHANS=${ORPHANS}"
     for i in ${ORPHANS}
-    do 
-        echo "Cleaning $i"
-        cleanOcArtifacts $i &disown
+    do
+        cleanOcArtifacts $i
     done
 }
 
 function cleanOcArtifacts() {
-    declare -p ALL_BRANCH_ARTIFACTS=( $(oc get all,pvc,secrets,route -n $PROJECT_PREFIX-dev | grep -i "pr-$1\-" | column -t | awk '{print $1}' | sed 's/docker-registry.default.svc:5000\/dqszvc-dev/imageStream/g') )
-    for ORPHAN in "${ALL_BRANCH_ARTIFACTS[@]}"
-    do 
-        echo "oc delete -n $PROJECT_PREFIX-dev $ORPHAN"
-        oc delete -n $PROJECT_PREFIX-dev $ORPHAN
+    echo "Cleaning PR $1"
+    declare -p ALL_BRANCH_ARTIFACTS=( $(oc get all,pvc,secrets,route -n $PROJECT_PREFIX-dev | grep -i "pr\-$1" | awk '{print $1}' | grep -P "(\-pr\-\d+)" | sed 's/docker-registry.default.svc:5000\/dqszvc-dev/imagestream/g' ) )
+    for a in "${ALL_BRANCH_ARTIFACTS[@]}"
+    do
+       echo "oc delete -n $PROJECT_PREFIX-dev $a"
+       oc delete -n $PROJECT_PREFIX-dev $a
     done
 }
 

@@ -30,6 +30,7 @@ RUN dotnet ef migrations script --idempotent --output "${WORKDIR}/databaseMigrat
 
 
 FROM docker-registry.default.svc:5000/dqszvc-tools/dotnet-30-runtime-rhel7 AS runtime
+
 #FROM registry.redhat.io/dotnet/dotnet-22-runtime-rhel7 AS runtime
 #FROM dotnet-22-runtime-rhel7 AS runtime
 WORKDIR /opt/app-root/app
