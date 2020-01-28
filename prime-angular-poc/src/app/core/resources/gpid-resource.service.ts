@@ -10,18 +10,19 @@ import { AppHttpResponse } from '@core/models/app-http-response.model';
 @Injectable({
   providedIn: 'root'
 })
-export class DataResource {
+export class GpidResource {
+
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private http: HttpClient,
     private logger: LoggerService
   ) { }
 
-  public getData() {
-    return this.http.get(`${this.config.apiEndpoint}/data`)
+  public getGpid() {
+    return this.http.get(`${this.config.apiEndpoint}/enrolment-certificates/gpid`)
       .pipe(
         map((response: AppHttpResponse) => response.result),
-        tap((response: any) => this.logger.info('DATA', response))
+        tap((response: any) => this.logger.info('GPID', response))
       );
   }
 }
