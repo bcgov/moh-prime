@@ -97,7 +97,7 @@ namespace Prime.Controllers
     [HttpGet("gpid", Name = nameof(GetGpid))]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ApiOkResponse<string>), StatusCodes.Status200OK)]
-    // [Authorize]
+    [Authorize]
     public async Task<ActionResult<string>> GetGpid()
     {
       var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(User.GetPrimeUserId());
