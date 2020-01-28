@@ -3,8 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 
-import { EnrolmentCertificate } from '../../shared/models/enrolment-certificate.model';
-import { EnrolmentCertificateResource } from '../../shared/services/enrolment-certificate-resource.service';
+import { ProvisionerAccess } from '../../shared/models/provision-access.model';
+import { ProvisionerAccessResource } from '../../shared/services/provisioner-access-resource.service';
 
 @Component({
   selector: 'app-certificate',
@@ -13,16 +13,16 @@ import { EnrolmentCertificateResource } from '../../shared/services/enrolment-ce
 })
 export class CertificateComponent implements OnInit {
   public busy: Subscription;
-  public certificate: EnrolmentCertificate;
+  public certificate: ProvisionerAccess;
 
   constructor(
     private route: ActivatedRoute,
-    private enrolmentCertificateResource: EnrolmentCertificateResource,
+    private enrolmentCertificateResource: ProvisionerAccessResource,
   ) { }
 
   public ngOnInit() {
     this.busy = this.enrolmentCertificateResource
       .getCertificate(this.route.snapshot.params.tokenId)
-      .subscribe((certificate: EnrolmentCertificate) => this.certificate = certificate);
+      .subscribe((certificate: ProvisionerAccess) => this.certificate = certificate);
   }
 }

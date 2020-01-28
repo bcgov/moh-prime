@@ -7,12 +7,13 @@ import { map, tap } from 'rxjs/operators';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { PrimeHttpResponse } from '@core/models/prime-http-response.model';
 import { LoggerService } from '@core/services/logger.service';
-import { EnrolmentCertificate } from '../models/enrolment-certificate.model';
+
+import { ProvisionerAccess } from '../models/provision-access.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class EnrolmentCertificateResource {
+export class ProvisionerAccessResource {
 
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -20,11 +21,11 @@ export class EnrolmentCertificateResource {
     private logger: LoggerService
   ) { }
 
-  public getCertificate(accessTokenId: string): Observable<EnrolmentCertificate> {
+  public getCertificate(accessTokenId: string): Observable<ProvisionerAccess> {
     return this.http.get(`${this.config.apiEndpoint}/provisioner-access/certificate/${accessTokenId}`)
       .pipe(
-        map((response: PrimeHttpResponse) => response.result as EnrolmentCertificate),
-        tap((enrolmentCertificate: EnrolmentCertificate) => this.logger.info('ENROLMENT_CERTIFICATE', enrolmentCertificate))
+        map((response: PrimeHttpResponse) => response.result as ProvisionerAccess),
+        tap((enrolmentCertificate: ProvisionerAccess) => this.logger.info('ENROLMENT_CERTIFICATE', enrolmentCertificate))
       );
   }
 }

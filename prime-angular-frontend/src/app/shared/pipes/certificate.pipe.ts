@@ -1,12 +1,12 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { EnrolmentCertificate } from '@certificate/shared/models/enrolment-certificate.model';
+import { ProvisionerAccess } from 'app/modules/provisioner-access/shared/models/provision-access.model';
 
 @Pipe({
   name: 'certificate'
 })
 export class CertificatePipe implements PipeTransform {
-  transform(certificate: EnrolmentCertificate, display: string): string {
+  transform(certificate: ProvisionerAccess, display: string): string {
     if (!certificate) {
       return null;
     }
