@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 
-import { ProvisionerAccess } from '../../shared/models/provision-access.model';
+import { EnrolmentCertificate } from '../../shared/models/enrolment-certificate.model';
 import { ProvisionerAccessResource } from '../../shared/services/provisioner-access-resource.service';
 
 @Component({
@@ -13,7 +13,7 @@ import { ProvisionerAccessResource } from '../../shared/services/provisioner-acc
 })
 export class CertificateComponent implements OnInit {
   public busy: Subscription;
-  public certificate: ProvisionerAccess;
+  public certificate: EnrolmentCertificate;
 
   constructor(
     private route: ActivatedRoute,
@@ -23,6 +23,6 @@ export class CertificateComponent implements OnInit {
   public ngOnInit() {
     this.busy = this.enrolmentCertificateResource
       .getCertificate(this.route.snapshot.params.tokenId)
-      .subscribe((certificate: ProvisionerAccess) => this.certificate = certificate);
+      .subscribe((certificate: EnrolmentCertificate) => this.certificate = certificate);
   }
 }

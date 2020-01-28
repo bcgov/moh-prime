@@ -8,7 +8,7 @@ import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { PrimeHttpResponse } from '@core/models/prime-http-response.model';
 import { LoggerService } from '@core/services/logger.service';
 
-import { ProvisionerAccess } from '../models/provision-access.model';
+import { EnrolmentCertificate } from '../models/enrolment-certificate.model';
 
 @Injectable({
   providedIn: 'root'
@@ -21,11 +21,11 @@ export class ProvisionerAccessResource {
     private logger: LoggerService
   ) { }
 
-  public getCertificate(accessTokenId: string): Observable<ProvisionerAccess> {
+  public getCertificate(accessTokenId: string): Observable<EnrolmentCertificate> {
     return this.http.get(`${this.config.apiEndpoint}/provisioner-access/certificate/${accessTokenId}`)
       .pipe(
-        map((response: PrimeHttpResponse) => response.result as ProvisionerAccess),
-        tap((enrolmentCertificate: ProvisionerAccess) => this.logger.info('ENROLMENT_CERTIFICATE', enrolmentCertificate))
+        map((response: PrimeHttpResponse) => response.result as EnrolmentCertificate),
+        tap((enrolmentCertificate: EnrolmentCertificate) => this.logger.info('ENROLMENT_CERTIFICATE', enrolmentCertificate))
       );
   }
 }
