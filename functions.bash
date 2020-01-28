@@ -151,7 +151,7 @@ function occleanup() {
     ORPHANS=()
     curl -o openPRs.txt "https://api.github.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/pulls?status=open&sort=number"
     declare -p OPEN_PR_ARRAY=( $(grep '"number":' openPRs.txt | column -t | sed 's|[:,]||g' | awk '{print $2}') )
-    declare -p LIVE_BRANCH_ARRAY=( $(oc get route -n $PROJECT_PREFIX-dev | awk '{print $2}' | grep -P "(pr\-\d+)" | sed 's/[^0-9]*//g' | sort -un) )
+    declare -p LIVE_BRANCH_ARRAY=( $(oc get dc -n $PROJECT_PREFIX-dev | awk '{print $1}' | grep -P "(\-pr\-\d+)" | sed 's/[^0-9]*//g' | sort -un) )
     ORPHANS=$(echo ${OPEN_PR_ARRAY[@]} ${LIVE_BRANCH_ARRAY[@]} | tr ' ' '\n' | sort | uniq -u)
     echo "ORPHANS=${ORPHANS}"
     for i in ${ORPHANS}
@@ -162,7 +162,7 @@ function occleanup() {
 
 function cleanOcArtifacts() {
     echo "Cleaning PR $1"
-    declare -p ALL_BRANCH_ARTIFACTS=( $(oc get all,pvc,secrets,route -n $PROJECT_PREFIX-dev | grep -i "pr\-$1" | awk '{print $1}' | grep -P "(\-pr\-\d+)" | sed 's/docker-registry.default.svc:5000\/dqszvc-dev/imagestream/g' | sed 's/build.build.openshift.io/bc/g' ) )
+    declare -p ALL_BRANCH_ARTIFACTS=( $(oc get all,pvc,secrets,route -n $PROJECT_PREFIX-dev | grep -i "pr\-$1" | awk '{print $1}' ) )
     for a in "${ALL_BRANCH_ARTIFACTS[@]}"
     do
        echo "oc delete -n $PROJECT_PREFIX-dev $a"
