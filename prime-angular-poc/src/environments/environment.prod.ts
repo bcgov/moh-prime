@@ -12,6 +12,6 @@ export const environment = {
     initOptions: {
       onLoad: 'check-sso'
     },
-    bearerExcludedUrls: ['/']
+    loadUserProfileAtStartUp: false
   }
 };

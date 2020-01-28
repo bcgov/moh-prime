@@ -15,7 +15,6 @@ namespace Prime.Models
         public string PreferredFirstName { get; set; }
         public string PreferredMiddleName { get; set; }
         public string PreferredLastName { get; set; }
-        public DateTime DateOfBirth { get; set; }
         public string LicensePlate { get; set; }
         public IEnumerable<OrganizationType> OrganizationTypes { get; set; }
 
@@ -34,7 +33,6 @@ namespace Prime.Models
                 PreferredFirstName = enrollee.PreferredFirstName,
                 PreferredMiddleName = enrollee.PreferredMiddleName,
                 PreferredLastName = enrollee.PreferredLastName,
-                DateOfBirth = enrollee.DateOfBirth,
                 LicensePlate = enrollee.LicensePlate,
                 OrganizationTypes = enrollee.Organizations.Select(org => org.OrganizationType),
                 EnrolmentCertificateNote = enrollee.EnrolmentCertificateNote,

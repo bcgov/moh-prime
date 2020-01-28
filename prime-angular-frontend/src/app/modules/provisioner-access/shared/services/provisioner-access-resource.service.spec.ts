@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { DataResource } from './data-resource.service';
+import { ProvisionerAccessResource } from './provisioner-access-resource.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 
-describe('DataResource', () => {
+describe('ProvisionerAccessResource', () => {
   beforeEach(() => TestBed.configureTestingModule({
     imports: [
       HttpClientTestingModule
@@ -18,7 +18,7 @@ describe('DataResource', () => {
   }));
 
   it('should be created', () => {
-    const service: DataResource = TestBed.get(DataResource);
+    const service: ProvisionerAccessResource = TestBed.get(ProvisionerAccessResource);
     expect(service).toBeTruthy();
   });
 });

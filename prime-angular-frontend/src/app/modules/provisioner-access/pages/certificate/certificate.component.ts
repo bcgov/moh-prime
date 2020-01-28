@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { EnrolmentCertificate } from '../../shared/models/enrolment-certificate.model';
-import { EnrolmentCertificateResource } from '../../shared/services/enrolment-certificate-resource.service';
+import { ProvisionerAccessResource } from '../../shared/services/provisioner-access-resource.service';
 
 @Component({
   selector: 'app-certificate',
@@ -17,7 +17,7 @@ export class CertificateComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private enrolmentCertificateResource: EnrolmentCertificateResource,
+    private enrolmentCertificateResource: ProvisionerAccessResource,
   ) { }
 
   public ngOnInit() {

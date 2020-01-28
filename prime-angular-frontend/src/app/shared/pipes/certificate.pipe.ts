@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { EnrolmentCertificate } from '@certificate/shared/models/enrolment-certificate.model';
+import { EnrolmentCertificate } from 'app/modules/provisioner-access/shared/models/enrolment-certificate.model';
 
 @Pipe({
   name: 'certificate'
