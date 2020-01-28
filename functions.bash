@@ -144,6 +144,7 @@ function getAllOpenPr () {
 function getOldPr () {
     ORPHANS=$(printf '%s\n' "${ROUTE_ARRAY[@]}" "${OPEN_PR_ARRAY[@]}" | sort | uniq -u)
 }
+
 function occleanup() {
     OPEN_PR_ARRAY=()
     LIVE_BRANCH_ARRAY=()
@@ -161,7 +162,7 @@ function occleanup() {
 
 function cleanOcArtifacts() {
     echo "Cleaning PR $1"
-    declare -p ALL_BRANCH_ARTIFACTS=( $(oc get all,pvc,secrets,route -n $PROJECT_PREFIX-dev | grep -i "pr\-$1" | awk '{print $1}' | grep -P "(\-pr\-\d+)" | sed 's/docker-registry.default.svc:5000\/dqszvc-dev/imagestream/g' ) )
+    declare -p ALL_BRANCH_ARTIFACTS=( $(oc get all,pvc,secrets,route -n $PROJECT_PREFIX-dev | grep -i "pr\-$1" | awk '{print $1}' | grep -P "(\-pr\-\d+)" | sed 's/docker-registry.default.svc:5000\/dqszvc-dev/imagestream/g' | sed 's/build.build.openshift.io/bc/g' ) )
     for a in "${ALL_BRANCH_ARTIFACTS[@]}"
     do
        echo "oc delete -n $PROJECT_PREFIX-dev $a"
