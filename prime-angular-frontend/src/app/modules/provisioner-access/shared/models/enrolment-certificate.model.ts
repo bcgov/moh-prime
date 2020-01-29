@@ -16,4 +16,5 @@ export interface EnrolmentCertificate {
   transactions: Privilege[];
   userType: Privilege;
   canHaveOBOs: Privilege;
+  expiryDate: string;
 }

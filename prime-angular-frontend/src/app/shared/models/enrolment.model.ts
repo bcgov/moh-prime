@@ -14,6 +14,7 @@ export interface HttpEnrollee extends Enrollee {
   id?: number;
   appliedDate: string;
   approvedDate: string;
+  expiryDate?: string;
   certifications: CollegeCertification[];
   deviceProviderNumber: string;
   isInsulinPumpProvider: boolean;

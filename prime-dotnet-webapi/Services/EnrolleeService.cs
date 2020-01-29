@@ -404,7 +404,7 @@ namespace Prime.Services
                     await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
                     enrollee.LicensePlate = this.GenerateLicensePlate();
                     createdEnrolmentStatus.PharmaNetStatus = true;
-                    await _accessTermService.SetAcceptedDateForAccessTermAsync(enrollee);
+                    await _accessTermService.AcceptCurrentAccessTermAsync(enrollee);
                     await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrolleeId, enrollee);
                     break;
 
@@ -479,7 +479,8 @@ namespace Prime.Services
                     .Include(e => e.AccessAgreementNote)
                     .Include(e => e.EnrolmentCertificateNote)
                     .Include(e => e.AssignedPrivileges)
-                        .ThenInclude(AssignedPrivilege => AssignedPrivilege.Privilege);
+                        .ThenInclude(AssignedPrivilege => AssignedPrivilege.Privilege)
+                    .Include(e => e.AccessTerms);
         }
 
         public async Task<Enrollee> GetEnrolleeAsync(int enrolleeId)

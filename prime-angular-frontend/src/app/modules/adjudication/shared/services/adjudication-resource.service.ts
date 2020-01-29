@@ -197,6 +197,7 @@ export class AdjudicationResource {
       contactPhone,
       voicePhone,
       voiceExtension,
+      expiryDate,
       ...remainder
     } = enrollee;
 
@@ -218,7 +219,8 @@ export class AdjudicationResource {
         contactEmail,
         contactPhone,
         voicePhone,
-        voiceExtension
+        voiceExtension,
+        expiryDate
       },
       collectionNoticeAccepted,
       ...remainder
