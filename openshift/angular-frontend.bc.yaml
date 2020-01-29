@@ -88,8 +88,9 @@ objects:
       io.kompose.service: "${NAME}${SUFFIX}"
     name: "${NAME}${SUFFIX}"
   spec:
-    containers:
-    - env:
+    dockerStrategy: 
+      dockerfilePath: openshift.dockerfile
+      env:
       - name: SUFFIX
         value: "${SUFFIX}"
       - name: REDIRECT_URL
