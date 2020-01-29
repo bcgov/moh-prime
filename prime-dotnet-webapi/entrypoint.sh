@@ -2,14 +2,19 @@
 #export MAIL_SERVER_URL=`route -n|grep "UG"|grep -v "UGH"|cut -f 10 -d " "`
 #export MAIL_SERVER_PORT=1025
 #dotnet prime.dll
+
+### For local dev - if they don't have a DB_CONNECTION_STRING (since we have one in openshift)
 if [ -z "$DB_HOST" ]
 then
+    host=${DB_HOST};port=5432;
+    database=${POSTGRESQL_DATABASE};
+    username=${POSTGRESQL_USER};
+    password=${POSTGRESQL_ADMIN_PASSWORD}
     export DB_CONNECTION_STRING="${DB_CONNECTION_STRING}"
 else
-    host=postgresql;port=5432;database=postgres;username=postgres;password=0p1miz3Pr1m3
-    export DB_CONNECTION_STRING="host=${DB_HOST};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"
+    host=postgresql;port=5432;database=postgres;username=postgres;password=postgres
 fi
-
+    export DB_CONNECTION_STRING="host=${DB_HOST};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"
 echo "Running database migrations..."
 dotnet ef database update
 

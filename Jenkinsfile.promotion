@@ -74,15 +74,11 @@ pipeline {
             steps {
                 echo "Deploy to Production..."
                 sh "./player.sh build database prod"
-                sh "export PIPELINE_ARGS='${API_ARGS} ${PROD_FRONTNEND_ARGS}'"
                 sh "./player.sh build api prod"
                 sh "./player.sh build frontend prod"
-                sh "export PIPELINE_ARGS=''"
                 sh "./player.sh deploy database prod"
-                sh "export PIPELINE_ARGS='${API_ARGS} ${PROD_FRONTNEND_ARGS}'"
                 sh "./player.sh deploy api prod"
                 sh "./player.sh deploy frontend prod"
-                sh "export PIPELINE_ARGS=''"
                 sh "./player.sh toolbelt schemaspy prod"
             }
         }
