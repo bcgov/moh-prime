@@ -25,7 +25,7 @@ RUN dotnet publish -c Release -o /opt/app-root/app/out /p:MicrosoftNETPlatformLi
 ENV PATH="$PATH:/opt/app-root/.dotnet/tools"
 
 RUN dotnet publish -c Release -o /opt/app-root/app/out /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
-RUN dotnet tool install --global dotnet-ef --version 3.0.0
+RUN dotnet tool install --global dotnet-ef --version 3.1.1
 RUN dotnet ef migrations script --idempotent --output "${WORKDIR}/databaseMigrations.sql"
 
 
@@ -44,6 +44,6 @@ ENV DB_CONNECTION_STRING="host=postgresql${SUFFIX};port=5432;database=${POSTGRES
 COPY entrypoint.sh /opt/app-root/app
 USER 0
 RUN chmod 777 /opt/app-root/app/entrypoint.sh && \
-    chmod +x /opt/app-root/app/entrypoint.sh 
+    chmod +x /opt/app-root/app/entrypoint.sh
 
 CMD /opt/app-root/app/entrypoint.sh
