@@ -93,6 +93,21 @@ objects:
               secretKeyRef:
                 key: database-admin-password
                 name: "postgresql-secret"
+          - name: KEYCLOAK_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                key: KEYCLOAK_CLIENT_ID
+                name: "keycloak"
+          - name: KEYCLOAK_REALM
+            valueFrom:
+              secretKeyRef:
+                key: KEYCLOAK_REALM
+                name: "keycloak"
+          - name: KEYCLOAK_URL
+            valueFrom:
+              secretKeyRef:
+                key: KEYCLOAK_URL
+                name: "keycloak"
           image: " "
           name: primeweb
           ports:
