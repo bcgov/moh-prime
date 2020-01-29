@@ -125,7 +125,7 @@ objects:
 - apiVersion: v1
   kind: Route
   metadata:
-    name: "${NAME}${SUFFIX}-insecure"
+    name: "${NAME}${SUFFIX}"
   spec:
     host: "${VANITY_URL}"
     port:
