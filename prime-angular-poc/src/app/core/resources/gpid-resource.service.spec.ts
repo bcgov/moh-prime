@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-
-import { EnrolmentCertificateResource } from './enrolment-certificate-resource.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+
+import { GpidResource } from './gpid-resource.service';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 
-describe('EnrolmentCertificateService', () => {
+describe('GpidResource', () => {
   beforeEach(() => TestBed.configureTestingModule({
     imports: [
       HttpClientTestingModule
@@ -18,7 +18,7 @@ describe('EnrolmentCertificateService', () => {
   }));
 
   it('should be created', () => {
-    const service: EnrolmentCertificateResource = TestBed.get(EnrolmentCertificateResource);
+    const service: GpidResource = TestBed.get(GpidResource);
     expect(service).toBeTruthy();
   });
 });

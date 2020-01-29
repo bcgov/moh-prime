@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EnrolmentCertificateComponent } from './enrolment-certificate.component';
+import { ProvisionerAccessComponent } from './provisioner-access.component';
 import { HeaderComponent } from '@shared/components/header/header.component';
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
 import { EnrolleePrivilegesComponent } from '@shared/components/enrollee/enrollee-privileges/enrollee-privileges.component';
@@ -11,9 +11,9 @@ import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { EnrolleePropertyComponent } from '@shared/components/enrollee/enrollee-property/enrollee-property.component';
 
-describe('EnrolmentCertificateComponent', () => {
-  let component: EnrolmentCertificateComponent;
-  let fixture: ComponentFixture<EnrolmentCertificateComponent>;
+describe('ProvisionerAccessComponent', () => {
+  let component: ProvisionerAccessComponent;
+  let fixture: ComponentFixture<ProvisionerAccessComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -30,7 +30,7 @@ describe('EnrolmentCertificateComponent', () => {
         }
       ],
       declarations: [
-        EnrolmentCertificateComponent,
+        ProvisionerAccessComponent,
         HeaderComponent,
         PageSubheaderComponent,
         EnrolleePrivilegesComponent,
@@ -41,7 +41,7 @@ describe('EnrolmentCertificateComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EnrolmentCertificateComponent);
+    fixture = TestBed.createComponent(ProvisionerAccessComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

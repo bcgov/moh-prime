@@ -1,15 +1,16 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { CertificateComponent } from './pages/certificate/certificate.component';
-import { EnrolmentCertificateComponent } from './shared/components/enrolment-certificate/enrolment-certificate.component';
-import { PageNotFoundComponent } from '@core/components/page-not-found/page-not-found.component';
-import { EnrolmentCertificateRoutes } from './enrolment-certificate.routes';
 
+import { PageNotFoundComponent } from '@core/components/page-not-found/page-not-found.component';
+
+import { ProvisionerAccessRoutes } from './provisioner-access.routes';
+import { CertificateComponent } from './pages/certificate/certificate.component';
+import { ProvisionerAccessComponent } from './shared/components/provisioner-access/provisioner-access.component';
 
 const routes: Routes = [
   {
-    path: EnrolmentCertificateRoutes.MODULE_PATH,
-    component: EnrolmentCertificateComponent,
+    path: ProvisionerAccessRoutes.MODULE_PATH,
+    component: ProvisionerAccessComponent,
     children: [
       {
         path: ':tokenId',

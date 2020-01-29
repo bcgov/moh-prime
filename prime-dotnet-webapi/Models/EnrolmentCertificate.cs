@@ -15,7 +15,6 @@ namespace Prime.Models
         public string PreferredFirstName { get; set; }
         public string PreferredMiddleName { get; set; }
         public string PreferredLastName { get; set; }
-        public DateTime DateOfBirth { get; set; }
         public string LicensePlate { get; set; }
         public DateTime? ExpiryDate { get; set; }
         public IEnumerable<OrganizationType> OrganizationTypes { get; set; }
