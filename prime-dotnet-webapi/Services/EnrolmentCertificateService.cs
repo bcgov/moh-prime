@@ -32,6 +32,8 @@ namespace Prime.Services
                 .Include(t => t.Enrollee)
                     .ThenInclude(e => e.Organizations)
                         .ThenInclude(org => org.OrganizationType)
+                .Include(t => t.Enrollee)
+                    .ThenInclude(e => e.AccessTerms)
                 .SingleOrDefaultAsync();
 
             if (token == null || token.Enrollee == null)
