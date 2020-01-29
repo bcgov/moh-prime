@@ -9,9 +9,9 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 COPY . .
-ENV KEYCLOAK_URL ${KEYCLOAK_URL}
-ENV KEYCLOAK_REALM=${KEYCLOAK_REALM}
-ENV KEYCLOAK_CLIENT_ID=${KEYCLOAK_CLIENT_ID}
+ENV KEYCLOAK_URL $KEYCLOAK_URL
+ENV KEYCLOAK_REALM=$KEYCLOAK_REALM
+ENV KEYCLOAK_CLIENT_ID=$KEYCLOAK_CLIENT_ID
 RUN (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
 RUN cat /usr/src/app/src/environments/environment.prod.ts && \
     npm install @angular/cli -g --silent && \ 

@@ -1,6 +1,6 @@
 #FROM mcr.microsoft.com/dotnet/core/sdk:3.0 AS build
 #FROM registry.redhat.io/rhel8/dotnet-30 as build
-FROM registry.redhat.io/dotnet/dotnet-31-rhel7 as build
+FROM registry.redhat.io/dotnet/dotnet-31-rhel7  
 WORKDIR /opt/app-root/app
 USER 0
 
