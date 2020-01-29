@@ -1,0 +1,37 @@
+<app-page [busy]="busy">
+
+  <app-page-header>Enrolment Certificate</app-page-header>
+
+  <ng-container *ngIf="certificate">
+    <div class="mb-5">
+      <app-enrollee-property title="Name"
+                             [makeBold]="true">
+        {{ certificate | certificate: 'fullName' | default }}
+      </app-enrollee-property>
+    </div>
+
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>PharmaNet ID</ng-container>
+    </app-page-subheader>
+
+    <p class="font-weight-bold mb-5">
+      {{ certificate.licensePlate | uppercase }}
+    </p>
+
+    <div class="mb-5">
+      <app-enrollee-organizations [organizationTypes]="certificate?.organizationTypes"></app-enrollee-organizations>
+    </div>
+
+    <div class="mb-5">
+      <app-enrollee-privileges [transactions]="certificate?.transactions"
+                               [userType]="certificate?.userType"
+                               [canHaveOBOs]="certificate?.canHaveOBOs"></app-enrollee-privileges>
+    </div>
+
+    <p>
+      {{ certificate?.enrolmentCertificateNote?.note | default: 'None' }}
+    </p>
+
+  </ng-container>
+
+</app-page>

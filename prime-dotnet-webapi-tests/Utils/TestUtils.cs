@@ -52,6 +52,14 @@ namespace PrimeTests.Utils
                                 .RuleFor(c => c.PracticeCode, f => f.Random.Short(1, 4))
                                 ;
 
+        public static Faker<Certification> ManualCertificationFaker = new Faker<Certification>()
+                                .RuleFor(c => c.CollegeCode, f => f.Random.Short(1, 5))
+                                .RuleFor(c => c.LicenseNumber, f => f.Random.Int(100000, 999999).ToString().Substring(1))
+                                .RuleFor(c => c.LicenseCode, f => f.Random.Short(3, 3))
+                                .RuleFor(c => c.RenewalDate, f => f.Date.Future(1))
+                                .RuleFor(c => c.PracticeCode, f => f.Random.Short(1, 4))
+                                ;
+
         public static Faker<Job> JobFaker = new Faker<Job>()
                                 .RuleFor(j => j.Title, f => f.Random.Word())
                                 ;
@@ -172,11 +180,11 @@ namespace PrimeTests.Utils
 
             if (!db.Set(typeof(License)).Any())
             {
-                db.AddRange(new License { Code = 1, Name = "Full - General" });
-                db.AddRange(new License { Code = 2, Name = "Full - Pharmacist" });
-                db.AddRange(new License { Code = 3, Name = "Full - Specialty" });
-                db.AddRange(new License { Code = 4, Name = "Registered Nurse" });
-                db.AddRange(new License { Code = 5, Name = "Temporary Registered Nurse" });
+                db.AddRange(new License { Code = 1, Manual = false, Name = "Full - Family" });
+                db.AddRange(new License { Code = 2, Manual = false, Name = "Full - Specialty" });
+                db.AddRange(new License { Code = 3, Manual = true, Name = "Special" });
+                db.AddRange(new License { Code = 4, Manual = false, Name = "Osteopathic" });
+                db.AddRange(new License { Code = 5, Manual = true, Name = "Provisional - Family" });
             }
 
             if (!db.Set(typeof(CollegeLicense)).Any())

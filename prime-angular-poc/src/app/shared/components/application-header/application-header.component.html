@@ -1,0 +1,19 @@
+<mat-toolbar color="primary">
+  <span *ngIf="isMobile">
+    <mat-icon (click)="toggleSidenav()">menu</mat-icon>
+  </span>
+  <span>
+    <img src="/assets/gov_bc_logo.png"
+         alt="Government of BC Logo">
+  </span>
+
+  <span class="flex-fill"></span>
+
+  <span class="login">
+    <mat-icon (click)="onAction()">account_circle</mat-icon>
+  </span>
+</mat-toolbar>
+
+<div class="ngx-progress">
+  <ng-progress></ng-progress>
+</div>

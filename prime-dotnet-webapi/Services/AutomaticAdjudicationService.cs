@@ -23,7 +23,8 @@ namespace Prime.Services
                 new SelfDeclarationRule(),
                 new AddressRule(),
                 new PharmanetValidationRule(pharmanetApiService),
-                new DeviceProviderRule()
+                new DeviceProviderRule(),
+                new LicenceClassRule()
             };
         }
 
@@ -194,10 +195,9 @@ namespace Prime.Services
                 var passed = true;
                 if (enrollee.Certifications?.Any() == true)
                 {
-                    // TODO properly implement this check
                     foreach (var item in enrollee.Certifications)
                     {
-                        if (item.LicenseCode > 0)
+                        if (item.License.Manual)
                         {
                             AddReason(enrollee, StatusReason.LICENCE_CLASS_CODE);
                             passed = false;
