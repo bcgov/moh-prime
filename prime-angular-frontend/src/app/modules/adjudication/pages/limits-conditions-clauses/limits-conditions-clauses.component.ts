@@ -105,7 +105,7 @@ export class LimitsConditionsClausesComponent implements OnInit {
         exhaustMap((result: { output: boolean }) => {
           if (result && result.hasOwnProperty('output')) {
             enrolment.alwaysManual = result.output;
-            return this.adjudicationResource.updateEnrollee(enrolment);
+            return this.adjudicationResource.updateEnrolleeAlwaysManual(enrolment.id, result.output);
           }
           return EMPTY;
         }),

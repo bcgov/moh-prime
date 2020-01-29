@@ -11,7 +11,7 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20200127222254_AlwaysManual")]
+    [Migration("20200129200238_AlwaysManual")]
     partial class AlwaysManual
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -7,10 +7,11 @@ namespace Prime.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
-                name: "ManuallyAdjudicate",
+            migrationBuilder.AddColumn<bool>(
+                name: "AlwaysManual",
                 table: "Enrollee",
-                newName: "AlwaysManual");
+                nullable: false,
+                defaultValue: false);
 
             migrationBuilder.InsertData(
                 table: "StatusReasonLookup",
@@ -25,10 +26,9 @@ namespace Prime.Migrations
                 keyColumn: "Code",
                 keyValue: (short)12);
 
-            migrationBuilder.RenameColumn(
+            migrationBuilder.DropColumn(
                 name: "AlwaysManual",
-                table: "Enrollee",
-                newName: "ManuallyAdjudicate");
+                table: "Enrollee");
         }
     }
 }

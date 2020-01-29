@@ -81,9 +81,9 @@ export class AdjudicationResource {
       );
   }
 
-  public updateEnrollee(enrolment: Enrolment): Observable<any> {
-    const { id } = enrolment;
-    return this.http.put(`${this.config.apiEndpoint}/enrollees/${id}`, this.enrolmentAdapterRequest(enrolment));
+  public updateEnrolleeAlwaysManual(id: number, alwaysManual: boolean): Observable<any> {
+    const payload = { alwaysManual };
+    return this.http.put(`${this.config.apiEndpoint}/enrollees/${id}/always-manual`, payload);
   }
 
   public deleteEnrolment(id: number): Observable<Enrolment> {
