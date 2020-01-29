@@ -11,8 +11,8 @@ else
 fi
 
 echo "Running database migrations..."
-dotnet ef database update
-dotnet ef migrations script --idempotent 
+#dotnet ef database update
+#dotnet ef migrations script --idempotent 
 echo "Running .NET..."
 dotnet prime.dll &disown
 
