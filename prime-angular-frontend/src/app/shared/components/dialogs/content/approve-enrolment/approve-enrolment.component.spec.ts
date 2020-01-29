@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ApproveEnrolmentComponent } from './approve-enrolment.component';
+import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
 
 describe('ApproveEnrolmentComponent', () => {
   let component: ApproveEnrolmentComponent;
@@ -8,9 +9,12 @@ describe('ApproveEnrolmentComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ApproveEnrolmentComponent ]
+      imports: [
+        NgxMaterialModule
+      ],
+      declarations: [ApproveEnrolmentComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

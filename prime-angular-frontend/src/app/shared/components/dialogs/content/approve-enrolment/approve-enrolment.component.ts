@@ -19,7 +19,7 @@ export class ApproveEnrolmentComponent implements OnInit, IDialogContent {
   }
 
   public get alwaysManual(): boolean {
-    return this.enrolment.alwaysManual;
+    return this.enrolment ? this.enrolment.alwaysManual : false;
   }
 
   onChange($event) {
