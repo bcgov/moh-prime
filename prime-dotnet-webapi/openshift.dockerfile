@@ -21,7 +21,7 @@ COPY . /opt/app-root/app
 ENV PATH="$PATH:/opt/app-root/.dotnet/tools"
 RUN curl https://api.nuget.org/v3/index.json
 RUN dotnet publish -c Release -o /opt/app-root/app/out /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
-RUN dotnet tool install --global dotnet-ef --version 3.0.0
+RUN dotnet tool install --global dotnet-ef --version 3.1.1
 RUN dotnet ef migrations script --idempotent --output "${WORKDIR}/databaseMigrations.sql"
 
 #FROM mcr.microsoft.com/dotnet/core/aspnet:3.0 AS runtime
