@@ -11,6 +11,6 @@ namespace Prime.Services
 
         Task CreateEnrolleeAccessTermAsync(Enrollee enrollee);
 
-        Task SetAcceptedDateForAccessTermAsync(Enrollee enrollee);
+        Task AcceptCurrentAccessTermAsync(Enrollee enrollee);
     }
 }

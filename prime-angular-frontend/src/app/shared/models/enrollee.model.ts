@@ -10,4 +10,5 @@ export interface Enrollee extends EnrolleeProfile {
   contactPhone: string;
   voicePhone: string;
   voiceExtension: string;
+  expiryDate?: string;
 }

@@ -132,6 +132,7 @@ export class EnrolmentResource {
       contactPhone,
       voicePhone,
       voiceExtension,
+      expiryDate,
       ...remainder
     } = enrollee;
 
@@ -153,7 +154,8 @@ export class EnrolmentResource {
         contactEmail,
         contactPhone,
         voicePhone,
-        voiceExtension
+        voiceExtension,
+        expiryDate
       },
       collectionNoticeAccepted,
       ...remainder
