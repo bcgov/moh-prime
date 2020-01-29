@@ -25,6 +25,21 @@ parameters:
   required: true
 - name: OC_APP
   required: true
+- name: VANITY_URL
+  required: true
+  value: "pharmanetenrolment.gov.bc.ca"
+- name: HTTP_SCHEMA
+  required: true
+  value: "https"
+- name: HTTP_PORT
+  required: true
+  value: "8443"
+- name: TERMINATION_TYPE
+  required: true
+  value: "Passthrough"
+- name: REDIRECT_URL
+  required: true
+  value: "https://pharmanetenrolment.gov.bc.ca"
 objects:
 - apiVersion: v1
   kind: DeploymentConfig
@@ -47,7 +62,7 @@ objects:
         cpu: 300m
         memory: 512Mi
       limits:
-        cpu: '1'
+        cpu: "1"
         memory: 1024Mi
     template:
       metadata:
@@ -62,11 +77,27 @@ objects:
           - name: OC_APP
             value: ${OC_APP}
           - name: REDIRECT_URL
-            value: http://angular-frontend${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca
+            value: "${REDIRECT_URL}"
+          - name: TLS_CHAIN
+            valueFrom:
+              secretKeyRef:
+                key: authority-chain
+                name: "frontend-tls-certificate" 
+          - name: TLS_PRIVATE
+            valueFrom:
+              secretKeyRef:
+                key: private-key
+                name: "frontend-tls-certificate"
+          - name: TLS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database-admin-password
+                name: "postgresql-secret"
           image: " "
           name: primeweb
           ports:
           - containerPort: 8080
+          - containerPort: 8443
           readinessProbe:
             failureThreshold: 3
             httpGet:
@@ -79,44 +110,44 @@ objects:
             timeoutSeconds: 1
           resources: {}
         restartPolicy: Always
-    test: false
+    test: false 
     triggers:
-    - type: ConfigChange
-    - imageChangeParams:
-        automatic: true
-        containerNames:
-        - primeweb
-        from:
-          kind: ImageStreamTag
-          name: "${NAME}${SUFFIX}:latest"
-      type: ImageChange
+      - type: ConfigChange
+      - imageChangeParams:
+          automatic: true
+          containerNames:
+            - primeweb
+          from:
+            kind: ImageStreamTag
+            name: "${NAME}${SUFFIX}:latest"
+        type: ImageChange
   status: {}
 - apiVersion: v1
   kind: Route
   metadata:
-    name: "${NAME}${SUFFIX}"
+    name: "${NAME}${SUFFIX}-insecure"
   spec:
-    host: "${NAME}${SUFFIX}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca"
+    host: "${VANITY_URL}"
     port:
-      targetPort: '8080'
+      targetPort: "${HTTP_PORT}"
     to:
       kind: Service
       name: "${NAME}${SUFFIX}"
 - apiVersion: v1
   kind: Service
   metadata:
-    annotations:
-      kompose.cmd: kompose convert --provider=openshift --build=build-config --build-repo=https://github.com/bcgov/moh-prime.git
-      kompose.version: 1.18.0 (06a2e56)
     creationTimestamp: 
     labels:
       io.kompose.service: "${NAME}${SUFFIX}"
     name: "${NAME}${SUFFIX}"
   spec:
     ports:
-    - name: '8080'
+    - name: "8080"
       port: 8080
       targetPort: 8080
+    - name: "8443"
+      port: 8443
+      targetPort: 8443
     selector:
       io.kompose.service: "${NAME}${SUFFIX}"
   status:

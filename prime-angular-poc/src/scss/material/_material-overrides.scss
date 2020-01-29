@@ -1,0 +1,34 @@
+//
+// MATERIAL OVERRIDES
+//
+
+// NOTE: Used to fix issues OR augment Material components
+// that are not theme related
+
+// Remove all outlines from all elements.  This is very aggressive! and should
+// be removed once supported by Angular Material.
+* {
+  outline: none !important;
+}
+
+//
+// Forms
+//
+
+.mat-checkbox-layout,
+.mat-slide-toggle-content {
+  // Force checkbox and slide labels to line wrap if required
+  // instead of overflowing their container
+  white-space: normal !important;
+}
+
+.mat-form-field {
+  // Provide a bit more spacing under form fields so error
+  // messages are not resting on underlying field labels
+  margin-bottom: 0.3rem;
+}
+
+.mat-checkbox label,
+.mat-radio-button label {
+  color: theme-palette(blue);
+}

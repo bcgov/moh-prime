@@ -38,7 +38,7 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
   public EnrolmentStatus = EnrolmentStatus;
   public EnrolleeClassification = EnrolleeClassification;
 
-  public termsOfAccess: AccessTerm;
+  public accessTerm: AccessTerm;
 
   constructor(
     protected route: ActivatedRoute,
@@ -63,6 +63,14 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
     return this.viewportService.isMobile;
   }
 
+  public get isObo() {
+    return this.accessTerm.userClause.enrolleeClassification === EnrolleeClassification.OBO;
+  }
+
+  public get isRu() {
+    return this.accessTerm.userClause.enrolleeClassification === EnrolleeClassification.RU;
+  }
+
   public get hasAgreed(): boolean {
     return this.agreed.value;
   }
@@ -74,8 +82,8 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
         : { verb: 'Decline', adjective: 'declined' };
 
       const data: DialogOptions = {
-        title: 'Access Agreement',
-        message: `Are you sure you want to ${status.verb.toLowerCase()} the access agreement?`,
+        title: 'Terms of Access',
+        message: `Are you sure you want to ${status.verb.toLowerCase()} the terms of access?`,
         actionText: `${status.verb} Agreement`
       };
       this.busy = this.dialog.open(ConfirmDialogComponent, { data })
@@ -89,13 +97,13 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
         )
         .subscribe(
           () => {
-            this.toastService.openSuccessToast(`Access agreement has been ${status.adjective}`);
+            this.toastService.openSuccessToast(`Terms of Access has been ${status.adjective}`);
             this.routeTo(EnrolmentRoutes.PHARMANET_ENROLMENT_CERTIFICATE, {
               state: { showProgressBar: this.isInitialEnrolment }
             });
           },
           (error: any) => {
-            this.toastService.openErrorToast(`Access agreement could not be ${status.adjective}`);
+            this.toastService.openErrorToast(`Terms of Access could not be ${status.adjective}`);
             this.logger.error('[Enrolment] AccessAgreement::onSubmit error has occurred: ', error);
           }
         );
@@ -104,16 +112,16 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
 
   public onAcceptedAgreement() {
     const data: DialogOptions = {
-      title: 'Access Agreement',
-      message: 'Are you sure you want to accept the access agreement?',
+      title: 'Accept Terms of Access',
+      message: 'Are you sure you want to accept the terms of access?',
       actionText: 'Accept Agreement'
     };
   }
 
   public onDeclinedAgreement() {
     const data: DialogOptions = {
-      title: 'Access Agreement',
-      message: 'Are you sure you want to decline the access agreement?',
+      title: 'Decline Terms of Access',
+      message: 'Are you sure you want to decline the terms of access?',
       actionText: 'Decline Agreement'
     };
   }
@@ -131,6 +139,8 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
     if (!this.hasReadAgreement) {
       this.utilsService.scrollTop();
       this.currentPage++;
+
+      this.onPageChange({ atEnd: true });
     }
   }
 
@@ -144,9 +154,9 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
   public ngOnInit() {
     this.enrolment = this.enrolmentService.enrolment;
     this.isInitialEnrolment = this.enrolment.progressStatus !== ProgressStatus.FINISHED;
-    this.enrolmentResource.getTermsOfAccess(this.enrolment.id)
+    this.enrolmentResource.getAccessTerm(this.enrolment.id)
       .subscribe(
-        (termsOfAccess: AccessTerm) => this.termsOfAccess = termsOfAccess,
+        (accessTerm: AccessTerm) => this.accessTerm = accessTerm,
         (error: any) => {
           this.toastService.openErrorToast(`Terms of access could not be found`);
           this.logger.error('[Enrolment] AccessAgreement::ngOnInit error has occurred: ', error);

@@ -68,7 +68,7 @@ export class EnrolmentResource {
   }
 
   public enrolmentCertificateAccessTokens(): Observable<EnrolmentCertificateAccessToken[]> {
-    return this.http.get(`${this.config.apiEndpoint}/enrolment-certificates/access`)
+    return this.http.get(`${this.config.apiEndpoint}/provisioner-access/token`)
       .pipe(
         map((response: PrimeHttpResponse) => response.result),
         tap((tokens: EnrolmentCertificateAccessToken[]) => this.logger.info('ACCESS_TOKENS', tokens))
@@ -76,18 +76,18 @@ export class EnrolmentResource {
   }
 
   public createEnrolmentCertificateAccessToken(): Observable<EnrolmentCertificateAccessToken> {
-    return this.http.post(`${this.config.apiEndpoint}/enrolment-certificates/access`, {})
+    return this.http.post(`${this.config.apiEndpoint}/provisioner-access/token`, {})
       .pipe(
         map((response: PrimeHttpResponse) => response.result as EnrolmentCertificateAccessToken),
         tap((token: EnrolmentCertificateAccessToken) => this.logger.info('ACCESS_TOKEN', token))
       );
   }
 
-  public getTermsOfAccess(id: number): Observable<AccessTerm> {
+  public getAccessTerm(id: number): Observable<AccessTerm> {
     return this.http.get(`${this.config.apiEndpoint}/enrollees/${id}/access-terms`)
       .pipe(
         map((response: PrimeHttpResponse) => response.result as AccessTerm),
-        tap((termsOfAccess: AccessTerm) => this.logger.info('TERMS_OF_ACCESS', termsOfAccess))
+        tap((accessTerm: AccessTerm) => this.logger.info('ACCESS_TERM', accessTerm))
       );
   }
 

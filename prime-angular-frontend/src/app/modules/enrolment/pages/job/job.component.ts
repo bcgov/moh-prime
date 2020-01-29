@@ -44,7 +44,7 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
 
     this.jobNames = this.configService.jobNames;
     this.filteredJobNames = new BehaviorSubject<Config<number>[]>(this.jobNames);
-    this.allowDefaultOption = true;
+    this.allowDefaultOption = false;
     this.defaultOptionLabel = 'None';
   }
 

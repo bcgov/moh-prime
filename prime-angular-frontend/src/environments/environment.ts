@@ -8,7 +8,7 @@ export const environment = {
   apiEndpoint: 'http://localhost:5000/api',
   loginRedirectUrl: 'http://localhost:4200',
   prime: {
-    displayPhone: '1-844-397-7463 (844-39PRIME)',
+    displayPhone: '1-844-39PRIME',
     phone: '18443977463',
     email: 'prime@gov.bc.ca',
   },
@@ -21,7 +21,7 @@ export const environment = {
     initOptions: {
       onLoad: 'check-sso'
     },
-    bearerExcludedUrls: ['/enrolment-certificates/certificate']
+    bearerExcludedUrls: ['/provisioner-access/certificate']
   }
 };
 

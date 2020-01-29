@@ -15,6 +15,7 @@ namespace Prime.Services
         private readonly IEmailService _emailService;
         private readonly IPrivilegeService _privilegeService;
         private readonly IAccessTermService _accessTermService;
+        private readonly IEnrolleeProfileVersionService _enroleeProfileVersionService;
 
         private class StatusWrapper
         {
@@ -32,13 +33,15 @@ namespace Prime.Services
             IAutomaticAdjudicationService automaticAdjudicationService,
             IEmailService emailService,
             IPrivilegeService privilegeService,
-            IAccessTermService accessTermService)
+            IAccessTermService accessTermService,
+            IEnrolleeProfileVersionService enroleeProfileVersionService)
             : base(context, httpContext)
         {
             _automaticAdjudicationService = automaticAdjudicationService;
             _emailService = emailService;
             _privilegeService = privilegeService;
             _accessTermService = accessTermService;
+            _enroleeProfileVersionService = enroleeProfileVersionService;
         }
 
         private Dictionary<Status, StatusWrapper[]> GetWorkFlowStateMap()
@@ -329,6 +332,8 @@ namespace Prime.Services
             var enrollee = await this.GetBaseEnrolleeQuery()
                 .Include(e => e.Certifications)
                     .ThenInclude(cer => cer.College) // Needed for PharmaNet College auto-adjudication
+                .Include(e => e.Certifications)
+                    .ThenInclude(l => l.License) // Needed for LicenceClass Rule
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
             if (enrollee == null)
@@ -355,6 +360,9 @@ namespace Prime.Services
             switch (newStatus.Code)
             {
                 case Status.SUBMITTED_CODE:
+                    // Store a copy of the submitted enrollee profile
+                    await _enroleeProfileVersionService.CreateEnrolleeProfileVersionAsync(enrollee);
+
                     if (await _automaticAdjudicationService.QualifiesForAutomaticAdjudication(enrollee))
                     {
                         // Change the status to adjudicated/approved
@@ -458,6 +466,8 @@ namespace Prime.Services
                     .Include(e => e.PhysicalAddress)
                     .Include(e => e.MailingAddress)
                     .Include(e => e.Certifications)
+                        .ThenInclude(c => c.License)
+                            .ThenInclude(l => l.DefaultPrivileges)
                     .Include(e => e.Jobs)
                     .Include(e => e.Organizations)
                     .Include(e => e.EnrolmentStatuses)

@@ -157,25 +157,10 @@ namespace Prime.Models
             }
         }
 
-        [NotMapped]
-        public string EnrolleeClassification
-        {
-            get
-            {
-                ICollection<EnrolmentStatusReason> enrolmentStatusReasons = this.CurrentStatus?.EnrolmentStatusReasons;
-
-                if (enrolmentStatusReasons != null && enrolmentStatusReasons.Count > 0)
-                {
-                    return (this.Certifications.Count > 0)
-                        ? PrimeConstants.PRIME_MOA
-                        : PrimeConstants.PRIME_RU;
-                }
-
-                return null;
-            }
-        }
-
         [JsonIgnore]
         public ICollection<AccessTerm> AccessTerms { get; set; }
+
+        [JsonIgnore]
+        public ICollection<EnrolleeProfileVersion> EnrolleeProfileVersions { get; set; }
     }
 }
