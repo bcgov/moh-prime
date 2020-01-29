@@ -226,6 +226,9 @@ namespace Prime.Services
             // a change in routing for the enrollee
             enrollee.ProfileCompleted = _enrolleeDb.ProfileCompleted || profileCompleted;
 
+            // Set AlwaysManual to what is stored in DB
+            enrollee.AlwaysManual = _enrolleeDb.AlwaysManual;
+
             _context.Entry(enrollee).State = EntityState.Modified;
 
             try
@@ -466,8 +469,6 @@ namespace Prime.Services
                     .Include(e => e.PhysicalAddress)
                     .Include(e => e.MailingAddress)
                     .Include(e => e.Certifications)
-                        .ThenInclude(c => c.License)
-                            .ThenInclude(l => l.DefaultPrivileges)
                     .Include(e => e.Jobs)
                     .Include(e => e.Organizations)
                     .Include(e => e.EnrolmentStatuses)
@@ -573,5 +574,24 @@ namespace Prime.Services
             return newNote;
         }
 
+
+        public async Task<Enrollee> UpdateEnrolleeAlwaysManualAsync(int enrolleeId, bool alwaysManual)
+        {
+            var enrollee = await _context.Enrollees
+                .Where(e => e.Id == enrolleeId)
+                .SingleOrDefaultAsync();
+
+            enrollee.AlwaysManual = alwaysManual;
+
+            _context.Update(enrollee);
+
+            var updated = await _context.SaveChangesAsync();
+            if (updated < 1)
+            {
+                throw new InvalidOperationException($"Could not update the enrollee's alwaysManual flag.");
+            }
+
+            return enrollee;
+        }
     }
 }

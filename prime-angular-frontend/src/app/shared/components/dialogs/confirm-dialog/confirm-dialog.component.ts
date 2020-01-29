@@ -66,9 +66,12 @@ export class ConfirmDialogComponent implements OnInit {
 
     const componentRef = viewContainerRef.createComponent(componentFactory);
     (componentRef.instance as IDialogContent).data = data;
-    (componentRef.instance as IDialogContent).output.subscribe((value: any) => {
-      this.dialogContentOutput = value;
-    });
+    const output = (componentRef.instance as IDialogContent).output;
+    if (output) {
+      (componentRef.instance as IDialogContent).output.subscribe((value: any) => {
+        this.dialogContentOutput = value;
+      });
+    }
   }
 
 }
