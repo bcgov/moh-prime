@@ -16,6 +16,7 @@ namespace Prime.Models
         public string PreferredMiddleName { get; set; }
         public string PreferredLastName { get; set; }
         public string LicensePlate { get; set; }
+        public DateTime? ExpiryDate { get; set; }
         public IEnumerable<OrganizationType> OrganizationTypes { get; set; }
 
         public EnrolmentCertificateNote EnrolmentCertificateNote { get; set; }
@@ -34,6 +35,7 @@ namespace Prime.Models
                 PreferredMiddleName = enrollee.PreferredMiddleName,
                 PreferredLastName = enrollee.PreferredLastName,
                 LicensePlate = enrollee.LicensePlate,
+                ExpiryDate = enrollee.ExpiryDate,
                 OrganizationTypes = enrollee.Organizations.Select(org => org.OrganizationType),
                 EnrolmentCertificateNote = enrollee.EnrolmentCertificateNote,
                 Transactions = enrollee.AssignedPrivileges

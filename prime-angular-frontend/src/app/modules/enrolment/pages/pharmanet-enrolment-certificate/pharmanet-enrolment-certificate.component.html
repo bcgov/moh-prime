@@ -9,9 +9,6 @@
 
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>Next Steps</ng-container>
-      <ng-container appPageSubheaderSummary>
-        <div class="renewal-date">Renew by January 2021</div>
-      </ng-container>
     </app-page-subheader>
 
     <p>
@@ -29,6 +26,9 @@
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>Your PharmaNet ID</ng-container>
     </app-page-subheader>
+
+    <p class="mb-4">Your PharmaNet ID is
+      {{ expiryDate === null ? ' expired' : ' valid for one year. Please renew by ' + expiryDate }}.</p>
 
     <p class="font-weight-bold mb-5">
       {{ enrolment.enrollee.licensePlate | uppercase }}
