@@ -10,6 +10,7 @@ namespace Prime.Services
 {
     public class AccessTermService : BaseService, IAccessTermService
     {
+        private static readonly TimeSpan ACCESS_TERM_EXPIRY = TimeSpan.FromDays(365);
         public AccessTermService(
             ApiDbContext context, IHttpContextAccessor httpContext) : base(context, httpContext)
         { }
@@ -62,16 +63,16 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task SetAcceptedDateForAccessTermAsync(Enrollee enrollee)
+        public async Task AcceptCurrentAccessTermAsync(Enrollee enrollee)
         {
             var accessTerm = await _context.AccessTerms
-                .Where(toa => toa.EnrolleeId == enrollee.Id)
-                .OrderByDescending(toa => toa.AcceptedDate)
-                .FirstOrDefaultAsync();
+                .Where(at => at.EnrolleeId == enrollee.Id)
+                .OrderByDescending(at => at.AcceptedDate)
+                .FirstAsync();
 
             accessTerm.AcceptedDate = DateTime.Now;
             // Add an Expiry Date of one year in the future.
-            accessTerm.ExpiryDate = DateTime.Now.AddYears(1);
+            accessTerm.ExpiryDate = DateTime.Now.Add(ACCESS_TERM_EXPIRY);
 
             await _context.SaveChangesAsync();
         }
