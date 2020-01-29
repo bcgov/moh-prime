@@ -1,18 +1,15 @@
 <app-page [busy]="busy">
 
-  <app-page-header>Enrolment Certificate</app-page-header>
+  <app-page-header class="mb-5">Provisioner Link</app-page-header>
 
   <ng-container *ngIf="certificate">
-    <div class="mb-5">
-      <app-enrollee-property title="Name"
-                             [makeBold]="true">
-        {{ certificate | certificate: 'fullName' | default }}
-      </app-enrollee-property>
-    </div>
-
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>PharmaNet ID</ng-container>
     </app-page-subheader>
+
+    <p class="mb-4">Your PharmaNet ID is
+      {{ expiryDate === null ? ' expired' : ' valid for one year. Please renew by ' + expiryDate }}.
+    </p>
 
     <p class="font-weight-bold mb-5">
       {{ certificate.licensePlate | uppercase }}
