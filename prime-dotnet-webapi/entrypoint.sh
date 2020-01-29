@@ -6,7 +6,6 @@ if [ -z "$DB_HOST" ]
 then
     export DB_CONNECTION_STRING="${DB_CONNECTION_STRING}"
 else
-    host=postgresql;port=5432;database=postgres;username=postgres;password=0p1miz3Pr1m3
     export DB_CONNECTION_STRING="host=${DB_HOST};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"
 fi
 
