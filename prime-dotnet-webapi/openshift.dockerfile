@@ -22,7 +22,7 @@ COPY . /opt/app-root/app
 
 # Begin database migration setup
 ENV PATH="$PATH:/opt/app-root/.dotnet/tools"
-RUN dotnet publish -c Release -o /opt/app-root/app/out /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
+RUN dotnet publish -c Release -o /opt/app-root/app/ /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
 RUN dotnet tool install --global dotnet-ef
 #RUN dotnet ef migrations script --idempotent --output "${WORKDIR}/databaseMigrations.sql"
 
@@ -30,7 +30,7 @@ RUN dotnet tool install --global dotnet-ef
 #FROM registry.redhat.io/dotnet/dotnet-30-runtime-rhel7 as runtime
 #WORKDIR /opt/app-root/app
 #COPY --from=build /opt/app-root/app/out /opt/app-root/app
-RUN mv out/* .
+
 EXPOSE 8080 5001 1025
 COPY entrypoint.sh .
 #RUN apt update && \
@@ -39,7 +39,8 @@ COPY entrypoint.sh .
 #    telnet && \
 USER 0
 RUN chmod +x entrypoint.sh && \
-    chmod 777 entrypoint.sh
+    chmod 777 entrypoint.sh && \
+    chmod -R 755 ${WORKDIR}
 ENV DB_CONNECTION_STRING="host=postgresql${SUFFIX};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_PASSWORD}"
 ENV API_PORT 8080
 ENTRYPOINT [ "./entrypoint.sh" ]
