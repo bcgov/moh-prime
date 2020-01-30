@@ -4,7 +4,7 @@ pipeline {
         BRANCH_LOWER=BRANCH_NAME.toLowerCase()
         VANITY_URL="pharmanetenrolment.gov.bc.ca"
         TEST_VANITY_URL="test.pharmanetenrolment-dqszvc-test.pathfinder.gov.bc.ca"
-        TEST_FRONTEND_ARGS = "-p HTTP_PORT=8080 -p HTTP_SCHEMA=http TERMINATION_TYPE='Edge' -p REDIRECT_URL=http://${TEST_VANITY_URL} -p VANITY_URL=${TEST_VANITY_URL} "
+        TEST_FRONTEND_ARGS = "-p HTTP_PORT=8080 -p HTTP_SCHEMA=http TERMINATION_TYPE='Edge' -p REDIRECT_URL=http://${TEST_VANITY_URL} -p VANITY_URL=${TEST_VANITY_URL}"
         TEST_API_ARGS="ASPNETCORE_ENVIRONMENT=Release -p HTTP_PORT=8080 -p HTTP_SCHEMA=http -p VANITY_URL=${TEST_VANITY_URL} -p SSO_HOST=sso-dev.pathfinder.gov.bc.ca"
     }
     stages {
