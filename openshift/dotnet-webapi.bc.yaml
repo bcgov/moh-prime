@@ -107,6 +107,8 @@ objects:
               secretKeyRef:
                 key: KEYCLOAK_CLIENT_ID
                 name: "keycloak"
+          - name: JWT_WELL_KNOWN_CONFIG 
+            value: "https://${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/.well-known/openid-configuration"
       tags:
         - annotations: null
           from:
