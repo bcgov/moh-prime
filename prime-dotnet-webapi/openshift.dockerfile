@@ -19,7 +19,7 @@ ENV DB_CONNECTION_STRING "host=postgresql${SUFFIX};port=5432;database=${POSTGRES
 ENV KEYCLOAK_URL $KEYCLOAK_URL
 ENV KEYCLOAK_REALM $KEYCLOAK_REALM
 ENV KEYCLOAK_CLIENT_ID $KEYCLOAK_CLIENT_ID
-ENV JWT_WELL_KNOWN_CONFIG "https://${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/.well-known/openid-configuration"
+ARG JWT_WELL_KNOWN_CONFIG "${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/.well-known/openid-configuration"
 
 COPY *.csproj /opt/app-root/app
 
