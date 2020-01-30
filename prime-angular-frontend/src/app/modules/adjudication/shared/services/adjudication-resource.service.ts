@@ -83,7 +83,9 @@ export class AdjudicationResource {
 
   public updateEnrolleeAlwaysManual(id: number, alwaysManual: boolean): Observable<any> {
     const payload = { alwaysManual };
-    return this.http.put(`${this.config.apiEndpoint}/enrollees/${id}/always-manual`, payload);
+    let params = new HttpParams();
+    params = params.set('alwaysManual', `${alwaysManual}`);
+    return this.http.put(`${this.config.apiEndpoint}/enrollees/${id}/always-manual`, payload, { params });
   }
 
   public deleteEnrolment(id: number): Observable<Enrolment> {

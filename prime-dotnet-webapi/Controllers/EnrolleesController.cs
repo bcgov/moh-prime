@@ -549,7 +549,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiOkResponse<Enrollee>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Enrollee>> UpdateEnrolleeAlwaysManual(int enrolleeId, bool alwaysManual)
+        public async Task<ActionResult<Enrollee>> UpdateEnrolleeAlwaysManual(int enrolleeId, [FromQuery]bool alwaysManual)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
@@ -570,6 +570,7 @@ namespace Prime.Controllers
                 this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrolment certificate notes can not be updated when the current status is 'In Progress'.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
+
 
             var updatedEnrollee = await _enrolleeService.UpdateEnrolleeAlwaysManualAsync(enrolleeId, alwaysManual);
 
