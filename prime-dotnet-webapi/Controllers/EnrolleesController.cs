@@ -536,13 +536,13 @@ namespace Prime.Controllers
         }
 
 
-        // POST: api/Enrollees/5/always-manual
+        // PUT: api/Enrollees/5/always-manual
         /// <summary>
         /// Updates an enrollees always manual flag, forcing them to always be sent to manual adjudication
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="alwaysManual"></param>
-        [HttpPost("{enrolleeId}/always-manual", Name = nameof(UpdateEnrolleeAlwaysManual))]
+        [HttpPut("{enrolleeId}/always-manual", Name = nameof(UpdateEnrolleeAlwaysManual))]
         [Authorize(Policy = PrimeConstants.ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
