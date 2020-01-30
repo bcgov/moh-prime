@@ -22,6 +22,9 @@ parameters:
     value: "https://github.com/bcgov/moh-prime"
   - name: SOURCE_REPOSITORY_REF
     required: true
+  - name: SSO_HOST
+    required: true
+    value: "sso.pathfinder.gov.bc.ca"
   - name: OC_NAMESPACE
     required: true
   - name: OC_APP
@@ -67,7 +70,7 @@ objects:
         limits:
           cpu: "1"
           memory: 1024Mi
-      template:
+      template:sso
         metadata:
           creationTimestamp: null
           labels:
@@ -98,7 +101,8 @@ objects:
                 - name: JWT_AUDIENCE
                   value: "prime-web-api"
                 - name: JWT_WELL_KNOWN_CONFIG
-                  value: "https://sso-${OC_APP}.pathfinder.gov.bc.ca/auth/realms/v4mbqqas/.well-known/openid-configuration"
+                  required: true
+                  value: "https://${SSO_HOST}/auth/realms/v4mbqqas/.well-known/openid-configuration"
                 - name: DB_HOST
                   value: "postgresql${SUFFIX}"
                 - name: PHARMANET_API_URL
