@@ -18,8 +18,8 @@ namespace Prime
     public static class AuthenticationSetup
     {
         public static void Initialize(
-            IServiceCollection services, 
-            IConfiguration configuration, 
+            IServiceCollection services,
+            IConfiguration configuration,
             IHostEnvironment environment
             )
         {
