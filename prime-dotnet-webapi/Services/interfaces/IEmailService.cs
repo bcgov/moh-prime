@@ -1,11 +1,12 @@
+using System.Threading.Tasks;
 using Prime.Models;
 
 namespace Prime.Services
 {
     public interface IEmailService
     {
-        void SendReminderEmail(Enrollee enrollee);
+        Task SendReminderEmailAsync(Enrollee enrollee);
 
-        void SendProvisionerLink(string provisionerEmail, EnrolmentCertificateAccessToken token);
+        Task SendProvisionerLinkAsync(string provisionerEmail, EnrolmentCertificateAccessToken token);
     }
 }

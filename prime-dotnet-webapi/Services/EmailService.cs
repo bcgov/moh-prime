@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using System.Net.Mail;
@@ -15,7 +16,20 @@ namespace Prime.Services
             : base(context, httpContext)
         { }
 
-        public void SendReminderEmail(Enrollee enrollee)
+        public static bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task SendReminderEmailAsync(Enrollee enrollee)
         {
             if (!IsValidEmail(enrollee.ContactEmail))
             {
@@ -26,10 +40,10 @@ namespace Prime.Services
             string subject = "Prime requires your attention";
             string body = $"Your Prime application status has changed since you last viewed it. Please click <a href=\"{PrimeConstants.FRONTEND_URL}\">here</a> to log into Prime and view your status.";
 
-            Send(PRIME_EMAIL, enrollee.ContactEmail, subject, body);
+            await Send(PRIME_EMAIL, enrollee.ContactEmail, subject, body);
         }
 
-        public async void SendProvisionerLink(string provisionerEmail, EnrolmentCertificateAccessToken token)
+        public async Task SendProvisionerLinkAsync(string provisionerEmail, EnrolmentCertificateAccessToken token)
         {
             if (!IsValidEmail(provisionerEmail))
             {
@@ -44,15 +58,15 @@ namespace Prime.Services
             string subject = "New access request";
             string body = $"This user has been approved for PharmaNet access. Please click <a href=\"{token.FrontendUrl}\">here</a> to view their information.";
 
-            Send(PRIME_EMAIL, new[] { provisionerEmail }, new[] { token.Enrollee.ContactEmail }, subject, body);
+            await Send(PRIME_EMAIL, new[] { provisionerEmail }, new[] { token.Enrollee.ContactEmail }, subject, body);
         }
 
-        private void Send(string from, string to, string subject, string body)
+        private async Task Send(string from, string to, string subject, string body)
         {
-            Send(from, new[] { to }, new string[0], subject, body);
+            await Send(from, new[] { to }, new string[0], subject, body);
         }
 
-        private void Send(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body)
+        private async Task Send(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body)
         {
             if (!to.Any())
             {
@@ -89,7 +103,7 @@ namespace Prime.Services
             SmtpClient smtp = new SmtpClient(PrimeConstants.MAIL_SERVER_URL, PrimeConstants.MAIL_SERVER_PORT);
             try
             {
-                smtp.Send(mail);
+                await smtp.SendMailAsync(mail);
             }
             catch (Exception ex)
             {
@@ -103,18 +117,10 @@ namespace Prime.Services
 
                 throw;
             }
-        }
-
-        private bool IsValidEmail(string email)
-        {
-            try
+            finally
             {
-                var addr = new MailAddress(email);
-                return addr.Address == email;
-            }
-            catch
-            {
-                return false;
+                smtp.Dispose();
+                mail.Dispose();
             }
         }
     }
