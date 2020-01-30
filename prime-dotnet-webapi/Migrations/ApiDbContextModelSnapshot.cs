@@ -78,9 +78,11 @@ namespace Prime.Migrations
                     b.Property<int>("EnrolleeId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime?>("ExpiryDate");
+                    b.Property<DateTime?>("ExpiryDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("GlobalClauseId");
+                    b.Property<int>("GlobalClauseId")
+                        .HasColumnType("integer");
 
                     b.Property<int?>("LimitsConditionsClauseId")
                         .HasColumnType("integer");
