@@ -2,7 +2,7 @@ pipeline {
     agent none
     environment {
         BRANCH_LOWER=BRANCH_NAME.toLowerCase()
-        VANITY_URL="${BRANCH_LOWER}-dqszvc-dev.pathfinder.gov.bc.ca"
+        VANITY_URL="${BRANCH_LOWER}.pathfinder.gov.bc.ca"
         HTTP_SCHEMA="http"
         HTTP_PORT="8080"
         FRONTEND_ARGS="-p HTTP_PORT=${HTTP_PORT} -p HTTP_SCHEMA=${HTTP_SCHEMA} TERMINATION_TYPE='Edge' -p REDIRECT_URL=${HTTP_SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL}"
