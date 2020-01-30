@@ -107,7 +107,7 @@ function toolbelt() {
     else
         MODE="create"
     fi;
-    oc process -f ./"${TEModelFactories/EnrolmentStatusReasonFactory.csLATE_DIRECTORY}/$DEPLOY_CONFIG_TEMPLATE" \
+    oc process -f ./"${TEMPLATE_DIRECTORY}/$DEPLOY_CONFIG_TEMPLATE" \
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
         -p OC_NAMESPACE="$PROJECT_PREFIX" \
@@ -187,3 +187,4 @@ function functionTest() {
     echo "Trailing = ${@:4}"
     echo "All = $@"
 }
+``
