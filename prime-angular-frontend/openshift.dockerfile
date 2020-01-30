@@ -4,17 +4,16 @@ FROM node:10.16 as build-deps
 # set working directory
 ENV NODE_ROOT /usr/src/app
 ENV REDIRECT_URL $REDIRECT_URL
+ENV KEYCLOAK_REALM $KEYCLOAK_REALM
+ENV KEYCLOAK_CLIENT_ID $KEYCLOAK_CLIENT_ID
+ENV KEYCLOAK_URL $KEYCLOAK_URL
 ENV OC_APP $OC_APP
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 COPY . .
-RUN KEYCLOAK_URL=$(grep KEYCLOAK_URL /usr/src/app/src/environments/keycloak.env.$OC_APP | cut -d "=" -f2) && \
-    KEYCLOAK_REALM=$(grep KEYCLOAK_REALM /usr/src/app/src/environments/keycloak.env.$OC_APP | cut -d "=" -f2) && \
-    KEYCLOAK_CLIENT_ID=$(grep KEYCLOAK_CLIENT_ID /usr/src/app/src/environments/keycloak.env.$OC_APP | cut -d "=" -f2) && \
-    (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
-RUN cat /usr/src/app/src/environments/environment.prod.ts && \
-    npm install @angular/cli -g --silent && \ 
+RUN (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
+RUN npm install @angular/cli -g --silent && \ 
     npm install && \
     npm audit fix && \
     ng build --prod && \
