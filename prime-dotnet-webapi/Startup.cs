@@ -1,35 +1,41 @@
 using System;
-using System.IO;
-using System.Reflection;
-using System.Net.Mime;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
-using Newtonsoft.Json;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Prime.Services;
 using Prime.Infrastructure;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
+using System.IO;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using System.Net.Mime;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
 
 namespace Prime
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+        public static IConfiguration StaticConfig { get; private set; }
+        public IWebHostEnvironment Environment { get; }
+        public readonly string AllowSpecificOrigins = "CorsPolicy";
+
         public Startup(IWebHostEnvironment env, IConfiguration configuration)
         {
             Configuration = configuration;
             StaticConfig = configuration;
             Environment = env;
         }
-
-        public IConfiguration Configuration { get; }
-        public static IConfiguration StaticConfig { get; private set; }
-        public IWebHostEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -52,14 +58,13 @@ namespace Prime
 
             services.AddCors(options =>
             {
-                options.AddPolicy("AllowAll",
+                options.AddPolicy(AllowSpecificOrigins,
                     builder =>
                     {
                         builder
                             .AllowAnyOrigin()
                             .AllowAnyMethod()
-                            .AllowAnyHeader()
-                            .AllowCredentials();
+                            .AllowAnyHeader();
                     });
             });
 
@@ -95,7 +100,7 @@ namespace Prime
             this.UpdateDatabase(app);
 
             // TODO Turn on when there is an actual cert
-            //app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
 
             // Enable middleware to serve generated Swagger as a JSON endpoint
             app.UseSwagger();
@@ -109,7 +114,7 @@ namespace Prime
 
             // Matches request to an endpoint
             app.UseRouting();
-            app.UseCors("AllowAll");
+            app.UseCors(AllowSpecificOrigins);
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -121,7 +126,6 @@ namespace Prime
             });
         }
 
-        // TODO reconfigure health checks for 3.0
         protected virtual void ConfigureHealthCheck(IApplicationBuilder app)
         {
             // Health check output

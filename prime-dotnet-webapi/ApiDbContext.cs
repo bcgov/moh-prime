@@ -9,26 +9,25 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Prime.Models;
 using Prime.Configuration;
-using Microsoft.EntityFrameworkCore.Design;
 
 namespace Prime
 {
     // Allow for design time creation of the ApiDbContext
-    public class ApiDbContextFactory : IDesignTimeDbContextFactory<ApiDbContext>
-    {
-        public ApiDbContext CreateDbContext(string[] args)
-        {
-            // Connect to database
-            // var connectionString = System.Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
-            var connectionString = "Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=postgres";
-            var optionsBuilder = new DbContextOptionsBuilder<ApiDbContext>();
+    // public class ApiDbContextFactory : IDesignTimeDbContextFactory<ApiDbContext>
+    // {
+    //     public ApiDbContext CreateDbContext(string[] args)
+    //     {
+    //         // Connect to database
+    //         // var connectionString = System.Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+    //         var connectionString = "Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=postgres";
+    //         var optionsBuilder = new DbContextOptionsBuilder<ApiDbContext>();
 
-            optionsBuilder.UseNpgsql(connectionString);
-            optionsBuilder.EnableSensitiveDataLogging(sensitiveDataLoggingEnabled: false);
+    //         optionsBuilder.UseNpgsql(connectionString);
+    //         optionsBuilder.EnableSensitiveDataLogging(sensitiveDataLoggingEnabled: false);
 
-            return new ApiDbContext(optionsBuilder.Options);
-        }
-    }
+    //         return new ApiDbContext(optionsBuilder.Options);
+    //     }
+    // }
 
     public class ApiDbContext : DbContext
     {
@@ -36,9 +35,9 @@ namespace Prime
 
         private readonly IHttpContextAccessor _context;
 
-        public ApiDbContext(DbContextOptions options) : base(options)
-        {
-        }
+        // public ApiDbContext(DbContextOptions options) : base(options)
+        // {
+        // }
 
         public ApiDbContext(
             DbContextOptions<ApiDbContext> options,

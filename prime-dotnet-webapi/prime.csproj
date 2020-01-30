@@ -1,8 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-	<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <RootNamespace>Prime</RootNamespace>
     <!--
     Make sure documentation XML is also included when publishing (not only when testing)
