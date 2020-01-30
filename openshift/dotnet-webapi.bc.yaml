@@ -51,8 +51,8 @@ objects:
         io.kompose.service: "${NAME}${SUFFIX}"
       name: "${NAME}${SUFFIX}"
     spec:
-      containers:
-      - env:
+      sourceStrategy:
+        env:
           - name: OC_APP
             value: "${OC_APP}"
           - name: SUFFIX
