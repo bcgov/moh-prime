@@ -416,7 +416,7 @@ namespace Prime.Services
             // Enrollee just left manual adjudication, inform the enrollee
             if (oldStatus?.Code == Status.SUBMITTED_CODE)
             {
-                _emailService.SendReminderEmail(enrollee);
+                await _emailService.SendReminderEmailAsync(enrollee);
             }
 
             return createdEnrolmentStatus;
