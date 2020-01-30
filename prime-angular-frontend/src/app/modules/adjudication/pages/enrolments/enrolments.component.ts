@@ -20,6 +20,7 @@ import {
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { ApproveEnrolmentComponent } from '@shared/components/dialogs/content/approve-enrolment/approve-enrolment.component';
 
 @Component({
   selector: 'app-enrolments',
@@ -81,26 +82,34 @@ export class EnrolmentsComponent implements OnInit {
       .subscribe();
   }
 
-  public approveEnrolment(id: number) {
+  public approveEnrolment(enrolment: Enrolment) {
     const data: DialogOptions = {
       title: 'Approve Enrolment',
       message: 'Are you sure you want to approve this enrolment?',
-      actionText: 'Approve Enrolment'
+      actionText: 'Approve Enrolment',
+      data: { enrolment },
+      component: ApproveEnrolmentComponent
     };
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        exhaustMap((result: boolean) =>
-          (result)
-            ? this.adjudicationResource.updateEnrolmentStatus(id, EnrolmentStatus.ADJUDICATED_APPROVED)
-            : EMPTY
+        exhaustMap((result: { output: boolean }) => {
+          if (result && result.hasOwnProperty('output') && result.output !== undefined) {
+            enrolment.alwaysManual = result.output;
+            return this.adjudicationResource.updateEnrolleeAlwaysManual(enrolment.id, result.output);
+          }
+          return this.adjudicationResource.enrollee(enrolment.id);
+        }),
+        exhaustMap(() =>
+          this.adjudicationResource
+            .updateEnrolmentStatus(enrolment.id, EnrolmentStatus.ADJUDICATED_APPROVED)
         ),
-        exhaustMap(() => this.adjudicationResource.enrollee(id))
+        exhaustMap(() => this.adjudicationResource.enrollee(enrolment.id))
       )
       .subscribe(
-        (enrolment: Enrolment) => {
+        (approvedEnrolment: Enrolment) => {
           this.toastService.openSuccessToast('Enrolment has been approved');
-          this.updateEnrolment(enrolment);
+          this.updateEnrolment(approvedEnrolment);
         },
         (error: any) => {
           this.toastService.openErrorToast('Enrolment could not be approved');
