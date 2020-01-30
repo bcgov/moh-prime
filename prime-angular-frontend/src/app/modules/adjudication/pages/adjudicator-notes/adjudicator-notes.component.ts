@@ -107,11 +107,15 @@ export class AdjudicatorNotesComponent implements OnInit {
       .afterClosed()
       .pipe(
         exhaustMap((result: { output: boolean }) => {
-          if (result && result.hasOwnProperty('output') && result.output !== undefined) {
-            enrolment.alwaysManual = result.output;
-            return this.adjudicationResource.updateEnrolleeAlwaysManual(enrolment.id, result.output);
+          if (result) {
+            if (result.hasOwnProperty('output') && result.output !== undefined) {
+              enrolment.alwaysManual = result.output;
+              return this.adjudicationResource.updateEnrolleeAlwaysManual(enrolment.id, result.output);
+            }
+            return this.adjudicationResource.enrollee(enrolment.id);
           }
-          return this.adjudicationResource.enrollee(enrolment.id);
+          return EMPTY;
+
         }),
         exhaustMap(() =>
           this.adjudicationResource
