@@ -4,8 +4,8 @@ namespace Prime.Services
 {
     public interface IEmailService
     {
-        void Send(string from, string to, string subject, string body);
-
         void SendReminderEmail(Enrollee enrollee);
+
+        void SendProvisionerLink(string provisionerEmail, EnrolmentCertificateAccessToken token);
     }
 }
