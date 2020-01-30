@@ -12,7 +12,8 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 COPY . .
-RUN mkdir -p /usr/src/app/src/environments && \
+RUN echo "Making environment directory..." && \
+    mkdir -p /usr/src/app/src/environments && \
     (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
 RUN npm install @angular/cli -g --silent && \ 
     npm install && \
