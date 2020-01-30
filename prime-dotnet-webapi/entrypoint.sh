@@ -15,7 +15,7 @@ else
     export DB_CONNECTION_STRING="host=${DB_HOST};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"
 fi
 echo "Cleaning scratch directory..."
-rm -fr /tmp/NuGetScratch/
+rm -fr /tmp/NuGetScratch/*
 
 echo "Running database migrations..."
 dotnet ef database update
