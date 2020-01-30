@@ -20,6 +20,9 @@ parameters:
     required: true
   - name: SOURCE_REPOSITORY_REF
     required: true
+  - name: SSO_HOST
+    required: true
+    value: "sso.pathfinder.gov.bc.ca"
   - name: OC_NAMESPACE
     required: true
   - name: OC_APP
@@ -48,8 +51,8 @@ objects:
         io.kompose.service: "${NAME}${SUFFIX}"
       name: "${NAME}${SUFFIX}"
     spec:
-      sourceStrategy:
-        env:
+      containers:
+      - env:
           - name: OC_APP
             value: "${OC_APP}"
           - name: SUFFIX
@@ -71,7 +74,7 @@ objects:
           - name: JWT_AUDIENCE
             value: "prime-web-api"
           - name: JWT_WELL_KNOWN_CONFIG 
-            value: "https://sso-${OC_APP}.pathfinder.gov.bc.ca/auth/realms/v4mbqqas/.well-known/openid-configuration"
+            value: "https://${SSO_HOST}.pathfinder.gov.bc.ca/auth/realms/v4mbqqas/.well-known/openid-configuration"
           - name: DB_HOST
             value: "postgresql${SUFFIX}"
           - name: POSTGRESQL_USER
