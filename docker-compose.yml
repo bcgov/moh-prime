@@ -59,7 +59,7 @@ services:
     restart: always
     image: mailhog/mailhog:latest
     ports:
-      - 25:1025# 
+      - 25:1025 
 ######################################################### Sign-in #
   # schema-spy:
   #   container_name: schema-spy
