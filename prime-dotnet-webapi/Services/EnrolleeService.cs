@@ -205,14 +205,14 @@ namespace Prime.Services
         public async Task<int> UpdateEnrolleeAsync(Enrollee enrollee, bool profileCompleted = false)
         {
             var _enrolleeDb = await _context.Enrollees
-                                .Include(e => e.PhysicalAddress)
-                                .Include(e => e.MailingAddress)
-                                .Include(e => e.Certifications)
-                                .Include(e => e.Jobs)
-                                .Include(e => e.Organizations)
-                                .AsNoTracking()
-                                .Where(e => e.Id == enrollee.Id)
-                                .SingleOrDefaultAsync();
+                .Include(e => e.PhysicalAddress)
+                .Include(e => e.MailingAddress)
+                .Include(e => e.Certifications)
+                .Include(e => e.Jobs)
+                .Include(e => e.Organizations)
+                .AsNoTracking()
+                .Where(e => e.Id == enrollee.Id)
+                .SingleOrDefaultAsync();
 
             // Remove existing, and recreate if necessary
             this.ReplaceExistingAddress(_enrolleeDb.PhysicalAddress, enrollee.PhysicalAddress, enrollee);
