@@ -1,5 +1,5 @@
 #FROM mcr.microsoft.com/dotnet/core/sdk:3.0 AS build
-FROM registry.redhat.io/dotnet/dotnet-31-rhel7 
+FROM docker-registry.default.svc:5000/dqszvc-tools/dotnet-31-rhel7 
 WORKDIR /opt/app-root/app
 USER 0
 ENV PATH="$PATH:/opt/rh/rh-dotnet31/root/usr/bin/"
