@@ -14,7 +14,7 @@ ENV DB_CONNECTION_STRING "host=postgresql${SUFFIX};port=5432;database=${POSTGRES
 ENV KEYCLOAK_URL $KEYCLOAK_URL
 ENV KEYCLOAK_REALM $KEYCLOAK_REALM
 ENV KEYCLOAK_CLIENT_ID $KEYCLOAK_CLIENT_ID
-ARG JWT_WELL_KNOWN_CONFIG=${KEYCLOAK_URL}"/realms/"${KEYCLOAK_REALM}"/.well-known/openid-configuration"
+ENV JWT_WELL_KNOWN_CONFIG=${KEYCLOAK_URL}"/realms/"${KEYCLOAK_REALM}"/.well-known/openid-configuration"
 
 COPY *.csproj /opt/app-root/app
 RUN /opt/rh/rh-dotnet31/root/usr/bin/dotnet restore
@@ -40,7 +40,7 @@ COPY entrypoint.sh .
 
 RUN chmod +x entrypoint.sh && \
     chmod 777 entrypoint.sh && \
-    chmod -R 777 /opt/app-root/app
+    chmod -R 777 /opt/app-root/
 ENV DB_CONNECTION_STRING="host=postgresql${SUFFIX};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_PASSWORD}"
 ENV API_PORT 8080
 ENTRYPOINT [ "./entrypoint.sh" ]
