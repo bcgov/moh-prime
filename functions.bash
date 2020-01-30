@@ -156,7 +156,7 @@ function occleanup() {
     echo "ORPHANS=${ORPHANS}"
     for i in ${ORPHANS}
     do
-        cleanOcArtifacts $i
+        cleanOcArtifacts $i &disown
     done
 }
 
