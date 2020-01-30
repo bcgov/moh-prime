@@ -217,30 +217,7 @@ export class DashboardComponent implements OnInit {
               ].includes(enrolmentStatus)
             ),
             deemphasize: (!enrolment || (enrolment && !enrolment.profileCompleted)) ? true : false
-          },
-          // TODO hidden for now and possibly removed later
-          // {
-          //   name: 'Enrolment Log History',
-          //   icon: (
-          //     progressStatus !== ProgressStatus.FINISHED ||
-          //     [
-          //       EnrolmentStatus.DECLINED,
-          //       EnrolmentStatus.DECLINED_TOS
-          //     ].includes(enrolmentStatus)
-          //   )
-          //     ? 'lock'
-          //     : 'history',
-          //   route: EnrolmentRoutes.ENROLMENT_LOG_HISTORY,
-          //   showItem: true,
-          //   disabled: (
-          //     progressStatus !== ProgressStatus.FINISHED ||
-          //     [
-          //       EnrolmentStatus.DECLINED,
-          //       EnrolmentStatus.DECLINED_TOS
-          //     ].includes(enrolmentStatus)
-          //   ),
-          //   deemphasize: (!enrolment || (enrolment && !enrolment.profileCompleted)) ? true : false
-          // }
+          }
         ]
       }
     ];
