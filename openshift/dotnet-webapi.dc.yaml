@@ -67,6 +67,7 @@ objects:
         limits:
           cpu: "1"
           memory: 1024Mi
+      template:
         metadata:
           creationTimestamp: null
           labels:
@@ -96,9 +97,6 @@ objects:
                   value: "prime-application-${OC_APP}"
                 - name: JWT_AUDIENCE
                   value: "prime-web-api"
-                - name: JWT_WELL_KNOWN_CONFIG
-                  required: true
-                  value: "https://${SSO_HOST}/auth/realms/v4mbqqas/.well-known/openid-configuration"
                 - name: DB_HOST
                   value: "postgresql${SUFFIX}"
                 - name: PHARMANET_API_URL
