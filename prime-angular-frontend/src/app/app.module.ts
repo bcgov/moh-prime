@@ -11,7 +11,7 @@ import { AppComponent } from './app.component';
 import { AuthModule } from '@auth/auth.module';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { AdjudicationModule } from '@adjudication/adjudication.module';
-import { EnrolmentCertificateModule } from './modules/enrolment-certificate/enrolment-certificate.module';
+import { EnrolmentCertificateModule } from './modules/provisioner-access/provisioner-access.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -20,9 +20,9 @@ import { EnrolmentCertificateModule } from './modules/enrolment-certificate/enro
     ConfigModule,
     CoreModule,
     AppConfigModule,
-    AuthModule, // TODO: lazy load this module
-    EnrolmentModule, // TODO: lazy load this module
-    AdjudicationModule, // TODO: lazy load this module
+    AuthModule, // TODO lazy load this module
+    EnrolmentModule, // TODO lazy load this module
+    AdjudicationModule, // TODO lazy load this module
     EnrolmentCertificateModule,
     AppRoutingModule // WARNING: MUST be the last routing module imported!!!
   ],

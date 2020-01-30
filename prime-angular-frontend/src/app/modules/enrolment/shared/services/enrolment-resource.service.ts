@@ -68,7 +68,7 @@ export class EnrolmentResource {
   }
 
   public enrolmentCertificateAccessTokens(): Observable<EnrolmentCertificateAccessToken[]> {
-    return this.http.get(`${this.config.apiEndpoint}/enrolment-certificates/access`)
+    return this.http.get(`${this.config.apiEndpoint}/provisioner-access/token`)
       .pipe(
         map((response: PrimeHttpResponse) => response.result),
         tap((tokens: EnrolmentCertificateAccessToken[]) => this.logger.info('ACCESS_TOKENS', tokens))
@@ -76,7 +76,7 @@ export class EnrolmentResource {
   }
 
   public createEnrolmentCertificateAccessToken(): Observable<EnrolmentCertificateAccessToken> {
-    return this.http.post(`${this.config.apiEndpoint}/enrolment-certificates/access`, {})
+    return this.http.post(`${this.config.apiEndpoint}/provisioner-access/token`, {})
       .pipe(
         map((response: PrimeHttpResponse) => response.result as EnrolmentCertificateAccessToken),
         tap((token: EnrolmentCertificateAccessToken) => this.logger.info('ACCESS_TOKEN', token))
@@ -132,6 +132,7 @@ export class EnrolmentResource {
       contactPhone,
       voicePhone,
       voiceExtension,
+      expiryDate,
       ...remainder
     } = enrollee;
 
@@ -153,7 +154,8 @@ export class EnrolmentResource {
         contactEmail,
         contactPhone,
         voicePhone,
-        voiceExtension
+        voiceExtension,
+        expiryDate
       },
       collectionNoticeAccepted,
       ...remainder

@@ -12,20 +12,20 @@ using Prime.Services;
 namespace Prime.Controllers
 {
     [Produces("application/json")]
-    [Route("api/enrolment-certificates")]
+    [Route("api/provisioner-access")]
     [ApiController]
-    public class EnrolmentCertificatesController : ControllerBase
+    public class ProvisionerAccessController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
         private readonly IEnrolmentCertificateService _certificateService;
 
-        public EnrolmentCertificatesController(IEnrolleeService enrolleeService, IEnrolmentCertificateService enrolmentCertificateService)
+        public ProvisionerAccessController(IEnrolleeService enrolleeService, IEnrolmentCertificateService enrolmentCertificateService)
         {
             _enrolleeService = enrolleeService;
             _certificateService = enrolmentCertificateService;
         }
 
-        // GET: api/enrolment-certificates/certificate/{guid}
+        // GET: api/provisioner-access/certificate/{guid}
         /// <summary>
         /// Gets the Enrolment Certificate based on the supplied Access Token GUID. This endpoint is not authenticated.
         /// </summary>
@@ -44,11 +44,11 @@ namespace Prime.Controllers
             return Ok(new ApiOkResponse<EnrolmentCertificate>(certificate));
         }
 
-        // GET: api/enrolment-certificates/access
+        // GET: api/provisioner-access/token
         /// <summary>
         /// Gets all of the access tokens for the user.
         /// </summary>
-        [HttpGet("access", Name = nameof(GetAccessTokens))]
+        [HttpGet("token", Name = nameof(GetAccessTokens))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiOkResponse<IEnumerable<EnrolmentCertificateAccessToken>>), StatusCodes.Status200OK)]
@@ -61,11 +61,11 @@ namespace Prime.Controllers
         }
 
 
-        // POST: api/enrolment-certificates/access
+        // POST: api/provisioner-access/token
         /// <summary>
         /// Creates an EnrolmentCertificateAccessToken for the user if the user has a finished enrolment.
         /// </summary>
-        [HttpPost("access", Name = nameof(CreateEnrolmentCertificateAccessToken))]
+        [HttpPost("token", Name = nameof(CreateEnrolmentCertificateAccessToken))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
@@ -90,7 +90,7 @@ namespace Prime.Controllers
             return CreatedAtAction(nameof(GetEnrolmentCertificate), new { accessTokenId = createdToken.Id }, new ApiCreatedResponse<EnrolmentCertificateAccessToken>(createdToken));
         }
 
-        // GET: api/enrolment-certificates/gpid
+        // GET: api/provisioner-access/gpid
         /// <summary>
         /// Gets the GPID for the user. Only a valid token is required, no role is required.
         /// </summary>

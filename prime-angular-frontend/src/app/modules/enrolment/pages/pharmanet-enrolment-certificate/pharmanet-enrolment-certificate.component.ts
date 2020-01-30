@@ -11,6 +11,7 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { WindowRefService } from '@core/services/window-ref.service';
 import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
+import moment from 'moment';
 
 @Component({
   selector: 'app-pharmanet-enrolment-certificate',
@@ -21,6 +22,7 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
   public enrolment: Enrolment;
   public tokens: EnrolmentCertificateAccessToken[];
   public showProgressBar: boolean;
+  public expiryDate: string;
 
   constructor(
     protected route: ActivatedRoute,
@@ -58,7 +60,7 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
   }
 
   public getTokenUrl(tokenId: string): string {
-    return `${this.config.loginRedirectUrl}/enrolment-certificate/${tokenId}`;
+    return `${this.config.loginRedirectUrl}/provisioner-access/${tokenId}`;
   }
 
   public generateProvisionerLink() {
@@ -75,6 +77,12 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
 
     this.enrolment = this.enrolmentService.enrolment;
     this.isInitialEnrolment = this.enrolment.progressStatus !== ProgressStatus.FINISHED;
+
+    if (this.enrolment.enrollee && this.enrolment.enrollee.expiryDate) {
+      const expiryMoment = moment(this.enrolment.enrollee.expiryDate);
+      this.expiryDate = expiryMoment.isAfter(moment.now())
+        ? expiryMoment.format('MMMM Do, YYYY') : null;
+    }
 
     this.busy = this.enrolmentResource.enrolmentCertificateAccessTokens()
       .subscribe(

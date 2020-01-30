@@ -10,8 +10,8 @@ ENV POSTGRESQL_ADMIN_PASSWORD "${POSTGRESQL_ADMIN_PASSWORD}"
 ENV POSTGRESQL_USER "${POSTGRESQL_USER}"
 ENV SUFFIX "${SUFFIX}"
 ENV DB_HOST "$DB_HOST"
-ARG DB_CONNECTION_STRING="host=postgresql${SUFFIX};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_PASSWORD}"
-RUN mkdir -p /opt/app-root/app
+ENV DB_CONNECTION_STRING "host=postgresql${SUFFIX};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_PASSWORD}"
+
 COPY *.csproj /opt/app-root/app
 RUN /opt/rh/rh-dotnet31/root/usr/bin/dotnet restore
 COPY . /opt/app-root/app

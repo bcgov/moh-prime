@@ -1,8 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
-import { Subscription } from 'rxjs';
+import { Subscription, from, Observable } from 'rxjs';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 
@@ -10,8 +9,9 @@ import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 
 import { AuthProvider } from '@auth/shared/enum/auth-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
-import { DataResource } from '@auth/shared/resources/data-resource.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { GpidResource } from '@core/resources/gpid-resource.service';
+import { exhaustMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -20,28 +20,24 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 })
 export class LoginComponent implements OnInit {
   public busy: Subscription;
-  public data: any;
+  public gpid: Observable<string>;
 
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
-    private route: ActivatedRoute,
     private dialog: MatDialog,
     private authService: AuthService,
-    private dataResource: DataResource
+    private gpidResource: GpidResource
   ) { }
 
   public onAction() {
     this.requestAccess();
   }
 
-  public ngOnInit() {
-    const hasLoggedIn = this.route.snapshot.params.login;
-
-    if (hasLoggedIn) {
-      this.busy = this.dataResource.getData()
-        // TODO handle response to display GPID
-        .subscribe((data: any) => this.data = data);
-    }
+  public async ngOnInit() {
+    this.gpid = from(this.authService.isLoggedIn())
+      .pipe(
+        exhaustMap(() => this.gpidResource.getGpid())
+      );
   }
 
   private requestAccess() {
