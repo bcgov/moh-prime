@@ -20,9 +20,6 @@ parameters:
     required: true
   - name: SOURCE_REPOSITORY_REF
     required: true
-  - name: SSO_HOST
-    required: true
-    value: "sso.pathfinder.gov.bc.ca"
   - name: OC_NAMESPACE
     required: true
   - name: OC_APP
