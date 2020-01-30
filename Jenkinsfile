@@ -2,9 +2,11 @@ pipeline {
     agent none
     environment {
         BRANCH_LOWER=BRANCH_NAME.toLowerCase()
-        VANITY_URL="${BRANCH_LOWER}.pharmanetenrolment.gov.bc.ca"
-        FRONTEND_ARGS="-p HTTP_PORT=8080 -p HTTP_SCHEMA=http TERMINATION_TYPE='Edge' -p REDIRECT_URL=http://${VANITY_URL} -p VANITY_URL=${VANITY_URL}"
-        API_ARGS="-p ASPNETCORE_ENVIRONMENT=Development -p HTTP_PORT=8080 -p HTTP_SCHEMA=http -p VANITY_URL=${VANITY_URL}"
+        VANITY_URL="${BRANCH_LOWER}-dqszvc-dev.pathfinder.gov.bc.ca"
+        HTTP_SCHEMA="https"
+        HTTP_PORT="${HTTP_PORT}"
+        FRONTEND_ARGS="-p HTTP_PORT=${HTTP_PORT} -p HTTP_SCHEMA=${HTTP_SCHEMA} TERMINATION_TYPE='Edge' -p REDIRECT_URL=${HTTP_SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL}"
+        API_ARGS="-p ASPNETCORE_ENVIRONMENT=Development -p HTTP_PORT=${HTTP_PORT} -p HTTP_SCHEMA=${HTTP_SCHEMA} -p VANITY_URL=${VANITY_URL}"
     }
     options {
         disableResume()
