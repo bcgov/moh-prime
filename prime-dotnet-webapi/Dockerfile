@@ -25,10 +25,13 @@ RUN dotnet tool install --global dotnet-ef
 RUN mv out/* .
 EXPOSE 8080 5001 1025
 COPY entrypoint.sh .
-#RUN apt update && \
-#    apt install -yqq net-tools \
-#    inetutils-ping \
-#    telnet && \
+
+RUN apt update && \
+    apt install -yqq net-tools \
+    inetutils-ping \
+    telnet \
+    postgresql-10
+
 USER 0
 RUN chmod +x entrypoint.sh && \
     chmod 777 entrypoint.sh
