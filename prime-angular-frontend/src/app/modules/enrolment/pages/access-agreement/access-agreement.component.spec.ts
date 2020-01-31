@@ -19,6 +19,7 @@ import { ProgressIndicatorComponent } from '@shared/components/progress-indicato
 import { PrimeContactComponent } from '@shared/components/prime-contact/prime-contact.component';
 import { PrimePhoneComponent } from '@shared/components/prime-phone/prime-phone.component';
 import { PrimeEmailComponent } from '@shared/components/prime-email/prime-email.component';
+import { SafeHtmlPipe } from '@shared/pipes/safe-html.pipe';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { CollectionNoticeAlertComponent } from '@enrolment/shared/components/collection-notice-alert/collection-notice-alert.component';
 import { GlobalClauseComponent } from './components/global-clause/global-clause.component';
@@ -28,11 +29,11 @@ import { LimitsAndConditionsClauseComponent } from './components/limits-and-cond
 import { AccessTermsPagerComponent } from './components/access-terms-pager/access-terms-pager.component';
 import { RuAccessTermsComponent } from './components/ru-access-terms/ru-access-terms.component';
 import { OboAccessTermsComponent } from './components/obo-access-terms/obo-access-terms.component';
+import { AccessTermComponent } from './components/access-term/access-term.component';
 
 describe('AccessAgreementComponent', () => {
   let component: AccessAgreementComponent;
   let fixture: ComponentFixture<AccessAgreementComponent>;
-
   beforeEach(async(() => {
     TestBed.configureTestingModule(
       {
@@ -61,7 +62,9 @@ describe('AccessAgreementComponent', () => {
           AccessTermsPagerComponent,
           CollectionNoticeAlertComponent,
           RuAccessTermsComponent,
-          OboAccessTermsComponent
+          OboAccessTermsComponent,
+          AccessTermComponent,
+          SafeHtmlPipe
         ],
         providers: [
           {

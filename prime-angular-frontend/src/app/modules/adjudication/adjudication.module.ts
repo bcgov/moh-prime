@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { EditorModule } from '@tinymce/tinymce-angular';
 
 import { SharedModule } from '@shared/shared.module';
 import { AdjudicationRoutingModule } from './adjudication-routing.module';
@@ -23,7 +24,8 @@ import { EnrolleeProfileVersionsComponent } from './pages/enrollee-profile-versi
   ],
   imports: [
     SharedModule,
-    AdjudicationRoutingModule
+    AdjudicationRoutingModule,
+    EditorModule
   ]
 })
 export class AdjudicationModule { }
