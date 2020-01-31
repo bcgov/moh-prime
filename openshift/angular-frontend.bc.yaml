@@ -37,9 +37,6 @@ parameters:
 - name: TERMINATION_TYPE
   required: true
   value: 'passthrough'
-- name: REDIRECT_URL
-  required: true
-  value: "https://pharmanetenrolment.gov.bc.ca"
 objects:
 - apiVersion: v1
   kind: ImageStream
@@ -54,7 +51,7 @@ objects:
       - name: SUFFIX
         value: "${SUFFIX}"
       - name: REDIRECT_URL
-        value: "${REDIRECT_URL}"
+        value: "${HTTP_SCHEMA}://${VANITY_URL}"
       - name: OC_APP
         value: ${OC_APP}
       - name: TLS_CHAIN
@@ -109,7 +106,7 @@ objects:
       - name: SUFFIX
         value: "${SUFFIX}"
       - name: REDIRECT_URL
-        value: "${REDIRECT_URL}"
+        value: "${HTTP_SCHEMA}://${VANITY_URL}"
       - name: OC_APP
         value: ${OC_APP}
       - name: TLS_CHAIN
@@ -150,7 +147,7 @@ objects:
           - name: SUFFIX
             value: "${SUFFIX}"
           - name: REDIRECT_URL
-            value: "${REDIRECT_URL}"
+            value: "${HTTP_SCHEMA}://${VANITY_URL}"
           - name: OC_APP
             value: ${OC_APP}
           - name: TLS_CHAIN
