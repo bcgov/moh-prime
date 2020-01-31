@@ -12,9 +12,5 @@ export interface EnrolmentCertificate {
   preferredLastName: string;
   licensePlate: string;
   organizationTypes: Config<number>[];
-  enrolmentCertificateNote: AdjudicationNote;
-  transactions: Privilege[];
-  userType: Privilege;
-  canHaveOBOs: Privilege;
   expiryDate: string;
 }

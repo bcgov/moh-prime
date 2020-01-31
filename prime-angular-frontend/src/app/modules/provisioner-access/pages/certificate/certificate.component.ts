@@ -22,6 +22,23 @@ export class CertificateComponent implements OnInit {
     private enrolmentCertificateResource: ProvisionerAccessResource,
   ) { }
 
+  public get hasPreferredName(): boolean {
+    return (
+      this.certificate &&
+      (
+        !!this.certificate.preferredFirstName ||
+        !!this.certificate.preferredMiddleName ||
+        !!this.certificate.preferredLastName
+      )
+    );
+  }
+
+  public get fullName(): string {
+    return !this.hasPreferredName
+      ? `${this.certificate.firstName} ${this.certificate.middleName} ${this.certificate.lastName}`
+      : `${this.certificate.preferredFirstName} ${this.certificate.preferredMiddleName} ${this.certificate.preferredLastName}`;
+  }
+
   public ngOnInit() {
     this.busy = this.enrolmentCertificateResource
       .getCertificate(this.route.snapshot.params.tokenId)
