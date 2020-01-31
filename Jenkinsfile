@@ -2,7 +2,7 @@ pipeline {
     agent none
     environment {
         BRANCH_LOWER=BRANCH_NAME.toLowerCase()
-        VANITY_URL="${BRANCH_LOWER}.pharmanetenrolment.gov.bc.ca"
+        VANITY_URL="angular-frontend-${BRANCH_LOWER}-dqszvc-dev.pathfinder.gov.bc.ca"
         FRONTEND_ARGS="-p HTTP_PORT=8080 -p HTTP_SCHEMA=http TERMINATION_TYPE='Edge' -p REDIRECT_URL=http://${VANITY_URL} -p VANITY_URL=${VANITY_URL}"
         API_ARGS="-p ASPNETCORE_ENVIRONMENT=Development -p HTTP_PORT=8080 -p HTTP_SCHEMA=http -p VANITY_URL=${VANITY_URL}"
     }
