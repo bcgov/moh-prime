@@ -40,7 +40,8 @@ COPY entrypoint.sh .
 
 RUN chmod +x entrypoint.sh && \
     chmod 777 entrypoint.sh && \
-    chmod -R 777 /opt/app-root/
+    chmod -R 777 /opt/app-root && \
+    chmod -R 777 /opt/app-root/.*
 ENV DB_CONNECTION_STRING="host=postgresql${SUFFIX};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_PASSWORD}"
 ENV API_PORT 8080
 ENTRYPOINT [ "./entrypoint.sh" ]
