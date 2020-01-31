@@ -18,7 +18,7 @@ echo "Cleaning scratch directory..."
 rm -fr /tmp/NuGetScratch/*
 
 echo "Running database migrations..."
-dotnet ef database update -v
+dotnet ef database update
 
 echo "Running .NET..."
 dotnet prime.dll &disown
