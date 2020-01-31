@@ -24,7 +24,7 @@ namespace Prime
             optionsBuilder.UseNpgsql(ConnectionString);
             optionsBuilder.EnableSensitiveDataLogging(sensitiveDataLoggingEnabled: true);
 
-            return new ApiDbContext(optionsBuilder.Options);
+            return new ApiDbContext(optionsBuilder.Options, null);
         }
     }
 
@@ -33,10 +33,6 @@ namespace Prime
         private readonly DateTime SEEDING_DATE = DateTime.Now;
 
         private readonly IHttpContextAccessor _context;
-
-        public ApiDbContext(DbContextOptions options) : base(options)
-        {
-        }
 
         public ApiDbContext(
             DbContextOptions<ApiDbContext> options,
