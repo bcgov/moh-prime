@@ -15,6 +15,7 @@ import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.mod
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { PageComponent } from '@shared/components/page/page.component';
+import { EditorModule } from '@tinymce/tinymce-angular';
 
 describe('LimitsConditionsClausesComponent', () => {
   let component: LimitsConditionsClausesComponent;
@@ -29,7 +30,8 @@ describe('LimitsConditionsClausesComponent', () => {
         NgxContextualHelpModule,
         NgxMaterialModule,
         ReactiveFormsModule,
-        RouterTestingModule
+        RouterTestingModule,
+        EditorModule
       ],
       declarations: [
         LimitsConditionsClausesComponent,

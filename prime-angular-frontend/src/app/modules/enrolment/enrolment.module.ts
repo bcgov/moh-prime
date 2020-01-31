@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
-
 import { SharedModule } from '@shared/shared.module';
+
 import { EnrolmentRoutingModule } from './enrolment-routing.module';
 
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
@@ -34,6 +34,7 @@ import { JobFormComponent } from './shared/components/job-form/job-form.componen
 import { CollectionNoticeAlertComponent } from './shared/components/collection-notice-alert/collection-notice-alert.component';
 import { RuAccessTermsComponent } from './pages/access-agreement/components/ru-access-terms/ru-access-terms.component';
 import { OboAccessTermsComponent } from './pages/access-agreement/components/obo-access-terms/obo-access-terms.component';
+import { AccessTermComponent } from './pages/access-agreement/components/access-term/access-term.component';
 
 @NgModule({
   declarations: [
@@ -64,7 +65,8 @@ import { OboAccessTermsComponent } from './pages/access-agreement/components/obo
     JobFormComponent,
     CollectionNoticeAlertComponent,
     OboAccessTermsComponent,
-    RuAccessTermsComponent
+    RuAccessTermsComponent,
+    AccessTermComponent
   ],
   imports: [
     SharedModule,

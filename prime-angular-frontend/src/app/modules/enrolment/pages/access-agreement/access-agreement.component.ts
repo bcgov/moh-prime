@@ -154,7 +154,7 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
   public ngOnInit() {
     this.enrolment = this.enrolmentService.enrolment;
     this.isInitialEnrolment = this.enrolment.progressStatus !== ProgressStatus.FINISHED;
-    this.enrolmentResource.getAccessTerm(this.enrolment.id)
+    this.enrolmentResource.getAccessTermLatest(this.enrolment.id, false)
       .subscribe(
         (accessTerm: AccessTerm) => this.accessTerm = accessTerm,
         (error: any) => {
