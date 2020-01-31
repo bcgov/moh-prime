@@ -24,7 +24,8 @@ namespace Prime.Services
                 new AddressRule(),
                 new PharmanetValidationRule(pharmanetApiService),
                 new DeviceProviderRule(),
-                new LicenceClassRule()
+                new LicenceClassRule(),
+                new AlwaysManualRule()
             };
         }
 
@@ -207,6 +208,21 @@ namespace Prime.Services
                 }
 
                 return Task.FromResult(passed);
+            }
+        }
+
+        // Check if the enrollee has always manual flag set
+        public class AlwaysManualRule : BaseAutomaticAdjudicationRule
+        {
+
+            protected override Task<bool> ProcessRuleInternal(Enrollee enrollee)
+            {
+                if (enrollee.AlwaysManual)
+                {
+                    AddReason(enrollee, StatusReason.ALWAYS_MANUAL_CODE);
+                }
+
+                return Task.FromResult(!enrollee.AlwaysManual);
             }
         }
     }

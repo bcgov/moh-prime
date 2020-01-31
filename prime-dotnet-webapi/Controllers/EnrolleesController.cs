@@ -168,7 +168,7 @@ namespace Prime.Controllers
 
             // If the enrollee is not in the status of 'In Progress' or 'Accepted TOA', it cannot be updated
             // TODO should be update to be EDITING and switched to EDITING immediately on ACCEPTED_TOS
-            if (!(await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.IN_PROGRESS_CODE, Status.ACCEPTED_TOS_CODE)))
+            if (!(await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.IN_PROGRESS_CODE, Status.ACCEPTED_TOS_CODE)) && !User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE))
             {
                 this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee can not be updated when the current status is not 'In Progress'.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
@@ -533,6 +533,48 @@ namespace Prime.Controllers
             var enrolleeProfileVersion = await _enrolleeProfileVersionService.GetEnrolleeProfileVersionAsync(enrolleeProfileVersionId);
 
             return Ok(new ApiOkResponse<EnrolleeProfileVersion>(enrolleeProfileVersion));
+        }
+
+
+        // PUT: api/Enrollees/5/always-manual
+        /// <summary>
+        /// Updates an enrollees always manual flag, forcing them to always be sent to manual adjudication
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="alwaysManual"></param>
+        [HttpPut("{enrolleeId}/always-manual", Name = nameof(UpdateEnrolleeAlwaysManual))]
+        [Authorize(Policy = PrimeConstants.ADMIN_POLICY)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiOkResponse<Enrollee>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<Enrollee>> UpdateEnrolleeAlwaysManual(int enrolleeId, [FromQuery]bool alwaysManual)
+        {
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+
+            if (enrollee == null)
+            {
+                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}."));
+            }
+
+            if (enrollee.Id != 0 && enrollee.Id != enrolleeId)
+            {
+                this.ModelState.AddModelError("EnrolmentCertificateNote.EnrolleeId", "Enrollee Id does not match with the payload.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
+
+            // Always manual flag cannot be updated while enrollee is not in a submitted state
+            if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.IN_PROGRESS_CODE))
+            {
+                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrolment certificate notes can not be updated when the current status is 'In Progress'.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
+
+
+            var updatedEnrollee = await _enrolleeService.UpdateEnrolleeAlwaysManualAsync(enrolleeId, alwaysManual);
+
+            return Ok(new ApiOkResponse<Enrollee>(updatedEnrollee));
         }
     }
 }

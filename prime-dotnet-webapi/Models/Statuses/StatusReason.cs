@@ -20,6 +20,7 @@ namespace Prime.Models
         public readonly static short LICENCE_CLASS_CODE = 9;
         public readonly static short SELF_DECLARATION_CODE = 10;
         public readonly static short ADDRESS_CODE = 11;
+        public readonly static short ALWAYS_MANUAL_CODE = 12;
 
         [Key]
         public short Code { get; set; }

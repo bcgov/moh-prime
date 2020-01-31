@@ -91,7 +91,7 @@
       </button>
       <button mat-menu-item
               *ngIf="canApproveOrDeny(enrolment.currentStatus.status.code)"
-              (click)="approveEnrolment(enrolment.id)">
+              (click)="approveEnrolment(enrolment)">
         <mat-icon>check_circle_outline</mat-icon>
         <span>Approve Enrolment</span>
       </button>
