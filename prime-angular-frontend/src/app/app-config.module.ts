@@ -33,7 +33,7 @@ export const APP_DI_CONFIG: AppConfig = {
   prime: {
     displayPhone: environment.prime.displayPhone,
     phone: environment.prime.phone,
-    email: environment.prime.phone,
+    email: environment.prime.email,
   },
   routes: {
     denied: AppRoutes.DENIED,
