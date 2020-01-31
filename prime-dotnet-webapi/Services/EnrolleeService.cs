@@ -469,6 +469,8 @@ namespace Prime.Services
                     .Include(e => e.PhysicalAddress)
                     .Include(e => e.MailingAddress)
                     .Include(e => e.Certifications)
+                        .ThenInclude(c => c.License)
+                            .ThenInclude(l => l.DefaultPrivileges)
                     .Include(e => e.Jobs)
                     .Include(e => e.Organizations)
                     .Include(e => e.EnrolmentStatuses)
@@ -583,8 +585,6 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
 
             enrollee.AlwaysManual = alwaysManual;
-
-            _context.Update(enrollee);
 
             var updated = await _context.SaveChangesAsync();
             if (updated < 1)

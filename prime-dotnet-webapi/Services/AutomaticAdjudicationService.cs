@@ -211,16 +211,19 @@ namespace Prime.Services
             }
         }
 
-
-        // Check if the enrollee has the AlwaysManual flag set
-        protected override Task<bool> ProcessRuleInternal(Enrollee enrollee)
+        // Check if the enrollee has always manual flag set
+        public class AlwaysManualRule : BaseAutomaticAdjudicationRule
         {
-           if (enrollee.AlwaysManual)
-           {
-               AddReason(enrollee, StatusReason.ALWAYS_MANUAL_CODE);
-           }
 
-           return Task.FromResult(!enrollee.AlwaysManual);
+            protected override Task<bool> ProcessRuleInternal(Enrollee enrollee)
+            {
+                if (enrollee.AlwaysManual)
+                {
+                    AddReason(enrollee, StatusReason.ALWAYS_MANUAL_CODE);
+                }
+
+                return Task.FromResult(!enrollee.AlwaysManual);
+            }
         }
     }
 }
