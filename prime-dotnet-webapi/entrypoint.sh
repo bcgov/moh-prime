@@ -14,14 +14,17 @@ else
     password=${POSTGRESQL_ADMIN_PASSWORD}
     export DB_CONNECTION_STRING="host=${DB_HOST};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"
 fi
-echo "Cleaning scratch directory..."
-rm -fr /tmp/NuGetScratch/*
 
 echo "Running database migrations..."
 dotnet ef database update -v
 
+echo "Resting 5 seconds to let things settle down..."
+sleep 5
+
 echo "Running .NET..."
 dotnet prime.dll -v &disown
+
+echo "Launched, waiting for connection to API internally..."
 
 function waitForIt() {
 until [[ "$response" -eq "$2" ]]
