@@ -394,6 +394,8 @@
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
+        "https://test.pharmanetenrolment.gov.bc.ca/*",
+        "http://angular-frontend-dqszvc-test.pathfinder.gov.bc.ca/*",
         "http://test.pharmanetenrolment.gov.bc.ca/*"
       ],
       "webOrigins": [
