@@ -23,7 +23,7 @@ COPY . /opt/app-root/app
 # Begin database migration setup
 ENV PATH="$PATH:/opt/app-root/.dotnet/tools"
 RUN dotnet publish -c Release -o /opt/app-root/app/ /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
-RUN dotnet tool install --global dotnet-ef
+RUN dotnet tool install --global dotnet-ef --version 3.1.1
 #RUN dotnet ef migrations script --idempotent --output "${WORKDIR}/databaseMigrations.sql"
 
 #FROM mcr.microsoft.com/dotnet/core/aspnet:3.0 AS runtime
@@ -34,17 +34,10 @@ RUN dotnet tool install --global dotnet-ef
 EXPOSE 8080 5001 1025
 COPY entrypoint.sh .
 
-RUN apt update && \
-    apt install -yqq net-tools \
-    inetutils-ping \
-    telnet \
-    postgresql-client-10
-
 RUN chmod +x entrypoint.sh && \
     chmod 777 entrypoint.sh && \
     chmod -R 777 /opt/app-root && \
     chmod -R 777 /opt/app-root/.*
-RUN dotnet ef database script --idempotent -v -output /opt/app-root/app/migrations.sql
-ENV DB_CONNECTION_STRING="host=postgresql${SUFFIX};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_PASSWORD}"
+
 ENV API_PORT 8080
 ENTRYPOINT [ "./entrypoint.sh" ]
