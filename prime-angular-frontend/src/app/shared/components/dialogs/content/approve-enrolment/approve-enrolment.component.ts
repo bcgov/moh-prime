@@ -14,7 +14,8 @@ export class ApproveEnrolmentComponent implements OnInit, IDialogContent {
 
   constructor() { }
 
-  @Input() public set data({ enrolment }: { enrolment: Enrolment }) {
+  @Input() 
+  public set data({ enrolment }: { enrolment: Enrolment }) {
     this.enrolment = enrolment;
   }
 
@@ -22,11 +23,9 @@ export class ApproveEnrolmentComponent implements OnInit, IDialogContent {
     return this.enrolment ? this.enrolment.alwaysManual : false;
   }
 
-  onChange($event) {
+  public onChange($event) {
     this.output.emit($event.checked);
   }
 
-  ngOnInit() {
-  }
-
+  public ngOnInit() { }
 }
