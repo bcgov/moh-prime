@@ -4,7 +4,7 @@
     <app-alert type="info"
                icon="none">
       <ng-container #alertTitle
-                    class="alert-title">Collection Notice</ng-container>
+                    class="alert-title">Collection of Personal Information Notice</ng-container>
       <ng-container #alertContent
                     class="alert-content">
 
@@ -17,7 +17,7 @@
 </ng-container>
 
 <ng-template #fullPage>
-  <app-page-header>Collection Notice</app-page-header>
+  <app-page-header>Collection of Personal Information Notice</app-page-header>
 
   <ng-container *ngTemplateOutlet="collectionNotice"></ng-container>
 </ng-template>
@@ -29,7 +29,7 @@
     Health under the authority of s. 26(a) and 26(c) of the Freedom of Information and Protection of Privacy Act
     (FOIPPA) and s. 22(1)(b) of the Pharmaceutical Services Act for the purpose of managing your access to, and use of,
     PharmaNet. If you have any questions about the collection or use of this information, call Health Insurance BC toll
-    free at <app-prime-phone></app-prime-phone>.
+    free at <app-prime-phone></app-prime-phone> or <app-prime-email></app-prime-email>.
   </p>
 
   <div class="col text-right">
@@ -38,7 +38,7 @@
             type="button"
             color="primary"
             (click)="onAccept()">
-      Ok
+      Next
     </button>
 
   </div>
