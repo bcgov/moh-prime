@@ -3,7 +3,7 @@
 FROM registry.redhat.io/dotnet/dotnet-31-rhel7  
 WORKDIR /opt/app-root/app
 USER 0
-
+ENV DB_CONNECTION_STRING "host=postgres;port=5432;database=postgres;username=postgres;password=postgres"
 ENV ASPNETCORE_ENVIRONMENT Development
 ENV PATH="$PATH:/opt/rh/rh-dotnet31/root/usr/bin/"
 RUN mkdir -p /opt/app-root/app
@@ -29,6 +29,6 @@ COPY entrypoint.sh .
 USER 0
 RUN chmod +x entrypoint.sh && \
     chmod 777 entrypoint.sh
-ENV DB_CONNECTION_STRING "host=postgres;port=5432;database=postgres;username=postgres;password=postgres"
+
 ENV API_PORT 8080
 ENTRYPOINT [ "./entrypoint.sh" ]
