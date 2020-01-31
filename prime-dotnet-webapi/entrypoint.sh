@@ -18,10 +18,10 @@ echo "Cleaning scratch directory..."
 rm -fr /tmp/NuGetScratch/*
 
 echo "Running database migrations..."
-dotnet ef database update
+dotnet ef database update -v
 
 echo "Running .NET..."
-dotnet prime.dll &disown
+dotnet prime.dll -v &disown
 
 function waitForIt() {
 until [[ "$response" -eq "$2" ]]
