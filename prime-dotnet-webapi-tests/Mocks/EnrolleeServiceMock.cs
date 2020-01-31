@@ -195,10 +195,5 @@ namespace PrimeTests.Mocks
 
             return Task.FromResult(updatedNote);
         }
-
-        public Task<AccessTerm> GetEnrolleeAccessTermsAsync(int enrolleeId)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -83,8 +83,29 @@ export class EnrolmentResource {
       );
   }
 
-  public getAccessTerm(id: number): Observable<AccessTerm> {
-    return this.http.get(`${this.config.apiEndpoint}/enrollees/${id}/access-terms`)
+  // ---
+  // Access Terms
+  // ---
+
+  public getAccessTerms(enrolleeId: number): Observable<AccessTerm> {
+    return this.http.get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/access-terms`)
+      .pipe(
+        map((response: PrimeHttpResponse) => response.result as AccessTerm),
+        tap((accessTerm: AccessTerm) => this.logger.info('ACCESS_TERM', accessTerm))
+      );
+  }
+
+  public getAccessTerm(enrolleeId: number, id: number): Observable<AccessTerm> {
+    return this.http.get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/access-terms/${id}`)
+      .pipe(
+        map((response: PrimeHttpResponse) => response.result as AccessTerm),
+        tap((accessTerm: AccessTerm) => this.logger.info('ACCESS_TERM', accessTerm))
+      );
+  }
+
+  public getAccessTermLatest(enrolleeId: number, signed: boolean): Observable<AccessTerm> {
+    return this.http.get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/access-terms/latest`,
+      { params: { signed: signed.toString() } })
       .pipe(
         map((response: PrimeHttpResponse) => response.result as AccessTerm),
         tap((accessTerm: AccessTerm) => this.logger.info('ACCESS_TERM', accessTerm))
