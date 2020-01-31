@@ -91,7 +91,7 @@ import { SafeHtmlPipe } from './pipes/safe-html.pipe';
     PrimeEmailComponent,
     PrimePhoneComponent,
     EnrolleePropertyErrorComponent,
-    ApproveEnrolmentComponent
+    ApproveEnrolmentComponent,
     SafeHtmlPipe
   ],
   imports: [
