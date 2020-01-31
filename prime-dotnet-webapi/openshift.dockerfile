@@ -38,7 +38,7 @@ RUN apt update && \
     apt install -yqq net-tools \
     inetutils-ping \
     telnet \
-    postgresql-10
+    postgresql-client-10
 
 RUN chmod +x entrypoint.sh && \
     chmod 777 entrypoint.sh && \
