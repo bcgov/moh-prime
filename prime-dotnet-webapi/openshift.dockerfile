@@ -1,7 +1,4 @@
-#FROM docker-registry.default.svc:5000/dqszvc-${OC_APP}/dotnet-22-rhel7 AS build
-#FROM registry.redhat.io/dotnet/dotnet-22-rhel7 AS build
-FROM docker-registry.default.svc:5000/dqszvc-tools/dotnet-22-rhel7 AS build
-#FROM dotnet-22-rhel7 AS build
+FROM docker-registry.default.svc:5000/dqszvc-tools/dotnet-22-rhel7
 WORKDIR /opt/app-root/app
 
 
