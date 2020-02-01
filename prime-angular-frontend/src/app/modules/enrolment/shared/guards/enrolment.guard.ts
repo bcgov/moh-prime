@@ -1,18 +1,20 @@
 import { Injectable, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, of, from } from 'rxjs';
+import { map, exhaustMap } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { BaseGuard } from '@core/guards/base.guard';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+import { Enrollee } from '@shared/models/enrollee.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { User } from '@auth/shared/models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -36,8 +38,33 @@ export class EnrolmentGuard extends BaseGuard {
    * status.
    */
   protected checkAccess(routePath: string = null): Observable<boolean> | Promise<boolean> {
+    const user$ = from(this.authService.getUser());
+    const createEnrollee$ = user$
+      .pipe(
+        exhaustMap(({ userId, firstName, lastName, dateOfBirth, physicalAddress }: User) => {
+          // Enforced the enrolment type instead of using Partial<Enrolment>
+          // to avoid creating constructors and partials for every model
+          const enrollee = {
+            userId,
+            firstName,
+            lastName,
+            dateOfBirth,
+            physicalAddress,
+            voicePhone: null,
+            contactEmail: null
+          } as Enrollee;
+
+          return this.enrolmentResource.createEnrollee(enrollee);
+        })
+      );
+
     return this.enrolmentResource.enrollee()
       .pipe(
+        exhaustMap((enrolment: Enrolment) => {
+          return (!enrolment)
+            ? createEnrollee$
+            : of(enrolment);
+        }),
         map((enrolment: Enrolment) => {
           // Store the enrolment for access throughout enrolment
           this.enrolmentService.enrolment$.next(enrolment);
@@ -71,7 +98,7 @@ export class EnrolmentGuard extends BaseGuard {
         case EnrolmentStatus.DECLINED:
           return this.navigate(routePath, EnrolmentRoutes.DECLINED);
         case EnrolmentStatus.ACCEPTED_TOS:
-          return this.manageAcceptedTosRouting(routePath, enrolment);
+          return this.manageAcceptedToaRouting(routePath, enrolment);
         case EnrolmentStatus.DECLINED_TOS:
           return this.navigate(routePath, EnrolmentRoutes.DECLINED_TERMS_OF_ACCESS);
       }
@@ -83,9 +110,9 @@ export class EnrolmentGuard extends BaseGuard {
 
   /**
    * @description
-   * Manages the routing for enrollees that are in-progress
-   * filling out their initial enrolment, which prevents
-   * access to post-enrolment routes.
+   * Manages the routing for enrollees that are in-progress filling
+   * out their initial enrolment, which prevents access to
+   * post-enrolment routes.
    */
   private manageInProgressRouting(routePath: string, enrolment: Enrolment) {
     const enrolmentSubmissionRoutes = [
@@ -133,7 +160,7 @@ export class EnrolmentGuard extends BaseGuard {
    * @description
    * Manages the routing for enrollees
    */
-  private manageAcceptedTosRouting(routePath: string, enrolment: Enrolment) {
+  private manageAcceptedToaRouting(routePath: string, enrolment: Enrolment) {
     const enrolmentSubmissionRoutes = [
       ...EnrolmentRoutes.enrolmentSubmissionRoutes()
     ];
@@ -147,9 +174,8 @@ export class EnrolmentGuard extends BaseGuard {
 
   /**
    * @description
-   * Prevent infinite route loops by navigating to a route
-   * only when the current route path is not the destination
-   * path.
+   * Prevent infinite route loops by navigating to a route only
+   * when the current route path is not the destination path.
    */
   private navigate(routePath: string, destinationPath: string): boolean {
     const enrolmentRoutePath = this.config.routes.enrolment;

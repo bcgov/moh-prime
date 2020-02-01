@@ -8,14 +8,15 @@ import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { Config } from '@config/config.model';
 import { PrimeHttpResponse } from '@core/models/prime-http-response.model';
 import { LoggerService } from '@core/services/logger.service';
+import { Enrollee } from '@shared/models/enrollee.model';
 import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolmentCertificateAccessToken } from '@shared/models/enrolment-certificate-access-token.model';
-import { Address } from '@enrolment/shared/models/address.model';
-import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
+import { Address } from '@enrolment/shared/models/address.model';
 import { Organization } from '@enrolment/shared/models/organization.model';
-import { EnrolleeNote } from '../models/enrollee-note.model';
+import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { AccessTerm } from '../models/access-term.model';
+import { EnrolleeNote } from '../models/enrollee-note.model';
 
 @Injectable({
   providedIn: 'root'
@@ -40,8 +41,8 @@ export class EnrolmentResource {
       );
   }
 
-  public createEnrollee(payload: Enrolment): Observable<Enrolment> {
-    return this.http.post(`${this.config.apiEndpoint}/enrollees`, this.enrolmentAdapterRequest(payload))
+  public createEnrollee(payload: Enrollee): Observable<Enrolment> {
+    return this.http.post(`${this.config.apiEndpoint}/enrollees`, payload)
       .pipe(
         map((response: PrimeHttpResponse) => response.result),
         tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),

@@ -44,6 +44,7 @@ namespace Prime.Models
         [Required]
         public DateTime DateOfBirth { get; set; }
 
+        [Required]
         public PhysicalAddress PhysicalAddress { get; set; }
 
         public MailingAddress MailingAddress { get; set; }
