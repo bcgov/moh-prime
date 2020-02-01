@@ -14,8 +14,10 @@ else
     password=${POSTGRESQL_ADMIN_PASSWORD}
     export DB_CONNECTION_STRING="host=${DB_HOST};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"
 fi
+echo "Resting 5 seconds to let things settle down..."
+sleep 5
 
-echo "Running database update..."
+#echo "Running database update..."
 dotnet ef database update -v
 
 #echo "Generating upgrade scripts..."
