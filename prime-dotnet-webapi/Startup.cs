@@ -177,6 +177,8 @@ namespace Prime
                 .AddNpgSql(connectionString);
         }
 
+        // TODO useful early on but Database.Migrate should be removed prior to
+        // production as it doesn't scale
         protected virtual void UpdateDatabase(IApplicationBuilder app)
         {
             if (app == null)
