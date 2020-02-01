@@ -63,8 +63,8 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
     return `${this.config.loginRedirectUrl}/provisioner-access/${tokenId}`;
   }
 
-  public generateProvisionerLink() {
-    this.enrolmentResource.createEnrolmentCertificateAccessToken()
+  public sendProvisionerAccessLink(recipientEmail: string) {
+    this.enrolmentResource.sendProvisionerAccessLink(recipientEmail)
       .subscribe((token: EnrolmentCertificateAccessToken) => this.tokens.push(token));
   }
 
