@@ -75,7 +75,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiOkResponse<EnrolmentCertificateAccessToken>), StatusCodes.Status201Created)]
         [Authorize(Policy = PrimeConstants.USER_POLICY)]
-        public async Task<ActionResult<EnrolmentCertificateAccessToken>> SendProvisionerLink(string recipientEmail)
+        public async Task<ActionResult<EnrolmentCertificateAccessToken>> SendProvisionerLink(FromBodyText recipientEmail)
         {
             if (!EmailService.IsValidEmail(recipientEmail))
             {
