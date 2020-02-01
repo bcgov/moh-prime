@@ -23,5 +23,4 @@ COPY entrypoint.sh .
 RUN chmod +x entrypoint.sh && \
     chmod 777 entrypoint.sh
 
-
 ENTRYPOINT [ "./entrypoint.sh" ]
