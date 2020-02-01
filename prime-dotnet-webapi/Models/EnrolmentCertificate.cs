@@ -19,8 +19,6 @@ namespace Prime.Models
         public DateTime? ExpiryDate { get; set; }
         public IEnumerable<OrganizationType> OrganizationTypes { get; set; }
 
-        public EnrolmentCertificateNote EnrolmentCertificateNote { get; set; }
-
         public static EnrolmentCertificate Create(Enrollee enrollee)
         {
             return new EnrolmentCertificate
