@@ -139,7 +139,7 @@ objects:
                 - name: POSTGRESQL_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      key: database-password
+                      key: database-admin-password
                       name: "postgresql-secret"
                 - name: POSTGRESQL_ADMIN_PASSWORD
                   valueFrom:
