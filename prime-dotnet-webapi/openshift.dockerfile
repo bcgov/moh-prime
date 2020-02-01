@@ -24,6 +24,7 @@ RUN dotnet restore
 COPY . /opt/app-root/app/
 #RUN dotnet publish -c Release -o /opt/app-root/app/out /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
 RUN dotnet publish -c Release -o /opt/app-root/app /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
+RUN dotnet tool install --global dotnet-ef --version=2.2
 #FROM docker-registry.default.svc:5000/dqszvc-tools/dotnet-22-runtime-rhel7 AS runtime
 #FROM registry.redhat.io/dotnet/dotnet-22-runtime-rhel7 AS runtime
 #FROM dotnet-22-runtime-rhel7 AS runtime
