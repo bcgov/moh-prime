@@ -25,14 +25,14 @@ COPY *.csproj /opt/app-root/app
 
 RUN dotnet restore
 COPY . /opt/app-root/app/
-RUN dotnet publish -c Release -o /opt/app-root/app/out /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
-
-FROM docker-registry.default.svc:5000/dqszvc-tools/dotnet-22-runtime-rhel7 AS runtime
+#RUN dotnet publish -c Release -o /opt/app-root/app/out /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
+RUN dotnet publish -c Release -o /opt/app-root/app /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
+#FROM docker-registry.default.svc:5000/dqszvc-tools/dotnet-22-runtime-rhel7 AS runtime
 #FROM registry.redhat.io/dotnet/dotnet-22-runtime-rhel7 AS runtime
 #FROM dotnet-22-runtime-rhel7 AS runtime
-WORKDIR /opt/app-root/app
-ENV PATH "$PATH:/opt/rh/rh-dotnet22/root/usr/lib64/dotnet"
-COPY --from=build /opt/app-root/app/out /opt/app-root/app
+#WORKDIR /opt/app-root/app
+#ENV PATH "$PATH:/opt/rh/rh-dotnet22/root/usr/lib64/dotnet"
+#COPY --from=build /opt/app-root/app/out /opt/app-root/app
 EXPOSE 8080 5001 1025
 ENV DB_HOST ${DB_HOST}
 ENV API_PORT 8080
