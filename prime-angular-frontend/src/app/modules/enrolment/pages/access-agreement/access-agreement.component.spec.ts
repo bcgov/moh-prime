@@ -30,6 +30,8 @@ import { AccessTermsPagerComponent } from './components/access-terms-pager/acces
 import { RuAccessTermsComponent } from './components/ru-access-terms/ru-access-terms.component';
 import { OboAccessTermsComponent } from './components/obo-access-terms/obo-access-terms.component';
 import { AccessTermComponent } from './components/access-term/access-term.component';
+import { formatDate } from '@angular/common';
+import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 
 describe('AccessAgreementComponent', () => {
   let component: AccessAgreementComponent;
@@ -64,7 +66,8 @@ describe('AccessAgreementComponent', () => {
           RuAccessTermsComponent,
           OboAccessTermsComponent,
           AccessTermComponent,
-          SafeHtmlPipe
+          SafeHtmlPipe,
+          FormatDatePipe
         ],
         providers: [
           {

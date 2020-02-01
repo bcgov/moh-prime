@@ -130,10 +130,12 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> AccessTermExistsAsync(int accessTermId)
+        public async Task<bool> AccessTermExistsOnEnrolleeAsync(int accessTermId, int enrolleeId)
         {
             return await _context.AccessTerms
-                .AnyAsync(e => e.Id == accessTermId);
+                .Where(at => at.Id == accessTermId)
+                .Where(at => at.EnrolleeId == enrolleeId)
+                .AnyAsync();
         }
 
         /**

@@ -87,11 +87,11 @@ export class EnrolmentResource {
   // Access Terms
   // ---
 
-  public getAccessTerms(enrolleeId: number): Observable<AccessTerm> {
+  public getAccessTerms(enrolleeId: number): Observable<AccessTerm[]> {
     return this.http.get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/access-terms`)
       .pipe(
-        map((response: PrimeHttpResponse) => response.result as AccessTerm),
-        tap((accessTerm: AccessTerm) => this.logger.info('ACCESS_TERM', accessTerm))
+        map((response: PrimeHttpResponse) => response.result as AccessTerm[]),
+        tap((accessTerms: AccessTerm[]) => this.logger.info('ACCESS_TERM', accessTerms))
       );
   }
 

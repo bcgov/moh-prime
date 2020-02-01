@@ -26,7 +26,7 @@ import { DeclinedComponent } from './pages/declined/declined.component';
 import { DeclinedAccessAgreementComponent } from './pages/declined-access-agreement/declined-access-agreement.component';
 import { AccessAgreementHistoryComponent } from './pages/access-agreement-history/access-agreement-history.component';
 import { PharmanetTransactionsComponent } from './pages/pharmanet-transactions/pharmanet-transactions.component';
-import { EnrolmentLogHistoryComponent } from './pages/enrolment-log-history/enrolment-log-history.component';
+import { AccessTermsComponent } from './pages/access-terms/access-terms.component';
 
 import { PageFooterComponent } from './shared/components/page-footer/page-footer.component';
 import { CollegeCertificationFormComponent } from './shared/components/college-certification-form/college-certification-form.component';
@@ -35,6 +35,7 @@ import { CollectionNoticeAlertComponent } from './shared/components/collection-n
 import { RuAccessTermsComponent } from './pages/access-agreement/components/ru-access-terms/ru-access-terms.component';
 import { OboAccessTermsComponent } from './pages/access-agreement/components/obo-access-terms/obo-access-terms.component';
 import { AccessTermComponent } from './pages/access-agreement/components/access-term/access-term.component';
+import { AccessAgreementCurrentComponent } from './pages/access-agreement-current/access-agreement-current.component';
 
 @NgModule({
   declarations: [
@@ -59,14 +60,15 @@ import { AccessTermComponent } from './pages/access-agreement/components/access-
     AccessAgreementHistoryComponent,
     PharmanetEnrolmentCertificateComponent,
     PharmanetTransactionsComponent,
-    EnrolmentLogHistoryComponent,
+    AccessTermsComponent,
     PageFooterComponent,
     CollegeCertificationFormComponent,
     JobFormComponent,
     CollectionNoticeAlertComponent,
     OboAccessTermsComponent,
     RuAccessTermsComponent,
-    AccessTermComponent
+    AccessTermComponent,
+    AccessAgreementCurrentComponent
   ],
   imports: [
     SharedModule,
