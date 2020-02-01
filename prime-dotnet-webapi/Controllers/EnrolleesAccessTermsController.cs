@@ -87,9 +87,9 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            if (!await _accessTermService.AccessTermExistsAsync(accessTermId))
+            if (!await _accessTermService.AccessTermExistsOnEnrolleeAsync(accessTermId, enrolleeId))
             {
-                return NotFound(new ApiResponse(404, $"Access term not found with id {accessTermId}"));
+                return NotFound(new ApiResponse(404, $"Access term not found with id {accessTermId} for enrollee id: {enrolleeId}"));
             }
 
             // Prevent access to the enrollee's current terms of access based on status

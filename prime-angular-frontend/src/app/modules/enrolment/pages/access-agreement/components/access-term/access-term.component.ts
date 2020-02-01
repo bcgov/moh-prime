@@ -18,10 +18,12 @@ export class AccessTermComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    const tempClause: string = this.accessTerms.userClause.clause;
-    const limits: string = this.accessTerms.limitsConditionsClause.clause;
-    const content = limits == null ? '' : PREFIX + limits + SUFFIX;
-    this.clause = tempClause.replace(PLACEHOLDER, content);
+    if (this.accessTerms) {
+      const tempClause: string = this.accessTerms.userClause.clause;
+      const limits: string = this.accessTerms.limitsConditionsClause.clause;
+      const content = limits == null ? '' : PREFIX + limits + SUFFIX;
+      this.clause = tempClause.replace(PLACEHOLDER, content);
+    }
   }
 
 }
