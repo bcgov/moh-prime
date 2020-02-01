@@ -17,6 +17,7 @@ pipeline {
             when { expression { ( GIT_BRANCH != 'master' ) } }
             agent { label 'master' }
             steps {
+                checkout scm
                 echo "Building ..."
                 sh "./player.sh build database dev"
                 sh "./player.sh build api dev ${API_ARGS}"
