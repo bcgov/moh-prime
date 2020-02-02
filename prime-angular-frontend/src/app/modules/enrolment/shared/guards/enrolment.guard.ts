@@ -88,7 +88,7 @@ export class EnrolmentGuard extends BaseGuard {
     if (!enrolment) {
       return this.navigate(routePath, EnrolmentRoutes.DEMOGRAPHIC);
     } else if (enrolment) {
-      switch (enrolment.currentStatus.status.code) {
+      switch (enrolment.currentStatus.statusCode) {
         case EnrolmentStatus.IN_PROGRESS:
           return this.manageInProgressRouting(routePath, enrolment);
         case EnrolmentStatus.SUBMITTED:
