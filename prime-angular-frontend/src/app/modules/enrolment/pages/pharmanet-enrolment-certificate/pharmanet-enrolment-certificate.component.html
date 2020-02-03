@@ -34,48 +34,7 @@
       {{ enrolment.enrollee.licensePlate | uppercase }}
     </p>
 
-    <app-page-subheader>
-      <ng-container appPageSubheaderTitle>Provisioner Links</ng-container>
-    </app-page-subheader>
 
-    <p class="mb-5">
-      Click the Provisioner Link button to generate a link for your vendor to access your PharmaNet ID. (Copy and paste
-      the Provisioner Link into an email and send.) You can generate a new link if you need to. Each link expires in one
-      week, or after three views.
-    </p>
-
-    <div class="mb-5">
-      <button mat-flat-button
-              color="primary"
-              (click)="sendProvisionerAccessLink('ex@wut.com')">
-        <mat-icon class="add-icon">add</mat-icon>
-        Generate Provisioner Link
-      </button>
-
-      <div *ngIf="tokens?.length"
-           class="table-responsive">
-        <table class="table mt-4">
-          <thead>
-            <tr>
-              <th scope="col">Active</th>
-              <th scope="col">Views</th>
-              <th scope="col">&nbsp;</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let token of tokens">
-              <td>{{ token.active | yesNo }}</td>
-              <td>{{ token.viewCount }}</td>
-              <td>
-
-                <app-clipboard-icon [content]="getTokenUrl(token.id)"></app-clipboard-icon>
-
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
 
     <div class="mb-5">
       <app-enrollee-organizations [organizations]="organizations"></app-enrollee-organizations>
@@ -93,6 +52,39 @@
         </app-enrollee-property>
       </div>
     </ng-container>
+
+
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>Email your PharmaNet ID</ng-container>
+    </app-page-subheader>
+
+    <p class="mb-5">
+      Enter an email address that may be used to provide your PharmaNet ID to the vendor.
+    </p>
+
+    <div class="mb-5">
+      <div class="row">
+        <div class="col-6">
+          <div [formGroup]="form">
+            <mat-form-field class="w-100">
+
+              <input matInput
+                     placeholder="Email"
+                     formControlName="vendorEmail">
+              <mat-error *ngIf="vendorEmail.hasError('email')">Must be a valid email address</mat-error>
+            </mat-form-field>
+            <button mat-flat-button
+                    color="primary"
+                    (click)="sendProvisionerAccessLink()">
+              Email Provisioner Link
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
 
   </app-page>
 

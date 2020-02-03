@@ -12,6 +12,8 @@ import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { WindowRefService } from '@core/services/window-ref.service';
 import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 import moment from 'moment';
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { FormControlValidators } from '@shared/validators/form-control.validators';
 
 @Component({
   selector: 'app-pharmanet-enrolment-certificate',
@@ -24,6 +26,8 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
   public showProgressBar: boolean;
   public expiryDate: string;
 
+  public form: FormGroup;
+
   constructor(
     protected route: ActivatedRoute,
     protected router: Router,
@@ -32,12 +36,15 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
     private enrolmentService: EnrolmentService,
     private toastService: ToastService,
     private logger: LoggerService,
-    private windowRef: WindowRefService
+    private windowRef: WindowRefService,
+    private fb: FormBuilder
   ) {
     super(route, router);
     this.tokens = [];
     this.showProgressBar = false;
+    this.form = this.buildVendorEmailGroup();
   }
+
 
   public get enrollee() {
     return (this.enrolment) ? this.enrolment.enrollee : null;
@@ -63,10 +70,18 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
     return `${this.config.loginRedirectUrl}/provisioner-access/${tokenId}`;
   }
 
-  public sendProvisionerAccessLink(recipientEmail: string) {
-    this.enrolmentResource.sendProvisionerAccessLink(recipientEmail)
-      .subscribe((token: EnrolmentCertificateAccessToken) => this.tokens.push(token));
+  public get vendorEmail(): FormControl {
+    return this.form.get('vendorEmail') as FormControl;
   }
+
+  public sendProvisionerAccessLink() {
+    if (this.vendorEmail.value && this.vendorEmail.valid) {
+      this.enrolmentResource.sendProvisionerAccessLink(this.vendorEmail.value)
+        .subscribe((token: EnrolmentCertificateAccessToken) => this.tokens.push(token));
+    }
+  }
+
+
 
   public ngOnInit() {
     // Only shown the first time the enrollee reaches the summary
@@ -92,5 +107,11 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
           this.logger.error('[EnrolmentCertificate] Summary::ngOnInit error has occurred: ', error);
         }
       );
+  }
+
+  private buildVendorEmailGroup(): FormGroup {
+    return this.fb.group({
+      vendorEmail: [null, [Validators.required, FormControlValidators.email]],
+    });
   }
 }
