@@ -32,21 +32,21 @@ parameters:
   - description: The OpenShift ImageStream name.
     displayName: IMAGE_STREAM_NAME
     name: IMAGE_STREAM_NAME
-    value: postgresql
+    value: postgresql-10
   - description: The OpenShift Namespace where the ImageStream resides.
     displayName: Namespace
     name: IMAGE_STREAM_NAMESPACE
-    value: ''
+    value: 'dqszvc-tools'
   - description: 'Version of PostgreSQL image to be used (9.2, 9.4, 9.5 or latest).'
     displayName: Version of PostgreSQL Image
     name: IMAGE_STREAM_VERSION
     required: true
-    value: '10'
+    value: 'latest'
   - description: Name of the PostgreSQL database accessed.
     displayName: PostgreSQL Database Name
     name: POSTGRESQL_DATABASE
     required: true
-    value: postgresQL
+    value: postgresql
   - description: 'Volume space available for data, e.g. 512Mi, 2Gi.'
     displayName: Volume Capacity
     name: VOLUME_CAPACITY
@@ -202,7 +202,7 @@ objects:
               - postgresql
             from:
               kind: ImageStreamTag
-              name: 'postgresql-10'
+              name: 'postgresql-10:latest'
               namespace: dqszvc-tools
             lastTriggeredImage: ''
           type: ImageChange

@@ -40,7 +40,7 @@ objects:
           annotations: null
           from:
             kind: ImageStreamTag
-            name: 'postgresql-10'
+            name: 'postgresql-10:latest'
             namespace: dqszvc-tools
           generation: 1
           importPolicy: {}
