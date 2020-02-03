@@ -144,15 +144,16 @@ function occleanup() {
     ORPHANS=$(echo ${OPEN_PR_ARRAY[@]} ${LIVE_BRANCH_ARRAY[@]} | tr ' ' '\n' | sort | uniq -u)
     for i in $ORPHANS
     do
-        cleanOcArtifacts $i
+        cleanOcArtifacts $i 
     done
 }
 
 function cleanOcArtifacts() {
-    declare -p ALL_BRANCH_ARTIFACTS=( $(oc get all,pvc,secrets,route -n $PROJECT_PREFIX-dev | grep -i "\-$2" | awk '{print $2}' | grep -P "(\-pr\-\d+)") )
+    declare -p ALL_BRANCH_ARTIFACTS=( $(oc get all,pvc,secrets,route -n $PROJECT_PREFIX-dev | grep -i "\-pr\-$1" | awk '{print $1}' | grep -P "(\-pr\-\d+)") )
     for a in "${ALL_BRANCH_ARTIFACTS[@]}"
     do
-        oc delete -n $PROJECT_PREFIX-dev $a
+        echo "oc delete -n $PROJECT_PREFIX-dev $a"
+        #oc delete -n $PROJECT_PREFIX-dev $a
     done
 }
 
@@ -166,6 +167,7 @@ function nukenpave() {
         build $@
         deploy $@
 }
+
 function functionTest() {
     echo "1=$2"
     echo "2=$3"
