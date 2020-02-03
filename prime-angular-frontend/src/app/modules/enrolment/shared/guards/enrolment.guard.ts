@@ -45,6 +45,7 @@ export class EnrolmentGuard extends BaseGuard {
           // Enforced the enrolment type instead of using Partial<Enrolment>
           // to avoid creating constructors and partials for every model
           const enrollee = {
+            // Providing only the minimum required fields for creating an enrollee
             userId,
             firstName,
             lastName,
@@ -66,8 +67,14 @@ export class EnrolmentGuard extends BaseGuard {
             : of(enrolment);
         }),
         map((enrolment: Enrolment) => {
-          // Store the enrolment for access throughout enrolment
-          this.enrolmentService.enrolment$.next(enrolment);
+          // Store the enrolment for access throughout enrolment, BUT only
+          // if it doesn't already exist OR the enrollee is filling out
+          // their initial enrolment to allow for page-by-page updates
+          if (!this.enrolmentService.enrolment || !this.enrolmentService.isInitialEnrolment) {
+            this.logger.info('UPDATE_ENROLMENT_SERVICE', enrolment);
+            this.enrolmentService.enrolment$.next(enrolment);
+          }
+
           return this.routeDestination(routePath, enrolment);
         })
       );

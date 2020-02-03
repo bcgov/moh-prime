@@ -7,16 +7,15 @@ import { Job } from '../models/job.model';
 import { Organization } from '../models/organization.model';
 import { CollegeCertification } from '../models/college-certification.model';
 
-// TODO rename profile to demographic
 // TODO refactor into enrolment service and enrolment form service
-// TODO implement using NGXS to manage state
 @Injectable({
   providedIn: 'root'
 })
 export class EnrolmentStateService {
-  // TODO revisit access to form groups as service is refined, but for now public
-  // TODO make into BehaviourSubject or asObservable, which would make it immutable
-  public profileForm: FormGroup;
+  // TODO revisit access to form groups as service is refined, but
+  // for now public, and then make into BehaviourSubject or use
+  // asObservable, which would make them immutable
+  public demographicForm: FormGroup;
   public regulatoryForm: FormGroup;
   public deviceProviderForm: FormGroup;
   public jobsForm: FormGroup;
@@ -29,7 +28,7 @@ export class EnrolmentStateService {
   constructor(
     private fb: FormBuilder
   ) {
-    this.profileForm = this.buildProfileForm();
+    this.demographicForm = this.buildDemographicForm();
     this.regulatoryForm = this.buildRegulatoryForm();
     this.deviceProviderForm = this.buildDeviceProviderForm();
     this.jobsForm = this.buildJobsForm();
@@ -54,7 +53,7 @@ export class EnrolmentStateService {
     const id = this.enrolleeId;
     const userId = this.userId;
 
-    const profile = this.profileForm.getRawValue();
+    const profile = this.demographicForm.getRawValue();
     const regulatory = this.regulatoryForm.getRawValue();
     const deviceProvider = this.deviceProviderForm.getRawValue();
     const jobs = this.jobsForm.getRawValue();
@@ -88,7 +87,7 @@ export class EnrolmentStateService {
   }
 
   public isProfileInfoValid(): boolean {
-    return this.profileForm.valid;
+    return this.demographicForm.valid;
   }
 
   public isRegulatoryValid(): boolean {
@@ -118,7 +117,7 @@ export class EnrolmentStateService {
    */
   private patchEnrolment(enrolment: Enrolment) {
     if (enrolment) {
-      this.profileForm.patchValue(enrolment.enrollee);
+      this.demographicForm.patchValue(enrolment.enrollee);
       this.deviceProviderForm.patchValue(enrolment);
 
       if (enrolment.certifications.length) {
@@ -158,7 +157,7 @@ export class EnrolmentStateService {
     }
   }
 
-  private buildProfileForm(): FormGroup {
+  private buildDemographicForm(): FormGroup {
     return this.fb.group({
       userId: [{ value: null, disabled: true }, [Validators.required]],
       firstName: [{ value: null, disabled: true }, [Validators.required]],

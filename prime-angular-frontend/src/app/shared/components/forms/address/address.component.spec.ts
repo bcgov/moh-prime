@@ -49,7 +49,7 @@ describe('AddressComponent', () => {
     fixture = TestBed.createComponent(AddressComponent);
     component = fixture.componentInstance;
     // Add the bound FormGroup to the component
-    component.form = enrolmentStateService.profileForm.get('physicalAddress') as FormGroup;
+    component.form = enrolmentStateService.demographicForm.get('physicalAddress') as FormGroup;
     fixture.detectChanges();
   }));
 

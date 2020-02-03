@@ -70,8 +70,8 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       console.log('DEMOGRAPHIC', this.enrolmentStateService.isProfileInfoValid());
       console.log('REGULATORY', this.enrolmentStateService.isRegulatoryValid());
       console.log('JOBS', this.enrolmentStateService.isJobsValid());
-      console.log('DECLARATION', this.enrolmentStateService.isSelfDeclarationValid());
-      console.log('ACCESS', this.enrolmentStateService.isOrganizationValid());
+      console.log('ORGANIZATION', this.enrolmentStateService.isOrganizationValid());
+      console.log('SELF DECLARATION', this.enrolmentStateService.isSelfDeclarationValid());
     }
   }
 

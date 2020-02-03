@@ -16,7 +16,6 @@ import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmen
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
-import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 
 @Component({
   selector: 'app-job',
@@ -33,14 +32,14 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     protected route: ActivatedRoute,
     protected router: Router,
     protected dialog: MatDialog,
-    private configService: ConfigService,
-    private enrolmentService: EnrolmentService,
-    private enrolmentResource: EnrolmentResource,
-    private enrolmentStateService: EnrolmentStateService,
-    private toastService: ToastService,
-    private logger: LoggerService
+    protected enrolmentService: EnrolmentService,
+    protected enrolmentResource: EnrolmentResource,
+    protected enrolmentStateService: EnrolmentStateService,
+    protected toastService: ToastService,
+    protected logger: LoggerService,
+    private configService: ConfigService
   ) {
-    super(route, router, dialog);
+    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger);
 
     this.jobNames = this.configService.jobNames;
     this.filteredJobNames = new BehaviorSubject<Config<number>[]>(this.jobNames);
@@ -50,37 +49,6 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
 
   public get jobs(): FormArray {
     return this.form.get('jobs') as FormArray;
-  }
-
-  public onSubmit() {
-    if (this.form.valid) {
-      // Enrollees can not have jobs and certifications
-      this.removeCollegeCertifications();
-
-      const payload = this.enrolmentStateService.enrolment;
-      // Remove the default so not proliferated outside the component
-      payload.jobs = payload.jobs
-        .map((job: Job) => (job.title === this.defaultOptionLabel) ? { ...job, title: '' } : job);
-
-      this.busy = this.enrolmentResource.updateEnrollee(payload)
-        .subscribe(
-          () => {
-            this.toastService.openSuccessToast('Job information has been saved');
-            this.form.markAsPristine();
-
-            const routePath = (!this.isProfileComplete)
-              ? EnrolmentRoutes.ORGANIZATION
-              : EnrolmentRoutes.OVERVIEW;
-            this.routeTo(routePath);
-          },
-          (error: any) => {
-            this.toastService.openErrorToast('Job information could not be saved');
-            this.logger.error('[Enrolment] Job::onSubmit error has occurred: ', error);
-          }
-        );
-    } else {
-      this.form.markAllAsTouched();
-    }
   }
 
   public addJob(value: string = '') {
@@ -130,12 +98,18 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     }
   }
 
-  protected patchForm() {
-    const enrolment = this.enrolmentService.enrolment;
+  protected onSubmitFormIsValid() {
+    // Enrollees can not have jobs and certifications
+    this.removeCollegeCertifications();
+  }
 
-    this.isProfileComplete = enrolment.profileCompleted;
-    this.enrolmentStateService.enrolment = enrolment;
-    this.isInitialEnrolment = enrolment.progressStatus !== ProgressStatus.FINISHED;
+  protected nextRouteAfterSubmit() {
+    let nextRoutePath: string;
+    if (!this.isProfileComplete) {
+      nextRoutePath = EnrolmentRoutes.ORGANIZATION;
+    }
+
+    super.nextRouteAfterSubmit(nextRoutePath);
   }
 
   private filterJobNames(jobs: Job[]) {
