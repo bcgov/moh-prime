@@ -139,7 +139,7 @@ function occleanup() {
     LIVE_BRANCH_ARRAY=()
     ORPHANS=()
     curl -o openPRs.txt "https://api.github.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/pulls?status=open&sort=number"
-    declare -p OPEN_PR_ARRAY=( $(grep '"number"' openPRs.txt | column -t | sed 's|[:,]||g' | awk '{print $3}') )
+    declare -p OPEN_PR_ARRAY=( $(grep '"number":' openPRs.txt | column -t | sed 's|[:,]||g' | awk '{print $2}') )
     declare -p LIVE_BRANCH_ARRAY=( $(oc get route -n $PROJECT_PREFIX-dev | awk '{print $2}' | grep -P "(\-pr\-\d+)" | sed 's/[^0-9]*//g' | sort -un) )
     ORPHANS=$(echo ${OPEN_PR_ARRAY[@]} ${LIVE_BRANCH_ARRAY[@]} | tr ' ' '\n' | sort | uniq -u)
     for i in $ORPHANS
