@@ -152,8 +152,8 @@ function cleanOcArtifacts() {
     declare -p ALL_BRANCH_ARTIFACTS=( $(oc get all,pvc,secrets,route -n $PROJECT_PREFIX-dev | grep -i "\-pr\-$1" | awk '{print $1}' | grep -P "(\-pr\-\d+)") )
     for a in "${ALL_BRANCH_ARTIFACTS[@]}"
     do
-        echo "oc delete -n $PROJECT_PREFIX-dev $a"
-        #oc delete -n $PROJECT_PREFIX-dev $a
+        #echo "oc delete -n $PROJECT_PREFIX-dev $a"
+        oc delete -n $PROJECT_PREFIX-dev $a
     done
 }
 
