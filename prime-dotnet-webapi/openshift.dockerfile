@@ -2,7 +2,7 @@
 FROM docker-registry.default.svc:5000/dqszvc-tools/dotnet-31-rhel7 
 WORKDIR /opt/app-root/app
 USER 0
-ENV PATH="$PATH:/opt/rh/rh-dotnet31/root/usr/bin//opt/app-root/.dotnet/tools:/root/.dotnet/tools"
+ENV PATH="$PATH:/opt/rh/rh-dotnet31/root/usr/bin/:/opt/app-root/.dotnet/tools:/root/.dotnet/tools"
 ENV ASPNETCORE_ENVIRONMENT "${ASPNETCORE_ENVIRONMENT}"
 ENV POSTGRESQL_PASSWORD "${POSTGRESQL_PASSWORD}"
 ENV POSTGRESQL_DATABASE "${POSTGRESQL_DATABASE}"
