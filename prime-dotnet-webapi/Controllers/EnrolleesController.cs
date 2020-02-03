@@ -19,15 +19,18 @@ namespace Prime.Controllers
         private readonly IEnrolleeService _enrolleeService;
         private readonly IAccessTermService _accessTermService;
         private readonly IEnrolleeProfileVersionService _enrolleeProfileVersionService;
+        private readonly IEmailService _emailService;
 
         public EnrolleesController(
             IEnrolleeService enrolleeService,
             IAccessTermService accessTermService,
-            IEnrolleeProfileVersionService enrolleeProfileVersionService)
+            IEnrolleeProfileVersionService enrolleeProfileVersionService,
+            IEmailService emailService)
         {
             _enrolleeService = enrolleeService;
             _accessTermService = accessTermService;
             _enrolleeProfileVersionService = enrolleeProfileVersionService;
+            _emailService = emailService;
         }
 
         // GET: api/Enrollees
@@ -575,6 +578,14 @@ namespace Prime.Controllers
             var updatedEnrollee = await _enrolleeService.UpdateEnrolleeAlwaysManualAsync(enrolleeId, alwaysManual);
 
             return Ok(new ApiOkResponse<Enrollee>(updatedEnrollee));
+        }
+
+        [HttpPost("email-test", Name = nameof(SendEmail))]
+        [Authorize(Policy = PrimeConstants.ADMIN_POLICY)]
+        public async Task<ActionResult<string>> SendEmail([FromQuery]string email)
+        {
+            _emailService.Send("Prime@gov.bc.ca", email, "a subject", "a body");
+            return Ok(new ApiOkResponse<string>(email));
         }
     }
 }
