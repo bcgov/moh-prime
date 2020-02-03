@@ -49,6 +49,7 @@ import { PrimeContactComponent } from '@shared/components/prime-contact/prime-co
 import { PrimeEmailComponent } from './components/prime-email/prime-email.component';
 import { PrimePhoneComponent } from './components/prime-phone/prime-phone.component';
 import { EnrolleePropertyErrorComponent } from './components/enrollee/enrollee-property-error/enrollee-property-error.component';
+import { ApproveEnrolmentComponent } from './components/dialogs/content/approve-enrolment/approve-enrolment.component';
 
 @NgModule({
   declarations: [
@@ -88,7 +89,8 @@ import { EnrolleePropertyErrorComponent } from './components/enrollee/enrollee-p
     PrimeContactComponent,
     PrimeEmailComponent,
     PrimePhoneComponent,
-    EnrolleePropertyErrorComponent
+    EnrolleePropertyErrorComponent,
+    ApproveEnrolmentComponent
   ],
   imports: [
     CommonModule,
@@ -149,7 +151,8 @@ import { EnrolleePropertyErrorComponent } from './components/enrollee/enrollee-p
   ],
   entryComponents: [
     ConfirmDialogComponent,
-    EnrolmentStatusReasonsComponent
+    EnrolmentStatusReasonsComponent,
+    ApproveEnrolmentComponent
   ]
 })
 export class SharedModule { }

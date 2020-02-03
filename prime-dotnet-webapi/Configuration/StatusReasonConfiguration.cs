@@ -20,7 +20,8 @@ namespace Prime.Configuration
                     new StatusReason { Code = 8,  Name = "Insulin Pump Provider", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new StatusReason { Code = 9,  Name = "Licence Class", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new StatusReason { Code = 10, Name = "Answered one or more Self Declaration questions \"Yes\"", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new StatusReason { Code = 11, Name = "Contact Address or Identity Address not in British Columbia", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE }
+                    new StatusReason { Code = 11, Name = "Contact Address or Identity Address not in British Columbia", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new StatusReason { Code = 12,  Name = "Always Manual Rule Set", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                 };
             }
         }
