@@ -16,12 +16,17 @@ namespace Prime
     // Allow for design time creation of the ApiDbContext
     public class ApiDbContextFactory : IDesignTimeDbContextFactory<ApiDbContext>
     {
-        private string ConnectionString = System.Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
-
         public ApiDbContext CreateDbContext(string[] args)
         {
+            // Connect to database
+            var connectionString = System.Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+            if (connectionString == null)
+            {
+                connectionString = "Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=postgres";
+            }
+
             var optionsBuilder = new DbContextOptionsBuilder<ApiDbContext>();
-            optionsBuilder.UseNpgsql(ConnectionString);
+            optionsBuilder.UseNpgsql(connectionString);
             optionsBuilder.EnableSensitiveDataLogging(sensitiveDataLoggingEnabled: true);
 
             return new ApiDbContext(optionsBuilder.Options, null);

@@ -4837,9 +4837,11 @@ namespace Prime.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<bool>("AlwaysManual");
+                    b.Property<bool>("AlwaysManual")
+                        .HasColumnType("boolean");
 
-                    b.Property<string>("ContactEmail");
+                    b.Property<string>("ContactEmail")
+                        .HasColumnType("text");
 
                     b.Property<string>("ContactPhone")
                         .HasColumnType("text");
