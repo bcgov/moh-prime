@@ -65,12 +65,13 @@
     <div class="mb-5">
       <div class="row">
         <div class="col-6">
-          <div [formGroup]="form">
-            <mat-form-field class="w-100">
+          <form [formGroup]="form">
+            <mat-form-field class="w-100 mb-3">
 
               <input matInput
                      placeholder="Email"
                      formControlName="vendorEmail">
+              <mat-error *ngIf="vendorEmail.hasError('required')">Required</mat-error>
               <mat-error *ngIf="vendorEmail.hasError('email')">Must be a valid email address</mat-error>
             </mat-form-field>
             <button mat-flat-button
@@ -78,13 +79,10 @@
                     (click)="sendProvisionerAccessLink()">
               Email Provisioner Link
             </button>
-          </div>
+          </form>
         </div>
       </div>
     </div>
-
-
-
 
   </app-page>
 

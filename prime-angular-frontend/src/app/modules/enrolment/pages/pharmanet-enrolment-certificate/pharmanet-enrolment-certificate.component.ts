@@ -81,8 +81,6 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
     }
   }
 
-
-
   public ngOnInit() {
     // Only shown the first time the enrollee reaches the summary
     const routeState = this.windowRef.nativeWindow.history.state;
