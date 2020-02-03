@@ -2,7 +2,10 @@
 
   <app-page-header class="mb-5">Provisioner Link</app-page-header>
 
+
+
   <ng-container *ngIf="certificate">
+
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>PharmaNet ID</ng-container>
     </app-page-subheader>
@@ -15,19 +18,38 @@
       {{ certificate.licensePlate | uppercase }}
     </p>
 
-    <div class="mb-5">
-      <app-enrollee-organizations [organizationTypes]="certificate?.organizationTypes"></app-enrollee-organizations>
+
+
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>User Information</ng-container>
+    </app-page-subheader>
+
+
+
+    <div class="mb-4">
+
+      <app-enrollee-property title="Name"
+                             [makeBold]="true">
+        {{ fullName }}
+      </app-enrollee-property>
+
     </div>
 
-    <div class="mb-5">
-      <app-enrollee-privileges [transactions]="certificate?.transactions"
-                               [userType]="certificate?.userType"
-                               [canHaveOBOs]="certificate?.canHaveOBOs"></app-enrollee-privileges>
-    </div>
+    <ng-container *ngFor="let organizationType of certificate.organizationTypes">
 
-    <p>
-      {{ certificate?.enrolmentCertificateNote?.note | default: 'None' }}
-    </p>
+      <app-enrollee-property title="Organization Type"
+                             [makeBold]="true">
+        {{ organizationType.name }}
+      </app-enrollee-property>
+
+    </ng-container>
+
+    <app-enrollee-property *ngIf="certificate.organizationTypes.length == 0"
+                           title="Organization Type"
+                           [makeBold]="true">
+      None
+    </app-enrollee-property>
+
 
   </ng-container>
 
