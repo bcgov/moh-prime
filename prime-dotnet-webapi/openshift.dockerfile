@@ -1,5 +1,6 @@
 #FROM mcr.microsoft.com/dotnet/core/sdk:3.0 AS build
 FROM docker-registry.default.svc:5000/dqszvc-tools/dotnet-31-rhel7 
+#FROM docker-registry.default.svc:5000/dqszvc-tools/sdk:3.1
 WORKDIR /opt/app-root/app
 USER 0
 ENV PATH="$PATH:/opt/rh/rh-dotnet31/root/usr/bin/:/opt/app-root/.dotnet/tools:/root/.dotnet/tools"
@@ -10,7 +11,7 @@ ENV POSTGRESQL_ADMIN_PASSWORD "${POSTGRESQL_ADMIN_PASSWORD}"
 ENV POSTGRESQL_USER "${POSTGRESQL_USER}"
 ENV SUFFIX "${SUFFIX}"
 ENV DB_HOST "$DB_HOST"
-ENV DB_CONNECTION_STRING "host=postgresql${SUFFIX};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_PASSWORD}"
+ENV DB_CONNECTION_STRING "host=postgresql${SUFFIX};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"
 ENV KEYCLOAK_URL $KEYCLOAK_URL
 ENV KEYCLOAK_REALM $KEYCLOAK_REALM
 ENV KEYCLOAK_CLIENT_ID $KEYCLOAK_CLIENT_ID
