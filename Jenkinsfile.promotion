@@ -2,10 +2,11 @@ pipeline {
     agent none
     environment {
         BRANCH_LOWER=BRANCH_NAME.toLowerCase()
-        VANITY_URL="pharmanetenrolment.gov.bc.ca"
-        TEST_VANITY_URL="test.pharmanetenrolment.gov.bc.ca"
-        TEST_FRONTEND_ARGS = "-p HTTP_PORT=8080 -p HTTP_SCHEMA=http TERMINATION_TYPE='Edge' -p REDIRECT_URL=http://${TEST_VANITY_URL} -p VANITY_URL=${TEST_VANITY_URL}"
-        TEST_API_ARGS="ASPNETCORE_ENVIRONMENT=Release -p HTTP_PORT=8080 -p HTTP_SCHEMA=http -p VANITY_URL=${TEST_VANITY_URL} -p SSO_HOST=sso-dev.pathfinder.gov.bc.ca"
+        VANITY_URL="test.pharmanetenrolment.gov.bc.ca"
+        HTTP_SCHEMA="https"
+        HTTP_PORT="8443"
+        FRONTEND_ARGS="-p HTTP_PORT=${HTTP_PORT} -p HTTP_SCHEMA=${HTTP_SCHEMA} -p REDIRECT_URL=${HTTP_SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL}"
+        API_ARGS="-p ASPNETCORE_ENVIRONMENT=Development -p HTTP_PORT=${HTTP_PORT} -p HTTP_SCHEMA=${HTTP_SCHEMA} -p VANITY_URL=${VANITY_URL}"
     }
     stages {
         stage('Promote Master to Test') {
@@ -17,11 +18,11 @@ pipeline {
             steps {
                     echo "Test (MASTER) ..."
                     sh "./player.sh build database test"
-                    sh "./player.sh build api test ${TEST_API_ARGS}"
-                    sh "./player.sh build frontend test ${TEST_FRONTEND_ARGS}"
+                    sh "./player.sh build api test ${API_ARGS}"
+                    sh "./player.sh build frontend test ${FRONTEND_ARGS}"
                     sh "./player.sh deploy database test"
-                    sh "./player.sh deploy api test ${TEST_API_ARGS}"
-                    sh "./player.sh deploy frontend test ${TEST_FRONTEND_ARGS}"
+                    sh "./player.sh deploy api test ${API_ARGS}"
+                    sh "./player.sh deploy frontend test ${FRONTEND_ARGS}"
                     sh "./player.sh toolbelt schemaspy test"
             }
         }
