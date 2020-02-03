@@ -41,7 +41,7 @@ parameters:
     displayName: Version of PostgreSQL Image
     name: IMAGE_STREAM_VERSION
     required: true
-    value: '9.6'
+    value: '10'
   - description: Name of the PostgreSQL database accessed.
     displayName: PostgreSQL Database Name
     name: POSTGRESQL_DATABASE
@@ -202,8 +202,8 @@ objects:
               - postgresql
             from:
               kind: ImageStreamTag
-              name: 'postgresql:9.6'
-              namespace: openshift
+              name: 'postgresql-10'
+              namespace: dqszvc-tools
             lastTriggeredImage: ''
           type: ImageChange
         - type: ConfigChange
