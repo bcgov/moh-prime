@@ -11,7 +11,7 @@ parameters:
     name: NAME
     required: true
   - name: VERSION
-    required: true
+    required: false
   - name: SOURCE_CONTEXT_DIR
     required: true
   - name: SOURCE_REPOSITORY_URL

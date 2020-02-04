@@ -5,6 +5,8 @@ pipeline {
         VANITY_URL="angular-frontend-${BRANCH_LOWER}-dqszvc-dev.pathfinder.gov.bc.ca"
         HTTP_SCHEMA="http"
         HTTP_PORT="8080"
+        VERSION="${BUILD_NUMBER}"
+        ARGS="-p VERSION=${VERSION}"
         FRONTEND_ARGS="-p HTTP_PORT=${HTTP_PORT} -p HTTP_SCHEMA=${HTTP_SCHEMA} TERMINATION_TYPE='Edge' -p REDIRECT_URL=${HTTP_SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL}"
         API_ARGS="-p ASPNETCORE_ENVIRONMENT=Development -p HTTP_PORT=${HTTP_PORT} -p HTTP_SCHEMA=${HTTP_SCHEMA} -p VANITY_URL=${VANITY_URL}"
     }
@@ -20,9 +22,9 @@ pipeline {
             agent { label 'master' }
             steps {
                 echo "Building ..."
-                sh "./player.sh build database dev"
-                sh "./player.sh build api dev ${API_ARGS}"
-                sh "./player.sh build frontend dev ${FRONTEND_ARGS}"
+                sh "./player.sh build database dev ${ARGS}"
+                sh "./player.sh build api dev ${ARGS} ${API_ARGS}"
+                sh "./player.sh build frontend dev ${ARGS} ${FRONTEND_ARGS}"
             }
         }
         stage('Deploy Branch') {
@@ -33,16 +35,16 @@ pipeline {
             agent { label 'master' }
             steps {
                 echo "Deploy to dev..."
-                sh "./player.sh deploy database dev"
-                sh "./player.sh deploy api dev ${API_ARGS}"
-                sh "./player.sh deploy frontend dev ${FRONTEND_ARGS}"
+                sh "./player.sh deploy database dev ${ARGS}"
+                sh "./player.sh deploy api dev ${ARGS} ${API_ARGS}"
+                sh "./player.sh deploy frontend dev ${ARGS} ${FRONTEND_ARGS}"
             }
         }
         stage('SchemaSpy Database Investigation') {
             when { expression { ( GIT_BRANCH == 'develop' ) } }
             agent { label 'master' }
             steps {
-                sh "./player.sh toolbelt schemaspy dev"
+                sh "./player.sh toolbelt schemaspy dev ${ARGS}"
             }
         }
     }

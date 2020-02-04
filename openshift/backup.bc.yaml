@@ -13,7 +13,7 @@ parameters:
     description: A suffix appended to all objects
     required: false
   - name: VERSION
-    required: true
+    required: false
   - name: SOURCE_CONTEXT_DIR
     required: true
   - name: SOURCE_REPOSITORY_URL

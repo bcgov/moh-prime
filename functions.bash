@@ -36,7 +36,6 @@ function build() {
         echo "oc process -f ./${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE} -p NAME=${APP_NAME} -p VERSION=${BUILD_NUMBER} -p SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR} -p SOURCE_REPOSITORY_URL=${GIT_URL} -p SOURCE_REPOSITORY_REF=${BRANCH_NAME} -p OC_NAMESPACE=$PROJECT_PREFIX -p OC_APP=$3 ${@:4} | oc ${MODE} -f - --namespace=$PROJECT_PREFIX-$3"
         oc process -f ./"${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE}" \
         -p NAME="${APP_NAME}" \
-        -p VERSION="${BUILD_NUMBER}" \
         -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
@@ -46,7 +45,6 @@ function build() {
         echo "oc process -f ./${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE} -p NAME=${APP_NAME} -p VERSION=${BUILD_NUMBER} -p SUFFIX=-${BRANCH_LOWER} -p SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR} -p SOURCE_REPOSITORY_URL=${GIT_URL} -p SOURCE_REPOSITORY_REF=${BRANCH_NAME} -p OC_NAMESPACE=$PROJECT_PREFIX -p OC_APP=$3 ${@:4} | oc ${MODE} -f - --namespace=$PROJECT_PREFIX-$3"
         oc process -f ./"${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE}" \
         -p NAME="${APP_NAME}" \
-        -p VERSION="${BUILD_NUMBER}" \
         -p SUFFIX="-${BRANCH_LOWER}" \
         -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
@@ -78,7 +76,6 @@ function deploy() {
     then
         oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
         -p NAME="${APP_NAME}" \
-        -p VERSION="${BUILD_NUMBER}" \
         -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
@@ -87,7 +84,6 @@ function deploy() {
     else
         oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
         -p NAME="${APP_NAME}" \
-        -p VERSION="${BUILD_NUMBER}" \
         -p SUFFIX='-'"${BRANCH_LOWER}" \
         -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
@@ -98,7 +94,7 @@ function deploy() {
 }
 
 function toolbelt() {
-    source $2.conf
+    source ./$2.conf
     #OC_APP=tools
     buildPresent=$(oc get bc/"$APP_NAME" --ignore-not-found=true)
     if [ -z "${buildPresent}" ];
@@ -109,14 +105,16 @@ function toolbelt() {
     fi;
     oc process -f ./"${TEMPLATE_DIRECTORY}/$BUILD_CONFIG_TEMPLATE" \
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
+        -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
         -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
         -p OC_NAMESPACE="$PROJECT_PREFIX" \
-        -p OC_APP="$3" ${PIPELINE_ARGS} ${@:4} --output="yaml" | oc $MODE -f - --namespace="$PROJECT_PREFIX-$3"
+        -p OC_APP="$3" ${@:4} --output="yaml" | oc $MODE -f - --namespace="$PROJECT_PREFIX-$3"
     oc process -f "${TEMPLATE_DIRECTORY}/$DEPLOY_CONFIG_TEMPLATE" \
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
+        -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
         -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
         -p OC_NAMESPACE="$PROJECT_PREFIX" \
-        -p OC_APP="$3" ${PIPELINE_ARGS} ${@:4} --output="yaml" | oc $MODE -f - --namespace="$PROJECT_PREFIX-$3"
+        -p OC_APP="$3" ${@:4} --output="yaml" | oc $MODE -f - --namespace="$PROJECT_PREFIX-$3"
     if [ "$BUILD_REQUIRED" == true ];
     then
         echo "Building oc start-build $APP_NAME -n $PROJECT_PREFIX-${OC_APP} --wait --follow ..."
