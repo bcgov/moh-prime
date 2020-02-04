@@ -176,25 +176,5 @@ namespace Prime
                 .AddDbContextCheck<ApiDbContext>("DbContextHealthCheck")
                 .AddNpgSql(connectionString);
         }
-
-        // TODO useful early on but Database.Migrate should be removed prior to
-        // production as it doesn't scale
-        protected virtual void UpdateDatabase(IApplicationBuilder app)
-        {
-            if (app == null)
-            {
-                throw new ArgumentNullException(nameof(app), "Could not update database, the passed in IApplicationBuilder cannot be null.");
-            }
-
-            using (var serviceScope = app.ApplicationServices
-                .GetRequiredService<IServiceScopeFactory>()
-                .CreateScope())
-            {
-                using (var context = serviceScope.ServiceProvider.GetService<ApiDbContext>())
-                {
-                    context.Database.Migrate();
-                }
-            }
-        }
     }
 }
