@@ -84,7 +84,7 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
     }
 
     const data: DialogOptions = {
-      title: 'Confim Email',
+      title: 'Confirm Email',
       message: `Are you sure you want to send your PharmaNet certificate to ${this.vendorEmail.value}?`,
       actionText: 'Send',
     };
