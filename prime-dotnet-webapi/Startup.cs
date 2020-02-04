@@ -96,9 +96,6 @@ namespace Prime
 
             this.ConfigureHealthCheck(app);
 
-            // Update the DB if necessary with new migrations
-            this.UpdateDatabase(app);
-
             // TODO Turn on when there is an actual cert
             // app.UseHttpsRedirection();
 
