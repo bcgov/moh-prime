@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
-namespace Prime.Models
+namespace Prime.Models.Api
 {
     public class ApiResponse
     {
