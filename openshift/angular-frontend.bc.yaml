@@ -49,8 +49,8 @@ objects:
       io.kompose.service: "${NAME}${SUFFIX}"
     name: "${NAME}${SUFFIX}"
   spec:
-    containers:
-    - env:
+    sourceStrategy:
+      env:
       - name: SUFFIX
         value: "${SUFFIX}"
       - name: REDIRECT_URL
@@ -97,7 +97,7 @@ objects:
     labels:
       io.kompose.service: "${NAME}${SUFFIX}"
     name: "${NAME}${SUFFIX}"
-  spec:
+  strategy:
     dockerStrategy: 
       dockerfilePath: openshift.dockerfile
       env:
@@ -147,13 +147,7 @@ objects:
       git:
         ref: "${SOURCE_REPOSITORY_REF}"
         uri: "${SOURCE_REPOSITORY_URL}"
-      type: Git
-    strategy:
-      dockerStrategy: 
-        dockerfilePath: openshift.dockerfile
-        env:
-          - name: SUFFIX
-            value: "${SUFFIX}"            
+      type: Git       
     triggers:
     - type: ConfigChange
     - type: ImageChange
