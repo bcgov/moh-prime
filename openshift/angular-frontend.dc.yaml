@@ -110,14 +110,14 @@ objects:
             timeoutSeconds: 1
           resources: {}
           volumeMounts:
-            - name: vanity-certs
-              mountPath: /etc/nginx/certs
+            - mountPath: /etc/nginx/certs
+              name: vanity-tls-certificates
               readOnly: true
-      volumes:
-        - name: vanity-certs
-          secret:
-            defaultMode: 420
-            secretName: vanity-tls-certificate
+    volumes:
+      - name: vanity-tls-certificates
+        secret:
+          defaultMode: 420
+          secretName: vanity-tls-certificate
     test: false 
     triggers:
       - type: ConfigChange
