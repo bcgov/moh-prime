@@ -23,7 +23,7 @@ ENV DB_CONNECTION_STRING "host=postgres;port=5432;database=postgres;username=pos
 
 WORKDIR /opt/app-root/app
 COPY --from=build /opt/app-root/app/out/ /opt/app-root/app
-COPY --from=build /opt/app-root/app/Configuration/ /opt/app-root/app
+COPY --from=build /opt/app-root/app/Configuration/ /opt/app-root/app/Configuration/
 COPY --from=build /opt/app-root/app/entrypoint.sh /opt/app-root/app
 
 RUN apt-get update && \
