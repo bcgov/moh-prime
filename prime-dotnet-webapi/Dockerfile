@@ -14,7 +14,7 @@ RUN dotnet restore
 COPY . /opt/app-root/app
 
 #RUN dotnet publish -c Release -o /opt/app-root/app/out /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
-RUN dotnet publish -c Release -o /opt/app-root/app/out /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
+RUN dotnet publish -c Release -o /opt/app-root/app/out/ /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
 RUN dotnet tool install --global dotnet-ef --version 3.1.1 && \
     dotnet ef migrations script --idempotent --output /opt/app-root/app/out/databaseMigrations.sql
 
@@ -22,7 +22,7 @@ FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime
 ENV DB_CONNECTION_STRING "host=postgres;port=5432;database=postgres;username=postgres;password=postgres"
 
 WORKDIR /opt/app-root/app
-COPY --from=build /opt/app-root/app/out /opt/app-root/app
+COPY --from=build /opt/app-root/app/out/ /opt/app-root/app
 COPY --from=build /opt/app-root/app/entrypoint.sh /opt/app-root/app
 RUN apt-get update && \
     apt-get install -yqq gpgv gnupg2 wget && \

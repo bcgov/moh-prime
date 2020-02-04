@@ -27,7 +27,7 @@ RUN dotnet restore
 COPY . /opt/app-root/app
 
 # Begin database migration setup
-RUN dotnet publish -c Release -o /opt/app-root/app/out /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
+RUN dotnet publish -c Release -o /opt/app-root/app/out/ /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
 RUN dotnet tool install --global dotnet-ef --version 3.1.1
 RUN dotnet ef migrations script --idempotent --output /opt/app-root/app/out/databaseMigrations.sql
 ENV DB_CONNECTION_STRING "host=postgresql${SUFFIX};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"
@@ -36,7 +36,7 @@ ENV DB_CONNECTION_STRING "host=postgresql${SUFFIX};port=5432;database=${POSTGRES
 FROM docker-registry.default.svc:5000/dqszvc-tools/aspnet:3.1 AS runtime
 
 WORKDIR /opt/app-root/app
-COPY --from=build /opt/app-root/app/out /opt/app-root/app
+COPY --from=build /opt/app-root/app/out/ /opt/app-root/app
 COPY --from=build /opt/app-root/app/entrypoint.sh /opt/app-root/app
 
 RUN apt-get update && \
