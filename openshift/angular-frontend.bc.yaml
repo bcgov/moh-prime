@@ -57,16 +57,6 @@ objects:
         value: "${REDIRECT_URL}"
       - name: OC_APP
         value: ${OC_APP}
-      - name: TLS_CHAIN
-        valueFrom:
-          secretKeyRef:
-            key: authority-chain
-            name: 'frontend-tls-certificate' 
-      - name: TLS_PRIVATE
-        valueFrom:
-          secretKeyRef:
-            key: private-key
-            name: 'frontend-tls-certificate'
       - name: KEYCLOAK_CLIENT_ID
         valueFrom:
           secretKeyRef:
@@ -112,16 +102,6 @@ objects:
         value: "${REDIRECT_URL}"
       - name: OC_APP
         value: ${OC_APP}
-      - name: TLS_CHAIN
-        valueFrom:
-          secretKeyRef:
-            key: authority-chain
-            name: 'frontend-tls-certificate' 
-      - name: TLS_PRIVATE
-        valueFrom:
-          secretKeyRef:
-            key: private-key
-            name: 'frontend-tls-certificate' 
     completionDeadlineSeconds: 6000
     nodeSelector: 
     output:
@@ -148,22 +128,22 @@ objects:
         dockerfilePath: openshift.dockerfile
         env:
           - name: SUFFIX
+            value: "${SUFFIX}"    source:
+      contextDir: "${SOURCE_CONTEXT_DIR}"
+      git:
+        ref: "${SOURCE_REPOSITORY_REF}"
+        uri: "${SOURCE_REPOSITORY_URL}"
+      type: Git
+    strategy:
+      dockerStrategy: 
+        dockerfilePath: openshift.dockerfile
+        env:
+          - name: SUFFIX
             value: "${SUFFIX}"
           - name: REDIRECT_URL
             value: "${REDIRECT_URL}"
           - name: OC_APP
             value: ${OC_APP}
-          - name: TLS_CHAIN
-            valueFrom:
-              secretKeyRef:
-                key: authority-chain
-                name: 'frontend-tls-certificate' 
-          - name: TLS_PRIVATE
-            valueFrom:
-              secretKeyRef:
-                key: private-key
-                name: 'frontend-tls-certificate' 
-      type: Docker
     triggers:
     - type: ConfigChange
     - type: ImageChange
