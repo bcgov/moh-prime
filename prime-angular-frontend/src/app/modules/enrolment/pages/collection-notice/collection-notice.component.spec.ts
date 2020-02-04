@@ -20,6 +20,8 @@ import { CollectionNoticeAlertComponent } from '@enrolment/shared/components/col
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { PrimePhoneComponent } from '@shared/components/prime-phone/prime-phone.component';
 import { PrimeEmailComponent } from '@shared/components/prime-email/prime-email.component';
+import { EnrolmentModule } from '@enrolment/enrolment.module';
+import { SharedModule } from '@shared/shared.module';
 
 describe('CollectionNoticeComponent', () => {
   let component: CollectionNoticeComponent;
@@ -31,17 +33,9 @@ describe('CollectionNoticeComponent', () => {
         imports: [
           RouterTestingModule,
           NgxMaterialModule,
-          NgxBusyModule
-        ],
-        declarations: [
-          AlertComponent,
-          CollectionNoticeComponent,
-          CollectionNoticeAlertComponent,
-          PrimeContactComponent,
-          PrimeEmailComponent,
-          PrimePhoneComponent,
-          PageComponent,
-          PageHeaderComponent
+          NgxBusyModule,
+          EnrolmentModule,
+          SharedModule
         ],
         providers: [
           {

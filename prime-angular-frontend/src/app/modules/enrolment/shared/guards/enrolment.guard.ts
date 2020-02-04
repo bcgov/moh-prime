@@ -118,7 +118,7 @@ export class EnrolmentGuard extends BaseGuard {
     const whiteListedRoutes = [
       EnrolmentRoutes.TERMS_OF_ACCESS,
       EnrolmentRoutes.PHARMANET_TRANSACTIONS,
-      EnrolmentRoutes.ENROLMENT_LOG_HISTORY
+      EnrolmentRoutes.CURRENT_ACCESS_TERM
     ];
     const route = routePath.split('/').pop();
 

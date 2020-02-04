@@ -25,7 +25,8 @@ import { DeclinedAccessAgreementComponent } from './pages/declined-access-agreem
 import { AccessAgreementHistoryComponent } from './pages/access-agreement-history/access-agreement-history.component';
 import { PharmanetEnrolmentCertificateComponent } from './pages/pharmanet-enrolment-certificate/pharmanet-enrolment-certificate.component';
 import { PharmanetTransactionsComponent } from './pages/pharmanet-transactions/pharmanet-transactions.component';
-import { EnrolmentLogHistoryComponent } from './pages/enrolment-log-history/enrolment-log-history.component';
+import { AccessTermsComponent } from './pages/access-terms/access-terms.component';
+import { AccessAgreementCurrentComponent } from './pages/access-agreement-current/access-agreement-current.component';
 
 const routes: Routes = [
   {
@@ -123,9 +124,9 @@ const routes: Routes = [
       // Enrollee history and PharmaNet:
       //
       {
-        path: EnrolmentRoutes.TERMS_OF_ACCESS_HISTORY,
-        component: AccessAgreementHistoryComponent,
-        data: { title: 'Terms of Access History' }
+        path: EnrolmentRoutes.CURRENT_ACCESS_TERM,
+        component: AccessAgreementCurrentComponent,
+        data: { title: 'Terms of Access' }
       },
       {
         path: EnrolmentRoutes.PHARMANET_ENROLMENT_CERTIFICATE,
@@ -138,9 +139,19 @@ const routes: Routes = [
         data: { title: 'PharmaNet Transactions' }
       },
       {
-        path: EnrolmentRoutes.ENROLMENT_LOG_HISTORY,
-        component: EnrolmentLogHistoryComponent,
-        data: { title: 'Enrolment Log History' }
+        path: EnrolmentRoutes.ACCESS_TERMS,
+        children: [
+          {
+            path: '',
+            component: AccessTermsComponent,
+            data: { title: 'PRIME Transaction History' }
+          },
+          {
+            path: ':id',
+            component: AccessAgreementHistoryComponent,
+            data: { title: 'PRIME Transaction History' }
+          }
+        ]
       },
       {
         path: '', // Equivalent to `/` and alias for `overview`
