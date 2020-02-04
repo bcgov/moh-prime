@@ -5,11 +5,11 @@ source tests.bash
 
 case "$1" in
     build)
-        build $@ > # /dev/null 2>&1
+        build $@ #> /dev/null 2>&1
         echo "Extra params= ${@:4}"
         ;;
     deploy)
-        deploy $@ > # /dev/null 2>&1
+        deploy $@ #>  /dev/null 2>&1
         echo "Extra params= ${@:4}"
         ;;
     toolbelt)
