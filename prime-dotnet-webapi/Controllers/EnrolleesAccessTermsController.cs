@@ -10,7 +10,6 @@ using Prime.Models.Api;
 
 namespace Prime.Controllers
 {
-
     [Produces("application/json")]
     [Route("api/enrollees")]
     [ApiController]
