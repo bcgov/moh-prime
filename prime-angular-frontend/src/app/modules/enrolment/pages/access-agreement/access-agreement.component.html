@@ -12,11 +12,12 @@
     <!-- <app-access-terms-pager [accessTerm]="accessTerm"
                             [currentPage]="currentPage"
                             (changed)="onPageChange($event)"></app-access-terms-pager> -->
+    <app-access-term [accessTerms]="accessTerm"></app-access-term>
 
-    <app-ru-access-terms *ngIf="isRu"
+    <!-- <app-ru-access-terms *ngIf="isRu"
                          [accessTerms]="accessTerm"></app-ru-access-terms>
     <app-obo-access-terms *ngIf="isObo"
-                          [accessTerms]="accessTerm"></app-obo-access-terms>
+                          [accessTerms]="accessTerm"></app-obo-access-terms> -->
 
   </ng-container>
 

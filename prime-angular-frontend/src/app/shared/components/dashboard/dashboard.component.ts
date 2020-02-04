@@ -156,12 +156,10 @@ export class DashboardComponent implements OnInit {
             )
           },
           {
-            name: (enrolmentStatus === EnrolmentStatus.ACCEPTED_TOS)
-              ? 'Terms of Access History'
-              : 'Terms of Access',
+            name: 'Terms of Access',
             icon: statusIcons.accessAgreement,
             route: (enrolmentStatus === EnrolmentStatus.ACCEPTED_TOS)
-              ? EnrolmentRoutes.TERMS_OF_ACCESS_HISTORY
+              ? EnrolmentRoutes.CURRENT_ACCESS_TERM
               : EnrolmentRoutes.TERMS_OF_ACCESS,
             showItem: true,
             disabled: (
@@ -217,9 +215,31 @@ export class DashboardComponent implements OnInit {
               ].includes(enrolmentStatus)
             ),
             deemphasize: (!enrolment || (enrolment && !enrolment.profileCompleted)) ? true : false
+          },
+          {
+            name: 'PRIME Transaction History',
+            icon: (
+              progressStatus !== ProgressStatus.FINISHED ||
+              [
+                EnrolmentStatus.DECLINED,
+                EnrolmentStatus.DECLINED_TOS
+              ].includes(enrolmentStatus)
+            )
+              ? 'lock'
+              : 'history',
+            route: EnrolmentRoutes.ACCESS_TERMS,
+            showItem: true,
+            disabled: (
+              progressStatus !== ProgressStatus.FINISHED ||
+              [
+                EnrolmentStatus.DECLINED,
+                EnrolmentStatus.DECLINED_TOS
+              ].includes(enrolmentStatus)
+            ),
+            deemphasize: (!enrolment || (enrolment && !enrolment.profileCompleted)) ? true : false
           }
         ]
-      }
+      },
     ];
   }
 

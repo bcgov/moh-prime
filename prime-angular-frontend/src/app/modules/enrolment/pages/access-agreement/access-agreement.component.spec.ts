@@ -2,9 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-
 import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
-
 import { AccessAgreementComponent } from './access-agreement.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { KeycloakService } from 'keycloak-angular';
