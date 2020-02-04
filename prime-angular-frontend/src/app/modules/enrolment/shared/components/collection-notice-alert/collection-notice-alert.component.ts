@@ -24,6 +24,12 @@ export class CollectionNoticeAlertComponent implements OnInit {
 
   public EnrolmentRoutes = EnrolmentRoutes;
 
+  public get buttonText(): string {
+    return (!this.profileCompleted)
+      ? 'Next'
+      : 'Ok';
+  }
+
   public ngOnInit() {
     this.enrolment = this.enrolmentService.enrolment;
     this.profileCompleted = (this.enrolment) ? this.enrolment.profileCompleted : false;
