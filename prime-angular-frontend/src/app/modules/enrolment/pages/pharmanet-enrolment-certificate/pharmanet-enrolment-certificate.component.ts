@@ -12,6 +12,13 @@ import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { WindowRefService } from '@core/services/window-ref.service';
 import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 import moment from 'moment';
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { FormControlValidators } from '@shared/validators/form-control.validators';
+import { MatDialog } from '@angular/material';
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { exhaustMap } from 'rxjs/operators';
+import { EMPTY } from 'rxjs';
+import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 
 @Component({
   selector: 'app-pharmanet-enrolment-certificate',
@@ -20,9 +27,10 @@ import moment from 'moment';
 })
 export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage implements OnInit {
   public enrolment: Enrolment;
-  public tokens: EnrolmentCertificateAccessToken[];
   public showProgressBar: boolean;
   public expiryDate: string;
+
+  public form: FormGroup;
 
   constructor(
     protected route: ActivatedRoute,
@@ -30,14 +38,17 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
     @Inject(APP_CONFIG) private config: AppConfig,
     private enrolmentResource: EnrolmentResource,
     private enrolmentService: EnrolmentService,
+    private dialog: MatDialog,
     private toastService: ToastService,
     private logger: LoggerService,
-    private windowRef: WindowRefService
+    private windowRef: WindowRefService,
+    private fb: FormBuilder
   ) {
     super(route, router);
-    this.tokens = [];
     this.showProgressBar = false;
+    this.form = this.buildVendorEmailGroup();
   }
+
 
   public get enrollee() {
     return (this.enrolment) ? this.enrolment.enrollee : null;
@@ -63,9 +74,37 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
     return `${this.config.loginRedirectUrl}/provisioner-access/${tokenId}`;
   }
 
-  public generateProvisionerLink() {
-    this.enrolmentResource.createEnrolmentCertificateAccessToken()
-      .subscribe((token: EnrolmentCertificateAccessToken) => this.tokens.push(token));
+  public get vendorEmail(): FormControl {
+    return this.form.get('vendorEmail') as FormControl;
+  }
+
+  public sendProvisionerAccessLink() {
+    if (!this.vendorEmail.value || !this.vendorEmail.valid) {
+      return;
+    }
+
+    const data: DialogOptions = {
+      title: 'Confirm Email',
+      message: `Are you sure you want to send your PharmaNet certificate to ${this.vendorEmail.value}?`,
+      actionText: 'Send',
+    };
+
+    this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result: boolean) =>
+          result
+            ? this.enrolmentResource.sendProvisionerAccessLink(this.vendorEmail.value)
+            : EMPTY
+        )
+      )
+      .subscribe(
+        () => this.toastService.openSuccessToast('Email was successfully sent'),
+        (error: any) => {
+          this.logger.error('[Enrolment] Error occurred sending email', error);
+          this.toastService.openErrorToast('Email could not be sent');
+        }
+      );
   }
 
   public ngOnInit() {
@@ -83,14 +122,11 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
       this.expiryDate = expiryMoment.isAfter(moment.now())
         ? expiryMoment.format('MMMM Do, YYYY') : null;
     }
+  }
 
-    this.busy = this.enrolmentResource.enrolmentCertificateAccessTokens()
-      .subscribe(
-        (tokens: EnrolmentCertificateAccessToken[]) => this.tokens = tokens,
-        (error: any) => {
-          this.toastService.openErrorToast('Access tokens could be found.');
-          this.logger.error('[EnrolmentCertificate] Summary::ngOnInit error has occurred: ', error);
-        }
-      );
+  private buildVendorEmailGroup(): FormGroup {
+    return this.fb.group({
+      vendorEmail: [null, [Validators.required, FormControlValidators.email]],
+    });
   }
 }
