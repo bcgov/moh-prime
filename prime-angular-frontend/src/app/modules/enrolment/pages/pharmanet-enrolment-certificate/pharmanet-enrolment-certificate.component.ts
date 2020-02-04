@@ -14,6 +14,10 @@ import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 import moment from 'moment';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { FormControlValidators } from '@shared/validators/form-control.validators';
+import { MatDialog } from '@angular/material';
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { exhaustMap } from 'rxjs/operators';
+import { EMPTY } from 'rxjs';
 
 @Component({
   selector: 'app-pharmanet-enrolment-certificate',
@@ -22,7 +26,6 @@ import { FormControlValidators } from '@shared/validators/form-control.validator
 })
 export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage implements OnInit {
   public enrolment: Enrolment;
-  public tokens: EnrolmentCertificateAccessToken[];
   public showProgressBar: boolean;
   public expiryDate: string;
 
@@ -34,13 +37,13 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
     @Inject(APP_CONFIG) private config: AppConfig,
     private enrolmentResource: EnrolmentResource,
     private enrolmentService: EnrolmentService,
+    private dialog: MatDialog,
     private toastService: ToastService,
     private logger: LoggerService,
     private windowRef: WindowRefService,
     private fb: FormBuilder
   ) {
     super(route, router);
-    this.tokens = [];
     this.showProgressBar = false;
     this.form = this.buildVendorEmailGroup();
   }
@@ -75,10 +78,25 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
   }
 
   public sendProvisionerAccessLink() {
-    if (this.vendorEmail.value && this.vendorEmail.valid) {
-      this.enrolmentResource.sendProvisionerAccessLink(this.vendorEmail.value)
-        .subscribe((token: EnrolmentCertificateAccessToken) => this.tokens.push(token));
+    if (!this.vendorEmail.value || !this.vendorEmail.valid) {
+      return;
     }
+
+    this.dialog.open(ConfirmDialogComponent).afterClosed()
+      .pipe(
+        exhaustMap((result: boolean) =>
+          result
+            ? this.enrolmentResource.sendProvisionerAccessLink(this.vendorEmail.value)
+            : EMPTY
+        )
+      )
+      .subscribe(
+        () => this.toastService.openSuccessToast('Email was successfully sent'),
+        (error: any) => {
+          this.logger.error('[Enrolment] Error occurred sending email', error);
+          this.toastService.openErrorToast('Email could not be sent');
+        }
+      );
   }
 
   public ngOnInit() {
@@ -96,15 +114,6 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
       this.expiryDate = expiryMoment.isAfter(moment.now())
         ? expiryMoment.format('MMMM Do, YYYY') : null;
     }
-
-    this.busy = this.enrolmentResource.enrolmentCertificateAccessTokens()
-      .subscribe(
-        (tokens: EnrolmentCertificateAccessToken[]) => this.tokens = tokens,
-        (error: any) => {
-          this.toastService.openErrorToast('Access tokens could be found.');
-          this.logger.error('[EnrolmentCertificate] Summary::ngOnInit error has occurred: ', error);
-        }
-      );
   }
 
   private buildVendorEmailGroup(): FormGroup {
