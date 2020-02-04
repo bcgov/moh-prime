@@ -37,6 +37,7 @@ FROM docker-registry.default.svc:5000/dqszvc-tools/aspnet:3.1 AS runtime
 
 WORKDIR /opt/app-root/app
 COPY --from=build /opt/app-root/app/out/ /opt/app-root/app
+COPY --from=build /opt/app-root/app/Configuration/ /opt/app-root/app
 COPY --from=build /opt/app-root/app/entrypoint.sh /opt/app-root/app
 
 RUN apt-get update && \
