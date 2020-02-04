@@ -141,6 +141,11 @@ objects:
                     secretKeyRef:
                       key: database-admin-password
                       name: "postgresql-secret"
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: database-admin-password
+                      name: "postgresql-secret"
                 - name: POSTGRESQL_ADMIN_PASSWORD
                   valueFrom:
                     secretKeyRef:
