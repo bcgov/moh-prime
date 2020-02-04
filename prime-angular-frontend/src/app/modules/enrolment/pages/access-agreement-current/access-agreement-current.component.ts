@@ -1,19 +1,18 @@
 import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { AccessTerm } from '@enrolment/shared/models/access-term.model';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
-import { AuthRoutes } from '@auth/auth.routes';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { AccessTerm } from '@enrolment/shared/models/access-term.model';
 
 @Component({
-  selector: 'app-access-agreement-history',
-  templateUrl: './access-agreement-history.component.html',
-  styleUrls: ['./access-agreement-history.component.scss']
+  selector: 'app-access-agreement-current',
+  templateUrl: './access-agreement-current.component.html',
+  styleUrls: ['./access-agreement-current.component.scss']
 })
-export class AccessAgreementHistoryComponent implements OnInit {
+export class AccessAgreementCurrentComponent implements OnInit {
   public busy: Subscription;
   public accessTerm: AccessTerm;
 
@@ -26,13 +25,12 @@ export class AccessAgreementHistoryComponent implements OnInit {
   ) { }
 
   public ngOnInit() {
-    this.getAccessTerm();
+    this.getAccessTermLatestSigned();
   }
 
-  private getAccessTerm() {
+  private getAccessTermLatestSigned() {
     const enrolleeId = this.enrolmentService.enrolment.id;
-    const accessTermId = this.route.snapshot.params.id;
-    this.busy = this.enrolmentResource.getAccessTerm(enrolleeId, accessTermId)
+    this.busy = this.enrolmentResource.getAccessTermLatest(enrolleeId, true)
       .subscribe(
         (accessTerm: AccessTerm) => {
           this.logger.info('ACCESS TERM', accessTerm);
