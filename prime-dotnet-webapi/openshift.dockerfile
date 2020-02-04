@@ -18,7 +18,7 @@ ENV KEYCLOAK_CLIENT_ID $KEYCLOAK_CLIENT_ID
 ENV JWT_WELL_KNOWN_CONFIG $JWT_WELL_KNOWN_CONFIG
 ENV API_PORT 8080
 COPY *.csproj /opt/app-root/app
-RUN /opt/rh/rh-dotnet31/root/usr/bin/dotnet restore
+RUN dotnet restore
 COPY . /opt/app-root/app
 
 # Begin database migration setup
