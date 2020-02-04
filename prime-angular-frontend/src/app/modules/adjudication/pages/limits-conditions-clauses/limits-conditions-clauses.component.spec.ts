@@ -12,9 +12,7 @@ import { ConfigService } from '@config/config.service';
 import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
 import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
-import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
-import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
-import { PageComponent } from '@shared/components/page/page.component';
+import { AdjudicationModule } from '@adjudication/adjudication.module';
 
 describe('LimitsConditionsClausesComponent', () => {
   let component: LimitsConditionsClausesComponent;
@@ -29,13 +27,8 @@ describe('LimitsConditionsClausesComponent', () => {
         NgxContextualHelpModule,
         NgxMaterialModule,
         ReactiveFormsModule,
-        RouterTestingModule
-      ],
-      declarations: [
-        LimitsConditionsClausesComponent,
-        PageComponent,
-        PageHeaderComponent,
-        FormatDatePipe
+        RouterTestingModule,
+        AdjudicationModule
       ],
       providers: [
         {
