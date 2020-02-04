@@ -14,6 +14,8 @@ import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.mod
 import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
+// import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
+import { RouterModule } from '@angular/router';
 
 describe('CollectionNoticeComponent', () => {
   let component: CollectionNoticeComponent;
@@ -26,7 +28,8 @@ describe('CollectionNoticeComponent', () => {
           RouterTestingModule,
           NgxMaterialModule,
           NgxBusyModule,
-          EnrolmentModule
+          EnrolmentModule,
+          RouterModule.forRoot([])
         ],
         providers: [
           {

@@ -14,6 +14,7 @@ import { MockConfigService } from 'test/mocks/mock-config.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { EnrolmentCertificateModule } from '../../provisioner-access.module';
+import { CoreModule } from '@core/core.module';
 
 describe('CertificateComponent', () => {
   let component: CertificateComponent;
@@ -29,7 +30,8 @@ describe('CertificateComponent', () => {
           NgxMaterialModule,
           RouterTestingModule,
           HttpClientTestingModule,
-          EnrolmentCertificateModule
+          EnrolmentCertificateModule,
+          CoreModule
         ],
         providers: [
           {
