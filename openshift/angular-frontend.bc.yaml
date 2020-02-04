@@ -61,22 +61,22 @@ objects:
         valueFrom:
           secretKeyRef:
             key: KEYCLOAK_CLIENT_ID
-            name: keycloak
+            name: 'keycloak'
       - name: KEYCLOAK_REALM
         valueFrom:
           secretKeyRef:
             key: KEYCLOAK_REALM
-            name: keycloak
+            name: 'keycloak'
       - name: KEYCLOAK_URL
         valueFrom:
           secretKeyRef:
             key: KEYCLOAK_URL
-            name: keycloak
+            name: 'keycloak'
       - name: JWT_WELL_KNOWN_CONFIG
         valueFrom:
           secretKeyRef:
             key: JWT_WELL_KNOWN_CONFIG
-            name: keycloak
+            name: 'keycloak'
     tags:
     - annotations: 
       from:

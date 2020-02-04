@@ -14,7 +14,9 @@ ENV KEYCLOAK_REALM "${KEYCLOAK_REALM}"
 ENV KEYCLOAK_CLIENT_ID "${KEYCLOAK_CLIENT_ID}"
 ENV JWT_WELL_KNOWN_CONFIG "${JWT_WELL_KNOWN_CONFIG}"
 
-RUN (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
+RUN echo "Importing Keycloak values..." && \
+    echo "Keycloak URL = ${KEYCLOAK_URL}" && \
+    (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
 RUN cat /usr/src/app/src/environments/environment.prod.ts && \
     npm install @angular/cli -g --silent && \ 
     npm install && \
