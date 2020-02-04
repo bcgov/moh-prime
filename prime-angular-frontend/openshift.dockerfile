@@ -9,9 +9,11 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 COPY . .
-ENV KEYCLOAK_URL $KEYCLOAK_URL
-ENV KEYCLOAK_REALM=$KEYCLOAK_REALM
-ENV KEYCLOAK_CLIENT_ID=$KEYCLOAK_CLIENT_ID
+ENV KEYCLOAK_URL "${KEYCLOAK_URL}"
+ENV KEYCLOAK_REALM "${KEYCLOAK_REALM}"
+ENV KEYCLOAK_CLIENT_ID "${KEYCLOAK_CLIENT_ID}"
+ENV JWT_WELL_KNOWN_CONFIG "${JWT_WELL_KNOWN_CONFIG}"
+
 RUN (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
 RUN cat /usr/src/app/src/environments/environment.prod.ts && \
     npm install @angular/cli -g --silent && \ 
@@ -21,6 +23,11 @@ RUN cat /usr/src/app/src/environments/environment.prod.ts && \
     echo "NPM packages installed..." 
 
 FROM nginx:1.15-alpine
+ENV KEYCLOAK_URL "${KEYCLOAK_URL}"
+ENV KEYCLOAK_REALM "${KEYCLOAK_REALM}"
+ENV KEYCLOAK_CLIENT_ID "${KEYCLOAK_CLIENT_ID}"
+ENV JWT_WELL_KNOWN_CONFIG "${JWT_WELL_KNOWN_CONFIG}"
+
 COPY --from=build-deps /usr/src/app/dist/angular-frontend /usr/share/nginx/html
 RUN rm -f /etc/nginx/conf.d/default.conf 
 COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/
