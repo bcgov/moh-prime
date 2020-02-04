@@ -94,7 +94,7 @@ namespace Prime
                 app.UseDeveloperExceptionPage();
             }
 
-            this.ConfigureHealthCheck(app);
+            // this.ConfigureHealthCheck(app);
 
             // TODO Turn on when there is an actual cert
             // app.UseHttpsRedirection();
@@ -119,39 +119,39 @@ namespace Prime
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHealthChecks("/health");
+                // endpoints.MapHealthChecks("/health");
             });
         }
 
-        protected virtual void ConfigureHealthCheck(IApplicationBuilder app)
-        {
-            // Health check output
-            var healthCheckOptions = new HealthCheckOptions
-            {
-                ResponseWriter = async (c, r) =>
-                {
-                    c.Response.ContentType = MediaTypeNames.Application.Json;
+        // protected virtual void ConfigureHealthCheck(IApplicationBuilder app)
+        // {
+        //     // Health check output
+        //     var healthCheckOptions = new HealthCheckOptions
+        //     {
+        //         ResponseWriter = async (c, r) =>
+        //         {
+        //             c.Response.ContentType = MediaTypeNames.Application.Json;
 
-                    var result = JsonConvert.SerializeObject(
-                        new
-                        {
-                            checks = r.Entries.Select(e =>
-                            new
-                            {
-                                description = e.Key,
-                                status = e.Value.Status.ToString(),
-                                responseTime = e.Value.Duration.TotalMilliseconds
-                            }),
-                            totalResponseTime = r.TotalDuration.TotalMilliseconds
-                        });
+        //             var result = JsonConvert.SerializeObject(
+        //                 new
+        //                 {
+        //                     checks = r.Entries.Select(e =>
+        //                     new
+        //                     {
+        //                         description = e.Key,
+        //                         status = e.Value.Status.ToString(),
+        //                         responseTime = e.Value.Duration.TotalMilliseconds
+        //                     }),
+        //                     totalResponseTime = r.TotalDuration.TotalMilliseconds
+        //                 });
 
-                    await c.Response.WriteAsync(result);
-                }
-            };
+        //             await c.Response.WriteAsync(result);
+        //         }
+        //     };
 
-            // Enable healthchecks for an single endpoint
-            app.UseHealthChecks("/healthcheck", healthCheckOptions);
-        }
+        //     // Enable healthchecks for an single endpoint
+        //     app.UseHealthChecks("/healthcheck", healthCheckOptions);
+        // }
 
         protected virtual void ConfigureDatabase(IServiceCollection services)
         {
