@@ -18,6 +18,7 @@ import { MatDialog } from '@angular/material';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { exhaustMap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
+import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 
 @Component({
   selector: 'app-pharmanet-enrolment-certificate',
@@ -82,7 +83,14 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
       return;
     }
 
-    this.dialog.open(ConfirmDialogComponent).afterClosed()
+    const data: DialogOptions = {
+      title: 'Confim Email',
+      message: `Are you sure you want to send your PharmaNet certificate to ${this.vendorEmail.value}?`,
+      actionText: 'Send',
+    };
+
+    this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
       .pipe(
         exhaustMap((result: boolean) =>
           result
