@@ -20,15 +20,18 @@ namespace Prime.Controllers
         private readonly IEnrolleeService _enrolleeService;
         private readonly IAccessTermService _accessTermService;
         private readonly IEnrolleeProfileVersionService _enrolleeProfileVersionService;
+        private readonly IEmailService _emailService;
 
         public EnrolleesController(
             IEnrolleeService enrolleeService,
             IAccessTermService accessTermService,
-            IEnrolleeProfileVersionService enrolleeProfileVersionService)
+            IEnrolleeProfileVersionService enrolleeProfileVersionService,
+            IEmailService emailService)
         {
             _enrolleeService = enrolleeService;
             _accessTermService = accessTermService;
             _enrolleeProfileVersionService = enrolleeProfileVersionService;
+            _emailService = emailService;
         }
 
         // GET: api/Enrollees
@@ -457,36 +460,6 @@ namespace Prime.Controllers
             return Ok(new ApiOkResponse<IEnrolleeNote>(updatedNote));
         }
 
-        // GET: api/Enrollees/5/access-terms
-        /// <summary>
-        /// Get the enrolmee's terms of access.
-        /// </summary>
-        /// <param name="enrolleeId"></param>
-        [HttpGet("{enrolleeId}/access-terms", Name = nameof(GetAccessTerms))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiOkResponse<AccessTerm>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<AccessTerm>> GetAccessTerms(int enrolleeId)
-        {
-            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
-            {
-                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
-            }
-
-            // Prevent access to the enrollee's current terms of access based on status
-            if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.IN_PROGRESS_CODE, Status.DECLINED_CODE, Status.DECLINED_TOS_CODE))
-            {
-                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee terms of service can not be retrieved when the current status is 'IN_PROGRESS', 'DECLINED', or 'DECLINED_TOA'.");
-                return BadRequest(new ApiBadRequestResponse(this.ModelState));
-            }
-
-            var accessTerms = await _accessTermService.GetEnrolleeAccessTermsAsync(enrolleeId);
-
-            return Ok(new ApiOkResponse<AccessTerm>(accessTerms));
-        }
-
         // GET: api/Enrollees/5/versions
         /// <summary>
         /// Get a list of enrolmee profile versions.
@@ -576,6 +549,14 @@ namespace Prime.Controllers
             var updatedEnrollee = await _enrolleeService.UpdateEnrolleeAlwaysManualAsync(enrolleeId, alwaysManual);
 
             return Ok(new ApiOkResponse<Enrollee>(updatedEnrollee));
+        }
+
+        [HttpPost("email-test", Name = nameof(SendEmail))]
+        [Authorize(Policy = PrimeConstants.ADMIN_POLICY)]
+        public async Task<ActionResult<string>> SendEmail([FromQuery]string email)
+        {
+            _emailService.Send("Prime@gov.bc.ca", email, "a subject", "a body");
+            return Ok(new ApiOkResponse<string>(email));
         }
     }
 }

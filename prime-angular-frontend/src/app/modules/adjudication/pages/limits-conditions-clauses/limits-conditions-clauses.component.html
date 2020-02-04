@@ -132,17 +132,22 @@
     <div class="row mb-4">
       <div class="col-sm-12 col-lg-8">
 
-        <mat-form-field class="w-100">
-          <textarea matInput
-                    placeholder="Write Note Here"
-                    rows="10"
-                    formControlName="note"></textarea>
-          <mat-error>Required</mat-error>
-        </mat-form-field>
+        <editor class="mb-4"
+                initialValue=""
+                formControlName="note"
+                [init]="{
+                  height: '25rem',
+                  base_url: '/tinymce',
+                  suffix: '.min',
+                  plugins: 'lists advlist',
+                  toolbar: 'undo redo | bold italic underline | bullist numlist outdent indent | removeformat',
+                  menubar: 'false'
+                }">
+        </editor>
 
         <div class="text-right">
           <button mat-flat-button
-                  color="primary">Save Note</button>
+                  color="primary">Save Clause</button>
         </div>
 
       </div>

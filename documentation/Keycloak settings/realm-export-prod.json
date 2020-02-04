@@ -1494,6 +1494,7 @@
         "uiLocales": "",
         "jwksUrl": "https://id.gov.bc.ca/oauth2/jwk.json",
         "backchannelSupported": "true",
+        "issuer": "https://id.gov.bc.ca/oauth2/",
         "useJwksUrl": "true",
         "loginHint": "",
         "authorizationUrl": "https://id.gov.bc.ca/login/oidc/authorize",
@@ -1611,7 +1612,7 @@
       "identityProviderAlias": "bcsc",
       "identityProviderMapper": "oidc-username-idp-mapper",
       "config": {
-        "template": "${CLAIM}.sub"
+        "template": "${CLAIM.sub}"
       }
     },
     {
@@ -1661,6 +1662,7 @@
       "identityProviderMapper": "oidc-user-attribute-idp-mapper",
       "config": {
         "user.attribute": "displayName",
+        "claim": "display_name",
         "claim.value": "display_name"
       }
     },

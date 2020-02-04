@@ -10,6 +10,9 @@ export interface AccessTerm {
   licenseClassClauses: Clause[];
   limitsConditionsClause: Clause;
   effectiveDate: string;
+  createdDate: string;
+  acceptedDate?: string;
+  expiryDate?: string;
 }
 
 export interface Clause {
