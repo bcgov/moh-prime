@@ -30,6 +30,8 @@ ENV DB_CONNECTION_STRING "host=postgresql${SUFFIX};port=5432;database=${POSTGRES
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime
 WORKDIR /opt/app-root/app
 COPY --from=build /opt/app-root/app/out /opt/app-root/app
+COPY --from=build /opt/app-root/app/entrypoint.sh /opt/app-root/app
+
 RUN apt-get update && \
     apt-get install -yqq gpgv gnupg2 wget && \
     echo 'deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main' >  /etc/apt/sources.list.d/pgdg.list && \
