@@ -117,7 +117,7 @@ objects:
         - name: vanity-certs
           secret:
             secretName: vanity-tls-certificate
-        restartPolicy: Always
+      restartPolicy: Always
     test: false 
     triggers:
       - type: ConfigChange
