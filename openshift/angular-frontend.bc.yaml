@@ -107,6 +107,26 @@ objects:
         value: "${REDIRECT_URL}"
       - name: OC_APP
         value: ${OC_APP}
+      - name: KEYCLOAK_CLIENT_ID
+        valueFrom:
+          secretKeyRef:
+            key: KEYCLOAK_CLIENT_ID
+            name: 'keycloak'
+      - name: KEYCLOAK_REALM
+        valueFrom:
+          secretKeyRef:
+            key: KEYCLOAK_REALM
+            name: 'keycloak'
+      - name: KEYCLOAK_URL
+        valueFrom:
+          secretKeyRef:
+            key: KEYCLOAK_URL
+            name: 'keycloak'
+      - name: JWT_WELL_KNOWN_CONFIG
+        valueFrom:
+          secretKeyRef:
+            key: JWT_WELL_KNOWN_CONFIG
+            name: 'keycloak'
     completionDeadlineSeconds: 6000
     nodeSelector: 
     output:
@@ -133,22 +153,7 @@ objects:
         dockerfilePath: openshift.dockerfile
         env:
           - name: SUFFIX
-            value: "${SUFFIX}"    source:
-      contextDir: "${SOURCE_CONTEXT_DIR}"
-      git:
-        ref: "${SOURCE_REPOSITORY_REF}"
-        uri: "${SOURCE_REPOSITORY_URL}"
-      type: Git
-    strategy:
-      dockerStrategy: 
-        dockerfilePath: openshift.dockerfile
-        env:
-          - name: SUFFIX
-            value: "${SUFFIX}"
-          - name: REDIRECT_URL
-            value: "${REDIRECT_URL}"
-          - name: OC_APP
-            value: ${OC_APP}
+            value: "${SUFFIX}"            
     triggers:
     - type: ConfigChange
     - type: ImageChange
