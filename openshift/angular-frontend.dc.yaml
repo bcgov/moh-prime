@@ -78,21 +78,6 @@ objects:
             value: ${OC_APP}
           - name: REDIRECT_URL
             value: "${REDIRECT_URL}"
-          - name: TLS_CHAIN
-            valueFrom:
-              secretKeyRef:
-                key: authority-chain
-                name: "frontend-tls-certificate" 
-          - name: TLS_PRIVATE
-            valueFrom:
-              secretKeyRef:
-                key: private-key
-                name: "frontend-tls-certificate"
-          - name: TLS_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                key: database-admin-password
-                name: "postgresql-secret"
           - name: KEYCLOAK_CLIENT_ID
             valueFrom:
               secretKeyRef:
