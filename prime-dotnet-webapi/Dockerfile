@@ -25,7 +25,7 @@ WORKDIR /opt/app-root/app
 COPY --from=build /opt/app-root/app/out /opt/app-root/app
 
 RUN apt-get update && \
-    apt-get install -yqq gpgv wget && \
+    apt-get install -yqq gpgv gnupg2 wget && \
     echo 'deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main' >  /etc/apt/sources.list.d/pgdg.list && \
     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
     apt-get update && \
