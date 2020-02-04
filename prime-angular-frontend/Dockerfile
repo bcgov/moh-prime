@@ -5,7 +5,7 @@ FROM node:10.16 as build-deps
 ENV NODE_ROOT /usr/src/app
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
-
+ENV API_PORT 8080
 COPY . .
 
 RUN npm install @angular/cli -g && \
