@@ -124,6 +124,14 @@ objects:
             successThreshold: 1
             timeoutSeconds: 1
           resources: {}
+          volumeMounts:
+            - name: vanity-certs
+              mountPath: /etc/nginx/certs
+              readOnly: true
+      volumes:
+        - name: vanity-certs
+          secret:
+            secretName: vanity-tls-certificate
         restartPolicy: Always
     test: false 
     triggers:
