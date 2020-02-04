@@ -24,26 +24,22 @@ COPY . /opt/app-root/app
 # Begin database migration setup
 RUN dotnet publish -c Release -o /opt/app-root/app/out /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
 RUN dotnet tool install --global dotnet-ef --version 3.1.1
-RUN dotnet ef migrations script --idempotent --output /opt/app-root/app/databaseMigrations.sql
-
+RUN dotnet ef migrations script --idempotent --output /opt/app-root/app/out/databaseMigrations.sql
+ENV DB_CONNECTION_STRING "host=postgresql${SUFFIX};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"
 #FROM docker-registry.default.svc:5000/dqszvc-tools/dotnet-22-runtime-rhel7 AS runtime
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime
 WORKDIR /opt/app-root/app
 COPY --from=build /opt/app-root/app/out /opt/app-root/app
-RUN apt update -y && \
-    echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -sc)-pgdg main" > /etc/apt/sources.list.d/PostgreSQL.list  && \
+RUN apt-get update && \
+    apt-get install -yqq gpgv wget && \
+    echo 'deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main' >  /etc/apt/sources.list.d/pgdg.list && \
     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
     apt-get update && \
-    apt-get install -yqq --no-install-recommends postgresql-client-10
-
-#FROM registry.redhat.io/dotnet/dotnet-30-runtime-rhel7 as runtime
-
-EXPOSE 8080 5001 1025
-COPY entrypoint.sh .
-
-RUN chmod +x entrypoint.sh && \
+    apt-get install -yqq --no-install-recommends postgresql-client-10 && \
+    chmod +x entrypoint.sh && \
     chmod 777 entrypoint.sh && \
     chmod -R 777 /opt/app-root && \
-    chmod -R 777 /opt/app-root/.*
+    chmod -R 777 /opt/app-root/.* 
 
+EXPOSE 8080 5001 1025
 ENTRYPOINT [ "./entrypoint.sh" ]
