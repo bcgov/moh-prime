@@ -1,17 +1,8 @@
 #!/bin/bash
-#dotnet prime.dll
+echo "Running the migrations..."
+psql -d postgres -f databaseMigration.sql
 
 echo "Resting 5 seconds to let things settle down..."
-sleep 5
-
-#echo "Running database update..."
-#dotnet ef database update -v
-
-#echo "Generating upgrade scripts..."
-#dotnet ef migrations script --idempotent --output "${WORKDIR}/databaseMigrations.sql"
-
-echo "Resting 5 seconds to let things settle down..."
-sleep 5
 
 echo "Running .NET..."
 dotnet prime.dll -v &disown

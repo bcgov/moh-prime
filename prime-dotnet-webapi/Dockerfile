@@ -14,15 +14,21 @@ RUN dotnet restore
 COPY . /opt/app-root/app
 
 #RUN dotnet publish -c Release -o /opt/app-root/app/out /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
-RUN dotnet publish -c Release -o /opt/app-root/app/ /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
+RUN dotnet publish -c Release -o /opt/app-root/app/out /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
 RUN dotnet tool install --global dotnet-ef --version 3.1.1 && \
-    dotnet ef migrations script --idempotent --output /opt/app-root/app/databaseMigrations.sql
+    dotnet ef migrations script --idempotent --output /opt/app-root/app/out/databaseMigrations.sql
 
-# FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime
+RUN apt update -y && \
+    echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -sc)-pgdg main" > /etc/apt/sources.list.d/PostgreSQL.list  && \
+    wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
+    apt-get update && \
+    apt-get install -yqq --no-install-recommends postgresql-client-10
+
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime
 ENV DB_CONNECTION_STRING "host=postgres;port=5432;database=postgres;username=postgres;password=postgres"
 ENV API_PORT 8080
 WORKDIR /opt/app-root/app
-#COPY --from=build /opt/app-root/app/out /opt/app-root/app
+COPY --from=build /opt/app-root/app/out /opt/app-root/app
 EXPOSE 8080 5001 1025
 COPY entrypoint.sh .
 
