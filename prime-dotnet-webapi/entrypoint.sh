@@ -5,7 +5,7 @@ psql -h $DB_HOST -U ${POSTGRESQL_USER} -d ${POSTGRESQL_DATABASE} -a -f databaseM
 echo "Resting 5 seconds to let things settle down..."
 
 echo "Running .NET..."
-dotnet prime.dll -v &disown
+dotnet prime.dll -v #&disown
 
 echo "Launched, waiting for connection to API internally..."
 

@@ -38,6 +38,6 @@ RUN apt-get update && \
 EXPOSE 8080 5001 1025
 #COPY entrypoint.sh .
 
-USER 10000
+#USER 10000
 
 ENTRYPOINT [ "./entrypoint.sh" ]
