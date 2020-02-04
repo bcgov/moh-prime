@@ -2,8 +2,10 @@
 #FROM docker-registry.default.svc:5000/dqszvc-tools/dotnet-31-rhel7 AS build
 FROM docker-registry.default.svc:5000/dqszvc-tools/sdk:3.1 AS build
 WORKDIR /opt/app-root/app
+
 USER 0
-RUN ls -alh /opt/app-root/ && \
+RUN ls -alh /opt; \
+    mkdir -p /opt/app-root; \
     mkdir -p /opt/app-root/app
 
 ENV PATH="$PATH:/opt/rh/rh-dotnet31/root/usr/bin/:/opt/app-root/.dotnet/tools:/root/.dotnet/tools"
