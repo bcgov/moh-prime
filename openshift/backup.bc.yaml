@@ -43,8 +43,8 @@ objects:
           annotations: null
           from:
             kind: ImageStreamTag
-            name: '${NAME}${SUFFIX}:latest'
-            namespace: openshift
+            name: 'postgresql:10.6'
+            namespace: dqszvc-tools
           generation: 1
           importPolicy: {}
           referencePolicy:
