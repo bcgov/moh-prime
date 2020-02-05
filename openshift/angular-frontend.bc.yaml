@@ -100,36 +100,28 @@ objects:
   spec:
     nodeSelector: null
     strategy:
-      dockerStrategy: {}
-      type: Docker
-      dockerfilePath: openshift.dockerfile
-      env:
-        - name: SUFFIX
-          value: ${SUFFIX}
-        - name: REDIRECT_URL
-          value: ${REDIRECT_URL}
-        - name: OC_APP
-          value: ${OC_APP}
-        - name: keycloakClientID
-          valueFrom:
-            secretKeyRef:
-              key: KEYCLOAK_CLIENT_ID
-              name: 'keycloak'
-        - name: keycloakRealm
-          valueFrom:
-            secretKeyRef:
-              key: KEYCLOAK_REALM
-              name: 'keycloak'
-        - name: keycloakURL
-          valueFrom:
-            secretKeyRef:
-              key: KEYCLOAK_URL
-              name: 'keycloak'
-        - name: jwtConfig
-          valueFrom:
-            secretKeyRef:
-              key: JWT_WELL_KNOWN_CONFIG
-              name: 'keycloak'
+      dockerStrategy:
+        env:
+          - name: JWT_WELL_KNOWN_CONFIG
+            valueFrom:
+              secretKeyRef:
+                key: JWT_WELL_KNOWN_CONFIG
+                name: keycloak
+          - name: KEYCLOAK_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                key: KEYCLOAK_CLIENT_ID
+                name: keycloak
+          - name: KEYCLOAK_REALM
+            valueFrom:
+              secretKeyRef:
+                key: KEYCLOAK_REALM
+                name: keycloak
+          - name: KEYCLOAK_URL
+            valueFrom:
+              secretKeyRef:
+                key: KEYCLOAK_URL
+                name: keycloak
     completionDeadlineSeconds: 6000
     output:
       to:
