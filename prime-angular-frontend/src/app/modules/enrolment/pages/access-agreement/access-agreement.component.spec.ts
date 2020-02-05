@@ -11,7 +11,6 @@ import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
-import { SharedModule } from '@shared/shared.module';
 
 describe('AccessAgreementComponent', () => {
   let component: AccessAgreementComponent;
@@ -27,8 +26,7 @@ describe('AccessAgreementComponent', () => {
           NgxMaterialModule,
           ReactiveFormsModule,
           RouterTestingModule,
-          EnrolmentModule,
-          SharedModule
+          EnrolmentModule
         ],
         providers: [
           {

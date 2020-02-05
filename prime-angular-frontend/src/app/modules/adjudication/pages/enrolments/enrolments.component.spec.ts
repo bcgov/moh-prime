@@ -11,10 +11,7 @@ import { ConfigService } from '@config/config.service';
 import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
 import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
-import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
-import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
-import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
-import { PageComponent } from '@shared/components/page/page.component';
+import { AdjudicationModule } from '@adjudication/adjudication.module';
 
 describe('EnrolmentsComponent', () => {
   let component: EnrolmentsComponent;
@@ -29,14 +26,8 @@ describe('EnrolmentsComponent', () => {
           NgxBusyModule,
           NgxContextualHelpModule,
           NgxMaterialModule,
-          RouterTestingModule
-        ],
-        declarations: [
-          EnrolmentsComponent,
-          PageComponent,
-          PageHeaderComponent,
-          PageSubheaderComponent,
-          FormatDatePipe
+          RouterTestingModule,
+          AdjudicationModule
         ],
         providers: [
           {
