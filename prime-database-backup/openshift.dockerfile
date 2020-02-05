@@ -1,11 +1,10 @@
-FROM ubuntu:18.04
+FROM docker-registry.default.svc:5000/dqszvc-tools/ubuntu:18.04
 USER 0
-
-ENV POSTGRESQL_PASSWORD "postgres"
-ENV PGPASSWORD "postgres"
-ENV POSTGRESQL_DATABASE "postgres"
-ENV POSTGRESQL_ADMIN_PASSWORD "postgres"
-ENV POSTGRESQL_USER "postgres"
+ENV PGPASSWORD "${POSTGRESQL_ADMIN_PASSWORD}"
+ENV POSTGRESQL_PASSWORD "${POSTGRESQL_ADMIN_PASSWORD}"
+ENV POSTGRESQL_DATABASE "${POSTGRESQL_DATABASE}"
+ENV POSTGRESQL_ADMIN_PASSWORD "${POSTGRESQL_ADMIN_PASSWORD}"
+ENV POSTGRESQL_USER "${POSTGRESQL_USER}"
 RUN apt-get update && \
     apt-get install -yqq wget curl nano net-utils nmap && \
     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
