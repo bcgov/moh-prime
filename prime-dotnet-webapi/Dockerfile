@@ -20,6 +20,9 @@ RUN dotnet tool install --global dotnet-ef --version 3.1.1 && \
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime
 ENV DB_CONNECTION_STRING "host=postgres;port=5432;database=postgres;username=postgres;password=postgres"
+ENV DB_HOST primedb
+ENV POSTGRES_USER postgres
+ENV POSTGRESQL_DATABASE postgres
 
 WORKDIR /opt/app-root/app
 COPY --from=build /opt/app-root/app/out/ /opt/app-root/app
