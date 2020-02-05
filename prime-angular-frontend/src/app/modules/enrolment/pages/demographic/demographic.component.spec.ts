@@ -15,19 +15,8 @@ import { ConfigService } from '@config/config.service';
 import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
 import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
-import { PageComponent } from '@shared/components/page/page.component';
-import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
-import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
 import { AuthService } from '@auth/shared/services/auth.service';
-import { AddressComponent } from '@shared/components/forms/address/address.component';
-import { PageFooterComponent } from '@enrolment/shared/components/page-footer/page-footer.component';
-import { ProgressIndicatorComponent } from '@shared/components/progress-indicator/progress-indicator.component';
-import { EnrolleeProfileComponent } from '@shared/components/enrollee/enrollee-profile/enrollee-profile.component';
-import { DefaultPipe } from '@shared/pipes/default.pipe';
-import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
-import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
-import { ConfigCodePipe } from '@config/config-code.pipe';
-import { PostalPipe } from '@shared/pipes/postal.pipe';
+import { EnrolmentModule } from '@enrolment/enrolment.module';
 
 describe('DemographicComponent', () => {
   let component: DemographicComponent;
@@ -44,22 +33,8 @@ describe('DemographicComponent', () => {
           NgxMaskModule.forRoot(),
           NgxMaterialModule,
           ReactiveFormsModule,
-          RouterTestingModule
-        ],
-        declarations: [
-          DemographicComponent,
-          AddressComponent,
-          PageHeaderComponent,
-          PageSubheaderComponent,
-          ProgressIndicatorComponent,
-          EnrolleeProfileComponent,
-          PageComponent,
-          PageFooterComponent,
-          PostalPipe,
-          ConfigCodePipe,
-          DefaultPipe,
-          EnrolleePipe,
-          FormatDatePipe
+          RouterTestingModule,
+          EnrolmentModule
         ],
         providers: [
           {

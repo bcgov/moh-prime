@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 
-namespace Prime.Models
+namespace Prime.Models.Api
 {
     public class ApiOkResponse<T> : ApiResponse where T : class
     {
