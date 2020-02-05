@@ -3,21 +3,18 @@ FROM node:10.16 as build-deps
 #SHELL [ "/bin/bash","-c"]
 # set working directory
 ENV NODE_ROOT /usr/src/app
-ENV REDIRECT_URL=$REDIRECT_URL
-ENV KEYCLOAK_URL=$keycloakURL
-ENV KEYCLOAK_REALM=$keycloakRealm
-ENV KEYCLOAK_CLIENT_ID=$keycloakClientID
-ENV JWT_WELL_KNOWN_CONFIG=$jwtConfig
-
+ENV REDIRECT_URL $REDIRECT_URL
 ENV OC_APP $OC_APP
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 COPY . .
+ENV KEYCLOAK_URL $KEYCLOAK_URL
+ENV KEYCLOAK_REALM $KEYCLOAK_REALM
+ENV KEYCLOAK_CLIENT_ID $KEYCLOAK_CLIENT_ID
+ENV JWT_WELL_KNOWN_CONFIG $JWT_WELL_KNOWN_CONFIG
 
-RUN echo "Importing Keycloak values..." && \
-    echo "Keycloak URL = ${KEYCLOAK_URL}" && \
-    echo "Redirect URL = ${REDIRECT_URL}"  && \
+RUN echo "Populating environment..." && \
     (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
 RUN cat /usr/src/app/src/environments/environment.prod.ts && \
     npm install @angular/cli -g --silent && \ 
@@ -27,12 +24,6 @@ RUN cat /usr/src/app/src/environments/environment.prod.ts && \
     echo "NPM packages installed..." 
 
 FROM nginx:1.15-alpine
-USER 0
-ENV REDIRECT_URL=$REDIRECT_URL
-ENV KEYCLOAK_URL=$keycloakURL
-ENV KEYCLOAK_REALM=$keycloakRealm
-ENV KEYCLOAK_CLIENT_ID=$keycloakClientID
-ENV JWT_WELL_KNOWN_CONFIG=$jwtConfig
 COPY --from=build-deps /usr/src/app/dist/angular-frontend /usr/share/nginx/html
 RUN rm -f /etc/nginx/conf.d/default.conf 
 COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/
@@ -48,7 +39,6 @@ RUN mkdir -p /var/cache/nginx && \
     chown -R 1001:1001 /etc/nginx && \
     chmod -R 777 /etc/nginx && \
     chmod -R 777 /var/cache/nginx && \ 
-    touch /var/run/nginx.pid && \
     chmod -R 777 /var/run && \
     chmod +x /home/entrypoint.sh && \
     chmod 777 /home/entrypoint.sh && \
