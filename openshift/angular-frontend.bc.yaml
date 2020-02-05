@@ -49,8 +49,8 @@ objects:
       io.kompose.service: "${NAME}${SUFFIX}"
     name: "${NAME}${SUFFIX}"
   spec:
-    sourceStrategy:
-      env:
+    containers:
+    - env:
         - name: SUFFIX
           value: "${SUFFIX}"
         - name: REDIRECT_URL
@@ -99,7 +99,8 @@ objects:
     name: "${NAME}${SUFFIX}"
   spec:
     strategy:
-      dockerStrategy: 
+      dockerStrategy: {}
+      type: Docker
         dockerfilePath: openshift.dockerfile
         env:
         - name: SUFFIX
@@ -154,3 +155,4 @@ objects:
       - type: ImageChange
   status:
     lastVersion: 0
+    git, binary, dockerfile, image

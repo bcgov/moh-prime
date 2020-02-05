@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace Prime.Models
+namespace Prime.Models.Api
 {
     public class ApiBadRequestResponse : ApiResponse
     {
@@ -13,14 +13,14 @@ namespace Prime.Models
         public ApiBadRequestResponse(ModelStateDictionary modelState)
             : base(StatusCodes.Status400BadRequest)
         {
-            if (modelState != null
-                    && modelState.IsValid)
+            if (modelState?.IsValid == true)
             {
                 throw new ArgumentException("ModelState must be invalid", nameof(modelState));
             }
 
-            Errors = modelState.SelectMany(x => x.Value.Errors)
-                .Select(x => x.ErrorMessage).ToArray();
+            Errors = modelState
+                .SelectMany(x => x.Value.Errors)
+                .Select(x => x.ErrorMessage);
         }
     }
 }

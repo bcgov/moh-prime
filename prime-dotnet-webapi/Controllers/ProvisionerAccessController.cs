@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using Prime.Models;
+using Prime.Models.Api;
 using Prime.Services;
 
 namespace Prime.Controllers
@@ -18,11 +19,13 @@ namespace Prime.Controllers
     {
         private readonly IEnrolleeService _enrolleeService;
         private readonly IEnrolmentCertificateService _certificateService;
+        private readonly IEmailService _emailService;
 
-        public ProvisionerAccessController(IEnrolleeService enrolleeService, IEnrolmentCertificateService enrolmentCertificateService)
+        public ProvisionerAccessController(IEnrolleeService enrolleeService, IEnrolmentCertificateService enrolmentCertificateService, IEmailService emailService)
         {
             _enrolleeService = enrolleeService;
             _certificateService = enrolmentCertificateService;
+            _emailService = emailService;
         }
 
         // GET: api/provisioner-access/certificate/{guid}
@@ -61,31 +64,39 @@ namespace Prime.Controllers
         }
 
 
-        // POST: api/provisioner-access/token
+        // POST: api/provisioner-access/send-link
         /// <summary>
-        /// Creates an EnrolmentCertificateAccessToken for the user if the user has a finished enrolment.
+        /// Creates an EnrolmentCertificateAccessToken for the user if the user has a finished enrolment,
+        /// then sends the link to a recipient by email.
         /// </summary>
-        [HttpPost("token", Name = nameof(CreateEnrolmentCertificateAccessToken))]
+        [HttpPost("send-link", Name = nameof(SendProvisionerLink))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiOkResponse<EnrolmentCertificateAccessToken>), StatusCodes.Status201Created)]
         [Authorize(Policy = PrimeConstants.USER_POLICY)]
-        public async Task<ActionResult<EnrolmentCertificateAccessToken>> CreateEnrolmentCertificateAccessToken()
+        public async Task<ActionResult<EnrolmentCertificateAccessToken>> SendProvisionerLink(FromBodyText recipientEmail)
         {
+            if (!EmailService.IsValidEmail(recipientEmail))
+            {
+                this.ModelState.AddModelError("Recipient Email", "The recipient email provided is not valid.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
+
             var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(User.GetPrimeUserId());
             if (enrollee == null)
             {
                 this.ModelState.AddModelError("Enrollee.UserId", "No enrollee exists for this User Id.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
-            if (enrollee.CurrentStatus?.Status.Code != Status.ACCEPTED_TOS_CODE)
+            if (enrollee.ProgressStatus != ProgressStatusType.FINISHED)
             {
                 this.ModelState.AddModelError("Enrollee.UserId", "The enrollee for this User Id is not in a finished state.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
             var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrollee);
+            await _emailService.SendProvisionerLinkAsync(recipientEmail, createdToken);
 
             return CreatedAtAction(nameof(GetEnrolmentCertificate), new { accessTokenId = createdToken.Id }, new ApiCreatedResponse<EnrolmentCertificateAccessToken>(createdToken));
         }

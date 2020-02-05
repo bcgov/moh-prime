@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 
 using Prime.Models;
 using Prime.Services;
+using Prime.Models.Api;
 
 namespace Prime.Controllers
 {
-
     [Produces("application/json")]
     [Route("api/enrollees")]
     [ApiController]
