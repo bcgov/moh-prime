@@ -101,51 +101,51 @@ objects:
     nodeSelector: null
     strategy:
       dockerStrategy: {}
-        type: Docker
-        dockerfilePath: openshift.dockerfile
-        env:
-          - name: JWT_WELL_KNOWN_CONFIG
-            valueFrom:
-              secretKeyRef:
-                key: JWT_WELL_KNOWN_CONFIG
-                name: keycloak
-          - name: KEYCLOAK_CLIENT_ID
-            valueFrom:
-              secretKeyRef:
-                key: KEYCLOAK_CLIENT_ID
-                name: keycloak
-          - name: KEYCLOAK_REALM
-            valueFrom:
-              secretKeyRef:
-                key: KEYCLOAK_REALM
-                name: keycloak
-          - name: KEYCLOAK_URL
-            valueFrom:
-              secretKeyRef:
-                key: KEYCLOAK_URL
-                name: keycloak
-    completionDeadlineSeconds: 6000
-    output:
-      to:
-        kind: ImageStreamTag
-        name: "${NAME}${SUFFIX}:latest"
-    postCommit: {}
-    resources:
-      requests:
-        cpu: '1'
-        memory: 1Gi
-      limits:
-        cpu: '2'
-        memory: 4Gi
-    runPolicy: Serial
-    source:
-      contextDir: "${SOURCE_CONTEXT_DIR}"
-      git:
-        ref: "${SOURCE_REPOSITORY_REF}"
-        uri: "${SOURCE_REPOSITORY_URL}"
-      type: Git       
-    triggers:
-    - type: ConfigChange
-    - type: ImageChange
+      type: Docker
+      dockerfilePath: openshift.dockerfile
+      env:
+        - name: JWT_WELL_KNOWN_CONFIG
+          valueFrom:
+            secretKeyRef:
+              key: JWT_WELL_KNOWN_CONFIG
+              name: keycloak
+        - name: KEYCLOAK_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              key: KEYCLOAK_CLIENT_ID
+              name: keycloak
+        - name: KEYCLOAK_REALM
+          valueFrom:
+            secretKeyRef:
+              key: KEYCLOAK_REALM
+              name: keycloak
+        - name: KEYCLOAK_URL
+          valueFrom:
+            secretKeyRef:
+              key: KEYCLOAK_URL
+              name: keycloak
+      completionDeadlineSeconds: 6000
+      output:
+        to:
+          kind: ImageStreamTag
+          name: "${NAME}${SUFFIX}:latest"
+      postCommit: {}
+      resources:
+        requests:
+          cpu: '1'
+          memory: 1Gi
+        limits:
+          cpu: '2'
+          memory: 4Gi
+      runPolicy: Serial
+      source:
+        contextDir: "${SOURCE_CONTEXT_DIR}"
+        git:
+          ref: "${SOURCE_REPOSITORY_REF}"
+          uri: "${SOURCE_REPOSITORY_URL}"
+        type: Git       
+      triggers:
+      - type: ConfigChange
+      - type: ImageChange
 status:
   lastVersion: 0
