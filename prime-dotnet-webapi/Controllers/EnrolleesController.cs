@@ -350,15 +350,15 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiCreatedResponse<AdjudicatorNote>), StatusCodes.Status201Created)]
         public async Task<ActionResult<AdjudicatorNote>> CreateAdjudicatorNote(int enrolleeId, FromBodyText note)
         {
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
+            {
+                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
+            }
+
             if (string.IsNullOrWhiteSpace(note))
             {
                 this.ModelState.AddModelError("note", "Adjudicator notes can't be null or empty.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
-            }
-
-            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
-            {
-                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
 
             // Notes can not be added to 'In Progress' enrolments
