@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Prime.Models;
 using Prime.Services;
 
@@ -13,12 +14,12 @@ namespace PrimeTests.Mocks
             // no data to seed, as it is done in the base class
         }
 
-        public void Send(string from, string to, string subject, string body)
+        public Task SendProvisionerLinkAsync(string provisionerEmail, EnrolmentCertificateAccessToken token)
         {
             throw new System.NotImplementedException();
         }
 
-        public void SendReminderEmail(Enrollee enrollee)
+        public Task SendReminderEmailAsync(Enrollee enrollee)
         {
             throw new System.NotImplementedException();
         }
