@@ -4,10 +4,10 @@ FROM node:10.16 as build-deps
 # set working directory
 ENV NODE_ROOT /usr/src/app
 ENV REDIRECT_URL=$REDIRECT_URL
-ENV KEYCLOAK_URL=$KEYCLOAK_URL
-ENV KEYCLOAK_REALM=$KEYCLOAK_REALM
-ENV KEYCLOAK_CLIENT_ID=$KEYCLOAK_CLIENT_ID
-ENV JWT_WELL_KNOWN_CONFIG=$JWT_WELL_KNOWN_CONFIG
+ENV KEYCLOAK_URL=$keycloakURL
+ENV KEYCLOAK_REALM=$keycloakRealm
+ENV KEYCLOAK_CLIENT_ID=$keycloakClientID
+ENV JWT_WELL_KNOWN_CONFIG=$jwtConfig
 
 ENV OC_APP $OC_APP
 RUN mkdir -p /usr/src/app
@@ -27,11 +27,11 @@ RUN cat /usr/src/app/src/environments/environment.prod.ts && \
     echo "NPM packages installed..." 
 
 FROM nginx:1.15-alpine
-ARG KEYCLOAK_URL="${KEYCLOAK_URL}"
-ARG KEYCLOAK_REALM="${KEYCLOAK_REALM}"
-ARG KEYCLOAK_CLIENT_ID="${KEYCLOAK_CLIENT_ID}"
-ARG JWT_WELL_KNOWN_CONFIG=x"${JWT_WELL_KNOWN_CONFIG}"
-
+ENV REDIRECT_URL=$REDIRECT_URL
+ENV KEYCLOAK_URL=$keycloakURL
+ENV KEYCLOAK_REALM=$keycloakRealm
+ENV KEYCLOAK_CLIENT_ID=$keycloakClientID
+ENV JWT_WELL_KNOWN_CONFIG=$jwtConfig
 COPY --from=build-deps /usr/src/app/dist/angular-frontend /usr/share/nginx/html
 RUN rm -f /etc/nginx/conf.d/default.conf 
 COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/

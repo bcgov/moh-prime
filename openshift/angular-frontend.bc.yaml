@@ -110,27 +110,27 @@ objects:
           value: ${REDIRECT_URL}
         - name: OC_APP
           value: ${OC_APP}
-        - name: KEYCLOAK_CLIENT_ID
+        - name: keycloakClientID
           valueFrom:
             secretKeyRef:
               key: KEYCLOAK_CLIENT_ID
               name: 'keycloak'
-        - name: KEYCLOAK_REALM
+        - name: keycloakRealm
           valueFrom:
             secretKeyRef:
               key: KEYCLOAK_REALM
               name: 'keycloak'
-        - name: KEYCLOAK_URL
+        - name: keycloakURL
           valueFrom:
             secretKeyRef:
               key: KEYCLOAK_URL
               name: 'keycloak'
-        - name: JWT_WELL_KNOWN_CONFIG
+        - name: jwtConfig
           valueFrom:
             secretKeyRef:
               key: JWT_WELL_KNOWN_CONFIG
               name: 'keycloak'
-      completionDeadlineSeconds: 6000
+    completionDeadlineSeconds: 6000
     output:
       to:
         kind: ImageStreamTag
