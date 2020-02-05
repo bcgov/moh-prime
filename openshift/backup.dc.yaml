@@ -164,7 +164,7 @@ objects:
                     - '-c'
                     - >-
                       psql -h 127.0.0.1 -d postgres -U
-                      $POSTGRESQL_USER -c 'SELECT 1'
+                      $PGUSER -c 'SELECT 1'
                 initialDelaySeconds: 5
                 timeoutSeconds: 1
               resources:
@@ -199,7 +199,7 @@ objects:
             from:
               kind: ImageStreamTag
               name: 'postgresql:10.6'
-              namespace: ${OC_NAMESPACE}-tools
+              namespace: dqszvc-tools
             lastTriggeredImage: ''
           type: ImageChange
         - type: ConfigChange
