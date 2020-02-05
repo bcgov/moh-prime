@@ -27,6 +27,7 @@ RUN cat /usr/src/app/src/environments/environment.prod.ts && \
     echo "NPM packages installed..." 
 
 FROM nginx:1.15-alpine
+USER 0
 ENV REDIRECT_URL=$REDIRECT_URL
 ENV KEYCLOAK_URL=$keycloakURL
 ENV KEYCLOAK_REALM=$keycloakRealm
@@ -47,6 +48,7 @@ RUN mkdir -p /var/cache/nginx && \
     chown -R 1001:1001 /etc/nginx && \
     chmod -R 777 /etc/nginx && \
     chmod -R 777 /var/cache/nginx && \ 
+    touch /var/run/nginx.pid && \
     chmod -R 777 /var/run && \
     chmod +x /home/entrypoint.sh && \
     chmod 777 /home/entrypoint.sh && \
