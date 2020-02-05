@@ -75,8 +75,9 @@ export class EnrolmentResource {
       );
   }
 
-  public createEnrolmentCertificateAccessToken(): Observable<EnrolmentCertificateAccessToken> {
-    return this.http.post(`${this.config.apiEndpoint}/provisioner-access/token`, {})
+  public sendProvisionerAccessLink(recipientEmail: string): Observable<EnrolmentCertificateAccessToken> {
+    const payload = { data: recipientEmail };
+    return this.http.post(`${this.config.apiEndpoint}/provisioner-access/send-link`, payload)
       .pipe(
         map((response: PrimeHttpResponse) => response.result as EnrolmentCertificateAccessToken),
         tap((token: EnrolmentCertificateAccessToken) => this.logger.info('ACCESS_TOKEN', token))

@@ -16,28 +16,37 @@ namespace Prime.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
+                .HasAnnotation("ProductVersion", "3.1.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("Prime.Models.AccessAgreementNote", b =>
                 {
                     b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("EnrolleeId");
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
 
-                    b.Property<string>("Note");
+                    b.Property<string>("Note")
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("NoteDate");
+                    b.Property<DateTime>("NoteDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -50,29 +59,42 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.AccessTerm", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime?>("AcceptedDate");
+                    b.Property<DateTime?>("AcceptedDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("CreatedDate");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("EnrolleeId");
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
 
-                    b.Property<DateTime?>("ExpiryDate");
+                    b.Property<DateTime?>("ExpiryDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("GlobalClauseId");
+                    b.Property<int>("GlobalClauseId")
+                        .HasColumnType("integer");
 
-                    b.Property<int?>("LimitsConditionsClauseId");
+                    b.Property<int?>("LimitsConditionsClauseId")
+                        .HasColumnType("integer");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("UserClauseId");
+                    b.Property<int>("UserClauseId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -89,9 +111,11 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.AccessTermLicenseClassClause", b =>
                 {
-                    b.Property<int>("AccessTermId");
+                    b.Property<int>("AccessTermId")
+                        .HasColumnType("integer");
 
-                    b.Property<int>("LicenseClassClauseId");
+                    b.Property<int>("LicenseClassClauseId")
+                        .HasColumnType("integer");
 
                     b.HasKey("AccessTermId", "LicenseClassClauseId");
 
@@ -103,31 +127,45 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.Address", b =>
                 {
                     b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int>("AddressType");
+                    b.Property<int>("AddressType")
+                        .HasColumnType("integer");
 
-                    b.Property<string>("City");
+                    b.Property<string>("City")
+                        .HasColumnType("text");
 
-                    b.Property<string>("CountryCode");
+                    b.Property<string>("CountryCode")
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("EnrolleeId");
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
 
-                    b.Property<string>("Postal");
+                    b.Property<string>("Postal")
+                        .HasColumnType("text");
 
-                    b.Property<string>("ProvinceCode");
+                    b.Property<string>("ProvinceCode")
+                        .HasColumnType("text");
 
-                    b.Property<string>("Street");
+                    b.Property<string>("Street")
+                        .HasColumnType("text");
 
-                    b.Property<string>("Street2");
+                    b.Property<string>("Street2")
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -147,22 +185,31 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.AdjudicatorNote", b =>
                 {
                     b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("EnrolleeId");
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Note")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("NoteDate");
+                    b.Property<DateTime>("NoteDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -173,17 +220,23 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.AssignedPrivilege", b =>
                 {
-                    b.Property<int>("PrivilegeId");
+                    b.Property<int>("PrivilegeId")
+                        .HasColumnType("integer");
 
-                    b.Property<int>("EnrolleeId");
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("PrivilegeId", "EnrolleeId");
 
@@ -195,28 +248,40 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.Certification", b =>
                 {
                     b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<short>("CollegeCode");
+                    b.Property<short>("CollegeCode")
+                        .HasColumnType("smallint");
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("EnrolleeId");
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
 
-                    b.Property<short>("LicenseCode");
+                    b.Property<short>("LicenseCode")
+                        .HasColumnType("smallint");
 
                     b.Property<string>("LicenseNumber")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<short?>("PracticeCode");
+                    b.Property<short?>("PracticeCode")
+                        .HasColumnType("smallint");
 
-                    b.Property<DateTime>("RenewalDate");
+                    b.Property<DateTime>("RenewalDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -234,20 +299,28 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.College", b =>
                 {
                     b.Property<short>("Code")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<string>("Prefix");
+                    b.Property<string>("Prefix")
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Code");
 
@@ -288,17 +361,23 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.CollegeLicense", b =>
                 {
-                    b.Property<short>("CollegeCode");
+                    b.Property<short>("CollegeCode")
+                        .HasColumnType("smallint");
 
-                    b.Property<short>("LicenseCode");
+                    b.Property<short>("LicenseCode")
+                        .HasColumnType("smallint");
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("CollegeCode", "LicenseCode");
 
@@ -815,17 +894,23 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.CollegePractice", b =>
                 {
-                    b.Property<short>("CollegeCode");
+                    b.Property<short>("CollegeCode")
+                        .HasColumnType("smallint");
 
-                    b.Property<short>("PracticeCode");
+                    b.Property<short>("PracticeCode")
+                        .HasColumnType("smallint");
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("CollegeCode", "PracticeCode");
 
@@ -875,18 +960,23 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.Country", b =>
                 {
                     b.Property<string>("Code")
-                        .ValueGeneratedOnAdd();
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Code");
 
@@ -915,17 +1005,23 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.DefaultPrivilege", b =>
                 {
-                    b.Property<int>("PrivilegeId");
+                    b.Property<int>("PrivilegeId")
+                        .HasColumnType("integer");
 
-                    b.Property<short>("LicenseCode");
+                    b.Property<short>("LicenseCode")
+                        .HasColumnType("smallint");
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("PrivilegeId", "LicenseCode");
 
@@ -4737,69 +4833,100 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.Enrollee", b =>
                 {
                     b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<bool>("AlwaysManual");
+                    b.Property<bool>("AlwaysManual")
+                        .HasColumnType("boolean");
 
-                    b.Property<string>("ContactEmail");
+                    b.Property<string>("ContactEmail")
+                        .HasColumnType("text");
 
-                    b.Property<string>("ContactPhone");
+                    b.Property<string>("ContactPhone")
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<DateTime>("DateOfBirth");
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("DeviceProviderNumber")
+                        .HasColumnType("character varying(5)")
                         .HasMaxLength(5);
 
                     b.Property<string>("FirstName")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<bool?>("HasConviction");
+                    b.Property<bool?>("HasConviction")
+                        .HasColumnType("boolean");
 
-                    b.Property<string>("HasConvictionDetails");
+                    b.Property<string>("HasConvictionDetails")
+                        .HasColumnType("text");
 
-                    b.Property<bool?>("HasDisciplinaryAction");
+                    b.Property<bool?>("HasDisciplinaryAction")
+                        .HasColumnType("boolean");
 
-                    b.Property<string>("HasDisciplinaryActionDetails");
+                    b.Property<string>("HasDisciplinaryActionDetails")
+                        .HasColumnType("text");
 
-                    b.Property<bool?>("HasPharmaNetSuspended");
+                    b.Property<bool?>("HasPharmaNetSuspended")
+                        .HasColumnType("boolean");
 
-                    b.Property<string>("HasPharmaNetSuspendedDetails");
+                    b.Property<string>("HasPharmaNetSuspendedDetails")
+                        .HasColumnType("text");
 
-                    b.Property<bool?>("HasRegistrationSuspended");
+                    b.Property<bool?>("HasRegistrationSuspended")
+                        .HasColumnType("boolean");
 
-                    b.Property<string>("HasRegistrationSuspendedDetails");
+                    b.Property<string>("HasRegistrationSuspendedDetails")
+                        .HasColumnType("text");
 
-                    b.Property<bool?>("IsInsulinPumpProvider");
+                    b.Property<bool?>("IsInsulinPumpProvider")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("LastName")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("LicensePlate")
+                        .HasColumnType("character varying(20)")
                         .HasMaxLength(20);
 
-                    b.Property<string>("MiddleName");
+                    b.Property<string>("MiddleName")
+                        .HasColumnType("text");
 
-                    b.Property<string>("PreferredFirstName");
+                    b.Property<string>("PreferredFirstName")
+                        .HasColumnType("text");
 
-                    b.Property<string>("PreferredLastName");
+                    b.Property<string>("PreferredLastName")
+                        .HasColumnType("text");
 
-                    b.Property<string>("PreferredMiddleName");
+                    b.Property<string>("PreferredMiddleName")
+                        .HasColumnType("text");
 
-                    b.Property<bool>("ProfileCompleted");
+                    b.Property<bool>("ProfileCompleted")
+                        .HasColumnType("boolean");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<Guid>("UserId");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<string>("VoiceExtension");
+                    b.Property<string>("VoiceExtension")
+                        .HasColumnType("text");
 
-                    b.Property<string>("VoicePhone");
+                    b.Property<string>("VoicePhone")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -4812,23 +4939,31 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.EnrolleeProfileVersion", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedDate");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("EnrolleeId");
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("ProfileSnapshot")
                         .IsRequired()
                         .HasColumnType("json");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -4840,24 +4975,33 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.EnrolmentCertificateAccessToken", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
 
-                    b.Property<bool>("Active");
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
                     b.Property<int?>("EnrolleeId")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("integer");
 
-                    b.Property<DateTime>("Expires");
+                    b.Property<DateTime>("Expires")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("ViewCount");
+                    b.Property<int>("ViewCount")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -4869,21 +5013,30 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.EnrolmentCertificateNote", b =>
                 {
                     b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("EnrolleeId");
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
 
-                    b.Property<string>("Note");
+                    b.Property<string>("Note")
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("NoteDate");
+                    b.Property<DateTime>("NoteDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -4896,23 +5049,33 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.EnrolmentStatus", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("EnrolleeId");
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
 
-                    b.Property<bool>("PharmaNetStatus");
+                    b.Property<bool>("PharmaNetStatus")
+                        .HasColumnType("boolean");
 
-                    b.Property<short>("StatusCode");
+                    b.Property<short>("StatusCode")
+                        .HasColumnType("smallint");
 
-                    b.Property<DateTime>("StatusDate");
+                    b.Property<DateTime>("StatusDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -4926,21 +5089,30 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.EnrolmentStatusReason", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("EnrolmentStatusId");
+                    b.Property<int>("EnrolmentStatusId")
+                        .HasColumnType("integer");
 
-                    b.Property<string>("ReasonNote");
+                    b.Property<string>("ReasonNote")
+                        .HasColumnType("text");
 
-                    b.Property<short>("StatusReasonCode");
+                    b.Property<short>("StatusReasonCode")
+                        .HasColumnType("smallint");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -4954,20 +5126,28 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.GlobalClause", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Clause")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<DateTime>("EffectiveDate");
+                    b.Property<DateTime>("EffectiveDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -4989,20 +5169,28 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.Job", b =>
                 {
                     b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("EnrolleeId");
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Title")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -5014,18 +5202,25 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.JobName", b =>
                 {
                     b.Property<short>("Code")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Code");
 
@@ -5073,20 +5268,28 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.License", b =>
                 {
                     b.Property<short>("Code")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<bool>("Manual");
+                    b.Property<bool>("Manual")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Code");
 
@@ -5678,20 +5881,28 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.LicenseClassClause", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Clause")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<DateTime>("EffectiveDate");
+                    b.Property<DateTime>("EffectiveDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -5723,21 +5934,30 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.LimitsConditionsClause", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<string>("Clause");
+                    b.Property<string>("Clause")
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<DateTime>("EffectiveDate");
+                    b.Property<DateTime>("EffectiveDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("EnrolleeId");
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -5749,19 +5969,27 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.Organization", b =>
                 {
                     b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("EnrolleeId");
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
 
-                    b.Property<short>("OrganizationTypeCode");
+                    b.Property<short>("OrganizationTypeCode")
+                        .HasColumnType("smallint");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -5775,18 +6003,25 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.OrganizationType", b =>
                 {
                     b.Property<short>("Code")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Code");
 
@@ -5834,18 +6069,25 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.Practice", b =>
                 {
                     b.Property<short>("Code")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Code");
 
@@ -5893,21 +6135,30 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.Privilege", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
 
-                    b.Property<short>("PrivilegeGroupCode");
+                    b.Property<short>("PrivilegeGroupCode")
+                        .HasColumnType("smallint");
 
-                    b.Property<string>("TransactionType");
+                    b.Property<string>("TransactionType")
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -6130,19 +6381,27 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.PrivilegeGroup", b =>
                 {
                     b.Property<short>("Code")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
 
-                    b.Property<short>("PrivilegeTypeCode");
+                    b.Property<short>("PrivilegeTypeCode")
+                        .HasColumnType("smallint");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Code");
 
@@ -6206,17 +6465,24 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.PrivilegeType", b =>
                 {
                     b.Property<short>("Code")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Code");
 
@@ -6246,21 +6512,27 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.Province", b =>
                 {
                     b.Property<string>("Code")
-                        .ValueGeneratedOnAdd();
+                        .HasColumnType("text");
 
                     b.Property<string>("CountryCode")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Code");
 
@@ -6974,17 +7246,24 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.Status", b =>
                 {
                     b.Property<short>("Code")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Code");
 
@@ -7050,17 +7329,24 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.StatusReason", b =>
                 {
                     b.Property<short>("Code")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Code");
 
@@ -7180,23 +7466,32 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.UserClause", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Clause")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<DateTime>("EffectiveDate");
+                    b.Property<DateTime>("EffectiveDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("EnrolleeClassification")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -8173,7 +8468,8 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithOne("AccessAgreementNote")
                         .HasForeignKey("Prime.Models.AccessAgreementNote", "EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.AccessTerm", b =>
@@ -8181,12 +8477,14 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany("AccessTerms")
                         .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Prime.Models.GlobalClause", "GlobalClause")
                         .WithMany()
                         .HasForeignKey("GlobalClauseId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Prime.Models.LimitsConditionsClause", "LimitsConditionsClause")
                         .WithMany()
@@ -8195,7 +8493,8 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.UserClause", "UserClause")
                         .WithMany()
                         .HasForeignKey("UserClauseId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.AccessTermLicenseClassClause", b =>
@@ -8203,12 +8502,14 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.AccessTerm", "AccessTerm")
                         .WithMany("AccessTermLicenseClassClauses")
                         .HasForeignKey("AccessTermId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Prime.Models.LicenseClassClause", "LicenseClassClause")
                         .WithMany("AccessTermLicenseClassClauses")
                         .HasForeignKey("LicenseClassClauseId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.Address", b =>
@@ -8227,7 +8528,8 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany("AdjudicatorNotes")
                         .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.AssignedPrivilege", b =>
@@ -8235,12 +8537,14 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany("AssignedPrivileges")
                         .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Prime.Models.Privilege", "Privilege")
                         .WithMany("AssignedPrivileges")
                         .HasForeignKey("PrivilegeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.Certification", b =>
@@ -8248,17 +8552,20 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.College", "College")
                         .WithMany("Certifications")
                         .HasForeignKey("CollegeCode")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany("Certifications")
                         .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Prime.Models.License", "License")
                         .WithMany("Certifications")
                         .HasForeignKey("LicenseCode")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Prime.Models.Practice", "Practice")
                         .WithMany("Certifications")
@@ -8270,12 +8577,14 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.College", "College")
                         .WithMany("CollegeLicenses")
                         .HasForeignKey("CollegeCode")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Prime.Models.License", "License")
                         .WithMany("CollegeLicenses")
                         .HasForeignKey("LicenseCode")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.CollegePractice", b =>
@@ -8283,12 +8592,14 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.College", "College")
                         .WithMany("CollegePractices")
                         .HasForeignKey("CollegeCode")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Prime.Models.Practice", "Practice")
                         .WithMany("CollegePractices")
                         .HasForeignKey("PracticeCode")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.DefaultPrivilege", b =>
@@ -8296,12 +8607,14 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.License", "License")
                         .WithMany("DefaultPrivileges")
                         .HasForeignKey("LicenseCode")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Prime.Models.Privilege", "Privilege")
                         .WithMany("DefaultPrivileges")
                         .HasForeignKey("PrivilegeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.EnrolleeProfileVersion", b =>
@@ -8309,7 +8622,8 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany("EnrolleeProfileVersions")
                         .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.EnrolmentCertificateAccessToken", b =>
@@ -8317,7 +8631,8 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany()
                         .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.EnrolmentCertificateNote", b =>
@@ -8325,7 +8640,8 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithOne("EnrolmentCertificateNote")
                         .HasForeignKey("Prime.Models.EnrolmentCertificateNote", "EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.EnrolmentStatus", b =>
@@ -8333,12 +8649,14 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany("EnrolmentStatuses")
                         .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Prime.Models.Status", "Status")
                         .WithMany("EnrolmentStatuses")
                         .HasForeignKey("StatusCode")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.EnrolmentStatusReason", b =>
@@ -8346,12 +8664,14 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.EnrolmentStatus", "EnrolmentStatus")
                         .WithMany("EnrolmentStatusReasons")
                         .HasForeignKey("EnrolmentStatusId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Prime.Models.StatusReason", "StatusReason")
                         .WithMany("EnrolmentStatusReasons")
                         .HasForeignKey("StatusReasonCode")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.Job", b =>
@@ -8359,7 +8679,8 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany("Jobs")
                         .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.LimitsConditionsClause", b =>
@@ -8367,7 +8688,8 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany()
                         .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.Organization", b =>
@@ -8375,12 +8697,14 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany("Organizations")
                         .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Prime.Models.OrganizationType", "OrganizationType")
                         .WithMany("Organizations")
                         .HasForeignKey("OrganizationTypeCode")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.Privilege", b =>
@@ -8388,7 +8712,8 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.PrivilegeGroup", "PrivilegeGroup")
                         .WithMany("Privileges")
                         .HasForeignKey("PrivilegeGroupCode")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.PrivilegeGroup", b =>
@@ -8396,7 +8721,8 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.PrivilegeType", "PrivilegeType")
                         .WithMany("PrivilegeGroups")
                         .HasForeignKey("PrivilegeTypeCode")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.Province", b =>
@@ -8404,7 +8730,8 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Country", "Country")
                         .WithMany()
                         .HasForeignKey("CountryCode")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.MailingAddress", b =>
@@ -8412,7 +8739,8 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithOne("MailingAddress")
                         .HasForeignKey("Prime.Models.MailingAddress", "EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.PhysicalAddress", b =>
@@ -8421,7 +8749,8 @@ namespace Prime.Migrations
                         .WithOne("PhysicalAddress")
                         .HasForeignKey("Prime.Models.PhysicalAddress", "EnrolleeId")
                         .HasConstraintName("FK_Address_Enrollee_EnrolleeId1")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
