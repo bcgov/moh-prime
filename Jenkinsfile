@@ -2,11 +2,9 @@ pipeline {
     agent none
     environment {
         BRANCH_LOWER=BRANCH_NAME.toLowerCase()
-        VANITY_URL="angular-frontend-${BRANCH_LOWER}-dqszvc-dev.pathfinder.gov.bc.ca"
-        HTTP_SCHEMA="http"
-        HTTP_PORT="8080"
-        FRONTEND_ARGS="-p HTTP_PORT=${HTTP_PORT} -p HTTP_SCHEMA=${HTTP_SCHEMA} TERMINATION_TYPE='Edge' -p REDIRECT_URL=${HTTP_SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL}"
-        API_ARGS="-p ASPNETCORE_ENVIRONMENT=Development -p HTTP_PORT=${HTTP_PORT} -p HTTP_SCHEMA=${HTTP_SCHEMA} -p VANITY_URL=${VANITY_URL}"
+        VANITY_URL="${BRANCH_LOWER}.pharmanetenrolment.gov.bc.ca"
+        FRONTEND_ARGS="-p HTTP_PORT=8080 -p HTTP_SCHEMA=http -p REDIRECT_URL=http://${VANITY_URL} -p VANITY_URL=${VANITY_URL}"
+        API_ARGS="-p ASPNETCORE_ENVIRONMENT=Development -p HTTP_PORT=8080 -p HTTP_SCHEMA=http -p VANITY_URL=${VANITY_URL}"
     }
     options {
         disableResume()
@@ -19,6 +17,7 @@ pipeline {
             when { expression { ( GIT_BRANCH != 'master' ) } }
             agent { label 'master' }
             steps {
+                checkout scm
                 echo "Building ..."
                 sh "./player.sh build database dev"
                 sh "./player.sh build api dev ${API_ARGS}"
