@@ -6,8 +6,7 @@ import { AdminComponent } from './admin.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
-import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
-import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
+import { AuthModule } from '@auth/auth.module';
 
 describe('AdminComponent', () => {
   let component: AdminComponent;
@@ -17,12 +16,8 @@ describe('AdminComponent', () => {
     TestBed.configureTestingModule(
       {
         imports: [
-          NgxContextualHelpModule
-        ],
-        declarations: [
-          AdminComponent,
-          PageHeaderComponent,
-          PageSubheaderComponent
+          NgxContextualHelpModule,
+          AuthModule
         ],
         providers: [
           {
