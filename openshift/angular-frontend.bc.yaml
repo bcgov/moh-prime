@@ -100,7 +100,9 @@ objects:
   spec:
     nodeSelector: null
     strategy:
-      dockerStrategy:
+      dockerStrategy: {}
+      type: Docker
+      dockerfilePath: openshift.dockerfile
         env:
           - name: JWT_WELL_KNOWN_CONFIG
             valueFrom:
