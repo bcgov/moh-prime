@@ -1,0 +1,32 @@
+@import 'palette';
+
+.preview {
+  color: theme-palette(grey, dark);
+
+  h1 {
+    font-size: 1.2rem;
+    text-align: center;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .italic {
+    font-style: italic;
+  }
+
+  .bold {
+    font-weight: bold;
+  }
+
+  .underline {
+    text-decoration: underline;
+  }
+
+  .text-indent {
+    text-indent: 1rem;
+  }
+
+  li {
+    margin-bottom: 1rem;
+  }
+}
