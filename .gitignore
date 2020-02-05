@@ -6,4 +6,8 @@ documentation/~$PRIME Test Cases and Results.xlsx
 BuildReports/
 
 # Visual Studio Code
-.vscode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
