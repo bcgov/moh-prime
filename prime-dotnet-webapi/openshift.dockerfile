@@ -33,7 +33,7 @@ RUN dotnet ef migrations script --idempotent --output /opt/app-root/app/out/data
 #FROM docker-registry.default.svc:5000/dqszvc-tools/dotnet-22-runtime-rhel7 AS runtime
 #FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime
 FROM docker-registry.default.svc:5000/dqszvc-tools/aspnet:3.1 AS runtime
-
+USER 0
 ENV PATH="$PATH:/opt/rh/rh-dotnet31/root/usr/bin/:/opt/app-root/.dotnet/tools:/root/.dotnet/tools"
 ENV ASPNETCORE_ENVIRONMENT "${ASPNETCORE_ENVIRONMENT}"
 ENV POSTGRESQL_PASSWORD "${POSTGRESQL_PASSWORD}"
@@ -63,7 +63,7 @@ RUN apt-get update && \
     apt-get install -yqq --no-install-recommends postgresql-client-10 && \
     chmod +x entrypoint.sh && \
     chmod 777 entrypoint.sh && \
-    chmod -R 777 /var/run && \
+    chmod -R 777 /var/run/ && \
     chmod -R 777 /opt/app-root && \
     chmod -R 777 /opt/app-root/.* 
 
