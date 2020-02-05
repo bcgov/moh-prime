@@ -39,6 +39,7 @@
     "moment": "^2.24.0",
     "ng-busy": "^8.0.0",
     "ngx-clipboard": "^12.2.1",
+    "ngx-markdown": "^8.2.2",
     "ngx-mask": "^8.1.6",
     "ngx-progressbar": "^2.1.1",
     "popper.js": "^1.16.0",
