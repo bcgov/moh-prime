@@ -341,24 +341,24 @@ namespace Prime.Controllers
         /// Creates a new adjudicator note on an enrollee.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        /// <param name="adjudicatorNote"></param>
+        /// <param name="note"></param>
         [HttpPost("{enrolleeId}/adjudicator-notes", Name = nameof(CreateAdjudicatorNote))]
         [Authorize(Policy = PrimeConstants.ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiCreatedResponse<AdjudicatorNote>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<AdjudicatorNote>> CreateAdjudicatorNote(int enrolleeId, AdjudicatorNote adjudicatorNote)
+        public async Task<ActionResult<AdjudicatorNote>> CreateAdjudicatorNote(int enrolleeId, FromBodyText note)
         {
+            if (string.IsNullOrWhiteSpace(note))
+            {
+                this.ModelState.AddModelError("note", "Adjudicator notes can't be null or empty.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
+
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
-            }
-
-            if (enrolleeId != adjudicatorNote.EnrolleeId)
-            {
-                this.ModelState.AddModelError("AdjudicatorNote.EnrolleeId", "Enrollee Id does not match with the payload.");
-                return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
             // Notes can not be added to 'In Progress' enrolments
@@ -368,7 +368,7 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            var createdAdjudicatorNote = await _enrolleeService.CreateEnrolleeAdjudicatorNoteAsync(enrolleeId, adjudicatorNote);
+            var createdAdjudicatorNote = await _enrolleeService.CreateEnrolleeAdjudicatorNoteAsync(enrolleeId, note);
 
             return CreatedAtAction(
                 nameof(GetAdjudicatorNotes),

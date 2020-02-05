@@ -507,16 +507,16 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, AdjudicatorNote adjudicatorNote)
+        public async Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, string note)
         {
-            AdjudicatorNote newAdjudicatorNote = new AdjudicatorNote
+            var adjudicatorNote = new AdjudicatorNote
             {
                 EnrolleeId = enrolleeId,
-                Note = adjudicatorNote.Note,
+                Note = note,
                 NoteDate = DateTime.Now
             };
 
-            _context.AdjudicatorNotes.Add(newAdjudicatorNote);
+            _context.AdjudicatorNotes.Add(adjudicatorNote);
 
             var created = await _context.SaveChangesAsync();
             if (created < 1)
@@ -524,7 +524,7 @@ namespace Prime.Services
                 throw new InvalidOperationException("Could not create adjudicator note.");
             };
 
-            return newAdjudicatorNote;
+            return adjudicatorNote;
         }
 
         public async Task<IEnrolleeNote> UpdateEnrolleeNoteAsync(int enrolleeId, IEnrolleeNote newNote)

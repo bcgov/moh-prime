@@ -104,7 +104,7 @@ export class AdjudicationResource {
   }
 
   public addAdjudicatorNote(enrolleeId: number, note: string): Observable<AdjudicationNote> {
-    const payload = { enrolleeId, note };
+    const payload = { data: note };
     return this.http.post(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/adjudicator-notes`, payload)
       .pipe(
         map((response: PrimeHttpResponse) => response.result as AdjudicationNote),
