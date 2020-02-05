@@ -2,16 +2,21 @@
 logfile="/opt/backup/pgsql.log"
 backup_dir="/opt/backup"
 touch $logfile
-databases=`psql -h ${PG_HOST} -U ${PG_USER} -q -c "\l" | sed -n 4,/\eof/p | grep -v rows\) | grep -v template0 | grep -v template1 | awk {'print $1'}`
 
 echo "Starting backup of databases " >> $logfile
-for i in $databases; do
+function databaseBackup() {
         dateinfo=`date '+%Y-%m-%d %H:%M:%S'`
         timeslot=`date '+%Y%m%d%H%M'`
-        /usr/bin/vacuumdb -z -h ${PG_HOST} -U ${PG_USER} $i >/dev/null 2>&1
-        /usr/bin/pg_dump -U ${PG_USER} -i -F c -b $i -h 127.0.0.1 -f $backup_dir/$i-database-$timeslot.backup
-        echo "Backup and Vacuum complete on $dateinfo for database: $i " >> $logfile
-done
+        /usr/bin/vacuumdb -z -h ${PGHOST} -U ${PGUSERNAME} ${PGDATABASE} >/dev/null 2>&1
+        /usr/bin/pg_dump -U ${PGUSERNAME} -F c -b ${PGDATABASE} -h ${PGHOST} -f $backup_dir/${PGDATABASE}-database-$timeslot.backup
+        echo "${timeslot} - Backup and Vacuum complete on $dateinfo for database: ${PGDATABASE} " >> $logfile
+        tar -czf $backup_dir/${PGDATABASE}-database-$timeslot.backup.tgz $backup_dir/${PGDATABASE}-database-$timeslot.backup
+        rm -f $backup_dir/${PGDATABASE}-database-$timeslot.backup
+        dateinfo=`date '+%Y-%m-%d %H:%M:%S'`
+        timeslot=`date '+%Y%m%d%H%M'`
+        echo "${timeslot} - Backup compressed $dateinfo for database: ${PGDATABASE} " >> $logfile
+}
+databaseBackup
 echo "Done backup of databases " >> $logfile
 
 #tail -15 /backup/pgsql.log | mailx youremail@domain.com
