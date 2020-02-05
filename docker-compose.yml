@@ -85,12 +85,12 @@ services:
     depends_on:
       - postgres    
     volumes:
-      - backup_postgres_data:/var/lib/postgresql/data
-      - backup_postgres_dump:/dump
+      - backup_postgres_data:/opt/backup
+      - local_postgres_data:/var/lib/postgresql/data
 volumes:
   local_postgres_data:
   backup_postgres_data:
-  backup_postgres_dump:
+
 networks:
   primenet:
     driver: bridge

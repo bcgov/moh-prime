@@ -1,15 +1,15 @@
-FROM ubuntu:18.04
+FROM postgres:10.6
 USER 0
 
-ENV POSTGRESQL_PASSWORD "postgres"
-ENV PGPASSWORD "postgres"
-ENV POSTGRESQL_DATABASE "postgres"
-ENV POSTGRESQL_ADMIN_PASSWORD "postgres"
-ENV POSTGRESQL_USER "postgres"
-RUN apt-get update && \
-    apt-get install -yqq wget curl nano net-utils nmap && \
-    wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
-    sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -sc)-pgdg main" > /etc/apt/sources.list.d/PostgreSQL.list' && \
-    apt-get update && \
-    apt-get install -yqq postgresql-client-10 postgresql-10 && \
-    systemctl enable postgresql.service
+ENV PG_PASSWORD "postgres"
+ENV PG_DATABASE "postgres"
+ENV PG_PASSWORD "postgres"
+ENV PG_USERNAME "postgres"
+
+COPY . /opt/backup
+RUN chmod -R 777 /opt/backup && \
+    chmod +x /opt/backup/backup.sh && \
+    chmod +x /opt/backup/entrypoint.sh && \
+    cp /opt/backup/backup.sh /etc/cron.d/
+
+CMD ./entrypoint.sh
