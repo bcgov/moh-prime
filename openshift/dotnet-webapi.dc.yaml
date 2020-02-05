@@ -185,7 +185,7 @@ objects:
               readinessProbe:
                 failureThreshold: 3
                 httpGet:
-                  path: /healthcheck
+                  path: /api/healthcheck
                   port: 8080
                   scheme: "HTTP"
                 initialDelaySeconds: 30
