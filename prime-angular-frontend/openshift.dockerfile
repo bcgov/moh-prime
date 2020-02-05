@@ -2,6 +2,7 @@
 FROM node:10.16 as build-deps
 #SHELL [ "/bin/bash","-c"]
 # set working directory
+USER 0
 ENV NODE_ROOT /usr/src/app
 ENV REDIRECT_URL $REDIRECT_URL
 ENV OC_APP $OC_APP
@@ -34,9 +35,7 @@ COPY --from=build-deps /usr/src/app/entrypoint.sh /home
 EXPOSE 8080
 RUN mkdir -p /var/cache/nginx && \ 
     mkdir -p /var/cache/nginx/client_temp && \ 
-    chown -R 1001:1001 /var/cache/nginx && \ 
     touch /etc/nginx/conf.d/default.conf && \
-    chown -R 1001:1001 /etc/nginx && \
     chmod -R 777 /etc/nginx && \
     chmod -R 777 /var/cache/nginx && \ 
     chmod -R 777 /var/run && \
@@ -45,14 +44,10 @@ RUN mkdir -p /var/cache/nginx && \
     echo "Build completed."
 
 WORKDIR /
-#RUN envsubst '$SUFFIX' < /etc/nginx/nginx.template.conf > /etc/nginx/nginx.conf
+
 COPY ./entrypoint.sh /
 RUN chmod a+x /entrypoint.sh
 
 EXPOSE 80 8080 4200:8080
-
-#CMD ["sh", "/run.sh"]
-
-#CMD ["nginx", "-g", "daemon off;"]
 
 CMD ["/entrypoint.sh"]
