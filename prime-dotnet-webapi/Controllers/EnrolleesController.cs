@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using Prime.Models;
 using Prime.Services;
+using Prime.ViewModels;
 
 namespace Prime.Controllers
 {
@@ -13,7 +14,7 @@ namespace Prime.Controllers
     [Route("api/[controller]")]
     [ApiController]
     // User needs at least the ADMIN or ENROLLEE role to use this controller
-    [Authorize(Policy = PrimeConstants.USER_POLICY)]
+    // [Authorize(Policy = PrimeConstants.USER_POLICY)]
     public class EnrolleesController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
@@ -29,6 +30,7 @@ namespace Prime.Controllers
             _accessTermService = accessTermService;
             _enrolleeProfileVersionService = enrolleeProfileVersionService;
         }
+
 
         // GET: api/Enrollees
         /// <summary>
@@ -77,10 +79,10 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
 
-            if (!User.CanAccess(enrollee))
-            {
-                return Forbid();
-            }
+            // if (!User.CanAccess(enrollee))
+            // {
+            //     return Forbid();
+            // }
 
             return Ok(new ApiOkResponse<Enrollee>(enrollee));
         }
@@ -144,10 +146,10 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            if (!User.CanAccess(enrollee))
-            {
-                return Forbid();
-            }
+            // if (!User.CanAccess(enrollee))
+            // {
+            //     return Forbid();
+            // }
 
             if (enrollee.Id == null)
             {

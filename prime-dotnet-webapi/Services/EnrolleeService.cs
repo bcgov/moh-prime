@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using SimpleBase;
 using Prime.Models;
+using Prime.ViewModels;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Prime.Services
 {
@@ -205,7 +207,6 @@ namespace Prime.Services
         public async Task<int> UpdateEnrolleeAsync(Enrollee enrollee, bool profileCompleted = false)
         {
             var _enrolleeDb = await _context.Enrollees
-                                .Include(e => e.PhysicalAddress)
                                 .Include(e => e.MailingAddress)
                                 .Include(e => e.Certifications)
                                 .Include(e => e.Jobs)
@@ -214,8 +215,11 @@ namespace Prime.Services
                                 .Where(e => e.Id == enrollee.Id)
                                 .SingleOrDefaultAsync();
 
+            IList<PropertyEntry> whiteList = new List<PropertyEntry>(
+                new PropertyEntry(),
+            );
+
             // Remove existing, and recreate if necessary
-            this.ReplaceExistingAddress(_enrolleeDb.PhysicalAddress, enrollee.PhysicalAddress, enrollee);
             this.ReplaceExistingAddress(_enrolleeDb.MailingAddress, enrollee.MailingAddress, enrollee);
             this.ReplaceExistingItems(_enrolleeDb.Certifications, enrollee.Certifications, enrollee);
             this.ReplaceExistingItems(_enrolleeDb.Jobs, enrollee.Jobs, enrollee);
@@ -229,7 +233,15 @@ namespace Prime.Services
             // Set AlwaysManual to what is stored in DB
             enrollee.AlwaysManual = _enrolleeDb.AlwaysManual;
 
-            _context.Entry(enrollee).State = EntityState.Modified;
+            _context.Entry(enrollee).Property(e => e.PreferredFirstName).IsModified = false;
+            var properties = _context.Entry(enrollee).Properties;
+
+            foreach (var Property in properties)
+            {
+
+            }
+
+            // _context.Entry(enrollee).State = EntityState.Modified;
 
             try
             {
