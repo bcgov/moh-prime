@@ -102,7 +102,7 @@ objects:
     strategy:
       dockerStrategy: {}
       type: Docker
-      dockerfilePath: openshift.dockerfile
+        dockerfilePath: openshift.dockerfile
         env:
           - name: JWT_WELL_KNOWN_CONFIG
             valueFrom:
