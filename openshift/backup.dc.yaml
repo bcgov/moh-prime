@@ -1,15 +1,16 @@
 apiVersion: v1
 kind: Template
 labels:
-  template: postgresql-persistent-template
+  template: database-backup-template
 metadata:
   creationTimestamp: null
-  name: postgresql-dc
+  name: database-backup-dc
 parameters:
   - description: The name of the OpenShift Service exposed for the database.
     displayName: Database Service Name
     name: NAME
     required: true
+    value: backup
   - name: VERSION
     required: false
   - name: SOURCE_CONTEXT_DIR
@@ -28,11 +29,11 @@ parameters:
     displayName: Database Service Name
     name: DATABASE_SERVICE_NAME
     required: true
-    value: postgresql
+    value: ${NAME}${SUFFIX}
   - description: The OpenShift ImageStream name.
     displayName: IMAGE_STREAM_NAME
     name: IMAGE_STREAM_NAME
-    value: postgresql
+    value: ${NAME}${SUFFIX}
   - description: The OpenShift Namespace where the ImageStream resides.
     displayName: Namespace
     name: IMAGE_STREAM_NAMESPACE
@@ -41,12 +42,12 @@ parameters:
     displayName: Version of PostgreSQL Image
     name: IMAGE_STREAM_VERSION
     required: true
-    value: '9.6'
+    value: '10.6'
   - description: Name of the PostgreSQL database accessed.
     displayName: PostgreSQL Database Name
     name: POSTGRESQL_DATABASE
     required: true
-    value: postgresQL
+    value: backup
   - description: 'Volume space available for data, e.g. 512Mi, 2Gi.'
     displayName: Volume Capacity
     name: VOLUME_CAPACITY
@@ -127,28 +128,23 @@ objects:
           containers:
             - capabilities: {}
               env:
-                - name: POSTGRESQL_USER
+                - name: PGUSER
                   valueFrom:
                     secretKeyRef:
                       key: database-user
-                      name: '${NAME}-secret'
-                - name: POSTGRESQL_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      key: database-password
-                      name: '${NAME}-secret'
-                - name: POSTGRESQL_ADMIN_PASSWORD
+                      name: 'postgres-secret'
+                - name: PGPASSWORD
                   valueFrom:
                     secretKeyRef:
                       key: database-admin-password
-                      name: '${NAME}-secret'
-                - name: POSTGRESQL_DATABASE
+                      name: 'postgres-secret'
+                - name: PGDATABASE
                   valueFrom:
                     secretKeyRef:
                       key: database-name
-                      name: '${NAME}-secret'
+                      name: 'postgres-secret'
                 - name: DB_HOST
-                  value: '${NAME}${SUFFIX}'
+                  value: 'postgres${SUFFIX}'
               image: ' '
               imagePullPolicy: IfNotPresent
               livenessProbe:
@@ -156,7 +152,7 @@ objects:
                 tcpSocket:
                   port: 5432
                 timeoutSeconds: 1
-              name: postgresql
+              name: ${NAME}${SUFFIX}
               ports:
                 - containerPort: 5432
                   protocol: TCP
@@ -199,11 +195,11 @@ objects:
         - imageChangeParams:
             automatic: true
             containerNames:
-              - postgresql
+              - backup
             from:
               kind: ImageStreamTag
-              name: 'postgresql:9.6'
-              namespace: openshift
+              name: 'postgresql:10.6'
+              namespace: ${OC_NAMESPACE}-tools
             lastTriggeredImage: ''
           type: ImageChange
         - type: ConfigChange
