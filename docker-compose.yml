@@ -5,7 +5,7 @@ services:
   postgres:
     restart: always
     container_name: primedb
-    image: postgres:10
+    image: postgres:10.6
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USERNAME: postgres
