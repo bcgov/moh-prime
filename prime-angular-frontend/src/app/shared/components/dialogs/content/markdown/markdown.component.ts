@@ -9,15 +9,9 @@ import { IDialogContent } from '../../dialog-content.model';
 export class MarkdownComponent implements OnInit, IDialogContent {
 
   @Input()
-  public data: string;
-
-  @Output() output = new EventEmitter<{ output: boolean }>();
+  public data: { message: string };
 
   constructor() { }
-
-  public onChange($event) {
-    this.output.emit($event.checked);
-  }
 
   ngOnInit() {
   }
