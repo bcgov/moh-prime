@@ -11,3 +11,4 @@ RUN chmod -R 777 /opt/backup && \
     chmod +x /opt/backup/backup.sh && \
     chmod +x /opt/backup/entrypoint.sh && \
     cp /opt/backup/backup.sh /etc/cron.d/
+CMD /opt/backup/entrypoint.sh
