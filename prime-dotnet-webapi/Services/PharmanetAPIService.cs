@@ -8,7 +8,10 @@ using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 
 using Microsoft.AspNetCore.Http;
+
 using Newtonsoft.Json;
+
+using System.Text.Json;
 
 using Prime.Models;
 
@@ -19,7 +22,8 @@ namespace Prime.Services
         private static HttpClient Client = InitHttpClient();
 
         public PharmanetApiService(
-            ApiDbContext context, IHttpContextAccessor httpContext)
+            ApiDbContext context,
+            IHttpContextAccessor httpContext)
             : base(context, httpContext)
         { }
 

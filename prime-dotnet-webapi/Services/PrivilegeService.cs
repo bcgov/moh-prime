@@ -11,7 +11,8 @@ namespace Prime.Services
     public class PrivilegeService : BaseService, IPrivilegeService
     {
         public PrivilegeService(
-            ApiDbContext context, IHttpContextAccessor httpContext)
+            ApiDbContext context,
+            IHttpContextAccessor httpContext)
             : base(context, httpContext)
         { }
 
