@@ -1,6 +1,9 @@
 #!/bin/sh
+echo "Substituting environment..."
 envsubst '$SUFFIX' < /etc/nginx/nginx.template.conf > /etc/nginx/conf.d/default.conf 
-nginx -g "pid /tmp/nginx.pid; worker_processes 2; daemon-off;"
+echo "Running nginx..."
+nginx
+echo "Keeping container alive..."
 tail -f /dev/null
 
 #nginx -g "daemon-off;"
