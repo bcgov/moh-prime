@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "Running the migrations..."
 #psql -d postgres -f databaseMigration.sql
-psql -h $DB_HOST -U ${DB_HOST} -d ${POSTGRESQL_DATABASE} -a -f databaseMigrations.sql
+psql -h $DB_HOST -U ${POSTGRESQL_USER} -d ${POSTGRESQL_DATABASE} -a -f databaseMigrations.sql
 echo "Resting 5 seconds to let things settle down..."
 
 echo "Running .NET..."
