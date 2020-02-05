@@ -5,7 +5,7 @@ services:
   postgres:
     restart: always
     container_name: primedb
-    image: postgres:9.6
+    image: postgres:10.6
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USERNAME: postgres
@@ -75,10 +75,22 @@ services:
       - "80:8069"
     depends_on:
       - postgres
-      
+######################################################### Sign-in #
+  backup:
+    container_name: backup
+    build:
+      context: prime-database-backup
+    ports:
+      - "6432:5432"
+    depends_on:
+      - postgres    
+    volumes:
+      - backup_postgres_data:/var/lib/postgresql/data
+      - backup_postgres_dump:/dump
 volumes:
   local_postgres_data:
-
+  backup_postgres_data:
+  backup_postgres_dump:
 networks:
   primenet:
     driver: bridge
