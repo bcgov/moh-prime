@@ -586,12 +586,7 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
 
             enrollee.AlwaysManual = alwaysManual;
-
-            var updated = await _context.SaveChangesAsync();
-            if (updated < 1)
-            {
-                throw new InvalidOperationException($"Could not update the enrollee's alwaysManual flag.");
-            }
+            await _context.SaveChangesAsync();
 
             return enrollee;
         }
