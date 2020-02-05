@@ -159,6 +159,7 @@ export class EnrolmentStateService {
 
   private buildDemographicForm(): FormGroup {
     return this.fb.group({
+      // TODO drop BCSC fields
       userId: [{ value: null, disabled: true }, [Validators.required]],
       firstName: [{ value: null, disabled: true }, [Validators.required]],
       middleName: [{ value: null, disabled: true }, []],
@@ -167,6 +168,7 @@ export class EnrolmentStateService {
       preferredFirstName: [null, []],
       preferredMiddleName: [null, []],
       preferredLastName: [null, []],
+      // TODO drop BCSC fields
       physicalAddress: this.fb.group({
         countryCode: [{ value: null, disabled: true }, [Validators.required]],
         provinceCode: [{ value: null, disabled: true }, [Validators.required]],

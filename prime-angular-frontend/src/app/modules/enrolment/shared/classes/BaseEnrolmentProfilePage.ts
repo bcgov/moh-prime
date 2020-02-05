@@ -128,6 +128,9 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
 
   protected patchForm(): void {
     this.enrolment = this.enrolmentService.enrolment;
+
+    console.log('PATCH', this.enrolmentStateService.enrolment);
+
     this.enrolmentStateService.enrolment = this.enrolment;
     this.isInitialEnrolment = this.enrolment.progressStatus !== ProgressStatus.FINISHED;
     this.isProfileComplete = this.enrolment.profileCompleted;
