@@ -139,7 +139,12 @@ objects:
                 - name: POSTGRESQL_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      key: database-password
+                      key: database-admin-password
+                      name: "postgresql-secret"
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: database-admin-password
                       name: "postgresql-secret"
                 - name: POSTGRESQL_ADMIN_PASSWORD
                   valueFrom:
@@ -180,10 +185,10 @@ objects:
               readinessProbe:
                 failureThreshold: 3
                 httpGet:
-                  path: /healthcheck
+                  path: /api/healthcheck
                   port: 8080
                   scheme: "HTTP"
-                initialDelaySeconds: 5
+                initialDelaySeconds: 30
                 periodSeconds: 10
                 successThreshold: 1
                 timeoutSeconds: 1

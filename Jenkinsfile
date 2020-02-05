@@ -7,7 +7,7 @@ pipeline {
         HTTP_PORT="8080"
         VERSION="${BUILD_NUMBER}"
         ARGS="-p VERSION=${VERSION}"
-        FRONTEND_ARGS="-p HTTP_PORT=${HTTP_PORT} -p HTTP_SCHEMA=${HTTP_SCHEMA} TERMINATION_TYPE='Edge' -p REDIRECT_URL=${HTTP_SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL}"
+        FRONTEND_ARGS="-p HTTP_PORT=${HTTP_PORT} -p HTTP_SCHEMA=${HTTP_SCHEMA} -p REDIRECT_URL=${HTTP_SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL}"
         API_ARGS="-p ASPNETCORE_ENVIRONMENT=Development -p HTTP_PORT=${HTTP_PORT} -p HTTP_SCHEMA=${HTTP_SCHEMA} -p VANITY_URL=${VANITY_URL}"
     }
     options {
@@ -21,6 +21,7 @@ pipeline {
             when { expression { ( GIT_BRANCH != 'master' ) } }
             agent { label 'master' }
             steps {
+                checkout scm
                 echo "Building ..."
                 sh "./player.sh build database dev ${ARGS}"
                 sh "./player.sh build api dev ${ARGS} ${API_ARGS}"

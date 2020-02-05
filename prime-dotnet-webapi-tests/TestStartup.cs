@@ -12,30 +12,37 @@ using Prime.Models;
 
 namespace PrimeTests
 {
-    public class TestStartup : Startup
+  public class TestStartup : Startup
+  {
+    public TestStartup(IWebHostEnvironment env, IConfiguration configuration)
+        : base(env, TestHelper.GetIConfigurationRoot(Directory.GetCurrentDirectory()))
+    { }
+
+    protected override void ConfigureDatabase(IServiceCollection services)
     {
-        public TestStartup(IHostingEnvironment env, IConfiguration configuration)
-            : base(env, TestHelper.GetIConfigurationRoot(Directory.GetCurrentDirectory()))
-        {}
+      services.AddDbContext<ApiDbContext>(options =>
+      {
+        options.UseInMemoryDatabase(databaseName: "PrimeTests");
+        options.EnableSensitiveDataLogging(sensitiveDataLoggingEnabled: true);
+      });
 
-        protected override void ConfigureDatabase(IServiceCollection services)
-        {
-            services.AddDbContext<ApiDbContext>(options =>
-                options.UseInMemoryDatabase(databaseName: "PrimeTests")
-            );
+      object p = services
+          .AddControllers()
+          .AddApplicationPart(Assembly.Load(new AssemblyName("Prime")));
 
-            object p = services.AddMvc().AddApplicationPart(Assembly.Load(new AssemblyName("Prime")));
-        }
-
-        protected override void UpdateDatabase(IApplicationBuilder app)
-        {
-            // Noop, since the tests are using the InMemoryDatabase
-        }
-
-        protected override void ConfigureHealthCheck(IApplicationBuilder app)
-        {
-            // Noop, since health checks aren't needed in tests
-        }
+      services
+          .AddHealthChecks();
     }
+
+    protected override void UpdateDatabase(IApplicationBuilder app)
+    {
+      // Noop, since the tests are using the InMemoryDatabase
+    }
+
+    protected override void ConfigureHealthCheck(IApplicationBuilder app)
+    {
+      // Noop, since health checks aren't needed in tests
+    }
+  }
 
 }
