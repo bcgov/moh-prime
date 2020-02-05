@@ -30,7 +30,7 @@ RUN rm -f /etc/nginx/conf.d/default.conf
 COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/
 #COPY --from=build-deps /usr/src/app/nginx.template.conf /etc/nginx/nginx.template.conf
 COPY --from=build-deps /usr/src/app/nginx${OC_APP}.conf /etc/nginx/nginx.template.conf
-COPY --from=build-deps /usr/src/app/entrypoint.sh /home
+COPY --from=build-deps /usr/src/app/entrypoint.sh /etc/nginx
 
 EXPOSE 8080
 RUN mkdir -p /var/cache/nginx && \ 
@@ -39,8 +39,8 @@ RUN mkdir -p /var/cache/nginx && \
     chmod -R 777 /etc/nginx && \
     chmod -R 777 /var/cache/nginx && \ 
     chmod -R 777 /var/run && \
-    chmod +x /home/entrypoint.sh && \
-    chmod 777 /home/entrypoint.sh && \
+    chmod +x /etc/nginx/entrypoint.sh && \
+    chmod 777 /etc/nginx/entrypoint.sh && \
     echo "Build completed."
 
 WORKDIR /
@@ -50,4 +50,4 @@ RUN chmod a+x /entrypoint.sh
 
 EXPOSE 80 8080 4200:8080
 
-CMD ["/entrypoint.sh"]
+CMD /etc/nginx/entrypoint.sh
