@@ -80,10 +80,10 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
 
-            // if (!User.CanAccess(enrollee))
-            // {
-            //     return Forbid();
-            // }
+            if (!User.CanAccess(enrollee))
+            {
+                return Forbid();
+            }
 
             return Ok(new ApiOkResponse<Enrollee>(enrollee));
         }
