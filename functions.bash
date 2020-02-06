@@ -64,12 +64,12 @@ function deploy() {
         if [ "${routePresent}" -gt 0 ];
         then
             echo "Recreating route..."
-            oc delete route/${APP_NAME}${SUFFIX} --namespace=$PROJECT_PREFIX-$3"
+            oc delete route/${APP_NAME}${SUFFIX} --namespace=$PROJECT_PREFIX-$3
         fi;
         if [ "${servicePresent}" -gt 0 ];
         then
             echo "Recreating service..."
-            oc delete service/${APP_NAME}${SUFFIX} --namespace=$PROJECT_PREFIX-$3"
+            oc delete service/${APP_NAME}${SUFFIX} --namespace=$PROJECT_PREFIX-$3
         fi;
     else
         MODE="apply"
