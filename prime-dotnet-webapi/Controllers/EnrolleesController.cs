@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using Prime.Models;
+using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels;
 
@@ -14,7 +15,7 @@ namespace Prime.Controllers
     [Route("api/[controller]")]
     [ApiController]
     // User needs at least the ADMIN or ENROLLEE role to use this controller
-    // [Authorize(Policy = PrimeConstants.USER_POLICY)]
+    [Authorize(Policy = PrimeConstants.USER_POLICY)]
     public class EnrolleesController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
@@ -146,10 +147,10 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            // if (!User.CanAccess(enrollee))
-            // {
-            //     return Forbid();
-            // }
+            if (!User.CanAccess(enrollee))
+            {
+                return Forbid();
+            }
 
             if (enrollee.Id == null)
             {

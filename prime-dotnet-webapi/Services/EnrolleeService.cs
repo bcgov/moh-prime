@@ -8,6 +8,8 @@ using SimpleBase;
 using Prime.Models;
 using Prime.ViewModels;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Prime.Models.Api;
+using System.Reflection;
 
 namespace Prime.Services
 {
@@ -215,15 +217,16 @@ namespace Prime.Services
                                 .Where(e => e.Id == enrollee.Id)
                                 .SingleOrDefaultAsync();
 
-            IList<PropertyEntry> whiteList = new List<PropertyEntry>(
-                new PropertyEntry(),
-            );
+            // autoMapper.Map(entity, existingEntity);
+            _enrolleeDb.PreferredFirstName = enrollee.PreferredFirstName;
+
+            // PropertyInfo[] properties = typeof(UpdateEnrolleeProfileViewModel).GetProperties();
 
             // Remove existing, and recreate if necessary
-            this.ReplaceExistingAddress(_enrolleeDb.MailingAddress, enrollee.MailingAddress, enrollee);
-            this.ReplaceExistingItems(_enrolleeDb.Certifications, enrollee.Certifications, enrollee);
-            this.ReplaceExistingItems(_enrolleeDb.Jobs, enrollee.Jobs, enrollee);
-            this.ReplaceExistingItems(_enrolleeDb.Organizations, enrollee.Organizations, enrollee);
+            // this.ReplaceExistingAddress(_enrolleeDb.MailingAddress, enrollee.MailingAddress, enrollee);
+            // this.ReplaceExistingItems(_enrolleeDb.Certifications, enrollee.Certifications, enrollee);
+            // this.ReplaceExistingItems(_enrolleeDb.Jobs, enrollee.Jobs, enrollee);
+            // this.ReplaceExistingItems(_enrolleeDb.Organizations, enrollee.Organizations, enrollee);
 
             // If profileCompleted is true, this is the first time the enrollee
             // has completed their profile by traversing the wizard, and indicates
@@ -233,15 +236,43 @@ namespace Prime.Services
             // Set AlwaysManual to what is stored in DB
             enrollee.AlwaysManual = _enrolleeDb.AlwaysManual;
 
-            _context.Entry(enrollee).Property(e => e.PreferredFirstName).IsModified = false;
-            var properties = _context.Entry(enrollee).Properties;
+            // foreach (var item in whiteList)
+            // {
+            //     _context.Entry(enrollee).Property(e => item).IsModified = true;
+            // }
 
-            foreach (var Property in properties)
-            {
+            // IEnumerable<PropertyEntry> properties = _context.Entry(enrollee).Properties;
 
-            }
+            // _context.Enrollees.Attach(enrollee);
+
+            // _context.Update(enrollee);
 
             // _context.Entry(enrollee).State = EntityState.Modified;
+
+            // _context.Entry(enrollee).Property(e =>e.Id).IsModified = true;
+            _context.Entry(enrollee).Property(e => e.UserId).IsModified = true;
+            _context.Entry(_enrolleeDb).Property(e => e.PreferredFirstName).IsModified = false;
+            _context.Entry(enrollee).Property(e => e.PreferredMiddleName).IsModified = false;
+            _context.Entry(enrollee).Property(e => e.PreferredLastName).IsModified = true;
+            // _context.Entry(enrollee).Property(e => e.MailingAddress).IsModified = true;
+            // _context.Entry(enrollee).Property(e => e.ContactEmail).IsModified = true;
+            // _context.Entry(enrollee).Property(e => e.ContactPhone).IsModified = true;
+            _context.Entry(enrollee).Property(e => e.VoicePhone).IsModified = false;
+            // _context.Entry(enrollee).Property(e => e.VoiceExtension).IsModified = true;
+            // _context.Entry(enrollee).Property(e => e.Certifications).IsModified = true;
+            // _context.Entry(enrollee).Property(e => e.Jobs).IsModified = true;
+            // _context.Entry(enrollee).Property(e => e.Organizations).IsModified = true;
+            // _context.Entry(enrollee).Property(e => e.DeviceProviderNumber).IsModified = true;
+            // _context.Entry(enrollee).Property(e => e.IsInsulinPumpProvider).IsModified = true;
+            // _context.Entry(enrollee).Property(e => e.HasConviction).IsModified = true;
+            // _context.Entry(enrollee).Property(e => e.HasConvictionDetails).IsModified = true;
+            // _context.Entry(enrollee).Property(e => e.HasRegistrationSuspended).IsModified = true;
+            // _context.Entry(enrollee).Property(e => e.HasRegistrationSuspendedDetails).IsModified = true;
+            // _context.Entry(enrollee).Property(e => e.HasDisciplinaryAction).IsModified = true;
+            // _context.Entry(enrollee).Property(e => e.HasDisciplinaryActionDetails).IsModified = true;
+            // _context.Entry(enrollee).Property(e => e.HasPharmaNetSuspended).IsModified = true;
+            _context.Entry(enrollee).Property(e => e.HasPharmaNetSuspendedDetails).IsModified = true;
+
 
             try
             {
