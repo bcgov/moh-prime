@@ -12,7 +12,6 @@ import { EnrolmentsComponent } from './pages/enrolments/enrolments.component';
 import { EnrolmentComponent } from './pages/enrolment/enrolment.component';
 import { AdjudicatorNotesComponent } from './pages/adjudicator-notes/adjudicator-notes.component';
 import { LimitsConditionsClausesComponent } from './pages/limits-conditions-clauses/limits-conditions-clauses.component';
-import { CertificateLimitsConditionsComponent } from './pages/certificate-limits-conditions/certificate-limits-conditions.component';
 import { EnrolleeProfileVersionsComponent } from './pages/enrollee-profile-versions/enrollee-profile-versions.component';
 import { EnrolleeProfileVersionComponent } from './pages/enrollee-profile-version/enrollee-profile-version.component';
 
@@ -50,11 +49,6 @@ const routes: Routes = [
                 path: 'limits-conditions-clauses',
                 component: LimitsConditionsClausesComponent,
                 data: { title: 'Limits and Conditions Clauses' }
-              },
-              {
-                path: 'certificate-limits-conditions',
-                component: CertificateLimitsConditionsComponent,
-                data: { title: 'Certificate Limits and Conditions' }
               },
               {
                 path: 'history',
