@@ -133,7 +133,8 @@ namespace Prime.Services
 
         public async Task<IEnumerable<Enrollee>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)
         {
-            IEnumerable<Enrollee> items = await this.GetBaseEnrolleeQuery().ToListAsync();
+            IEnumerable<Enrollee> items = await this.GetBaseEnrolleeQuery()
+                                                    .ToListAsync();
 
             if (searchOptions?.StatusCode != null)
             {
