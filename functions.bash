@@ -66,11 +66,11 @@ function deploy() {
             echo "Recreating route..."
             oc delete route/${APP_NAME}${SUFFIX} --namespace=$PROJECT_PREFIX-$3
         fi;
-        if [ "${servicePresent}" -gt 0 ];
-        then
-            echo "Recreating service..."
-            oc delete service/${APP_NAME}${SUFFIX} --namespace=$PROJECT_PREFIX-$3
-        fi;
+#        if [ "${servicePresent}" -gt 0 ];
+#        then
+#            echo "Recreating service..."
+#            oc delete service/${APP_NAME}${SUFFIX} --namespace=$PROJECT_PREFIX-$3
+#        fi;
     else
         MODE="apply"
     fi;
@@ -82,7 +82,7 @@ function deploy() {
     -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
     -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
     -p OC_NAMESPACE="$PROJECT_PREFIX" \
-    -p OC_APP="$3" ${@:4} --output="yaml" | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$3" #--overwrite=true --all #--output="yaml" 
+    -p OC_APP="$3" ${@:4} --output="yaml" | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$3" --overwrite=true --all #--output="yaml" 
 }
 
 function toolbelt() {
