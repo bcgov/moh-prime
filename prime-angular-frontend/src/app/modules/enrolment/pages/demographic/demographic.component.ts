@@ -171,7 +171,7 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
   protected patchForm() {
     const enrolment = this.enrolmentService.enrolment;
 
-    this.enrollee = enrolment.enrollee || null;
+    this.enrollee = enrolment.enrollee;
     this.enrolmentStateService.enrolment = enrolment;
     this.isInitialEnrolment = enrolment.progressStatus !== ProgressStatus.FINISHED;
     this.isProfileComplete = enrolment.profileCompleted;
