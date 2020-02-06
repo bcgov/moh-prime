@@ -45,7 +45,7 @@ namespace PrimeTests.Mocks
             throw new NotImplementedException();
         }
 
-        public Task<bool> AccessTermExistsAsync(int accessTermId)
+        public Task<bool> AccessTermExistsOnEnrolleeAsync(int accessTermId, int enrolleeId)
         {
             throw new NotImplementedException();
         }

@@ -9,6 +9,7 @@ using Prime.Models;
 using Prime.Services;
 using PrimeTests.Utils;
 using PrimeTests.Mocks;
+using Prime.Models.Api;
 
 namespace PrimeTests.Services
 {

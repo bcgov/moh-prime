@@ -7,11 +7,6 @@
     "ms-vsliveshare.vsliveshare-audio",
     "ms-vsliveshare.vsliveshare-pack",
     "ms-vscode.csharp",
-    "ms-azuretools.vscode-docker",
-    "formulahendry.auto-rename-tag",
-    "msjsdiag.debugger-for-chrome",
-    "christian-kohler.path-intellisense",
-    "gruntfuggly.todo-tree",
-    "ms-vscode.vscode-typescript-tslint-plugin"
+    "ms-azuretools.vscode-docker"
   ]
 }
