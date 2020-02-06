@@ -6,46 +6,108 @@ metadata:
   name: database-backup-bc
   creationTimestamp: null
 parameters:
-  - name: NAME
-    displayName: Name
-    description: A prefix appended to all objects
-    required: true
-    value: backup
-  - name: SUFFIX
-    displayName: Name Suffix
-    description: A suffix appended to all objects
-    required: false
-  - name: VERSION
-    required: false
-  - name: SOURCE_CONTEXT_DIR
-    required: true
-  - name: SOURCE_REPOSITORY_URL
-    required: true
-  - name: SOURCE_REPOSITORY_REF
-    required: true
-  - name: OC_NAMESPACE
-    required: true
-  - name: OC_APP
-    required: true
+- name: NAME
+  displayName: Name
+  description: A prefix appended to all objects
+  required: true
+  value: backup
+- name: SUFFIX
+  displayName: Name Suffix
+  description: A suffix appended to all objects
+  required: false
+- name: VERSION
+  required: false
+- name: SOURCE_CONTEXT_DIR
+  required: true
+- name: SOURCE_REPOSITORY_URL
+  required: true
+- name: SOURCE_REPOSITORY_REF
+  required: true
+- name: OC_NAMESPACE
+  required: true
+- name: OC_APP
+  required: true
 objects:
-  - kind: ImageStream
-    apiVersion: v1
+  - apiVersion: v1
+    kind: BuildConfig
     metadata:
-      name: '${NAME}${SUFFIX}'
+      annotations:
+        kompose.cmd: kompose convert --provider=openshift --build=build-config --build-repo=https://github.com/bcgov/moh-prime.git
+        kompose.version: 1.20.0 (f3d54d784)
+      creationTimestamp: null
       labels:
-        shared: 'true'
-      annotations: {}
+        io.kompose.service: ${NAME}
+      name: ${NAME}
     spec:
-      lookupPolicy:
-        local: false
+      nodeSelector: null
+      output:
+        to:
+          kind: ImageStreamTag
+          name: ${NAME}:latest
+      postCommit: {}
+      resources: {}
+      runPolicy: Serial
+      source:
+        contextDir: "${SOURCE_CONTEXT_DIR}"
+        git:
+          ref: "${SOURCE_REPOSITORY_REF}"
+          uri: "${SOURCE_REPOSITORY_URL}"
+        type: Git
+      strategy:
+        dockerStrategy:
+          dockerfilePath: openshift.dockerfile
+          env:
+          - name: PGUSER
+            valueFrom:
+              secretKeyRef:
+                key: database-user
+                name: "postgresql-secret"
+          - name: PGPASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database-admin-password
+                name: "postgresql-secret"
+          - name: PGDATABASE
+            valueFrom:
+              secretKeyRef:
+                key: database-name
+                name: "postgresql-secret"
+        type: Docker
+      triggers:
+      - type: ConfigChange
+      - type: ImageChange
+    status:
+      lastVersion: 0
+  - apiVersion: v1
+    kind: ImageStream
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: ${NAME}
+      name: ${NAME}
+    spec:
       tags:
-        - name: '${NAME}'
-          annotations: null
-          from:
-            kind: ImageStreamTag
-            name: 'postgresql:10.6'
-            namespace: dqszvc-tools
-          generation: 1
-          importPolicy: {}
-          referencePolicy:
-            type: Local
+      - annotations: null
+        from:
+          kind: DockerImage
+          name: ${NAME}
+        generation: null
+        importPolicy: {}
+        name: latest
+    status:
+      dockerImageRepository: ""
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: ${NAME}-data
+      name: ${NAME}-data
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 2Gi
+    status: {}
+          

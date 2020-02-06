@@ -6,201 +6,81 @@ metadata:
   creationTimestamp: null
   name: database-backup-dc
 parameters:
-  - description: The name of the OpenShift Service exposed for the database.
-    displayName: Database Service Name
-    name: NAME
-    required: true
-    value: backup
-  - name: VERSION
-    required: false
-  - name: SOURCE_CONTEXT_DIR
-    required: true
-  - name: SOURCE_REPOSITORY_URL
-    required: true
-  - name: SOURCE_REPOSITORY_REF
-    required: true
-  - name: SUFFIX
-    required: false
-  - name: OC_NAMESPACE
-    required: true
-  - name: OC_APP
-    required: true
-  - description: The name of the OpenShift Service exposed for the database.
-    displayName: Database Service Name
-    name: DATABASE_SERVICE_NAME
-    required: true
-    value: ${NAME}${SUFFIX}
-  - description: The OpenShift ImageStream name.
-    displayName: IMAGE_STREAM_NAME
-    name: IMAGE_STREAM_NAME
-    value: ${NAME}${SUFFIX}
-  - description: The OpenShift Namespace where the ImageStream resides.
-    displayName: Namespace
-    name: IMAGE_STREAM_NAMESPACE
-    value: ''
-  - description: 'Version of PostgreSQL image to be used (9.2, 9.4, 9.5 or latest).'
-    displayName: Version of PostgreSQL Image
-    name: IMAGE_STREAM_VERSION
-    required: true
-    value: '10.6'
-  - description: Name of the PostgreSQL database accessed.
-    displayName: PostgreSQL Database Name
-    name: POSTGRESQL_DATABASE
-    required: true
-    value: backup
-  - description: 'Volume space available for data, e.g. 512Mi, 2Gi.'
-    displayName: Volume Capacity
-    name: VOLUME_CAPACITY
-    required: true
-    value: 1Gi
-  - name: CPU_LIMIT
-    value: 500m
-  - name: MEMORY_LIMIT
-    value: 2Gi
-  - name: CPU_REQUEST
-    value: 200m
-  - name: MEMORY_REQUEST
-    value: 1.5Gi
+- name: NAME
+  displayName: Name
+  description: A prefix appended to all objects
+  required: true
+  value: backup
+- name: SUFFIX
+  displayName: Name Suffix
+  description: A suffix appended to all objects
+  required: false
+- name: VERSION
+  required: false
+- name: SOURCE_CONTEXT_DIR
+  required: true
+- name: SOURCE_REPOSITORY_URL
+  required: true
+- name: SOURCE_REPOSITORY_REF
+  required: true
+- name: OC_NAMESPACE
+  required: true
+- name: OC_APP
+  required: true
 objects:
   - apiVersion: v1
-    kind: Service
+    kind: DeploymentConfig
     metadata:
       annotations:
-        template.openshift.io/expose-uri: >-
-          postgres://{.spec.clusterIP}:{.spec.ports[?(.name=="postgresql")].port}
-      name: '${NAME}${SUFFIX}'
-    spec:
-      ports:
-        - name: postgresql
-          nodePort: 0
-          port: 5432
-          protocol: TCP
-          targetPort: 5432
-      selector:
-        name: '${NAME}${SUFFIX}'
-      sessionAffinity: None
-      type: ClusterIP
-    status:
-      loadBalancer: {}
-  - apiVersion: v1
-    kind: PersistentVolumeClaim
-    metadata:
-      name: '${NAME}${SUFFIX}'
-      annotations:
-        volume.beta.kubernetes.io/storage-class: netapp-file-standard
-        trident.netapp.io/reclaimPolicy: Retain
-    spec:
-      accessModes:
-        - ReadWriteMany
-      resources:
-        requests:
-          storage: '${VOLUME_CAPACITY}'
-  - kind: ImageStream
-    apiVersion: v1
-    metadata:
-      name: '${NAME}${SUFFIX}'
+        kompose.cmd: kompose convert --provider=openshift --build=deploy-config --build-repo=https://github.com/bcgov/moh-prime.git
+        kompose.version: 1.20.0 (f3d54d784)
       creationTimestamp: null
       labels:
-        shared: 'true'
-      annotations: {}
-    spec:
-      lookupPolicy:
-        local: false
-  - kind: DeploymentConfig
-    apiVersion: v1
-    metadata:
-      annotations:
-        template.alpha.openshift.io/wait-for-ready: 'true'
-      name: '${NAME}${SUFFIX}'
+        io.kompose.service: ${NAME}
+      name: ${NAME}
     spec:
       replicas: 1
       selector:
-        name: '${NAME}${SUFFIX}'
+        io.kompose.service: ${NAME}
       strategy:
+        resources: {}
         type: Recreate
-        maxSurge: 50%
-        maxUnavailable: 0
       template:
         metadata:
+          creationTimestamp: null
           labels:
-            name: '${NAME}${SUFFIX}'
+            io.kompose.network/primenet: "true"
+            io.kompose.service: ${NAME}
         spec:
           containers:
-            - capabilities: {}
-              env:
-                - name: PGUSER
-                  valueFrom:
-                    secretKeyRef:
-                      key: database-user
-                      name: 'postgres-secret'
-                - name: PGPASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      key: database-admin-password
-                      name: 'postgres-secret'
-                - name: PGDATABASE
-                  valueFrom:
-                    secretKeyRef:
-                      key: database-name
-                      name: 'postgres-secret'
-                - name: DB_HOST
-                  value: 'postgres${SUFFIX}'
-              image: ' '
-              imagePullPolicy: IfNotPresent
-              livenessProbe:
-                initialDelaySeconds: 30
-                tcpSocket:
-                  port: 5432
-                timeoutSeconds: 1
-              name: ${NAME}${SUFFIX}
-              ports:
-                - containerPort: 5432
-                  protocol: TCP
-              readinessProbe:
-                exec:
-                  command:
-                    - /bin/sh
-                    - '-i'
-                    - '-c'
-                    - >-
-                      psql -h 127.0.0.1 -d postgres -U
-                      $PGUSER -c 'SELECT 1'
-                initialDelaySeconds: 5
-                timeoutSeconds: 1
-              resources:
-                requests:
-                  cpu: '${CPU_REQUEST}'
-                  memory: '${MEMORY_REQUEST}'
-                limits:
-                  cpu: '${CPU_LIMIT}'
-                  memory: '${MEMORY_LIMIT}'
-              securityContext:
-                capabilities: {}
-                privileged: false
-              terminationMessagePath: /dev/termination-log
-              volumeMounts:
-                - mountPath: /var/lib/pgsql/data
-                  name: '${NAME}${SUFFIX}-data'
-                - mountPath: /var/run/postgresql
-                  name: '${NAME}${SUFFIX}-run'
-          dnsPolicy: ClusterFirst
+          - image: ' '
+            name: ${NAME}
+            ports:
+            - containerPort: 5432
+            resources: {}
+            volumeMounts:
+            - mountPath: /opt/backup
+              name: backup-postgres-data
+            - mountPath: /var/lib/postgresql/data
+              name: postgresql
           restartPolicy: Always
           volumes:
-            - name: '${NAME}${SUFFIX}-data'
-              persistentVolumeClaim:
-                claimName: '${NAME}${SUFFIX}'
-            - name: '${NAME}${SUFFIX}-run'
-              emptyDir: {}
+          - name: backup-postgres-data
+            persistentVolumeClaim:
+              claimName: backup
+          - name: postgresql
+            persistentVolumeClaim:
+              claimName: postresql
+      test: false
       triggers:
-        - imageChangeParams:
-            automatic: true
-            containerNames:
-              - backup
-            from:
-              kind: ImageStreamTag
-              name: 'postgresql:10.6'
-              namespace: dqszvc-tools
-            lastTriggeredImage: ''
-          type: ImageChange
-        - type: ConfigChange
+      - type: ConfigChange
+      - imageChangeParams:
+          automatic: true
+          containerNames:
+          - backup
+          from:
+            kind: ImageStreamTag
+            name: backup:latest
+        type: ImageChange
     status: {}
+    
