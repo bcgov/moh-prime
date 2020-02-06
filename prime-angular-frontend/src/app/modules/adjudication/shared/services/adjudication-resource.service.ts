@@ -116,17 +116,13 @@ export class AdjudicationResource {
 
   public updateAdjudicationNote(
     enrolleeId: number,
-    note: string,
-    noteType: NoteType.AccessAgreementNote | NoteType.EnrolmentCertificateNote
+    note: string
   ): Observable<AdjudicationNote> {
     const payload = { enrolleeId, note };
-    const params = (noteType === NoteType.EnrolmentCertificateNote)
-      ? { path: 'enrolment-certificate-notes', message: 'ENROLMENT_CERTIFICATE_NOTE' }
-      : { path: 'access-agreement-notes', message: 'ACCESS_AGREEMENT_NOTE' };
-    return this.http.put(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/${params.path}`, payload)
+    return this.http.put(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/access-agreement-notes`, payload)
       .pipe(
         map((response: PrimeHttpResponse) => response.result as AdjudicationNote),
-        tap((adjudicatorNote: AdjudicationNote) => this.logger.info(params.message, adjudicatorNote))
+        tap((adjudicatorNote: AdjudicationNote) => this.logger.info('ACCESS_AGREEMENT_NOTE', adjudicatorNote))
       );
   }
 
