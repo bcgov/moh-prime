@@ -13,6 +13,7 @@ using PrimeTests.Mocks;
 using PrimeTests.Utils;
 using Newtonsoft.Json;
 using Prime;
+using Prime.Models.Api;
 
 namespace PrimeTests.Controllers
 {

@@ -31,11 +31,10 @@ export class UtilsService {
 
   /**
    * @description
-   * returns true if the browser is Internet Explorer
+   * Checks if the browser is Internet Explorer.
    */
   public isIE(): boolean {
     const isIE = /msie\s|trident\//i.test(window.navigator.userAgent);
     return isIE;
   }
-
 }
