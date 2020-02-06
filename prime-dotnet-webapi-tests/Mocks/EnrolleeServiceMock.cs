@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Bogus;
 
 using Prime.Models;
+using Prime.Models.Api;
 using Prime.Services;
 using PrimeTests.Utils;
 
@@ -195,5 +196,11 @@ namespace PrimeTests.Mocks
 
             return Task.FromResult(updatedNote);
         }
+        public Task<Enrollee> UpdateEnrolleeAlwaysManualAsync(int enrolleeId, bool alwaysManual)
+        {
+
+            return Task.FromResult(new Enrollee());
+        }
     }
+
 }

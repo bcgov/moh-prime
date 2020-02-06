@@ -6,9 +6,9 @@ export interface Enrollee extends EnrolleeProfile {
   userId: string;
   physicalAddress: Address;
   mailingAddress?: Address;
-  contactEmail: string;
-  contactPhone: string;
   voicePhone: string;
-  voiceExtension: string;
+  voiceExtension?: string;
+  contactEmail: string;
+  contactPhone?: string;
   expiryDate?: string;
 }

@@ -49,7 +49,6 @@ import { EnrolleeOrganizationsComponent } from '@shared/components/enrollee/enro
 import { PrimeContactComponent } from '@shared/components/prime-contact/prime-contact.component';
 import { PrimeEmailComponent } from './components/prime-email/prime-email.component';
 import { PrimePhoneComponent } from './components/prime-phone/prime-phone.component';
-import { EnrolleePropertyErrorComponent } from './components/enrollee/enrollee-property-error/enrollee-property-error.component';
 import { ApproveEnrolmentComponent } from './components/dialogs/content/approve-enrolment/approve-enrolment.component';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { MarkdownComponent } from './components/dialogs/content/markdown/markdown.component';
@@ -92,7 +91,6 @@ import { MarkdownComponent } from './components/dialogs/content/markdown/markdow
     PrimeContactComponent,
     PrimeEmailComponent,
     PrimePhoneComponent,
-    EnrolleePropertyErrorComponent,
     ApproveEnrolmentComponent,
     SafeHtmlPipe,
     MarkdownComponent

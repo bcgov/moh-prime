@@ -8,7 +8,6 @@ import { Role } from '@auth/shared/enum/role.enum';
 import { User } from '@auth/shared/models/user.model';
 
 export interface IAuthService {
-  hasJustLoggedIn: boolean;
   getUserId(): Promise<string>;
   getUser(forceReload?: boolean): Promise<User>;
   getUserRoles(): string[];
@@ -40,16 +39,25 @@ export interface KeycloakAttributes {
   providedIn: 'root'
 })
 export class AuthService implements IAuthService {
-
   private jwtHelper: JwtHelperService;
 
-  public hasJustLoggedIn: boolean;
+  // Login event state for performing operations
+  // required immediately after authentication
+  private hasJustLoggedInState: boolean;
 
   constructor(
     private keycloakService: KeycloakService,
     private logger: LoggerService
   ) {
     this.jwtHelper = new JwtHelperService();
+  }
+
+  public set hasJustLoggedIn(hasJustLoggedIn: boolean) {
+    this.hasJustLoggedInState = hasJustLoggedIn;
+  }
+
+  public get hasJustLoggedIn(): boolean {
+    return this.hasJustLoggedInState;
   }
 
   public async getUserId(): Promise<string> {
@@ -141,13 +149,5 @@ export class AuthService implements IAuthService {
 
   public clearToken() {
     this.keycloakService.clearToken();
-  }
-
-  public setHasJustLoggedIn(hasJustLoggedIn: boolean) {
-    this.hasJustLoggedIn = hasJustLoggedIn;
-  }
-
-  public getHasJustLoggedIn(): boolean {
-    return this.hasJustLoggedIn;
   }
 }

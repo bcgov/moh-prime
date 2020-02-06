@@ -82,10 +82,8 @@ export class AdjudicationResource {
   }
 
   public updateEnrolleeAlwaysManual(id: number, alwaysManual: boolean): Observable<any> {
-    const payload = { alwaysManual };
-    let params = new HttpParams();
-    params = params.set('alwaysManual', `${alwaysManual}`);
-    return this.http.put(`${this.config.apiEndpoint}/enrollees/${id}/always-manual`, payload, { params });
+    const payload = { data: alwaysManual };
+    return this.http.patch(`${this.config.apiEndpoint}/enrollees/${id}/always-manual`, payload);
   }
 
   public deleteEnrolment(id: number): Observable<Enrolment> {
@@ -106,7 +104,7 @@ export class AdjudicationResource {
   }
 
   public addAdjudicatorNote(enrolleeId: number, note: string): Observable<AdjudicationNote> {
-    const payload = { enrolleeId, note };
+    const payload = { data: note };
     return this.http.post(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/adjudicator-notes`, payload)
       .pipe(
         map((response: PrimeHttpResponse) => response.result as AdjudicationNote),
