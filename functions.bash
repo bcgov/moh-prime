@@ -43,7 +43,7 @@ function build() {
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
         -p OC_NAMESPACE="$PROJECT_PREFIX" \
-        -p OC_APP="$3" ${@:4} --output="yaml" | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$3" --overwrite=true --all
+        -p OC_APP="$3" ${@:4} --output="yaml" | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$3" --overwrite=true --all #--output="yaml"
     else
         echo "oc process -f ./${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE} -p NAME=${APP_NAME} -p VERSION=${BUILD_NUMBER} -p SUFFIX=-${BRANCH_LOWER} -p SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR} -p SOURCE_REPOSITORY_URL=${GIT_URL} -p SOURCE_REPOSITORY_REF=${BRANCH_NAME} -p OC_NAMESPACE=$PROJECT_PREFIX -p OC_APP=$3 ${@:4} | oc ${MODE} -f - --namespace=$PROJECT_PREFIX-$3"
         oc process -f ./"${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE}" \
@@ -54,7 +54,7 @@ function build() {
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
         -p OC_NAMESPACE="$PROJECT_PREFIX" \
-        -p OC_APP="$3" ${@:4} --output="yaml" | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$3" --overwrite=true --all
+        -p OC_APP="$3" ${@:4} --output="yaml" | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$3" --overwrite=true --all #--output="yaml"
     fi;
     if [ "$BUILD_REQUIRED" == true ];
     then
