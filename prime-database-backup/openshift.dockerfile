@@ -1,4 +1,4 @@
-FROM docker-registry.default.svc:5000/dqszvc-tools/postgresql:10.6
+FROM postgres:10.6
 USER 0
 
 ENV PGPASSWORD "${POSTGRESQL_ADMIN_PASSWORD}"
