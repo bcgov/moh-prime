@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material';
 import { Observable } from 'rxjs';
 
 import { ToastService } from '@core/services/toast.service';
+import { LoggerService } from '@core/services/logger.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { Enrolment } from '@shared/models/enrolment.model';
 
@@ -14,7 +15,6 @@ import { ProgressStatus } from '../enums/progress-status.enum';
 import { EnrolmentService } from '../services/enrolment.service';
 import { EnrolmentResource } from '../services/enrolment-resource.service';
 import { EnrolmentStateService } from '../services/enrolment-state.service';
-import { LoggerService } from '@core/services/logger.service';
 
 export interface IBaseEnrolmentProfilePage {
   form: FormGroup;
