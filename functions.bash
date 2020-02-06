@@ -29,9 +29,11 @@ function build() {
     buildPresent=$(oc get bc/"$APP_NAME${SUFFIX}" --ignore-not-found=true | wc -l)
     if [ "${buildPresent}" -gt 0 ];
     then
-        MODE="replace"
+        MODE="apply"
+        OC_ARGS="--overwrite=true --all"
     else
         MODE="create"
+        OC_ARGS=""
     fi;
     echo "oc process -f ./${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE} -p NAME=${APP_NAME} -p VERSION=${BUILD_NUMBER} -p SUFFIX=-${BRANCH_LOWER} -p SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR} -p SOURCE_REPOSITORY_URL=${GIT_URL} -p SOURCE_REPOSITORY_REF=${BRANCH_NAME} -p OC_NAMESPACE=$PROJECT_PREFIX -p OC_APP=$3 ${@:4} | oc ${MODE} -f - --namespace=$PROJECT_PREFIX-$3"
     oc process -f ./"${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE}" \
@@ -42,7 +44,7 @@ function build() {
     -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
     -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
     -p OC_NAMESPACE="$PROJECT_PREFIX" \
-    -p OC_APP="$3" ${@:4} --output="yaml" | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$3" #--overwrite=true --all #--output="yaml"
+    -p OC_APP="$3" ${@:4} --output="yaml" | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$3" --overwrite=true --all ${OC_ARGS} #--output="yaml"
     if [ "$BUILD_REQUIRED" == true ];
     then
         echo "Building oc start-build $APP_NAME$SUFFIX -n $PROJECT_PREFIX-$3 --wait --follow ..."
@@ -60,11 +62,12 @@ function deploy() {
     export servicePresent=$(oc get service/${APP_NAME}${SUFFIX} --ignore-not-found=true | wc -l)
     if [ "${deployPresent}" -gt 0 ];
     then
-        MODE="replace"
+        MODE="apply"
         if [ "${routePresent}" -gt 0 ];
         then
             echo "Recreating route..."
             oc delete route/${APP_NAME}${SUFFIX} --namespace=$PROJECT_PREFIX-$3
+            OC_ARGS="--overwrite=true --all"
         fi;
 #        if [ "${servicePresent}" -gt 0 ];
 #        then
@@ -72,7 +75,7 @@ function deploy() {
 #            oc delete service/${APP_NAME}${SUFFIX} --namespace=$PROJECT_PREFIX-$3
 #        fi;
     else
-        MODE="apply"
+        MODE="create"
     fi;
     oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
     -p NAME="${APP_NAME}" \
@@ -82,7 +85,7 @@ function deploy() {
     -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
     -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
     -p OC_NAMESPACE="$PROJECT_PREFIX" \
-    -p OC_APP="$3" ${@:4} --output="yaml" | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$3" #--overwrite=true --all #--output="yaml" 
+    -p OC_APP="$3" ${@:4} --output="yaml" | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$3" ${OC_ARGS}
 }
 
 function toolbelt() {
