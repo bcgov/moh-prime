@@ -79,7 +79,8 @@ export class EnrolmentStateService {
     return (
       this.isProfileInfoValid() &&
       this.isRegulatoryValid() &&
-      this.isDeviceProviderValid() &&
+      // TODO removed until after Community Practice
+      // this.isDeviceProviderValid() &&
       this.isJobsValid() &&
       this.isSelfDeclarationValid() &&
       this.isOrganizationValid()
