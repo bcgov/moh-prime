@@ -206,7 +206,7 @@ namespace Prime.Services
             return enrollee.Id;
         }
 
-        public async Task<int> UpdateEnrolleeAsync(Enrollee enrollee, bool profileCompleted = false)
+        public async Task<int> UpdateEnrolleeAsync(EnrolleeProfileViewModel enrolleeProfile, bool profileCompleted = false)
         {
             var _enrolleeDb = await _context.Enrollees
                                 .Include(e => e.MailingAddress)
@@ -214,65 +214,23 @@ namespace Prime.Services
                                 .Include(e => e.Jobs)
                                 .Include(e => e.Organizations)
                                 .AsNoTracking()
-                                .Where(e => e.Id == enrollee.Id)
+                                .Where(e => e.Id == enrolleeProfile.Id)
                                 .SingleOrDefaultAsync();
 
-            // autoMapper.Map(entity, existingEntity);
-            _enrolleeDb.PreferredFirstName = enrollee.PreferredFirstName;
-
-            // PropertyInfo[] properties = typeof(UpdateEnrolleeProfileViewModel).GetProperties();
+            Enrollee enrollee = new Enrollee { Id = enrolleeProfile.Id } ;   // stub model, only has Id
+            _context.Enrollees.Attach(enrollee); // track your stub model
+            _context.Entry(enrollee).CurrentValues.SetValues(enrolleeProfile); // reflection
 
             // Remove existing, and recreate if necessary
-            // this.ReplaceExistingAddress(_enrolleeDb.MailingAddress, enrollee.MailingAddress, enrollee);
-            // this.ReplaceExistingItems(_enrolleeDb.Certifications, enrollee.Certifications, enrollee);
-            // this.ReplaceExistingItems(_enrolleeDb.Jobs, enrollee.Jobs, enrollee);
-            // this.ReplaceExistingItems(_enrolleeDb.Organizations, enrollee.Organizations, enrollee);
+            this.ReplaceExistingAddress(_enrolleeDb.MailingAddress, enrolleeProfile.MailingAddress, enrolleeProfile);
+            this.ReplaceExistingItems(_enrolleeDb.Certifications, enrolleeProfile.Certifications, enrolleeProfile);
+            this.ReplaceExistingItems(_enrolleeDb.Jobs, enrolleeProfile.Jobs, enrolleeProfile);
+            this.ReplaceExistingItems(_enrolleeDb.Organizations, enrolleeProfile.Organizations, enrolleeProfile);
 
             // If profileCompleted is true, this is the first time the enrollee
             // has completed their profile by traversing the wizard, and indicates
             // a change in routing for the enrollee
             enrollee.ProfileCompleted = _enrolleeDb.ProfileCompleted || profileCompleted;
-
-            // Set AlwaysManual to what is stored in DB
-            enrollee.AlwaysManual = _enrolleeDb.AlwaysManual;
-
-            // foreach (var item in whiteList)
-            // {
-            //     _context.Entry(enrollee).Property(e => item).IsModified = true;
-            // }
-
-            // IEnumerable<PropertyEntry> properties = _context.Entry(enrollee).Properties;
-
-            // _context.Enrollees.Attach(enrollee);
-
-            // _context.Update(enrollee);
-
-            // _context.Entry(enrollee).State = EntityState.Modified;
-
-            // _context.Entry(enrollee).Property(e =>e.Id).IsModified = true;
-            _context.Entry(enrollee).Property(e => e.UserId).IsModified = true;
-            _context.Entry(_enrolleeDb).Property(e => e.PreferredFirstName).IsModified = false;
-            _context.Entry(enrollee).Property(e => e.PreferredMiddleName).IsModified = false;
-            _context.Entry(enrollee).Property(e => e.PreferredLastName).IsModified = true;
-            // _context.Entry(enrollee).Property(e => e.MailingAddress).IsModified = true;
-            // _context.Entry(enrollee).Property(e => e.ContactEmail).IsModified = true;
-            // _context.Entry(enrollee).Property(e => e.ContactPhone).IsModified = true;
-            _context.Entry(enrollee).Property(e => e.VoicePhone).IsModified = false;
-            // _context.Entry(enrollee).Property(e => e.VoiceExtension).IsModified = true;
-            // _context.Entry(enrollee).Property(e => e.Certifications).IsModified = true;
-            // _context.Entry(enrollee).Property(e => e.Jobs).IsModified = true;
-            // _context.Entry(enrollee).Property(e => e.Organizations).IsModified = true;
-            // _context.Entry(enrollee).Property(e => e.DeviceProviderNumber).IsModified = true;
-            // _context.Entry(enrollee).Property(e => e.IsInsulinPumpProvider).IsModified = true;
-            // _context.Entry(enrollee).Property(e => e.HasConviction).IsModified = true;
-            // _context.Entry(enrollee).Property(e => e.HasConvictionDetails).IsModified = true;
-            // _context.Entry(enrollee).Property(e => e.HasRegistrationSuspended).IsModified = true;
-            // _context.Entry(enrollee).Property(e => e.HasRegistrationSuspendedDetails).IsModified = true;
-            // _context.Entry(enrollee).Property(e => e.HasDisciplinaryAction).IsModified = true;
-            // _context.Entry(enrollee).Property(e => e.HasDisciplinaryActionDetails).IsModified = true;
-            // _context.Entry(enrollee).Property(e => e.HasPharmaNetSuspended).IsModified = true;
-            _context.Entry(enrollee).Property(e => e.HasPharmaNetSuspendedDetails).IsModified = true;
-
 
             try
             {
@@ -284,7 +242,7 @@ namespace Prime.Services
             }
         }
 
-        private void ReplaceExistingAddress(Address dbAddress, Address newAddress, Enrollee enrollee)
+        private void ReplaceExistingAddress(Address dbAddress, Address newAddress, EnrolleeProfileViewModel enrollee)
         {
             // Remove existing addresses
             if (dbAddress != null)
@@ -302,7 +260,7 @@ namespace Prime.Services
             }
         }
 
-        private void ReplaceExistingItems<T>(ICollection<T> dbCollection, ICollection<T> newCollection, Enrollee enrollee) where T : class, IEnrolleeNavigationProperty
+        private void ReplaceExistingItems<T>(ICollection<T> dbCollection, ICollection<T> newCollection, EnrolleeProfileViewModel enrollee) where T : class, IEnrolleeNavigationProperty
         {
             // Remove existing items
             foreach (var item in dbCollection)

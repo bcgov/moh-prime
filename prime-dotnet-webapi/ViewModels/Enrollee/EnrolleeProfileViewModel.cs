@@ -7,9 +7,9 @@ using Prime.Models;
 
 namespace Prime.ViewModels
 {
-    public class UpdateEnrolleeProfileViewModel
+    public class EnrolleeProfileViewModel
     {
-        public UpdateEnrolleeProfileViewModel(Enrollee model)
+        public EnrolleeProfileViewModel(Enrollee model)
         {
             Id = model.Id;
             UserId = model.UserId;

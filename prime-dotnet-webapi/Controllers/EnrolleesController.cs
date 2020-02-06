@@ -177,7 +177,9 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            await _enrolleeService.UpdateEnrolleeAsync(enrollee, beenThroughTheWizard);
+            var enrolleeProfile = new EnrolleeProfileViewModel(enrollee);
+
+            await _enrolleeService.UpdateEnrolleeAsync(enrolleeProfile, beenThroughTheWizard);
 
             return NoContent();
         }
