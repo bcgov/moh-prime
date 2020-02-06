@@ -15,8 +15,8 @@ import { Job } from '@enrolment/shared/models/job.model';
 import { Address } from '@enrolment/shared/models/address.model';
 import { Organization } from '@enrolment/shared/models/organization.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-import { AccessTerm } from '../models/access-term.model';
-import { EnrolleeNote } from '../models/enrollee-note.model';
+import { AccessTerm } from '@enrolment/shared/models/access-term.model';
+import { EnrolleeNote } from '@enrolment/shared/models/enrollee-note.model';
 
 @Injectable({
   providedIn: 'root'
