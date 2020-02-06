@@ -1,3 +1,5 @@
+oc project ${PROJECT_PREFIX}-$3
+
 export BRANCH_LOWER=`echo "${BRANCH_NAME}" | awk '{print tolower($0)}'`
 function variablePopulation() {
     if [ "${BRANCH_LOWER}" == "develop" ] || [ "${BRANCH_LOWER}" == "master" ];
@@ -25,7 +27,7 @@ function build() {
     source ./"$2.conf"
     echo "Building $2 (${APP_NAME}) to $PROJECT_PREFIX-$3..."
     buildPresent=$(oc get bc/"$APP_NAME-$BRANCH_LOWER" --ignore-not-found=true)
-    if [ -z "${buildPresent}" ];
+    if [ -n "${buildPresent}" ];
     then
         MODE="replace"
     else
@@ -66,15 +68,25 @@ function build() {
 function deploy() {
     source ./"$2.conf"
     echo "Deploying $2 (${APP_NAME}) to $3 ..."
-    deployPresent=$(oc get dc/"${APP_NAME}-${BRANCH_LOWER}" --ignore-not-found=true)
-    if [ -z "${deployPresent}" ];
+    export deployPresent=$(oc get dc/"${APP_NAME}-${BRANCH_LOWER}" --ignore-not-found=true)
+    export routePresent=$(oc get route/"${APP_NAME}-${BRANCH_LOWER}" --ignore-not-found=true)
+    export servicePresent$(oc get service/"${APP_NAME}-${BRANCH_LOWER}" --ignore-not-found=true)
+    if [ -n "${deployPresent}" ];
     then
         MODE="replace"
+        if [ -n "${routePresent}" ];
+        then
+            echo "Recreating route..."
+            oc delete route/${APP_NAME}${SUFFIX} --namespace="$PROJECT_PREFIX-$3"
+        fi;
+        if [ -n "${servicePresent}" ];
+        then
+            echo "Recreating service..."
+            oc delete service/${APP_NAME}${SUFFIX} --namespace="$PROJECT_PREFIX-$3"
+        fi;
     else
         MODE="create"
     fi;
-    echo "Recreating route..."
-    #oc delete route/${APP_NAME}-${BRANCH_LOWER} --namespace="$PROJECT_PREFIX-$3"
     if [ "${BRANCH_LOWER}" == "develop" ] || [ "${BRANCH_LOWER}" == "master" ];
     then
         oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
@@ -84,7 +96,7 @@ function deploy() {
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
         -p OC_NAMESPACE="$PROJECT_PREFIX" \
-        -p OC_APP="$3" ${@:4} --output="yaml" | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$3" --output="yaml" --overwrite=true --all --validate=true
+        -p OC_APP="$3" ${@:4} --output="yaml" | oc "${MODE}" -f - #--namespace="$PROJECT_PREFIX-$3" --output="yaml" --overwrite=false --all --validate=true
     else
         oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
         -p NAME="${APP_NAME}" \
@@ -94,7 +106,7 @@ function deploy() {
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
         -p OC_NAMESPACE="$PROJECT_PREFIX" \
-        -p OC_APP="$3" ${@:4} --output="yaml" | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$3" --output="yaml" --overwrite=true --all --validate=true
+        -p OC_APP="$3" ${@:4} --output="yaml" | oc "${MODE}" -f - #--namespace="$PROJECT_PREFIX-$3" --output="yaml" --overwrite=false --all --validate=true
     fi;
 }
 
