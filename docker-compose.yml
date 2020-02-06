@@ -17,49 +17,49 @@ services:
     networks:
       - primenet
 ######################################################### Sign-in #
-  dotnet-webapi:
-    container_name: primeapi
-    restart: always
-    build:
-      context: prime-dotnet-webapi/
-    environment:
-      DB_CONNECTION_STRING: "host=postgres;port=5432;database=postgres;username=postgres;password=postgres"
-      JWT_SIGNING_KEY: "SdqlA0Y5e6HMAK1wm6iHHHz2u37XGtlo"
-      ASPNETCORE_HTTPS_PORT: "5001"
-      ASPNETCORE_ENVIRONMENT: "Development"
-      ASPNETCORE_URLS: "http://+:8080"
-      DOTNET_CLI_HOME: "/tmp/DOTNET_CLI_HOME"
-    ports:
-      - "5000:8080"
-      - "5001:5001"
-    networks:
-      - primenet
-    depends_on:
-      - postgres
+  # dotnet-webapi:
+  #   container_name: primeapi
+  #   restart: always
+  #   build:
+  #     context: prime-dotnet-webapi/
+  #   environment:
+  #     DB_CONNECTION_STRING: "host=postgres;port=5432;database=postgres;username=postgres;password=postgres"
+  #     JWT_SIGNING_KEY: "SdqlA0Y5e6HMAK1wm6iHHHz2u37XGtlo"
+  #     ASPNETCORE_HTTPS_PORT: "5001"
+  #     ASPNETCORE_ENVIRONMENT: "Development"
+  #     ASPNETCORE_URLS: "http://+:8080"
+  #     DOTNET_CLI_HOME: "/tmp/DOTNET_CLI_HOME"
+  #   ports:
+  #     - "5000:8080"
+  #     - "5001:5001"
+  #   networks:
+  #     - primenet
+  #   depends_on:
+  #     - postgres
 ###################################################### Web Frontend #
-  nginx-angular:
-    container_name: primeweb
-    build:
-         context: prime-angular-frontend/
-    command: "nginx -g 'daemon off;'"
-    restart: always
-    ports:
-       - "8080:8080"
-       - "4200:8080"
-    expose:
-       - "8080"
-       - "4200"
-    networks:
-      - primenet
-    depends_on:
-      - dotnet-webapi
+  # nginx-angular:
+  #   container_name: primeweb
+  #   build:
+  #        context: prime-angular-frontend/
+  #   command: "nginx -g 'daemon off;'"
+  #   restart: always
+  #   ports:
+  #      - "8080:8080"
+  #      - "4200:8080"
+  #   expose:
+  #      - "8080"
+  #      - "4200"
+  #   networks:
+  #     - primenet
+  #   depends_on:
+  #     - dotnet-webapi
 ################################################# Local SMTP Server #
   mailhog:
     container_name: mailhog
     restart: always
     image: mailhog/mailhog:latest
     ports:
-      - 25:1025 
+      - 25:1025
 ######################################################### Sign-in #
   # schema-spy:
   #   container_name: schema-spy

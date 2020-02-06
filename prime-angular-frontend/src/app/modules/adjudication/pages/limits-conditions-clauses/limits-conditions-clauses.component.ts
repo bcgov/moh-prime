@@ -25,7 +25,6 @@ import { ApproveEnrolmentComponent } from '@shared/components/dialogs/content/ap
   selector: 'app-limits-conditions-clauses',
   templateUrl: './limits-conditions-clauses.component.html',
   styleUrls: ['./limits-conditions-clauses.component.scss'],
-  encapsulation: ViewEncapsulation.None
 })
 export class LimitsConditionsClausesComponent implements OnInit {
   public busy: Subscription;

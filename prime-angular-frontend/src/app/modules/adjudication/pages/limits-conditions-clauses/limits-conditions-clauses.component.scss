@@ -1,6 +1,6 @@
 @import 'palette';
 
-.preview {
+.preview ::ng-deep {
   color: theme-palette(grey, dark);
 
   h1 {
