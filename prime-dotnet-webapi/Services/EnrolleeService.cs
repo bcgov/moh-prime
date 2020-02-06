@@ -133,16 +133,13 @@ namespace Prime.Services
 
         public async Task<IEnumerable<Enrollee>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)
         {
-            IQueryable<Enrollee> query = this.GetBaseEnrolleeQuery();
+            IEnumerable<Enrollee> items = await this.GetBaseEnrolleeQuery().ToListAsync();
 
             if (searchOptions?.StatusCode != null)
             {
                 // TODO refactor see Jira PRIME-251
-                query.Load();
-                query = _context.Enrollees.Where(e => e.CurrentStatus.StatusCode == (short)searchOptions.StatusCode);
+               items = items.Where(e => e.CurrentStatus.StatusCode == (short)searchOptions.StatusCode);
             }
-
-            var items = await query.ToListAsync();
 
             foreach (var item in items)
             {
