@@ -95,7 +95,7 @@ namespace Prime.Controllers
             // Prevent access to the enrollee's current terms of access based on status
             if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.ACTIVE_CODE, Status.LOCKED_CODE))
             {
-                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee terms of service can not be retrieved when the current status is 'IN_PROGRESS', 'DECLINED', or 'DECLINED_TOA'.");
+                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee terms of service can not be retrieved when the current status is 'ACTIVE'or 'LOCKED'.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
