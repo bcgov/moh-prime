@@ -17,6 +17,8 @@ import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
 describe('DemographicComponent', () => {
   let component: DemographicComponent;
@@ -48,6 +50,10 @@ describe('DemographicComponent', () => {
           {
             provide: AuthService,
             useClass: MockAuthService
+          },
+          {
+            provide: EnrolmentService,
+            useClass: MockEnrolmentService
           }
         ]
       }
