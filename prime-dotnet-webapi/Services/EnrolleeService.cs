@@ -57,7 +57,7 @@ namespace Prime.Services
                 Status ACTIVE = _context.Statuses.Single(s => s.Code == Status.ACTIVE_CODE);
                 Status UNDER_REVIEW = _context.Statuses.Single(s => s.Code == Status.UNDER_REVIEW_CODE);
                 Status REQUIRES_TOA = _context.Statuses.Single(s => s.Code == Status.REQUIRES_TOA_CODE);
-                Status DECLINED = _context.Statuses.Single(s => s.Code == Status.DECLINED_CODE);
+                Status DECLINED = _context.Statuses.Single(s => s.Code == Status.LOCKED_CODE);
 
                 _workflowStateMap = new Dictionary<Status, StatusWrapper[]>();
                 _workflowStateMap.Add(NULL_STATUS, new[] {
@@ -382,7 +382,7 @@ namespace Prime.Services
 
                     break;
 
-                case Status.DECLINED_CODE:
+                case Status.LOCKED_CODE:
                     await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
                     createdEnrolmentStatus.PharmaNetStatus = true;
                     break;
@@ -399,7 +399,7 @@ namespace Prime.Services
                         await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
                         enrollee.LicensePlate = this.GenerateLicensePlate();
                         createdEnrolmentStatus.PharmaNetStatus = true;
-                        await _accessTermService.SetAcceptedDateForAccessTermAsync(enrollee);
+                        await _accessTermService.AcceptCurrentAccessTermAsync(enrollee);
                         await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrolleeId, enrollee);
                         break;
                     }
