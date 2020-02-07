@@ -44,6 +44,7 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
       this.onSubmitFormIsValid();
 
       if (this.isInitialEnrolment) {
+        // Update using the form which could contain changes
         const payload = this.enrolmentStateService.enrolment;
 
         this.logger.info('UPDATING_ENROLMENT', payload);
