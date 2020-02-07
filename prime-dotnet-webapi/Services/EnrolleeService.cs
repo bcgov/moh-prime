@@ -142,7 +142,7 @@ namespace Prime.Services
             if (searchOptions?.StatusCode != null)
             {
                 // TODO refactor see Jira PRIME-251
-               items = items.Where(e => e.CurrentStatus.StatusCode == (short)searchOptions.StatusCode);
+                items = items.Where(e => e.CurrentStatus.StatusCode == (short)searchOptions.StatusCode);
             }
 
             foreach (var item in items)
@@ -207,15 +207,15 @@ namespace Prime.Services
         public async Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeProfileViewModel enrolleeProfile, bool profileCompleted = false)
         {
             var _enrolleeDb = await _context.Enrollees
-                                .Include(e => e.MailingAddress)
-                                .Include(e => e.Certifications)
-                                .Include(e => e.Jobs)
-                                .Include(e => e.Organizations)
-                                .AsNoTracking()
-                                .Where(e => e.Id == enrolleeId)
-                                .SingleOrDefaultAsync();
+                .Include(e => e.MailingAddress)
+                .Include(e => e.Certifications)
+                .Include(e => e.Jobs)
+                .Include(e => e.Organizations)
+                .AsNoTracking()
+                .Where(e => e.Id == enrolleeId)
+                .SingleOrDefaultAsync();
 
-            Enrollee enrollee = new Enrollee { Id = enrolleeId } ;   // stub model, only has Id
+            Enrollee enrollee = new Enrollee { Id = enrolleeId };   // stub model, only has Id
             _context.Enrollees.Attach(enrollee); // track your stub model
             _context.Entry(enrollee).CurrentValues.SetValues(enrolleeProfile); // reflection
 

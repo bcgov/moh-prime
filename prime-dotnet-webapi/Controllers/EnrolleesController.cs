@@ -144,30 +144,12 @@ namespace Prime.Controllers
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
             if (enrollee == null)
             {
-                this.ModelState.AddModelError("Enrollee", "Could not update the enrollee, the passed in Enrollee cannot be null.");
-                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
 
             if (!User.CanAccess(enrollee))
             {
                 return Forbid();
-            }
-
-            if (enrollee.Id == null)
-            {
-                this.ModelState.AddModelError("Enrollee.Id", "Enrollee Id is required to make updates.");
-                return BadRequest(new ApiBadRequestResponse(this.ModelState));
-            }
-
-            if (enrolleeId != enrollee.Id)
-            {
-                this.ModelState.AddModelError("Enrollee.Id", "Enrollee Id does not match with the payload.");
-                return BadRequest(new ApiBadRequestResponse(this.ModelState));
-            }
-
-            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
-            {
-                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
 
             // If the enrollee is not in the status of 'In Progress' or 'Accepted TOA', it cannot be updated
