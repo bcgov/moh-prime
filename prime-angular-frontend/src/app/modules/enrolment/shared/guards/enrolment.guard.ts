@@ -67,14 +67,9 @@ export class EnrolmentGuard extends BaseGuard {
             : of(enrolment);
         }),
         map((enrolment: Enrolment) => {
-          // Store the enrolment for access throughout enrolment, BUT only
-          // if it doesn't already exist OR the enrollee is filling out
-          // their initial enrolment to allow for page-by-page updates
-          if (!this.enrolmentService.enrolment || !this.enrolmentService.isInitialEnrolment) {
-            this.logger.info('UPDATE_ENROLMENT_SERVICE', enrolment);
-            this.enrolmentService.enrolment$.next(enrolment);
-          }
-
+          // Store the enrolment for access throughout enrolment, which
+          // will allows be the most up-to-date enrolment
+          this.enrolmentService.enrolment$.next(enrolment);
           return this.routeDestination(routePath, enrolment);
         })
       );
