@@ -14,6 +14,7 @@ using PrimeTests.Utils;
 using Newtonsoft.Json;
 using Prime;
 using Prime.Models.Api;
+using Prime.ViewModels;
 
 namespace PrimeTests.Controllers
 {
@@ -444,17 +445,19 @@ namespace PrimeTests.Controllers
                 // pick off an enrollee to update
                 Enrollee enrollee = enrollees.First();
                 int enrolleeId = (int)enrollee.Id;
-                string previousFirstName = enrollee.FirstName;
-                string previousLastName = enrollee.LastName;
+                string previousFirstName = enrollee.PreferredFirstName;
+                string previousLastName = enrollee.PreferredLastName;
                 string expectedFirstName = "NewFirstName";
                 string expectedLastName = "NewLastName";
 
-                // update the names
-                enrollee.FirstName = expectedFirstName;
-                enrollee.LastName = expectedLastName;
+                EnrolleeProfileViewModel enrolleeProfile = new EnrolleeProfileViewModel
+                {
+                    PreferredFirstName = expectedFirstName,
+                    PreferredLastName = expectedLastName
+                };
 
                 // create a request with an AUTH token
-                var request = TestUtils.CreateRequest<Enrollee>(HttpMethod.Put, $"/api/enrollees/{enrolleeId}", enrollee.UserId, enrollee);
+                var request = TestUtils.CreateRequest<Enrollee>(HttpMethod.Put, $"/api/enrollees/{enrolleeId}", enrollee.UserId, enrolleeProfile);
 
                 // call the controller to update the enrollee
                 var response = await _client.SendAsync(request);
