@@ -144,10 +144,15 @@ export class EnrolmentResource {
   private enrolmentAdapter(enrollee: HttpEnrollee): Enrolment {
     const {
       userId,
+      firstName,
+      middleName,
+      lastName,
       preferredFirstName,
       preferredMiddleName,
       preferredLastName,
+      dateOfBirth,
       licensePlate,
+      physicalAddress,
       mailingAddress,
       contactEmail,
       contactPhone,
@@ -160,17 +165,22 @@ export class EnrolmentResource {
     return {
       enrollee: {
         userId,
+        firstName,
+        middleName,
+        lastName,
         preferredFirstName,
         preferredMiddleName,
         preferredLastName,
+        dateOfBirth,
         licensePlate,
+        physicalAddress,
         mailingAddress,
         contactEmail,
         contactPhone,
         voicePhone,
         voiceExtension,
         expiryDate
-      } as Enrollee,
+      },
       // Provide the default and allow it to be overridden
       collectionNoticeAccepted: false,
       ...remainder

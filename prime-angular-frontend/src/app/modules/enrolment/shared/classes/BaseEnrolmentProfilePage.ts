@@ -18,6 +18,7 @@ import { EnrolmentStateService } from '../services/enrolment-state.service';
 
 export interface IBaseEnrolmentProfilePage {
   form: FormGroup;
+  enrolment: Enrolment;
   onSubmit(): void;
   canDeactivate(): Observable<boolean> | boolean;
 }
@@ -44,8 +45,18 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
       this.onSubmitFormIsValid();
 
       if (this.isInitialEnrolment) {
+        // TODO remove BCSC fields when API is updated
+        const {
+          firstName,
+          middleName,
+          lastName,
+          dateOfBirth,
+          physicalAddress
+        } = this.enrolmentService.enrolment.enrollee;
         // Update using the form which could contain changes
         const payload = this.enrolmentStateService.enrolment;
+        // TODO remove BCSC fields when API is updated
+        payload.enrollee = { ...payload.enrollee, firstName, middleName, lastName, dateOfBirth, physicalAddress };
 
         this.logger.info('UPDATING_ENROLMENT', payload);
 
@@ -67,8 +78,6 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
             }
           );
       } else {
-        this.logger.info('NOT_UPDATING_ENROLMENT');
-
         this.form.markAsPristine();
         this.nextRouteAfterSubmit();
       }
@@ -94,7 +103,6 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
    */
   protected onSubmitFormIsValid() {
     // Not Implemented
-    this.logger.info('ON_SUBMIT_FORM_IS_VALID');
   }
 
   /**
@@ -103,7 +111,6 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
    */
   protected onSubmitFormIsInvalid() {
     // Not Implemented
-    this.logger.info('ON_SUBMIT_FORM_IS_INVALID');
   }
 
   /**
@@ -112,7 +119,6 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
    */
   protected afterSubmitIsSuccessful() {
     // Not Implemented
-    this.logger.info('AFTER_SUBMIT_IS_SUCCESSFUL');
   }
 
   /**
@@ -122,17 +128,18 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
    * @params nextRoutePath Optional next route, or defaults to overview
    */
   protected nextRouteAfterSubmit(nextRoutePath: string = EnrolmentRoutes.OVERVIEW): void {
-    this.logger.info('NEXT_ENROLMENT_ROUTE', nextRoutePath);
-
     this.routeTo(nextRoutePath);
   }
 
   protected patchForm(): void {
     this.enrolment = this.enrolmentService.enrolment;
 
-    console.log('PATCH', this.enrolmentStateService.enrolment);
+    console.log('PATCH_WITH', this.enrolment);
 
     this.enrolmentStateService.enrolment = this.enrolment;
+
+    console.log('PATCHED', this.enrolmentStateService.enrolment);
+
     this.isInitialEnrolment = this.enrolment.progressStatus !== ProgressStatus.FINISHED;
     this.isProfileComplete = this.enrolment.profileCompleted;
   }

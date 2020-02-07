@@ -87,7 +87,6 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
 
   public onMailingAddressChange() {
     this.hasMailingAddress = !this.hasMailingAddress;
-
     this.toggleMailingAddressValidators(this.mailingAddress, ['street2']);
   }
 

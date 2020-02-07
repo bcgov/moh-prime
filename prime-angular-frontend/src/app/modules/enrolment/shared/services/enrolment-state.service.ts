@@ -159,7 +159,6 @@ export class EnrolmentStateService {
 
   private buildDemographicForm(): FormGroup {
     return this.fb.group({
-      userId: [{ value: null, disabled: true }, [Validators.required]],
       preferredFirstName: [null, []],
       preferredMiddleName: [null, []],
       preferredLastName: [null, []],
