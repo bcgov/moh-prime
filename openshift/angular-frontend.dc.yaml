@@ -143,6 +143,9 @@ objects:
     host: "${VANITY_URL}"
     port:
       targetPort: "${HTTP_PORT}"
+    tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: passthrough
     to:
       kind: Service
       name: "${NAME}${SUFFIX}"
