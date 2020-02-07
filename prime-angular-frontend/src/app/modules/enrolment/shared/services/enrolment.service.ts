@@ -12,7 +12,6 @@ export interface IEnrolmentService {
   enrolment: Enrolment;
   isInitialEnrolment: boolean;
   isProfileComplete: boolean;
-  status: Config<number>;
 }
 
 @Injectable({
@@ -35,14 +34,14 @@ export class EnrolmentService implements IEnrolmentService {
   }
 
   public get isInitialEnrolment(): boolean {
-    return this.enrolment.progressStatus !== ProgressStatus.FINISHED;
+    return (this.enrolment)
+      ? this.enrolment.progressStatus !== ProgressStatus.FINISHED
+      : false;
   }
 
   public get isProfileComplete(): boolean {
-    return this.enrolment.profileCompleted;
-  }
-
-  public get status(): Config<number> {
-    return this._enrolment.value.currentStatus.status;
+    return (this.enrolment)
+      ? this.enrolment.profileCompleted
+      : false;
   }
 }
