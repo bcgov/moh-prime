@@ -132,7 +132,8 @@ export class ConfigService implements IConfigService {
 
   /**
    *  @description
-   *  Filters configs that match to the bottom of the list.
+   *  Filter config items that contain the value to be matched in their name
+   *  to the bottom of the list.
    */
   private filterBottom(list: Config<number | string>[], match: string) {
     return list.reduce((acc, item) => {
