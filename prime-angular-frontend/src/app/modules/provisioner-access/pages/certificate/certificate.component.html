@@ -1,0 +1,56 @@
+<app-page [busy]="busy">
+
+  <app-page-header class="mb-5">Provisioner Link</app-page-header>
+
+
+
+  <ng-container *ngIf="certificate">
+
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>PharmaNet ID</ng-container>
+    </app-page-subheader>
+
+    <p class="mb-4">Your PharmaNet ID is
+      {{ expiryDate === null ? ' expired' : ' valid for one year. Please renew by ' + expiryDate }}.
+    </p>
+
+    <p class="font-weight-bold mb-5">
+      {{ certificate.licensePlate | uppercase }}
+    </p>
+
+
+
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>User Information</ng-container>
+    </app-page-subheader>
+
+
+
+    <div class="mb-4">
+
+      <app-enrollee-property title="Name"
+                             [makeBold]="true">
+        {{ fullName }}
+      </app-enrollee-property>
+
+    </div>
+
+    <ng-container *ngFor="let organizationType of certificate.organizationTypes">
+
+      <app-enrollee-property title="Organization Type"
+                             [makeBold]="true">
+        {{ organizationType.name }}
+      </app-enrollee-property>
+
+    </ng-container>
+
+    <app-enrollee-property *ngIf="certificate.organizationTypes.length == 0"
+                           title="Organization Type"
+                           [makeBold]="true">
+      None
+    </app-enrollee-property>
+
+
+  </ng-container>
+
+</app-page>

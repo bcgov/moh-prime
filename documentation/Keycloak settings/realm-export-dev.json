@@ -26,7 +26,7 @@
   "registrationEmailAsUsername": false,
   "rememberMe": false,
   "verifyEmail": false,
-  "loginWithEmailAllowed": true,
+  "loginWithEmailAllowed": false,
   "duplicateEmailsAllowed": false,
   "resetPasswordAllowed": false,
   "editUsernameAllowed": false,
@@ -292,6 +292,7 @@
           "attributes": {}
         }
       ],
+      "prime-pos-gpid": [],
       "security-admin-console": [],
       "admin-cli": [],
       "broker": [
@@ -717,6 +718,116 @@
         "phone",
         "offline_access"
       ]
+    },
+    {
+      "id": "0b79e39a-f8a7-4fe2-a1b7-105f70979cbb",
+      "clientId": "prime-pos-gpid",
+      "name": "Provisioner System",
+      "description": "",
+      "surrogateAuthRequired": false,
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "**********",
+      "redirectUris": [
+        "*"
+      ],
+      "webOrigins": [
+        "*"
+      ],
+      "notBefore": 0,
+      "bearerOnly": false,
+      "consentRequired": true,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "publicClient": true,
+      "frontchannelLogout": false,
+      "protocol": "openid-connect",
+      "attributes": {
+        "saml.assertion.signature": "false",
+        "saml.multivalued.roles": "false",
+        "saml.force.post.binding": "false",
+        "saml.encrypt": "false",
+        "login_theme": "keycloak",
+        "saml.server.signature": "false",
+        "saml.server.signature.keyinfo.ext": "false",
+        "exclude.session.state.from.auth.response": "false",
+        "consent.screen.text": "GPID",
+        "saml_force_name_id_format": "false",
+        "saml.client.signature": "false",
+        "tls.client.certificate.bound.access.tokens": "false",
+        "saml.authnstatement": "false",
+        "display.on.consent.screen": "true",
+        "saml.onetimeuse.condition": "false"
+      },
+      "authenticationFlowBindingOverrides": {},
+      "fullScopeAllowed": false,
+      "nodeReRegistrationTimeout": -1,
+      "protocolMappers": [
+        {
+          "id": "90ff99ec-42fc-4326-873f-93854c5eb2ff",
+          "name": "Client Host",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientHost",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientHost",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "dcd5f3f0-4f8e-466b-859f-d0dc053e6618",
+          "name": "set audience to prime-web-api",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-hardcoded-claim-mapper",
+          "consentRequired": false,
+          "config": {
+            "claim.value": "prime-web-api",
+            "userinfo.token.claim": "false",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "aud",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "26bbb2da-d42a-49d9-9ac8-3e959b4d90c1",
+          "name": "Client IP Address",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientAddress",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientAddress",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "fe00e8cb-632b-4d8b-a7ed-81d1bd3e96a3",
+          "name": "Client ID",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientId",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientId",
+            "jsonType.label": "String"
+          }
+        }
+      ],
+      "defaultClientScopes": [
+        "identity_provider",
+        "identity_assurance_level"
+      ],
+      "optionalClientScopes": []
     },
     {
       "id": "22854b97-16d6-4693-a405-ad4ead7edbd8",
@@ -2292,6 +2403,20 @@
     {
       "id": "72909a86-c06d-44eb-907f-ecdbf3ed81bf",
       "alias": "BCSC redirect",
+      "config": {
+        "defaultProvider": "bcsc"
+      }
+    },
+    {
+      "id": "88ead67b-6d82-4be5-942f-957f8002485c",
+      "alias": "ailias",
+      "config": {
+        "defaultProvider": "bcsc"
+      }
+    },
+    {
+      "id": "230fa290-b786-4ea0-ac0a-bcd2e5509e51",
+      "alias": "bcsc",
       "config": {
         "defaultProvider": "bcsc"
       }

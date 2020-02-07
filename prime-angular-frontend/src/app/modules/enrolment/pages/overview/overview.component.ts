@@ -40,16 +40,12 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     super(route, router);
   }
 
-  public isAnyJobOrReg(): boolean {
-    return this.enrolmentStateService.isAnyJobOrReg();
-  }
-
   public onSubmit() {
     if (this.enrolmentStateService.isEnrolmentValid()) {
       const enrolment = this.enrolmentStateService.enrolment;
       const data: DialogOptions = {
         title: 'Submit Enrolment',
-        message: 'When your enrolment has submitted for adjudication it can no longer be updated. Are you ready to submit your enrolment?',
+        message: 'When your enrolment is submitted for adjudication it can no longer be updated. Are you ready to submit your enrolment?',
         actionText: 'Submit Enrolment'
       };
       this.busy = this.dialog.open(ConfirmDialogComponent, { data })
@@ -76,7 +72,6 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       console.log('JOBS', this.enrolmentStateService.isJobsValid());
       console.log('DECLARATION', this.enrolmentStateService.isSelfDeclarationValid());
       console.log('ACCESS', this.enrolmentStateService.isOrganizationValid());
-      console.log('ANY ( JOB || REGULATORY )', this.enrolmentStateService.isAnyJobOrReg());
     }
   }
 

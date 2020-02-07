@@ -78,21 +78,26 @@ objects:
             value: ${OC_APP}
           - name: REDIRECT_URL
             value: "${REDIRECT_URL}"
-          - name: TLS_CHAIN
+          - name: KEYCLOAK_CLIENT_ID
             valueFrom:
               secretKeyRef:
-                key: authority-chain
-                name: "frontend-tls-certificate" 
-          - name: TLS_PRIVATE
+                key: KEYCLOAK_CLIENT_ID
+                name: "keycloak"
+          - name: KEYCLOAK_REALM
             valueFrom:
               secretKeyRef:
-                key: private-key
-                name: "frontend-tls-certificate"
-          - name: TLS_PASSWORD
+                key: KEYCLOAK_REALM
+                name: "keycloak"
+          - name: KEYCLOAK_URL
             valueFrom:
               secretKeyRef:
-                key: database-admin-password
-                name: "postgresql-secret"
+                key: KEYCLOAK_URL
+                name: "keycloak"
+          - name: JWT_WELL_KNOWN_CONFIG
+            valueFrom:
+              secretKeyRef:
+                key: JWT_WELL_KNOWN_CONFIG
+                name: keycloak
           image: " "
           name: primeweb
           ports:
@@ -102,14 +107,22 @@ objects:
             failureThreshold: 3
             httpGet:
               path: /info
-              port: 8080
-              scheme: HTTP
+              port: 8443
+              scheme: HTTPS
             initialDelaySeconds: 5
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 1
           resources: {}
-        restartPolicy: Always
+          volumeMounts:
+            - mountPath: /etc/nginx/certs
+              name: vanity-tls-certs
+              readOnly: true
+        volumes:
+          - name: vanity-tls-certs
+            secret:
+              defaultMode: 420
+              secretName: vanity-tls-certificate
     test: false 
     triggers:
       - type: ConfigChange
@@ -125,11 +138,14 @@ objects:
 - apiVersion: v1
   kind: Route
   metadata:
-    name: "${NAME}${SUFFIX}-insecure"
+    name: "${NAME}${SUFFIX}"
   spec:
     host: "${VANITY_URL}"
     port:
       targetPort: "${HTTP_PORT}"
+    tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: passthrough
     to:
       kind: Service
       name: "${NAME}${SUFFIX}"

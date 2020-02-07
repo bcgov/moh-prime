@@ -36,6 +36,7 @@ export class MockEnrolmentService implements IEnrolmentService {
         voicePhone: faker.phone.phoneNumber(),
         voiceExtension: null,
         licensePlate: null,
+        expiryDate: null,
       },
       appliedDate: null,
       approvedDate: null,
@@ -84,7 +85,8 @@ export class MockEnrolmentService implements IEnrolmentService {
       accessAgreementNote: null,
       profileCompleted: true,
       progressStatus: ProgressStatus.STARTED,
-      collectionNoticeAccepted: false
+      collectionNoticeAccepted: false,
+      alwaysManual: false
     });
   }
 

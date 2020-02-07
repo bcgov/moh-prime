@@ -1,20 +1,13 @@
 #!/bin/bash
-#export MAIL_SERVER_URL=`route -n|grep "UG"|grep -v "UGH"|cut -f 10 -d " "`
-#export MAIL_SERVER_PORT=1025
-#dotnet prime.dll
-if [ -z "$DB_HOST" ]
-then
-    export DB_CONNECTION_STRING="${DB_CONNECTION_STRING}"
-else
-    host=postgresql;port=5432;database=postgres;username=postgres;password=0p1miz3Pr1m3
-    export DB_CONNECTION_STRING="host=${DB_HOST};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"
-fi
-
-echo "Running database migrations..."
-dotnet ef database update
+echo "Running the migrations..."
+#psql -d postgres -f databaseMigration.sql
+psql -h $DB_HOST -U ${POSTGRESQL_USER} -d ${POSTGRESQL_DATABASE} -a -f databaseMigrations.sql
+echo "Resting 5 seconds to let things settle down..."
 
 echo "Running .NET..."
-dotnet prime.dll &disown
+dotnet prime.dll -v &disown
+
+echo "Launched, waiting for connection to API internally..."
 
 function waitForIt() {
 until [[ "$response" -eq "$2" ]]

@@ -64,11 +64,11 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
   }
 
   public get isObo() {
-    return this.enrolment.enrolleeClassification === EnrolleeClassification.OBO;
+    return this.accessTerm.userClause.enrolleeClassification === EnrolleeClassification.OBO;
   }
 
   public get isRu() {
-    return this.enrolment.enrolleeClassification === EnrolleeClassification.RU;
+    return this.accessTerm.userClause.enrolleeClassification === EnrolleeClassification.RU;
   }
 
   public get hasAgreed(): boolean {
@@ -154,7 +154,7 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
   public ngOnInit() {
     this.enrolment = this.enrolmentService.enrolment;
     this.isInitialEnrolment = this.enrolment.progressStatus !== ProgressStatus.FINISHED;
-    this.enrolmentResource.getAccessTerm(this.enrolment.id)
+    this.enrolmentResource.getAccessTermLatest(this.enrolment.id, false)
       .subscribe(
         (accessTerm: AccessTerm) => this.accessTerm = accessTerm,
         (error: any) => {

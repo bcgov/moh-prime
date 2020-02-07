@@ -24,13 +24,19 @@ export class CollectionNoticeAlertComponent implements OnInit {
 
   public EnrolmentRoutes = EnrolmentRoutes;
 
+  public get buttonText(): string {
+    return (!this.profileCompleted)
+      ? 'Next'
+      : 'Ok';
+  }
+
   public ngOnInit() {
     this.enrolment = this.enrolmentService.enrolment;
     this.profileCompleted = (this.enrolment) ? this.enrolment.profileCompleted : false;
   }
 
   public show() {
-    return this.authService.getHasJustLoggedIn();
+    return this.authService.hasJustLoggedIn;
   }
 
   public onAccept() {
@@ -38,7 +44,7 @@ export class CollectionNoticeAlertComponent implements OnInit {
       ? EnrolmentRoutes.DEMOGRAPHIC
       : EnrolmentRoutes.OVERVIEW;
 
-    this.authService.setHasJustLoggedIn(false);
+    this.authService.hasJustLoggedIn = false;
 
     this.router.navigate([route], { relativeTo: this.route.parent });
   }

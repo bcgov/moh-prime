@@ -70,8 +70,6 @@ objects:
             value: "prime-application-${OC_APP}"
           - name: JWT_AUDIENCE
             value: "prime-web-api"
-          - name: JWT_WELL_KNOWN_CONFIG 
-            value: "https://sso-${OC_APP}.pathfinder.gov.bc.ca/auth/realms/v4mbqqas/.well-known/openid-configuration"
           - name: DB_HOST
             value: "postgresql${SUFFIX}"
           - name: POSTGRESQL_USER
@@ -82,7 +80,7 @@ objects:
           - name: POSTGRESQL_PASSWORD
             valueFrom:
               secretKeyRef:
-                key: database-password
+                key: database-admin-password
                 name: "postgresql-secret"
           - name: POSTGRESQL_ADMIN_PASSWORD
             valueFrom:
@@ -94,6 +92,26 @@ objects:
               secretKeyRef:
                 key: database-name
                 name: "postgresql-secret"
+          - name: KEYCLOAK_URL
+            valueFrom:
+              secretKeyRef:
+                key: KEYCLOAK_URL
+                name: "keycloak"
+          - name: KEYCLOAK_REALM
+            valueFrom:
+              secretKeyRef:
+                key: KEYCLOAK_REALM
+                name: "keycloak"
+          - name: KEYCLOAK_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                key: KEYCLOAK_CLIENT_ID
+                name: "keycloak"
+          - name: JWT_WELL_KNOWN_CONFIG
+            valueFrom:
+              secretKeyRef:
+                key: JWT_WELL_KNOWN_CONFIG
+                name: "keycloak" 
       tags:
         - annotations: null
           from:

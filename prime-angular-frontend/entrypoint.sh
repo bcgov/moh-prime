@@ -1,8 +1,9 @@
 #!/bin/sh
+echo "Substituting environment..."
 envsubst '$SUFFIX' < /etc/nginx/nginx.template.conf > /etc/nginx/conf.d/default.conf 
-echo "$TLS_PASSWORD" >  /etc/nginx/passwd.txt
-echo "$TLS_PRIVATE" > /etc/nginx/private.key
-echo "$TLS_CHAIN" >  /etc/nginx/chained.crt
-nginx 
+echo "Running nginx..."
+nginx
+echo "Keeping container alive..."
 tail -f /dev/null
+
 #nginx -g "daemon-off;"

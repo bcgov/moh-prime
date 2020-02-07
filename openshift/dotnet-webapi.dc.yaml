@@ -88,7 +88,7 @@ objects:
                 - name: ASPNETCORE_URLS
                   value: "http://+:8080"
                 - name: FRONTEND_URL
-                  value: "${REDIRECT_URL}"
+                  value: "${VANITY_URL}"
                 - name: JWT_SIGNING_KEY
                   value: SdqlA0Y5e6HMAK1wm6iHHHz2u37XGtlo
                 - name: JWT_ADMIN_CLIENT
@@ -97,8 +97,6 @@ objects:
                   value: "prime-application-${OC_APP}"
                 - name: JWT_AUDIENCE
                   value: "prime-web-api"
-                - name: JWT_WELL_KNOWN_CONFIG
-                  value: "https://sso-${OC_APP}.pathfinder.gov.bc.ca/auth/realms/v4mbqqas/.well-known/openid-configuration"
                 - name: DB_HOST
                   value: "postgresql${SUFFIX}"
                 - name: PHARMANET_API_URL
@@ -141,7 +139,12 @@ objects:
                 - name: POSTGRESQL_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      key: database-password
+                      key: database-admin-password
+                      name: "postgresql-secret"
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: database-admin-password
                       name: "postgresql-secret"
                 - name: POSTGRESQL_ADMIN_PASSWORD
                   valueFrom:
@@ -153,6 +156,26 @@ objects:
                     secretKeyRef:
                       key: database-name
                       name: "postgresql-secret"
+                - name: KEYCLOAK_URL
+                  valueFrom:
+                    secretKeyRef:
+                      key: KEYCLOAK_URL
+                      name: "keycloak"
+                - name: KEYCLOAK_REALM
+                  valueFrom:
+                    secretKeyRef:
+                      key: KEYCLOAK_REALM
+                      name: "keycloak"
+                - name: KEYCLOAK_CLIENT_ID
+                  valueFrom:
+                    secretKeyRef:
+                      key: KEYCLOAK_CLIENT_ID
+                      name: "keycloak"
+                - name: JWT_WELL_KNOWN_CONFIG
+                  valueFrom:
+                    secretKeyRef:
+                      key: JWT_WELL_KNOWN_CONFIG
+                      name: "keycloak" 
               image: " "
               name: primeapi
               ports:
@@ -162,10 +185,10 @@ objects:
               readinessProbe:
                 failureThreshold: 3
                 httpGet:
-                  path: /healthcheck
+                  path: /api/healthcheck
                   port: 8080
                   scheme: "HTTP"
-                initialDelaySeconds: 5
+                initialDelaySeconds: 30
                 periodSeconds: 10
                 successThreshold: 1
                 timeoutSeconds: 1

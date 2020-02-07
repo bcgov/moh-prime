@@ -1,0 +1,12 @@
+<app-page>
+
+  <app-page-header>Terms of Access</app-page-header>
+  <app-page-subheader *ngIf="accessTerm?.acceptedDate">
+    <ng-container appPageSubheaderSummary>
+      Accepted on {{ accessTerm?.acceptedDate | formatDate }}.
+    </ng-container>
+  </app-page-subheader>
+  <app-access-term *ngIf="accessTerm"
+                   [accessTerms]="accessTerm"></app-access-term>
+
+</app-page>

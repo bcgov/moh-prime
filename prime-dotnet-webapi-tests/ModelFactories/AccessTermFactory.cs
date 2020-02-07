@@ -6,7 +6,7 @@ namespace PrimeTests.ModelFactories
 {
     public class AccessTermFactory : Faker<AccessTerm>
     {
-        private static int IdCounter = 1;
+        // private static int IdCounter = 1;
 
         // TODO awaiting finalization of dynamic access agreement
         public AccessTermFactory(Enrollee owner)

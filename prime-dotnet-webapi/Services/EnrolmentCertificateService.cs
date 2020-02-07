@@ -14,7 +14,8 @@ namespace Prime.Services
         private const int MAX_VIEWS = 3;
 
         public EnrolmentCertificateService(
-            ApiDbContext context, IHttpContextAccessor httpContext)
+            ApiDbContext context,
+            IHttpContextAccessor httpContext)
             : base(context, httpContext)
         { }
 
@@ -25,13 +26,10 @@ namespace Prime.Services
                 .Include(t => t.Enrollee)
                     .ThenInclude(e => e.EnrolmentCertificateNote)
                 .Include(t => t.Enrollee)
-                    .ThenInclude(e => e.AssignedPrivileges)
-                        .ThenInclude(ap => ap.Privilege)
-                            .ThenInclude(p => p.PrivilegeGroup)
-                                .ThenInclude(pg => pg.PrivilegeType)
-                .Include(t => t.Enrollee)
                     .ThenInclude(e => e.Organizations)
                         .ThenInclude(org => org.OrganizationType)
+                .Include(t => t.Enrollee)
+                    .ThenInclude(e => e.AccessTerms)
                 .SingleOrDefaultAsync();
 
             if (token == null || token.Enrollee == null)

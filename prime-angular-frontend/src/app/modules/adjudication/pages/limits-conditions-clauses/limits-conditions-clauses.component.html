@@ -91,7 +91,7 @@
       </button>
       <button mat-menu-item
               *ngIf="canApproveOrDeny(enrolment.currentStatus.status.code)"
-              (click)="approveEnrolment(enrolment.id)">
+              (click)="approveEnrolment(enrolment)">
         <mat-icon>check_circle_outline</mat-icon>
         <span>Approve Enrolment</span>
       </button>
@@ -112,11 +112,6 @@
         <span>Limits and Conditions Clauses</span>
       </button>
       <button mat-menu-item
-              [routerLink]="['../', 'certificate-limits-conditions']">
-        <mat-icon>assignment_turned_in</mat-icon>
-        <span>Certificate Limits and Conditions</span>
-      </button>
-      <button mat-menu-item
               *ngIf="canAllowEditing(enrolment.currentStatus.status.code)"
               (click)="markAsInProgress(enrolment.id)">
         <mat-icon>undo</mat-icon>
@@ -130,21 +125,30 @@
         novalidate>
 
     <div class="row mb-4">
-      <div class="col-sm-12 col-lg-8">
-
-        <mat-form-field class="w-100">
-          <textarea matInput
-                    placeholder="Write Note Here"
-                    rows="10"
-                    formControlName="note"></textarea>
-          <mat-error>Required</mat-error>
-        </mat-form-field>
-
+      <div class="col-sm-12 col-lg-6">
+        <editor class="mb-4"
+                initialValue=""
+                formControlName="note"
+                (onKeyUp)="handleChange($event)"
+                [init]="{
+                  height: '25rem',
+                  base_url: '/tinymce',
+                  suffix: '.min',
+                  plugins: 'lists advlist',
+                  toolbar: 'undo redo | bold italic underline | bullist numlist outdent indent | removeformat',
+                  menubar: 'false'
+                }">
+        </editor>
         <div class="text-right">
           <button mat-flat-button
-                  color="primary">Save Note</button>
+                  color="primary">Save Clause</button>
         </div>
-
+      </div>
+      <div class="col-sm-12 col-lg-6">
+        <div class="preview">
+          <p class="bold underline">Limits and Conditions</p>
+          <div [innerHTML]="preview | safeHtml | default: '<ul><li>preview</li></ul>'"></div>
+        </div>
       </div>
     </div>
 

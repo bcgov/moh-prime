@@ -15,14 +15,9 @@ namespace Prime.Models
         public string PreferredFirstName { get; set; }
         public string PreferredMiddleName { get; set; }
         public string PreferredLastName { get; set; }
-        public DateTime DateOfBirth { get; set; }
         public string LicensePlate { get; set; }
+        public DateTime? ExpiryDate { get; set; }
         public IEnumerable<OrganizationType> OrganizationTypes { get; set; }
-
-        public EnrolmentCertificateNote EnrolmentCertificateNote { get; set; }
-        public IEnumerable<Privilege> Transactions { get; set; }
-        public Privilege UserType { get; set; }
-        public Privilege CanHaveOBOs { get; set; }
 
         public static EnrolmentCertificate Create(Enrollee enrollee)
         {
@@ -34,21 +29,9 @@ namespace Prime.Models
                 PreferredFirstName = enrollee.PreferredFirstName,
                 PreferredMiddleName = enrollee.PreferredMiddleName,
                 PreferredLastName = enrollee.PreferredLastName,
-                DateOfBirth = enrollee.DateOfBirth,
                 LicensePlate = enrollee.LicensePlate,
-                OrganizationTypes = enrollee.Organizations.Select(org => org.OrganizationType),
-                EnrolmentCertificateNote = enrollee.EnrolmentCertificateNote,
-                Transactions = enrollee.AssignedPrivileges
-                    .Select(ap => ap.Privilege)
-                    .Where(p => p.PrivilegeGroup.PrivilegeTypeCode == PrivilegeType.PHARMANET_TRANSACTIONS),
-                UserType = enrollee.AssignedPrivileges
-                    .Select(ap => ap.Privilege)
-                    .Where(p => p.PrivilegeGroupCode == PrivilegeGroup.USER_TYPE)
-                    .SingleOrDefault(),
-                CanHaveOBOs = enrollee.AssignedPrivileges
-                    .Select(ap => ap.Privilege)
-                    .Where(p => p.PrivilegeGroupCode == PrivilegeGroup.CAN_HAVE_OBOS)
-                    .SingleOrDefault(),
+                ExpiryDate = enrollee.ExpiryDate,
+                OrganizationTypes = enrollee.Organizations.Select(org => org.OrganizationType)
             };
         }
     }

@@ -23,7 +23,9 @@ export class DeclinedAccessAgreementComponent extends BaseEnrolmentPage implemen
   public ngOnInit() {
     this.enrolmentService.enrolment$
       .subscribe((enrolment: Enrolment) =>
-        this.isInitialEnrolment = enrolment.progressStatus !== ProgressStatus.FINISHED
+        this.isInitialEnrolment = (enrolment)
+          ? enrolment.progressStatus !== ProgressStatus.FINISHED
+          : null
       );
   }
 }

@@ -45,6 +45,7 @@ namespace Prime.Models
         [Required]
         public DateTime DateOfBirth { get; set; }
 
+        [Required]
         public PhysicalAddress PhysicalAddress { get; set; }
 
         public MailingAddress MailingAddress { get; set; }
@@ -184,6 +185,15 @@ namespace Prime.Models
             }
         }
 
+        [NotMapped]
+        public DateTime? ExpiryDate
+        {
+            get => this.AccessTerms?
+                .OrderByDescending(at => at.AcceptedDate)
+                .FirstOrDefault(at => at.ExpiryDate != null)?
+                .ExpiryDate;
+        }
+
         public ICollection<AdjudicatorNote> AdjudicatorNotes { get; set; }
 
         public AccessAgreementNote AccessAgreementNote { get; set; }
@@ -198,28 +208,12 @@ namespace Prime.Models
             }
         }
 
-        [NotMapped]
-        public string EnrolleeClassification
-        {
-            get
-            {
-                ICollection<EnrolmentStatusReason> enrolmentStatusReasons = this.CurrentStatus?.EnrolmentStatusReasons;
-
-                if (enrolmentStatusReasons != null)
-                {
-                    return (this.Certifications.Count > 0)
-                        ? PrimeConstants.PRIME_RU
-                        : PrimeConstants.PRIME_OBO;
-                }
-
-                return null;
-            }
-        }
-
         [JsonIgnore]
         public ICollection<AccessTerm> AccessTerms { get; set; }
 
         [JsonIgnore]
         public ICollection<EnrolleeProfileVersion> EnrolleeProfileVersions { get; set; }
+
+        public bool AlwaysManual { get; set; }
     }
 }

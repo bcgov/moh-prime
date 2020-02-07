@@ -2,6 +2,7 @@ using System;
 using System.Net;
 using System.Net.Http;
 using Prime.Models;
+using Prime.Models.Api;
 using PrimeTests.Utils;
 using Xunit;
 

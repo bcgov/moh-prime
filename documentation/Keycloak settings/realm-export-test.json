@@ -394,7 +394,9 @@
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
-        "http://angular-frontend-dqszvc-test.pathfinder.gov.bc.ca/*"
+        "https://test.pharmanetenrolment.gov.bc.ca/*",
+        "http://angular-frontend-dqszvc-test.pathfinder.gov.bc.ca/*",
+        "http://test.pharmanetenrolment.gov.bc.ca/*"
       ],
       "webOrigins": [
         "*"
@@ -411,8 +413,8 @@
       "protocol": "openid-connect",
       "attributes": {
         "saml.assertion.signature": "false",
-        "saml.force.post.binding": "false",
         "saml.multivalued.roles": "false",
+        "saml.force.post.binding": "false",
         "saml.encrypt": "false",
         "login_theme": "bcgov",
         "saml.server.signature": "false",
@@ -1301,7 +1303,7 @@
         "userInfoUrl": "https://idtest.gov.bc.ca/oauth2/userinfo",
         "uiLocales": "",
         "tokenUrl": "https://idtest.gov.bc.ca/oauth2/token",
-        "clientId": "urn.ca.bc.gov.health.prime.dev",
+        "clientId": "urn.ca.bc.gov.health.prime.test",
         "jwksUrl": "https://idtest.gov.bc.ca/oauth2/jwk.json",
         "backchannelSupported": "true",
         "issuer": "https://idtest.gov.bc.ca/oauth2/",
@@ -1311,6 +1313,7 @@
         "disableUserInfo": "",
         "logoutUrl": "https://idtest.gov.bc.ca/oauth2/revoke",
         "clientSecret": "**********",
+        "allowedClockSkew": "",
         "defaultScope": "openid profile address"
       }
     },
@@ -1328,9 +1331,9 @@
       "linkOnly": false,
       "firstBrokerLoginFlowAlias": "first broker login",
       "config": {
-        "hideOnLoginPage": "",
         "userInfoUrl": "https://sso-test.pathfinder.gov.bc.ca/auth/realms/_bceid/protocol/openid-connect/userinfo",
         "validateSignature": "true",
+        "hideOnLoginPage": "",
         "clientId": "https://sso-test.pathfinder.gov.bc.ca/auth/realms/v4mbqqas",
         "tokenUrl": "https://sso-test.pathfinder.gov.bc.ca/auth/realms/_bceid/protocol/openid-connect/token",
         "uiLocales": "",
@@ -1711,13 +1714,25 @@
         }
       },
       {
-        "id": "1c697532-4e8f-4984-ba9b-b6ef4b539bcc",
+        "id": "dbc66b47-7f57-47ab-a149-5c0a24aeb688",
         "name": "rsa-generated",
         "providerId": "rsa-generated",
         "subComponents": {},
         "config": {
+          "keySize": [
+            "2048"
+          ],
+          "active": [
+            "true"
+          ],
           "priority": [
             "100"
+          ],
+          "enabled": [
+            "true"
+          ],
+          "algorithm": [
+            "RS256"
           ]
         }
       }

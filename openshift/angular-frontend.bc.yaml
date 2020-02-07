@@ -57,16 +57,26 @@ objects:
         value: "${REDIRECT_URL}"
       - name: OC_APP
         value: ${OC_APP}
-      - name: TLS_CHAIN
+      - name: KEYCLOAK_CLIENT_ID
         valueFrom:
           secretKeyRef:
-            key: authority-chain
-            name: 'frontend-tls-certificate' 
-      - name: TLS_PRIVATE
+            key: KEYCLOAK_CLIENT_ID
+            name: "keycloak"
+      - name: KEYCLOAK_REALM
         valueFrom:
           secretKeyRef:
-            key: private-key
-            name: 'frontend-tls-certificate'  
+            key: KEYCLOAK_REALM
+            name: "keycloak"
+      - name: KEYCLOAK_URL
+        valueFrom:
+          secretKeyRef:
+            key: KEYCLOAK_URL
+            name: "keycloak"
+      - name: JWT_WELL_KNOWN_CONFIG
+        valueFrom:
+          secretKeyRef:
+            key: JWT_WELL_KNOWN_CONFIG
+            name: 'keycloak'
     tags:
     - annotations: 
       from:
@@ -88,24 +98,35 @@ objects:
       io.kompose.service: "${NAME}${SUFFIX}"
     name: "${NAME}${SUFFIX}"
   spec:
-    containers:
-    - env:
+    dockerStrategy: 
+      dockerfilePath: openshift.dockerfile
+      env:
       - name: SUFFIX
         value: "${SUFFIX}"
       - name: REDIRECT_URL
         value: "${REDIRECT_URL}"
       - name: OC_APP
         value: ${OC_APP}
-      - name: TLS_CHAIN
+      - name: KEYCLOAK_CLIENT_ID
         valueFrom:
           secretKeyRef:
-            key: authority-chain
-            name: 'frontend-tls-certificate' 
-      - name: TLS_PRIVATE
+            key: KEYCLOAK_CLIENT_ID
+            name: "keycloak"
+      - name: KEYCLOAK_REALM
         valueFrom:
           secretKeyRef:
-            key: private-key
-            name: 'frontend-tls-certificate' 
+            key: KEYCLOAK_REALM
+            name: "keycloak"
+      - name: KEYCLOAK_URL
+        valueFrom:
+          secretKeyRef:
+            key: KEYCLOAK_URL
+            name: "keycloak"
+      - name: JWT_WELL_KNOWN_CONFIG
+        valueFrom:
+          secretKeyRef:
+            key: JWT_WELL_KNOWN_CONFIG
+            name: 'keycloak'
     completionDeadlineSeconds: 6000
     nodeSelector: 
     output:
@@ -137,16 +158,26 @@ objects:
             value: "${REDIRECT_URL}"
           - name: OC_APP
             value: ${OC_APP}
-          - name: TLS_CHAIN
+          - name: KEYCLOAK_CLIENT_ID
             valueFrom:
               secretKeyRef:
-                key: authority-chain
-                name: 'frontend-tls-certificate' 
-          - name: TLS_PRIVATE
+                key: KEYCLOAK_CLIENT_ID
+                name: "keycloak"
+          - name: KEYCLOAK_REALM
             valueFrom:
               secretKeyRef:
-                key: private-key
-                name: 'frontend-tls-certificate' 
+                key: KEYCLOAK_REALM
+                name: "keycloak"
+          - name: KEYCLOAK_URL
+            valueFrom:
+              secretKeyRef:
+                key: KEYCLOAK_URL
+                name: "keycloak"
+          - name: JWT_WELL_KNOWN_CONFIG
+            valueFrom:
+              secretKeyRef:
+                key: JWT_WELL_KNOWN_CONFIG
+                name: 'keycloak'
       type: Docker
     triggers:
     - type: ConfigChange

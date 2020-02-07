@@ -55,8 +55,8 @@ export class ConfigService implements IConfigService {
   }
 
   public get licenses(): LicenseConfig[] {
-    return [...this.configuration.licenses]
-      .sort(this.sortConfig);
+    return this.filterBottom([...this.configuration.licenses]
+      .sort(this.sortConfig), 'Non-');
   }
 
   public get organizationNames(): Config<number>[] {
@@ -129,4 +129,19 @@ export class ConfigService implements IConfigService {
       ? 1 : (item1.name < item2.name)
         ? -1 : 0;
   }
+
+  /**
+   *  @description
+   *  Filter config items that contain the value to be matched in their name
+   *  to the bottom of the list.
+   */
+  private filterBottom(list: Config<number | string>[], match: string) {
+    return list.reduce((acc, item) => {
+      (item.name.includes(match)) ? acc[1].push(item) : acc[0].push(item);
+      return acc;
+    }, [[], []]).reduce((acc, temp) =>
+      acc.concat(temp)
+      , []);
+  }
+
 }

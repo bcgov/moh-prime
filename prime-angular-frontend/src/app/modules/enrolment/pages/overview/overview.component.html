@@ -12,19 +12,10 @@
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>Enrolment Review</ng-container>
       <ng-container appPageSubheaderSummary>
-        Review all the information to ensure it is accurate, you will not get approved if any of your information is
-        incorrect. If you need to edit your information use the pencil icon to navigate to the section of the
+        If you need to edit your information use the pencil icon to navigate to the section of the
         enrolment to make changes.
       </ng-container>
     </app-page-subheader>
-  </div>
-
-  <div *ngIf="!isAnyJobOrReg()"
-       class="mb-4 red">
-    <mat-icon matTooltip="Action Required"
-              matTooltipPosition="after"
-              class="red">warning</mat-icon>
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
   </div>
 
   <app-page-subheader>
@@ -49,7 +40,7 @@
 
       <button mat-flat-button
               color="primary"
-              [disabled]="!accept.checked || !isAnyJobOrReg()"
+              [disabled]="!accept.checked"
               (click)="onSubmit()">Submit Enrolment</button>
 
     </div>

@@ -14,6 +14,7 @@ export interface HttpEnrollee extends Enrollee {
   id?: number;
   appliedDate: string;
   approvedDate: string;
+  expiryDate?: string;
   certifications: CollegeCertification[];
   deviceProviderNumber: string;
   isInsulinPumpProvider: boolean;
@@ -39,6 +40,8 @@ export interface HttpEnrollee extends Enrollee {
   progressStatus: ProgressStatus;
   // Indicates enrollee has seen the collection notice
   collectionNoticeAccepted: boolean;
+  // Always send an enrollee to manual adjudication
+  alwaysManual: boolean;
 }
 
 // TODO outgoing enrolment model
@@ -72,4 +75,6 @@ export interface Enrolment {
   progressStatus: ProgressStatus;
   // Indicates enrollee has seen the collection notice
   collectionNoticeAccepted: boolean;
+  // Always send an enrollee to manual adjudication
+  alwaysManual: boolean;
 }
