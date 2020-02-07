@@ -152,8 +152,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            // If the enrollee is not in the status of 'In Progress' or 'Accepted TOA', it cannot be updated
-            // TODO should be update to be EDITING and switched to EDITING immediately on ACCEPTED_TOS
+            // If the enrollee is not in the status of 'Active', it cannot be updated
             if (!(await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.ACTIVE_CODE)))
             {
                 this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee can not be updated when the current status is not 'In Progress'.");
