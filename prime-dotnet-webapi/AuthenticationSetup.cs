@@ -5,11 +5,11 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
+using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Prime.Infrastructure;
 
@@ -17,7 +17,11 @@ namespace Prime
 {
     public static class AuthenticationSetup
     {
-        public static void Initialize(IServiceCollection services, IConfiguration configuration, IHostingEnvironment environment)
+        public static void Initialize(
+            IServiceCollection services,
+            IConfiguration configuration,
+            IHostEnvironment environment
+            )
         {
             if (services is null)
             {

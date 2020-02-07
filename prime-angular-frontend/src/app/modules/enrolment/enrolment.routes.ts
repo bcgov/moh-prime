@@ -18,10 +18,10 @@ export class EnrolmentRoutes {
   public static DECLINED_TERMS_OF_ACCESS = 'declined-terms-of-access';
   // Enrollee history and PharmaNet:
   // Replaces terms of access after accepting the terms of access (TOA)
-  public static TERMS_OF_ACCESS_HISTORY = 'terms-of-access-history';
+  public static CURRENT_ACCESS_TERM = 'current-access-term';
   public static PHARMANET_ENROLMENT_CERTIFICATE = 'pharmanet-enrolment-certificate';
   public static PHARMANET_TRANSACTIONS = 'pharmanet-transactions';
-  public static ENROLMENT_LOG_HISTORY = 'enrolment-log-history';
+  public static ACCESS_TERMS = 'access-terms';
 
   public static MODULE_PATH = EnrolmentRoutes.ENROLMENT;
 
@@ -71,10 +71,10 @@ export class EnrolmentRoutes {
 
   public static enrolmentApprovedRoutes(): string[] {
     return [
-      EnrolmentRoutes.TERMS_OF_ACCESS_HISTORY,
+      EnrolmentRoutes.CURRENT_ACCESS_TERM,
       EnrolmentRoutes.PHARMANET_ENROLMENT_CERTIFICATE,
       EnrolmentRoutes.PHARMANET_TRANSACTIONS,
-      EnrolmentRoutes.ENROLMENT_LOG_HISTORY
+      EnrolmentRoutes.ACCESS_TERMS
     ];
   }
 

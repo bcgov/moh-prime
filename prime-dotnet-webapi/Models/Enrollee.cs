@@ -44,6 +44,7 @@ namespace Prime.Models
         [Required]
         public DateTime DateOfBirth { get; set; }
 
+        [Required]
         public PhysicalAddress PhysicalAddress { get; set; }
 
         public MailingAddress MailingAddress { get; set; }
@@ -171,5 +172,7 @@ namespace Prime.Models
 
         [JsonIgnore]
         public ICollection<EnrolleeProfileVersion> EnrolleeProfileVersions { get; set; }
+
+        public bool AlwaysManual { get; set; }
     }
 }

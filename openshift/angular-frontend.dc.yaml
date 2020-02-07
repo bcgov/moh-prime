@@ -78,21 +78,6 @@ objects:
             value: ${OC_APP}
           - name: REDIRECT_URL
             value: "${REDIRECT_URL}"
-          - name: TLS_CHAIN
-            valueFrom:
-              secretKeyRef:
-                key: authority-chain
-                name: "frontend-tls-certificate" 
-          - name: TLS_PRIVATE
-            valueFrom:
-              secretKeyRef:
-                key: private-key
-                name: "frontend-tls-certificate"
-          - name: TLS_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                key: database-admin-password
-                name: "postgresql-secret"
           - name: KEYCLOAK_CLIENT_ID
             valueFrom:
               secretKeyRef:
@@ -108,6 +93,11 @@ objects:
               secretKeyRef:
                 key: KEYCLOAK_URL
                 name: "keycloak"
+          - name: JWT_WELL_KNOWN_CONFIG
+            valueFrom:
+              secretKeyRef:
+                key: JWT_WELL_KNOWN_CONFIG
+                name: keycloak
           image: " "
           name: primeweb
           ports:
@@ -124,7 +114,15 @@ objects:
             successThreshold: 1
             timeoutSeconds: 1
           resources: {}
-        restartPolicy: Always
+          volumeMounts:
+            - mountPath: /etc/nginx/certs
+              name: vanity-tls-certs
+              readOnly: true
+        volumes:
+          - name: vanity-tls-certs
+            secret:
+              defaultMode: 420
+              secretName: vanity-tls-certificate
     test: false 
     triggers:
       - type: ConfigChange
@@ -145,6 +143,9 @@ objects:
     host: "${VANITY_URL}"
     port:
       targetPort: "${HTTP_PORT}"
+    tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: passthrough
     to:
       kind: Service
       name: "${NAME}${SUFFIX}"

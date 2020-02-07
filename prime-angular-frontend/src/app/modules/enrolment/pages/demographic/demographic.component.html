@@ -1,7 +1,6 @@
 <app-page [busy]="busy">
   <app-page-header>PharmaNet Enrolment</app-page-header>
   <app-progress-indicator *ngIf="isInitialEnrolment"
-                          message="Begin Enrolment"
                           [inProgress]="isInitialEnrolment"
                           [currentRoute]="EnrolmentRoutes.DEMOGRAPHIC"></app-progress-indicator>
 
@@ -17,8 +16,8 @@
           This information comes from your BC Services Card. If you use a different name professionally, please
           select "I have a preferred name."
           <small class="font-italic d-block">
-                Entering a preferred name in PRIME will not change your BC Services Card name.
-              </small>
+            Entering a preferred name in PRIME will not change your BC Services Card name.
+          </small>
         </ng-container>
       </app-page-subheader>
 

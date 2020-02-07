@@ -88,7 +88,7 @@ export class DashboardComponent implements OnInit {
           // only focus on the current status
           map((enrolment: Enrolment) =>
             (enrolment && enrolment.currentStatus)
-              ? enrolment.currentStatus.status.code
+              ? enrolment.currentStatus.statusCode
               : null
           ),
           distinctUntilChanged(),
@@ -120,7 +120,7 @@ export class DashboardComponent implements OnInit {
   private getEnrolleeSideNavSections(): DashboardNavSection[] {
     const enrolment = this.enrolmentService.enrolment;
     const enrolmentStatus = (enrolment)
-      ? enrolment.currentStatus.status.code
+      ? enrolment.currentStatus.statusCode
       : EnrolmentStatus.IN_PROGRESS;
     // Indicates the position of the enrollee within their initial enrolment, which
     // provides a status hook with greater granularity than the enrolment statuses
@@ -156,12 +156,10 @@ export class DashboardComponent implements OnInit {
             )
           },
           {
-            name: (enrolmentStatus === EnrolmentStatus.ACCEPTED_TOS)
-              ? 'Terms of Access History'
-              : 'Terms of Access',
+            name: 'Terms of Access',
             icon: statusIcons.accessAgreement,
             route: (enrolmentStatus === EnrolmentStatus.ACCEPTED_TOS)
-              ? EnrolmentRoutes.TERMS_OF_ACCESS_HISTORY
+              ? EnrolmentRoutes.CURRENT_ACCESS_TERM
               : EnrolmentRoutes.TERMS_OF_ACCESS,
             showItem: true,
             disabled: (
@@ -217,9 +215,31 @@ export class DashboardComponent implements OnInit {
               ].includes(enrolmentStatus)
             ),
             deemphasize: (!enrolment || (enrolment && !enrolment.profileCompleted)) ? true : false
+          },
+          {
+            name: 'PRIME Transaction History',
+            icon: (
+              progressStatus !== ProgressStatus.FINISHED ||
+              [
+                EnrolmentStatus.DECLINED,
+                EnrolmentStatus.DECLINED_TOS
+              ].includes(enrolmentStatus)
+            )
+              ? 'lock'
+              : 'history',
+            route: EnrolmentRoutes.ACCESS_TERMS,
+            showItem: true,
+            disabled: (
+              progressStatus !== ProgressStatus.FINISHED ||
+              [
+                EnrolmentStatus.DECLINED,
+                EnrolmentStatus.DECLINED_TOS
+              ].includes(enrolmentStatus)
+            ),
+            deemphasize: (!enrolment || (enrolment && !enrolment.profileCompleted)) ? true : false
           }
         ]
-      }
+      },
     ];
   }
 

@@ -3,8 +3,8 @@ import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource, MatDialog } from '@angular/material';
 
-import { exhaustMap } from 'rxjs/operators';
-import { EMPTY, Subscription } from 'rxjs';
+import { exhaustMap, map, tap } from 'rxjs/operators';
+import { EMPTY, Subscription, of } from 'rxjs';
 
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
@@ -19,6 +19,7 @@ import {
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { NoteType } from '@adjudication/shared/enums/note-type.enum';
+import { ApproveEnrolmentComponent } from '@shared/components/dialogs/content/approve-enrolment/approve-enrolment.component';
 
 @Component({
   selector: 'app-limits-conditions-clauses',
@@ -59,7 +60,7 @@ export class LimitsConditionsClausesComponent implements OnInit {
   public onSubmit() {
     if (this.form.valid) {
       this.busy = this.adjudicationResource
-        .updateAdjudicationNote(this.enrollee.id, this.note.value, NoteType.AccessAgreementNote)
+        .updateAdjudicationNote(this.enrollee.id, this.note.value)
         .subscribe(
           () => {
             this.toastService.openSuccessToast(`Terms of Access note has been saved.`);
@@ -90,26 +91,37 @@ export class LimitsConditionsClausesComponent implements OnInit {
       .subscribe();
   }
 
-  public approveEnrolment(id: number) {
+  public approveEnrolment(enrolment: Enrolment) {
     const data: DialogOptions = {
       title: 'Approve Enrolment',
       message: 'Are you sure you want to approve this enrolment?',
-      actionText: 'Approve Enrolment'
+      actionText: 'Approve Enrolment',
+      data: { enrolment },
+      component: ApproveEnrolmentComponent
     };
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        exhaustMap((result: boolean) =>
-          (result)
-            ? this.adjudicationResource.updateEnrolmentStatus(id, EnrolmentStatus.ADJUDICATED_APPROVED)
-            : EMPTY
+        exhaustMap((result: { output: boolean }) => {
+          if (result) {
+            if (result.hasOwnProperty('output') && result.output !== undefined) {
+              enrolment.alwaysManual = result.output;
+              return this.adjudicationResource.updateEnrolleeAlwaysManual(enrolment.id, result.output);
+            }
+            return this.adjudicationResource.enrollee(enrolment.id);
+          }
+          return EMPTY;
+        }),
+        exhaustMap(() =>
+          this.adjudicationResource
+            .updateEnrolmentStatus(enrolment.id, EnrolmentStatus.ADJUDICATED_APPROVED)
         ),
-        exhaustMap(() => this.adjudicationResource.enrollee(id))
+        exhaustMap(() => this.adjudicationResource.enrollee(enrolment.id))
       )
       .subscribe(
-        (enrolment: Enrolment) => {
+        (approvedEnrolment: Enrolment) => {
           this.toastService.openSuccessToast('Enrolment has been approved');
-          this.updateEnrolment(enrolment);
+          this.updateEnrolment(approvedEnrolment);
         },
         (error: any) => {
           this.toastService.openErrorToast('Enrolment could not be approved');
@@ -117,6 +129,7 @@ export class LimitsConditionsClausesComponent implements OnInit {
         }
       );
   }
+
 
   public declineEnrolment(id: number) {
     const data: DialogOptions = {

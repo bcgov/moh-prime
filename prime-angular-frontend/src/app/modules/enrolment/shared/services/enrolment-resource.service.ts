@@ -8,14 +8,15 @@ import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { Config } from '@config/config.model';
 import { PrimeHttpResponse } from '@core/models/prime-http-response.model';
 import { LoggerService } from '@core/services/logger.service';
+import { Enrollee } from '@shared/models/enrollee.model';
 import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolmentCertificateAccessToken } from '@shared/models/enrolment-certificate-access-token.model';
-import { Address } from '@enrolment/shared/models/address.model';
-import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
+import { Address } from '@enrolment/shared/models/address.model';
 import { Organization } from '@enrolment/shared/models/organization.model';
-import { EnrolleeNote } from '../models/enrollee-note.model';
-import { AccessTerm } from '../models/access-term.model';
+import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
+import { AccessTerm } from '@enrolment/shared/models/access-term.model';
+import { EnrolleeNote } from '@enrolment/shared/models/enrollee-note.model';
 
 @Injectable({
   providedIn: 'root'
@@ -40,8 +41,8 @@ export class EnrolmentResource {
       );
   }
 
-  public createEnrollee(payload: Enrolment): Observable<Enrolment> {
-    return this.http.post(`${this.config.apiEndpoint}/enrollees`, this.enrolmentAdapterRequest(payload))
+  public createEnrollee(payload: Enrollee): Observable<Enrolment> {
+    return this.http.post(`${this.config.apiEndpoint}/enrollees`, payload)
       .pipe(
         map((response: PrimeHttpResponse) => response.result),
         tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
@@ -75,16 +76,38 @@ export class EnrolmentResource {
       );
   }
 
-  public createEnrolmentCertificateAccessToken(): Observable<EnrolmentCertificateAccessToken> {
-    return this.http.post(`${this.config.apiEndpoint}/provisioner-access/token`, {})
+  public sendProvisionerAccessLink(recipientEmail: string): Observable<EnrolmentCertificateAccessToken> {
+    const payload = { data: recipientEmail };
+    return this.http.post(`${this.config.apiEndpoint}/provisioner-access/send-link`, payload)
       .pipe(
         map((response: PrimeHttpResponse) => response.result as EnrolmentCertificateAccessToken),
         tap((token: EnrolmentCertificateAccessToken) => this.logger.info('ACCESS_TOKEN', token))
       );
   }
 
-  public getAccessTerm(id: number): Observable<AccessTerm> {
-    return this.http.get(`${this.config.apiEndpoint}/enrollees/${id}/access-terms`)
+  // ---
+  // Access Terms
+  // ---
+
+  public getAccessTerms(enrolleeId: number): Observable<AccessTerm[]> {
+    return this.http.get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/access-terms`)
+      .pipe(
+        map((response: PrimeHttpResponse) => response.result as AccessTerm[]),
+        tap((accessTerms: AccessTerm[]) => this.logger.info('ACCESS_TERM', accessTerms))
+      );
+  }
+
+  public getAccessTerm(enrolleeId: number, id: number): Observable<AccessTerm> {
+    return this.http.get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/access-terms/${id}`)
+      .pipe(
+        map((response: PrimeHttpResponse) => response.result as AccessTerm),
+        tap((accessTerm: AccessTerm) => this.logger.info('ACCESS_TERM', accessTerm))
+      );
+  }
+
+  public getAccessTermLatest(enrolleeId: number, signed: boolean): Observable<AccessTerm> {
+    return this.http.get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/access-terms/latest`,
+      { params: { signed: signed.toString() } })
       .pipe(
         map((response: PrimeHttpResponse) => response.result as AccessTerm),
         tap((accessTerm: AccessTerm) => this.logger.info('ACCESS_TERM', accessTerm))

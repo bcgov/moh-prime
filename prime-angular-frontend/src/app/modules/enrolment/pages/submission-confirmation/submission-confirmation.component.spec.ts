@@ -8,17 +8,9 @@ import { SubmissionConfirmationComponent } from './submission-confirmation.compo
 import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
 import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
-import { AlertComponent } from '@shared/components/alert/alert.component';
-import { PageComponent } from '@shared/components/page/page.component';
-import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
-import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
-import { ProgressIndicatorComponent } from '@shared/components/progress-indicator/progress-indicator.component';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { PrimeContactComponent } from '@shared/components/prime-contact/prime-contact.component';
-import { CollectionNoticeAlertComponent } from '@enrolment/shared/components/collection-notice-alert/collection-notice-alert.component';
-import { PrimePhoneComponent } from '@shared/components/prime-phone/prime-phone.component';
-import { PrimeEmailComponent } from '@shared/components/prime-email/prime-email.component';
 import { KeycloakService } from 'keycloak-angular';
+import { EnrolmentModule } from '@enrolment/enrolment.module';
 
 describe('SubmissionConfirmationComponent', () => {
   let component: SubmissionConfirmationComponent;
@@ -32,18 +24,7 @@ describe('SubmissionConfirmationComponent', () => {
           NgxContextualHelpModule,
           NgxMaterialModule,
           RouterTestingModule,
-        ],
-        declarations: [
-          AlertComponent,
-          SubmissionConfirmationComponent,
-          PageComponent,
-          PageHeaderComponent,
-          PageSubheaderComponent,
-          PrimePhoneComponent,
-          PrimeEmailComponent,
-          ProgressIndicatorComponent,
-          PrimeContactComponent,
-          CollectionNoticeAlertComponent
+          EnrolmentModule
         ],
         providers: [
           {

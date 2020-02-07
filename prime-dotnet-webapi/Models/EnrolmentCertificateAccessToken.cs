@@ -23,5 +23,11 @@ namespace Prime.Models
         public int ViewCount { get; set; }
 
         public Boolean Active { get; set; }
+
+        [NotMapped]
+        public string FrontendUrl
+        {
+            get => $"{PrimeConstants.FRONTEND_URL}/provisioner-access/{Id}";
+        }
     }
 }

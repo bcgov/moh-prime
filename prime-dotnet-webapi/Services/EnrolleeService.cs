@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using SimpleBase;
 using Prime.Models;
+using Prime.Models.Api;
 
 namespace Prime.Services
 {
@@ -132,16 +133,14 @@ namespace Prime.Services
 
         public async Task<IEnumerable<Enrollee>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)
         {
-            IQueryable<Enrollee> query = this.GetBaseEnrolleeQuery();
+            IEnumerable<Enrollee> items = await this.GetBaseEnrolleeQuery()
+                                                    .ToListAsync();
 
             if (searchOptions?.StatusCode != null)
             {
                 // TODO refactor see Jira PRIME-251
-                query.Load();
-                query = _context.Enrollees.Where(e => e.CurrentStatus.StatusCode == (short)searchOptions.StatusCode);
+               items = items.Where(e => e.CurrentStatus.StatusCode == (short)searchOptions.StatusCode);
             }
-
-            var items = await query.ToListAsync();
 
             foreach (var item in items)
             {
@@ -205,14 +204,14 @@ namespace Prime.Services
         public async Task<int> UpdateEnrolleeAsync(Enrollee enrollee, bool profileCompleted = false)
         {
             var _enrolleeDb = await _context.Enrollees
-                                .Include(e => e.PhysicalAddress)
-                                .Include(e => e.MailingAddress)
-                                .Include(e => e.Certifications)
-                                .Include(e => e.Jobs)
-                                .Include(e => e.Organizations)
-                                .AsNoTracking()
-                                .Where(e => e.Id == enrollee.Id)
-                                .SingleOrDefaultAsync();
+                .Include(e => e.PhysicalAddress)
+                .Include(e => e.MailingAddress)
+                .Include(e => e.Certifications)
+                .Include(e => e.Jobs)
+                .Include(e => e.Organizations)
+                .AsNoTracking()
+                .Where(e => e.Id == enrollee.Id)
+                .SingleOrDefaultAsync();
 
             // Remove existing, and recreate if necessary
             this.ReplaceExistingAddress(_enrolleeDb.PhysicalAddress, enrollee.PhysicalAddress, enrollee);
@@ -225,6 +224,9 @@ namespace Prime.Services
             // has completed their profile by traversing the wizard, and indicates
             // a change in routing for the enrollee
             enrollee.ProfileCompleted = _enrolleeDb.ProfileCompleted || profileCompleted;
+
+            // Set AlwaysManual to what is stored in DB
+            enrollee.AlwaysManual = _enrolleeDb.AlwaysManual;
 
             _context.Entry(enrollee).State = EntityState.Modified;
 
@@ -416,7 +418,7 @@ namespace Prime.Services
             // Enrollee just left manual adjudication, inform the enrollee
             if (oldStatus?.Code == Status.SUBMITTED_CODE)
             {
-                _emailService.SendReminderEmail(enrollee);
+                await _emailService.SendReminderEmailAsync(enrollee);
             }
 
             return createdEnrolmentStatus;
@@ -503,16 +505,16 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, AdjudicatorNote adjudicatorNote)
+        public async Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, string note)
         {
-            AdjudicatorNote newAdjudicatorNote = new AdjudicatorNote
+            var adjudicatorNote = new AdjudicatorNote
             {
                 EnrolleeId = enrolleeId,
-                Note = adjudicatorNote.Note,
+                Note = note,
                 NoteDate = DateTime.Now
             };
 
-            _context.AdjudicatorNotes.Add(newAdjudicatorNote);
+            _context.AdjudicatorNotes.Add(adjudicatorNote);
 
             var created = await _context.SaveChangesAsync();
             if (created < 1)
@@ -520,7 +522,7 @@ namespace Prime.Services
                 throw new InvalidOperationException("Could not create adjudicator note.");
             };
 
-            return newAdjudicatorNote;
+            return adjudicatorNote;
         }
 
         public async Task<IEnrolleeNote> UpdateEnrolleeNoteAsync(int enrolleeId, IEnrolleeNote newNote)
@@ -572,6 +574,19 @@ namespace Prime.Services
             }
 
             return newNote;
+        }
+
+
+        public async Task<Enrollee> UpdateEnrolleeAlwaysManualAsync(int enrolleeId, bool alwaysManual)
+        {
+            var enrollee = await _context.Enrollees
+                .Where(e => e.Id == enrolleeId)
+                .SingleOrDefaultAsync();
+
+            enrollee.AlwaysManual = alwaysManual;
+            await _context.SaveChangesAsync();
+
+            return enrollee;
         }
     }
 }
