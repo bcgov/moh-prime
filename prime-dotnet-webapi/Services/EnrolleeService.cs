@@ -206,7 +206,7 @@ namespace Prime.Services
             return enrollee.Id;
         }
 
-        public async Task<int> UpdateEnrolleeAsync(EnrolleeProfileViewModel enrolleeProfile, bool profileCompleted = false)
+        public async Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeProfileViewModel enrolleeProfile, bool profileCompleted = false)
         {
             var _enrolleeDb = await _context.Enrollees
                                 .Include(e => e.MailingAddress)
@@ -214,18 +214,18 @@ namespace Prime.Services
                                 .Include(e => e.Jobs)
                                 .Include(e => e.Organizations)
                                 .AsNoTracking()
-                                .Where(e => e.Id == enrolleeProfile.Id)
+                                .Where(e => e.Id == enrolleeId)
                                 .SingleOrDefaultAsync();
 
-            Enrollee enrollee = new Enrollee { Id = enrolleeProfile.Id } ;   // stub model, only has Id
+            Enrollee enrollee = new Enrollee { Id = enrolleeId } ;   // stub model, only has Id
             _context.Enrollees.Attach(enrollee); // track your stub model
             _context.Entry(enrollee).CurrentValues.SetValues(enrolleeProfile); // reflection
 
             // Remove existing, and recreate if necessary
-            this.ReplaceExistingAddress(_enrolleeDb.MailingAddress, enrolleeProfile.MailingAddress, enrolleeProfile);
-            this.ReplaceExistingItems(_enrolleeDb.Certifications, enrolleeProfile.Certifications, enrolleeProfile);
-            this.ReplaceExistingItems(_enrolleeDb.Jobs, enrolleeProfile.Jobs, enrolleeProfile);
-            this.ReplaceExistingItems(_enrolleeDb.Organizations, enrolleeProfile.Organizations, enrolleeProfile);
+            this.ReplaceExistingAddress(_enrolleeDb.MailingAddress, enrolleeProfile.MailingAddress, enrolleeProfile, enrolleeId);
+            this.ReplaceExistingItems(_enrolleeDb.Certifications, enrolleeProfile.Certifications, enrolleeProfile, enrolleeId);
+            this.ReplaceExistingItems(_enrolleeDb.Jobs, enrolleeProfile.Jobs, enrolleeProfile, enrolleeId);
+            this.ReplaceExistingItems(_enrolleeDb.Organizations, enrolleeProfile.Organizations, enrolleeProfile, enrolleeId);
 
             // If profileCompleted is true, this is the first time the enrollee
             // has completed their profile by traversing the wizard, and indicates
@@ -242,7 +242,7 @@ namespace Prime.Services
             }
         }
 
-        private void ReplaceExistingAddress(Address dbAddress, Address newAddress, EnrolleeProfileViewModel enrollee)
+        private void ReplaceExistingAddress(Address dbAddress, Address newAddress, EnrolleeProfileViewModel enrollee, int enrolleeId)
         {
             // Remove existing addresses
             if (dbAddress != null)
@@ -255,12 +255,12 @@ namespace Prime.Services
             if (newAddress != null)
             {
                 // Prevent the ID from being changed by the incoming changes
-                newAddress.EnrolleeId = (int)enrollee.Id;
+                newAddress.EnrolleeId = (int)enrolleeId;
                 _context.Entry(newAddress).State = EntityState.Added;
             }
         }
 
-        private void ReplaceExistingItems<T>(ICollection<T> dbCollection, ICollection<T> newCollection, EnrolleeProfileViewModel enrollee) where T : class, IEnrolleeNavigationProperty
+        private void ReplaceExistingItems<T>(ICollection<T> dbCollection, ICollection<T> newCollection, EnrolleeProfileViewModel enrollee, int enrolleeId) where T : class, IEnrolleeNavigationProperty
         {
             // Remove existing items
             foreach (var item in dbCollection)
@@ -275,7 +275,7 @@ namespace Prime.Services
                 foreach (var item in newCollection)
                 {
                     // Prevent the ID from being changed by the incoming changes
-                    item.EnrolleeId = (int)enrollee.Id;
+                    item.EnrolleeId = (int)enrolleeId;
                     _context.Entry(item).State = EntityState.Added;
                 }
             }

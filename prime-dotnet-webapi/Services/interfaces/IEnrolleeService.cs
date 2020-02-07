@@ -22,7 +22,7 @@ namespace Prime.Services
 
         Task<int?> CreateEnrolleeAsync(Enrollee enrollee);
 
-        Task<int> UpdateEnrolleeAsync(EnrolleeProfileViewModel enrollee, bool profileCompleted = false);
+        Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeProfileViewModel enrolleeProfile, bool profileCompleted = false);
 
         Task DeleteEnrolleeAsync(int enrolleeId);
 

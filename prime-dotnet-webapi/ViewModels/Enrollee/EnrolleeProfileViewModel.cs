@@ -9,38 +9,6 @@ namespace Prime.ViewModels
 {
     public class EnrolleeProfileViewModel
     {
-        public EnrolleeProfileViewModel(Enrollee model)
-        {
-            Id = model.Id;
-            UserId = model.UserId;
-            PreferredFirstName = model.PreferredFirstName;
-            PreferredMiddleName = model.PreferredMiddleName;
-            PreferredLastName = model.PreferredLastName;
-            MailingAddress = model.MailingAddress;
-            ContactEmail = model.ContactEmail;
-            ContactPhone = model.ContactPhone;
-            VoicePhone = model.VoicePhone;
-            VoiceExtension = model.VoiceExtension;
-            Certifications = model.Certifications;
-            Jobs = model.Jobs;
-            Organizations = model.Organizations;
-            DeviceProviderNumber = model.DeviceProviderNumber;
-            IsInsulinPumpProvider = model.IsInsulinPumpProvider;
-            HasConviction = model.HasConviction;
-            HasConvictionDetails = model.HasConvictionDetails;
-            HasRegistrationSuspended = model.HasRegistrationSuspended;
-            HasRegistrationSuspendedDetails = model.HasRegistrationSuspendedDetails;
-            HasDisciplinaryAction = model.HasDisciplinaryAction;
-            HasDisciplinaryActionDetails = model.HasDisciplinaryActionDetails;
-            HasPharmaNetSuspended = model.HasPharmaNetSuspended;
-            HasPharmaNetSuspendedDetails = model.HasPharmaNetSuspendedDetails;
-        }
-
-        [Key]
-        public int? Id { get; set; }
-
-        [Required]
-        public Guid UserId { get; set; }
         public string PreferredFirstName { get; set; }
 
         public string PreferredMiddleName { get; set; }
