@@ -38,7 +38,6 @@ RUN apt-get update && \
     apt-get install -yqq --no-install-recommends postgresql-client-10 && \
     chmod +x entrypoint.sh && \
     chmod 777 entrypoint.sh && \
-    chmod -R 777 /var/run/ && \
     chmod -R 777 /opt/app-root && \
     chmod -R 777 /opt/app-root/.*
 

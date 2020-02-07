@@ -1,7 +1,19 @@
 #!/bin/bash
 echo "Running the migrations..."
 #psql -d postgres -f databaseMigration.sql
+
+PG_IS_READY=$(pg_isready -h $DB_HOST -U ${POSTGRESQL_USER} -d ${POSTGRESQL_DATABASE})
+
+until [[ $PG_IS_READY == "primedb:5432 - accepting connections" ]]
+do
+    echo "Waiting for the database ..." ;
+    sleep 1 ;
+    PG_IS_READY=$(pg_isready -h $DB_HOST -U ${POSTGRESQL_USER} -d ${POSTGRESQL_DATABASE})
+done
+echo "Connected to database."
+
 psql -h $DB_HOST -U ${POSTGRESQL_USER} -d ${POSTGRESQL_DATABASE} -a -f databaseMigrations.sql
+
 echo "Resting 5 seconds to let things settle down..."
 
 echo "Running .NET..."
