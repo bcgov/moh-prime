@@ -84,8 +84,8 @@ namespace Prime.Services
 
             if (!response.IsSuccessStatusCode)
             {
-                // TODO log error? Client error probably means bad licence number or college ref.
-                return null;
+                // TODO log error? Client error probably means badly formatted licence number or college ref.
+                throw new PharmanetCollegeApiException($"Error code {response.StatusCode} was returned when calling Pharmanet API.");
             }
 
             var content = await response.Content.ReadAsAsync<List<PharmanetCollegeRecord>>();
@@ -108,7 +108,7 @@ namespace Prime.Services
             }
 
             int parsed;
-            if (!Int32.TryParse(licenceNumber, out parsed) ||  parsed < 1 || parsed > 11)
+            if (!Int32.TryParse(licenceNumber, out parsed) || parsed < 1 || parsed > 11)
             {
                 return null;
             }
