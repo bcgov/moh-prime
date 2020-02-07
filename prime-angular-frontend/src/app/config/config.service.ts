@@ -131,16 +131,6 @@ export class ConfigService implements IConfigService {
   }
 
   /**
-   * @description
-   * Sort matched items to bottom
-   */
-  private sortBottom = (match: string) => (item1: Config<number | string>, item2: Config<number | string>) => {
-    return (item1.name.indexOf(match) > -1 && item2.name.indexOf(match) === -1)
-      ? 1 : (item1.name.indexOf(match) === -1 && item2.name.indexOf(match) > -1)
-        ? -1 : 0;
-  }
-
-  /**
    *  @description
    *  Filters configs that match to the bottom of the list.
    */
