@@ -7302,7 +7302,7 @@ namespace Prime.Migrations
                             Code = (short)4,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Declined",
+                            Name = "Locked",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
@@ -7821,7 +7821,7 @@ namespace Prime.Migrations
           <li>
             <strong>“On-Behalf-of User”</strong> means a member of your staff who (i) requires access to PharmaNet to
             carry out duties in relation to your Practice; and (ii) is authorized by you to access PharmaNet on your
-            behalf; and (iii) granted access to PharmaNet by the Province.
+            behalf; and (iii) has been granted access to PharmaNet by the Province.
           </li>
           <li>
             <strong>“Personal Information”</strong> means all recorded information that is about an identifiable

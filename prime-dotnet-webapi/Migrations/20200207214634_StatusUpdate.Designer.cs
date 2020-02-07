@@ -11,35 +11,44 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20200127215608_StatusUpdate")]
+    [Migration("20200207214634_StatusUpdate")]
     partial class StatusUpdate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
+                .HasAnnotation("ProductVersion", "3.1.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("Prime.Models.AccessAgreementNote", b =>
                 {
                     b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("EnrolleeId");
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
 
-                    b.Property<string>("Note");
+                    b.Property<string>("Note")
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("NoteDate");
+                    b.Property<DateTime>("NoteDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -52,27 +61,42 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.AccessTerm", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime?>("AcceptedDate");
+                    b.Property<DateTime?>("AcceptedDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("CreatedDate");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("EnrolleeId");
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
 
-                    b.Property<int>("GlobalClauseId");
+                    b.Property<DateTime?>("ExpiryDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<int?>("LimitsConditionsClauseId");
+                    b.Property<int>("GlobalClauseId")
+                        .HasColumnType("integer");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<int?>("LimitsConditionsClauseId")
+                        .HasColumnType("integer");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("UserClauseId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("UserClauseId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -89,9 +113,11 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.AccessTermLicenseClassClause", b =>
                 {
-                    b.Property<int>("AccessTermId");
+                    b.Property<int>("AccessTermId")
+                        .HasColumnType("integer");
 
-                    b.Property<int>("LicenseClassClauseId");
+                    b.Property<int>("LicenseClassClauseId")
+                        .HasColumnType("integer");
 
                     b.HasKey("AccessTermId", "LicenseClassClauseId");
 
@@ -103,31 +129,45 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.Address", b =>
                 {
                     b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int>("AddressType");
+                    b.Property<int>("AddressType")
+                        .HasColumnType("integer");
 
-                    b.Property<string>("City");
+                    b.Property<string>("City")
+                        .HasColumnType("text");
 
-                    b.Property<string>("CountryCode");
+                    b.Property<string>("CountryCode")
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("EnrolleeId");
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
 
-                    b.Property<string>("Postal");
+                    b.Property<string>("Postal")
+                        .HasColumnType("text");
 
-                    b.Property<string>("ProvinceCode");
+                    b.Property<string>("ProvinceCode")
+                        .HasColumnType("text");
 
-                    b.Property<string>("Street");
+                    b.Property<string>("Street")
+                        .HasColumnType("text");
 
-                    b.Property<string>("Street2");
+                    b.Property<string>("Street2")
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -147,22 +187,31 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.AdjudicatorNote", b =>
                 {
                     b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("EnrolleeId");
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Note")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("NoteDate");
+                    b.Property<DateTime>("NoteDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -173,17 +222,23 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.AssignedPrivilege", b =>
                 {
-                    b.Property<int>("PrivilegeId");
+                    b.Property<int>("PrivilegeId")
+                        .HasColumnType("integer");
 
-                    b.Property<int>("EnrolleeId");
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("PrivilegeId", "EnrolleeId");
 
@@ -195,28 +250,40 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.Certification", b =>
                 {
                     b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<short>("CollegeCode");
+                    b.Property<short>("CollegeCode")
+                        .HasColumnType("smallint");
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("EnrolleeId");
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
 
-                    b.Property<short>("LicenseCode");
+                    b.Property<short>("LicenseCode")
+                        .HasColumnType("smallint");
 
                     b.Property<string>("LicenseNumber")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<short?>("PracticeCode");
+                    b.Property<short?>("PracticeCode")
+                        .HasColumnType("smallint");
 
-                    b.Property<DateTime>("RenewalDate");
+                    b.Property<DateTime>("RenewalDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -234,20 +301,28 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.College", b =>
                 {
                     b.Property<short>("Code")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<string>("Prefix");
+                    b.Property<string>("Prefix")
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Code");
 
@@ -288,17 +363,23 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.CollegeLicense", b =>
                 {
-                    b.Property<short>("CollegeCode");
+                    b.Property<short>("CollegeCode")
+                        .HasColumnType("smallint");
 
-                    b.Property<short>("LicenseCode");
+                    b.Property<short>("LicenseCode")
+                        .HasColumnType("smallint");
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("CollegeCode", "LicenseCode");
 
@@ -815,17 +896,23 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.CollegePractice", b =>
                 {
-                    b.Property<short>("CollegeCode");
+                    b.Property<short>("CollegeCode")
+                        .HasColumnType("smallint");
 
-                    b.Property<short>("PracticeCode");
+                    b.Property<short>("PracticeCode")
+                        .HasColumnType("smallint");
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("CollegeCode", "PracticeCode");
 
@@ -875,18 +962,23 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.Country", b =>
                 {
                     b.Property<string>("Code")
-                        .ValueGeneratedOnAdd();
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Code");
 
@@ -915,17 +1007,23 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.DefaultPrivilege", b =>
                 {
-                    b.Property<int>("PrivilegeId");
+                    b.Property<int>("PrivilegeId")
+                        .HasColumnType("integer");
 
-                    b.Property<short>("LicenseCode");
+                    b.Property<short>("LicenseCode")
+                        .HasColumnType("smallint");
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("PrivilegeId", "LicenseCode");
 
@@ -4737,67 +4835,100 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.Enrollee", b =>
                 {
                     b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<string>("ContactEmail");
+                    b.Property<bool>("AlwaysManual")
+                        .HasColumnType("boolean");
 
-                    b.Property<string>("ContactPhone");
+                    b.Property<string>("ContactEmail")
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<string>("ContactPhone")
+                        .HasColumnType("text");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("DateOfBirth");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("DeviceProviderNumber")
+                        .HasColumnType("character varying(5)")
                         .HasMaxLength(5);
 
                     b.Property<string>("FirstName")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<bool?>("HasConviction");
+                    b.Property<bool?>("HasConviction")
+                        .HasColumnType("boolean");
 
-                    b.Property<string>("HasConvictionDetails");
+                    b.Property<string>("HasConvictionDetails")
+                        .HasColumnType("text");
 
-                    b.Property<bool?>("HasDisciplinaryAction");
+                    b.Property<bool?>("HasDisciplinaryAction")
+                        .HasColumnType("boolean");
 
-                    b.Property<string>("HasDisciplinaryActionDetails");
+                    b.Property<string>("HasDisciplinaryActionDetails")
+                        .HasColumnType("text");
 
-                    b.Property<bool?>("HasPharmaNetSuspended");
+                    b.Property<bool?>("HasPharmaNetSuspended")
+                        .HasColumnType("boolean");
 
-                    b.Property<string>("HasPharmaNetSuspendedDetails");
+                    b.Property<string>("HasPharmaNetSuspendedDetails")
+                        .HasColumnType("text");
 
-                    b.Property<bool?>("HasRegistrationSuspended");
+                    b.Property<bool?>("HasRegistrationSuspended")
+                        .HasColumnType("boolean");
 
-                    b.Property<string>("HasRegistrationSuspendedDetails");
+                    b.Property<string>("HasRegistrationSuspendedDetails")
+                        .HasColumnType("text");
 
-                    b.Property<bool?>("IsInsulinPumpProvider");
+                    b.Property<bool?>("IsInsulinPumpProvider")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("LastName")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("LicensePlate")
+                        .HasColumnType("character varying(20)")
                         .HasMaxLength(20);
 
-                    b.Property<string>("MiddleName");
+                    b.Property<string>("MiddleName")
+                        .HasColumnType("text");
 
-                    b.Property<string>("PreferredFirstName");
+                    b.Property<string>("PreferredFirstName")
+                        .HasColumnType("text");
 
-                    b.Property<string>("PreferredLastName");
+                    b.Property<string>("PreferredLastName")
+                        .HasColumnType("text");
 
-                    b.Property<string>("PreferredMiddleName");
+                    b.Property<string>("PreferredMiddleName")
+                        .HasColumnType("text");
 
-                    b.Property<bool>("ProfileCompleted");
+                    b.Property<bool>("ProfileCompleted")
+                        .HasColumnType("boolean");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<Guid>("UserId");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<string>("VoiceExtension");
+                    b.Property<string>("VoiceExtension")
+                        .HasColumnType("text");
 
-                    b.Property<string>("VoicePhone");
+                    b.Property<string>("VoicePhone")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -4810,23 +4941,31 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.EnrolleeProfileVersion", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedDate");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("EnrolleeId");
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("ProfileSnapshot")
                         .IsRequired()
                         .HasColumnType("json");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -4838,24 +4977,33 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.EnrolmentCertificateAccessToken", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
 
-                    b.Property<bool>("Active");
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
                     b.Property<int?>("EnrolleeId")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("integer");
 
-                    b.Property<DateTime>("Expires");
+                    b.Property<DateTime>("Expires")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("ViewCount");
+                    b.Property<int>("ViewCount")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -4867,21 +5015,30 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.EnrolmentCertificateNote", b =>
                 {
                     b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("EnrolleeId");
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
 
-                    b.Property<string>("Note");
+                    b.Property<string>("Note")
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("NoteDate");
+                    b.Property<DateTime>("NoteDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -4894,23 +5051,33 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.EnrolmentStatus", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("EnrolleeId");
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
 
-                    b.Property<bool>("PharmaNetStatus");
+                    b.Property<bool>("PharmaNetStatus")
+                        .HasColumnType("boolean");
 
-                    b.Property<short>("StatusCode");
+                    b.Property<short>("StatusCode")
+                        .HasColumnType("smallint");
 
-                    b.Property<DateTime>("StatusDate");
+                    b.Property<DateTime>("StatusDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -4924,21 +5091,30 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.EnrolmentStatusReason", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("EnrolmentStatusId");
+                    b.Property<int>("EnrolmentStatusId")
+                        .HasColumnType("integer");
 
-                    b.Property<string>("ReasonNote");
+                    b.Property<string>("ReasonNote")
+                        .HasColumnType("text");
 
-                    b.Property<short>("StatusReasonCode");
+                    b.Property<short>("StatusReasonCode")
+                        .HasColumnType("smallint");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -4952,20 +5128,28 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.GlobalClause", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Clause")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<DateTime>("EffectiveDate");
+                    b.Property<DateTime>("EffectiveDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -4987,20 +5171,28 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.Job", b =>
                 {
                     b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("EnrolleeId");
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Title")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -5012,18 +5204,25 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.JobName", b =>
                 {
                     b.Property<short>("Code")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Code");
 
@@ -5071,20 +5270,28 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.License", b =>
                 {
                     b.Property<short>("Code")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<bool>("Manual");
+                    b.Property<bool>("Manual")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Code");
 
@@ -5577,7 +5784,7 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Manual = true,
-                            Name = "Non-practicing Nurse Practitioner",
+                            Name = "Non-Practicing Nurse Practitioner",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -5657,7 +5864,7 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Manual = true,
-                            Name = "Non-practicing Licensed Nurse Practitioner",
+                            Name = "Non-Practicing Licensed Nurse Practitioner",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -5676,20 +5883,28 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.LicenseClassClause", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Clause")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<DateTime>("EffectiveDate");
+                    b.Property<DateTime>("EffectiveDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -5721,21 +5936,30 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.LimitsConditionsClause", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<string>("Clause");
+                    b.Property<string>("Clause")
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<DateTime>("EffectiveDate");
+                    b.Property<DateTime>("EffectiveDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("EnrolleeId");
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -5747,19 +5971,27 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.Organization", b =>
                 {
                     b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("EnrolleeId");
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
 
-                    b.Property<short>("OrganizationTypeCode");
+                    b.Property<short>("OrganizationTypeCode")
+                        .HasColumnType("smallint");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -5773,18 +6005,25 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.OrganizationType", b =>
                 {
                     b.Property<short>("Code")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Code");
 
@@ -5820,10 +6059,10 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            Code = (short)4,
+                            Code = (short)5,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Primary Care Network",
+                            Name = "Device Provider",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
@@ -5832,18 +6071,25 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.Practice", b =>
                 {
                     b.Property<short>("Code")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Code");
 
@@ -5891,21 +6137,30 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.Privilege", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
 
-                    b.Property<short>("PrivilegeGroupCode");
+                    b.Property<short>("PrivilegeGroupCode")
+                        .HasColumnType("smallint");
 
-                    b.Property<string>("TransactionType");
+                    b.Property<string>("TransactionType")
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -6128,19 +6383,27 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.PrivilegeGroup", b =>
                 {
                     b.Property<short>("Code")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
 
-                    b.Property<short>("PrivilegeTypeCode");
+                    b.Property<short>("PrivilegeTypeCode")
+                        .HasColumnType("smallint");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Code");
 
@@ -6204,17 +6467,24 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.PrivilegeType", b =>
                 {
                     b.Property<short>("Code")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Code");
 
@@ -6244,21 +6514,27 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.Province", b =>
                 {
                     b.Property<string>("Code")
-                        .ValueGeneratedOnAdd();
+                        .HasColumnType("text");
 
                     b.Property<string>("CountryCode")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Code");
 
@@ -6972,17 +7248,24 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.Status", b =>
                 {
                     b.Property<short>("Code")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Code");
 
@@ -7021,7 +7304,7 @@ namespace Prime.Migrations
                             Code = (short)4,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Declined",
+                            Name = "Locked",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
@@ -7030,17 +7313,24 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.StatusReason", b =>
                 {
                     b.Property<short>("Code")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Code");
 
@@ -7160,23 +7450,32 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.UserClause", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Clause")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("CreatedTimeStamp");
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreatedUserId");
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<DateTime>("EffectiveDate");
+                    b.Property<DateTime>("EffectiveDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("EnrolleeClassification")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("UpdatedTimeStamp");
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UpdatedUserId");
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -7186,7 +7485,248 @@ namespace Prime.Migrations
                         new
                         {
                             Id = 1,
-                            Clause = "OBO user clause lorem, ipsum dolor sit amet consectetur adipisicing elit. Modi nihil corporis, ex totam, eos sapiente quam, sit ea iure consequatur neque harum architecto debitis adipisci molestiae fuga sed nam vitae.",
+                            Clause = @"<h1>PHARMANET TERMS OF ACCESS FOR ON-BEHALF-OF USER</h1>
+
+<p class=""bold"">
+  By enrolling for PharmaNet access, you agree to the following terms (the “Agreement”). Please read them carefully.
+</p>
+
+<ol>
+  <li>
+
+    <p class=""bold underline"">
+      On Behalf of User Access
+    </p>
+
+    <p class=""bold"">
+      You represent and warrant to the Province that:
+    </p>
+
+    <ol type=""a"">
+      <li>
+        your employment duties in relation to a Practitioner require you to access PharmaNet (and PharmaNet Data) to
+        support the Practitioner’s delivery of Direct Patient Care;
+      </li>
+      <li>
+        you are directly supervised by a Practitioner who has been granted access to PharmaNet by the Province; and
+      </li>
+      <li>
+        all information provided by you in connection with your application for PharmaNet access, including all
+        information submitted through PRIME, is true and correct.
+      </li>
+    </ol>
+
+  </li>
+  <li>
+
+    <p class=""bold underline"">
+      Definitions
+    </p>
+
+    <p class=""bold"">
+      In these terms, capitalized terms will have the following meanings:
+    </p>
+
+    <ul class=""list-unstyled"">
+      <li>
+        <strong>“Direct Patient Care”</strong> means, for the purposes of this Agreement, the provision of health
+        services to an individual to whom a Practitioner provides direct patient care in the context of their Practice.
+      </li>
+      <li>
+        <strong>“PharmaCare Newsletter”</strong> means the PharmaCare newsletter published by the Province on the
+        following website (or such other website as may be specified by the Province from time to time for this
+        purpose):
+
+        <br><br>
+
+        <a href=""http://www.gov.bc.ca/pharmacarenewsletter"" target=""_blank"" rel=""noopener noreferrer"">www.gov.bc.ca/pharmacarenewsletter</a>
+      </li>
+      <li>
+        <strong>“PharmaNet”</strong> means PharmaNet as continued under section 2 of the Information Management
+        Regulation.
+      </li>
+      <li>
+        <strong>“PharmaNet Data”</strong> includes any record or information contained in PharmaNet and any record or
+        information in the custody, control or possession of you or a Practitioner that was obtained through access to
+        PharmaNet by anyone.
+      </li>
+      <li>
+        <strong>“Practice”</strong> means a Practitioner’s practice of their health profession.
+      </li>
+      <li>
+        <strong>“Practitioner”</strong> means a health professional regulated under the Health Professions Act who
+        supervises your access and use of PharmaNet and who has been granted access to PharmaNet by the Province.
+      </li>
+      <li>
+        <strong>“PRIME”</strong> means the online service provided by the Province that allows users to apply for, and
+        manage, their access to PharmaNet, and through which users are granted access by the Province.
+      </li>
+      <li>
+        <strong>“Province”</strong> means Her Majesty the Queen in Right of British Columbia, as represented by the
+        Minister of Health.
+      </li>
+    </ul>
+
+  </li>
+  <li>
+
+    <p class=""bold underline"">
+      Terms of Access to PharmaNet
+    </p>
+
+    <p class=""bold"">
+      You must:
+    </p>
+
+    <ol type=""a"">
+      <li>
+        access and use PharmaNet and PharmaNet Data only to support Direct Patient Care delivered by the Practitioner to
+        the individuals whose PharmaNet Data you are accessing;
+      </li>
+      <li>
+        only access PharmaNet as permitted by law and directed by the Practitioner;
+      </li>
+      <li>
+        maintain all PharmaNet Data, whether accessed on PharmaNet or otherwise disclosed to you in any manner, in
+        strict confidence;
+      </li>
+      <li>
+        maintain the security of PharmaNet, and any applications, connections, or networks used to access PharmaNet;
+      </li>
+      <li>
+        complete all training required by the Practice’s PharmaNet software vendor and the Province before accessing
+        PharmaNet;
+      </li>
+      <li>
+        notify the Province if you have any reason to suspect that PharmaNet, or any PharmaNet Data, is or has been
+        accessed or used inappropriately by any person.
+      </li>
+    </ol>
+
+    <p class=""bold"">
+      You must:
+    </p>
+
+    <ol type=""a""
+        start=""7"">
+      <li>
+        disclose PharmaNet Data for any purpose other than Direct Patient Care, except as permitted by law and directed
+        by the Practitioner;
+      </li>
+      <li>
+        permit any person to use any user IDs, passwords or credentials provided to you to access PharmaNet;
+      </li>
+      <li>
+        reveal, share or compromise any user IDs, passwords or credentials for PharmaNet;
+      </li>
+      <li>
+        use, or attempt to use, the user IDs, passwords or credentials of any other person to access PharmaNet;
+      </li>
+      <li>
+        take any action that might compromise the integrity of PharmaNet, its information, or the provincial drug plan,
+        such as altering information or submitting false information;
+      </li>
+      <li>
+        test the security related to PharmaNet;
+      </li>
+      <li>
+        attempt to access PharmaNet from any location other than the approved Practice site of the Practitioner,
+        including by VPN or other remote access technology, unless that VPN or remote access technology has first been
+        approved by the Province in writing for use at the Practice.
+      </li>
+    </ol>
+
+    <p>
+      Your access to PharmaNet and use of PharmaNet Data are governed by the Pharmaceutical Services Act and you must
+      comply with all your duties under that Act.
+    </p>
+
+    <p>
+      The Province may, in writing and from time to time, set further limits and conditions in respect of PharmaNet,
+      either for you or for the Practitioner(s), and that you must comply with any such further limits and conditions.
+    </p>
+
+  </li>
+  <li>
+
+    <p class=""bold underline"">
+      How to Notify the Province
+    </p>
+
+    <p>
+      Notice to the province may be sent in writing to:
+    </p>
+
+    <address>
+      Director, Information and PharmaNet Development<br>
+      Ministry of Health<br>
+      PO Box 9652, STN PROV GOVT<br>
+      Victoria, BC V8W 9P4<br>
+
+      <br>
+
+      <a href=""mailto:PRIMESupport@gov.bc.ca"">PRIMESupport@gov.bc.ca</a>
+    </address>
+
+  </li>
+  <li>
+
+    <p class=""bold underline"">
+      Province may modify these terms
+    </p>
+
+    <p>
+      The Province may amend these terms, including this section, at any time in its sole discretion:
+    </p>
+
+    <ol type=""i"">
+      <li>
+        by written notice to you, in which case the amendment will become effective upon the later of (A) the date
+        notice of the amendment is first delivered to you, or (B) the effective date of the amendment specified by the
+        Province, if any; or
+      </li>
+      <li>
+        by publishing notice of any such amendment in the PharmaCare Newsletter, in which case the notice will specify
+        the effective date of the amendment, which date will be at least thirty (30) days after the date that the
+        PharmaCare Newsletter containing the notice is first published.
+      </li>
+    </ol>
+
+    <p>
+      If you do not agree with any amendment for which notice has been provided by the Province in accordance with (i)
+      or (ii) above, you must promptly (and in any event before the effective date) cease all access or use of
+      PharmaNet.
+    </p>
+
+    <p>
+      Any written notice to you under (i) above will be in writing and delivered by the Province to you using any of the
+      contact mechanisms identified by you in PRIME, including by mail to a specified postal address, email to a
+      specified email address or text message to a specified cell phone number. You may be required to click a URL link
+      or log into PRIME to receive the contents of any such notice.
+    </p>
+
+  </li>
+  {$lcPlaceholder}
+  <li>
+
+    <p class=""bold underline"">
+      Governing Law
+    </p>
+
+    <p>
+      These terms will be governed by and will be construed and interpreted in accordance with the laws of British
+      Columbia and the laws of Canada applicable therein.
+    </p>
+
+    <p>
+      Unless otherwise specified, a reference to a statute or regulation by name means the statute or regulation of
+      British Columbia of that name, as amended or replaced from time to time, and includes any enactment made under the
+      authority of that statute or regulation.
+    </p>
+
+  </li>
+</ol>
+",
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -7197,7 +7737,683 @@ namespace Prime.Migrations
                         new
                         {
                             Id = 2,
-                            Clause = "RU user clause lorem, ipsum dolor sit amet consectetur adipisicing elit. Modi nihil corporis, ex totam, eos sapiente quam, sit ea iure consequatur neque harum architecto debitis adipisci molestiae fuga sed nam vitae.",
+                            Clause = @"<h1>PHARMANET REGULATED USER TERMS OF ACCESS</h1>
+
+<p class=""bold"">
+  By enrolling for PharmaNet access, you agree to the following terms (the “Agreement”). Please read them carefully.
+</p>
+
+<ol>
+  <li>
+
+    <p class=""bold underline"">
+      BACKGROUND
+    </p>
+
+    <p>
+      The Province owns and is responsible for the operation of PharmaNet, the province-wide network that links B.C.
+      pharmacies to a central data system. Every prescription dispensed in community pharmacies in B.C. is entered into
+      PharmaNet.
+    </p>
+
+    <p>
+      The purpose of providing you, and the On-Behalf-of Users whom you have authorized, with access to PharmaNet is to
+      enhance patient care by providing timely and relevant information to persons involved in the provision of direct
+      patient care.
+    </p>
+
+    <p class=""bold underline"">
+      PharmaNet contains highly sensitive confidential information, including Personal Information and the proprietary
+      and confidential information of third-party licensors to the Province, and it is in the public interest to
+      ensure that appropriate measures are in place to protect the confidentiality of all such information. All access
+      to and use of PharmaNet and PharmaNet Data is subject to the Act and Privacy Laws.
+    </p>
+
+  </li>
+  <li>
+
+    <p class=""bold underline"">
+      INTERPRETATION
+    </p>
+
+    <ol type=""a"">
+      <li>
+
+        <p>
+          <strong>Definitions.</strong> Unless otherwise provided in this Agreement, capitalized terms will have the
+          meanings given below:
+        </p>
+
+        <ul class=""list-unstyled"">
+          <li>
+            <strong>“Act”</strong> means the Pharmaceutical Services Act.
+          </li>
+          <li>
+            <strong>“Approved SSO”</strong> means a software support organization approved by the Province that provides
+            you with the information technology software and/or services through which you and On-Behalf-of Users access
+            PharmaNet.
+          </li>
+          <li>
+
+            <p>
+              <strong>“Conformance Standards”</strong> means the following documents published by the Province, as
+              amended
+              from time to time:
+            </p>
+
+            <ol type=""i"">
+              <li>
+                PharmaNet Professional and Software Conformance Standards; and
+              </li>
+              <li>
+                Office of the Chief Information Officer: “Submission for Technical Security Standard and High Level
+                Architecture for Wireless Local Area Network Connectivity”.
+              </li>
+            </ol>
+
+          </li>
+          <li>
+            <strong>“Direct Patient Care”</strong> means, for the purposes of this Agreement, the provision of health
+            services to an individual to whom you provide direct patient care in the context of your Practice.
+          </li>
+          <li>
+            <strong>“Information Management Regulation”</strong> means the Information Management Regulation, B.C. Reg.
+            74/2015.
+          </li>
+          <li>
+            <strong>“On-Behalf-of User”</strong> means a member of your staff who (i) requires access to PharmaNet to
+            carry out duties in relation to your Practice; and (ii) is authorized by you to access PharmaNet on your
+            behalf; and (iii) has been granted access to PharmaNet by the Province.
+          </li>
+          <li>
+            <strong>“Personal Information”</strong> means all recorded information that is about an identifiable
+            individual or is defined as, or deemed to be, “personal information” or “personal health information”
+            pursuant to any Privacy Laws.
+          </li>
+          <li>
+            <strong>“PharmaCare Newsletter”</strong> means the PharmaCare newsletter published by the Province on the
+            following website (or such other website as may be specified by the Province from time to time for this
+            purpose):
+
+            <br><br>
+
+            <a href=""http://www.gov.bc.ca/pharmacarenewsletter"" target=""_blank"" rel=""noopener noreferrer"">www.gov.bc.ca/pharmacarenewsletter</a>
+          </li>
+          <li>
+            <strong>“PharmaNet”</strong> means PharmaNet as continued under section 2 of the Information Management
+            Regulation.
+          </li>
+          <li>
+            <strong>“PharmaNet Data”</strong> includes any record or information contained in PharmaNet and any record
+            or information in the custody, control or possession of you or a On-Behalf-of User that was obtained through
+            your or a On-Behalf-of User’s access to PharmaNet.
+          </li>
+          <li>
+            <strong>“Practice”</strong> means your practice of the health profession regulated under the Health
+            Professions Act and identified by you through PRIME.
+          </li>
+          <li>
+            <strong>“PRIME”</strong> means the online service provided by the Province that allows users to apply for,
+            and manage, their access to PharmaNet, and through which users are granted access by the Province.
+          </li>
+          <li>
+            <strong>“Privacy Laws”</strong> means the Act, the Freedom of Information and Protection of Privacy Act, the
+            Personal Information Protection Act, and any other statutory or legal obligations of privacy owed by you or
+            the Province, whether arising under statute, by contract or at common law.
+          </li>
+          <li>
+            <strong>“Province”</strong> means Her Majesty the Queen in Right of British Columbia, as represented by the
+            Minister of Health.
+          </li>
+          <li>
+            <strong>“Professional College”</strong> is the regulatory body governing your Practice.
+          </li>
+          <li>
+
+            <p>
+              <strong>“Unauthorized Person”</strong> means any person other than:
+            </p>
+
+            <ol type=""i"">
+              <li>
+                you,
+              </li>
+              <li>
+                an On-Behalf-of User, or
+              </li>
+              <li>
+                a representative of an Approved SSO that is accessing PharmaNet for technical support purposes in
+                accordance with section 6 of the Information Management Regulation.
+              </li>
+            </ol>
+
+          </li>
+        </ul>
+
+      </li>
+      <li>
+        <strong>Reference to Enactments.</strong> Unless otherwise specified, a reference to a statute or regulation by
+        name means the statute or regulation of British Columbia of that name, as amended or replaced from time to time,
+        and includes any enactment made under the authority of that statute or regulation.
+      </li>
+      <li>
+
+        <p>
+          <strong>Conflicting Provisions.</strong> In the event of a conflict among provisions of this Agreement:
+        </p>
+
+        <ol type=""i"">
+          <li>
+            a provision in the body of this Agreement will prevail over any conflicting provision in any further limits
+            or conditions communicated to you in writing by the Province, unless the conflicting provision expressly
+            states otherwise; and
+          </li>
+          <li>
+            a provision referred to in (i) above will prevail over any conflicting provision in the Conformance
+            Standards.
+          </li>
+        </ol>
+
+      </li>
+    </ol>
+
+  </li>
+  <li>
+
+    <p class=""bold underline"">
+      APPLICATION OF LEGISLATION
+    </p>
+
+    <p>
+      You will strictly comply with, and you will ensure that On-Behalf-of Users strictly comply with, the Act and all
+      Privacy Laws applicable to PharmaNet and PharmaNet Data.
+    </p>
+
+  </li>
+  <li>
+
+    <p class=""bold underline"">
+      NOTICE THAT SPECIFIC PROVISIONS OF THE ACT APPLY DIRECTLY TO YOU
+    </p>
+
+    <p>
+      You acknowledge that:
+    </p>
+
+    <ol type=""a"">
+      <li>
+        PharmaNet Data accessed by you or an On-Behalf-of User pursuant to this Agreement is disclosed to you by the
+        Province under the authority of the Act;
+      </li>
+      <li>
+        specific provisions of the Act, including the Information Management Regulation and sections 24, 25 and 29 of
+        the Act, apply directly to you and to On-Behalf-of Users as a result; and
+      </li>
+      <li>
+        this Agreement documents limits and conditions, set by the minister in writing, that the Act requires you to
+        comply with.
+      </li>
+    </ol>
+
+  </li>
+  <li>
+
+    <p class=""bold underline"">
+      ACCESS
+    </p>
+
+    <ol type=""a"">
+      <li>
+        <strong>Grant of Access.</strong> The Province will provide you with access to PharmaNet subject to your
+        compliance with the limits and conditions set out in section 5(b) below and otherwise in this Agreement. The
+        Province may from time to time, at its discretion, amend or change the scope of your access privileges to
+        PharmaNet as privacy, security, business and clinical practice requirements change. In such circumstances, the
+        Province will use reasonable efforts to notify you of such changes.
+      </li>
+      <li>
+
+        <p>
+          <strong>Limits and Conditions of Access.</strong> The following limits and conditions apply to your access to
+          PharmaNet:
+        </p>
+
+        <ol type=""i"">
+          <li>
+            you will only access PharmaNet, and you will ensure that On-Behalf-of Users only access PharmaNet, for so
+            long as you are a registrant in good standing with the Professional College and your licence permits you to
+            deliver Direct Patient Care requiring access to PharmaNet;
+          </li>
+          <li>
+            you will only access PharmaNet, and you will ensure that On-Behalf-of Users only access PharmaNet, at a
+            location approved by the Province, and using only the technologies and applications approved by the
+            Province. For greater certainty, you must not access PharmaNet using a VPN or similar remote access
+            technology to an approved location, unless that VPN or remote access technology has first been approved by
+            the Province in writing for use at the Practice;
+          </li>
+          <li>
+            you will only access PharmaNet as necessary for your provision of Direct Patient Care, and you will ensure
+            that On-Behalf-of Users only access PharmaNet as necessary to support your provision of Direct Patient Care;
+          </li>
+          <li>
+            you will not under any circumstances access PharmaNet, or use PharmaNet Data, for the purpose of market
+            research, and you will ensure that no On-Behalf-of Users access PharmaNet, or use PharmaNet Data, for the
+            purpose of market research;
+          </li>
+          <li>
+            subject to section 6(b) of this Agreement, you will not use PharmaNet Data, and you will ensure that
+            On-Behalf-of Users do not use PharmaNet Data, for any purpose other than your provision of Direct Patient
+            Care, including for the purposes of quality improvement, evaluation, health care planning, surveillance,
+            research or other secondary uses;
+          </li>
+          <li>
+            you will not permit any Unauthorized Person to access PharmaNet, and you will take all reasonable measures
+            to ensure that no Unauthorized Person can access PharmaNet;
+          </li>
+          <li>
+            you will complete any training program(s) that your Approved SSO makes available to you in relation to
+            PharmaNet, and you will ensure that all On-Behalf-of Users complete such training;
+          </li>
+          <li>
+            you will immediately notify the Province when you or an On-Behalf-of User no longer require access to
+            PharmaNet, including where the On-Behalf-of User ceases to be one of your staff or takes a leave of absence
+            from your staff, or where the On-Behalf-of User’s access-related duties in relation to the Practice have
+            changed;
+          </li>
+          <li>
+            you will comply with, and you will ensure that On-Behalf-of Users comply with, any additional limits or
+            conditions applicable to you, as may be communicated to you by the Province in writing;
+          </li>
+          <li>
+            you represent and warrant that all information provided by you in connection with your application for
+            PharmaNet access, including through PRIME, is true and correct.
+          </li>
+        </ol>
+
+      </li>
+      <li>
+        <strong>Responsibility for On-Behalf-of Users.</strong> You agree that you are responsible under this Agreement
+        for all activities undertaken by On-Behalf-of Users in relation to their access to PharmaNet and use of
+        PharmaNet Data.
+      </li>
+      <li>
+
+        <p>
+          <strong>Privacy and Security Measures.</strong> You are responsible for taking all reasonable measures to
+          safeguard Personal Information, including any Personal Information in the PharmaNet Data while it is in the
+          custody, control or possession of yourself or an On-Behalf-of User. In particular, you will:
+        </p>
+
+        <ol type=""i"">
+          <li>
+            take all reasonable steps to ensure the physical security of Personal Information, generally and as required
+            by Privacy Laws;
+          </li>
+          <li>
+            secure all workstations and printers in a protected area in the Practice to prevent viewing of PharmaNet
+            Data by Unauthorized Persons;
+          </li>
+          <li>
+            ensure separate access credential (such as user name and password) for each On-Behalf-of User, and prohibit
+            sharing or other multiple use of your access credential, or an On-Behalf-of User’s access credential, for
+            access to PharmaNet;
+          </li>
+          <li>
+            secure any workstations used to access PharmaNet and all devices, codes or passwords that enable access to
+            PharmaNet by yourself or any On-Behalf-of User;
+          </li>
+          <li>
+            take such other privacy and security measures as the Province may reasonably require from time-to-time.
+          </li>
+        </ol>
+
+      </li>
+      <li>
+        <strong>Conformance Standards - Business Rules.</strong> You will comply with, and will ensure On-Behalf-of
+        Users comply with, the business rules specified in the Conformance Standards when accessing and recording
+        information in PharmaNet.
+      </li>
+    </ol>
+
+  </li>
+  <li>
+
+    <p class=""bold underline"">
+      DISCLOSURE, STORAGE, AND ACCESS REQUESTS
+    </p>
+
+    <ol type=""a"">
+      <li>
+        <strong>Retention of PharmaNet Data.</strong> You will not store or retain PharmaNet Data in any paper files or
+        any electronic system, unless such storage or retention is required for record keeping in accordance with
+        Professional College requirements and in connection with your provision of Direct Patient Care and otherwise is
+        in compliance with the Conformance Standards. You will not modify any records retained in accordance with this
+        section other than as may be expressly authorized in the Conformance Standards. For clarity, you may annotate a
+        discrete record provided that the discrete record is not itself modified other than as expressly authorized in
+        the Conformance Standards.
+      </li>
+      <li>
+        <strong>Use of Retained Records.</strong> You may use any records retained by you in accordance with section
+        6(a) of this Agreement for a purpose authorized under section 24(1) of the Act, including for the purpose of
+        monitoring your own Practice.
+      </li>
+      <li>
+        <strong>Disclosure to Third Parties.</strong> You will not, and will ensure that On-Behalf-of Users do not,
+        disclose PharmaNet Data to any Unauthorized Person, unless disclosure is required for Direct Patient Care or is
+        otherwise authorized under section 24(1) of the Act.
+      </li>
+      <li>
+        <strong>No Disclosure for Market Research.</strong> You will not, and will ensure that On-Behalf-of Users do
+        not, disclose PharmaNet Data for the purpose of market research.
+      </li>
+      <li>
+        <strong>Responding to Patient Access Requests.</strong> Aside from any records retained by you in accordance
+        with section 6(a) of this Agreement, you will not provide to patients any copies of records containing PharmaNet
+        Data or “print outs” produced directly from PharmaNet, and will refer any requests for access to such records or
+        “print outs” to the Province.
+      </li>
+      <li>
+        <strong>Responding to Requests to Correct a Record contained in PharmaNet.</strong> If you receive a request for
+        correction of any record or information contained in PharmaNet, you will refer the request to the Province.
+      </li>
+      <li>
+        <strong>Legal Demands for Records Contained in PharmaNet.</strong> You will immediately notify the Province if
+        you receive any order, demand or request compelling, or threatening to compel, disclosure of records contained
+        in PharmaNet. You will cooperate and consult with the Province in responding to any such demands. For greater
+        certainty, the foregoing requires that you notify the Province only with respect to any access requests or
+        demands for records contained in PharmaNet, and not records retained by you in accordance with section 6(a) of
+        this Agreement.
+      </li>
+    </ol>
+
+  </li>
+  <li>
+
+    <p class=""bold underline"">
+      ACCURACY
+    </p>
+
+    <p>
+      You will make reasonable efforts to ensure that any Personal Information recorded by you or an On-Behalf-of User
+      in PharmaNet is accurate, complete and up to date. In the event that you become aware of a material inaccuracy or
+      error in such information, you will take reasonable steps to investigate the inaccuracy or error, correct it if
+      necessary, and notify the Province of the inaccuracy or error and any steps taken.
+    </p>
+
+  </li>
+  <li>
+
+    <p class=""bold underline"">
+      INVESTIGATIONS, AUDITS, AND REPORTING
+    </p>
+
+    <ol type=""a"">
+      <li>
+        <strong>Audits and Investigations.</strong> You will cooperate with any audits or investigations conducted by
+        the Province regarding your, or any On-Behalf-of User’s, compliance with the Act, Privacy Laws and this
+        Agreement, including providing access upon request to your facilities, data management systems, books, records
+        and personnel for the purposes of such audit or investigation.
+      </li>
+      <li>
+        <strong>Reports to College or Privacy Commissioner.</strong> You acknowledge and agree that the Province may
+        report any material breach of this Agreement to your Professional College or to the Information and Privacy
+        Commissioner of British Columbia.
+      </li>
+    </ol>
+
+  </li>
+  <li>
+
+    <p class=""bold underline"">
+      NOTICE OF NON COMPLIANCE AND DUTY TO INVESTIGATE
+    </p>
+
+    <ol type=""a"">
+      <li>
+        <strong>Duty to Investigate.</strong> You will investigate suspected breaches of the terms of this Agreement,
+        and will take all reasonable steps to prevent recurrences of any such breaches, including taking any steps
+        necessary to cooperate with the Province in ensuring the suspension or termination of an On-Behalf-of User’s
+        access rights.
+      </li>
+      <li>
+
+        <p>
+          <strong>Non Compliance.</strong> You will promptly notify the Province, and provide particulars, if:
+        </p>
+
+        <ol type=""i"">
+          <li>
+            you or an On-Behalf-of User do not comply, or you anticipate that you or a On-Behalf-of User will be unable
+            to comply with the terms of this Agreement in any respect, or
+          </li>
+          <li>
+            you have knowledge of any circumstances, incidents or events which have or may jeopardize the security,
+            confidentiality, or integrity of PharmaNet, including any unauthorized attempt, by any person, to access
+            PharmaNet.
+          </li>
+        </ol>
+
+      </li>
+    </ol>
+
+  </li>
+  <li>
+
+    <p class=""bold underline"">
+      TERM OF AGREEMENT, SUSPENSION & TERMINATION
+    </p>
+
+    <ol type=""a"">
+      <li>
+        <strong>Term.</strong> The term of this Agreement begins on the date you are granted access to PharmaNet by the
+        Province and will continue until the date this Agreement is terminated under paragraph (b), (c), (d) or (e)
+        below.
+      </li>
+      <li>
+        <strong>Termination for Any Reason.</strong> You may terminate this Agreement at any time on written notice to
+        the Province.
+      </li>
+      <li>
+        <strong>Suspension or Termination of PharmaNet access.</strong> If the Province suspends or terminates your
+        right, or an On-Behalf-of User’s right, to access PharmaNet under the Information Management Regulation, the
+        Province may also terminate this Agreement at any time thereafter upon written notice to you.
+      </li>
+      <li>
+        <strong>Termination for Breach.</strong> Notwithstanding paragraph (c) above, the Province may terminate this
+        Agreement, and any or all access to PharmaNet by you or an On-Behalf-of User, immediately upon notice to you if
+        you or an On-Behalf-of User fail to comply with any provision of this Agreement.
+      </li>
+      <li>
+        <strong>Termination by operation of the Information Management Regulation.</strong> This Agreement will
+        terminate automatically if your access to PharmaNet ends by operation of section 18 of the Information
+        Management Regulation.
+      </li>
+      <li>
+        <strong>Suspension of Account for Inactivity.</strong> As a security precaution, the Province may suspend your
+        account or an On-Behalf-of User’s account after a period of inactivity, in accordance with the Province’s
+        policies. Please contact the Province immediately if your account has been suspended for inactivity but you
+        still require access to PharmaNet.
+      </li>
+    </ol>
+
+  </li>
+  <li>
+
+    <p class=""bold underline"">
+      DISCLAIMER OF WARRANTY, LIMITATION OF LIABILITY AND INDEMNITY
+    </p>
+
+    <ol type=""a"">
+      <li>
+        <strong>Information Provided As Is.</strong> You acknowledge and agree that any use of PharmaNet and PharmaNet
+        Data is solely at your own risk. All such access and information is provided on an “as is” and “as available”
+        basis without warranty or condition of any kind. The Province does not warrant the accuracy, completeness or
+        reliability of the PharmaNet Data or the availability of PharmaNet, or that access to or the operation of
+        PharmaNet will function without error, failure or interruption.
+      </li>
+      <li>
+        <strong>You are Responsible.</strong> You are responsible for verifying the accuracy of information disclosed to
+        you as a result of your access to PharmaNet or otherwise pursuant to this Agreement before relying or acting
+        upon such information. The clinical or other information disclosed to you or an On-Behalf-of User pursuant to
+        this Agreement is in no way intended to be a substitute for professional judgment.
+      </li>
+      <li>
+        <strong>The Province Not Liable for Loss.</strong> No action may be brought by any person against the Province
+        for any loss or damage of any kind caused by any reason or purpose related to reliance on PharmaNet or PharmaNet
+        Data.
+      </li>
+      <li>
+        <strong>You Must Indemnify the Province if You Cause a Loss or Claim.</strong> You agree to indemnify and save
+        harmless the Province, and the Province’s employees and agents (each an <strong>""Indemnified Person""</strong>)
+        from any losses, claims, damages, actions, causes of action, costs and expenses that an Indemnified Person may
+        sustain, incur, suffer or be put to at any time, either before or after this Agreement ends, which are based
+        upon, arise out of or occur directly or indirectly by reason of any act or omission by you, or by any
+        On-Behalf-of User, in connection with this Agreement.
+      </li>
+    </ol>
+
+  </li>
+  <li>
+
+    <p class=""bold underline"">
+      NOTICE
+    </p>
+
+    <ol type=""a"">
+      <li>
+
+        <p>
+          <strong>Notice to Province.</strong> Except where this Agreement expressly provides for another method of
+          delivery, any notice to be given by you to the Province that is contemplated by this Agreement, to be
+          effective,
+          must be in writing and emailed or mailed to:
+        </p>
+
+        <address>
+          Director, Information and PharmaNet Development<br>
+          Ministry of Health<br>
+          PO Box 9652, STN PROV GOVT<br>
+          Victoria, BC V8W 9P4<br>
+
+          <br>
+
+          <a href=""mailto:PRIMESupport@gov.bc.ca"">PRIMESupport@gov.bc.ca</a>
+        </address>
+
+      </li>
+      <li>
+        <strong>Notice to You.</strong> Any notice to you to be delivered under the terms of this Agreement will be in
+        writing and delivered by the Province to you using any of the contact mechanisms identified by you in PRIME,
+        including by mail to a specified postal address, email to a specified email address or text message to the
+        specified cell phone number. You may be required to click a URL link or log into PRIME to receive the content
+        of any such notice.
+      </li>
+      <li>
+        <strong>Deemed receipt.</strong> Any written communication from a party, if personally delivered or sent
+        electronically, will be deemed to have been received 24 hours after the time the notice was sent, or, if sent
+        by mail, will be deemed to have been received 3 days (excluding Saturdays, Sundays and statutory holidays)
+        after the date the notice was sent.
+      </li>
+      <li>
+        <strong>Substitute contact information.</strong> You may notify the Province of a substitute contact mechanism
+        by updating your contact information in PRIME.
+      </li>
+    </ol>
+
+  </li>
+  {$lcPlaceholder}
+  <li>
+
+    <p class=""bold underline"">
+      GENERAL
+    </p>
+
+    <ol type=""a"">
+      <li>
+
+        <p>
+          <strong>Entire Agreement.</strong> This Agreement constitutes the entire agreement between the parties with
+          respect to the subject matter of this agreement.
+        </p>
+
+      </li>
+      <li>
+
+        <p>
+          <strong>Severability.</strong> Each provision in this Agreement constitutes a separate covenant and is
+          severable from any other covenant, and if any of them are held by a court, or other decision-maker, to be
+          invalid, this Agreement will be interpreted as if such provisions were not included.
+        </p>
+
+      </li>
+      <li>
+
+        <p>
+          <strong>Survival.</strong> Sections 3, 4, 5(b)(iv) (v), 5(c), 5(d), 6(a)(b)(c)(d), 8, 9, 11, and any other
+          provision of this Agreement that expressly or by its nature continues after termination, shall survive
+          termination of this Agreement.
+        </p>
+
+      </li>
+      <li>
+
+        <p>
+          <strong>Governing Law.</strong> This Agreement will be governed by and will be construed and interpreted in
+          accordance with the laws of British Columbia and the laws of Canada applicable therein.
+        </p>
+
+      </li>
+      <li>
+
+        <p>
+          <strong>Assignment Restricted.</strong> Your rights and obligations under this Agreement may not be assigned
+          without the prior written approval of the Province.
+        </p>
+
+      </li>
+      <li>
+
+        <p>
+          <strong>Waiver.</strong> The failure of the Province at any time to insist on performance of any provision of
+          this Agreement by you is not a waiver of its right subsequently to insist on performance of that or any other
+          provision of this Agreement.
+        </p>
+
+      </li>
+      <li>
+
+        <p>
+          <strong>Province may modify this Agreement.</strong> The Province may amend this Agreement, including this
+          section, at any time in its sole discretion:
+        </p>
+
+        <ol type=""i"">
+          <li>
+            by written notice to you, in which case the amendment will become effective upon the later of (A) the date
+            notice of the amendment is first delivered to you, or (B) the effective date of the amendment specified by
+            the Province, if any; or
+          </li>
+          <li>
+            by publishing notice of any such amendment in the PharmaCare Newsletter, in which case the notice will
+            specify the effective date of the amendment, which date will be at least 30 (thirty) days after the date
+            that the PharmaCare Newsletter containing the notice is first published.
+          </li>
+        </ol>
+
+        <p>
+          If you or an On-Behalf-of User access or use PharmaNet after the effective date of an amendment described in
+          (i) or (ii) above, you will be deemed to have accepted the corresponding amendment, and this Agreement will be
+          deemed to have been so amended as of the effective date. If you do not agree with any amendment for which
+          notice has been provided by the Province in accordance with (i) or (ii) above, you must promptly (and in any
+          event before the effective date) cease all access or use of PharmaNet by yourself and all On-Behalf-of Users,
+          and take the steps necessary to terminate this Agreement in accordance with section 10.
+        </p>
+
+      </li>
+    </ol>
+
+  </li>
+</ol>
+",
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -7236,7 +8452,8 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithOne("AccessAgreementNote")
                         .HasForeignKey("Prime.Models.AccessAgreementNote", "EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.AccessTerm", b =>
@@ -7244,12 +8461,14 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany("AccessTerms")
                         .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Prime.Models.GlobalClause", "GlobalClause")
                         .WithMany()
                         .HasForeignKey("GlobalClauseId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Prime.Models.LimitsConditionsClause", "LimitsConditionsClause")
                         .WithMany()
@@ -7258,7 +8477,8 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.UserClause", "UserClause")
                         .WithMany()
                         .HasForeignKey("UserClauseId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.AccessTermLicenseClassClause", b =>
@@ -7266,12 +8486,14 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.AccessTerm", "AccessTerm")
                         .WithMany("AccessTermLicenseClassClauses")
                         .HasForeignKey("AccessTermId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Prime.Models.LicenseClassClause", "LicenseClassClause")
                         .WithMany("AccessTermLicenseClassClauses")
                         .HasForeignKey("LicenseClassClauseId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.Address", b =>
@@ -7290,7 +8512,8 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany("AdjudicatorNotes")
                         .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.AssignedPrivilege", b =>
@@ -7298,12 +8521,14 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany("AssignedPrivileges")
                         .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Prime.Models.Privilege", "Privilege")
                         .WithMany("AssignedPrivileges")
                         .HasForeignKey("PrivilegeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.Certification", b =>
@@ -7311,17 +8536,20 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.College", "College")
                         .WithMany("Certifications")
                         .HasForeignKey("CollegeCode")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany("Certifications")
                         .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Prime.Models.License", "License")
                         .WithMany("Certifications")
                         .HasForeignKey("LicenseCode")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Prime.Models.Practice", "Practice")
                         .WithMany("Certifications")
@@ -7333,12 +8561,14 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.College", "College")
                         .WithMany("CollegeLicenses")
                         .HasForeignKey("CollegeCode")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Prime.Models.License", "License")
                         .WithMany("CollegeLicenses")
                         .HasForeignKey("LicenseCode")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.CollegePractice", b =>
@@ -7346,12 +8576,14 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.College", "College")
                         .WithMany("CollegePractices")
                         .HasForeignKey("CollegeCode")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Prime.Models.Practice", "Practice")
                         .WithMany("CollegePractices")
                         .HasForeignKey("PracticeCode")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.DefaultPrivilege", b =>
@@ -7359,12 +8591,14 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.License", "License")
                         .WithMany("DefaultPrivileges")
                         .HasForeignKey("LicenseCode")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Prime.Models.Privilege", "Privilege")
                         .WithMany("DefaultPrivileges")
                         .HasForeignKey("PrivilegeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.EnrolleeProfileVersion", b =>
@@ -7372,7 +8606,8 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany("EnrolleeProfileVersions")
                         .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.EnrolmentCertificateAccessToken", b =>
@@ -7380,7 +8615,8 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany()
                         .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.EnrolmentCertificateNote", b =>
@@ -7388,7 +8624,8 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithOne("EnrolmentCertificateNote")
                         .HasForeignKey("Prime.Models.EnrolmentCertificateNote", "EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.EnrolmentStatus", b =>
@@ -7396,12 +8633,14 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany("EnrolmentStatuses")
                         .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Prime.Models.Status", "Status")
                         .WithMany("EnrolmentStatuses")
                         .HasForeignKey("StatusCode")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.EnrolmentStatusReason", b =>
@@ -7409,12 +8648,14 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.EnrolmentStatus", "EnrolmentStatus")
                         .WithMany("EnrolmentStatusReasons")
                         .HasForeignKey("EnrolmentStatusId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Prime.Models.StatusReason", "StatusReason")
                         .WithMany("EnrolmentStatusReasons")
                         .HasForeignKey("StatusReasonCode")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.Job", b =>
@@ -7422,7 +8663,8 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany("Jobs")
                         .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.LimitsConditionsClause", b =>
@@ -7430,7 +8672,8 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany()
                         .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.Organization", b =>
@@ -7438,12 +8681,14 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany("Organizations")
                         .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Prime.Models.OrganizationType", "OrganizationType")
                         .WithMany("Organizations")
                         .HasForeignKey("OrganizationTypeCode")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.Privilege", b =>
@@ -7451,7 +8696,8 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.PrivilegeGroup", "PrivilegeGroup")
                         .WithMany("Privileges")
                         .HasForeignKey("PrivilegeGroupCode")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.PrivilegeGroup", b =>
@@ -7459,7 +8705,8 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.PrivilegeType", "PrivilegeType")
                         .WithMany("PrivilegeGroups")
                         .HasForeignKey("PrivilegeTypeCode")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.Province", b =>
@@ -7467,7 +8714,8 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Country", "Country")
                         .WithMany()
                         .HasForeignKey("CountryCode")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.MailingAddress", b =>
@@ -7475,7 +8723,8 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithOne("MailingAddress")
                         .HasForeignKey("Prime.Models.MailingAddress", "EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.PhysicalAddress", b =>
@@ -7484,7 +8733,8 @@ namespace Prime.Migrations
                         .WithOne("PhysicalAddress")
                         .HasForeignKey("Prime.Models.PhysicalAddress", "EnrolleeId")
                         .HasConstraintName("FK_Address_Enrollee_EnrolleeId1")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
