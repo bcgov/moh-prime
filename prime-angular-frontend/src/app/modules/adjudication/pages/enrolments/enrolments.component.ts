@@ -64,6 +64,12 @@ export class EnrolmentsComponent implements OnInit {
     return (currentStatusCode === EnrolmentStatus.SUBMITTED);
   }
 
+  public isActive(currentStatusCode: EnrolmentStatus) {
+    // TODO: fix after status merge
+    // return (currentStatusCode === EnrolmentStatus.ACTIVE);
+    return true;
+  }
+
   public viewEnrolmentHistory(enrolmentId: number) {
     this.router.navigate([enrolmentId, AdjudicationRoutes.PROFILE_HISTORY], { relativeTo: this.route.parent });
   }

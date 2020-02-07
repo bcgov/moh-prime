@@ -128,6 +128,7 @@
         <span>Global Adjudicator Notes</span>
       </button>
       <button mat-menu-item
+              *ngIf="!isActive(enrolment.currentStatus.status.code)"
               [routerLink]="[enrolment.id, 'limits-conditions-clauses']">
         <mat-icon>description</mat-icon>
         <span>Limits and Conditions Clauses</span>
