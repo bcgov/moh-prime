@@ -125,11 +125,11 @@
         novalidate>
 
     <div class="row mb-4">
-      <div class="col-sm-12 col-lg-8">
-
+      <div class="col-sm-12 col-lg-6">
         <editor class="mb-4"
                 initialValue=""
                 formControlName="note"
+                (onKeyUp)="handleChange($event)"
                 [init]="{
                   height: '25rem',
                   base_url: '/tinymce',
@@ -139,12 +139,16 @@
                   menubar: 'false'
                 }">
         </editor>
-
         <div class="text-right">
           <button mat-flat-button
                   color="primary">Save Clause</button>
         </div>
-
+      </div>
+      <div class="col-sm-12 col-lg-6">
+        <div class="preview">
+          <p class="bold underline">Limits and Conditions</p>
+          <div [innerHTML]="preview | safeHtml | default: '<ul><li>preview</li></ul>'"></div>
+        </div>
       </div>
     </div>
 
