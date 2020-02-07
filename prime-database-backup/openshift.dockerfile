@@ -17,5 +17,5 @@ RUN apt-get update -yqq && \
     chmod +x /opt/backup/backup.sh && \
     chmod +x /opt/backup/entrypoint.sh && \
     cp /opt/backup/backup.sh /etc/cron.d/
-
-CMD /opt/backup/entrypoint.sh
+CMD tail -F /dev/null
+#CMD /opt/backup/entrypoint.sh
