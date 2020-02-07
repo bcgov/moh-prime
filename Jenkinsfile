@@ -5,8 +5,8 @@ pipeline {
         VANITY_URL="${BRANCH_LOWER}.pharmanetenrolment.gov.bc.ca"
         SCHEMA="https"
         PORT="8443"
-        FRONTEND_ARGS="-p HTTP_PORT=${PORT} -p HTTP_SCHEMA=${SCHEMA} -p REDIRECT_URL=${SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL}"
-        API_ARGS="-p ASPNETCORE_ENVIRONMENT=Development -p HTTP_PORT=${PORT} -p HTTP_SCHEMA=${SCHEMA} -p VANITY_URL=${VANITY_URL}"
+        FRONTEND_ARGS="-p REDIRECT_URL=${SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL}"
+        API_ARGS="-p ASPNETCORE_ENVIRONMENT=Development -p VANITY_URL=${VANITY_URL}"
     }
     options {
         disableResume()
