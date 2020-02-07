@@ -44,7 +44,7 @@ function build() {
     -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
     -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
     -p OC_NAMESPACE="$PROJECT_PREFIX" \
-    -p OC_APP="$3" ${@:4} --output="yaml" | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$3" --overwrite=true --all ${OC_ARGS} #--output="yaml"
+    -p OC_APP="$3" ${@:4} --output="yaml" | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$3" ${OC_ARGS} #--output="yaml"
     if [ "$BUILD_REQUIRED" == true ];
     then
         echo "Building oc start-build $APP_NAME$SUFFIX -n $PROJECT_PREFIX-$3 --wait --follow ..."
@@ -76,6 +76,7 @@ function deploy() {
 #        fi;
     else
         MODE="create"
+        OC_ARGS=""
     fi;
     oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
     -p NAME="${APP_NAME}" \
