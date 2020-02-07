@@ -155,7 +155,7 @@ namespace Prime.Controllers
             // If the enrollee is not in the status of 'Active', it cannot be updated
             if (!(await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.ACTIVE_CODE)))
             {
-                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee can not be updated when the current status is not 'In Progress'.");
+                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee can not be updated when the current status is not 'Active'.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
@@ -431,7 +431,7 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            // Notes can not be added to 'In Progress' enrolments
+            // Notes can not be added to 'Active' enrolments
             // TODO Decide when ajudicators should be able to add notes
             if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.ACTIVE_CODE))
             {
