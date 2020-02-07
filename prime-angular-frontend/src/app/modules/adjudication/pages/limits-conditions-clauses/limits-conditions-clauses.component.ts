@@ -24,7 +24,7 @@ import { ApproveEnrolmentComponent } from '@shared/components/dialogs/content/ap
 @Component({
   selector: 'app-limits-conditions-clauses',
   templateUrl: './limits-conditions-clauses.component.html',
-  styleUrls: ['./limits-conditions-clauses.component.scss']
+  styleUrls: ['./limits-conditions-clauses.component.scss'],
 })
 export class LimitsConditionsClausesComponent implements OnInit {
   public busy: Subscription;
@@ -32,6 +32,7 @@ export class LimitsConditionsClausesComponent implements OnInit {
   public columns: string[];
   public dataSource: MatTableDataSource<Enrolment>;
   public enrollee: Enrolment;
+  public preview: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -55,6 +56,14 @@ export class LimitsConditionsClausesComponent implements OnInit {
 
   public canAllowEditing(currentStatusCode: number) {
     return (currentStatusCode !== EnrolmentStatus.ADJUDICATED_APPROVED);
+  }
+
+  /**
+   * Updates the preview with the editor content
+   */
+  public handleChange(event: { editor: any }) {
+    if (!event.editor) { return; }
+    this.preview = event.editor.getContent();
   }
 
   public onSubmit() {
