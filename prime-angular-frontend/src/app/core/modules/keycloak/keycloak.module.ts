@@ -3,46 +3,34 @@ import { environment } from '@env/environment';
 
 import { KeycloakAngularModule, KeycloakService, KeycloakOptions } from 'keycloak-angular';
 import { Router } from '@angular/router';
+import { ToastService } from '@core/services/toast.service';
+import { AuthRoutes } from '@auth/auth.routes';
 
 export function initializer(keycloak: KeycloakService, injector: Injector): () => Promise<any> {
   return (): Promise<any> => {
-    console.log(`before :${keycloak.getKeycloakInstance()}`);
     return keycloak.init(environment.keycloakConfig as KeycloakOptions)
-      .then(() => {
-        console.log('----in then');
-        console.log(`after :${keycloak.getKeycloakInstance()}`);
-        const kc = keycloak.getKeycloakInstance();
-        console.log(kc);
-        kc.onTokenExpired = () => {
-          keycloak.updateToken()
-            .then(() => console.log('-------Successfully refreshed access token.'))
-            .catch(() => {
-              console.log('---------Failed to refresh access token.');
-              injector.get(Router).navigate([environment.loginRedirectUrl]);
-            });
-        };
-      })
-      .catch(() => {
-        console.log('-----failed to initialize');
-        injector.get(Router).navigate([environment.loginRedirectUrl]);
-      });
+      .then(
+        (authenticated) => {
+          const kc = keycloak.getKeycloakInstance();
+          kc.onTokenExpired = () => {
+            keycloak.updateToken()
+              .catch(() => redirectToLogin(injector));
+          };
+
+          if (authenticated) {
+            // Force refresh to begin expiry timer.
+            keycloak.updateToken(-1);
+          }
+        },
+        (error: any) => redirectToLogin(injector)
+      );
   };
 }
 
-// {
-//   const initPromise = keycloak.init(environment.keycloakConfig as KeycloakOptions);
-//   initPromise.then(() => {
-//     keycloak.getKeycloakInstance().onTokenExpired = () => {
-//       keycloak.updateToken()
-//         .then(() => console.log('Successfully refreshed access token.'))
-//         .catch(() => {
-//           console.log('Failed to refresh access token.');
-//           //router.navigate([environment.loginRedirectUrl]);
-//         });
-//     };
-//   });
-//   return initPromise;
-// };
+function redirectToLogin(injector: Injector): void {
+  injector.get(ToastService).openErrorToast('Your session has expired, please log in again');
+  injector.get(Router).navigateByUrl(AuthRoutes.INFO);
+}
 
 @NgModule({
   imports: [KeycloakAngularModule],
