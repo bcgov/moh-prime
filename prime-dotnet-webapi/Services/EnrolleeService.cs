@@ -253,7 +253,7 @@ namespace Prime.Services
             if (newAddress != null)
             {
                 // Prevent the ID from being changed by the incoming changes
-                newAddress.EnrolleeId = (int)enrolleeId;
+                newAddress.EnrolleeId = enrolleeId;
                 _context.Entry(newAddress).State = EntityState.Added;
             }
         }
@@ -273,7 +273,7 @@ namespace Prime.Services
                 foreach (var item in newCollection)
                 {
                     // Prevent the ID from being changed by the incoming changes
-                    item.EnrolleeId = (int)enrolleeId;
+                    item.EnrolleeId = enrolleeId;
                     _context.Entry(item).State = EntityState.Added;
                 }
             }
