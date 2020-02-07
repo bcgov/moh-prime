@@ -5,7 +5,9 @@ ENV PGPASSWORD "${POSTGRESQL_ADMIN_PASSWORD}"
 ENV PGDATABASE "${POSTGRESQL_DATABASE}"
 ENV PGHOST "${POSTGRESQL_HOST}"
 ENV PGUSERNAME "${POSTGRESQL_USER}"
-
+RUN ls -alh && \
+    mkdir -p /opt/backup && \
+    ls -alh /opt/backup
 COPY . /opt/backup
 RUN apt-get update -yqq && \ 
     apt-get install -yqq inetutils-ping && \ 
