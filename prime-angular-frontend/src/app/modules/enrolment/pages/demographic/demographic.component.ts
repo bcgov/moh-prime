@@ -3,12 +3,9 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
-import { map, tap } from 'rxjs/operators';
-
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
-import { Enrolment } from '@shared/models/enrolment.model';
-import { AuthService } from '@auth/shared/services/auth.service';
+import { Enrollee } from '@shared/models/enrollee.model';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
@@ -16,7 +13,6 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { FormUtilsService } from '@enrolment/shared/services/form-utils.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
-import { Enrollee } from '@shared/models/enrollee.model';
 
 @Component({
   selector: 'app-demographic',
@@ -26,14 +22,12 @@ import { Enrollee } from '@shared/models/enrollee.model';
 export class DemographicComponent extends BaseEnrolmentProfilePage implements OnInit {
   public hasPreferredName: boolean;
   public hasMailingAddress: boolean;
-  public isNewProfile: boolean;
   public enrollee: Partial<Enrollee>;
 
   constructor(
     protected route: ActivatedRoute,
     protected router: Router,
     protected dialog: MatDialog,
-    private authService: AuthService,
     private enrolmentResource: EnrolmentResource,
     private enrolmentService: EnrolmentService,
     private enrolmentStateService: EnrolmentStateService,
@@ -42,8 +36,6 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
     private logger: LoggerService
   ) {
     super(route, router, dialog);
-
-    this.isNewProfile = false;
   }
 
   public get preferredFirstName(): FormControl {
@@ -89,15 +81,7 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
   public onSubmit() {
     if (this.form.valid) {
       const payload = this.enrolmentStateService.enrolment;
-      const request$ = (this.isNewProfile)
-        ? this.enrolmentResource.createEnrollee(payload)
-          .pipe(
-            tap(() => this.isNewProfile = false),
-            map((enrolment: Enrolment) => this.enrolmentStateService.enrolment = enrolment)
-          )
-        : this.enrolmentResource.updateEnrollee(payload);
-
-      this.busy = request$
+      this.busy = this.enrolmentResource.updateEnrollee(payload)
         .subscribe(
           () => {
             this.toastService.openSuccessToast('Profile information has been saved');
@@ -184,48 +168,13 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
     }
   }
 
-  protected async patchForm() {
+  protected patchForm() {
     const enrolment = this.enrolmentService.enrolment;
 
-    if (enrolment) {
-      if (enrolment.enrollee) {
-        this.enrollee = enrolment.enrollee;
-      }
-
-      this.enrolmentStateService.enrolment = enrolment;
-      this.isInitialEnrolment = enrolment.progressStatus !== ProgressStatus.FINISHED;
-      this.isProfileComplete = enrolment.profileCompleted;
-    } else {
-      const {
-        firstName,
-        lastName,
-        dateOfBirth,
-        physicalAddress
-      } = await this.authService.getUser();
-
-      this.enrollee = {
-        firstName,
-        lastName,
-        dateOfBirth,
-        physicalAddress
-      };
-
-      this.isNewProfile = true;
-      this.isInitialEnrolment = true;
-      this.isProfileComplete = false;
-
-      this.patchFormWithUser();
-    }
-  }
-
-  private async patchFormWithUser() {
-    if (this.isNewProfile) {
-      const user = await this.authService.getUser();
-
-      this.logger.info('USER', user);
-
-      this.form.patchValue(user);
-    }
+    this.enrollee = enrolment.enrollee;
+    this.enrolmentStateService.enrolment = enrolment;
+    this.isInitialEnrolment = enrolment.progressStatus !== ProgressStatus.FINISHED;
+    this.isProfileComplete = enrolment.profileCompleted;
   }
 
   private togglePreferredNameValidators(preferredFirstName: FormControl, preferredLastName: FormControl) {

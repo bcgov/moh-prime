@@ -88,7 +88,7 @@ export class DashboardComponent implements OnInit {
           // only focus on the current status
           map((enrolment: Enrolment) =>
             (enrolment && enrolment.currentStatus)
-              ? enrolment.currentStatus.status.code
+              ? enrolment.currentStatus.statusCode
               : null
           ),
           distinctUntilChanged(),
@@ -120,7 +120,7 @@ export class DashboardComponent implements OnInit {
   private getEnrolleeSideNavSections(): DashboardNavSection[] {
     const enrolment = this.enrolmentService.enrolment;
     const enrolmentStatus = (enrolment)
-      ? enrolment.currentStatus.status.code
+      ? enrolment.currentStatus.statusCode
       : EnrolmentStatus.IN_PROGRESS;
     // Indicates the position of the enrollee within their initial enrolment, which
     // provides a status hook with greater granularity than the enrolment statuses

@@ -10,11 +10,6 @@ namespace Prime.Models.Api
             _data = data;
         }
 
-        // public static implicit operator FromBodyData<T>(T t)
-        // {
-        //     return new FromBodyData<T>(t);
-        // }
-
         public static implicit operator T(FromBodyData<T> t)
         {
             return t.Data;
@@ -30,11 +25,6 @@ namespace Prime.Models.Api
         {
             _data = data;
         }
-
-        // public static implicit operator FromBodyText(string s)
-        // {
-        //     return new FromBodyText(s);
-        // }
 
         public static implicit operator string(FromBodyText t)
         {

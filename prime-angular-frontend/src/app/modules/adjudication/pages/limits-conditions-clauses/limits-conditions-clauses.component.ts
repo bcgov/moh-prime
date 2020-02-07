@@ -69,7 +69,7 @@ export class LimitsConditionsClausesComponent implements OnInit {
   public onSubmit() {
     if (this.form.valid) {
       this.busy = this.adjudicationResource
-        .updateAdjudicationNote(this.enrollee.id, this.note.value, NoteType.AccessAgreementNote)
+        .updateAdjudicationNote(this.enrollee.id, this.note.value)
         .subscribe(
           () => {
             this.toastService.openSuccessToast(`Terms of Access note has been saved.`);
