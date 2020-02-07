@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { NgxMaskModule } from 'ngx-mask';
 import { ClipboardModule } from 'ngx-clipboard';
 import { NgxBusyModule } from './modules/ngx-busy/ngx-busy.module';
+import { MarkdownModule } from 'ngx-markdown';
 
 import { ConfigModule } from '@config/config.module';
 import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
@@ -48,9 +49,9 @@ import { EnrolleeOrganizationsComponent } from '@shared/components/enrollee/enro
 import { PrimeContactComponent } from '@shared/components/prime-contact/prime-contact.component';
 import { PrimeEmailComponent } from './components/prime-email/prime-email.component';
 import { PrimePhoneComponent } from './components/prime-phone/prime-phone.component';
-import { EnrolleePropertyErrorComponent } from './components/enrollee/enrollee-property-error/enrollee-property-error.component';
 import { ApproveEnrolmentComponent } from './components/dialogs/content/approve-enrolment/approve-enrolment.component';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
+import { MarkdownComponent } from './components/dialogs/content/markdown/markdown.component';
 
 @NgModule({
   declarations: [
@@ -90,9 +91,9 @@ import { SafeHtmlPipe } from './pipes/safe-html.pipe';
     PrimeContactComponent,
     PrimeEmailComponent,
     PrimePhoneComponent,
-    EnrolleePropertyErrorComponent,
     ApproveEnrolmentComponent,
-    SafeHtmlPipe
+    SafeHtmlPipe,
+    MarkdownComponent
   ],
   imports: [
     CommonModule,
@@ -104,7 +105,8 @@ import { SafeHtmlPipe } from './pipes/safe-html.pipe';
     NgxMaskModule.forRoot(),
     NgxMaterialModule,
     NgxProgressModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MarkdownModule.forRoot()
   ],
   exports: [
     CommonModule,
@@ -155,7 +157,8 @@ import { SafeHtmlPipe } from './pipes/safe-html.pipe';
   entryComponents: [
     ConfirmDialogComponent,
     EnrolmentStatusReasonsComponent,
-    ApproveEnrolmentComponent
+    ApproveEnrolmentComponent,
+    MarkdownComponent
   ]
 })
 export class SharedModule { }

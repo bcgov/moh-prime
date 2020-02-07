@@ -136,16 +136,14 @@ namespace Prime.Services
 
         public async Task<IEnumerable<Enrollee>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)
         {
-            IQueryable<Enrollee> query = this.GetBaseEnrolleeQuery();
+            IEnumerable<Enrollee> items = await this.GetBaseEnrolleeQuery()
+                                                    .ToListAsync();
 
             if (searchOptions?.StatusCode != null)
             {
                 // TODO refactor see Jira PRIME-251
-                query.Load();
-                query = _context.Enrollees.Where(e => e.CurrentStatus.StatusCode == (short)searchOptions.StatusCode);
+               items = items.Where(e => e.CurrentStatus.StatusCode == (short)searchOptions.StatusCode);
             }
-
-            var items = await query.ToListAsync();
 
             foreach (var item in items)
             {
@@ -507,16 +505,16 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, AdjudicatorNote adjudicatorNote)
+        public async Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, string note)
         {
-            AdjudicatorNote newAdjudicatorNote = new AdjudicatorNote
+            var adjudicatorNote = new AdjudicatorNote
             {
                 EnrolleeId = enrolleeId,
-                Note = adjudicatorNote.Note,
+                Note = note,
                 NoteDate = DateTime.Now
             };
 
-            _context.AdjudicatorNotes.Add(newAdjudicatorNote);
+            _context.AdjudicatorNotes.Add(adjudicatorNote);
 
             var created = await _context.SaveChangesAsync();
             if (created < 1)
@@ -524,7 +522,7 @@ namespace Prime.Services
                 throw new InvalidOperationException("Could not create adjudicator note.");
             };
 
-            return newAdjudicatorNote;
+            return adjudicatorNote;
         }
 
         public async Task<IEnrolleeNote> UpdateEnrolleeNoteAsync(int enrolleeId, IEnrolleeNote newNote)
@@ -586,12 +584,7 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
 
             enrollee.AlwaysManual = alwaysManual;
-
-            var updated = await _context.SaveChangesAsync();
-            if (updated < 1)
-            {
-                throw new InvalidOperationException($"Could not update the enrollee's alwaysManual flag.");
-            }
+            await _context.SaveChangesAsync();
 
             return enrollee;
         }
