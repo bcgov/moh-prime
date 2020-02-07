@@ -15,10 +15,10 @@ namespace Prime.Configuration
             get
             {
                 return new[] {
-                    // Non-practicing pharmacist
+                    // Non-Practicing pharmacist
                     new DefaultPrivilege { LicenseCode = 30, PrivilegeId = 18, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
-                    // Non-practicing pharmacy technician
+                    // Non-Practicing pharmacy technician
                     new DefaultPrivilege { LicenseCode = 31, PrivilegeId = 18, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Retired - life
@@ -30,13 +30,13 @@ namespace Prime.Configuration
                     // Administrative
                     new DefaultPrivilege { LicenseCode = 23, PrivilegeId = 18, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
-                    // Non-practicing Registered Psychiatric Nurse
+                    // Non-Practicing Registered Psychiatric Nurse
                     new DefaultPrivilege { LicenseCode = 43, PrivilegeId = 18, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
-                    // Non-practicing Nurse Practitioner
+                    // Non-Practicing Nurse Practitioner
                     new DefaultPrivilege { LicenseCode = 49, PrivilegeId = 18, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
-                    // Non-practicing Licensed Practical Nurse
+                    // Non-Practicing Licensed Practical Nurse
                     new DefaultPrivilege { LicenseCode = 54, PrivilegeId = 18, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Practicing Licensed Graduate Nurse
@@ -465,7 +465,7 @@ namespace Prime.Configuration
                     new DefaultPrivilege { LicenseCode = 47, PrivilegeId = 17, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new DefaultPrivilege { LicenseCode = 47, PrivilegeId = 19, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
-                    // Non-practicing Registered Nurse
+                    // Non-Practicing Registered Nurse
                     new DefaultPrivilege { LicenseCode = 34, PrivilegeId = 18, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Provisional Nurse Practitioner
@@ -535,7 +535,7 @@ namespace Prime.Configuration
                     // Temporary Licensed Practical Nurse (special event)
                     new DefaultPrivilege { LicenseCode = 56, PrivilegeId = 18, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
-                    // Non-practicing Licensed Nurse Practitioner
+                    // Non-Practicing Licensed Nurse Practitioner
                     new DefaultPrivilege { LicenseCode = 57, PrivilegeId = 18, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Temporary Nurse Practitioner (time-limited)
