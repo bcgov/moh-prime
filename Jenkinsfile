@@ -3,7 +3,7 @@ pipeline {
     environment {
         BRANCH_LOWER=BRANCH_NAME.toLowerCase()
         VANITY_URL="${BRANCH_LOWER}.pharmanetenrolment.gov.bc.ca"
-        SCHEMA="http"
+        SCHEMA="https"
         PORT="8443"
         FRONTEND_ARGS="-p HTTP_PORT=${PORT} -p HTTP_SCHEMA=${SCHEMA} -p REDIRECT_URL=${SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL}"
         API_ARGS="-p ASPNETCORE_ENVIRONMENT=Development -p HTTP_PORT=${PORT} -p HTTP_SCHEMA=${SCHEMA} -p VANITY_URL=${VANITY_URL}"
