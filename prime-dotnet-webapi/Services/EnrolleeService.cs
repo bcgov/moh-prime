@@ -57,7 +57,7 @@ namespace Prime.Services
                 Status ACTIVE = _context.Statuses.Single(s => s.Code == Status.ACTIVE_CODE);
                 Status UNDER_REVIEW = _context.Statuses.Single(s => s.Code == Status.UNDER_REVIEW_CODE);
                 Status REQUIRES_TOA = _context.Statuses.Single(s => s.Code == Status.REQUIRES_TOA_CODE);
-                Status DECLINED = _context.Statuses.Single(s => s.Code == Status.LOCKED_CODE);
+                Status LOCKED = _context.Statuses.Single(s => s.Code == Status.LOCKED_CODE);
 
                 _workflowStateMap = new Dictionary<Status, StatusWrapper[]>();
                 _workflowStateMap.Add(NULL_STATUS, new[] {
@@ -66,18 +66,18 @@ namespace Prime.Services
                 _workflowStateMap.Add(ACTIVE, new[] {
                     new StatusWrapper { Status = UNDER_REVIEW, AdminOnly = false },
                     new StatusWrapper { Status = REQUIRES_TOA, AdminOnly = true },
-                    new StatusWrapper { Status = DECLINED, AdminOnly = true }
+                    new StatusWrapper { Status = LOCKED, AdminOnly = true }
                 });
                 _workflowStateMap.Add(UNDER_REVIEW, new[] {
                     new StatusWrapper { Status = ACTIVE, AdminOnly = true },
                     new StatusWrapper { Status = REQUIRES_TOA, AdminOnly = true },
-                    new StatusWrapper { Status = DECLINED, AdminOnly = true }
+                    new StatusWrapper { Status = LOCKED, AdminOnly = true }
                 });
                 _workflowStateMap.Add(REQUIRES_TOA, new[] {
                     new StatusWrapper { Status = ACTIVE, AdminOnly = false },
-                    new StatusWrapper { Status = DECLINED, AdminOnly = false }
+                    new StatusWrapper { Status = LOCKED, AdminOnly = false }
                 });
-                _workflowStateMap.Add(DECLINED, new[] {
+                _workflowStateMap.Add(LOCKED, new[] {
                     new StatusWrapper { Status = ACTIVE, AdminOnly = true }
                 });
             }
