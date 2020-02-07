@@ -1,7 +1,7 @@
 #FROM mcr.microsoft.com/dotnet/core/sdk:3.0 AS build
 FROM  mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
 #FROM registry.redhat.io/rhel8/dotnet-30 as build
-#FROM registry.redhat.io/dotnet/dotnet-31-rhel7  
+#FROM registry.redhat.io/dotnet/dotnet-31-rhel7
 USER 0
 ENV DB_CONNECTION_STRING "host=postgres;port=5432;database=postgres;username=postgres;password=postgres"
 WORKDIR /opt/app-root/app
@@ -38,8 +38,9 @@ RUN apt-get update && \
     apt-get install -yqq --no-install-recommends postgresql-client-10 && \
     chmod +x entrypoint.sh && \
     chmod 777 entrypoint.sh && \
+    chmod -R 777 /var/run/ && \
     chmod -R 777 /opt/app-root && \
-    chmod -R 777 /opt/app-root/.* 
+    chmod -R 777 /opt/app-root/.*
 
 EXPOSE 8080 5001 1025
 #COPY entrypoint.sh .
