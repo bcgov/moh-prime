@@ -3,8 +3,7 @@ echo "Running the migrations..."
 #psql -d postgres -f databaseMigration.sql
 
 PG_IS_READY=$(pg_isready -h $DB_HOST -U ${POSTGRESQL_USER} -d ${POSTGRESQL_DATABASE})
-
-until [[ $PG_IS_READY == "primedb:5432 - accepting connections" ]]
+until [[ $PG_IS_READY == *"$DB_HOST"* && $PG_IS_READY == *"accepting connections"* ]]
 do
     echo "Waiting for the database ..." ;
     sleep 1 ;
