@@ -97,7 +97,8 @@ namespace Prime.Services
                 .OrderByDescending(at => at.AcceptedDate)
                 .ToListAsync();
 
-            accessTerms.ForEach(at => {
+            accessTerms.ForEach(at =>
+            {
                 at.LicenseClassClauses = at.AccessTermLicenseClassClauses
                 .Select(talc => talc.LicenseClassClause).ToList();
             });
@@ -201,7 +202,7 @@ namespace Prime.Services
 
             var newClause = new LimitsConditionsClause
             {
-                EnrolleeId = lastNote.EnrolleeId,
+                EnrolleeId = (int)enrollee.Id,
                 Clause = null,
                 EffectiveDate = new DateTime()
             };

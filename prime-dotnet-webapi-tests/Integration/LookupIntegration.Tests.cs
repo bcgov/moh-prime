@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Prime.Models;
+using Prime.Models.Api;
 using PrimeTests.Utils;
 using Xunit;
 

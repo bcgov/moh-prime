@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { IDialogContent } from '../../dialog-content.model';
 
 @Component({
@@ -7,13 +7,11 @@ import { IDialogContent } from '../../dialog-content.model';
   styleUrls: ['./markdown.component.scss']
 })
 export class MarkdownComponent implements OnInit, IDialogContent {
+  @Input() public data: { message: string };
 
-  @Input()
-  public data: { message: string };
-
-  constructor() { }
-
-  ngOnInit() {
+  constructor() {
+    this.data = { message: '' };
   }
 
+  public ngOnInit() { }
 }
