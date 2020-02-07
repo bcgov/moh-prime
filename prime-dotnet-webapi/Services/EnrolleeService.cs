@@ -65,7 +65,6 @@ namespace Prime.Services
                 });
                 _workflowStateMap.Add(ACTIVE, new[] {
                     new StatusWrapper { Status = UNDER_REVIEW, AdminOnly = false },
-                    new StatusWrapper { Status = REQUIRES_TOA, AdminOnly = true },
                     new StatusWrapper { Status = LOCKED, AdminOnly = true }
                 });
                 _workflowStateMap.Add(UNDER_REVIEW, new[] {
@@ -75,7 +74,7 @@ namespace Prime.Services
                 });
                 _workflowStateMap.Add(REQUIRES_TOA, new[] {
                     new StatusWrapper { Status = ACTIVE, AdminOnly = false },
-                    new StatusWrapper { Status = LOCKED, AdminOnly = false }
+                    new StatusWrapper { Status = LOCKED, AdminOnly = true }
                 });
                 _workflowStateMap.Add(LOCKED, new[] {
                     new StatusWrapper { Status = ACTIVE, AdminOnly = true }
