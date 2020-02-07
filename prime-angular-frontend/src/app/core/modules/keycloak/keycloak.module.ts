@@ -9,27 +9,22 @@ import { AuthRoutes } from '@auth/auth.routes';
 export function initializer(keycloak: KeycloakService, injector: Injector): () => Promise<any> {
   return (): Promise<any> => {
     return keycloak.init(environment.keycloakConfig as KeycloakOptions)
-      .then(
-        (authenticated) => {
-          const kc = keycloak.getKeycloakInstance();
-          kc.onTokenExpired = () => {
-            keycloak.updateToken()
-              .catch(() => redirectToLogin(injector));
-          };
+      .then((authenticated) => {
+        const kc = keycloak.getKeycloakInstance();
+        kc.onTokenExpired = () => {
+          keycloak.updateToken()
+            .catch(() => {
+              injector.get(ToastService).openErrorToast('Your session has expired, please log in again');
+              injector.get(Router).navigateByUrl(AuthRoutes.INFO);
+            });
+        };
 
-          if (authenticated) {
-            // Force refresh to begin expiry timer.
-            keycloak.updateToken(-1);
-          }
-        },
-        (error: any) => redirectToLogin(injector)
-      );
+        if (authenticated) {
+          // Force refresh to begin expiry timer.
+          keycloak.updateToken(-1);
+        }
+      });
   };
-}
-
-function redirectToLogin(injector: Injector): void {
-  injector.get(ToastService).openErrorToast('Your session has expired, please log in again');
-  injector.get(Router).navigateByUrl(AuthRoutes.INFO);
 }
 
 @NgModule({
