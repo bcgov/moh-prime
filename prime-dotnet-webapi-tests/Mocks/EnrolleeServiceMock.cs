@@ -7,6 +7,7 @@ using Bogus;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
+using Prime.ViewModels;
 using PrimeTests.Utils;
 
 namespace PrimeTests.Mocks
@@ -70,21 +71,9 @@ namespace PrimeTests.Mocks
             return Task.FromResult(enrollees);
         }
 
-        public Task<int> UpdateEnrolleeAsync(Enrollee enrollee, bool profileCompleted)
+        public Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeProfileViewModel enrolleeProfile, bool profileCompleted)
         {
-            int updated = 0;
-            if (enrollee.Id.HasValue)
-            {
-                int id = enrollee.Id.Value;
-
-                var found = this.GetHolder<int, Enrollee>().Remove(id);
-                if (found)
-                {
-                    updated = 1;
-                    this.GetHolder<int, Enrollee>().Add(id, enrollee);
-                }
-            }
-            return Task.FromResult(updated);
+            throw new NotImplementedException();
         }
 
         public Task<IEnumerable<Status>> GetAvailableEnrolmentStatusesAsync(int enrolleeId)
