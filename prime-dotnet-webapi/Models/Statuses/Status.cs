@@ -9,12 +9,10 @@ namespace Prime.Models
     [Table("StatusLookup")]
     public sealed class Status : BaseAuditable, ILookup<short>, IEquatable<Status>
     {
-        public const short IN_PROGRESS_CODE = 1;
-        public const short SUBMITTED_CODE = 2;
-        public const short APPROVED_CODE = 3;
-        public const short DECLINED_CODE = 4;
-        public const short ACCEPTED_TOS_CODE = 5;
-        public const short DECLINED_TOS_CODE = 6;
+        public const short ACTIVE_CODE = 1;
+        public const short UNDER_REVIEW_CODE = 2;
+        public const short REQUIRES_TOA_CODE = 3;
+        public const short LOCKED_CODE = 4;
 
         [Key]
         public short Code { get; set; }

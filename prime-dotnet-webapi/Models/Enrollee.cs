@@ -12,7 +12,8 @@ namespace Prime.Models
     {
         STARTED,
         SUBMITTED,
-        FINISHED
+        FINISHED,
+        EDITING
     }
 
     [Table("Enrollee")]
@@ -101,6 +102,16 @@ namespace Prime.Models
         }
 
         [NotMapped]
+        public EnrolmentStatus PreviousStatus
+        {
+            get => this.EnrolmentStatuses?
+                .OrderByDescending(es => es.StatusDate)
+                .ThenByDescending(es => es.Id)
+                .Skip(1)
+                .FirstOrDefault();
+        }
+
+        [NotMapped]
         public EnrolmentStatus PharmaNetStatus { get => this.EnrolmentStatuses?.SingleOrDefault(es => es.PharmaNetStatus); }
 
         [NotMapped]
@@ -113,11 +124,23 @@ namespace Prime.Models
                 var codes = (EnrolmentStatuses ?? Enumerable.Empty<EnrolmentStatus>())
                     .Select(es => es.StatusCode);
 
-                return codes.Contains(Status.ACCEPTED_TOS_CODE)
-                    ? ProgressStatusType.FINISHED
-                    : codes.Contains(Status.SUBMITTED_CODE)
-                        ? ProgressStatusType.SUBMITTED
-                        : ProgressStatusType.STARTED;
+                if (codes.Contains(Status.ACTIVE_CODE))
+                {
+                    if (this.PreviousStatus?.StatusCode == Status.UNDER_REVIEW_CODE)
+                    {
+                        return ProgressStatusType.EDITING;
+                    }
+                    if (this.PreviousStatus?.StatusCode == Status.REQUIRES_TOA_CODE)
+                    {
+                        return ProgressStatusType.FINISHED;
+                    }
+                }
+                if (codes.Contains(Status.UNDER_REVIEW_CODE))
+                {
+                    return ProgressStatusType.SUBMITTED;
+                }
+
+                return ProgressStatusType.STARTED;
             }
         }
 
@@ -128,17 +151,35 @@ namespace Prime.Models
         {
             get => this.EnrolmentStatuses?
                 .OrderByDescending(en => en.StatusDate)
-                .FirstOrDefault(es => es.StatusCode == Status.SUBMITTED_CODE)?
+                .FirstOrDefault(es => es.StatusCode == Status.UNDER_REVIEW_CODE)?
                 .StatusDate;
         }
 
         [NotMapped]
         public DateTime? ApprovedDate
         {
-            get => this.EnrolmentStatuses?
+            get
+            {
+                var activeStatuses = this.EnrolmentStatuses?
                 .OrderByDescending(en => en.StatusDate)
-                .FirstOrDefault(es => es.StatusCode == Status.APPROVED_CODE)?
-                .StatusDate;
+                .Where(es => es.StatusCode == Status.ACTIVE_CODE);
+
+                if (activeStatuses != null)
+                {
+                    // Enrollee has been accepted and has an approved date
+                    foreach (var active in activeStatuses)
+                    {
+                        EnrolmentStatus prevStatus = this.EnrolmentStatuses.SingleOrDefault(p => p.Id == active.Id - 1);
+
+                        if (prevStatus != null && prevStatus?.StatusCode == Status.REQUIRES_TOA_CODE)
+                        {
+                            return active.StatusDate;
+                        }
+                    }
+                }
+
+                return null;
+            }
         }
 
         [NotMapped]
