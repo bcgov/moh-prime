@@ -21,7 +21,11 @@ export class RouteStateService {
 
   constructor(
     private router: Router
-  ) { }
+  ) {
+    this.routeState = {
+      previousRoute: ''
+    };
+  }
 
   public get previousRoute(): string {
     return this.routeState.previousRoute;
