@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
-import { exhaustMap } from 'rxjs/operators';
-import { EMPTY, Subscription } from 'rxjs';
+import { exhaustMap, map } from 'rxjs/operators';
+import { EMPTY, Subscription, Observable } from 'rxjs';
 
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
@@ -74,6 +74,13 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       console.log('ORGANIZATION', this.enrolmentStateService.isOrganizationValid());
       console.log('SELF DECLARATION', this.enrolmentStateService.isSelfDeclarationValid());
     }
+  }
+
+  public canDeactivate(): Observable<boolean> | boolean {
+    const data = 'unsaved';
+    return (this.enrolmentStateService.isDirty)
+      ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
+      : true;
   }
 
   public ngOnInit() {

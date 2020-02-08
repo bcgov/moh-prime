@@ -64,6 +64,7 @@ export class EnrolmentStateService {
   }
 
   /**
+   * @description
    * Store the enrolment JSON and populate the enrolment form, which can
    * only be set more than once when explicitly forced.
    */
@@ -77,11 +78,12 @@ export class EnrolmentStateService {
 
       this.patchEnrolment(enrolment);
     } else {
-      this.logger.warn('Enrolment has already been patched, and cannot be patched without invoking an explicit rest of the enrolment');
+      this.logger.warn('Enrolment has already been patched, and cannot be patched without invoking an explicit reset of the enrolment');
     }
   }
 
   /**
+   * @description
    * Get the enrolment as JSON for submission.
    */
   public get enrolment() {
@@ -109,10 +111,14 @@ export class EnrolmentStateService {
     };
   }
 
-  public isDirty(): boolean {
+  public get isDirty(): boolean {
     return this.forms.reduce(
-      (isDirty: boolean, form: FormGroup) => isDirty && form.dirty, true
+      (isDirty: boolean, form: FormGroup) => isDirty || form.dirty, false
     );
+  }
+
+  public markAsPristine(): void {
+    this.forms.forEach((form: FormGroup) => form.markAsPristine());
   }
 
   public isEnrolmentValid(): boolean {
@@ -152,6 +158,7 @@ export class EnrolmentStateService {
   }
 
   /**
+   * @description
    * Patch the enrolment forms with the enrolment JSON.
    *
    * @param enrolment JSON for patching
@@ -195,6 +202,10 @@ export class EnrolmentStateService {
           organizations.push(organization);
         });
       }
+
+      // After patching the form is dirty, and needs to be pristine
+      // to allow for deactivation modals to work properly
+      this.markAsPristine();
     }
   }
 

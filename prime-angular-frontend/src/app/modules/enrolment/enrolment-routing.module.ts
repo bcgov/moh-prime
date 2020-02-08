@@ -52,6 +52,7 @@ const routes: Routes = [
         // reviewing prior to submission
         path: EnrolmentRoutes.OVERVIEW,
         component: OverviewComponent,
+        canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'PharmaNet Enrolment' }
       },
       //

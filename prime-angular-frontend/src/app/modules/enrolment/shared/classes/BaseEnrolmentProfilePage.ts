@@ -1,4 +1,4 @@
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, CanDeactivate } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 
@@ -11,7 +11,6 @@ import { Enrolment } from '@shared/models/enrolment.model';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentPage } from './BaseEnrolmentPage';
-import { ProgressStatus } from '../enums/progress-status.enum';
 import { EnrolmentService } from '../services/enrolment.service';
 import { EnrolmentResource } from '../services/enrolment-resource.service';
 import { EnrolmentStateService } from '../services/enrolment-state.service';
@@ -27,6 +26,8 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
   public form: FormGroup;
   public enrolment: Enrolment;
 
+  protected allowRoutingWhenDirty: boolean;
+
   constructor(
     protected route: ActivatedRoute,
     protected router: Router,
@@ -38,6 +39,8 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
     protected logger: LoggerService
   ) {
     super(route, router);
+
+    this.allowRoutingWhenDirty = false;
   }
 
   public onSubmit(beenThroughTheWizard: boolean = false): void {
@@ -57,8 +60,6 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
         } = this.enrolmentService.enrolment.enrollee;
         payload.enrollee = { ...payload.enrollee, firstName, middleName, lastName, dateOfBirth, physicalAddress };
 
-        this.logger.info('UPDATING_ENROLMENT', payload);
-
         // Indicate whether the enrolment process has reached the terminal view, or
         // "Been Through The Wizard - Heidi G. 2019"
         this.busy = this.enrolmentResource.updateEnrollee(payload, beenThroughTheWizard)
@@ -77,7 +78,9 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
             }
           );
       } else {
-        this.form.markAsPristine();
+        // Allow routing to occur without invoking the deactivation,
+        // modal to persist form state being dirty between views
+        this.allowRoutingWhenDirty = true;
         this.nextRouteAfterSubmit();
       }
     } else {
@@ -88,7 +91,7 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
 
   public canDeactivate(): Observable<boolean> | boolean {
     const data = 'unsaved';
-    return (this.form.dirty)
+    return (this.form.dirty && !this.allowRoutingWhenDirty)
       ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
       : true;
   }
