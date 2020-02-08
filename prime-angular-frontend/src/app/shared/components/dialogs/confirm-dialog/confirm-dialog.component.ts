@@ -28,6 +28,8 @@ export class ConfirmDialogComponent implements OnInit {
     this.options = (typeof customOptions === 'string')
       ? this.getOptions(defaultOptions[customOptions]())
       : this.getOptions(customOptions);
+
+    this.dialogContentOutput = null;
   }
 
   public onConfirm() {
@@ -73,5 +75,4 @@ export class ConfirmDialogComponent implements OnInit {
       output$.subscribe((value: any) => this.dialogContentOutput = value);
     }
   }
-
 }

@@ -40,12 +40,14 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
     super(route, router);
   }
 
-  public onSubmit(beenThroughTheWizard: boolean = false) {
+  public onSubmit(beenThroughTheWizard: boolean = false): void {
     if (this.form.valid) {
       this.onSubmitFormIsValid();
 
       if (this.isInitialEnrolment) {
-        // TODO remove BCSC fields when API is updated
+        // Update using the form which could contain changes
+        const payload = this.enrolmentStateService.enrolment;
+        // TODO remove BCSC when API updated since it shouldn't be sent for update
         const {
           firstName,
           middleName,
@@ -53,9 +55,6 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
           dateOfBirth,
           physicalAddress
         } = this.enrolmentService.enrolment.enrollee;
-        // Update using the form which could contain changes
-        const payload = this.enrolmentStateService.enrolment;
-        // TODO remove BCSC fields when API is updated
         payload.enrollee = { ...payload.enrollee, firstName, middleName, lastName, dateOfBirth, physicalAddress };
 
         this.logger.info('UPDATING_ENROLMENT', payload);
@@ -101,7 +100,7 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
    * @description
    * Pre-submission hook for execution.
    */
-  protected onSubmitFormIsValid() {
+  protected onSubmitFormIsValid(): void {
     // Not Implemented
   }
 
@@ -109,7 +108,7 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
    * @description
    * Pre-submission hook for execution.
    */
-  protected onSubmitFormIsInvalid() {
+  protected onSubmitFormIsInvalid(): void {
     // Not Implemented
   }
 
@@ -117,7 +116,7 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
    * @description
    * Post-submission hook for execution.
    */
-  protected afterSubmitIsSuccessful() {
+  protected afterSubmitIsSuccessful(): void {
     // Not Implemented
   }
 
@@ -132,15 +131,12 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
   }
 
   protected patchForm(): void {
+    // Store a local copy of the enrolment for views
     this.enrolment = this.enrolmentService.enrolment;
+    this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
+    this.isProfileComplete = this.enrolmentService.isProfileComplete;
 
-    console.log('PATCH_WITH', this.enrolment);
-
-    this.enrolmentStateService.enrolment = this.enrolment;
-
-    console.log('PATCHED', this.enrolmentStateService.enrolment);
-
-    this.isInitialEnrolment = this.enrolment.progressStatus !== ProgressStatus.FINISHED;
-    this.isProfileComplete = this.enrolment.profileCompleted;
+    // Attempt to patch the form if not already patched
+    this.enrolmentStateService.setEnrolment(this.enrolment);
   }
 }

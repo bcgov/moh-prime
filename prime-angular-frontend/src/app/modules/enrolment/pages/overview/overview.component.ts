@@ -16,7 +16,6 @@ import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
-import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 
 @Component({
   selector: 'app-overview',
@@ -67,6 +66,8 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
             this.logger.error('[Enrolment] Review::onSubmit error has occurred: ', error);
           });
     } else {
+      this.toastService.openErrorToast('Your enrolment has an error that needs to be corrected before you will be able to submit');
+
       console.log('DEMOGRAPHIC', this.enrolmentStateService.isProfileInfoValid());
       console.log('REGULATORY', this.enrolmentStateService.isRegulatoryValid());
       console.log('JOBS', this.enrolmentStateService.isJobsValid());
@@ -76,9 +77,25 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   }
 
   public ngOnInit() {
-    const enrolment = this.enrolmentService.enrolment;
+    let enrolment = this.enrolmentService.enrolment;
+    if (this.enrolmentStateService.isPatched) {
+      enrolment = this.enrolmentStateService.enrolment;
+      // Merge BCSC information in for use within the view
+      const {
+        firstName,
+        middleName,
+        lastName,
+        dateOfBirth,
+        physicalAddress
+      } = this.enrolmentService.enrolment.enrollee;
+      enrolment.enrollee = { ...enrolment.enrollee, firstName, middleName, lastName, dateOfBirth, physicalAddress };
+    }
+
+    // Store a local copy of the enrolment for views
     this.enrolment = enrolment;
-    this.enrolmentStateService.enrolment = enrolment;
-    this.isInitialEnrolment = enrolment.progressStatus !== ProgressStatus.FINISHED;
+    this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
+
+    // Attempt to patch the form if not already patched
+    this.enrolmentStateService.setEnrolment(enrolment);
   }
 }
