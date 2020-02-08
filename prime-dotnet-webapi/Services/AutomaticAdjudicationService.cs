@@ -23,7 +23,8 @@ namespace Prime.Services
                 new SelfDeclarationRule(),
                 new AddressRule(),
                 new PharmanetValidationRule(pharmanetApiService),
-                new DeviceProviderRule(),
+                // TODO removed until after Community Practice
+                // new DeviceProviderRule(),
                 new LicenceClassRule(),
                 new AlwaysManualRule()
             };
