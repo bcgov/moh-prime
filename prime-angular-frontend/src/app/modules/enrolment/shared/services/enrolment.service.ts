@@ -2,10 +2,8 @@ import { Injectable } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs';
 
-import { Config } from '@config/config.model';
 import { Enrolment } from '@shared/models/enrolment.model';
-
-import { ProgressStatus } from '../enums/progress-status.enum';
+import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 
 export interface IEnrolmentService {
   enrolment$: BehaviorSubject<Enrolment>;
