@@ -118,8 +118,7 @@ export class EnrolmentResource {
   // ---
 
   private enrolleeAdapterResponse(enrollee: HttpEnrollee): Enrolment {
-    // Fill in values that could be `null`, but cannot
-    // be within the form model
+    // Fill in values that could be `null`
     if (!enrollee.mailingAddress) {
       enrollee.mailingAddress = new Address();
     }
