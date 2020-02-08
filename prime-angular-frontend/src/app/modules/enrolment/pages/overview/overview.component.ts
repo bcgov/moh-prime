@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
-import { exhaustMap, map } from 'rxjs/operators';
 import { EMPTY, Subscription, Observable } from 'rxjs';
+import { exhaustMap } from 'rxjs/operators';
 
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
@@ -26,6 +26,8 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public busy: Subscription;
   public enrolment: Enrolment;
 
+  protected allowRoutingWhenDirty: boolean;
+
   constructor(
     protected route: ActivatedRoute,
     protected router: Router,
@@ -37,6 +39,8 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     private logger: LoggerService
   ) {
     super(route, router);
+
+    this.allowRoutingWhenDirty = false;
   }
 
   public onSubmit() {
@@ -76,9 +80,16 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     }
   }
 
+  public routeTo(routePath: EnrolmentRoutes, navigationExtras: NavigationExtras = {}) {
+    this.allowRoutingWhenDirty = true;
+    super.routeTo(routePath, navigationExtras);
+  }
+
+  // TODO split out deactivation and allowRoutingWhenDirty into separate base class
+  // since it has common use @see BaseEnrolmentProfilePage
   public canDeactivate(): Observable<boolean> | boolean {
     const data = 'unsaved';
-    return (this.enrolmentStateService.isDirty)
+    return (this.enrolmentStateService.isDirty && !this.allowRoutingWhenDirty)
       ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
       : true;
   }

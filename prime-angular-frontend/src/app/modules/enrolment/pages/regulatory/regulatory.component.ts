@@ -67,6 +67,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   }
 
   public ngOnDestroy() {
+    // TODO refactor how this occurs as it causes the view to jump on route
     this.removeIncompleteCertifications();
   }
 

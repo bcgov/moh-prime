@@ -50,7 +50,7 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
       if (this.isInitialEnrolment) {
         // Update using the form which could contain changes
         const payload = this.enrolmentStateService.enrolment;
-        // TODO remove BCSC when API updated since it shouldn't be sent for update
+        // TODO remove BCSC when API updated since it shouldn't be sent in updates
         const {
           firstName,
           middleName,
