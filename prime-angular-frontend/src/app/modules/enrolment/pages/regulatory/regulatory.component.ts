@@ -13,6 +13,7 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
+import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-regulatory',
@@ -32,7 +33,8 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     private enrolmentService: EnrolmentService,
     private enrolmentStateService: EnrolmentStateService,
     private toastService: ToastService,
-    private logger: LoggerService
+    private logger: LoggerService,
+    private utilsService: UtilsService
   ) {
     super(route, router, dialog);
 
@@ -73,6 +75,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
         );
     } else {
       this.form.markAllAsTouched();
+      this.utilsService.scrollToErrorSection();
     }
   }
 

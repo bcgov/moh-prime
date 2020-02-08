@@ -12,6 +12,7 @@ import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-stat
 import { FormUtilsService } from '@enrolment/shared/services/form-utils.service';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
 import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
+import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-self-declaration',
@@ -32,7 +33,8 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     private enrolmentStateService: EnrolmentStateService,
     private formUtilsService: FormUtilsService,
     private toastService: ToastService,
-    private logger: LoggerService
+    private logger: LoggerService,
+    private utilsService: UtilsService
   ) {
     super(route, router, dialog);
 
@@ -95,6 +97,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     } else {
       this.form.markAllAsTouched();
       this.showUnansweredQuestionsError = this.showUnansweredQuestions();
+      this.utilsService.scrollToErrorSection();
     }
   }
 

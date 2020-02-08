@@ -11,6 +11,7 @@ import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-stat
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
+import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-device-provider',
@@ -28,7 +29,8 @@ export class DeviceProviderComponent extends BaseEnrolmentProfilePage implements
     private enrolmentService: EnrolmentService,
     private enrolmentStateService: EnrolmentStateService,
     private toastService: ToastService,
-    private logger: LoggerService
+    private logger: LoggerService,
+    private utilsService: UtilsService
   ) {
     super(route, router, dialog);
 
@@ -71,6 +73,7 @@ export class DeviceProviderComponent extends BaseEnrolmentProfilePage implements
       this.form.markAsPristine();
     } else {
       this.form.markAllAsTouched();
+      this.utilsService.scrollToErrorSection();
     }
   }
 

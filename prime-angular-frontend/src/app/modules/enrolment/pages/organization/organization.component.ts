@@ -17,6 +17,7 @@ import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmen
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-organization',
@@ -37,7 +38,8 @@ export class OrganizationComponent extends BaseEnrolmentProfilePage implements O
     private enrolmentService: EnrolmentService,
     private enrolmentStateService: EnrolmentStateService,
     private toastService: ToastService,
-    private logger: LoggerService
+    private logger: LoggerService,
+    private utilsService: UtilsService
   ) {
     super(route, router, dialog);
 
@@ -70,6 +72,7 @@ export class OrganizationComponent extends BaseEnrolmentProfilePage implements O
           });
     } else {
       this.form.markAllAsTouched();
+      this.utilsService.scrollToErrorSection();
     }
   }
 

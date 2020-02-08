@@ -13,6 +13,7 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { FormUtilsService } from '@enrolment/shared/services/form-utils.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
+import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-demographic',
@@ -33,7 +34,8 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
     private enrolmentStateService: EnrolmentStateService,
     private formUtilsService: FormUtilsService,
     private toastService: ToastService,
-    private logger: LoggerService
+    private logger: LoggerService,
+    private utilsService: UtilsService
   ) {
     super(route, router, dialog);
   }
@@ -98,6 +100,7 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
         );
     } else {
       this.form.markAllAsTouched();
+      this.utilsService.scrollToErrorSection();
     }
   }
 

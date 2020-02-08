@@ -17,6 +17,7 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
+import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-job',
@@ -38,7 +39,8 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     private enrolmentResource: EnrolmentResource,
     private enrolmentStateService: EnrolmentStateService,
     private toastService: ToastService,
-    private logger: LoggerService
+    private logger: LoggerService,
+    private utilsService: UtilsService
   ) {
     super(route, router, dialog);
 
@@ -80,6 +82,7 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
         );
     } else {
       this.form.markAllAsTouched();
+      this.utilsService.scrollToErrorSection();
     }
   }
 
