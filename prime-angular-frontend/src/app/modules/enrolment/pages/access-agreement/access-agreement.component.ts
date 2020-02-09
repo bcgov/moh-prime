@@ -76,7 +76,7 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
 
   public onSubmit(enrolmentStatus: EnrolmentStatus) {
     if (this.hasReadAgreement) {
-      const status = (enrolmentStatus === EnrolmentStatus.ACCEPTED_TOS)
+      const status = (enrolmentStatus === EnrolmentStatus.ACTIVE)
         ? { verb: 'Accept', adjective: 'accepted' }
         : { verb: 'Decline', adjective: 'declined' };
 
