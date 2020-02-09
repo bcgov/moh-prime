@@ -56,7 +56,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
         .pipe(
           exhaustMap((result: boolean) =>
             (result)
-              ? this.enrolmentResource.updateEnrolmentStatus(enrolment.id, EnrolmentStatus.SUBMITTED)
+              ? this.enrolmentResource.updateEnrolmentStatus(enrolment.id, EnrolmentStatus.UNDER_REVIEW)
               : EMPTY
           )
         )
