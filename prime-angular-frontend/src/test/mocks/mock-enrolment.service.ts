@@ -64,7 +64,7 @@ export class MockEnrolmentService implements IEnrolmentService {
         enrolmentId,
         statusCode: null,
         status: {
-          code: EnrolmentStatus.IN_PROGRESS,
+          code: EnrolmentStatus.ACTIVE,
           name: null
         },
         statusDate: null,
