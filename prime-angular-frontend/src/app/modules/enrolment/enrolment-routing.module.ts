@@ -37,6 +37,8 @@ const routes: Routes = [
       EnrolleeGuard,
       EnrolmentGuard
     ],
+    // Ensure that the configuration is loaded, otherwise
+    // if it already exists NOOP
     resolve: [ConfigResolver],
     children: [
       {
@@ -58,9 +60,6 @@ const routes: Routes = [
       //
       // Enrollee profile:
       //
-      // TODO refactor routes to have deeper child routing, which
-      // will provide an easier way to lock down routing, and provide
-      // feedback for marking active routes in the dashboard
       {
         path: EnrolmentRoutes.DEMOGRAPHIC,
         component: DemographicComponent,
