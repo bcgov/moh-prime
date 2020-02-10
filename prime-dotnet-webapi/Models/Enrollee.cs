@@ -27,7 +27,7 @@ namespace Prime.Models
         [StringLength(20)]
         public string GPID { get; set; }
 
-        [StringLength(20)]
+        [StringLength(255)]
         public string HPDID { get; set; }
 
         [Required]
