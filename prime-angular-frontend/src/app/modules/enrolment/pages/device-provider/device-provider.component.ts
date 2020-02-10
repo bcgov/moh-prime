@@ -10,8 +10,6 @@ import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmen
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
-import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-device-provider',
@@ -25,14 +23,13 @@ export class DeviceProviderComponent extends BaseEnrolmentProfilePage implements
     protected route: ActivatedRoute,
     protected router: Router,
     protected dialog: MatDialog,
-    private enrolmentResource: EnrolmentResource,
-    private enrolmentService: EnrolmentService,
-    private enrolmentStateService: EnrolmentStateService,
-    private toastService: ToastService,
-    private logger: LoggerService,
-    private utilsService: UtilsService
+    protected enrolmentService: EnrolmentService,
+    protected enrolmentResource: EnrolmentResource,
+    protected enrolmentStateService: EnrolmentStateService,
+    protected toastService: ToastService,
+    protected logger: LoggerService
   ) {
-    super(route, router, dialog);
+    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger);
 
     this.decisions = [
       { code: false, name: 'No' },
@@ -46,35 +43,6 @@ export class DeviceProviderComponent extends BaseEnrolmentProfilePage implements
 
   public get isInsulinPumpProvider(): FormControl {
     return this.form.get('isInsulinPumpProvider') as FormControl;
-  }
-
-  public onSubmit() {
-    if (this.form.valid) {
-      const payload = this.enrolmentStateService.enrolment;
-      this.busy = this.enrolmentResource.updateEnrollee(payload)
-        .subscribe(
-          () => {
-            this.toastService.openSuccessToast('Device Provider information has been saved');
-            this.form.markAsPristine();
-
-            const nextRoutePath = (!payload.certifications.length)
-              ? EnrolmentRoutes.JOB
-              : EnrolmentRoutes.SELF_DECLARATION;
-            const routePath = (!this.isProfileComplete)
-              ? nextRoutePath
-              : EnrolmentRoutes.OVERVIEW;
-            this.routeTo(routePath);
-          },
-          (error: any) => {
-            this.toastService.openErrorToast('Device Provider information could not be saved');
-            this.logger.error('[Enrolment] Device Provider::onSubmit error has occurred: ', error);
-          }
-        );
-      this.form.markAsPristine();
-    } else {
-      this.form.markAllAsTouched();
-      this.utilsService.scrollToErrorSection();
-    }
   }
 
   public ngOnInit() {
@@ -96,11 +64,14 @@ export class DeviceProviderComponent extends BaseEnrolmentProfilePage implements
       });
   }
 
-  protected patchForm() {
-    const enrolment = this.enrolmentService.enrolment;
+  protected nextRouteAfterSubmit() {
+    let nextRoutePath: string;
+    if (!this.isProfileComplete) {
+      nextRoutePath = (!this.enrolmentStateService.enrolment.certifications.length)
+        ? EnrolmentRoutes.JOB
+        : EnrolmentRoutes.SELF_DECLARATION;
+    }
 
-    this.isProfileComplete = enrolment.profileCompleted;
-    this.enrolmentStateService.enrolment = enrolment;
-    this.isInitialEnrolment = enrolment.progressStatus !== ProgressStatus.FINISHED;
+    super.nextRouteAfterSubmit(nextRoutePath);
   }
 }

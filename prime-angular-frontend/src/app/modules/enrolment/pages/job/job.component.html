@@ -25,7 +25,7 @@
         <div class="col col-sm-10 py-3"
              formArrayName="jobs">
 
-          <ng-container *ngFor="let job of jobs.controls; let i = index"
+          <ng-container *ngFor="let job of jobs.controls; let i = index;"
                         [formGroupName]="i">
 
             <app-job-form [form]="job"

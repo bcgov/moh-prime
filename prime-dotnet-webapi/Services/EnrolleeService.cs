@@ -497,6 +497,20 @@ namespace Prime.Services
             return entity;
         }
 
+        public async Task<Enrollee> GetEnrolleeNoTrackingAsync(int enrolleeId)
+        {
+            var entity = await this.GetBaseEnrolleeQuery()
+                .AsNoTracking()
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
+            if (entity != null)
+            {
+                entity.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(entity);
+            }
+
+            return entity;
+        }
+
         public async Task<IEnumerable<AdjudicatorNote>> GetEnrolleeAdjudicatorNotesAsync(Enrollee enrollee)
         {
             return await _context.AdjudicatorNotes
