@@ -62,7 +62,7 @@ export class EnrolmentRoutes {
       // Enrolment was flagged for manual adjudication
       EnrolmentRoutes.SUBMISSION_CONFIRMATION,
       EnrolmentRoutes.DECLINED,
-      // ACCESS_AGREEMENT is synonymous with APPROVED
+      // TERMS_OF_ACCESS is synonymous with APPROVED
       EnrolmentRoutes.TERMS_OF_ACCESS,
       EnrolmentRoutes.DECLINED_TERMS_OF_ACCESS
     ];

@@ -91,18 +91,14 @@ export class EnrolmentGuard extends BaseGuard {
       return this.navigate(routePath, EnrolmentRoutes.DEMOGRAPHIC);
     } else if (enrolment) {
       switch (enrolment.currentStatus.statusCode) {
-        case EnrolmentStatus.IN_PROGRESS:
-          return this.manageInProgressRouting(routePath, enrolment);
-        case EnrolmentStatus.SUBMITTED:
+        case EnrolmentStatus.ACTIVE:
+          return this.manageActiveRouting(routePath, enrolment);
+        case EnrolmentStatus.UNDER_REVIEW:
           return this.navigate(routePath, EnrolmentRoutes.SUBMISSION_CONFIRMATION);
-        case EnrolmentStatus.ADJUDICATED_APPROVED:
-          return this.manageApprovedRouting(routePath, enrolment);
-        case EnrolmentStatus.DECLINED:
+        case EnrolmentStatus.REQUIRES_TOA:
+          return this.manageRequiresToaRouting(routePath, enrolment);
+        case EnrolmentStatus.LOCKED:
           return this.navigate(routePath, EnrolmentRoutes.DECLINED);
-        case EnrolmentStatus.ACCEPTED_TOS:
-          return this.manageAcceptedToaRouting(routePath, enrolment);
-        case EnrolmentStatus.DECLINED_TOS:
-          return this.navigate(routePath, EnrolmentRoutes.DECLINED_TERMS_OF_ACCESS);
       }
     }
 
@@ -116,7 +112,7 @@ export class EnrolmentGuard extends BaseGuard {
    * out their initial enrolment, which prevents access to
    * post-enrolment routes.
    */
-  private manageInProgressRouting(routePath: string, enrolment: Enrolment) {
+  private manageActiveRouting(routePath: string, enrolment: Enrolment): boolean {
     const enrolmentSubmissionRoutes = [
       ...EnrolmentRoutes.enrolmentSubmissionRoutes()
     ];
@@ -143,7 +139,7 @@ export class EnrolmentGuard extends BaseGuard {
       : true;
   }
 
-  private manageApprovedRouting(routePath: string, enrolment: Enrolment) {
+  private manageRequiresToaRouting(routePath: string, enrolment: Enrolment): boolean {
     const whiteListedRoutes = [
       EnrolmentRoutes.TERMS_OF_ACCESS,
       EnrolmentRoutes.PHARMANET_TRANSACTIONS,
@@ -153,22 +149,6 @@ export class EnrolmentGuard extends BaseGuard {
 
     if (!whiteListedRoutes.includes(route)) {
       return this.navigate(routePath, EnrolmentRoutes.TERMS_OF_ACCESS);
-    }
-
-    return true;
-  }
-
-  /**
-   * @description
-   * Manages the routing for enrollees
-   */
-  private manageAcceptedToaRouting(routePath: string, enrolment: Enrolment) {
-    const enrolmentSubmissionRoutes = [
-      ...EnrolmentRoutes.enrolmentSubmissionRoutes()
-    ];
-
-    if (enrolmentSubmissionRoutes.includes(routePath)) {
-      this.navigate(routePath, EnrolmentRoutes.OVERVIEW);
     }
 
     return true;
