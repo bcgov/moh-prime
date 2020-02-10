@@ -112,7 +112,11 @@ namespace Prime.Models
         }
 
         [NotMapped]
-        public EnrolmentStatus PharmaNetStatus { get => this.EnrolmentStatuses?.SingleOrDefault(es => es.PharmaNetStatus); }
+        public EnrolmentStatus PharmaNetStatus
+        {
+            get => this.EnrolmentStatuses?
+                .SingleOrDefault(es => es.PharmaNetStatus);
+        }
 
         [NotMapped]
         public ProgressStatusType ProgressStatus
@@ -126,16 +130,12 @@ namespace Prime.Models
 
                 if (codes.Contains(Status.ACTIVE_CODE))
                 {
-                    if (this.PreviousStatus?.StatusCode == Status.UNDER_REVIEW_CODE)
-                    {
-                        return ProgressStatusType.EDITING;
-                    }
                     if (this.PreviousStatus?.StatusCode == Status.REQUIRES_TOA_CODE)
                     {
                         return ProgressStatusType.FINISHED;
                     }
                 }
-                if (codes.Contains(Status.UNDER_REVIEW_CODE))
+                else if (codes.Contains(Status.UNDER_REVIEW_CODE))
                 {
                     return ProgressStatusType.SUBMITTED;
                 }
