@@ -401,7 +401,7 @@ namespace Prime.Services
 
                 case Status.ACCEPTED_TOS_CODE:
                     await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
-                    enrollee.LicensePlate = this.GenerateLicensePlate();
+                    enrollee.GPID = this.GenerateGPID();
                     createdEnrolmentStatus.PharmaNetStatus = true;
                     await _accessTermService.AcceptCurrentAccessTermAsync(enrollee);
                     await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrolleeId, enrollee);
@@ -434,7 +434,7 @@ namespace Prime.Services
             }
         }
 
-        private string GenerateLicensePlate()
+        private string GenerateGPID()
         {
             return Base85.Ascii85.Encode(Guid.NewGuid().ToByteArray());
         }
