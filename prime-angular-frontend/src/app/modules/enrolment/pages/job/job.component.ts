@@ -127,7 +127,7 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
    * Removes incomplete jobs from the list in preparation
    * for submission, and allows for an empty list of jobs.
    */
-  private removeIncompleteJobs(noEmptyCert: boolean = false) {
+  private removeIncompleteJobs(noEmptyJob: boolean = false) {
     this.jobs.controls
       .forEach((control: FormGroup, index: number) => {
         const value = control.get('title').value;
@@ -140,7 +140,7 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
 
     // Always have a single job available, and it prevents
     // the page from jumping too much when routing
-    if (!noEmptyCert && !this.jobs.controls.length) {
+    if (!noEmptyJob && !this.jobs.controls.length) {
       this.addJob();
     }
   }
