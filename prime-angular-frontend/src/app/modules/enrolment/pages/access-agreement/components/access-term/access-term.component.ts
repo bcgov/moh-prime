@@ -8,8 +8,7 @@ const SUFFIX = '</li>';
 @Component({
   selector: 'app-access-term',
   templateUrl: './access-term.component.html',
-  styleUrls: ['./access-term.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  styleUrls: ['./access-term.component.scss']
 })
 export class AccessTermComponent implements OnInit {
   @Input() public accessTerms: AccessTerm;
