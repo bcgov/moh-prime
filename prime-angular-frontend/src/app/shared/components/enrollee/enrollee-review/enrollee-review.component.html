@@ -115,6 +115,20 @@
       {{ certification.collegeCode | configCode: 'colleges' | default }}
     </app-enrollee-property>
 
+    <div class="row">
+      <div class="col-2">
+        <app-enrollee-property title="College Number">
+          {{ certification.collegeCode | configCode: 'colleges' : 'prefix' }}
+        </app-enrollee-property>
+      </div>
+
+      <div class="col-2">
+        <app-enrollee-property title="License Number">
+          {{ certification.licenseNumber | default }}
+        </app-enrollee-property>
+      </div>
+    </div>
+
     <app-enrollee-property title="License Number">
       {{ certification.collegeCode | configCode: 'colleges' : 'prefix' }}{{ certification.licenseNumber | default }}
     </app-enrollee-property>
