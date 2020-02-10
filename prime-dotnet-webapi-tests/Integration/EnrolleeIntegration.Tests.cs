@@ -10,6 +10,7 @@ using Xunit;
 using Prime;
 using Prime.Models;
 using PrimeTests.Utils;
+using Prime.Models.Api;
 
 namespace PrimeTests.Integration
 {

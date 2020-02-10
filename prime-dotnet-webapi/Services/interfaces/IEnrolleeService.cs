@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 using Prime.Models;
 using Prime.Models.Api;
+using Prime.ViewModels;
 
 namespace Prime.Services
 {
@@ -17,11 +18,13 @@ namespace Prime.Services
 
         Task<Enrollee> GetEnrolleeAsync(int enrolleeId);
 
+        Task<Enrollee> GetEnrolleeNoTrackingAsync(int enrolleeId);
+
         Task<IEnumerable<Enrollee>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null);
 
         Task<int?> CreateEnrolleeAsync(Enrollee enrollee);
 
-        Task<int> UpdateEnrolleeAsync(Enrollee enrollee, bool profileCompleted = false);
+        Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeProfileViewModel enrolleeProfile, bool profileCompleted = false);
 
         Task DeleteEnrolleeAsync(int enrolleeId);
 
@@ -37,7 +40,7 @@ namespace Prime.Services
 
         Task<IEnumerable<AdjudicatorNote>> GetEnrolleeAdjudicatorNotesAsync(Enrollee enrollee);
 
-        Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, AdjudicatorNote adjudicatorNote);
+        Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, string note);
 
         Task<IEnrolleeNote> UpdateEnrolleeNoteAsync(int enrolleeId, IEnrolleeNote newNote);
 

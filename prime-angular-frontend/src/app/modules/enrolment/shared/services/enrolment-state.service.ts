@@ -1,60 +1,96 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
 
+import { LoggerService } from '@core/services/logger.service';
 import { FormControlValidators } from '@shared/validators/form-control.validators';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { Job } from '../models/job.model';
 import { Organization } from '../models/organization.model';
 import { CollegeCertification } from '../models/college-certification.model';
+import { RouteStateService } from '@core/services/route-state.service';
+import { RouterEvent } from '@angular/router';
+import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 
-// TODO rename profile to demographic
 // TODO refactor into enrolment service and enrolment form service
-// TODO implement using NGXS to manage state
 @Injectable({
   providedIn: 'root'
 })
 export class EnrolmentStateService {
-  // TODO revisit access to form groups as service is refined, but for now public
-  // TODO make into BehaviourSubject or asObservable, which would make it immutable
-  public profileForm: FormGroup;
+  // TODO revisit access to form groups as service is refined, but
+  // for now public, and then make into BehaviourSubject or use
+  // asObservable, which would make them immutable
+  public demographicForm: FormGroup;
   public regulatoryForm: FormGroup;
   public deviceProviderForm: FormGroup;
   public jobsForm: FormGroup;
   public selfDeclarationForm: FormGroup;
   public organizationForm: FormGroup;
 
+  private patched: boolean;
   private enrolleeId: number;
   private userId: string;
 
   constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private routeStateService: RouteStateService,
+    private logger: LoggerService
   ) {
-    this.profileForm = this.buildProfileForm();
+    this.demographicForm = this.buildDemographicForm();
     this.regulatoryForm = this.buildRegulatoryForm();
     this.deviceProviderForm = this.buildDeviceProviderForm();
     this.jobsForm = this.buildJobsForm();
     this.selfDeclarationForm = this.buildSelfDeclarationForm();
     this.organizationForm = this.buildOrganizationsForm();
+
+    // Initial state of the form is unpatched and ready for
+    // enrolment information
+    this.patched = false;
+
+    // Listen for a route end that is outside of the enrollee
+    // profile/overview, and reset the form model
+    this.routeStateService.onNavigationEnd()
+      .subscribe((event: RouterEvent) => {
+        const route = event.url.slice(event.url.lastIndexOf('/') + 1);
+        if (!EnrolmentRoutes.enrolmentProfileRoutes().includes(route)) {
+          this.logger.info('RESET ENROLLEE FORM');
+          this.forms.forEach((form: FormGroup) => form.reset());
+          this.patched = false;
+        }
+      });
+  }
+
+  public get isPatched() {
+    return this.patched;
   }
 
   /**
-   * Store the enrolment JSON and populate the enrolment form.
+   * @description
+   * Store the enrolment JSON and populate the enrolment form, which can
+   * only be set more than once when explicitly forced.
    */
-  public set enrolment(enrolment: Enrolment) {
-    this.enrolleeId = enrolment.id;
-    this.userId = enrolment.enrollee.userId;
+  public setEnrolment(enrolment: Enrolment, force: boolean = false) {
+    if (!this.patched || force) {
+      // Indicate that the form is patched, and may contain unsaved information
+      this.patched = true;
 
-    this.patchEnrolment(enrolment);
+      this.enrolleeId = enrolment.id;
+      this.userId = enrolment.enrollee.userId;
+
+      this.patchEnrolment(enrolment);
+    } else {
+      this.logger.warn('Enrolment has already been patched, and cannot be patched without invoking an explicit reset of the enrolment');
+    }
   }
 
   /**
+   * @description
    * Get the enrolment as JSON for submission.
    */
   public get enrolment() {
     const id = this.enrolleeId;
     const userId = this.userId;
 
-    const profile = this.profileForm.getRawValue();
+    const profile = this.demographicForm.getRawValue();
     const regulatory = this.regulatoryForm.getRawValue();
     const deviceProvider = this.deviceProviderForm.getRawValue();
     const jobs = this.jobsForm.getRawValue();
@@ -75,30 +111,30 @@ export class EnrolmentStateService {
     };
   }
 
+  public get isDirty(): boolean {
+    return this.forms.reduce(
+      (isDirty: boolean, form: FormGroup) => isDirty || form.dirty, false
+    );
+  }
+
+  public markAsPristine(): void {
+    this.forms.forEach((form: FormGroup) => form.markAsPristine());
+  }
+
   public isEnrolmentValid(): boolean {
     return (
       this.isProfileInfoValid() &&
       this.isRegulatoryValid() &&
-      this.isDeviceProviderValid() &&
+      // TODO removed until after Community Practice
+      // this.isDeviceProviderValid() &&
       this.isJobsValid() &&
       this.isSelfDeclarationValid() &&
-      this.isOrganizationValid() &&
-      this.isAnyJobOrReg()
+      this.isOrganizationValid()
     );
   }
 
-  /**
-   * Returns true if a Job or Regulatory has been entered.
-   */
-  public isAnyJobOrReg(): boolean {
-    const jobs = this.jobsForm.get('jobs') as FormArray;
-    const certifications = this.regulatoryForm.get('certifications') as FormArray;
-    // When you set cert to 'None' there still exists an item in FormArray, this checks for that state
-    return jobs.length > 0 || (certifications.length > 0 && (certifications.value[0].licenseNumber !== null));
-  }
-
   public isProfileInfoValid(): boolean {
-    return this.profileForm.valid;
+    return this.demographicForm.valid;
   }
 
   public isRegulatoryValid(): boolean {
@@ -122,13 +158,14 @@ export class EnrolmentStateService {
   }
 
   /**
+   * @description
    * Patch the enrolment forms with the enrolment JSON.
    *
    * @param enrolment JSON for patching
    */
   private patchEnrolment(enrolment: Enrolment) {
     if (enrolment) {
-      this.profileForm.patchValue(enrolment.enrollee);
+      this.demographicForm.patchValue(enrolment.enrollee);
       this.deviceProviderForm.patchValue(enrolment);
 
       if (enrolment.certifications.length) {
@@ -165,27 +202,29 @@ export class EnrolmentStateService {
           organizations.push(organization);
         });
       }
+
+      // After patching the form is dirty, and needs to be pristine
+      // to allow for deactivation modals to work properly
+      this.markAsPristine();
     }
   }
 
-  private buildProfileForm(): FormGroup {
+  private get forms(): FormGroup[] {
+    return [
+      this.demographicForm,
+      this.regulatoryForm,
+      this.jobsForm,
+      this.deviceProviderForm,
+      this.organizationForm,
+      this.selfDeclarationForm
+    ];
+  }
+
+  private buildDemographicForm(): FormGroup {
     return this.fb.group({
-      userId: [{ value: null, disabled: true }, [Validators.required]],
-      firstName: [{ value: null, disabled: true }, [Validators.required]],
-      middleName: [{ value: null, disabled: true }, []],
-      lastName: [{ value: null, disabled: true }, [Validators.required]],
-      dateOfBirth: [{ value: null, disabled: true }, [Validators.required]],
       preferredFirstName: [null, []],
       preferredMiddleName: [null, []],
       preferredLastName: [null, []],
-      physicalAddress: this.fb.group({
-        countryCode: [{ value: null, disabled: true }, [Validators.required]],
-        provinceCode: [{ value: null, disabled: true }, [Validators.required]],
-        street: [{ value: null, disabled: true }, [Validators.required]],
-        street2: [{ value: null, disabled: true }, []],
-        city: [{ value: null, disabled: true }, [Validators.required]],
-        postal: [{ value: null, disabled: true }, [Validators.required]]
-      }),
       mailingAddress: this.fb.group({
         countryCode: [{ value: null, disabled: false }, []],
         provinceCode: [{ value: null, disabled: false }, []],
@@ -227,6 +266,18 @@ export class EnrolmentStateService {
     });
   }
 
+  public buildJobsForm(): FormGroup {
+    return this.fb.group({
+      jobs: this.fb.array([]),
+    });
+  }
+
+  public buildJobForm(value: string = null): FormGroup {
+    return this.fb.group({
+      title: [value, [Validators.required]]
+    });
+  }
+
   public buildDeviceProviderForm(): FormGroup {
     return this.fb.group({
       deviceProviderNumber: [null, [
@@ -237,15 +288,15 @@ export class EnrolmentStateService {
     });
   }
 
-  public buildJobsForm(): FormGroup {
+  private buildOrganizationsForm(): FormGroup {
     return this.fb.group({
-      jobs: this.fb.array([]),
+      organizations: this.fb.array([])
     });
   }
 
-  public buildJobForm(value: string = null): FormGroup {
+  public buildOrganizationForm(code: number = null): FormGroup {
     return this.fb.group({
-      title: [value, [Validators.required]]
+      organizationTypeCode: [code, [Validators.required]]
     });
   }
 
@@ -259,18 +310,6 @@ export class EnrolmentStateService {
       hasDisciplinaryActionDetails: [null, []],
       hasPharmaNetSuspended: [null, [FormControlValidators.requiredBoolean]],
       hasPharmaNetSuspendedDetails: [null, []]
-    });
-  }
-
-  private buildOrganizationsForm(): FormGroup {
-    return this.fb.group({
-      organizations: this.fb.array([])
-    });
-  }
-
-  public buildOrganizationForm(code: number = null): FormGroup {
-    return this.fb.group({
-      organizationTypeCode: [code, [Validators.required]]
     });
   }
 }

@@ -82,10 +82,8 @@ export class AdjudicationResource {
   }
 
   public updateEnrolleeAlwaysManual(id: number, alwaysManual: boolean): Observable<any> {
-    const payload = { alwaysManual };
-    let params = new HttpParams();
-    params = params.set('alwaysManual', `${alwaysManual}`);
-    return this.http.put(`${this.config.apiEndpoint}/enrollees/${id}/always-manual`, payload, { params });
+    const payload = { data: alwaysManual };
+    return this.http.patch(`${this.config.apiEndpoint}/enrollees/${id}/always-manual`, payload);
   }
 
   public deleteEnrolment(id: number): Observable<Enrolment> {
@@ -106,7 +104,7 @@ export class AdjudicationResource {
   }
 
   public addAdjudicatorNote(enrolleeId: number, note: string): Observable<AdjudicationNote> {
-    const payload = { enrolleeId, note };
+    const payload = { data: note };
     return this.http.post(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/adjudicator-notes`, payload)
       .pipe(
         map((response: PrimeHttpResponse) => response.result as AdjudicationNote),
@@ -116,17 +114,13 @@ export class AdjudicationResource {
 
   public updateAdjudicationNote(
     enrolleeId: number,
-    note: string,
-    noteType: NoteType.AccessAgreementNote | NoteType.EnrolmentCertificateNote
+    note: string
   ): Observable<AdjudicationNote> {
     const payload = { enrolleeId, note };
-    const params = (noteType === NoteType.EnrolmentCertificateNote)
-      ? { path: 'enrolment-certificate-notes', message: 'ENROLMENT_CERTIFICATE_NOTE' }
-      : { path: 'access-agreement-notes', message: 'ACCESS_AGREEMENT_NOTE' };
-    return this.http.put(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/${params.path}`, payload)
+    return this.http.put(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/access-agreement-notes`, payload)
       .pipe(
         map((response: PrimeHttpResponse) => response.result as AdjudicationNote),
-        tap((adjudicatorNote: AdjudicationNote) => this.logger.info(params.message, adjudicatorNote))
+        tap((adjudicatorNote: AdjudicationNote) => this.logger.info('ACCESS_AGREEMENT_NOTE', adjudicatorNote))
       );
   }
 
@@ -203,8 +197,6 @@ export class AdjudicationResource {
       ...remainder
     } = enrollee;
 
-    const collectionNoticeAccepted = false;
-
     return {
       enrollee: {
         userId,
@@ -224,7 +216,8 @@ export class AdjudicationResource {
         voiceExtension,
         expiryDate
       },
-      collectionNoticeAccepted,
+      // Provide the default and allow it to be overridden
+      collectionNoticeAccepted: false,
       ...remainder
     };
   }

@@ -6,6 +6,12 @@
   <div class="row justify-content-end">
     <div class="col text-right">
 
+      <mat-label>Refresh</mat-label>
+      <button mat-icon-button
+              class="mr-4"
+              (click)="getEnrolments()">
+        <mat-icon>refresh</mat-icon>
+      </button>
       <mat-form-field>
         <mat-label>Filter By Status</mat-label>
         <mat-select value=""
@@ -17,7 +23,6 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-
     </div>
   </div>
 
@@ -133,21 +138,16 @@
         <span>Limits and Conditions Clauses</span>
       </button>
       <button mat-menu-item
-              [routerLink]="[enrolment.id, 'certificate-limits-conditions']">
-        <mat-icon>assignment_turned_in</mat-icon>
-        <span>Certificate Limits and Conditions</span>
-      </button>
-      <button mat-menu-item
               *ngIf="canAllowEditing(enrolment.currentStatus.status.code)"
               (click)="markForEditing(enrolment.id, enrolment.progressStatus)">
         <mat-icon>undo</mat-icon>
         <span>Enable Editing</span>
       </button>
-      <button mat-menu-item
+      <!-- <button mat-menu-item
               (click)="deleteEnrolment(enrolment.id)">
         <mat-icon>delete</mat-icon>
         <span>Delete Enrolment</span>
-      </button>
+      </button> -->
     </mat-menu>
   </ng-template>
 

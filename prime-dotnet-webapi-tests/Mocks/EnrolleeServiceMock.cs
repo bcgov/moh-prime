@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Bogus;
 
 using Prime.Models;
+using Prime.Models.Api;
 using Prime.Services;
+using Prime.ViewModels;
 using PrimeTests.Utils;
 
 namespace PrimeTests.Mocks
@@ -69,21 +71,9 @@ namespace PrimeTests.Mocks
             return Task.FromResult(enrollees);
         }
 
-        public Task<int> UpdateEnrolleeAsync(Enrollee enrollee, bool profileCompleted)
+        public Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeProfileViewModel enrolleeProfile, bool profileCompleted)
         {
-            int updated = 0;
-            if (enrollee.Id.HasValue)
-            {
-                int id = enrollee.Id.Value;
-
-                var found = this.GetHolder<int, Enrollee>().Remove(id);
-                if (found)
-                {
-                    updated = 1;
-                    this.GetHolder<int, Enrollee>().Add(id, enrollee);
-                }
-            }
-            return Task.FromResult(updated);
+            throw new NotImplementedException();
         }
 
         public Task<IEnumerable<Status>> GetAvailableEnrolmentStatusesAsync(int enrolleeId)
@@ -163,10 +153,10 @@ namespace PrimeTests.Mocks
             return Task.FromResult(notes);
         }
 
-        public Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, AdjudicatorNote adjudicatorNote)
+        public Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, string note)
         {
             // TODO add proper tests, but need test spike. Add adjudicatorNote to fake db.
-            return Task.FromResult(adjudicatorNote);
+            return Task.FromResult(new AdjudicatorNote());
         }
 
         public Task<IEnrolleeNote> UpdateEnrolleeNoteAsync(int enrolleeId, IEnrolleeNote newNote)
@@ -194,6 +184,11 @@ namespace PrimeTests.Mocks
             }
 
             return Task.FromResult(updatedNote);
+        }
+        public Task<Enrollee> UpdateEnrolleeAlwaysManualAsync(int enrolleeId, bool alwaysManual)
+        {
+
+            return Task.FromResult(new Enrollee());
         }
     }
 }

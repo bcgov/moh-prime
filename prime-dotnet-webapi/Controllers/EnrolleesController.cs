@@ -5,8 +5,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using Prime.Models;
-using Prime.Services;
 using Prime.Models.Api;
+using Prime.Services;
+using Prime.ViewModels;
 
 namespace Prime.Controllers
 {
@@ -30,6 +31,7 @@ namespace Prime.Controllers
             _accessTermService = accessTermService;
             _enrolleeProfileVersionService = enrolleeProfileVersionService;
         }
+
 
         // GET: api/Enrollees
         /// <summary>
@@ -129,7 +131,7 @@ namespace Prime.Controllers
         /// Updates a specific Enrollee.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        /// <param name="enrollee"></param>
+        /// <param name="enrolleeProfile"></param>
         /// <param name="beenThroughTheWizard"></param>
         [HttpPut("{enrolleeId}", Name = nameof(UpdateEnrollee))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
@@ -137,34 +139,17 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateEnrollee(int enrolleeId, Enrollee enrollee, [FromQuery]bool beenThroughTheWizard)
+        public async Task<IActionResult> UpdateEnrollee(int enrolleeId, EnrolleeProfileViewModel enrolleeProfile, [FromQuery]bool beenThroughTheWizard)
         {
+            var enrollee = await _enrolleeService.GetEnrolleeNoTrackingAsync(enrolleeId);
             if (enrollee == null)
             {
-                this.ModelState.AddModelError("Enrollee", "Could not update the enrollee, the passed in Enrollee cannot be null.");
-                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
 
             if (!User.CanAccess(enrollee))
             {
                 return Forbid();
-            }
-
-            if (enrollee.Id == null)
-            {
-                this.ModelState.AddModelError("Enrollee.Id", "Enrollee Id is required to make updates.");
-                return BadRequest(new ApiBadRequestResponse(this.ModelState));
-            }
-
-            if (enrolleeId != enrollee.Id)
-            {
-                this.ModelState.AddModelError("Enrollee.Id", "Enrollee Id does not match with the payload.");
-                return BadRequest(new ApiBadRequestResponse(this.ModelState));
-            }
-
-            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
-            {
-                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
 
             // If the enrollee is not in the status of 'In Progress' or 'Accepted TOA', it cannot be updated
@@ -175,7 +160,7 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            await _enrolleeService.UpdateEnrolleeAsync(enrollee, beenThroughTheWizard);
+            await _enrolleeService.UpdateEnrolleeAsync(enrolleeId, enrolleeProfile, beenThroughTheWizard);
 
             return NoContent();
         }
@@ -341,23 +326,23 @@ namespace Prime.Controllers
         /// Creates a new adjudicator note on an enrollee.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        /// <param name="adjudicatorNote"></param>
+        /// <param name="note"></param>
         [HttpPost("{enrolleeId}/adjudicator-notes", Name = nameof(CreateAdjudicatorNote))]
         [Authorize(Policy = PrimeConstants.ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiCreatedResponse<AdjudicatorNote>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<AdjudicatorNote>> CreateAdjudicatorNote(int enrolleeId, AdjudicatorNote adjudicatorNote)
+        public async Task<ActionResult<AdjudicatorNote>> CreateAdjudicatorNote(int enrolleeId, FromBodyText note)
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
 
-            if (enrolleeId != adjudicatorNote.EnrolleeId)
+            if (string.IsNullOrWhiteSpace(note))
             {
-                this.ModelState.AddModelError("AdjudicatorNote.EnrolleeId", "Enrollee Id does not match with the payload.");
+                this.ModelState.AddModelError("note", "Adjudicator notes can't be null or empty.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
@@ -368,7 +353,7 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            var createdAdjudicatorNote = await _enrolleeService.CreateEnrolleeAdjudicatorNoteAsync(enrolleeId, adjudicatorNote);
+            var createdAdjudicatorNote = await _enrolleeService.CreateEnrolleeAdjudicatorNoteAsync(enrolleeId, note);
 
             return CreatedAtAction(
                 nameof(GetAdjudicatorNotes),
@@ -507,20 +492,20 @@ namespace Prime.Controllers
         }
 
 
-        // PUT: api/Enrollees/5/always-manual
+        // PATCH: api/Enrollees/5/always-manual
         /// <summary>
         /// Updates an enrollees always manual flag, forcing them to always be sent to manual adjudication
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="alwaysManual"></param>
-        [HttpPut("{enrolleeId}/always-manual", Name = nameof(UpdateEnrolleeAlwaysManual))]
+        [HttpPatch("{enrolleeId}/always-manual", Name = nameof(UpdateEnrolleeAlwaysManual))]
         [Authorize(Policy = PrimeConstants.ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiOkResponse<Enrollee>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Enrollee>> UpdateEnrolleeAlwaysManual(int enrolleeId, [FromQuery]bool alwaysManual)
+        public async Task<ActionResult<Enrollee>> UpdateEnrolleeAlwaysManual(int enrolleeId, FromBodyData<bool> alwaysManual)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
@@ -528,20 +513,6 @@ namespace Prime.Controllers
             {
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}."));
             }
-
-            if (enrollee.Id != 0 && enrollee.Id != enrolleeId)
-            {
-                this.ModelState.AddModelError("EnrolmentCertificateNote.EnrolleeId", "Enrollee Id does not match with the payload.");
-                return BadRequest(new ApiBadRequestResponse(this.ModelState));
-            }
-
-            // Always manual flag cannot be updated while enrollee is not in a submitted state
-            if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.IN_PROGRESS_CODE))
-            {
-                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrolment certificate notes can not be updated when the current status is 'In Progress'.");
-                return BadRequest(new ApiBadRequestResponse(this.ModelState));
-            }
-
 
             var updatedEnrollee = await _enrolleeService.UpdateEnrolleeAlwaysManualAsync(enrolleeId, alwaysManual);
 

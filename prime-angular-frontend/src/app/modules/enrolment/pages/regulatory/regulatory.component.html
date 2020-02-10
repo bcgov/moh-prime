@@ -15,9 +15,8 @@
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>College Licence Information</ng-container>
         <ng-container appPageSubheaderSummary>
-          Provide details for all your active College licenses, or select <strong>none</strong> if you are not certified
-          by a professional College (e.g., College of Physicians and Surgeons of BC, College of Nursing Professionals of
-          BC, etc.)
+          Provide details for all your active College licences, or select <strong>none</strong> if you are not certified
+          by a professional College.
         </ng-container>
       </app-page-subheader>
 
@@ -25,7 +24,7 @@
         <div class="col col-sm-10 py-3"
              formArrayName="certifications">
 
-          <ng-container *ngFor="let certificate of certifications.controls; let i = index"
+          <ng-container *ngFor="let certificate of certifications.controls; let i = index;"
                         [formGroupName]="i">
 
             <app-college-certification-form [form]="certificate"

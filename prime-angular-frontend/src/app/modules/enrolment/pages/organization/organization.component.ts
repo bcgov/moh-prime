@@ -12,7 +12,6 @@ import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { Organization } from '@enrolment/shared/models/organization.model';
-import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
@@ -32,45 +31,20 @@ export class OrganizationComponent extends BaseEnrolmentProfilePage implements O
     protected route: ActivatedRoute,
     protected router: Router,
     protected dialog: MatDialog,
-    private configService: ConfigService,
-    private enrolmentResource: EnrolmentResource,
-    private enrolmentService: EnrolmentService,
-    private enrolmentStateService: EnrolmentStateService,
-    private toastService: ToastService,
-    private logger: LoggerService
+    protected enrolmentService: EnrolmentService,
+    protected enrolmentResource: EnrolmentResource,
+    protected enrolmentStateService: EnrolmentStateService,
+    protected toastService: ToastService,
+    protected logger: LoggerService,
+    private configService: ConfigService
   ) {
-    super(route, router, dialog);
+    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger);
 
     this.organizationTypes = this.configService.organizationTypes;
   }
 
   public get organizations(): FormArray {
     return this.form.get('organizations') as FormArray;
-  }
-
-  public onSubmit() {
-    if (this.form.valid) {
-      const payload = this.enrolmentStateService.enrolment;
-      // Indicate that the enrolment process has reached the terminal view, or
-      // "Been Through The Wizard - Heidi G. 2019"
-      this.busy = this.enrolmentResource.updateEnrollee(payload)
-        .subscribe(
-          () => {
-            this.form.markAsPristine();
-            this.toastService.openSuccessToast('PharmaNet access has been saved');
-
-            const routePath = (!this.isProfileComplete)
-              ? EnrolmentRoutes.SELF_DECLARATION
-              : EnrolmentRoutes.OVERVIEW;
-            this.routeTo(routePath);
-          },
-          (error: any) => {
-            this.toastService.openErrorToast('PharmaNet access could not be saved');
-            this.logger.error('[Enrolment] Organization::onSubmit error has occurred: ', error);
-          });
-    } else {
-      this.form.markAllAsTouched();
-    }
   }
 
   public addOrganization() {
@@ -143,12 +117,13 @@ export class OrganizationComponent extends BaseEnrolmentProfilePage implements O
     }
   }
 
-  protected patchForm() {
-    const enrolment = this.enrolmentService.enrolment;
+  protected nextRouteAfterSubmit() {
+    let nextRoutePath: string;
+    if (!this.isProfileComplete) {
+      nextRoutePath = EnrolmentRoutes.SELF_DECLARATION;
+    }
 
-    this.isProfileComplete = enrolment.profileCompleted;
-    this.enrolmentStateService.enrolment = enrolment;
-    this.isInitialEnrolment = enrolment.progressStatus !== ProgressStatus.FINISHED;
+    super.nextRouteAfterSubmit(nextRoutePath);
   }
 
   private removeIncompleteOrganizations() {
