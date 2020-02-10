@@ -6,7 +6,8 @@ ENV PGDATABASE "${POSTGRESQL_DATABASE}"
 ENV PGHOST "${POSTGRESQL_HOST}"
 ENV PGUSERNAME "${POSTGRESQL_USER}"
 
-COPY . /opt/backup
+COPY . /opt/backup/
+# COPY * /opt/backup/
 
 RUN ls -alh && \
     mkdir -p /opt/backup && \
@@ -19,6 +20,7 @@ RUN apt-get update -yqq && \
     chmod -R 777 /opt/backup && \
     chmod +x /opt/backup/backup.sh && \
     chmod +x /opt/backup/entrypoint.sh && \
-    cp /opt/backup/backup.sh /etc/cron.d/
+    cp /opt/backup/backup.cron /etc/cron.d/
+
 CMD tail -F /dev/null
-#CMD /opt/backup/entrypoint.sh
+# CMD /opt/backup/entrypoint.sh
