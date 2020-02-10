@@ -67,7 +67,7 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     const canDeactivate = super.canDeactivate();
 
     return (canDeactivate instanceof Observable)
-      ? canDeactivate.pipe(tap(() => this.removeIncompleteJobs()))
+      ? canDeactivate.pipe(tap((result: boolean) => this.removeIncompleteJobs(result)))
       : canDeactivate;
   }
 
@@ -77,7 +77,7 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
   }
 
   public ngOnDestroy() {
-    this.removeIncompleteJobs();
+    this.removeIncompleteJobs(true);
   }
 
   protected createFormInstance() {
@@ -122,7 +122,12 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     this.filteredJobNames.next(filteredJobNames);
   }
 
-  private removeIncompleteJobs() {
+  /**
+   * @description
+   * Removes incomplete jobs from the list in preparation
+   * for submission, and allows for an empty list of jobs.
+   */
+  private removeIncompleteJobs(noEmptyCert: boolean = false) {
     this.jobs.controls
       .forEach((control: FormGroup, index: number) => {
         const value = control.get('title').value;
@@ -135,7 +140,7 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
 
     // Always have a single job available, and it prevents
     // the page from jumping too much when routing
-    if (!this.jobs.controls.length) {
+    if (!noEmptyCert && !this.jobs.controls.length) {
       this.addJob();
     }
   }
