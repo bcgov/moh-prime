@@ -225,10 +225,6 @@ export class EnrolmentsComponent implements OnInit {
       );
   }
 
-  public ngOnInit() {
-    this.getEnrolments();
-  }
-
   private updateEnrolment(enrolment: Enrolment) {
     this.dataSource.data = this.dataSource.data
       .map((currentEnrolment: Enrolment) =>
