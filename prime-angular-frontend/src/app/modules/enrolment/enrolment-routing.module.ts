@@ -52,6 +52,7 @@ const routes: Routes = [
         // reviewing prior to submission
         path: EnrolmentRoutes.OVERVIEW,
         component: OverviewComponent,
+        canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'PharmaNet Enrolment' }
       },
       //
@@ -72,7 +73,7 @@ const routes: Routes = [
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'PharmaNet Enrolment' }
       },
-      // TODO Temporary removal of device provider for ComPAP
+      // TODO Temporary removal of device provider for Community Practice
       // {
       //   path: EnrolmentRoutes.DEVICE_PROVIDER,
       //   component: DeviceProviderComponent,

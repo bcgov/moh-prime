@@ -24,7 +24,7 @@ export class CollectionNoticeComponent implements OnInit {
 
   public ngOnInit() {
     this.enrolment = this.enrolmentService.enrolment;
-    this.profileCompleted = (this.enrolment) ? this.enrolment.profileCompleted : false;
+    this.profileCompleted = this.enrolmentService.isProfileComplete;
     this.authService.hasJustLoggedIn = true;
 
     if (this.profileCompleted) {

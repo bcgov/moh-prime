@@ -24,7 +24,7 @@
         <div class="col col-sm-10 py-3"
              formArrayName="organizations">
 
-          <ng-container *ngFor="let organization of organizations.controls; let i = index"
+          <ng-container *ngFor="let organization of organizations.controls; let i = index;"
                         [formGroupName]="i">
 
             <app-form-icon-group [show]="organizations.length > 1"
