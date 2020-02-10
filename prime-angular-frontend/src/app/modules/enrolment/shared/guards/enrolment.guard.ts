@@ -56,21 +56,22 @@ export class EnrolmentGuard extends BaseGuard {
           } as Enrollee;
 
           return this.enrolmentResource.createEnrollee(enrollee);
-        })
+        }),
+        map((enrolment: Enrolment) => [enrolment, true])
       );
 
     return this.enrolmentResource.enrollee()
       .pipe(
-        exhaustMap((enrolment: Enrolment) => {
-          return (!enrolment)
+        exhaustMap((enrolment: Enrolment) =>
+          (!enrolment)
             ? createEnrollee$
-            : of(enrolment);
-        }),
-        map((enrolment: Enrolment) => {
+            : of([enrolment, false])
+        ),
+        map(([enrolment, isNewEnrolment]: [Enrolment, boolean]) => {
           // Store the enrolment for access throughout enrolment, which
           // will allows be the most up-to-date enrolment
           this.enrolmentService.enrolment$.next(enrolment);
-          return this.routeDestination(routePath, enrolment);
+          return this.routeDestination(routePath, enrolment, isNewEnrolment);
         })
       );
   }
@@ -79,11 +80,13 @@ export class EnrolmentGuard extends BaseGuard {
    * @description
    * Determine the route destination based on the enrolment status.
    */
-  private routeDestination(routePath: string, enrolment: Enrolment) {
+  private routeDestination(routePath: string, enrolment: Enrolment, isNewEnrolment: boolean = false) {
     // On login the enrollees will always be redirected to
     // the collection notice
     if (routePath.includes(EnrolmentRoutes.COLLECTION_NOTICE)) {
       return true;
+    } else if (isNewEnrolment) {
+      this.navigate(routePath, EnrolmentRoutes.OVERVIEW);
     }
 
     // Otherwise, routes are directed based on enrolment status
