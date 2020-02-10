@@ -92,7 +92,7 @@
                 class="mb-2"
                 [ngClass]="(!isMobile) ? 'mr-2' : 'w-100'"
                 [disabled]="!hasAgreed"
-                (click)="onSubmit(EnrolmentStatus.ACCEPTED_TOS)">
+                (click)="onSubmit(true)">
           Accept Agreement
         </button>
 
@@ -101,7 +101,7 @@
                 class="mb-2"
                 [ngClass]="(!isMobile) ? 'mr-2' : 'w-100'"
                 [disabled]="!hasAgreed"
-                (click)="onSubmit(EnrolmentStatus.DECLINED_TOS)">
+                (click)="onSubmit()">
           Decline Agreement
         </button>
 

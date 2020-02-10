@@ -62,21 +62,21 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
     return this.viewportService.isMobile;
   }
 
-  public get isObo() {
-    return this.accessTerm.userClause.enrolleeClassification === EnrolleeClassification.OBO;
+  public get isObo(): boolean {
+    return (this.accessTerm.userClause.enrolleeClassification === EnrolleeClassification.OBO);
   }
 
-  public get isRu() {
-    return this.accessTerm.userClause.enrolleeClassification === EnrolleeClassification.RU;
+  public get isRu(): boolean {
+    return (this.accessTerm.userClause.enrolleeClassification === EnrolleeClassification.RU);
   }
 
   public get hasAgreed(): boolean {
     return this.agreed.value;
   }
 
-  public onSubmit(enrolmentStatus: EnrolmentStatus) {
+  public onSubmit(isAcceptingToa: boolean = false) {
     if (this.hasReadAgreement) {
-      const status = (enrolmentStatus === EnrolmentStatus.ACTIVE)
+      const status = (isAcceptingToa)
         ? { verb: 'Accept', adjective: 'accepted' }
         : { verb: 'Decline', adjective: 'declined' };
 
@@ -90,7 +90,7 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
         .pipe(
           exhaustMap((result: boolean) =>
             (result)
-              ? this.enrolmentResource.updateEnrolmentStatus(this.enrolment.id, enrolmentStatus)
+              ? this.enrolmentResource.updateEnrolmentStatus(this.enrolment.id, EnrolmentStatus.ACTIVE)
               : EMPTY
           )
         )
