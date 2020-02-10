@@ -55,13 +55,13 @@ export class EnrolmentsComponent implements OnInit {
   }
 
   public canApproveOrDeny(currentStatusCode: EnrolmentStatus) {
-    // Admins can only approve or deny an enrollee in a SUBMITTED state
-    return (currentStatusCode === EnrolmentStatus.SUBMITTED);
+    // Admins can only approve or deny an enrollee in a UNDER_REVIEW state
+    return (currentStatusCode === EnrolmentStatus.UNDER_REVIEW);
   }
 
   public canAllowEditing(currentStatusCode: EnrolmentStatus) {
-    // Admins can only allow re-enable editing for an enrollee in a SUBMITTED state
-    return (currentStatusCode === EnrolmentStatus.SUBMITTED);
+    // Admins can only allow re-enable editing for an enrollee in a UNDER_REVIEW state
+    return (currentStatusCode === EnrolmentStatus.UNDER_REVIEW);
   }
 
   public viewEnrolmentHistory(enrolmentId: number) {
@@ -105,7 +105,7 @@ export class EnrolmentsComponent implements OnInit {
         }),
         exhaustMap(() =>
           this.adjudicationResource
-            .updateEnrolmentStatus(enrolment.id, EnrolmentStatus.ADJUDICATED_APPROVED)
+            .updateEnrolmentStatus(enrolment.id, EnrolmentStatus.REQUIRES_TOA)
         ),
         exhaustMap(() => this.adjudicationResource.enrollee(enrolment.id))
       )
@@ -133,18 +133,18 @@ export class EnrolmentsComponent implements OnInit {
       .pipe(
         exhaustMap((result: boolean) =>
           (result)
-            ? this.adjudicationResource.updateEnrolmentStatus(id, EnrolmentStatus.DECLINED)
+            ? this.adjudicationResource.updateEnrolmentStatus(id, EnrolmentStatus.LOCKED)
             : EMPTY
         ),
         exhaustMap(() => this.adjudicationResource.enrollee(id)),
       )
       .subscribe(
         (enrolment: Enrolment) => {
-          this.toastService.openSuccessToast('Enrolment has been declined');
+          this.toastService.openSuccessToast('Enrolment has been locked');
           this.updateEnrolment(enrolment);
         },
         (error: any) => {
-          this.toastService.openErrorToast('Enrolment could not be declined');
+          this.toastService.openErrorToast('Enrolment could not be locked');
           this.logger.error('[Adjudication] Enrolments::declineEnrolment error has occurred: ', error);
         }
       );
@@ -157,24 +157,12 @@ export class EnrolmentsComponent implements OnInit {
       actionType: 'warn',
       actionText: 'Enable Editing'
     };
-
-    // TODO Due to the lack of requirements on upcoming statuses the ACCEPTED_TOS
-    // is being treated as "EDITING" and IN_PROGRESS as "NEW" to reduce the amount
-    // of changes until the new set of statuses have been agreed upon
-    // NOTE: To enforce this from the front-end regarding enabling editing:
-    // 1) Enrolment status can never be IN_PROGRESS after an initial application has
-    // been completed and the enrollee has ACCEPTED_TOS
-    // 2) SUBMITTED can never be reached without being IN_PROGRESS or ACCEPTED_TOS
-    const editStatus = (progressStatus === ProgressStatus.FINISHED)
-      ? EnrolmentStatus.ACCEPTED_TOS
-      : EnrolmentStatus.IN_PROGRESS;
-
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
         exhaustMap((result: boolean) =>
           (result)
-            ? this.adjudicationResource.updateEnrolmentStatus(id, editStatus)
+            ? this.adjudicationResource.updateEnrolmentStatus(id, EnrolmentStatus.ACTIVE)
             : EMPTY
         ),
         exhaustMap(() => this.adjudicationResource.enrollee(id))
@@ -215,35 +203,6 @@ export class EnrolmentsComponent implements OnInit {
         (error: any) => {
           this.toastService.openErrorToast('Enrolment could not be deleted');
           this.logger.error('[Adjudication] Enrolments::deleteEnrolments error has occurred: ', error);
-        }
-      );
-  }
-
-  public toggleEnrolmentAlwaysManual(id: number) {
-    const data: DialogOptions = {
-      title: 'Decline Enrolment',
-      message: 'Are you sure you want to decline this enrolment?',
-      actionType: 'warn',
-      actionText: 'Decline Enrolment'
-    };
-    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
-      .afterClosed()
-      .pipe(
-        exhaustMap((result: boolean) =>
-          (result)
-            ? this.adjudicationResource.updateEnrolmentStatus(id, EnrolmentStatus.DECLINED)
-            : EMPTY
-        ),
-        exhaustMap(() => this.adjudicationResource.enrollee(id)),
-      )
-      .subscribe(
-        (enrolment: Enrolment) => {
-          this.toastService.openSuccessToast('Enrolment has been declined');
-          this.updateEnrolment(enrolment);
-        },
-        (error: any) => {
-          this.toastService.openErrorToast('Enrolment could not be declined');
-          this.logger.error('[Adjudication] Enrolments::declineEnrolment error has occurred: ', error);
         }
       );
   }
