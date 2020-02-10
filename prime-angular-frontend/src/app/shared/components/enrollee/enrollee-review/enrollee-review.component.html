@@ -116,23 +116,19 @@
     </app-enrollee-property>
 
     <div class="row">
-      <div class="col-2">
+      <div class="col col-sm-4 col-md-4 col-lg-3">
         <app-enrollee-property title="College Number">
           {{ certification.collegeCode | configCode: 'colleges' : 'prefix' }}
         </app-enrollee-property>
       </div>
-      <div class="col-2">
-        <app-enrollee-property title="License Number">
+      <div class="col">
+        <app-enrollee-property title="Licence Number">
           {{ certification.licenseNumber | default }}
         </app-enrollee-property>
       </div>
     </div>
 
-    <app-enrollee-property title="License Number">
-      {{ certification.collegeCode | configCode: 'colleges' : 'prefix' }}{{ certification.licenseNumber | default }}
-    </app-enrollee-property>
-
-    <app-enrollee-property title="License Class">
+    <app-enrollee-property title="Licence Class">
       {{ certification.licenseCode | configCode: 'licenses' | default }}
     </app-enrollee-property>
 
