@@ -67,8 +67,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   }
 
   public ngOnDestroy() {
-    // TODO refactor how this occurs as it causes the view to jump on route
-    this.removeIncompleteCertifications();
+    this.removeIncompleteCertifications(true);
   }
 
   protected createFormInstance() {
@@ -119,10 +118,8 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
 
     // Always have a single cerfication available, and it prevents
     // the page from jumping too much when routing
-    if (!noEmptyCert) {
-      if (!this.certifications.controls.length) {
-        this.addCertification();
-      }
+    if (!noEmptyCert && !this.certifications.controls.length) {
+      this.addCertification();
     }
   }
 
