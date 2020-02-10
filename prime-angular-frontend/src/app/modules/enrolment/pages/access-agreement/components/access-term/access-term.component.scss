@@ -1,4 +1,9 @@
-.access-term-wrapper {
+/**
+  * TODO: Deprecation notice, https://github.com/angular/angular/issues/27614
+  * :ng-deep has been deprecated but still no solution to replace it.
+  * This is here to allow the styling to propagate to the dynamic innerHTML
+  */
+.access-term-wrapper ::ng-deep {
   h1 {
     font-size: 1.2rem;
     text-align: center;
