@@ -12,6 +12,7 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-regulatory',
@@ -31,9 +32,10 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     protected enrolmentStateService: EnrolmentStateService,
     protected toastService: ToastService,
     protected logger: LoggerService,
+    protected utilService: UtilsService,
     private configService: ConfigService
   ) {
-    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger);
+    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger, utilService);
 
     this.colleges = this.configService.colleges;
     this.licenses = this.configService.licenses;

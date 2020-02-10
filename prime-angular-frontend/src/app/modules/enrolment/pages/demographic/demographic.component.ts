@@ -11,6 +11,7 @@ import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-stat
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { FormUtilsService } from '@enrolment/shared/services/form-utils.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-demographic',
@@ -30,9 +31,10 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
     protected enrolmentStateService: EnrolmentStateService,
     protected toastService: ToastService,
     protected logger: LoggerService,
+    protected utilService: UtilsService,
     private formUtilsService: FormUtilsService
   ) {
-    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger);
+    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger, utilService);
   }
 
   public get preferredFirstName(): FormControl {

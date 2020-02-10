@@ -14,6 +14,7 @@ import { BaseEnrolmentPage } from './BaseEnrolmentPage';
 import { EnrolmentService } from '../services/enrolment.service';
 import { EnrolmentResource } from '../services/enrolment-resource.service';
 import { EnrolmentStateService } from '../services/enrolment-state.service';
+import { UtilsService } from '@core/services/utils.service';
 
 export interface IBaseEnrolmentProfilePage {
   form: FormGroup;
@@ -36,7 +37,8 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
     protected enrolmentResource: EnrolmentResource,
     protected enrolmentStateService: EnrolmentStateService,
     protected toastService: ToastService,
-    protected logger: LoggerService
+    protected logger: LoggerService,
+    protected utilService: UtilsService
   ) {
     super(route, router);
 
@@ -77,6 +79,7 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
     } else {
       this.onSubmitFormIsInvalid();
       this.form.markAllAsTouched();
+      this.utilService.scrollToErrorSection();
     }
   }
 
