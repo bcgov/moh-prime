@@ -32,7 +32,7 @@ export class EnrolmentService implements IEnrolmentService {
 
   public get isInitialEnrolment(): boolean {
     return (this.enrolment)
-      ? !!this.enrolment.expiryDate
+      ? !this.enrolment.expiryDate
       : false;
   }
 
