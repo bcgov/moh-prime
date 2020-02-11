@@ -12,6 +12,7 @@ import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 // TODO incoming transitional Enrollee model, eventually will be Enrollee
 export interface HttpEnrollee extends Enrollee {
   id?: number;
+  hpdid: string;
   appliedDate: string;
   approvedDate: string;
   expiryDate?: string;

@@ -11,7 +11,7 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20200210192957_GPID-HPDID")]
+    [Migration("20200211022229_GPID-HPDID")]
     partial class GPIDHPDID
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -4858,8 +4858,7 @@ namespace Prime.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("DeviceProviderNumber")
-                        .HasColumnType("character varying(5)")
-                        .HasMaxLength(5);
+                        .HasColumnType("text");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -4870,8 +4869,8 @@ namespace Prime.Migrations
                         .HasMaxLength(20);
 
                     b.Property<string>("HPDID")
-                        .HasColumnType("character varying(20)")
-                        .HasMaxLength(20);
+                        .HasColumnType("character varying(255)")
+                        .HasMaxLength(255);
 
                     b.Property<bool?>("HasConviction")
                         .HasColumnType("boolean");

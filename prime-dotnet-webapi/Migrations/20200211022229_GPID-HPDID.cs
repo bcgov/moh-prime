@@ -10,6 +10,15 @@ namespace Prime.Migrations
                 name: "LicensePlate",
                 table: "Enrollee");
 
+            migrationBuilder.AlterColumn<string>(
+                name: "DeviceProviderNumber",
+                table: "Enrollee",
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "character varying(5)",
+                oldMaxLength: 5,
+                oldNullable: true);
+
             migrationBuilder.AddColumn<string>(
                 name: "GPID",
                 table: "Enrollee",
@@ -19,7 +28,7 @@ namespace Prime.Migrations
             migrationBuilder.AddColumn<string>(
                 name: "HPDID",
                 table: "Enrollee",
-                maxLength: 20,
+                maxLength: 255,
                 nullable: true);
 
             migrationBuilder.UpdateData(
@@ -715,6 +724,15 @@ namespace Prime.Migrations
             migrationBuilder.DropColumn(
                 name: "HPDID",
                 table: "Enrollee");
+
+            migrationBuilder.AlterColumn<string>(
+                name: "DeviceProviderNumber",
+                table: "Enrollee",
+                type: "character varying(5)",
+                maxLength: 5,
+                nullable: true,
+                oldClrType: typeof(string),
+                oldNullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "LicensePlate",

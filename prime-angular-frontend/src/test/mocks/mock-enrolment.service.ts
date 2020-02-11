@@ -36,6 +36,7 @@ export class MockEnrolmentService implements IEnrolmentService {
         voicePhone: faker.phone.phoneNumber(),
         voiceExtension: null,
         gpid: null,
+        hpdid: null,
         expiryDate: null,
       },
       appliedDate: null,

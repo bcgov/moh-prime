@@ -6,6 +6,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { LoggerService } from '@core/services/logger.service';
 import { Role } from '@auth/shared/enum/role.enum';
 import { User } from '@auth/shared/models/user.model';
+import { KeycloakTokenParsed } from 'keycloak-js';
 
 export interface IAuthService {
   getUserId(): Promise<string>;
@@ -84,9 +85,11 @@ export class AuthService implements IAuthService {
     } = await this.keycloakService.loadUserProfile(forceReload) as Keycloak.KeycloakProfile & KeycloakAttributes;
 
     const userId = await this.getUserId();
+    const hpdid = userId;
 
     return {
       userId,
+      hpdid,
       firstName,
       lastName,
       dateOfBirth,
