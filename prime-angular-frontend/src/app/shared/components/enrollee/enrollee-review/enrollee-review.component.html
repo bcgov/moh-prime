@@ -115,11 +115,20 @@
       {{ certification.collegeCode | configCode: 'colleges' | default }}
     </app-enrollee-property>
 
-    <app-enrollee-property title="License Number">
-      {{ certification.collegeCode | configCode: 'colleges' : 'prefix' }}{{ certification.licenseNumber | default }}
-    </app-enrollee-property>
+    <div class="row">
+      <div class="col col-sm-4 col-md-4 col-lg-3">
+        <app-enrollee-property title="College Number">
+          {{ certification.collegeCode | configCode: 'colleges' : 'prefix' }}
+        </app-enrollee-property>
+      </div>
+      <div class="col">
+        <app-enrollee-property title="Licence Number">
+          {{ certification.licenseNumber | default }}
+        </app-enrollee-property>
+      </div>
+    </div>
 
-    <app-enrollee-property title="License Class">
+    <app-enrollee-property title="Licence Class">
       {{ certification.licenseCode | configCode: 'licenses' | default }}
     </app-enrollee-property>
 
@@ -222,46 +231,46 @@
   </app-page-subheader>
 
   <app-enrollee-property title="Are you, or have you ever been, subject to any limits, conditions or prohibitions imposed as a result of disciplinary actions taken by a governing body of a health profession in any jurisdiction, that involved improper access to, collection, use, or disclosure of personal information?"
-                         [makeBold]="true">
+                         [makeBold]="false">
     {{ enrolment?.hasConviction | yesNo: true }}
   </app-enrollee-property>
 
   <app-enrollee-property *ngIf="enrolment?.hasConviction"
                          title="Description"
-                         [makeBold]="true">
+                         [makeBold]="false">
     {{ enrolment?.hasConvictionDetails }}
   </app-enrollee-property>
 
   <app-enrollee-property title="Are you or have you ever been the subject of an order or a conviction under legislation in any jurisdiction for a matter that involved improper access to, collection, use, or disclosure of personal information?"
-                         [makeBold]="true">
+                         [makeBold]="false">
     {{ enrolment?.hasRegistrationSuspended | yesNo: true }}
   </app-enrollee-property>
 
   <app-enrollee-property *ngIf="enrolment?.hasRegistrationSuspended"
                          title="Description"
-                         [makeBold]="true">
+                         [makeBold]="false">
     {{ enrolment?.hasRegistrationSuspendedDetails }}
   </app-enrollee-property>
 
   <app-enrollee-property title="Have you ever been disciplined or fired by an employer, or had a contract for your services terminated, for a matter that involved improper access to, collection, use, or disclosure of personal information?"
-                         [makeBold]="true">
+                         [makeBold]="false">
     {{ enrolment?.hasDisciplinaryAction | yesNo: true }}
   </app-enrollee-property>
 
   <app-enrollee-property *ngIf="enrolment?.hasDisciplinaryAction"
                          title="Description"
-                         [makeBold]="true">
+                         [makeBold]="false">
     {{ enrolment?.hasDisciplinaryActionDetails }}
   </app-enrollee-property>
 
   <app-enrollee-property title="Have you ever had your access to an electronic health record system, electronic medical record system, pharmacy or laboratory record system, or any similar health information system, in any jurisdiction, suspended or cancelled?"
-                         [makeBold]="true">
+                         [makeBold]="false">
     {{ enrolment?.hasPharmaNetSuspended | yesNo: true }}
   </app-enrollee-property>
 
   <app-enrollee-property *ngIf="enrolment?.hasPharmaNetSuspended"
                          title="Description"
-                         [makeBold]="true">
+                         [makeBold]="false">
     {{ enrolment?.hasPharmaNetSuspendedDetails }}
   </app-enrollee-property>
 

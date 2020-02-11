@@ -16,10 +16,6 @@ export class UtilsService {
     this.window = windowRef.nativeWindow;
   }
 
-  public scrollTo() {
-    this.window.scrollTo(0, 0);
-  }
-
   /**
    * @description
    * Scroll to the top of the mat-sidenav container.
@@ -27,6 +23,27 @@ export class UtilsService {
   public scrollTop() {
     const contentContainer = this.document.querySelector('.mat-sidenav-content') || this.window;
     contentContainer.scroll({ top: 0, left: 0, behavior: 'smooth' });
+  }
+
+  /**
+   * @description
+   * Scroll to have the element in view.
+   */
+  public scrollTo(el: Element): void {
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  /**
+   * @description
+   * Scroll to a material form field that is invalid.
+   * If it is in a section scroll to the section instead.
+   */
+  public scrollToErrorSection(): void {
+    const firstElementWithError = document.querySelector('mat-form-field.ng-invalid');
+    const element = firstElementWithError.closest('section') == null ? firstElementWithError : firstElementWithError.closest('section');
+    this.scrollTo(element);
   }
 
   /**

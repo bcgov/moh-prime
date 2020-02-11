@@ -16,6 +16,7 @@ import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmen
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-organization',
@@ -36,9 +37,10 @@ export class OrganizationComponent extends BaseEnrolmentProfilePage implements O
     protected enrolmentStateService: EnrolmentStateService,
     protected toastService: ToastService,
     protected logger: LoggerService,
+    protected utilService: UtilsService,
     private configService: ConfigService
   ) {
-    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger);
+    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger, utilService);
 
     this.organizationTypes = this.configService.organizationTypes;
   }

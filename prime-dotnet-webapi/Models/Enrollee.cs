@@ -138,15 +138,22 @@ namespace Prime.Models
         [NotMapped]
         public DateTime? ApprovedDate
         {
-            get => this.EnrolmentStatuses?
-                .OrderByDescending(en => en.StatusDate)
-                .FirstOrDefault(es => es.StatusCode == Status.APPROVED_CODE)?
-                .StatusDate;
+            get
+            {
+                return this.EnrolmentStatuses?
+                    .OrderByDescending(en => en.StatusDate)
+                    .Where(es => es.StatusCode == Status.APPROVED_CODE)
+                    .Where(es => es.StatusDate > this.AppliedDate)
+                    .FirstOrDefault()?
+                    .StatusDate;
+            }
         }
 
         [NotMapped]
         public DateTime? ExpiryDate
         {
+            // This applies to the expiry date of the most recent accepted
+            // ToA
             get => this.AccessTerms?
                 .OrderByDescending(at => at.AcceptedDate)
                 .FirstOrDefault(at => at.ExpiryDate != null)?

@@ -10,6 +10,7 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { FormUtilsService } from '@enrolment/shared/services/form-utils.service';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
+import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-self-declaration',
@@ -30,9 +31,10 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     protected enrolmentResource: EnrolmentResource,
     protected toastService: ToastService,
     protected logger: LoggerService,
+    protected utilService: UtilsService,
     private formUtilsService: FormUtilsService
   ) {
-    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger);
+    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger, utilService);
 
     this.decisions = [
       { code: false, name: 'No' },
