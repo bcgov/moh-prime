@@ -197,8 +197,6 @@ export class AdjudicationResource {
       ...remainder
     } = enrollee;
 
-    const collectionNoticeAccepted = false;
-
     return {
       enrollee: {
         userId,
@@ -218,7 +216,8 @@ export class AdjudicationResource {
         voiceExtension,
         expiryDate
       },
-      collectionNoticeAccepted,
+      // Provide the default and allow it to be overridden
+      collectionNoticeAccepted: false,
       ...remainder
     };
   }

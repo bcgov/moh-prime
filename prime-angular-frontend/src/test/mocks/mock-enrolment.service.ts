@@ -98,7 +98,11 @@ export class MockEnrolmentService implements IEnrolmentService {
     return this._enrolment.value;
   }
 
-  public get status(): Config<number> {
-    return this._enrolment.value.currentStatus.status;
+  public get isInitialEnrolment(): boolean {
+    return this.enrolment.progressStatus !== ProgressStatus.FINISHED;
+  }
+
+  public get isProfileComplete(): boolean {
+    return (this.enrolment) ? this.enrolment.profileCompleted : false;
   }
 }
