@@ -24,7 +24,7 @@
         <div class="col col-sm-10 py-3"
              formArrayName="certifications">
 
-          <ng-container *ngFor="let certificate of certifications.controls; let i = index"
+          <ng-container *ngFor="let certificate of certifications.controls; let i = index;"
                         [formGroupName]="i">
 
             <app-college-certification-form [form]="certificate"

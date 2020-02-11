@@ -153,10 +153,10 @@ namespace PrimeTests.Mocks
             return Task.FromResult(notes);
         }
 
-        public Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, AdjudicatorNote adjudicatorNote)
+        public Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, string note)
         {
             // TODO add proper tests, but need test spike. Add adjudicatorNote to fake db.
-            return Task.FromResult(adjudicatorNote);
+            return Task.FromResult(new AdjudicatorNote());
         }
 
         public Task<IEnrolleeNote> UpdateEnrolleeNoteAsync(int enrolleeId, IEnrolleeNote newNote)
@@ -191,5 +191,4 @@ namespace PrimeTests.Mocks
             return Task.FromResult(new Enrollee());
         }
     }
-
 }

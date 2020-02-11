@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 
 @Component({
   selector: 'app-declined-access-agreement',
@@ -24,7 +23,7 @@ export class DeclinedAccessAgreementComponent extends BaseEnrolmentPage implemen
     this.enrolmentService.enrolment$
       .subscribe((enrolment: Enrolment) =>
         this.isInitialEnrolment = (enrolment)
-          ? enrolment.progressStatus !== ProgressStatus.FINISHED
+          ? this.enrolmentService.isInitialEnrolment
           : null
       );
   }

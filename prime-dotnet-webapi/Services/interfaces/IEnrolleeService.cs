@@ -18,6 +18,8 @@ namespace Prime.Services
 
         Task<Enrollee> GetEnrolleeAsync(int enrolleeId);
 
+        Task<Enrollee> GetEnrolleeNoTrackingAsync(int enrolleeId);
+
         Task<IEnumerable<Enrollee>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null);
 
         Task<int?> CreateEnrolleeAsync(Enrollee enrollee);

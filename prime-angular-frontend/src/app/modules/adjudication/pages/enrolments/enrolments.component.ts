@@ -254,11 +254,7 @@ export class EnrolmentsComponent implements OnInit {
       );
   }
 
-  public ngOnInit() {
-    this.getEnrolments();
-  }
-
-  private getEnrolments(statusCode?: number) {
+  public getEnrolments(statusCode?: number) {
     this.busy = this.adjudicationResource.enrollees(statusCode)
       .subscribe(
         (enrolments: Enrolment[]) => {
@@ -270,6 +266,10 @@ export class EnrolmentsComponent implements OnInit {
           this.logger.error('[Adjudication] Enrolments::getEnrolments error has occurred: ', error);
         }
       );
+  }
+
+  public ngOnInit() {
+    this.getEnrolments();
   }
 
   private updateEnrolment(enrolment: Enrolment) {
