@@ -9,7 +9,7 @@ RUN mkdir -p /opt/backup
 
 WORKDIR /opt/backup
 
-COPY . .
+COPY . /opt
 #COPY . /opt/
 
 
@@ -20,6 +20,7 @@ RUN echo "Checking host dir..." && \
     apt-get update -yqq && \ 
     apt-get install -yqq inetutils-ping vim nano net-tools && \ 
     ls -alh /opt && \
+    cp /opt/* /opt/backup && \
     chmod -R 777 /opt/backup && \
     chmod +x /opt/backup/backup.sh && \
     chmod +x /opt/backup/entrypoint.sh && \
