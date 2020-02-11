@@ -90,49 +90,8 @@ function deploy() {
 }
 
 function toolbelt() {
-    source ./$2.conf
-    #OC_APP=tools
-    buildPresent=$(oc get bc/"$APP_NAME" --ignore-not-found=true)
-    if [ -z "${buildPresent}" ];
-    then
-        MODE="replace"
-    else
-        MODE="create"
-    fi;
-    oc process -f ./"${TEMPLATE_DIRECTORY}/$DEPLOY_CONFIG_TEMPLATE" \
-        -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
-        -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
-        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
-        -p OC_NAMESPACE="$PROJECT_PREFIX" \
-        -p OC_APP="$3" ${@:4} --output="yaml" | oc $MODE -f - --namespace="$PROJECT_PREFIX-$3" ${OC_ARGS}
-    if [ "${deployPresent}" -gt 0 ];
-    then
-        MODE="apply"
-        if [ "${routePresent}" -gt 0 ];
-        then
-            echo "Recreating route..."
-            oc delete route/${APP_NAME}${SUFFIX} --namespace=$PROJECT_PREFIX-$3
-            OC_ARGS="--overwrite=true --all"
-        fi;
-#        if [ "${servicePresent}" -gt 0 ];
-#        then
-#            echo "Recreating service..."
-#            oc delete service/${APP_NAME}${SUFFIX} --namespace=$PROJECT_PREFIX-$3
-#        fi;
-    else
-    oc process -f "${TEMPLATE_DIRECTORY}/$DEPLOY_CONFIG_TEMPLATE" \
-        -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
-        -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
-        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
-        -p OC_NAMESPACE="$PROJECT_PREFIX" \
-        -p OC_APP="$3" ${@:4} --output="yaml" | oc $MODE -f - --namespace="$PROJECT_PREFIX-$3" ${OC_ARGS}
-    if [ "$BUILD_REQUIRED" == true ];
-    then
-        echo "Building oc start-build $APP_NAME -n $PROJECT_PREFIX-${OC_APP} --wait --follow ..."
-        oc start-build $APP_NAME -n $PROJECT_PREFIX-$3 --wait --follow
-    else
-        echo "Deployment should be automatic..."
-    fi
+    build $1
+    deploy $1
 }
 
 function determineMode() {
