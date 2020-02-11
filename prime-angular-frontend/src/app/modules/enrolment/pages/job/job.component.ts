@@ -16,6 +16,7 @@ import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmen
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-job',
@@ -37,9 +38,10 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     protected enrolmentStateService: EnrolmentStateService,
     protected toastService: ToastService,
     protected logger: LoggerService,
+    protected utilService: UtilsService,
     private configService: ConfigService
   ) {
-    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger);
+    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger, utilService);
 
     this.jobNames = this.configService.jobNames;
     this.filteredJobNames = new BehaviorSubject<Config<number>[]>(this.jobNames);
