@@ -95,7 +95,7 @@ function toolbelt() {
     buildPresent=$(oc get bc/"$APP_NAME" --ignore-not-found=true)
     if [ -z "${buildPresent}" ];
     then
-        MODE="apply"
+        MODE="replace"
     else
         MODE="create"
     fi;
@@ -104,13 +104,7 @@ function toolbelt() {
         -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
         -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
         -p OC_NAMESPACE="$PROJECT_PREFIX" \
-        -p OC_APP="$3" ${@:4} --output="yaml" | oc $MODE -f - --namespace="$PROJECT_PREFIX-$3"
-    oc process -f "${TEMPLATE_DIRECTORY}/$DEPLOY_CONFIG_TEMPLATE" \
-        -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
-        -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
-        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
-        -p OC_NAMESPACE="$PROJECT_PREFIX" \
-        -p OC_APP="$3" ${@:4} --output="yaml" | oc $MODE -f - --namespace="$PROJECT_PREFIX-$3"
+        -p OC_APP="$3" ${@:4} --output="yaml" | oc $MODE -f - --namespace="$PROJECT_PREFIX-$3" ${OC_ARGS}
     if [ "$BUILD_REQUIRED" == true ];
     then
         echo "Building oc start-build $APP_NAME -n $PROJECT_PREFIX-${OC_APP} --wait --follow ..."
@@ -118,6 +112,12 @@ function toolbelt() {
     else
         echo "Deployment should be automatic..."
     fi
+    oc process -f "${TEMPLATE_DIRECTORY}/$DEPLOY_CONFIG_TEMPLATE" \
+        -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
+        -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
+        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
+        -p OC_NAMESPACE="$PROJECT_PREFIX" \
+        -p OC_APP="$3" ${@:4} --output="yaml" | oc $MODE -f - --namespace="$PROJECT_PREFIX-$3" ${OC_ARGS}
 }
 
 function determineMode() {

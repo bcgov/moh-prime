@@ -9,11 +9,15 @@ RUN mkdir -p /opt/backup
 
 WORKDIR /opt/backup
 
-#COPY . /opt/backup/
-COPY . /opt/
+COPY . /opt/backup/
+#COPY . /opt/
 
 
-RUN apt-get update -yqq && \ 
+RUN echo "Checking host dir..." && \
+    ls -alh && \
+    echo "Checking workdir..." && \
+    ls -alh \opt\backup && \
+    apt-get update -yqq && \ 
     apt-get install -yqq inetutils-ping vim nano net-tools && \ 
     ls -alh /opt && \
     chmod -R 777 /opt/backup && \
