@@ -134,31 +134,20 @@ namespace Prime.Models
         {
             get
             {
-                var activeStatuses = this.EnrolmentStatuses?
-                .OrderByDescending(en => en.StatusDate)
-                .Where(es => es.StatusCode == Status.ACTIVE_CODE);
-
-                if (activeStatuses != null)
-                {
-                    // Enrollee has been accepted and has an approved date
-                    foreach (var active in activeStatuses)
-                    {
-                        EnrolmentStatus prevStatus = this.EnrolmentStatuses.SingleOrDefault(p => p.Id == active.Id - 1);
-
-                        if (prevStatus != null && prevStatus?.StatusCode == Status.REQUIRES_TOA_CODE)
-                        {
-                            return active.StatusDate;
-                        }
-                    }
-                }
-
-                return null;
+                return this.EnrolmentStatuses?
+                    .OrderByDescending(en => en.StatusDate)
+                    .Where(es => es.StatusCode == Status.APPROVED_CODE)
+                    .Where(es => es.StatusDate > this.AppliedDate)
+                    .FirstOrDefault()?
+                    .StatusDate;
             }
         }
 
         [NotMapped]
         public DateTime? ExpiryDate
         {
+            // This applies to the expiry date of the most recent accepted
+            // ToA
             get => this.AccessTerms?
                 .OrderByDescending(at => at.AcceptedDate)
                 .FirstOrDefault(at => at.ExpiryDate != null)?
