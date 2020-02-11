@@ -1,18 +1,20 @@
 FROM postgres:10.6
 USER 0
-
 ENV PGPASSWORD "${POSTGRESQL_ADMIN_PASSWORD}"
 ENV PGDATABASE "${POSTGRESQL_DATABASE}"
 ENV PGHOST "${POSTGRESQL_HOST}"
 ENV PGUSERNAME "${POSTGRESQL_USER}"
 
-COPY . /opt/backup/
-# COPY * /opt/backup/
-
 RUN ls -alh && \
     mkdir -p /opt/backup && \
     ls -alh /opt && \
     ls -alh /opt/backup
+
+WORKDIR /opt/backup
+
+#COPY . /opt/backup/
+COPY * /opt/backup/
+
 
 RUN apt-get update -yqq && \ 
     apt-get install -yqq inetutils-ping vim nano net-tools && \ 
