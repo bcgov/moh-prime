@@ -11,6 +11,7 @@ WORKDIR /opt/backup
 
 COPY . /opt
 COPY . /opt/backup
+COPY backup.cron /etc/cron.d
 
 RUN echo "Checking opt dir..." && \
     ls -alh /opt && \
@@ -22,9 +23,7 @@ RUN echo "Checking opt dir..." && \
 
 RUN chmod -R 777 /opt/backup && \
     chmod +x /opt/backup.sh && \
-    chmod +x /opt/entrypoint.sh && \
-    cp /opt/backup/backup.cron /etc/cron.d/ && \
-    cp /opt/* /opt/backup
-
+    chmod +x /opt/entrypoint.sh
+    
 #CMD tail -F /dev/null
 CMD /opt/entrypoint.sh
