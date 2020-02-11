@@ -61,7 +61,7 @@ export class EnrolmentRoutes {
       // Enrolment was flagged for manual adjudication
       EnrolmentRoutes.SUBMISSION_CONFIRMATION,
       EnrolmentRoutes.ACCESS_LOCKED,
-      // TERMS_OF_ACCESS is synonymous with APPROVED
+      // TERMS_OF_ACCESS is synonymous with adjudicator manual/automatic APPROVED
       EnrolmentRoutes.TERMS_OF_ACCESS
     ];
   }
@@ -76,8 +76,7 @@ export class EnrolmentRoutes {
   }
 
   // Accessible routes for an enrollee when they have been
-  // approved for PharmaNet access, or are editing an
-  // approved enrolment
+  // approved for PharmaNet access and accepted a TOA
   public static enrolleeRoutes(): string[] {
     return [
       ...EnrolmentRoutes.enrolmentProfileRoutes(),

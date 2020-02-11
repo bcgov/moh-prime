@@ -143,11 +143,11 @@ export class EnrolmentGuard extends BaseGuard {
   }
 
   private manageRequiresToaRouting(routePath: string, enrolment: Enrolment): boolean {
-    const whiteListedRoutes = [
-      EnrolmentRoutes.TERMS_OF_ACCESS,
-      EnrolmentRoutes.PHARMANET_TRANSACTIONS,
-      EnrolmentRoutes.CURRENT_ACCESS_TERM
-    ];
+    // Allow access to an extend set of routes if the enrollee
+    // has accepted at least one TOA
+    const whiteListedRoutes = (!!enrolment.expiryDate)
+      ? EnrolmentRoutes.enrolmentAcceptedToaRoutes()
+      : [];
     const route = routePath.split('/').pop();
 
     if (!whiteListedRoutes.includes(route)) {
