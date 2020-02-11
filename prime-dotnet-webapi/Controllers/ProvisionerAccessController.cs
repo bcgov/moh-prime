@@ -113,7 +113,7 @@ namespace Prime.Controllers
         {
             var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(User.GetPrimeUserId());
 
-            return Ok(new ApiOkResponse<string>(enrollee?.LicensePlate));
+            return Ok(new ApiOkResponse<string>(enrollee?.GPID));
         }
     }
 }

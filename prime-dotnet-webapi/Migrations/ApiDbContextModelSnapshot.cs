@@ -4862,6 +4862,14 @@ namespace Prime.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("GPID")
+                        .HasColumnType("character varying(20)")
+                        .HasMaxLength(20);
+
+                    b.Property<string>("HPDID")
+                        .HasColumnType("character varying(255)")
+                        .HasMaxLength(255);
+
                     b.Property<bool?>("HasConviction")
                         .HasColumnType("boolean");
 
@@ -4892,10 +4900,6 @@ namespace Prime.Migrations
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<string>("LicensePlate")
-                        .HasColumnType("character varying(20)")
-                        .HasMaxLength(20);
 
                     b.Property<string>("MiddleName")
                         .HasColumnType("text");

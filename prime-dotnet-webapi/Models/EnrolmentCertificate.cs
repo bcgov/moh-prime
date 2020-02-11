@@ -15,7 +15,7 @@ namespace Prime.Models
         public string PreferredFirstName { get; set; }
         public string PreferredMiddleName { get; set; }
         public string PreferredLastName { get; set; }
-        public string LicensePlate { get; set; }
+        public string GPID { get; set; }
         public DateTime? ExpiryDate { get; set; }
         public IEnumerable<OrganizationType> OrganizationTypes { get; set; }
 
@@ -29,7 +29,7 @@ namespace Prime.Models
                 PreferredFirstName = enrollee.PreferredFirstName,
                 PreferredMiddleName = enrollee.PreferredMiddleName,
                 PreferredLastName = enrollee.PreferredLastName,
-                LicensePlate = enrollee.LicensePlate,
+                GPID = enrollee.GPID,
                 ExpiryDate = enrollee.ExpiryDate,
                 OrganizationTypes = enrollee.Organizations.Select(org => org.OrganizationType)
             };

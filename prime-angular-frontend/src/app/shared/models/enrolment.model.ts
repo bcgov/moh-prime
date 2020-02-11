@@ -11,6 +11,7 @@ import { Privilege } from '@enrolment/shared/models/privilege.model';
 // TODO incoming transitional Enrollee model, eventually will be Enrollee
 export interface HttpEnrollee extends Enrollee {
   id?: number;
+  hpdid: string;
   appliedDate: string;
   approvedDate: string;
   expiryDate?: string;
