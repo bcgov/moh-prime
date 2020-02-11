@@ -101,7 +101,7 @@ export class EnrolmentGuard extends BaseGuard {
         case EnrolmentStatus.REQUIRES_TOA:
           return this.manageRequiresToaRouting(routePath, enrolment);
         case EnrolmentStatus.LOCKED:
-          return this.navigate(routePath, EnrolmentRoutes.DECLINED);
+          return this.navigate(routePath, EnrolmentRoutes.ACCESS_LOCKED);
       }
     }
 

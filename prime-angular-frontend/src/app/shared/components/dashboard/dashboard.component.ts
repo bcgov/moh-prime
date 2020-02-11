@@ -128,6 +128,15 @@ export class DashboardComponent implements OnInit {
       : false;
     const statusIcons = this.getEnrolmentStatusIcons(enrolmentStatus, hasAcceptedAtLeastOneToa);
 
+    console.log('enrolmentStatus', enrolmentStatus);
+    console.log('hasAcceptedAtLeastOneToa', hasAcceptedAtLeastOneToa);
+
+    const termsOfAccessRoute = (enrolmentStatus === EnrolmentStatus.UNDER_REVIEW)
+      ? EnrolmentRoutes.SUBMISSION_CONFIRMATION
+      : (enrolmentStatus === EnrolmentStatus.REQUIRES_TOA)
+        ? EnrolmentRoutes.TERMS_OF_ACCESS
+        : EnrolmentRoutes.CURRENT_ACCESS_TERM;
+
     return [
       {
         header: 'Enrolment',
@@ -139,7 +148,7 @@ export class DashboardComponent implements OnInit {
             route: EnrolmentRoutes.OVERVIEW,
             showItem: true,
             disabled: (
-              hasAcceptedAtLeastOneToa ||
+              !hasAcceptedAtLeastOneToa ||
               [
                 EnrolmentStatus.UNDER_REVIEW,
                 EnrolmentStatus.REQUIRES_TOA,
@@ -155,13 +164,11 @@ export class DashboardComponent implements OnInit {
           {
             name: 'Terms of Access',
             icon: statusIcons.accessAgreement,
-            route: EnrolmentRoutes.CURRENT_ACCESS_TERM,
+            route: termsOfAccessRoute,
             showItem: true,
             disabled: (
-              hasAcceptedAtLeastOneToa ||
+              !hasAcceptedAtLeastOneToa ||
               [
-                EnrolmentStatus.UNDER_REVIEW,
-                EnrolmentStatus.REQUIRES_TOA,
                 EnrolmentStatus.LOCKED
               ].includes(enrolmentStatus)
             )
@@ -172,10 +179,8 @@ export class DashboardComponent implements OnInit {
             route: EnrolmentRoutes.PHARMANET_ENROLMENT_CERTIFICATE,
             showItem: true,
             disabled: (
-              hasAcceptedAtLeastOneToa ||
+              !hasAcceptedAtLeastOneToa ||
               [
-                EnrolmentStatus.UNDER_REVIEW,
-                EnrolmentStatus.REQUIRES_TOA,
                 EnrolmentStatus.LOCKED
               ].includes(enrolmentStatus)
             )
@@ -187,7 +192,7 @@ export class DashboardComponent implements OnInit {
           {
             name: 'PharmaNet Transactions',
             icon: (
-              hasAcceptedAtLeastOneToa ||
+              !hasAcceptedAtLeastOneToa ||
               [
                 EnrolmentStatus.LOCKED
               ].includes(enrolmentStatus)
@@ -197,7 +202,7 @@ export class DashboardComponent implements OnInit {
             route: EnrolmentRoutes.PHARMANET_TRANSACTIONS,
             showItem: true,
             disabled: (
-              hasAcceptedAtLeastOneToa ||
+              !hasAcceptedAtLeastOneToa ||
               [
                 EnrolmentStatus.LOCKED
               ].includes(enrolmentStatus)
@@ -207,7 +212,7 @@ export class DashboardComponent implements OnInit {
           {
             name: 'PRIME Transaction History',
             icon: (
-              hasAcceptedAtLeastOneToa ||
+              !hasAcceptedAtLeastOneToa ||
               [
                 EnrolmentStatus.LOCKED
               ].includes(enrolmentStatus)
@@ -217,7 +222,7 @@ export class DashboardComponent implements OnInit {
             route: EnrolmentRoutes.ACCESS_TERMS,
             showItem: true,
             disabled: (
-              hasAcceptedAtLeastOneToa ||
+              !hasAcceptedAtLeastOneToa ||
               [
                 EnrolmentStatus.LOCKED
               ].includes(enrolmentStatus)
@@ -234,7 +239,7 @@ export class DashboardComponent implements OnInit {
     let accessAgreement = 'assignment';
     let certificate = 'card_membership';
 
-    if (hasAcceptedAtLeastOneToa) {
+    if (!hasAcceptedAtLeastOneToa) {
       // Default icons when performing initial enrolment
       enrollee = 'assignment_turned_in';
       accessAgreement = 'lock';

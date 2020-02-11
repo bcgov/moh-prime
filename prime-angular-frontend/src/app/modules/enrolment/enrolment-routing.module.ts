@@ -105,7 +105,7 @@ const routes: Routes = [
         data: { title: 'PharmaNet Enrolment' }
       },
       {
-        path: EnrolmentRoutes.DECLINED,
+        path: EnrolmentRoutes.ACCESS_LOCKED,
         component: DeclinedComponent,
         data: { title: 'Enrolment Summary' }
       },
