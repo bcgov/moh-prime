@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+######################################################### Sign-in #
+  backup:
+    container_name: backup
+    build:
+      context: .
+    ports:
+      - "6432:5432"
+    depends_on:
+      - postgres    
+    volumes:
+      - backup_postgres_data:/opt/backup
+      - local_postgres_data:/var/lib/postgresql/data
+    networks:
+      - primenet
+volumes:
+  local_postgres_data:
+  backup_postgres_data:

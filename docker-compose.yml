@@ -65,19 +65,35 @@ services:
     networks:
       - primenet
 ######################################################### Sign-in #
-  # schema-spy:
-  #   container_name: schema-spy
-  #   build:
-  #     context: schemaspy/
-  #   image: openjdk:jre-alpine
-  #   ports:
-  #     - "8069:8069"
-  #     - "80:8069"
-  #   depends_on:
-  #     - postgres
-
+  schema-spy:
+    container_name: schema-spy
+    build:
+      context: schemaspy/
+    image: openjdk:jre-alpine
+    ports:
+      - "8069:8069"
+      - "80:8069"
+    depends_on:
+      - postgres
+    networks:
+      - primenet
+######################################################### Sign-in #
+  backup:
+    container_name: backup
+    build:
+      context: prime-database-backup
+    ports:
+      - "6432:5432"
+    depends_on:
+      - postgres    
+    volumes:
+      - backup_postgres_data:/opt/backup
+      - local_postgres_data:/var/lib/postgresql/data
+    networks:
+      - primenet
 volumes:
   local_postgres_data:
+  backup_postgres_data:
 
 networks:
   primenet:
