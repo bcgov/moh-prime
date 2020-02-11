@@ -32,6 +32,7 @@ parameters:
     required: true
     value: dev
 objects:
+
   - apiVersion: v1
     kind: DeploymentConfig
     metadata:
@@ -64,12 +65,12 @@ objects:
             resources: {}
             volumeMounts:
             - mountPath: /opt/backup
-              name: backup-postgres-data
+              name: backup-data
             - mountPath: /var/lib/postgresql/data
               name: postgresql
           restartPolicy: Always
           volumes:
-          - name: backup-postgres-data
+          - name: backup-data
             persistentVolumeClaim:
               claimName: backup-data
           - name: postgresql
