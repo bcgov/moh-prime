@@ -63,6 +63,10 @@ export class EnrolmentsComponent implements OnInit {
     return (currentStatusCode === EnrolmentStatus.UNDER_REVIEW);
   }
 
+  public isActive(currentStatusCode: EnrolmentStatus) {
+    return (currentStatusCode === EnrolmentStatus.ACTIVE);
+  }
+
   public viewEnrolmentHistory(enrolmentId: number) {
     this.router.navigate([enrolmentId, AdjudicationRoutes.PROFILE_HISTORY], { relativeTo: this.route.parent });
   }
