@@ -16,7 +16,7 @@ COPY . /opt/backup/
 RUN echo "Checking host dir..." && \
     ls -alh && \
     echo "Checking workdir..." && \
-    ls -alh \opt\backup && \
+    ls -alh /opt/backup && \
     apt-get update -yqq && \ 
     apt-get install -yqq inetutils-ping vim nano net-tools && \ 
     ls -alh /opt && \
