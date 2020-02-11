@@ -7,7 +7,6 @@ import { Job } from '@enrolment/shared/models/job.model';
 import { Organization } from '@enrolment/shared/models/organization.model';
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
 import { Privilege } from '@enrolment/shared/models/privilege.model';
-import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 
 // TODO incoming transitional Enrollee model, eventually will be Enrollee
 export interface HttpEnrollee extends Enrollee {
@@ -36,8 +35,6 @@ export interface HttpEnrollee extends Enrollee {
   accessAgreementNote: AdjudicationNote;
   // Indicates enrollee has not completed all profile information
   profileCompleted: boolean;
-  // Status hook for where the enrollee is in the initial enrolment
-  progressStatus: ProgressStatus;
   // Indicates enrollee has seen the collection notice
   collectionNoticeAccepted: boolean;
   // Always send an enrollee to manual adjudication
@@ -50,6 +47,7 @@ export interface Enrolment {
   enrollee: Enrollee;
   appliedDate: string;
   approvedDate: string;
+  expiryDate?: string;
   certifications: CollegeCertification[];
   deviceProviderNumber: string;
   isInsulinPumpProvider: boolean;
@@ -71,8 +69,6 @@ export interface Enrolment {
   accessAgreementNote: AdjudicationNote;
   // Indicates enrollee has not completed all profile information
   profileCompleted: boolean;
-  // Status hook for where the enrollee is in the initial enrolment
-  progressStatus: ProgressStatus;
   // Indicates enrollee has seen the collection notice
   collectionNoticeAccepted: boolean;
   // Always send an enrollee to manual adjudication
