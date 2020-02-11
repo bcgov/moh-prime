@@ -68,11 +68,13 @@ export class DashboardComponent implements OnInit {
   }
 
   public onLogout() {
+    let routePath = this.config.loginRedirectUrl;
+
     if (this.authService.isAdmin()) {
-      this.authService.logout(`${this.config.loginRedirectUrl}/${AuthRoutes.ADMIN}`);
-    } else {
-      this.authService.logout(this.config.loginRedirectUrl);
+      routePath = `${routePath}/${AuthRoutes.ADMIN}`;
     }
+
+    this.authService.logout(routePath);
   }
 
   public async ngOnInit() {
