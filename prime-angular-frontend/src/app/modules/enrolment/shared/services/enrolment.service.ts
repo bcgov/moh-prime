@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 import { Enrolment } from '@shared/models/enrolment.model';
-import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 
 export interface IEnrolmentService {
   enrolment$: BehaviorSubject<Enrolment>;
@@ -33,7 +32,7 @@ export class EnrolmentService implements IEnrolmentService {
 
   public get isInitialEnrolment(): boolean {
     return (this.enrolment)
-      ? this.enrolment.progressStatus !== ProgressStatus.FINISHED
+      ? !this.enrolment.expiryDate
       : false;
   }
 
