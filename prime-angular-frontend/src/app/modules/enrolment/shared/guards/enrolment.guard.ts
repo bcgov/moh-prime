@@ -76,6 +76,10 @@ export class EnrolmentGuard extends BaseGuard {
       );
   }
 
+  private route(routePath: string): string {
+    return routePath.split('/').pop()
+  }
+
   /**
    * @description
    * Determine the route destination based on the enrolment status.
@@ -119,7 +123,7 @@ export class EnrolmentGuard extends BaseGuard {
     const enrolmentSubmissionRoutes = [
       ...EnrolmentRoutes.enrolmentSubmissionRoutes()
     ];
-    const route = routePath.split('/').pop();
+    const route = this.route(routePath);
 
     const redirectionRoute = (!enrolment.profileCompleted)
       ? EnrolmentRoutes.DEMOGRAPHIC // Only for new enrolments with incomplete profiles
@@ -156,7 +160,7 @@ export class EnrolmentGuard extends BaseGuard {
     const whiteListedRoutes = (!!enrolment.expiryDate)
       ? EnrolmentRoutes.enrolmentAcceptedToaRoutes()
       : [];
-    const route = routePath.split('/').pop();
+    const route = this.route(routePath);
 
     if (!whiteListedRoutes.includes(route)) {
       return this.navigate(routePath, defaultRoute);
