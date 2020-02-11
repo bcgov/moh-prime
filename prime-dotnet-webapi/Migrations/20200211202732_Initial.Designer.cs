@@ -11,7 +11,7 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20200211173206_Initial")]
+    [Migration("20200211202732_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -4864,6 +4864,14 @@ namespace Prime.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("GPID")
+                        .HasColumnType("character varying(20)")
+                        .HasMaxLength(20);
+
+                    b.Property<string>("HPDID")
+                        .HasColumnType("character varying(255)")
+                        .HasMaxLength(255);
+
                     b.Property<bool?>("HasConviction")
                         .HasColumnType("boolean");
 
@@ -4894,10 +4902,6 @@ namespace Prime.Migrations
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<string>("LicensePlate")
-                        .HasColumnType("character varying(20)")
-                        .HasMaxLength(20);
 
                     b.Property<string>("MiddleName")
                         .HasColumnType("text");
@@ -5009,42 +5013,6 @@ namespace Prime.Migrations
                     b.HasIndex("EnrolleeId");
 
                     b.ToTable("EnrolmentCertificateAccessToken");
-                });
-
-            modelBuilder.Entity("Prime.Models.EnrolmentCertificateNote", b =>
-                {
-                    b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTime>("CreatedTimeStamp")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("EnrolleeId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Note")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("NoteDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EnrolleeId")
-                        .IsUnique();
-
-                    b.ToTable("EnrolmentCertificateNote");
                 });
 
             modelBuilder.Entity("Prime.Models.EnrolmentStatus", b =>
@@ -8614,15 +8582,6 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany()
                         .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Prime.Models.EnrolmentCertificateNote", b =>
-                {
-                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
-                        .WithOne("EnrolmentCertificateNote")
-                        .HasForeignKey("Prime.Models.EnrolmentCertificateNote", "EnrolleeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -41,12 +41,13 @@ export class EnrolmentGuard extends BaseGuard {
     const user$ = from(this.authService.getUser());
     const createEnrollee$ = user$
       .pipe(
-        exhaustMap(({ userId, firstName, lastName, dateOfBirth, physicalAddress }: User) => {
+        exhaustMap(({ userId, hpdid, firstName, lastName, dateOfBirth, physicalAddress }: User) => {
           // Enforced the enrolment type instead of using Partial<Enrolment>
           // to avoid creating constructors and partials for every model
           const enrollee = {
             // Providing only the minimum required fields for creating an enrollee
             userId,
+            hpdid,
             firstName,
             lastName,
             dateOfBirth,

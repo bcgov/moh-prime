@@ -53,7 +53,8 @@ namespace Prime.Migrations
                     UpdatedUserId = table.Column<Guid>(nullable: false),
                     UpdatedTimeStamp = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<Guid>(nullable: false),
-                    LicensePlate = table.Column<string>(maxLength: 20, nullable: true),
+                    GPID = table.Column<string>(maxLength: 20, nullable: true),
+                    HPDID = table.Column<string>(maxLength: 255, nullable: true),
                     FirstName = table.Column<string>(nullable: false),
                     MiddleName = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: false),
@@ -375,31 +376,6 @@ namespace Prime.Migrations
                     table.PrimaryKey("PK_EnrolmentCertificateAccessToken", x => x.Id);
                     table.ForeignKey(
                         name: "FK_EnrolmentCertificateAccessToken_Enrollee_EnrolleeId",
-                        column: x => x.EnrolleeId,
-                        principalTable: "Enrollee",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "EnrolmentCertificateNote",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    CreatedUserId = table.Column<Guid>(nullable: false),
-                    CreatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    UpdatedUserId = table.Column<Guid>(nullable: false),
-                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    EnrolleeId = table.Column<int>(nullable: false),
-                    Note = table.Column<string>(nullable: true),
-                    NoteDate = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EnrolmentCertificateNote", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_EnrolmentCertificateNote_Enrollee_EnrolleeId",
                         column: x => x.EnrolleeId,
                         principalTable: "Enrollee",
                         principalColumn: "Id",
@@ -2702,12 +2678,6 @@ namespace Prime.Migrations
                 column: "EnrolleeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EnrolmentCertificateNote_EnrolleeId",
-                table: "EnrolmentCertificateNote",
-                column: "EnrolleeId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_EnrolmentStatus_EnrolleeId",
                 table: "EnrolmentStatus",
                 column: "EnrolleeId");
@@ -2797,9 +2767,6 @@ namespace Prime.Migrations
 
             migrationBuilder.DropTable(
                 name: "EnrolmentCertificateAccessToken");
-
-            migrationBuilder.DropTable(
-                name: "EnrolmentCertificateNote");
 
             migrationBuilder.DropTable(
                 name: "EnrolmentStatusReason");

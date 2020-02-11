@@ -386,6 +386,11 @@ namespace Prime.Services
                     createdEnrolmentStatus.PharmaNetStatus = true;
                     break;
 
+                    enrollee.GPID = this.GenerateGPID();
+                    await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
+                    await _accessTermService.AcceptCurrentAccessTermAsync(enrollee);
+                    await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrolleeId, enrollee);
+                    createdEnrolmentStatus.PharmaNetStatus = true;
                 case Status.ACTIVE_CODE:
                     // Sent back to edit profile from Under Review
                     if (oldStatus.Code == Status.UNDER_REVIEW_CODE)
@@ -396,7 +401,7 @@ namespace Prime.Services
                     if (oldStatus.Code == Status.REQUIRES_TOA_CODE)
                     {
                         await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
-                        enrollee.LicensePlate = this.GenerateLicensePlate();
+                        enrollee.GPID = this.GenerateGPID();
                         createdEnrolmentStatus.PharmaNetStatus = true;
                         await _accessTermService.AcceptCurrentAccessTermAsync(enrollee);
                         await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrolleeId, enrollee);
@@ -427,7 +432,7 @@ namespace Prime.Services
             }
         }
 
-        private string GenerateLicensePlate()
+        private string GenerateGPID()
         {
             return Base85.Ascii85.Encode(Guid.NewGuid().ToByteArray());
         }

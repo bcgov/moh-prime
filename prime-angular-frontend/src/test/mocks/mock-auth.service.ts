@@ -34,6 +34,7 @@ export class MockAuthService implements IAuthService {
   public getUser(forceReload?: boolean): Promise<User> {
     return new Promise((resolve, reject) => resolve({
       userId: `${faker.random.uuid()}`,
+      hpdid: `${faker.random.uuid()}`,
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
       dateOfBirth: faker.date.past().toISOString(),
