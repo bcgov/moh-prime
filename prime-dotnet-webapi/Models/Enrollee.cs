@@ -63,9 +63,6 @@ namespace Prime.Models
 
         public ICollection<Organization> Organizations { get; set; }
 
-        [RegularExpression(@"([0-9]+)", ErrorMessage = "Device Provider Number should not contain characters")]
-        [StringLength(5, MinimumLength = 5, ErrorMessage = "Device Provider Number must be 5 digits")]
-        [JsonConverter(typeof(EmptyStringToNullJsonConverter))]
         public string DeviceProviderNumber { get; set; }
 
         public bool? IsInsulinPumpProvider { get; set; }
@@ -138,15 +135,22 @@ namespace Prime.Models
         [NotMapped]
         public DateTime? ApprovedDate
         {
-            get => this.EnrolmentStatuses?
-                .OrderByDescending(en => en.StatusDate)
-                .FirstOrDefault(es => es.StatusCode == Status.APPROVED_CODE)?
-                .StatusDate;
+            get
+            {
+                return this.EnrolmentStatuses?
+                    .OrderByDescending(en => en.StatusDate)
+                    .Where(es => es.StatusCode == Status.APPROVED_CODE)
+                    .Where(es => es.StatusDate > this.AppliedDate)
+                    .FirstOrDefault()?
+                    .StatusDate;
+            }
         }
 
         [NotMapped]
         public DateTime? ExpiryDate
         {
+            // This applies to the expiry date of the most recent accepted
+            // ToA
             get => this.AccessTerms?
                 .OrderByDescending(at => at.AcceptedDate)
                 .FirstOrDefault(at => at.ExpiryDate != null)?
@@ -156,8 +160,6 @@ namespace Prime.Models
         public ICollection<AdjudicatorNote> AdjudicatorNotes { get; set; }
 
         public AccessAgreementNote AccessAgreementNote { get; set; }
-
-        public EnrolmentCertificateNote EnrolmentCertificateNote { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

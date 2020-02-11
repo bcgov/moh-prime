@@ -19,7 +19,6 @@ import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { AccessTerm } from '@enrolment/shared/models/access-term.model';
-import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 import { ViewportService } from '@core/services/viewport.service';
 
 @Component({
@@ -153,7 +152,7 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
 
   public ngOnInit() {
     this.enrolment = this.enrolmentService.enrolment;
-    this.isInitialEnrolment = this.enrolment.progressStatus !== ProgressStatus.FINISHED;
+    this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
     this.enrolmentResource.getAccessTermLatest(this.enrolment.id, false)
       .subscribe(
         (accessTerm: AccessTerm) => this.accessTerm = accessTerm,
