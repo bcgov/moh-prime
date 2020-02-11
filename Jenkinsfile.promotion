@@ -17,13 +17,13 @@ pipeline {
             agent { label 'master' }
             steps {
                     echo "Test (MASTER) ..."
-                    sh "./player.sh build database test"
-                    sh "./player.sh build api test ${API_ARGS}"
-                    sh "./player.sh build frontend test ${FRONTEND_ARGS}"
-                    sh "./player.sh deploy database test"
-                    sh "./player.sh deploy api test ${API_ARGS}"
-                    sh "./player.sh deploy frontend test ${FRONTEND_ARGS}"
-                    sh "./player.sh toolbelt schemaspy test"
+                    sh "./player.sh build database test ${ARGS}"
+                    sh "./player.sh build api test ${ARGS} ${API_ARGS}"
+                    sh "./player.sh build frontend test ${ARGS} ${FRONTEND_ARGS}"
+                    sh "./player.sh deploy database test ${ARGS}"
+                    sh "./player.sh deploy api test ${ARGS} ${API_ARGS}"
+                    sh "./player.sh deploy frontend test ${ARGS} ${FRONTEND_ARGS}"
+                    sh "./player.sh toolbelt schemaspy test ${ARGS}"
             }
         }
         stage('SonarQube Code Check') {
@@ -74,12 +74,12 @@ pipeline {
             agent { label 'master' }
             steps {
                 echo "Deploy to Production..."
-                sh "./player.sh build database prod"
-                sh "./player.sh build api prod"
-                sh "./player.sh build frontend prod"
-                sh "./player.sh deploy database prod"
-                sh "./player.sh deploy api prod"
-                sh "./player.sh deploy frontend prod"
+                sh "./player.sh build database prod ${ARGS}"
+                sh "./player.sh build api prod ${ARGS}"
+                sh "./player.sh build frontend prod ${ARGS}"
+                sh "./player.sh deploy database prod ${ARGS}"
+                sh "./player.sh deploy api prod ${ARGS}"
+                sh "./player.sh deploy frontend prod ${ARGS}"
                 sh "./player.sh toolbelt schemaspy prod"
             }
         }
