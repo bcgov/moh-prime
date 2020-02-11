@@ -77,7 +77,7 @@ export class EnrolmentGuard extends BaseGuard {
   }
 
   private route(routePath: string): string {
-    return routePath.split('/').pop()
+    return routePath.split('/').pop();
   }
 
   /**
