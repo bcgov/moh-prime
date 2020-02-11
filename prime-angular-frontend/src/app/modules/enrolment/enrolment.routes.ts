@@ -14,7 +14,6 @@ export class EnrolmentRoutes {
   public static SUBMISSION_CONFIRMATION = 'submission-confirmation';
   public static TERMS_OF_ACCESS = 'terms-of-access';
   public static DECLINED = 'declined';
-  public static DECLINED_TERMS_OF_ACCESS = 'declined-terms-of-access';
   // Enrollee history and PharmaNet:
   // Replaces terms of access after accepting the terms of access (TOA)
   public static CURRENT_ACCESS_TERM = 'current-access-term';
@@ -63,8 +62,7 @@ export class EnrolmentRoutes {
       EnrolmentRoutes.SUBMISSION_CONFIRMATION,
       EnrolmentRoutes.DECLINED,
       // TERMS_OF_ACCESS is synonymous with APPROVED
-      EnrolmentRoutes.TERMS_OF_ACCESS,
-      EnrolmentRoutes.DECLINED_TERMS_OF_ACCESS
+      EnrolmentRoutes.TERMS_OF_ACCESS
     ];
   }
 

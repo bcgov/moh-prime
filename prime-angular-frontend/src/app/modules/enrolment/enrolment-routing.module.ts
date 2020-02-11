@@ -21,7 +21,6 @@ import { SubmissionConfirmationComponent } from './pages/submission-confirmation
 import { AccessAgreementComponent } from './pages/access-agreement/access-agreement.component';
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
 import { DeclinedComponent } from './pages/declined/declined.component';
-import { DeclinedAccessAgreementComponent } from './pages/declined-access-agreement/declined-access-agreement.component';
 import { AccessAgreementHistoryComponent } from './pages/access-agreement-history/access-agreement-history.component';
 import { PharmanetEnrolmentCertificateComponent } from './pages/pharmanet-enrolment-certificate/pharmanet-enrolment-certificate.component';
 import { PharmanetTransactionsComponent } from './pages/pharmanet-transactions/pharmanet-transactions.component';
@@ -114,11 +113,6 @@ const routes: Routes = [
         path: EnrolmentRoutes.TERMS_OF_ACCESS,
         component: AccessAgreementComponent,
         data: { title: 'Enrolment Terms of Access' }
-      },
-      {
-        path: EnrolmentRoutes.DECLINED_TERMS_OF_ACCESS,
-        component: DeclinedAccessAgreementComponent,
-        data: { title: 'Enrolment Summary' }
       },
       //
       // Enrollee history and PharmaNet:

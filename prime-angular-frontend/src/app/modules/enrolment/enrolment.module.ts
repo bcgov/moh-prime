@@ -23,7 +23,6 @@ import {
 import { UserClauseComponent } from './pages/access-agreement/components/user-clause/user-clause.component';
 import { PharmanetEnrolmentCertificateComponent } from './pages/pharmanet-enrolment-certificate/pharmanet-enrolment-certificate.component';
 import { DeclinedComponent } from './pages/declined/declined.component';
-import { DeclinedAccessAgreementComponent } from './pages/declined-access-agreement/declined-access-agreement.component';
 import { AccessAgreementHistoryComponent } from './pages/access-agreement-history/access-agreement-history.component';
 import { PharmanetTransactionsComponent } from './pages/pharmanet-transactions/pharmanet-transactions.component';
 import { AccessTermsComponent } from './pages/access-terms/access-terms.component';
@@ -56,7 +55,6 @@ import { AccessAgreementCurrentComponent } from './pages/access-agreement-curren
     LimitsAndConditionsClauseComponent,
     UserClauseComponent,
     DeclinedComponent,
-    DeclinedAccessAgreementComponent,
     AccessAgreementHistoryComponent,
     PharmanetEnrolmentCertificateComponent,
     PharmanetTransactionsComponent,
