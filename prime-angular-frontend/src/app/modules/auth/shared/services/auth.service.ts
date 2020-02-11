@@ -69,6 +69,13 @@ export class AuthService implements IAuthService {
     return token.sub;
   }
 
+  public async getPreferredUsername(): Promise<string> {
+    const token = await this.decodeToken() as any;
+
+    return token.preferred_username;
+  }
+
+
   public async getUser(forceReload?: boolean): Promise<User> {
     const {
       firstName,
@@ -85,7 +92,8 @@ export class AuthService implements IAuthService {
     } = await this.keycloakService.loadUserProfile(forceReload) as Keycloak.KeycloakProfile & KeycloakAttributes;
 
     const userId = await this.getUserId();
-    const hpdid = userId;
+    const hpdid = await this.getPreferredUsername();
+
 
     return {
       userId,
