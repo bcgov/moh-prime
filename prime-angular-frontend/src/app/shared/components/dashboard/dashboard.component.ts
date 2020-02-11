@@ -128,9 +128,6 @@ export class DashboardComponent implements OnInit {
       : false;
     const statusIcons = this.getEnrolmentStatusIcons(enrolmentStatus, hasAcceptedAtLeastOneToa);
 
-    console.log('enrolmentStatus', enrolmentStatus);
-    console.log('hasAcceptedAtLeastOneToa', hasAcceptedAtLeastOneToa);
-
     const termsOfAccessRoute = (enrolmentStatus === EnrolmentStatus.UNDER_REVIEW)
       ? EnrolmentRoutes.SUBMISSION_CONFIRMATION
       : (enrolmentStatus === EnrolmentStatus.REQUIRES_TOA)
