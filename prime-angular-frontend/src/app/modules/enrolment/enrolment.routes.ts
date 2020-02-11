@@ -62,8 +62,7 @@ export class EnrolmentRoutes {
       EnrolmentRoutes.SUBMISSION_CONFIRMATION,
       EnrolmentRoutes.ACCESS_LOCKED,
       // TERMS_OF_ACCESS is synonymous with adjudicator manual/automatic APPROVED
-      EnrolmentRoutes.TERMS_OF_ACCESS,
-      EnrolmentRoutes.ACCESS_TERMS
+      EnrolmentRoutes.TERMS_OF_ACCESS
     ];
   }
 
