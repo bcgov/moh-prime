@@ -58,6 +58,22 @@ objects:
             io.kompose.service: backup
         spec:
           containers:
+          - env:
+            - name: PGUSER
+              valueFrom:
+                secretKeyRef:
+                  key: database-user
+                  name: "postgresql-secret"
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: database-admin-password
+                  name: "postgresql-secret"
+            - name: PGDATABASE
+              valueFrom:
+                secretKeyRef:
+                  key: database-name
+                  name: "postgresql-secret"
           - image: ' '
             name: backup
             ports:
