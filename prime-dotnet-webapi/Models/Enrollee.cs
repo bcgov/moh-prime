@@ -12,7 +12,8 @@ namespace Prime.Models
     {
         STARTED,
         SUBMITTED,
-        FINISHED
+        FINISHED,
+        EDITING
     }
 
     [Table("Enrollee")]
@@ -104,24 +105,20 @@ namespace Prime.Models
         }
 
         [NotMapped]
-        public EnrolmentStatus PharmaNetStatus { get => this.EnrolmentStatuses?.SingleOrDefault(es => es.PharmaNetStatus); }
+        public EnrolmentStatus PreviousStatus
+        {
+            get => this.EnrolmentStatuses?
+                .OrderByDescending(es => es.StatusDate)
+                .ThenByDescending(es => es.Id)
+                .Skip(1)
+                .FirstOrDefault();
+        }
 
         [NotMapped]
-        public ProgressStatusType ProgressStatus
+        public EnrolmentStatus PharmaNetStatus
         {
-            get
-            {
-                // Indicates the position of the enrollee within their initial enrolment, which
-                // provides a status hook with greater granularity than the enrolment statuses
-                var codes = (EnrolmentStatuses ?? Enumerable.Empty<EnrolmentStatus>())
-                    .Select(es => es.StatusCode);
-
-                return codes.Contains(Status.ACCEPTED_TOS_CODE)
-                    ? ProgressStatusType.FINISHED
-                    : codes.Contains(Status.SUBMITTED_CODE)
-                        ? ProgressStatusType.SUBMITTED
-                        : ProgressStatusType.STARTED;
-            }
+            get => this.EnrolmentStatuses?
+                .SingleOrDefault(es => es.PharmaNetStatus);
         }
 
         public bool ProfileCompleted { get; set; }
@@ -131,7 +128,7 @@ namespace Prime.Models
         {
             get => this.EnrolmentStatuses?
                 .OrderByDescending(en => en.StatusDate)
-                .FirstOrDefault(es => es.StatusCode == Status.SUBMITTED_CODE)?
+                .FirstOrDefault(es => es.StatusCode == Status.UNDER_REVIEW_CODE)?
                 .StatusDate;
         }
 
@@ -142,7 +139,7 @@ namespace Prime.Models
             {
                 return this.EnrolmentStatuses?
                     .OrderByDescending(en => en.StatusDate)
-                    .Where(es => es.StatusCode == Status.APPROVED_CODE)
+                    .Where(es => es.StatusCode == Status.REQUIRES_TOA_CODE)
                     .Where(es => es.StatusDate > this.AppliedDate)
                     .FirstOrDefault()?
                     .StatusDate;
@@ -163,8 +160,6 @@ namespace Prime.Models
         public ICollection<AdjudicatorNote> AdjudicatorNotes { get; set; }
 
         public AccessAgreementNote AccessAgreementNote { get; set; }
-
-        public EnrolmentCertificateNote EnrolmentCertificateNote { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
