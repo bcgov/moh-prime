@@ -71,7 +71,6 @@ import { AccessAgreementCurrentComponent } from './pages/access-agreement-curren
   imports: [
     SharedModule,
     EnrolmentRoutingModule
-  ],
-  exports: []
+  ]
 })
 export class EnrolmentModule { }
