@@ -23,7 +23,7 @@ RUN echo "Checking host dir..." && \
     chmod -R 777 /opt/backup && \
     chmod +x /opt/backup/backup.sh && \
     chmod +x /opt/backup/entrypoint.sh && \
-    cp /opt/backup.cron /etc/cron.d/
+    cp /opt/backup/backup.cron /etc/cron.d/
 
 CMD tail -F /dev/null
 # CMD /opt/backup/entrypoint.sh
