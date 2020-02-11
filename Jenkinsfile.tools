@@ -20,6 +20,7 @@ pipeline {
                 //sh "./player.sh toolbelt mailhog test"
                 //sh "./player.sh toolbelt schemaspy dev"
                 //sh "./player.sh toolbelt metabase dev"
+                //sh "./player.sh toolbelt backup dev"
             }
         }
         stage('Nuke Database') {
