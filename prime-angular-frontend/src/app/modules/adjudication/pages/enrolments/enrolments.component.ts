@@ -64,9 +64,7 @@ export class EnrolmentsComponent implements OnInit {
   }
 
   public isActive(currentStatusCode: EnrolmentStatus) {
-    // TODO: fix after status merge
-    // return (currentStatusCode === EnrolmentStatus.ACTIVE);
-    return true;
+    return (currentStatusCode === EnrolmentStatus.ACTIVE);
   }
 
   public viewEnrolmentHistory(enrolmentId: number) {
