@@ -9,7 +9,7 @@ RUN mkdir -p /opt/backup
 
 WORKDIR /opt/backup
 
-COPY . /opt/backup/
+COPY . .
 #COPY . /opt/
 
 
@@ -23,6 +23,7 @@ RUN echo "Checking host dir..." && \
     chmod -R 777 /opt/backup && \
     chmod +x /opt/backup/backup.sh && \
     chmod +x /opt/backup/entrypoint.sh && \
+    cp . /opt/backup/ && \
     cp /opt/backup/backup.cron /etc/cron.d/
 
 CMD tail -F /dev/null
