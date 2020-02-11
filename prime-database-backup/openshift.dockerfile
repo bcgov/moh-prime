@@ -21,9 +21,10 @@ RUN echo "Checking opt dir..." && \
     ls -alh /opt
 
 RUN chmod -R 777 /opt/backup && \
-    chmod +x /opt/backup/backup.sh && \
-    chmod +x /opt/backup/entrypoint.sh && \
-    cp /opt/backup/backup.cron /etc/cron.d/
+    chmod +x /opt/backup.sh && \
+    chmod +x /opt/entrypoint.sh && \
+    cp /opt/backup/backup.cron /etc/cron.d/ && \
+    cp /opt/* /opt/backup
 
-CMD tail -F /dev/null
-# CMD /opt/backup/entrypoint.sh
+#CMD tail -F /dev/null
+CMD /opt/entrypoint.sh
