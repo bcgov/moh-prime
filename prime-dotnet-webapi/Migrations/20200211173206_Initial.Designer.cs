@@ -11,8 +11,8 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20200207214634_StatusUpdate")]
-    partial class StatusUpdate
+    [Migration("20200211173206_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -4858,8 +4858,7 @@ namespace Prime.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("DeviceProviderNumber")
-                        .HasColumnType("character varying(5)")
-                        .HasMaxLength(5);
+                        .HasColumnType("text");
 
                     b.Property<string>("FirstName")
                         .IsRequired()

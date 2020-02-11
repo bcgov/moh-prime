@@ -4856,8 +4856,7 @@ namespace Prime.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("DeviceProviderNumber")
-                        .HasColumnType("character varying(5)")
-                        .HasMaxLength(5);
+                        .HasColumnType("text");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
