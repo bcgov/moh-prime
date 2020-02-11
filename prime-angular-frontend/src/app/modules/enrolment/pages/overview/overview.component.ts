@@ -56,14 +56,17 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
         .pipe(
           exhaustMap((result: boolean) =>
             (result)
-              ? this.enrolmentResource.updateEnrolmentStatus(enrolment.id, EnrolmentStatus.SUBMITTED)
+              ? this.enrolmentResource.updateEnrollee(enrolment)
               : EMPTY
+          ),
+          exhaustMap(() =>
+            this.enrolmentResource.updateEnrolmentStatus(enrolment.id, EnrolmentStatus.UNDER_REVIEW)
           )
         )
         .subscribe(
           () => {
             this.toastService.openSuccessToast('Enrolment has been submitted');
-            this.router.navigate([EnrolmentRoutes.SUBMISSION_CONFIRMATION], { relativeTo: this.route.parent });
+            this.routeTo(EnrolmentRoutes.SUBMISSION_CONFIRMATION);
           },
           (error: any) => {
             this.toastService.openErrorToast('Enrolment could not be submitted');

@@ -189,12 +189,10 @@ export class MockConfigService extends ConfigService implements IConfigService {
           { code: 'YT', name: 'Yukon', countryCode: 'CA' }
         ],
         statuses: [
-          { code: 4, name: 'Declined' },
-          { code: 3, name: 'Adjudicated/Approved' },
-          { code: 5, name: 'Accepted TOS (Terms of Service)' },
-          { code: 1, name: 'In Progress' },
-          { code: 2, name: 'Submitted' },
-          { code: 6, name: 'Declined TOS (Terms of Service)' }
+          { code: 1, name: 'Active' },
+          { code: 4, name: 'Locked' },
+          { code: 3, name: 'Requires TOA' },
+          { code: 2, name: 'Under Review' }
         ],
         statusReasons: [
           { code: 7, name: 'Self Declaration' },

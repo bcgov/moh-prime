@@ -5,14 +5,7 @@
 
   <div class="row justify-content-end">
     <div class="col text-right">
-
-      <mat-label>Refresh</mat-label>
-      <button mat-icon-button
-              class="mr-4"
-              (click)="getEnrolments()">
-        <mat-icon>refresh</mat-icon>
-      </button>
-      <mat-form-field>
+      <mat-form-field class="mr-3">
         <mat-label>Filter By Status</mat-label>
         <mat-select value=""
                     (selectionChange)="filterByStatus($event)">
@@ -23,6 +16,12 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
+
+      <button mat-icon-button
+              matTooltip="Refresh the list of enrolments"
+              (click)="getEnrolments()">
+        <mat-icon>refresh</mat-icon>
+      </button>
     </div>
   </div>
 
@@ -35,7 +34,7 @@
       <th mat-header-cell
           *matHeaderCellDef> Application Date </th>
       <td mat-cell
-          *matCellDef="let enrolment"> {{ enrolment.appliedDate | formatDate }} </td>
+          *matCellDef="let enrolment;"> {{ enrolment.appliedDate | formatDate }} </td>
     </ng-container>
 
     <!-- Name Column -->
@@ -43,7 +42,7 @@
       <th mat-header-cell
           *matHeaderCellDef> Name </th>
       <td mat-cell
-          *matCellDef="let enrolment"> {{ enrolment.enrollee.firstName }} {{ enrolment.enrollee.lastName }} </td>
+          *matCellDef="let enrolment;"> {{ enrolment.enrollee.firstName }} {{ enrolment.enrollee.lastName }} </td>
     </ng-container>
 
     <!-- Status Column -->
@@ -51,7 +50,7 @@
       <th mat-header-cell
           *matHeaderCellDef> Status </th>
       <td mat-cell
-          *matCellDef="let enrolment">
+          *matCellDef="let enrolment;">
         <mat-chip-list>
           <mat-chip>{{ enrolment.currentStatus.status.name }}</mat-chip>
         </mat-chip-list>
@@ -63,7 +62,7 @@
       <th mat-header-cell
           *matHeaderCellDef> Approval Date </th>
       <td mat-cell
-          *matCellDef="let enrolment"> {{ enrolment.approvedDate | formatDate }} </td>
+          *matCellDef="let enrolment;"> {{ enrolment.approvedDate | formatDate }} </td>
     </ng-container>
 
     <!-- Actions Column -->
@@ -71,7 +70,7 @@
       <th mat-header-cell
           *matHeaderCellDef>&nbsp;</th>
       <td mat-cell
-          *matCellDef="let enrolment"
+          *matCellDef="let enrolment;"
           class="text-right">
 
         <ng-container [ngTemplateOutlet]="menu"
@@ -116,13 +115,13 @@
         <span>Review Status Reasons</span>
       </button>
       <button mat-menu-item
-              *ngIf="canApproveOrDeny(enrolment.currentStatus.status.code)"
+              *ngIf="canApproveOrDeny(enrolment.currentStatus.statusCode)"
               (click)="approveEnrolment(enrolment)">
         <mat-icon>check_circle_outline</mat-icon>
         <span>Approve Enrolment</span>
       </button>
       <button mat-menu-item
-              *ngIf="canApproveOrDeny(enrolment.currentStatus.status.code)"
+              *ngIf="canApproveOrDeny(enrolment.currentStatus.statusCode)"
               (click)="declineEnrolment(enrolment.id)">
         <mat-icon>block</mat-icon>
         <span>Decline Enrolment</span>
@@ -139,8 +138,8 @@
         <span>Limits and Conditions Clauses</span>
       </button>
       <button mat-menu-item
-              *ngIf="canAllowEditing(enrolment.currentStatus.status.code)"
-              (click)="markForEditing(enrolment.id, enrolment.progressStatus)">
+              *ngIf="canAllowEditing(enrolment.currentStatus.statusCode)"
+              (click)="markForEditing(enrolment.id)">
         <mat-icon>undo</mat-icon>
         <span>Enable Editing</span>
       </button>

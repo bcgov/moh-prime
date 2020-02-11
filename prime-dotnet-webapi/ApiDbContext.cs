@@ -64,8 +64,6 @@ namespace Prime
 
         public DbSet<AdjudicatorNote> AdjudicatorNotes { get; set; }
         public DbSet<AccessAgreementNote> AccessAgreementNotes { get; set; }
-        public DbSet<EnrolmentCertificateNote> EnrolmentCertificateNotes { get; set; }
-
         public DbSet<AccessTerm> AccessTerms { get; set; }
         public DbSet<GlobalClause> GlobalClauses { get; set; }
         public DbSet<UserClause> UserClauses { get; set; }

@@ -117,8 +117,8 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
     this.enrolment = this.enrolmentService.enrolment;
     this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
 
-    if (this.enrolment.enrollee && this.enrolment.enrollee.expiryDate) {
-      const expiryMoment = moment(this.enrolment.enrollee.expiryDate);
+    if (this.enrolment.enrollee && this.enrolment.expiryDate) {
+      const expiryMoment = moment(this.enrolment.expiryDate);
       this.expiryDate = expiryMoment.isAfter(moment.now())
         ? expiryMoment.format('MMMM Do, YYYY') : null;
     }
