@@ -10,11 +10,10 @@ RUN mkdir -p /opt/backup
 WORKDIR /opt/backup
 
 COPY . /opt
-#COPY . /opt/
+COPY . /opt/backup
 
-
-RUN echo "Checking host dir..." && \
-    ls -alh && \
+RUN echo "Checking opt dir..." && \
+    ls -alh /opt && \
     echo "Checking workdir..." && \
     ls -alh /opt/backup && \
     apt-get update -yqq && \ 
@@ -24,7 +23,6 @@ RUN echo "Checking host dir..." && \
     chmod -R 777 /opt/backup && \
     chmod +x /opt/backup/backup.sh && \
     chmod +x /opt/backup/entrypoint.sh && \
-    cp . /opt/backup/ && \
     cp /opt/backup/backup.cron /etc/cron.d/
 
 CMD tail -F /dev/null
