@@ -16,7 +16,6 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
-import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 
 @Component({
   selector: 'app-dashboard',
@@ -121,12 +120,11 @@ export class DashboardComponent implements OnInit {
     const enrolmentStatus = (enrolment)
       ? enrolment.currentStatus.statusCode
       : EnrolmentStatus.ACTIVE;
-    // Indicates the position of the enrollee within their initial enrolment, which
-    // provides a status hook with greater granularity than the enrolment statuses
-    const progressStatus = (enrolment)
-      ? enrolment.progressStatus
-      : ProgressStatus.STARTED;
-    const statusIcons = this.getEnrolmentStatusIcons(enrolmentStatus, progressStatus);
+    // Check if the enrollee is within their initial enrolment
+    const hasAcceptedAtLeastOneToa = (enrolment)
+      ? !!enrolment.expiryDate
+      : false;
+    const statusIcons = this.getEnrolmentStatusIcons(enrolmentStatus, hasAcceptedAtLeastOneToa);
 
     return [
       {
@@ -139,7 +137,7 @@ export class DashboardComponent implements OnInit {
             route: EnrolmentRoutes.OVERVIEW,
             showItem: true,
             disabled: (
-              progressStatus !== ProgressStatus.FINISHED ||
+              hasAcceptedAtLeastOneToa ||
               [
                 EnrolmentStatus.UNDER_REVIEW,
                 EnrolmentStatus.REQUIRES_TOA,
@@ -158,7 +156,7 @@ export class DashboardComponent implements OnInit {
             route: EnrolmentRoutes.CURRENT_ACCESS_TERM,
             showItem: true,
             disabled: (
-              progressStatus !== ProgressStatus.FINISHED ||
+              hasAcceptedAtLeastOneToa ||
               [
                 EnrolmentStatus.UNDER_REVIEW,
                 EnrolmentStatus.REQUIRES_TOA,
@@ -172,7 +170,7 @@ export class DashboardComponent implements OnInit {
             route: EnrolmentRoutes.PHARMANET_ENROLMENT_CERTIFICATE,
             showItem: true,
             disabled: (
-              progressStatus !== ProgressStatus.FINISHED ||
+              hasAcceptedAtLeastOneToa ||
               [
                 EnrolmentStatus.UNDER_REVIEW,
                 EnrolmentStatus.REQUIRES_TOA,
@@ -187,7 +185,7 @@ export class DashboardComponent implements OnInit {
           {
             name: 'PharmaNet Transactions',
             icon: (
-              progressStatus !== ProgressStatus.FINISHED ||
+              hasAcceptedAtLeastOneToa ||
               [
                 EnrolmentStatus.LOCKED
               ].includes(enrolmentStatus)
@@ -197,7 +195,7 @@ export class DashboardComponent implements OnInit {
             route: EnrolmentRoutes.PHARMANET_TRANSACTIONS,
             showItem: true,
             disabled: (
-              progressStatus !== ProgressStatus.FINISHED ||
+              hasAcceptedAtLeastOneToa ||
               [
                 EnrolmentStatus.LOCKED
               ].includes(enrolmentStatus)
@@ -207,7 +205,7 @@ export class DashboardComponent implements OnInit {
           {
             name: 'PRIME Transaction History',
             icon: (
-              progressStatus !== ProgressStatus.FINISHED ||
+              hasAcceptedAtLeastOneToa ||
               [
                 EnrolmentStatus.LOCKED
               ].includes(enrolmentStatus)
@@ -217,7 +215,7 @@ export class DashboardComponent implements OnInit {
             route: EnrolmentRoutes.ACCESS_TERMS,
             showItem: true,
             disabled: (
-              progressStatus !== ProgressStatus.FINISHED ||
+              hasAcceptedAtLeastOneToa ||
               [
                 EnrolmentStatus.LOCKED
               ].includes(enrolmentStatus)
@@ -229,15 +227,12 @@ export class DashboardComponent implements OnInit {
     ];
   }
 
-  private getEnrolmentStatusIcons(
-    enrolmentStatus: EnrolmentStatus,
-    progressStatus: ProgressStatus
-  ) {
+  private getEnrolmentStatusIcons(enrolmentStatus: EnrolmentStatus, hasAcceptedAtLeastOneToa: boolean) {
     let enrollee = 'assignment_ind';
     let accessAgreement = 'assignment';
     let certificate = 'card_membership';
 
-    if (progressStatus !== ProgressStatus.FINISHED) {
+    if (hasAcceptedAtLeastOneToa) {
       // Default icons when performing initial enrolment
       enrollee = 'assignment_turned_in';
       accessAgreement = 'lock';

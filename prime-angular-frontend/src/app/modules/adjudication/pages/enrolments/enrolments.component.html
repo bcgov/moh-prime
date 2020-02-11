@@ -116,13 +116,13 @@
         <span>Review Status Reasons</span>
       </button>
       <button mat-menu-item
-              *ngIf="canApproveOrDeny(enrolment.currentStatus.status.code)"
+              *ngIf="canApproveOrDeny(enrolment.currentStatus.statusCode)"
               (click)="approveEnrolment(enrolment)">
         <mat-icon>check_circle_outline</mat-icon>
         <span>Approve Enrolment</span>
       </button>
       <button mat-menu-item
-              *ngIf="canApproveOrDeny(enrolment.currentStatus.status.code)"
+              *ngIf="canApproveOrDeny(enrolment.currentStatus.statusCode)"
               (click)="declineEnrolment(enrolment.id)">
         <mat-icon>block</mat-icon>
         <span>Decline Enrolment</span>
@@ -138,8 +138,8 @@
         <span>Limits and Conditions Clauses</span>
       </button>
       <button mat-menu-item
-              *ngIf="canAllowEditing(enrolment.currentStatus.status.code)"
-              (click)="markForEditing(enrolment.id, enrolment.progressStatus)">
+              *ngIf="canAllowEditing(enrolment.currentStatus.statusCode)"
+              (click)="markForEditing(enrolment.id)">
         <mat-icon>undo</mat-icon>
         <span>Enable Editing</span>
       </button>

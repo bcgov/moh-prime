@@ -18,7 +18,6 @@ import {
 } from '@shared/components/dialogs/content/enrolment-status-reasons/enrolment-status-reasons.component';
 
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
-import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { ApproveEnrolmentComponent } from '@shared/components/dialogs/content/approve-enrolment/approve-enrolment.component';
 
@@ -150,7 +149,7 @@ export class EnrolmentsComponent implements OnInit {
       );
   }
 
-  public markForEditing(id: number, progressStatus: ProgressStatus) {
+  public markForEditing(id: number) {
     const data: DialogOptions = {
       title: 'Enable Editing',
       message: 'When enabled the enrollee will be able to update their enrolment. Are you sure you want to enable editing?',

@@ -118,32 +118,6 @@ namespace Prime.Models
                 .SingleOrDefault(es => es.PharmaNetStatus);
         }
 
-        [NotMapped]
-        public ProgressStatusType ProgressStatus
-        {
-            get
-            {
-                // Indicates the position of the enrollee within their initial enrolment, which
-                // provides a status hook with greater granularity than the enrolment statuses
-                var codes = (EnrolmentStatuses ?? Enumerable.Empty<EnrolmentStatus>())
-                    .Select(es => es.StatusCode);
-
-                if (codes.Contains(Status.ACTIVE_CODE))
-                {
-                    if (this.PreviousStatus?.StatusCode == Status.REQUIRES_TOA_CODE)
-                    {
-                        return ProgressStatusType.FINISHED;
-                    }
-                }
-                else if (codes.Contains(Status.UNDER_REVIEW_CODE))
-                {
-                    return ProgressStatusType.SUBMITTED;
-                }
-
-                return ProgressStatusType.STARTED;
-            }
-        }
-
         public bool ProfileCompleted { get; set; }
 
         [NotMapped]
