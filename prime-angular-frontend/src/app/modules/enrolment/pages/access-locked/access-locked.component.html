@@ -4,7 +4,7 @@
 
   <app-progress-indicator *ngIf="isInitialEnrolment"
                           message="Enrolment Declined"
-                          [currentRoute]="EnrolmentRoutes.DECLINED"></app-progress-indicator>
+                          [currentRoute]="EnrolmentRoutes.ACCESS_LOCKED"></app-progress-indicator>
 
   <div class="mb-4">
     <app-alert type="danger"
@@ -25,6 +25,7 @@
     should be directed to:
   </p>
 
-  <app-prime-contact></app-prime-contact>
+  <app-prime-phone></app-prime-phone><br>
+  <app-prime-email></app-prime-email>
 
 </app-page>
