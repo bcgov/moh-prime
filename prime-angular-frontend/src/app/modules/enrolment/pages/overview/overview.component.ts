@@ -63,7 +63,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
         .subscribe(
           () => {
             this.toastService.openSuccessToast('Enrolment has been submitted');
-            this.router.navigate([EnrolmentRoutes.SUBMISSION_CONFIRMATION], { relativeTo: this.route.parent });
+            this.routeTo(EnrolmentRoutes.SUBMISSION_CONFIRMATION);
           },
           (error: any) => {
             this.toastService.openErrorToast('Enrolment could not be submitted');
