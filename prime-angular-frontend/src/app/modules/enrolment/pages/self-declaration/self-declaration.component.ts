@@ -5,13 +5,12 @@ import { MatDialog } from '@angular/material';
 
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
-import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { FormUtilsService } from '@enrolment/shared/services/form-utils.service';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
-import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
+import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-self-declaration',
@@ -27,14 +26,15 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     protected route: ActivatedRoute,
     protected router: Router,
     protected dialog: MatDialog,
-    private enrolmentResource: EnrolmentResource,
-    private enrolmentService: EnrolmentService,
-    private enrolmentStateService: EnrolmentStateService,
-    private formUtilsService: FormUtilsService,
-    private toastService: ToastService,
-    private logger: LoggerService
+    protected enrolmentService: EnrolmentService,
+    protected enrolmentStateService: EnrolmentStateService,
+    protected enrolmentResource: EnrolmentResource,
+    protected toastService: ToastService,
+    protected logger: LoggerService,
+    protected utilService: UtilsService,
+    private formUtilsService: FormUtilsService
   ) {
-    super(route, router, dialog);
+    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger, utilService);
 
     this.decisions = [
       { code: false, name: 'No' },
@@ -77,25 +77,9 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
   }
 
   public onSubmit() {
+    const hasBeenThroughTheWizard = true;
     this.hasAttemptedFormSubmission = true;
-
-    if (this.form.valid) {
-      const payload = this.enrolmentStateService.enrolment;
-      this.busy = this.enrolmentResource.updateEnrollee(payload, true)
-        .subscribe(
-          () => {
-            this.toastService.openSuccessToast('Self declaration has been saved');
-            this.form.markAsPristine();
-            this.routeTo(EnrolmentRoutes.OVERVIEW);
-          },
-          (error: any) => {
-            this.toastService.openErrorToast('Self declaration could not be saved');
-            this.logger.error('[Enrolment] SelfDeclaration::onSubmit error has occurred: ', error);
-          });
-    } else {
-      this.form.markAllAsTouched();
-      this.showUnansweredQuestionsError = this.showUnansweredQuestions();
-    }
+    super.onSubmit(hasBeenThroughTheWizard);
   }
 
   public ngOnInit() {
@@ -135,12 +119,8 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
       });
   }
 
-  protected patchForm() {
-    const enrolment = this.enrolmentService.enrolment;
-
-    this.isProfileComplete = enrolment.profileCompleted;
-    this.enrolmentStateService.enrolment = enrolment;
-    this.isInitialEnrolment = enrolment.progressStatus !== ProgressStatus.FINISHED;
+  protected onSubmitFormIsInvalid() {
+    this.showUnansweredQuestionsError = this.showUnansweredQuestions();
   }
 
   private toggleSelfDeclarationValidators(value: boolean, control: FormControl) {

@@ -108,7 +108,7 @@
               (click)="onRoute(EnrolmentRoutes.REGULATORY)">edit</mat-icon>
   </app-page-subheader>
 
-  <ng-container *ngFor="let certification of certifications; let i = index">
+  <ng-container *ngFor="let certification of certifications; let i = index;">
 
     <app-enrollee-property title="College Certification"
                            [makeBold]="true">
@@ -178,7 +178,8 @@
     </app-enrollee-property>
   </ng-container>
 
-  <app-enrollee-property title="Job Title"
+  <app-enrollee-property *ngIf="!hasJob"
+                         title="Job Title"
                          [makeBold]="true">
     None
   </app-enrollee-property>

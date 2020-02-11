@@ -6,6 +6,7 @@ import { ConfigService } from '@config/config.service';
 
 import { FormUtilsService } from '@enrolment/shared/services/form-utils.service';
 import { Country } from '@shared/enums/country.enum';
+import { pairwise, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-address',
@@ -54,10 +55,13 @@ export class AddressComponent implements OnInit {
   private initForm() {
     this.setAddress(this.countryCode.value);
     this.countryCode.valueChanges
-      .subscribe((countryCode: string) => {
+      .pipe(
+        distinctUntilChanged()
+      )
+      .subscribe((country: string) => {
         this.provinceCode.reset();
         this.postal.reset();
-        this.setAddress(countryCode);
+        this.setAddress(country);
       });
   }
 

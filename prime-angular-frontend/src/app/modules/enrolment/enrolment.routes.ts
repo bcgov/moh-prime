@@ -1,6 +1,5 @@
 export class EnrolmentRoutes {
   public static ENROLMENT = 'enrolment';
-  // TODO remove collection notice, yes... no... yes... no...???
   public static COLLECTION_NOTICE = 'collection-notice';
   // Enrollee overview:
   public static OVERVIEW = 'overview';
