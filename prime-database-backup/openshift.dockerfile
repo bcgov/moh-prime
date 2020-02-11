@@ -20,8 +20,7 @@ RUN echo "Checking opt dir..." && \
     apt-get install -yqq inetutils-ping vim nano net-tools && \ 
     ls -alh /opt
 
-RUN cp /opt/* /opt/backup && \
-    chmod -R 777 /opt/backup && \
+RUN chmod -R 777 /opt/backup && \
     chmod +x /opt/backup/backup.sh && \
     chmod +x /opt/backup/entrypoint.sh && \
     cp /opt/backup/backup.cron /etc/cron.d/
