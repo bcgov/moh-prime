@@ -97,7 +97,7 @@ export class EnrolmentGuard extends BaseGuard {
         case EnrolmentStatus.ACTIVE:
           return this.manageActiveRouting(routePath, enrolment);
         case EnrolmentStatus.UNDER_REVIEW:
-          return this.navigate(routePath, EnrolmentRoutes.SUBMISSION_CONFIRMATION);
+          return this.manageUnderReviewRouter(routePath, enrolment);
         case EnrolmentStatus.REQUIRES_TOA:
           return this.manageRequiresToaRouting(routePath, enrolment);
         case EnrolmentStatus.LOCKED:
@@ -142,7 +142,15 @@ export class EnrolmentGuard extends BaseGuard {
       : true;
   }
 
+  private manageUnderReviewRouter(routePath: string, enrolment: Enrolment): boolean {
+    return this.manageRouting(routePath, EnrolmentRoutes.SUBMISSION_CONFIRMATION, enrolment);
+  }
+
   private manageRequiresToaRouting(routePath: string, enrolment: Enrolment): boolean {
+    return this.manageRouting(routePath, EnrolmentRoutes.TERMS_OF_ACCESS, enrolment);
+  }
+
+  private manageRouting(routePath: string, defaultRoute: string, enrolment: Enrolment): boolean {
     // Allow access to an extend set of routes if the enrollee
     // has accepted at least one TOA
     const whiteListedRoutes = (!!enrolment.expiryDate)
@@ -151,7 +159,7 @@ export class EnrolmentGuard extends BaseGuard {
     const route = routePath.split('/').pop();
 
     if (!whiteListedRoutes.includes(route)) {
-      return this.navigate(routePath, EnrolmentRoutes.TERMS_OF_ACCESS);
+      return this.navigate(routePath, defaultRoute);
     }
 
     return true;
