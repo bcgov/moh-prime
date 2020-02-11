@@ -92,13 +92,6 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"Access term not found with id {accessTermId} for enrollee id: {enrolleeId}"));
             }
 
-            // Prevent access to the enrollee's current terms of access based on status
-            if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.ACTIVE_CODE, Status.LOCKED_CODE))
-            {
-                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee terms of service can not be retrieved when the current status is 'ACTIVE'or 'LOCKED'.");
-                return BadRequest(new ApiBadRequestResponse(this.ModelState));
-            }
-
             var accessTerms = await _accessTermService.GetEnrolleesAccessTermAsync(enrolleeId, accessTermId);
 
             return Ok(new ApiOkResponse<AccessTerm>(accessTerms));
