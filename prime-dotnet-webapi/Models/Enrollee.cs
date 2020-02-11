@@ -136,7 +136,7 @@ namespace Prime.Models
             {
                 return this.EnrolmentStatuses?
                     .OrderByDescending(en => en.StatusDate)
-                    .Where(es => es.StatusCode == Status.APPROVED_CODE)
+                    .Where(es => es.StatusCode == Status.REQUIRES_TOA_CODE)
                     .Where(es => es.StatusDate > this.AppliedDate)
                     .FirstOrDefault()?
                     .StatusDate;
