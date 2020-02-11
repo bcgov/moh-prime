@@ -471,7 +471,6 @@ namespace Prime.Services
                         .ThenInclude(es => es.EnrolmentStatusReasons)
                         .ThenInclude(esr => esr.StatusReason)
                     .Include(e => e.AccessAgreementNote)
-                    .Include(e => e.EnrolmentCertificateNote)
                     .Include(e => e.AssignedPrivileges)
                         .ThenInclude(AssignedPrivilege => AssignedPrivilege.Privilege)
                     .Include(e => e.AccessTerms);
@@ -536,7 +535,6 @@ namespace Prime.Services
         {
             var enrollee = await _context.Enrollees
                 .Include(e => e.AccessAgreementNote)
-                .Include(e => e.EnrolmentCertificateNote)
                 .Where(e => e.Id == enrolleeId)
                 .SingleOrDefaultAsync();
 
@@ -545,10 +543,6 @@ namespace Prime.Services
             if (newNote.GetType() == typeof(AccessAgreementNote))
             {
                 dbNote = enrollee.AccessAgreementNote;
-            }
-            else if (newNote.GetType() == typeof(EnrolmentCertificateNote))
-            {
-                dbNote = enrollee.EnrolmentCertificateNote;
             }
             else
             {

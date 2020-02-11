@@ -403,46 +403,7 @@ namespace Prime.Controllers
             return Ok(new ApiOkResponse<IEnrolleeNote>(updatedNote));
         }
 
-        // PUT: api/Enrollees/5/enrolment-certificate-notes
-        /// <summary>
-        /// Updates an enrolment certificate note.
-        /// </summary>
-        /// <param name="enrolleeId"></param>
-        /// <param name="enrolmentCertNote"></param>
-        [HttpPut("{enrolleeId}/enrolment-certificate-notes", Name = nameof(UpdateEnrolmentCertNote))]
-        [Authorize(Policy = PrimeConstants.ADMIN_POLICY)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiOkResponse<EnrolmentCertificateNote>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<EnrolmentCertificateNote>> UpdateEnrolmentCertNote(int enrolleeId, EnrolmentCertificateNote enrolmentCertNote)
-        {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
-            if (enrollee == null)
-            {
-                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}."));
-            }
-
-            if (enrolmentCertNote.EnrolleeId != 0 && enrolleeId != enrolmentCertNote.EnrolleeId)
-            {
-                this.ModelState.AddModelError("EnrolmentCertificateNote.EnrolleeId", "Enrollee Id does not match with the payload.");
-                return BadRequest(new ApiBadRequestResponse(this.ModelState));
-            }
-
-            // Notes can not be added to 'Active' enrolments
-            // TODO Decide when ajudicators should be able to add notes
-            if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.ACTIVE_CODE))
-            {
-                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrolment certificate notes can not be updated when the current status is 'Active'.");
-                return BadRequest(new ApiBadRequestResponse(this.ModelState));
-            }
-
-            var updatedNote = await _enrolleeService.UpdateEnrolleeNoteAsync(enrolleeId, enrolmentCertNote);
-
-            return Ok(new ApiOkResponse<IEnrolleeNote>(updatedNote));
-        }
 
         // GET: api/Enrollees/5/versions
         /// <summary>
