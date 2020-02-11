@@ -161,8 +161,6 @@ namespace Prime.Models
 
         public AccessAgreementNote AccessAgreementNote { get; set; }
 
-        public EnrolmentCertificateNote EnrolmentCertificateNote { get; set; }
-
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (Guid.Empty.Equals(this.UserId))
