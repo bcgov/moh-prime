@@ -10,6 +10,7 @@ import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmen
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-device-provider',
@@ -27,9 +28,10 @@ export class DeviceProviderComponent extends BaseEnrolmentProfilePage implements
     protected enrolmentResource: EnrolmentResource,
     protected enrolmentStateService: EnrolmentStateService,
     protected toastService: ToastService,
-    protected logger: LoggerService
+    protected logger: LoggerService,
+    protected utilService: UtilsService,
   ) {
-    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger);
+    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger, utilService);
 
     this.decisions = [
       { code: false, name: 'No' },
