@@ -95,9 +95,11 @@ function toolbelt() {
     buildPresent=$(oc get bc/"$APP_NAME" --ignore-not-found=true)
     if [ -z "${buildPresent}" ];
     then
-        MODE="replace"
+        MODE="apply"
+        OC_ARGS="--overwrite=true --all"
     else
         MODE="create"
+        OC_ARGS=""
     fi;
     oc process -f ./"${TEMPLATE_DIRECTORY}/$DEPLOY_CONFIG_TEMPLATE" \
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
@@ -129,7 +131,7 @@ function toolbelt() {
     if [ "$BUILD_REQUIRED" == true ];
     then
         echo "Building oc start-build $APP_NAME -n $PROJECT_PREFIX-${OC_APP} --wait --follow ..."
-        oc start-build $APP_NAME -n $PROJECT_PREFIX-$3 --wait --follow
+        oc start-build $APP_NAME -n $PROJECT_PREFIX-$3 ${OC_ARGS} --wait --follow
     else
         echo "Deployment should be automatic..."
     fi
