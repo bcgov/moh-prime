@@ -6,11 +6,11 @@ import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 @Component({
-  selector: 'app-declined',
-  templateUrl: './declined.component.html',
-  styleUrls: ['./declined.component.scss']
+  selector: 'app-access-locked',
+  templateUrl: './access-locked.component.html',
+  styleUrls: ['./access-locked.component.scss']
 })
-export class DeclinedComponent extends BaseEnrolmentPage implements OnInit {
+export class AccessLocked extends BaseEnrolmentPage implements OnInit {
   constructor(
     protected route: ActivatedRoute,
     protected router: Router,

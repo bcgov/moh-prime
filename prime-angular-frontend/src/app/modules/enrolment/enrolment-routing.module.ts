@@ -20,7 +20,7 @@ import { OrganizationComponent } from './pages/organization/organization.compone
 import { SubmissionConfirmationComponent } from './pages/submission-confirmation/submission-confirmation.component';
 import { AccessAgreementComponent } from './pages/access-agreement/access-agreement.component';
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
-import { DeclinedComponent } from './pages/declined/declined.component';
+import { AccessLocked } from './pages/access-locked/access-locked.component';
 import { AccessAgreementHistoryComponent } from './pages/access-agreement-history/access-agreement-history.component';
 import { PharmanetEnrolmentCertificateComponent } from './pages/pharmanet-enrolment-certificate/pharmanet-enrolment-certificate.component';
 import { PharmanetTransactionsComponent } from './pages/pharmanet-transactions/pharmanet-transactions.component';
@@ -106,7 +106,7 @@ const routes: Routes = [
       },
       {
         path: EnrolmentRoutes.ACCESS_LOCKED,
-        component: DeclinedComponent,
+        component: AccessLocked,
         data: { title: 'Enrolment Summary' }
       },
       {

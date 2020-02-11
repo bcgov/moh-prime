@@ -1,6 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
-import { Enrolment } from '@shared/models/enrolment.model';
 
 
 @Component({
