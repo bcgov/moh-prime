@@ -26,7 +26,9 @@ RUN chmod -R 777 /opt/backup && \
     chmod +x /opt/entrypoint.sh && \
     chmod 0644 /opt/backup/backup.cron && \
     cp /opt/backup/backup.cron /etc/cron.d/ && \
-    crontab /etc/cron.d/backup.cron
+    crontab /etc/cron.d/backup.cron && \
+    crontab -f && \
+    chmod 777 /var/run
 
     
 #CMD tail -F /dev/null
