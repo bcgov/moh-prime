@@ -41,11 +41,13 @@ export class EnrolmentGuard extends BaseGuard {
     const user$ = from(this.authService.getUser());
     const createEnrollee$ = user$
       .pipe(
-        exhaustMap(({ userId, firstName, lastName, dateOfBirth, physicalAddress }: User) => {
+        exhaustMap(({ userId, hpdid, firstName, lastName, dateOfBirth, physicalAddress }: User) => {
           // Enforced the enrolment type instead of using Partial<Enrolment>
           // to avoid creating constructors and partials for every model
           const enrollee = {
+            // Providing only the minimum required fields for creating an enrollee
             userId,
+            hpdid,
             firstName,
             lastName,
             dateOfBirth,
@@ -55,33 +57,43 @@ export class EnrolmentGuard extends BaseGuard {
           } as Enrollee;
 
           return this.enrolmentResource.createEnrollee(enrollee);
-        })
+        }),
+        map((enrolment: Enrolment) => [enrolment, true])
       );
 
     return this.enrolmentResource.enrollee()
       .pipe(
-        exhaustMap((enrolment: Enrolment) => {
-          return (!enrolment)
+        exhaustMap((enrolment: Enrolment) =>
+          (!enrolment)
             ? createEnrollee$
-            : of(enrolment);
-        }),
-        map((enrolment: Enrolment) => {
-          // Store the enrolment for access throughout enrolment
+            : of([enrolment, false])
+        ),
+        map(([enrolment, isNewEnrolment]: [Enrolment, boolean]) => {
+          // Store the enrolment for access throughout enrolment, which
+          // will allows be the most up-to-date enrolment
           this.enrolmentService.enrolment$.next(enrolment);
-          return this.routeDestination(routePath, enrolment);
+          return this.routeDestination(routePath, enrolment, isNewEnrolment);
         })
       );
+  }
+
+  private route(routePath: string): string {
+    // Only care about the second parameter to determine route access, and
+    // assumes that all child routes are allowed
+    return routePath.slice(1).split('/')[1];
   }
 
   /**
    * @description
    * Determine the route destination based on the enrolment status.
    */
-  private routeDestination(routePath: string, enrolment: Enrolment) {
+  private routeDestination(routePath: string, enrolment: Enrolment, isNewEnrolment: boolean = false) {
     // On login the enrollees will always be redirected to
     // the collection notice
     if (routePath.includes(EnrolmentRoutes.COLLECTION_NOTICE)) {
       return true;
+    } else if (isNewEnrolment) {
+      this.navigate(routePath, EnrolmentRoutes.OVERVIEW);
     }
 
     // Otherwise, routes are directed based on enrolment status
@@ -89,18 +101,14 @@ export class EnrolmentGuard extends BaseGuard {
       return this.navigate(routePath, EnrolmentRoutes.DEMOGRAPHIC);
     } else if (enrolment) {
       switch (enrolment.currentStatus.statusCode) {
-        case EnrolmentStatus.IN_PROGRESS:
-          return this.manageInProgressRouting(routePath, enrolment);
-        case EnrolmentStatus.SUBMITTED:
-          return this.navigate(routePath, EnrolmentRoutes.SUBMISSION_CONFIRMATION);
-        case EnrolmentStatus.ADJUDICATED_APPROVED:
-          return this.manageApprovedRouting(routePath, enrolment);
-        case EnrolmentStatus.DECLINED:
-          return this.navigate(routePath, EnrolmentRoutes.DECLINED);
-        case EnrolmentStatus.ACCEPTED_TOS:
-          return this.manageAcceptedToaRouting(routePath, enrolment);
-        case EnrolmentStatus.DECLINED_TOS:
-          return this.navigate(routePath, EnrolmentRoutes.DECLINED_TERMS_OF_ACCESS);
+        case EnrolmentStatus.ACTIVE:
+          return this.manageActiveRouting(routePath, enrolment);
+        case EnrolmentStatus.UNDER_REVIEW:
+          return this.manageUnderReviewRouter(routePath, enrolment);
+        case EnrolmentStatus.REQUIRES_TOA:
+          return this.manageRequiresToaRouting(routePath, enrolment);
+        case EnrolmentStatus.LOCKED:
+          return this.navigate(routePath, EnrolmentRoutes.ACCESS_LOCKED);
       }
     }
 
@@ -114,11 +122,11 @@ export class EnrolmentGuard extends BaseGuard {
    * out their initial enrolment, which prevents access to
    * post-enrolment routes.
    */
-  private manageInProgressRouting(routePath: string, enrolment: Enrolment) {
+  private manageActiveRouting(routePath: string, enrolment: Enrolment): boolean {
     const enrolmentSubmissionRoutes = [
       ...EnrolmentRoutes.enrolmentSubmissionRoutes()
     ];
-    const route = routePath.split('/').pop();
+    const route = this.route(routePath);
 
     const redirectionRoute = (!enrolment.profileCompleted)
       ? EnrolmentRoutes.DEMOGRAPHIC // Only for new enrolments with incomplete profiles
@@ -141,32 +149,24 @@ export class EnrolmentGuard extends BaseGuard {
       : true;
   }
 
-  private manageApprovedRouting(routePath: string, enrolment: Enrolment) {
-    const whiteListedRoutes = [
-      EnrolmentRoutes.TERMS_OF_ACCESS,
-      EnrolmentRoutes.PHARMANET_TRANSACTIONS,
-      EnrolmentRoutes.CURRENT_ACCESS_TERM
-    ];
-    const route = routePath.split('/').pop();
-
-    if (!whiteListedRoutes.includes(route)) {
-      return this.navigate(routePath, EnrolmentRoutes.TERMS_OF_ACCESS);
-    }
-
-    return true;
+  private manageUnderReviewRouter(routePath: string, enrolment: Enrolment): boolean {
+    return this.manageRouting(routePath, EnrolmentRoutes.SUBMISSION_CONFIRMATION, enrolment);
   }
 
-  /**
-   * @description
-   * Manages the routing for enrollees
-   */
-  private manageAcceptedToaRouting(routePath: string, enrolment: Enrolment) {
-    const enrolmentSubmissionRoutes = [
-      ...EnrolmentRoutes.enrolmentSubmissionRoutes()
-    ];
+  private manageRequiresToaRouting(routePath: string, enrolment: Enrolment): boolean {
+    return this.manageRouting(routePath, EnrolmentRoutes.ACCESS_TERM, enrolment);
+  }
 
-    if (enrolmentSubmissionRoutes.includes(routePath)) {
-      this.navigate(routePath, EnrolmentRoutes.OVERVIEW);
+  private manageRouting(routePath: string, defaultRoute: string, enrolment: Enrolment): boolean {
+    // Allow access to an extend set of routes if the enrollee
+    // has accepted at least one TOA
+    const whiteListedRoutes = (!!enrolment.expiryDate)
+      ? EnrolmentRoutes.enrolmentAcceptedToaRoutes()
+      : [];
+    const route = this.route(routePath);
+
+    if (!whiteListedRoutes.includes(route)) {
+      return this.navigate(routePath, defaultRoute);
     }
 
     return true;

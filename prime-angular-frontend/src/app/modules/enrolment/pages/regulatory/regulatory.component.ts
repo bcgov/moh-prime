@@ -12,7 +12,7 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
-import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
+import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-regulatory',
@@ -27,14 +27,15 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     protected route: ActivatedRoute,
     protected router: Router,
     protected dialog: MatDialog,
-    private configService: ConfigService,
-    private enrolmentResource: EnrolmentResource,
-    private enrolmentService: EnrolmentService,
-    private enrolmentStateService: EnrolmentStateService,
-    private toastService: ToastService,
-    private logger: LoggerService
+    protected enrolmentService: EnrolmentService,
+    protected enrolmentResource: EnrolmentResource,
+    protected enrolmentStateService: EnrolmentStateService,
+    protected toastService: ToastService,
+    protected logger: LoggerService,
+    protected utilService: UtilsService,
+    private configService: ConfigService
   ) {
-    super(route, router, dialog);
+    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger, utilService);
 
     this.colleges = this.configService.colleges;
     this.licenses = this.configService.licenses;
@@ -42,38 +43,6 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
 
   public get certifications(): FormArray {
     return this.form.get('certifications') as FormArray;
-  }
-
-  public onSubmit() {
-    if (this.form.valid) {
-      // Enrollees can not have certifications and jobs
-      this.removeJobs();
-
-      const payload = this.enrolmentStateService.enrolment;
-      this.busy = this.enrolmentResource.updateEnrollee(payload)
-        .subscribe(
-          () => {
-            this.form.markAsPristine();
-            this.toastService.openSuccessToast('Regulatory information has been saved');
-
-            this.removeIncompleteCertifications(true);
-
-            const nextRoutePath = (!this.certifications.length)
-              ? EnrolmentRoutes.JOB
-              : EnrolmentRoutes.ORGANIZATION;
-            const routePath = (!this.isProfileComplete)
-              ? nextRoutePath
-              : EnrolmentRoutes.OVERVIEW;
-            this.routeTo(routePath);
-          },
-          (error: any) => {
-            this.toastService.openErrorToast('Regulatory information could not be saved');
-            this.logger.error('[Enrolment] Regulatory::onSubmit error has occurred: ', error);
-          }
-        );
-    } else {
-      this.form.markAllAsTouched();
-    }
   }
 
   public addCertification() {
@@ -100,7 +69,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   }
 
   public ngOnDestroy() {
-    this.removeIncompleteCertifications();
+    this.removeIncompleteCertifications(true);
   }
 
   protected createFormInstance() {
@@ -115,12 +84,24 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     }
   }
 
-  protected patchForm() {
-    const enrolment = this.enrolmentService.enrolment;
+  protected onSubmitFormIsValid() {
+    // Enrollees can not have certifications and jobs
+    this.removeJobs();
+  }
 
-    this.enrolmentStateService.enrolment = enrolment;
-    this.isProfileComplete = enrolment.profileCompleted;
-    this.isInitialEnrolment = enrolment.progressStatus !== ProgressStatus.FINISHED;
+  protected afterSubmitIsSuccessful() {
+    this.removeIncompleteCertifications(true);
+  }
+
+  protected nextRouteAfterSubmit() {
+    let nextRoutePath: string;
+    if (!this.isProfileComplete) {
+      nextRoutePath = (!this.certifications.length)
+        ? EnrolmentRoutes.JOB
+        : EnrolmentRoutes.ORGANIZATION;
+    }
+
+    super.nextRouteAfterSubmit(nextRoutePath);
   }
 
   /**
@@ -139,10 +120,8 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
 
     // Always have a single cerfication available, and it prevents
     // the page from jumping too much when routing
-    if (!noEmptyCert) {
-      if (!this.certifications.controls.length) {
-        this.addCertification();
-      }
+    if (!noEmptyCert && !this.certifications.controls.length) {
+      this.addCertification();
     }
   }
 

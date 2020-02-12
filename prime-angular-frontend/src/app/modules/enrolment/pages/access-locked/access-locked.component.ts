@@ -4,14 +4,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 
 @Component({
-  selector: 'app-declined',
-  templateUrl: './declined.component.html',
-  styleUrls: ['./declined.component.scss']
+  selector: 'app-access-locked',
+  templateUrl: './access-locked.component.html',
+  styleUrls: ['./access-locked.component.scss']
 })
-export class DeclinedComponent extends BaseEnrolmentPage implements OnInit {
+export class AccessLocked extends BaseEnrolmentPage implements OnInit {
   constructor(
     protected route: ActivatedRoute,
     protected router: Router,
@@ -23,7 +22,7 @@ export class DeclinedComponent extends BaseEnrolmentPage implements OnInit {
   public ngOnInit() {
     this.enrolmentService.enrolment$
       .subscribe((enrolment: Enrolment) =>
-        this.isInitialEnrolment = enrolment.progressStatus !== ProgressStatus.FINISHED
+        this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment
       );
   }
 }

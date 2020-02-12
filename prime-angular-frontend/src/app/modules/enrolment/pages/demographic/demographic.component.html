@@ -21,7 +21,7 @@
         </ng-container>
       </app-page-subheader>
 
-      <app-enrollee-profile [enrollee]="enrollee"
+      <app-enrollee-profile [enrollee]="enrolment.enrollee"
                             [showAddress]="false"></app-enrollee-profile>
 
       <mat-slide-toggle class="mb-3"
@@ -98,7 +98,7 @@
         </ng-container>
       </app-page-subheader>
 
-      <app-enrollee-profile [enrollee]="enrollee"
+      <app-enrollee-profile [enrollee]="enrolment.enrollee"
                             [showPersonal]="false"
                             [showAddressTitle]="false"></app-enrollee-profile>
 
@@ -234,7 +234,7 @@
 
   </form>
 
-  <app-page-footer [profileCompleted]="isProfileComplete"
+  <app-page-footer [isInitialEnrolment]="isInitialEnrolment"
                    [hasSecondaryAction]="isProfileComplete"
                    (save)="onSubmit()"></app-page-footer>
 

@@ -92,13 +92,6 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"Access term not found with id {accessTermId} for enrollee id: {enrolleeId}"));
             }
 
-            // Prevent access to the enrollee's current terms of access based on status
-            if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.IN_PROGRESS_CODE, Status.DECLINED_CODE, Status.DECLINED_TOS_CODE))
-            {
-                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee terms of service can not be retrieved when the current status is 'IN_PROGRESS', 'DECLINED', or 'DECLINED_TOA'.");
-                return BadRequest(new ApiBadRequestResponse(this.ModelState));
-            }
-
             var accessTerms = await _accessTermService.GetEnrolleesAccessTermAsync(enrolleeId, accessTermId);
 
             return Ok(new ApiOkResponse<AccessTerm>(accessTerms));
@@ -139,9 +132,12 @@ namespace Prime.Controllers
             // }
 
             AccessTerm accessTerm;
-            if (signed) {
+            if (signed)
+            {
                 accessTerm = await _accessTermService.GetMostRecentAcceptedEnrolleesAccessTermAsync(enrolleeId);
-            } else {
+            }
+            else
+            {
                 accessTerm = await _accessTermService.GetMostRecentNotAcceptedEnrolleesAccessTermAsync(enrolleeId);
             }
             return Ok(new ApiOkResponse<AccessTerm>(accessTerm));

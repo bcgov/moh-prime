@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
   Router,
-  // NOTE: Import as RouterEvent to avoid confusion with the DOM Event
-  Event as RouterEvent,
+  RouterEvent,
   NavigationStart,
   NavigationEnd,
   NavigationCancel,
@@ -10,16 +9,27 @@ import {
 } from '@angular/router';
 
 import { Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RouteStateService {
+  private routeState: {
+    previousRoute: string
+  };
 
   constructor(
     private router: Router
-  ) { }
+  ) {
+    this.routeState = {
+      previousRoute: ''
+    };
+  }
+
+  public get previousRoute(): string {
+    return this.routeState.previousRoute;
+  }
 
   /**
    * @description
@@ -27,7 +37,7 @@ export class RouteStateService {
    */
   public onNavigationStart(): Observable<RouterEvent> {
     return this.router.events.pipe(
-      filter(event => event instanceof NavigationStart)
+      filter((event: RouterEvent) => event instanceof NavigationStart)
     );
   }
 
@@ -37,7 +47,7 @@ export class RouteStateService {
    */
   public onNavigationStop(): Observable<RouterEvent> {
     return this.router.events.pipe(
-      filter(event =>
+      filter((event: RouterEvent) =>
         event instanceof NavigationEnd ||
         event instanceof NavigationCancel ||
         event instanceof NavigationError
@@ -51,7 +61,9 @@ export class RouteStateService {
    */
   public onNavigationEnd(): Observable<RouterEvent> {
     return this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
+      filter((event: RouterEvent) => event instanceof NavigationEnd),
+      // Perform a side-effect to store the previous route
+      tap((event: RouterEvent) => this.routeState.previousRoute = event.url)
     );
   }
 }

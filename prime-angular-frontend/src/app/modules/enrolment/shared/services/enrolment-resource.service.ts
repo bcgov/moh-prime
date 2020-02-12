@@ -16,7 +16,6 @@ import { Address } from '@enrolment/shared/models/address.model';
 import { Organization } from '@enrolment/shared/models/organization.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { AccessTerm } from '@enrolment/shared/models/access-term.model';
-import { EnrolleeNote } from '@enrolment/shared/models/enrollee-note.model';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +32,7 @@ export class EnrolmentResource {
     return this.http.get(`${this.config.apiEndpoint}/enrollees`)
       .pipe(
         map((response: PrimeHttpResponse) => response.result),
-        tap((enrollees: HttpEnrollee[]) => this.logger.info('ENROLLEES', enrollees)),
+        tap((enrollees: HttpEnrollee[]) => this.logger.info('ENROLLEES', enrollees[0])),
         map((enrollees: HttpEnrollee[]) =>
           // Only a single enrollee will be provided
           (enrollees.length) ? this.enrolleeAdapterResponse(enrollees.pop()) : null
@@ -119,6 +118,7 @@ export class EnrolmentResource {
   // ---
 
   private enrolleeAdapterResponse(enrollee: HttpEnrollee): Enrolment {
+    // Fill in values that could be `null`
     if (!enrollee.mailingAddress) {
       enrollee.mailingAddress = new Address();
     }
@@ -135,6 +135,8 @@ export class EnrolmentResource {
       enrollee.organizations = [];
     }
 
+    // Reorganize the shape of the enrollee into an enrolment
+    // TODO refactor this adapter out of the application
     return this.enrolmentAdapter(enrollee);
   }
 
@@ -148,18 +150,16 @@ export class EnrolmentResource {
       preferredMiddleName,
       preferredLastName,
       dateOfBirth,
-      licensePlate,
+      gpid,
+      hpdid,
       physicalAddress,
       mailingAddress,
       contactEmail,
       contactPhone,
       voicePhone,
       voiceExtension,
-      expiryDate,
       ...remainder
     } = enrollee;
-
-    const collectionNoticeAccepted = false;
 
     return {
       enrollee: {
@@ -171,24 +171,22 @@ export class EnrolmentResource {
         preferredMiddleName,
         preferredLastName,
         dateOfBirth,
-        licensePlate,
+        gpid,
+        hpdid,
         physicalAddress,
         mailingAddress,
         contactEmail,
         contactPhone,
         voicePhone,
-        voiceExtension,
-        expiryDate
+        voiceExtension
       },
-      collectionNoticeAccepted,
+      // Provide the default and allow it to be overridden
+      collectionNoticeAccepted: false,
       ...remainder
     };
   }
 
   private enrolmentAdapterRequest(enrolment: Enrolment): HttpEnrollee {
-    if (enrolment.enrollee.physicalAddress.postal) {
-      enrolment.enrollee.physicalAddress.postal = enrolment.enrollee.physicalAddress.postal.toUpperCase();
-    }
     if (enrolment.enrollee.mailingAddress.postal) {
       enrolment.enrollee.mailingAddress.postal = enrolment.enrollee.mailingAddress.postal.toUpperCase();
     }
@@ -196,9 +194,6 @@ export class EnrolmentResource {
     enrolment.certifications = this.removeIncompleteCollegeCertifications(enrolment.certifications);
     enrolment.jobs = this.removeIncompleteJobs(enrolment.jobs);
     enrolment.organizations = this.removeIncompleteOrganizations(enrolment.organizations);
-
-    enrolment.accessAgreementNote = new EnrolleeNote();
-    enrolment.enrolmentCertificateNote = new EnrolleeNote();
 
     return this.enrolleeAdapter(enrolment);
   }

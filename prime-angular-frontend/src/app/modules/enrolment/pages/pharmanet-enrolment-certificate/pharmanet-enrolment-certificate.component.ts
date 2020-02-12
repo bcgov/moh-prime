@@ -1,24 +1,24 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material';
+
+import moment from 'moment';
+
+import { exhaustMap } from 'rxjs/operators';
+import { EMPTY } from 'rxjs';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
+import { WindowRefService } from '@core/services/window-ref.service';
 import { Enrolment } from '@shared/models/enrolment.model';
-import { EnrolmentCertificateAccessToken } from '@shared/models/enrolment-certificate-access-token.model';
+import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
+import { FormControlValidators } from '@shared/validators/form-control.validators';
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
-import { WindowRefService } from '@core/services/window-ref.service';
-import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
-import moment from 'moment';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { FormControlValidators } from '@shared/validators/form-control.validators';
-import { MatDialog } from '@angular/material';
-import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { exhaustMap } from 'rxjs/operators';
-import { EMPTY } from 'rxjs';
-import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 
 @Component({
   selector: 'app-pharmanet-enrolment-certificate',
@@ -115,10 +115,10 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
       : false;
 
     this.enrolment = this.enrolmentService.enrolment;
-    this.isInitialEnrolment = this.enrolment.progressStatus !== ProgressStatus.FINISHED;
+    this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
 
-    if (this.enrolment.enrollee && this.enrolment.enrollee.expiryDate) {
-      const expiryMoment = moment(this.enrolment.enrollee.expiryDate);
+    if (this.enrolment.enrollee && this.enrolment.expiryDate) {
+      const expiryMoment = moment(this.enrolment.expiryDate);
       this.expiryDate = expiryMoment.isAfter(moment.now())
         ? expiryMoment.format('MMMM Do, YYYY') : null;
     }

@@ -54,43 +54,30 @@ namespace Prime.Services
             {
                 // Construct the workflow map
                 // TODO Should be async
-                // TODO Need idea of new enrollee vs old enrollee baked into statuses
-                // TODO IN_PROGRESS should be NEW and potentially prefix a duplicate set of enrolment lifecycle statuses
-                Status IN_PROGRESS = _context.Statuses.Single(s => s.Code == Status.IN_PROGRESS_CODE);
-                Status SUBMITTED = _context.Statuses.Single(s => s.Code == Status.SUBMITTED_CODE);
-                Status APPROVED = _context.Statuses.Single(s => s.Code == Status.APPROVED_CODE);
-                Status DECLINED = _context.Statuses.Single(s => s.Code == Status.DECLINED_CODE);
-                Status ACCEPTED_TOS = _context.Statuses.Single(s => s.Code == Status.ACCEPTED_TOS_CODE);
-                Status DECLINED_TOS = _context.Statuses.Single(s => s.Code == Status.DECLINED_TOS_CODE);
+                Status ACTIVE = _context.Statuses.Single(s => s.Code == Status.ACTIVE_CODE);
+                Status UNDER_REVIEW = _context.Statuses.Single(s => s.Code == Status.UNDER_REVIEW_CODE);
+                Status REQUIRES_TOA = _context.Statuses.Single(s => s.Code == Status.REQUIRES_TOA_CODE);
+                Status LOCKED = _context.Statuses.Single(s => s.Code == Status.LOCKED_CODE);
 
                 _workflowStateMap = new Dictionary<Status, StatusWrapper[]>();
                 _workflowStateMap.Add(NULL_STATUS, new[] {
-                    new StatusWrapper { Status = IN_PROGRESS, AdminOnly = false }
+                    new StatusWrapper { Status = ACTIVE, AdminOnly = false }
                 });
-                // TODO Only for new enrollees should be treated as "NEW"
-                _workflowStateMap.Add(IN_PROGRESS, new[] {
-                    new StatusWrapper { Status = SUBMITTED, AdminOnly = false }
+                _workflowStateMap.Add(ACTIVE, new[] {
+                    new StatusWrapper { Status = UNDER_REVIEW, AdminOnly = false },
+                    new StatusWrapper { Status = LOCKED, AdminOnly = true }
                 });
-                _workflowStateMap.Add(SUBMITTED, new[] {
-                    // TODO Should not be possible after first ACCEPTED_TOS instead use "EDITING"
-                    new StatusWrapper { Status = IN_PROGRESS, AdminOnly = true },
-                    new StatusWrapper { Status = APPROVED, AdminOnly = true },
-                    new StatusWrapper { Status = DECLINED, AdminOnly = true }
+                _workflowStateMap.Add(UNDER_REVIEW, new[] {
+                    new StatusWrapper { Status = ACTIVE, AdminOnly = true },
+                    new StatusWrapper { Status = REQUIRES_TOA, AdminOnly = true },
+                    new StatusWrapper { Status = LOCKED, AdminOnly = true }
                 });
-                _workflowStateMap.Add(APPROVED, new[] {
-                    new StatusWrapper { Status = ACCEPTED_TOS, AdminOnly = false },
-                    new StatusWrapper { Status = DECLINED_TOS, AdminOnly = false }
+                _workflowStateMap.Add(REQUIRES_TOA, new[] {
+                    new StatusWrapper { Status = ACTIVE, AdminOnly = false },
+                    new StatusWrapper { Status = LOCKED, AdminOnly = true }
                 });
-                _workflowStateMap.Add(DECLINED, new[] {
-                    // TODO Should not be possible after first ACCEPTED_TOS instead use "EDITING"
-                    new StatusWrapper { Status = IN_PROGRESS, AdminOnly = true }
-                });
-                _workflowStateMap.Add(ACCEPTED_TOS, new[] {
-                    new StatusWrapper { Status = SUBMITTED, AdminOnly = false }
-                });
-                _workflowStateMap.Add(DECLINED_TOS, new[] {
-                    // TODO Should not be possible after first ACCEPTED_TOS instead use "EDITING"
-                    new StatusWrapper { Status = IN_PROGRESS, AdminOnly = true }
+                _workflowStateMap.Add(LOCKED, new[] {
+                    new StatusWrapper { Status = ACTIVE, AdminOnly = true }
                 });
             }
 
@@ -182,7 +169,7 @@ namespace Prime.Services
             EnrolmentStatus enrolmentStatus = new EnrolmentStatus
             {
                 Enrollee = enrollee,
-                StatusCode = Status.IN_PROGRESS_CODE,
+                StatusCode = Status.ACTIVE_CODE,
                 StatusDate = DateTime.Now,
                 PharmaNetStatus = false
             };
@@ -361,7 +348,7 @@ namespace Prime.Services
 
             switch (newStatus.Code)
             {
-                case Status.SUBMITTED_CODE:
+                case Status.UNDER_REVIEW_CODE:
                     // Store a copy of the submitted enrollee profile
                     await _enroleeProfileVersionService.CreateEnrolleeProfileVersionAsync(enrollee);
 
@@ -371,7 +358,7 @@ namespace Prime.Services
                         var adjudicatedEnrolmentStatus = new EnrolmentStatus
                         {
                             EnrolleeId = enrolleeId,
-                            StatusCode = Status.APPROVED_CODE,
+                            StatusCode = Status.REQUIRES_TOA_CODE,
                             StatusDate = DateTime.Now,
                             PharmaNetStatus = false
                         };
@@ -386,7 +373,7 @@ namespace Prime.Services
                     }
                     break;
 
-                case Status.APPROVED_CODE:
+                case Status.REQUIRES_TOA_CODE:
                     // Approved through manual processing
                     createdEnrolmentStatus.AddStatusReason(StatusReason.MANUAL_CODE);
 
@@ -394,29 +381,40 @@ namespace Prime.Services
 
                     break;
 
-                case Status.DECLINED_CODE:
+                case Status.LOCKED_CODE:
                     await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
                     createdEnrolmentStatus.PharmaNetStatus = true;
                     break;
 
-                case Status.ACCEPTED_TOS_CODE:
+                    enrollee.GPID = this.GenerateGPID();
                     await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
-                    enrollee.LicensePlate = this.GenerateLicensePlate();
-                    createdEnrolmentStatus.PharmaNetStatus = true;
                     await _accessTermService.AcceptCurrentAccessTermAsync(enrollee);
                     await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrolleeId, enrollee);
+                    createdEnrolmentStatus.PharmaNetStatus = true;
+                case Status.ACTIVE_CODE:
+                    // Sent back to edit profile from Under Review
+                    if (oldStatus.Code == Status.UNDER_REVIEW_CODE)
+                    {
+                        break;
+                    }
+                    // Accepted Terms of Access
+                    if (oldStatus.Code == Status.REQUIRES_TOA_CODE)
+                    {
+                        await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
+                        enrollee.GPID = this.GenerateGPID();
+                        createdEnrolmentStatus.PharmaNetStatus = true;
+                        await _accessTermService.AcceptCurrentAccessTermAsync(enrollee);
+                        await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrolleeId, enrollee);
+                        break;
+                    }
                     break;
 
-                case Status.DECLINED_TOS_CODE:
-                    await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
-                    createdEnrolmentStatus.PharmaNetStatus = true;
-                    break;
             }
 
             await _context.SaveChangesAsync();
 
             // Enrollee just left manual adjudication, inform the enrollee
-            if (oldStatus?.Code == Status.SUBMITTED_CODE)
+            if (oldStatus?.Code == Status.UNDER_REVIEW_CODE)
             {
                 await _emailService.SendReminderEmailAsync(enrollee);
             }
@@ -434,7 +432,7 @@ namespace Prime.Services
             }
         }
 
-        private string GenerateLicensePlate()
+        private string GenerateGPID()
         {
             return Base85.Ascii85.Encode(Guid.NewGuid().ToByteArray());
         }
@@ -478,7 +476,6 @@ namespace Prime.Services
                         .ThenInclude(es => es.EnrolmentStatusReasons)
                         .ThenInclude(esr => esr.StatusReason)
                     .Include(e => e.AccessAgreementNote)
-                    .Include(e => e.EnrolmentCertificateNote)
                     .Include(e => e.AssignedPrivileges)
                         .ThenInclude(AssignedPrivilege => AssignedPrivilege.Privilege)
                     .Include(e => e.AccessTerms);
@@ -487,6 +484,20 @@ namespace Prime.Services
         public async Task<Enrollee> GetEnrolleeAsync(int enrolleeId)
         {
             var entity = await this.GetBaseEnrolleeQuery()
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
+            if (entity != null)
+            {
+                entity.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(entity);
+            }
+
+            return entity;
+        }
+
+        public async Task<Enrollee> GetEnrolleeNoTrackingAsync(int enrolleeId)
+        {
+            var entity = await this.GetBaseEnrolleeQuery()
+                .AsNoTracking()
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
             if (entity != null)
@@ -529,7 +540,6 @@ namespace Prime.Services
         {
             var enrollee = await _context.Enrollees
                 .Include(e => e.AccessAgreementNote)
-                .Include(e => e.EnrolmentCertificateNote)
                 .Where(e => e.Id == enrolleeId)
                 .SingleOrDefaultAsync();
 
@@ -538,10 +548,6 @@ namespace Prime.Services
             if (newNote.GetType() == typeof(AccessAgreementNote))
             {
                 dbNote = enrollee.AccessAgreementNote;
-            }
-            else if (newNote.GetType() == typeof(EnrolmentCertificateNote))
-            {
-                dbNote = enrollee.EnrolmentCertificateNote;
             }
             else
             {

@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs';
 
-import { Config } from '@config/config.model';
 import { Enrolment } from '@shared/models/enrolment.model';
 
 export interface IEnrolmentService {
   enrolment$: BehaviorSubject<Enrolment>;
   enrolment: Enrolment;
-  status: Config<number>;
+  isInitialEnrolment: boolean;
+  isProfileComplete: boolean;
 }
 
 @Injectable({
@@ -30,7 +30,15 @@ export class EnrolmentService implements IEnrolmentService {
     return this._enrolment.value;
   }
 
-  public get status(): Config<number> {
-    return this._enrolment.value.currentStatus.status;
+  public get isInitialEnrolment(): boolean {
+    return (this.enrolment)
+      ? !this.enrolment.expiryDate
+      : false;
+  }
+
+  public get isProfileComplete(): boolean {
+    return (this.enrolment)
+      ? this.enrolment.profileCompleted
+      : false;
   }
 }

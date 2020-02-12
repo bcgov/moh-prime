@@ -5,7 +5,7 @@
   <app-page-header>Terms Of Access</app-page-header>
 
   <app-progress-indicator *ngIf="isInitialEnrolment"
-                          [currentRoute]="EnrolmentRoutes.TERMS_OF_ACCESS"></app-progress-indicator>
+                          [currentRoute]="EnrolmentRoutes.ACCESS_TERM"></app-progress-indicator>
 
   <ng-container *ngIf="currentPage > 0; else preamble">
 
@@ -60,21 +60,62 @@
 
     <p>
       Please read the PharmaNet User Terms of Access carefully, as you must comply with them at all times in relation to
-      your use PharmaNet. You are encouraged to print or save a copy of the PharmNet User Terms of Access.
+      your use PharmaNet. You are encouraged to print or save a copy of the PharmaNet User Terms of Access.
     </p>
 
   </ng-template>
 
   <div *ngIf="hasReadAgreement"
-       class="footer my-3">
+       class="footer my-3 pb-2">
     <mat-checkbox class="mr-4"
                   [formControl]="agreed">
       I have read and accept the PharmaNet User Terms of Access.
     </mat-checkbox>
   </div>
 
-  <div class="row justify-content-between pt-2">
-    <div class="col-4">
+  <div *ngIf="!hasReadAgreement"
+       class="row">
+    <div class="col text-right">
+
+      <button mat-flat-button
+              color="primary"
+              (click)="onNextPage()">
+        Continue
+      </button>
+
+    </div>
+  </div>
+
+  <div *ngIf="hasReadAgreement"
+       class="row">
+    <div class="col-12 col-sm-8 order-sm-12 col-md-7 text-md-right">
+
+      <button mat-flat-button
+              color="primary"
+              class="mb-2 w-100"
+              [disabled]="!hasAgreed"
+              (click)="onSubmit(true)">
+        Accept Agreement
+      </button>
+
+    </div>
+    <div class="col-12 col-sm-4 order-sm-1 col-md-5">
+
+      <button *ngIf="hasReadAgreement"
+              mat-button
+              color="warn"
+              class="mb-2"
+              [ngClass]="(!isMobile) ? 'mr-2' : 'w-100'"
+              [disabled]="!hasAgreed"
+              (click)="onSubmit()">
+        Decline Agreement
+      </button>
+
+    </div>
+  </div>
+
+  <!-- <div class="row">
+    <div class="col-12 pt-3">
 
       <button *ngIf="currentPage"
               mat-stroked-button
@@ -83,41 +124,6 @@
       </button>
 
     </div>
-    <div class="col-8 text-right">
-
-      <ng-container *ngIf="hasReadAgreement; else hasMorePages">
-
-        <button mat-flat-button
-                color="primary"
-                class="mb-2"
-                [ngClass]="(!isMobile) ? 'mr-2' : 'w-100'"
-                [disabled]="!hasAgreed"
-                (click)="onSubmit(EnrolmentStatus.ACCEPTED_TOS)">
-          Accept Agreement
-        </button>
-
-        <button mat-flat-button
-                color="warn"
-                class="mb-2"
-                [ngClass]="(!isMobile) ? 'mr-2' : 'w-100'"
-                [disabled]="!hasAgreed"
-                (click)="onSubmit(EnrolmentStatus.DECLINED_TOS)">
-          Decline Agreement
-        </button>
-
-      </ng-container>
-
-      <ng-template #hasMorePages>
-
-        <button mat-flat-button
-                color="primary"
-                (click)="onNextPage()">
-          Continue
-        </button>
-
-      </ng-template>
-
-    </div>
-  </div>
+  </div> -->
 
 </app-page>

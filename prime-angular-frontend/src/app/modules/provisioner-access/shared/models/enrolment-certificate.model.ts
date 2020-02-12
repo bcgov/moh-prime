@@ -10,7 +10,7 @@ export interface EnrolmentCertificate {
   preferredFirstName: string;
   preferredMiddleName: string;
   preferredLastName: string;
-  licensePlate: string;
+  gpid: string;
   organizationTypes: Config<number>[];
   expiryDate: string;
 }

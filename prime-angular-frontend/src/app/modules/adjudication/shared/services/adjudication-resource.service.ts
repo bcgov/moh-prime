@@ -186,18 +186,16 @@ export class AdjudicationResource {
       preferredMiddleName,
       preferredLastName,
       dateOfBirth,
-      licensePlate,
+      gpid,
+      hpdid,
       physicalAddress,
       mailingAddress,
       contactEmail,
       contactPhone,
       voicePhone,
       voiceExtension,
-      expiryDate,
       ...remainder
     } = enrollee;
-
-    const collectionNoticeAccepted = false;
 
     return {
       enrollee: {
@@ -209,16 +207,17 @@ export class AdjudicationResource {
         preferredMiddleName,
         preferredLastName,
         dateOfBirth,
-        licensePlate,
+        gpid,
+        hpdid,
         physicalAddress,
         mailingAddress,
         contactEmail,
         contactPhone,
         voicePhone,
-        voiceExtension,
-        expiryDate
+        voiceExtension
       },
-      collectionNoticeAccepted,
+      // Provide the default and allow it to be overridden
+      collectionNoticeAccepted: false,
       ...remainder
     };
   }
