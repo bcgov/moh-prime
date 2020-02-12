@@ -22,6 +22,8 @@ RUN echo "Checking opt dir..." && \
     ls -alh /opt
 
 RUN chmod -R 777 /opt/backup && \
+    touch /var/log/cron.log && \
+    chmod 777 /var/log/cron.log && \
     chmod +x /opt/backup.sh && \
     chmod +x /opt/entrypoint.sh && \
     chmod 0644 /opt/backup/backup.cron && \
