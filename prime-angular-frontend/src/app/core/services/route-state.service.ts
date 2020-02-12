@@ -16,19 +16,19 @@ import { filter, tap } from 'rxjs/operators';
 })
 export class RouteStateService {
   private routeState: {
-    previousRoute: string
+    currentRoutePath: string
   };
 
   constructor(
     private router: Router
   ) {
     this.routeState = {
-      previousRoute: ''
+      currentRoutePath: ''
     };
   }
 
-  public get previousRoute(): string {
-    return this.routeState.previousRoute;
+  public get currentRoutePath(): string {
+    return this.routeState.currentRoutePath;
   }
 
   /**
@@ -63,7 +63,7 @@ export class RouteStateService {
     return this.router.events.pipe(
       filter((event: RouterEvent) => event instanceof NavigationEnd),
       // Perform a side-effect to store the previous route
-      tap((event: RouterEvent) => this.routeState.previousRoute = event.url)
+      tap((event: RouterEvent) => this.routeState.currentRoutePath = event.url)
     );
   }
 }
