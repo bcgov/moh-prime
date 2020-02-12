@@ -153,9 +153,7 @@ export class DashboardComponent implements OnInit {
               ].includes(enrolmentStatus)
             ),
             // forceActive: (
-            //   // TODO highlight needs to be based on routes... use child routes for profile?
-            //   // Highlight the profile when in these states
-            //   // EnrolmentRoutes.enrolmentProfileRoutes().includes()
+            // TODO highlight needs to be based on routes
             // )
           },
           {
@@ -168,7 +166,10 @@ export class DashboardComponent implements OnInit {
               [
                 EnrolmentStatus.LOCKED
               ].includes(enrolmentStatus)
-            )
+            ),
+            // forceActive: (
+            // TODO highlight needs to be based on routes
+            // )
           },
           {
             name: 'PharmaNet Enrolment Certificate',
@@ -204,7 +205,7 @@ export class DashboardComponent implements OnInit {
                 EnrolmentStatus.LOCKED
               ].includes(enrolmentStatus)
             ),
-            deemphasize: (!enrolment || (enrolment && !enrolment.profileCompleted)) ? true : false
+            deemphasize: this.enrolmentService.isInitialEnrolment
           },
           {
             name: 'PRIME Transaction History',
@@ -224,7 +225,7 @@ export class DashboardComponent implements OnInit {
                 EnrolmentStatus.LOCKED
               ].includes(enrolmentStatus)
             ),
-            deemphasize: (!enrolment || (enrolment && !enrolment.profileCompleted)) ? true : false
+            deemphasize: this.enrolmentService.isInitialEnrolment
           }
         ]
       },
@@ -238,7 +239,6 @@ export class DashboardComponent implements OnInit {
 
     if (!hasAcceptedAtLeastOneToa) {
       // Default icons when performing initial enrolment
-      enrollee = 'assignment_turned_in';
       accessAgreement = 'lock';
       certificate = 'lock';
 
@@ -247,10 +247,8 @@ export class DashboardComponent implements OnInit {
           enrollee = 'assignment_ind';
           break;
         case EnrolmentStatus.UNDER_REVIEW:
-          accessAgreement = 'schedule';
-          break;
         case EnrolmentStatus.REQUIRES_TOA:
-          accessAgreement = 'assignment';
+          accessAgreement = 'schedule';
           break;
         case EnrolmentStatus.LOCKED:
           enrollee = 'lock';
