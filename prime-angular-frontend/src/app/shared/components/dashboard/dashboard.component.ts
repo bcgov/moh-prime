@@ -244,7 +244,6 @@ export class DashboardComponent implements OnInit {
 
       switch (enrolmentStatus) {
         case EnrolmentStatus.ACTIVE:
-          enrollee = 'assignment_ind';
           break;
         case EnrolmentStatus.UNDER_REVIEW:
         case EnrolmentStatus.REQUIRES_TOA:
