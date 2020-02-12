@@ -154,7 +154,7 @@ export class EnrolmentGuard extends BaseGuard {
   }
 
   private manageRequiresToaRouting(routePath: string, enrolment: Enrolment): boolean {
-    return this.manageRouting(routePath, EnrolmentRoutes.TERMS_OF_ACCESS, enrolment);
+    return this.manageRouting(routePath, EnrolmentRoutes.ACCESS_TERM, enrolment);
   }
 
   private manageRouting(routePath: string, defaultRoute: string, enrolment: Enrolment): boolean {

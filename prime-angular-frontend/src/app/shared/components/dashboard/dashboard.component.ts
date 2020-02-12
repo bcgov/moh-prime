@@ -32,16 +32,15 @@ export class DashboardComponent implements OnInit {
     fixedInViewport: boolean,
     showText: boolean
   };
-
   public username: string;
 
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private route: ActivatedRoute,
+    private router: Router,
     private authService: AuthService,
     private viewportService: ViewportService,
     private enrolmentService: EnrolmentService,
-    private router: Router,
     private logger: LoggerService
   ) { }
 
@@ -103,7 +102,7 @@ export class DashboardComponent implements OnInit {
 
     // Initialize the sidenav with properties based on current viewport
     this.setSideNavProps(this.viewportService.device);
-    // Listen for viewport onresize changes
+
     this.viewportService.onResize()
       .subscribe((device: string) => this.setSideNavProps(device));
 
@@ -131,7 +130,7 @@ export class DashboardComponent implements OnInit {
     const termsOfAccessRoute = (enrolmentStatus === EnrolmentStatus.UNDER_REVIEW)
       ? EnrolmentRoutes.SUBMISSION_CONFIRMATION
       : (enrolmentStatus === EnrolmentStatus.REQUIRES_TOA)
-        ? EnrolmentRoutes.TERMS_OF_ACCESS
+        ? EnrolmentRoutes.ACCESS_TERM
         : EnrolmentRoutes.CURRENT_ACCESS_TERM;
 
     return [
