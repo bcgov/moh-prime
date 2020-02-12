@@ -119,6 +119,24 @@ objects:
               parent: "cronjobbackup"
           spec:
             containers:
+              - env:
+                - name: PGHOST
+                  value: postgresql
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: database-admin-password
+                      name: postgresql-secret
+                - name: PGDATABASE
+                  valueFrom:
+                    secretKeyRef:
+                      key: database-name
+                      name: postgresql-secret
+                - name: PGUSERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      key: database-user
+                      name: postgresql-secret
             - name: backup
               image: "backup:latest"
               command: ["/opt/backup/backup.sh"]
