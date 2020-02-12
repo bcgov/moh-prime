@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
-import { Configuration, Config, PracticeConfig, CollegeConfig, LicenseConfig, ProvinceConfig } from './config.model';
+import { Configuration, Config, PracticeConfig, CollegeConfig, LicenseConfig, ProvinceConfig, LicenseWeightedConfig } from './config.model';
 import { PrimeHttpResponse } from '@core/models/prime-http-response.model';
 
 export interface IConfigService {
@@ -55,8 +55,8 @@ export class ConfigService implements IConfigService {
   }
 
   public get licenses(): LicenseConfig[] {
-    return this.filterBottom([...this.configuration.licenses]
-      .sort(this.sortConfig), 'Non-');
+    return [...this.configuration.licenses]
+      .sort(this.sortConfigWeight);
   }
 
   public get organizationNames(): Config<number>[] {
@@ -127,6 +127,16 @@ export class ConfigService implements IConfigService {
   private sortConfig(item1: Config<number | string>, item2: Config<number | string>) {
     return (item1.name > item2.name)
       ? 1 : (item1.name < item2.name)
+        ? -1 : 0;
+  }
+
+  /**
+   * @description
+   * Sort configuration by weight.
+   */
+  private sortConfigWeight(item1: LicenseWeightedConfig, item2: LicenseWeightedConfig) {
+    return (item1.weight > item2.weight)
+      ? 1 : (item1.weight < item2.weight)
         ? -1 : 0;
   }
 

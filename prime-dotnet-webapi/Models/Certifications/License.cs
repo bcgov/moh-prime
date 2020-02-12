@@ -11,6 +11,8 @@ namespace Prime.Models
         [Key]
         public short Code { get; set; }
 
+        public int Weight { get; set; }
+
         [Required]
         public bool Manual { get; set; }
 
