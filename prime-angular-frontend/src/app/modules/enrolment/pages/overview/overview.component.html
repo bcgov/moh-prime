@@ -23,6 +23,7 @@
   </app-page-subheader>
 
   <app-enrollee-review *ngIf="enrolment"
+                       [showEditRedirect]="currentStatus === EnrolmentStatus.ACTIVE"
                        [enrolment]="enrolment"
                        (route)="routeTo($event)"></app-enrollee-review>
 

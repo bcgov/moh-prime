@@ -5,7 +5,7 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Preferred Name</ng-container>
-    <mat-icon *ngIf="isEnrollee"
+    <mat-icon *ngIf="showEditRedirect"
               matTooltip="Edit Preferred Name"
               (click)="onRoute(EnrolmentRoutes.DEMOGRAPHIC)">edit</mat-icon>
   </app-page-subheader>
@@ -29,7 +29,7 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Mailing Address</ng-container>
-    <mat-icon *ngIf="isEnrollee"
+    <mat-icon *ngIf="showEditRedirect"
               matTooltip="Edit Mailing Address"
               (click)="onRoute(EnrolmentRoutes.DEMOGRAPHIC)">edit</mat-icon>
   </app-page-subheader>
@@ -65,7 +65,7 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Contact Information</ng-container>
-    <mat-icon *ngIf="isEnrollee"
+    <mat-icon *ngIf="showEditRedirect"
               matTooltip="Edit Contact Information"
               (click)="onRoute(EnrolmentRoutes.DEMOGRAPHIC)">edit</mat-icon>
   </app-page-subheader>
@@ -84,7 +84,7 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Notification Information</ng-container>
-    <mat-icon *ngIf="isEnrollee"
+    <mat-icon *ngIf="showEditRedirect"
               matTooltip="Edit Notification Information"
               (click)="onRoute(EnrolmentRoutes.DEMOGRAPHIC)">edit</mat-icon>
   </app-page-subheader>
@@ -103,7 +103,7 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>College Licence Information</ng-container>
-    <mat-icon *ngIf="isEnrollee"
+    <mat-icon *ngIf="showEditRedirect"
               matTooltip="Edit College Certifications"
               (click)="onRoute(EnrolmentRoutes.REGULATORY)">edit</mat-icon>
   </app-page-subheader>
@@ -155,7 +155,7 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Device Provider</ng-container>
-    <mat-icon *ngIf="isEnrollee"
+    <mat-icon *ngIf="showEditRedirect"
               matTooltip="Edit Device Provider"
               (click)="onRoute(EnrolmentRoutes.DEVICE_PROVIDER)">edit</mat-icon>
   </app-page-subheader>
@@ -175,7 +175,7 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Job Information</ng-container>
-    <mat-icon *ngIf="isEnrollee"
+    <mat-icon *ngIf="showEditRedirect"
               matTooltip="Edit Job Information"
               (click)="onRoute(EnrolmentRoutes.JOB)">edit</mat-icon>
   </app-page-subheader>
@@ -199,7 +199,7 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Organization Information</ng-container>
-    <mat-icon *ngIf="isEnrollee"
+    <mat-icon *ngIf="showEditRedirect"
               matTooltip="Edit Organizations"
               (click)="onRoute(EnrolmentRoutes.ORGANIZATION)">edit</mat-icon>
   </app-page-subheader>
@@ -225,7 +225,7 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Self Declaration</ng-container>
-    <mat-icon *ngIf="isEnrollee"
+    <mat-icon *ngIf="showEditRedirect"
               matTooltip="Edit Self Declaration"
               (click)="onRoute(EnrolmentRoutes.SELF_DECLARATION)">edit</mat-icon>
   </app-page-subheader>
