@@ -28,6 +28,18 @@
                        (route)="routeTo($event)"></app-enrollee-review>
 
   <div class="footer">
+
+    <app-alert *ngIf="currentStatus !== EnrolmentStatus.ACTIVE"
+               type="danger"
+               icon="warning">
+      <ng-container #alertContent
+                    class="alert-content">
+        Your enrolment has already been submitted for adjudication. If you would like to edit your PRIME profile and
+        re-submit contact us at <app-prime-phone></app-prime-phone>.
+      </ng-container>
+    </app-alert>
+
+
     <mat-checkbox #accept
                   [disabled]="currentStatus !== EnrolmentStatus.ACTIVE">
       <div class="pl-3">
