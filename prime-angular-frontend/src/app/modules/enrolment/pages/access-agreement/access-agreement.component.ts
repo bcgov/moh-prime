@@ -83,7 +83,8 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
       const data: DialogOptions = {
         title: 'Terms of Access',
         message: `Are you sure you want to ${status.verb.toLowerCase()} the terms of access?`,
-        actionText: `${status.verb} Agreement`
+        actionText: `${status.verb} Agreement`,
+        actionType: (!isAcceptingToa) ? 'warn' : 'primary'
       };
       this.busy = this.dialog.open(ConfirmDialogComponent, { data })
         .afterClosed()
@@ -107,22 +108,6 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
           }
         );
     }
-  }
-
-  public onAcceptedAgreement() {
-    const data: DialogOptions = {
-      title: 'Accept Terms of Access',
-      message: 'Are you sure you want to accept the terms of access?',
-      actionText: 'Accept Agreement'
-    };
-  }
-
-  public onDeclinedAgreement() {
-    const data: DialogOptions = {
-      title: 'Decline Terms of Access',
-      message: 'Are you sure you want to decline the terms of access?',
-      actionText: 'Decline Agreement'
-    };
   }
 
   public onPrevPage() {

@@ -77,8 +77,6 @@ export class EnrolmentStateService {
       this.userId = enrolment.enrollee.userId;
 
       this.patchEnrolment(enrolment);
-    } else {
-      this.logger.warn('Enrolment has already been patched, and cannot be patched without invoking an explicit reset of the enrolment');
     }
   }
 
