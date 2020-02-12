@@ -130,6 +130,7 @@
                 initialValue=""
                 formControlName="note"
                 (onKeyUp)="handleChange($event)"
+                (onChange)="handleChange($event)"
                 [init]="{
                   height: '25rem',
                   base_url: '/tinymce',
@@ -148,7 +149,7 @@
       <div class="col-sm-12 col-lg-6">
         <div class="preview">
           <p class="bold underline">Limits and Conditions</p>
-          <div [innerHTML]="preview | safeHtml | default: '<ul><li>preview</li></ul>'"></div>
+          <div [innerHTML]="preview | safeHtml | default: 'No Preview Found'"></div>
         </div>
       </div>
     </div>
