@@ -1,2 +1,2 @@
 # Runs backup 
-59 1 * * * sh /opt/backup/backup.sh 
+*/1 * * * * sh /opt/backup/backup.sh 
