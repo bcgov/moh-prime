@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
-import { Configuration, Config, PracticeConfig, CollegeConfig, LicenseConfig, ProvinceConfig } from './config.model';
+import { Configuration, Config, PracticeConfig, CollegeConfig, LicenseConfig, ProvinceConfig, LicenseWeightedConfig } from './config.model';
 import { PrimeHttpResponse } from '@core/models/prime-http-response.model';
 
 export interface IConfigService {
@@ -134,7 +134,7 @@ export class ConfigService implements IConfigService {
    * @description
    * Sort configuration by weight.
    */
-  private sortConfigWeight(item1: LicenseConfig, item2: LicenseConfig) {
+  private sortConfigWeight(item1: LicenseWeightedConfig, item2: LicenseWeightedConfig) {
     return (item1.weight > item2.weight)
       ? 1 : (item1.weight < item2.weight)
         ? -1 : 0;
