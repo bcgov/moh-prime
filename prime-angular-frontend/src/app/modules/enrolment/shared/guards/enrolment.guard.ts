@@ -78,7 +78,9 @@ export class EnrolmentGuard extends BaseGuard {
   }
 
   private route(routePath: string): string {
-    return routePath.split('/').pop();
+    // Only care about the second parameter to determine route access, and
+    // assumes that all child routes are allowed
+    return routePath.slice(1).split('/')[1];
   }
 
   /**
