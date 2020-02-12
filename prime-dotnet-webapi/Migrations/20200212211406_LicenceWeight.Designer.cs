@@ -11,7 +11,7 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20200212202628_LicenceWeight")]
+    [Migration("20200212211406_LicenceWeight")]
     partial class LicenceWeight
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -4858,12 +4858,19 @@ namespace Prime.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("DeviceProviderNumber")
-                        .HasColumnType("character varying(5)")
-                        .HasMaxLength(5);
+                        .HasColumnType("text");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<string>("GPID")
+                        .HasColumnType("character varying(20)")
+                        .HasMaxLength(20);
+
+                    b.Property<string>("HPDID")
+                        .HasColumnType("character varying(255)")
+                        .HasMaxLength(255);
 
                     b.Property<bool?>("HasConviction")
                         .HasColumnType("boolean");
@@ -4895,10 +4902,6 @@ namespace Prime.Migrations
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<string>("LicensePlate")
-                        .HasColumnType("character varying(20)")
-                        .HasMaxLength(20);
 
                     b.Property<string>("MiddleName")
                         .HasColumnType("text");
@@ -5010,42 +5013,6 @@ namespace Prime.Migrations
                     b.HasIndex("EnrolleeId");
 
                     b.ToTable("EnrolmentCertificateAccessToken");
-                });
-
-            modelBuilder.Entity("Prime.Models.EnrolmentCertificateNote", b =>
-                {
-                    b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTime>("CreatedTimeStamp")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("EnrolleeId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Note")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("NoteDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EnrolleeId")
-                        .IsUnique();
-
-                    b.ToTable("EnrolmentCertificateNote");
                 });
 
             modelBuilder.Entity("Prime.Models.EnrolmentStatus", b =>
@@ -5347,22 +5314,22 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            Code = (short)8,
+                            Code = (short)9,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Manual = true,
-                            Name = "Conditional - Practice Limitations",
+                            Name = "Conditional - Practice Setting",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Weight = 5
                         },
                         new
                         {
-                            Code = (short)9,
+                            Code = (short)8,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Manual = true,
-                            Name = "Conditional - Practice Setting",
+                            Name = "Conditional - Practice Limitations",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Weight = 6
@@ -5446,17 +5413,6 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            Code = (short)11,
-                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Manual = false,
-                            Name = "Educational - Medical Student",
-                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Weight = 14
-                        },
-                        new
-                        {
                             Code = (short)12,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -5464,7 +5420,7 @@ namespace Prime.Migrations
                             Name = "Educational - Postgraduate Resident",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Weight = 15
+                            Weight = 14
                         },
                         new
                         {
@@ -5475,7 +5431,7 @@ namespace Prime.Migrations
                             Name = "Educational - Postgraduate Resident Elective",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Weight = 16
+                            Weight = 15
                         },
                         new
                         {
@@ -5486,7 +5442,7 @@ namespace Prime.Migrations
                             Name = "Educational - Postgraduate Fellow",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Weight = 17
+                            Weight = 16
                         },
                         new
                         {
@@ -5495,6 +5451,17 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Manual = false,
                             Name = "Educational - Postgraduate Trainee",
+                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Weight = 17
+                        },
+                        new
+                        {
+                            Code = (short)11,
+                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Manual = false,
+                            Name = "Educational - Medical Student",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Weight = 18
@@ -7338,7 +7305,7 @@ namespace Prime.Migrations
                             Code = (short)1,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "In Progress",
+                            Name = "Active",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -7347,7 +7314,7 @@ namespace Prime.Migrations
                             Code = (short)2,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Submitted",
+                            Name = "Under Review",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -7356,7 +7323,7 @@ namespace Prime.Migrations
                             Code = (short)3,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Adjudicated/Approved",
+                            Name = "Requires TOA",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -7365,25 +7332,7 @@ namespace Prime.Migrations
                             Code = (short)4,
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Declined",
-                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Code = (short)5,
-                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Accepted Access Agreement",
-                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Code = (short)6,
-                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Declined Access Agreement",
+                            Name = "Locked",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
@@ -7683,7 +7632,7 @@ namespace Prime.Migrations
     </ol>
 
     <p class=""bold"">
-      You must:
+      You must not:
     </p>
 
     <ol type=""a""
@@ -7733,7 +7682,7 @@ namespace Prime.Migrations
     </p>
 
     <p>
-      Notice to the province may be sent in writing to:
+      Notice to the Province may be sent in writing to:
     </p>
 
     <address>
@@ -8694,15 +8643,6 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany()
                         .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Prime.Models.EnrolmentCertificateNote", b =>
-                {
-                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
-                        .WithOne("EnrolmentCertificateNote")
-                        .HasForeignKey("Prime.Models.EnrolmentCertificateNote", "EnrolleeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
