@@ -15,8 +15,9 @@ function databaseBackup() {
         dateinfo=`date '+%Y-%m-%d %H:%M:%S'`
         timeslot=`date '+%Y%m%d%H%M'`
         echo "${timeslot} - Backup compressed $dateinfo for database: ${PGDATABASE} " >> $logfile
+        
 }
 databaseBackup
 echo "Done backup of databases " >> $logfile
-
+wall "Backup completed ${timeslot}"
 #tail -15 /backup/pgsql.log | mailx youremail@domain.com
