@@ -29,6 +29,7 @@ RUN chmod -R 777 /opt/backup && \
     chmod 0644 /opt/backup/backup.cron && \
     cp /opt/backup/backup.cron /etc/cron.d/ && \
     cp /opt/backup.sh /etc/cron.daily && \
+    cp /opt/backup.sh /etc/cron.hourly && \
     crontab /etc/cron.d/backup.cron && \
     crontab -l && \
     chmod 777 /var/run
