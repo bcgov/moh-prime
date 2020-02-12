@@ -28,7 +28,8 @@
                        (route)="routeTo($event)"></app-enrollee-review>
 
   <div class="footer">
-    <mat-checkbox #accept>
+    <mat-checkbox #accept
+                  [disabled]="currentStatus !== EnrolmentStatus.ACTIVE">
       <div class="pl-3">
         I certify that all information provided is true and complete. I understand it is an offence under the
         Pharmaceutical Services Act to knowingly provide false or misleading information.

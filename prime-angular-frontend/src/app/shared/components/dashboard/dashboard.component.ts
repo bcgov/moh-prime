@@ -147,8 +147,6 @@ export class DashboardComponent implements OnInit {
             disabled: (
               !hasAcceptedAtLeastOneToa ||
               [
-                EnrolmentStatus.UNDER_REVIEW,
-                EnrolmentStatus.REQUIRES_TOA,
                 EnrolmentStatus.LOCKED
               ].includes(enrolmentStatus)
             ),
@@ -258,11 +256,9 @@ export class DashboardComponent implements OnInit {
       }
     } else {
       switch (enrolmentStatus) {
+        case EnrolmentStatus.ACTIVE:
         case EnrolmentStatus.UNDER_REVIEW:
         case EnrolmentStatus.REQUIRES_TOA:
-          // Prevent viewing current TOA since it is assumed to be
-          // changing at this point, but can access it in history
-          enrollee = 'lock';
           break;
         case EnrolmentStatus.LOCKED:
           enrollee = 'lock';
