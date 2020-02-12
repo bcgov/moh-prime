@@ -35,6 +35,7 @@ import { RuAccessTermsComponent } from './pages/access-agreement/components/ru-a
 import { OboAccessTermsComponent } from './pages/access-agreement/components/obo-access-terms/obo-access-terms.component';
 import { AccessTermComponent } from './pages/access-agreement/components/access-term/access-term.component';
 import { AccessAgreementCurrentComponent } from './pages/access-agreement-current/access-agreement-current.component';
+import { AccessAgreementHistoryEnrolmentComponent } from './pages/access-agreement-history-enrolment/access-agreement-history-enrolment.component';
 
 @NgModule({
   declarations: [
@@ -66,7 +67,8 @@ import { AccessAgreementCurrentComponent } from './pages/access-agreement-curren
     OboAccessTermsComponent,
     RuAccessTermsComponent,
     AccessTermComponent,
-    AccessAgreementCurrentComponent
+    AccessAgreementCurrentComponent,
+    AccessAgreementHistoryEnrolmentComponent
   ],
   imports: [
     SharedModule,

@@ -6,6 +6,20 @@
          [dataSource]="dataSource"
          class="w-100">
 
+    <ng-container matColumnDef="current">
+      <th mat-header-cell
+          *matHeaderCellDef>&nbsp;</th>
+      <td mat-cell
+          *matCellDef="let index = index">
+        <ng-container *ngIf="index === 0">
+          <mat-chip-list>
+            <mat-chip disabled>Current</mat-chip>
+          </mat-chip-list>
+        </ng-container>
+
+      </td>
+    </ng-container>
+
     <!-- Enrolment Application Date Column -->
     <ng-container matColumnDef="applicationDate">
       <th mat-header-cell
@@ -64,7 +78,7 @@
         <span>View Terms of Access</span>
       </button>
       <button mat-menu-item
-              [routerLink]="['enrolments', accessTerm.id]">
+              [routerLink]="[accessTerm.id, 'enrolment']">
         <mat-icon>unarchive</mat-icon>
         <span>View Prime Enrolment</span>
       </button>

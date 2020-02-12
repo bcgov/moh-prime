@@ -24,7 +24,7 @@ export class AccessTermsComponent implements OnInit {
     private toastService: ToastService
   ) {
     // this.columns = ['applicationDate', 'approvalDate', 'expiryDate', 'actions'];
-    this.columns = ['applicationDate', 'approvalDate', 'actions'];
+    this.columns = ['current', 'applicationDate', 'approvalDate', 'actions'];
   }
 
   public ngOnInit() {
