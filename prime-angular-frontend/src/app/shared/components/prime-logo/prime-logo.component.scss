@@ -1,0 +1,20 @@
+.logo-fill-light g:not(.yellow) {
+  path,
+  polygon {
+    fill: white;
+  }
+}
+
+.logo-fill-dark {
+  path,
+  polygon {
+    fill: #224176;
+  }
+}
+
+.yellow {
+  path,
+  polygon {
+    fill: #E3A92B;
+  }
+}
