@@ -14,27 +14,25 @@
           <span class="font-weight-bolder font-size-huge">PRIME</span>
         </app-page-header>
         <app-page-subheader [divider]="false">
-          <ng-container appPageSubheaderTitle>Request Access to PharmaNet</ng-container>
-          <ng-container appPageSubheaderSummary>
+          <ng-container appPageSubheaderTitle>Request approval to access PharmaNet</ng-container>
+          <!-- <ng-container appPageSubheaderSummary>
             <small class="font-weight-light">PRIME provides approval for access to PharmaNet.</small>
-          </ng-container>
+          </ng-container> -->
         </app-page-subheader>
 
         <div class="ml-2">
-          <p class="font-italic font-weight-light mb-4 accent">To get started you will need:</p>
-          <ul>
-            <li>
-              <div class="font-weight-bold">BC Services Card on your Mobile Device</div>
-            </li>
-            <li><span class="font-weight-bold">College Licence Information</span>
-              <span><small class="font-italic font-weight-light ml-2">(for prescribers only)</small></span></li>
-          </ul>
+          <p class="font-italic font-weight-light mb-4 accent">Before you start:</p>
+
+          <div class="font-weight-bold">Set up your BC Services Card on your mobile device</div>
+          <span class="font-weight-bold">Have your College licence information ready</span>
+          <span><small class="font-italic font-weight-light ml-2">if applicable</small></span>
+
           <div class="mt-4">
             <button mat-flat-button
                     class="mr-4 mb-4"
                     color="primary"
                     [disabled]="isIE"
-                    (click)="loginUsingBCSC()">Log in with BC Services Card</button>
+                    (click)="loginUsingBCSC()">Log in</button>
             <button mat-flat-button
                     color="accent"
                     href="#">Learn More</button>
@@ -53,64 +51,31 @@
         </div>
       </div>
       <div class="row mb-4 justify-content-center">
-        <p class="col-sm-12 col-md-6  font-weight-bold">As a Health Professional working in British Columbia,
-          use PRIME to
-          request approval from The Ministry of Health to access PharmaNet.</p>
-      </div>
-      <div class="row mb-4 justify-content-center">
         <div class="col-sm-12 col-md-3 info mb-4">
           <h3>BC Services Card</h3>
           <p>
             To get started you will need to set up your BC Services card on your mobile device.
+            This is a quick process and it usually only takes a few minutes.
           </p>
-          <a href=""><small class="anchor font-weight-bold">LEARN MORE ABOUT BC SERVICES CARD</small></a>
+          <a href=""><small class="anchor font-weight-bold">HOW TO SET UP A MOBILE CARD</small></a>
         </div>
         <div class="col-sm-12 col-md-3 info mb-4">
           <h3>PRIME Enrolment</h3>
-          <p>
-            Provide contact and Health Professional information. Answer a set of self-declaration questions, then
-            carefully read and accept the PharmaNet terms of access.
-          </p>
+          <p><strong>1.</strong>
+            Confirm or update your contact information</p>
+          <p><strong>2.</strong>
+            Provide professional information where applicable</p>
+          <p><strong>3.</strong>
+            Answer a set of Self Declaration questions</p>
+          <p><strong>4.</strong>
+            Carefully read and accept the PharmaNet Terms of Access</p>
         </div>
         <div class="col-sm-12 col-md-3 info mb-4">
           <h3>Enrolment Certificate</h3>
           <p>
-            Once approved, to access PharmaNet, send your enrolment certificate to the PharmaNet provider used by your
-            place of work, or to your system administrator.
+            Once approved, send your enrolment notification to the PharmaNet provider used
+            by your place of work, or to your system administrator.
           </p>
-        </div>
-      </div>
-    </div>
-  </app-pill>
-
-  <app-pill [variant]="2">
-    <div>
-      <div class="row">
-        <div class="col-sm-12 mb-4">
-          <h1 class="font-weight-bold">BC Services Card</h1>
-        </div>
-      </div>
-      <div class="row mb-4 justify-content-center">
-        <div class="col-sm-12 col-md-6 info mb-4">
-          <p>
-            PRIME uses the BC Services Card to securely identify people who access PharmaNet. PRIME will retrieve your
-            full name, date of birth and mailing address (no other personal information is shared). The Ministry of
-            Health wants to make sure patient information on PharmaNet is accessed appropriately, only by health
-            professionals who have a clinical need to do so.
-
-            <br><br>
-
-            If you do not have your BC Services Card set up on your mobile device, you will need to do that first. This
-            is a quick process and it usually only takes a few minutes!
-
-            <br><br>
-
-            Visit the BC Services Card website for more information and instructions.
-          </p>
-
-            <a class="anchor" href="">
-              <strong>HOW TO SET UP MOBILE CARD</strong>
-            </a>
         </div>
       </div>
     </div>
@@ -124,10 +89,11 @@
     </div>
     <div class="row mb-4 justify-content-center">
       <div class="col-sm-12 col-md-5 info mb-4">
-        <p>
+        <p class="center-text">
           Questions about PRIME should be directed to:<br>
-          <app-prime-phone></app-prime-phone><br>
-          <app-prime-email></app-prime-email>
+          <app-prime-phone></app-prime-phone> (1- 844 - 397- 7463)
+          <br>
+          <app-prime-support-email></app-prime-support-email>
         </p>
       </div>
     </div>
