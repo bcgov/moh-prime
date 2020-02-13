@@ -6,27 +6,31 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
+import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 
 @Component({
   selector: 'app-access-agreement-history-enrolment',
   templateUrl: './access-agreement-history-enrolment.component.html',
   styleUrls: ['./access-agreement-history-enrolment.component.scss']
 })
-export class AccessAgreementHistoryEnrolmentComponent implements OnInit {
+export class AccessAgreementHistoryEnrolmentComponent extends BaseEnrolmentPage implements OnInit {
   public busy: Subscription;
   public enrolmentProfileHistory: EnrolmentProfileVersion;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
+    protected route: ActivatedRoute,
+    protected router: Router,
     private enrolmentResource: EnrolmentResource,
     private toastService: ToastService,
     private logger: LoggerService,
     private enrolmentService: EnrolmentService
-  ) { }
+  ) {
+    super(route, router);
+  }
 
   public routeTo() {
-    this.router.navigate(['../'], { relativeTo: this.route.parent });
+    super.routeTo(EnrolmentRoutes.routePath(EnrolmentRoutes.ACCESS_TERMS));
   }
 
   public ngOnInit() {

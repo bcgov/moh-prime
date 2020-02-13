@@ -7,31 +7,35 @@ import { AuthRoutes } from '@auth/auth.routes';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AccessTerm } from '@enrolment/shared/models/access-term.model';
+import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
+import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 
 @Component({
   selector: 'app-access-agreement-history',
   templateUrl: './access-agreement-history.component.html',
   styleUrls: ['./access-agreement-history.component.scss']
 })
-export class AccessAgreementHistoryComponent implements OnInit {
+export class AccessAgreementHistoryComponent extends BaseEnrolmentPage implements OnInit {
   public busy: Subscription;
   public accessTerm: AccessTerm;
 
   constructor(
+    protected router: Router,
+    protected route: ActivatedRoute,
     private enrolmentResource: EnrolmentResource,
     private enrolmentService: EnrolmentService,
     private logger: LoggerService,
-    private router: Router,
     private toastService: ToastService,
-    private route: ActivatedRoute
-  ) { }
-
-  public ngOnInit() {
-    this.getAccessTerm();
+  ) {
+    super(route, router);
   }
 
   public routeTo() {
-    this.router.navigate(['../'], { relativeTo: this.route.parent });
+    super.routeTo(EnrolmentRoutes.routePath(EnrolmentRoutes.ACCESS_TERMS));
+  }
+
+  public ngOnInit() {
+    this.getAccessTerm();
   }
 
   private getAccessTerm() {
