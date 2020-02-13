@@ -176,17 +176,6 @@ function cleanOcArtifacts() {
     done
 }
 
-function nukenpave() {
-    source $2.conf
-    declare -p TARGET_ARTIFACTS=($(oc get all,pvc,route -n $PROJECT_PREFIX-$3 | grep -i "$APP_NAME" | awk '{print $2}' | grep -Ev "(\-pr\-)") )
-    for target in "${TARGET_ARTIFACTS[@]}"
-    do
-        oc delete -n $PROJECT_PREFIX-$3 $target
-    done
-        build $@
-        deploy $@
-}
-
 function functionTest() {
     echo "1=$2"
     echo "2=$3"

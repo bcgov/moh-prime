@@ -18,10 +18,10 @@ RUN echo "Checking opt dir..." && \
     echo "Checking workdir..." && \
     ls -alh /opt/backup && \
     apt-get update -yqq && \ 
-    apt-get install -yqq inetutils-ping vim nano net-tools cron && \ 
+    apt-get install -yqq inetutils-ping vim nano net-tools cron crontab && \ 
     ls -alh /opt
 
-RUN chmod -R 777 /opt/backup && \
+RUN chmod -R 755 /opt/backup && \
     touch /var/log/cron.log && \
     chmod 777 /var/log/cron.log && \
     chmod +x /opt/backup.sh && \

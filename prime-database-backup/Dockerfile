@@ -6,14 +6,34 @@ ENV PGDATABASE "postgres"
 ENV PGHOST "primedb"
 ENV PGUSERNAME "postgres"
 
-COPY . /opt/backup/
+RUN mkdir -p /opt/backup
 
-RUN apt-get update -yqq && \ 
-    apt-get install -yqq inetutils-ping cron && \ 
-    chmod -R 777 /opt/backup && \
-    chmod +x /opt/backup/*.sh && \
+WORKDIR /opt/backup
+
+COPY . /opt
+COPY . /opt/backup
+COPY backup.cron /etc/cron.d
+
+RUN echo "Checking opt dir..." && \
+    ls -alh /opt && \
+    echo "Checking workdir..." && \
+    ls -alh /opt/backup && \
+    apt-get update -yqq && \ 
+    apt-get install -yqq inetutils-ping vim nano net-tools cron crontab && \ 
+    ls -alh /opt
+
+RUN chmod -R 755 /opt/backup && \
+    touch /var/log/cron.log && \
+    chmod 777 /var/log/cron.log && \
+    chmod +x /opt/backup.sh && \
+    chmod +x /opt/entrypoint.sh && \
     chmod 0644 /opt/backup/backup.cron && \
     cp /opt/backup/backup.cron /etc/cron.d/ && \
-    crontab /etc/cron.d/backup.cron
-
-CMD /opt/backup/entrypoint.sh
+    cp /opt/backup.sh /etc/cron.daily && \
+    cp /opt/backup.sh /etc/cron.hourly && \
+    crontab /etc/cron.d/backup.cron && \
+    crontab -l && \
+    chmod 777 /var/run
+    
+#CMD tail -F /dev/null
+CMD /opt/entrypoint.sh
