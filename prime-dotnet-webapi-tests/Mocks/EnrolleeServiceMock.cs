@@ -171,10 +171,6 @@ namespace PrimeTests.Mocks
                 {
                     enrollee.AccessAgreementNote = (AccessAgreementNote)newNote;
                 }
-                else if (newNote.GetType() == typeof(EnrolmentCertificateNote))
-                {
-                    enrollee.EnrolmentCertificateNote = (EnrolmentCertificateNote)newNote;
-                }
                 else
                 {
                     throw new ArgumentException("Enrollee note type is not recognized, or not allowed.");
@@ -189,6 +185,11 @@ namespace PrimeTests.Mocks
         {
 
             return Task.FromResult(new Enrollee());
+        }
+
+        public Task<Enrollee> GetEnrolleeNoTrackingAsync(int enrolleeId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

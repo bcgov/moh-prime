@@ -13,11 +13,6 @@ namespace PrimeTests.ModelFactories
         public AdjudicatorNoteFactory(Enrollee owner) : base(owner) { }
     }
 
-    public class EnrolmentCertificateNoteFactory : NoteFactory<EnrolmentCertificateNote>
-    {
-        public EnrolmentCertificateNoteFactory(Enrollee owner) : base(owner) { }
-    }
-
     public abstract class NoteFactory<T> : Faker<T> where T : BaseAuditable, IEnrolleeNote
     {
         private static int IdCounter = 1;
