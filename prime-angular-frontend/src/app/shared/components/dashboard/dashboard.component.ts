@@ -1,10 +1,12 @@
 import { Component, OnInit, ViewChild, Inject } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterEvent } from '@angular/router';
 import { MatSidenav } from '@angular/material';
 
-import { map, distinctUntilChanged, pairwise } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, distinctUntilChanged, pairwise, startWith } from 'rxjs/operators';
 
 import { AppConfig, APP_CONFIG } from 'app/app-config.module';
+import { RouteStateService } from '@core/services/route-state.service';
 import { ViewportService } from '@core/services/viewport.service';
 import { LoggerService } from '@core/services/logger.service';
 import { DeviceResolution } from '@shared/enums/device-resolution.enum';
@@ -38,6 +40,7 @@ export class DashboardComponent implements OnInit {
     @Inject(APP_CONFIG) private config: AppConfig,
     private route: ActivatedRoute,
     private router: Router,
+    private routeStateService: RouteStateService,
     private authService: AuthService,
     private viewportService: ViewportService,
     private enrolmentService: EnrolmentService,
@@ -127,6 +130,17 @@ export class DashboardComponent implements OnInit {
       : false;
     const statusIcons = this.getEnrolmentStatusIcons(enrolmentStatus, hasAcceptedAtLeastOneToa);
 
+    // Placed outside ngOnInit on purpose to avoid issues with timing in the lifecycle hook
+    const currentRoutePath$ = this.routeStateService.routePath$
+      .pipe(
+        // Provide a default since the navigation end event of the router
+        // doesn't occur as the application is initially loaded
+        startWith(this.router.url),
+        // Only care about the second parameter to determine route access, and
+        // assumes that all child routes are equivalent
+        map((routePath: string) => routePath.slice(1).split('/')[1])
+      );
+
     const termsOfAccessRoute = (enrolmentStatus === EnrolmentStatus.UNDER_REVIEW)
       ? EnrolmentRoutes.SUBMISSION_CONFIRMATION
       : (enrolmentStatus === EnrolmentStatus.REQUIRES_TOA)
@@ -149,11 +163,12 @@ export class DashboardComponent implements OnInit {
                 EnrolmentStatus.LOCKED
               ].includes(enrolmentStatus)
             ),
-            // forceActive: (
-            //   // TODO highlight needs to be based on routes... use child routes for profile?
-            //   // Highlight the profile when in these states
-            //   // EnrolmentRoutes.enrolmentProfileRoutes().includes()
-            // )
+            forceActive: currentRoutePath$
+              .pipe(
+                map((routePath: string) =>
+                  EnrolmentRoutes.enrolmentProfileRoutes().includes(routePath)
+                )
+              )
           },
           {
             name: 'Terms of Access',
@@ -165,7 +180,16 @@ export class DashboardComponent implements OnInit {
               [
                 EnrolmentStatus.LOCKED
               ].includes(enrolmentStatus)
-            )
+            ),
+            // TODO
+            // forceActive: currentRoutePath$
+            //   .pipe(
+            //     map((routePath: string) =>
+            //       [
+            //         EnrolmentRoutes.SUBMISSION_CONFIRMATION
+            //       ].includes(routePath)
+            //     )
+            //   )
           },
           {
             name: 'PharmaNet Enrolment Certificate',
@@ -201,7 +225,7 @@ export class DashboardComponent implements OnInit {
                 EnrolmentStatus.LOCKED
               ].includes(enrolmentStatus)
             ),
-            deemphasize: (!enrolment || (enrolment && !enrolment.profileCompleted)) ? true : false
+            deemphasize: this.enrolmentService.isInitialEnrolment
           },
           {
             name: 'PRIME Transaction History',
@@ -221,7 +245,7 @@ export class DashboardComponent implements OnInit {
                 EnrolmentStatus.LOCKED
               ].includes(enrolmentStatus)
             ),
-            deemphasize: (!enrolment || (enrolment && !enrolment.profileCompleted)) ? true : false
+            deemphasize: this.enrolmentService.isInitialEnrolment
           }
         ]
       },
@@ -235,19 +259,15 @@ export class DashboardComponent implements OnInit {
 
     if (!hasAcceptedAtLeastOneToa) {
       // Default icons when performing initial enrolment
-      enrollee = 'assignment_turned_in';
       accessAgreement = 'lock';
       certificate = 'lock';
 
       switch (enrolmentStatus) {
         case EnrolmentStatus.ACTIVE:
-          enrollee = 'assignment_ind';
           break;
         case EnrolmentStatus.UNDER_REVIEW:
-          accessAgreement = 'schedule';
-          break;
         case EnrolmentStatus.REQUIRES_TOA:
-          accessAgreement = 'assignment';
+          accessAgreement = 'schedule';
           break;
         case EnrolmentStatus.LOCKED:
           enrollee = 'lock';
