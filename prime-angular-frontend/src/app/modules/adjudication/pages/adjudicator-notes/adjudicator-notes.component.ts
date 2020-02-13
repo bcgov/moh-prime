@@ -183,12 +183,12 @@ export class AdjudicatorNotesComponent implements OnInit {
       )
       .subscribe(
         (enrolment: Enrolment) => {
-          this.toastService.openSuccessToast('Enrolment status was reverted to In-Progress');
+          this.toastService.openSuccessToast('Enrolment status was reverted to Active');
           this.updateEnrolment(enrolment);
         },
         (error: any) => {
-          this.toastService.openErrorToast('Enrolment status could not be reverted to In-Progress');
-          this.logger.error('[Adjudication] Enrolments::markAsInProgress error has occurred: ', error);
+          this.toastService.openErrorToast('Enrolment status could not be reverted to Active');
+          this.logger.error('[Adjudication] Enrolments::markAsActive error has occurred: ', error);
         }
       );
   }
