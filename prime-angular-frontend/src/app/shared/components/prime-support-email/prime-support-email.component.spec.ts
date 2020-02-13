@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PrimeSupportEmailComponent } from './prime-support-email.component';
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 
 describe('PrimeSupportEmailComponent', () => {
   let component: PrimeSupportEmailComponent;
@@ -8,9 +9,15 @@ describe('PrimeSupportEmailComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PrimeSupportEmailComponent ]
+      declarations: [PrimeSupportEmailComponent],
+      providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        },
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
