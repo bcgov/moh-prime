@@ -13,12 +13,10 @@ namespace PrimeTests.Mocks
 
         private static Dictionary<short, Status> _statusMap = new Dictionary<short, Status> {
             { NULL_STATUS_CODE, new Status { Code = NULL_STATUS_CODE, Name = "No Status" } },
-            { Status.IN_PROGRESS_CODE, new Status { Code = Status.IN_PROGRESS_CODE, Name = "In Progress" } },
-            { Status.SUBMITTED_CODE, new Status { Code = Status.SUBMITTED_CODE, Name = "Submitted" } },
-            { Status.APPROVED_CODE, new Status { Code = Status.APPROVED_CODE, Name = "Adjudicated/Approved" } },
-            { Status.DECLINED_CODE, new Status { Code = Status.DECLINED_CODE, Name = "Declined" } },
-            { Status.ACCEPTED_TOS_CODE, new Status { Code = Status.ACCEPTED_TOS_CODE, Name = "Accepted TOS (Terms of Service)" } },
-            { Status.DECLINED_TOS_CODE, new Status { Code = Status.DECLINED_TOS_CODE, Name = "Declined TOS (Terms of Service)" } },
+            { Status.ACTIVE_CODE, new Status { Code = Status.ACTIVE_CODE, Name = "Active" } },
+            { Status.UNDER_REVIEW_CODE, new Status { Code = Status.UNDER_REVIEW_CODE, Name = "Under Review" } },
+            { Status.REQUIRES_TOA_CODE, new Status { Code = Status.REQUIRES_TOA_CODE, Name = "Requires TOA" } },
+            { Status.LOCKED_CODE, new Status { Code = Status.LOCKED_CODE, Name = "Locked" } }
          };
 
         protected class StatusWrapper
@@ -29,13 +27,34 @@ namespace PrimeTests.Mocks
 
         protected static Dictionary<Status, StatusWrapper[]> _workflowStateMap = new Dictionary<Status, StatusWrapper[]> {
             // construct the workflow map
-            { _statusMap[NULL_STATUS_CODE], new StatusWrapper[] { new StatusWrapper { Status = _statusMap[Status.IN_PROGRESS_CODE], AdminOnly = false } } },
-            { _statusMap[Status.IN_PROGRESS_CODE], new StatusWrapper[] { new StatusWrapper { Status = _statusMap[Status.SUBMITTED_CODE], AdminOnly = false } } },
-            { _statusMap[Status.SUBMITTED_CODE], new StatusWrapper[] { new StatusWrapper { Status = _statusMap[Status.APPROVED_CODE], AdminOnly = true }, new StatusWrapper { Status = _statusMap[Status.DECLINED_CODE], AdminOnly = true } } },
-            { _statusMap[Status.APPROVED_CODE], new StatusWrapper[] { new StatusWrapper { Status = _statusMap[Status.ACCEPTED_TOS_CODE], AdminOnly = false }, new StatusWrapper { Status = _statusMap[Status.DECLINED_TOS_CODE], AdminOnly = false } } },
-            { _statusMap[Status.DECLINED_CODE], new StatusWrapper[0] },
-            { _statusMap[Status.ACCEPTED_TOS_CODE], new StatusWrapper[0] },
-            { _statusMap[Status.DECLINED_TOS_CODE], new StatusWrapper[0] }
+            { _statusMap[NULL_STATUS_CODE], new StatusWrapper[] {
+                    new StatusWrapper { Status = _statusMap[Status.ACTIVE_CODE], AdminOnly = false }
+                }
+            },
+            { _statusMap[Status.ACTIVE_CODE], new StatusWrapper[]
+                {
+                    new StatusWrapper { Status = _statusMap[Status.UNDER_REVIEW_CODE], AdminOnly = false },
+                    new StatusWrapper { Status = _statusMap[Status.LOCKED_CODE], AdminOnly = true }
+                }
+            },
+            { _statusMap[Status.UNDER_REVIEW_CODE], new StatusWrapper[]
+                {
+                    new StatusWrapper { Status = _statusMap[Status.ACTIVE_CODE], AdminOnly = true },
+                    new StatusWrapper { Status = _statusMap[Status.REQUIRES_TOA_CODE], AdminOnly = true },
+                    new StatusWrapper { Status = _statusMap[Status.LOCKED_CODE], AdminOnly = true }
+                }
+            },
+            { _statusMap[Status.REQUIRES_TOA_CODE], new StatusWrapper[]
+                {
+                    new StatusWrapper { Status = _statusMap[Status.ACTIVE_CODE], AdminOnly = false },
+                    new StatusWrapper { Status = _statusMap[Status.LOCKED_CODE], AdminOnly = true }
+                }
+            },
+            { _statusMap[Status.LOCKED_CODE], new StatusWrapper[]
+                {
+                    new StatusWrapper { Status = _statusMap[Status.ACTIVE_CODE], AdminOnly = true }
+                }
+            }
         };
 
         private Dictionary<string, object> _fakeDb;
