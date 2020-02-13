@@ -457,7 +457,7 @@ namespace PrimeTests.Controllers
                 };
 
                 // create a request with an AUTH token
-                var request = TestUtils.CreateRequest<Enrollee>(HttpMethod.Put, $"/api/enrollees/{enrolleeId}", enrollee.UserId, enrolleeProfile);
+                var request = TestUtils.CreateRequest<Enrollee>(HttpMethod.Put, $"/api/enrollees/{enrolleeId}", enrollee.UserId, enrollee);
 
                 // call the controller to update the enrollee
                 var response = await _client.SendAsync(request);
@@ -646,7 +646,7 @@ namespace PrimeTests.Controllers
                 int enrolleeId = (int)enrollee.Id;
 
                 // update the status to 'Submitted'
-                await service.CreateEnrolmentStatusAsync(enrolleeId, new Status { Code = Status.SUBMITTED_CODE, Name = "Submitted" });
+                await service.CreateEnrolmentStatusAsync(enrolleeId, new Status { Code = Status.UNDER_REVIEW_CODE, Name = "Under Review" });
                 enrollee = await service.GetEnrolleeAsync(enrolleeId);
 
                 // create a request with an AUTH token
@@ -659,7 +659,7 @@ namespace PrimeTests.Controllers
 
                 // check for the expected error messages
                 var body = await response.Content.ReadAsStringAsync();
-                Assert.Contains("Enrollee can not be updated when the current status is not 'In Progress'.", body);
+                Assert.Contains("Enrollee can not be updated when the current status is not 'Active'.", body);
 
                 // make sure the same amount of enrollees exist
                 enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
@@ -727,7 +727,7 @@ namespace PrimeTests.Controllers
                 var statuses = (await TestUtils.DeserializeResponse<ApiOkResponse<IEnumerable<Status>>>(response)).Result;
                 Assert.NotNull(statuses);
                 Assert.Single(statuses);
-                Assert.Contains(new Status { Code = Status.SUBMITTED_CODE }, statuses);
+                Assert.Contains(new Status { Code = Status.UNDER_REVIEW_CODE }, statuses);
 
                 // make sure the same amount of enrollees exist
                 enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
@@ -825,7 +825,7 @@ namespace PrimeTests.Controllers
                 var enrolleeStatuses = (await TestUtils.DeserializeResponse<ApiOkResponse<IEnumerable<EnrolmentStatus>>>(response)).Result;
                 Assert.NotNull(enrolleeStatuses);
                 Assert.Single(enrolleeStatuses);
-                Assert.Equal(Status.IN_PROGRESS_CODE, enrolleeStatuses.First().StatusCode);
+                Assert.Equal(Status.ACTIVE_CODE, enrolleeStatuses.First().StatusCode);
 
                 // make sure the same amount of enrollees exist
                 enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
@@ -913,7 +913,7 @@ namespace PrimeTests.Controllers
 
                 // create a request with an AUTH token
                 var request = TestUtils.CreateRequest<Status>(HttpMethod.Post,
-                 $"/api/enrollees/{expectedEnrolleeId}/statuses", expectedEnrollee.UserId, new Status { Code = Status.SUBMITTED_CODE });
+                 $"/api/enrollees/{expectedEnrolleeId}/statuses", expectedEnrollee.UserId, new Status { Code = Status.UNDER_REVIEW_CODE });
 
                 // try to create a new enrollee status
                 var response = await _client.SendAsync(request);
@@ -922,7 +922,7 @@ namespace PrimeTests.Controllers
                 // check that the statuses were returned
                 var enrolleeStatus = (await TestUtils.DeserializeResponse<ApiOkResponse<EnrolmentStatus>>(response)).Result;
                 Assert.NotNull(enrolleeStatus);
-                Assert.Equal(Status.SUBMITTED_CODE, enrolleeStatus.StatusCode);
+                Assert.Equal(Status.UNDER_REVIEW_CODE, enrolleeStatus.StatusCode);
 
                 // make sure the same amount of enrollees exist
                 enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
@@ -948,7 +948,7 @@ namespace PrimeTests.Controllers
 
                 // create a request with an AUTH token
                 var request = TestUtils.CreateRequest<Status>(HttpMethod.Post,
-                 $"/api/enrollees/{notFoundEnrolleeId}/statuses", Guid.NewGuid(), new Status { Code = Status.SUBMITTED_CODE });
+                 $"/api/enrollees/{notFoundEnrolleeId}/statuses", Guid.NewGuid(), new Status { Code = Status.UNDER_REVIEW_CODE });
 
                 // try to get an enrollee that does not exist
                 var response = await _client.SendAsync(request);
@@ -1014,7 +1014,7 @@ namespace PrimeTests.Controllers
 
                 // create a request with an AUTH token
                 var request = TestUtils.CreateRequest<Status>(HttpMethod.Post,
-                 $"/api/enrollees/{expectedEnrolleeId}/statuses", expectedEnrollee.UserId, new Status { Code = Status.APPROVED_CODE });
+                 $"/api/enrollees/{expectedEnrolleeId}/statuses", expectedEnrollee.UserId, new Status { Code = Status.REQUIRES_TOA_CODE });
 
                 // try to create a new enrolment status
                 var response = await _client.SendAsync(request);
@@ -1022,7 +1022,7 @@ namespace PrimeTests.Controllers
 
                 // check for the expected error messages
                 var body = await response.Content.ReadAsStringAsync();
-                Assert.Contains("Cannot change from current Status Code: " + Status.IN_PROGRESS_CODE + " to the new Status Code: " + Status.APPROVED_CODE, body);
+                Assert.Contains("Cannot change from current Status Code: " + Status.ACTIVE_CODE + " to the new Status Code: " + Status.REQUIRES_TOA_CODE, body);
 
                 // make sure the same amount of enrollees exist
                 enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
@@ -1049,7 +1049,7 @@ namespace PrimeTests.Controllers
 
                 // create a request with an AUTH token
                 var request = TestUtils.CreateRequest<Status>(HttpMethod.Post,
-                 $"/api/enrollees/{expectedEnrolleeId}/statuses", Guid.NewGuid(), new Status { Code = Status.SUBMITTED_CODE });
+                 $"/api/enrollees/{expectedEnrolleeId}/statuses", Guid.NewGuid(), new Status { Code = Status.UNDER_REVIEW_CODE });
 
                 // try to create a new enrolment status with a different userId
                 var response = await _client.SendAsync(request);
