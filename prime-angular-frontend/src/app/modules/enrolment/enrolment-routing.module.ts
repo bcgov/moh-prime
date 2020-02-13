@@ -111,7 +111,7 @@ const routes: Routes = [
         data: { title: 'Enrolment Summary' }
       },
       {
-        path: EnrolmentRoutes.TERMS_OF_ACCESS,
+        path: EnrolmentRoutes.ACCESS_TERM,
         component: AccessAgreementComponent,
         data: { title: 'Enrolment Terms of Access' }
       },

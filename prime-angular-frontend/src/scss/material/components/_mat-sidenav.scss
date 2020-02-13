@@ -31,73 +31,31 @@
 
   .active,
   .active:focus,
+  // Alias for active for forcing an equivalent to "routerLinkActive"
+  // for dashboard navigation that are associated to multiple views.
+  // The order of operations in view rendering between ngClass
+  // and router bindings where ".active" is removed immediately
+  .force-active,
+  .force-active:focus,
   .mat-list-item:focus {
     background-color: theme-palette(blue, lighter) !important;
   }
 
-  .active {
+  .active,
+  .force-active {
+    a {
+      font-weight: bold !important;
+    }
+
     .mat-list-item-content {
       border-right: 5px solid theme-palette(yellow) !important;
     }
   }
 
   .mat-list-item-content {
+    // Add a border for spacing to prevent the sidenav from jumping when an nav item is active
     border-right: 5px solid transparent !important;
     padding-left: 25px !important;
-  }
-
-  .active {
-    .mat-list-item-content {
-      border-right: 5px solid theme-palette(yellow) !important;
-    }
-  }
-
-  .mat-list-item-content {
-    border-right: 5px solid transparent !important;
-    padding-left: 25px !important;
-  }
-
-  .active {
-    .mat-list-item-content {
-      border-right: 5px solid theme-palette(yellow) !important;
-    }
-  }
-
-  .mat-list-item-content {
-    border-right: 5px solid transparent !important;
-    padding-left: 25px !important;
-  }
-
-  .active {
-    .mat-list-item-content {
-      border-right: 5px solid theme-palette(yellow) !important;
-    }
-  }
-
-  .mat-list-item-content {
-    border-right: 5px solid transparent !important;
-    padding-left: 25px !important;
-  }
-
-  .active {
-    .mat-list-item-content {
-      border-right: 5px solid theme-palette(yellow) !important;
-    }
-  }
-
-  .mat-list-item-content {
-    border-right: 5px solid transparent !important;
-    padding-left: 25px !important;
-  }
-
-  .active {
-    .mat-list-item-content {
-      border-right: 5px solid theme-palette(yellow) !important;
-    }
-  }
-
-  .active a {
-    font-weight: bold !important;
   }
 
   // Force the mat-icon to be centered in the sidenav
