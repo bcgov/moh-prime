@@ -5,30 +5,27 @@ import {
   NavigationStart,
   NavigationEnd,
   NavigationCancel,
-  NavigationError
+  NavigationError,
+  ActivatedRoute
 } from '@angular/router';
 
 import { Observable } from 'rxjs';
-import { filter, tap } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RouteStateService {
-  private routeState: {
-    previousRoute: string
-  };
-
   constructor(
+    private route: ActivatedRoute,
     private router: Router
-  ) {
-    this.routeState = {
-      previousRoute: ''
-    };
-  }
+  ) { }
 
-  public get previousRoute(): string {
-    return this.routeState.previousRoute;
+  public get routePath$(): Observable<string> {
+    return this.onNavigationEnd()
+      .pipe(
+        map((event: RouterEvent) => event.url)
+      );
   }
 
   /**
@@ -61,9 +58,7 @@ export class RouteStateService {
    */
   public onNavigationEnd(): Observable<RouterEvent> {
     return this.router.events.pipe(
-      filter((event: RouterEvent) => event instanceof NavigationEnd),
-      // Perform a side-effect to store the previous route
-      tap((event: RouterEvent) => this.routeState.previousRoute = event.url)
+      filter((event: RouterEvent) => event instanceof NavigationEnd)
     );
   }
 }
