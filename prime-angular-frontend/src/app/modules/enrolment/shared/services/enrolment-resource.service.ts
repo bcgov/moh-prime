@@ -16,6 +16,7 @@ import { Address } from '@enrolment/shared/models/address.model';
 import { Organization } from '@enrolment/shared/models/organization.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { AccessTerm } from '@enrolment/shared/models/access-term.model';
+import { EnrolmentProfileVersion, HttpEnrolleeProfileVersion } from '@adjudication/shared/models/enrollee-profile-history.model';
 
 @Injectable({
   providedIn: 'root'
@@ -113,9 +114,30 @@ export class EnrolmentResource {
       );
   }
 
+  public getEnrolmentProfileForAccessTerm(enrolleeId: number, accessTermId: number): Observable<EnrolmentProfileVersion> {
+    return this.http
+      .get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/access-terms/${accessTermId}/enrolment`)
+      .pipe(
+        map((response: PrimeHttpResponse) => response.result as EnrolmentProfileVersion),
+        tap((enrolmentProfileVersion: EnrolmentProfileVersion) => this.logger.info('ENROLMENT_PROFILE_VERSION', enrolmentProfileVersion)),
+        map(this.enrolleeVersionAdapterResponse.bind(this))
+      );
+  }
+
   // ---
   // Enrollee and Enrolment Adapters
   // ---
+
+  private enrolleeVersionAdapterResponse(
+    { id, enrolleeId, profileSnapshot, createdDate }: HttpEnrolleeProfileVersion
+  ): EnrolmentProfileVersion {
+    return {
+      id,
+      enrolleeId,
+      profileSnapshot: this.enrolleeAdapterResponse(profileSnapshot),
+      createdDate
+    };
+  }
 
   private enrolleeAdapterResponse(enrollee: HttpEnrollee): Enrolment {
     // Fill in values that could be `null`
