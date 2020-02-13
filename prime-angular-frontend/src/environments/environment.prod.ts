@@ -7,6 +7,7 @@ export const environment = {
     displayPhone: '1-844-397-7463 (844-39PRIME)',
     phone: '18443977463',
     email: 'prime@gov.bc.ca',
+    supportEmail: 'primesupport@gov.bc.ca',
   },
   keycloakConfig: {
     config: {
