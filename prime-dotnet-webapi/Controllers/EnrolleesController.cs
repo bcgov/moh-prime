@@ -407,7 +407,7 @@ namespace Prime.Controllers
 
         // GET: api/Enrollees/5/versions
         /// <summary>
-        /// Get a list of enrolmee profile versions.
+        /// Get a list of enrollee profile versions.
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}/versions", Name = nameof(GetEnrolleeProfileVersions))]

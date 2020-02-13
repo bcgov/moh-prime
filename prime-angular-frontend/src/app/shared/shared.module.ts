@@ -46,12 +46,15 @@ import { EnrolleeProfileComponent } from '@shared/components/enrollee/enrollee-p
 import { EnrolleeAddressComponent } from '@shared/components/enrollee/enrollee-address/enrollee-address.component';
 import { EnrolleePrivilegesComponent } from '@shared/components/enrollee/enrollee-privileges/enrollee-privileges.component';
 import { EnrolleeOrganizationsComponent } from '@shared/components/enrollee/enrollee-organizations/enrollee-organizations.component';
+import { PrimeEmailComponent } from './components/prime-email/prime-email.component';
+import { PrimePhoneComponent } from './components/prime-phone/prime-phone.component';
 import { PrimeEmailComponent } from '@shared/components/prime-email/prime-email.component';
 import { PrimePhoneComponent } from '@shared/components/prime-phone/prime-phone.component';
 import { PrimeLogoComponent } from '@shared/components/prime-logo/prime-logo.component';
 import { ApproveEnrolmentComponent } from '@shared/components/dialogs/content/approve-enrolment/approve-enrolment.component';
 import { SafeHtmlPipe } from '@shared/pipes/safe-html.pipe';
 import { MarkdownComponent } from '@shared/components/dialogs/content/markdown/markdown.component';
+import { PrimeSupportEmailComponent } from './components/prime-support-email/prime-support-email.component';
 
 @NgModule({
   declarations: [
@@ -93,7 +96,8 @@ import { MarkdownComponent } from '@shared/components/dialogs/content/markdown/m
     PrimeLogoComponent,
     ApproveEnrolmentComponent,
     SafeHtmlPipe,
-    MarkdownComponent
+    MarkdownComponent,
+    PrimeSupportEmailComponent
   ],
   imports: [
     CommonModule,
@@ -153,6 +157,7 @@ import { MarkdownComponent } from '@shared/components/dialogs/content/markdown/m
     PrimePhoneComponent,
     PrimeLogoComponent,
     SafeHtmlPipe
+    PrimeSupportEmailComponent
   ],
   entryComponents: [
     ConfirmDialogComponent,

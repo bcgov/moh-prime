@@ -11,7 +11,7 @@ import { PageSubheaderComponent } from '@shared/components/page-subheader/page-s
 import { PillComponent } from '@auth/shared/components/pill/pill.component';
 import { BannerComponent } from '@auth/shared/components/banner/banner.component';
 import { PrimePhoneComponent } from '@shared/components/prime-phone/prime-phone.component';
-import { PrimeEmailComponent } from '@shared/components/prime-email/prime-email.component';
+import { PrimeSupportEmailComponent } from '@shared/components/prime-support-email/prime-support-email.component';
 
 describe('InfoComponent', () => {
   let component: InfoComponent;
@@ -30,7 +30,7 @@ describe('InfoComponent', () => {
           PillComponent,
           BannerComponent,
           PrimePhoneComponent,
-          PrimeEmailComponent
+          PrimeSupportEmailComponent,
         ],
         providers: [
           {
