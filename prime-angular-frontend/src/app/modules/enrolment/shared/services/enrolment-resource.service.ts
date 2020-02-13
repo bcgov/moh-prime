@@ -150,14 +150,14 @@ export class EnrolmentResource {
       preferredMiddleName,
       preferredLastName,
       dateOfBirth,
-      licensePlate,
+      gpid,
+      hpdid,
       physicalAddress,
       mailingAddress,
       contactEmail,
       contactPhone,
       voicePhone,
       voiceExtension,
-      expiryDate,
       ...remainder
     } = enrollee;
 
@@ -171,14 +171,14 @@ export class EnrolmentResource {
         preferredMiddleName,
         preferredLastName,
         dateOfBirth,
-        licensePlate,
+        gpid,
+        hpdid,
         physicalAddress,
         mailingAddress,
         contactEmail,
         contactPhone,
         voicePhone,
-        voiceExtension,
-        expiryDate
+        voiceExtension
       },
       // Provide the default and allow it to be overridden
       collectionNoticeAccepted: false,

@@ -1,10 +1,12 @@
 import { Component, OnInit, ViewChild, Inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, RouterEvent } from '@angular/router';
 import { MatSidenav } from '@angular/material';
 
-import { map, distinctUntilChanged, pairwise } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, distinctUntilChanged, pairwise, startWith } from 'rxjs/operators';
 
 import { AppConfig, APP_CONFIG } from 'app/app-config.module';
+import { RouteStateService } from '@core/services/route-state.service';
 import { ViewportService } from '@core/services/viewport.service';
 import { LoggerService } from '@core/services/logger.service';
 import { DeviceResolution } from '@shared/enums/device-resolution.enum';
@@ -16,7 +18,6 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
-import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 
 @Component({
   selector: 'app-dashboard',
@@ -33,15 +34,16 @@ export class DashboardComponent implements OnInit {
     fixedInViewport: boolean,
     showText: boolean
   };
-
   public username: string;
 
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
+    private route: ActivatedRoute,
+    private router: Router,
+    private routeStateService: RouteStateService,
     private authService: AuthService,
     private viewportService: ViewportService,
     private enrolmentService: EnrolmentService,
-    private router: Router,
     private logger: LoggerService
   ) { }
 
@@ -68,11 +70,13 @@ export class DashboardComponent implements OnInit {
   }
 
   public onLogout() {
+    let routePath = this.config.loginRedirectUrl;
+
     if (this.authService.isAdmin()) {
-      this.authService.logout(`${this.config.loginRedirectUrl}/${AuthRoutes.ADMIN}`);
-    } else {
-      this.authService.logout(this.config.loginRedirectUrl);
+      routePath = `${routePath}/${AuthRoutes.ADMIN}`;
     }
+
+    this.authService.logout(routePath);
   }
 
   public async ngOnInit() {
@@ -101,7 +105,7 @@ export class DashboardComponent implements OnInit {
 
     // Initialize the sidenav with properties based on current viewport
     this.setSideNavProps(this.viewportService.device);
-    // Listen for viewport onresize changes
+
     this.viewportService.onResize()
       .subscribe((device: string) => this.setSideNavProps(device));
 
@@ -115,19 +119,33 @@ export class DashboardComponent implements OnInit {
       : this.getEnrolleeSideNavSections();
   }
 
-  // TODO Refactor side nav sections and logic when the next set of
-  // status changes are implemented
   private getEnrolleeSideNavSections(): DashboardNavSection[] {
     const enrolment = this.enrolmentService.enrolment;
     const enrolmentStatus = (enrolment)
       ? enrolment.currentStatus.statusCode
-      : EnrolmentStatus.IN_PROGRESS;
-    // Indicates the position of the enrollee within their initial enrolment, which
-    // provides a status hook with greater granularity than the enrolment statuses
-    const progressStatus = (enrolment)
-      ? enrolment.progressStatus
-      : ProgressStatus.STARTED;
-    const statusIcons = this.getEnrolmentStatusIcons(enrolmentStatus, progressStatus);
+      : EnrolmentStatus.ACTIVE;
+    // Check if the enrollee is within their initial enrolment
+    const hasAcceptedAtLeastOneToa = (enrolment)
+      ? !!enrolment.expiryDate
+      : false;
+    const statusIcons = this.getEnrolmentStatusIcons(enrolmentStatus, hasAcceptedAtLeastOneToa);
+
+    // Placed outside ngOnInit on purpose to avoid issues with timing in the lifecycle hook
+    const currentRoutePath$ = this.routeStateService.routePath$
+      .pipe(
+        // Provide a default since the navigation end event of the router
+        // doesn't occur as the application is initially loaded
+        startWith(this.router.url),
+        // Only care about the second parameter to determine route access, and
+        // assumes that all child routes are equivalent
+        map((routePath: string) => routePath.slice(1).split('/')[1])
+      );
+
+    const termsOfAccessRoute = (enrolmentStatus === EnrolmentStatus.UNDER_REVIEW)
+      ? EnrolmentRoutes.SUBMISSION_CONFIRMATION
+      : (enrolmentStatus === EnrolmentStatus.REQUIRES_TOA)
+        ? EnrolmentRoutes.ACCESS_TERM
+        : EnrolmentRoutes.CURRENT_ACCESS_TERM;
 
     return [
       {
@@ -139,41 +157,39 @@ export class DashboardComponent implements OnInit {
             icon: statusIcons.enrollee,
             route: EnrolmentRoutes.OVERVIEW,
             showItem: true,
-            // Will never be disabled, so has been explicitly set
             disabled: (
-              progressStatus !== ProgressStatus.FINISHED ||
+              !hasAcceptedAtLeastOneToa ||
               [
-                EnrolmentStatus.IN_PROGRESS,
-                EnrolmentStatus.SUBMITTED,
-                EnrolmentStatus.ADJUDICATED_APPROVED,
-                EnrolmentStatus.DECLINED,
-                EnrolmentStatus.DECLINED_TOS
+                EnrolmentStatus.LOCKED
               ].includes(enrolmentStatus)
             ),
-            forceActive: (
-              // Highlight the profile when in these states
-              [EnrolmentStatus.IN_PROGRESS].includes(enrolmentStatus)
-            )
+            forceActive: currentRoutePath$
+              .pipe(
+                map((routePath: string) =>
+                  EnrolmentRoutes.enrolmentProfileRoutes().includes(routePath)
+                )
+              )
           },
           {
             name: 'Terms of Access',
             icon: statusIcons.accessAgreement,
-            route: (enrolmentStatus === EnrolmentStatus.ACCEPTED_TOS)
-              ? EnrolmentRoutes.CURRENT_ACCESS_TERM
-              : EnrolmentRoutes.TERMS_OF_ACCESS,
+            route: termsOfAccessRoute,
             showItem: true,
             disabled: (
+              !hasAcceptedAtLeastOneToa ||
               [
-                EnrolmentStatus.IN_PROGRESS,
-                EnrolmentStatus.SUBMITTED,
-                EnrolmentStatus.DECLINED,
-                EnrolmentStatus.DECLINED_TOS
+                EnrolmentStatus.LOCKED
               ].includes(enrolmentStatus)
             ),
-            forceActive: (
-              // Highlight the terms of access when in these states
-              [EnrolmentStatus.SUBMITTED].includes(enrolmentStatus)
-            )
+            // TODO
+            // forceActive: currentRoutePath$
+            //   .pipe(
+            //     map((routePath: string) =>
+            //       [
+            //         EnrolmentRoutes.SUBMISSION_CONFIRMATION
+            //       ].includes(routePath)
+            //     )
+            //   )
           },
           {
             name: 'PharmaNet Enrolment Certificate',
@@ -181,12 +197,9 @@ export class DashboardComponent implements OnInit {
             route: EnrolmentRoutes.PHARMANET_ENROLMENT_CERTIFICATE,
             showItem: true,
             disabled: (
+              !hasAcceptedAtLeastOneToa ||
               [
-                EnrolmentStatus.IN_PROGRESS,
-                EnrolmentStatus.SUBMITTED,
-                EnrolmentStatus.ADJUDICATED_APPROVED,
-                EnrolmentStatus.DECLINED,
-                EnrolmentStatus.DECLINED_TOS
+                EnrolmentStatus.LOCKED
               ].includes(enrolmentStatus)
             )
           }
@@ -197,10 +210,9 @@ export class DashboardComponent implements OnInit {
           {
             name: 'PharmaNet Transactions',
             icon: (
-              progressStatus !== ProgressStatus.FINISHED ||
+              !hasAcceptedAtLeastOneToa ||
               [
-                EnrolmentStatus.DECLINED,
-                EnrolmentStatus.DECLINED_TOS
+                EnrolmentStatus.LOCKED
               ].includes(enrolmentStatus)
             )
               ? 'lock'
@@ -208,21 +220,19 @@ export class DashboardComponent implements OnInit {
             route: EnrolmentRoutes.PHARMANET_TRANSACTIONS,
             showItem: true,
             disabled: (
-              progressStatus !== ProgressStatus.FINISHED ||
+              !hasAcceptedAtLeastOneToa ||
               [
-                EnrolmentStatus.DECLINED,
-                EnrolmentStatus.DECLINED_TOS
+                EnrolmentStatus.LOCKED
               ].includes(enrolmentStatus)
             ),
-            deemphasize: (!enrolment || (enrolment && !enrolment.profileCompleted)) ? true : false
+            deemphasize: this.enrolmentService.isInitialEnrolment
           },
           {
             name: 'PRIME Transaction History',
             icon: (
-              progressStatus !== ProgressStatus.FINISHED ||
+              !hasAcceptedAtLeastOneToa ||
               [
-                EnrolmentStatus.DECLINED,
-                EnrolmentStatus.DECLINED_TOS
+                EnrolmentStatus.LOCKED
               ].includes(enrolmentStatus)
             )
               ? 'lock'
@@ -230,61 +240,46 @@ export class DashboardComponent implements OnInit {
             route: EnrolmentRoutes.ACCESS_TERMS,
             showItem: true,
             disabled: (
-              progressStatus !== ProgressStatus.FINISHED ||
+              !hasAcceptedAtLeastOneToa ||
               [
-                EnrolmentStatus.DECLINED,
-                EnrolmentStatus.DECLINED_TOS
+                EnrolmentStatus.LOCKED
               ].includes(enrolmentStatus)
             ),
-            deemphasize: (!enrolment || (enrolment && !enrolment.profileCompleted)) ? true : false
+            deemphasize: this.enrolmentService.isInitialEnrolment
           }
         ]
       },
     ];
   }
 
-  private getEnrolmentStatusIcons(
-    enrolmentStatus: EnrolmentStatus,
-    progressStatus: ProgressStatus
-  ) {
+  private getEnrolmentStatusIcons(enrolmentStatus: EnrolmentStatus, hasAcceptedAtLeastOneToa: boolean) {
     let enrollee = 'assignment_ind';
     let accessAgreement = 'assignment';
     let certificate = 'card_membership';
 
-    if (progressStatus !== ProgressStatus.FINISHED) {
-      enrollee = 'assignment_turned_in';
+    if (!hasAcceptedAtLeastOneToa) {
+      // Default icons when performing initial enrolment
       accessAgreement = 'lock';
       certificate = 'lock';
 
       switch (enrolmentStatus) {
-        case EnrolmentStatus.IN_PROGRESS:
-          enrollee = 'assignment_ind';
+        case EnrolmentStatus.ACTIVE:
           break;
-        case EnrolmentStatus.SUBMITTED:
+        case EnrolmentStatus.UNDER_REVIEW:
+        case EnrolmentStatus.REQUIRES_TOA:
           accessAgreement = 'schedule';
           break;
-        case EnrolmentStatus.ADJUDICATED_APPROVED:
-          accessAgreement = 'assignment';
-          break;
-        case EnrolmentStatus.DECLINED:
-          enrollee = 'highlight_off';
-          break;
-        case EnrolmentStatus.DECLINED_TOS:
-          accessAgreement = 'highlight_off';
+        case EnrolmentStatus.LOCKED:
+          enrollee = 'lock';
           break;
       }
     } else {
       switch (enrolmentStatus) {
-        case EnrolmentStatus.SUBMITTED:
-          accessAgreement = 'lock';
-          certificate = 'lock';
+        case EnrolmentStatus.ACTIVE:
+        case EnrolmentStatus.UNDER_REVIEW:
+        case EnrolmentStatus.REQUIRES_TOA:
           break;
-        case EnrolmentStatus.ADJUDICATED_APPROVED:
-          enrollee = 'lock';
-          certificate = 'lock';
-          break;
-        case EnrolmentStatus.DECLINED:
-        case EnrolmentStatus.DECLINED_TOS:
+        case EnrolmentStatus.LOCKED:
           enrollee = 'lock';
           accessAgreement = 'lock';
           certificate = 'lock';

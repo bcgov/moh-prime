@@ -12,9 +12,8 @@ export class EnrolmentRoutes {
   public static SELF_DECLARATION = 'self-declaration';
   // Enrolment submission:
   public static SUBMISSION_CONFIRMATION = 'submission-confirmation';
-  public static TERMS_OF_ACCESS = 'terms-of-access';
-  public static DECLINED = 'declined';
-  public static DECLINED_TERMS_OF_ACCESS = 'declined-terms-of-access';
+  public static ACCESS_TERM = 'access-term';
+  public static ACCESS_LOCKED = 'access-locked';
   // Enrollee history and PharmaNet:
   // Replaces terms of access after accepting the terms of access (TOA)
   public static CURRENT_ACCESS_TERM = 'current-access-term';
@@ -61,14 +60,13 @@ export class EnrolmentRoutes {
     return [
       // Enrolment was flagged for manual adjudication
       EnrolmentRoutes.SUBMISSION_CONFIRMATION,
-      EnrolmentRoutes.DECLINED,
-      // ACCESS_AGREEMENT is synonymous with APPROVED
-      EnrolmentRoutes.TERMS_OF_ACCESS,
-      EnrolmentRoutes.DECLINED_TERMS_OF_ACCESS
+      EnrolmentRoutes.ACCESS_LOCKED,
+      // ACCESS_TERM is synonymous with adjudicator manual/automatic APPROVED
+      EnrolmentRoutes.ACCESS_TERM
     ];
   }
 
-  public static enrolmentApprovedRoutes(): string[] {
+  public static enrolmentAcceptedToaRoutes(): string[] {
     return [
       EnrolmentRoutes.CURRENT_ACCESS_TERM,
       EnrolmentRoutes.PHARMANET_ENROLMENT_CERTIFICATE,
@@ -78,12 +76,11 @@ export class EnrolmentRoutes {
   }
 
   // Accessible routes for an enrollee when they have been
-  // approved for PharmaNet access, or are editing an
-  // approved enrolment
+  // approved for PharmaNet access and accepted a TOA
   public static enrolleeRoutes(): string[] {
     return [
       ...EnrolmentRoutes.enrolmentProfileRoutes(),
-      ...EnrolmentRoutes.enrolmentApprovedRoutes()
+      ...EnrolmentRoutes.enrolmentAcceptedToaRoutes()
     ];
   }
 }

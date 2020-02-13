@@ -20,8 +20,7 @@ import { OrganizationComponent } from './pages/organization/organization.compone
 import { SubmissionConfirmationComponent } from './pages/submission-confirmation/submission-confirmation.component';
 import { AccessAgreementComponent } from './pages/access-agreement/access-agreement.component';
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
-import { DeclinedComponent } from './pages/declined/declined.component';
-import { DeclinedAccessAgreementComponent } from './pages/declined-access-agreement/declined-access-agreement.component';
+import { AccessLocked } from './pages/access-locked/access-locked.component';
 import { AccessAgreementHistoryComponent } from './pages/access-agreement-history/access-agreement-history.component';
 import { PharmanetEnrolmentCertificateComponent } from './pages/pharmanet-enrolment-certificate/pharmanet-enrolment-certificate.component';
 import { PharmanetTransactionsComponent } from './pages/pharmanet-transactions/pharmanet-transactions.component';
@@ -37,6 +36,8 @@ const routes: Routes = [
       EnrolleeGuard,
       EnrolmentGuard
     ],
+    // Ensure that the configuration is loaded, otherwise
+    // if it already exists NOOP
     resolve: [ConfigResolver],
     children: [
       {
@@ -58,9 +59,6 @@ const routes: Routes = [
       //
       // Enrollee profile:
       //
-      // TODO refactor routes to have deeper child routing, which
-      // will provide an easier way to lock down routing, and provide
-      // feedback for marking active routes in the dashboard
       {
         path: EnrolmentRoutes.DEMOGRAPHIC,
         component: DemographicComponent,
@@ -107,19 +105,14 @@ const routes: Routes = [
         data: { title: 'PharmaNet Enrolment' }
       },
       {
-        path: EnrolmentRoutes.DECLINED,
-        component: DeclinedComponent,
+        path: EnrolmentRoutes.ACCESS_LOCKED,
+        component: AccessLocked,
         data: { title: 'Enrolment Summary' }
       },
       {
-        path: EnrolmentRoutes.TERMS_OF_ACCESS,
+        path: EnrolmentRoutes.ACCESS_TERM,
         component: AccessAgreementComponent,
         data: { title: 'Enrolment Terms of Access' }
-      },
-      {
-        path: EnrolmentRoutes.DECLINED_TERMS_OF_ACCESS,
-        component: DeclinedAccessAgreementComponent,
-        data: { title: 'Enrolment Summary' }
       },
       //
       // Enrollee history and PharmaNet:

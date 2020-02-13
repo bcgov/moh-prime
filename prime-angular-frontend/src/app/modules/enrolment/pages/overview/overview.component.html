@@ -23,11 +23,25 @@
   </app-page-subheader>
 
   <app-enrollee-review *ngIf="enrolment"
+                       [showEditRedirect]="currentStatus === EnrolmentStatus.ACTIVE"
                        [enrolment]="enrolment"
                        (route)="routeTo($event)"></app-enrollee-review>
 
   <div class="footer">
-    <mat-checkbox #accept>
+
+    <app-alert *ngIf="currentStatus !== EnrolmentStatus.ACTIVE"
+               type="danger"
+               icon="warning">
+      <ng-container #alertContent
+                    class="alert-content">
+        Your enrolment has already been submitted for adjudication. If you would like to edit your PRIME profile and
+        re-submit contact us at <app-prime-phone></app-prime-phone>.
+      </ng-container>
+    </app-alert>
+
+
+    <mat-checkbox #accept
+                  [disabled]="currentStatus !== EnrolmentStatus.ACTIVE">
       <div class="pl-3">
         I certify that all information provided is true and complete. I understand it is an offence under the
         Pharmaceutical Services Act to knowingly provide false or misleading information.

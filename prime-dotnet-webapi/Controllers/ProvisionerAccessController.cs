@@ -89,7 +89,7 @@ namespace Prime.Controllers
                 this.ModelState.AddModelError("Enrollee.UserId", "No enrollee exists for this User Id.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
-            if (enrollee.ProgressStatus != ProgressStatusType.FINISHED)
+            if (enrollee.ExpiryDate != null)
             {
                 this.ModelState.AddModelError("Enrollee.UserId", "The enrollee for this User Id is not in a finished state.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
@@ -113,7 +113,7 @@ namespace Prime.Controllers
         {
             var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(User.GetPrimeUserId());
 
-            return Ok(new ApiOkResponse<string>(enrollee?.LicensePlate));
+            return Ok(new ApiOkResponse<string>(enrollee?.GPID));
         }
     }
 }

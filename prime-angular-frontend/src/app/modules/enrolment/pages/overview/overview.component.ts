@@ -25,6 +25,8 @@ import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-stat
 export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public busy: Subscription;
   public enrolment: Enrolment;
+  public currentStatus: EnrolmentStatus;
+  public EnrolmentStatus = EnrolmentStatus;
 
   protected allowRoutingWhenDirty: boolean;
 
@@ -40,7 +42,8 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   ) {
     super(route, router);
 
-    this.allowRoutingWhenDirty = false;
+    this.currentStatus = null;
+    this.allowRoutingWhenDirty = true;
   }
 
   public onSubmit() {
@@ -56,14 +59,17 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
         .pipe(
           exhaustMap((result: boolean) =>
             (result)
-              ? this.enrolmentResource.updateEnrolmentStatus(enrolment.id, EnrolmentStatus.SUBMITTED)
+              ? this.enrolmentResource.updateEnrollee(enrolment)
               : EMPTY
+          ),
+          exhaustMap(() =>
+            this.enrolmentResource.updateEnrolmentStatus(enrolment.id, EnrolmentStatus.UNDER_REVIEW)
           )
         )
         .subscribe(
           () => {
             this.toastService.openSuccessToast('Enrolment has been submitted');
-            this.router.navigate([EnrolmentRoutes.SUBMISSION_CONFIRMATION], { relativeTo: this.route.parent });
+            this.routeTo(EnrolmentRoutes.SUBMISSION_CONFIRMATION);
           },
           (error: any) => {
             this.toastService.openErrorToast('Enrolment could not be submitted');
@@ -96,6 +102,10 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
 
   public ngOnInit() {
     let enrolment = this.enrolmentService.enrolment;
+
+    // Store current status as it will be truncated for initial enrolment
+    this.currentStatus = enrolment.currentStatus.statusCode;
+
     if (this.enrolmentStateService.isPatched) {
       enrolment = this.enrolmentStateService.enrolment;
       // Merge BCSC information in for use within the view

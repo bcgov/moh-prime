@@ -51,11 +51,11 @@ export class AdjudicatorNotesComponent implements OnInit {
   }
 
   public canApproveOrDeny(currentStatusCode: number) {
-    return (currentStatusCode === EnrolmentStatus.SUBMITTED);
+    return (currentStatusCode === EnrolmentStatus.UNDER_REVIEW);
   }
 
   public canAllowEditing(currentStatusCode: number) {
-    return (currentStatusCode !== EnrolmentStatus.ADJUDICATED_APPROVED);
+    return (currentStatusCode !== EnrolmentStatus.REQUIRES_TOA);
   }
 
   public onSubmit() {
@@ -119,7 +119,7 @@ export class AdjudicatorNotesComponent implements OnInit {
         }),
         exhaustMap(() =>
           this.adjudicationResource
-            .updateEnrolmentStatus(enrolment.id, EnrolmentStatus.ADJUDICATED_APPROVED)
+            .updateEnrolmentStatus(enrolment.id, EnrolmentStatus.REQUIRES_TOA)
         ),
         exhaustMap(() => this.adjudicationResource.enrollee(enrolment.id))
       )
@@ -147,7 +147,7 @@ export class AdjudicatorNotesComponent implements OnInit {
       .pipe(
         exhaustMap((result: boolean) =>
           (result)
-            ? this.adjudicationResource.updateEnrolmentStatus(id, EnrolmentStatus.DECLINED)
+            ? this.adjudicationResource.updateEnrolmentStatus(id, EnrolmentStatus.LOCKED)
             : EMPTY
         ),
         exhaustMap(() => this.adjudicationResource.enrollee(id)),
@@ -164,7 +164,7 @@ export class AdjudicatorNotesComponent implements OnInit {
       );
   }
 
-  public markAsInProgress(id: number) {
+  public markAsActive(id: number) {
     const data: DialogOptions = {
       title: 'Enable Editing',
       message: 'When enabled the enrollee will be able to update their enrolment. Are you sure you want to enable editing?',
@@ -176,7 +176,7 @@ export class AdjudicatorNotesComponent implements OnInit {
       .pipe(
         exhaustMap((result: boolean) =>
           (result)
-            ? this.adjudicationResource.updateEnrolmentStatus(id, EnrolmentStatus.IN_PROGRESS)
+            ? this.adjudicationResource.updateEnrolmentStatus(id, EnrolmentStatus.ACTIVE)
             : EMPTY
         ),
         exhaustMap(() => this.adjudicationResource.enrollee(id))

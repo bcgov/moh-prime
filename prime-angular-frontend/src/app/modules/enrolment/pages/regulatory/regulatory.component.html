@@ -15,7 +15,7 @@
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>College Licence Information</ng-container>
         <ng-container appPageSubheaderSummary>
-          Provide details for all your active College licences, or select <strong>none</strong> if you are not certified
+          Provide details for all your active College licences, or select <strong>none</strong> if you are not licenced
           by a professional College.
         </ng-container>
       </app-page-subheader>
@@ -50,7 +50,7 @@
 
   </form>
 
-  <app-page-footer [profileCompleted]="isProfileComplete"
+  <app-page-footer [isInitialEnrolment]="isInitialEnrolment"
                    (save)="onSubmit()"
                    (back)="routeTo(EnrolmentRoutes.DEMOGRAPHIC)"></app-page-footer>
 

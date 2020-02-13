@@ -8,7 +8,6 @@ import { IEnrolmentService } from '@enrolment/shared/services/enrolment.service'
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { EnrolleeClassification } from '@shared/enums/enrollee-classification.enum';
 import { Address } from '@enrolment/shared/models/address.model';
-import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
 
 export class MockEnrolmentService implements IEnrolmentService {
   // tslint:disable-next-line: variable-name
@@ -35,11 +34,12 @@ export class MockEnrolmentService implements IEnrolmentService {
         contactPhone: faker.phone.phoneNumber(),
         voicePhone: faker.phone.phoneNumber(),
         voiceExtension: null,
-        licensePlate: null,
-        expiryDate: null,
+        gpid: null,
+        hpdid: null,
       },
       appliedDate: null,
       approvedDate: null,
+      expiryDate: null,
       certifications: [],
       deviceProviderNumber: null,
       isInsulinPumpProvider: null,
@@ -64,7 +64,7 @@ export class MockEnrolmentService implements IEnrolmentService {
         enrolmentId,
         statusCode: null,
         status: {
-          code: EnrolmentStatus.IN_PROGRESS,
+          code: EnrolmentStatus.ACTIVE,
           name: null
         },
         statusDate: null,
@@ -84,7 +84,6 @@ export class MockEnrolmentService implements IEnrolmentService {
       enrolmentCertificateNote: null,
       accessAgreementNote: null,
       profileCompleted: true,
-      progressStatus: ProgressStatus.STARTED,
       collectionNoticeAccepted: false,
       alwaysManual: false
     });
@@ -99,7 +98,7 @@ export class MockEnrolmentService implements IEnrolmentService {
   }
 
   public get isInitialEnrolment(): boolean {
-    return this.enrolment.progressStatus !== ProgressStatus.FINISHED;
+    return !!this.enrolment.expiryDate;
   }
 
   public get isProfileComplete(): boolean {
