@@ -5,14 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-
 using Bogus;
-using Bogus.Extensions;
-
 using Prime;
 using Prime.Models;
 using Prime.Services;
-
 using PrimeTests.Utils.Auth;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
@@ -69,8 +65,8 @@ namespace PrimeTests.Utils
                                 ;
 
         public static Faker<EnrolmentStatus> EnrolmentStatusFaker = new Faker<EnrolmentStatus>()
-              .RuleFor(es => es.StatusCode, f => Status.IN_PROGRESS_CODE)
-              .RuleFor(es => es.Status, f => new Status { Code = Status.IN_PROGRESS_CODE, Name = "In Progress" })
+              .RuleFor(es => es.StatusCode, f => Status.ACTIVE_CODE)
+              .RuleFor(es => es.Status, f => new Status { Code = Status.ACTIVE_CODE, Name = "Active Code" })
               .RuleFor(es => es.StatusDate, f => DateTime.Now)
               .RuleFor(es => es.PharmaNetStatus, f => false)
               ;
@@ -221,12 +217,10 @@ namespace PrimeTests.Utils
 
             if (!db.Set(typeof(Status)).Any())
             {
-                db.AddRange(new Status { Code = Status.IN_PROGRESS_CODE, Name = "In Progress" });
-                db.AddRange(new Status { Code = Status.SUBMITTED_CODE, Name = "Submitted" });
-                db.AddRange(new Status { Code = Status.APPROVED_CODE, Name = "Adjudicated/Approved" });
-                db.AddRange(new Status { Code = Status.DECLINED_CODE, Name = "Declined" });
-                db.AddRange(new Status { Code = Status.ACCEPTED_TOS_CODE, Name = "Accepted TOS (Terms of Service)" });
-                db.AddRange(new Status { Code = Status.DECLINED_TOS_CODE, Name = "Declined TOS (Terms of Service)" });
+                db.AddRange(new Status { Code = Status.ACTIVE_CODE, Name = "In Progress" });
+                db.AddRange(new Status { Code = Status.UNDER_REVIEW_CODE, Name = "Submitted" });
+                db.AddRange(new Status { Code = Status.REQUIRES_TOA_CODE, Name = "Adjudicated/Approved" });
+                db.AddRange(new Status { Code = Status.LOCKED_CODE, Name = "Declined" });
             }
 
             if (!db.Set(typeof(Country)).Any())
