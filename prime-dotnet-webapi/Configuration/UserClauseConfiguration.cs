@@ -6,23 +6,17 @@ namespace Prime.Configuration
 {
     public class UserClauseConfiguration : SeededTable<UserClause>
     {
-
-        public string getRuClause()
+        public string getClause(string file)
         {
-            string ruClauseFile = "./Configuration/assets/ru-access-terms.html";
-            if (File.Exists(ruClauseFile))
+            string clauseFile = Path.GetFullPath("./Configuration/assets/" + file);
+
+            if (File.Exists(clauseFile))
             {
-                return System.IO.File.ReadAllText(ruClauseFile);
+                return System.IO.File.ReadAllText(clauseFile);
             }
-            throw new FileNotFoundException("Could not find file");
-        }
-
-        public string getOboClause()
-        {
-            string oboClauseFile = "./Configuration/assets/obo-access-terms.html";
-            if (File.Exists(oboClauseFile))
+            else if (clauseFile.Contains("prime-dotnet-webapi-tests"))
             {
-                return System.IO.File.ReadAllText(oboClauseFile);
+                return "";
             }
             throw new FileNotFoundException("Could not find file");
         }
@@ -31,8 +25,8 @@ namespace Prime.Configuration
             get
             {
                 return new[] {
-                    new UserClause { Id = 1, Clause = this.getOboClause(), EnrolleeClassification = PrimeConstants.PRIME_OBO, EffectiveDate = SEEDING_DATE, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new UserClause { Id = 2, Clause = this.getRuClause(), EnrolleeClassification = PrimeConstants.PRIME_RU, EffectiveDate = SEEDING_DATE, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE }
+                    new UserClause { Id = 1, Clause = this.getClause("obo-access-terms.html"), EnrolleeClassification = PrimeConstants.PRIME_OBO, EffectiveDate = SEEDING_DATE, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new UserClause { Id = 2, Clause = this.getClause("ru-access-terms.html"), EnrolleeClassification = PrimeConstants.PRIME_RU, EffectiveDate = SEEDING_DATE, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE }
                 };
             }
         }
