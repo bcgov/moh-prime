@@ -10,7 +10,7 @@ import {
 } from '@angular/router';
 
 import { Observable } from 'rxjs';
-import { filter, tap, map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
