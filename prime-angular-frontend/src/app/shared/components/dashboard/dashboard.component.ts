@@ -219,13 +219,13 @@ export class DashboardComponent implements OnInit {
               : 'date_range',
             route: EnrolmentRoutes.PHARMANET_TRANSACTIONS,
             showItem: true,
-            disabled: (
-              !hasAcceptedAtLeastOneToa ||
-              [
-                EnrolmentStatus.LOCKED
-              ].includes(enrolmentStatus)
-            ),
-            deemphasize: this.enrolmentService.isInitialEnrolment
+            disabled: true, // (
+            //   !hasAcceptedAtLeastOneToa ||
+            //   [
+            //     EnrolmentStatus.LOCKED
+            //   ].includes(enrolmentStatus)
+            // ),
+            deemphasize: true // this.enrolmentService.isInitialEnrolment
           },
           {
             name: 'PRIME Transaction History',
