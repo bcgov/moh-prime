@@ -17,6 +17,7 @@ export interface IAuthService {
   isEnrollee(): Promise<boolean>;
   isAdjudicator(): boolean;
   isAdmin(): boolean;
+  isSuperAdmin(): boolean;
   decodeToken(): Promise<Keycloak.KeycloakTokenParsed | null>;
   login(options?: Keycloak.KeycloakLoginOptions): Promise<void>;
   isLoggedIn(): Promise<boolean>;
@@ -94,7 +95,6 @@ export class AuthService implements IAuthService {
     const userId = await this.getUserId();
     const hpdid = await this.getPreferredUsername();
 
-
     return {
       userId,
       hpdid,
@@ -135,6 +135,10 @@ export class AuthService implements IAuthService {
 
   public isAdmin(): boolean {
     return this.isUserInRole(Role.ADMIN);
+  }
+
+  public isSuperAdmin(): boolean {
+    return this.isUserInRole(Role.SUPER_ADMIN);
   }
 
   public async decodeToken(): Promise<Keycloak.KeycloakTokenParsed | null> {
