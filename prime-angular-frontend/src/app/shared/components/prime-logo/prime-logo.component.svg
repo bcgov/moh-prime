@@ -1,4 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg"
+     preserveAspectRatio="xMidYMid meet"
      [attr.width]="config.width"
      [attr.height]="config.height"
      [attr.viewBox]="config.dimensions"

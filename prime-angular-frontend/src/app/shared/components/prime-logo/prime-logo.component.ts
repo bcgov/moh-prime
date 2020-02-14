@@ -28,6 +28,8 @@ export class PrimeLogoComponent implements OnInit {
 
   public config: PrimeLogoConfig;
 
+  private ratio: { [key: string]: number };
+
   constructor() {
     this.fill = 'dark';
     this.mode = 'full';
@@ -47,30 +49,31 @@ export class PrimeLogoComponent implements OnInit {
 
   private buildFullConfig(fill: primeLogoFill, mode: primeLogoMode, size: primeLogoSize, position: primeLogoPosition): PrimeLogoConfig {
     const dimensions = (position === 'right')
-      ? [0, 0, 200, 92]
-      : [0, 0, 92, 142];
+      ? [-2, -2, 212, 100]
+      : [-2, -2, 100, 150];
+
     return {
       mode,
       fill,
       size,
       position,
       dimensions: dimensions.join(','),
-      width: `${dimensions[3]}`,
-      height: `${dimensions[4]}`
+      width: `${dimensions[2]}`,
+      height: `${dimensions[3]}`
     };
   }
 
   private buildIconConfig(fill: primeLogoFill, mode: primeLogoMode, size: primeLogoSize): PrimeLogoConfig {
     const position = 'none';
-    const dimensions = [0, 0, 92, 92];
+    const dimensions = [-2, -2, 100, 100];
     return {
       mode,
       fill,
       size,
       position,
       dimensions: dimensions.join(','),
-      width: `${dimensions[3]}`,
-      height: `${dimensions[4]}`
+      width: `${dimensions[2]}`,
+      height: `${dimensions[3]}`
     };
   }
 }
