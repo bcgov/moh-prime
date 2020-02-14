@@ -5,7 +5,7 @@
   }
 }
 
-.logo-fill-dark {
+.logo-fill-dark g:not(.yellow) {
   path,
   polygon {
     fill: #224176;
@@ -15,6 +15,24 @@
 .yellow {
   path,
   polygon {
-    fill: #E3A92B;
+    fill: #e3a92b;
   }
 }
+
+.logo-position-right {
+  transform: translate(114, -82);
+}
+
+// .logo-small {
+//   // width: px;
+//   // height: px;
+// }
+
+// .logo-medium {
+//   // width: px;
+//   // height: px;
+// }
+
+// .logo-large {
+//   // width: px;
+// }
