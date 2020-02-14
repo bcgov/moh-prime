@@ -82,3 +82,14 @@ a {
 .accent {
   font-style: italic;
 }
+
+.mat-flat-button.large {
+  width: 140px;
+  height: 46px;
+  font-size: 1.2rem;
+
+  &.light {
+    background-color: theme-palette(blue, light);
+    color: white;
+  }
+}
