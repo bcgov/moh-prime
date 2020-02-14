@@ -233,16 +233,16 @@ export class AdjudicatorNotesComponent implements OnInit {
           value: '',
           disabled: false
         },
-        [Validators.required]
+        []
       ]
     });
   }
 
   private getEnrollee(enrolleeId: number, statusCode?: number) {
-    this.busy = combineLatest(
+    this.busy = combineLatest([
       this.adjudicationResource.enrollee(enrolleeId, statusCode),
       this.adjudicationResource.adjudicatorNotes(enrolleeId)
-    ).subscribe(
+    ]).subscribe(
       ([enrolment, adjudicatorNotes]: [Enrolment, AdjudicationNote[]]) => {
         this.logger.info('ENROLMENT', enrolment);
         this.logger.info('ADJUDICATOR_NOTES', adjudicatorNotes);

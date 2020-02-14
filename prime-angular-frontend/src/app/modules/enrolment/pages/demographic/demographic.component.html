@@ -153,7 +153,8 @@
           <mat-form-field class="w-100">
             <input matInput
                    placeholder="Optional Extension Number"
-                   formControlName="voiceExtension">
+                   formControlName="voiceExtension"
+                   maxlength="10">
             <mat-error *ngIf="voiceExtension.hasError('required')">Required</mat-error>
             <mat-error *ngIf="voiceExtension.hasError('numeric')">Must contain only numbers</mat-error>
           </mat-form-field>

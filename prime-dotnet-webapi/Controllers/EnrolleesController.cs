@@ -345,14 +345,6 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            // Notes can not be added to 'Active' enrolments
-            // TODO Decide when ajudicators should be able to add notes
-            if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.ACTIVE_CODE))
-            {
-                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Adjudicator notes can not be updated when the current status is 'Active'.");
-                return BadRequest(new ApiBadRequestResponse(this.ModelState));
-            }
-
             var createdAdjudicatorNote = await _enrolleeService.CreateEnrolleeAdjudicatorNoteAsync(enrolleeId, note);
 
             return CreatedAtAction(
