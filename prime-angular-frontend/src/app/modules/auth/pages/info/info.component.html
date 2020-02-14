@@ -5,9 +5,11 @@
 
     <div class="row mt-4 enrolment-container">
       <div class="col-md-3 d-none d-md-block">
+
         <img src="/assets/prime-logo-textless.svg"
              class="logo"
              alt="PRIME Logo">
+
       </div>
       <div class="col-md-7 col-sm-12">
         <app-page-header>
@@ -26,12 +28,13 @@
 
           <div class="mt-4">
             <button mat-flat-button
-                    class="mr-4 mb-4"
+                    class="mr-4 mb-4 large"
                     color="primary"
                     [disabled]="isIE"
                     (click)="loginUsingBCSC()">Log in</button>
+
             <button mat-flat-button
-                    color="accent"
+                    class="large light"
                     href="#">Learn More</button>
           </div>
         </div>
