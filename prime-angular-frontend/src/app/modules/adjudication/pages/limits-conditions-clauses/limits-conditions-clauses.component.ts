@@ -34,13 +34,13 @@ export class LimitsConditionsClausesComponent implements OnInit {
   public dataSource: MatTableDataSource<Enrolment>;
   public enrollee: Enrolment;
   public preview: string;
-  public authService: AuthService;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
     private adjudicationResource: AdjudicationResource,
+    private authService: AuthService,
     private toastService: ToastService,
     private dialog: MatDialog,
     private logger: LoggerService
@@ -58,6 +58,10 @@ export class LimitsConditionsClausesComponent implements OnInit {
 
   public canAllowEditing(currentStatusCode: number) {
     return (currentStatusCode !== EnrolmentStatus.REQUIRES_TOA);
+  }
+
+  public isSuperAdmin() {
+    return this.authService.isSuperAdmin();
   }
 
   /**

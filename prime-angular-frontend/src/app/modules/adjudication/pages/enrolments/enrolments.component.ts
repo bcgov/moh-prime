@@ -33,13 +33,13 @@ export class EnrolmentsComponent implements OnInit {
   public statuses: Config<number>[];
   public filteredStatus: Config<number>;
   public dataSource: MatTableDataSource<Enrolment>;
-  public authService: AuthService;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private configService: ConfigService,
     private adjudicationResource: AdjudicationResource,
+    private authService: AuthService,
     private toastService: ToastService,
     private dialog: MatDialog,
     private logger: LoggerService
@@ -63,6 +63,10 @@ export class EnrolmentsComponent implements OnInit {
   public canAllowEditing(currentStatusCode: EnrolmentStatus) {
     // Admins can only allow re-enable editing for an enrollee in a UNDER_REVIEW state
     return (currentStatusCode === EnrolmentStatus.UNDER_REVIEW);
+  }
+
+  public isSuperAdmin() {
+    return this.authService.isSuperAdmin();
   }
 
   public isActive(currentStatusCode: EnrolmentStatus) {

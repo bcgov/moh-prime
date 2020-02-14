@@ -118,7 +118,7 @@
         <span>Enable Editing</span>
       </button>
       <button mat-menu-item
-              *ngIf="authService.isSuperAdmin()"
+              *ngIf="isSuperAdmin()"
               (click)="deleteEnrolment(enrolment.id)">
         <mat-icon>delete</mat-icon>
         <span>Delete Enrolment</span>
