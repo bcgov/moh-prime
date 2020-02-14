@@ -68,7 +68,6 @@ export class AdjudicatorNotesComponent implements OnInit {
             const notes = [adjudicatorNote, ...this.adjudicatorNotes.value];
             this.adjudicatorNotes.next(notes);
             this.note.reset();
-            this.form.markAsPristine();
           },
           (error: any) => {
             this.toastService.openErrorToast(`Adjudication note could not be saved`);
