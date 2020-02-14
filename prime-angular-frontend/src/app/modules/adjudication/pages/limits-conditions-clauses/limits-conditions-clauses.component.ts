@@ -228,9 +228,7 @@ export class LimitsConditionsClausesComponent implements OnInit {
 
   public ngOnInit() {
     this.createFormInstance();
-
     this.initForm();
-
     this.getEnrollee(this.route.snapshot.params.id);
   }
 
