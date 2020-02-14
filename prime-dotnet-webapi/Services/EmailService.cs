@@ -10,7 +10,7 @@ namespace Prime.Services
 {
     public class EmailService : BaseService, IEmailService
     {
-        private const string PRIME_EMAIL = "prime@gov.bc.ca";
+        private const string PRIME_EMAIL = "no-reply-prime@gov.bc.ca";
 
         public EmailService(ApiDbContext context, IHttpContextAccessor httpContext)
             : base(context, httpContext)
@@ -112,7 +112,7 @@ namespace Prime.Services
                  || ex is SmtpFailedRecipientException
                  || ex is SmtpFailedRecipientsException)
                 {
-                    // TODO log mail exception, parhaps in a table in the database?
+                    // TODO log mail exception, perhaps in a table in the database?
                 }
 
                 throw;
