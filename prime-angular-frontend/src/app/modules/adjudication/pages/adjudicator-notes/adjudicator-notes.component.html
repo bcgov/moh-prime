@@ -137,7 +137,8 @@
 
         <div class="text-right">
           <button mat-flat-button
-                  color="primary">Save Note</button>
+                  color="primary"
+                  [disabled]="note.value.length === 0">Save Note</button>
         </div>
 
       </div>
