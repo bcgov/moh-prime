@@ -20,6 +20,7 @@ import {
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { ApproveEnrolmentComponent } from '@shared/components/dialogs/content/approve-enrolment/approve-enrolment.component';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 @Component({
   selector: 'app-enrolments',
@@ -37,6 +38,7 @@ export class EnrolmentsComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private configService: ConfigService,
+    private authService: AuthService,
     private adjudicationResource: AdjudicationResource,
     private toastService: ToastService,
     private dialog: MatDialog,
@@ -183,31 +185,35 @@ export class EnrolmentsComponent implements OnInit {
   }
 
   public deleteEnrolment(id: number) {
+
     const data: DialogOptions = {
       title: 'Delete Enrolment',
       message: 'Are you sure you want to delete this enrolment?',
       actionType: 'warn',
       actionText: 'Delete Enrolment'
     };
-    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
-      .afterClosed()
-      .pipe(
-        exhaustMap((result: boolean) =>
-          (result)
-            ? this.adjudicationResource.deleteEnrolment(id)
-            : EMPTY
+
+    if (this.authService.isSuperAdmin()) {
+      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          exhaustMap((result: boolean) =>
+            (result)
+              ? this.adjudicationResource.deleteEnrolment(id)
+              : EMPTY
+          )
         )
-      )
-      .subscribe(
-        (enrolment: Enrolment) => {
-          this.toastService.openSuccessToast('Enrolment has been deleted');
-          this.removeEnrolment(enrolment);
-        },
-        (error: any) => {
-          this.toastService.openErrorToast('Enrolment could not be deleted');
-          this.logger.error('[Adjudication] Enrolments::deleteEnrolments error has occurred: ', error);
-        }
-      );
+        .subscribe(
+          (enrolment: Enrolment) => {
+            this.toastService.openSuccessToast('Enrolment has been deleted');
+            this.removeEnrolment(enrolment);
+          },
+          (error: any) => {
+            this.toastService.openErrorToast('Enrolment could not be deleted');
+            this.logger.error('[Adjudication] Enrolments::deleteEnrolments error has occurred: ', error);
+          }
+        );
+    }
   }
 
   public getEnrolments(statusCode?: number) {
@@ -226,6 +232,7 @@ export class EnrolmentsComponent implements OnInit {
 
   public ngOnInit() {
     this.getEnrolments();
+    // console.log(this.authService.isSuperAdmin());
   }
 
   private updateEnrolment(enrolment: Enrolment) {
