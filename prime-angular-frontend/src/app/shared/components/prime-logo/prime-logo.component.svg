@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg"
      [attr.width]="config.width"
      [attr.height]="config.height"
-     [attr.viewBox]="config.dimensions"
+     [attr.viewBox]="config.viewbox"
      [ngClass]="{
        'logo-fill-light': config.fill === 'light',
        'logo-fill-dark': config.fill === 'dark'
