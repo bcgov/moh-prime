@@ -144,7 +144,7 @@ export class DashboardComponent implements OnInit {
     const termsOfAccessRoute = (enrolmentStatus === EnrolmentStatus.UNDER_REVIEW)
       ? EnrolmentRoutes.SUBMISSION_CONFIRMATION
       : (enrolmentStatus === EnrolmentStatus.REQUIRES_TOA)
-        ? EnrolmentRoutes.ACCESS_TERM
+        ? EnrolmentRoutes.PENDING_ACCESS_TERM
         : EnrolmentRoutes.CURRENT_ACCESS_TERM;
 
     return [
