@@ -33,12 +33,12 @@ export class EnrolmentsComponent implements OnInit {
   public statuses: Config<number>[];
   public filteredStatus: Config<number>;
   public dataSource: MatTableDataSource<Enrolment>;
+  public authService: AuthService;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private configService: ConfigService,
-    private authService: AuthService,
     private adjudicationResource: AdjudicationResource,
     private toastService: ToastService,
     private dialog: MatDialog,

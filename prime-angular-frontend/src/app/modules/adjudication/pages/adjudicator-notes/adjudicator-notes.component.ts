@@ -33,13 +33,13 @@ export class AdjudicatorNotesComponent implements OnInit {
   public columns: string[];
   public dataSource: MatTableDataSource<Enrolment>;
   public adjudicatorNotes: BehaviorSubject<AdjudicationNote[]>;
+  public authService: AuthService;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
     private adjudicationResource: AdjudicationResource,
-    private authService: AuthService,
     private toastService: ToastService,
     private dialog: MatDialog,
     private logger: LoggerService
