@@ -1,0 +1,38 @@
+@import 'palette';
+@import 'bootstrap/bootstrap-grid';
+
+.container-fluid {
+  min-height: 100vh;
+  background-color: theme-palette(blue);
+
+  @include media-breakpoint-up(sm) {
+    background-color: theme-palette(yellow);
+  }
+
+  .logo {
+    max-width: 100px;
+  }
+
+  .row {
+    &:first-child {
+      min-height: 15vh;
+      background-color: theme-palette(blue);
+    }
+
+    &:nth-child(2) {
+      min-height: 70vh;
+      background-color: theme-palette(blue);
+
+
+      h1 {
+        color: white;
+        font-size: 6rem;
+        margin-top: 10%;
+
+        span {
+          font-size: 2.75rem;
+        }
+      }
+    }
+  }
+}
