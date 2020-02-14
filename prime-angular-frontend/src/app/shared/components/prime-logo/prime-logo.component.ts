@@ -56,20 +56,20 @@ export class PrimeLogoComponent implements OnInit {
   }
 
   private getViewbox(label: primeLogoLabel): number[] {
-    const coords = [-2, -2]; // viewbox top/left padding
-    const dimensions = (label === 'none')
+    const vbCoords = [-2, -2]; // viewbox top/left padding
+    const vbDimensions = (label === 'none')
       ? [100, 100]
       : (label === 'right')
         ? [212, 100]
         : [100, 150];
 
-    return [...coords, ...dimensions];
+    return [...vbCoords, ...vbDimensions];
   }
 
   private getDimensions(size: primeLogoSize, viewbox: number[]): Partial<PrimeLogoConfig> {
     return {
-      width: `${viewbox[2] * this.scale[size]}px}`,
-      height: `${viewbox[3] * this.scale[size]}px}`
+      width: `${viewbox[2] * this.scale[size]}px`,
+      height: `${viewbox[3] * this.scale[size]}px`
     };
   }
 }
