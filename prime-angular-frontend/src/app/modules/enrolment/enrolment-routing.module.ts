@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { ConfigResolver } from '@config/config-resolver';
+import { UnsupportedGuard } from '@core/guards/unsupported.guard';
 import { CanDeactivateFormGuard } from '@core/guards/can-deactivate-form.guard';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
@@ -32,6 +33,7 @@ const routes: Routes = [
   {
     path: EnrolmentRoutes.MODULE_PATH,
     component: DashboardComponent,
+    canActivate: [UnsupportedGuard],
     canActivateChild: [
       AuthenticationGuard,
       EnrolleeGuard,
