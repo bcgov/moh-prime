@@ -1,14 +1,22 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UnsupportedComponent } from './unsupported.component';
+import { SharedModule } from '@shared/shared.module';
+import { UserInterfaceModule } from '@ui/user-interface.module';
 
-describe('AccessPreventedComponent', () => {
+describe('UnsupportedComponent', () => {
   let component: UnsupportedComponent;
   let fixture: ComponentFixture<UnsupportedComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [UnsupportedComponent]
+      imports: [
+        UserInterfaceModule,
+        SharedModule
+      ],
+      declarations: [
+        UnsupportedComponent
+      ]
     })
       .compileComponents();
   }));
