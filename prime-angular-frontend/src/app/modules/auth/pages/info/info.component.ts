@@ -14,18 +14,14 @@ import { UtilsService } from '@core/services/utils.service';
 })
 export class InfoComponent implements OnInit {
   @ViewChild('learnmore', { static: true }) public learnMore: ElementRef;
-  public isIE: boolean;
 
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
     private utilsService: UtilsService
-  ) {
-    this.isIE = utilsService.isIE();
-  }
+  ) { }
 
   public loginUsingBCSC() {
-    if (this.isIE) { return; }
     const redirectUri = `${this.config.loginRedirectUrl}${EnrolmentRoutes.routePath(EnrolmentRoutes.COLLECTION_NOTICE)}`;
 
     this.authService.login({
