@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+
 import { Subscription } from 'rxjs';
+
+import { ToastService } from '@core/services/toast.service';
+import { LoggerService } from '@core/services/logger.service';
 import { AccessTerm } from '@enrolment/shared/models/access-term.model';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { LoggerService } from '@core/services/logger.service';
-import { ToastService } from '@core/services/toast.service';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-access-agreement-current',
@@ -19,9 +20,8 @@ export class AccessAgreementCurrentComponent implements OnInit {
   constructor(
     private enrolmentResource: EnrolmentResource,
     private enrolmentService: EnrolmentService,
-    private logger: LoggerService,
     private toastService: ToastService,
-    private route: ActivatedRoute
+    private logger: LoggerService
   ) { }
 
   public ngOnInit() {
