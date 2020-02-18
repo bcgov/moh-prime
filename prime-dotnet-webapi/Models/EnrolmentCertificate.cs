@@ -21,7 +21,7 @@ namespace Prime.Models
 
         public static EnrolmentCertificate Create(Enrollee enrolleeHistory, Enrollee enrollee)
         {
-            // Display information from profile history from last submission before more recently accepted TOA
+            // Display information from profile history from last submission before most recently accepted TOA
             // Display GPID and Expiry Date from current enrollee object because inital submission will
             // not have these fields until after accepting the TOA
             return new EnrolmentCertificate
