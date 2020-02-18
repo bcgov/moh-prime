@@ -20,6 +20,7 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { ApproveEnrolmentComponent } from '@shared/components/dialogs/content/approve-enrolment/approve-enrolment.component';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 @Component({
   selector: 'app-adjudicator-notes',
@@ -38,6 +39,7 @@ export class AdjudicatorNotesComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     private adjudicationResource: AdjudicationResource,
+    private authService: AuthService,
     private toastService: ToastService,
     private dialog: MatDialog,
     private logger: LoggerService
@@ -56,6 +58,10 @@ export class AdjudicatorNotesComponent implements OnInit {
 
   public canAllowEditing(currentStatusCode: number) {
     return (currentStatusCode !== EnrolmentStatus.REQUIRES_TOA);
+  }
+
+  public isSuperAdmin() {
+    return this.authService.isSuperAdmin();
   }
 
   public onSubmit() {
@@ -200,25 +206,27 @@ export class AdjudicatorNotesComponent implements OnInit {
       actionType: 'warn',
       actionText: 'Delete Enrolment'
     };
-    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
-      .afterClosed()
-      .pipe(
-        exhaustMap((result: boolean) =>
-          (result)
-            ? this.adjudicationResource.deleteEnrolment(id)
-            : EMPTY
+    if (this.authService.isSuperAdmin()) {
+      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          exhaustMap((result: boolean) =>
+            (result)
+              ? this.adjudicationResource.deleteEnrolment(id)
+              : EMPTY
+          )
         )
-      )
-      .subscribe(
-        (enrolment: Enrolment) => {
-          this.toastService.openSuccessToast('Enrolment has been deleted');
-          this.removeEnrolment(enrolment);
-        },
-        (error: any) => {
-          this.toastService.openErrorToast('Enrolment could not be deleted');
-          this.logger.error('[Adjudication] Enrolments::deleteEnrolments error has occurred: ', error);
-        }
-      );
+        .subscribe(
+          (enrolment: Enrolment) => {
+            this.toastService.openSuccessToast('Enrolment has been deleted');
+            this.removeEnrolment(enrolment);
+          },
+          (error: any) => {
+            this.toastService.openErrorToast('Enrolment could not be deleted');
+            this.logger.error('[Adjudication] Enrolments::deleteEnrolments error has occurred: ', error);
+          }
+        );
+    }
   }
 
   public ngOnInit() {
@@ -233,16 +241,16 @@ export class AdjudicatorNotesComponent implements OnInit {
           value: '',
           disabled: false
         },
-        [Validators.required]
+        []
       ]
     });
   }
 
   private getEnrollee(enrolleeId: number, statusCode?: number) {
-    this.busy = combineLatest(
+    this.busy = combineLatest([
       this.adjudicationResource.enrollee(enrolleeId, statusCode),
       this.adjudicationResource.adjudicatorNotes(enrolleeId)
-    ).subscribe(
+    ]).subscribe(
       ([enrolment, adjudicatorNotes]: [Enrolment, AdjudicationNote[]]) => {
         this.logger.info('ENROLMENT', enrolment);
         this.logger.info('ADJUDICATOR_NOTES', adjudicatorNotes);

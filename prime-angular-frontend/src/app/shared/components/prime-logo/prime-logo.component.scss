@@ -1,0 +1,24 @@
+.logo-fill-light g:not(.logo-fill-yellow) {
+  path,
+  polygon {
+    fill: white;
+  }
+}
+
+.logo-fill-dark g:not(.logo-fill-yellow) {
+  path,
+  polygon {
+    fill: #224176;
+  }
+}
+
+.logo-fill-yellow {
+  path,
+  polygon {
+    fill: #e3a92b;
+  }
+}
+
+.logo-position-right {
+  transform: translate(114px, -82px);
+}

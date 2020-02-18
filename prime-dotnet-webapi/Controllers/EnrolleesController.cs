@@ -170,6 +170,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpDelete("{enrolleeId}", Name = nameof(DeleteEnrollee))]
+        [Authorize(Policy = PrimeConstants.SUPER_ADMIN_POLICY)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
@@ -342,14 +343,6 @@ namespace Prime.Controllers
             if (string.IsNullOrWhiteSpace(note))
             {
                 this.ModelState.AddModelError("note", "Adjudicator notes can't be null or empty.");
-                return BadRequest(new ApiBadRequestResponse(this.ModelState));
-            }
-
-            // Notes can not be added to 'Active' enrolments
-            // TODO Decide when ajudicators should be able to add notes
-            if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.ACTIVE_CODE))
-            {
-                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Adjudicator notes can not be updated when the current status is 'Active'.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 

@@ -5,9 +5,11 @@
 
     <div class="row mt-4 enrolment-container">
       <div class="col-md-3 d-none d-md-block">
+
         <img src="/assets/prime-logo-textless.svg"
              class="logo"
              alt="PRIME Logo">
+
       </div>
       <div class="col-md-7 col-sm-12">
         <app-page-header>
@@ -15,9 +17,6 @@
         </app-page-header>
         <app-page-subheader [divider]="false">
           <ng-container appPageSubheaderTitle>Request approval to access PharmaNet</ng-container>
-          <!-- <ng-container appPageSubheaderSummary>
-            <small class="font-weight-light">PRIME provides approval for access to PharmaNet.</small>
-          </ng-container> -->
         </app-page-subheader>
 
         <div class="ml-2">
@@ -29,12 +28,13 @@
 
           <div class="mt-4">
             <button mat-flat-button
-                    class="mr-4 mb-4"
+                    class="mr-4 mb-4 large"
                     color="primary"
                     [disabled]="isIE"
                     (click)="loginUsingBCSC()">Log in</button>
+
             <button mat-flat-button
-                    color="accent"
+                    class="large light"
                     href="#">Learn More</button>
           </div>
         </div>
@@ -83,15 +83,15 @@
 
   <div>
     <div class="row">
-      <div class="col-sm-12 mb-4 center-text">
+      <div class="col-sm-12 mb-4 text-center">
         <h1 class="font-weight-bold">Get Support</h1>
       </div>
     </div>
     <div class="row mb-4 justify-content-center">
       <div class="col-sm-12 col-md-5 info mb-4">
-        <p class="center-text">
+        <p class="text-center">
           Questions about PRIME should be directed to:<br>
-          <app-prime-phone></app-prime-phone> (1- 844 - 397- 7463)
+          <app-prime-phone></app-prime-phone> (<app-prime-phone mode="normal"></app-prime-phone>)
           <br>
           <app-prime-support-email></app-prime-support-email>
         </p>
