@@ -141,7 +141,7 @@ const routes: Routes = [
           {
             path: '',
             component: AccessTermsComponent,
-            data: { title: 'PRIME Transaction History' }
+            data: { title: 'PRIME History' }
           },
           {
             path: ':id',
@@ -149,12 +149,12 @@ const routes: Routes = [
               {
                 path: '',
                 component: AccessAgreementHistoryComponent,
-                data: { title: 'PRIME Transaction History' }
+                data: { title: 'PRIME History' }
               },
               {
                 path: EnrolmentRoutes.ENROLMENT,
                 component: AccessAgreementHistoryEnrolmentComponent,
-                data: { title: 'PRIME Transaction History' }
+                data: { title: 'PRIME History' }
               },
             ]
           }
