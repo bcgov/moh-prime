@@ -65,15 +65,15 @@ export class EnrolmentsComponent implements OnInit {
     return (currentStatusCode === EnrolmentStatus.UNDER_REVIEW);
   }
 
-  public isSuperAdmin() {
+  public isSuperAdmin(): boolean {
     return this.authService.isSuperAdmin();
   }
 
-  public isActive(currentStatusCode: EnrolmentStatus) {
+  public isActive(currentStatusCode: EnrolmentStatus): boolean {
     return (currentStatusCode === EnrolmentStatus.ACTIVE);
   }
 
-  public isUnderReview(currentStatusCode: EnrolmentStatus) {
+  public isUnderReview(currentStatusCode: EnrolmentStatus): boolean {
     return (currentStatusCode === EnrolmentStatus.UNDER_REVIEW);
   }
 
