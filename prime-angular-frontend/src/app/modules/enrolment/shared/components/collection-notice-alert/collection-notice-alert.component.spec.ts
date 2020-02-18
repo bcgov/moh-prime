@@ -16,6 +16,7 @@ import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { PrimeEmailComponent } from '@shared/components/prime-email/prime-email.component';
 import { PrimePhoneComponent } from '@shared/components/prime-phone/prime-phone.component';
+import { SharedModule } from '@shared/shared.module';
 
 describe('CollectionNoticeAlertComponent', () => {
   let component: CollectionNoticeAlertComponent;
@@ -26,7 +27,8 @@ describe('CollectionNoticeAlertComponent', () => {
       {
         imports: [
           NgxMaterialModule,
-          RouterTestingModule
+          RouterTestingModule,
+          SharedModule
         ],
         declarations: [
           AlertComponent,
