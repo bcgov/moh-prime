@@ -2,8 +2,6 @@
 
   <app-page-header class="mb-5">Provisioner Link</app-page-header>
 
-
-
   <ng-container *ngIf="certificate; else noCertificate">
 
     <app-page-subheader>
@@ -17,8 +15,6 @@
     <p class="font-weight-bold mb-5">
       {{ certificate.gpid | uppercase }}
     </p>
-
-
 
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>User Information</ng-container>
@@ -54,10 +50,14 @@
   </ng-container>
   <ng-template #noCertificate>
     <app-page-subheader>
-      <ng-container appPageSubheaderTitle>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-        incididunt ut labore et dolore magna aliqua. </ng-container>
-      <ng-container appPageSubheaderSummary>It is a long established fact that a reader will be distracted by the
-        readable content of a page when looking at its layout.</ng-container>
+      <ng-container appPageSubheaderTitle>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+        magna aliqua.
+      </ng-container>
+      <ng-container appPageSubheaderSummary>
+        It is a long established fact that a reader will be distracted by the readable content of a page when looking at
+        its layout.
+      </ng-container>
     </app-page-subheader>
     <p>This provisioner link has expired please seek medical attention</p>
   </ng-template>
