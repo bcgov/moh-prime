@@ -276,8 +276,10 @@ export class DashboardComponent implements OnInit {
     } else {
       switch (enrolmentStatus) {
         case EnrolmentStatus.ACTIVE:
+          break;
         case EnrolmentStatus.UNDER_REVIEW:
         case EnrolmentStatus.REQUIRES_TOA:
+          accessAgreement = 'schedule';
           break;
         case EnrolmentStatus.LOCKED:
           enrollee = 'lock';
