@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-
-import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { Router, ActivatedRoute } from '@angular/router';
-import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+
 import { AuthService } from '@auth/shared/services/auth.service';
+import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 @Component({
   selector: 'app-collection-notice-alert',
@@ -18,7 +18,7 @@ export class CollectionNoticeAlertComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
-    private enrolmentService: EnrolmentService,
+    private enrolmentService: EnrolmentService
   ) { }
 
   public get label(): string {
@@ -27,23 +27,29 @@ export class CollectionNoticeAlertComponent implements OnInit {
       : 'Ok';
   }
 
-  public show() {
+  public show(): boolean {
     return this.authService.hasJustLoggedIn;
   }
 
   public onAccept() {
-    const route = (!this.isProfileCompleted)
-      ? EnrolmentRoutes.DEMOGRAPHIC
-      : EnrolmentRoutes.OVERVIEW;
+    const currentRoutePath = this.route.snapshot.routeConfig.path;
 
-    this.authService.hasJustLoggedIn = false;
+    if (currentRoutePath === EnrolmentRoutes.COLLECTION_NOTICE) {
+      const route = (!this.isProfileCompleted)
+        ? EnrolmentRoutes.DEMOGRAPHIC
+        : EnrolmentRoutes.OVERVIEW;
 
-    if (this.enrolmentService.isInitialEnrolment) {
-      this.router.navigate([route], { relativeTo: this.route.parent });
+      this.authService.hasJustLoggedIn = false;
+
+      if (this.enrolmentService.isInitialEnrolment) {
+        this.router.navigate([route], { relativeTo: this.route.parent });
+      }
     }
   }
 
   public ngOnInit() {
+    console.log('isProfileComplete', this.enrolmentService.isProfileComplete);
+
     this.isProfileCompleted = this.enrolmentService.isProfileComplete;
   }
 }

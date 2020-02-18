@@ -5,8 +5,7 @@ import {
   NavigationStart,
   NavigationEnd,
   NavigationCancel,
-  NavigationError,
-  ActivatedRoute
+  NavigationError
 } from '@angular/router';
 
 import { Observable } from 'rxjs';
@@ -17,7 +16,6 @@ import { filter, map } from 'rxjs/operators';
 })
 export class RouteStateService {
   constructor(
-    private route: ActivatedRoute,
     private router: Router
   ) { }
 
