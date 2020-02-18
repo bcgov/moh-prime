@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { AccessDeniedComponent } from '@core/components/access-denied/access-denied.component';
-import { MaintenanceComponent } from '@core/components/maintenance/maintenance.component';
-import { PageNotFoundComponent } from '@core/components/page-not-found/page-not-found.component';
 import { AppRoutes } from './app.routes';
+import { AccessDeniedComponent } from '@ui/components/access-denied/access-denied.component';
+import { MaintenanceComponent } from '@ui/components/maintenance/maintenance.component';
+import { PageNotFoundComponent } from '@ui/components/page-not-found/page-not-found.component';
 
 const routes: Routes = [
   {

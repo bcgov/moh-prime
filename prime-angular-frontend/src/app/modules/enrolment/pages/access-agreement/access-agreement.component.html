@@ -5,20 +5,11 @@
   <app-page-header>Terms Of Access</app-page-header>
 
   <app-progress-indicator *ngIf="isInitialEnrolment"
-                          [currentRoute]="EnrolmentRoutes.ACCESS_TERM"></app-progress-indicator>
+                          [inProgress]="isInitialEnrolment"
+                          [currentRoute]="EnrolmentRoutes.PENDING_ACCESS_TERM"></app-progress-indicator>
 
   <ng-container *ngIf="currentPage > 0; else preamble">
-
-    <!-- <app-access-terms-pager [accessTerm]="accessTerm"
-                            [currentPage]="currentPage"
-                            (changed)="onPageChange($event)"></app-access-terms-pager> -->
     <app-access-term [accessTerms]="accessTerm"></app-access-term>
-
-    <!-- <app-ru-access-terms *ngIf="isRu"
-                         [accessTerms]="accessTerm"></app-ru-access-terms>
-    <app-obo-access-terms *ngIf="isObo"
-                          [accessTerms]="accessTerm"></app-obo-access-terms> -->
-
   </ng-container>
 
   <ng-template #preamble>
@@ -37,30 +28,14 @@
       </app-alert>
     </div>
 
-    <ng-container *ngIf="isAutomatic">
-
-      <p>
-        Your application can be automatically processed. Within a few minutes you should receive approval to access
-        PharmaNet once you accept the PharmaNet Terms of Access Agreement. Please read the agreement carefully before
-        accepting.
-      </p>
-
-      <p>
-        After you accept the Terms of Access Agreement, you will receive your PharmaNet ID. Give this ID to the person
-        or organization responsible for setting up your PharmaNet access account. This ID must be associated with
-        your transactions on any PharmaNet access.
-      </p>
-
-    </ng-container>
-
     <p>
       To complete your enrolment, you must accept the PharmaNet User Terms of Access. These terms are specific to the
       type of access you have been granted.
     </p>
 
     <p>
-      Please read the PharmaNet User Terms of Access carefully, as you must comply with them at all times in relation to
-      your use PharmaNet. You are encouraged to print or save a copy of the PharmaNet User Terms of Access.
+      Please read the PharmaNet User Terms of Access carefully, as you must comply with them at all times in relation
+      to your use PharmaNet. You are encouraged to print or save a copy of the PharmaNet User Terms of Access.
     </p>
 
   </ng-template>

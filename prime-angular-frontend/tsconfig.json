@@ -32,6 +32,9 @@
       "@shared/*": [
         "./app/shared/*"
       ],
+      "@ui/*": [
+        "./app/modules/user-interface/*"
+      ],
       "@auth/*": [
         "./app/modules/auth/*"
       ],
@@ -42,7 +45,7 @@
         "./app/modules/adjudication/*"
       ],
       "@certificate/*": [
-        "./app/modules/enrolment-certificate/*"
+        "./app/modules/provisioner-access/*"
       ]
     }
   },

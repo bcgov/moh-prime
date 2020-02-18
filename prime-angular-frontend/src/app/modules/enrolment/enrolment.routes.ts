@@ -12,7 +12,7 @@ export class EnrolmentRoutes {
   public static SELF_DECLARATION = 'self-declaration';
   // Enrolment submission:
   public static SUBMISSION_CONFIRMATION = 'submission-confirmation';
-  public static ACCESS_TERM = 'access-term';
+  public static PENDING_ACCESS_TERM = 'pending-access-term';
   public static ACCESS_LOCKED = 'access-locked';
   // Enrollee history and PharmaNet:
   // Replaces terms of access after accepting the terms of access (TOA)
@@ -62,7 +62,7 @@ export class EnrolmentRoutes {
       EnrolmentRoutes.SUBMISSION_CONFIRMATION,
       EnrolmentRoutes.ACCESS_LOCKED,
       // ACCESS_TERM is synonymous with adjudicator manual/automatic APPROVED
-      EnrolmentRoutes.ACCESS_TERM
+      EnrolmentRoutes.PENDING_ACCESS_TERM
     ];
   }
 

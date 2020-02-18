@@ -3,8 +3,6 @@
 
   <app-page-header>Limits and Conditions Clauses</app-page-header>
 
-  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate debitis, non atque vel distinctio digbias.</p>
-
   <table mat-table
          [dataSource]="dataSource"
          class="w-100 mb-5">
@@ -117,6 +115,12 @@
         <mat-icon>undo</mat-icon>
         <span>Enable Editing</span>
       </button>
+      <button mat-menu-item
+              *ngIf="isSuperAdmin()"
+              (click)="deleteEnrolment(enrolment.id)">
+        <mat-icon>delete</mat-icon>
+        <span>Delete Enrolment</span>
+      </button>
     </mat-menu>
   </ng-template>
 
@@ -127,7 +131,6 @@
     <div class="row mb-4">
       <div class="col-sm-12 col-lg-6">
         <editor class="mb-4"
-                initialValue=""
                 formControlName="note"
                 (onKeyUp)="handleChange($event)"
                 (onChange)="handleChange($event)"
@@ -148,7 +151,7 @@
 
       <div class="col-sm-12 col-lg-6">
         <div class="preview">
-          <p class="bold underline">Limits and Conditions</p>
+          <p class="bold underline">Additional Limits and Conditions</p>
           <div [innerHTML]="preview | safeHtml | default: 'No Preview Found'"></div>
         </div>
       </div>

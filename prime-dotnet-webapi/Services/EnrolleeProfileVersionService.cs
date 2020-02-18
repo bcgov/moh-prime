@@ -39,6 +39,18 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(epv => epv.Id == enrolleeProfileVersionId);
         }
 
+        /**
+          * Get the most recent Profile version before a given time.
+          */
+        public async Task<EnrolleeProfileVersion> GetEnrolleeProfileVersionBeforeDateAsync(int enrolleeId, DateTime dateTime)
+        {
+            return await _context.EnrolleeProfileVersions
+            .Where(epv => epv.EnrolleeId == enrolleeId)
+            .Where(epv => epv.CreatedDate < dateTime)
+            .OrderByDescending(epv => epv.CreatedDate)
+            .FirstOrDefaultAsync();
+        }
+
         public async Task CreateEnrolleeProfileVersionAsync(Enrollee enrollee)
         {
             var enrolleeProfileVersion = new EnrolleeProfileVersion
@@ -52,5 +64,6 @@ namespace Prime.Services
 
             await _context.SaveChangesAsync();
         }
+
     }
 }

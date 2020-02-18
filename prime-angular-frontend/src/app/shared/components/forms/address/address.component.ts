@@ -56,12 +56,17 @@ export class AddressComponent implements OnInit {
     this.setAddress(this.countryCode.value);
     this.countryCode.valueChanges
       .pipe(
+        pairwise(),
         distinctUntilChanged()
       )
-      .subscribe((country: string) => {
-        this.provinceCode.reset();
-        this.postal.reset();
-        this.setAddress(country);
+      .subscribe(([prevCountry, nextCountry]: [string, string]) => {
+
+        if (prevCountry !== nextCountry) {
+          this.provinceCode.reset();
+          this.postal.reset();
+        }
+
+        this.setAddress(nextCountry);
       });
   }
 

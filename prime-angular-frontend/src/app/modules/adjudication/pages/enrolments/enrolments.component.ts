@@ -20,6 +20,7 @@ import {
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { ApproveEnrolmentComponent } from '@shared/components/dialogs/content/approve-enrolment/approve-enrolment.component';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 @Component({
   selector: 'app-enrolments',
@@ -38,6 +39,7 @@ export class EnrolmentsComponent implements OnInit {
     private router: Router,
     private configService: ConfigService,
     private adjudicationResource: AdjudicationResource,
+    private authService: AuthService,
     private toastService: ToastService,
     private dialog: MatDialog,
     private logger: LoggerService
@@ -61,6 +63,10 @@ export class EnrolmentsComponent implements OnInit {
   public canAllowEditing(currentStatusCode: EnrolmentStatus) {
     // Admins can only allow re-enable editing for an enrollee in a UNDER_REVIEW state
     return (currentStatusCode === EnrolmentStatus.UNDER_REVIEW);
+  }
+
+  public isSuperAdmin() {
+    return this.authService.isSuperAdmin();
   }
 
   public isActive(currentStatusCode: EnrolmentStatus) {
@@ -172,42 +178,46 @@ export class EnrolmentsComponent implements OnInit {
       )
       .subscribe(
         (enrolment: Enrolment) => {
-          this.toastService.openSuccessToast('Enrolment status was reverted to In-Progress');
+          this.toastService.openSuccessToast('Enrolment status was reverted to Active');
           this.updateEnrolment(enrolment);
         },
         (error: any) => {
-          this.toastService.openErrorToast('Enrolment status could not be reverted to In-Progress');
-          this.logger.error('[Adjudication] Enrolments::markAsInProgress error has occurred: ', error);
+          this.toastService.openErrorToast('Enrolment status could not be reverted to Active');
+          this.logger.error('[Adjudication] Enrolments::markAsActive error has occurred: ', error);
         }
       );
   }
 
   public deleteEnrolment(id: number) {
+
     const data: DialogOptions = {
       title: 'Delete Enrolment',
       message: 'Are you sure you want to delete this enrolment?',
       actionType: 'warn',
       actionText: 'Delete Enrolment'
     };
-    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
-      .afterClosed()
-      .pipe(
-        exhaustMap((result: boolean) =>
-          (result)
-            ? this.adjudicationResource.deleteEnrolment(id)
-            : EMPTY
+
+    if (this.authService.isSuperAdmin()) {
+      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          exhaustMap((result: boolean) =>
+            (result)
+              ? this.adjudicationResource.deleteEnrolment(id)
+              : EMPTY
+          )
         )
-      )
-      .subscribe(
-        (enrolment: Enrolment) => {
-          this.toastService.openSuccessToast('Enrolment has been deleted');
-          this.removeEnrolment(enrolment);
-        },
-        (error: any) => {
-          this.toastService.openErrorToast('Enrolment could not be deleted');
-          this.logger.error('[Adjudication] Enrolments::deleteEnrolments error has occurred: ', error);
-        }
-      );
+        .subscribe(
+          (enrolment: Enrolment) => {
+            this.toastService.openSuccessToast('Enrolment has been deleted');
+            this.removeEnrolment(enrolment);
+          },
+          (error: any) => {
+            this.toastService.openErrorToast('Enrolment could not be deleted');
+            this.logger.error('[Adjudication] Enrolments::deleteEnrolments error has occurred: ', error);
+          }
+        );
+    }
   }
 
   public getEnrolments(statusCode?: number) {
@@ -226,6 +236,7 @@ export class EnrolmentsComponent implements OnInit {
 
   public ngOnInit() {
     this.getEnrolments();
+    // console.log(this.authService.isSuperAdmin());
   }
 
   private updateEnrolment(enrolment: Enrolment) {

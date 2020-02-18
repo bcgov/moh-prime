@@ -26,6 +26,7 @@ import { PharmanetEnrolmentCertificateComponent } from './pages/pharmanet-enrolm
 import { PharmanetTransactionsComponent } from './pages/pharmanet-transactions/pharmanet-transactions.component';
 import { AccessTermsComponent } from './pages/access-terms/access-terms.component';
 import { AccessAgreementCurrentComponent } from './pages/access-agreement-current/access-agreement-current.component';
+import { AccessAgreementHistoryEnrolmentComponent } from './pages/access-agreement-history-enrolment/access-agreement-history-enrolment.component';
 
 const routes: Routes = [
   {
@@ -110,7 +111,7 @@ const routes: Routes = [
         data: { title: 'Enrolment Summary' }
       },
       {
-        path: EnrolmentRoutes.ACCESS_TERM,
+        path: EnrolmentRoutes.PENDING_ACCESS_TERM,
         component: AccessAgreementComponent,
         data: { title: 'Enrolment Terms of Access' }
       },
@@ -138,12 +139,22 @@ const routes: Routes = [
           {
             path: '',
             component: AccessTermsComponent,
-            data: { title: 'PRIME Transaction History' }
+            data: { title: 'PRIME History' }
           },
           {
             path: ':id',
-            component: AccessAgreementHistoryComponent,
-            data: { title: 'PRIME Transaction History' }
+            children: [
+              {
+                path: '',
+                component: AccessAgreementHistoryComponent,
+                data: { title: 'PRIME History' }
+              },
+              {
+                path: EnrolmentRoutes.ENROLMENT,
+                component: AccessAgreementHistoryEnrolmentComponent,
+                data: { title: 'PRIME History' }
+              },
+            ]
           }
         ]
       },

@@ -28,7 +28,6 @@ import { ViewportService } from '@core/services/viewport.service';
 })
 export class AccessAgreementComponent extends BaseEnrolmentPage implements OnInit {
   public enrolment: Enrolment;
-  public isAutomatic: boolean;
   public currentPage: number;
   public hasReadAgreement: boolean;
   public agreed: FormControl;

@@ -75,6 +75,10 @@ export class MockAuthService implements IAuthService {
     return this._role === Role.ADMIN;
   }
 
+  public isSuperAdmin(): boolean {
+    return this._role === Role.SUPER_ADMIN;
+  }
+
   public decodeToken(): Promise<KeycloakTokenParsed> {
     throw new Error('Method not implemented.');
   }

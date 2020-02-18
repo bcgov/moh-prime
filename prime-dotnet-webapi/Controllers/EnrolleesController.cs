@@ -170,6 +170,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpDelete("{enrolleeId}", Name = nameof(DeleteEnrollee))]
+        [Authorize(Policy = PrimeConstants.SUPER_ADMIN_POLICY)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
@@ -345,14 +346,6 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            // Notes can not be added to 'Active' enrolments
-            // TODO Decide when ajudicators should be able to add notes
-            if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.ACTIVE_CODE))
-            {
-                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Adjudicator notes can not be updated when the current status is 'Active'.");
-                return BadRequest(new ApiBadRequestResponse(this.ModelState));
-            }
-
             var createdAdjudicatorNote = await _enrolleeService.CreateEnrolleeAdjudicatorNoteAsync(enrolleeId, note);
 
             return CreatedAtAction(
@@ -407,7 +400,7 @@ namespace Prime.Controllers
 
         // GET: api/Enrollees/5/versions
         /// <summary>
-        /// Get a list of enrolmee profile versions.
+        /// Get a list of enrollee profile versions.
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}/versions", Name = nameof(GetEnrolleeProfileVersions))]
