@@ -35,7 +35,7 @@
 
             <button mat-flat-button
                     class="large light"
-                    href="#">Learn More</button>
+                    (click)="scrollTo()">Learn More</button>
           </div>
         </div>
       </div>
@@ -47,7 +47,8 @@
     <div>
       <div class="row">
         <div class="col-sm-12 mb-4">
-          <h1 class="font-weight-bold">PRIME Enrolment Steps</h1>
+          <h1 class="font-weight-bold"
+              #learnmore>PRIME Enrolment Steps</h1>
         </div>
       </div>
       <div class="row mb-4 justify-content-center">
