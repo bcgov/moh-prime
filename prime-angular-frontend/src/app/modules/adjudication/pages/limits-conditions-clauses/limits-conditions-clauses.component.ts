@@ -64,6 +64,10 @@ export class LimitsConditionsClausesComponent implements OnInit {
     return this.authService.isSuperAdmin();
   }
 
+  public isUnderReview(currentStatusCode: EnrolmentStatus) {
+    return (currentStatusCode === EnrolmentStatus.UNDER_REVIEW);
+  }
+
   /**
    * Updates the preview with the editor content
    */
