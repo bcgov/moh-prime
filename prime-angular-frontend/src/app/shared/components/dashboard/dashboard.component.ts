@@ -228,7 +228,7 @@ export class DashboardComponent implements OnInit {
             deemphasize: true // this.enrolmentService.isInitialEnrolment
           },
           {
-            name: 'PRIME Transaction History',
+            name: 'PRIME History',
             icon: (
               !hasAcceptedAtLeastOneToa ||
               [
