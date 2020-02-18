@@ -31,8 +31,7 @@ RUN chmod -R 755 /opt/backup && \
     cp /opt/backup.sh /etc/cron.daily && \
     cp /opt/backup.sh /etc/cron.hourly && \
     crontab /etc/cron.d/backup.cron && \
-    crontab -l && \
-    chmod 777 /var/run
+    crontab -l
     
 #CMD tail -F /dev/null
 CMD /opt/entrypoint.sh
