@@ -60,8 +60,18 @@ export class ConfigService implements IConfigService {
   }
 
   public get organizationNames(): Config<number>[] {
+    const communityPractice = this.configuration.organizationNames
+      .find(o => o.code === 2);
+
     return [...this.configuration.organizationNames]
-      .sort(this.sortConfig);
+      .sort(this.sortConfig)
+      // Move community practice to the top
+      // TODO remove after community practice
+      .filter(o => o.code !== 2)
+      .reduce((os, o) => {
+        os.push(o);
+        return os;
+      }, [communityPractice]);
   }
 
   public get organizationTypes(): Config<number>[] {
@@ -146,12 +156,13 @@ export class ConfigService implements IConfigService {
    *  to the bottom of the list.
    */
   private filterBottom(list: Config<number | string>[], match: string) {
-    return list.reduce((acc, item) => {
-      (item.name.includes(match)) ? acc[1].push(item) : acc[0].push(item);
-      return acc;
-    }, [[], []]).reduce((acc, temp) =>
-      acc.concat(temp)
-      , []);
+    return list
+      .reduce((acc, item) => {
+        (item.name.includes(match))
+          ? acc[1].push(item)
+          : acc[0].push(item);
+        return acc;
+      }, [[], []])
+      .reduce((acc, temp) => acc.concat(temp), []);
   }
-
 }
