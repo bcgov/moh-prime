@@ -4,7 +4,6 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { Router, ActivatedRoute } from '@angular/router';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { AuthService } from '@auth/shared/services/auth.service';
-import { Enrolment } from '@shared/models/enrolment.model';
 
 @Component({
   selector: 'app-collection-notice-alert',
@@ -12,27 +11,20 @@ import { Enrolment } from '@shared/models/enrolment.model';
   styleUrls: ['./collection-notice-alert.component.scss']
 })
 export class CollectionNoticeAlertComponent implements OnInit {
-  public profileCompleted: boolean;
-  public enrolment: Enrolment;
-
-  constructor(
-    private authService: AuthService,
-    private enrolmentService: EnrolmentService,
-    private router: Router,
-    private route: ActivatedRoute
-  ) { }
-
+  public isProfileCompleted: boolean;
   public EnrolmentRoutes = EnrolmentRoutes;
 
-  public get buttonText(): string {
-    return (!this.profileCompleted)
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private authService: AuthService,
+    private enrolmentService: EnrolmentService,
+  ) { }
+
+  public get label(): string {
+    return (!this.isProfileCompleted)
       ? 'Next'
       : 'Ok';
-  }
-
-  public ngOnInit() {
-    this.enrolment = this.enrolmentService.enrolment;
-    this.profileCompleted = this.enrolmentService.isProfileComplete;
   }
 
   public show() {
@@ -40,12 +32,18 @@ export class CollectionNoticeAlertComponent implements OnInit {
   }
 
   public onAccept() {
-    const route = (!this.profileCompleted)
+    const route = (!this.isProfileCompleted)
       ? EnrolmentRoutes.DEMOGRAPHIC
       : EnrolmentRoutes.OVERVIEW;
 
     this.authService.hasJustLoggedIn = false;
 
-    this.router.navigate([route], { relativeTo: this.route.parent });
+    if (this.enrolmentService.isInitialEnrolment) {
+      this.router.navigate([route], { relativeTo: this.route.parent });
+    }
+  }
+
+  public ngOnInit() {
+    this.isProfileCompleted = this.enrolmentService.isProfileComplete;
   }
 }
