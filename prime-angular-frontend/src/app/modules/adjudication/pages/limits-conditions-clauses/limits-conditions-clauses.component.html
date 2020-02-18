@@ -105,6 +105,7 @@
         <span>Global Adjudicator Notes</span>
       </button>
       <button mat-menu-item
+              *ngIf="isUnderReview(enrolment.currentStatus.statusCode)"
               [routerLink]="['../', 'limits-conditions-clauses']">
         <mat-icon>description</mat-icon>
         <span>Limits and Conditions Clauses</span>

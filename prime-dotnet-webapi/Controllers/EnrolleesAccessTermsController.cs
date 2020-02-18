@@ -124,15 +124,8 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            // TODO: Update when statuses are refactored!
-            // Prevent access to the enrollee's current terms of access based on status
-            // if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.IN_PROGRESS_CODE, Status.DECLINED_CODE, Status.DECLINED_TOS_CODE))
-            // {
-            //     this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee terms of service can not be retrieved when the current status is 'IN_PROGRESS', 'DECLINED', or 'DECLINED_TOA'.");
-            //     return BadRequest(new ApiBadRequestResponse(this.ModelState));
-            // }
-
             AccessTerm accessTerm;
+
             if (signed)
             {
                 accessTerm = await _accessTermService.GetMostRecentAcceptedEnrolleesAccessTermAsync(enrolleeId);
