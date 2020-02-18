@@ -189,9 +189,9 @@ objects:
                   port: 8080
                   scheme: "HTTP"
                 initialDelaySeconds: 30
-                periodSeconds: 10
+                periodSeconds: 30
                 successThreshold: 1
-                timeoutSeconds: 1
+                timeoutSeconds: 10
               resources: {}
               volumeMounts:
                 - name: cert-volume
