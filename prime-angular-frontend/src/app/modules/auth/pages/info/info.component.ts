@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Inject } from '@angular/core';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
@@ -13,6 +13,7 @@ import { UtilsService } from '@core/services/utils.service';
   styleUrls: ['./info.component.scss']
 })
 export class InfoComponent implements OnInit {
+  @ViewChild('learnmore', { static: true }) public learnMore: ElementRef;
   public isIE: boolean;
 
   constructor(
@@ -31,6 +32,10 @@ export class InfoComponent implements OnInit {
       idpHint: AuthProvider.BCSC,
       redirectUri
     });
+  }
+
+  public scrollTo() {
+    this.utilsService.scrollTo(this.learnMore.nativeElement);
   }
 
   public ngOnInit() { }

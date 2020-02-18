@@ -35,7 +35,7 @@
 
             <button mat-flat-button
                     class="large light"
-                    href="#">Learn More</button>
+                    (click)="scrollTo()">Learn More</button>
           </div>
         </div>
       </div>
@@ -47,7 +47,8 @@
     <div>
       <div class="row">
         <div class="col-sm-12 mb-4">
-          <h1 class="font-weight-bold">PRIME Enrolment Steps</h1>
+          <h1 class="font-weight-bold"
+              #learnmore>PRIME Enrolment Steps</h1>
         </div>
       </div>
       <div class="row mb-4 justify-content-center">
@@ -57,7 +58,9 @@
             To get started you will need to set up your BC Services card on your mobile device.
             This is a quick process and it usually only takes a few minutes.
           </p>
-          <a href=""><small class="anchor font-weight-bold">HOW TO SET UP A MOBILE CARD</small></a>
+          <a href="https://www2.gov.bc.ca/gov/content/governments/government-id/bc-services-card/login-with-card/mobile-card/set-up-mobile-card" target="_blank">
+            <small class="anchor font-weight-bold">HOW TO SET UP A MOBILE CARD</small>
+          </a>
         </div>
         <div class="col-sm-12 col-md-3 info mb-4">
           <h3>PRIME Enrolment</h3>
