@@ -16,7 +16,7 @@ namespace Prime.Services
         { }
 
         /**
-         * Get the most access term for an enrollee by id.
+         * Get access term for an enrollee by id if accepted.
          */
         public async Task<AccessTerm> GetEnrolleesAccessTermAsync(int enrolleeId, int accessTermId)
         {

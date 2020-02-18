@@ -144,7 +144,7 @@ export class DashboardComponent implements OnInit {
     const termsOfAccessRoute = (enrolmentStatus === EnrolmentStatus.UNDER_REVIEW)
       ? EnrolmentRoutes.SUBMISSION_CONFIRMATION
       : (enrolmentStatus === EnrolmentStatus.REQUIRES_TOA)
-        ? EnrolmentRoutes.ACCESS_TERM
+        ? EnrolmentRoutes.PENDING_ACCESS_TERM
         : EnrolmentRoutes.CURRENT_ACCESS_TERM;
 
     return [
@@ -219,13 +219,13 @@ export class DashboardComponent implements OnInit {
               : 'date_range',
             route: EnrolmentRoutes.PHARMANET_TRANSACTIONS,
             showItem: true,
-            disabled: (
-              !hasAcceptedAtLeastOneToa ||
-              [
-                EnrolmentStatus.LOCKED
-              ].includes(enrolmentStatus)
-            ),
-            deemphasize: this.enrolmentService.isInitialEnrolment
+            disabled: true, // (
+            //   !hasAcceptedAtLeastOneToa ||
+            //   [
+            //     EnrolmentStatus.LOCKED
+            //   ].includes(enrolmentStatus)
+            // ),
+            deemphasize: true // this.enrolmentService.isInitialEnrolment
           },
           {
             name: 'PRIME Transaction History',
