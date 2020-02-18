@@ -85,6 +85,8 @@ objects:
             name: backup-data
           - mountPath: /var/lib/postgresql/data
             name: postgresql
+          - mountPath: /var/run
+            name: backup-run
         restartPolicy: Always
         volumes:
         - name: backup-data
@@ -93,6 +95,8 @@ objects:
         - name: postgresql
           persistentVolumeClaim:
             claimName: postgresql
+        - name: backup-run
+            emptyDir: {}
     test: false
     triggers:
     - type: ConfigChange
@@ -105,51 +109,3 @@ objects:
           name: backup:latest
       type: ImageChange
   status: {}
-- apiVersion: batch/v1beta1
-  kind: CronJob
-  metadata:
-    name: backup
-  spec:
-    schedule: "*/5 * * * *"
-    jobTemplate:
-      spec:
-        template:
-          metadata:
-            labels:
-              parent: "cronjobbackup"
-          spec:
-            containers:
-              - env:
-                - name: PGHOST
-                  value: postgresql
-                - name: PGPASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      key: database-admin-password
-                      name: postgresql-secret
-                - name: PGDATABASE
-                  valueFrom:
-                    secretKeyRef:
-                      key: database-name
-                      name: postgresql-secret
-                - name: PGUSERNAME
-                  valueFrom:
-                    secretKeyRef:
-                      key: database-user
-                      name: postgresql-secret
-            - name: backup
-              image: "backup:latest"
-              command: ["/opt/backup/backup.sh"]
-              volumeMounts:
-              - mountPath: /opt/backup
-                name: backup-data
-              - mountPath: /var/lib/postgresql/data
-                name: postgresql
-            volumes:
-            - name: backup-data
-              persistentVolumeClaim:
-                claimName: backup-data
-            - name: postgresql
-              persistentVolumeClaim:
-                claimName: postgresql
-            restartPolicy: OnFailure

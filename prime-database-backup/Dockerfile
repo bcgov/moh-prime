@@ -19,7 +19,7 @@ RUN echo "Checking opt dir..." && \
     echo "Checking workdir..." && \
     ls -alh /opt/backup && \
     apt-get update -yqq && \ 
-    apt-get install -yqq inetutils-ping vim nano net-tools cron crontab && \ 
+    apt-get install -yqq inetutils-ping vim nano net-tools cron && \ 
     ls -alh /opt
 
 RUN chmod -R 755 /opt/backup && \
@@ -34,6 +34,6 @@ RUN chmod -R 755 /opt/backup && \
     crontab /etc/cron.d/backup.cron && \
     crontab -l && \
     chmod 777 /var/run
-    
+
 #CMD tail -F /dev/null
 CMD /opt/entrypoint.sh
