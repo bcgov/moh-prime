@@ -12,12 +12,19 @@ namespace Prime.Services
     {
         private static readonly TimeSpan TOKEN_LIFESPAN = TimeSpan.FromDays(7);
         private const int MAX_VIEWS = 3;
+        private readonly IAccessTermService _accessTermService;
+        private readonly IEnrolleeProfileVersionService _enroleeProfileVersionService;
 
         public EnrolmentCertificateService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext)
+            IHttpContextAccessor httpContext,
+            IAccessTermService accessTermService,
+            IEnrolleeProfileVersionService enroleeProfileVersionService)
             : base(context, httpContext)
-        { }
+        {
+            _accessTermService = accessTermService;
+            _enroleeProfileVersionService = enroleeProfileVersionService;
+        }
 
         public async Task<EnrolmentCertificate> GetEnrolmentCertificateAsync(Guid accessTokenId)
         {
@@ -26,8 +33,6 @@ namespace Prime.Services
                 .Include(t => t.Enrollee)
                     .ThenInclude(e => e.Organizations)
                         .ThenInclude(org => org.OrganizationType)
-                .Include(t => t.Enrollee)
-                    .ThenInclude(e => e.AccessTerms)
                 .SingleOrDefaultAsync();
 
             if (token == null || token.Enrollee == null)
@@ -39,7 +44,35 @@ namespace Prime.Services
 
             if (token.Active)
             {
-                return EnrolmentCertificate.Create(token.Enrollee);
+                var enrolleeId = (int)token?.EnrolleeId;
+                var acceptedAccessTerm = await _accessTermService.GetMostRecentAcceptedEnrolleesAccessTermAsync(enrolleeId);
+                if (acceptedAccessTerm != null)
+                {
+                    var enrolleeProfileHistory = await _enroleeProfileVersionService.GetEnrolleeProfileVersionBeforeDateAsync(enrolleeId, (DateTime)acceptedAccessTerm?.AcceptedDate);
+
+                    if (enrolleeProfileHistory != null)
+                    {
+                        // Load JSON profile history to an Enrollee Object
+                        // TODO refactor this to work with different versions of enrollee as model changes from JSON object
+                        var enrolleeHistory = enrolleeProfileHistory.ProfileSnapshot.ToObject<Enrollee>();
+
+                        // Add the organization type to each organization from JSON profile history
+                        // TODO find simpler way to load relationships from JSON object
+                        var organizations = enrolleeHistory.Organizations;
+
+                        for (var i = 0; i < enrolleeHistory.Organizations.Count; i++)
+                        {
+                            var result = _context.Organizations
+                                .Where(o => o.Id == enrolleeHistory.Organizations.ElementAt(i).Id)
+                                .Include(o => o.OrganizationType)
+                                .FirstOrDefault();
+
+                            enrolleeHistory.Organizations.ElementAt(i).OrganizationType = result.OrganizationType;
+                        }
+                        return EnrolmentCertificate.Create(enrolleeHistory, token.Enrollee);
+                    }
+                }
+                return null;
             }
             else
             {
