@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Inject } from '@angular/core';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
