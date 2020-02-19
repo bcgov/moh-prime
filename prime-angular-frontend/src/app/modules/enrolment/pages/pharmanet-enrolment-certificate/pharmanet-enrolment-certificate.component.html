@@ -28,13 +28,8 @@
     </app-page-subheader>
 
     <p class="mb-4">Your PharmaNet ID is
-      {{ expiryDate === null ? ' expired' : ' valid for one year. Please renew by ' + expiryDate }}.</p>
-
-    <p class="font-weight-bold mb-5">
-      {{ enrolment.enrollee.gpid | uppercase }}
+      {{ expiryDate === null ? ' expired' : ' valid for one year. Please renew by ' + expiryDate }}.
     </p>
-
-
 
     <div class="mb-5">
       <app-enrollee-organizations [organizations]="organizations"></app-enrollee-organizations>
