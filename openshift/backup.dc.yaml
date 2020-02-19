@@ -75,18 +75,18 @@ objects:
                   secretKeyRef:
                     key: database-user
                     name: postgresql-secret
-        - image: ' '
-          name: backup
-          ports:
-          - containerPort: 5432
-          resources: {}
-          volumeMounts:
-          - mountPath: /opt/backup
-            name: backup-data
-          - mountPath: /var/lib/postgresql/data
-            name: postgresql
-          - mountPath: /var/run
-            name: backup-run
+            image: ' '
+            name: backup
+            ports:
+              - containerPort: 5432
+            resources: {}
+            volumeMounts:
+              - mountPath: /opt/backup
+                name: backup-data
+              - mountPath: /var/lib/postgresql/data
+                name: postgresql
+              - mountPath: /var/run
+                name: backup-run
         restartPolicy: Always
         volumes:
         - name: backup-data
@@ -96,7 +96,7 @@ objects:
           persistentVolumeClaim:
             claimName: postgresql
         - name: backup-run
-            emptyDir: {}
+          emptyDir: {}
     test: false
     triggers:
     - type: ConfigChange
