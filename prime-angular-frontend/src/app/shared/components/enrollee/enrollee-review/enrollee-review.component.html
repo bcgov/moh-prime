@@ -104,13 +104,13 @@
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>College Licence Information</ng-container>
     <mat-icon *ngIf="showEditRedirect"
-              matTooltip="Edit College Certifications"
+              matTooltip="Edit College Licenses"
               (click)="onRoute(EnrolmentRoutes.REGULATORY)">edit</mat-icon>
   </app-page-subheader>
 
   <ng-container *ngFor="let certification of certifications; let i = index;">
 
-    <app-enrollee-property title="College Certification"
+    <app-enrollee-property title="College Licence"
                            [makeBold]="true">
       {{ certification.collegeCode | configCode: 'colleges' | default }}
     </app-enrollee-property>
