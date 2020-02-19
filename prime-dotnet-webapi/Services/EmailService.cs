@@ -113,8 +113,8 @@ namespace Prime.Services
                  || ex is SmtpFailedRecipientsException)
                 {
                     // TODO log mail exception, perhaps in a table in the database?
+                    throw new EmailServiceException("Email service failed", ex);
                 }
-
                 throw;
             }
             finally
@@ -122,6 +122,13 @@ namespace Prime.Services
                 smtp.Dispose();
                 mail.Dispose();
             }
+        }
+        
+        public class EmailServiceException : Exception
+        {
+            public EmailServiceException() { }
+            public EmailServiceException(string message) : base(message) { }
+            public EmailServiceException(string message, Exception inner) : base(message, inner) { }
         }
     }
 }

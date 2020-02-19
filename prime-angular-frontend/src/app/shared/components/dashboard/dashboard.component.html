@@ -31,7 +31,7 @@
                        [routerLink]="item.route"
                        routerLinkActive="active"
                        [ngClass]="{
-                         'force-active': (item.forceActive | async),
+                         'force-active': item.forceActive,
                          'disabled': item.disabled,
                          'deemphasize': item.deemphasize
                        }"

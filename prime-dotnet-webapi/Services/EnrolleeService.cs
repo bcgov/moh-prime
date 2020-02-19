@@ -396,7 +396,7 @@ namespace Prime.Services
                     if (oldStatus.Code == Status.REQUIRES_TOA_CODE)
                     {
                         await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
-                        enrollee.GPID = this.GenerateGPID();
+                        SetGPID(enrollee);
                         createdEnrolmentStatus.PharmaNetStatus = true;
                         await _accessTermService.AcceptCurrentAccessTermAsync(enrollee);
                         await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrolleeId, enrollee);
@@ -407,12 +407,6 @@ namespace Prime.Services
             }
 
             await _context.SaveChangesAsync();
-
-            // Enrollee just left manual adjudication, inform the enrollee
-            if (oldStatus?.Code == Status.UNDER_REVIEW_CODE)
-            {
-                await _emailService.SendReminderEmailAsync(enrollee);
-            }
 
             return createdEnrolmentStatus;
         }
@@ -427,9 +421,12 @@ namespace Prime.Services
             }
         }
 
-        private string GenerateGPID()
+        private void SetGPID(Enrollee enrollee)
         {
-            return Base85.Ascii85.Encode(Guid.NewGuid().ToByteArray());
+            if (string.IsNullOrWhiteSpace(enrollee.GPID))
+            {
+                enrollee.GPID = Base85.Ascii85.Encode(Guid.NewGuid().ToByteArray());
+            }
         }
 
         public bool IsStatusChangeAllowed(Status startingStatus, Status endingStatus)
@@ -588,6 +585,13 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
 
             return enrollee;
+        }
+
+        public async Task<int> GetEnrolleeCountAsync()
+        {
+            return await _context.Enrollees
+                   .CountAsync();
+
         }
     }
 }

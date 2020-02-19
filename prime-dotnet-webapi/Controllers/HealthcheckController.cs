@@ -27,12 +27,10 @@ namespace Prime.Controllers
         /// Does a healthcheck that queries the enrollee table to wake up the database
         /// </summary>
         [HttpGet]
-        [ProducesResponseType(typeof(ApiOkResponse<Enrollee>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Enrollee>> GetHealthcheck()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task GetHealthcheck()
         {
-            var enrollees = await _enrolleeService.GetEnrolleesAsync();
-            var empty = new Enrollee();
-            return Ok(new ApiOkResponse<Enrollee>(empty));
+            await _enrolleeService.GetEnrolleeCountAsync();
         }
     }
 }
