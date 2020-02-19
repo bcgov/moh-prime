@@ -6,7 +6,7 @@ import { ConfigService } from '@config/config.service';
 
 import { FormUtilsService } from '@enrolment/shared/services/form-utils.service';
 import { Country } from '@shared/enums/country.enum';
-import { pairwise, distinctUntilChanged } from 'rxjs/operators';
+import { pairwise, distinctUntilChanged, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-address',
@@ -56,11 +56,11 @@ export class AddressComponent implements OnInit {
     this.setAddress(this.countryCode.value);
     this.countryCode.valueChanges
       .pipe(
+        startWith(Country.CANADA),
         pairwise(),
         distinctUntilChanged()
       )
       .subscribe(([prevCountry, nextCountry]: [string, string]) => {
-
         if (prevCountry !== nextCountry) {
           this.provinceCode.reset();
           this.postal.reset();
@@ -70,8 +70,9 @@ export class AddressComponent implements OnInit {
       });
   }
 
-  private setAddress(countryCode) {
+  private setAddress(countryCode: string) {
     this.filteredProvinces = this.provinces.filter(p => p.countryCode === this.countryCode.value);
+
     this.setAddressLabels(countryCode);
   }
 
