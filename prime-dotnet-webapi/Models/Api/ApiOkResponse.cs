@@ -14,6 +14,5 @@ namespace Prime.Models.Api
         {
             Result = result;
         }
-
     }
 }
