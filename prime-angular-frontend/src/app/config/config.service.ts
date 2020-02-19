@@ -14,7 +14,6 @@ export interface IConfigService {
   countries: Config<string>[];
   jobNames: Config<number>[];
   licenses: LicenseConfig[];
-  organizationNames: Config<number>[];
   organizationTypes: Config<number>[];
   provinces: ProvinceConfig[];
   statuses: Config<number>[];
@@ -59,14 +58,19 @@ export class ConfigService implements IConfigService {
       .sort(this.sortConfigWeight);
   }
 
-  public get organizationNames(): Config<number>[] {
-    return [...this.configuration.organizationNames]
-      .sort(this.sortConfig);
-  }
-
   public get organizationTypes(): Config<number>[] {
+    const communityPractice = this.configuration.organizationTypes
+      .find(o => o.code === 2);
+
     return [...this.configuration.organizationTypes]
-      .sort(this.sortConfig);
+      .sort(this.sortConfig)
+      // Move community practice to the top
+      // TODO remove after community practice
+      .filter(o => o.code !== 2)
+      .reduce((os, o) => {
+        os.push(o);
+        return os;
+      }, [communityPractice]);
   }
 
   public get provinces(): ProvinceConfig[] {
@@ -146,12 +150,13 @@ export class ConfigService implements IConfigService {
    *  to the bottom of the list.
    */
   private filterBottom(list: Config<number | string>[], match: string) {
-    return list.reduce((acc, item) => {
-      (item.name.includes(match)) ? acc[1].push(item) : acc[0].push(item);
-      return acc;
-    }, [[], []]).reduce((acc, temp) =>
-      acc.concat(temp)
-      , []);
+    return list
+      .reduce((acc, item) => {
+        (item.name.includes(match))
+          ? acc[1].push(item)
+          : acc[0].push(item);
+        return acc;
+      }, [[], []])
+      .reduce((acc, temp) => acc.concat(temp), []);
   }
-
 }

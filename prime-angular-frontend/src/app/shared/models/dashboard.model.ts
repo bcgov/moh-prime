@@ -1,5 +1,3 @@
-import { Observable } from 'rxjs';
-
 export interface DashboardNavSection {
   header?: string;
   showHeader?: boolean;
@@ -13,5 +11,5 @@ export interface DashboardNavSectionItem {
   showItem: boolean;
   disabled?: boolean;
   deemphasize?: boolean;
-  forceActive?: Observable<boolean>;
+  forceActive?: boolean;
 }

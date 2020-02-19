@@ -64,6 +64,10 @@ export class AdjudicatorNotesComponent implements OnInit {
     return this.authService.isSuperAdmin();
   }
 
+  public isUnderReview(currentStatusCode: EnrolmentStatus) {
+    return (currentStatusCode === EnrolmentStatus.UNDER_REVIEW);
+  }
+
   public onSubmit() {
     if (this.form.valid) {
       this.busy = this.adjudicationResource
