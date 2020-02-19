@@ -114,32 +114,6 @@ namespace Prime
             }
         }
 
-        private void ApplyConfigurations(ModelBuilder modelBuilder)
-        {
-            modelBuilder.ApplyConfiguration(new CollegeConfiguration());
-            modelBuilder.ApplyConfiguration(new LicenseConfiguration());
-            modelBuilder.ApplyConfiguration(new CollegeLicenseConfiguration());
-            modelBuilder.ApplyConfiguration(new PracticeConfiguration());
-            modelBuilder.ApplyConfiguration(new CollegePracticeConfiguration());
-            modelBuilder.ApplyConfiguration(new JobNameConfiguration());
-            modelBuilder.ApplyConfiguration(new OrganizationTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new StatusConfiguration());
-            modelBuilder.ApplyConfiguration(new StatusReasonConfiguration());
-            modelBuilder.ApplyConfiguration(new CountryConfiguration());
-            modelBuilder.ApplyConfiguration(new ProvinceConfiguration());
-
-            modelBuilder.ApplyConfiguration(new PrivilegeTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new PrivilegeGroupConfiguration());
-            modelBuilder.ApplyConfiguration(new PrivilegeConfiguration());
-            modelBuilder.ApplyConfiguration(new DefaultPrivilegeConfiguration());
-            modelBuilder.ApplyConfiguration(new AssignedPrivilegeConfiguration());
-            modelBuilder.ApplyConfiguration(new EnrolleeProfileVersionConfiguration());
-
-            modelBuilder.ApplyConfiguration(new GlobalClauseConfiguration());
-            modelBuilder.ApplyConfiguration(new UserClauseConfiguration());
-            modelBuilder.ApplyConfiguration(new LicenseClassClauseConfiguration());
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             #region Discriminators
@@ -163,7 +137,28 @@ namespace Prime
             }
             #endregion
 
-            ApplyConfigurations(modelBuilder);
+            modelBuilder.ApplyConfiguration(new CollegeConfiguration());
+            modelBuilder.ApplyConfiguration(new LicenseConfiguration());
+            modelBuilder.ApplyConfiguration(new CollegeLicenseConfiguration());
+            modelBuilder.ApplyConfiguration(new PracticeConfiguration());
+            modelBuilder.ApplyConfiguration(new CollegePracticeConfiguration());
+            modelBuilder.ApplyConfiguration(new JobNameConfiguration());
+            modelBuilder.ApplyConfiguration(new OrganizationTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new StatusConfiguration());
+            modelBuilder.ApplyConfiguration(new StatusReasonConfiguration());
+            modelBuilder.ApplyConfiguration(new CountryConfiguration());
+            modelBuilder.ApplyConfiguration(new ProvinceConfiguration());
+
+            modelBuilder.ApplyConfiguration(new PrivilegeTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new PrivilegeGroupConfiguration());
+            modelBuilder.ApplyConfiguration(new PrivilegeConfiguration());
+            modelBuilder.ApplyConfiguration(new DefaultPrivilegeConfiguration());
+            modelBuilder.ApplyConfiguration(new AssignedPrivilegeConfiguration());
+            modelBuilder.ApplyConfiguration(new EnrolleeProfileVersionConfiguration());
+
+            modelBuilder.ApplyConfiguration(new GlobalClauseConfiguration());
+            modelBuilder.ApplyConfiguration(new UserClauseConfiguration());
+            modelBuilder.ApplyConfiguration(new LicenseClassClauseConfiguration());
 
             #region Indexes
             modelBuilder.Entity<MailingAddress>()
