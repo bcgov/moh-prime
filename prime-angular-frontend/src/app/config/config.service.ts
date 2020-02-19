@@ -14,7 +14,6 @@ export interface IConfigService {
   countries: Config<string>[];
   jobNames: Config<number>[];
   licenses: LicenseConfig[];
-  organizationNames: Config<number>[];
   organizationTypes: Config<number>[];
   provinces: ProvinceConfig[];
   statuses: Config<number>[];
@@ -59,11 +58,11 @@ export class ConfigService implements IConfigService {
       .sort(this.sortConfigWeight);
   }
 
-  public get organizationNames(): Config<number>[] {
-    const communityPractice = this.configuration.organizationNames
+  public get organizationTypes(): Config<number>[] {
+    const communityPractice = this.configuration.organizationTypes
       .find(o => o.code === 2);
 
-    return [...this.configuration.organizationNames]
+    return [...this.configuration.organizationTypes]
       .sort(this.sortConfig)
       // Move community practice to the top
       // TODO remove after community practice
@@ -72,11 +71,6 @@ export class ConfigService implements IConfigService {
         os.push(o);
         return os;
       }, [communityPractice]);
-  }
-
-  public get organizationTypes(): Config<number>[] {
-    return [...this.configuration.organizationTypes]
-      .sort(this.sortConfig);
   }
 
   public get provinces(): ProvinceConfig[] {
