@@ -48,8 +48,6 @@ export class CollectionNoticeAlertComponent implements OnInit {
   }
 
   public ngOnInit() {
-    console.log('isProfileComplete', this.enrolmentService.isProfileComplete);
-
     this.isProfileCompleted = this.enrolmentService.isProfileComplete;
   }
 }
