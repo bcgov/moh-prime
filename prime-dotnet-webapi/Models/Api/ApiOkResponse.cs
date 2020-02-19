@@ -6,9 +6,14 @@ namespace Prime.Models.Api
     {
         public T Result { get; }
 
-        public ApiOkResponse(T result) : base(StatusCodes.Status200OK)
+        public ApiOkResponse(T result) : this(result, null)
+        {
+        }
+
+        public ApiOkResponse(T result, string message) : base(StatusCodes.Status200OK, message)
         {
             Result = result;
         }
+
     }
 }
