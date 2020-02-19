@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using Prime.Models;
 using Prime.Configuration;
-using Prime;
-using System;
 
 namespace PrimeTests.ModelFactories
 {
