@@ -19,17 +19,14 @@ namespace Prime.Controllers
     public class EnrolleesController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
-        private readonly IEmailService _emailService;
         private readonly IAccessTermService _accessTermService;
         private readonly IEnrolleeProfileVersionService _enrolleeProfileVersionService;
 
         public EnrolleesController(
             IEnrolleeService enrolleeService,
-            IEmailService emailService,
             IAccessTermService accessTermService,
             IEnrolleeProfileVersionService enrolleeProfileVersionService)
         {
-            _emailService = emailService;
             _enrolleeService = enrolleeService;
             _accessTermService = accessTermService;
             _enrolleeProfileVersionService = enrolleeProfileVersionService;
@@ -270,7 +267,6 @@ namespace Prime.Controllers
         public async Task<ActionResult<EnrolmentStatus>> CreateEnrolmentStatus(int enrolleeId, Status status)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-            var prevStatus = enrollee.CurrentStatus.StatusCode;
 
             if (enrollee == null)
             {
@@ -295,20 +291,6 @@ namespace Prime.Controllers
             }
 
             var enrolmentStatus = await _enrolleeService.CreateEnrolmentStatusAsync(enrolleeId, status);
-
-
-            // Enrollee just left manual adjudication, inform the enrollee
-            if (prevStatus == Status.UNDER_REVIEW_CODE)
-            {
-                try
-                {
-                    await _emailService.SendReminderEmailAsync(enrollee);
-                }
-                catch (EmailService.EmailServiceException ese)
-                {
-                    return Ok(new ApiOkResponse<EnrolmentStatus>(enrolmentStatus, ese.Message));
-                }
-            }
 
             return Ok(new ApiOkResponse<EnrolmentStatus>(enrolmentStatus));
         }

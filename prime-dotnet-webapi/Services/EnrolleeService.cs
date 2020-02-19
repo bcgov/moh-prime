@@ -408,6 +408,12 @@ namespace Prime.Services
 
             await _context.SaveChangesAsync();
 
+            // Enrollee just left manual adjudication, inform the enrollee
+            if (oldStatus?.Code == Status.UNDER_REVIEW_CODE)
+            {
+                await _emailService.SendReminderEmailAsync(enrollee);
+            }
+
             return createdEnrolmentStatus;
         }
 
