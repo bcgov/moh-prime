@@ -132,10 +132,6 @@ export class MockConfigService extends ConfigService implements IConfigService {
             ]
           }
         ],
-        organizationNames: [
-          { code: 1, name: 'Shoppers Drug Mart' },
-          { code: 2, name: 'London Drugs' }
-        ],
         organizationTypes: [
           { code: 1, name: 'Health Authority' },
           { code: 2, name: 'Pharmacy' }

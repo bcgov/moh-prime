@@ -181,15 +181,15 @@ export class DashboardComponent implements OnInit {
                 EnrolmentStatus.LOCKED
               ].includes(enrolmentStatus)
             ),
-            // TODO
-            // forceActive: currentRoutePath$
-            //   .pipe(
-            //     map((routePath: string) =>
-            //       [
-            //         EnrolmentRoutes.SUBMISSION_CONFIRMATION
-            //       ].includes(routePath)
-            //     )
-            //   )
+            forceActive: currentRoutePath$
+              .pipe(
+                map((routePath: string) =>
+                  [
+                    EnrolmentRoutes.PENDING_ACCESS_TERM,
+                    EnrolmentRoutes.CURRENT_ACCESS_TERM
+                  ].includes(routePath)
+                )
+              )
           },
           {
             name: 'PharmaNet Enrolment Certificate',
@@ -228,7 +228,7 @@ export class DashboardComponent implements OnInit {
             deemphasize: true // this.enrolmentService.isInitialEnrolment
           },
           {
-            name: 'PRIME Transaction History',
+            name: 'PRIME History',
             icon: (
               !hasAcceptedAtLeastOneToa ||
               [
@@ -276,8 +276,10 @@ export class DashboardComponent implements OnInit {
     } else {
       switch (enrolmentStatus) {
         case EnrolmentStatus.ACTIVE:
+          break;
         case EnrolmentStatus.UNDER_REVIEW:
         case EnrolmentStatus.REQUIRES_TOA:
+          accessAgreement = 'schedule';
           break;
         case EnrolmentStatus.LOCKED:
           enrollee = 'lock';

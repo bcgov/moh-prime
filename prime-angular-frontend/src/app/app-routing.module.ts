@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AppRoutes } from './app.routes';
 import { AccessDeniedComponent } from '@ui/components/access-denied/access-denied.component';
+import { UnsupportedComponent } from '@ui/components/unsupported/unsupported.component';
 import { MaintenanceComponent } from '@ui/components/maintenance/maintenance.component';
 import { PageNotFoundComponent } from '@ui/components/page-not-found/page-not-found.component';
 
@@ -12,6 +13,13 @@ const routes: Routes = [
     component: AccessDeniedComponent,
     data: {
       title: 'Access Denied'
+    }
+  },
+  {
+    path: AppRoutes.UNSUPPORTED,
+    component: UnsupportedComponent,
+    data: {
+      title: 'Unsupported Browser'
     }
   },
   {
