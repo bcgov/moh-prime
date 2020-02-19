@@ -307,8 +307,8 @@ namespace Prime.Controllers
                 {
                     return Ok(new ApiOkResponse<EnrolmentStatus>(enrolmentStatus, ese.Message));
                 }
-
             }
+
             return Ok(new ApiOkResponse<EnrolmentStatus>(enrolmentStatus));
         }
 
