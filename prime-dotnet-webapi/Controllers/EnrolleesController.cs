@@ -270,6 +270,7 @@ namespace Prime.Controllers
         public async Task<ActionResult<EnrolmentStatus>> CreateEnrolmentStatus(int enrolleeId, Status status)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+            var prevStatus = enrollee.CurrentStatus.StatusCode;
 
             if (enrollee == null)
             {
@@ -297,7 +298,7 @@ namespace Prime.Controllers
 
 
             // Enrollee just left manual adjudication, inform the enrollee
-            if (enrollee.CurrentStatus.StatusCode == Status.UNDER_REVIEW_CODE)
+            if (prevStatus == Status.UNDER_REVIEW_CODE)
             {
                 try
                 {
