@@ -189,27 +189,27 @@ export class DashboardComponent implements OnInit {
       },
       {
         items: [
-          {
-            name: 'PharmaNet Transactions',
-            icon: (
-              !hasAcceptedAtLeastOneToa ||
-              [
-                EnrolmentStatus.LOCKED
-              ].includes(enrolmentStatus)
-            )
-              ? 'lock'
-              : 'date_range',
-            route: EnrolmentRoutes.PHARMANET_TRANSACTIONS,
-            showItem: true,
-            // TODO add back when feature has been developed
-            disabled: true, // (
-            //   !hasAcceptedAtLeastOneToa ||
-            //   [
-            //     EnrolmentStatus.LOCKED
-            //   ].includes(enrolmentStatus)
-            // ),
-            deemphasize: true // this.enrolmentService.isInitialEnrolment
-          },
+          // TODO removed until the page has been implemented
+          // {
+          //   name: 'PharmaNet Transactions',
+          //   icon: (
+          //     !hasAcceptedAtLeastOneToa ||
+          //     [
+          //       EnrolmentStatus.LOCKED
+          //     ].includes(enrolmentStatus)
+          //   )
+          //     ? 'lock'
+          //     : 'date_range',
+          //   route: EnrolmentRoutes.PHARMANET_TRANSACTIONS,
+          //   showItem: true,
+          //   disabled: (
+          //     !hasAcceptedAtLeastOneToa ||
+          //     [
+          //       EnrolmentStatus.LOCKED
+          //     ].includes(enrolmentStatus)
+          //   ),
+          //   deemphasize: this.enrolmentService.isInitialEnrolment
+          // },
           {
             name: 'PRIME History',
             icon: (
