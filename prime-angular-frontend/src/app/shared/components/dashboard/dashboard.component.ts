@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild, Inject } from '@angular/core';
-import { Router, ActivatedRoute, RouterEvent } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { MatSidenav } from '@angular/material';
 
-import { Observable } from 'rxjs';
-import { map, distinctUntilChanged, pairwise, startWith } from 'rxjs/operators';
+import { merge } from 'rxjs';
+import { map, distinctUntilChanged } from 'rxjs/operators';
 
 import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { RouteStateService } from '@core/services/route-state.service';
@@ -86,19 +86,21 @@ export class DashboardComponent implements OnInit {
     if (this.authService.isEnrollee()) {
       // Listen for changes to the current enrolment status to update
       // the side navigation based on enrollee progression
-      this.enrolmentService.enrolment$
-        .pipe(
-          // Reduce noise from enrollee profile updates, and
-          // only focus on the current status
-          map((enrolment: Enrolment) =>
-            (enrolment && enrolment.currentStatus)
-              ? enrolment.currentStatus.statusCode
-              : null
+      merge(
+        this.enrolmentService.enrolment$
+          .pipe(
+            // Reduce noise from enrollee profile updates, and
+            // only focus on the current status
+            map((enrolment: Enrolment) =>
+              (enrolment && enrolment.currentStatus)
+                ? enrolment.currentStatus.statusCode
+                : null
+            ),
+            distinctUntilChanged()
           ),
-          distinctUntilChanged(),
-          pairwise()
-        )
-        .subscribe(([prevCurrentStatus, nextCurrentStatus]) =>
+        this.routeStateService.onNavigationEnd()
+      )
+        .subscribe(() =>
           this.dashboardNavSections = this.getSideNavSections()
         );
     }
@@ -129,17 +131,7 @@ export class DashboardComponent implements OnInit {
       ? !!enrolment.expiryDate
       : false;
     const statusIcons = this.getEnrolmentStatusIcons(enrolmentStatus, hasAcceptedAtLeastOneToa);
-
-    // Placed outside ngOnInit on purpose to avoid issues with timing in the lifecycle hook
-    const currentRoutePath$ = this.routeStateService.routePath$
-      .pipe(
-        // Provide a default since the navigation end event of the router
-        // doesn't occur as the application is initially loaded
-        startWith(this.router.url),
-        // Only care about the second parameter to determine route access, and
-        // assumes that all child routes are equivalent
-        map((routePath: string) => routePath.slice(1).split('/')[1])
-      );
+    const currentRoute = this.router.url.slice(1).split('/')[1];
 
     const termsOfAccessRoute = (enrolmentStatus === EnrolmentStatus.UNDER_REVIEW)
       ? EnrolmentRoutes.SUBMISSION_CONFIRMATION
@@ -163,12 +155,7 @@ export class DashboardComponent implements OnInit {
                 EnrolmentStatus.LOCKED
               ].includes(enrolmentStatus)
             ),
-            forceActive: currentRoutePath$
-              .pipe(
-                map((routePath: string) =>
-                  EnrolmentRoutes.enrolmentProfileRoutes().includes(routePath)
-                )
-              )
+            forceActive: EnrolmentRoutes.enrolmentProfileRoutes().includes(currentRoute)
           },
           {
             name: 'Terms of Access',
@@ -181,15 +168,10 @@ export class DashboardComponent implements OnInit {
                 EnrolmentStatus.LOCKED
               ].includes(enrolmentStatus)
             ),
-            forceActive: currentRoutePath$
-              .pipe(
-                map((routePath: string) =>
-                  [
-                    EnrolmentRoutes.PENDING_ACCESS_TERM,
-                    EnrolmentRoutes.CURRENT_ACCESS_TERM
-                  ].includes(routePath)
-                )
-              )
+            forceActive: [
+              EnrolmentRoutes.PENDING_ACCESS_TERM,
+              EnrolmentRoutes.CURRENT_ACCESS_TERM
+            ].includes(currentRoute)
           },
           {
             name: 'PharmaNet Enrolment Certificate',
@@ -219,6 +201,7 @@ export class DashboardComponent implements OnInit {
               : 'date_range',
             route: EnrolmentRoutes.PHARMANET_TRANSACTIONS,
             showItem: true,
+            // TODO add back when feature has been developed
             disabled: true, // (
             //   !hasAcceptedAtLeastOneToa ||
             //   [
