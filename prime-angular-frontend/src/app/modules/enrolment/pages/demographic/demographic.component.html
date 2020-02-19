@@ -204,29 +204,30 @@
               </mat-form-field>
 
             </div>
+            <!-- </div> -->
+
+            <!-- </ng-container> -->
+
+            <!-- TODO temporarily made visible until SMS available -->
+            <!-- <ng-container *ngIf="contactPhone.value || hasContactPhone.value"> -->
+
+            <!-- <div class="row"> -->
+            <div class="col-6">
+
+              <mat-form-field class="w-100">
+                <input matInput
+                       placeholder="Optional SMS Phone Number"
+                       formControlName="contactPhone"
+                       mask="(000) 000-0000"
+                       [showMaskTyped]="false">
+                <mat-error *ngIf="contactPhone.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="contactPhone.hasError('phone')">Must be a valid phone number</mat-error>
+              </mat-form-field>
+
+            </div>
           </div>
 
           <!-- </ng-container> -->
-
-          <ng-container *ngIf="contactPhone.value || hasContactPhone.value">
-
-            <div class="row">
-              <div class="col-6">
-
-                <mat-form-field class="w-100">
-                  <input matInput
-                         placeholder="Mobile Phone"
-                         formControlName="contactPhone"
-                         mask="(000) 000-0000"
-                         [showMaskTyped]="false">
-                  <mat-error *ngIf="contactPhone.hasError('required')">Required</mat-error>
-                  <mat-error *ngIf="contactPhone.hasError('phone')">Must be a valid phone number</mat-error>
-                </mat-form-field>
-
-              </div>
-            </div>
-
-          </ng-container>
 
         </div>
       </div>
