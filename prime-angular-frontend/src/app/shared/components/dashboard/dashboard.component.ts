@@ -181,15 +181,15 @@ export class DashboardComponent implements OnInit {
                 EnrolmentStatus.LOCKED
               ].includes(enrolmentStatus)
             ),
-            // TODO
-            // forceActive: currentRoutePath$
-            //   .pipe(
-            //     map((routePath: string) =>
-            //       [
-            //         EnrolmentRoutes.SUBMISSION_CONFIRMATION
-            //       ].includes(routePath)
-            //     )
-            //   )
+            forceActive: currentRoutePath$
+              .pipe(
+                map((routePath: string) =>
+                  [
+                    EnrolmentRoutes.PENDING_ACCESS_TERM,
+                    EnrolmentRoutes.CURRENT_ACCESS_TERM
+                  ].includes(routePath)
+                )
+              )
           },
           {
             name: 'PharmaNet Enrolment Certificate',
