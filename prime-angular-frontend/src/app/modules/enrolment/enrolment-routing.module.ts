@@ -130,11 +130,12 @@ const routes: Routes = [
         component: PharmanetEnrolmentCertificateComponent,
         data: { title: 'PharmaNet Enrolment Certificate' }
       },
-      {
-        path: EnrolmentRoutes.PHARMANET_TRANSACTIONS,
-        component: PharmanetTransactionsComponent,
-        data: { title: 'PharmaNet Transactions' }
-      },
+      // TODO removed until the page has been implemented
+      // {
+      //   path: EnrolmentRoutes.PHARMANET_TRANSACTIONS,
+      //   component: PharmanetTransactionsComponent,
+      //   data: { title: 'PharmaNet Transactions' }
+      // },
       {
         path: EnrolmentRoutes.ACCESS_TERMS,
         children: [
