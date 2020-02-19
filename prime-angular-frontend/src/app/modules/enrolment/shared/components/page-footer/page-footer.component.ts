@@ -31,7 +31,7 @@ export class PageFooterComponent implements OnInit {
   }
 
   public onSecondaryAction() {
-    (!this.isInitialEnrolment)
+    (this.isInitialEnrolment)
       ? this.back.emit()
       : this.continue.emit();
   }
@@ -39,10 +39,10 @@ export class PageFooterComponent implements OnInit {
   public ngOnInit() {
     if (this.isInitialEnrolment) {
       this.saveButtonLabel = 'Save and Continue';
-      this.hasSecondaryAction = false;
+      this.secondaryActionButtonLabel = 'Back';
     } else {
       this.saveButtonLabel = 'Continue';
-      this.secondaryActionButtonLabel = 'Back';
+      this.hasSecondaryAction = false;
     }
   }
 }

@@ -42,8 +42,16 @@ export class UtilsService {
    */
   public scrollToErrorSection(): void {
     const firstElementWithError = document.querySelector('mat-form-field.ng-invalid');
-    const element = firstElementWithError.closest('section') == null ? firstElementWithError : firstElementWithError.closest('section');
-    this.scrollTo(element);
+
+    if (firstElementWithError) {
+      const element = (firstElementWithError.closest('section') == null)
+        ? firstElementWithError
+        : firstElementWithError.closest('section');
+
+      this.scrollTo(element);
+    } else {
+      this.scrollTop();
+    }
   }
 
   /**

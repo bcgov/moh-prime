@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { PageNotFoundComponent } from './page-not-found.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { SharedModule } from '@shared/shared.module';
+import { UserInterfaceModule } from '@ui/user-interface.module';
 
 describe('PageNotFoundComponent', () => {
   let component: PageNotFoundComponent;
@@ -12,11 +13,9 @@ describe('PageNotFoundComponent', () => {
     TestBed.configureTestingModule(
       {
         imports: [
-          SharedModule
+          UserInterfaceModule
         ],
-        declarations: [
-          PageNotFoundComponent
-        ],
+        declarations: [],
         providers: [
           {
             provide: APP_CONFIG,

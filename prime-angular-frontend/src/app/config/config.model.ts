@@ -3,7 +3,6 @@ export interface Configuration {
   colleges: CollegeConfig[];
   jobNames: Config<number>[];
   licenses: LicenseWeightedConfig[];
-  organizationNames: Config<number>[];
   organizationTypes: Config<number>[];
   practices: PracticeConfig[];
   provinces: ProvinceConfig[];

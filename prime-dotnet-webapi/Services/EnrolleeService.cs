@@ -396,7 +396,7 @@ namespace Prime.Services
                     if (oldStatus.Code == Status.REQUIRES_TOA_CODE)
                     {
                         await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
-                        enrollee.GPID = this.GenerateGPID();
+                        SetGPID(enrollee);
                         createdEnrolmentStatus.PharmaNetStatus = true;
                         await _accessTermService.AcceptCurrentAccessTermAsync(enrollee);
                         await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrolleeId, enrollee);
@@ -421,9 +421,12 @@ namespace Prime.Services
             }
         }
 
-        private string GenerateGPID()
+        private void SetGPID(Enrollee enrollee)
         {
-            return Base85.Ascii85.Encode(Guid.NewGuid().ToByteArray());
+            if (string.IsNullOrWhiteSpace(enrollee.GPID))
+            {
+                enrollee.GPID = Base85.Ascii85.Encode(Guid.NewGuid().ToByteArray());
+            }
         }
 
         public bool IsStatusChangeAllowed(Status startingStatus, Status endingStatus)
