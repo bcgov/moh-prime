@@ -240,8 +240,9 @@ export class EnrolmentStateService {
       hasContactEmail: [true, []],
       // TODO temporarily made required until SMS available
       contactEmail: [null, [Validators.required, FormControlValidators.email]],
-      hasContactPhone: [{ value: false, disabled: true }, []],
-      contactPhone: [{ value: null, disabled: true }, [FormControlValidators.phone]]
+      // TODO temporarily made optional until SMS available to collect phone numbers in advance
+      hasContactPhone: [true, []],
+      contactPhone: [null, [FormControlValidators.phone]]
     });
   }
 

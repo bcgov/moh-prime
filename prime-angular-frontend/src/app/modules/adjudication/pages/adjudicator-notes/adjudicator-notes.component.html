@@ -84,7 +84,7 @@
         <span>View Enrolment History</span>
       </button>
       <button mat-menu-item
-              *ngIf="enrolment.currentStatus.enrolmentStatusReasons.length"
+              *ngIf="enrolment.currentStatus.enrolmentStatusReasons?.length"
               (click)="reviewStatusReasons(enrolment)">
         <mat-icon>flag</mat-icon>
         <span>Review Status Reasons</span>
@@ -145,7 +145,7 @@
         <div class="text-right">
           <button mat-flat-button
                   color="primary"
-                  [disabled]="!note.value.length">Save Note</button>
+                  [disabled]="!note.value?.length">Save Note</button>
         </div>
 
       </div>
@@ -154,7 +154,7 @@
     <div class="row mb-4">
       <div class="col-sm-12 col-lg-8">
 
-        <div *ngIf="adjudicatorNotes.value.length"
+        <div *ngIf="adjudicatorNotes.value?.length"
              class="table-responsive">
           <table class="table">
             <!-- <thead>

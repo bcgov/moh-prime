@@ -45,5 +45,7 @@ namespace Prime.Services
         Task<IEnrolleeNote> UpdateEnrolleeNoteAsync(int enrolleeId, IEnrolleeNote newNote);
 
         Task<Enrollee> UpdateEnrolleeAlwaysManualAsync(int enrolleeId, bool alwaysManual);
+
+        Task<int> GetEnrolleeCountAsync();
     }
 }
