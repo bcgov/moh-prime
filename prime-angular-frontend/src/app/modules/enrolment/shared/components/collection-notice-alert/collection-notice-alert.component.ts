@@ -34,12 +34,12 @@ export class CollectionNoticeAlertComponent implements OnInit {
   public onAccept() {
     const currentRoutePath = this.route.snapshot.routeConfig.path;
 
+    this.authService.hasJustLoggedIn = false;
+
     if (currentRoutePath === EnrolmentRoutes.COLLECTION_NOTICE) {
       const route = (!this.isProfileCompleted)
         ? EnrolmentRoutes.DEMOGRAPHIC
         : EnrolmentRoutes.OVERVIEW;
-
-      this.authService.hasJustLoggedIn = false;
 
       if (this.enrolmentService.isInitialEnrolment) {
         this.router.navigate([route], { relativeTo: this.route.parent });
