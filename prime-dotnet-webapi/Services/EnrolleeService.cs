@@ -592,5 +592,12 @@ namespace Prime.Services
 
             return enrollee;
         }
+
+        public async Task<int> GetEnrolleeCountAsync()
+        {
+            return await _context.Enrollees
+                   .CountAsync();
+
+        }
     }
 }
