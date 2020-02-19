@@ -3,7 +3,6 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
-import { AuthRoutes } from '@auth/auth.routes';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AccessTerm } from '@enrolment/shared/models/access-term.model';
