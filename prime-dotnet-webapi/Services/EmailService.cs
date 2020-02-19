@@ -123,6 +123,7 @@ namespace Prime.Services
                 mail.Dispose();
             }
         }
+        
         public class EmailServiceException : Exception
         {
             public EmailServiceException() { }
