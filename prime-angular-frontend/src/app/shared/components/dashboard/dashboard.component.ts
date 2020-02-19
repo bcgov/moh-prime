@@ -219,6 +219,7 @@ export class DashboardComponent implements OnInit {
               : 'date_range',
             route: EnrolmentRoutes.PHARMANET_TRANSACTIONS,
             showItem: true,
+            // TODO add back when feature has been developed
             disabled: true, // (
             //   !hasAcceptedAtLeastOneToa ||
             //   [
