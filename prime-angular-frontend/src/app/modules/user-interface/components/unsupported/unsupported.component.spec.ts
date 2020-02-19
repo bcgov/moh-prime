@@ -9,16 +9,15 @@ describe('UnsupportedComponent', () => {
   let fixture: ComponentFixture<UnsupportedComponent>;
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        UserInterfaceModule,
-        SharedModule
-      ],
-      declarations: [
-        UnsupportedComponent
-      ]
-    })
-      .compileComponents();
+    TestBed.configureTestingModule(
+      {
+        imports: [
+          SharedModule,
+          UserInterfaceModule
+        ],
+        declarations: []
+      }
+    ).compileComponents();
   }));
 
   beforeEach(() => {
