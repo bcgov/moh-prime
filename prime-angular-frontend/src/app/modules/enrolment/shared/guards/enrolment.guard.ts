@@ -162,7 +162,7 @@ export class EnrolmentGuard extends BaseGuard {
     // has accepted at least one TOA
     const whiteListedRoutes = (!!enrolment.expiryDate)
       ? [
-        EnrolmentRoutes.enrolmentAcceptedToaRoutes(),
+        ...EnrolmentRoutes.enrolmentAcceptedToaRoutes(),
         // Allow read-only access to the enrollee profile
         EnrolmentRoutes.OVERVIEW
       ]

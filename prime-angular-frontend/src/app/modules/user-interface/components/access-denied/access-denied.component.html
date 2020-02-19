@@ -1,17 +1,13 @@
-<div class="container">
-  <div class="row">
-    <div class="col align-self-center text-center">
-      <h1>Access Denied</h1>
-      <h2>
-        You don't appear to have the proper authorization.
-      </h2>
-      <p class="lead">
-        Let us help you find your way to your <a href="/">destination</a>.
-      </p>
-      <p class="text-muted">
-        We track these issues automatically, but if the problem persists feel free to
-        <a [attr.href]="email">contact us</a>.
-      </p>
+<app-page-simple>
+  <div class="row justify-content-center">
+    <div class="col-sm-12 col-md-10 col-lg-8 text-center">
+      <h1 class="mb-5">
+        403 <span class="d-block d-lg-inline">You don't appear to have the proper authorization.</span>
+      </h1>
+
+      <a mat-flat-button href="/">
+      Let us help you find your way to your destination
+    </a>
     </div>
   </div>
-</div>
+</app-page-simple>

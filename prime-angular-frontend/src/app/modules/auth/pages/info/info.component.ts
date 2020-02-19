@@ -21,11 +21,10 @@ export class InfoComponent implements OnInit {
     private authService: AuthService,
     private utilsService: UtilsService
   ) {
-    this.isIE = utilsService.isIE();
+    this.isIE = this.utilsService.isIE();
   }
 
   public loginUsingBCSC() {
-    if (this.isIE) { return; }
     const redirectUri = `${this.config.loginRedirectUrl}${EnrolmentRoutes.routePath(EnrolmentRoutes.COLLECTION_NOTICE)}`;
 
     this.authService.login({
