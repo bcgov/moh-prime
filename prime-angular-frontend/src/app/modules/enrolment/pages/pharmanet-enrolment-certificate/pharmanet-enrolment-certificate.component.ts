@@ -19,6 +19,7 @@ import { AccessTerm } from '@enrolment/shared/models/access-term.model';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
+import { EnrolleeClassification } from '@shared/enums/enrollee-classification.enum';
 
 @Component({
   selector: 'app-pharmanet-enrolment-certificate',
