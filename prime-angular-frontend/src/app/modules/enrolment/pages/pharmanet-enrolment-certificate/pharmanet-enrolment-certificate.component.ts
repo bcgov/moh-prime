@@ -15,7 +15,7 @@ import { WindowRefService } from '@core/services/window-ref.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { FormControlValidators } from '@shared/validators/form-control.validators';
-import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { AccessTerm } from '@enrolment/shared/models/access-term.model';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
@@ -29,6 +29,7 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
   public enrolment: Enrolment;
   public showProgressBar: boolean;
   public expiryDate: string;
+  public accessTerm: AccessTerm;
 
   public form: FormGroup;
 
@@ -48,7 +49,6 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
     this.showProgressBar = false;
     this.form = this.buildVendorEmailGroup();
   }
-
 
   public get enrollee() {
     return (this.enrolment) ? this.enrolment.enrollee : null;
@@ -70,12 +70,18 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
     return (this.enrolment.enrolmentCertificateNote) ? this.enrolment.enrolmentCertificateNote.note : null;
   }
 
-  public getTokenUrl(tokenId: string): string {
-    return `${this.config.loginRedirectUrl}/provisioner-access/${tokenId}`;
-  }
-
   public get vendorEmail(): FormControl {
     return this.form.get('vendorEmail') as FormControl;
+  }
+
+  public get isRu(): boolean {
+    return (this.accessTerm)
+      ? this.accessTerm.userClause.enrolleeClassification === EnrolleeClassification.RU
+      : false;
+  }
+
+  public getTokenUrl(tokenId: string): string {
+    return `${this.config.loginRedirectUrl}/provisioner-access/${tokenId}`;
   }
 
   public sendProvisionerAccessLink() {
@@ -122,6 +128,15 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
       this.expiryDate = expiryMoment.isAfter(moment.now())
         ? expiryMoment.format('MMMM Do, YYYY') : null;
     }
+
+    this.enrolmentResource.getAccessTermLatest(this.enrolment.id, true)
+      .subscribe(
+        (accessTerm: AccessTerm) => this.accessTerm = accessTerm,
+        (error: any) => {
+          this.toastService.openErrorToast(`Terms of access could not be found`);
+          this.logger.error('[Enrolment] AccessAgreement::ngOnInit error has occurred: ', error);
+        }
+      );
   }
 
   private buildVendorEmailGroup(): FormGroup {

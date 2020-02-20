@@ -18,11 +18,6 @@
       require to provision your access to PharmaNet.
     </p>
 
-    <p class="mb-5">
-      You can either copy and paste the provisioner link into an email to your vendor on your own, or use the list below
-      and have PRIME send an email on your behalf.
-    </p>
-
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>Your PharmaNet Enrolment</ng-container>
     </app-page-subheader>
@@ -35,7 +30,8 @@
       <app-enrollee-organizations [organizations]="organizations"></app-enrollee-organizations>
     </div>
 
-    <div class="mb-5">
+    <div *ngIf="isRu"
+         class="mb-5">
       <app-enrollee-privileges [privileges]="privileges"></app-enrollee-privileges>
     </div>
 
@@ -54,7 +50,7 @@
     </app-page-subheader>
 
     <p class="mb-5">
-      Enter an email address that may be used to provide your PharmaNet Enrolment information to your vendor (or system
+      Enter an email address that may be used to send your PharmaNet Enrolment information to your vendor (or system
       administrator).
     </p>
 
@@ -73,7 +69,7 @@
             <button mat-flat-button
                     color="primary"
                     (click)="sendProvisionerAccessLink()">
-              Email Provisioner Link
+              Send Provisioner Link
             </button>
           </form>
         </div>
