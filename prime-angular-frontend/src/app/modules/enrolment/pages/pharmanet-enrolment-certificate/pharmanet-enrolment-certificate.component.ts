@@ -13,13 +13,13 @@ import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { WindowRefService } from '@core/services/window-ref.service';
 import { Enrolment } from '@shared/models/enrolment.model';
+import { EnrolleeClassification } from '@shared/enums/enrollee-classification.enum';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { FormControlValidators } from '@shared/validators/form-control.validators';
 import { AccessTerm } from '@enrolment/shared/models/access-term.model';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
-import { EnrolleeClassification } from '@shared/enums/enrollee-classification.enum';
 
 @Component({
   selector: 'app-pharmanet-enrolment-certificate',
