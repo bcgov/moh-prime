@@ -6,7 +6,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { Role } from '@auth/shared/enum/role.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { BaseGuard } from '@core/guards/base.guard';
-import { from, Observable } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 import { Admin } from '@auth/shared/models/admin.model';
 import { AdjudicationResource } from '../services/adjudication-resource.service';
@@ -30,10 +30,8 @@ export class AdjudicationGuard extends BaseGuard {
    * Check the user is authenticated, otherwise redirect
    * them to an appropriate destination.
    */
-  protected canAccess(authenticated: boolean, roles: string[], routePath: string): Promise<boolean> {
-
-    const admin$ = from(this.authService.getAdmin());
-    const createAdmin$ = admin$
+  protected checkAccess(routePath: string = null): Observable<boolean> | Promise<boolean> {
+    const admin$ = from(this.authService.getAdmin())
       .pipe(
         exhaustMap(({ userId, firstName, lastName, email, idir }: Admin) => {
           // Enforced the enrolment type instead of using Partial<Enrolment>
@@ -49,11 +47,12 @@ export class AdjudicationGuard extends BaseGuard {
 
           return this.adjudicationResource.createAdmin(admin);
         }),
-        map((admin: Admin) => [admin, true])
-      );
+      ).toPromise();
 
+    const redirect$ = new Promise(async (resolve, reject) => {
 
-    return new Promise((resolve, reject) => {
+      const authenticated = await this.authService.isLoggedIn();
+      const roles = this.authService.getUserRoles(true);
       let destinationRoute = this.config.routes.denied;
 
       if (!authenticated) {
@@ -67,5 +66,9 @@ export class AdjudicationGuard extends BaseGuard {
       this.router.navigate([destinationRoute]);
       return reject(false);
     });
+
+
+    return Promise.all([admin$, redirect$])
+      .then(([admin, result]: [Admin, boolean]) => result);
   }
 }

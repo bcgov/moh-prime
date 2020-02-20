@@ -28,7 +28,7 @@ namespace Prime.Controllers
         /// </summary>
         [HttpPost(Name = nameof(CreateAdmin))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiCreatedResponse<Admin>), StatusCodes.Status201Created)]
         public async Task<ActionResult<Admin>> CreateAdmin(Admin admin)
         {
@@ -41,8 +41,8 @@ namespace Prime.Controllers
             // Check to see if this userId is already an admin, if so, reject creating another
             if (await _adminService.AdminUserIdExistsAsync(admin.UserId))
             {
-                this.ModelState.AddModelError("Admin.UserId", "An admin already exists for this User Id, only one admin is allowed per User Id.");
-                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+                this.ModelState.AddModelError("Admin.UserId", "An admin already exists for this User Id.");
+                return Ok(new ApiOkResponse<Admin>(admin));
             }
 
             var createdAdminId = await _adminService.CreateAdminAsync(admin);
