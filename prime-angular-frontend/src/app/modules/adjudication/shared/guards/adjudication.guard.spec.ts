@@ -6,12 +6,14 @@ import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { AdjudicationGuard } from './adjudication.guard';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('AdjudicationGuard', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule
+        RouterTestingModule,
+        HttpClientTestingModule,
       ],
       providers: [
         AdjudicationGuard,
