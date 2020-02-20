@@ -26,18 +26,6 @@ export class AdjudicationResource {
     private logger: LoggerService
   ) { }
 
-  // public admin(): Observable<Admin> {
-  //   return this.http.get(`${this.config.apiEndpoint}/admins`)
-  //     .pipe(
-  //       map((response: PrimeHttpResponse) => response.result),
-  //       tap((admins: Admin[]) => this.logger.info('ADMINS', admins[0])),
-  //       map((admins: Admin[]) =>
-  //         // Only a single admin will be provided
-  //         (admins.length) ? admins.pop() : null
-  //       )
-  //     );
-  // }
-
   public createAdmin(payload: Admin): Observable<Admin> {
     return this.http.post(`${this.config.apiEndpoint}/admins`, payload)
       .pipe(
