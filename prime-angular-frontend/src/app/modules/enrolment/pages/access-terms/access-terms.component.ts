@@ -28,8 +28,6 @@ export class AccessTermsComponent extends BaseEnrolmentPage implements OnInit {
     private toastService: ToastService
   ) {
     super(route, router);
-    // this.columns = ['applicationDate', 'approvalDate', 'expiryDate', 'actions'];
-    this.columns = ['current', 'applicationDate', 'approvalDate', 'actions'];
   }
 
   public ngOnInit() {

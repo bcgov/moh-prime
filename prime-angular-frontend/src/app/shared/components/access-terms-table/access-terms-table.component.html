@@ -1,0 +1,75 @@
+<table mat-table
+       [dataSource]="dataSource"
+       class="w-100">
+
+  <!-- Current Flag Column -->
+  <ng-container matColumnDef="current">
+    <th mat-header-cell
+        *matHeaderCellDef>&nbsp;</th>
+    <td mat-cell
+        *matCellDef="let index = index">
+      <ng-container *ngIf="index === 0">
+        <mat-chip-list>
+          <mat-chip disabled>Current</mat-chip>
+        </mat-chip-list>
+      </ng-container>
+
+    </td>
+  </ng-container>
+
+  <!-- Enrolment Application Date Column -->
+  <ng-container matColumnDef="applicationDate">
+    <th mat-header-cell
+        *matHeaderCellDef> Enrolment Application Date </th>
+    <td mat-cell
+        *matCellDef="let accessTerm"> {{ accessTerm.createdDate | formatDate }} </td>
+  </ng-container>
+
+  <!-- PharmaNet Approval Date Column -->
+  <ng-container matColumnDef="approvalDate">
+    <th mat-header-cell
+        *matHeaderCellDef> PharmaNet Approval Date </th>
+    <td mat-cell
+        *matCellDef="let accessTerm"> {{ accessTerm.acceptedDate | formatDate }} </td>
+  </ng-container>
+
+  <!-- Actions Column -->
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell
+        *matHeaderCellDef>&nbsp;</th>
+    <td mat-cell
+        *matCellDef="let accessTerm"
+        class="text-right">
+
+      <ng-container [ngTemplateOutlet]="menu"
+                    [ngTemplateOutletContext]="{ accessTerm: accessTerm }"></ng-container>
+
+    </td>
+  </ng-container>
+
+  <tr mat-header-row
+      *matHeaderRowDef="columns; sticky: true"></tr>
+  <tr mat-row
+      *matRowDef="let row; columns: columns;"></tr>
+</table>
+
+<ng-template #menu
+             let-accessTerm="accessTerm">
+  <button mat-icon-button
+          [matMenuTriggerFor]="menu">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item
+            [routerLink]="[accessTerm.id]">
+      <mat-icon>remove_red_eye</mat-icon>
+      <span>View Terms of Access</span>
+    </button>
+    <button mat-menu-item
+            [routerLink]="[accessTerm.id, enrolmentRoute]">
+      <mat-icon>unarchive</mat-icon>
+      <span>View Prime Enrolment</span>
+    </button>
+  </mat-menu>
+</ng-template>
