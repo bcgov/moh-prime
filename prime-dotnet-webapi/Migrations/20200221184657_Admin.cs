@@ -14,15 +14,15 @@ namespace Prime.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    CreatedUserId = table.Column<Guid>(nullable: false),
-                    CreatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    UpdatedUserId = table.Column<Guid>(nullable: false),
-                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<Guid>(nullable: false),
                     FirstName = table.Column<string>(nullable: false),
                     LastName = table.Column<string>(nullable: false),
                     Email = table.Column<string>(nullable: false),
-                    IDIR = table.Column<string>(nullable: false)
+                    IDIR = table.Column<string>(nullable: false),
+                    CreatedUserId = table.Column<Guid>(nullable: false),
+                    CreatedTimeStamp = table.Column<DateTime>(nullable: false),
+                    UpdatedUserId = table.Column<Guid>(nullable: false),
+                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
