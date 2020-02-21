@@ -306,17 +306,17 @@ namespace Prime.Services
             return items;
         }
 
-        public Task<EnrolmentStatus> CreateEnrolmentStatusAsync(int enrolleeId, Status status)
+        public Task<EnrolmentStatus> CreateEnrolmentStatusAsync(int enrolleeId, Status status, bool acceptedAccessTerm)
         {
             if (status == null)
             {
                 throw new ArgumentNullException(nameof(status), "Could not create an enrolment status, the passed in Status cannot be null.");
             }
 
-            return this.CreateEnrolmentStatusInternalAsync(enrolleeId, status);
+            return this.CreateEnrolmentStatusInternalAsync(enrolleeId, status, acceptedAccessTerm);
         }
 
-        private async Task<EnrolmentStatus> CreateEnrolmentStatusInternalAsync(int enrolleeId, Status newStatus)
+        private async Task<EnrolmentStatus> CreateEnrolmentStatusInternalAsync(int enrolleeId, Status newStatus, bool acceptedAccessTerm)
         {
             var enrollee = await this.GetBaseEnrolleeQuery()
                 .Include(e => e.Certifications)
@@ -392,8 +392,9 @@ namespace Prime.Services
                     {
                         break;
                     }
+
                     // Accepted Terms of Access
-                    if (oldStatus.Code == Status.REQUIRES_TOA_CODE)
+                    if (oldStatus.Code == Status.REQUIRES_TOA_CODE && acceptedAccessTerm)
                     {
                         await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
                         SetGPID(enrollee);

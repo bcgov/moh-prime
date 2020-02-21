@@ -41,8 +41,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiOkResponse<IEnumerable<Enrollee>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Enrollee>>> GetEnrollees(
-            [FromQuery]EnrolleeSearchOptions searchOptions)
+        public async Task<ActionResult<IEnumerable<Enrollee>>> GetEnrollees([FromQuery]EnrolleeSearchOptions searchOptions)
         {
             IEnumerable<Enrollee> enrollees = null;
 
@@ -258,13 +257,16 @@ namespace Prime.Controllers
         /// <summary>
         /// Adds a status change for a specific Enrollee.
         /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="status"></param>
+        /// <param name="acceptedAccessTerm"></param>
         [HttpPost("{enrolleeId}/statuses", Name = nameof(CreateEnrolmentStatus))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiOkResponse<IEnumerable<Status>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<EnrolmentStatus>> CreateEnrolmentStatus(int enrolleeId, Status status)
+        public async Task<ActionResult<EnrolmentStatus>> CreateEnrolmentStatus(int enrolleeId, Status status, [FromQuery]bool acceptedAccessTerm)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
@@ -290,7 +292,7 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            var enrolmentStatus = await _enrolleeService.CreateEnrolmentStatusAsync(enrolleeId, status);
+            var enrolmentStatus = await _enrolleeService.CreateEnrolmentStatusAsync(enrolleeId, status, acceptedAccessTerm);
 
             return Ok(new ApiOkResponse<EnrolmentStatus>(enrolmentStatus));
         }
