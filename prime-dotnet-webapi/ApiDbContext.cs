@@ -52,6 +52,7 @@ namespace Prime
         public DbSet<Organization> Organizations { get; set; }
         public DbSet<OrganizationType> OrganizationTypes { get; set; }
         public DbSet<Enrollee> Enrollees { get; set; }
+        public DbSet<Admin> Admins { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<EnrolmentStatus> EnrolmentStatuses { get; set; }
         public DbSet<EnrolmentStatusReason> EnrolmentStatusReasons { get; set; }
@@ -177,6 +178,10 @@ namespace Prime
                 .IsUnique();
 
             modelBuilder.Entity<Enrollee>()
+                .HasIndex("UserId")
+                .IsUnique();
+
+            modelBuilder.Entity<Admin>()
                 .HasIndex("UserId")
                 .IsUnique();
             #endregion
