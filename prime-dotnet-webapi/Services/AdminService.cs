@@ -67,26 +67,20 @@ namespace Prime.Services
 
         public Task<Admin> GetAdminAsync(int adminId)
         {
-            var entity = _context.Admins
+            return _context.Admins
                 .SingleOrDefaultAsync(a => a.Id == adminId);
-
-            return entity;
         }
 
         public async Task<Admin> GetAdminForUserIdAsync(Guid userId)
         {
-            Admin admin = await _context.Admins
+            return await _context.Admins
                 .SingleOrDefaultAsync(a => a.UserId == userId);
-
-            return admin;
         }
 
         public async Task<IEnumerable<Admin>> GetAdminsAsync()
         {
-            var admins = await _context.Admins
+            return await _context.Admins
                 .ToListAsync();
-
-            return admins;
         }
 
         public async Task<int> UpdateAdminAsync(int adminId, Admin admin)

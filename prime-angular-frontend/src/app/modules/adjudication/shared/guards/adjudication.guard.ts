@@ -34,10 +34,7 @@ export class AdjudicationGuard extends BaseGuard {
     const admin$ = from(this.authService.getAdmin())
       .pipe(
         exhaustMap(({ userId, firstName, lastName, email, idir }: Admin) => {
-          // Enforced the enrolment type instead of using Partial<Enrolment>
-          // to avoid creating constructors and partials for every model
           const admin = {
-            // Providing only the minimum required fields for creating an enrollee
             userId,
             firstName,
             lastName,
