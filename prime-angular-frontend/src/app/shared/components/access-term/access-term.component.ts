@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
-import { AccessTerm } from '@enrolment/shared/models/access-term.model';
+import { AccessTerm } from '@shared/models/access-term.model';
 
 const PLACEHOLDER = '{$lcPlaceholder}';
 const PREFIX = '<li><p class="bold underline">Additional Limits and Conditions</p>';

@@ -5,7 +5,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { AccessTerm } from '@enrolment/shared/models/access-term.model';
+import { AccessTerm } from '@shared/models/access-term.model';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 

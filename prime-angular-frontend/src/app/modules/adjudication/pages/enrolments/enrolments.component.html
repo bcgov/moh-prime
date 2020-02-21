@@ -109,6 +109,11 @@
         <span>View Enrolment History</span>
       </button>
       <button mat-menu-item
+              (click)="viewAccessTermsHistory(enrolment.id)">
+        <mat-icon>history</mat-icon>
+        <span>View Access Terms History</span>
+      </button>
+      <button mat-menu-item
               *ngIf="enrolment.currentStatus.enrolmentStatusReasons.length"
               (click)="reviewStatusReasons(enrolment)">
         <mat-icon>flag</mat-icon>

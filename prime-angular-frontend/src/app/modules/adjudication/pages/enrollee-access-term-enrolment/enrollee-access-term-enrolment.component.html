@@ -1,0 +1,23 @@
+<app-page [busy]="busy">
+
+  <app-page-header>Enrolment History</app-page-header>
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>
+      Enrolment From {{ enrolmentProfileHistory?.createdDate | formatDate }}
+    </ng-container>
+  </app-page-subheader>
+
+  <app-enrollee-review [enrolment]="enrolmentProfileHistory?.profileSnapshot"></app-enrollee-review>
+
+  <div class="row justify-content-between">
+    <div class="col pt-4">
+
+      <button mat-stroked-button
+              type="button"
+              (click)="routeTo()">Back</button>
+
+    </div>
+  </div>
+
+</app-page>

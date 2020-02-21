@@ -1,0 +1,20 @@
+<app-page>
+
+  <app-page-header>Archived Terms of Access</app-page-header>
+  <app-page-subheader *ngIf="accessTerm?.acceptedDate">
+    <ng-container appPageSubheaderSummary>
+      Accepted on {{ accessTerm?.acceptedDate | formatDate }}.<br />
+    </ng-container>
+  </app-page-subheader>
+  <app-access-term *ngIf="accessTerm"
+                   [accessTerms]="accessTerm"></app-access-term>
+  <div class="row justify-content-between">
+    <div class="col pt-4">
+
+      <button mat-stroked-button
+              type="button"
+              (click)="routeTo()">Back</button>
+
+    </div>
+  </div>
+</app-page>

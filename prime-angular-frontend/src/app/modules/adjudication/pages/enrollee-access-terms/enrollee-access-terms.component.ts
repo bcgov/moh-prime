@@ -1,20 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material';
-import { AccessTerm } from '@shared/models/access-term.model';
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
-import { Subscription } from 'rxjs';
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
-import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { AccessTerm } from '@shared/models/access-term.model';
+import { MatTableDataSource } from '@angular/material';
+import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 
 @Component({
-  selector: 'app-access-terms',
-  templateUrl: './access-terms.component.html',
-  styleUrls: ['./access-terms.component.scss']
+  selector: 'app-enrollee-access-terms',
+  templateUrl: './enrollee-access-terms.component.html',
+  styleUrls: ['./enrollee-access-terms.component.scss']
 })
-export class AccessTermsComponent extends BaseEnrolmentPage implements OnInit {
+export class EnrolleeAccessTermsComponent implements OnInit {
   public dataSource: MatTableDataSource<AccessTerm>;
   public busy: Subscription;
   public columns: string[];
@@ -23,11 +21,9 @@ export class AccessTermsComponent extends BaseEnrolmentPage implements OnInit {
     protected router: Router,
     protected route: ActivatedRoute,
     private enrolmentResource: EnrolmentResource,
-    private enrolmentService: EnrolmentService,
     private logger: LoggerService,
     private toastService: ToastService
   ) {
-    super(route, router);
   }
 
   public ngOnInit() {
@@ -35,7 +31,7 @@ export class AccessTermsComponent extends BaseEnrolmentPage implements OnInit {
   }
 
   private getAccessTerms() {
-    const enrolleeId = this.enrolmentService.enrolment.id;
+    const enrolleeId = this.route.snapshot.params.id;
     this.busy = this.enrolmentResource.getAccessTerms(enrolleeId)
       .subscribe(
         (accessTerms: AccessTerm[]) => {
@@ -44,7 +40,7 @@ export class AccessTermsComponent extends BaseEnrolmentPage implements OnInit {
         },
         (error: any) => {
           this.toastService.openErrorToast('Access Terms could not be retrieved');
-          this.logger.error('[Enrolments] AccessTerms::getAccessTerms error has occurred: ', error);
+          this.logger.error('[ADJUDICATION] EnrolleeAccessTerms::getAccessTerms error has occurred: ', error);
         }
       );
   }

@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
 
-import { EnrolmentProfileVersion } from '@adjudication/shared/models/enrollee-profile-history.model';
+import { EnrolmentProfileVersion } from '@shared/models/enrollee-profile-history.model';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 @Component({

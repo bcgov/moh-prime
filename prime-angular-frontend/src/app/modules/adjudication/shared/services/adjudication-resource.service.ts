@@ -13,7 +13,8 @@ import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { Address } from '@enrolment/shared/models/address.model';
 import { NoteType } from '@adjudication/shared/enums/note-type.enum';
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
-import { EnrolmentProfileVersion, HttpEnrolleeProfileVersion } from '@adjudication/shared/models/enrollee-profile-history.model';
+import { EnrolmentProfileVersion, HttpEnrolleeProfileVersion } from '@shared/models/enrollee-profile-history.model';
+import { AccessTerm } from '@shared/models/access-term.model';
 
 @Injectable({
   providedIn: 'root'
@@ -130,6 +131,37 @@ export class AdjudicationResource {
       .pipe(
         map((response: PrimeHttpResponse) => response.result as Config<boolean>[]),
         tap((alwaysManual: Config<boolean>[]) => this.logger.info('ALWAYS_MANUAL', alwaysManual))
+      );
+  }
+
+  // ---
+  // Access Terms
+  // TODO: These are duplicated across resources.
+  // ---
+
+  public getAccessTerms(enrolleeId: number): Observable<AccessTerm[]> {
+    return this.http.get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/access-terms`)
+      .pipe(
+        map((response: PrimeHttpResponse) => response.result as AccessTerm[]),
+        tap((accessTerms: AccessTerm[]) => this.logger.info('ACCESS_TERM', accessTerms))
+      );
+  }
+
+  public getAccessTerm(enrolleeId: number, id: number): Observable<AccessTerm> {
+    return this.http.get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/access-terms/${id}`)
+      .pipe(
+        map((response: PrimeHttpResponse) => response.result as AccessTerm),
+        tap((accessTerm: AccessTerm) => this.logger.info('ACCESS_TERM', accessTerm))
+      );
+  }
+
+  public getEnrolmentProfileForAccessTerm(enrolleeId: number, accessTermId: number): Observable<EnrolmentProfileVersion> {
+    return this.http
+      .get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/access-terms/${accessTermId}/enrolment`)
+      .pipe(
+        map((response: PrimeHttpResponse) => response.result as EnrolmentProfileVersion),
+        tap((enrolmentProfileVersion: EnrolmentProfileVersion) => this.logger.info('ENROLMENT_PROFILE_VERSION', enrolmentProfileVersion)),
+        map(this.enrolleeVersionAdapterResponse.bind(this))
       );
   }
 

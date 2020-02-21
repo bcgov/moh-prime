@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { EnrolmentProfileVersion } from '@adjudication/shared/models/enrollee-profile-history.model';
+import { EnrolmentProfileVersion } from '@shared/models/enrollee-profile-history.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { ToastService } from '@core/services/toast.service';

@@ -54,6 +54,7 @@ import { SafeHtmlPipe } from '@shared/pipes/safe-html.pipe';
 import { MarkdownComponent } from '@shared/components/dialogs/content/markdown/markdown.component';
 import { PrimeSupportEmailComponent } from '@shared/components/prime-support-email/prime-support-email.component';
 import { AccessTermsTableComponent } from './components/access-terms-table/access-terms-table.component';
+import { AccessTermComponent } from './components/access-term/access-term.component';
 
 @NgModule({
   declarations: [
@@ -97,7 +98,8 @@ import { AccessTermsTableComponent } from './components/access-terms-table/acces
     SafeHtmlPipe,
     MarkdownComponent,
     PrimeSupportEmailComponent,
-    AccessTermsTableComponent
+    AccessTermsTableComponent,
+    AccessTermComponent
   ],
   imports: [
     CommonModule,
@@ -158,7 +160,8 @@ import { AccessTermsTableComponent } from './components/access-terms-table/acces
     PrimeLogoComponent,
     SafeHtmlPipe,
     PrimeSupportEmailComponent,
-    AccessTermsTableComponent
+    AccessTermsTableComponent,
+    AccessTermComponent,
   ],
   entryComponents: [
     ConfirmDialogComponent,
