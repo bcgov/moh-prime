@@ -6,6 +6,10 @@ import { LoggerService } from '@core/services/logger.service';
 import { Role } from '@auth/shared/enum/role.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { BaseGuard } from '@core/guards/base.guard';
+import { from, Observable, of } from 'rxjs';
+import { exhaustMap, map } from 'rxjs/operators';
+import { Admin } from '@auth/shared/models/admin.model';
+import { AdjudicationResource } from '../services/adjudication-resource.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +19,8 @@ export class AdjudicationGuard extends BaseGuard {
     protected authService: AuthService,
     protected logger: LoggerService,
     @Inject(APP_CONFIG) private config: AppConfig,
-    private router: Router
+    private router: Router,
+    private adjudicationResource: AdjudicationResource
   ) {
     super(authService, logger);
   }
@@ -25,8 +30,26 @@ export class AdjudicationGuard extends BaseGuard {
    * Check the user is authenticated, otherwise redirect
    * them to an appropriate destination.
    */
-  protected canAccess(authenticated: boolean, roles: string[], routePath: string): Promise<boolean> {
-    return new Promise((resolve, reject) => {
+  protected checkAccess(routePath: string = null): Observable<boolean> | Promise<boolean> {
+    const admin$ = from(this.authService.getAdmin())
+      .pipe(
+        exhaustMap(({ userId, firstName, lastName, email, idir }: Admin) => {
+          const admin = {
+            userId,
+            firstName,
+            lastName,
+            email,
+            idir
+          } as Admin;
+
+          return this.adjudicationResource.createAdmin(admin);
+        }),
+      ).toPromise();
+
+    const redirect$ = new Promise(async (resolve, reject) => {
+
+      const authenticated = await this.authService.isLoggedIn();
+      const roles = this.authService.getUserRoles(true);
       let destinationRoute = this.config.routes.denied;
 
       if (!authenticated) {
@@ -40,5 +63,9 @@ export class AdjudicationGuard extends BaseGuard {
       this.router.navigate([destinationRoute]);
       return reject(false);
     });
+
+
+    return Promise.all([admin$, redirect$])
+      .then(([admin, result]: [Admin, boolean]) => result);
   }
 }
