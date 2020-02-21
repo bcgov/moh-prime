@@ -309,17 +309,17 @@ namespace Prime.Services
             return items;
         }
 
-        public Task<EnrolmentStatus> CreateEnrolmentStatusAsync(int enrolleeId, Status status, bool acceptedAccessTerm)
+        public Task<EnrolmentStatus> CreateEnrolmentStatusAsync(int enrolleeId, Status status, bool acceptedAccessTerm, int? adminId)
         {
             if (status == null)
             {
                 throw new ArgumentNullException(nameof(status), "Could not create an enrolment status, the passed in Status cannot be null.");
             }
 
-            return this.CreateEnrolmentStatusInternalAsync(enrolleeId, status, acceptedAccessTerm);
+            return this.CreateEnrolmentStatusInternalAsync(enrolleeId, status, acceptedAccessTerm, adminId);
         }
 
-        private async Task<EnrolmentStatus> CreateEnrolmentStatusInternalAsync(int enrolleeId, Status newStatus, bool acceptedAccessTerm)
+        private async Task<EnrolmentStatus> CreateEnrolmentStatusInternalAsync(int enrolleeId, Status newStatus, bool acceptedAccessTerm, int? adminId)
         {
             var enrollee = await this.GetBaseEnrolleeQuery()
                 .Include(e => e.Certifications)
@@ -374,11 +374,11 @@ namespace Prime.Services
                         // Flip to the object that will get returned
                         createdEnrolmentStatus = adjudicatedEnrolmentStatus;
 
-                        await _businessEventService.CreateBusinessEventAsync(enrolleeId, BusinessEventType.STATUS_CHANGE_CODE, "Automatically Approved");
+                        await _businessEventService.CreateBusinessEventAsync(enrolleeId, BusinessEventType.STATUS_CHANGE_CODE, "Automatically Approved", adminId);
                     }
                     else
                     {
-                        await _businessEventService.CreateBusinessEventAsync(enrolleeId, BusinessEventType.STATUS_CHANGE_CODE, "Submitted");
+                        await _businessEventService.CreateBusinessEventAsync(enrolleeId, BusinessEventType.STATUS_CHANGE_CODE, "Submitted", adminId);
                     }
                     break;
 
@@ -388,7 +388,7 @@ namespace Prime.Services
 
                     await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee);
 
-                    await _businessEventService.CreateBusinessEventAsync(enrolleeId, BusinessEventType.STATUS_CHANGE_CODE, "Manually Approved");
+                    await _businessEventService.CreateBusinessEventAsync(enrolleeId, BusinessEventType.STATUS_CHANGE_CODE, "Manually Approved", adminId);
 
                     break;
 
@@ -401,7 +401,7 @@ namespace Prime.Services
                     // Sent back to edit profile from Under Review
                     if (oldStatus.Code == Status.UNDER_REVIEW_CODE)
                     {
-                        await _businessEventService.CreateBusinessEventAsync(enrolleeId, BusinessEventType.STATUS_CHANGE_CODE, "Enabled Editing");
+                        await _businessEventService.CreateBusinessEventAsync(enrolleeId, BusinessEventType.STATUS_CHANGE_CODE, "Enabled Editing", adminId);
                         break;
                     }
 
@@ -413,7 +413,7 @@ namespace Prime.Services
                         createdEnrolmentStatus.PharmaNetStatus = true;
                         await _accessTermService.AcceptCurrentAccessTermAsync(enrollee);
                         await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrolleeId, enrollee);
-                        await _businessEventService.CreateBusinessEventAsync(enrolleeId, BusinessEventType.STATUS_CHANGE_CODE, "Accepted TOA");
+                        await _businessEventService.CreateBusinessEventAsync(enrolleeId, BusinessEventType.STATUS_CHANGE_CODE, "Accepted TOA", adminId);
                         break;
                     }
                     break;

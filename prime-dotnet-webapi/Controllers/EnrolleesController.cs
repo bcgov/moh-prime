@@ -22,17 +22,20 @@ namespace Prime.Controllers
         private readonly IEmailService _emailService;
         private readonly IAccessTermService _accessTermService;
         private readonly IEnrolleeProfileVersionService _enrolleeProfileVersionService;
+        private readonly IAdminService _adminService;
 
         public EnrolleesController(
             IEnrolleeService enrolleeService,
             IEmailService emailService,
             IAccessTermService accessTermService,
-            IEnrolleeProfileVersionService enrolleeProfileVersionService)
+            IEnrolleeProfileVersionService enrolleeProfileVersionService,
+            IAdminService adminService)
         {
             _emailService = emailService;
             _enrolleeService = enrolleeService;
             _accessTermService = accessTermService;
             _enrolleeProfileVersionService = enrolleeProfileVersionService;
+            _adminService = adminService;
         }
 
 
@@ -273,6 +276,7 @@ namespace Prime.Controllers
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
             var prevStatus = enrollee.CurrentStatus.StatusCode;
+            int? adminId = null;
 
             if (enrollee == null)
             {
@@ -296,7 +300,13 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            var enrolmentStatus = await _enrolleeService.CreateEnrolmentStatusAsync(enrolleeId, status, acceptedAccessTerm);
+            if (User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE))
+            {
+                var admin = await _adminService.GetAdminForUserIdAsync(User.GetPrimeUserId());
+                adminId = admin.Id;
+            }
+
+            var enrolmentStatus = await _enrolleeService.CreateEnrolmentStatusAsync(enrolleeId, status, acceptedAccessTerm, adminId);
 
             // Enrollee just left manual adjudication, inform the enrollee
             if (prevStatus == Status.UNDER_REVIEW_CODE)
