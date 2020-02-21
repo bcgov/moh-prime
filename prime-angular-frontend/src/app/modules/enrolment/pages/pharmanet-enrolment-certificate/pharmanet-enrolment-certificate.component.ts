@@ -72,8 +72,20 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
     return (this.enrolment.enrolmentCertificateNote) ? this.enrolment.enrolmentCertificateNote.note : null;
   }
 
-  public get vendorEmail(): FormControl {
-    return this.form.get('vendorEmail') as FormControl;
+  public get careConnectRecipient(): FormControl {
+    return this.form.get('careConnectRecipient') as FormControl;
+  }
+
+  public get excellerisRecipient(): FormControl {
+    return this.form.get('excellerisRecipient') as FormControl;
+  }
+
+  public get plexiaRecipient(): FormControl {
+    return this.form.get('plexiaRecipient') as FormControl;
+  }
+
+  public get otherRecipient(): FormControl {
+    return this.form.get('otherRecipient') as FormControl;
   }
 
   public get isRu(): boolean {
@@ -86,32 +98,30 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
     return `${this.config.loginRedirectUrl}/provisioner-access/${tokenId}`;
   }
 
-  public sendProvisionerAccessLink() {
-    if (!this.vendorEmail.value || !this.vendorEmail.valid) {
-      return;
+  public sendProvisionerAccessLink(provisionerName: string) {
+    if (this.form.valid) {
+      // const data: DialogOptions = {
+      //   title: 'Confirm Email',
+      //   message: `Are you sure you want to send your PharmaNet certificate to ${this.vendorEmail.value}?`,
+      //   actionText: 'Send',
+      // };
+      // this.dialog.open(ConfirmDialogComponent, { data })
+      //   .afterClosed()
+      //   .pipe(
+      //     exhaustMap((result: boolean) =>
+      //       result
+      //         ? this.enrolmentResource.sendProvisionerAccessLink(this.vendorEmail.value, provisionerName)
+      //         : EMPTY
+      //     )
+      //   )
+      //   .subscribe(
+      //     () => this.toastService.openSuccessToast('Email was successfully sent'),
+      //     (error: any) => {
+      //       this.logger.error('[Enrolment] Error occurred sending email', error);
+      //       this.toastService.openErrorToast('Email could not be sent');
+      //     }
+      //   );
     }
-
-    const data: DialogOptions = {
-      title: 'Confirm Email',
-      message: `Are you sure you want to send your PharmaNet certificate to ${this.vendorEmail.value}?`,
-      actionText: 'Send',
-    };
-    this.dialog.open(ConfirmDialogComponent, { data })
-      .afterClosed()
-      .pipe(
-        exhaustMap((result: boolean) =>
-          result
-            ? this.enrolmentResource.sendProvisionerAccessLink(this.vendorEmail.value)
-            : EMPTY
-        )
-      )
-      .subscribe(
-        () => this.toastService.openSuccessToast('Email was successfully sent'),
-        (error: any) => {
-          this.logger.error('[Enrolment] Error occurred sending email', error);
-          this.toastService.openErrorToast('Email could not be sent');
-        }
-      );
   }
 
   public ngOnInit() {
@@ -142,7 +152,10 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
 
   private buildVendorEmailGroup(): FormGroup {
     return this.fb.group({
-      vendorEmail: [null, [Validators.required, FormControlValidators.email]],
+      careConnectRecipient: [null, [Validators.required, FormControlValidators.email]],
+      excellerisRecipient: [null, [Validators.required, FormControlValidators.email]],
+      plexiaRecipient: [null, [Validators.required, FormControlValidators.email]],
+      otherRecipient: [null, [Validators.required, FormControlValidators.email]]
     });
   }
 }
