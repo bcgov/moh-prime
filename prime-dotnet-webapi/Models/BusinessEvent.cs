@@ -21,6 +21,11 @@ namespace Prime.Models
         [JsonIgnore]
         public Admin Admin { get; set; }
 
+        public short BusinessEventTypeCode { get; set; }
+
+        [JsonIgnore]
+        public BusinessEventType BusinessEventType { get; set; }
+
         public string Description { get; set; }
 
         public DateTime? EventDate { get; set; }

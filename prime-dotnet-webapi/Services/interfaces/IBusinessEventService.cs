@@ -5,6 +5,6 @@ namespace Prime.Services
 {
     public interface IBusinessEventService
     {
-        Task CreateBusinessEventAsync(BusinessEvent businessEvent);
+        Task<BusinessEvent> CreateBusinessEventAsync(int enrolleeId, short eventTypeCode, string description, int? adminId = null);
     }
 }

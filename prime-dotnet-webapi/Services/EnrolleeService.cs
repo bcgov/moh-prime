@@ -20,6 +20,7 @@ namespace Prime.Services
         private readonly IPrivilegeService _privilegeService;
         private readonly IAccessTermService _accessTermService;
         private readonly IEnrolleeProfileVersionService _enroleeProfileVersionService;
+        private readonly IBusinessEventService _businessEventService;
 
         private class StatusWrapper
         {
@@ -38,7 +39,8 @@ namespace Prime.Services
             IEmailService emailService,
             IPrivilegeService privilegeService,
             IAccessTermService accessTermService,
-            IEnrolleeProfileVersionService enroleeProfileVersionService)
+            IEnrolleeProfileVersionService enroleeProfileVersionService,
+            IBusinessEventService businessEventService)
             : base(context, httpContext)
         {
             _automaticAdjudicationService = automaticAdjudicationService;
@@ -46,6 +48,7 @@ namespace Prime.Services
             _privilegeService = privilegeService;
             _accessTermService = accessTermService;
             _enroleeProfileVersionService = enroleeProfileVersionService;
+            _businessEventService = businessEventService;
         }
 
         private Dictionary<Status, StatusWrapper[]> GetWorkFlowStateMap()
@@ -370,6 +373,8 @@ namespace Prime.Services
 
                         // Flip to the object that will get returned
                         createdEnrolmentStatus = adjudicatedEnrolmentStatus;
+
+                        await _businessEventService.CreateBusinessEventAsync(enrolleeId, BusinessEventType.STATUS_CHANGE_CODE, "Automatically Approved");
                     }
                     break;
 

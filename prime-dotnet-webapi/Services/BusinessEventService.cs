@@ -1,9 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Prime.Models;
 
 namespace Prime.Services
@@ -14,9 +11,26 @@ namespace Prime.Services
             ApiDbContext context, IHttpContextAccessor httpContext) : base(context, httpContext)
         { }
 
-        public Task CreateBusinessEventAsync(BusinessEvent businessEvent)
+        public async Task<BusinessEvent> CreateBusinessEventAsync(int enrolleeId, short eventTypeCode, string description, int? adminId = null)
         {
-            throw new NotImplementedException();
+            var businessEvent = new BusinessEvent
+            {
+                EnrolleeId = enrolleeId,
+                AdminId = adminId,
+                BusinessEventTypeCode = eventTypeCode,
+                Description = description,
+                EventDate = DateTime.Now
+            };
+
+            _context.BusinessEvents.Add(businessEvent);
+
+            var created = await _context.SaveChangesAsync();
+            if (created < 1)
+            {
+                throw new InvalidOperationException("Could not create business event.");
+            };
+
+            return businessEvent;
         }
     }
 }

@@ -1,5 +1,4 @@
 
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -11,7 +10,6 @@ namespace Prime.Models
     public sealed class BusinessEventType : BaseAuditable, ILookup<short>
     {
         public const short STATUS_CHANGE_CODE = 1;
-
 
         [Key]
         public short Code { get; set; }
