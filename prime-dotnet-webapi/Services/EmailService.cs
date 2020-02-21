@@ -43,11 +43,16 @@ namespace Prime.Services
             await Send(PRIME_EMAIL, enrollee.ContactEmail, subject, body);
         }
 
-        public async Task SendProvisionerLinkAsync(string provisionerEmail, EnrolmentCertificateAccessToken token)
+        public async Task SendProvisionerLinkAsync(string provisionerEmail, EnrolmentCertificateAccessToken token, string contactEmail = "")
         {
             if (!IsValidEmail(provisionerEmail))
             {
-                throw new ArgumentException("Cannot send provisioner link, supplied email address is invalid.");
+                throw new ArgumentException("Cannot send provisioner link, supplied provisioner email address is invalid.");
+            }
+
+            if (!String.IsNullOrEmpty(contactEmail) && !IsValidEmail(contactEmail))
+            {
+                throw new ArgumentException("Cannot send provisioner link, supplied contact email address is invalid.");
             }
 
             if (token.Enrollee == null)
@@ -123,7 +128,7 @@ namespace Prime.Services
                 mail.Dispose();
             }
         }
-        
+
         public class EmailServiceException : Exception
         {
             public EmailServiceException() { }

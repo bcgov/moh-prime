@@ -63,23 +63,22 @@ namespace Prime.Controllers
             return Ok(new ApiOkResponse<IEnumerable<EnrolmentCertificateAccessToken>>(tokens));
         }
 
-
         // POST: api/provisioner-access/send-link
         /// <summary>
         /// Creates an EnrolmentCertificateAccessToken for the user if the user has a finished enrolment,
         /// then sends the link to a recipient by email.
         /// </summary>
-        [HttpPost("send-link", Name = nameof(SendProvisionerLink))]
+        [HttpPost("send-link/{pharmaNetVendorName}", Name = nameof(SendProvisionerLink))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiOkResponse<EnrolmentCertificateAccessToken>), StatusCodes.Status201Created)]
-        [Authorize(Policy = PrimeConstants.USER_POLICY)]
-        public async Task<ActionResult<EnrolmentCertificateAccessToken>> SendProvisionerLink(FromBodyText recipientEmail)
+        // [Authorize(Policy = PrimeConstants.USER_POLICY)]
+        public async Task<ActionResult<EnrolmentCertificateAccessToken>> SendProvisionerLink(string pharmaNetVendorName, FromBodyText contactEmail)
         {
-            if (!EmailService.IsValidEmail(recipientEmail))
+            if (!string.IsNullOrEmpty(contactEmail) && !EmailService.IsValidEmail(contactEmail))
             {
-                this.ModelState.AddModelError("Recipient Email", "The recipient email provided is not valid.");
+                this.ModelState.AddModelError("Contact Email", "The contact email provided is not valid.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
@@ -96,9 +95,21 @@ namespace Prime.Controllers
             }
 
             var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrollee);
+            var recipientEmail = _certificateService.GetPharmaNetVendorEmail(pharmaNetVendorName);
+
+            if (!EmailService.IsValidEmail(recipientEmail))
+            {
+                this.ModelState.AddModelError("Recipient Email", "The recipient email provided is not valid.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+            }
+
             await _emailService.SendProvisionerLinkAsync(recipientEmail, createdToken);
 
-            return CreatedAtAction(nameof(GetEnrolmentCertificate), new { accessTokenId = createdToken.Id }, new ApiCreatedResponse<EnrolmentCertificateAccessToken>(createdToken));
+            return CreatedAtAction(
+                nameof(GetEnrolmentCertificate),
+                new { accessTokenId = createdToken.Id },
+                new ApiCreatedResponse<EnrolmentCertificateAccessToken>(createdToken)
+            );
         }
 
         // GET: api/provisioner-access/gpid

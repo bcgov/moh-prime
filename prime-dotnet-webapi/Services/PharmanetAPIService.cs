@@ -11,8 +11,6 @@ using Microsoft.AspNetCore.Http;
 
 using Newtonsoft.Json;
 
-using System.Text.Json;
-
 using Prime.Models;
 
 namespace Prime.Services

@@ -96,7 +96,6 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
       message: `Are you sure you want to send your PharmaNet certificate to ${this.vendorEmail.value}?`,
       actionText: 'Send',
     };
-
     this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(

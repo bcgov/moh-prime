@@ -76,7 +76,6 @@ export class AuthService implements IAuthService {
     return token.preferred_username;
   }
 
-
   public async getUser(forceReload?: boolean): Promise<User> {
     const {
       firstName,
