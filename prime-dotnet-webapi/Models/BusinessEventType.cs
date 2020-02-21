@@ -10,6 +10,8 @@ namespace Prime.Models
     public sealed class BusinessEventType : BaseAuditable, ILookup<short>
     {
         public const short STATUS_CHANGE_CODE = 1;
+        public const short EMAIL_CODE = 2;
+        public const short NOTE_CODE = 3;
 
         [Key]
         public short Code { get; set; }

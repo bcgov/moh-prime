@@ -11,6 +11,8 @@ namespace Prime.Configuration
             {
                 return new[] {
                     new BusinessEventType { Code = 1, Name = "Status Change", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new BusinessEventType { Code = 2, Name = "Email", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new BusinessEventType { Code = 3, Name = "Note", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE }
                 };
             }
         }

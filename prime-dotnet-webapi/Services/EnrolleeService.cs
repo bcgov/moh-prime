@@ -376,6 +376,10 @@ namespace Prime.Services
 
                         await _businessEventService.CreateBusinessEventAsync(enrolleeId, BusinessEventType.STATUS_CHANGE_CODE, "Automatically Approved");
                     }
+                    else
+                    {
+                        await _businessEventService.CreateBusinessEventAsync(enrolleeId, BusinessEventType.STATUS_CHANGE_CODE, "Submitted");
+                    }
                     break;
 
                 case Status.REQUIRES_TOA_CODE:
@@ -383,6 +387,8 @@ namespace Prime.Services
                     createdEnrolmentStatus.AddStatusReason(StatusReason.MANUAL_CODE);
 
                     await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee);
+
+                    await _businessEventService.CreateBusinessEventAsync(enrolleeId, BusinessEventType.STATUS_CHANGE_CODE, "Manually Approved");
 
                     break;
 
@@ -395,6 +401,7 @@ namespace Prime.Services
                     // Sent back to edit profile from Under Review
                     if (oldStatus.Code == Status.UNDER_REVIEW_CODE)
                     {
+                        await _businessEventService.CreateBusinessEventAsync(enrolleeId, BusinessEventType.STATUS_CHANGE_CODE, "Enabled Editing");
                         break;
                     }
 
@@ -406,6 +413,7 @@ namespace Prime.Services
                         createdEnrolmentStatus.PharmaNetStatus = true;
                         await _accessTermService.AcceptCurrentAccessTermAsync(enrollee);
                         await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrolleeId, enrollee);
+                        await _businessEventService.CreateBusinessEventAsync(enrolleeId, BusinessEventType.STATUS_CHANGE_CODE, "Accepted TOA");
                         break;
                     }
                     break;
