@@ -90,7 +90,7 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
         .pipe(
           exhaustMap((result: boolean) =>
             (result)
-              ? this.enrolmentResource.updateEnrolmentStatus(this.enrolment.id, EnrolmentStatus.ACTIVE)
+              ? this.enrolmentResource.updateEnrolmentStatus(this.enrolment.id, EnrolmentStatus.ACTIVE, isAcceptingToa)
               : EMPTY
           )
         )
