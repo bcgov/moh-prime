@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -43,6 +44,13 @@ namespace Prime.Controllers
             {
                 this.ModelState.AddModelError("Admin.UserId", "An admin already exists for this User Id.");
                 return Ok(new ApiOkResponse<Admin>(admin));
+            }
+
+            Guid PrimeUserId = User.GetPrimeUserId();
+            if (PrimeUserId.Equals(Guid.Empty) || !PrimeUserId.Equals(admin.UserId))
+            {
+                this.ModelState.AddModelError("Admin", "Could not create an admin, permission denied.");
+                return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
             var createdAdminId = await _adminService.CreateAdminAsync(admin);

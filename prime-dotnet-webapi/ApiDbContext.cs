@@ -180,6 +180,10 @@ namespace Prime
             modelBuilder.Entity<Enrollee>()
                 .HasIndex("UserId")
                 .IsUnique();
+
+            modelBuilder.Entity<Admin>()
+                .HasIndex("UserId")
+                .IsUnique();
             #endregion
 
             #region Relationships
