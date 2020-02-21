@@ -16,7 +16,7 @@ namespace Prime.Services
         private readonly IAccessTermService _accessTermService;
         private readonly IEnrolleeProfileVersionService _enroleeProfileVersionService;
 
-        private ImmutableDictionary<string, string> PharmaNetVendors = new Dictionary<string, string>()
+        private ImmutableDictionary<string, string> PharmaNetProvisioners = new Dictionary<string, string>()
         {
             { "CareConnect", "CareConnect@phsa.ca" },
             { "Excelleris", "support@excelleris.com" },
@@ -116,10 +116,10 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public string GetPharmaNetVendorEmail(string pharmaNetVendor)
+        public string GetPharmaNetProvisionerEmail(string vendorName)
         {
             string vendorEmail;
-            PharmaNetVendors.TryGetValue(pharmaNetVendor, out vendorEmail);
+            PharmaNetProvisioners.TryGetValue(vendorName, out vendorEmail);
             return vendorEmail;
         }
 

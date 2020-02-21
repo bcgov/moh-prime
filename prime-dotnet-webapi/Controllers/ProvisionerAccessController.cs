@@ -68,15 +68,15 @@ namespace Prime.Controllers
         /// Creates an EnrolmentCertificateAccessToken for the user if the user has a finished enrolment,
         /// then sends the link to a recipient by email.
         /// </summary>
-        [HttpPost("send-link/{pharmaNetVendorName}", Name = nameof(SendProvisionerLink))]
+        [HttpPost("send-link/{provisionerName}", Name = nameof(SendProvisionerLink))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiOkResponse<EnrolmentCertificateAccessToken>), StatusCodes.Status201Created)]
         // [Authorize(Policy = PrimeConstants.USER_POLICY)]
-        public async Task<ActionResult<EnrolmentCertificateAccessToken>> SendProvisionerLink(string pharmaNetVendorName, FromBodyText contactEmail)
+        public async Task<ActionResult<EnrolmentCertificateAccessToken>> SendProvisionerLink(string provisionerName, FromBodyText ccEmail)
         {
-            if (!string.IsNullOrEmpty(contactEmail) && !EmailService.IsValidEmail(contactEmail))
+            if (!string.IsNullOrEmpty(ccEmail) && !EmailService.IsValidEmail(ccEmail))
             {
                 this.ModelState.AddModelError("Contact Email", "The contact email provided is not valid.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
@@ -95,7 +95,7 @@ namespace Prime.Controllers
             }
 
             var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrollee);
-            var recipientEmail = _certificateService.GetPharmaNetVendorEmail(pharmaNetVendorName);
+            var recipientEmail = _certificateService.GetPharmaNetProvisionerEmail(provisionerName);
 
             if (!EmailService.IsValidEmail(recipientEmail))
             {
@@ -103,7 +103,7 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            await _emailService.SendProvisionerLinkAsync(recipientEmail, createdToken);
+            await _emailService.SendProvisionerLinkAsync(recipientEmail, createdToken, ccEmail);
 
             return CreatedAtAction(
                 nameof(GetEnrolmentCertificate),

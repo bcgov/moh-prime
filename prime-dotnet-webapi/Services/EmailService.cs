@@ -43,16 +43,22 @@ namespace Prime.Services
             await Send(PRIME_EMAIL, enrollee.ContactEmail, subject, body);
         }
 
-        public async Task SendProvisionerLinkAsync(string provisionerEmail, EnrolmentCertificateAccessToken token, string contactEmail = "")
+        public async Task SendProvisionerLinkAsync(string provisionerEmail, EnrolmentCertificateAccessToken token, string ccEmail)
         {
+            var ccEmails = new List<string>() { token.Enrollee.ContactEmail };
+
             if (!IsValidEmail(provisionerEmail))
             {
                 throw new ArgumentException("Cannot send provisioner link, supplied provisioner email address is invalid.");
             }
 
-            if (!String.IsNullOrEmpty(contactEmail) && !IsValidEmail(contactEmail))
+            if (!String.IsNullOrEmpty(ccEmail) && !IsValidEmail(ccEmail))
             {
-                throw new ArgumentException("Cannot send provisioner link, supplied contact email address is invalid.");
+                throw new ArgumentException("Cannot send provisioner link, supplied copy email address is invalid.");
+            }
+            else
+            {
+                ccEmails.Add(ccEmail);
             }
 
             if (token.Enrollee == null)
@@ -63,7 +69,7 @@ namespace Prime.Services
             string subject = "New access request";
             string body = $"This user has been approved for PharmaNet access. Please click <a href=\"{token.FrontendUrl}\">here</a> to view their information.";
 
-            await Send(PRIME_EMAIL, new[] { provisionerEmail }, new[] { token.Enrollee.ContactEmail }, subject, body);
+            await Send(PRIME_EMAIL, new[] { provisionerEmail }, ccEmails, subject, body);
         }
 
         private async Task Send(string from, string to, string subject, string body)
