@@ -258,6 +258,9 @@ namespace Prime.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
                     b.ToTable("Admin");
                 });
 

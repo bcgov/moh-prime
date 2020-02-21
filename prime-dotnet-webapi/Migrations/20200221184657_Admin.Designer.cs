@@ -11,7 +11,7 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20200220215135_Admin")]
+    [Migration("20200221184657_Admin")]
     partial class Admin
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -259,6 +259,9 @@ namespace Prime.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Admin");
                 });
