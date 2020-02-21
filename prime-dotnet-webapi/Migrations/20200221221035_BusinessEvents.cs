@@ -14,11 +14,11 @@ namespace Prime.Migrations
                 {
                     Code = table.Column<short>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(nullable: true),
                     CreatedUserId = table.Column<Guid>(nullable: false),
                     CreatedTimeStamp = table.Column<DateTime>(nullable: false),
                     UpdatedUserId = table.Column<Guid>(nullable: false),
-                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: true)
+                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -31,15 +31,15 @@ namespace Prime.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    CreatedUserId = table.Column<Guid>(nullable: false),
-                    CreatedTimeStamp = table.Column<DateTime>(nullable: false),
-                    UpdatedUserId = table.Column<Guid>(nullable: false),
-                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false),
                     EnrolleeId = table.Column<int>(nullable: false),
                     AdminId = table.Column<int>(nullable: true),
                     BusinessEventTypeCode = table.Column<short>(nullable: false),
                     Description = table.Column<string>(nullable: true),
-                    EventDate = table.Column<DateTime>(nullable: true)
+                    EventDate = table.Column<DateTime>(nullable: true),
+                    CreatedUserId = table.Column<Guid>(nullable: false),
+                    CreatedTimeStamp = table.Column<DateTime>(nullable: false),
+                    UpdatedUserId = table.Column<Guid>(nullable: false),
+                    UpdatedTimeStamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -67,7 +67,12 @@ namespace Prime.Migrations
             migrationBuilder.InsertData(
                 table: "BusinessEventTypeLookup",
                 columns: new[] { "Code", "CreatedTimeStamp", "CreatedUserId", "Name", "UpdatedTimeStamp", "UpdatedUserId" },
-                values: new object[] { (short)1, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Status Change", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") });
+                values: new object[,]
+                {
+                    { (short)1, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Status Change", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
+                    { (short)2, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Email", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") },
+                    { (short)3, new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000"), "Note", new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("00000000-0000-0000-0000-000000000000") }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_BusinessEvent_AdminId",

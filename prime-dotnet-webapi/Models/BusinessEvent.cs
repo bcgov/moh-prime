@@ -9,7 +9,7 @@ namespace Prime.Models
     public class BusinessEvent : BaseAuditable
     {
         [Key]
-        public int? Id { get; set; }
+        public int Id { get; set; }
 
         public int EnrolleeId { get; set; }
 
