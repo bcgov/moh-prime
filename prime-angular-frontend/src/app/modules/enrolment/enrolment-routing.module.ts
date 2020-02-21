@@ -126,9 +126,9 @@ const routes: Routes = [
         data: { title: 'Terms of Access' }
       },
       {
-        path: EnrolmentRoutes.PHARMANET_ENROLMENT_CERTIFICATE,
+        path: EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY,
         component: PharmanetEnrolmentCertificateComponent,
-        data: { title: 'PharmaNet Enrolment Certificate' }
+        data: { title: 'PharmaNet Enrolment Summary' }
       },
       // TODO removed until the page has been implemented
       // {
