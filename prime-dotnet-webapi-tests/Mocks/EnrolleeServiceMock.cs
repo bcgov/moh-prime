@@ -191,5 +191,10 @@ namespace PrimeTests.Mocks
         {
             throw new NotImplementedException();
         }
+
+        public Task<int> GetEnrolleeCountAsync()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
