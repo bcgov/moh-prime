@@ -6,7 +6,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { LoggerService } from '@core/services/logger.service';
 import { Role } from '@auth/shared/enum/role.enum';
 import { User } from '@auth/shared/models/user.model';
-import { KeycloakTokenParsed } from 'keycloak-js';
+import { Admin } from '../models/admin.model';
 
 export interface IAuthService {
   getUserId(): Promise<string>;
@@ -109,6 +109,25 @@ export class AuthService implements IAuthService {
         postal
       },
       contactEmail
+    };
+  }
+
+  public async getAdmin(forceReload?: boolean): Promise<Admin> {
+    const {
+      firstName,
+      lastName,
+      email
+    } = await this.keycloakService.loadUserProfile(forceReload) as Keycloak.KeycloakProfile;
+
+    const userId = await this.getUserId();
+    const idir = await this.getPreferredUsername();
+
+    return {
+      userId,
+      firstName,
+      lastName,
+      email,
+      idir
     };
   }
 
