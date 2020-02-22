@@ -1,0 +1,76 @@
+apiVersion: v1
+kind: Template
+labels:
+  template: postgresql-persistent-template
+metadata:
+  creationTimestamp: null
+  name: postgresql-dc
+parameters:
+  - description: The name of the OpenShift Service exposed for the database.
+    displayName: Database Service Name
+    name: NAME
+    required: true
+  - name: VERSION
+    required: true
+  - name: SOURCE_CONTEXT_DIR
+    required: true
+  - name: SOURCE_REPOSITORY_URL
+    required: true
+  - name: SOURCE_REPOSITORY_REF
+    required: true
+  - name: SUFFIX
+    required: false
+  - name: OC_NAMESPACE
+    required: true
+  - name: OC_APP
+    required: true
+  - description: The name of the OpenShift Service exposed for the database.
+    displayName: Database Service Name
+    name: DATABASE_SERVICE_NAME
+    required: true
+    value: postgresql
+  - description: The OpenShift ImageStream name.
+    displayName: IMAGE_STREAM_NAME
+    name: IMAGE_STREAM_NAME
+    value: postgresql-10
+  - description: The OpenShift Namespace where the ImageStream resides.
+    displayName: Namespace
+    name: IMAGE_STREAM_NAMESPACE
+    value: 'dqszvc-tools'
+  - description: 'Version of PostgreSQL image to be used (9.2, 9.4, 9.5 or latest).'
+    displayName: Version of PostgreSQL Image
+    name: IMAGE_STREAM_VERSION
+    required: true
+    value: 'latest'
+  - description: Name of the PostgreSQL database accessed.
+    displayName: PostgreSQL Database Name
+    name: POSTGRESQL_DATABASE
+    required: true
+    value: postgresql
+  - description: 'Volume space available for data, e.g. 512Mi, 2Gi.'
+    displayName: Volume Capacity
+    name: VOLUME_CAPACITY
+    required: true
+    value: 1Gi
+  - name: CPU_LIMIT
+    value: 500m
+  - name: MEMORY_LIMIT
+    value: 2Gi
+  - name: CPU_REQUEST
+    value: 200m
+  - name: MEMORY_REQUEST
+    value: 1.5Gi
+objects:
+ - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: '${NAME}${SUFFIX}'
+      annotations:
+        volume.beta.kubernetes.io/storage-class: netapp-block-standard
+        trident.netapp.io/reclaimPolicy: Retain
+    spec:
+      accessModes:
+        - ReadWriteMany
+      resources:
+        requests:
+          storage: '${VOLUME_CAPACITY}'

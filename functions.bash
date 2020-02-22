@@ -26,9 +26,26 @@ function pipeline_args() {
 function build() {
     source ./"$2.conf"
     echo "Building $2 (${APP_NAME}) to $PROJECT_PREFIX-$3..."
-    buildPresent=$(oc get bc/"$APP_NAME${SUFFIX}" --ignore-not-found=true | wc -l)
+    buildPresent=$(oc get pvc/${APP_NAME}${SUFFIX} --ignore-not-found=true --no-headers=true | awk '{print $1}')
     MODE="apply"
     OC_ARGS="--overwrite=false --all"
+    if [ -n ${PVC_TEMPLATE} ];
+    then
+        existingPVC=`oc get pvc/${APP_NAME}${SUFFIX} --ignore-not-found=true --no-headers=true | awk '{print $1}'`
+        if [ -z ${existingPVC} ]
+        echo "Building storage..."
+        oc process -f ./"${TEMPLATE_DIRECTORY}/${PVC_TEMPLATE}" \
+    -p NAME="${APP_NAME}" \
+    -p VERSION="${BUILD_NUMBER}" \
+    -p SUFFIX="${SUFFIX}" \
+    -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
+    -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
+    -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
+    -p OC_NAMESPACE="$PROJECT_PREFIX" \
+    -p OC_APP="$3" ${@:4} --output="yaml" | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$3" ${OC_ARGS}
+    else
+        echo "Deployment should be automatic..."
+    fi
     echo "oc process -f ./${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE} -p NAME=${APP_NAME} -p VERSION=${BUILD_NUMBER} -p SUFFIX=-${BRANCH_LOWER} -p SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR} -p SOURCE_REPOSITORY_URL=${GIT_URL} -p SOURCE_REPOSITORY_REF=${BRANCH_NAME} -p OC_NAMESPACE=$PROJECT_PREFIX -p OC_APP=$3 ${@:4} | oc ${MODE} -f - --namespace=$PROJECT_PREFIX-$3"
     oc process -f ./"${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE}" \
     -p NAME="${APP_NAME}" \
@@ -124,6 +141,7 @@ function getOldPr () {
 }
 
 function occleanup() {
+    oc project ${PROJECT_PREFIX}-dev
     OPEN_PR_ARRAY=()
     LIVE_BRANCH_ARRAY=()
     ORPHANS=()
