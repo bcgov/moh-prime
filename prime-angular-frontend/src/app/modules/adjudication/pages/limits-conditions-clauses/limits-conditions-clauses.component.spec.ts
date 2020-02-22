@@ -31,7 +31,7 @@ describe('LimitsConditionsClausesComponent', () => {
         NgxMaterialModule,
         ReactiveFormsModule,
         RouterTestingModule,
-        AdjudicationModule
+        AdjudicationModule,
       ],
       providers: [
         {
