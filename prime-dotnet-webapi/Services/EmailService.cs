@@ -124,8 +124,8 @@ namespace Prime.Services
                  || ex is SmtpFailedRecipientsException)
                 {
                     // TODO log mail exception, perhaps in a table in the database?
-                    throw new EmailServiceException("Email service failed", ex);
                 }
+
                 throw;
             }
             finally
