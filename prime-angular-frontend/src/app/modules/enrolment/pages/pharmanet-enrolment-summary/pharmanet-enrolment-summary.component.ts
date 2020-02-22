@@ -23,17 +23,16 @@ import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { AccessTerm } from '@shared/models/access-term.model';
 
 @Component({
-  selector: 'app-pharmanet-enrolment-certificate',
-  templateUrl: './pharmanet-enrolment-certificate.component.html',
-  styleUrls: ['./pharmanet-enrolment-certificate.component.scss']
+  selector: 'app-pharmanet-enrolment-summary',
+  templateUrl: './pharmanet-enrolment-summary.component.html',
+  styleUrls: ['./pharmanet-enrolment-summary.component.scss']
 })
-export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage implements OnInit {
+export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implements OnInit {
+  public form: FormGroup;
   public enrolment: Enrolment;
   public showProgressBar: boolean;
   public expiryDate: string;
   public accessTerm: AccessTerm;
-
-  public form: FormGroup;
 
   constructor(
     protected route: ActivatedRoute,
