@@ -151,11 +151,11 @@
       </div>
     </div>
 
-    <div class="row mb-4">
+    <div *ngIf="adjudicatorNotes.value?.length"
+         class="row mb-4">
       <div class="col-sm-12 col-lg-8">
 
-        <div *ngIf="adjudicatorNotes.value?.length"
-             class="table-responsive">
+        <div class="table-responsive">
           <table class="table">
             <tbody>
               <tr *ngFor="let adjudicatorNote of adjudicatorNotes | async">
@@ -170,5 +170,15 @@
     </div>
 
   </form>
+
+  <div class="row justify-content-between">
+    <div class="col pt-4">
+
+      <button mat-stroked-button
+              type="button"
+              (click)="routeTo()">Back</button>
+
+    </div>
+  </div>
 
 </app-page>
