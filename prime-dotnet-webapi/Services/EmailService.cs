@@ -37,14 +37,15 @@ namespace Prime.Services
                 return;
             }
 
-            string subject = "Prime requires your attention";
-            string body = $"Your Prime application status has changed since you last viewed it. Please click <a href=\"{PrimeConstants.FRONTEND_URL}\">here</a> to log into Prime and view your status.";
+            string subject = "PRIME Requires your Attention";
+            string body = $"Your PRIME application status has changed since you last viewed it. Please click <a href=\"{PrimeConstants.FRONTEND_URL}\">here</a> to log into PRIME and view your status.";
 
             await Send(PRIME_EMAIL, enrollee.ContactEmail, subject, body);
         }
 
         public async Task SendProvisionerLinkAsync(string provisionerEmail, EnrolmentCertificateAccessToken token, string ccEmail)
         {
+            // Always send a copy to the enrollee
             var ccEmails = new List<string>() { token.Enrollee.ContactEmail };
 
             if (!IsValidEmail(provisionerEmail))
@@ -52,13 +53,16 @@ namespace Prime.Services
                 throw new ArgumentException("Cannot send provisioner link, supplied provisioner email address is invalid.");
             }
 
-            if (!String.IsNullOrEmpty(ccEmail) && !IsValidEmail(ccEmail))
+            if (!String.IsNullOrEmpty(ccEmail))
             {
-                throw new ArgumentException("Cannot send provisioner link, supplied copy email address is invalid.");
-            }
-            else
-            {
-                ccEmails.Add(ccEmail);
+                if (IsValidEmail(ccEmail))
+                {
+                    ccEmails.Add(ccEmail);
+                }
+                else
+                {
+                    throw new ArgumentException("Cannot send provisioner link, supplied carbon copy email address is invalid.");
+                }
             }
 
             if (token.Enrollee == null)
@@ -66,7 +70,7 @@ namespace Prime.Services
                 await _context.Entry(token).Reference(t => t.Enrollee).LoadAsync();
             }
 
-            string subject = "New access request";
+            string subject = "New Access Request";
             string body = $"This user has been approved for PharmaNet access. Please click <a href=\"{token.FrontendUrl}\">here</a> to view their information.";
 
             await Send(PRIME_EMAIL, new[] { provisionerEmail }, ccEmails, subject, body);

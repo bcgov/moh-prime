@@ -82,12 +82,9 @@ namespace Prime.Services
                         return EnrolmentCertificate.Create(enrolleeHistory, token.Enrollee);
                     }
                 }
-                return null;
             }
-            else
-            {
-                return null;
-            }
+
+            return null;
         }
 
         public async Task<EnrolmentCertificateAccessToken> CreateCertificateAccessTokenAsync(Enrollee enrollee)
@@ -116,11 +113,21 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public string GetPharmaNetProvisionerEmail(string vendorName)
+        public string GetPharmaNetProvisionerEmail(string provisionerName, ref string otherEmail)
         {
-            string vendorEmail;
-            PharmaNetProvisioners.TryGetValue(vendorName, out vendorEmail);
-            return vendorEmail;
+            string recipientEmail;
+
+            if (provisionerName == "Other")
+            {
+                recipientEmail = otherEmail;
+                otherEmail = "";
+            }
+            else
+            {
+                PharmaNetProvisioners.TryGetValue(provisionerName, out recipientEmail);
+            }
+
+            return recipientEmail;
         }
 
         private async Task UpdateTokenMetadataAsync(EnrolmentCertificateAccessToken token)

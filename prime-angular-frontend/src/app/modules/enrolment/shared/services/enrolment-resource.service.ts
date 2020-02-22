@@ -80,7 +80,7 @@ export class EnrolmentResource {
       );
   }
 
-  public sendProvisionerAccessLink(provisionerName: string, ccEmail: string): Observable<EnrolmentCertificateAccessToken> {
+  public sendProvisionerAccessLink(provisionerName: string, ccEmail: string = null): Observable<EnrolmentCertificateAccessToken> {
     const payload = { data: ccEmail };
     return this.http.post(`${this.config.apiEndpoint}/provisioner-access/send-link/${provisionerName}`, payload)
       .pipe(

@@ -99,13 +99,18 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
     return `${this.config.loginRedirectUrl}/provisioner-access/${tokenId}`;
   }
 
-  public sendProvisionerAccessLink(provisionerName: string) {
+  public sendProvisionerAccessLinkWithCc(provisionerName: string) {
     const formControl = this.form.get(`${provisionerName.toLowerCase()}Recipient`);
+    if (!formControl) { return; }
 
-    let ccEmail = '';
-    if (formControl && formControl.valid) {
-      ccEmail = formControl.value;
-    }
+    (formControl.valid)
+      ? this.sendProvisionerAccessLink(provisionerName, formControl.value)
+      : formControl.markAllAsTouched();
+  }
+
+  public sendProvisionerAccessLink(provisionerName: string, email: string = null) {
+    console.log(provisionerName, email);
+
 
     const data: DialogOptions = {
       title: 'Confirm Email',
@@ -117,7 +122,7 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
       .pipe(
         exhaustMap((result: boolean) =>
           result
-            ? this.enrolmentResource.sendProvisionerAccessLink(provisionerName, ccEmail)
+            ? this.enrolmentResource.sendProvisionerAccessLink(provisionerName, email)
             : EMPTY
         )
       )
