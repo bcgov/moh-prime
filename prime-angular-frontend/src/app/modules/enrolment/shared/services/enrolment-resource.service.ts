@@ -80,9 +80,9 @@ export class EnrolmentResource {
       );
   }
 
-  public sendProvisionerAccessLink(recipientEmail: string, vendorName: string): Observable<EnrolmentCertificateAccessToken> {
-    const payload = { data: recipientEmail };
-    return this.http.post(`${this.config.apiEndpoint}/provisioner-access/send-link/${vendorName}`, payload)
+  public sendProvisionerAccessLink(provisionerName: string, ccEmail: string): Observable<EnrolmentCertificateAccessToken> {
+    const payload = { data: ccEmail };
+    return this.http.post(`${this.config.apiEndpoint}/provisioner-access/send-link/${provisionerName}`, payload)
       .pipe(
         map((response: PrimeHttpResponse) => response.result as EnrolmentCertificateAccessToken),
         tap((token: EnrolmentCertificateAccessToken) => this.logger.info('ACCESS_TOKEN', token))

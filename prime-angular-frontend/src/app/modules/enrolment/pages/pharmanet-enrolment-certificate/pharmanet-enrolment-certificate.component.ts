@@ -28,12 +28,11 @@ import { AccessTerm } from '@shared/models/access-term.model';
   styleUrls: ['./pharmanet-enrolment-certificate.component.scss']
 })
 export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage implements OnInit {
+  public form: FormGroup;
   public enrolment: Enrolment;
   public showProgressBar: boolean;
   public expiryDate: string;
   public accessTerm: AccessTerm;
-
-  public form: FormGroup;
 
   constructor(
     protected route: ActivatedRoute,
@@ -69,7 +68,9 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
   }
 
   public get enrolmentCertificateNote() {
-    return (this.enrolment.enrolmentCertificateNote) ? this.enrolment.enrolmentCertificateNote.note : null;
+    return (this.enrolment.enrolmentCertificateNote)
+      ? this.enrolment.enrolmentCertificateNote.note
+      : null;
   }
 
   public get careConnectRecipient(): FormControl {
@@ -99,28 +100,29 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
   }
 
   public sendProvisionerAccessLink(provisionerName: string) {
-    if (this.form.valid) {
-      // const data: DialogOptions = {
-      //   title: 'Confirm Email',
-      //   message: `Are you sure you want to send your PharmaNet certificate to ${this.vendorEmail.value}?`,
-      //   actionText: 'Send',
-      // };
-      // this.dialog.open(ConfirmDialogComponent, { data })
-      //   .afterClosed()
-      //   .pipe(
-      //     exhaustMap((result: boolean) =>
-      //       result
-      //         ? this.enrolmentResource.sendProvisionerAccessLink(this.vendorEmail.value, provisionerName)
-      //         : EMPTY
-      //     )
-      //   )
-      //   .subscribe(
-      //     () => this.toastService.openSuccessToast('Email was successfully sent'),
-      //     (error: any) => {
-      //       this.logger.error('[Enrolment] Error occurred sending email', error);
-      //       this.toastService.openErrorToast('Email could not be sent');
-      //     }
-      //   );
+    const formControl = this.form.get(`${provisionerName.toLocaleUpperCase()}Recipient`);
+    if (formControl.valid) {
+      const data: DialogOptions = {
+        title: 'Confirm Email',
+        message: `Are you sure you want to send your PharmaNet certificate to ${provisionerName}?`,
+        actionText: 'Send',
+      };
+      this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          exhaustMap((result: boolean) =>
+            result
+              ? this.enrolmentResource.sendProvisionerAccessLink(provisionerName, formControl.value)
+              : EMPTY
+          )
+        )
+        .subscribe(
+          () => this.toastService.openSuccessToast('Email was successfully sent'),
+          (error: any) => {
+            this.logger.error('[Enrolment] Error occurred sending email', error);
+            this.toastService.openErrorToast('Email could not be sent');
+          }
+        );
     }
   }
 

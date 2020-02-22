@@ -33,7 +33,7 @@
         <mat-checkbox #careconnect>CareConnect</mat-checkbox>
         <div *ngIf="careconnect.checked"
              class="pt-2">
-          <ng-container *ngTemplateOutlet="verbose; context: {provisioner: 'CareConnect'}"></ng-container>
+          <ng-container *ngTemplateOutlet="verbose; context: { provisioner: 'CareConnect' }"></ng-container>
 
           <mat-form-field class="w-100 mb-3">
             <input matInput
@@ -42,6 +42,13 @@
             <mat-error *ngIf="careConnectRecipient.hasError('required')">Required</mat-error>
             <mat-error *ngIf="careConnectRecipient.hasError('email')">Must be a valid email address</mat-error>
           </mat-form-field>
+
+          <button mat-flat-button
+                  type="button"
+                  color="primary"
+                  (click)="sendProvisionerAccessLink('CareConnect')">
+            Send
+          </button>
         </div>
       </div>
 
@@ -49,7 +56,7 @@
         <mat-checkbox #excelleris>Excelleris</mat-checkbox>
         <div *ngIf="excelleris.checked"
              class="pt-2">
-          <ng-container *ngTemplateOutlet="verbose; context: {provisioner: 'Excelleris'}"></ng-container>
+          <ng-container *ngTemplateOutlet="verbose; context: { provisioner: 'Excelleris' }"></ng-container>
 
           <mat-form-field class="w-100 mb-3">
             <input matInput
@@ -60,7 +67,9 @@
           </mat-form-field>
 
           <button mat-flat-button
-                  color="primary">
+                  type="button"
+                  color="primary"
+                  (click)="sendProvisionerAccessLink('Excelleris')">
             Send
           </button>
         </div>
@@ -70,10 +79,12 @@
         <mat-checkbox #iclinic>iClinic</mat-checkbox>
         <div *ngIf="iclinic.checked"
              class="pt-2">
-          <ng-container *ngTemplateOutlet="concise; context: {provisioner: 'iClinic'}"></ng-container>
+          <ng-container *ngTemplateOutlet="concise; context: { provisioner: 'iClinic' }"></ng-container>
 
           <button mat-flat-button
-                  color="primary">
+                  type="button"
+                  color="primary"
+                  (click)="sendProvisionerAccessLink('iClinic')">
             Send
           </button>
         </div>
@@ -83,10 +94,12 @@
         <mat-checkbox #medinet>MediNet</mat-checkbox>
         <div *ngIf="medinet.checked"
              class="pt-2">
-          <ng-container *ngTemplateOutlet="concise; context: {provisioner: 'MediNet'}"></ng-container>
+          <ng-container *ngTemplateOutlet="concise; context: { provisioner: 'MediNet' }"></ng-container>
 
           <button mat-flat-button
-                  color="primary">
+                  type="button"
+                  color="primary"
+                  (click)="sendProvisionerAccessLink('MediNet')">
             Send
           </button>
         </div>
@@ -96,7 +109,7 @@
         <mat-checkbox #plexia>Plexia</mat-checkbox>
         <div *ngIf="plexia.checked"
              class="pt-2">
-          <ng-container *ngTemplateOutlet="verbose; context: {provisioner: 'Plexia'}"></ng-container>
+          <ng-container *ngTemplateOutlet="verbose; context: { provisioner: 'Plexia' }"></ng-container>
 
           <mat-form-field class="w-100 mb-3">
             <input matInput
@@ -107,7 +120,9 @@
           </mat-form-field>
 
           <button mat-flat-button
-                  color="primary">
+                  type="button"
+                  color="primary"
+                  (click)="sendProvisionerAccessLink('Plexia')">
             Send
           </button>
         </div>
@@ -127,7 +142,9 @@
           </mat-form-field>
 
           <button mat-flat-button
-                  color="primary">
+                  type="button"
+                  color="primary"
+                  (click)="sendProvisionerAccessLink('Other')">
             Send
           </button>
 
@@ -150,25 +167,6 @@
         {{ provisioner }} for your account to be created. {{ provisioner }} will also receive confirmation that your
         notification has been sent.
       </p>
-    </ng-template>
-
-    <ng-template #form
-                 let-provisioner="provisioner">
-      <mat-form-field class="w-100 mb-3">
-        <input matInput
-               placeholder="Email"
-               formControlName="vendorEmail">
-        <mat-error *ngIf="vendorEmail.hasError('required')">Required</mat-error>
-        <mat-error *ngIf="vendorEmail.hasError('email')">Must be a valid email address</mat-error>
-      </mat-form-field>
-    </ng-template>
-
-    <ng-template #send
-                 let-provisioner="provisioner">
-      <button mat-flat-button
-              color="primary">
-        Send
-      </button>
     </ng-template>
 
   </app-page>
