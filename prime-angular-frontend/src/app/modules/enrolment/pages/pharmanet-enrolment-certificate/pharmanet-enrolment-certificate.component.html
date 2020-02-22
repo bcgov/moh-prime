@@ -36,18 +36,18 @@
           <ng-container *ngTemplateOutlet="verbose; context: { provisioner: 'CareConnect' }"></ng-container>
 
           <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-8">
 
               <mat-form-field class="w-100 mb-3">
                 <input matInput
                        placeholder="Email"
-                       formControlName="careConnectRecipient">
-                <mat-error *ngIf="careConnectRecipient.hasError('required')">Required</mat-error>
-                <mat-error *ngIf="careConnectRecipient.hasError('email')">Must be a valid email address</mat-error>
+                       formControlName="careconnectRecipient">
+                <mat-error *ngIf="careconnectRecipient.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="careconnectRecipient.hasError('email')">Must be a valid email address</mat-error>
               </mat-form-field>
 
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-4">
 
               <button mat-flat-button
                       type="button"
@@ -70,7 +70,7 @@
           <ng-container *ngTemplateOutlet="verbose; context: { provisioner: 'Excelleris' }"></ng-container>
 
           <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-8">
 
               <mat-form-field class="w-100 mb-3">
                 <input matInput
@@ -81,7 +81,7 @@
               </mat-form-field>
 
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-4">
 
               <button mat-flat-button
                       type="button"
@@ -103,12 +103,12 @@
              class="pt-2">
 
           <div class="row">
-            <div class="col-sm-12 col-md-8">
+            <div class="col-sm-8">
 
               <ng-container *ngTemplateOutlet="concise; context: { provisioner: 'iClinic' }"></ng-container>
 
             </div>
-            <div class="col-sm-12 col-md-4">
+            <div class="col-sm-4">
 
               <button mat-flat-button
                       type="button"
@@ -128,15 +128,26 @@
         <mat-checkbox #medinet>MediNet</mat-checkbox>
         <div *ngIf="medinet.checked"
              class="pt-2">
-          <ng-container *ngTemplateOutlet="concise; context: { provisioner: 'MediNet' }"></ng-container>
 
-          <button mat-flat-button
-                  type="button"
-                  color="primary"
-                  class="w-100 mb-4"
-                  (click)="sendProvisionerAccessLink('MediNet')">
-            Send
-          </button>
+          <div class="row">
+            <div class="col-sm-8">
+
+              <ng-container *ngTemplateOutlet="concise; context: { provisioner: 'MediNet' }"></ng-container>
+
+            </div>
+            <div class="col-sm-4">
+
+              <button mat-flat-button
+                      type="button"
+                      color="primary"
+                      class="w-100 mb-4"
+                      (click)="sendProvisionerAccessLink('MediNet')">
+                Send
+              </button>
+
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -147,7 +158,7 @@
           <ng-container *ngTemplateOutlet="verbose; context: { provisioner: 'Plexia' }"></ng-container>
 
           <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-8">
 
               <mat-form-field class="w-100 mb-3">
                 <input matInput
@@ -158,7 +169,7 @@
               </mat-form-field>
 
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-4">
 
               <button mat-flat-button
                       type="button"
@@ -183,7 +194,7 @@
           </p>
 
           <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-8">
 
               <mat-form-field class="w-100 mb-3">
                 <input matInput
@@ -194,7 +205,7 @@
               </mat-form-field>
 
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-4">
 
               <button mat-flat-button
                       type="button"

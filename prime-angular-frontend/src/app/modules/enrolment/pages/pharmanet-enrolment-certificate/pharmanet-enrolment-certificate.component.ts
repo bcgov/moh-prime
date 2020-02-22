@@ -73,8 +73,8 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
       : null;
   }
 
-  public get careConnectRecipient(): FormControl {
-    return this.form.get('careConnectRecipient') as FormControl;
+  public get careconnectRecipient(): FormControl {
+    return this.form.get('careconnectRecipient') as FormControl;
   }
 
   public get excellerisRecipient(): FormControl {
@@ -100,30 +100,34 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
   }
 
   public sendProvisionerAccessLink(provisionerName: string) {
-    const formControl = this.form.get(`${provisionerName.toLocaleUpperCase()}Recipient`);
-    if (formControl.valid) {
-      const data: DialogOptions = {
-        title: 'Confirm Email',
-        message: `Are you sure you want to send your PharmaNet certificate to ${provisionerName}?`,
-        actionText: 'Send',
-      };
-      this.dialog.open(ConfirmDialogComponent, { data })
-        .afterClosed()
-        .pipe(
-          exhaustMap((result: boolean) =>
-            result
-              ? this.enrolmentResource.sendProvisionerAccessLink(provisionerName, formControl.value)
-              : EMPTY
-          )
-        )
-        .subscribe(
-          () => this.toastService.openSuccessToast('Email was successfully sent'),
-          (error: any) => {
-            this.logger.error('[Enrolment] Error occurred sending email', error);
-            this.toastService.openErrorToast('Email could not be sent');
-          }
-        );
+    const formControl = this.form.get(`${provisionerName.toLowerCase()}Recipient`);
+
+    let ccEmail = '';
+    if (formControl && formControl.valid) {
+      ccEmail = formControl.value;
     }
+
+    const data: DialogOptions = {
+      title: 'Confirm Email',
+      message: `Are you sure you want to send your PharmaNet certificate to ${provisionerName}?`,
+      actionText: 'Send',
+    };
+    this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result: boolean) =>
+          result
+            ? this.enrolmentResource.sendProvisionerAccessLink(provisionerName, ccEmail)
+            : EMPTY
+        )
+      )
+      .subscribe(
+        () => this.toastService.openSuccessToast('Email was successfully sent'),
+        (error: any) => {
+          this.logger.error('[Enrolment] Error occurred sending email', error);
+          this.toastService.openErrorToast('Email could not be sent');
+        }
+      );
   }
 
   public ngOnInit() {
@@ -154,7 +158,7 @@ export class PharmanetEnrolmentCertificateComponent extends BaseEnrolmentPage im
 
   private buildVendorEmailGroup(): FormGroup {
     return this.fb.group({
-      careConnectRecipient: [null, [Validators.required, FormControlValidators.email]],
+      careconnectRecipient: [null, [Validators.required, FormControlValidators.email]],
       excellerisRecipient: [null, [Validators.required, FormControlValidators.email]],
       plexiaRecipient: [null, [Validators.required, FormControlValidators.email]],
       otherRecipient: [null, [Validators.required, FormControlValidators.email]]
