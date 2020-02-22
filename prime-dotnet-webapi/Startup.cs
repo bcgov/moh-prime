@@ -85,6 +85,7 @@ namespace Prime
             this.ConfigureDatabase(services);
 
             AuthenticationSetup.Initialize(services, Configuration, Environment);
+            services.AddApplicationInsightsTelemetry();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

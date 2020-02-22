@@ -12,10 +12,12 @@
       Suppress warning CS1591: Missing XML comment for publicly visible type or member
     -->
     <NoWarn>$(NoWarn);1591</NoWarn>
+    <ApplicationInsightsResourceId>/subscriptions/a6003607-07d5-4dcb-b2d0-3eb81bcd043e/resourcegroups/PRIME/providers/microsoft.insights/components/prime</ApplicationInsightsResourceId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="3.0.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.12.0" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.1" />
@@ -35,6 +37,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Configuration\Resources\ru-access-terms.html" />
     <EmbeddedResource Include="Configuration\Resources\obo-access-terms.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services" />
   </ItemGroup>
 
 </Project>
