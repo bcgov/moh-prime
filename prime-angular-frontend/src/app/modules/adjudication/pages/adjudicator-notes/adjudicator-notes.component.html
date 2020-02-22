@@ -160,7 +160,7 @@
             <tbody>
               <tr *ngFor="let adjudicatorNote of adjudicatorNotes | async">
                 <th class="text-nowrap">{{ adjudicatorNote.noteDate | formatDate }}</th>
-                <td class="">{{ adjudicatorNote.note }}</td>
+                <td>{{ adjudicatorNote.note }}</td>
               </tr>
             </tbody>
           </table>
