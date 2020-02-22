@@ -15,7 +15,7 @@ namespace Prime.Models
 
         [JsonIgnore]
         [Required]
-        public DateTime CreatedTimeStamp { get; set; }
+        public DateTimeOffset CreatedTimeStamp { get; set; }
 
         [JsonIgnore]
         [Required]
@@ -23,6 +23,6 @@ namespace Prime.Models
 
         [JsonIgnore]
         [Required]
-        public DateTime UpdatedTimeStamp { get; set; }
+        public DateTimeOffset UpdatedTimeStamp { get; set; }
     }
 }

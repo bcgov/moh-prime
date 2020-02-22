@@ -37,7 +37,7 @@ namespace Prime.Models
         public License License { get; set; }
 
         [Required]
-        public DateTime RenewalDate { get; set; }
+        public DateTimeOffset RenewalDate { get; set; }
 
         public short? PracticeCode { get; set; }
 

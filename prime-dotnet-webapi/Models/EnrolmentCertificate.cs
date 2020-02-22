@@ -16,7 +16,7 @@ namespace Prime.Models
         public string PreferredMiddleName { get; set; }
         public string PreferredLastName { get; set; }
         public string GPID { get; set; }
-        public DateTime? ExpiryDate { get; set; }
+        public DateTimeOffset? ExpiryDate { get; set; }
         public IEnumerable<OrganizationType> OrganizationTypes { get; set; }
 
         public static EnrolmentCertificate Create(Enrollee enrolleeHistory, Enrollee enrollee)

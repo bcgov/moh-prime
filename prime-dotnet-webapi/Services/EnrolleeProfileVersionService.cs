@@ -42,7 +42,7 @@ namespace Prime.Services
         /**
           * Get the most recent Profile version before a given time.
           */
-        public async Task<EnrolleeProfileVersion> GetEnrolleeProfileVersionBeforeDateAsync(int enrolleeId, DateTime dateTime)
+        public async Task<EnrolleeProfileVersion> GetEnrolleeProfileVersionBeforeDateAsync(int enrolleeId, DateTimeOffset dateTime)
         {
             return await _context.EnrolleeProfileVersions
             .Where(epv => epv.EnrolleeId == enrolleeId)

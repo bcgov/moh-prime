@@ -18,7 +18,7 @@ namespace Prime.Models
         [Required]
         public JObject ProfileSnapshot { get; set; }
         [Required]
-        public DateTime CreatedDate { get; set; }
+        public DateTimeOffset CreatedDate { get; set; }
 
     }
 }

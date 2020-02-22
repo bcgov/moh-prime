@@ -41,10 +41,10 @@ namespace Prime.Models
         public LimitsConditionsClause LimitsConditionsClause { get; set; }
 
         [Required]
-        public DateTime CreatedDate { get; set; }
+        public DateTimeOffset CreatedDate { get; set; }
 
-        public DateTime? AcceptedDate { get; set; }
+        public DateTimeOffset? AcceptedDate { get; set; }
 
-        public DateTime? ExpiryDate { get; set; }
+        public DateTimeOffset? ExpiryDate { get; set; }
     }
 }

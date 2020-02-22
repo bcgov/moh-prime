@@ -48,7 +48,7 @@ namespace Prime.Services
                 var acceptedAccessTerm = await _accessTermService.GetMostRecentAcceptedEnrolleesAccessTermAsync(enrolleeId);
                 if (acceptedAccessTerm != null)
                 {
-                    var enrolleeProfileHistory = await _enroleeProfileVersionService.GetEnrolleeProfileVersionBeforeDateAsync(enrolleeId, (DateTime)acceptedAccessTerm?.AcceptedDate);
+                    var enrolleeProfileHistory = await _enroleeProfileVersionService.GetEnrolleeProfileVersionBeforeDateAsync(enrolleeId, (DateTimeOffset)acceptedAccessTerm?.AcceptedDate);
 
                     if (enrolleeProfileHistory != null)
                     {

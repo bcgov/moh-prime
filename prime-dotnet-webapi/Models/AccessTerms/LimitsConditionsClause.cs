@@ -21,7 +21,7 @@ namespace Prime.Models
         public string Clause { get; set; }
 
         [Required]
-        public DateTime EffectiveDate { get; set; }
+        public DateTimeOffset EffectiveDate { get; set; }
 
     }
 }
