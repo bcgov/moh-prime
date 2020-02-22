@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -11,9 +11,9 @@ import { LoggerService } from '@core/services/logger.service';
 import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 
 import { Address } from '@enrolment/shared/models/address.model';
-import { NoteType } from '@adjudication/shared/enums/note-type.enum';
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
 import { EnrolmentProfileVersion, HttpEnrolleeProfileVersion } from '@adjudication/shared/models/enrollee-profile-history.model';
+import { Admin } from '@auth/shared/models/admin.model';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +25,15 @@ export class AdjudicationResource {
     private http: HttpClient,
     private logger: LoggerService
   ) { }
+
+  public createAdmin(payload: Admin): Observable<Admin> {
+    return this.http.post(`${this.config.apiEndpoint}/admins`, payload)
+      .pipe(
+        map((response: PrimeHttpResponse) => response.result),
+        tap((admin: Admin) => this.logger.info('ADMIN', admin)),
+        map((admin: Admin) => admin)
+      );
+  }
 
   public enrollees(statusCode?: number): Observable<Enrolment[]> {
     const params = (statusCode) ? { statusCode: `${statusCode}` } : {};
@@ -237,4 +246,6 @@ export class AdjudicationResource {
       ...remainder
     };
   }
+
+
 }

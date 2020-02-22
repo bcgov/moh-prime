@@ -59,9 +59,13 @@ export class EnrolmentResource {
     return this.http.put(`${this.config.apiEndpoint}/enrollees/${id}`, this.enrolmentAdapterRequest(enrolment), { params });
   }
 
-  public updateEnrolmentStatus(id: number, statusCode: number): Observable<Config<number>[]> {
+  public updateEnrolmentStatus(id: number, statusCode: number, acceptedAccessTerm: boolean = false): Observable<Config<number>[]> {
     const payload = { code: statusCode };
-    return this.http.post(`${this.config.apiEndpoint}/enrollees/${id}/statuses`, payload)
+    let params = new HttpParams();
+    if (acceptedAccessTerm) {
+      params = params.set('acceptedAccessTerm', `${acceptedAccessTerm}`);
+    }
+    return this.http.post(`${this.config.apiEndpoint}/enrollees/${id}/statuses`, payload, { params })
       .pipe(
         map((response: PrimeHttpResponse) => response.result as Config<number>[]),
         tap((statuses: Config<number>[]) => this.logger.info('ENROLMENT_STATUSES', statuses))
