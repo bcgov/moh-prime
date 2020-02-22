@@ -11,6 +11,7 @@ import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
+import { SharedModule } from '@shared/shared.module';
 
 describe('AccessTermsComponent', () => {
   let component: AccessTermsComponent;
@@ -24,13 +25,11 @@ describe('AccessTermsComponent', () => {
           NgxMaterialModule,
           RouterTestingModule,
           HttpClientTestingModule,
-          RouterTestingModule
+          RouterTestingModule,
+          SharedModule
         ],
         declarations: [
           AccessTermsComponent,
-          PageComponent,
-          PageHeaderComponent,
-          FormatDatePipe
         ],
         providers: [
           {
