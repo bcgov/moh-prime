@@ -27,14 +27,8 @@ function build() {
     source ./"$2.conf"
     echo "Building $2 (${APP_NAME}) to $PROJECT_PREFIX-$3..."
     buildPresent=$(oc get bc/"$APP_NAME${SUFFIX}" --ignore-not-found=true | wc -l)
-    if [ "${buildPresent}" -gt 0 ];
-    then
-        MODE="apply"
-        OC_ARGS="--overwrite=true --all"
-    else
-        MODE="apply"
-        OC_ARGS=""
-    fi;
+    MODE="apply"
+    OC_ARGS="--overwrite=false --all"
     echo "oc process -f ./${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE} -p NAME=${APP_NAME} -p VERSION=${BUILD_NUMBER} -p SUFFIX=-${BRANCH_LOWER} -p SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR} -p SOURCE_REPOSITORY_URL=${GIT_URL} -p SOURCE_REPOSITORY_REF=${BRANCH_NAME} -p OC_NAMESPACE=$PROJECT_PREFIX -p OC_APP=$3 ${@:4} | oc ${MODE} -f - --namespace=$PROJECT_PREFIX-$3"
     oc process -f ./"${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE}" \
     -p NAME="${APP_NAME}" \
@@ -60,24 +54,8 @@ function deploy() {
     export deployPresent=$(oc get dc/${APP_NAME}${SUFFIX} --ignore-not-found=true | wc -l)
     export routePresent=$(oc get route/${APP_NAME}${SUFFIX} --ignore-not-found=true | wc -l)
     export servicePresent=$(oc get service/${APP_NAME}${SUFFIX} --ignore-not-found=true | wc -l)
-    if [ "${deployPresent}" -gt 0 ];
-    then
-        MODE="apply"
-        if [ "${routePresent}" -gt 0 ];
-        then
-            echo "Recreating route..."
-            oc delete route/${APP_NAME}${SUFFIX} --namespace=$PROJECT_PREFIX-$3
-            OC_ARGS="--overwrite=true --all"
-        fi;
-#        if [ "${servicePresent}" -gt 0 ];
-#        then
-#            echo "Recreating service..."
-#            oc delete service/${APP_NAME}${SUFFIX} --namespace=$PROJECT_PREFIX-$3
-#        fi;
-    else
-        MODE="apply"
-        OC_ARGS=""
-    fi;
+    MODE="apply"
+    OC_ARGS="--overwrite=false --all"
     oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
     -p NAME="${APP_NAME}" \
     -p VERSION="${BUILD_NUMBER}" \
@@ -93,14 +71,8 @@ function toolbelt() {
     source ./$2.conf
     #OC_APP=tools
     buildPresent=$(oc get bc/"$APP_NAME" --ignore-not-found=true)
-    if [ -z "${buildPresent}" ];
-    then
-        MODE="apply"
-        OC_ARGS="--overwrite=true --all"
-    else
-        MODE="apply"
-        OC_ARGS=""
-    fi;
+    MODE="apply"
+    OC_ARGS="--overwrite=false --all"
     oc process -f ./"${TEMPLATE_DIRECTORY}/$BUILD_CONFIG_TEMPLATE" \
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
@@ -127,7 +99,7 @@ function determineMode() {
     if [ -z "${buildPresent}" ];
     then 
         MODE="apply"
-        OC_ARGS="--overwrite=true --all"
+        OC_ARGS="--overwrite=false --all"
     else 
         MODE="apply"
         OC_ARGS=""
@@ -176,20 +148,10 @@ function cleanOcArtifacts() {
     done
 }
 
-function nukenpave() {
-    source $2.conf
-    declare -p TARGET_ARTIFACTS=($(oc get all,pvc,route -n $PROJECT_PREFIX-$3 | grep -i "$APP_NAME" | awk '{print $2}' | grep -Ev "(\-pr\-)") )
-    for target in "${TARGET_ARTIFACTS[@]}"
-    do
-        oc delete -n $PROJECT_PREFIX-$3 $target
-    done
-        build $@
-        deploy $@
-}
-
 function functionTest() {
     echo "1=$2"
     echo "2=$3"
     echo "Trailing = ${@:4}"
     echo "All = $@"
 }
+backup, #6

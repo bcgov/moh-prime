@@ -60,7 +60,7 @@ export class EnrolleePrivilegesComponent implements OnInit {
   public get userTypeString() {
     if (this.userTypePrivilege.transactionType === 'RU') {
       return this.canHaveOBOsPrivilege
-        ? 'You are allowed to have an "On Behalf User" access Pharmanet on your behalf'
+        ? 'You are allowed to have authorized users access PharmaNet on your behalf'
         : 'You are not allowed to have an "On Behalf User" access Pharmanet on your behalf';
     } else {
       return 'You are allowed to access PharmaNet on behalf of a Regulated User';
