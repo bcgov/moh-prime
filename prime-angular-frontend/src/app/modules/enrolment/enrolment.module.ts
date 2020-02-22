@@ -21,7 +21,7 @@ import {
   LimitsAndConditionsClauseComponent
 } from './pages/access-agreement/components/limits-and-conditions-clause/limits-and-conditions-clause.component';
 import { UserClauseComponent } from './pages/access-agreement/components/user-clause/user-clause.component';
-import { PharmanetEnrolmentCertificateComponent } from './pages/pharmanet-enrolment-certificate/pharmanet-enrolment-certificate.component';
+import { PharmanetEnrolmentSummaryComponent } from './pages/pharmanet-enrolment-summary/pharmanet-enrolment-summary.component';
 import { AccessLocked } from './pages/access-locked/access-locked.component';
 import { AccessAgreementHistoryComponent } from './pages/access-agreement-history/access-agreement-history.component';
 import { PharmanetTransactionsComponent } from './pages/pharmanet-transactions/pharmanet-transactions.component';
@@ -56,7 +56,7 @@ import { AccessAgreementHistoryEnrolmentComponent } from './pages/access-agreeme
     UserClauseComponent,
     AccessLocked,
     AccessAgreementHistoryComponent,
-    PharmanetEnrolmentCertificateComponent,
+    PharmanetEnrolmentSummaryComponent,
     PharmanetTransactionsComponent,
     AccessTermsComponent,
     PageFooterComponent,

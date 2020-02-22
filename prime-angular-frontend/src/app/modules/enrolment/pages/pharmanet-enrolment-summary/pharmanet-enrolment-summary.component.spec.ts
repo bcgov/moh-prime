@@ -6,16 +6,16 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 
-import { PharmanetEnrolmentCertificateComponent } from './pharmanet-enrolment-certificate.component';
+import { PharmanetEnrolmentSummaryComponent } from './pharmanet-enrolment-summary.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
 
 
-describe('PharmanetEnrolmentCertificateComponent', () => {
-  let component: PharmanetEnrolmentCertificateComponent;
-  let fixture: ComponentFixture<PharmanetEnrolmentCertificateComponent>;
+describe('PharmanetEnrolmentSummaryComponent', () => {
+  let component: PharmanetEnrolmentSummaryComponent;
+  let fixture: ComponentFixture<PharmanetEnrolmentSummaryComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule(
@@ -46,7 +46,7 @@ describe('PharmanetEnrolmentCertificateComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PharmanetEnrolmentCertificateComponent);
+    fixture = TestBed.createComponent(PharmanetEnrolmentSummaryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

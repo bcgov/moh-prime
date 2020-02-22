@@ -13,7 +13,8 @@ namespace Prime.Configuration
                     new JobName { Code = 1, Name = "Medical Office Assistant", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new JobName { Code = 2, Name = "Pharmacy Assistant", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new JobName { Code = 3, Name = "Registration Clerk", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new JobName { Code = 4, Name = "Ward Clerk", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE }
+                    new JobName { Code = 4, Name = "Ward Clerk", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new JobName { Code = 5, Name = "Nursing Unit Assistant", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE }
                 };
             }
         }
