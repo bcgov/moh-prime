@@ -35,20 +35,31 @@
              class="pt-2">
           <ng-container *ngTemplateOutlet="verbose; context: { provisioner: 'CareConnect' }"></ng-container>
 
-          <mat-form-field class="w-100 mb-3">
-            <input matInput
-                   placeholder="Email"
-                   formControlName="careConnectRecipient">
-            <mat-error *ngIf="careConnectRecipient.hasError('required')">Required</mat-error>
-            <mat-error *ngIf="careConnectRecipient.hasError('email')">Must be a valid email address</mat-error>
-          </mat-form-field>
+          <div class="row">
+            <div class="col-sm-6">
 
-          <button mat-flat-button
-                  type="button"
-                  color="primary"
-                  (click)="sendProvisionerAccessLink('CareConnect')">
-            Send
-          </button>
+              <mat-form-field class="w-100 mb-3">
+                <input matInput
+                       placeholder="Email"
+                       formControlName="careConnectRecipient">
+                <mat-error *ngIf="careConnectRecipient.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="careConnectRecipient.hasError('email')">Must be a valid email address</mat-error>
+              </mat-form-field>
+
+            </div>
+            <div class="col-sm-6">
+
+              <button mat-flat-button
+                      type="button"
+                      color="primary"
+                      class="w-100 mb-4"
+                      (click)="sendProvisionerAccessLink('CareConnect')">
+                Send
+              </button>
+
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -58,20 +69,31 @@
              class="pt-2">
           <ng-container *ngTemplateOutlet="verbose; context: { provisioner: 'Excelleris' }"></ng-container>
 
-          <mat-form-field class="w-100 mb-3">
-            <input matInput
-                   placeholder="Email"
-                   formControlName="excellerisRecipient">
-            <mat-error *ngIf="excellerisRecipient.hasError('required')">Required</mat-error>
-            <mat-error *ngIf="excellerisRecipient.hasError('email')">Must be a valid email address</mat-error>
-          </mat-form-field>
+          <div class="row">
+            <div class="col-sm-6">
 
-          <button mat-flat-button
-                  type="button"
-                  color="primary"
-                  (click)="sendProvisionerAccessLink('Excelleris')">
-            Send
-          </button>
+              <mat-form-field class="w-100 mb-3">
+                <input matInput
+                       placeholder="Email"
+                       formControlName="excellerisRecipient">
+                <mat-error *ngIf="excellerisRecipient.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="excellerisRecipient.hasError('email')">Must be a valid email address</mat-error>
+              </mat-form-field>
+
+            </div>
+            <div class="col-sm-6">
+
+              <button mat-flat-button
+                      type="button"
+                      color="primary"
+                      class="w-100 mb-4"
+                      (click)="sendProvisionerAccessLink('Excelleris')">
+                Send
+              </button>
+
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -79,14 +101,26 @@
         <mat-checkbox #iclinic>iClinic</mat-checkbox>
         <div *ngIf="iclinic.checked"
              class="pt-2">
-          <ng-container *ngTemplateOutlet="concise; context: { provisioner: 'iClinic' }"></ng-container>
 
-          <button mat-flat-button
-                  type="button"
-                  color="primary"
-                  (click)="sendProvisionerAccessLink('iClinic')">
-            Send
-          </button>
+          <div class="row">
+            <div class="col-sm-12 col-md-8">
+
+              <ng-container *ngTemplateOutlet="concise; context: { provisioner: 'iClinic' }"></ng-container>
+
+            </div>
+            <div class="col-sm-12 col-md-4">
+
+              <button mat-flat-button
+                      type="button"
+                      color="primary"
+                      class="w-100 mb-4"
+                      (click)="sendProvisionerAccessLink('iClinic')">
+                Send
+              </button>
+
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -99,6 +133,7 @@
           <button mat-flat-button
                   type="button"
                   color="primary"
+                  class="w-100 mb-4"
                   (click)="sendProvisionerAccessLink('MediNet')">
             Send
           </button>
@@ -111,20 +146,31 @@
              class="pt-2">
           <ng-container *ngTemplateOutlet="verbose; context: { provisioner: 'Plexia' }"></ng-container>
 
-          <mat-form-field class="w-100 mb-3">
-            <input matInput
-                   placeholder="Email"
-                   formControlName="plexiaRecipient">
-            <mat-error *ngIf="plexiaRecipient.hasError('required')">Required</mat-error>
-            <mat-error *ngIf="plexiaRecipient.hasError('email')">Must be a valid email address</mat-error>
-          </mat-form-field>
+          <div class="row">
+            <div class="col-sm-6">
 
-          <button mat-flat-button
-                  type="button"
-                  color="primary"
-                  (click)="sendProvisionerAccessLink('Plexia')">
-            Send
-          </button>
+              <mat-form-field class="w-100 mb-3">
+                <input matInput
+                       placeholder="Email"
+                       formControlName="plexiaRecipient">
+                <mat-error *ngIf="plexiaRecipient.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="plexiaRecipient.hasError('email')">Must be a valid email address</mat-error>
+              </mat-form-field>
+
+            </div>
+            <div class="col-sm-6">
+
+              <button mat-flat-button
+                      type="button"
+                      color="primary"
+                      class="w-100 mb-4"
+                      (click)="sendProvisionerAccessLink('Plexia')">
+                Send
+              </button>
+
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -132,21 +178,34 @@
         <mat-checkbox #other>Other</mat-checkbox>
         <div *ngIf="other.checked"
              class="pt-2">
+          <p class="mb-4">
+            Enter an email address that may be used to send your PRIME approval information.
+          </p>
 
-          <mat-form-field class="w-100 mb-3">
-            <input matInput
-                   placeholder="Email"
-                   formControlName="otherRecipient">
-            <mat-error *ngIf="otherRecipient.hasError('required')">Required</mat-error>
-            <mat-error *ngIf="otherRecipient.hasError('email')">Must be a valid email address</mat-error>
-          </mat-form-field>
+          <div class="row">
+            <div class="col-sm-6">
 
-          <button mat-flat-button
-                  type="button"
-                  color="primary"
-                  (click)="sendProvisionerAccessLink('Other')">
-            Send
-          </button>
+              <mat-form-field class="w-100 mb-3">
+                <input matInput
+                       placeholder="Email"
+                       formControlName="otherRecipient">
+                <mat-error *ngIf="otherRecipient.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="otherRecipient.hasError('email')">Must be a valid email address</mat-error>
+              </mat-form-field>
+
+            </div>
+            <div class="col-sm-6">
+
+              <button mat-flat-button
+                      type="button"
+                      color="primary"
+                      class="w-100 mb-4"
+                      (click)="sendProvisionerAccessLink('Other')">
+                Send
+              </button>
+
+            </div>
+          </div>
 
         </div>
       </div>
@@ -154,14 +213,14 @@
 
     <ng-template #concise
                  let-provisioner="provisioner">
-      <p>
+      <p class="mb-4">
         Your PharmaNet approval information will be sent to {{ provisioner }}.
       </p>
     </ng-template>
 
     <ng-template #verbose
                  let-provisioner="provisioner">
-      <p>
+      <p class="mb-4">
         Provide the email address of the person in your organization who is responsible for contacting {{ provisioner }}
         to set up accounts (e.g., your Office Manager or MOA). This contact must forward your approval notification to
         {{ provisioner }} for your account to be created. {{ provisioner }} will also receive confirmation that your
