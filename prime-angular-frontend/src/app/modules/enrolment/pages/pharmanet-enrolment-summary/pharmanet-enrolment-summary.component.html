@@ -2,20 +2,20 @@
 
   <app-page [busy]="busy">
 
-    <app-page-header>PharmaNet Enrolment Certificate</app-page-header>
+    <app-page-header>PharmaNet Enrolment Summary</app-page-header>
 
     <app-progress-indicator *ngIf="showProgressBar"
-                            [currentRoute]="EnrolmentRoutes.PHARMANET_ENROLMENT_CERTIFICATE"></app-progress-indicator>
+                            [currentRoute]="EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY"></app-progress-indicator>
 
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>Next Steps</ng-container>
     </app-page-subheader>
 
     <p>
-      Your PharmaNet Enrolment is below. You will need to provide this information to the person who will set up your
-      local PharmaNet access account. For most community practices, this will be the vendor for your PharmaNet access
-      software. Use the email option below to send your vendor (or system administrator) the information they will
-      require to provision your access to PharmaNet.
+      Your PharmaNet Enrolment summary is below. You will need to provide this information to the person who will set up
+      your local PharmaNet access account. For most community practices, this will be the vendor for your PharmaNet
+      access software. Use the email option below to send your vendor (or system administrator) the information they
+      will require to provision your access to PharmaNet.
     </p>
 
     <app-page-subheader>
@@ -44,14 +44,12 @@
       </div>
     </ng-container>
 
-
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>Email your PharmaNet Enrolment Information</ng-container>
     </app-page-subheader>
 
     <p class="mb-5">
-      Enter an email address that may be used to send your PharmaNet Enrolment information to your vendor (or system
-      administrator).
+      Enter an email address to send your PharmaNet Enrolment information to your vendor (or system administrator).
     </p>
 
     <div class="mb-5">

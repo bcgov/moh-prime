@@ -233,6 +233,10 @@ export class AdjudicatorNotesComponent implements OnInit {
     }
   }
 
+  public routeTo() {
+    this.router.navigate(['../../'], { relativeTo: this.route.parent });
+  }
+
   public ngOnInit() {
     this.createFormInstance();
     this.getEnrollee(this.route.snapshot.params.id);
