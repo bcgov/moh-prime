@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 
 import moment from 'moment';
@@ -100,18 +100,15 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   }
 
   public sendProvisionerAccessLinkWithCc(provisionerName: string) {
-    const formControl = this.form.get(`${provisionerName.toLowerCase()}Recipient`);
+    const formControl = this.form.get(`${provisionerName.toLowerCase()}Recipient`) as FormControl;
     if (!formControl) { return; }
 
     (formControl.valid)
-      ? this.sendProvisionerAccessLink(provisionerName, formControl.value)
+      ? this.sendProvisionerAccessLink(provisionerName, formControl.value, formControl)
       : formControl.markAllAsTouched();
   }
 
-  public sendProvisionerAccessLink(provisionerName: string, email: string = null) {
-    console.log(provisionerName, email);
-
-
+  public sendProvisionerAccessLink(provisionerName: string, email: string = null, formControl: FormControl = null) {
     const data: DialogOptions = {
       title: 'Confirm Email',
       message: `Are you sure you want to send your PharmaNet certificate to ${provisionerName}?`,
@@ -127,7 +124,12 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
         )
       )
       .subscribe(
-        () => this.toastService.openSuccessToast('Email was successfully sent'),
+        () => {
+          this.toastService.openSuccessToast('Email was successfully sent');
+          if (formControl) {
+            formControl.reset();
+          }
+        },
         (error: any) => {
           this.logger.error('[Enrolment] Error occurred sending email', error);
           this.toastService.openErrorToast('Email could not be sent');
