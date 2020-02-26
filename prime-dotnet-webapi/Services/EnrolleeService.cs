@@ -7,9 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using SimpleBase;
 using Prime.Models;
 using Prime.ViewModels;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Prime.Models.Api;
-using System.Reflection;
 
 namespace Prime.Services
 {

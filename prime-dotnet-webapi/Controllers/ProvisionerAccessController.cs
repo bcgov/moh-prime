@@ -63,23 +63,24 @@ namespace Prime.Controllers
             return Ok(new ApiOkResponse<IEnumerable<EnrolmentCertificateAccessToken>>(tokens));
         }
 
-
         // POST: api/provisioner-access/send-link
         /// <summary>
         /// Creates an EnrolmentCertificateAccessToken for the user if the user has a finished enrolment,
         /// then sends the link to a recipient by email.
         /// </summary>
-        [HttpPost("send-link", Name = nameof(SendProvisionerLink))]
+        [HttpPost("send-link/{provisionerName}", Name = nameof(SendProvisionerLink))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiOkResponse<EnrolmentCertificateAccessToken>), StatusCodes.Status201Created)]
-        [Authorize(Policy = PrimeConstants.USER_POLICY)]
-        public async Task<ActionResult<EnrolmentCertificateAccessToken>> SendProvisionerLink(FromBodyText recipientEmail)
+        // [Authorize(Policy = PrimeConstants.USER_POLICY)]
+        public async Task<ActionResult<EnrolmentCertificateAccessToken>> SendProvisionerLink(string provisionerName, FromBodyText email)
         {
-            if (!EmailService.IsValidEmail(recipientEmail))
+            string optionalEmail = (string)email;
+            if (!string.IsNullOrEmpty(optionalEmail) && !EmailService.IsValidEmail(optionalEmail))
             {
-                this.ModelState.AddModelError("Recipient Email", "The recipient email provided is not valid.");
+                // Email used as Cc to enrollee organization contact, or as the recipient for other provisioners
+                this.ModelState.AddModelError("Email", "The email provided is not valid.");
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
@@ -95,10 +96,15 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
+            var recipientEmail = _certificateService.GetPharmaNetProvisionerEmail(provisionerName, ref optionalEmail);
             var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrollee);
-            await _emailService.SendProvisionerLinkAsync(recipientEmail, createdToken);
+            await _emailService.SendProvisionerLinkAsync(recipientEmail, createdToken, optionalEmail);
 
-            return CreatedAtAction(nameof(GetEnrolmentCertificate), new { accessTokenId = createdToken.Id }, new ApiCreatedResponse<EnrolmentCertificateAccessToken>(createdToken));
+            return CreatedAtAction(
+                nameof(GetEnrolmentCertificate),
+                new { accessTokenId = createdToken.Id },
+                new ApiCreatedResponse<EnrolmentCertificateAccessToken>(createdToken)
+            );
         }
 
         // GET: api/provisioner-access/gpid
