@@ -396,8 +396,6 @@ namespace Prime.Controllers
             return Ok(new ApiOkResponse<IEnrolleeNote>(updatedNote));
         }
 
-
-
         // GET: api/Enrollees/5/versions
         /// <summary>
         /// Get a list of enrollee profile versions.
@@ -446,7 +444,6 @@ namespace Prime.Controllers
 
             return Ok(new ApiOkResponse<EnrolleeProfileVersion>(enrolleeProfileVersion));
         }
-
 
         // PATCH: api/Enrollees/5/always-manual
         /// <summary>
