@@ -90,7 +90,7 @@ objects:
         trident.netapp.io/reclaimPolicy: Retain
     spec:
       accessModes:
-        - ReadWriteMany
+        - ReadWriteOnce
       resources:
         requests:
           storage: '${VOLUME_CAPACITY}'

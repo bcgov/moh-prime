@@ -27,9 +27,6 @@ case "$1" in
     occleanup)
         occleanup
         ;;
-    nukenpave)
-        nukenpave $@
-        ;;
     pipeline_args)
         pipeline_args $@
         ;;
