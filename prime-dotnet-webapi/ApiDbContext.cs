@@ -84,7 +84,6 @@ namespace Prime
 
             return await base.SaveChangesAsync(cancellationToken);
         }
-
         private void ApplyAudits()
         {
             ChangeTracker.DetectChanges();
@@ -138,6 +137,7 @@ namespace Prime
             }
             #endregion
 
+            modelBuilder.ApplyConfiguration(new EnrolleeConfiguration());
             modelBuilder.ApplyConfiguration(new CollegeConfiguration());
             modelBuilder.ApplyConfiguration(new LicenseConfiguration());
             modelBuilder.ApplyConfiguration(new CollegeLicenseConfiguration());
