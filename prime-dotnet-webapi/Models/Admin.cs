@@ -27,6 +27,8 @@ namespace Prime.Models
         [Required]
         public string IDIR { get; set; }
 
+        public IEnumerable<Enrollee> Enrollees { get; set; }
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (Guid.Empty.Equals(this.UserId))
