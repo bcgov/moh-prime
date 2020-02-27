@@ -5,7 +5,7 @@
 
   <div class="row justify-content-end">
     <div class="col text-right">
-      <mat-form-field class="mr-3">
+      <!-- <mat-form-field class="mr-3">
         <mat-label>Filter By Status</mat-label>
         <mat-select value=""
                     (selectionChange)="filterByStatus($event)">
@@ -15,13 +15,20 @@
             {{ status.name }}
           </mat-option>
         </mat-select>
-      </mat-form-field>
-
-      <button mat-icon-button
-              matTooltip="Refresh the list of enrolments"
-              (click)="getEnrolments()">
-        <mat-icon>refresh</mat-icon>
-      </button>
+      </mat-form-field> -->
+      <div class="row">
+        <div class="col text-right pr-0">
+          <app-search-form (search)="onSearch($event)"
+                           (filter)="onFilter($event)">
+          </app-search-form>
+        </div>
+        <div class="col-auto"><button class=""
+                  mat-icon-button
+                  matTooltip="Refresh the list of enrolments"
+                  (click)="getEnrolments()">
+            <mat-icon>refresh</mat-icon>
+          </button></div>
+      </div>
     </div>
   </div>
 
