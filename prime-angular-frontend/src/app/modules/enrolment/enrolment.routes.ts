@@ -17,7 +17,7 @@ export class EnrolmentRoutes {
   // Enrollee history and PharmaNet:
   // Replaces terms of access after accepting the terms of access (TOA)
   public static CURRENT_ACCESS_TERM = 'current-access-term';
-  public static PHARMANET_ENROLMENT_CERTIFICATE = 'pharmanet-enrolment-certificate';
+  public static PHARMANET_ENROLMENT_SUMMARY = 'pharmanet-enrolment-summary';
   public static PHARMANET_TRANSACTIONS = 'pharmanet-transactions';
   public static ACCESS_TERMS = 'access-terms';
 
@@ -34,7 +34,7 @@ export class EnrolmentRoutes {
       ...EnrolmentRoutes.enrolmentProfileRoutes(),
       ...EnrolmentRoutes.enrolmentSubmissionRoutes(),
       // Allows progress indicator to calculate 100%
-      EnrolmentRoutes.PHARMANET_ENROLMENT_CERTIFICATE
+      EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY
     ];
   }
 
@@ -69,7 +69,7 @@ export class EnrolmentRoutes {
   public static enrolmentAcceptedToaRoutes(): string[] {
     return [
       EnrolmentRoutes.CURRENT_ACCESS_TERM,
-      EnrolmentRoutes.PHARMANET_ENROLMENT_CERTIFICATE,
+      EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY,
       EnrolmentRoutes.PHARMANET_TRANSACTIONS,
       EnrolmentRoutes.ACCESS_TERMS
     ];

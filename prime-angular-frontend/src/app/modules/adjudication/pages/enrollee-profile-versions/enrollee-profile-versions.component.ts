@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material';
 
 import { Subscription } from 'rxjs';
@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
 
-import { EnrolmentProfileVersion } from '@adjudication/shared/models/enrollee-profile-history.model';
+import { EnrolmentProfileVersion } from '@shared/models/enrollee-profile-history.model';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 @Component({
@@ -22,11 +22,16 @@ export class EnrolleeProfileVersionsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private adjudicationResource: AdjudicationResource,
     private toastService: ToastService,
     private logger: LoggerService
   ) {
     this.columns = ['name', 'createdDate', 'actions'];
+  }
+
+  public routeTo() {
+    this.router.navigate(['../../'], { relativeTo: this.route.parent });
   }
 
   public ngOnInit() {

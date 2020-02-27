@@ -1,0 +1,245 @@
+<div class="app-print-layout">
+
+  <app-page [busy]="busy">
+
+    <app-page-header>PharmaNet Enrolment Summary</app-page-header>
+
+    <app-progress-indicator *ngIf="showProgressBar"
+                            [currentRoute]="EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY"></app-progress-indicator>
+
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>Next Steps</ng-container>
+    </app-page-subheader>
+
+    <p>
+      Your PharmaNet Enrolment summary is below. You will need to provide this information to the person who will set up
+      your local PharmaNet access account. For most community practices, this will be the vendor for your PharmaNet
+      access software. Use the email option below to send your vendor (or system administrator) the information they
+      will require to provision your access to PharmaNet.
+    </p>
+
+
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>Notify your PharmaNet Software Vendor</ng-container>
+    </app-page-subheader>
+
+    <p class="mb-4">
+      Select your PharmaNet software vendor(s) to notify them of your completed enrolment. Select “Other” to notify a
+      different system administrator responsible for your access to PharmaNet. Check your inbox for a confirmation
+      email.
+    </p>
+
+    <form [formGroup]="form">
+      <div class="mb-2">
+        <mat-checkbox #careconnect>CareConnect</mat-checkbox>
+        <div *ngIf="careconnect.checked"
+             class="pt-2">
+          <ng-container *ngTemplateOutlet="verbose; context: { provisioner: 'CareConnect' }"></ng-container>
+
+          <div class="row">
+            <div class="col-sm-8">
+
+              <mat-form-field class="w-100 mb-3">
+                <input matInput
+                       placeholder="Email"
+                       formControlName="careconnectRecipient">
+                <mat-error *ngIf="careconnectRecipient.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="careconnectRecipient.hasError('email')">Must be a valid email address</mat-error>
+              </mat-form-field>
+
+            </div>
+            <div class="col-sm-4">
+
+              <button mat-flat-button
+                      type="button"
+                      color="primary"
+                      class="w-100 mb-4"
+                      (click)="sendProvisionerAccessLinkWithCc('CareConnect')">
+                Send
+              </button>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="mb-2">
+        <mat-checkbox #excelleris>Excelleris</mat-checkbox>
+        <div *ngIf="excelleris.checked"
+             class="pt-2">
+          <ng-container *ngTemplateOutlet="verbose; context: { provisioner: 'Excelleris' }"></ng-container>
+
+          <div class="row">
+            <div class="col-sm-8">
+
+              <mat-form-field class="w-100 mb-3">
+                <input matInput
+                       placeholder="Email"
+                       formControlName="excellerisRecipient">
+                <mat-error *ngIf="excellerisRecipient.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="excellerisRecipient.hasError('email')">Must be a valid email address</mat-error>
+              </mat-form-field>
+
+            </div>
+            <div class="col-sm-4">
+
+              <button mat-flat-button
+                      type="button"
+                      color="primary"
+                      class="w-100 mb-4"
+                      (click)="sendProvisionerAccessLinkWithCc('Excelleris')">
+                Send
+              </button>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="mb-2">
+        <mat-checkbox #iclinic>iClinic</mat-checkbox>
+        <div *ngIf="iclinic.checked"
+             class="pt-2">
+
+          <div class="row">
+            <div class="col-sm-8">
+
+              <ng-container *ngTemplateOutlet="concise; context: { provisioner: 'iClinic' }"></ng-container>
+
+            </div>
+            <div class="col-sm-4">
+
+              <button mat-flat-button
+                      type="button"
+                      color="primary"
+                      class="w-100 mb-4"
+                      (click)="sendProvisionerAccessLink('iClinic')">
+                Send
+              </button>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="mb-2">
+        <mat-checkbox #medinet>MediNet</mat-checkbox>
+        <div *ngIf="medinet.checked"
+             class="pt-2">
+
+          <div class="row">
+            <div class="col-sm-8">
+
+              <ng-container *ngTemplateOutlet="concise; context: { provisioner: 'MediNet' }"></ng-container>
+
+            </div>
+            <div class="col-sm-4">
+
+              <button mat-flat-button
+                      type="button"
+                      color="primary"
+                      class="w-100 mb-4"
+                      (click)="sendProvisionerAccessLink('MediNet')">
+                Send
+              </button>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="mb-2">
+        <mat-checkbox #plexia>Plexia</mat-checkbox>
+        <div *ngIf="plexia.checked"
+             class="pt-2">
+          <ng-container *ngTemplateOutlet="verbose; context: { provisioner: 'Plexia' }"></ng-container>
+
+          <div class="row">
+            <div class="col-sm-8">
+
+              <mat-form-field class="w-100 mb-3">
+                <input matInput
+                       placeholder="Email"
+                       formControlName="plexiaRecipient">
+                <mat-error *ngIf="plexiaRecipient.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="plexiaRecipient.hasError('email')">Must be a valid email address</mat-error>
+              </mat-form-field>
+
+            </div>
+            <div class="col-sm-4">
+
+              <button mat-flat-button
+                      type="button"
+                      color="primary"
+                      class="w-100 mb-4"
+                      (click)="sendProvisionerAccessLinkWithCc('Plexia')">
+                Send
+              </button>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="mb-2">
+        <mat-checkbox #other>Other</mat-checkbox>
+        <div *ngIf="other.checked"
+             class="pt-2">
+          <p class="mb-4">
+            Enter an email address that may be used to send your PRIME approval information.
+          </p>
+
+          <div class="row">
+            <div class="col-sm-8">
+
+              <mat-form-field class="w-100 mb-3">
+                <input matInput
+                       placeholder="Email"
+                       formControlName="otherRecipient">
+                <mat-error *ngIf="otherRecipient.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="otherRecipient.hasError('email')">Must be a valid email address</mat-error>
+              </mat-form-field>
+
+            </div>
+            <div class="col-sm-4">
+
+              <button mat-flat-button
+                      type="button"
+                      color="primary"
+                      class="w-100 mb-4"
+                      (click)="sendProvisionerAccessLinkWithCc('Other')">
+                Send
+              </button>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </form>
+
+    <ng-template #concise
+                 let-provisioner="provisioner">
+      <p class="mb-4">
+        Your PharmaNet approval information will be sent to {{ provisioner }}.
+      </p>
+    </ng-template>
+
+    <ng-template #verbose
+                 let-provisioner="provisioner">
+      <p class="mb-4">
+        Provide the email address of the person in your organization who is responsible for contacting {{ provisioner }}
+        to set up accounts (e.g., your Office Manager or MOA). This contact must forward your approval notification to
+        {{ provisioner }} for your account to be created. {{ provisioner }} will also receive confirmation that your
+        notification has been sent.
+      </p>
+    </ng-template>
+
+  </app-page>
+
+</div>

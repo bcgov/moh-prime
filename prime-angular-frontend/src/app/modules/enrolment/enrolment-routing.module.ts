@@ -23,7 +23,7 @@ import { AccessAgreementComponent } from './pages/access-agreement/access-agreem
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
 import { AccessLocked } from './pages/access-locked/access-locked.component';
 import { AccessAgreementHistoryComponent } from './pages/access-agreement-history/access-agreement-history.component';
-import { PharmanetEnrolmentCertificateComponent } from './pages/pharmanet-enrolment-certificate/pharmanet-enrolment-certificate.component';
+import { PharmanetEnrolmentSummaryComponent } from './pages/pharmanet-enrolment-summary/pharmanet-enrolment-summary.component';
 import { PharmanetTransactionsComponent } from './pages/pharmanet-transactions/pharmanet-transactions.component';
 import { AccessTermsComponent } from './pages/access-terms/access-terms.component';
 import { AccessAgreementCurrentComponent } from './pages/access-agreement-current/access-agreement-current.component';
@@ -126,9 +126,9 @@ const routes: Routes = [
         data: { title: 'Terms of Access' }
       },
       {
-        path: EnrolmentRoutes.PHARMANET_ENROLMENT_CERTIFICATE,
-        component: PharmanetEnrolmentCertificateComponent,
-        data: { title: 'PharmaNet Enrolment Certificate' }
+        path: EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY,
+        component: PharmanetEnrolmentSummaryComponent,
+        data: { title: 'PharmaNet Enrolment Summary' }
       },
       // TODO removed until the page has been implemented
       // {
