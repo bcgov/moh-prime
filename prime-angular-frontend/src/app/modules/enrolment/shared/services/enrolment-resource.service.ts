@@ -15,8 +15,8 @@ import { Job } from '@enrolment/shared/models/job.model';
 import { Address } from '@enrolment/shared/models/address.model';
 import { Organization } from '@enrolment/shared/models/organization.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-import { AccessTerm } from '@enrolment/shared/models/access-term.model';
-import { EnrolmentProfileVersion, HttpEnrolleeProfileVersion } from '@adjudication/shared/models/enrollee-profile-history.model';
+import { AccessTerm } from '@shared/models/access-term.model';
+import { EnrolmentProfileVersion, HttpEnrolleeProfileVersion } from '@shared/models/enrollee-profile-history.model';
 
 @Injectable({
   providedIn: 'root'
@@ -80,9 +80,9 @@ export class EnrolmentResource {
       );
   }
 
-  public sendProvisionerAccessLink(recipientEmail: string): Observable<EnrolmentCertificateAccessToken> {
-    const payload = { data: recipientEmail };
-    return this.http.post(`${this.config.apiEndpoint}/provisioner-access/send-link`, payload)
+  public sendProvisionerAccessLink(provisionerName: string, ccEmail: string = null): Observable<EnrolmentCertificateAccessToken> {
+    const payload = { data: ccEmail };
+    return this.http.post(`${this.config.apiEndpoint}/provisioner-access/send-link/${provisionerName}`, payload)
       .pipe(
         map((response: PrimeHttpResponse) => response.result as EnrolmentCertificateAccessToken),
         tap((token: EnrolmentCertificateAccessToken) => this.logger.info('ACCESS_TOKEN', token))

@@ -7,9 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using SimpleBase;
 using Prime.Models;
 using Prime.ViewModels;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Prime.Models.Api;
-using System.Reflection;
 
 namespace Prime.Services
 {
@@ -421,6 +419,12 @@ namespace Prime.Services
             }
 
             await _context.SaveChangesAsync();
+
+            // Enrollee just left manual adjudication, inform the enrollee
+            if (oldStatus?.Code == Status.UNDER_REVIEW_CODE)
+            {
+                await _emailService.SendReminderEmailAsync(enrollee);
+            }
 
             return createdEnrolmentStatus;
         }

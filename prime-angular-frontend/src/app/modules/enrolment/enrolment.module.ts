@@ -21,7 +21,7 @@ import {
   LimitsAndConditionsClauseComponent
 } from './pages/access-agreement/components/limits-and-conditions-clause/limits-and-conditions-clause.component';
 import { UserClauseComponent } from './pages/access-agreement/components/user-clause/user-clause.component';
-import { PharmanetEnrolmentCertificateComponent } from './pages/pharmanet-enrolment-certificate/pharmanet-enrolment-certificate.component';
+import { PharmanetEnrolmentSummaryComponent } from './pages/pharmanet-enrolment-summary/pharmanet-enrolment-summary.component';
 import { AccessLocked } from './pages/access-locked/access-locked.component';
 import { AccessAgreementHistoryComponent } from './pages/access-agreement-history/access-agreement-history.component';
 import { PharmanetTransactionsComponent } from './pages/pharmanet-transactions/pharmanet-transactions.component';
@@ -33,7 +33,6 @@ import { JobFormComponent } from './shared/components/job-form/job-form.componen
 import { CollectionNoticeAlertComponent } from './shared/components/collection-notice-alert/collection-notice-alert.component';
 import { RuAccessTermsComponent } from './pages/access-agreement/components/ru-access-terms/ru-access-terms.component';
 import { OboAccessTermsComponent } from './pages/access-agreement/components/obo-access-terms/obo-access-terms.component';
-import { AccessTermComponent } from './pages/access-agreement/components/access-term/access-term.component';
 import { AccessAgreementCurrentComponent } from './pages/access-agreement-current/access-agreement-current.component';
 import { AccessAgreementHistoryEnrolmentComponent } from './pages/access-agreement-history-enrolment/access-agreement-history-enrolment.component';
 
@@ -57,7 +56,7 @@ import { AccessAgreementHistoryEnrolmentComponent } from './pages/access-agreeme
     UserClauseComponent,
     AccessLocked,
     AccessAgreementHistoryComponent,
-    PharmanetEnrolmentCertificateComponent,
+    PharmanetEnrolmentSummaryComponent,
     PharmanetTransactionsComponent,
     AccessTermsComponent,
     PageFooterComponent,
@@ -66,7 +65,6 @@ import { AccessAgreementHistoryEnrolmentComponent } from './pages/access-agreeme
     CollectionNoticeAlertComponent,
     OboAccessTermsComponent,
     RuAccessTermsComponent,
-    AccessTermComponent,
     AccessAgreementCurrentComponent,
     AccessAgreementHistoryEnrolmentComponent
   ],

@@ -18,7 +18,7 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
-import { AccessTerm } from '@enrolment/shared/models/access-term.model';
+import { AccessTerm } from '@shared/models/access-term.model';
 import { ViewportService } from '@core/services/viewport.service';
 
 @Component({
@@ -97,7 +97,7 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
         .subscribe(
           () => {
             this.toastService.openSuccessToast(`Terms of Access has been ${status.adjective}`);
-            this.routeTo(EnrolmentRoutes.PHARMANET_ENROLMENT_CERTIFICATE, {
+            this.routeTo(EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY, {
               state: { showProgressBar: this.isInitialEnrolment }
             });
           },

@@ -16,7 +16,7 @@ export class PrimePhoneComponent {
   }
 
   public get primePhoneHref() {
-    const phone = parseInt(this.config.prime.phone, 10);
+    const phone = this.config.prime.phone.replace(/[^0-9.]/g, '');
     return `tel:+${phone}`;
   }
 
@@ -27,7 +27,7 @@ export class PrimePhoneComponent {
   }
 
   private get primePhone() {
-    return this.config.prime.phone.split('-').join(' - ');
+    return this.config.prime.phone;
   }
 
   private get primePhoneVanity() {

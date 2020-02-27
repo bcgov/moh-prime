@@ -10,6 +10,9 @@ import { AdjudicatorNotesComponent } from './pages/adjudicator-notes/adjudicator
 import { LimitsConditionsClausesComponent } from './pages/limits-conditions-clauses/limits-conditions-clauses.component';
 import { EnrolleeProfileVersionComponent } from './pages/enrollee-profile-version/enrollee-profile-version.component';
 import { EnrolleeProfileVersionsComponent } from './pages/enrollee-profile-versions/enrollee-profile-versions.component';
+import { EnrolleeAccessTermsComponent } from './pages/enrollee-access-terms/enrollee-access-terms.component';
+import { EnrolleeAccessTermComponent } from './pages/enrollee-access-term/enrollee-access-term.component';
+import { EnrolleeAccessTermEnrolmentComponent } from './pages/enrollee-access-term-enrolment/enrollee-access-term-enrolment.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +21,10 @@ import { EnrolleeProfileVersionsComponent } from './pages/enrollee-profile-versi
     AdjudicatorNotesComponent,
     LimitsConditionsClausesComponent,
     EnrolleeProfileVersionComponent,
-    EnrolleeProfileVersionsComponent
+    EnrolleeProfileVersionsComponent,
+    EnrolleeAccessTermsComponent,
+    EnrolleeAccessTermComponent,
+    EnrolleeAccessTermEnrolmentComponent
   ],
   imports: [
     SharedModule,
