@@ -46,7 +46,7 @@ namespace Prime.Controllers
             IEnumerable<Enrollee> enrollees = null;
 
             // User must have the ADMIN role to see all enrollees
-            if (User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE))
+            if (User.IsAdmin())
             {
                 enrollees = await _enrolleeService.GetEnrolleesAsync(searchOptions);
             }
