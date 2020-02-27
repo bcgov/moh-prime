@@ -27,8 +27,7 @@ function build() {
     source ./"$2.conf"
     echo "Building $2 (${APP_NAME}) to $PROJECT_PREFIX-$3..."
     buildPresent=$(oc get bc/"$APP_NAME${SUFFIX}" --ignore-not-found=true | wc -l)
-    MODE="apply"
-    OC_ARGS="--overwrite=false --all"
+    determineMode
     echo "oc process -f ./${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE} -p NAME=${APP_NAME} -p VERSION=${BUILD_NUMBER} -p SUFFIX=-${BRANCH_LOWER} -p SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR} -p SOURCE_REPOSITORY_URL=${GIT_URL} -p SOURCE_REPOSITORY_REF=${BRANCH_NAME} -p OC_NAMESPACE=$PROJECT_PREFIX -p OC_APP=$3 ${@:4} | oc ${MODE} -f - --namespace=$PROJECT_PREFIX-$3"
     oc process -f ./"${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE}" \
     -p NAME="${APP_NAME}" \
@@ -52,10 +51,10 @@ function deploy() {
     source ./"$2.conf"
     echo "Deploying $2 (${APP_NAME}) to $3 ..."
     export deployPresent=$(oc get dc/${APP_NAME}${SUFFIX} --ignore-not-found=true | wc -l)
+    export pvcPresent=$(oc get pvc/${APP_NAME}${SUFFIX} --ignore-not-found=true | wc -l)
     export routePresent=$(oc get route/${APP_NAME}${SUFFIX} --ignore-not-found=true | wc -l)
     export servicePresent=$(oc get service/${APP_NAME}${SUFFIX} --ignore-not-found=true | wc -l)
-    MODE="apply"
-    OC_ARGS="--overwrite=false --all"
+    determineMode
     oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
     -p NAME="${APP_NAME}" \
     -p VERSION="${BUILD_NUMBER}" \
@@ -64,7 +63,7 @@ function deploy() {
     -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
     -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
     -p OC_NAMESPACE="$PROJECT_PREFIX" \
-    -p OC_APP="$3" ${@:4} --output="yaml" | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$3" ${OC_ARGS}
+    -p OC_APP="$3" ${@:4} | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$3" ${OC_ARGS}
 }
 
 function toolbelt() {
@@ -99,10 +98,10 @@ function determineMode() {
     if [ -z "${buildPresent}" ];
     then 
         MODE="apply"
-        OC_ARGS="--overwrite=false --all"
+        OC_ARGS=""
     else 
         MODE="apply"
-        OC_ARGS=""
+        OC_ARGS="--overwrite=false --all"
     fi;
 }
 
@@ -154,4 +153,3 @@ function functionTest() {
     echo "Trailing = ${@:4}"
     echo "All = $@"
 }
-backup, #6
