@@ -236,7 +236,7 @@ export class EnrolmentsComponent implements OnInit {
   }
 
   public getEnrolments(statusCode?: number, textSearch?: string) {
-    this.busy = this.adjudicationResource.enrollees(statusCode, textSearch)
+    return this.adjudicationResource.enrollees(statusCode, textSearch)
       .subscribe(
         (enrolments: Enrolment[]) => {
           this.logger.info('ENROLMENTS', enrolments);
@@ -250,7 +250,7 @@ export class EnrolmentsComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.getEnrolments();
+    this.busy = this.getEnrolments();
     // console.log(this.authService.isSuperAdmin());
   }
 
