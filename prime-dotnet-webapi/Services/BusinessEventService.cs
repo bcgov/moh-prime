@@ -11,13 +11,13 @@ namespace Prime.Services
             ApiDbContext context, IHttpContextAccessor httpContext) : base(context, httpContext)
         { }
 
-        public async Task<BusinessEvent> CreateBusinessEventAsync(int enrolleeId, short eventTypeCode, string description, int? adminId = null)
+        public async Task<BusinessEvent> CreateStatusChangeEventAsync(int enrolleeId, string description, int? adminId = null)
         {
             var businessEvent = new BusinessEvent
             {
                 EnrolleeId = enrolleeId,
                 AdminId = adminId,
-                BusinessEventTypeCode = eventTypeCode,
+                BusinessEventTypeCode = BusinessEventType.STATUS_CHANGE_CODE,
                 Description = description,
                 EventDate = DateTime.Now
             };
@@ -27,7 +27,7 @@ namespace Prime.Services
             var created = await _context.SaveChangesAsync();
             if (created < 1)
             {
-                throw new InvalidOperationException("Could not create business event.");
+                throw new InvalidOperationException("Could not create status change business event.");
             };
 
             return businessEvent;
