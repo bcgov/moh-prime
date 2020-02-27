@@ -471,5 +471,34 @@ namespace Prime.Controllers
 
             return Ok(new ApiOkResponse<Enrollee>(updatedEnrollee));
         }
+
+        // POST: api/Enrollees/5/adjudicator
+        /// <summary>
+        /// Add/remove an enrollees assigned adjudicator.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpGet("{enrolleeId}/adjudicator", Name = nameof(ModifyEnrolleeAdjudicator))]
+        // [Authorize(Policy = PrimeConstants.ADMIN_POLICY)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiOkResponse<Admin>), StatusCodes.Status200OK)]
+        // TODO add route model binding for Enrollee
+        // TODO add middleware/policy to do simple checks
+        public async Task<ActionResult<Admin>> ModifyEnrolleeAdjudicator(int enrolleeId)
+        {
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+
+            if (enrollee == null)
+            {
+                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}."));
+            }
+
+            var adjudicatorUserId = User.GetPrimeUserId();
+            var assignedAdmin = await _enrolleeService.ModifyEnrolleeAdjudicator(enrollee, adjudicatorUserId);
+
+            return Ok(new ApiOkResponse<Admin>(assignedAdmin));
+        }
     }
 }

@@ -160,7 +160,6 @@ namespace Prime.Services
 
             return this.CreateEnrolleeInternalAsync(enrollee);
         }
-
         private async Task<int?> CreateEnrolleeInternalAsync(Enrollee enrollee)
         {
             // Create a status history record
@@ -597,6 +596,23 @@ namespace Prime.Services
             return await _context.Enrollees
                    .CountAsync();
 
+        }
+
+        public async Task<Admin> ModifyEnrolleeAdjudicator(Enrollee enrollee, Guid adjudicatorUserId)
+        {
+            var admin = await _context.Admins.SingleOrDefaultAsync(a => a.UserId == adjudicatorUserId);
+            var currentAdjudicatorUserId = enrollee.Adjudicator?.UserId;
+
+            enrollee.Adjudicator = (currentAdjudicatorUserId != adjudicatorUserId) ? admin : null;
+            _context.Update(enrollee);
+
+            var updated = await _context.SaveChangesAsync();
+            if (updated < 1)
+            {
+                throw new InvalidOperationException($"Could not update the enrollee adjudicator.");
+            }
+
+            return enrollee.Adjudicator;
         }
     }
 }

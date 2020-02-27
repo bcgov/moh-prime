@@ -47,5 +47,7 @@ namespace Prime.Services
         Task<Enrollee> UpdateEnrolleeAlwaysManualAsync(int enrolleeId, bool alwaysManual);
 
         Task<int> GetEnrolleeCountAsync();
+
+        Task<Admin> ModifyEnrolleeAdjudicator(Enrollee enrollee, Guid adminId);
     }
 }
