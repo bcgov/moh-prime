@@ -32,5 +32,28 @@ namespace Prime.Services
 
             return businessEvent;
         }
+
+
+        public async Task<BusinessEvent> CreateEmailEventAsync(int enrolleeId, string description, int? adminId = null)
+        {
+            var businessEvent = new BusinessEvent
+            {
+                EnrolleeId = enrolleeId,
+                AdminId = adminId,
+                BusinessEventTypeCode = BusinessEventType.EMAIL_CODE,
+                Description = description,
+                EventDate = DateTime.Now
+            };
+
+            _context.BusinessEvents.Add(businessEvent);
+
+            var created = await _context.SaveChangesAsync();
+            if (created < 1)
+            {
+                throw new InvalidOperationException("Could not create email business event.");
+            };
+
+            return businessEvent;
+        }
     }
 }
