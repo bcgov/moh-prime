@@ -32,7 +32,7 @@ namespace Prime.Services
 
         Task<IEnumerable<EnrolmentStatus>> GetEnrolmentStatusesAsync(int enrolleeId);
 
-        Task<EnrolmentStatus> CreateEnrolmentStatusAsync(int enrolleeId, Status status, bool acceptedAccessTerm);
+        Task<EnrolmentStatus> CreateEnrolmentStatusAsync(int enrolleeId, Status status, bool acceptedAccessTerm, int? adminId);
 
         bool IsStatusChangeAllowed(Status startingStatus, Status endingStatus);
 
