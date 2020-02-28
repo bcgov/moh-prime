@@ -21,15 +21,18 @@ namespace Prime.Controllers
         private readonly IEnrolleeService _enrolleeService;
         private readonly IAccessTermService _accessTermService;
         private readonly IEnrolleeProfileVersionService _enrolleeProfileVersionService;
+        private readonly IAdminService _adminService;
 
         public EnrolleesController(
             IEnrolleeService enrolleeService,
             IAccessTermService accessTermService,
-            IEnrolleeProfileVersionService enrolleeProfileVersionService)
+            IEnrolleeProfileVersionService enrolleeProfileVersionService,
+            IAdminService adminService)
         {
             _enrolleeService = enrolleeService;
             _accessTermService = accessTermService;
             _enrolleeProfileVersionService = enrolleeProfileVersionService;
+            _adminService = adminService;
         }
 
 
@@ -269,6 +272,7 @@ namespace Prime.Controllers
         public async Task<ActionResult<EnrolmentStatus>> CreateEnrolmentStatus(int enrolleeId, Status status, [FromQuery]bool acceptedAccessTerm)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+            int? adminId = null;
 
             if (enrollee == null)
             {
@@ -292,8 +296,13 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            var enrolmentStatus = await _enrolleeService.CreateEnrolmentStatusAsync(enrolleeId, status, acceptedAccessTerm);
+            if (User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE))
+            {
+                var admin = await _adminService.GetAdminForUserIdAsync(User.GetPrimeUserId());
+                adminId = admin.Id;
+            }
 
+            var enrolmentStatus = await _enrolleeService.CreateEnrolmentStatusAsync(enrolleeId, status, acceptedAccessTerm, adminId);
             return Ok(new ApiOkResponse<EnrolmentStatus>(enrolmentStatus));
         }
 

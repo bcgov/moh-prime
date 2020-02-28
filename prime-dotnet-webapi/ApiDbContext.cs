@@ -70,6 +70,7 @@ namespace Prime
         public DbSet<UserClause> UserClauses { get; set; }
         public DbSet<LicenseClassClause> LicenseClassClauses { get; set; }
         public DbSet<LimitsConditionsClause> LimitsConditionsClauses { get; set; }
+        public DbSet<BusinessEvent> BusinessEvents { get; set; }
 
         public override int SaveChanges()
         {
@@ -161,6 +162,8 @@ namespace Prime
             modelBuilder.ApplyConfiguration(new UserClauseConfiguration());
             modelBuilder.ApplyConfiguration(new LicenseClassClauseConfiguration());
 
+            modelBuilder.ApplyConfiguration(new BusinessEventTypeConfiguration());
+
             #region Indexes
             modelBuilder.Entity<MailingAddress>()
                 .HasIndex(a => a.EnrolleeId)
@@ -225,6 +228,11 @@ namespace Prime
                 .HasOne(tlic => tlic.LicenseClassClause)
                 .WithMany(lcc => lcc.AccessTermLicenseClassClauses)
                 .HasForeignKey(tlic => tlic.LicenseClassClauseId);
+
+            modelBuilder.Entity<BusinessEvent>()
+                .HasOne(be => be.BusinessEventType)
+                .WithMany(t => t.BusinessEvents)
+                .HasForeignKey(be => be.BusinessEventTypeCode);
             #endregion
         }
     }
