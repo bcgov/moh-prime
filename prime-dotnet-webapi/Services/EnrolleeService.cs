@@ -163,6 +163,7 @@ namespace Prime.Services
 
             return this.CreateEnrolleeInternalAsync(enrollee);
         }
+
         private async Task<int?> CreateEnrolleeInternalAsync(Enrollee enrollee)
         {
             // Create a status history record
