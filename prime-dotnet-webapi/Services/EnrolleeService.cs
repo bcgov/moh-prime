@@ -133,7 +133,9 @@ namespace Prime.Services
                     || e.LastName.ToLower().StartsWith(searchOptions.TextSearch.ToLower())
                     || e.ContactEmail.ToLower().StartsWith(searchOptions.TextSearch.ToLower())
                     || e.VoicePhone.ToLower().StartsWith(searchOptions.TextSearch.ToLower())
-                    || e.Id.ToString().Equals(searchOptions.TextSearch)
+                    // Since DisplayId is a derived field we can not query on it. And we
+                    // don't want to have to grab all Enrollees and filter on the front end.
+                    || (e.Id + Enrollee.DISPLAY_OFFSET).ToString().Equals(searchOptions.TextSearch)
                     || e.FirstName.ToLower().StartsWith(searchOptions.TextSearch.ToLower())
                     || e.Certifications.Any(c => c.LicenseNumber.ToLower().StartsWith(searchOptions.TextSearch.ToLower()))
                 );

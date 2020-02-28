@@ -47,11 +47,11 @@ export class SearchFormComponent implements OnInit {
 
   protected initForm() {
     this.textSearch.valueChanges.pipe(
-      debounceTime(1000),
+      debounceTime(500),
     ).subscribe((t: string) => this.search.emit(t));
 
     this.statusCode.valueChanges.pipe(
-      debounceTime(1000),
+      debounceTime(500),
     ).subscribe((es: EnrolmentStatus) => this.filter.emit(es));
   }
 

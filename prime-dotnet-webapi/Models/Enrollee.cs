@@ -158,9 +158,12 @@ namespace Prime.Models
         }
 
         [NotMapped]
+        public static int DISPLAY_OFFSET = 1000;
+
+        [NotMapped]
         public int? DisplayId
         {
-            get => (this.Id == null) ? null : this.Id + 1000;
+            get => (this.Id == null) ? null : this.Id + Enrollee.DISPLAY_OFFSET;
         }
 
         public ICollection<AdjudicatorNote> AdjudicatorNotes { get; set; }
