@@ -159,7 +159,7 @@
       <button mat-menu-item
               (click)="updateEnrolmentAdjudicator(enrolment)">
         <mat-icon>pan_tool</mat-icon>
-        <span>{{ (enrolment?.adjudicator) ? 'Disclaim' : 'Claim' }} Enrolment</span>
+        <span>{{ (enrolment?.adjudicatorId) ? 'Disclaim' : 'Claim' }} Enrolment</span>
       </button>
       <button mat-menu-item
               *ngIf="isSuperAdmin()"

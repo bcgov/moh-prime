@@ -93,19 +93,35 @@ export class AdjudicationResource {
       );
   }
 
-  public updateEnrolmentAdjudicator(enrolleeId: number): Observable<Admin> {
+  public addEnrolleeAdjudicator(enrolleeId: number): Observable<Enrolment> {
     return this.http.put(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/adjudicator`, null)
       .pipe(
-        map((response: PrimeHttpResponse) => response.result as Admin),
-        tap((adjudicator: Admin) => this.logger.info('ENROLMENT_ADJUDICATOR', adjudicator)),
+        map((response: PrimeHttpResponse) => response.result),
+        map((enrollee: HttpEnrollee) => this.enrolmentAdapter(enrollee)),
+        tap((enrolment: Enrolment) => this.logger.info('UPDATED_ENROLMENT', enrolment)),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Adjudicator could not be assigned to the enrolment');
-          this.logger.error('[Adjudication] AdjudicationResource::updateEnrolmentAdjudicator error has occurred: ', error);
+          this.toastService.openErrorToast('Adjudicator could not be assigned');
+          this.logger.error('[Adjudication] AdjudicationResource::addEnrolleeAdjudicator error has occurred: ', error);
           throw error;
         })
       );
   }
 
+  public removeEnrolleeAdjudicator(enrolleeId: number): Observable<Enrolment> {
+    return this.http.delete(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/adjudicator`)
+      .pipe(
+        map((response: PrimeHttpResponse) => response.result),
+        map((enrollee: HttpEnrollee) => this.enrolmentAdapter(enrollee)),
+        tap((enrolment: Enrolment) => this.logger.info('UPDATED_ENROLMENT', enrolment)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Adjudicator could not be unassigned');
+          this.logger.error('[Adjudication] AdjudicationResource::removeEnrolleeAdjudicator error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  // TODO should have a response other than `any`
   public updateEnrolleeAlwaysManual(id: number, alwaysManual: boolean): Observable<any> {
     const payload = { data: alwaysManual };
     return this.http.patch(`${this.config.apiEndpoint}/enrollees/${id}/always-manual`, payload);
@@ -293,6 +309,4 @@ export class AdjudicationResource {
       ...remainder
     };
   }
-
-
 }

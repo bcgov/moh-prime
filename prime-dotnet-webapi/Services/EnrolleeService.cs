@@ -412,6 +412,7 @@ namespace Prime.Services
                         await _accessTermService.AcceptCurrentAccessTermAsync(enrollee);
                         await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrolleeId, enrollee);
                         await _businessEventService.CreateBusinessEventAsync(enrolleeId, BusinessEventType.STATUS_CHANGE_CODE, "Accepted TOA", adminId);
+                        await UpdateEnrolleeAdjudicator((int)enrollee.Id);
                         break;
                     }
                     break;
@@ -609,17 +610,19 @@ namespace Prime.Services
         {
             return await _context.Enrollees
                    .CountAsync();
-
         }
 
-        public async Task<Admin> UpdateEnrolleeAdjudicator(Enrollee enrollee, Guid adjudicatorUserId)
+        public async Task<Enrollee> UpdateEnrolleeAdjudicator(int enrolleeId, Guid adjudicatorUserId = default(Guid))
         {
-            var currentAdjudicatorUserId = enrollee.Adjudicator?.UserId;
-
-            // Allow a different adjudicator to take over the claim
-            enrollee.Adjudicator = (currentAdjudicatorUserId != adjudicatorUserId)
+            var admin = (!adjudicatorUserId.Equals(Guid.Empty))
                 ? await _context.Admins.SingleOrDefaultAsync(a => a.UserId == adjudicatorUserId)
                 : null;
+
+            var enrollee = await GetBaseEnrolleeQuery()
+                .Include(e => e.Adjudicator)
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
+            enrollee.Adjudicator = admin;
 
             _context.Update(enrollee);
 
@@ -629,7 +632,7 @@ namespace Prime.Services
                 throw new InvalidOperationException($"Could not update the enrollee adjudicator.");
             }
 
-            return enrollee.Adjudicator;
+            return enrollee;
         }
     }
 }

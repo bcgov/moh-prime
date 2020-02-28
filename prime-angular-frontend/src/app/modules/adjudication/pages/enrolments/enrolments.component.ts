@@ -227,9 +227,21 @@ export class EnrolmentsComponent implements OnInit {
     }
   }
 
-  public updateEnrolmentAdjudicator(enrolment: Enrolment) {
-    this.adjudicationResource.updateEnrolmentAdjudicator(enrolment.id)
-      .subscribe((admin: Admin) => enrolment.adjudicator = admin);
+  public updateEnrolmentAdjudicator(currentEnrolment: Enrolment) {
+    const request$ = (!currentEnrolment.adjudicatorId)
+      ? this.adjudicationResource.addEnrolleeAdjudicator(currentEnrolment.id)
+      : this.adjudicationResource.removeEnrolleeAdjudicator(currentEnrolment.id);
+
+    request$
+      .subscribe((updatedEnrolment: Enrolment) => {
+        const updatedDataset = this.dataSource.data.map((enrolment: Enrolment) =>
+          (enrolment.id === updatedEnrolment.id)
+            ? updatedEnrolment
+            : enrolment
+        );
+
+        this.dataSource.connect().next(updatedDataset);
+      });
   }
 
   public getEnrolments(statusCode?: number) {
