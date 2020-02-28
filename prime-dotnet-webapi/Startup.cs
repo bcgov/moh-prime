@@ -50,6 +50,7 @@ namespace Prime
             services.AddScoped<IAccessTermService, AccessTermService>();
             services.AddScoped<IEnrolleeProfileVersionService, EnrolleeProfileVersionService>();
             services.AddScoped<IAdminService, AdminService>();
+            services.AddScoped<IBusinessEventService, BusinessEventService>();
 
             services
                 // Adds support for controllers and API-related features
