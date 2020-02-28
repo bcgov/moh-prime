@@ -45,7 +45,7 @@ export class EnrolmentsComponent implements OnInit {
     private dialog: MatDialog,
     private logger: LoggerService
   ) {
-    this.columns = ['appliedDate', 'name', 'status', 'approvedDate', 'actions'];
+    this.columns = ['uniqueId', 'name', 'appliedDate', 'status', 'approvedDate', 'actions'];
     this.statuses = this.configService.statuses;
     this.filteredStatus = null;
     this.textSearch = null;
