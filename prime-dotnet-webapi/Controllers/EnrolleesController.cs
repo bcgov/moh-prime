@@ -358,7 +358,14 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            var createdAdjudicatorNote = await _enrolleeService.CreateEnrolleeAdjudicatorNoteAsync(enrolleeId, note);
+            var adminId = 0;
+            if (User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE))
+            {
+                var admin = await _adminService.GetAdminForUserIdAsync(User.GetPrimeUserId());
+                adminId = admin.Id;
+            }
+
+            var createdAdjudicatorNote = await _enrolleeService.CreateEnrolleeAdjudicatorNoteAsync(enrolleeId, note, adminId);
 
             return CreatedAtAction(
                 nameof(GetAdjudicatorNotes),
@@ -401,7 +408,14 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            var updatedNote = await _enrolleeService.UpdateEnrolleeNoteAsync(enrolleeId, accessAgreementNote);
+            var adminId = 0;
+            if (User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE))
+            {
+                var admin = await _adminService.GetAdminForUserIdAsync(User.GetPrimeUserId());
+                adminId = admin.Id;
+            }
+
+            var updatedNote = await _enrolleeService.UpdateEnrolleeNoteAsync(enrolleeId, accessAgreementNote, adminId);
 
             return Ok(new ApiOkResponse<IEnrolleeNote>(updatedNote));
         }

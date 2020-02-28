@@ -528,7 +528,7 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, string note)
+        public async Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, string note, int? adminId = null)
         {
             var adjudicatorNote = new AdjudicatorNote
             {
@@ -546,13 +546,13 @@ namespace Prime.Services
             }
             else
             {
-                _businessEventService.CreateNoteEventAsync(enrolleeId, "Added Adjudicator Note: " + note, int ? adminId = null)
+                await _businessEventService.CreateNoteEventAsync(enrolleeId, "Added Adjudicator Note: " + note, adminId);
             }
 
             return adjudicatorNote;
         }
 
-        public async Task<IEnrolleeNote> UpdateEnrolleeNoteAsync(int enrolleeId, IEnrolleeNote newNote)
+        public async Task<IEnrolleeNote> UpdateEnrolleeNoteAsync(int enrolleeId, IEnrolleeNote newNote, int? adminId = null)
         {
             var enrollee = await _context.Enrollees
                 .Include(e => e.AccessAgreementNote)
@@ -593,6 +593,10 @@ namespace Prime.Services
             if (updated < 1)
             {
                 throw new InvalidOperationException($"Could not update the enrollee note.");
+            }
+            else
+            {
+                await _businessEventService.CreateNoteEventAsync(enrolleeId, "Updated Limits and Conditions Note: " + newNote, adminId);
             }
 
             return newNote;
