@@ -85,7 +85,7 @@ namespace Prime
 
             return await base.SaveChangesAsync(cancellationToken);
         }
-        
+
         private void ApplyAudits()
         {
             ChangeTracker.DetectChanges();
