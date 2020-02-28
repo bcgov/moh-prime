@@ -196,36 +196,6 @@ namespace Prime.Controllers
             return Ok(new ApiOkResponse<Enrollee>(enrollee));
         }
 
-        // GET: api/Enrollees/5/availableStatuses
-        /// <summary>
-        /// Gets a list of the statuses that the enrollee can change to.
-        /// </summary>
-        /// <param name="enrolleeId"></param>
-        [HttpGet("{enrolleeId}/availableStatuses", Name = nameof(GetAvailableEnrolmentStatuses))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiOkResponse<IEnumerable<Status>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Status>>> GetAvailableEnrolmentStatuses(int enrolleeId)
-        {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-
-            if (enrollee == null)
-            {
-                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
-            }
-
-            if (!User.CanAccess(enrollee))
-            {
-                return Forbid();
-            }
-
-            var availableEnrolmentStatuses = await _enrolleeService.GetAvailableEnrolmentStatusesAsync(enrolleeId);
-
-            return Ok(new ApiOkResponse<IEnumerable<Status>>(availableEnrolmentStatuses));
-        }
-
         // GET: api/Enrollees/5/statuses
         /// <summary>
         /// Gets all of the status changes for a specific Enrollee.
@@ -254,56 +224,6 @@ namespace Prime.Controllers
             var enrollees = await _enrolleeService.GetEnrolmentStatusesAsync(enrolleeId);
 
             return Ok(new ApiOkResponse<IEnumerable<EnrolmentStatus>>(enrollees));
-        }
-
-        // POST: api/Enrollees/5/statuses
-        /// <summary>
-        /// Adds a status change for a specific Enrollee.
-        /// </summary>
-        /// <param name="enrolleeId"></param>
-        /// <param name="status"></param>
-        /// <param name="acceptedAccessTerm"></param>
-        [HttpPost("{enrolleeId}/statuses", Name = nameof(CreateEnrolmentStatus))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiOkResponse<IEnumerable<Status>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<EnrolmentStatus>> CreateEnrolmentStatus(int enrolleeId, Status status, [FromQuery]bool acceptedAccessTerm)
-        {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-            int? adminId = null;
-
-            if (enrollee == null)
-            {
-                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
-            }
-
-            if (!User.CanAccess(enrollee))
-            {
-                return Forbid();
-            }
-
-            if (status?.Code == null || status.Code < 1)
-            {
-                this.ModelState.AddModelError("Status.Code", "Status Code is required to create statuses.");
-                return BadRequest(new ApiBadRequestResponse(this.ModelState));
-            }
-
-            if (!_enrolleeService.IsStatusChangeAllowed(enrollee.CurrentStatus?.Status, status))
-            {
-                this.ModelState.AddModelError("Status.Code", $"Cannot change from current Status Code: {enrollee.CurrentStatus?.Status?.Code} to the new Status Code: {status.Code}");
-                return BadRequest(new ApiBadRequestResponse(this.ModelState));
-            }
-
-            if (User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE))
-            {
-                var admin = await _adminService.GetAdminForUserIdAsync(User.GetPrimeUserId());
-                adminId = admin.Id;
-            }
-
-            var enrolmentStatus = await _enrolleeService.CreateEnrolmentStatusAsync(enrolleeId, status, acceptedAccessTerm, adminId);
-            return Ok(new ApiOkResponse<EnrolmentStatus>(enrolmentStatus));
         }
 
         // GET: api/Enrollees/5/adjudicator-notes
