@@ -2,20 +2,20 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, catchError } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { Config } from '@config/config.model';
 import { PrimeHttpResponse } from '@core/models/prime-http-response.model';
 import { LoggerService } from '@core/services/logger.service';
+import { ToastService } from '@core/services/toast.service';
+import { AccessTerm } from '@shared/models/access-term.model';
 import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
+import { EnrolmentProfileVersion, HttpEnrolleeProfileVersion } from '@shared/models/enrollee-profile-history.model';
 
+import { Admin } from '@auth/shared/models/admin.model';
 import { Address } from '@enrolment/shared/models/address.model';
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
-import { EnrolmentProfileVersion, HttpEnrolleeProfileVersion } from '@shared/models/enrollee-profile-history.model';
-import { Admin } from '@auth/shared/models/admin.model';
-import { AccessTerm } from '@shared/models/access-term.model';
-
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +25,7 @@ export class AdjudicationResource {
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private http: HttpClient,
+    private toastService: ToastService,
     private logger: LoggerService
   ) { }
 
@@ -89,6 +90,20 @@ export class AdjudicationResource {
       .pipe(
         map((response: PrimeHttpResponse) => response.result as Config<number>[]),
         tap((statuses: Config<number>[]) => this.logger.info('ENROLMENT_STATUSES', statuses))
+      );
+  }
+
+  public updateEnrolmentAdjudicator(id: number): Observable<Admin> {
+    return this.http.put(`${this.config.apiEndpoint}/enrollees/${id}/adjudicator`, null)
+      .pipe(
+        map((response: PrimeHttpResponse) => response.result as Admin),
+        tap((adjudicator: Admin) => this.logger.info('ENROLMENT_ADJUDICATOR', adjudicator)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Adjudicator could not be assigned to the enrolment');
+          this.logger.error('[Adjudication] AdjudicationResource::updateEnrolmentAdjudicator error has occurred: ', error);
+
+          throw error;
+        })
       );
   }
 

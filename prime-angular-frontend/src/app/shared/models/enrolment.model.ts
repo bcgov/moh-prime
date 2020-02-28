@@ -1,4 +1,3 @@
-import { Config } from '@config/config.model';
 import { Enrollee } from '@shared/models/enrollee.model';
 import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
 import { EnrolleeClassification } from '@shared/enums/enrollee-classification.enum';
@@ -7,6 +6,7 @@ import { Job } from '@enrolment/shared/models/job.model';
 import { Organization } from '@enrolment/shared/models/organization.model';
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
 import { Privilege } from '@enrolment/shared/models/privilege.model';
+import { Admin } from '@auth/shared/models/admin.model';
 
 // TODO incoming transitional Enrollee model, eventually will be Enrollee
 export interface HttpEnrollee extends Enrollee {
@@ -40,6 +40,8 @@ export interface HttpEnrollee extends Enrollee {
   collectionNoticeAccepted: boolean;
   // Always send an enrollee to manual adjudication
   alwaysManual: boolean;
+  adjudicatorId: number;
+  adjudicator: Admin;
 }
 
 // TODO outgoing enrolment model
@@ -74,4 +76,6 @@ export interface Enrolment {
   collectionNoticeAccepted: boolean;
   // Always send an enrollee to manual adjudication
   alwaysManual: boolean;
+  adjudicatorId: number;
+  adjudicator: Admin;
 }
