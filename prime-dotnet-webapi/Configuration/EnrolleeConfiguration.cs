@@ -8,7 +8,12 @@ namespace Prime.Configuration
     {
         public void Configure(EntityTypeBuilder<Enrollee> builder)
         {
-            builder.HasKey(a => new { a.Id });
+            builder
+                .HasKey(a => new { a.Id });
+
+            builder
+                .HasIndex("UserId")
+                .IsUnique();
 
             builder
                 .HasOne<Admin>(e => e.Adjudicator)

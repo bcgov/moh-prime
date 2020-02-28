@@ -180,10 +180,6 @@ namespace Prime
                 .HasName("IX_EnrolleeId_AddressType")
                 .IsUnique();
 
-            modelBuilder.Entity<Enrollee>()
-                .HasIndex("UserId")
-                .IsUnique();
-
             modelBuilder.Entity<Admin>()
                 .HasIndex("UserId")
                 .IsUnique();
