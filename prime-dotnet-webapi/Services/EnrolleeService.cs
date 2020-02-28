@@ -393,6 +393,7 @@ namespace Prime.Services
                 case Status.LOCKED_CODE:
                     await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
                     createdEnrolmentStatus.PharmaNetStatus = true;
+                    await _businessEventService.CreateStatusChangeEventAsync(enrolleeId, "Locked", adminId);
                     break;
 
                 case Status.ACTIVE_CODE:
@@ -424,6 +425,7 @@ namespace Prime.Services
             if (oldStatus?.Code == Status.UNDER_REVIEW_CODE)
             {
                 await _emailService.SendReminderEmailAsync(enrollee);
+                await _businessEventService.CreateEmailEventAsync((int)enrollee?.Id, "Email to Enrollee after leaving manual adjudication");
             }
 
             return createdEnrolmentStatus;
@@ -541,7 +543,11 @@ namespace Prime.Services
             if (created < 1)
             {
                 throw new InvalidOperationException("Could not create adjudicator note.");
-            };
+            }
+            else
+            {
+                _businessEventService.CreateNoteEventAsync(enrolleeId, "Added Adjudicator Note: " + note, int ? adminId = null)
+            }
 
             return adjudicatorNote;
         }
