@@ -203,20 +203,23 @@ namespace Prime.Services
                 .Where(e => e.Id == enrolleeId)
                 .SingleOrDefaultAsync();
 
-            Enrollee enrollee = new Enrollee { Id = enrolleeId };   // stub model, only has Id
-            _context.Enrollees.Attach(enrollee); // track your stub model
-            _context.Entry(enrollee).CurrentValues.SetValues(enrolleeProfile); // reflection
-
             // Remove existing, and recreate if necessary
             this.ReplaceExistingAddress(_enrolleeDb.MailingAddress, enrolleeProfile.MailingAddress, enrolleeProfile, enrolleeId);
             this.ReplaceExistingItems(_enrolleeDb.Certifications, enrolleeProfile.Certifications, enrolleeProfile, enrolleeId);
             this.ReplaceExistingItems(_enrolleeDb.Jobs, enrolleeProfile.Jobs, enrolleeProfile, enrolleeId);
             this.ReplaceExistingItems(_enrolleeDb.Organizations, enrolleeProfile.Organizations, enrolleeProfile, enrolleeId);
 
+            var enrolleeTrack = await _context.Enrollees
+                .Where(e => e.Id == enrolleeId)
+                .SingleOrDefaultAsync();
+
+            enrolleeTrack.HasConvictionDetails = enrolleeProfile.HasConvictionDetails;
+            _context.Entry(enrolleeTrack).CurrentValues.SetValues(enrolleeProfile); // reflection
+
             // If profileCompleted is true, this is the first time the enrollee
             // has completed their profile by traversing the wizard, and indicates
             // a change in routing for the enrollee
-            enrollee.ProfileCompleted = _enrolleeDb.ProfileCompleted || profileCompleted;
+            enrolleeTrack.ProfileCompleted = _enrolleeDb.ProfileCompleted || profileCompleted;
 
             try
             {
