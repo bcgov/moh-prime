@@ -472,12 +472,12 @@ namespace Prime.Controllers
             return Ok(new ApiOkResponse<Enrollee>(updatedEnrollee));
         }
 
-        // POST: api/Enrollees/5/adjudicator
+        // PUT: api/Enrollees/5/adjudicator
         /// <summary>
         /// Add/remove an enrollees assigned adjudicator.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpGet("{enrolleeId}/adjudicator", Name = nameof(ModifyEnrolleeAdjudicator))]
+        [HttpPut("{enrolleeId}/adjudicator", Name = nameof(UpdateEnrolleeAdjudicator))]
         // [Authorize(Policy = PrimeConstants.ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -486,7 +486,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiOkResponse<Admin>), StatusCodes.Status200OK)]
         // TODO add route model binding for Enrollee
         // TODO add middleware/policy to do simple checks
-        public async Task<ActionResult<Admin>> ModifyEnrolleeAdjudicator(int enrolleeId)
+        public async Task<ActionResult<Admin>> UpdateEnrolleeAdjudicator(int enrolleeId)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
@@ -496,7 +496,7 @@ namespace Prime.Controllers
             }
 
             var adjudicatorUserId = User.GetPrimeUserId();
-            var assignedAdmin = await _enrolleeService.ModifyEnrolleeAdjudicator(enrollee, adjudicatorUserId);
+            var assignedAdmin = await _enrolleeService.UpdateEnrolleeAdjudicator(enrollee, adjudicatorUserId);
 
             return Ok(new ApiOkResponse<Admin>(assignedAdmin));
         }

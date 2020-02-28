@@ -598,7 +598,7 @@ namespace Prime.Services
 
         }
 
-        public async Task<Admin> ModifyEnrolleeAdjudicator(Enrollee enrollee, Guid adjudicatorUserId)
+        public async Task<Admin> UpdateEnrolleeAdjudicator(Enrollee enrollee, Guid adjudicatorUserId)
         {
             var admin = await _context.Admins.SingleOrDefaultAsync(a => a.UserId == adjudicatorUserId);
             var currentAdjudicatorUserId = enrollee.Adjudicator?.UserId;

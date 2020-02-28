@@ -48,6 +48,6 @@ namespace Prime.Services
 
         Task<int> GetEnrolleeCountAsync();
 
-        Task<Admin> ModifyEnrolleeAdjudicator(Enrollee enrollee, Guid adminId);
+        Task<Admin> UpdateEnrolleeAdjudicator(Enrollee enrollee, Guid adminId);
     }
 }
