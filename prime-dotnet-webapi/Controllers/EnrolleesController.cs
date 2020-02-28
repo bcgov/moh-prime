@@ -478,7 +478,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpPut("{enrolleeId}/adjudicator", Name = nameof(UpdateEnrolleeAdjudicator))]
-        // [Authorize(Policy = PrimeConstants.ADMIN_POLICY)]
+        [Authorize(Policy = PrimeConstants.ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]

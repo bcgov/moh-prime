@@ -93,15 +93,14 @@ export class AdjudicationResource {
       );
   }
 
-  public updateEnrolmentAdjudicator(id: number): Observable<Admin> {
-    return this.http.put(`${this.config.apiEndpoint}/enrollees/${id}/adjudicator`, null)
+  public updateEnrolmentAdjudicator(enrolleeId: number): Observable<Admin> {
+    return this.http.put(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/adjudicator`, null)
       .pipe(
         map((response: PrimeHttpResponse) => response.result as Admin),
         tap((adjudicator: Admin) => this.logger.info('ENROLMENT_ADJUDICATOR', adjudicator)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Adjudicator could not be assigned to the enrolment');
           this.logger.error('[Adjudication] AdjudicationResource::updateEnrolmentAdjudicator error has occurred: ', error);
-
           throw error;
         })
       );
