@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { IDialogContent } from '../../dialog-content.model';
+import { MatCheckboxChange } from '@angular/material';
 
 @Component({
   selector: 'app-approve-enrolment',
@@ -14,7 +15,7 @@ export class ApproveEnrolmentComponent implements OnInit, IDialogContent {
 
   constructor() { }
 
-  @Input() 
+  @Input()
   public set data({ enrolment }: { enrolment: Enrolment }) {
     this.enrolment = enrolment;
   }
@@ -23,8 +24,8 @@ export class ApproveEnrolmentComponent implements OnInit, IDialogContent {
     return this.enrolment ? this.enrolment.alwaysManual : false;
   }
 
-  public onChange($event) {
-    this.output.emit($event.checked);
+  public onChange($event: MatCheckboxChange) {
+    this.output.emit({ output: $event.checked });
   }
 
   public ngOnInit() { }

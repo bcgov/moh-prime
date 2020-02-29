@@ -139,6 +139,7 @@ namespace Prime
             }
             #endregion
 
+            modelBuilder.ApplyConfiguration(new EnrolleeConfiguration());
             modelBuilder.ApplyConfiguration(new CollegeConfiguration());
             modelBuilder.ApplyConfiguration(new LicenseConfiguration());
             modelBuilder.ApplyConfiguration(new CollegeLicenseConfiguration());
@@ -178,10 +179,6 @@ namespace Prime
             modelBuilder.Entity<Address>()
                 .HasIndex("EnrolleeId", "AddressType")
                 .HasName("IX_EnrolleeId_AddressType")
-                .IsUnique();
-
-            modelBuilder.Entity<Enrollee>()
-                .HasIndex("UserId")
                 .IsUnique();
 
             modelBuilder.Entity<Admin>()

@@ -4,7 +4,6 @@ using System.Linq;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
-using Prime.Infrastructure;
 
 namespace Prime.Models
 {
@@ -94,6 +93,10 @@ namespace Prime.Models
         public ICollection<Privilege> Privileges { get; set; }
 
         public ICollection<EnrolmentStatus> EnrolmentStatuses { get; set; }
+
+        public int? AdjudicatorId { get; set; }
+
+        public Admin Adjudicator { get; set; }
 
         [NotMapped]
         public EnrolmentStatus CurrentStatus

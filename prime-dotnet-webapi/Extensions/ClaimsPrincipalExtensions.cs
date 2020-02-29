@@ -6,7 +6,7 @@ using Prime.Models;
 
 namespace Prime
 {
-    public static class ClaimsPrincipalExensions
+    public static class ClaimsPrincipalExtensions
     {
         /// <summary>
         /// Returns the Guid of the logged in user. If there is no logged in user, this will return Guid.Empty
