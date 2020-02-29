@@ -203,20 +203,25 @@ namespace Prime.Services
                 .Where(e => e.Id == enrolleeId)
                 .SingleOrDefaultAsync();
 
-            Enrollee enrollee = new Enrollee { Id = enrolleeId };   // stub model, only has Id
-            _context.Enrollees.Attach(enrollee); // track your stub model
-            _context.Entry(enrollee).CurrentValues.SetValues(enrolleeProfile); // reflection
-
             // Remove existing, and recreate if necessary
             this.ReplaceExistingAddress(_enrolleeDb.MailingAddress, enrolleeProfile.MailingAddress, enrolleeProfile, enrolleeId);
             this.ReplaceExistingItems(_enrolleeDb.Certifications, enrolleeProfile.Certifications, enrolleeProfile, enrolleeId);
             this.ReplaceExistingItems(_enrolleeDb.Jobs, enrolleeProfile.Jobs, enrolleeProfile, enrolleeId);
             this.ReplaceExistingItems(_enrolleeDb.Organizations, enrolleeProfile.Organizations, enrolleeProfile, enrolleeId);
 
+            var enrolleeTrack = await _context.Enrollees
+                .Where(e => e.Id == enrolleeId)
+                .SingleOrDefaultAsync();
+
+            _context.Entry(enrolleeTrack).CurrentValues.SetValues(enrolleeProfile); // reflection
+
             // If profileCompleted is true, this is the first time the enrollee
             // has completed their profile by traversing the wizard, and indicates
             // a change in routing for the enrollee
-            enrollee.ProfileCompleted = _enrolleeDb.ProfileCompleted || profileCompleted;
+            if (profileCompleted)
+            {
+                enrolleeTrack.ProfileCompleted = profileCompleted;
+            }
 
             try
             {
@@ -372,11 +377,11 @@ namespace Prime.Services
                         // Flip to the object that will get returned
                         createdEnrolmentStatus = adjudicatedEnrolmentStatus;
 
-                        await _businessEventService.CreateStatusChangeEventAsync(enrolleeId, "Automatically Approved", adminId);
+                        await _businessEventService.CreateBusinessEventAsync(enrolleeId, BusinessEventType.STATUS_CHANGE_CODE, "Automatically Approved", adminId);
                     }
                     else
                     {
-                        await _businessEventService.CreateStatusChangeEventAsync(enrolleeId, "Submitted", adminId);
+                        await _businessEventService.CreateBusinessEventAsync(enrolleeId, BusinessEventType.STATUS_CHANGE_CODE, "Submitted", adminId);
                     }
                     break;
 
@@ -386,7 +391,7 @@ namespace Prime.Services
 
                     await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee);
 
-                    await _businessEventService.CreateStatusChangeEventAsync(enrolleeId, "Manually Approved", adminId);
+                    await _businessEventService.CreateBusinessEventAsync(enrolleeId, BusinessEventType.STATUS_CHANGE_CODE, "Manually Approved", adminId);
 
                     break;
 
@@ -400,7 +405,7 @@ namespace Prime.Services
                     // Sent back to edit profile from Under Review
                     if (oldStatus.Code == Status.UNDER_REVIEW_CODE)
                     {
-                        await _businessEventService.CreateStatusChangeEventAsync(enrolleeId, "Enabled Editing", adminId);
+                        await _businessEventService.CreateBusinessEventAsync(enrolleeId, BusinessEventType.STATUS_CHANGE_CODE, "Enabled Editing", adminId);
                         break;
                     }
 
@@ -412,7 +417,7 @@ namespace Prime.Services
                         createdEnrolmentStatus.PharmaNetStatus = true;
                         await _accessTermService.AcceptCurrentAccessTermAsync(enrollee);
                         await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrolleeId, enrollee);
-                        await _businessEventService.CreateStatusChangeEventAsync(enrolleeId, "Accepted TOA", adminId);
+                        await _businessEventService.CreateBusinessEventAsync(enrolleeId, BusinessEventType.STATUS_CHANGE_CODE, "Accepted TOA", adminId);
                         break;
                     }
                     break;
