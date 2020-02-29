@@ -2,13 +2,6 @@ oc project ${PROJECT_PREFIX}-$3
 
 export BRANCH_LOWER=`echo "${BRANCH_NAME}" | awk '{print tolower($0)}'`
 function variablePopulation() {
-    if [ "${BRANCH_LOWER}" == "develop" ] || [ "${BRANCH_LOWER}" == "master" ];
-    then
-        export SUFFIX=""
-        export CHANGE_BRANCH="$BRANCH_NAME"
-    else
-        export SUFFIX="-${BRANCH_LOWER}";
-    fi
     if [ "${APP_NAME}" == "test" ] || [ "${APP_NAME}" == "prod" ];
     then
         export DOTNET_PHASE="Release"
