@@ -20,6 +20,10 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using System.Net.Mime;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
+using Microsoft.AspNetCore.Routing;
+using Prime.Models.Api;
 
 namespace Prime
 {
@@ -52,11 +56,17 @@ namespace Prime
             services.AddScoped<IAdminService, AdminService>();
             services.AddScoped<IBusinessEventService, BusinessEventService>();
 
-            services
-                // Adds support for controllers and API-related features
-                .AddControllers()
-                // Add a convertor <globally> to change empty strings into null on serialization
-                .AddNewtonsoftJson(options => options.SerializerSettings.Converters.Add(new EmptyStringToNullJsonConverter()));
+            services.AddControllers()
+                .AddNewtonsoftJson(options =>
+                {
+                    options.SerializerSettings.Converters.Add(new StringEnumConverter(new KebabCaseNamingStrategy(), false));
+                    options.SerializerSettings.Converters.Add(new EmptyStringToNullJsonConverter());
+                });
+
+            services.Configure<RouteOptions>(options =>
+            {
+                options.ConstraintMap.Add("submissionAction", typeof(EnumRouteConstraint<SubmissionAction>));
+            });
 
             services.AddCors(options =>
             {
@@ -80,6 +90,7 @@ namespace Prime
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
+            services.AddSwaggerGenNewtonsoftSupport();
 
             services.AddHttpContextAccessor();
 

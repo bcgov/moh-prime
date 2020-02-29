@@ -1,20 +1,13 @@
 
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Newtonsoft.Json;
 
 namespace Prime.Infrastructure
 {
-    public class SubmissionActionEntityBinder : IModelBinder
+    public class EnumEntityBinder<T> : IModelBinder where T : struct
     {
-        // private readonly ApiDbContext _context;
-
-        // public SubmissionActionEntityBinder(ApiDbContext context)
-        // {
-        //     _context = context;
-        // }
-
         public Task BindModelAsync(ModelBindingContext bindingContext)
         {
             if (bindingContext == null)
@@ -23,8 +16,6 @@ namespace Prime.Infrastructure
             }
 
             var modelName = bindingContext.ModelName;
-
-            // Try to fetch the value of the argument by name
             var valueProviderResult = bindingContext.ValueProvider.GetValue(modelName);
 
             if (valueProviderResult == ValueProviderResult.None)
@@ -34,27 +25,23 @@ namespace Prime.Infrastructure
 
             bindingContext.ModelState.SetModelValue(modelName, valueProviderResult);
 
-            var value = valueProviderResult.FirstValue;
-
-            // Check if the argument value is null or empty
-            if (string.IsNullOrEmpty(value))
+            string value = valueProviderResult.FirstValue;
+            if (string.IsNullOrWhiteSpace(value))
             {
                 return Task.CompletedTask;
             }
 
-            if (!int.TryParse(value, out var id))
+            try
             {
-                // Non-integer arguments result in model state errors
+                var deserializedValue = JsonConvert.DeserializeObject<T>($"\"{value}\"");
+                bindingContext.Result = ModelBindingResult.Success(deserializedValue);
+            }
+            catch
+            {
                 bindingContext.ModelState.TryAddModelError(
-                    modelName, "Author Id must be an integer.");
-
-                return Task.CompletedTask;
+                    modelName, $"Could not bind to value {value}");
             }
 
-
-
-
-            bindingContext.Result = ModelBindingResult.Success(model);
             return Task.CompletedTask;
         }
     }

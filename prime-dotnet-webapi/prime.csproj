@@ -23,6 +23,7 @@
     <PackageReference Include="SimpleBase" Version="3.0.0"/>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0"/>
     <PackageReference Include="Appccelerate.StateMachine" Version="5.1.0"/>
+    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="5.0.0"/>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Configuration\Resources\ru-access-terms.html"/>
