@@ -29,12 +29,12 @@
          [dataSource]="dataSource"
          class="w-100">
 
-    <!-- Applied Date Column -->
-    <ng-container matColumnDef="appliedDate">
+    <!-- Unique Id Column -->
+    <ng-container matColumnDef="uniqueId">
       <th mat-header-cell
-          *matHeaderCellDef> Application Date </th>
+          *matHeaderCellDef> Unique Id </th>
       <td mat-cell
-          *matCellDef="let enrolment;"> {{ enrolment.appliedDate | formatDate }} </td>
+          *matCellDef="let enrolment;"> {{ enrolment.displayId }} </td>
     </ng-container>
 
     <!-- Name Column -->
@@ -51,6 +51,14 @@
           *matHeaderCellDef> Approval Date </th>
       <td mat-cell
           *matCellDef="let enrolment;"> {{ enrolment.approvedDate | formatDate | default }} </td>
+    </ng-container>
+
+    <!-- Applied Date Column -->
+    <ng-container matColumnDef="appliedDate">
+      <th mat-header-cell
+          *matHeaderCellDef> Submission Date </th>
+      <td mat-cell
+          *matCellDef="let enrolment;"> {{ enrolment.appliedDate | formatDate }} </td>
     </ng-container>
 
     <!-- Status Column -->

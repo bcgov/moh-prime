@@ -11,6 +11,7 @@ import { Admin } from '@auth/shared/models/admin.model';
 // TODO incoming transitional Enrollee model, eventually will be Enrollee
 export interface HttpEnrollee extends Enrollee {
   id?: number;
+  displayId?: number;
   hpdid: string;
   appliedDate: string;
   approvedDate: string;
@@ -47,6 +48,7 @@ export interface HttpEnrollee extends Enrollee {
 // TODO outgoing enrolment model
 export interface Enrolment {
   id?: number;
+  displayId?: number;
   enrollee: Enrollee;
   appliedDate: string;
   approvedDate: string;
