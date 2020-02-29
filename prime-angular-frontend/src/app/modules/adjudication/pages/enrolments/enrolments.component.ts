@@ -229,7 +229,7 @@ export class EnrolmentsComponent implements OnInit {
 
   public updateEnrolmentAdjudicator(currentEnrolment: Enrolment) {
     const request$ = (!currentEnrolment.adjudicatorId)
-      ? this.adjudicationResource.addEnrolleeAdjudicator(currentEnrolment.id)
+      ? this.adjudicationResource.setEnrolleeAdjudicator(currentEnrolment.id)
       : this.adjudicationResource.removeEnrolleeAdjudicator(currentEnrolment.id);
 
     request$
