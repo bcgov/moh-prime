@@ -618,7 +618,7 @@ namespace Prime.Services
                 .Include(e => e.Adjudicator)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
-            // When no adjudicatorUserId is not provided the admin is null
+            // When no adjudicatorUserId is provided the admin is null
             var admin = await _context.Admins
                 .SingleOrDefaultAsync(a => a.UserId == adjudicatorUserId);
 
