@@ -19,7 +19,7 @@ namespace Prime.Models
     public class Enrollee : BaseAuditable, IValidatableObject
     {
         [Key]
-        public int? Id { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public Guid UserId { get; set; }
@@ -161,9 +161,9 @@ namespace Prime.Models
         }
 
         [NotMapped]
-        public int? DisplayId
+        public int DisplayId
         {
-            get => (this.Id == null) ? null : this.Id + 1000;
+            get => Id + 1000;
         }
 
         public ICollection<AdjudicatorNote> AdjudicatorNotes { get; set; }
