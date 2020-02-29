@@ -18,7 +18,7 @@ pipeline {
             steps {
                 script {
                     BRANCH_LOWER=BRANCH_NAME.toLowerCase()
-                    VANITY_URL="${BRANCH_LOWER}.pharmanetenrolment.gov.bc.ca"
+                    VANITY_URL="test.pharmanetenrolment.gov.bc.ca"
                     SCHEMA="https"
                     PORT="8443"
                     FRONTEND_ARGS="-p REDIRECT_URL=${SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL} -p SUFFIX='-test'"
@@ -65,7 +65,7 @@ pipeline {
             steps {
                 script {
                     BRANCH_LOWER=BRANCH_NAME.toLowerCase()
-                    VANITY_URL="${BRANCH_LOWER}.pharmanetenrolment.gov.bc.ca"
+                    VANITY_URL="demo.pharmanetenrolment.gov.bc.ca"
                     SCHEMA="https"
                     PORT="8443"
                     FRONTEND_ARGS="-p REDIRECT_URL=${SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL} -p SUFFIX='-demo'"
