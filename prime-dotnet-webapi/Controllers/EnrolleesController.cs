@@ -303,7 +303,6 @@ namespace Prime.Controllers
             }
 
             var enrolmentStatus = await _enrolleeService.CreateEnrolmentStatusAsync(enrolleeId, status, acceptedAccessTerm, adminId);
-
             return Ok(new ApiOkResponse<EnrolmentStatus>(enrolmentStatus));
         }
 

@@ -12,7 +12,6 @@ namespace Prime.Models
         public const short STATUS_CHANGE_CODE = 1;
         public const short EMAIL_CODE = 2;
         public const short NOTE_CODE = 3;
-        public const short ADMIN_CLAIM_CODE = 4;
 
         [Key]
         public short Code { get; set; }
