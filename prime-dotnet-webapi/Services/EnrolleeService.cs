@@ -213,13 +213,15 @@ namespace Prime.Services
                 .Where(e => e.Id == enrolleeId)
                 .SingleOrDefaultAsync();
 
-            enrolleeTrack.HasConvictionDetails = enrolleeProfile.HasConvictionDetails;
             _context.Entry(enrolleeTrack).CurrentValues.SetValues(enrolleeProfile); // reflection
 
             // If profileCompleted is true, this is the first time the enrollee
             // has completed their profile by traversing the wizard, and indicates
             // a change in routing for the enrollee
-            enrolleeTrack.ProfileCompleted = _enrolleeDb.ProfileCompleted || profileCompleted;
+            if (profileCompleted)
+            {
+                enrolleeTrack.ProfileCompleted = profileCompleted;
+            }
 
             try
             {
