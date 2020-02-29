@@ -42,7 +42,15 @@
       <th mat-header-cell
           *matHeaderCellDef> Enrollee Name </th>
       <td mat-cell
-          *matCellDef="let enrolment;"> {{ enrolment.enrollee.firstName }} {{ enrolment.enrollee.lastName }} </td>
+          *matCellDef="let enrolment;"> {{ enrolment.enrollee.firstName }}, {{ enrolment.enrollee.lastName }} </td>
+    </ng-container>
+
+    <!-- Approved Date Column -->
+    <ng-container matColumnDef="approvedDate">
+      <th mat-header-cell
+          *matHeaderCellDef> Approval Date </th>
+      <td mat-cell
+          *matCellDef="let enrolment;"> {{ enrolment.approvedDate | formatDate | default }} </td>
     </ng-container>
 
     <!-- Applied Date Column -->
@@ -65,12 +73,12 @@
       </td>
     </ng-container>
 
-    <!-- Approved Date Column -->
-    <ng-container matColumnDef="approvedDate">
+    <!-- Adjudicator Column -->
+    <ng-container matColumnDef="adjudicator">
       <th mat-header-cell
-          *matHeaderCellDef> Approval Date </th>
+          *matHeaderCellDef> Adjudicator </th>
       <td mat-cell
-          *matCellDef="let enrolment;"> {{ enrolment.approvedDate | formatDate }} </td>
+          *matCellDef="let enrolment;"> {{ enrolment.adjudicator?.firstName | default }} </td>
     </ng-container>
 
     <!-- Actions Column -->
@@ -155,6 +163,11 @@
               (click)="markForEditing(enrolment.id)">
         <mat-icon>undo</mat-icon>
         <span>Enable Editing</span>
+      </button>
+      <button mat-menu-item
+              (click)="updateEnrolmentAdjudicator(enrolment)">
+        <mat-icon>pan_tool</mat-icon>
+        <span>{{ (enrolment?.adjudicatorId) ? 'Disclaim' : 'Claim' }} Enrolment</span>
       </button>
       <button mat-menu-item
               *ngIf="isSuperAdmin()"

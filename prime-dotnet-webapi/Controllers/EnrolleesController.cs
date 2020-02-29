@@ -405,8 +405,6 @@ namespace Prime.Controllers
             return Ok(new ApiOkResponse<IEnrolleeNote>(updatedNote));
         }
 
-
-
         // GET: api/Enrollees/5/versions
         /// <summary>
         /// Get a list of enrollee profile versions.
@@ -456,7 +454,6 @@ namespace Prime.Controllers
             return Ok(new ApiOkResponse<EnrolleeProfileVersion>(enrolleeProfileVersion));
         }
 
-
         // PATCH: api/Enrollees/5/always-manual
         /// <summary>
         /// Updates an enrollees always manual flag, forcing them to always be sent to manual adjudication
@@ -480,6 +477,62 @@ namespace Prime.Controllers
             }
 
             var updatedEnrollee = await _enrolleeService.UpdateEnrolleeAlwaysManualAsync(enrolleeId, alwaysManual);
+
+            return Ok(new ApiOkResponse<Enrollee>(updatedEnrollee));
+        }
+
+        // TODO add route model binding for Enrollee
+        // TODO add middleware/policy to do simple checks
+
+        // PUT: api/Enrollees/5/adjudicator
+        /// <summary>
+        /// Add an enrollee's assigned adjudicator.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpPut("{enrolleeId}/adjudicator", Name = nameof(SetEnrolleeAdjudicator))]
+        [Authorize(Policy = PrimeConstants.ADMIN_POLICY)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiOkResponse<Enrollee>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<Enrollee>> SetEnrolleeAdjudicator(int enrolleeId)
+        {
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+
+            if (enrollee == null)
+            {
+                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}."));
+            }
+
+            var adjudicatorUserId = User.GetPrimeUserId();
+            var updatedEnrollee = await _enrolleeService.UpdateEnrolleeAdjudicator((int)enrollee.Id, adjudicatorUserId);
+
+            return Ok(new ApiOkResponse<Enrollee>(updatedEnrollee));
+        }
+
+        // DELETE: api/Enrollees/5/adjudicator
+        /// <summary>
+        /// Remove an enrollee's assigned adjudicator.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpDelete("{enrolleeId}/adjudicator", Name = nameof(RemoveEnrolleeAdjudicator))]
+        [Authorize(Policy = PrimeConstants.ADMIN_POLICY)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiOkResponse<Enrollee>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<Enrollee>> RemoveEnrolleeAdjudicator(int enrolleeId)
+        {
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+
+            if (enrollee == null)
+            {
+                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}."));
+            }
+
+            var updatedEnrollee = await _enrolleeService.UpdateEnrolleeAdjudicator((int)enrollee.Id);
 
             return Ok(new ApiOkResponse<Enrollee>(updatedEnrollee));
         }

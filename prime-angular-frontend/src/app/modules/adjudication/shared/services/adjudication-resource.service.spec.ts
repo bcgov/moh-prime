@@ -3,11 +3,13 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { AdjudicationResource } from './adjudication-resource.service';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
 
 describe('AdjudicationResource', () => {
   beforeEach(() => TestBed.configureTestingModule({
     imports: [
-      HttpClientTestingModule
+      HttpClientTestingModule,
+      NgxMaterialModule
     ],
     providers: [
       {

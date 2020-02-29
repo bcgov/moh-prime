@@ -10,7 +10,7 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
   templateUrl: './access-locked.component.html',
   styleUrls: ['./access-locked.component.scss']
 })
-export class AccessLocked extends BaseEnrolmentPage implements OnInit {
+export class AccessLockedComponent extends BaseEnrolmentPage implements OnInit {
   constructor(
     protected route: ActivatedRoute,
     protected router: Router,
