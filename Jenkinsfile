@@ -17,19 +17,20 @@ pipeline {
                         VANITY_URL="${BRANCH_LOWER}.pharmanetenrolment.gov.bc.ca"
                         SCHEMA="https"
                         PORT="8443"
-                        FRONTEND_ARGS="-p REDIRECT_URL=${SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL} -p SUFFIX="
-                        API_ARGS="-p ASPNETCORE_ENVIRONMENT=Development -p VANITY_URL=${VANITY_URL} -p SUFFIX="
+                        FRONTEND_ARGS="-p REDIRECT_URL=${SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL}"
+                        API_ARGS="-p ASPNETCORE_ENVIRONMENT=Development -p VANITY_URL=${VANITY_URL}"
                     } else {
                         BRANCH_LOWER=BRANCH_NAME.toLowerCase()
                         VANITY_URL="${BRANCH_LOWER}.pharmanetenrolment.gov.bc.ca"
                         SCHEMA="https"
+                        SUFFIX='-${BRANCH_LOWER}'
                         PORT="8443"
-                        FRONTEND_ARGS="-p REDIRECT_URL=${SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL} -p SUFFIX='-${BRANCH_LOWER}'"
-                        API_ARGS="-p ASPNETCORE_ENVIRONMENT=Development -p VANITY_URL=${VANITY_URL} -p SUFFIX='-${BRANCH_LOWER}'"
+                        FRONTEND_ARGS="-p REDIRECT_URL=${SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL} -p SUFFIX=${SUFFIX}"
+                        API_ARGS="-p ASPNETCORE_ENVIRONMENT=Development -p VANITY_URL=${VANITY_URL} -p SUFFIX=${SUFFIX}"
                     }
                     checkout scm
                     echo "Building ..."
-                    sh "./player.sh build database dev"
+                    sh "./player.sh build database dev -p SUFFIX=${SUFFIX}"
                     sh "./player.sh build api dev ${API_ARGS}"
                     sh "./player.sh build frontend dev ${FRONTEND_ARGS}"
                 }
@@ -59,7 +60,7 @@ pipeline {
                         API_ARGS="-p ASPNETCORE_ENVIRONMENT=Development -p VANITY_URL=${VANITY_URL} -p SUFFIX='-${BRANCH_LOWER}'"
                     }
                     echo "Deploy to dev..."
-                    sh "./player.sh deploy database dev"
+                    sh "./player.sh deploy database dev -p SUFFIX=${SUFFIX}"
                     sh "./player.sh deploy api dev ${API_ARGS}"
                     sh "./player.sh deploy frontend dev ${FRONTEND_ARGS}"
                 }
