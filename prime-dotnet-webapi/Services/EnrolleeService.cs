@@ -614,13 +614,12 @@ namespace Prime.Services
 
         public async Task<Enrollee> UpdateEnrolleeAdjudicator(int enrolleeId, Guid adjudicatorUserId = default(Guid))
         {
-            var admin = (!adjudicatorUserId.Equals(Guid.Empty))
-                ? await _context.Admins.SingleOrDefaultAsync(a => a.UserId == adjudicatorUserId)
-                : null;
-
             var enrollee = await GetBaseEnrolleeQuery()
                 .Include(e => e.Adjudicator)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
+            var admin = await _context.Admins
+                .SingleOrDefaultAsync(a => a.UserId == adjudicatorUserId);
 
             enrollee.Adjudicator = admin;
 
