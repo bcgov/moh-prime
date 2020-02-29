@@ -93,7 +93,7 @@ export class AdjudicationResource {
       );
   }
 
-  public addEnrolleeAdjudicator(enrolleeId: number): Observable<Enrolment> {
+  public setEnrolleeAdjudicator(enrolleeId: number): Observable<Enrolment> {
     return this.http.put(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/adjudicator`, null)
       .pipe(
         map((response: PrimeHttpResponse) => response.result),
