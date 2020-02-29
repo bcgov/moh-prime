@@ -160,6 +160,12 @@ namespace Prime.Models
                 .ExpiryDate;
         }
 
+        [NotMapped]
+        public int? DisplayId
+        {
+            get => (this.Id == null) ? null : this.Id + 1000;
+        }
+
         public ICollection<AdjudicatorNote> AdjudicatorNotes { get; set; }
 
         public AccessAgreementNote AccessAgreementNote { get; set; }

@@ -121,10 +121,14 @@ export class AdjudicationResource {
       );
   }
 
-  // TODO should have a response other than `any`
-  public updateEnrolleeAlwaysManual(id: number, alwaysManual: boolean): Observable<any> {
+  public updateEnrolleeAlwaysManual(id: number, alwaysManual: boolean): Observable<Enrolment> {
     const payload = { data: alwaysManual };
-    return this.http.patch(`${this.config.apiEndpoint}/enrollees/${id}/always-manual`, payload);
+    return this.http.patch(`${this.config.apiEndpoint}/enrollees/${id}/always-manual`, payload)
+      .pipe(
+        map((response: PrimeHttpResponse) => response.result),
+        map((enrollee: HttpEnrollee) => this.enrolmentAdapter(enrollee)),
+        tap((enrolment: Enrolment) => this.logger.info('UPDATED_ENROLMENT', enrolment))
+      );
   }
 
   public deleteEnrolment(id: number): Observable<Enrolment> {
