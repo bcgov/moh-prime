@@ -11,7 +11,7 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20200302194356_RemoveShorts")]
+    [Migration("20200302211659_RemoveShorts")]
     partial class RemoveShorts
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
