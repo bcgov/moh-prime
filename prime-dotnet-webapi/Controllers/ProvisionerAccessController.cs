@@ -79,7 +79,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiOkResponse<EnrolmentCertificateAccessToken>), StatusCodes.Status201Created)]
-        // [Authorize(Policy = PrimeConstants.USER_POLICY)]
+        [Authorize(Policy = PrimeConstants.USER_POLICY)]
         public async Task<ActionResult<EnrolmentCertificateAccessToken>> SendProvisionerLink(string provisionerName, FromBodyText email)
         {
             string optionalEmail = (string)email;

@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 
-import { map, startWith, switchMap, mergeMap, combineAll, scan, pairwise } from 'rxjs/operators';
+import { map, startWith, switchMap } from 'rxjs/operators';
 
 import { Config } from '@config/config.model';
 import { Job } from '@enrolment/shared/models/job.model';
-import { BehaviorSubject, merge, Observable, combineLatest, of } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, of } from 'rxjs';
 
 @Component({
   selector: 'app-job-form',
@@ -51,7 +51,7 @@ export class JobFormComponent implements OnInit {
   }
 
   private initAutoComplete() {
-    return combineLatest(
+    return combineLatest([
       this.jobNames // Initial jobs passed through bindings
         .asObservable() // Prevent accidentally affecting parent observable
         .pipe(switchMap((jobNames: Config<number>[]) => {
@@ -70,7 +70,7 @@ export class JobFormComponent implements OnInit {
       this.form.valueChanges.pipe(
         startWith(''), // Trigger emission immediately!
       )
-    ).pipe(
+    ]).pipe(
       map(([availableJobNames, currentJob]: [Config<number>[], Job]) => this.filterJobNames(availableJobNames, currentJob))
     );
   }

@@ -30,8 +30,6 @@ namespace Prime.ViewModels
 
         public ICollection<Organization> Organizations { get; set; }
 
-        [RegularExpression(@"([0-9]+)", ErrorMessage = "Device Provider Number should not contain characters")]
-        [StringLength(5, MinimumLength = 5, ErrorMessage = "Device Provider Number must be 5 digits")]
         [JsonConverter(typeof(EmptyStringToNullJsonConverter))]
         public string DeviceProviderNumber { get; set; }
 
