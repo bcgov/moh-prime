@@ -419,6 +419,7 @@ namespace Prime.Services
                         await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrolleeId, enrollee);
                         await _businessEventService.CreateStatusChangeEventAsync(enrolleeId, "Accepted TOA", adminId);
                         await UpdateEnrolleeAdjudicator((int)enrollee.Id);
+                        await _businessEventService.CreateAdminClaimEventAsync(enrolleeId, "Admin disclaimed after TOA accepted");
                         break;
                     }
                     break;
@@ -633,7 +634,7 @@ namespace Prime.Services
                 .Include(e => e.Adjudicator)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
-            // Admin is set to null if no adjudicatorUserId is provided 
+            // Admin is set to null if no adjudicatorUserId is provided
             var admin = await _context.Admins
                 .SingleOrDefaultAsync(a => a.UserId == adjudicatorUserId);
 

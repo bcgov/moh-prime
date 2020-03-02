@@ -56,6 +56,21 @@ namespace Prime.Services
         }
 
 
+        public async Task<BusinessEvent> CreateAdminClaimEventAsync(int enrolleeId, string description, int? adminId = null)
+        {
+            var businessEvent = this.CreateBusinessEvent(BusinessEventType.ADMIN_CLAIM_CODE, enrolleeId, description, adminId);
+            _context.BusinessEvents.Add(businessEvent);
+            var created = await _context.SaveChangesAsync();
+
+            if (created < 1)
+            {
+                throw new InvalidOperationException("Could not create admin claim business event.");
+            };
+
+            return businessEvent;
+        }
+
+
         private BusinessEvent CreateBusinessEvent(short BusinessEventTypeCode, int enrolleeId, string description, int? adminId = null)
         {
             var businessEvent = new BusinessEvent
