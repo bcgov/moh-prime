@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve -o --port 4300",
     "build": "ng build --subresource-integrity",
     "test": "ng test",
     "lint": "ng lint",
