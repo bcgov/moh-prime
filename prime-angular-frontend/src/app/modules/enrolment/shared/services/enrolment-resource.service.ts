@@ -6,7 +6,7 @@ import { map, tap } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { Config } from '@config/config.model';
-import { PrimeHttpResponse } from '@core/models/prime-http-response.model';
+import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrollee } from '@shared/models/enrollee.model';
 import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
@@ -32,7 +32,7 @@ export class EnrolmentResource {
   public enrollee(): Observable<Enrolment> {
     return this.http.get(`${this.config.apiEndpoint}/enrollees`)
       .pipe(
-        map((response: PrimeHttpResponse) => response.result),
+        map((response: ApiHttpResponse) => response.result),
         tap((enrollees: HttpEnrollee[]) => this.logger.info('ENROLLEES', enrollees[0])),
         map((enrollees: HttpEnrollee[]) =>
           // Only a single enrollee will be provided
@@ -44,7 +44,7 @@ export class EnrolmentResource {
   public createEnrollee(payload: Enrollee): Observable<Enrolment> {
     return this.http.post(`${this.config.apiEndpoint}/enrollees`, payload)
       .pipe(
-        map((response: PrimeHttpResponse) => response.result),
+        map((response: ApiHttpResponse) => response.result),
         tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
         map((enrollee: HttpEnrollee) => this.enrolleeAdapterResponse(enrollee))
       );
@@ -67,7 +67,7 @@ export class EnrolmentResource {
     }
     return this.http.post(`${this.config.apiEndpoint}/enrollees/${id}/statuses`, payload, { params })
       .pipe(
-        map((response: PrimeHttpResponse) => response.result as Config<number>[]),
+        map((response: ApiHttpResponse) => response.result as Config<number>[]),
         tap((statuses: Config<number>[]) => this.logger.info('ENROLMENT_STATUSES', statuses))
       );
   }
@@ -75,7 +75,7 @@ export class EnrolmentResource {
   public enrolmentCertificateAccessTokens(): Observable<EnrolmentCertificateAccessToken[]> {
     return this.http.get(`${this.config.apiEndpoint}/provisioner-access/token`)
       .pipe(
-        map((response: PrimeHttpResponse) => response.result),
+        map((response: ApiHttpResponse) => response.result),
         tap((tokens: EnrolmentCertificateAccessToken[]) => this.logger.info('ACCESS_TOKENS', tokens))
       );
   }
@@ -84,7 +84,7 @@ export class EnrolmentResource {
     const payload = { data: ccEmail };
     return this.http.post(`${this.config.apiEndpoint}/provisioner-access/send-link/${provisionerName}`, payload)
       .pipe(
-        map((response: PrimeHttpResponse) => response.result as EnrolmentCertificateAccessToken),
+        map((response: ApiHttpResponse) => response.result as EnrolmentCertificateAccessToken),
         tap((token: EnrolmentCertificateAccessToken) => this.logger.info('ACCESS_TOKEN', token))
       );
   }
@@ -96,7 +96,7 @@ export class EnrolmentResource {
   public getAccessTerms(enrolleeId: number): Observable<AccessTerm[]> {
     return this.http.get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/access-terms`)
       .pipe(
-        map((response: PrimeHttpResponse) => response.result as AccessTerm[]),
+        map((response: ApiHttpResponse) => response.result as AccessTerm[]),
         tap((accessTerms: AccessTerm[]) => this.logger.info('ACCESS_TERM', accessTerms))
       );
   }
@@ -104,7 +104,7 @@ export class EnrolmentResource {
   public getAccessTerm(enrolleeId: number, id: number): Observable<AccessTerm> {
     return this.http.get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/access-terms/${id}`)
       .pipe(
-        map((response: PrimeHttpResponse) => response.result as AccessTerm),
+        map((response: ApiHttpResponse) => response.result as AccessTerm),
         tap((accessTerm: AccessTerm) => this.logger.info('ACCESS_TERM', accessTerm))
       );
   }
@@ -113,7 +113,7 @@ export class EnrolmentResource {
     return this.http.get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/access-terms/latest`,
       { params: { signed: signed.toString() } })
       .pipe(
-        map((response: PrimeHttpResponse) => response.result as AccessTerm),
+        map((response: ApiHttpResponse) => response.result as AccessTerm),
         tap((accessTerm: AccessTerm) => this.logger.info('ACCESS_TERM', accessTerm))
       );
   }
@@ -122,7 +122,7 @@ export class EnrolmentResource {
     return this.http
       .get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/access-terms/${accessTermId}/enrolment`)
       .pipe(
-        map((response: PrimeHttpResponse) => response.result as EnrolmentProfileVersion),
+        map((response: ApiHttpResponse) => response.result as EnrolmentProfileVersion),
         tap((enrolmentProfileVersion: EnrolmentProfileVersion) => this.logger.info('ENROLMENT_PROFILE_VERSION', enrolmentProfileVersion)),
         map(this.enrolleeVersionAdapterResponse.bind(this))
       );

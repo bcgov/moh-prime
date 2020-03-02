@@ -1,4 +1,4 @@
-export interface PrimeHttpResponse {
+export interface ApiHttpResponse {
   result: any;
   statusCode: number;
 }

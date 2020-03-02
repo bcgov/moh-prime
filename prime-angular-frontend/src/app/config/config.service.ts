@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { Configuration, Config, PracticeConfig, CollegeConfig, LicenseConfig, ProvinceConfig, LicenseWeightedConfig } from './config.model';
-import { PrimeHttpResponse } from '@core/models/prime-http-response.model';
+import { ApiHttpResponse } from '@core/models/api-http-response.model';
 
 export interface IConfigService {
   practices: PracticeConfig[];
@@ -118,9 +118,9 @@ export class ConfigService implements IConfigService {
    * Get the configuration for bootstrapping the application.
    */
   private getConfiguration(): Observable<Configuration> {
-    return this.http.get<PrimeHttpResponse>(`${this.config.apiEndpoint}/lookups`)
+    return this.http.get<ApiHttpResponse>(`${this.config.apiEndpoint}/lookups`)
       .pipe(
-        map((response: PrimeHttpResponse) => response.result)
+        map((response: ApiHttpResponse) => response.result)
       );
   }
 

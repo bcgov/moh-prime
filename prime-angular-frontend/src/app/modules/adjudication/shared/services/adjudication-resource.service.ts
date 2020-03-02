@@ -6,7 +6,7 @@ import { map, tap, catchError } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { Config } from '@config/config.model';
-import { PrimeHttpResponse } from '@core/models/prime-http-response.model';
+import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
 import { AccessTerm } from '@shared/models/access-term.model';
@@ -32,7 +32,7 @@ export class AdjudicationResource {
   public createAdmin(payload: Admin): Observable<Admin> {
     return this.http.post(`${this.config.apiEndpoint}/admins`, payload)
       .pipe(
-        map((response: PrimeHttpResponse) => response.result),
+        map((response: ApiHttpResponse) => response.result),
         tap((admin: Admin) => this.logger.info('ADMIN', admin)),
         map((admin: Admin) => admin)
       );
@@ -42,7 +42,7 @@ export class AdjudicationResource {
     const params = (statusCode) ? { statusCode: `${statusCode}` } : {};
     return this.http.get(`${this.config.apiEndpoint}/enrollees`, { params })
       .pipe(
-        map((response: PrimeHttpResponse) => response.result),
+        map((response: ApiHttpResponse) => response.result),
         tap((enrollees: HttpEnrollee[]) => this.logger.info('ENROLLEES', enrollees)),
         map((enrollees: HttpEnrollee[]) => this.enrolleesAdapterResponse(enrollees))
       );
@@ -52,7 +52,7 @@ export class AdjudicationResource {
     const params = (statusCode) ? { statusCode: `${statusCode}` } : {};
     return this.http.get(`${this.config.apiEndpoint}/enrollees/${id}`, { params })
       .pipe(
-        map((response: PrimeHttpResponse) => response.result),
+        map((response: ApiHttpResponse) => response.result),
         tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
         map((enrollee: HttpEnrollee) => this.enrolleeAdapterResponse(enrollee))
       );
@@ -61,7 +61,7 @@ export class AdjudicationResource {
   public enrolleeProfileVersions(enrolleeId: number): Observable<EnrolmentProfileVersion[]> {
     return this.http.get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/versions`)
       .pipe(
-        map((response: PrimeHttpResponse) => response.result),
+        map((response: ApiHttpResponse) => response.result),
         tap((enrolleeProfileVersions: HttpEnrolleeProfileVersion[]) =>
           this.logger.info('ENROLLEE_PROFILE_VERSIONS', enrolleeProfileVersions)
         ),
@@ -76,7 +76,7 @@ export class AdjudicationResource {
   public enrolleeProfileVersion(enrolleeId: number, enrolleeProfileVersionId: number): Observable<EnrolmentProfileVersion> {
     return this.http.get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/versions/${enrolleeProfileVersionId}`)
       .pipe(
-        map((response: PrimeHttpResponse) => response.result),
+        map((response: ApiHttpResponse) => response.result),
         tap((enrolleeProfileVersion: HttpEnrolleeProfileVersion) =>
           this.logger.info('ENROLLEE_PROFILE_VERSION', enrolleeProfileVersion)
         ),
@@ -88,7 +88,7 @@ export class AdjudicationResource {
     const payload = { code: statusCode };
     return this.http.post(`${this.config.apiEndpoint}/enrollees/${id}/statuses`, payload)
       .pipe(
-        map((response: PrimeHttpResponse) => response.result as Config<number>[]),
+        map((response: ApiHttpResponse) => response.result as Config<number>[]),
         tap((statuses: Config<number>[]) => this.logger.info('ENROLMENT_STATUSES', statuses))
       );
   }
@@ -96,7 +96,7 @@ export class AdjudicationResource {
   public setEnrolleeAdjudicator(enrolleeId: number): Observable<Enrolment> {
     return this.http.put(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/adjudicator`, null)
       .pipe(
-        map((response: PrimeHttpResponse) => response.result),
+        map((response: ApiHttpResponse) => response.result),
         map((enrollee: HttpEnrollee) => this.enrolmentAdapter(enrollee)),
         tap((enrolment: Enrolment) => this.logger.info('UPDATED_ENROLMENT', enrolment)),
         catchError((error: any) => {
@@ -110,7 +110,7 @@ export class AdjudicationResource {
   public removeEnrolleeAdjudicator(enrolleeId: number): Observable<Enrolment> {
     return this.http.delete(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/adjudicator`)
       .pipe(
-        map((response: PrimeHttpResponse) => response.result),
+        map((response: ApiHttpResponse) => response.result),
         map((enrollee: HttpEnrollee) => this.enrolmentAdapter(enrollee)),
         tap((enrolment: Enrolment) => this.logger.info('UPDATED_ENROLMENT', enrolment)),
         catchError((error: any) => {
@@ -125,7 +125,7 @@ export class AdjudicationResource {
     const payload = { data: alwaysManual };
     return this.http.patch(`${this.config.apiEndpoint}/enrollees/${id}/always-manual`, payload)
       .pipe(
-        map((response: PrimeHttpResponse) => response.result),
+        map((response: ApiHttpResponse) => response.result),
         map((enrollee: HttpEnrollee) => this.enrolmentAdapter(enrollee)),
         tap((enrolment: Enrolment) => this.logger.info('UPDATED_ENROLMENT', enrolment))
       );
@@ -134,7 +134,7 @@ export class AdjudicationResource {
   public deleteEnrolment(id: number): Observable<Enrolment> {
     return this.http.delete(`${this.config.apiEndpoint}/enrollees/${id}`)
       .pipe(
-        map((response: PrimeHttpResponse) => response.result),
+        map((response: ApiHttpResponse) => response.result),
         tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
         map((enrollee: HttpEnrollee) => this.enrolmentAdapter(enrollee))
       );
@@ -143,7 +143,7 @@ export class AdjudicationResource {
   public adjudicatorNotes(id: number): Observable<AdjudicationNote[]> {
     return this.http.get(`${this.config.apiEndpoint}/enrollees/${id}/adjudicator-notes`)
       .pipe(
-        map((response: PrimeHttpResponse) => response.result as AdjudicationNote[]),
+        map((response: ApiHttpResponse) => response.result as AdjudicationNote[]),
         tap((adjudicatorNotes: AdjudicationNote[]) => this.logger.info('ADJUDICATOR_NOTES', adjudicatorNotes))
       );
   }
@@ -152,7 +152,7 @@ export class AdjudicationResource {
     const payload = { data: note };
     return this.http.post(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/adjudicator-notes`, payload)
       .pipe(
-        map((response: PrimeHttpResponse) => response.result as AdjudicationNote),
+        map((response: ApiHttpResponse) => response.result as AdjudicationNote),
         tap((adjudicatorNote: AdjudicationNote) => this.logger.info('ADJUDICATOR_NOTE', adjudicatorNote))
       );
   }
@@ -164,7 +164,7 @@ export class AdjudicationResource {
     const payload = { enrolleeId, note };
     return this.http.put(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/access-agreement-notes`, payload)
       .pipe(
-        map((response: PrimeHttpResponse) => response.result as AdjudicationNote),
+        map((response: ApiHttpResponse) => response.result as AdjudicationNote),
         tap((adjudicatorNote: AdjudicationNote) => this.logger.info('ACCESS_AGREEMENT_NOTE', adjudicatorNote))
       );
   }
@@ -177,7 +177,7 @@ export class AdjudicationResource {
   public getAccessTerms(enrolleeId: number): Observable<AccessTerm[]> {
     return this.http.get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/access-terms`)
       .pipe(
-        map((response: PrimeHttpResponse) => response.result as AccessTerm[]),
+        map((response: ApiHttpResponse) => response.result as AccessTerm[]),
         tap((accessTerms: AccessTerm[]) => this.logger.info('ACCESS_TERM', accessTerms))
       );
   }
@@ -185,7 +185,7 @@ export class AdjudicationResource {
   public getAccessTerm(enrolleeId: number, id: number): Observable<AccessTerm> {
     return this.http.get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/access-terms/${id}`)
       .pipe(
-        map((response: PrimeHttpResponse) => response.result as AccessTerm),
+        map((response: ApiHttpResponse) => response.result as AccessTerm),
         tap((accessTerm: AccessTerm) => this.logger.info('ACCESS_TERM', accessTerm))
       );
   }
@@ -194,7 +194,7 @@ export class AdjudicationResource {
     return this.http
       .get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/access-terms/${accessTermId}/enrolment`)
       .pipe(
-        map((response: PrimeHttpResponse) => response.result as EnrolmentProfileVersion),
+        map((response: ApiHttpResponse) => response.result as EnrolmentProfileVersion),
         tap((enrolmentProfileVersion: EnrolmentProfileVersion) => this.logger.info('ENROLMENT_PROFILE_VERSION', enrolmentProfileVersion)),
         map(this.enrolleeVersionAdapterResponse.bind(this))
       );

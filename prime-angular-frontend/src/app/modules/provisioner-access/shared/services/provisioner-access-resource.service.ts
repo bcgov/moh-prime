@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
-import { PrimeHttpResponse } from '@core/models/prime-http-response.model';
+import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { LoggerService } from '@core/services/logger.service';
 
 import { EnrolmentCertificate } from '../models/enrolment-certificate.model';
@@ -24,7 +24,7 @@ export class ProvisionerAccessResource {
   public getCertificate(accessTokenId: string): Observable<EnrolmentCertificate> {
     return this.http.get(`${this.config.apiEndpoint}/provisioner-access/certificate/${accessTokenId}`)
       .pipe(
-        map((response: PrimeHttpResponse) => response.result as EnrolmentCertificate),
+        map((response: ApiHttpResponse) => response.result as EnrolmentCertificate),
         tap((enrolmentCertificate: EnrolmentCertificate) => this.logger.info('ENROLMENT_CERTIFICATE', enrolmentCertificate))
       );
   }
