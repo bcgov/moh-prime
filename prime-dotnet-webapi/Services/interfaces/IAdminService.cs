@@ -17,7 +17,7 @@ namespace Prime.Services
 
         Task<IEnumerable<Admin>> GetAdminsAsync();
 
-        Task<int?> CreateAdminAsync(Admin admin);
+        Task<int> CreateAdminAsync(Admin admin);
 
         Task<int> UpdateAdminAsync(int adminId, Admin admin);
 

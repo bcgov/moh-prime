@@ -202,7 +202,7 @@ namespace Prime.Services
 
             var newClause = new LimitsConditionsClause
             {
-                EnrolleeId = (int)enrollee.Id,
+                EnrolleeId = enrollee.Id,
                 Clause = null,
                 EffectiveDate = new DateTime()
             };

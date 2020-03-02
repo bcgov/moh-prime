@@ -10,19 +10,15 @@ namespace Prime.Models
         { }
 
         [JsonIgnore]
-        [Required]
         public Guid CreatedUserId { get; set; }
 
         [JsonIgnore]
-        [Required]
         public DateTime CreatedTimeStamp { get; set; }
 
         [JsonIgnore]
-        [Required]
         public Guid UpdatedUserId { get; set; }
 
         [JsonIgnore]
-        [Required]
         public DateTime UpdatedTimeStamp { get; set; }
     }
 }
