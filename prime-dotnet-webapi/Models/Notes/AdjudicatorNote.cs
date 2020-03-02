@@ -19,7 +19,6 @@ namespace Prime.Models
         [Required]
         public string Note { get; set; }
 
-        [Required]
         public DateTime NoteDate { get; set; }
     }
 }

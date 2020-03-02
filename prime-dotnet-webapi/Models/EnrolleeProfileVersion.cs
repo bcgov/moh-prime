@@ -11,14 +11,15 @@ namespace Prime.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required]
+
         public int EnrolleeId { get; set; }
+
         [JsonIgnore]
         public Enrollee Enrollee { get; set; }
+
         [Required]
         public JObject ProfileSnapshot { get; set; }
-        [Required]
-        public DateTime CreatedDate { get; set; }
 
+        public DateTime CreatedDate { get; set; }
     }
 }

@@ -19,7 +19,6 @@ namespace Prime.Models
         [JsonIgnore]
         public Enrollee Enrollee { get; set; }
 
-        [Required]
         public short CollegeCode { get; set; }
 
         [JsonIgnore]
@@ -30,13 +29,11 @@ namespace Prime.Models
         [JsonConverter(typeof(EmptyStringToNullJsonConverter))]
         public string LicenseNumber { get; set; }
 
-        [Required]
         public short LicenseCode { get; set; }
 
         [JsonIgnore]
         public License License { get; set; }
 
-        [Required]
         public DateTime RenewalDate { get; set; }
 
         public short? PracticeCode { get; set; }

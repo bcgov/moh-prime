@@ -21,7 +21,6 @@ namespace Prime.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
         public Guid UserId { get; set; }
 
         [StringLength(20)]
@@ -44,7 +43,6 @@ namespace Prime.Models
 
         public string PreferredLastName { get; set; }
 
-        [Required]
         public DateTime DateOfBirth { get; set; }
 
         [Required]

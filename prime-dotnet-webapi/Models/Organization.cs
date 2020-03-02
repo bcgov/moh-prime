@@ -17,7 +17,6 @@ namespace Prime.Models
         [JsonIgnore]
         public Enrollee Enrollee { get; set; }
 
-        [Required]
         public short OrganizationTypeCode { get; set; }
 
         [JsonIgnore]
