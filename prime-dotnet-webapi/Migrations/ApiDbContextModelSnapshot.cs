@@ -21,7 +21,7 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.AccessAgreementNote", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
@@ -125,7 +125,7 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.Address", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
@@ -183,7 +183,7 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.AdjudicatorNote", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
@@ -402,7 +402,7 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.Certification", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
@@ -4987,7 +4987,7 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.Enrollee", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
@@ -5150,8 +5150,7 @@ namespace Prime.Migrations
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
 
-                    b.Property<int?>("EnrolleeId")
-                        .IsRequired()
+                    b.Property<int>("EnrolleeId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("Expires")
@@ -5295,7 +5294,7 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.Job", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
@@ -6165,7 +6164,7 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.Organization", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);

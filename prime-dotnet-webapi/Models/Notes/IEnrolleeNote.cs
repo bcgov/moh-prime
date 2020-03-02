@@ -4,7 +4,7 @@ namespace Prime.Models
 {
     public interface IEnrolleeNote
     {
-        int? Id { get; set; }
+        int Id { get; set; }
 
         int EnrolleeId { get; set; }
 

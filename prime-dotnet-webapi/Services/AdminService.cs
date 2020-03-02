@@ -28,18 +28,13 @@ namespace Prime.Services
                 .AnyAsync(a => a.UserId == userId);
         }
 
-        public Task<int?> CreateAdminAsync(Admin admin)
+        public async Task<int> CreateAdminAsync(Admin admin)
         {
             if (admin == null)
             {
                 throw new ArgumentNullException(nameof(admin), "Could not create an admin, the passed in Admin cannot be null.");
             }
 
-            return this.CreateAdminInternalAsync(admin);
-        }
-
-        private async Task<int?> CreateAdminInternalAsync(Admin admin)
-        {
             _context.Admins.Add(admin);
 
             var created = await _context.SaveChangesAsync();
