@@ -16,6 +16,18 @@ function pipeline_args() {
     export PIPELINE_ARGS="$*"
 }
 
+function determineMode() {
+    buildPresent=$(oc get "$3"/"$2-${BRANCH_LOWER}" --ignore-not-found=true)
+    if [ -z "${buildPresent}" ];
+    then 
+        MODE="apply"
+        OC_ARGS=""
+    else 
+        MODE="apply"
+        OC_ARGS="--overwrite=false --all"
+    fi;
+}
+
 function build() {
     source ./"$2.conf"
     echo "Building $2 (${APP_NAME}) to $PROJECT_PREFIX-$3..."
@@ -32,8 +44,8 @@ function build() {
     -p OC_APP="$3" ${@:4} --output="yaml" | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$3" ${OC_ARGS} #--output="yaml"
     if [ "$BUILD_REQUIRED" == true ];
     then
-        echo "Building oc start-build $APP_NAME$SUFFIX -n $PROJECT_PREFIX-$3 --wait --follow ..."
-        oc start-build "$APP_NAME$SUFFIX" -n "$PROJECT_PREFIX-$3" --wait --follow
+        echo "Building oc start-build ${APP_NAME}${SUFFIX} -n $PROJECT_PREFIX-$3 --wait --follow ..."
+        oc start-build "${APP_NAME}${SUFFIX}" -n "$PROJECT_PREFIX-$3" --wait --follow
     else
         echo "Deployment should be automatic..."
     fi
@@ -84,17 +96,6 @@ function toolbelt() {
         -p OC_APP="$3" ${@:4} --output="yaml" | oc $MODE -f - --namespace="$PROJECT_PREFIX-$3" ${OC_ARGS}
 }
 
-function determineMode() {
-    buildPresent=$(oc get "$3"/"$2-${BRANCH_LOWER}" --ignore-not-found=true)
-    if [ -z "${buildPresent}" ];
-    then 
-        MODE="apply"
-        OC_ARGS=""
-    else 
-        MODE="apply"
-        OC_ARGS="--overwrite=false --all"
-    fi;
-}
 
 function getAllAssets() {
     oc get all,pvc,secrets -n $PROJECT_PREFIX-dev | column -t | awk '{print $1}' | sort -n
