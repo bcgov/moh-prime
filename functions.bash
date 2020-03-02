@@ -2,13 +2,6 @@ oc project ${PROJECT_PREFIX}-$3
 
 export BRANCH_LOWER=`echo "${BRANCH_NAME}" | awk '{print tolower($0)}'`
 function variablePopulation() {
-    if [ "${BRANCH_LOWER}" == "develop" ] || [ "${BRANCH_LOWER}" == "master" ];
-    then
-        export SUFFIX=""
-        export CHANGE_BRANCH="$BRANCH_NAME"
-    else
-        export SUFFIX="-${BRANCH_LOWER}";
-    fi
     if [ "${APP_NAME}" == "test" ] || [ "${APP_NAME}" == "prod" ];
     then
         export DOTNET_PHASE="Release"
@@ -28,11 +21,10 @@ function build() {
     echo "Building $2 (${APP_NAME}) to $PROJECT_PREFIX-$3..."
     buildPresent=$(oc get bc/"$APP_NAME${SUFFIX}" --ignore-not-found=true | wc -l)
     determineMode
-    echo "oc process -f ./${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE} -p NAME=${APP_NAME} -p VERSION=${BUILD_NUMBER} -p SUFFIX=-${BRANCH_LOWER} -p SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR} -p SOURCE_REPOSITORY_URL=${GIT_URL} -p SOURCE_REPOSITORY_REF=${BRANCH_NAME} -p OC_NAMESPACE=$PROJECT_PREFIX -p OC_APP=$3 ${@:4} | oc ${MODE} -f - --namespace=$PROJECT_PREFIX-$3"
+    echo "oc process -f ./${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE} -p NAME=${APP_NAME} -p VERSION=${BUILD_NUMBER} -p SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR} -p SOURCE_REPOSITORY_URL=${GIT_URL} -p SOURCE_REPOSITORY_REF=${BRANCH_NAME} -p OC_NAMESPACE=$PROJECT_PREFIX -p OC_APP=$3 ${@:4} | oc ${MODE} -f - --namespace=$PROJECT_PREFIX-$3"
     oc process -f ./"${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE}" \
     -p NAME="${APP_NAME}" \
     -p VERSION="${BUILD_NUMBER}" \
-    -p SUFFIX="${SUFFIX}" \
     -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
     -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
     -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
@@ -58,7 +50,6 @@ function deploy() {
     oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
     -p NAME="${APP_NAME}" \
     -p VERSION="${BUILD_NUMBER}" \
-    -p SUFFIX="${SUFFIX}" \
     -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
     -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
     -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
