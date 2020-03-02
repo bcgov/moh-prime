@@ -21,10 +21,10 @@ function determineMode() {
     if [ -z "${buildPresent}" ];
     then 
         MODE="apply"
-        OC_ARGS=""
+        #OC_ARGS=""
     else 
         MODE="apply"
-        OC_ARGS="--overwrite=false --all"
+        #OC_ARGS="--overwrite=false --all"
     fi;
 }
 
