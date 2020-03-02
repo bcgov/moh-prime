@@ -22,7 +22,7 @@ pipeline {
                     if (env.BRANCH_NAME == 'develop') {
                         SUFFIX=''
                     } else {
-                        SUFFIX="-${BRANCH_LOWER}"
+                        SUFFIX="\-${BRANCH_LOWER}"
                     }
                     checkout scm
                     echo "Building ..."
