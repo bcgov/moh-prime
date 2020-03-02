@@ -6,10 +6,10 @@ using Newtonsoft.Json;
 namespace Prime.Models
 {
     [Table("LicenseLookup")]
-    public class License : BaseAuditable, ILookup<short>
+    public class License : BaseAuditable, ILookup<int>
     {
         [Key]
-        public short Code { get; set; }
+        public int Code { get; set; }
 
         public int Weight { get; set; }
 

@@ -17,7 +17,7 @@ namespace Prime.Models
         [JsonIgnore]
         public Enrollee Enrollee { get; set; }
 
-        public short StatusCode { get; set; }
+        public int StatusCode { get; set; }
 
         public Status Status { get; set; }
 
@@ -29,7 +29,7 @@ namespace Prime.Models
 
         public ICollection<EnrolmentStatusReason> EnrolmentStatusReasons { get; set; }
 
-        public void AddStatusReason(short reasonCode, string reasonNote = null)
+        public void AddStatusReason(int reasonCode, string reasonNote = null)
         {
             if (EnrolmentStatusReasons == null)
             {

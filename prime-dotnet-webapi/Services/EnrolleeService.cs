@@ -130,7 +130,7 @@ namespace Prime.Services
             if (searchOptions?.StatusCode != null)
             {
                 // TODO refactor see Jira PRIME-251
-                items = items.Where(e => e.CurrentStatus.StatusCode == (short)searchOptions.StatusCode);
+                items = items.Where(e => e.CurrentStatus.StatusCode == searchOptions.StatusCode);
             }
 
             foreach (var item in items)
@@ -454,7 +454,7 @@ namespace Prime.Services
             return availableStatuses.Contains(endingStatus);
         }
 
-        public async Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, params short[] statusCodesToCheck)
+        public async Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, params int[] statusCodesToCheck)
         {
             var enrollee = await _context.Enrollees
                 .AsNoTracking()
