@@ -16,14 +16,23 @@ pipeline {
             when { expression { ( GIT_BRANCH == 'master' ) } }
             agent { label 'master' }
             steps {
+                script {
+                    BRANCH_LOWER=BRANCH_NAME.toLowerCase()
+                    VANITY_URL="test.pharmanetenrolment.gov.bc.ca"
+                    SCHEMA="https"
+                    PORT="8443"
+                    SUFFIX="-test"
+                    FRONTEND_ARGS="-p REDIRECT_URL=${SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL} -p SUFFIX=${SUFFIX}"
+                    API_ARGS="-p ASPNETCORE_ENVIRONMENT=Release -p VANITY_URL=${VANITY_URL} -p SUFFIX=${SUFFIX}"
                     echo "Test (MASTER) ..."
-                    sh "./player.sh build database test"
+                    sh "./player.sh build database test -p SUFFIX=${SUFFIX}"
                     sh "./player.sh build api test ${API_ARGS}"
                     sh "./player.sh build frontend test ${FRONTEND_ARGS}"
                     sh "./player.sh deploy database test"
                     sh "./player.sh deploy api test ${API_ARGS}"
                     sh "./player.sh deploy frontend test ${FRONTEND_ARGS}"
                     sh "./player.sh toolbelt schemaspy test"
+                }
             }
         }
         stage('SonarQube Code Check') {
@@ -46,6 +55,42 @@ pipeline {
                 echo "Scanning..."
                 sh "./player.sh zap frontend"
                 sh "./player.sh zap api"
+            }
+        }
+        stage('Promote Master to Demo') {
+            options {
+                timeout(time: 120, unit: 'MINUTES')   // timeout on this stage
+            }
+            when { expression { ( GIT_BRANCH == 'master' ) } }
+            agent { label 'master' }
+            steps {
+                script {
+                    BRANCH_LOWER=BRANCH_NAME.toLowerCase()
+                    VANITY_URL="demo.pharmanetenrolment.gov.bc.ca"
+                    SCHEMA="https"
+                    PORT="8443"
+                    SUFFIX="-demo"
+                    FRONTEND_ARGS="-p REDIRECT_URL=${SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL} -p SUFFIX=${SUFFIX}"
+                    API_ARGS="-p ASPNETCORE_ENVIRONMENT=Release -p VANITY_URL=${VANITY_URL} -p SUFFIX=${SUFFIX}"
+                    echo "Test (MASTER) ..."
+                    sh "./player.sh build database test -p SUFFIX=${SUFFIX}"
+                    sh "./player.sh build api test ${API_ARGS}"
+                    sh "./player.sh build frontend test ${FRONTEND_ARGS}"
+                    sh "./player.sh deploy database test"
+                    sh "./player.sh deploy api test ${API_ARGS}"
+                    sh "./player.sh deploy frontend test ${FRONTEND_ARGS}"
+                    sh "./player.sh toolbelt schemaspy test"
+                }
+            }
+        }
+        stage('SonarQube Code Check') {
+            options {
+                timeout(time: 90, unit: 'MINUTES')   // timeout on this stage
+            }
+            when { expression { ( GIT_BRANCH != 'master' ) } }
+            agent { label 'code-tests' }
+            steps {
+                sh "./player.sh scan"
             }
         }
         stage('Approve Promotion of Master') {

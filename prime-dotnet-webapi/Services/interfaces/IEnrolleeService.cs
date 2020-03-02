@@ -32,7 +32,7 @@ namespace Prime.Services
 
         Task<IEnumerable<EnrolmentStatus>> GetEnrolmentStatusesAsync(int enrolleeId);
 
-        Task<EnrolmentStatus> CreateEnrolmentStatusAsync(int enrolleeId, Status status, bool acceptedAccessTerm);
+        Task<EnrolmentStatus> CreateEnrolmentStatusAsync(int enrolleeId, Status status, bool acceptedAccessTerm, int? adminId);
 
         bool IsStatusChangeAllowed(Status startingStatus, Status endingStatus);
 
@@ -47,5 +47,7 @@ namespace Prime.Services
         Task<Enrollee> UpdateEnrolleeAlwaysManualAsync(int enrolleeId, bool alwaysManual);
 
         Task<int> GetEnrolleeCountAsync();
+
+        Task<Enrollee> UpdateEnrolleeAdjudicator(int enrolleeId, Guid adminId = default(Guid));
     }
 }

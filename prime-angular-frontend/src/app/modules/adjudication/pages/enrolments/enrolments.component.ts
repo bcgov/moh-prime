@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource, MatSelectChange, MatDialog } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
+import { MatTableDataSource, MatSelectChange, MatDialog } from '@angular/material';
 
 import { exhaustMap } from 'rxjs/operators';
 import { EMPTY, Subscription } from 'rxjs';
@@ -13,14 +13,15 @@ import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { ApproveEnrolmentComponent } from '@shared/components/dialogs/content/approve-enrolment/approve-enrolment.component';
 import {
   EnrolmentStatusReasonsComponent
 } from '@shared/components/dialogs/content/enrolment-status-reasons/enrolment-status-reasons.component';
 
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
-import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { ApproveEnrolmentComponent } from '@shared/components/dialogs/content/approve-enrolment/approve-enrolment.component';
+import { Admin } from '@auth/shared/models/admin.model';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 @Component({
   selector: 'app-enrolments',
@@ -44,7 +45,7 @@ export class EnrolmentsComponent implements OnInit {
     private dialog: MatDialog,
     private logger: LoggerService
   ) {
-    this.columns = ['appliedDate', 'name', 'status', 'approvedDate', 'actions'];
+    this.columns = ['uniqueId', 'name', 'appliedDate', 'status', 'approvedDate', 'adjudicator', 'actions'];
     this.statuses = this.configService.statuses;
     this.filteredStatus = null;
   }
@@ -197,14 +198,12 @@ export class EnrolmentsComponent implements OnInit {
   }
 
   public deleteEnrolment(id: number) {
-
     const data: DialogOptions = {
       title: 'Delete Enrolment',
       message: 'Are you sure you want to delete this enrolment?',
       actionType: 'warn',
       actionText: 'Delete Enrolment'
     };
-
     if (this.authService.isSuperAdmin()) {
       this.busy = this.dialog.open(ConfirmDialogComponent, { data })
         .afterClosed()
@@ -228,6 +227,23 @@ export class EnrolmentsComponent implements OnInit {
     }
   }
 
+  public updateEnrolmentAdjudicator(currentEnrolment: Enrolment) {
+    const request$ = (!currentEnrolment.adjudicatorId)
+      ? this.adjudicationResource.setEnrolleeAdjudicator(currentEnrolment.id)
+      : this.adjudicationResource.removeEnrolleeAdjudicator(currentEnrolment.id);
+
+    request$
+      .subscribe((updatedEnrolment: Enrolment) => {
+        const updatedDataset = this.dataSource.data.map((enrolment: Enrolment) =>
+          (enrolment.id === updatedEnrolment.id)
+            ? updatedEnrolment
+            : enrolment
+        );
+
+        this.dataSource.connect().next(updatedDataset);
+      });
+  }
+
   public getEnrolments(statusCode?: number) {
     this.busy = this.adjudicationResource.enrollees(statusCode)
       .subscribe(
@@ -244,7 +260,6 @@ export class EnrolmentsComponent implements OnInit {
 
   public ngOnInit() {
     this.getEnrolments();
-    // console.log(this.authService.isSuperAdmin());
   }
 
   private updateEnrolment(enrolment: Enrolment) {

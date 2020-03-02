@@ -6,7 +6,7 @@ using Prime.Models;
 
 namespace Prime
 {
-    public static class ClaimsPrincipalExensions
+    public static class ClaimsPrincipalExtensions
     {
         /// <summary>
         /// Returns the Guid of the logged in user. If there is no logged in user, this will return Guid.Empty
@@ -22,13 +22,18 @@ namespace Prime
         /// </summary>
         public static bool CanAccess(this ClaimsPrincipal User, Enrollee enrollee)
         {
-            if (User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE))
+            if (User.IsAdmin())
             {
                 return true;
             }
 
             Guid PrimeUserId = User.GetPrimeUserId();
             return !PrimeUserId.Equals(Guid.Empty) && PrimeUserId.Equals(enrollee.UserId);
+        }
+
+        public static bool IsAdmin(this ClaimsPrincipal User)
+        {
+            return User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE);
         }
 
         public static bool HasAssuranceLevel(this ClaimsPrincipal User, int level)
