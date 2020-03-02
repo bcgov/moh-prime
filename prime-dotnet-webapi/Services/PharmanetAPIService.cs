@@ -163,7 +163,7 @@ namespace Prime.Services
             public CollegeRecordRequestParams(string licenceNumber, string collegeReferenceId)
             {
                 applicationUUID = Guid.NewGuid().ToString();
-                programArea = "PRIME";
+                programArea = "PRIMERRR";
                 this.licenceNumber = licenceNumber;
                 this.collegeReferenceId = collegeReferenceId;
             }
