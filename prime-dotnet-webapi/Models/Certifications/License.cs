@@ -13,7 +13,6 @@ namespace Prime.Models
 
         public int Weight { get; set; }
 
-        [Required]
         public bool Manual { get; set; }
 
         [Required]

@@ -30,6 +30,7 @@ namespace Prime.Models
         public int UserClauseId { get; set; }
 
         public UserClause UserClause { get; set; }
+
         [NotMapped]
         public List<LicenseClassClause> LicenseClassClauses { get; set; }
 
@@ -40,7 +41,6 @@ namespace Prime.Models
 
         public LimitsConditionsClause LimitsConditionsClause { get; set; }
 
-        [Required]
         public DateTime CreatedDate { get; set; }
 
         public DateTime? AcceptedDate { get; set; }

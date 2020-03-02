@@ -22,7 +22,6 @@ namespace Prime.Models
         [Required]
         public string Clause { get; set; }
 
-        [Required]
         public DateTime EffectiveDate { get; set; }
 
         [JsonIgnore]
