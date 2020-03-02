@@ -85,7 +85,9 @@ export class MockEnrolmentService implements IEnrolmentService {
       accessAgreementNote: null,
       profileCompleted: true,
       collectionNoticeAccepted: false,
-      alwaysManual: false
+      alwaysManual: false,
+      adjudicatorId: null,
+      adjudicator: null
     });
   }
 

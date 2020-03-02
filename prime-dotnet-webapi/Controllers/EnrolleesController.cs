@@ -19,20 +19,20 @@ namespace Prime.Controllers
     public class EnrolleesController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
-        private readonly IEmailService _emailService;
         private readonly IAccessTermService _accessTermService;
         private readonly IEnrolleeProfileVersionService _enrolleeProfileVersionService;
+        private readonly IAdminService _adminService;
 
         public EnrolleesController(
             IEnrolleeService enrolleeService,
-            IEmailService emailService,
             IAccessTermService accessTermService,
-            IEnrolleeProfileVersionService enrolleeProfileVersionService)
+            IEnrolleeProfileVersionService enrolleeProfileVersionService,
+            IAdminService adminService)
         {
-            _emailService = emailService;
             _enrolleeService = enrolleeService;
             _accessTermService = accessTermService;
             _enrolleeProfileVersionService = enrolleeProfileVersionService;
+            _adminService = adminService;
         }
 
 
@@ -49,7 +49,7 @@ namespace Prime.Controllers
             IEnumerable<Enrollee> enrollees = null;
 
             // User must have the ADMIN role to see all enrollees
-            if (User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE))
+            if (User.IsAdmin())
             {
                 enrollees = await _enrolleeService.GetEnrolleesAsync(searchOptions);
             }
@@ -272,7 +272,7 @@ namespace Prime.Controllers
         public async Task<ActionResult<EnrolmentStatus>> CreateEnrolmentStatus(int enrolleeId, Status status, [FromQuery]bool acceptedAccessTerm)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-            var prevStatus = enrollee.CurrentStatus.StatusCode;
+            int? adminId = null;
 
             if (enrollee == null)
             {
@@ -296,21 +296,13 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            var enrolmentStatus = await _enrolleeService.CreateEnrolmentStatusAsync(enrolleeId, status, acceptedAccessTerm);
-
-            // Enrollee just left manual adjudication, inform the enrollee
-            if (prevStatus == Status.UNDER_REVIEW_CODE)
+            if (User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE))
             {
-                try
-                {
-                    await _emailService.SendReminderEmailAsync(enrollee);
-                }
-                catch (EmailService.EmailServiceException ese)
-                {
-                    return Ok(new ApiOkResponse<EnrolmentStatus>(enrolmentStatus, ese.Message));
-                }
+                var admin = await _adminService.GetAdminForUserIdAsync(User.GetPrimeUserId());
+                adminId = admin.Id;
             }
 
+            var enrolmentStatus = await _enrolleeService.CreateEnrolmentStatusAsync(enrolleeId, status, acceptedAccessTerm, adminId);
             return Ok(new ApiOkResponse<EnrolmentStatus>(enrolmentStatus));
         }
 
@@ -413,8 +405,6 @@ namespace Prime.Controllers
             return Ok(new ApiOkResponse<IEnrolleeNote>(updatedNote));
         }
 
-
-
         // GET: api/Enrollees/5/versions
         /// <summary>
         /// Get a list of enrollee profile versions.
@@ -464,7 +454,6 @@ namespace Prime.Controllers
             return Ok(new ApiOkResponse<EnrolleeProfileVersion>(enrolleeProfileVersion));
         }
 
-
         // PATCH: api/Enrollees/5/always-manual
         /// <summary>
         /// Updates an enrollees always manual flag, forcing them to always be sent to manual adjudication
@@ -488,6 +477,62 @@ namespace Prime.Controllers
             }
 
             var updatedEnrollee = await _enrolleeService.UpdateEnrolleeAlwaysManualAsync(enrolleeId, alwaysManual);
+
+            return Ok(new ApiOkResponse<Enrollee>(updatedEnrollee));
+        }
+
+        // TODO add route model binding for Enrollee
+        // TODO add middleware/policy to do simple checks
+
+        // PUT: api/Enrollees/5/adjudicator
+        /// <summary>
+        /// Add an enrollee's assigned adjudicator.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpPut("{enrolleeId}/adjudicator", Name = nameof(SetEnrolleeAdjudicator))]
+        [Authorize(Policy = PrimeConstants.ADMIN_POLICY)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiOkResponse<Enrollee>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<Enrollee>> SetEnrolleeAdjudicator(int enrolleeId)
+        {
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+
+            if (enrollee == null)
+            {
+                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}."));
+            }
+
+            var adjudicatorUserId = User.GetPrimeUserId();
+            var updatedEnrollee = await _enrolleeService.UpdateEnrolleeAdjudicator((int)enrollee.Id, adjudicatorUserId);
+
+            return Ok(new ApiOkResponse<Enrollee>(updatedEnrollee));
+        }
+
+        // DELETE: api/Enrollees/5/adjudicator
+        /// <summary>
+        /// Remove an enrollee's assigned adjudicator.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpDelete("{enrolleeId}/adjudicator", Name = nameof(RemoveEnrolleeAdjudicator))]
+        [Authorize(Policy = PrimeConstants.ADMIN_POLICY)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiOkResponse<Enrollee>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<Enrollee>> RemoveEnrolleeAdjudicator(int enrolleeId)
+        {
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+
+            if (enrollee == null)
+            {
+                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}."));
+            }
+
+            var updatedEnrollee = await _enrolleeService.UpdateEnrolleeAdjudicator((int)enrollee.Id);
 
             return Ok(new ApiOkResponse<Enrollee>(updatedEnrollee));
         }

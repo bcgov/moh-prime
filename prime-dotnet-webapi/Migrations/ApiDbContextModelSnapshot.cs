@@ -291,6 +291,116 @@ namespace Prime.Migrations
                     b.ToTable("AssignedPrivilege");
                 });
 
+            modelBuilder.Entity("Prime.Models.BusinessEvent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int?>("AdminId")
+                        .HasColumnType("integer");
+
+                    b.Property<short>("BusinessEventTypeCode")
+                        .HasColumnType("smallint");
+
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("EventDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdminId");
+
+                    b.HasIndex("BusinessEventTypeCode");
+
+                    b.HasIndex("EnrolleeId");
+
+                    b.ToTable("BusinessEvent");
+                });
+
+            modelBuilder.Entity("Prime.Models.BusinessEventType", b =>
+                {
+                    b.Property<short>("Code")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTime>("CreatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Code");
+
+                    b.ToTable("BusinessEventTypeLookup");
+
+                    b.HasData(
+                        new
+                        {
+                            Code = (short)1,
+                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Status Change",
+                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = (short)2,
+                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Email",
+                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = (short)3,
+                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Note",
+                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = (short)4,
+                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Admin Claim",
+                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        });
+                });
+
             modelBuilder.Entity("Prime.Models.Certification", b =>
                 {
                     b.Property<int?>("Id")
@@ -4883,6 +4993,9 @@ namespace Prime.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<int?>("AdjudicatorId")
+                        .HasColumnType("integer");
+
                     b.Property<bool>("AlwaysManual")
                         .HasColumnType("boolean");
 
@@ -4978,6 +5091,8 @@ namespace Prime.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AdjudicatorId");
 
                     b.HasIndex("UserId")
                         .IsUnique();
@@ -5273,6 +5388,15 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Ward Clerk",
+                            UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = (short)5,
+                            CreatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Nursing Unit Assistant",
                             UpdatedTimeStamp = new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
@@ -8603,6 +8727,25 @@ namespace Prime.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Prime.Models.BusinessEvent", b =>
+                {
+                    b.HasOne("Prime.Models.Admin", "Admin")
+                        .WithMany()
+                        .HasForeignKey("AdminId");
+
+                    b.HasOne("Prime.Models.BusinessEventType", "BusinessEventType")
+                        .WithMany("BusinessEvents")
+                        .HasForeignKey("BusinessEventTypeCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
+                        .WithMany()
+                        .HasForeignKey("EnrolleeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Prime.Models.Certification", b =>
                 {
                     b.HasOne("Prime.Models.College", "College")
@@ -8671,6 +8814,13 @@ namespace Prime.Migrations
                         .HasForeignKey("PrivilegeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Prime.Models.Enrollee", b =>
+                {
+                    b.HasOne("Prime.Models.Admin", "Adjudicator")
+                        .WithMany("Enrollees")
+                        .HasForeignKey("AdjudicatorId");
                 });
 
             modelBuilder.Entity("Prime.Models.EnrolleeProfileVersion", b =>

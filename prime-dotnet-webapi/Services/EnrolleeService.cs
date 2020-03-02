@@ -7,9 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using SimpleBase;
 using Prime.Models;
 using Prime.ViewModels;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Prime.Models.Api;
-using System.Reflection;
 
 namespace Prime.Services
 {
@@ -20,6 +18,7 @@ namespace Prime.Services
         private readonly IPrivilegeService _privilegeService;
         private readonly IAccessTermService _accessTermService;
         private readonly IEnrolleeProfileVersionService _enroleeProfileVersionService;
+        private readonly IBusinessEventService _businessEventService;
 
         private class StatusWrapper
         {
@@ -38,7 +37,8 @@ namespace Prime.Services
             IEmailService emailService,
             IPrivilegeService privilegeService,
             IAccessTermService accessTermService,
-            IEnrolleeProfileVersionService enroleeProfileVersionService)
+            IEnrolleeProfileVersionService enroleeProfileVersionService,
+            IBusinessEventService businessEventService)
             : base(context, httpContext)
         {
             _automaticAdjudicationService = automaticAdjudicationService;
@@ -46,6 +46,7 @@ namespace Prime.Services
             _privilegeService = privilegeService;
             _accessTermService = accessTermService;
             _enroleeProfileVersionService = enroleeProfileVersionService;
+            _businessEventService = businessEventService;
         }
 
         private Dictionary<Status, StatusWrapper[]> GetWorkFlowStateMap()
@@ -306,17 +307,17 @@ namespace Prime.Services
             return items;
         }
 
-        public Task<EnrolmentStatus> CreateEnrolmentStatusAsync(int enrolleeId, Status status, bool acceptedAccessTerm)
+        public Task<EnrolmentStatus> CreateEnrolmentStatusAsync(int enrolleeId, Status status, bool acceptedAccessTerm, int? adminId)
         {
             if (status == null)
             {
                 throw new ArgumentNullException(nameof(status), "Could not create an enrolment status, the passed in Status cannot be null.");
             }
 
-            return this.CreateEnrolmentStatusInternalAsync(enrolleeId, status, acceptedAccessTerm);
+            return this.CreateEnrolmentStatusInternalAsync(enrolleeId, status, acceptedAccessTerm, adminId);
         }
 
-        private async Task<EnrolmentStatus> CreateEnrolmentStatusInternalAsync(int enrolleeId, Status newStatus, bool acceptedAccessTerm)
+        private async Task<EnrolmentStatus> CreateEnrolmentStatusInternalAsync(int enrolleeId, Status newStatus, bool acceptedAccessTerm, int? adminId)
         {
             var enrollee = await this.GetBaseEnrolleeQuery()
                 .Include(e => e.Certifications)
@@ -370,6 +371,12 @@ namespace Prime.Services
 
                         // Flip to the object that will get returned
                         createdEnrolmentStatus = adjudicatedEnrolmentStatus;
+
+                        await _businessEventService.CreateBusinessEventAsync(enrolleeId, BusinessEventType.STATUS_CHANGE_CODE, "Automatically Approved", adminId);
+                    }
+                    else
+                    {
+                        await _businessEventService.CreateBusinessEventAsync(enrolleeId, BusinessEventType.STATUS_CHANGE_CODE, "Submitted", adminId);
                     }
                     break;
 
@@ -378,6 +385,8 @@ namespace Prime.Services
                     createdEnrolmentStatus.AddStatusReason(StatusReason.MANUAL_CODE);
 
                     await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee);
+
+                    await _businessEventService.CreateBusinessEventAsync(enrolleeId, BusinessEventType.STATUS_CHANGE_CODE, "Manually Approved", adminId);
 
                     break;
 
@@ -390,6 +399,7 @@ namespace Prime.Services
                     // Sent back to edit profile from Under Review
                     if (oldStatus.Code == Status.UNDER_REVIEW_CODE)
                     {
+                        await _businessEventService.CreateBusinessEventAsync(enrolleeId, BusinessEventType.STATUS_CHANGE_CODE, "Enabled Editing", adminId);
                         break;
                     }
 
@@ -401,6 +411,8 @@ namespace Prime.Services
                         createdEnrolmentStatus.PharmaNetStatus = true;
                         await _accessTermService.AcceptCurrentAccessTermAsync(enrollee);
                         await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrolleeId, enrollee);
+                        await _businessEventService.CreateBusinessEventAsync(enrolleeId, BusinessEventType.STATUS_CHANGE_CODE, "Accepted TOA", adminId);
+                        await UpdateEnrolleeAdjudicator((int)enrollee.Id);
                         break;
                     }
                     break;
@@ -408,6 +420,12 @@ namespace Prime.Services
             }
 
             await _context.SaveChangesAsync();
+
+            // Enrollee just left manual adjudication, inform the enrollee
+            if (oldStatus?.Code == Status.UNDER_REVIEW_CODE)
+            {
+                await _emailService.SendReminderEmailAsync(enrollee);
+            }
 
             return createdEnrolmentStatus;
         }
@@ -592,7 +610,29 @@ namespace Prime.Services
         {
             return await _context.Enrollees
                    .CountAsync();
+        }
 
+        public async Task<Enrollee> UpdateEnrolleeAdjudicator(int enrolleeId, Guid adjudicatorUserId = default(Guid))
+        {
+            var enrollee = await GetBaseEnrolleeQuery()
+                .Include(e => e.Adjudicator)
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
+            // Admin is set to null if no adjudicatorUserId is provided 
+            var admin = await _context.Admins
+                .SingleOrDefaultAsync(a => a.UserId == adjudicatorUserId);
+
+            enrollee.Adjudicator = admin;
+
+            _context.Update(enrollee);
+
+            var updated = await _context.SaveChangesAsync();
+            if (updated < 1)
+            {
+                throw new InvalidOperationException($"Could not update the enrollee adjudicator.");
+            }
+
+            return enrollee;
         }
     }
 }

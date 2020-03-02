@@ -102,7 +102,7 @@ namespace PrimeTests.Mocks
             return Task.FromResult(enrollee?.EnrolmentStatuses as IEnumerable<EnrolmentStatus>);
         }
 
-        public Task<EnrolmentStatus> CreateEnrolmentStatusAsync(int enrolleeId, Status status)
+        public Task<EnrolmentStatus> CreateEnrolmentStatusAsync(int enrolleeId, Status status, bool acceptedAccessTerm)
         {
             EnrolmentStatus createdEnrolmentStatus = null;
             if (this.GetHolder<int, Enrollee>().ContainsKey(enrolleeId))

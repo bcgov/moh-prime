@@ -2,18 +2,20 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, catchError } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { Config } from '@config/config.model';
 import { PrimeHttpResponse } from '@core/models/prime-http-response.model';
 import { LoggerService } from '@core/services/logger.service';
+import { ToastService } from '@core/services/toast.service';
+import { AccessTerm } from '@shared/models/access-term.model';
 import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
+import { EnrolmentProfileVersion, HttpEnrolleeProfileVersion } from '@shared/models/enrollee-profile-history.model';
 
+import { Admin } from '@auth/shared/models/admin.model';
 import { Address } from '@enrolment/shared/models/address.model';
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
-import { EnrolmentProfileVersion, HttpEnrolleeProfileVersion } from '@adjudication/shared/models/enrollee-profile-history.model';
-import { Admin } from '@auth/shared/models/admin.model';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +25,7 @@ export class AdjudicationResource {
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private http: HttpClient,
+    private toastService: ToastService,
     private logger: LoggerService
   ) { }
 
@@ -90,9 +93,42 @@ export class AdjudicationResource {
       );
   }
 
-  public updateEnrolleeAlwaysManual(id: number, alwaysManual: boolean): Observable<any> {
+  public setEnrolleeAdjudicator(enrolleeId: number): Observable<Enrolment> {
+    return this.http.put(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/adjudicator`, null)
+      .pipe(
+        map((response: PrimeHttpResponse) => response.result),
+        map((enrollee: HttpEnrollee) => this.enrolmentAdapter(enrollee)),
+        tap((enrolment: Enrolment) => this.logger.info('UPDATED_ENROLMENT', enrolment)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Adjudicator could not be assigned');
+          this.logger.error('[Adjudication] AdjudicationResource::addEnrolleeAdjudicator error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public removeEnrolleeAdjudicator(enrolleeId: number): Observable<Enrolment> {
+    return this.http.delete(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/adjudicator`)
+      .pipe(
+        map((response: PrimeHttpResponse) => response.result),
+        map((enrollee: HttpEnrollee) => this.enrolmentAdapter(enrollee)),
+        tap((enrolment: Enrolment) => this.logger.info('UPDATED_ENROLMENT', enrolment)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Adjudicator could not be unassigned');
+          this.logger.error('[Adjudication] AdjudicationResource::removeEnrolleeAdjudicator error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public updateEnrolleeAlwaysManual(id: number, alwaysManual: boolean): Observable<Enrolment> {
     const payload = { data: alwaysManual };
-    return this.http.patch(`${this.config.apiEndpoint}/enrollees/${id}/always-manual`, payload);
+    return this.http.patch(`${this.config.apiEndpoint}/enrollees/${id}/always-manual`, payload)
+      .pipe(
+        map((response: PrimeHttpResponse) => response.result),
+        map((enrollee: HttpEnrollee) => this.enrolmentAdapter(enrollee)),
+        tap((enrolment: Enrolment) => this.logger.info('UPDATED_ENROLMENT', enrolment))
+      );
   }
 
   public deleteEnrolment(id: number): Observable<Enrolment> {
@@ -133,12 +169,34 @@ export class AdjudicationResource {
       );
   }
 
-  public updateAlwaysManualFlag(enrolleeId: number, alwaysManual: boolean): Observable<Config<boolean>[]> {
-    const payload = { enrolleeId, alwaysManual };
-    return this.http.post(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/alwaysManual`, payload)
+  // ---
+  // Access Terms
+  // TODO: These are duplicated across resources.
+  // ---
+
+  public getAccessTerms(enrolleeId: number): Observable<AccessTerm[]> {
+    return this.http.get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/access-terms`)
       .pipe(
-        map((response: PrimeHttpResponse) => response.result as Config<boolean>[]),
-        tap((alwaysManual: Config<boolean>[]) => this.logger.info('ALWAYS_MANUAL', alwaysManual))
+        map((response: PrimeHttpResponse) => response.result as AccessTerm[]),
+        tap((accessTerms: AccessTerm[]) => this.logger.info('ACCESS_TERM', accessTerms))
+      );
+  }
+
+  public getAccessTerm(enrolleeId: number, id: number): Observable<AccessTerm> {
+    return this.http.get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/access-terms/${id}`)
+      .pipe(
+        map((response: PrimeHttpResponse) => response.result as AccessTerm),
+        tap((accessTerm: AccessTerm) => this.logger.info('ACCESS_TERM', accessTerm))
+      );
+  }
+
+  public getEnrolmentProfileForAccessTerm(enrolleeId: number, accessTermId: number): Observable<EnrolmentProfileVersion> {
+    return this.http
+      .get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/access-terms/${accessTermId}/enrolment`)
+      .pipe(
+        map((response: PrimeHttpResponse) => response.result as EnrolmentProfileVersion),
+        tap((enrolmentProfileVersion: EnrolmentProfileVersion) => this.logger.info('ENROLMENT_PROFILE_VERSION', enrolmentProfileVersion)),
+        map(this.enrolleeVersionAdapterResponse.bind(this))
       );
   }
 
@@ -246,6 +304,4 @@ export class AdjudicationResource {
       ...remainder
     };
   }
-
-
 }
