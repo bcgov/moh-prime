@@ -159,6 +159,10 @@ export class AuthService implements IAuthService {
     return this.isUserInRole(Role.SUPER_ADMIN);
   }
 
+  public isROAdmin(): boolean {
+    return this.isUserInRole(Role.READONLY_ADMIN);
+  }
+
   public async decodeToken(): Promise<Keycloak.KeycloakTokenParsed | null> {
     const token = await this.keycloakService.getToken();
     return (token) ? this.jwtHelper.decodeToken(token) : null;

@@ -72,7 +72,7 @@ export class DashboardComponent implements OnInit {
   public onLogout() {
     let routePath = this.config.loginRedirectUrl;
 
-    if (this.authService.isAdmin()) {
+    if (this.authService.isAdmin() || this.authService.isROAdmin()) {
       routePath = `${routePath}/${AuthRoutes.ADMIN}`;
     }
 
@@ -116,7 +116,7 @@ export class DashboardComponent implements OnInit {
   }
 
   private getSideNavSections(): DashboardNavSection[] {
-    return (this.authService.isAdjudicator() || this.authService.isAdmin())
+    return (this.authService.isAdjudicator() || this.authService.isAdmin() || this.authService.isROAdmin())
       ? this.getAdjudicationSideNavSections()
       : this.getEnrolleeSideNavSections();
   }

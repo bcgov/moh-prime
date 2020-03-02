@@ -20,7 +20,7 @@ namespace Prime
         /// <summary>
         /// Returns true if the logged in user is an admin, or if the user has the same UserId as the record
         /// </summary>
-        public static bool CanAccess(this ClaimsPrincipal User, Enrollee enrollee)
+        public static bool CanEdit(this ClaimsPrincipal User, Enrollee enrollee)
         {
             if (User.IsAdmin())
             {
@@ -31,9 +31,23 @@ namespace Prime
             return !PrimeUserId.Equals(Guid.Empty) && PrimeUserId.Equals(enrollee.UserId);
         }
 
+        /// <summary>
+        /// Returns true if the logged in user is an RO_admin, admin, or if the user has the same UserId as the record
+        /// </summary>
+        public static bool CanView(this ClaimsPrincipal User, Enrollee enrollee)
+        {
+            return User.HasAdminView() || User.CanEdit(enrollee);
+        }
+
+
         public static bool IsAdmin(this ClaimsPrincipal User)
         {
             return User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE);
+        }
+
+        public static bool HasAdminView(this ClaimsPrincipal User)
+        {
+            return User.IsInRole(PrimeConstants.PRIME_READONLY_ADMIN);
         }
 
         public static bool HasAssuranceLevel(this ClaimsPrincipal User, int level)

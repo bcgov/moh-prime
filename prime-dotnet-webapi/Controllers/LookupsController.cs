@@ -13,7 +13,7 @@ namespace Prime.Controllers
     [Route("api/[controller]")]
     [ApiController]
     // User needs at least the ADMIN or ENROLLEE role to use this controller
-    [Authorize(Policy = PrimeConstants.USER_POLICY)]
+    [Authorize(Roles = PrimeConstants.PRIME_READONLY_ADMIN + "," + PrimeConstants.PRIME_ENROLLEE_ROLE)]
     public class LookupsController : ControllerBase
     {
         private readonly ILookupService _lookupService;

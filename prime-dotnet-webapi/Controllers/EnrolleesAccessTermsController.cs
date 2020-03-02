@@ -14,8 +14,8 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/enrollees")]
     [ApiController]
-    // User needs at least the ADMIN or ENROLLEE role to use this controller
-    [Authorize(Policy = PrimeConstants.USER_POLICY)]
+    // User needs at least the RO_ADMIN or ENROLLEE role to use this controller
+    [Authorize(Roles = PrimeConstants.PRIME_READONLY_ADMIN + "," + PrimeConstants.PRIME_ENROLLEE_ROLE)]
     public class EnrolleesAccessTermsController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
@@ -52,7 +52,7 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
 
-            if (!User.CanAccess(enrollee))
+            if (!User.CanView(enrollee))
             {
                 return Forbid();
             }
@@ -83,7 +83,7 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
 
-            if (!User.CanAccess(enrollee))
+            if (!User.CanView(enrollee))
             {
                 return Forbid();
             }
@@ -119,7 +119,7 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
 
-            if (!User.CanAccess(enrollee))
+            if (!User.CanView(enrollee))
             {
                 return Forbid();
             }
@@ -158,7 +158,7 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
             }
 
-            if (!User.CanAccess(enrollee))
+            if (!User.CanView(enrollee))
             {
                 return Forbid();
             }
