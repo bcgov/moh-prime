@@ -118,9 +118,9 @@ export class ConfigService implements IConfigService {
    * Get the configuration for bootstrapping the application.
    */
   private getConfiguration(): Observable<Configuration> {
-    return this.http.get<ApiHttpResponse>(`${this.config.apiEndpoint}/lookups`)
+    return this.http.get<ApiHttpResponse<Configuration>>(`${this.config.apiEndpoint}/lookups`)
       .pipe(
-        map((response: ApiHttpResponse) => response.result)
+        map((response: ApiHttpResponse<Configuration>) => response.result)
       );
   }
 
