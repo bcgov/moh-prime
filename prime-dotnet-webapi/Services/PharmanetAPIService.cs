@@ -69,20 +69,20 @@ namespace Prime.Services
             var requestParams = new CollegeRecordRequestParams(licenceNumber, collegeReferenceId);
             var requestContent = new StringContent(JsonConvert.SerializeObject(requestParams));
 
-            HttpResponseMessage response;
+            HttpResponseMessage response = null;
             try
             {
                 response = await Client.PostAsync(PrimeConstants.PHARMANET_API_URL, requestContent);
             }
             catch (Exception ex)
             {
-                // TODO HTTP error. Log error? Retry?
+                LogError(requestParams, response, ex);
                 throw new PharmanetCollegeApiException("Error occurred when calling Pharmanet API. Try again later.", ex);
             }
 
             if (!response.IsSuccessStatusCode)
             {
-                // TODO log error? Client error probably means badly formatted licence number or college ref.
+                LogError(requestParams, response);
                 throw new PharmanetCollegeApiException($"Error code {response.StatusCode} was returned when calling Pharmanet API.");
             }
 
@@ -96,6 +96,13 @@ namespace Prime.Services
             }
 
             return practicionerRecord;
+        }
+
+        // TODO use real logger
+        private void LogError(CollegeRecordRequestParams requestParams, HttpResponseMessage response, Exception exception = null)
+        {
+            string secondaryMessage = exception == null ? $"response code {response.StatusCode}: {response.Content.ReadAsStringAsync()}" : $"exception: {exception.Message}";
+            Console.WriteLine($"{DateTime.Now} - Error validating collecge licence. UUID={requestParams.applicationUUID}, with {secondaryMessage}.");
         }
 
         private PharmanetCollegeRecord LocalDevApiMock(string licenceNumber)
