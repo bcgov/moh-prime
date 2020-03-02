@@ -17,7 +17,7 @@ function pipeline_args() {
 }
 
 function determineMode() {
-    buildPresent=$(oc get "$3"/"$2-${BRANCH_LOWER}" --ignore-not-found=true)
+    buildPresent=$((oc get bc/"${APP_NAME}${SUFFIX}" --ignore-not-found=true | wc -l)
     if [ -z "${buildPresent}" ];
     then 
         MODE="apply"

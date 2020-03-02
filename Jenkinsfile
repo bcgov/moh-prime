@@ -20,15 +20,16 @@ pipeline {
             steps {
                 script {
                     if (env.BRANCH_NAME == 'develop') {
-                        SUFFIX=''
-                    } else {
-                        SUFFIX="\-${BRANCH_LOWER}"
-                    }
-                    checkout scm
                     echo "Building ..."
-                    sh "./player.sh build database dev -p SUFFIX='${SUFFIX}'"
+                    sh "./player.sh build database dev"
                     sh "./player.sh build api dev ${API_ARGS}"
                     sh "./player.sh build frontend dev ${FRONTEND_ARGS}"
+                    } else {
+                    echo "Building ..."
+                    sh "./player.sh build database dev -p SUFFIX=-${BRANCH_LOWER}"
+                    sh "./player.sh build api dev ${API_ARGS}"
+                    sh "./player.sh build frontend dev ${FRONTEND_ARGS}"
+                    }
                 }
             }
         }
@@ -41,14 +42,16 @@ pipeline {
             steps {
                 script {
                     if (env.BRANCH_NAME == 'develop') {
-                        SUFFIX=''
-                    } else {
-                        SUFFIX="-${BRANCH_LOWER}"
-                    }
                     echo "Deploy to dev..."
-                    sh "./player.sh deploy database dev -p SUFFIX='${SUFFIX}'"
+                    sh "./player.sh deploy database dev"
                     sh "./player.sh deploy api dev ${API_ARGS}"
                     sh "./player.sh deploy frontend dev ${FRONTEND_ARGS}"
+                    } else {
+                    echo "Deploy to dev..."
+                    sh "./player.sh deploy database dev -p SUFFIX=-${BRANCH_LOWER}"
+                    sh "./player.sh deploy api dev ${API_ARGS}"
+                    sh "./player.sh deploy frontend dev ${FRONTEND_ARGS}"
+                    }
                 }
             }
         }
