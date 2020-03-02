@@ -102,7 +102,7 @@ namespace Prime.Services
                         .ToListAsync();
         }
 
-        public async Task<ICollection<AssignedPrivilege>> GetAssignedPrivilegesForEnrolleeAsync(int? enrolleeId)
+        public async Task<ICollection<AssignedPrivilege>> GetAssignedPrivilegesForEnrolleeAsync(int enrolleeId)
         {
             return await _context.AssignedPrivileges
                         .Where(ap => ap.EnrolleeId == enrolleeId)
@@ -112,7 +112,7 @@ namespace Prime.Services
                         .ToListAsync();
         }
 
-        private async Task<ICollection<Privilege>> GetPrivilegesForEnrolleeQueryAsync(int? enrolleeId)
+        private async Task<ICollection<Privilege>> GetPrivilegesForEnrolleeQueryAsync(int enrolleeId)
         {
             return await _context.Privileges
                         .Include(p => p.AssignedPrivileges)

@@ -8,7 +8,7 @@ namespace Prime.Services
     {
         Task AssignPrivilegesToEnrolleeAsync(int enrolleeId, Enrollee enrollee);
 
-        Task<ICollection<AssignedPrivilege>> GetAssignedPrivilegesForEnrolleeAsync(int? enrolleeId);
+        Task<ICollection<AssignedPrivilege>> GetAssignedPrivilegesForEnrolleeAsync(int enrolleeId);
 
         Task<ICollection<Privilege>> GetPrivilegesForEnrolleeAsync(Enrollee enrollee);
 
