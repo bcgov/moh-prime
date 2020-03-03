@@ -16,13 +16,13 @@ pipeline {
                     FRONTEND_ARGS="-p REDIRECT_URL=${SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL}"
                     API_ARGS="-p ASPNETCORE_ENVIRONMENT=Release -p VANITY_URL=${VANITY_URL}"
                     echo "Test (MASTER) ..."
-                    sh "./player.sh build database test"
-                    sh "./player.sh build api test ${API_ARGS}"
-                    sh "./player.sh build frontend test ${FRONTEND_ARGS}"
-                    sh "./player.sh deploy database test"
-                    sh "./player.sh deploy api test ${API_ARGS}"
-                    sh "./player.sh deploy frontend test ${FRONTEND_ARGS}"
-                    sh "./player.sh toolbelt schemaspy test"
+                    sh "./player.sh build database test -p SUFFIX='-test'"
+                    sh "./player.sh build api test ${API_ARGS} -p SUFFIX='-test'"
+                    sh "./player.sh build frontend test ${FRONTEND_ARGS} -p SUFFIX='-test'"
+                    sh "./player.sh deploy database test -p SUFFIX='-test'"
+                    sh "./player.sh deploy api test ${API_ARGS} -p SUFFIX='-test'"
+                    sh "./player.sh deploy frontend test ${FRONTEND_ARGS} -p SUFFIX='-test'"
+                    sh "./player.sh toolbelt schemaspy test -p SOURCE_CONTEXT_DIR='schemaspy'"
                 }
             }
         }
@@ -46,6 +46,24 @@ pipeline {
                 echo "Scanning..."
                 sh "./player.sh zap frontend"
                 sh "./player.sh zap api"
+            }
+        }
+        stage('Approve Promotion of Develop') {
+            options {
+                timeout(time: 24, unit: 'HOURS')   // timeout on this stage
+            }
+            when { expression { ( BRANCH_NAME == 'master' ) } }
+            steps {
+                script {
+                    def IS_APPROVED = input(
+                        id: 'IS_APPROVED', message: "Deploy to Develop?", ok: "Yes", parameters: [
+                            string(name: 'IS_APPROVED', defaultValue: 'Yes', description: 'Deploy to Develop?')
+                            ])
+                    if (IS_APPROVED != 'yes') {
+                        currentBuild.result = "SUCCESS"
+                        echo "User cancelled deployment"
+                    }
+                }
             }
         }
         stage('Promote Master to Demo') {
@@ -81,8 +99,8 @@ pipeline {
             steps {
                 script {
                     def IS_APPROVED = input(
-                        id: 'IS_APPROVED', message: "Deploy to Production?", ok: "yes", parameters: [
-                            string(name: 'IS_APPROVED', defaultValue: 'yes', description: 'Deploy to Production?')
+                        id: 'IS_APPROVED', message: "Deploy to Production?", ok: "Yes", parameters: [
+                            string(name: 'IS_APPROVED', defaultValue: 'Yes', description: 'Deploy to Production?')
                             ])
                     if (IS_APPROVED != 'yes') {
                         currentBuild.result = "SUCCESS"
