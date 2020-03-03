@@ -18,6 +18,8 @@ namespace Prime.Models
     [Table("Enrollee")]
     public class Enrollee : BaseAuditable, IValidatableObject
     {
+        public const int DISPLAY_OFFSET = 1000;
+
         [Key]
         public int Id { get; set; }
 
@@ -161,7 +163,7 @@ namespace Prime.Models
         [NotMapped]
         public int DisplayId
         {
-            get => Id + 1000;
+            get => Id + DISPLAY_OFFSET;
         }
 
         public ICollection<AdjudicatorNote> AdjudicatorNotes { get; set; }
