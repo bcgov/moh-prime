@@ -76,13 +76,13 @@ namespace Prime.Services
             }
             catch (Exception ex)
             {
-                LogError(requestParams, response, ex);
+                await LogError(requestParams, response, ex);
                 throw new PharmanetCollegeApiException("Error occurred when calling Pharmanet API. Try again later.", ex);
             }
 
             if (!response.IsSuccessStatusCode)
             {
-                LogError(requestParams, response);
+                await LogError(requestParams, response);
                 throw new PharmanetCollegeApiException($"Error code {response.StatusCode} was returned when calling Pharmanet API.");
             }
 
@@ -99,9 +99,10 @@ namespace Prime.Services
         }
 
         // TODO use real logger
-        private void LogError(CollegeRecordRequestParams requestParams, HttpResponseMessage response, Exception exception = null)
+        private async Task LogError(CollegeRecordRequestParams requestParams, HttpResponseMessage response, Exception exception = null)
         {
-            string secondaryMessage = exception == null ? $"response code {response.StatusCode}: {response.Content.ReadAsStringAsync()}" : $"exception: {exception.Message}";
+            string responseMessage = await response?.Content.ReadAsStringAsync();
+            string secondaryMessage = exception == null ? $"response code {response.StatusCode}: {responseMessage}" : $"exception: {exception.Message}";
             Console.WriteLine($"{DateTime.Now} - Error validating college licence. UUID = {requestParams.applicationUUID}, with {secondaryMessage}.");
         }
 
