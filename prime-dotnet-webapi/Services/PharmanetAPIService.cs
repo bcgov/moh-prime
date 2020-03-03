@@ -102,8 +102,8 @@ namespace Prime.Services
         private async Task LogError(CollegeRecordRequestParams requestParams, HttpResponseMessage response, Exception exception = null)
         {
             string responseMessage = await response?.Content.ReadAsStringAsync();
-            string secondaryMessage = exception == null ? $"response code {response.StatusCode}: {responseMessage}" : $"exception: {exception.Message}";
-            Console.WriteLine($"{DateTime.Now} - Error validating college licence. UUID = {requestParams.applicationUUID}, with {secondaryMessage}.");
+            string secondaryMessage = exception == null ? $"response code:{(int)response.StatusCode}, response body:{responseMessage}" : $"exception: {exception.Message}";
+            Console.WriteLine($"{DateTime.Now} - Error validating college licence. UUID:{requestParams.applicationUUID}, with {secondaryMessage}.");
         }
 
         private PharmanetCollegeRecord LocalDevApiMock(string licenceNumber)
