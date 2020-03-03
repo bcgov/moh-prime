@@ -12,7 +12,6 @@ namespace Prime.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
         public Guid UserId { get; set; }
 
         [Required]

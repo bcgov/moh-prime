@@ -2,7 +2,7 @@ export const environment = {
   production: true,
   version: '1.0.0',
   apiEndpoint: '/api/v1',
-  loginRedirectUrl: 'http://localhost:4200',
+  loginRedirectUrl: 'http://localhost:4300',
   keycloakConfig: {
     config: {
       url: 'https://sso-dev.pathfinder.gov.bc.ca/auth',

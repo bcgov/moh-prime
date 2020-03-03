@@ -9,7 +9,7 @@ namespace Prime.Models
     [Table("DefaultPrivilege")]
     public class DefaultPrivilege : BaseAuditable
     {
-        public short LicenseCode { get; set; }
+        public int LicenseCode { get; set; }
 
         [JsonIgnore]
         public License License { get; set; }
