@@ -109,7 +109,7 @@ namespace Prime.Controllers
             var emailLogMessage = string.IsNullOrEmpty(optionalEmail)
                 ? "Provisioner link sent to email: " + recipientEmail
                 : "Provisioner link sent to emails: " + recipientEmail + ", " + optionalEmail;
-            await _businessEventService.CreateEmailEventAsync((int)enrollee.Id, emailLogMessage);
+            await _businessEventService.CreateEmailEventAsync(enrollee.Id, emailLogMessage);
 
             return CreatedAtAction(
                 nameof(GetEnrolmentCertificate),
