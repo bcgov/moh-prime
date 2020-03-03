@@ -1,15 +1,16 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { AccessTerm } from '@shared/models/access-term.model';
+
 const PLACEHOLDER = '{$lcPlaceholder}';
 const PREFIX = '<li><p class="bold underline">Additional Limits and Conditions</p>';
 const SUFFIX = '</li>';
+
 @Component({
   selector: 'app-access-term',
   templateUrl: './access-term.component.html',
   styleUrls: ['./access-term.component.scss']
 })
 export class AccessTermComponent implements OnInit, OnChanges {
-
   @Input() public accessTerms: AccessTerm;
   public clause: string;
 
@@ -23,5 +24,6 @@ export class AccessTermComponent implements OnInit, OnChanges {
       this.clause = tempClause.replace(PLACEHOLDER, content);
     }
   }
+  
   public ngOnInit() { }
 }
