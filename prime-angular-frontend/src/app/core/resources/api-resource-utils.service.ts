@@ -18,7 +18,9 @@ export class ApiResourceUtilsService {
       ? Object.keys(queryParams)
         .reduce(
           (httpParams: HttpParams, key: string) =>
-            httpParams.set(key, `${queryParams[key]}`),
+            (![null, undefined].includes(queryParams[key]))
+              ? httpParams.set(key, `${queryParams[key]}`)
+              : httpParams,
           new HttpParams()
         )
       : null;
