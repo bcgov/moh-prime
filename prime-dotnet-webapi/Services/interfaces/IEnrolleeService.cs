@@ -22,7 +22,7 @@ namespace Prime.Services
 
         Task<IEnumerable<Enrollee>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null);
 
-        Task<int?> CreateEnrolleeAsync(Enrollee enrollee);
+        Task<int> CreateEnrolleeAsync(Enrollee enrollee);
 
         Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeProfileViewModel enrolleeProfile, bool profileCompleted = false);
 
@@ -36,7 +36,7 @@ namespace Prime.Services
 
         bool IsStatusChangeAllowed(Status startingStatus, Status endingStatus);
 
-        Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, params short[] statusCodesToCheck);
+        Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, params int[] statusCodesToCheck);
 
         Task<IEnumerable<AdjudicatorNote>> GetEnrolleeAdjudicatorNotesAsync(Enrollee enrollee);
 
@@ -47,5 +47,7 @@ namespace Prime.Services
         Task<Enrollee> UpdateEnrolleeAlwaysManualAsync(int enrolleeId, bool alwaysManual);
 
         Task<int> GetEnrolleeCountAsync();
+
+        Task<Enrollee> UpdateEnrolleeAdjudicator(int enrolleeId, Guid adminId = default(Guid));
     }
 }

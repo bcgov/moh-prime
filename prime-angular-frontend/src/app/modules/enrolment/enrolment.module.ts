@@ -22,7 +22,7 @@ import {
 } from './pages/access-agreement/components/limits-and-conditions-clause/limits-and-conditions-clause.component';
 import { UserClauseComponent } from './pages/access-agreement/components/user-clause/user-clause.component';
 import { PharmanetEnrolmentSummaryComponent } from './pages/pharmanet-enrolment-summary/pharmanet-enrolment-summary.component';
-import { AccessLocked } from './pages/access-locked/access-locked.component';
+import { AccessLockedComponent } from './pages/access-locked/access-locked.component';
 import { AccessAgreementHistoryComponent } from './pages/access-agreement-history/access-agreement-history.component';
 import { PharmanetTransactionsComponent } from './pages/pharmanet-transactions/pharmanet-transactions.component';
 import { AccessTermsComponent } from './pages/access-terms/access-terms.component';
@@ -34,7 +34,9 @@ import { CollectionNoticeAlertComponent } from './shared/components/collection-n
 import { RuAccessTermsComponent } from './pages/access-agreement/components/ru-access-terms/ru-access-terms.component';
 import { OboAccessTermsComponent } from './pages/access-agreement/components/obo-access-terms/obo-access-terms.component';
 import { AccessAgreementCurrentComponent } from './pages/access-agreement-current/access-agreement-current.component';
-import { AccessAgreementHistoryEnrolmentComponent } from './pages/access-agreement-history-enrolment/access-agreement-history-enrolment.component';
+import {
+  AccessAgreementHistoryEnrolmentComponent
+} from './pages/access-agreement-history-enrolment/access-agreement-history-enrolment.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +56,7 @@ import { AccessAgreementHistoryEnrolmentComponent } from './pages/access-agreeme
     LicenceClassClauseComponent,
     LimitsAndConditionsClauseComponent,
     UserClauseComponent,
-    AccessLocked,
+    AccessLockedComponent,
     AccessAgreementHistoryComponent,
     PharmanetEnrolmentSummaryComponent,
     PharmanetTransactionsComponent,

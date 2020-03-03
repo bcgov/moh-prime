@@ -8,7 +8,7 @@ namespace Prime.Models
     public class Job : BaseAuditable, IEnrolleeNavigationProperty
     {
         [Key]
-        public int? Id { get; set; }
+        public int Id { get; set; }
 
         [JsonIgnore]
         public int EnrolleeId { get; set; }

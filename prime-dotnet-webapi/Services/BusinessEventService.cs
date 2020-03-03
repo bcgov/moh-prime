@@ -11,7 +11,7 @@ namespace Prime.Services
             ApiDbContext context, IHttpContextAccessor httpContext) : base(context, httpContext)
         { }
 
-        public async Task<BusinessEvent> CreateBusinessEventAsync(int enrolleeId, short eventTypeCode, string description, int? adminId = null)
+        public async Task<BusinessEvent> CreateBusinessEventAsync(int enrolleeId, int eventTypeCode, string description, int? adminId = null)
         {
             var businessEvent = new BusinessEvent
             {
