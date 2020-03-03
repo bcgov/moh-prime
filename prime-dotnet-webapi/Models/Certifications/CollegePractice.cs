@@ -4,13 +4,13 @@ namespace Prime.Models
 {
     public class CollegePractice : BaseAuditable
     {
-        public short CollegeCode { get; set; }
+        public int CollegeCode { get; set; }
 
         [JsonIgnore]
         public College College { get; set; }
 
-        public short PracticeCode { get; set; }
-        
+        public int PracticeCode { get; set; }
+
         [JsonIgnore]
         public Practice Practice { get; set; }
     }
