@@ -1,11 +1,11 @@
 import { HttpErrorResponse, HttpParams, HttpResponse } from '@angular/common/http';
 
 import { Observable, throwError, pipe } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ApiHttpErrorResponse } from '@core/models/api-http-error-response.model';
 import { LoggerService } from '@core/services/logger.service';
-import { map, catchError } from 'rxjs/operators';
 
 export abstract class AbstractResource {
   constructor(
