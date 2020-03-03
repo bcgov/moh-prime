@@ -30,7 +30,7 @@ function determineMode() {
         OC_ARGS=""
     else 
         MODE="apply"
-        OC_ARGS="--overwrite=false --all"
+        OC_ARGS="--overwrite=true --all"
     fi;
 }
 
