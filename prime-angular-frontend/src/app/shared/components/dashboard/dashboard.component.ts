@@ -176,7 +176,7 @@ export class DashboardComponent implements OnInit {
           {
             name: 'PharmaNet Enrolment Certificate',
             icon: statusIcons.certificate,
-            route: EnrolmentRoutes.PHARMANET_ENROLMENT_CERTIFICATE,
+            route: EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY,
             showItem: true,
             disabled: (
               !hasAcceptedAtLeastOneToa ||

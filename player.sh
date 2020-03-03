@@ -7,12 +7,10 @@ case "$1" in
     build)
         build $@ # > /dev/null 2>&1
         #echo "Extra params= ${@:4}"
-
         ;;
     deploy)
         deploy $@ # > /dev/null 2>&1
         #echo "Extra params= ${@:4}"
-
         ;;
     toolbelt)
         toolbelt $@
@@ -26,9 +24,6 @@ case "$1" in
         ;;
     occleanup)
         occleanup
-        ;;
-    nukenpave)
-        nukenpave $@
         ;;
     pipeline_args)
         pipeline_args $@

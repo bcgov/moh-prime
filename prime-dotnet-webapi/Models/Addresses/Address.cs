@@ -14,7 +14,7 @@ namespace Prime.Models
     public abstract class Address : BaseAuditable
     {
         [Key]
-        public int? Id { get; set; }
+        public int Id { get; set; }
 
         [JsonIgnore]
         public int EnrolleeId { get; set; }

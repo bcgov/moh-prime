@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { AccessTerm } from '@enrolment/shared/models/access-term.model';
+import { AccessTerm } from '@shared/models/access-term.model';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { Subscription } from 'rxjs';
 import { LoggerService } from '@core/services/logger.service';
@@ -28,8 +28,6 @@ export class AccessTermsComponent extends BaseEnrolmentPage implements OnInit {
     private toastService: ToastService
   ) {
     super(route, router);
-    // this.columns = ['applicationDate', 'approvalDate', 'expiryDate', 'actions'];
-    this.columns = ['current', 'applicationDate', 'approvalDate', 'actions'];
   }
 
   public ngOnInit() {

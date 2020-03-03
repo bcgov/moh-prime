@@ -7,9 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using SimpleBase;
 using Prime.Models;
 using Prime.ViewModels;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Prime.Models.Api;
-using System.Reflection;
 
 namespace Prime.Services
 {
@@ -20,6 +18,7 @@ namespace Prime.Services
         private readonly IPrivilegeService _privilegeService;
         private readonly IAccessTermService _accessTermService;
         private readonly IEnrolleeProfileVersionService _enroleeProfileVersionService;
+        private readonly IBusinessEventService _businessEventService;
 
         private class StatusWrapper
         {
@@ -38,7 +37,8 @@ namespace Prime.Services
             IEmailService emailService,
             IPrivilegeService privilegeService,
             IAccessTermService accessTermService,
-            IEnrolleeProfileVersionService enroleeProfileVersionService)
+            IEnrolleeProfileVersionService enroleeProfileVersionService,
+            IBusinessEventService businessEventService)
             : base(context, httpContext)
         {
             _automaticAdjudicationService = automaticAdjudicationService;
@@ -46,6 +46,7 @@ namespace Prime.Services
             _privilegeService = privilegeService;
             _accessTermService = accessTermService;
             _enroleeProfileVersionService = enroleeProfileVersionService;
+            _businessEventService = businessEventService;
         }
 
         private Dictionary<Status, StatusWrapper[]> GetWorkFlowStateMap()
@@ -123,13 +124,29 @@ namespace Prime.Services
 
         public async Task<IEnumerable<Enrollee>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)
         {
-            IEnumerable<Enrollee> items = await this.GetBaseEnrolleeQuery()
-                                                    .ToListAsync();
+            var query = this.GetBaseEnrolleeQuery();
+
+            if (searchOptions != null && searchOptions.TextSearch != null)
+            {
+                query = query.Where(e =>
+                    e.FirstName.ToLower().StartsWith(searchOptions.TextSearch.ToLower())
+                    || e.LastName.ToLower().StartsWith(searchOptions.TextSearch.ToLower())
+                    || e.ContactEmail.ToLower().StartsWith(searchOptions.TextSearch.ToLower())
+                    || e.VoicePhone.ToLower().StartsWith(searchOptions.TextSearch.ToLower())
+                    // Since DisplayId is a derived field we can not query on it. And we
+                    // don't want to have to grab all Enrollees and filter on the front end.
+                    || (e.Id + Enrollee.DISPLAY_OFFSET).ToString().Equals(searchOptions.TextSearch)
+                    || e.FirstName.ToLower().StartsWith(searchOptions.TextSearch.ToLower())
+                    || e.Certifications.Any(c => c.LicenseNumber.ToLower().StartsWith(searchOptions.TextSearch.ToLower()))
+                );
+            }
+
+            IEnumerable<Enrollee> items = await query.ToListAsync();
 
             if (searchOptions?.StatusCode != null)
             {
                 // TODO refactor see Jira PRIME-251
-                items = items.Where(e => e.CurrentStatus.StatusCode == (short)searchOptions.StatusCode);
+                items = items.Where(e => e.CurrentStatus.StatusCode == searchOptions.StatusCode);
             }
 
             foreach (var item in items)
@@ -153,19 +170,13 @@ namespace Prime.Services
             return enrollee;
         }
 
-        public Task<int?> CreateEnrolleeAsync(Enrollee enrollee)
+        public async Task<int> CreateEnrolleeAsync(Enrollee enrollee)
         {
             if (enrollee == null)
             {
                 throw new ArgumentNullException(nameof(enrollee), "Could not create an enrollee, the passed in Enrollee cannot be null.");
             }
 
-            return this.CreateEnrolleeInternalAsync(enrollee);
-        }
-
-        private async Task<int?> CreateEnrolleeInternalAsync(Enrollee enrollee)
-        {
-            // Create a status history record
             EnrolmentStatus enrolmentStatus = new EnrolmentStatus
             {
                 Enrollee = enrollee,
@@ -194,17 +205,13 @@ namespace Prime.Services
         public async Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeProfileViewModel enrolleeProfile, bool profileCompleted = false)
         {
             var _enrolleeDb = await _context.Enrollees
-                .Include(e => e.MailingAddress)
-                .Include(e => e.Certifications)
-                .Include(e => e.Jobs)
-                .Include(e => e.Organizations)
-                .AsNoTracking()
-                .Where(e => e.Id == enrolleeId)
-                .SingleOrDefaultAsync();
-
-            Enrollee enrollee = new Enrollee { Id = enrolleeId };   // stub model, only has Id
-            _context.Enrollees.Attach(enrollee); // track your stub model
-            _context.Entry(enrollee).CurrentValues.SetValues(enrolleeProfile); // reflection
+                 .Include(e => e.MailingAddress)
+                 .Include(e => e.Certifications)
+                 .Include(e => e.Jobs)
+                 .Include(e => e.Organizations)
+                 .AsNoTracking()
+                 .Where(e => e.Id == enrolleeId)
+                 .SingleOrDefaultAsync();
 
             // Remove existing, and recreate if necessary
             this.ReplaceExistingAddress(_enrolleeDb.MailingAddress, enrolleeProfile.MailingAddress, enrolleeProfile, enrolleeId);
@@ -212,10 +219,19 @@ namespace Prime.Services
             this.ReplaceExistingItems(_enrolleeDb.Jobs, enrolleeProfile.Jobs, enrolleeProfile, enrolleeId);
             this.ReplaceExistingItems(_enrolleeDb.Organizations, enrolleeProfile.Organizations, enrolleeProfile, enrolleeId);
 
+            var enrolleeTrack = await _context.Enrollees
+                .Where(e => e.Id == enrolleeId)
+                .SingleOrDefaultAsync();
+
+            _context.Entry(enrolleeTrack).CurrentValues.SetValues(enrolleeProfile); // reflection
+
             // If profileCompleted is true, this is the first time the enrollee
             // has completed their profile by traversing the wizard, and indicates
             // a change in routing for the enrollee
-            enrollee.ProfileCompleted = _enrolleeDb.ProfileCompleted || profileCompleted;
+            if (profileCompleted)
+            {
+                enrolleeTrack.ProfileCompleted = profileCompleted;
+            }
 
             try
             {
@@ -306,18 +322,13 @@ namespace Prime.Services
             return items;
         }
 
-        public Task<EnrolmentStatus> CreateEnrolmentStatusAsync(int enrolleeId, Status status, bool acceptedAccessTerm)
+        public async Task<EnrolmentStatus> CreateEnrolmentStatusAsync(int enrolleeId, Status newStatus, bool acceptedAccessTerm, int? adminId)
         {
-            if (status == null)
+            if (newStatus == null)
             {
-                throw new ArgumentNullException(nameof(status), "Could not create an enrolment status, the passed in Status cannot be null.");
+                throw new ArgumentNullException(nameof(newStatus), "Could not create an enrolment status, the passed in Status cannot be null.");
             }
 
-            return this.CreateEnrolmentStatusInternalAsync(enrolleeId, status, acceptedAccessTerm);
-        }
-
-        private async Task<EnrolmentStatus> CreateEnrolmentStatusInternalAsync(int enrolleeId, Status newStatus, bool acceptedAccessTerm)
-        {
             var enrollee = await this.GetBaseEnrolleeQuery()
                 .Include(e => e.Certifications)
                     .ThenInclude(cer => cer.College) // Needed for PharmaNet College auto-adjudication
@@ -370,6 +381,12 @@ namespace Prime.Services
 
                         // Flip to the object that will get returned
                         createdEnrolmentStatus = adjudicatedEnrolmentStatus;
+
+                        await _businessEventService.CreateStatusChangeEventAsync(enrolleeId, "Automatically Approved", adminId);
+                    }
+                    else
+                    {
+                        await _businessEventService.CreateStatusChangeEventAsync(enrolleeId, "Submitted", adminId);
                     }
                     break;
 
@@ -379,17 +396,21 @@ namespace Prime.Services
 
                     await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee);
 
+                    await _businessEventService.CreateStatusChangeEventAsync(enrolleeId, "Manually Approved", adminId);
+
                     break;
 
                 case Status.LOCKED_CODE:
                     await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
                     createdEnrolmentStatus.PharmaNetStatus = true;
+                    await _businessEventService.CreateStatusChangeEventAsync(enrolleeId, "Locked", adminId);
                     break;
 
                 case Status.ACTIVE_CODE:
                     // Sent back to edit profile from Under Review
                     if (oldStatus.Code == Status.UNDER_REVIEW_CODE)
                     {
+                        await _businessEventService.CreateStatusChangeEventAsync(enrolleeId, "Enabled Editing", adminId);
                         break;
                     }
 
@@ -401,6 +422,9 @@ namespace Prime.Services
                         createdEnrolmentStatus.PharmaNetStatus = true;
                         await _accessTermService.AcceptCurrentAccessTermAsync(enrollee);
                         await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrolleeId, enrollee);
+                        await _businessEventService.CreateStatusChangeEventAsync(enrolleeId, "Accepted TOA", adminId);
+                        await UpdateEnrolleeAdjudicator(enrollee.Id);
+                        await _businessEventService.CreateAdminClaimEventAsync(enrolleeId, "Admin disclaimed after TOA accepted");
                         break;
                     }
                     break;
@@ -408,6 +432,13 @@ namespace Prime.Services
             }
 
             await _context.SaveChangesAsync();
+
+            // Enrollee just left manual adjudication, inform the enrollee
+            if (oldStatus?.Code == Status.UNDER_REVIEW_CODE)
+            {
+                await _emailService.SendReminderEmailAsync(enrollee);
+                await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Email to Enrollee after leaving manual adjudication");
+            }
 
             return createdEnrolmentStatus;
         }
@@ -436,7 +467,7 @@ namespace Prime.Services
             return availableStatuses.Contains(endingStatus);
         }
 
-        public async Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, params short[] statusCodesToCheck)
+        public async Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, params int[] statusCodesToCheck)
         {
             var enrollee = await _context.Enrollees
                 .AsNoTracking()
@@ -509,7 +540,7 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, string note)
+        public async Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, string note, int? adminId = null)
         {
             var adjudicatorNote = new AdjudicatorNote
             {
@@ -524,12 +555,16 @@ namespace Prime.Services
             if (created < 1)
             {
                 throw new InvalidOperationException("Could not create adjudicator note.");
-            };
+            }
+            else
+            {
+                await _businessEventService.CreateNoteEventAsync(enrolleeId, "Added Adjudicator Note: " + note, adminId);
+            }
 
             return adjudicatorNote;
         }
 
-        public async Task<IEnrolleeNote> UpdateEnrolleeNoteAsync(int enrolleeId, IEnrolleeNote newNote)
+        public async Task<IEnrolleeNote> UpdateEnrolleeNoteAsync(int enrolleeId, IEnrolleeNote newNote, int? adminId = null)
         {
             var enrollee = await _context.Enrollees
                 .Include(e => e.AccessAgreementNote)
@@ -571,6 +606,10 @@ namespace Prime.Services
             {
                 throw new InvalidOperationException($"Could not update the enrollee note.");
             }
+            else
+            {
+                await _businessEventService.CreateNoteEventAsync(enrolleeId, "Updated Limits and Conditions Note: " + newNote, adminId);
+            }
 
             return newNote;
         }
@@ -592,7 +631,30 @@ namespace Prime.Services
         {
             return await _context.Enrollees
                    .CountAsync();
-
         }
+
+        public async Task<Enrollee> UpdateEnrolleeAdjudicator(int enrolleeId, Guid adjudicatorUserId = default(Guid))
+        {
+            var enrollee = await GetBaseEnrolleeQuery()
+                .Include(e => e.Adjudicator)
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
+            // Admin is set to null if no adjudicatorUserId is provided
+            var admin = await _context.Admins
+                .SingleOrDefaultAsync(a => a.UserId == adjudicatorUserId);
+
+            enrollee.Adjudicator = admin;
+
+            _context.Update(enrollee);
+
+            var updated = await _context.SaveChangesAsync();
+            if (updated < 1)
+            {
+                throw new InvalidOperationException($"Could not update the enrollee adjudicator.");
+            }
+
+            return enrollee;
+        }
+
     }
 }

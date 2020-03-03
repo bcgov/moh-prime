@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -14,6 +15,15 @@ namespace Prime.Services
         private const int MAX_VIEWS = 3;
         private readonly IAccessTermService _accessTermService;
         private readonly IEnrolleeProfileVersionService _enroleeProfileVersionService;
+
+        private ImmutableDictionary<string, string> PharmaNetProvisioners = new Dictionary<string, string>()
+        {
+            { "CareConnect", "CareConnect@phsa.ca" },
+            { "Excelleris", "support@excelleris.com" },
+            { "iClinic", "help@iclinicemr.com" },
+            { "MediNet", "prime@medinet.ca" },
+            { "Plexia", "service@plexia.ca" }
+        }.ToImmutableDictionary();
 
         public EnrolmentCertificateService(
             ApiDbContext context,
@@ -44,7 +54,7 @@ namespace Prime.Services
 
             if (token.Active)
             {
-                var enrolleeId = (int)token?.EnrolleeId;
+                var enrolleeId = token.EnrolleeId;
                 var acceptedAccessTerm = await _accessTermService.GetMostRecentAcceptedEnrolleesAccessTermAsync(enrolleeId);
                 if (acceptedAccessTerm != null)
                 {
@@ -72,12 +82,9 @@ namespace Prime.Services
                         return EnrolmentCertificate.Create(enrolleeHistory, token.Enrollee);
                     }
                 }
-                return null;
             }
-            else
-            {
-                return null;
-            }
+
+            return null;
         }
 
         public async Task<EnrolmentCertificateAccessToken> CreateCertificateAccessTokenAsync(Enrollee enrollee)
@@ -106,6 +113,23 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
+        public string GetPharmaNetProvisionerEmail(string provisionerName, ref string otherEmail)
+        {
+            string recipientEmail;
+
+            if (provisionerName == "Other")
+            {
+                recipientEmail = otherEmail;
+                otherEmail = "";
+            }
+            else
+            {
+                PharmaNetProvisioners.TryGetValue(provisionerName, out recipientEmail);
+            }
+
+            return recipientEmail;
+        }
+
         private async Task UpdateTokenMetadataAsync(EnrolmentCertificateAccessToken token)
         {
             if (!token.Active)
@@ -113,8 +137,7 @@ namespace Prime.Services
                 return;
             }
 
-            if (token.ViewCount >= MAX_VIEWS
-                || DateTime.Today > token.Expires)
+            if (token.ViewCount >= MAX_VIEWS || DateTime.Today > token.Expires)
             {
                 token.Active = false;
             }
