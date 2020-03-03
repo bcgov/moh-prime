@@ -1,0 +1,18 @@
+<form [formGroup]="form">
+  <mat-form-field class="w-50 mr-4">
+    <input matInput
+           placeholder="Search"
+           formControlName="textSearch">
+  </mat-form-field>
+
+  <mat-form-field class="mr-3">
+    <mat-label>Filter By Status</mat-label>
+    <mat-select formControlName="statusCode">
+      <mat-option value="">All</mat-option>
+      <mat-option *ngFor="let status of statuses"
+                  [value]="status.code">
+        {{ status.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</form>

@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
@@ -38,8 +38,10 @@ export class AdjudicationResource {
       );
   }
 
-  public enrollees(statusCode?: number): Observable<Enrolment[]> {
-    const params = (statusCode) ? { statusCode: `${statusCode}` } : {};
+  public enrollees(statusCode?: number, textSearch?: string): Observable<Enrolment[]> {
+    let params = new HttpParams();
+    params = (statusCode) ? params.set('statusCode', `${statusCode}`) : params;
+    params = (textSearch) ? params.set('textSearch', textSearch) : params;
     return this.http.get(`${this.config.apiEndpoint}/enrollees`, { params })
       .pipe(
         map((response: PrimeHttpResponse) => response.result),

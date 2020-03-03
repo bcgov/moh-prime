@@ -22,17 +22,20 @@ namespace Prime.Controllers
         private readonly IAccessTermService _accessTermService;
         private readonly IEnrolleeProfileVersionService _enrolleeProfileVersionService;
         private readonly IAdminService _adminService;
+        private readonly IBusinessEventService _businessEventService;
 
         public EnrolleesController(
             IEnrolleeService enrolleeService,
             IAccessTermService accessTermService,
             IEnrolleeProfileVersionService enrolleeProfileVersionService,
-            IAdminService adminService)
+            IAdminService adminService,
+            IBusinessEventService businessEventService)
         {
             _enrolleeService = enrolleeService;
             _accessTermService = accessTermService;
             _enrolleeProfileVersionService = enrolleeProfileVersionService;
             _adminService = adminService;
+            _businessEventService = businessEventService;
         }
 
 
@@ -277,7 +280,8 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            var createdAdjudicatorNote = await _enrolleeService.CreateEnrolleeAdjudicatorNoteAsync(enrolleeId, note);
+            var admin = await _adminService.GetAdminForUserIdAsync(User.GetPrimeUserId());
+            var createdAdjudicatorNote = await _enrolleeService.CreateEnrolleeAdjudicatorNoteAsync(enrolleeId, note, admin.Id);
 
             return CreatedAtAction(
                 nameof(GetAdjudicatorNotes),
@@ -320,7 +324,8 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            var updatedNote = await _enrolleeService.UpdateEnrolleeNoteAsync(enrolleeId, accessAgreementNote);
+            var admin = await _adminService.GetAdminForUserIdAsync(User.GetPrimeUserId());
+            var updatedNote = await _enrolleeService.UpdateEnrolleeNoteAsync(enrolleeId, accessAgreementNote, admin.Id);
 
             return Ok(new ApiOkResponse<IEnrolleeNote>(updatedNote));
         }
@@ -426,7 +431,9 @@ namespace Prime.Controllers
             }
 
             var adjudicatorUserId = User.GetPrimeUserId();
+            var admin = await _adminService.GetAdminForUserIdAsync(User.GetPrimeUserId());
             var updatedEnrollee = await _enrolleeService.UpdateEnrolleeAdjudicator(enrollee.Id, adjudicatorUserId);
+            await _businessEventService.CreateAdminClaimEventAsync(enrolleeId, "Admin claimed enrollee", admin.Id);
 
             return Ok(new ApiOkResponse<Enrollee>(updatedEnrollee));
         }
@@ -453,6 +460,8 @@ namespace Prime.Controllers
             }
 
             var updatedEnrollee = await _enrolleeService.UpdateEnrolleeAdjudicator(enrollee.Id);
+            var admin = await _adminService.GetAdminForUserIdAsync(User.GetPrimeUserId());
+            await _businessEventService.CreateAdminClaimEventAsync(enrolleeId, "Admin disclaimed enrollee", admin.Id);
 
             return Ok(new ApiOkResponse<Enrollee>(updatedEnrollee));
         }
