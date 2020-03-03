@@ -165,7 +165,7 @@ namespace Prime.Services
             {
                 applicationUUID = Guid.NewGuid().ToString();
                 programArea = "PRIME";
-                //this.licenceNumber = licenceNumber;
+                this.licenceNumber = licenceNumber;
                 this.collegeReferenceId = collegeReferenceId;
             }
         }
