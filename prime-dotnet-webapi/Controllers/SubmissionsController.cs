@@ -14,25 +14,27 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/enrollees")]
     [ApiController]
-    // User needs at least the ADMIN or ENROLLEE role to use this controller
     [Authorize(Policy = PrimeConstants.USER_POLICY)]
     public class SubmissionsController : ControllerBase
     {
+        private readonly ISubmissionService _submissionService;
         private readonly IEnrolleeService _enrolleeService;
         private readonly IAccessTermService _accessTermService;
         private readonly IEnrolleeProfileVersionService _enrolleeProfileVersionService;
 
         public SubmissionsController(
+            ISubmissionService submissionService,
             IEnrolleeService enrolleeService,
             IAccessTermService accessTermService,
             IEnrolleeProfileVersionService enrolleeProfileVersionService)
         {
+            _submissionService = submissionService;
             _enrolleeService = enrolleeService;
             _accessTermService = accessTermService;
             _enrolleeProfileVersionService = enrolleeProfileVersionService;
         }
 
-        // POST: api/Enrollees/5/submit
+        // POST: api/enrollees/5/submit
         /// <summary>
         /// Performs a submission-related action on an Enrolle, such as submitting their profile for adjudication.
         /// </summary>
@@ -43,6 +45,51 @@ namespace Prime.Controllers
 
 
             return Ok(submissionAction);
+        }
+
+        // PUT: api/enrollees/5/always-manual
+        /// <summary>
+        /// Sets an Enrollee's always manual flag, forcing them to always be sent to manual adjudication
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpPut("{enrolleeId}/always-manual", Name = nameof(SetEnrolleeManualFlag))]
+        [Authorize(Policy = PrimeConstants.ADMIN_POLICY)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> SetEnrolleeManualFlag(int enrolleeId)
+        {
+            return await ManualFlagInternal(enrolleeId, true);
+        }
+
+        // DELETE: api/enrollees/5/always-manual
+        /// <summary>
+        /// Removes an Enrollee's always manual flag, allowing them to go through the adjudication rules engine normally.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpDelete("{enrolleeId}/always-manual", Name = nameof(RemoveEnrolleeManualFlag))]
+        [Authorize(Policy = PrimeConstants.ADMIN_POLICY)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> RemoveEnrolleeManualFlag(int enrolleeId)
+        {
+            return await ManualFlagInternal(enrolleeId, false);
+        }
+
+        private async Task<ActionResult> ManualFlagInternal(int enrolleeId, bool alwaysManual)
+        {
+            var enrolleeExists = await _enrolleeService.EnrolleeExistsAsync(enrolleeId);
+            if (!enrolleeExists)
+            {
+                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}."));
+            }
+
+            await _submissionService.UpdateAlwaysManualAsync(enrolleeId, alwaysManual);
+
+            return NoContent();
         }
     }
 }

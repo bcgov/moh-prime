@@ -379,33 +379,6 @@ namespace Prime.Controllers
             return Ok(new ApiOkResponse<EnrolleeProfileVersion>(enrolleeProfileVersion));
         }
 
-        // PATCH: api/Enrollees/5/always-manual
-        /// <summary>
-        /// Updates an enrollees always manual flag, forcing them to always be sent to manual adjudication
-        /// </summary>
-        /// <param name="enrolleeId"></param>
-        /// <param name="alwaysManual"></param>
-        [HttpPatch("{enrolleeId}/always-manual", Name = nameof(UpdateEnrolleeAlwaysManual))]
-        [Authorize(Policy = PrimeConstants.ADMIN_POLICY)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiOkResponse<Enrollee>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Enrollee>> UpdateEnrolleeAlwaysManual(int enrolleeId, FromBodyData<bool> alwaysManual)
-        {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-
-            if (enrollee == null)
-            {
-                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}."));
-            }
-
-            var updatedEnrollee = await _enrolleeService.UpdateEnrolleeAlwaysManualAsync(enrolleeId, alwaysManual);
-
-            return Ok(new ApiOkResponse<Enrollee>(updatedEnrollee));
-        }
-
         // TODO add route model binding for Enrollee
         // TODO add middleware/policy to do simple checks
 

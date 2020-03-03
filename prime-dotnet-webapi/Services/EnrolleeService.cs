@@ -614,19 +614,6 @@ namespace Prime.Services
             return newNote;
         }
 
-
-        public async Task<Enrollee> UpdateEnrolleeAlwaysManualAsync(int enrolleeId, bool alwaysManual)
-        {
-            var enrollee = await _context.Enrollees
-                .Where(e => e.Id == enrolleeId)
-                .SingleOrDefaultAsync();
-
-            enrollee.AlwaysManual = alwaysManual;
-            await _context.SaveChangesAsync();
-
-            return enrollee;
-        }
-
         public async Task<int> GetEnrolleeCountAsync()
         {
             return await _context.Enrollees

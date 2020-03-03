@@ -123,14 +123,11 @@ export class AdjudicationResource {
       );
   }
 
-  public updateEnrolleeAlwaysManual(id: number, alwaysManual: boolean): Observable<Enrolment> {
-    const payload = { data: alwaysManual };
-    return this.http.patch(`${this.config.apiEndpoint}/enrollees/${id}/always-manual`, payload)
-      .pipe(
-        map((response: PrimeHttpResponse) => response.result),
-        map((enrollee: HttpEnrollee) => this.enrolmentAdapter(enrollee)),
-        tap((enrolment: Enrolment) => this.logger.info('UPDATED_ENROLMENT', enrolment))
-      );
+  public updateEnrolleeAlwaysManual(id: number, alwaysManual: boolean): Observable<object> {
+    const url = `${this.config.apiEndpoint}/enrollees/${id}/always-manual`;
+    return alwaysManual
+      ? this.http.put(url, null)
+      : this.http.delete(url);
   }
 
   public deleteEnrolment(id: number): Observable<Enrolment> {
