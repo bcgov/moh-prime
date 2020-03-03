@@ -21,7 +21,7 @@ namespace Prime.Models
         [JsonIgnore]
         public Admin Admin { get; set; }
 
-        public short BusinessEventTypeCode { get; set; }
+        public int BusinessEventTypeCode { get; set; }
 
         [JsonIgnore]
         public BusinessEventType BusinessEventType { get; set; }

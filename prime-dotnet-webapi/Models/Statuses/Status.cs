@@ -7,15 +7,15 @@ using Newtonsoft.Json;
 namespace Prime.Models
 {
     [Table("StatusLookup")]
-    public sealed class Status : BaseAuditable, ILookup<short>, IEquatable<Status>
+    public sealed class Status : BaseAuditable, ILookup<int>, IEquatable<Status>
     {
-        public const short ACTIVE_CODE = 1;
-        public const short UNDER_REVIEW_CODE = 2;
-        public const short REQUIRES_TOA_CODE = 3;
-        public const short LOCKED_CODE = 4;
+        public const int ACTIVE_CODE = 1;
+        public const int UNDER_REVIEW_CODE = 2;
+        public const int REQUIRES_TOA_CODE = 3;
+        public const int LOCKED_CODE = 4;
 
         [Key]
-        public short Code { get; set; }
+        public int Code { get; set; }
 
         public string Name { get; set; }
 
