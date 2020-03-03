@@ -21,10 +21,8 @@ namespace Prime.Models
 
         public Status Status { get; set; }
 
-        [Required]
         public DateTime StatusDate { get; set; }
 
-        [Required]
         public bool PharmaNetStatus { get; set; }
 
         public ICollection<EnrolmentStatusReason> EnrolmentStatusReasons { get; set; }
