@@ -8,7 +8,7 @@ function variablePopulation() {
     else
         export DOTNET_PHASE="Development"
     fi
-    if [-z "${CHANGE_BRANCH}" ];
+    if [ -z "${CHANGE_BRANCH}" ];
     then
         export REPOSITORY_REF="${BRANCH_LOWER}"
     else   
@@ -27,10 +27,10 @@ function determineMode() {
     if [ -z "${buildPresent}" ];
     then 
         MODE="apply"
-        #OC_ARGS=""
+        OC_ARGS=""
     else 
         MODE="apply"
-        #OC_ARGS="--overwrite=false --all"
+        OC_ARGS="--overwrite=true --all"
     fi;
 }
 

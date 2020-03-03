@@ -13,6 +13,7 @@ import { EnrolleeProfileVersionsComponent } from './pages/enrollee-profile-versi
 import { EnrolleeAccessTermsComponent } from './pages/enrollee-access-terms/enrollee-access-terms.component';
 import { EnrolleeAccessTermComponent } from './pages/enrollee-access-term/enrollee-access-term.component';
 import { EnrolleeAccessTermEnrolmentComponent } from './pages/enrollee-access-term-enrolment/enrollee-access-term-enrolment.component';
+import { SearchFormComponent } from './shared/components/search-form/search-form.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { EnrolleeAccessTermEnrolmentComponent } from './pages/enrollee-access-te
     EnrolleeProfileVersionsComponent,
     EnrolleeAccessTermsComponent,
     EnrolleeAccessTermComponent,
-    EnrolleeAccessTermEnrolmentComponent
+    EnrolleeAccessTermEnrolmentComponent,
+    SearchFormComponent
   ],
   imports: [
     SharedModule,
