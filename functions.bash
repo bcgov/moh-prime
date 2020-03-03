@@ -8,7 +8,7 @@ function variablePopulation() {
     else
         export DOTNET_PHASE="Development"
     fi
-    if [-z "${CHANGE_BRANCH}" ];
+    if [ -z "${CHANGE_BRANCH}" ];
     then
         export REPOSITORY_REF="${BRANCH_LOWER}"
     else   
