@@ -8,6 +8,12 @@ function variablePopulation() {
     else
         export DOTNET_PHASE="Development"
     fi
+    if [-z "${CHANGE_BRANCH}" ];
+    then
+        export REPOSITORY_REF="${BRANCH_LOWER}"
+    else   
+        export REPOSITORY_REF="${CHANGE_BRANCH}"
+    fi
 }
 
 variablePopulation
@@ -39,7 +45,7 @@ function build() {
     -p VERSION="${BUILD_NUMBER}" \
     -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
     -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
-    -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
+    -p SOURCE_REPOSITORY_REF="${REPOSITORY_REF}" \
     -p OC_NAMESPACE="$PROJECT_PREFIX" \
     -p OC_APP="$3" ${@:4} --output="yaml" | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$3" ${OC_ARGS} #--output="yaml"
     if [ "$BUILD_REQUIRED" == true ];
@@ -64,7 +70,7 @@ function deploy() {
     -p VERSION="${BUILD_NUMBER}" \
     -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
     -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
-    -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
+    -p SOURCE_REPOSITORY_REF="${REPOSITORY_REF}" \
     -p OC_NAMESPACE="$PROJECT_PREFIX" \
     -p OC_APP="$3" ${@:4} | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$3" ${OC_ARGS}
 }
@@ -78,7 +84,7 @@ function toolbelt() {
     oc process -f ./"${TEMPLATE_DIRECTORY}/$BUILD_CONFIG_TEMPLATE" \
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
-        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
+        -p SOURCE_REPOSITORY_REF="${REPOSITORY_REF}" \
         -p OC_NAMESPACE="$PROJECT_PREFIX" \
         -p OC_APP="$3" ${@:4} --output="yaml" | oc $MODE -f - --namespace="$PROJECT_PREFIX-$3" ${OC_ARGS}
     if [ "$BUILD_REQUIRED" == true ];
@@ -91,7 +97,7 @@ function toolbelt() {
     oc process -f ./"${TEMPLATE_DIRECTORY}/$DEPLOY_CONFIG_TEMPLATE" \
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
-        -p SOURCE_REPOSITORY_REF="${CHANGE_BRANCH}" \
+        -p SOURCE_REPOSITORY_REF="${REPOSITORY_REF}" \
         -p OC_NAMESPACE="$PROJECT_PREFIX" \
         -p OC_APP="$3" ${@:4} --output="yaml" | oc $MODE -f - --namespace="$PROJECT_PREFIX-$3" ${OC_ARGS}
 }
