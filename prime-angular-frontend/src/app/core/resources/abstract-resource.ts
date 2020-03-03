@@ -40,23 +40,6 @@ export abstract class AbstractResource {
 
   /**
    * @description
-   * Make HttpParams from an object literal.
-   */
-  public makeHttpParams(
-    queryParams: { [key: string]: any }
-  ): HttpParams {
-    return (queryParams)
-      ? Object.keys(queryParams)
-        .reduce(
-          (httpParams: HttpParams, key: string) =>
-            httpParams.set(key, `${queryParams[key]}`),
-          new HttpParams()
-        )
-      : null;
-  }
-
-  /**
-   * @description
    * Handle the HTTP response.
    */
   protected handleResponse<T>() {
