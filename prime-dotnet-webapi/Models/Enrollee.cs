@@ -4,7 +4,6 @@ using System.Linq;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
-using Prime.Infrastructure;
 
 namespace Prime.Models
 {
@@ -19,10 +18,11 @@ namespace Prime.Models
     [Table("Enrollee")]
     public class Enrollee : BaseAuditable, IValidatableObject
     {
-        [Key]
-        public int? Id { get; set; }
+        public const int DISPLAY_OFFSET = 1000;
 
-        [Required]
+        [Key]
+        public int Id { get; set; }
+
         public Guid UserId { get; set; }
 
         [StringLength(20)]
@@ -45,7 +45,6 @@ namespace Prime.Models
 
         public string PreferredLastName { get; set; }
 
-        [Required]
         public DateTime DateOfBirth { get; set; }
 
         [Required]
@@ -94,6 +93,10 @@ namespace Prime.Models
         public ICollection<Privilege> Privileges { get; set; }
 
         public ICollection<EnrolmentStatus> EnrolmentStatuses { get; set; }
+
+        public int? AdjudicatorId { get; set; }
+
+        public Admin Adjudicator { get; set; }
 
         [NotMapped]
         public EnrolmentStatus CurrentStatus
@@ -158,9 +161,9 @@ namespace Prime.Models
         }
 
         [NotMapped]
-        public int? DisplayId
+        public int DisplayId
         {
-            get => (this.Id == null) ? null : this.Id + 1000;
+            get => Id + DISPLAY_OFFSET;
         }
 
         public ICollection<AdjudicatorNote> AdjudicatorNotes { get; set; }

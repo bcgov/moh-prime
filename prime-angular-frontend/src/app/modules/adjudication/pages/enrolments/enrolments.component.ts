@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource, MatSelectChange, MatDialog } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
+import { MatTableDataSource, MatSelectChange, MatDialog } from '@angular/material';
 
 import { exhaustMap } from 'rxjs/operators';
 import { EMPTY, Subscription } from 'rxjs';
@@ -13,14 +13,15 @@ import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { ApproveEnrolmentComponent } from '@shared/components/dialogs/content/approve-enrolment/approve-enrolment.component';
 import {
   EnrolmentStatusReasonsComponent
 } from '@shared/components/dialogs/content/enrolment-status-reasons/enrolment-status-reasons.component';
 
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
-import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { ApproveEnrolmentComponent } from '@shared/components/dialogs/content/approve-enrolment/approve-enrolment.component';
+import { Admin } from '@auth/shared/models/admin.model';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 @Component({
   selector: 'app-enrolments',
@@ -33,6 +34,7 @@ export class EnrolmentsComponent implements OnInit {
   public statuses: Config<number>[];
   public filteredStatus: Config<number>;
   public dataSource: MatTableDataSource<Enrolment>;
+  public textSearch: string;
   public isAdmin: boolean;
 
   constructor(
@@ -45,17 +47,22 @@ export class EnrolmentsComponent implements OnInit {
     private dialog: MatDialog,
     private logger: LoggerService
   ) {
-    this.columns = ['uniqueId', 'name', 'appliedDate', 'status', 'approvedDate', 'actions'];
+    this.columns = ['uniqueId', 'name', 'appliedDate', 'status', 'approvedDate', 'adjudicator', 'actions'];
     this.statuses = this.configService.statuses;
     this.filteredStatus = null;
-
     this.isAdmin = this.authService.isAdmin();
+    this.textSearch = null;
   }
 
-  public filterByStatus(selection: MatSelectChange) {
-    const statusCode = selection.value;
-    this.filteredStatus = this.statuses.find(s => s.code === statusCode);
-    this.getEnrolments(statusCode);
+  public onFilter(status: EnrolmentStatus) {
+    this.filteredStatus = this.statuses.find(s => s.code === status);
+    this.getEnrolments(status, this.textSearch);
+  }
+
+  public onSearch(search: string) {
+    const statusCode = (this.filteredStatus) ? this.filteredStatus.code : null;
+    this.textSearch = search;
+    this.getEnrolments(statusCode, search);
   }
 
   public canApproveOrDeny(currentStatusCode: EnrolmentStatus) {
@@ -66,10 +73,6 @@ export class EnrolmentsComponent implements OnInit {
   public canAllowEditing(currentStatusCode: EnrolmentStatus) {
     // Admins can only allow re-enable editing for an enrollee in a UNDER_REVIEW state
     return (currentStatusCode === EnrolmentStatus.UNDER_REVIEW);
-  }
-
-  public isSuperAdmin(): boolean {
-    return this.authService.isSuperAdmin();
   }
 
   public isActive(currentStatusCode: EnrolmentStatus): boolean {
@@ -200,7 +203,6 @@ export class EnrolmentsComponent implements OnInit {
   }
 
   public deleteEnrolment(id: number) {
-
     const data: DialogOptions = {
       title: 'Delete Enrolment',
       message: 'Are you sure you want to delete this enrolment?',
@@ -208,7 +210,7 @@ export class EnrolmentsComponent implements OnInit {
       actionText: 'Delete Enrolment'
     };
 
-    if (this.isSuperAdmin()) {
+    if (this.authService.isSuperAdmin()) {
       this.busy = this.dialog.open(ConfirmDialogComponent, { data })
         .afterClosed()
         .pipe(
@@ -231,8 +233,25 @@ export class EnrolmentsComponent implements OnInit {
     }
   }
 
-  public getEnrolments(statusCode?: number) {
-    this.busy = this.adjudicationResource.enrollees(statusCode)
+  public updateEnrolmentAdjudicator(currentEnrolment: Enrolment) {
+    const request$ = (!currentEnrolment.adjudicatorId)
+      ? this.adjudicationResource.setEnrolleeAdjudicator(currentEnrolment.id)
+      : this.adjudicationResource.removeEnrolleeAdjudicator(currentEnrolment.id);
+
+    request$
+      .subscribe((updatedEnrolment: Enrolment) => {
+        const updatedDataset = this.dataSource.data.map((enrolment: Enrolment) =>
+          (enrolment.id === updatedEnrolment.id)
+            ? updatedEnrolment
+            : enrolment
+        );
+
+        this.dataSource.connect().next(updatedDataset);
+      });
+  }
+
+  public getEnrolments(statusCode?: number, textSearch?: string) {
+    return this.adjudicationResource.enrollees(statusCode, textSearch)
       .subscribe(
         (enrolments: Enrolment[]) => {
           this.logger.info('ENROLMENTS', enrolments);
@@ -246,8 +265,7 @@ export class EnrolmentsComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.getEnrolments();
-    // console.log(this.authService.isSuperAdmin());
+    this.busy = this.getEnrolments();
   }
 
   private updateEnrolment(enrolment: Enrolment) {

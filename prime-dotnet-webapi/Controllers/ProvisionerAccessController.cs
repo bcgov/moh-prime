@@ -20,12 +20,18 @@ namespace Prime.Controllers
         private readonly IEnrolleeService _enrolleeService;
         private readonly IEnrolmentCertificateService _certificateService;
         private readonly IEmailService _emailService;
+        private readonly IBusinessEventService _businessEventService;
 
-        public ProvisionerAccessController(IEnrolleeService enrolleeService, IEnrolmentCertificateService enrolmentCertificateService, IEmailService emailService)
+        public ProvisionerAccessController(
+            IEnrolleeService enrolleeService,
+            IEnrolmentCertificateService enrolmentCertificateService,
+            IEmailService emailService,
+            IBusinessEventService businessEventService)
         {
             _enrolleeService = enrolleeService;
             _certificateService = enrolmentCertificateService;
             _emailService = emailService;
+            _businessEventService = businessEventService;
         }
 
         // GET: api/provisioner-access/certificate/{guid}
@@ -73,7 +79,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiOkResponse<EnrolmentCertificateAccessToken>), StatusCodes.Status201Created)]
-        // [Authorize(Policy = PrimeConstants.USER_POLICY)]
+        [Authorize(Policy = PrimeConstants.USER_POLICY)]
         public async Task<ActionResult<EnrolmentCertificateAccessToken>> SendProvisionerLink(string provisionerName, FromBodyText email)
         {
             string optionalEmail = (string)email;
@@ -99,6 +105,11 @@ namespace Prime.Controllers
             var recipientEmail = _certificateService.GetPharmaNetProvisionerEmail(provisionerName, ref optionalEmail);
             var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrollee);
             await _emailService.SendProvisionerLinkAsync(recipientEmail, createdToken, optionalEmail);
+
+            var emailLogMessage = string.IsNullOrEmpty(optionalEmail)
+                ? "Provisioner link sent to email: " + recipientEmail
+                : "Provisioner link sent to emails: " + recipientEmail + ", " + optionalEmail;
+            await _businessEventService.CreateEmailEventAsync(enrollee.Id, emailLogMessage);
 
             return CreatedAtAction(
                 nameof(GetEnrolmentCertificate),

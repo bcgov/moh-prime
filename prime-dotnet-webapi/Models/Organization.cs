@@ -9,7 +9,7 @@ namespace Prime.Models
     public class Organization : BaseAuditable, IEnrolleeNavigationProperty
     {
         [Key]
-        public int? Id { get; set; }
+        public int Id { get; set; }
 
         [JsonIgnore]
         public int EnrolleeId { get; set; }
@@ -17,8 +17,7 @@ namespace Prime.Models
         [JsonIgnore]
         public Enrollee Enrollee { get; set; }
 
-        [Required]
-        public short OrganizationTypeCode { get; set; }
+        public int OrganizationTypeCode { get; set; }
 
         [JsonIgnore]
         public OrganizationType OrganizationType { get; set; }

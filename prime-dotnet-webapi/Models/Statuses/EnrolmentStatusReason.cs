@@ -15,7 +15,7 @@ namespace Prime.Models
         [JsonIgnore]
         public EnrolmentStatus EnrolmentStatus { get; set; }
 
-        public short StatusReasonCode { get; set; }
+        public int StatusReasonCode { get; set; }
 
         public StatusReason StatusReason { get; set; }
 

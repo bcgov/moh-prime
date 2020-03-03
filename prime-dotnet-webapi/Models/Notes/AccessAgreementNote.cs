@@ -9,7 +9,7 @@ namespace Prime.Models
     public class AccessAgreementNote : BaseAuditable, IEnrolleeNote
     {
         [Key]
-        public int? Id { get; set; }
+        public int Id { get; set; }
 
         [JsonIgnore]
         public int EnrolleeId { get; set; }
