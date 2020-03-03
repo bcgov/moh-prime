@@ -421,7 +421,7 @@ namespace Prime.Services
             if (oldStatus?.Code == Status.UNDER_REVIEW_CODE)
             {
                 await _emailService.SendReminderEmailAsync(enrollee);
-                await _businessEventService.CreateEmailEventAsync((int)enrollee?.Id, "Email to Enrollee after leaving manual adjudication");
+                await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Email to Enrollee after leaving manual adjudication");
             }
 
             return createdEnrolmentStatus;
