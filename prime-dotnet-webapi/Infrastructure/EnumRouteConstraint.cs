@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Newtonsoft.Json;
@@ -15,16 +16,8 @@ namespace Prime.Infrastructure
                 return false;
             }
 
-            try
-            {
-                JsonConvert.DeserializeObject<T>($"\"{candidate}\"");
-            }
-            catch
-            {
-                return false;
-            }
-
-            return true;
+            TypeConverter converter = TypeDescriptor.GetConverter(typeof(T));
+            return converter?.ConvertFromInvariantString(null, candidate) != null;
         }
     }
 }
