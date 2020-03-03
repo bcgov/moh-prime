@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { Configuration, Config, PracticeConfig, CollegeConfig, LicenseConfig, ProvinceConfig, LicenseWeightedConfig } from './config.model';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
+import { ApiResource } from '@core/resources/api-resource.service';
 
 export interface IConfigService {
   practices: PracticeConfig[];
@@ -30,32 +31,32 @@ export class ConfigService implements IConfigService {
 
   constructor(
     @Inject(APP_CONFIG) protected config: AppConfig,
-    protected http: HttpClient
+    protected apiResource: ApiResource
   ) { }
 
   public get practices(): PracticeConfig[] {
     return [...this.configuration.practices]
-      .sort(this.sortConfig);
+      .sort(this.sortConfigByName);
   }
 
   public get colleges(): CollegeConfig[] {
     return [...this.configuration.colleges]
-      .sort(this.sortConfig);
+      .sort(this.sortConfigByName);
   }
 
   public get countries(): Config<string>[] {
     return [...this.configuration.countries]
-      .sort(this.sortConfig);
+      .sort(this.sortConfigByName);
   }
 
   public get jobNames(): Config<number>[] {
     return [...this.configuration.jobNames]
-      .sort(this.sortConfig);
+      .sort(this.sortConfigByName);
   }
 
   public get licenses(): LicenseConfig[] {
     return [...this.configuration.licenses]
-      .sort(this.sortConfigWeight);
+      .sort(this.sortConfigByWeight);
   }
 
   public get organizationTypes(): Config<number>[] {
@@ -63,7 +64,7 @@ export class ConfigService implements IConfigService {
       .find(o => o.code === 2);
 
     return [...this.configuration.organizationTypes]
-      .sort(this.sortConfig)
+      .sort(this.sortConfigByName)
       // Move community practice to the top
       // TODO remove after community practice
       .filter(o => o.code !== 2)
@@ -75,27 +76,27 @@ export class ConfigService implements IConfigService {
 
   public get provinces(): ProvinceConfig[] {
     return [...this.configuration.provinces]
-      .sort(this.sortConfig);
+      .sort(this.sortConfigByName);
   }
 
   public get statuses(): Config<number>[] {
     return [...this.configuration.statuses]
-      .sort(this.sortConfig);
+      .sort(this.sortConfigByName);
   }
 
   public get statusReasons() {
     return [...this.configuration.statusReasons]
-      .sort(this.sortConfig);
+      .sort(this.sortConfigByName);
   }
 
   public get privilegeGroups() {
     return [...this.configuration.privilegeGroups]
-      .sort(this.sortConfig);
+      .sort(this.sortConfigByName);
   }
 
   public get privilegeTypes() {
     return [...this.configuration.privilegeTypes]
-      .sort(this.sortConfig);
+      .sort(this.sortConfigByName);
   }
 
   /**
@@ -118,7 +119,7 @@ export class ConfigService implements IConfigService {
    * Get the configuration for bootstrapping the application.
    */
   private getConfiguration(): Observable<Configuration> {
-    return this.http.get<ApiHttpResponse<Configuration>>(`${this.config.apiEndpoint}/lookups`)
+    return this.apiResource.get<Configuration>('lookups')
       .pipe(
         map((response: ApiHttpResponse<Configuration>) => response.result)
       );
@@ -126,37 +127,27 @@ export class ConfigService implements IConfigService {
 
   /**
    * @description
-   * Sort configuration by name.
+   * Sort the configuration by name.
    */
-  private sortConfig(item1: Config<number | string>, item2: Config<number | string>) {
-    return (item1.name > item2.name)
-      ? 1 : (item1.name < item2.name)
-        ? -1 : 0;
+  private sortConfigByName(item1: Config<number | string>, item2: Config<number | string>) {
+    return this.sortConfig<Config<number | string>>(item1, item2, 'name');
   }
 
   /**
    * @description
-   * Sort configuration by weight.
+   * Sort the configuration by weight.
    */
-  private sortConfigWeight(item1: LicenseWeightedConfig, item2: LicenseWeightedConfig) {
-    return (item1.weight > item2.weight)
-      ? 1 : (item1.weight < item2.weight)
-        ? -1 : 0;
+  private sortConfigByWeight(item1: LicenseWeightedConfig, item2: LicenseWeightedConfig) {
+    return this.sortConfig<LicenseWeightedConfig>(item1, item2, 'weight');
   }
 
   /**
-   *  @description
-   *  Filter config items that contain the value to be matched in their name
-   *  to the bottom of the list.
+   * @description
+   * Generic sorting of a JSON object by key.
    */
-  private filterBottom(list: Config<number | string>[], match: string) {
-    return list
-      .reduce((acc, item) => {
-        (item.name.includes(match))
-          ? acc[1].push(item)
-          : acc[0].push(item);
-        return acc;
-      }, [[], []])
-      .reduce((acc, temp) => acc.concat(temp), []);
+  private sortConfig<T>(item1: T, item2: T, key: string) {
+    return (item1[key] > item2[key])
+      ? 1 : (item1[key] < item2[key])
+        ? -1 : 0;
   }
 }
