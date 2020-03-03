@@ -130,7 +130,7 @@ namespace Prime.Services
             if (searchOptions?.StatusCode != null)
             {
                 // TODO refactor see Jira PRIME-251
-                items = items.Where(e => e.CurrentStatus.StatusCode == (short)searchOptions.StatusCode);
+                items = items.Where(e => e.CurrentStatus.StatusCode == searchOptions.StatusCode);
             }
 
             foreach (var item in items)
@@ -154,19 +154,13 @@ namespace Prime.Services
             return enrollee;
         }
 
-        public Task<int?> CreateEnrolleeAsync(Enrollee enrollee)
+        public async Task<int> CreateEnrolleeAsync(Enrollee enrollee)
         {
             if (enrollee == null)
             {
                 throw new ArgumentNullException(nameof(enrollee), "Could not create an enrollee, the passed in Enrollee cannot be null.");
             }
 
-            return this.CreateEnrolleeInternalAsync(enrollee);
-        }
-
-        private async Task<int?> CreateEnrolleeInternalAsync(Enrollee enrollee)
-        {
-            // Create a status history record
             EnrolmentStatus enrolmentStatus = new EnrolmentStatus
             {
                 Enrollee = enrollee,
@@ -307,18 +301,13 @@ namespace Prime.Services
             return items;
         }
 
-        public Task<EnrolmentStatus> CreateEnrolmentStatusAsync(int enrolleeId, Status status, bool acceptedAccessTerm, int? adminId)
+        public async Task<EnrolmentStatus> CreateEnrolmentStatusAsync(int enrolleeId, Status newStatus, bool acceptedAccessTerm, int? adminId)
         {
-            if (status == null)
+            if (newStatus == null)
             {
-                throw new ArgumentNullException(nameof(status), "Could not create an enrolment status, the passed in Status cannot be null.");
+                throw new ArgumentNullException(nameof(newStatus), "Could not create an enrolment status, the passed in Status cannot be null.");
             }
 
-            return this.CreateEnrolmentStatusInternalAsync(enrolleeId, status, acceptedAccessTerm, adminId);
-        }
-
-        private async Task<EnrolmentStatus> CreateEnrolmentStatusInternalAsync(int enrolleeId, Status newStatus, bool acceptedAccessTerm, int? adminId)
-        {
             var enrollee = await this.GetBaseEnrolleeQuery()
                 .Include(e => e.Certifications)
                     .ThenInclude(cer => cer.College) // Needed for PharmaNet College auto-adjudication
@@ -412,7 +401,7 @@ namespace Prime.Services
                         await _accessTermService.AcceptCurrentAccessTermAsync(enrollee);
                         await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrolleeId, enrollee);
                         await _businessEventService.CreateBusinessEventAsync(enrolleeId, BusinessEventType.STATUS_CHANGE_CODE, "Accepted TOA", adminId);
-                        await UpdateEnrolleeAdjudicator((int)enrollee.Id);
+                        await UpdateEnrolleeAdjudicator(enrollee.Id);
                         break;
                     }
                     break;
@@ -454,7 +443,7 @@ namespace Prime.Services
             return availableStatuses.Contains(endingStatus);
         }
 
-        public async Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, params short[] statusCodesToCheck)
+        public async Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, params int[] statusCodesToCheck)
         {
             var enrollee = await _context.Enrollees
                 .AsNoTracking()
@@ -618,7 +607,7 @@ namespace Prime.Services
                 .Include(e => e.Adjudicator)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
-            // Admin is set to null if no adjudicatorUserId is provided 
+            // Admin is set to null if no adjudicatorUserId is provided
             var admin = await _context.Admins
                 .SingleOrDefaultAsync(a => a.UserId == adjudicatorUserId);
 

@@ -426,7 +426,7 @@ namespace Prime.Controllers
             }
 
             var adjudicatorUserId = User.GetPrimeUserId();
-            var updatedEnrollee = await _enrolleeService.UpdateEnrolleeAdjudicator((int)enrollee.Id, adjudicatorUserId);
+            var updatedEnrollee = await _enrolleeService.UpdateEnrolleeAdjudicator(enrollee.Id, adjudicatorUserId);
 
             return Ok(new ApiOkResponse<Enrollee>(updatedEnrollee));
         }
@@ -452,7 +452,7 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}."));
             }
 
-            var updatedEnrollee = await _enrolleeService.UpdateEnrolleeAdjudicator((int)enrollee.Id);
+            var updatedEnrollee = await _enrolleeService.UpdateEnrolleeAdjudicator(enrollee.Id);
 
             return Ok(new ApiOkResponse<Enrollee>(updatedEnrollee));
         }
