@@ -38,20 +38,20 @@ namespace Prime.Controllers
             if (admin == null)
             {
                 this.ModelState.AddModelError("Admin", "Could not create an admin, the passed in Admin cannot be null.");
-                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+                return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 
             // Check to see if this userId is already an admin, if so, reject creating another
             if (await _adminService.AdminUserIdExistsAsync(admin.UserId))
             {
-                return Ok(new ApiResultResponse<Admin>(admin));
+                return Ok(ApiResponse.Result(admin));
             }
 
             Guid PrimeUserId = User.GetPrimeUserId();
             if (PrimeUserId.Equals(Guid.Empty) || !PrimeUserId.Equals(admin.UserId))
             {
                 this.ModelState.AddModelError("Admin", "Could not create an admin, permission denied.");
-                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+                return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 
             var createdAdminId = await _adminService.CreateAdminAsync(admin);
@@ -59,7 +59,7 @@ namespace Prime.Controllers
             return CreatedAtAction(
                 nameof(GetAdminById),
                 new { adminId = createdAdminId },
-                new ApiResultResponse<Admin>(admin)
+                ApiResponse.Result(admin)
             );
         }
 
@@ -80,10 +80,10 @@ namespace Prime.Controllers
 
             if (admin == null)
             {
-                return NotFound(new ApiMessageResponse($"Admin not found with id {adminId}"));
+                return NotFound(ApiResponse.Message($"Admin not found with id {adminId}"));
             }
 
-            return Ok(new ApiResultResponse<Admin>(admin));
+            return Ok(ApiResponse.Result(admin));
         }
     }
 }

@@ -47,10 +47,10 @@ namespace Prime.Controllers
             var certificate = await _certificateService.GetEnrolmentCertificateAsync(accessTokenId);
             if (certificate == null)
             {
-                return NotFound(new ApiMessageResponse($"No valid Enrolment Certificate Access Token found with id {accessTokenId}"));
+                return NotFound(ApiResponse.Message($"No valid Enrolment Certificate Access Token found with id {accessTokenId}"));
             }
 
-            return Ok(new ApiResultResponse<EnrolmentCertificate>(certificate));
+            return Ok(ApiResponse.Result(certificate));
         }
 
         // GET: api/provisioner-access/token
@@ -66,7 +66,7 @@ namespace Prime.Controllers
         {
             var tokens = await _certificateService.GetCertificateAccessTokensForUserIdAsync(User.GetPrimeUserId());
 
-            return Ok(new ApiResultResponse<IEnumerable<EnrolmentCertificateAccessToken>>(tokens));
+            return Ok(ApiResponse.Result(tokens));
         }
 
         // POST: api/provisioner-access/send-link
@@ -87,19 +87,19 @@ namespace Prime.Controllers
             {
                 // Email used as Cc to enrollee organization contact, or as the recipient for other provisioners
                 this.ModelState.AddModelError("Email", "The email provided is not valid.");
-                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+                return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 
             var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(User.GetPrimeUserId());
             if (enrollee == null)
             {
                 this.ModelState.AddModelError("Enrollee.UserId", "No enrollee exists for this User Id.");
-                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+                return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
             if (enrollee.ExpiryDate == null)
             {
                 this.ModelState.AddModelError("Enrollee.UserId", "The enrollee for this User Id is not in a finished state.");
-                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+                return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 
             var recipientEmail = _certificateService.GetPharmaNetProvisionerEmail(provisionerName, ref optionalEmail);
@@ -114,7 +114,7 @@ namespace Prime.Controllers
             return CreatedAtAction(
                 nameof(GetEnrolmentCertificate),
                 new { accessTokenId = createdToken.Id },
-                new ApiResultResponse<EnrolmentCertificateAccessToken>(createdToken)
+                ApiResponse.Result(createdToken)
             );
         }
 
@@ -130,7 +130,7 @@ namespace Prime.Controllers
         {
             var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(User.GetPrimeUserId());
 
-            return Ok(new ApiResultResponse<string>(enrollee?.GPID));
+            return Ok(ApiResponse.Result(enrollee?.GPID));
         }
     }
 }

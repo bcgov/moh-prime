@@ -45,7 +45,7 @@ namespace Prime.Controllers
             lookupEntity.PrivilegeGroups = await _lookupService.GetLookupsAsync<int, PrivilegeGroup>();
             lookupEntity.PrivilegeTypes = await _lookupService.GetLookupsAsync<int, PrivilegeType>();
 
-            return Ok(new ApiResultResponse<LookupEntity>(lookupEntity));
+            return Ok(ApiResponse.Result(lookupEntity));
         }
     }
 }

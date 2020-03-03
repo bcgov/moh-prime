@@ -49,7 +49,7 @@ namespace Prime.Controllers
 
             if (enrollee == null)
             {
-                return NotFound(new ApiMessageResponse($"Enrollee not found with id {enrolleeId}"));
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
 
             if (!User.CanAccess(enrollee))
@@ -59,7 +59,7 @@ namespace Prime.Controllers
 
             var accessTerms = await _accessTermService.GetAcceptedAccessTerms(enrolleeId);
 
-            return Ok(new ApiResultResponse<IEnumerable<AccessTerm>>(accessTerms));
+            return Ok(ApiResponse.Result(accessTerms));
         }
 
         // GET: api/Enrollees/5/access-terms
@@ -80,7 +80,7 @@ namespace Prime.Controllers
 
             if (enrollee == null)
             {
-                return NotFound(new ApiMessageResponse($"Enrollee not found with id {enrolleeId}"));
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
 
             if (!User.CanAccess(enrollee))
@@ -90,12 +90,12 @@ namespace Prime.Controllers
 
             if (!await _accessTermService.AccessTermExistsOnEnrolleeAsync(accessTermId, enrolleeId))
             {
-                return NotFound(new ApiMessageResponse($"Access term not found with id {accessTermId} for enrollee id: {enrolleeId}"));
+                return NotFound(ApiResponse.Message($"Access term not found with id {accessTermId} for enrollee id: {enrolleeId}"));
             }
 
             var accessTerms = await _accessTermService.GetEnrolleesAccessTermAsync(enrolleeId, accessTermId);
 
-            return Ok(new ApiResultResponse<AccessTerm>(accessTerms));
+            return Ok(ApiResponse.Result(accessTerms));
         }
 
         // GET: api/Enrollees/5/access-terms/latest?signed=true
@@ -116,7 +116,7 @@ namespace Prime.Controllers
 
             if (enrollee == null)
             {
-                return NotFound(new ApiMessageResponse($"Enrollee not found with id {enrolleeId}"));
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
 
             if (!User.CanAccess(enrollee))
@@ -134,7 +134,7 @@ namespace Prime.Controllers
             {
                 accessTerm = await _accessTermService.GetMostRecentNotAcceptedEnrolleesAccessTermAsync(enrolleeId);
             }
-            return Ok(new ApiResultResponse<AccessTerm>(accessTerm));
+            return Ok(ApiResponse.Result(accessTerm));
         }
 
         // GET: api/Enrollees/5/access-terms/3/enrolment
@@ -155,7 +155,7 @@ namespace Prime.Controllers
 
             if (enrollee == null)
             {
-                return NotFound(new ApiMessageResponse($"Enrollee not found with id {enrolleeId}"));
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
 
             if (!User.CanAccess(enrollee))
@@ -166,7 +166,7 @@ namespace Prime.Controllers
             AccessTerm acceptedAccessTerm = await _accessTermService.GetEnrolleesAccessTermAsync(enrolleeId, accessTermId);
             if (acceptedAccessTerm == null)
             {
-                return NotFound(new ApiMessageResponse($"Accepted Access Term not found with id {accessTermId} for enrollee with id {enrolleeId}"));
+                return NotFound(ApiResponse.Message($"Accepted Access Term not found with id {accessTermId} for enrollee with id {enrolleeId}"));
             }
 
             var enrolleeProfileHistory = await _enrolleeProfileVersionService
@@ -174,10 +174,10 @@ namespace Prime.Controllers
 
             if (enrolleeProfileHistory == null)
             {
-                return NotFound(new ApiMessageResponse($"No enrolment profile history found for Access Term with id {accessTermId} for enrollee with id {enrolleeId}."));
+                return NotFound(ApiResponse.Message($"No enrolment profile history found for Access Term with id {accessTermId} for enrollee with id {enrolleeId}."));
             }
 
-            return Ok(new ApiResultResponse<EnrolleeProfileVersion>(enrolleeProfileHistory));
+            return Ok(ApiResponse.Result(enrolleeProfileHistory));
         }
     }
 }
