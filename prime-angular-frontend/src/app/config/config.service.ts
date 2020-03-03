@@ -1,5 +1,4 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -36,27 +35,27 @@ export class ConfigService implements IConfigService {
 
   public get practices(): PracticeConfig[] {
     return [...this.configuration.practices]
-      .sort(this.sortConfigByName);
+      .sort(this.sortConfigByName.bind(this));
   }
 
   public get colleges(): CollegeConfig[] {
     return [...this.configuration.colleges]
-      .sort(this.sortConfigByName);
+      .sort(this.sortConfigByName.bind(this));
   }
 
   public get countries(): Config<string>[] {
     return [...this.configuration.countries]
-      .sort(this.sortConfigByName);
+      .sort(this.sortConfigByName.bind(this));
   }
 
   public get jobNames(): Config<number>[] {
     return [...this.configuration.jobNames]
-      .sort(this.sortConfigByName);
+      .sort(this.sortConfigByName.bind(this));
   }
 
   public get licenses(): LicenseConfig[] {
     return [...this.configuration.licenses]
-      .sort(this.sortConfigByWeight);
+      .sort(this.sortConfigByWeight.bind(this));
   }
 
   public get organizationTypes(): Config<number>[] {
@@ -64,7 +63,7 @@ export class ConfigService implements IConfigService {
       .find(o => o.code === 2);
 
     return [...this.configuration.organizationTypes]
-      .sort(this.sortConfigByName)
+      .sort(this.sortConfigByName.bind(this))
       // Move community practice to the top
       // TODO remove after community practice
       .filter(o => o.code !== 2)
@@ -76,27 +75,27 @@ export class ConfigService implements IConfigService {
 
   public get provinces(): ProvinceConfig[] {
     return [...this.configuration.provinces]
-      .sort(this.sortConfigByName);
+      .sort(this.sortConfigByName.bind(this));
   }
 
   public get statuses(): Config<number>[] {
     return [...this.configuration.statuses]
-      .sort(this.sortConfigByName);
+      .sort(this.sortConfigByName.bind(this));
   }
 
   public get statusReasons() {
     return [...this.configuration.statusReasons]
-      .sort(this.sortConfigByName);
+      .sort(this.sortConfigByName.bind(this));
   }
 
   public get privilegeGroups() {
     return [...this.configuration.privilegeGroups]
-      .sort(this.sortConfigByName);
+      .sort(this.sortConfigByName.bind(this));
   }
 
   public get privilegeTypes() {
     return [...this.configuration.privilegeTypes]
-      .sort(this.sortConfigByName);
+      .sort(this.sortConfigByName.bind(this));
   }
 
   /**
