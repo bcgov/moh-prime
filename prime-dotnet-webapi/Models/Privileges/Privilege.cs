@@ -8,8 +8,8 @@ namespace Prime.Models
     [Table("Privilege")]
     public class Privilege : BaseAuditable
     {
-        public const short RU_CODE = 17;
-        public const short OBO_CODE = 18;
+        public const int RU_CODE = 17;
+        public const int OBO_CODE = 18;
 
 
         [Key]
@@ -19,7 +19,7 @@ namespace Prime.Models
 
         public string Description { get; set; }
 
-        public short PrivilegeGroupCode { get; set; }
+        public int PrivilegeGroupCode { get; set; }
 
         [JsonIgnore]
         public PrivilegeGroup PrivilegeGroup { get; set; }

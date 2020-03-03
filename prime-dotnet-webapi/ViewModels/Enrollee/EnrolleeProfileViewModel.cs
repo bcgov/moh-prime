@@ -50,7 +50,5 @@ namespace Prime.ViewModels
         public bool? HasPharmaNetSuspended { get; set; }
 
         public string HasPharmaNetSuspendedDetails { get; set; }
-
-        public bool ProfileCompleted { get; set; }
     }
 }

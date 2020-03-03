@@ -54,7 +54,7 @@ namespace Prime.Services
 
             if (token.Active)
             {
-                var enrolleeId = (int)token?.EnrolleeId;
+                var enrolleeId = token.EnrolleeId;
                 var acceptedAccessTerm = await _accessTermService.GetMostRecentAcceptedEnrolleesAccessTermAsync(enrolleeId);
                 if (acceptedAccessTerm != null)
                 {

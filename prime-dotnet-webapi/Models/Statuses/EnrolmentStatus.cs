@@ -17,19 +17,17 @@ namespace Prime.Models
         [JsonIgnore]
         public Enrollee Enrollee { get; set; }
 
-        public short StatusCode { get; set; }
+        public int StatusCode { get; set; }
 
         public Status Status { get; set; }
 
-        [Required]
         public DateTime StatusDate { get; set; }
 
-        [Required]
         public bool PharmaNetStatus { get; set; }
 
         public ICollection<EnrolmentStatusReason> EnrolmentStatusReasons { get; set; }
 
-        public void AddStatusReason(short reasonCode, string reasonNote = null)
+        public void AddStatusReason(int reasonCode, string reasonNote = null)
         {
             if (EnrolmentStatusReasons == null)
             {

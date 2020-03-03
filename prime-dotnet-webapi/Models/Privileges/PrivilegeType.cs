@@ -6,12 +6,12 @@ using Newtonsoft.Json;
 namespace Prime.Models
 {
     [Table("PrivilegeTypeLookup")]
-    public class PrivilegeType : BaseAuditable, ILookup<short>
+    public class PrivilegeType : BaseAuditable, ILookup<int>
     {
-        public readonly static short PHARMANET_TRANSACTIONS = 2;
+        public readonly static int PHARMANET_TRANSACTIONS = 2;
 
         [Key]
-        public short Code { get; set; }
+        public int Code { get; set; }
 
         public string Name { get; set; }
 

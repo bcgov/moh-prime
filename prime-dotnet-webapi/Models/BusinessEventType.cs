@@ -7,14 +7,15 @@ using System.Text.Json.Serialization;
 namespace Prime.Models
 {
     [Table("BusinessEventTypeLookup")]
-    public sealed class BusinessEventType : BaseAuditable, ILookup<short>
+    public sealed class BusinessEventType : BaseAuditable, ILookup<int>
     {
-        public const short STATUS_CHANGE_CODE = 1;
-        public const short EMAIL_CODE = 2;
-        public const short NOTE_CODE = 3;
+        public const int STATUS_CHANGE_CODE = 1;
+        public const int EMAIL_CODE = 2;
+        public const int NOTE_CODE = 3;
+        public const int ADMIN_CLAIM_CODE = 4;
 
         [Key]
-        public short Code { get; set; }
+        public int Code { get; set; }
 
         public string Name { get; set; }
 
