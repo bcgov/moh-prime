@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "Running the migrations..."
 #psql -d postgres -f databaseMigration.sql
-if [ -z "${DB_CONNECTION_STRING}"]
+if [ -z "${DB_CONNECTION_STRING}" ]
 then
 export DB_CONNECTION_STRING="host=${DB_HOST};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"
 fi
