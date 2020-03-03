@@ -6,6 +6,7 @@ import { map, tap } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { Config } from '@config/config.model';
+import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrollee } from '@shared/models/enrollee.model';
@@ -26,15 +27,16 @@ export class EnrolmentResource {
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private http: HttpClient,
+    private apiResource: ApiResource,
     private logger: LoggerService
   ) { }
 
   public enrollee(): Observable<Enrolment> {
-    return this.http.get(`${this.config.apiEndpoint}/enrollees`)
+    return this.apiResource.get<HttpEnrollee[]>('enrollees')
       .pipe(
-        map((response: ApiHttpResponse<any>) => response.result),
-        tap((enrollees: HttpEnrollee[]) => this.logger.info('ENROLLEES', enrollees[0])),
-        map((enrollees: HttpEnrollee[]) =>
+        map((response: ApiHttpResponse<HttpEnrollee[]>) => response.result),
+        tap((enrollees) => this.logger.info('ENROLLEES', enrollees[0])),
+        map((enrollees) =>
           // Only a single enrollee will be provided
           (enrollees.length) ? this.enrolleeAdapterResponse(enrollees.pop()) : null
         )
@@ -42,7 +44,7 @@ export class EnrolmentResource {
   }
 
   public createEnrollee(payload: Enrollee): Observable<Enrolment> {
-    return this.http.post(`${this.config.apiEndpoint}/enrollees`, payload)
+    return this.apiResource.post<HttpEnrollee>('enrollees', payload)
       .pipe(
         map((response: ApiHttpResponse<any>) => response.result),
         tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
@@ -56,7 +58,7 @@ export class EnrolmentResource {
     if (beenThroughTheWizard) {
       params = params.set('beenThroughTheWizard', `${beenThroughTheWizard}`);
     }
-    return this.http.put(`${this.config.apiEndpoint}/enrollees/${id}`, this.enrolmentAdapterRequest(enrolment), { params });
+    return this.apiResource.put<HttpEnrollee>(`enrollees/${id}`, this.enrolmentAdapterRequest(enrolment), params);
   }
 
   public updateEnrolmentStatus(id: number, statusCode: number, acceptedAccessTerm: boolean = false): Observable<Config<number>[]> {
@@ -65,15 +67,19 @@ export class EnrolmentResource {
     if (acceptedAccessTerm) {
       params = params.set('acceptedAccessTerm', `${acceptedAccessTerm}`);
     }
-    return this.http.post(`${this.config.apiEndpoint}/enrollees/${id}/statuses`, payload, { params })
+    return this.apiResource.post<HttpEnrollee>(`enrollees/${id}/statuses`, payload, params)
       .pipe(
         map((response: ApiHttpResponse<any>) => response.result as Config<number>[]),
         tap((statuses: Config<number>[]) => this.logger.info('ENROLMENT_STATUSES', statuses))
       );
   }
 
+  // ---
+  // Provisioner Access
+  // ---
+
   public enrolmentCertificateAccessTokens(): Observable<EnrolmentCertificateAccessToken[]> {
-    return this.http.get(`${this.config.apiEndpoint}/provisioner-access/token`)
+    return this.apiResource.get<HttpEnrollee[]>('provisioner-access/token')
       .pipe(
         map((response: ApiHttpResponse<any>) => response.result),
         tap((tokens: EnrolmentCertificateAccessToken[]) => this.logger.info('ACCESS_TOKENS', tokens))
@@ -82,7 +88,7 @@ export class EnrolmentResource {
 
   public sendProvisionerAccessLink(provisionerName: string, ccEmail: string = null): Observable<EnrolmentCertificateAccessToken> {
     const payload = { data: ccEmail };
-    return this.http.post(`${this.config.apiEndpoint}/provisioner-access/send-link/${provisionerName}`, payload)
+    return this.apiResource.post<HttpEnrollee>(`provisioner-access/send-link/${provisionerName}`, payload)
       .pipe(
         map((response: ApiHttpResponse<any>) => response.result as EnrolmentCertificateAccessToken),
         tap((token: EnrolmentCertificateAccessToken) => this.logger.info('ACCESS_TOKEN', token))
@@ -94,7 +100,7 @@ export class EnrolmentResource {
   // ---
 
   public getAccessTerms(enrolleeId: number): Observable<AccessTerm[]> {
-    return this.http.get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/access-terms`)
+    return this.apiResource.get<HttpEnrollee[]>(`enrollees/${enrolleeId}/access-terms`)
       .pipe(
         map((response: ApiHttpResponse<any>) => response.result as AccessTerm[]),
         tap((accessTerms: AccessTerm[]) => this.logger.info('ACCESS_TERM', accessTerms))
@@ -102,7 +108,7 @@ export class EnrolmentResource {
   }
 
   public getAccessTerm(enrolleeId: number, id: number): Observable<AccessTerm> {
-    return this.http.get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/access-terms/${id}`)
+    return this.apiResource.get<HttpEnrollee[]>(`enrollees/${enrolleeId}/access-terms/${id}`)
       .pipe(
         map((response: ApiHttpResponse<any>) => response.result as AccessTerm),
         tap((accessTerm: AccessTerm) => this.logger.info('ACCESS_TERM', accessTerm))
@@ -110,8 +116,8 @@ export class EnrolmentResource {
   }
 
   public getAccessTermLatest(enrolleeId: number, signed: boolean): Observable<AccessTerm> {
-    return this.http.get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/access-terms/latest`,
-      { params: { signed: signed.toString() } })
+    const params = new HttpParams({ fromObject: { signed: signed.toString() } });
+    return this.apiResource.get<HttpEnrollee[]>(`enrollees/${enrolleeId}/access-terms/latest`, params)
       .pipe(
         map((response: ApiHttpResponse<any>) => response.result as AccessTerm),
         tap((accessTerm: AccessTerm) => this.logger.info('ACCESS_TERM', accessTerm))
@@ -119,8 +125,7 @@ export class EnrolmentResource {
   }
 
   public getEnrolmentProfileForAccessTerm(enrolleeId: number, accessTermId: number): Observable<EnrolmentProfileVersion> {
-    return this.http
-      .get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/access-terms/${accessTermId}/enrolment`)
+    return this.apiResource.get<HttpEnrollee[]>(`enrollees/${enrolleeId}/access-terms/${accessTermId}/enrolment`)
       .pipe(
         map((response: ApiHttpResponse<any>) => response.result as EnrolmentProfileVersion),
         tap((enrolmentProfileVersion: EnrolmentProfileVersion) => this.logger.info('ENROLMENT_PROFILE_VERSION', enrolmentProfileVersion)),
