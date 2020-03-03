@@ -13,7 +13,7 @@ namespace Prime.Services
         {
         }
 
-        public async Task<Enrollee> PerformActionAsync(int enrolleeId, SubmissionAction action)
+        public async Task<Enrollee> PerformSubmissionActionAsync(int enrolleeId, SubmissionAction action)
         {
             throw new System.NotImplementedException();
         }

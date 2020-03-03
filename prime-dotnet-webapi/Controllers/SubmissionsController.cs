@@ -40,11 +40,21 @@ namespace Prime.Controllers
         /// </summary>
         [HttpPost("{enrolleeId}/{submissionAction:submissionAction}", Name = nameof(SumbissionAction))]
         [AllowAnonymous]
-        public async Task<ActionResult<SubmissionAction>> SumbissionAction(int enrolleeId, SubmissionAction submissionAction)
+        public async Task<ActionResult<Enrollee>> SumbissionAction(int enrolleeId, SubmissionAction submissionAction)
         {
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+            if (enrollee == null)
+            {
+                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}."));
+            }
+            if (!User.CanAccess(enrollee))
+            {
+                return Forbid();
+            }
 
+            await _submissionService.PerformSubmissionActionAsync(enrolleeId, submissionAction);
 
-            return Ok(submissionAction);
+            return Ok(new ApiOkResponse<Enrollee>(enrollee));
         }
 
         // PUT: api/enrollees/5/always-manual
