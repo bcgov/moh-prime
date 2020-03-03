@@ -55,6 +55,7 @@ namespace Prime
             services.AddScoped<IEnrolleeProfileVersionService, EnrolleeProfileVersionService>();
             services.AddScoped<IAdminService, AdminService>();
             services.AddScoped<IBusinessEventService, BusinessEventService>();
+            services.AddScoped<ISubmissionService, SubmissionService>();
 
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
