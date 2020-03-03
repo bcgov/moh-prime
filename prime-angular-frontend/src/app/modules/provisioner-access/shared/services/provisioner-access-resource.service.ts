@@ -1,11 +1,10 @@
-import { Injectable, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
-import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
+import { ApiResource } from '@core/resources/api-resource.service';
 import { LoggerService } from '@core/services/logger.service';
 
 import { EnrolmentCertificate } from '../models/enrolment-certificate.model';
@@ -16,15 +15,14 @@ import { EnrolmentCertificate } from '../models/enrolment-certificate.model';
 export class ProvisionerAccessResource {
 
   constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
-    private http: HttpClient,
+    private apiResource: ApiResource,
     private logger: LoggerService
   ) { }
 
   public getCertificate(accessTokenId: string): Observable<EnrolmentCertificate> {
-    return this.http.get(`${this.config.apiEndpoint}/provisioner-access/certificate/${accessTokenId}`)
+    return this.apiResource.get(`provisioner-access/certificate/${accessTokenId}`)
       .pipe(
-        map((response: ApiHttpResponse<any>) => response.result as EnrolmentCertificate),
+        map((response: ApiHttpResponse<EnrolmentCertificate>) => response.result as EnrolmentCertificate),
         tap((enrolmentCertificate: EnrolmentCertificate) => this.logger.info('ENROLMENT_CERTIFICATE', enrolmentCertificate))
       );
   }
