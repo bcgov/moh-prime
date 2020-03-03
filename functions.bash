@@ -23,7 +23,7 @@ function pipeline_args() {
 }
 
 function determineMode() {
-    buildPresent=$(oc get bc/"${APP_NAME}${SUFFIX}" --ignore-not-found=true | wc -l)
+    buildPresent=$(oc get bc/"$APP_NAME$SUFFIX" --ignore-not-found=true | wc -l)
     if [ -z "${buildPresent}" ];
     then 
         MODE="apply"
@@ -37,7 +37,7 @@ function determineMode() {
 function build() {
     source ./"$2.conf"
     echo "Building $2 (${APP_NAME}) to $PROJECT_PREFIX-$3..."
-    buildPresent=$(oc get bc/"${APP_NAME}${SUFFIX}" --ignore-not-found=true | wc -l)
+    buildPresent=$(oc get bc/"$APP_NAME$SUFFIX" --ignore-not-found=true | wc -l)
     determineMode
     echo "oc process -f ./${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE} -p NAME=${APP_NAME} -p VERSION=${BUILD_NUMBER} -p SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR} -p SOURCE_REPOSITORY_URL=${GIT_URL} -p SOURCE_REPOSITORY_REF=${BRANCH_NAME} -p OC_NAMESPACE=$PROJECT_PREFIX -p OC_APP=$3 ${@:4} | oc ${MODE} -f - --namespace=$PROJECT_PREFIX-$3"
     oc process -f ./"${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE}" \
@@ -50,8 +50,8 @@ function build() {
     -p OC_APP="$3" ${@:4} --output="yaml" | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$3" ${OC_ARGS} #--output="yaml"
     if [ "$BUILD_REQUIRED" == true ];
     then
-        echo "Building oc start-build ${APP_NAME}${SUFFIX} -n $PROJECT_PREFIX-$3 --wait --follow ..."
-        oc start-build "${APP_NAME}${SUFFIX}" -n "$PROJECT_PREFIX-$3" --wait --follow
+        echo "Building oc start-build $APP_NAME$SUFFIX -n $PROJECT_PREFIX-$3 --wait --follow ..."
+        oc start-build "$APP_NAME$SUFFIX" -n "$PROJECT_PREFIX-$3" --wait --follow
     else
         echo "Deployment should be automatic..."
     fi
@@ -60,10 +60,10 @@ function build() {
 function deploy() {
     source ./"$2.conf"
     echo "Deploying $2 (${APP_NAME}) to $3 ..."
-    export deployPresent=$(oc get dc/${APP_NAME}${SUFFIX} --ignore-not-found=true | wc -l)
-    export pvcPresent=$(oc get pvc/${APP_NAME}${SUFFIX} --ignore-not-found=true | wc -l)
-    export routePresent=$(oc get route/${APP_NAME}${SUFFIX} --ignore-not-found=true | wc -l)
-    export servicePresent=$(oc get service/${APP_NAME}${SUFFIX} --ignore-not-found=true | wc -l)
+    export deployPresent=$(oc get dc/$APP_NAME$SUFFIX --ignore-not-found=true | wc -l)
+    export pvcPresent=$(oc get pvc/$APP_NAME$SUFFIX --ignore-not-found=true | wc -l)
+    export routePresent=$(oc get route/$APP_NAME$SUFFIX --ignore-not-found=true | wc -l)
+    export servicePresent=$(oc get service/$APP_NAME$SUFFIX --ignore-not-found=true | wc -l)
     determineMode
     oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
     -p NAME="${APP_NAME}" \
