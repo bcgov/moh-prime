@@ -404,14 +404,8 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            var adminId = 0;
-            if (User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE))
-            {
-                var admin = await _adminService.GetAdminForUserIdAsync(User.GetPrimeUserId());
-                adminId = admin.Id;
-            }
-
-            var updatedNote = await _enrolleeService.UpdateEnrolleeNoteAsync(enrolleeId, accessAgreementNote, adminId);
+            var admin = await _adminService.GetAdminForUserIdAsync(User.GetPrimeUserId());
+            var updatedNote = await _enrolleeService.UpdateEnrolleeNoteAsync(enrolleeId, accessAgreementNote, admin.Id);
 
             return Ok(new ApiOkResponse<IEnrolleeNote>(updatedNote));
         }
