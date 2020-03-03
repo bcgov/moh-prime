@@ -55,7 +55,7 @@ namespace Prime.Services
         {
             var enrolleeProfileVersion = new EnrolleeProfileVersion
             {
-                EnrolleeId = (int)enrollee.Id,
+                EnrolleeId = enrollee.Id,
                 ProfileSnapshot = JObject.FromObject(enrollee, _camelCaseSerializer),
                 CreatedDate = DateTime.Now
             };
