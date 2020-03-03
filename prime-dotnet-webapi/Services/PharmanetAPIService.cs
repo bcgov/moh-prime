@@ -102,7 +102,7 @@ namespace Prime.Services
         private void LogError(CollegeRecordRequestParams requestParams, HttpResponseMessage response, Exception exception = null)
         {
             string secondaryMessage = exception == null ? $"response code {response.StatusCode}: {response.Content.ReadAsStringAsync()}" : $"exception: {exception.Message}";
-            Console.WriteLine($"{DateTime.Now} - Error validating collecge licence. UUID={requestParams.applicationUUID}, with {secondaryMessage}.");
+            Console.WriteLine($"{DateTime.Now} - Error validating college licence. UUID={requestParams.applicationUUID}, with {secondaryMessage}.");
         }
 
         private PharmanetCollegeRecord LocalDevApiMock(string licenceNumber)
