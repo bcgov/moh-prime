@@ -8,15 +8,16 @@ import { Config } from '@config/config.model';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { LoggerService } from '@core/services/logger.service';
+import { AccessTerm } from '@shared/models/access-term.model';
 import { Enrollee } from '@shared/models/enrollee.model';
 import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolmentCertificateAccessToken } from '@shared/models/enrolment-certificate-access-token.model';
-import { Job } from '@enrolment/shared/models/job.model';
-import { Address } from '@enrolment/shared/models/address.model';
-import { Organization } from '@enrolment/shared/models/organization.model';
-import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-import { AccessTerm } from '@shared/models/access-term.model';
 import { EnrolmentProfileVersion, HttpEnrolleeProfileVersion } from '@shared/models/enrollee-profile-history.model';
+
+import { Address } from '@enrolment/shared/models/address.model';
+import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
+import { Job } from '@enrolment/shared/models/job.model';
+import { Organization } from '@enrolment/shared/models/organization.model';
 
 @Injectable({
   providedIn: 'root'
