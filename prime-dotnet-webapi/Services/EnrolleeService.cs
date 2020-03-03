@@ -124,8 +124,24 @@ namespace Prime.Services
 
         public async Task<IEnumerable<Enrollee>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)
         {
-            IEnumerable<Enrollee> items = await this.GetBaseEnrolleeQuery()
-                                                    .ToListAsync();
+            var query = this.GetBaseEnrolleeQuery();
+
+            if (searchOptions != null && searchOptions.TextSearch != null)
+            {
+                query = query.Where(e =>
+                    e.FirstName.ToLower().StartsWith(searchOptions.TextSearch.ToLower())
+                    || e.LastName.ToLower().StartsWith(searchOptions.TextSearch.ToLower())
+                    || e.ContactEmail.ToLower().StartsWith(searchOptions.TextSearch.ToLower())
+                    || e.VoicePhone.ToLower().StartsWith(searchOptions.TextSearch.ToLower())
+                    // Since DisplayId is a derived field we can not query on it. And we
+                    // don't want to have to grab all Enrollees and filter on the front end.
+                    || (e.Id + Enrollee.DISPLAY_OFFSET).ToString().Equals(searchOptions.TextSearch)
+                    || e.FirstName.ToLower().StartsWith(searchOptions.TextSearch.ToLower())
+                    || e.Certifications.Any(c => c.LicenseNumber.ToLower().StartsWith(searchOptions.TextSearch.ToLower()))
+                );
+            }
+
+            IEnumerable<Enrollee> items = await query.ToListAsync();
 
             if (searchOptions?.StatusCode != null)
             {
@@ -639,5 +655,6 @@ namespace Prime.Services
 
             return enrollee;
         }
+
     }
 }

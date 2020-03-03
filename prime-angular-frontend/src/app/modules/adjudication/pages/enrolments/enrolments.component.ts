@@ -34,6 +34,7 @@ export class EnrolmentsComponent implements OnInit {
   public statuses: Config<number>[];
   public filteredStatus: Config<number>;
   public dataSource: MatTableDataSource<Enrolment>;
+  public textSearch: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -48,12 +49,18 @@ export class EnrolmentsComponent implements OnInit {
     this.columns = ['uniqueId', 'name', 'appliedDate', 'status', 'approvedDate', 'adjudicator', 'actions'];
     this.statuses = this.configService.statuses;
     this.filteredStatus = null;
+    this.textSearch = null;
   }
 
-  public filterByStatus(selection: MatSelectChange) {
-    const statusCode = selection.value;
-    this.filteredStatus = this.statuses.find(s => s.code === statusCode);
-    this.getEnrolments(statusCode);
+  public onFilter(status: EnrolmentStatus) {
+    this.filteredStatus = this.statuses.find(s => s.code === status);
+    this.getEnrolments(status, this.textSearch);
+  }
+
+  public onSearch(search: string) {
+    const statusCode = (this.filteredStatus) ? this.filteredStatus.code : null;
+    this.textSearch = search;
+    this.getEnrolments(statusCode, search);
   }
 
   public canApproveOrDeny(currentStatusCode: EnrolmentStatus) {
@@ -244,8 +251,8 @@ export class EnrolmentsComponent implements OnInit {
       });
   }
 
-  public getEnrolments(statusCode?: number) {
-    this.busy = this.adjudicationResource.enrollees(statusCode)
+  public getEnrolments(statusCode?: number, textSearch?: string) {
+    return this.adjudicationResource.enrollees(statusCode, textSearch)
       .subscribe(
         (enrolments: Enrolment[]) => {
           this.logger.info('ENROLMENTS', enrolments);
@@ -259,7 +266,7 @@ export class EnrolmentsComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.getEnrolments();
+    this.busy = this.getEnrolments();
   }
 
   private updateEnrolment(enrolment: Enrolment) {
