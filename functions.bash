@@ -13,6 +13,7 @@ function variablePopulation() {
         export REPOSITORY_REF="${BRANCH_LOWER}"
     else   
         export REPOSITORY_REF="${CHANGE_BRANCH}"
+    fi
 }
 
 variablePopulation
