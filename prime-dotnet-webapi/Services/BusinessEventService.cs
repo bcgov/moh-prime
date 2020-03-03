@@ -71,7 +71,7 @@ namespace Prime.Services
         }
 
 
-        private BusinessEvent CreateBusinessEvent(short BusinessEventTypeCode, int enrolleeId, string description, int? adminId = null)
+        private BusinessEvent CreateBusinessEvent(int BusinessEventTypeCode, int enrolleeId, string description, int? adminId = null)
         {
             var businessEvent = new BusinessEvent
             {
