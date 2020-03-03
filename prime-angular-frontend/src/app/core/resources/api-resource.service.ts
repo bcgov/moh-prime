@@ -15,8 +15,8 @@ import { ApiHttpErrorResponse } from '@core/models/api-http-error-response.model
 })
 export class ApiResource extends AbstractResource {
   constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
     protected logger: LoggerService,
+    @Inject(APP_CONFIG) private config: AppConfig,
     private http: HttpClient
   ) {
     super(logger);
