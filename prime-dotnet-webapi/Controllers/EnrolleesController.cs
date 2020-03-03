@@ -360,14 +360,8 @@ namespace Prime.Controllers
                 return BadRequest(new ApiBadRequestResponse(this.ModelState));
             }
 
-            var adminId = 0;
-            if (User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE))
-            {
-                var admin = await _adminService.GetAdminForUserIdAsync(User.GetPrimeUserId());
-                adminId = admin.Id;
-            }
-
-            var createdAdjudicatorNote = await _enrolleeService.CreateEnrolleeAdjudicatorNoteAsync(enrolleeId, note, adminId);
+            var admin = await _adminService.GetAdminForUserIdAsync(User.GetPrimeUserId());
+            var createdAdjudicatorNote = await _enrolleeService.CreateEnrolleeAdjudicatorNoteAsync(enrolleeId, note, admin.Id);
 
             return CreatedAtAction(
                 nameof(GetAdjudicatorNotes),
