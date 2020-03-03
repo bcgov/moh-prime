@@ -33,6 +33,7 @@ export class EnrolmentsComponent implements OnInit {
   public statuses: Config<number>[];
   public filteredStatus: Config<number>;
   public dataSource: MatTableDataSource<Enrolment>;
+  public isAdmin: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -47,6 +48,8 @@ export class EnrolmentsComponent implements OnInit {
     this.columns = ['uniqueId', 'name', 'appliedDate', 'status', 'approvedDate', 'actions'];
     this.statuses = this.configService.statuses;
     this.filteredStatus = null;
+
+    this.isAdmin = this.authService.isAdmin();
   }
 
   public filterByStatus(selection: MatSelectChange) {
@@ -205,7 +208,7 @@ export class EnrolmentsComponent implements OnInit {
       actionText: 'Delete Enrolment'
     };
 
-    if (this.authService.isSuperAdmin()) {
+    if (this.isSuperAdmin()) {
       this.busy = this.dialog.open(ConfirmDialogComponent, { data })
         .afterClosed()
         .pipe(

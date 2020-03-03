@@ -4,9 +4,9 @@ import { KeycloakTokenParsed, KeycloakLoginOptions } from 'keycloak-js';
 import { Role } from '@auth/shared/enum/role.enum';
 import { IAuthService } from '@auth/shared/services/auth.service';
 import { User } from '@auth/shared/models/user.model';
+import { Admin } from '@auth/shared/models/admin.model';
 
 export class MockAuthService implements IAuthService {
-
   // tslint:disable-next-line: variable-name
   private _role: Role;
   // tslint:disable-next-line: variable-name
@@ -49,6 +49,16 @@ export class MockAuthService implements IAuthService {
     }));
   }
 
+  public getAdmin(forceReload?: boolean): Promise<Admin> {
+    return new Promise((resolve, reject) => resolve({
+      userId: `${faker.random.uuid()}`,
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      email: faker.internet.email(),
+      idir: `${faker.random.uuid()}`,
+    }));
+  }
+
   public getUserRoles(): string[] {
     return [this._role];
   }
@@ -67,16 +77,20 @@ export class MockAuthService implements IAuthService {
     });
   }
 
-  public isAdjudicator(): boolean {
-    return this._role === Role.ADJUDICATOR;
-  }
-
   public isAdmin(): boolean {
     return this._role === Role.ADMIN;
   }
 
   public isSuperAdmin(): boolean {
     return this._role === Role.SUPER_ADMIN;
+  }
+
+  public hasAdminView(): boolean {
+    return this._role === Role.READONLY_ADMIN;
+  }
+
+  hasEnrollee(): boolean {
+    return this._role === Role.ENROLLEE;
   }
 
   public decodeToken(): Promise<KeycloakTokenParsed> {
