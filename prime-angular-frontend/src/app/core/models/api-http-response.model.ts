@@ -1,9 +1,11 @@
 export class ApiHttpResponse<T> {
+  readonly status: number;
   readonly result: T;
-  readonly statusCode: number;
+  readonly message?: string;
 
-  constructor(result: T, statusCode: number) {
+  constructor(status: number, result: T, message?: string) {
+    this.status = status;
     this.result = result;
-    this.statusCode = statusCode;
+    this.message = message;
   }
 }
