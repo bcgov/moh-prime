@@ -176,8 +176,6 @@ objects:
                     secretKeyRef:
                       key: JWT_WELL_KNOWN_CONFIG
                       name: "keycloak" 
-                - name: DB_CONNECTION_STRING
-                  value: "host=postgresql$SUFFIX;port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"
               image: " "
               name: primeapi
               ports:
