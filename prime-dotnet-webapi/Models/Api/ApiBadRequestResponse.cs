@@ -1,21 +1,19 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Prime.Models.Api
 {
-    public class ApiBadRequestResponse : ApiResponse
+    public class ApiBadRequestResponse
     {
         public IEnumerable<string> Errors { get; }
 
         public ApiBadRequestResponse(ModelStateDictionary modelState)
-            : base(StatusCodes.Status400BadRequest)
         {
-            if (modelState?.IsValid == true)
+            if (modelState == null || modelState.IsValid)
             {
-                throw new ArgumentException("ModelState must be invalid", nameof(modelState));
+                throw new ArgumentException("ModelState must have errors", nameof(modelState));
             }
 
             Errors = modelState

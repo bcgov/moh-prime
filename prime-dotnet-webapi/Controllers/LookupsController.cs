@@ -28,7 +28,7 @@ namespace Prime.Controllers
         /// Gets all the lookup code values.
         /// </summary>
         [HttpGet]
-        [ProducesResponseType(typeof(ApiOkResponse<LookupEntity>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<LookupEntity>), StatusCodes.Status200OK)]
         public async Task<ActionResult<LookupEntity>> GetLookups()
         {
             LookupEntity lookupEntity = new LookupEntity();
@@ -45,7 +45,7 @@ namespace Prime.Controllers
             lookupEntity.PrivilegeGroups = await _lookupService.GetLookupsAsync<int, PrivilegeGroup>();
             lookupEntity.PrivilegeTypes = await _lookupService.GetLookupsAsync<int, PrivilegeType>();
 
-            return Ok(new ApiOkResponse<LookupEntity>(lookupEntity));
+            return Ok(new ApiResultResponse<LookupEntity>(lookupEntity));
         }
     }
 }

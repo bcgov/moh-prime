@@ -29,8 +29,10 @@ namespace Prime.Controllers
         /// </summary>
         [HttpPost(Name = nameof(CreateAdmin))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiCreatedResponse<Admin>), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<Admin>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<Admin>), StatusCodes.Status201Created)]
         public async Task<ActionResult<Admin>> CreateAdmin(Admin admin)
         {
             if (admin == null)
@@ -42,8 +44,7 @@ namespace Prime.Controllers
             // Check to see if this userId is already an admin, if so, reject creating another
             if (await _adminService.AdminUserIdExistsAsync(admin.UserId))
             {
-                this.ModelState.AddModelError("Admin.UserId", "An admin already exists for this User Id.");
-                return Ok(new ApiOkResponse<Admin>(admin));
+                return Ok(new ApiResultResponse<Admin>(admin));
             }
 
             Guid PrimeUserId = User.GetPrimeUserId();
@@ -58,7 +59,7 @@ namespace Prime.Controllers
             return CreatedAtAction(
                 nameof(GetAdminById),
                 new { adminId = createdAdminId },
-                new ApiCreatedResponse<Admin>(admin)
+                new ApiResultResponse<Admin>(admin)
             );
         }
 
@@ -69,20 +70,20 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="adminId"></param>
         [HttpGet("{adminId}", Name = nameof(GetAdminById))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiOkResponse<Admin>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<Admin>), StatusCodes.Status200OK)]
         public async Task<ActionResult<Admin>> GetAdminById(int adminId)
         {
             var admin = await _adminService.GetAdminAsync(adminId);
 
             if (admin == null)
             {
-                return NotFound(new ApiResponse(404, $"Admin not found with id {adminId}"));
+                return NotFound(new ApiMessageResponse($"Admin not found with id {adminId}"));
             }
 
-            return Ok(new ApiOkResponse<Admin>(admin));
+            return Ok(new ApiResultResponse<Admin>(admin));
         }
     }
 }
