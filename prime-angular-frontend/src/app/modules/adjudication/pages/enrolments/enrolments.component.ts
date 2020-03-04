@@ -254,6 +254,11 @@ export class EnrolmentsComponent implements OnInit {
       });
   }
 
+  public refreshEnrolments() {
+    const statusCodes = this.filteredStatus.code;
+    return this.getEnrolments(statusCodes, this.textSearch);
+  }
+
   public getEnrolments(statusCode?: number, textSearch?: string) {
     return this.adjudicationResource.enrollees(statusCode, textSearch)
       .subscribe(
