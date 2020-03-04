@@ -44,7 +44,12 @@
         "id": "9bef3a33-bdaa-4284-baee-33d07ef1c66d",
         "name": "prime_admin",
         "description": "IDIR authenticated admin role",
-        "composite": false,
+        "composite": true,
+        "composites": {
+          "realm": [
+            "prime_readonly_admin"
+          ]
+        },
         "clientRole": false,
         "containerId": "v4mbqqas",
         "attributes": {}
@@ -58,6 +63,14 @@
             "prime_admin"
           ]
         },
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
+        "id": "6491e5ea-4980-4078-855c-b74834768f20",
+        "name": "prime_readonly_admin",
+        "composite": false,
         "clientRole": false,
         "containerId": "v4mbqqas",
         "attributes": {}
@@ -408,8 +421,7 @@
       "secret": "**********",
       "redirectUris": [
         "https://test.pharmanetenrolment.gov.bc.ca/*",
-        "http://angular-frontend-dqszvc-test.pathfinder.gov.bc.ca/*",
-        "http://test.pharmanetenrolment.gov.bc.ca/*"
+        "https://demo.pharmanetenrolment.gov.bc.ca/*"
       ],
       "webOrigins": [
         "*"

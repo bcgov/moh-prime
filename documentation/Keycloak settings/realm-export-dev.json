@@ -44,7 +44,12 @@
         "id": "57efb107-0882-49d1-bae8-199ff82344f3",
         "name": "prime_admin",
         "description": "IDIR authenticated admin role",
-        "composite": false,
+        "composite": true,
+        "composites": {
+          "realm": [
+            "prime_readonly_admin"
+          ]
+        },
         "clientRole": false,
         "containerId": "v4mbqqas",
         "attributes": {}
@@ -67,6 +72,14 @@
             "prime_admin"
           ]
         },
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
+        "id": "648cf4c5-ad27-45e7-9f0f-47ef1b18d0e3",
+        "name": "prime_readonly_admin",
+        "composite": false,
         "clientRole": false,
         "containerId": "v4mbqqas",
         "attributes": {}
