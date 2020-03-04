@@ -16,12 +16,13 @@
           This information comes from your BC Services Card. If you use a different name professionally, please
           select "I have a preferred name."
           <small class="font-italic d-block">
-            Entering a preferred name in PRIME will not change your BC Services Card name.
+            Entering a preferred name in PRIME will not change your BC Services Card name.<br>
+            NOTE: The name you provide must match your College registration information, if applicable.
           </small>
         </ng-container>
       </app-page-subheader>
 
-      <app-enrollee-profile [enrollee]="enrollee"
+      <app-enrollee-profile [enrollee]="enrolment.enrollee"
                             [showAddress]="false"></app-enrollee-profile>
 
       <mat-slide-toggle class="mb-3"
@@ -98,7 +99,7 @@
         </ng-container>
       </app-page-subheader>
 
-      <app-enrollee-profile [enrollee]="enrollee"
+      <app-enrollee-profile [enrollee]="enrolment.enrollee"
                             [showPersonal]="false"
                             [showAddressTitle]="false"></app-enrollee-profile>
 
@@ -153,7 +154,8 @@
           <mat-form-field class="w-100">
             <input matInput
                    placeholder="Optional Extension Number"
-                   formControlName="voiceExtension">
+                   formControlName="voiceExtension"
+                   maxlength="10">
             <mat-error *ngIf="voiceExtension.hasError('required')">Required</mat-error>
             <mat-error *ngIf="voiceExtension.hasError('numeric')">Must contain only numbers</mat-error>
           </mat-form-field>
@@ -168,7 +170,7 @@
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Notification Information</ng-container>
         <ng-container appPageSubheaderSummary>
-          Provide an email address and/or phone number that may be used for sending notifications from the PRIME
+          Provide an email address and phone number (optional) that may be used for sending notifications from the PRIME
           system.
         </ng-container>
       </app-page-subheader>
@@ -203,29 +205,30 @@
               </mat-form-field>
 
             </div>
+            <!-- </div> -->
+
+            <!-- </ng-container> -->
+
+            <!-- TODO temporarily made visible until SMS available -->
+            <!-- <ng-container *ngIf="contactPhone.value || hasContactPhone.value"> -->
+
+            <!-- <div class="row"> -->
+            <div class="col-6">
+
+              <mat-form-field class="w-100">
+                <input matInput
+                       placeholder="Optional SMS Phone Number"
+                       formControlName="contactPhone"
+                       mask="(000) 000-0000"
+                       [showMaskTyped]="false">
+                <mat-error *ngIf="contactPhone.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="contactPhone.hasError('phone')">Must be a valid phone number</mat-error>
+              </mat-form-field>
+
+            </div>
           </div>
 
           <!-- </ng-container> -->
-
-          <ng-container *ngIf="contactPhone.value || hasContactPhone.value">
-
-            <div class="row">
-              <div class="col-6">
-
-                <mat-form-field class="w-100">
-                  <input matInput
-                         placeholder="Mobile Phone"
-                         formControlName="contactPhone"
-                         mask="(000) 000-0000"
-                         [showMaskTyped]="false">
-                  <mat-error *ngIf="contactPhone.hasError('required')">Required</mat-error>
-                  <mat-error *ngIf="contactPhone.hasError('phone')">Must be a valid phone number</mat-error>
-                </mat-form-field>
-
-              </div>
-            </div>
-
-          </ng-container>
 
         </div>
       </div>
@@ -234,7 +237,7 @@
 
   </form>
 
-  <app-page-footer [profileCompleted]="isProfileComplete"
+  <app-page-footer [isInitialEnrolment]="isInitialEnrolment"
                    [hasSecondaryAction]="isProfileComplete"
                    (save)="onSubmit()"></app-page-footer>
 

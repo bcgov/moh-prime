@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 
 import { SharedModule } from '@shared/shared.module';
 
-import { EnrolmentCertificateRoutingModule } from './provisioner-access-routing.module';
-import { CertificateComponent } from './pages/certificate/certificate.component';
-import { ProvisionerAccessComponent } from './shared/components/provisioner-access/provisioner-access.component';
+import { ProvisionerAccessRoutingModule } from '@certificate/provisioner-access-routing.module';
+import { CertificateComponent } from '@certificate/pages/certificate/certificate.component';
+import { ProvisionerAccessComponent } from '@certificate/shared/components/provisioner-access/provisioner-access.component';
 
 @NgModule({
   declarations: [
@@ -13,7 +13,7 @@ import { ProvisionerAccessComponent } from './shared/components/provisioner-acce
   ],
   imports: [
     SharedModule,
-    EnrolmentCertificateRoutingModule
+    ProvisionerAccessRoutingModule
   ]
 })
-export class EnrolmentCertificateModule { }
+export class ProvisionerAccessModule { }

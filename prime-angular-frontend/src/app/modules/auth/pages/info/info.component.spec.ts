@@ -9,9 +9,8 @@ import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
 import { PillComponent } from '@auth/shared/components/pill/pill.component';
-import { BannerComponent } from '@auth/shared/components/banner/banner.component';
 import { PrimePhoneComponent } from '@shared/components/prime-phone/prime-phone.component';
-import { PrimeEmailComponent } from '@shared/components/prime-email/prime-email.component';
+import { PrimeSupportEmailComponent } from '@shared/components/prime-support-email/prime-support-email.component';
 
 describe('InfoComponent', () => {
   let component: InfoComponent;
@@ -28,9 +27,8 @@ describe('InfoComponent', () => {
           PageHeaderComponent,
           PageSubheaderComponent,
           PillComponent,
-          BannerComponent,
           PrimePhoneComponent,
-          PrimeEmailComponent
+          PrimeSupportEmailComponent,
         ],
         providers: [
           {

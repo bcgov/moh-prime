@@ -9,14 +9,10 @@ import { ConfigService } from '@config/config.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { CollectionNoticeAlertComponent } from './collection-notice-alert.component';
-import { AlertComponent } from '@shared/components/alert/alert.component';
-import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 import { RouterTestingModule } from '@angular/router/testing';
-import { PrimeContactComponent } from '@shared/components/prime-contact/prime-contact.component';
-import { PrimeEmailComponent } from '@shared/components/prime-email/prime-email.component';
-import { PrimePhoneComponent } from '@shared/components/prime-phone/prime-phone.component';
+import { SharedModule } from '@shared/shared.module';
 
 describe('CollectionNoticeAlertComponent', () => {
   let component: CollectionNoticeAlertComponent;
@@ -27,15 +23,11 @@ describe('CollectionNoticeAlertComponent', () => {
       {
         imports: [
           NgxMaterialModule,
-          RouterTestingModule
+          RouterTestingModule,
+          SharedModule
         ],
         declarations: [
-          AlertComponent,
-          CollectionNoticeAlertComponent,
-          PrimeContactComponent,
-          PrimeEmailComponent,
-          PrimePhoneComponent,
-          PageHeaderComponent
+          CollectionNoticeAlertComponent
         ],
         providers: [
           {

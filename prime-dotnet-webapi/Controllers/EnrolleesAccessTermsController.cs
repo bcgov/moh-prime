@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -92,13 +93,6 @@ namespace Prime.Controllers
                 return NotFound(new ApiResponse(404, $"Access term not found with id {accessTermId} for enrollee id: {enrolleeId}"));
             }
 
-            // Prevent access to the enrollee's current terms of access based on status
-            if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.IN_PROGRESS_CODE, Status.DECLINED_CODE, Status.DECLINED_TOS_CODE))
-            {
-                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee terms of service can not be retrieved when the current status is 'IN_PROGRESS', 'DECLINED', or 'DECLINED_TOA'.");
-                return BadRequest(new ApiBadRequestResponse(this.ModelState));
-            }
-
             var accessTerms = await _accessTermService.GetEnrolleesAccessTermAsync(enrolleeId, accessTermId);
 
             return Ok(new ApiOkResponse<AccessTerm>(accessTerms));
@@ -130,21 +124,60 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            // TODO: Update when statuses are refactored!
-            // Prevent access to the enrollee's current terms of access based on status
-            // if (await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.IN_PROGRESS_CODE, Status.DECLINED_CODE, Status.DECLINED_TOS_CODE))
-            // {
-            //     this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee terms of service can not be retrieved when the current status is 'IN_PROGRESS', 'DECLINED', or 'DECLINED_TOA'.");
-            //     return BadRequest(new ApiBadRequestResponse(this.ModelState));
-            // }
-
             AccessTerm accessTerm;
-            if (signed) {
+
+            if (signed)
+            {
                 accessTerm = await _accessTermService.GetMostRecentAcceptedEnrolleesAccessTermAsync(enrolleeId);
-            } else {
+            }
+            else
+            {
                 accessTerm = await _accessTermService.GetMostRecentNotAcceptedEnrolleesAccessTermAsync(enrolleeId);
             }
             return Ok(new ApiOkResponse<AccessTerm>(accessTerm));
+        }
+
+        // GET: api/Enrollees/5/access-terms/3/enrolment
+        /// <summary>
+        /// Get the enrolment history used for the given access term
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="accessTermId"></param>
+        [HttpGet("{enrolleeId}/access-terms/{accessTermId}/enrolment", Name = nameof(GetEnrolmentForAccessTerm))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiOkResponse<AccessTerm>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<EnrolleeProfileVersion>> GetEnrolmentForAccessTerm(int enrolleeId, int accessTermId)
+        {
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+
+            if (enrollee == null)
+            {
+                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
+            }
+
+            if (!User.CanAccess(enrollee))
+            {
+                return Forbid();
+            }
+
+            AccessTerm acceptedAccessTerm = await _accessTermService.GetEnrolleesAccessTermAsync(enrolleeId, accessTermId);
+            if (acceptedAccessTerm == null)
+            {
+                return NotFound(new ApiResponse(404, $"Accepted Access Term not found with id {accessTermId} for enrollee with id {enrolleeId}"));
+            }
+
+            var enrolleeProfileHistory = await _enrolleeProfileVersionService
+                    .GetEnrolleeProfileVersionBeforeDateAsync(enrolleeId, (DateTime)acceptedAccessTerm.AcceptedDate);
+
+            if (enrolleeProfileHistory == null)
+            {
+                return NotFound(new ApiResponse(404, $"No enrolment profile history found for Access Term with id {accessTermId} for enrollee with id {enrolleeId}."));
+            }
+
+            return Ok(new ApiOkResponse<EnrolleeProfileVersion>(enrolleeProfileHistory));
         }
     }
 }

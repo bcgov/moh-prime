@@ -52,6 +52,7 @@ namespace Prime
         public DbSet<Organization> Organizations { get; set; }
         public DbSet<OrganizationType> OrganizationTypes { get; set; }
         public DbSet<Enrollee> Enrollees { get; set; }
+        public DbSet<Admin> Admins { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<EnrolmentStatus> EnrolmentStatuses { get; set; }
         public DbSet<EnrolmentStatusReason> EnrolmentStatusReasons { get; set; }
@@ -64,13 +65,12 @@ namespace Prime
 
         public DbSet<AdjudicatorNote> AdjudicatorNotes { get; set; }
         public DbSet<AccessAgreementNote> AccessAgreementNotes { get; set; }
-        public DbSet<EnrolmentCertificateNote> EnrolmentCertificateNotes { get; set; }
-
         public DbSet<AccessTerm> AccessTerms { get; set; }
         public DbSet<GlobalClause> GlobalClauses { get; set; }
         public DbSet<UserClause> UserClauses { get; set; }
         public DbSet<LicenseClassClause> LicenseClassClauses { get; set; }
         public DbSet<LimitsConditionsClause> LimitsConditionsClauses { get; set; }
+        public DbSet<BusinessEvent> BusinessEvents { get; set; }
 
         public override int SaveChanges()
         {
@@ -139,6 +139,7 @@ namespace Prime
             }
             #endregion
 
+            modelBuilder.ApplyConfiguration(new EnrolleeConfiguration());
             modelBuilder.ApplyConfiguration(new CollegeConfiguration());
             modelBuilder.ApplyConfiguration(new LicenseConfiguration());
             modelBuilder.ApplyConfiguration(new CollegeLicenseConfiguration());
@@ -162,6 +163,8 @@ namespace Prime
             modelBuilder.ApplyConfiguration(new UserClauseConfiguration());
             modelBuilder.ApplyConfiguration(new LicenseClassClauseConfiguration());
 
+            modelBuilder.ApplyConfiguration(new BusinessEventTypeConfiguration());
+
             #region Indexes
             modelBuilder.Entity<MailingAddress>()
                 .HasIndex(a => a.EnrolleeId)
@@ -178,7 +181,7 @@ namespace Prime
                 .HasName("IX_EnrolleeId_AddressType")
                 .IsUnique();
 
-            modelBuilder.Entity<Enrollee>()
+            modelBuilder.Entity<Admin>()
                 .HasIndex("UserId")
                 .IsUnique();
             #endregion
@@ -222,6 +225,11 @@ namespace Prime
                 .HasOne(tlic => tlic.LicenseClassClause)
                 .WithMany(lcc => lcc.AccessTermLicenseClassClauses)
                 .HasForeignKey(tlic => tlic.LicenseClassClauseId);
+
+            modelBuilder.Entity<BusinessEvent>()
+                .HasOne(be => be.BusinessEventType)
+                .WithMany(t => t.BusinessEvents)
+                .HasForeignKey(be => be.BusinessEventTypeCode);
             #endregion
         }
     }

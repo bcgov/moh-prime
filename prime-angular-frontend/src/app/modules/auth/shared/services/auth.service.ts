@@ -6,6 +6,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { LoggerService } from '@core/services/logger.service';
 import { Role } from '@auth/shared/enum/role.enum';
 import { User } from '@auth/shared/models/user.model';
+import { Admin } from '../models/admin.model';
 
 export interface IAuthService {
   getUserId(): Promise<string>;
@@ -16,6 +17,7 @@ export interface IAuthService {
   isEnrollee(): Promise<boolean>;
   isAdjudicator(): boolean;
   isAdmin(): boolean;
+  isSuperAdmin(): boolean;
   decodeToken(): Promise<Keycloak.KeycloakTokenParsed | null>;
   login(options?: Keycloak.KeycloakLoginOptions): Promise<void>;
   isLoggedIn(): Promise<boolean>;
@@ -68,6 +70,12 @@ export class AuthService implements IAuthService {
     return token.sub;
   }
 
+  public async getPreferredUsername(): Promise<string> {
+    const token = await this.decodeToken() as any;
+
+    return token.preferred_username;
+  }
+
   public async getUser(forceReload?: boolean): Promise<User> {
     const {
       firstName,
@@ -84,9 +92,11 @@ export class AuthService implements IAuthService {
     } = await this.keycloakService.loadUserProfile(forceReload) as Keycloak.KeycloakProfile & KeycloakAttributes;
 
     const userId = await this.getUserId();
+    const hpdid = await this.getPreferredUsername();
 
     return {
       userId,
+      hpdid,
       firstName,
       lastName,
       dateOfBirth,
@@ -98,6 +108,25 @@ export class AuthService implements IAuthService {
         postal
       },
       contactEmail
+    };
+  }
+
+  public async getAdmin(forceReload?: boolean): Promise<Admin> {
+    const {
+      firstName,
+      lastName,
+      email
+    } = await this.keycloakService.loadUserProfile(forceReload) as Keycloak.KeycloakProfile;
+
+    const userId = await this.getUserId();
+    const idir = await this.getPreferredUsername();
+
+    return {
+      userId,
+      firstName,
+      lastName,
+      email,
+      idir
     };
   }
 
@@ -124,6 +153,10 @@ export class AuthService implements IAuthService {
 
   public isAdmin(): boolean {
     return this.isUserInRole(Role.ADMIN);
+  }
+
+  public isSuperAdmin(): boolean {
+    return this.isUserInRole(Role.SUPER_ADMIN);
   }
 
   public async decodeToken(): Promise<Keycloak.KeycloakTokenParsed | null> {

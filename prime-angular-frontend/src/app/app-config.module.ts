@@ -17,6 +17,7 @@ export class AppConfig {
     displayPhone: string;
     phone: string;
     email: string;
+    supportEmail: string;
   };
   routes: {
     denied: string;
@@ -34,6 +35,7 @@ export const APP_DI_CONFIG: AppConfig = {
     displayPhone: environment.prime.displayPhone,
     phone: environment.prime.phone,
     email: environment.prime.email,
+    supportEmail: environment.prime.supportEmail,
   },
   routes: {
     denied: AppRoutes.DENIED,

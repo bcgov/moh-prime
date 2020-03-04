@@ -6,7 +6,6 @@ import { PageSubheaderComponent } from '@shared/components/page-subheader/page-s
 import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { EnrolleePropertyComponent } from '../enrollee-property/enrollee-property.component';
 import { MatExpansionModule } from '@angular/material';
-import { PrimeContactComponent } from '@shared/components/prime-contact/prime-contact.component';
 import { APP_DI_CONFIG, APP_CONFIG } from 'app/app-config.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ConfigService } from '@config/config.service';
@@ -31,7 +30,6 @@ describe('EnrolleePrivilegesComponent', () => {
         PageSubheaderComponent,
         DefaultPipe,
         EnrolleePropertyComponent,
-        PrimeContactComponent,
         PrimeEmailComponent,
         PrimePhoneComponent
       ],

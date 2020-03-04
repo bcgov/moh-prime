@@ -11,6 +11,5 @@ export interface DashboardNavSectionItem {
   showItem: boolean;
   disabled?: boolean;
   deemphasize?: boolean;
-  // TODO refactor route children to limit or remove usage of forceActive
   forceActive?: boolean;
 }

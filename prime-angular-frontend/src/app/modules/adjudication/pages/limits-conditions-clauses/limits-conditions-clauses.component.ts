@@ -20,11 +20,12 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { NoteType } from '@adjudication/shared/enums/note-type.enum';
 import { ApproveEnrolmentComponent } from '@shared/components/dialogs/content/approve-enrolment/approve-enrolment.component';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 @Component({
   selector: 'app-limits-conditions-clauses',
   templateUrl: './limits-conditions-clauses.component.html',
-  styleUrls: ['./limits-conditions-clauses.component.scss']
+  styleUrls: ['./limits-conditions-clauses.component.scss'],
 })
 export class LimitsConditionsClausesComponent implements OnInit {
   public busy: Subscription;
@@ -32,12 +33,14 @@ export class LimitsConditionsClausesComponent implements OnInit {
   public columns: string[];
   public dataSource: MatTableDataSource<Enrolment>;
   public enrollee: Enrolment;
+  public preview: string;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
     private adjudicationResource: AdjudicationResource,
+    private authService: AuthService,
     private toastService: ToastService,
     private dialog: MatDialog,
     private logger: LoggerService
@@ -50,11 +53,27 @@ export class LimitsConditionsClausesComponent implements OnInit {
   }
 
   public canApproveOrDeny(currentStatusCode: number) {
-    return (currentStatusCode === EnrolmentStatus.SUBMITTED);
+    return (currentStatusCode === EnrolmentStatus.UNDER_REVIEW);
   }
 
   public canAllowEditing(currentStatusCode: number) {
-    return (currentStatusCode !== EnrolmentStatus.ADJUDICATED_APPROVED);
+    return (currentStatusCode !== EnrolmentStatus.REQUIRES_TOA);
+  }
+
+  public isSuperAdmin() {
+    return this.authService.isSuperAdmin();
+  }
+
+  public isUnderReview(currentStatusCode: EnrolmentStatus) {
+    return (currentStatusCode === EnrolmentStatus.UNDER_REVIEW);
+  }
+
+  /**
+   * Updates the preview with the editor content
+   */
+  public handleChange(event: { editor: any }) {
+    if (!event.editor) { return; }
+    this.preview = event.editor.getContent();
   }
 
   public onSubmit() {
@@ -114,7 +133,7 @@ export class LimitsConditionsClausesComponent implements OnInit {
         }),
         exhaustMap(() =>
           this.adjudicationResource
-            .updateEnrolmentStatus(enrolment.id, EnrolmentStatus.ADJUDICATED_APPROVED)
+            .updateEnrolmentStatus(enrolment.id, EnrolmentStatus.REQUIRES_TOA)
         ),
         exhaustMap(() => this.adjudicationResource.enrollee(enrolment.id))
       )
@@ -143,7 +162,7 @@ export class LimitsConditionsClausesComponent implements OnInit {
       .pipe(
         exhaustMap((result: boolean) =>
           (result)
-            ? this.adjudicationResource.updateEnrolmentStatus(id, EnrolmentStatus.DECLINED)
+            ? this.adjudicationResource.updateEnrolmentStatus(id, EnrolmentStatus.LOCKED)
             : EMPTY
         ),
         exhaustMap(() => this.adjudicationResource.enrollee(id)),
@@ -160,7 +179,7 @@ export class LimitsConditionsClausesComponent implements OnInit {
       );
   }
 
-  public markAsInProgress(id: number) {
+  public markAsActive(id: number) {
     const data: DialogOptions = {
       title: 'Enable Editing',
       message: 'When enabled the enrollee will be able to update their enrolment. Are you sure you want to enable editing?',
@@ -172,19 +191,19 @@ export class LimitsConditionsClausesComponent implements OnInit {
       .pipe(
         exhaustMap((result: boolean) =>
           (result)
-            ? this.adjudicationResource.updateEnrolmentStatus(id, EnrolmentStatus.IN_PROGRESS)
+            ? this.adjudicationResource.updateEnrolmentStatus(id, EnrolmentStatus.ACTIVE)
             : EMPTY
         ),
         exhaustMap(() => this.adjudicationResource.enrollee(id))
       )
       .subscribe(
         (enrolment: Enrolment) => {
-          this.toastService.openSuccessToast('Enrolment status was reverted to In-Progress');
+          this.toastService.openSuccessToast('Enrolment status was reverted to Active');
           this.updateEnrolment(enrolment);
         },
         (error: any) => {
-          this.toastService.openErrorToast('Enrolment status could not be reverted to In-Progress');
-          this.logger.error('[Adjudication] Enrolments::markAsInProgress error has occurred: ', error);
+          this.toastService.openErrorToast('Enrolment status could not be reverted to Active');
+          this.logger.error('[Adjudication] Enrolments::markAsActive error has occurred: ', error);
         }
       );
   }
@@ -196,30 +215,38 @@ export class LimitsConditionsClausesComponent implements OnInit {
       actionType: 'warn',
       actionText: 'Delete Enrolment'
     };
-    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
-      .afterClosed()
-      .pipe(
-        exhaustMap((result: boolean) =>
-          (result)
-            ? this.adjudicationResource.deleteEnrolment(id)
-            : EMPTY
+
+    if (this.authService.isSuperAdmin()) {
+      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          exhaustMap((result: boolean) =>
+            (result)
+              ? this.adjudicationResource.deleteEnrolment(id)
+              : EMPTY
+          )
         )
-      )
-      .subscribe(
-        (enrolment: Enrolment) => {
-          this.toastService.openSuccessToast('Enrolment has been deleted');
-          this.removeEnrolment(enrolment);
-        },
-        (error: any) => {
-          this.toastService.openErrorToast('Enrolment could not be deleted');
-          this.logger.error('[Adjudication] Enrolments::deleteEnrolments error has occurred: ', error);
-        }
-      );
+        .subscribe(
+          (enrolment: Enrolment) => {
+            this.toastService.openSuccessToast('Enrolment has been deleted');
+            this.removeEnrolment(enrolment);
+          },
+          (error: any) => {
+            this.toastService.openErrorToast('Enrolment could not be deleted');
+            this.logger.error('[Adjudication] Enrolments::deleteEnrolments error has occurred: ', error);
+          }
+        );
+    }
   }
 
   public ngOnInit() {
     this.createFormInstance();
+    this.initForm();
     this.getEnrollee(this.route.snapshot.params.id);
+  }
+
+  protected initForm() {
+    this.note.valueChanges.subscribe((value: string) => this.preview = value);
   }
 
   protected createFormInstance() {

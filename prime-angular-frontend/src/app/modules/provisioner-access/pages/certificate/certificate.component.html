@@ -2,9 +2,7 @@
 
   <app-page-header class="mb-5">Provisioner Link</app-page-header>
 
-
-
-  <ng-container *ngIf="certificate">
+  <ng-container *ngIf="certificate; else noCertificate">
 
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>PharmaNet ID</ng-container>
@@ -15,10 +13,8 @@
     </p>
 
     <p class="font-weight-bold mb-5">
-      {{ certificate.licensePlate | uppercase }}
+      {{ certificate.gpid | uppercase }}
     </p>
-
-
 
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>User Information</ng-container>
@@ -52,5 +48,15 @@
 
 
   </ng-container>
+  <ng-template #noCertificate>
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>
+        Provisioner Link
+      </ng-container>
+      <ng-container appPageSubheaderSummary>
+        This provisioner link has expired and is not useable.
+      </ng-container>
+    </app-page-subheader>
+  </ng-template>
 
 </app-page>

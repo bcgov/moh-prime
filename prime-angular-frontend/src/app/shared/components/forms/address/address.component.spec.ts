@@ -2,6 +2,7 @@ import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { NgxMaskModule } from 'ngx-mask';
 
@@ -23,6 +24,7 @@ describe('AddressComponent', () => {
         imports: [
           BrowserAnimationsModule,
           HttpClientTestingModule,
+          RouterTestingModule,
           NgxMaterialModule,
           NgxMaskModule.forRoot(),
           ReactiveFormsModule
@@ -49,7 +51,7 @@ describe('AddressComponent', () => {
     fixture = TestBed.createComponent(AddressComponent);
     component = fixture.componentInstance;
     // Add the bound FormGroup to the component
-    component.form = enrolmentStateService.profileForm.get('physicalAddress') as FormGroup;
+    component.form = enrolmentStateService.demographicForm.get('mailingAddress') as FormGroup;
     fixture.detectChanges();
   }));
 

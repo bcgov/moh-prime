@@ -5,7 +5,7 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Preferred Name</ng-container>
-    <mat-icon *ngIf="isEnrollee"
+    <mat-icon *ngIf="showEditRedirect"
               matTooltip="Edit Preferred Name"
               (click)="onRoute(EnrolmentRoutes.DEMOGRAPHIC)">edit</mat-icon>
   </app-page-subheader>
@@ -29,7 +29,7 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Mailing Address</ng-container>
-    <mat-icon *ngIf="isEnrollee"
+    <mat-icon *ngIf="showEditRedirect"
               matTooltip="Edit Mailing Address"
               (click)="onRoute(EnrolmentRoutes.DEMOGRAPHIC)">edit</mat-icon>
   </app-page-subheader>
@@ -65,7 +65,7 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Contact Information</ng-container>
-    <mat-icon *ngIf="isEnrollee"
+    <mat-icon *ngIf="showEditRedirect"
               matTooltip="Edit Contact Information"
               (click)="onRoute(EnrolmentRoutes.DEMOGRAPHIC)">edit</mat-icon>
   </app-page-subheader>
@@ -84,7 +84,7 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Notification Information</ng-container>
-    <mat-icon *ngIf="isEnrollee"
+    <mat-icon *ngIf="showEditRedirect"
               matTooltip="Edit Notification Information"
               (click)="onRoute(EnrolmentRoutes.DEMOGRAPHIC)">edit</mat-icon>
   </app-page-subheader>
@@ -92,10 +92,10 @@
   <app-enrollee-property title="Email Notification">
     {{ enrollee?.contactEmail | default }}
   </app-enrollee-property>
-  <!-- TODO removed until SMS is implemented -->
-  <!-- <app-enrollee-property title="Text Notification (SMS)">
+
+  <app-enrollee-property title="Text Notification (SMS)">
     {{ enrollee?.contactPhone | phone | default }}
-  </app-enrollee-property> -->
+  </app-enrollee-property>
 
 </section>
 
@@ -103,23 +103,32 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>College Licence Information</ng-container>
-    <mat-icon *ngIf="isEnrollee"
-              matTooltip="Edit College Certifications"
+    <mat-icon *ngIf="showEditRedirect"
+              matTooltip="Edit College Licenses"
               (click)="onRoute(EnrolmentRoutes.REGULATORY)">edit</mat-icon>
   </app-page-subheader>
 
-  <ng-container *ngFor="let certification of certifications; let i = index">
+  <ng-container *ngFor="let certification of certifications; let i = index;">
 
-    <app-enrollee-property title="College Certification"
+    <app-enrollee-property title="College Licence"
                            [makeBold]="true">
       {{ certification.collegeCode | configCode: 'colleges' | default }}
     </app-enrollee-property>
 
-    <app-enrollee-property title="License Number">
-      {{ certification.collegeCode | configCode: 'colleges' : 'prefix' }}{{ certification.licenseNumber | default }}
-    </app-enrollee-property>
+    <div class="row">
+      <div class="col col-sm-4 col-md-4 col-lg-3">
+        <app-enrollee-property title="College Number">
+          {{ certification.collegeCode | configCode: 'colleges' : 'prefix' }}
+        </app-enrollee-property>
+      </div>
+      <div class="col">
+        <app-enrollee-property title="Licence Number">
+          {{ certification.licenseNumber | default }}
+        </app-enrollee-property>
+      </div>
+    </div>
 
-    <app-enrollee-property title="License Class">
+    <app-enrollee-property title="Licence Class">
       {{ certification.licenseCode | configCode: 'licenses' | default }}
     </app-enrollee-property>
 
@@ -146,7 +155,7 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Device Provider</ng-container>
-    <mat-icon *ngIf="isEnrollee"
+    <mat-icon *ngIf="showEditRedirect"
               matTooltip="Edit Device Provider"
               (click)="onRoute(EnrolmentRoutes.DEVICE_PROVIDER)">edit</mat-icon>
   </app-page-subheader>
@@ -166,7 +175,7 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Job Information</ng-container>
-    <mat-icon *ngIf="isEnrollee"
+    <mat-icon *ngIf="showEditRedirect"
               matTooltip="Edit Job Information"
               (click)="onRoute(EnrolmentRoutes.JOB)">edit</mat-icon>
   </app-page-subheader>
@@ -178,7 +187,8 @@
     </app-enrollee-property>
   </ng-container>
 
-  <app-enrollee-property title="Job Title"
+  <app-enrollee-property *ngIf="!hasJob"
+                         title="Job Title"
                          [makeBold]="true">
     None
   </app-enrollee-property>
@@ -189,7 +199,7 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Organization Information</ng-container>
-    <mat-icon *ngIf="isEnrollee"
+    <mat-icon *ngIf="showEditRedirect"
               matTooltip="Edit Organizations"
               (click)="onRoute(EnrolmentRoutes.ORGANIZATION)">edit</mat-icon>
   </app-page-subheader>
@@ -215,52 +225,52 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Self Declaration</ng-container>
-    <mat-icon *ngIf="isEnrollee"
+    <mat-icon *ngIf="showEditRedirect"
               matTooltip="Edit Self Declaration"
               (click)="onRoute(EnrolmentRoutes.SELF_DECLARATION)">edit</mat-icon>
   </app-page-subheader>
 
   <app-enrollee-property title="Are you, or have you ever been, subject to any limits, conditions or prohibitions imposed as a result of disciplinary actions taken by a governing body of a health profession in any jurisdiction, that involved improper access to, collection, use, or disclosure of personal information?"
-                         [makeBold]="true">
+                         [makeBold]="false">
     {{ enrolment?.hasConviction | yesNo: true }}
   </app-enrollee-property>
 
   <app-enrollee-property *ngIf="enrolment?.hasConviction"
                          title="Description"
-                         [makeBold]="true">
+                         [makeBold]="false">
     {{ enrolment?.hasConvictionDetails }}
   </app-enrollee-property>
 
   <app-enrollee-property title="Are you or have you ever been the subject of an order or a conviction under legislation in any jurisdiction for a matter that involved improper access to, collection, use, or disclosure of personal information?"
-                         [makeBold]="true">
+                         [makeBold]="false">
     {{ enrolment?.hasRegistrationSuspended | yesNo: true }}
   </app-enrollee-property>
 
   <app-enrollee-property *ngIf="enrolment?.hasRegistrationSuspended"
                          title="Description"
-                         [makeBold]="true">
+                         [makeBold]="false">
     {{ enrolment?.hasRegistrationSuspendedDetails }}
   </app-enrollee-property>
 
   <app-enrollee-property title="Have you ever been disciplined or fired by an employer, or had a contract for your services terminated, for a matter that involved improper access to, collection, use, or disclosure of personal information?"
-                         [makeBold]="true">
+                         [makeBold]="false">
     {{ enrolment?.hasDisciplinaryAction | yesNo: true }}
   </app-enrollee-property>
 
   <app-enrollee-property *ngIf="enrolment?.hasDisciplinaryAction"
                          title="Description"
-                         [makeBold]="true">
+                         [makeBold]="false">
     {{ enrolment?.hasDisciplinaryActionDetails }}
   </app-enrollee-property>
 
   <app-enrollee-property title="Have you ever had your access to an electronic health record system, electronic medical record system, pharmacy or laboratory record system, or any similar health information system, in any jurisdiction, suspended or cancelled?"
-                         [makeBold]="true">
+                         [makeBold]="false">
     {{ enrolment?.hasPharmaNetSuspended | yesNo: true }}
   </app-enrollee-property>
 
   <app-enrollee-property *ngIf="enrolment?.hasPharmaNetSuspended"
                          title="Description"
-                         [makeBold]="true">
+                         [makeBold]="false">
     {{ enrolment?.hasPharmaNetSuspendedDetails }}
   </app-enrollee-property>
 

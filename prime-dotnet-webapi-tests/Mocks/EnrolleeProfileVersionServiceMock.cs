@@ -29,5 +29,10 @@ namespace PrimeTests.Mocks
         {
             throw new NotImplementedException();
         }
+
+        public Task<EnrolleeProfileVersion> GetEnrolleeProfileVersionBeforeDateAsync(int enrolleeId, DateTime dateTime)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

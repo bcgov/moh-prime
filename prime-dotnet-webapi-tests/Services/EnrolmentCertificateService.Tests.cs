@@ -24,7 +24,7 @@ namespace PrimeTests.Services
 
             EnrolmentCertificate cert = await _service.GetEnrolmentCertificateAsync(token.Id);
             Assert.NotNull(cert);
-            Assert.Equal(enrollee.LicensePlate, cert.LicensePlate);
+            Assert.Equal(enrollee.GPID, cert.GPID);
         }
 
         [Fact]

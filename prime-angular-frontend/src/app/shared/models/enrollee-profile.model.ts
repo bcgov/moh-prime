@@ -6,5 +6,5 @@ export interface EnrolleeProfile {
   preferredMiddleName: string;
   preferredLastName: string;
   dateOfBirth: string;
-  licensePlate: string;
+  gpid: string;
 }

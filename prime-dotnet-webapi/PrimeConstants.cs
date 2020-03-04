@@ -15,12 +15,14 @@ namespace Prime
         public readonly static string[] PRIME_CLIENT_IDS = { PRIME_ADMIN_CLIENT, PRIME_USER_CLIENT };
 
         // Auth
+        public const string PRIME_SUPER_ADMIN_ROLE = "prime_super_admin";
         public const string PRIME_ADMIN_ROLE = "prime_admin";
         public const string PRIME_ENROLLEE_ROLE = "prime_user";
         public const string ASSURANCE_LEVEL_CLAIM_TYPE = "identity_assurance_level";
         public const string KEYCLOAK_REALM_ACCESS_KEY = "realm_access";
         public const string KEYCLOAK_RESOURCE_ACCESS_KEY = "resource_access";
         public const string KEYCLOAK_ROLES_KEY = "roles";
+        public const string SUPER_ADMIN_POLICY = "super-admin-policy";
         public const string ADMIN_POLICY = "admin-policy";
         public const string USER_POLICY = "user-policy";
 

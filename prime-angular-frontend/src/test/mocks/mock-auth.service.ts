@@ -34,6 +34,7 @@ export class MockAuthService implements IAuthService {
   public getUser(forceReload?: boolean): Promise<User> {
     return new Promise((resolve, reject) => resolve({
       userId: `${faker.random.uuid()}`,
+      hpdid: `${faker.random.uuid()}`,
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
       dateOfBirth: faker.date.past().toISOString(),
@@ -72,6 +73,10 @@ export class MockAuthService implements IAuthService {
 
   public isAdmin(): boolean {
     return this._role === Role.ADMIN;
+  }
+
+  public isSuperAdmin(): boolean {
+    return this._role === Role.SUPER_ADMIN;
   }
 
   public decodeToken(): Promise<KeycloakTokenParsed> {

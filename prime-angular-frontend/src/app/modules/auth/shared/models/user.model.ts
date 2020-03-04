@@ -1,5 +1,6 @@
 export interface User {
   userId: string;
+  hpdid: string;
   firstName: string;
   lastName: string;
   dateOfBirth: string;

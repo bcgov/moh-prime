@@ -59,6 +59,19 @@
         "attributes": {}
       },
       {
+        "id": "1d6a0282-481f-4423-a924-de008ffc1b3a",
+        "name": "prime_super_admin",
+        "composite": true,
+        "composites": {
+          "realm": [
+            "prime_admin"
+          ]
+        },
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
         "id": "790e6ec6-559c-4ee2-a070-e98e86d080dc",
         "name": "uma_authorization",
         "description": "${role_uma_authorization}",

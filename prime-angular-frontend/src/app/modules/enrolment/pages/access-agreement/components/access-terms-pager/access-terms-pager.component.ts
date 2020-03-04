@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
 
 import { Pager } from '../../pager';
-import { AccessTerm } from '@enrolment/shared/models/access-term.model';
+import { AccessTerm } from '@shared/models/access-term.model';
 
 @Component({
   selector: 'app-access-terms-pager',

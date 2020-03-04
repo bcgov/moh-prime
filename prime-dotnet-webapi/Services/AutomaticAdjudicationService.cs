@@ -23,7 +23,8 @@ namespace Prime.Services
                 new SelfDeclarationRule(),
                 new AddressRule(),
                 new PharmanetValidationRule(pharmanetApiService),
-                new DeviceProviderRule(),
+                // TODO removed until after Community Practice
+                // new DeviceProviderRule(),
                 new LicenceClassRule(),
                 new AlwaysManualRule()
             };
@@ -59,7 +60,7 @@ namespace Prime.Services
                 return await ProcessRuleInternal(enrollee);
             }
 
-            protected void AddReason(Enrollee enrollee, short statusReasonCode, string statusReasonNote = null)
+            protected void AddReason(Enrollee enrollee, int statusReasonCode, string statusReasonNote = null)
             {
                 var currentStatus = enrollee.CurrentStatus;
                 if (currentStatus == null)

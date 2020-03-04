@@ -13,14 +13,14 @@ import { Organization } from '@enrolment/shared/models/organization.model';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EnrolleeReviewComponent {
-  @Input() public isEnrollee: boolean;
+  @Input() public showEditRedirect: boolean;
   @Input() public enrolment: Enrolment;
   @Output() public route: EventEmitter<string>;
 
   public EnrolmentRoutes = EnrolmentRoutes;
 
   constructor() {
-    this.isEnrollee = true;
+    this.showEditRedirect = false;
     this.route = new EventEmitter<string>();
   }
 

@@ -1,7 +1,11 @@
 import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
+
+import { BehaviorSubject } from 'rxjs';
 
 import { JobFormComponent } from './job-form.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
@@ -10,8 +14,6 @@ import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
 import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { BehaviorSubject } from 'rxjs';
 
 describe('JobFormComponent', () => {
   let component: JobFormComponent;
@@ -22,6 +24,7 @@ describe('JobFormComponent', () => {
       {
         imports: [
           BrowserAnimationsModule,
+          RouterTestingModule,
           NgxContextualHelpModule,
           NgxMaterialModule,
           ReactiveFormsModule

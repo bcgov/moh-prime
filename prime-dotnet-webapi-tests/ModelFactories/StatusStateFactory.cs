@@ -8,13 +8,10 @@ namespace PrimeTests.ModelFactories
 {
     public class StatusState
     {
-        public static readonly StatusState Submitted = new StatusState(Status.IN_PROGRESS_CODE, Status.SUBMITTED_CODE);
-        public static readonly StatusState Approved = new StatusState(Status.IN_PROGRESS_CODE, Status.SUBMITTED_CODE, Status.APPROVED_CODE);
-        public static readonly StatusState Declined = new StatusState(Status.IN_PROGRESS_CODE, Status.SUBMITTED_CODE, Status.DECLINED_CODE);
-        public static readonly StatusState AcceptedTos = new StatusState(Status.IN_PROGRESS_CODE, Status.SUBMITTED_CODE, Status.APPROVED_CODE, Status.ACCEPTED_TOS_CODE);
-        public static readonly StatusState DeclinedTos = new StatusState(Status.IN_PROGRESS_CODE, Status.SUBMITTED_CODE, Status.APPROVED_CODE, Status.DECLINED_TOS_CODE);
-        public static readonly StatusState Unlocked = new StatusState(Status.IN_PROGRESS_CODE, Status.SUBMITTED_CODE, Status.IN_PROGRESS_CODE);
-        public static readonly StatusState SecondSubmission = new StatusState(Status.IN_PROGRESS_CODE, Status.SUBMITTED_CODE, Status.IN_PROGRESS_CODE, Status.SUBMITTED_CODE);
+        public static readonly StatusState Active = new StatusState(Status.ACTIVE_CODE, Status.UNDER_REVIEW_CODE);
+        public static readonly StatusState UnderReview = new StatusState(Status.ACTIVE_CODE, Status.UNDER_REVIEW_CODE);
+        public static readonly StatusState RequiresTOA = new StatusState(Status.ACTIVE_CODE, Status.UNDER_REVIEW_CODE);
+        public static readonly StatusState Locked = new StatusState(Status.ACTIVE_CODE, Status.UNDER_REVIEW_CODE, Status.LOCKED_CODE);
 
         public static ICollection<StatusState> States { get; private set; }
 
@@ -57,10 +54,10 @@ namespace PrimeTests.ModelFactories
         {
             var enrolmentStatuses = new EnrolmentStatusFactory(_owner, _statuses).Generate(_statuses.Count());
 
-            var approvedStatus = enrolmentStatuses.SingleOrDefault(s => s.StatusCode == Status.APPROVED_CODE);
+            var approvedStatus = enrolmentStatuses.SingleOrDefault(s => s.StatusCode == Status.REQUIRES_TOA_CODE);
             if (approvedStatus != null) { approvedStatus.AddStatusReason(_automatic ? StatusReason.AUTOMATIC_CODE : StatusReason.MANUAL_CODE); }
 
-            var pharmanetStatus = enrolmentStatuses.FindLast(s => new[] { Status.DECLINED_CODE, Status.ACCEPTED_TOS_CODE, Status.DECLINED_CODE }.Contains(s.StatusCode));
+            var pharmanetStatus = enrolmentStatuses.FindLast(s => new[] { Status.LOCKED_CODE, Status.ACTIVE_CODE }.Contains(s.StatusCode));
             if (pharmanetStatus != null) { pharmanetStatus.PharmaNetStatus = true; }
 
             return enrolmentStatuses;

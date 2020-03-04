@@ -1,6 +1,6 @@
 <div class="mb-2">
   <div class="mb-2 property-key"
-       [ngClass]="{ 'font-weight-bold' : makeBold }">
+       [ngClass]="makeBold ? 'font-weight-bolder' : 'font-weight-bold'">
     {{ title }}
   </div>
   <div class="ml-4 property-value">

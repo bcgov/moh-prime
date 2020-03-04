@@ -18,8 +18,7 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
-import { AccessTerm } from '@enrolment/shared/models/access-term.model';
-import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
+import { AccessTerm } from '@shared/models/access-term.model';
 import { ViewportService } from '@core/services/viewport.service';
 
 @Component({
@@ -29,7 +28,6 @@ import { ViewportService } from '@core/services/viewport.service';
 })
 export class AccessAgreementComponent extends BaseEnrolmentPage implements OnInit {
   public enrolment: Enrolment;
-  public isAutomatic: boolean;
   public currentPage: number;
   public hasReadAgreement: boolean;
   public agreed: FormControl;
@@ -63,42 +61,43 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
     return this.viewportService.isMobile;
   }
 
-  public get isObo() {
-    return this.accessTerm.userClause.enrolleeClassification === EnrolleeClassification.OBO;
+  public get isObo(): boolean {
+    return (this.accessTerm.userClause.enrolleeClassification === EnrolleeClassification.OBO);
   }
 
-  public get isRu() {
-    return this.accessTerm.userClause.enrolleeClassification === EnrolleeClassification.RU;
+  public get isRu(): boolean {
+    return (this.accessTerm.userClause.enrolleeClassification === EnrolleeClassification.RU);
   }
 
   public get hasAgreed(): boolean {
     return this.agreed.value;
   }
 
-  public onSubmit(enrolmentStatus: EnrolmentStatus) {
+  public onSubmit(isAcceptingToa: boolean = false) {
     if (this.hasReadAgreement) {
-      const status = (enrolmentStatus === EnrolmentStatus.ACCEPTED_TOS)
+      const status = (isAcceptingToa)
         ? { verb: 'Accept', adjective: 'accepted' }
         : { verb: 'Decline', adjective: 'declined' };
 
       const data: DialogOptions = {
         title: 'Terms of Access',
         message: `Are you sure you want to ${status.verb.toLowerCase()} the terms of access?`,
-        actionText: `${status.verb} Agreement`
+        actionText: `${status.verb} Agreement`,
+        actionType: (!isAcceptingToa) ? 'warn' : 'primary'
       };
       this.busy = this.dialog.open(ConfirmDialogComponent, { data })
         .afterClosed()
         .pipe(
           exhaustMap((result: boolean) =>
             (result)
-              ? this.enrolmentResource.updateEnrolmentStatus(this.enrolment.id, enrolmentStatus)
+              ? this.enrolmentResource.updateEnrolmentStatus(this.enrolment.id, EnrolmentStatus.ACTIVE, isAcceptingToa)
               : EMPTY
           )
         )
         .subscribe(
           () => {
             this.toastService.openSuccessToast(`Terms of Access has been ${status.adjective}`);
-            this.routeTo(EnrolmentRoutes.PHARMANET_ENROLMENT_CERTIFICATE, {
+            this.routeTo(EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY, {
               state: { showProgressBar: this.isInitialEnrolment }
             });
           },
@@ -108,22 +107,6 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
           }
         );
     }
-  }
-
-  public onAcceptedAgreement() {
-    const data: DialogOptions = {
-      title: 'Accept Terms of Access',
-      message: 'Are you sure you want to accept the terms of access?',
-      actionText: 'Accept Agreement'
-    };
-  }
-
-  public onDeclinedAgreement() {
-    const data: DialogOptions = {
-      title: 'Decline Terms of Access',
-      message: 'Are you sure you want to decline the terms of access?',
-      actionText: 'Decline Agreement'
-    };
   }
 
   public onPrevPage() {
@@ -153,8 +136,8 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
 
   public ngOnInit() {
     this.enrolment = this.enrolmentService.enrolment;
-    this.isInitialEnrolment = this.enrolment.progressStatus !== ProgressStatus.FINISHED;
-    this.enrolmentResource.getAccessTermLatest(this.enrolment.id, false)
+    this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
+    this.busy = this.enrolmentResource.getAccessTermLatest(this.enrolment.id, false)
       .subscribe(
         (accessTerm: AccessTerm) => this.accessTerm = accessTerm,
         (error: any) => {

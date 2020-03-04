@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 using Prime.Models;
 using Prime.Models.Api;
+using Prime.ViewModels;
 
 namespace Prime.Services
 {
@@ -17,11 +18,13 @@ namespace Prime.Services
 
         Task<Enrollee> GetEnrolleeAsync(int enrolleeId);
 
+        Task<Enrollee> GetEnrolleeNoTrackingAsync(int enrolleeId);
+
         Task<IEnumerable<Enrollee>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null);
 
-        Task<int?> CreateEnrolleeAsync(Enrollee enrollee);
+        Task<int> CreateEnrolleeAsync(Enrollee enrollee);
 
-        Task<int> UpdateEnrolleeAsync(Enrollee enrollee, bool profileCompleted = false);
+        Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeProfileViewModel enrolleeProfile, bool profileCompleted = false);
 
         Task DeleteEnrolleeAsync(int enrolleeId);
 
@@ -29,18 +32,22 @@ namespace Prime.Services
 
         Task<IEnumerable<EnrolmentStatus>> GetEnrolmentStatusesAsync(int enrolleeId);
 
-        Task<EnrolmentStatus> CreateEnrolmentStatusAsync(int enrolleeId, Status status);
+        Task<EnrolmentStatus> CreateEnrolmentStatusAsync(int enrolleeId, Status status, bool acceptedAccessTerm, int? adminId);
 
         bool IsStatusChangeAllowed(Status startingStatus, Status endingStatus);
 
-        Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, params short[] statusCodesToCheck);
+        Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, params int[] statusCodesToCheck);
 
         Task<IEnumerable<AdjudicatorNote>> GetEnrolleeAdjudicatorNotesAsync(Enrollee enrollee);
 
-        Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, string note);
+        Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, string note, int? adminId = null);
 
-        Task<IEnrolleeNote> UpdateEnrolleeNoteAsync(int enrolleeId, IEnrolleeNote newNote);
+        Task<IEnrolleeNote> UpdateEnrolleeNoteAsync(int enrolleeId, IEnrolleeNote newNote, int? adminId = null);
 
         Task<Enrollee> UpdateEnrolleeAlwaysManualAsync(int enrolleeId, bool alwaysManual);
+
+        Task<int> GetEnrolleeCountAsync();
+
+        Task<Enrollee> UpdateEnrolleeAdjudicator(int enrolleeId, Guid adminId = default(Guid));
     }
 }

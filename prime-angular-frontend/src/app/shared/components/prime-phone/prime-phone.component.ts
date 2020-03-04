@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, Input } from '@angular/core';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 
 @Component({
@@ -7,15 +7,30 @@ import { APP_CONFIG, AppConfig } from 'app/app-config.module';
   styleUrls: ['./prime-phone.component.scss']
 })
 export class PrimePhoneComponent {
+  @Input() public mode: 'vanity' | 'normal';
+
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig
-  ) { }
-
-  public get primePhoneDisplay() {
-    return this.config.prime.displayPhone;
+  ) {
+    this.mode = 'vanity';
   }
 
   public get primePhoneHref() {
-    return `tel:+${this.config.prime.phone}`;
+    const phone = this.config.prime.phone.replace(/[^0-9.]/g, '');
+    return `tel:+${phone}`;
+  }
+
+  public get primePhoneDisplay() {
+    return (this.mode === 'vanity')
+      ? this.primePhoneVanity
+      : this.primePhone;
+  }
+
+  private get primePhone() {
+    return this.config.prime.phone;
+  }
+
+  private get primePhoneVanity() {
+    return this.config.prime.displayPhone;
   }
 }

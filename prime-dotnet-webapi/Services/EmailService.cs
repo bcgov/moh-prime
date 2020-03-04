@@ -10,7 +10,7 @@ namespace Prime.Services
 {
     public class EmailService : BaseService, IEmailService
     {
-        private const string PRIME_EMAIL = "prime@gov.bc.ca";
+        private const string PRIME_EMAIL = "no-reply-prime@gov.bc.ca";
 
         public EmailService(ApiDbContext context, IHttpContextAccessor httpContext)
             : base(context, httpContext)
@@ -37,17 +37,32 @@ namespace Prime.Services
                 return;
             }
 
-            string subject = "Prime requires your attention";
-            string body = $"Your Prime application status has changed since you last viewed it. Please click <a href=\"{PrimeConstants.FRONTEND_URL}\">here</a> to log into Prime and view your status.";
+            string subject = "PRIME Requires your Attention";
+            string body = $"Your PRIME application status has changed since you last viewed it. Please click <a href=\"{PrimeConstants.FRONTEND_URL}\">here</a> to log into PRIME and view your status.";
 
             await Send(PRIME_EMAIL, enrollee.ContactEmail, subject, body);
         }
 
-        public async Task SendProvisionerLinkAsync(string provisionerEmail, EnrolmentCertificateAccessToken token)
+        public async Task SendProvisionerLinkAsync(string provisionerEmail, EnrolmentCertificateAccessToken token, string ccEmail)
         {
+            // Always send a copy to the enrollee
+            var ccEmails = new List<string>() { token.Enrollee.ContactEmail };
+
             if (!IsValidEmail(provisionerEmail))
             {
-                throw new ArgumentException("Cannot send provisioner link, supplied email address is invalid.");
+                throw new ArgumentException("Cannot send provisioner link, supplied provisioner email address is invalid.");
+            }
+
+            if (!String.IsNullOrEmpty(ccEmail))
+            {
+                if (IsValidEmail(ccEmail))
+                {
+                    ccEmails.Add(ccEmail);
+                }
+                else
+                {
+                    throw new ArgumentException("Cannot send provisioner link, supplied carbon copy email address is invalid.");
+                }
             }
 
             if (token.Enrollee == null)
@@ -55,10 +70,10 @@ namespace Prime.Services
                 await _context.Entry(token).Reference(t => t.Enrollee).LoadAsync();
             }
 
-            string subject = "New access request";
+            string subject = "New Access Request";
             string body = $"This user has been approved for PharmaNet access. Please click <a href=\"{token.FrontendUrl}\">here</a> to view their information.";
 
-            await Send(PRIME_EMAIL, new[] { provisionerEmail }, new[] { token.Enrollee.ContactEmail }, subject, body);
+            await Send(PRIME_EMAIL, new[] { provisionerEmail }, ccEmails, subject, body);
         }
 
         private async Task Send(string from, string to, string subject, string body)
@@ -112,7 +127,7 @@ namespace Prime.Services
                  || ex is SmtpFailedRecipientException
                  || ex is SmtpFailedRecipientsException)
                 {
-                    // TODO log mail exception, parhaps in a table in the database?
+                    // TODO log mail exception, perhaps in a table in the database?
                 }
 
                 throw;
@@ -122,6 +137,13 @@ namespace Prime.Services
                 smtp.Dispose();
                 mail.Dispose();
             }
+        }
+
+        public class EmailServiceException : Exception
+        {
+            public EmailServiceException() { }
+            public EmailServiceException(string message) : base(message) { }
+            public EmailServiceException(string message, Exception inner) : base(message, inner) { }
         }
     }
 }

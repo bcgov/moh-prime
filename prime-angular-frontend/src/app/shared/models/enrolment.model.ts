@@ -1,4 +1,3 @@
-import { Config } from '@config/config.model';
 import { Enrollee } from '@shared/models/enrollee.model';
 import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
 import { EnrolleeClassification } from '@shared/enums/enrollee-classification.enum';
@@ -7,11 +6,13 @@ import { Job } from '@enrolment/shared/models/job.model';
 import { Organization } from '@enrolment/shared/models/organization.model';
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
 import { Privilege } from '@enrolment/shared/models/privilege.model';
-import { ProgressStatus } from '@enrolment/shared/enums/progress-status.enum';
+import { Admin } from '@auth/shared/models/admin.model';
 
 // TODO incoming transitional Enrollee model, eventually will be Enrollee
 export interface HttpEnrollee extends Enrollee {
   id?: number;
+  displayId?: number;
+  hpdid: string;
   appliedDate: string;
   approvedDate: string;
   expiryDate?: string;
@@ -36,20 +37,22 @@ export interface HttpEnrollee extends Enrollee {
   accessAgreementNote: AdjudicationNote;
   // Indicates enrollee has not completed all profile information
   profileCompleted: boolean;
-  // Status hook for where the enrollee is in the initial enrolment
-  progressStatus: ProgressStatus;
   // Indicates enrollee has seen the collection notice
   collectionNoticeAccepted: boolean;
   // Always send an enrollee to manual adjudication
   alwaysManual: boolean;
+  adjudicatorId: number;
+  adjudicator: Admin;
 }
 
 // TODO outgoing enrolment model
 export interface Enrolment {
   id?: number;
+  displayId?: number;
   enrollee: Enrollee;
   appliedDate: string;
   approvedDate: string;
+  expiryDate?: string;
   certifications: CollegeCertification[];
   deviceProviderNumber: string;
   isInsulinPumpProvider: boolean;
@@ -71,10 +74,10 @@ export interface Enrolment {
   accessAgreementNote: AdjudicationNote;
   // Indicates enrollee has not completed all profile information
   profileCompleted: boolean;
-  // Status hook for where the enrollee is in the initial enrolment
-  progressStatus: ProgressStatus;
   // Indicates enrollee has seen the collection notice
   collectionNoticeAccepted: boolean;
   // Always send an enrollee to manual adjudication
   alwaysManual: boolean;
+  adjudicatorId: number;
+  adjudicator: Admin;
 }

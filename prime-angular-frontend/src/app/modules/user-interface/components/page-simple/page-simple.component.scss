@@ -1,0 +1,21 @@
+@import 'palette';
+@import 'bootstrap/bootstrap-grid';
+
+.wrapper {
+  min-height: 100vh;
+  background-color: theme-palette(blue);
+
+  @include media-breakpoint-up(sm) {
+    background-color: theme-palette(yellow);
+  }
+
+  .header {
+    min-height: 15vh;
+    background-color: theme-palette(blue);
+  }
+
+  .container-fluid {
+    min-height: 70vh;
+    background-color: theme-palette(blue);
+  }
+}

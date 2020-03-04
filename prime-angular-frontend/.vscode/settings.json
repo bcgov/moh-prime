@@ -1,5 +1,6 @@
 {
   "editor.tabSize": 2,
+  "editor.semanticHighlighting.enabled": true,
   "editor.minimap.enabled": true,
   "editor.formatOnType": true,
   "editor.formatOnSave": true,
@@ -12,5 +13,6 @@
   "html.format.indentInnerHtml": true,
   "html.format.wrapAttributes": "force-aligned",
   "html.format.unformatted": "wbr,small,span,a,strong,em,br",
-  "git.ignoreLimitWarning": true
+  "git.ignoreLimitWarning": true,
+  "typescript.tsserver.experimental.enableProjectDiagnostics": true
 }

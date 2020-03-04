@@ -15,7 +15,7 @@
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Organization Information</ng-container>
         <ng-container appPageSubheaderSummary>
-          Identify all of the organizational types and work settings where you will be accessing PharmaNet. (Note:
+          Identify all of the organizational types (work settings) where you will be accessing PharmaNet. (Note:
           Community Practice is the only setting currently available in PRIME.)
         </ng-container>
       </app-page-subheader>
@@ -24,7 +24,7 @@
         <div class="col col-sm-10 py-3"
              formArrayName="organizations">
 
-          <ng-container *ngFor="let organization of organizations.controls; let i = index"
+          <ng-container *ngFor="let organization of organizations.controls; let i = index;"
                         [formGroupName]="i">
 
             <app-form-icon-group [show]="organizations.length > 1"
@@ -44,7 +44,7 @@
                 </mat-form-field>
 
                 <ng-container appContextualContent>
-                  Choose an Organization that you are associated.
+                  Organization type is the location where you access PharmaNet to deliver patient care.
                 </ng-container>
               </app-form-icon-group>
             </app-form-icon-group>
@@ -66,7 +66,7 @@
 
   </form>
 
-  <app-page-footer [profileCompleted]="isProfileComplete"
+  <app-page-footer [isInitialEnrolment]="isInitialEnrolment"
                    (save)="onSubmit()"
                    (back)="routeBackTo()"></app-page-footer>
 

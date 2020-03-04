@@ -1,7 +1,30 @@
 #!/bin/bash
 echo "Running the migrations..."
 #psql -d postgres -f databaseMigration.sql
+if [ -z "${DB_CONNECTION_STRING}" ]
+then
+export DB_CONNECTION_STRING="host=${DB_HOST};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"
+fi
+# Wait for database connection
+PG_IS_READY=$(pg_isready -h $DB_HOST -U ${POSTGRESQL_USER} -d ${POSTGRESQL_DATABASE})
+n=0
+until [[ $n -ge 5 || ($PG_IS_READY == *"$DB_HOST"* && $PG_IS_READY == *"accepting connections"*) ]]
+do
+    echo "Waiting for the database ..." ;
+    sleep 3 ;
+    PG_IS_READY=$(pg_isready -h $DB_HOST -U ${POSTGRESQL_USER} -d ${POSTGRESQL_DATABASE})
+    n=$[$n+1]
+done
+if [[ $n -ge 5 ]]
+then
+    echo "Failed to connect to database."
+else
+    echo "Connected to database."
+fi
+
+
 psql -h $DB_HOST -U ${POSTGRESQL_USER} -d ${POSTGRESQL_DATABASE} -a -f databaseMigrations.sql
+
 echo "Resting 5 seconds to let things settle down..."
 
 echo "Running .NET..."

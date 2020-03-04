@@ -88,7 +88,7 @@ objects:
                 - name: ASPNETCORE_URLS
                   value: "http://+:8080"
                 - name: FRONTEND_URL
-                  value: "${VANITY_URL}"
+                  value: "${HTTP_SCHEMA}://${VANITY_URL}"
                 - name: JWT_SIGNING_KEY
                   value: SdqlA0Y5e6HMAK1wm6iHHHz2u37XGtlo
                 - name: JWT_ADMIN_CLIENT
@@ -189,9 +189,9 @@ objects:
                   port: 8080
                   scheme: "HTTP"
                 initialDelaySeconds: 30
-                periodSeconds: 10
+                periodSeconds: 30
                 successThreshold: 1
-                timeoutSeconds: 1
+                timeoutSeconds: 10
               resources: {}
               volumeMounts:
                 - name: cert-volume

@@ -31,7 +31,7 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.ContactPhone, f => f.Phone.PhoneNumber().OrNull(f));
             RuleFor(x => x.DeviceProviderNumber, f => null);
             RuleFor(x => x.IsInsulinPumpProvider, f => null);
-            RuleFor(x => x.LicensePlate, f => null);
+            RuleFor(x => x.GPID, f => null);
             RuleFor(x => x.ProfileCompleted, f => false);
 
             RuleFor(x => x.HasConviction, false);
@@ -50,24 +50,19 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.Jobs, (f, x) => x.Certifications == null ? new JobFactory(x).Generate(1) : null);
             RuleFor(x => x.Organizations, (f, x) => new OrganizationFactory(x).Generate(1));
             RuleFor(x => x.AccessAgreementNote, (f, x) => new AccessAgreementNoteFactory(x).Generate().OrNull(f));
-            RuleFor(x => x.EnrolmentCertificateNote, (f, x) => new EnrolmentCertificateNoteFactory(x).Generate().OrNull(f));
             RuleFor(x => x.AdjudicatorNotes, (f, x) => new AdjudicatorNoteFactory(x).GenerateBetween(1, 4).OrNull(f));
             RuleFor(x => x.AssignedPrivileges, f => null);
             RuleFor(x => x.Privileges, f => null);
             RuleFor(x => x.EnrolleeProfileVersions, f => null);
             Ignore(x => x.AccessTerms); // Awaiting finialization of access terms
 
-            RuleSet("status.submitted", (set) =>
+            RuleSet("status.under_review", (set) =>
             {
-                set.RuleFor(x => x.EnrolmentStatuses, (f, x) => new StatusStateFactory(x, StatusState.Submitted).Generate());
+                set.RuleFor(x => x.EnrolmentStatuses, (f, x) => new StatusStateFactory(x, StatusState.UnderReview).Generate());
             });
-            RuleSet("status.approved", (set) =>
+            RuleSet("status.active", (set) =>
             {
-                set.RuleFor(x => x.EnrolmentStatuses, (f, x) => new StatusStateFactory(x, StatusState.Approved).Generate());
-            });
-            RuleSet("status.acceptedTos", (set) =>
-            {
-                set.RuleFor(x => x.EnrolmentStatuses, (f, x) => new StatusStateFactory(x, StatusState.AcceptedTos).Generate());
+                set.RuleFor(x => x.EnrolmentStatuses, (f, x) => new StatusStateFactory(x, StatusState.Active).Generate());
             });
             RuleSet("status.random", (set) =>
             {
@@ -95,9 +90,9 @@ namespace PrimeTests.ModelFactories
             {
                 x.ProfileCompleted = x.EnrolmentStatuses.Count > 1 ? true : f.Random.Bool();
 
-                if (x.ProgressStatus == ProgressStatusType.FINISHED)
+                if (x.CurrentStatus.StatusCode == Status.ACTIVE_CODE && x.PreviousStatus.StatusCode == Status.REQUIRES_TOA_CODE)
                 {
-                    x.LicensePlate = f.Random.AlphaNumeric(20);
+                    x.GPID = f.Random.AlphaNumeric(20);
 
                     if (x.Certifications != null)
                     {

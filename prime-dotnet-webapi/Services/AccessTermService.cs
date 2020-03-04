@@ -16,7 +16,7 @@ namespace Prime.Services
         { }
 
         /**
-         * Get the most access term for an enrollee by id.
+         * Get access term for an enrollee by id if accepted.
          */
         public async Task<AccessTerm> GetEnrolleesAccessTermAsync(int enrolleeId, int accessTermId)
         {
@@ -202,7 +202,7 @@ namespace Prime.Services
 
             var newClause = new LimitsConditionsClause
             {
-                EnrolleeId = (int)enrollee.Id,
+                EnrolleeId = enrollee.Id,
                 Clause = null,
                 EffectiveDate = new DateTime()
             };

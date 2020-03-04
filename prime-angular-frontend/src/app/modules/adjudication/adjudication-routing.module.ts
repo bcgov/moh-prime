@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { ConfigResolver } from '@config/config-resolver';
+import { UnsupportedGuard } from '@core/guards/unsupported.guard';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 
@@ -14,11 +15,15 @@ import { AdjudicatorNotesComponent } from './pages/adjudicator-notes/adjudicator
 import { LimitsConditionsClausesComponent } from './pages/limits-conditions-clauses/limits-conditions-clauses.component';
 import { EnrolleeProfileVersionsComponent } from './pages/enrollee-profile-versions/enrollee-profile-versions.component';
 import { EnrolleeProfileVersionComponent } from './pages/enrollee-profile-version/enrollee-profile-version.component';
+import { EnrolleeAccessTermsComponent } from './pages/enrollee-access-terms/enrollee-access-terms.component';
+import { EnrolleeAccessTermComponent } from './pages/enrollee-access-term/enrollee-access-term.component';
+import { EnrolleeAccessTermEnrolmentComponent } from './pages/enrollee-access-term-enrolment/enrollee-access-term-enrolment.component';
 
 const routes: Routes = [
   {
     path: AdjudicationRoutes.MODULE_PATH,
     component: DashboardComponent,
+    canActivate: [UnsupportedGuard],
     canActivateChild: [
       AuthenticationGuard,
       AdjudicationGuard
@@ -49,6 +54,31 @@ const routes: Routes = [
                 path: 'limits-conditions-clauses',
                 component: LimitsConditionsClausesComponent,
                 data: { title: 'Limits and Conditions Clauses' }
+              },
+              {
+                path: AdjudicationRoutes.ACCESS_TERMS,
+                children: [
+                  {
+                    path: '',
+                    component: EnrolleeAccessTermsComponent,
+                    data: { title: 'Enrollee Access Terms' }
+                  },
+                  {
+                    path: ':hid',
+                    children: [
+                      {
+                        path: '',
+                        component: EnrolleeAccessTermComponent,
+                        data: { title: 'Enrollee Access Term' }
+                      },
+                      {
+                        path: AdjudicationRoutes.ENROLMENT,
+                        component: EnrolleeAccessTermEnrolmentComponent,
+                        data: { title: 'Access Term Enrolment' }
+                      },
+                    ]
+                  },
+                ],
               },
               {
                 path: 'history',

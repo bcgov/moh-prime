@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
-import { Configuration, Config, PracticeConfig, CollegeConfig, LicenseConfig, ProvinceConfig } from './config.model';
+import { Configuration, Config, PracticeConfig, CollegeConfig, LicenseConfig, ProvinceConfig, LicenseWeightedConfig } from './config.model';
 import { PrimeHttpResponse } from '@core/models/prime-http-response.model';
 
 export interface IConfigService {
@@ -14,7 +14,6 @@ export interface IConfigService {
   countries: Config<string>[];
   jobNames: Config<number>[];
   licenses: LicenseConfig[];
-  organizationNames: Config<number>[];
   organizationTypes: Config<number>[];
   provinces: ProvinceConfig[];
   statuses: Config<number>[];
@@ -56,17 +55,22 @@ export class ConfigService implements IConfigService {
 
   public get licenses(): LicenseConfig[] {
     return [...this.configuration.licenses]
-      .sort(this.sortConfig);
-  }
-
-  public get organizationNames(): Config<number>[] {
-    return [...this.configuration.organizationNames]
-      .sort(this.sortConfig);
+      .sort(this.sortConfigWeight);
   }
 
   public get organizationTypes(): Config<number>[] {
+    const communityPractice = this.configuration.organizationTypes
+      .find(o => o.code === 2);
+
     return [...this.configuration.organizationTypes]
-      .sort(this.sortConfig);
+      .sort(this.sortConfig)
+      // Move community practice to the top
+      // TODO remove after community practice
+      .filter(o => o.code !== 2)
+      .reduce((os, o) => {
+        os.push(o);
+        return os;
+      }, [communityPractice]);
   }
 
   public get provinces(): ProvinceConfig[] {
@@ -128,5 +132,31 @@ export class ConfigService implements IConfigService {
     return (item1.name > item2.name)
       ? 1 : (item1.name < item2.name)
         ? -1 : 0;
+  }
+
+  /**
+   * @description
+   * Sort configuration by weight.
+   */
+  private sortConfigWeight(item1: LicenseWeightedConfig, item2: LicenseWeightedConfig) {
+    return (item1.weight > item2.weight)
+      ? 1 : (item1.weight < item2.weight)
+        ? -1 : 0;
+  }
+
+  /**
+   *  @description
+   *  Filter config items that contain the value to be matched in their name
+   *  to the bottom of the list.
+   */
+  private filterBottom(list: Config<number | string>[], match: string) {
+    return list
+      .reduce((acc, item) => {
+        (item.name.includes(match))
+          ? acc[1].push(item)
+          : acc[0].push(item);
+        return acc;
+      }, [[], []])
+      .reduce((acc, temp) => acc.concat(temp), []);
   }
 }

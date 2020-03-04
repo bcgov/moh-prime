@@ -46,12 +46,15 @@ import { EnrolleeProfileComponent } from '@shared/components/enrollee/enrollee-p
 import { EnrolleeAddressComponent } from '@shared/components/enrollee/enrollee-address/enrollee-address.component';
 import { EnrolleePrivilegesComponent } from '@shared/components/enrollee/enrollee-privileges/enrollee-privileges.component';
 import { EnrolleeOrganizationsComponent } from '@shared/components/enrollee/enrollee-organizations/enrollee-organizations.component';
-import { PrimeContactComponent } from '@shared/components/prime-contact/prime-contact.component';
-import { PrimeEmailComponent } from './components/prime-email/prime-email.component';
-import { PrimePhoneComponent } from './components/prime-phone/prime-phone.component';
-import { ApproveEnrolmentComponent } from './components/dialogs/content/approve-enrolment/approve-enrolment.component';
-import { SafeHtmlPipe } from './pipes/safe-html.pipe';
-import { MarkdownComponent } from './components/dialogs/content/markdown/markdown.component';
+import { PrimeEmailComponent } from '@shared/components/prime-email/prime-email.component';
+import { PrimePhoneComponent } from '@shared/components/prime-phone/prime-phone.component';
+import { PrimeLogoComponent } from '@shared/components/prime-logo/prime-logo.component';
+import { ApproveEnrolmentComponent } from '@shared/components/dialogs/content/approve-enrolment/approve-enrolment.component';
+import { SafeHtmlPipe } from '@shared/pipes/safe-html.pipe';
+import { MarkdownComponent } from '@shared/components/dialogs/content/markdown/markdown.component';
+import { PrimeSupportEmailComponent } from '@shared/components/prime-support-email/prime-support-email.component';
+import { AccessTermsTableComponent } from './components/access-terms-table/access-terms-table.component';
+import { AccessTermComponent } from './components/access-term/access-term.component';
 
 @NgModule({
   declarations: [
@@ -88,12 +91,15 @@ import { MarkdownComponent } from './components/dialogs/content/markdown/markdow
     EnrolleePrivilegesComponent,
     EnrolleeOrganizationsComponent,
     EnrolleePropertyComponent,
-    PrimeContactComponent,
     PrimeEmailComponent,
     PrimePhoneComponent,
+    PrimeLogoComponent,
     ApproveEnrolmentComponent,
     SafeHtmlPipe,
-    MarkdownComponent
+    MarkdownComponent,
+    PrimeSupportEmailComponent,
+    AccessTermsTableComponent,
+    AccessTermComponent
   ],
   imports: [
     CommonModule,
@@ -149,10 +155,13 @@ import { MarkdownComponent } from './components/dialogs/content/markdown/markdow
     EnrolleePrivilegesComponent,
     EnrolleeOrganizationsComponent,
     EnrolleePropertyComponent,
-    PrimeContactComponent,
     PrimeEmailComponent,
     PrimePhoneComponent,
-    SafeHtmlPipe
+    PrimeLogoComponent,
+    SafeHtmlPipe,
+    PrimeSupportEmailComponent,
+    AccessTermsTableComponent,
+    AccessTermComponent,
   ],
   entryComponents: [
     ConfirmDialogComponent,

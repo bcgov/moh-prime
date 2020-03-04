@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { ConfigResolver } from '@config/config-resolver';
+import { UnsupportedGuard } from '@core/guards/unsupported.guard';
 import { CanDeactivateFormGuard } from '@core/guards/can-deactivate-form.guard';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
@@ -20,23 +21,28 @@ import { OrganizationComponent } from './pages/organization/organization.compone
 import { SubmissionConfirmationComponent } from './pages/submission-confirmation/submission-confirmation.component';
 import { AccessAgreementComponent } from './pages/access-agreement/access-agreement.component';
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
-import { DeclinedComponent } from './pages/declined/declined.component';
-import { DeclinedAccessAgreementComponent } from './pages/declined-access-agreement/declined-access-agreement.component';
+import { AccessLockedComponent } from './pages/access-locked/access-locked.component';
 import { AccessAgreementHistoryComponent } from './pages/access-agreement-history/access-agreement-history.component';
-import { PharmanetEnrolmentCertificateComponent } from './pages/pharmanet-enrolment-certificate/pharmanet-enrolment-certificate.component';
+import { PharmanetEnrolmentSummaryComponent } from './pages/pharmanet-enrolment-summary/pharmanet-enrolment-summary.component';
 import { PharmanetTransactionsComponent } from './pages/pharmanet-transactions/pharmanet-transactions.component';
 import { AccessTermsComponent } from './pages/access-terms/access-terms.component';
 import { AccessAgreementCurrentComponent } from './pages/access-agreement-current/access-agreement-current.component';
+import {
+  AccessAgreementHistoryEnrolmentComponent
+} from './pages/access-agreement-history-enrolment/access-agreement-history-enrolment.component';
 
 const routes: Routes = [
   {
     path: EnrolmentRoutes.MODULE_PATH,
     component: DashboardComponent,
+    canActivate: [UnsupportedGuard],
     canActivateChild: [
       AuthenticationGuard,
       EnrolleeGuard,
       EnrolmentGuard
     ],
+    // Ensure that the configuration is loaded, otherwise
+    // if it already exists NOOP
     resolve: [ConfigResolver],
     children: [
       {
@@ -52,14 +58,12 @@ const routes: Routes = [
         // reviewing prior to submission
         path: EnrolmentRoutes.OVERVIEW,
         component: OverviewComponent,
+        canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'PharmaNet Enrolment' }
       },
       //
       // Enrollee profile:
       //
-      // TODO refactor routes to have deeper child routing, which
-      // will provide an easier way to lock down routing, and provide
-      // feedback for marking active routes in the dashboard
       {
         path: EnrolmentRoutes.DEMOGRAPHIC,
         component: DemographicComponent,
@@ -72,7 +76,7 @@ const routes: Routes = [
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'PharmaNet Enrolment' }
       },
-      // TODO Temporary removal of device provider for ComPAP
+      // TODO Temporary removal of device provider for Community Practice
       // {
       //   path: EnrolmentRoutes.DEVICE_PROVIDER,
       //   component: DeviceProviderComponent,
@@ -106,19 +110,14 @@ const routes: Routes = [
         data: { title: 'PharmaNet Enrolment' }
       },
       {
-        path: EnrolmentRoutes.DECLINED,
-        component: DeclinedComponent,
+        path: EnrolmentRoutes.ACCESS_LOCKED,
+        component: AccessLockedComponent,
         data: { title: 'Enrolment Summary' }
       },
       {
-        path: EnrolmentRoutes.TERMS_OF_ACCESS,
+        path: EnrolmentRoutes.PENDING_ACCESS_TERM,
         component: AccessAgreementComponent,
         data: { title: 'Enrolment Terms of Access' }
-      },
-      {
-        path: EnrolmentRoutes.DECLINED_TERMS_OF_ACCESS,
-        component: DeclinedAccessAgreementComponent,
-        data: { title: 'Enrolment Summary' }
       },
       //
       // Enrollee history and PharmaNet:
@@ -129,27 +128,38 @@ const routes: Routes = [
         data: { title: 'Terms of Access' }
       },
       {
-        path: EnrolmentRoutes.PHARMANET_ENROLMENT_CERTIFICATE,
-        component: PharmanetEnrolmentCertificateComponent,
-        data: { title: 'PharmaNet Enrolment Certificate' }
+        path: EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY,
+        component: PharmanetEnrolmentSummaryComponent,
+        data: { title: 'PharmaNet Enrolment Summary' }
       },
-      {
-        path: EnrolmentRoutes.PHARMANET_TRANSACTIONS,
-        component: PharmanetTransactionsComponent,
-        data: { title: 'PharmaNet Transactions' }
-      },
+      // TODO removed until the page has been implemented
+      // {
+      //   path: EnrolmentRoutes.PHARMANET_TRANSACTIONS,
+      //   component: PharmanetTransactionsComponent,
+      //   data: { title: 'PharmaNet Transactions' }
+      // },
       {
         path: EnrolmentRoutes.ACCESS_TERMS,
         children: [
           {
             path: '',
             component: AccessTermsComponent,
-            data: { title: 'PRIME Transaction History' }
+            data: { title: 'PRIME History' }
           },
           {
             path: ':id',
-            component: AccessAgreementHistoryComponent,
-            data: { title: 'PRIME Transaction History' }
+            children: [
+              {
+                path: '',
+                component: AccessAgreementHistoryComponent,
+                data: { title: 'PRIME History' }
+              },
+              {
+                path: EnrolmentRoutes.ENROLMENT,
+                component: AccessAgreementHistoryEnrolmentComponent,
+                data: { title: 'PRIME History' }
+              },
+            ]
           }
         ]
       },

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -12,24 +13,36 @@ namespace Prime.Services
     {
         private static readonly TimeSpan TOKEN_LIFESPAN = TimeSpan.FromDays(7);
         private const int MAX_VIEWS = 3;
+        private readonly IAccessTermService _accessTermService;
+        private readonly IEnrolleeProfileVersionService _enroleeProfileVersionService;
+
+        private ImmutableDictionary<string, string> PharmaNetProvisioners = new Dictionary<string, string>()
+        {
+            { "CareConnect", "CareConnect@phsa.ca" },
+            { "Excelleris", "support@excelleris.com" },
+            { "iClinic", "help@iclinicemr.com" },
+            { "MediNet", "prime@medinet.ca" },
+            { "Plexia", "service@plexia.ca" }
+        }.ToImmutableDictionary();
 
         public EnrolmentCertificateService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext)
+            IHttpContextAccessor httpContext,
+            IAccessTermService accessTermService,
+            IEnrolleeProfileVersionService enroleeProfileVersionService)
             : base(context, httpContext)
-        { }
+        {
+            _accessTermService = accessTermService;
+            _enroleeProfileVersionService = enroleeProfileVersionService;
+        }
 
         public async Task<EnrolmentCertificate> GetEnrolmentCertificateAsync(Guid accessTokenId)
         {
             var token = await _context.EnrolmentCertificateAccessTokens
                 .Where(t => t.Id == accessTokenId)
                 .Include(t => t.Enrollee)
-                    .ThenInclude(e => e.EnrolmentCertificateNote)
-                .Include(t => t.Enrollee)
                     .ThenInclude(e => e.Organizations)
                         .ThenInclude(org => org.OrganizationType)
-                .Include(t => t.Enrollee)
-                    .ThenInclude(e => e.AccessTerms)
                 .SingleOrDefaultAsync();
 
             if (token == null || token.Enrollee == null)
@@ -41,12 +54,37 @@ namespace Prime.Services
 
             if (token.Active)
             {
-                return EnrolmentCertificate.Create(token.Enrollee);
+                var enrolleeId = token.EnrolleeId;
+                var acceptedAccessTerm = await _accessTermService.GetMostRecentAcceptedEnrolleesAccessTermAsync(enrolleeId);
+                if (acceptedAccessTerm != null)
+                {
+                    var enrolleeProfileHistory = await _enroleeProfileVersionService.GetEnrolleeProfileVersionBeforeDateAsync(enrolleeId, (DateTime)acceptedAccessTerm?.AcceptedDate);
+
+                    if (enrolleeProfileHistory != null)
+                    {
+                        // Load JSON profile history to an Enrollee Object
+                        // TODO refactor this to work with different versions of enrollee as model changes from JSON object
+                        var enrolleeHistory = enrolleeProfileHistory.ProfileSnapshot.ToObject<Enrollee>();
+
+                        // Add the organization type to each organization from JSON profile history
+                        // TODO find simpler way to load relationships from JSON object
+                        var organizations = enrolleeHistory.Organizations;
+
+                        for (var i = 0; i < enrolleeHistory.Organizations.Count; i++)
+                        {
+                            var result = _context.Organizations
+                                .Where(o => o.Id == enrolleeHistory.Organizations.ElementAt(i).Id)
+                                .Include(o => o.OrganizationType)
+                                .FirstOrDefault();
+
+                            enrolleeHistory.Organizations.ElementAt(i).OrganizationType = result.OrganizationType;
+                        }
+                        return EnrolmentCertificate.Create(enrolleeHistory, token.Enrollee);
+                    }
+                }
             }
-            else
-            {
-                return null;
-            }
+
+            return null;
         }
 
         public async Task<EnrolmentCertificateAccessToken> CreateCertificateAccessTokenAsync(Enrollee enrollee)
@@ -75,6 +113,23 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
+        public string GetPharmaNetProvisionerEmail(string provisionerName, ref string otherEmail)
+        {
+            string recipientEmail;
+
+            if (provisionerName == "Other")
+            {
+                recipientEmail = otherEmail;
+                otherEmail = "";
+            }
+            else
+            {
+                PharmaNetProvisioners.TryGetValue(provisionerName, out recipientEmail);
+            }
+
+            return recipientEmail;
+        }
+
         private async Task UpdateTokenMetadataAsync(EnrolmentCertificateAccessToken token)
         {
             if (!token.Active)
@@ -82,8 +137,7 @@ namespace Prime.Services
                 return;
             }
 
-            if (token.ViewCount >= MAX_VIEWS
-                || DateTime.Today > token.Expires)
+            if (token.ViewCount >= MAX_VIEWS || DateTime.Today > token.Expires)
             {
                 token.Active = false;
             }

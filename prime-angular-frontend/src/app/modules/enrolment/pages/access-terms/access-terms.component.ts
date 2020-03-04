@@ -1,30 +1,33 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { AccessTerm } from '@enrolment/shared/models/access-term.model';
+import { AccessTerm } from '@shared/models/access-term.model';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { Subscription } from 'rxjs';
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-access-terms',
   templateUrl: './access-terms.component.html',
   styleUrls: ['./access-terms.component.scss']
 })
-export class AccessTermsComponent implements OnInit {
+export class AccessTermsComponent extends BaseEnrolmentPage implements OnInit {
   public dataSource: MatTableDataSource<AccessTerm>;
   public busy: Subscription;
   public columns: string[];
 
   constructor(
+    protected router: Router,
+    protected route: ActivatedRoute,
     private enrolmentResource: EnrolmentResource,
     private enrolmentService: EnrolmentService,
     private logger: LoggerService,
     private toastService: ToastService
   ) {
-    // this.columns = ['applicationDate', 'approvalDate', 'expiryDate', 'actions'];
-    this.columns = ['applicationDate', 'approvalDate', 'actions'];
+    super(route, router);
   }
 
   public ngOnInit() {

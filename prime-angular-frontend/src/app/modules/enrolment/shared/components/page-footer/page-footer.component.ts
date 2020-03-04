@@ -1,6 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
-import { Enrolment } from '@shared/models/enrolment.model';
 
 
 @Component({
@@ -9,7 +7,7 @@ import { Enrolment } from '@shared/models/enrolment.model';
   styleUrls: ['./page-footer.component.scss']
 })
 export class PageFooterComponent implements OnInit {
-  @Input() profileCompleted: boolean;
+  @Input() isInitialEnrolment: boolean;
   @Input() hasSecondaryAction: boolean;
   @Input() disableSave: boolean;
   @Output() save: EventEmitter<void>;
@@ -20,7 +18,7 @@ export class PageFooterComponent implements OnInit {
   public secondaryActionButtonLabel: string;
 
   constructor() {
-    this.profileCompleted = true;
+    this.isInitialEnrolment = true;
     this.hasSecondaryAction = true;
 
     this.save = new EventEmitter<void>();
@@ -33,13 +31,13 @@ export class PageFooterComponent implements OnInit {
   }
 
   public onSecondaryAction() {
-    (!this.profileCompleted)
+    (this.isInitialEnrolment)
       ? this.back.emit()
       : this.continue.emit();
   }
 
   public ngOnInit() {
-    if (!this.profileCompleted) {
+    if (this.isInitialEnrolment) {
       this.saveButtonLabel = 'Save and Continue';
       this.secondaryActionButtonLabel = 'Back';
     } else {

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
+import { UnsupportedGuard } from '@core/guards/unsupported.guard';
 import { AuthComponent } from './shared/components/auth/auth.component';
 import { AuthorizationRedirectGuard } from './shared/guards/authorization-redirect.guard';
 
@@ -13,7 +14,10 @@ const routes: Routes = [
   {
     path: AuthRoutes.MODULE_PATH,
     component: AuthComponent,
-    canActivate: [AuthorizationRedirectGuard],
+    canActivate: [
+      UnsupportedGuard,
+      AuthorizationRedirectGuard
+    ],
     children: [
       {
         path: AuthRoutes.INFO,

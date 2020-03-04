@@ -15,8 +15,8 @@ import { Job } from '@enrolment/shared/models/job.model';
 import { Address } from '@enrolment/shared/models/address.model';
 import { Organization } from '@enrolment/shared/models/organization.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-import { AccessTerm } from '@enrolment/shared/models/access-term.model';
-import { EnrolleeNote } from '@enrolment/shared/models/enrollee-note.model';
+import { AccessTerm } from '@shared/models/access-term.model';
+import { EnrolmentProfileVersion, HttpEnrolleeProfileVersion } from '@shared/models/enrollee-profile-history.model';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +33,7 @@ export class EnrolmentResource {
     return this.http.get(`${this.config.apiEndpoint}/enrollees`)
       .pipe(
         map((response: PrimeHttpResponse) => response.result),
-        tap((enrollees: HttpEnrollee[]) => this.logger.info('ENROLLEES', enrollees)),
+        tap((enrollees: HttpEnrollee[]) => this.logger.info('ENROLLEES', enrollees[0])),
         map((enrollees: HttpEnrollee[]) =>
           // Only a single enrollee will be provided
           (enrollees.length) ? this.enrolleeAdapterResponse(enrollees.pop()) : null
@@ -59,9 +59,13 @@ export class EnrolmentResource {
     return this.http.put(`${this.config.apiEndpoint}/enrollees/${id}`, this.enrolmentAdapterRequest(enrolment), { params });
   }
 
-  public updateEnrolmentStatus(id: number, statusCode: number): Observable<Config<number>[]> {
+  public updateEnrolmentStatus(id: number, statusCode: number, acceptedAccessTerm: boolean = false): Observable<Config<number>[]> {
     const payload = { code: statusCode };
-    return this.http.post(`${this.config.apiEndpoint}/enrollees/${id}/statuses`, payload)
+    let params = new HttpParams();
+    if (acceptedAccessTerm) {
+      params = params.set('acceptedAccessTerm', `${acceptedAccessTerm}`);
+    }
+    return this.http.post(`${this.config.apiEndpoint}/enrollees/${id}/statuses`, payload, { params })
       .pipe(
         map((response: PrimeHttpResponse) => response.result as Config<number>[]),
         tap((statuses: Config<number>[]) => this.logger.info('ENROLMENT_STATUSES', statuses))
@@ -76,9 +80,9 @@ export class EnrolmentResource {
       );
   }
 
-  public sendProvisionerAccessLink(recipientEmail: string): Observable<EnrolmentCertificateAccessToken> {
-    const payload = { data: recipientEmail };
-    return this.http.post(`${this.config.apiEndpoint}/provisioner-access/send-link`, payload)
+  public sendProvisionerAccessLink(provisionerName: string, ccEmail: string = null): Observable<EnrolmentCertificateAccessToken> {
+    const payload = { data: ccEmail };
+    return this.http.post(`${this.config.apiEndpoint}/provisioner-access/send-link/${provisionerName}`, payload)
       .pipe(
         map((response: PrimeHttpResponse) => response.result as EnrolmentCertificateAccessToken),
         tap((token: EnrolmentCertificateAccessToken) => this.logger.info('ACCESS_TOKEN', token))
@@ -114,11 +118,33 @@ export class EnrolmentResource {
       );
   }
 
+  public getEnrolmentProfileForAccessTerm(enrolleeId: number, accessTermId: number): Observable<EnrolmentProfileVersion> {
+    return this.http
+      .get(`${this.config.apiEndpoint}/enrollees/${enrolleeId}/access-terms/${accessTermId}/enrolment`)
+      .pipe(
+        map((response: PrimeHttpResponse) => response.result as EnrolmentProfileVersion),
+        tap((enrolmentProfileVersion: EnrolmentProfileVersion) => this.logger.info('ENROLMENT_PROFILE_VERSION', enrolmentProfileVersion)),
+        map(this.enrolleeVersionAdapterResponse.bind(this))
+      );
+  }
+
   // ---
   // Enrollee and Enrolment Adapters
   // ---
 
+  private enrolleeVersionAdapterResponse(
+    { id, enrolleeId, profileSnapshot, createdDate }: HttpEnrolleeProfileVersion
+  ): EnrolmentProfileVersion {
+    return {
+      id,
+      enrolleeId,
+      profileSnapshot: this.enrolleeAdapterResponse(profileSnapshot),
+      createdDate
+    };
+  }
+
   private enrolleeAdapterResponse(enrollee: HttpEnrollee): Enrolment {
+    // Fill in values that could be `null`
     if (!enrollee.mailingAddress) {
       enrollee.mailingAddress = new Address();
     }
@@ -135,6 +161,8 @@ export class EnrolmentResource {
       enrollee.organizations = [];
     }
 
+    // Reorganize the shape of the enrollee into an enrolment
+    // TODO refactor this adapter out of the application
     return this.enrolmentAdapter(enrollee);
   }
 
@@ -148,18 +176,16 @@ export class EnrolmentResource {
       preferredMiddleName,
       preferredLastName,
       dateOfBirth,
-      licensePlate,
+      gpid,
+      hpdid,
       physicalAddress,
       mailingAddress,
       contactEmail,
       contactPhone,
       voicePhone,
       voiceExtension,
-      expiryDate,
       ...remainder
     } = enrollee;
-
-    const collectionNoticeAccepted = false;
 
     return {
       enrollee: {
@@ -171,24 +197,22 @@ export class EnrolmentResource {
         preferredMiddleName,
         preferredLastName,
         dateOfBirth,
-        licensePlate,
+        gpid,
+        hpdid,
         physicalAddress,
         mailingAddress,
         contactEmail,
         contactPhone,
         voicePhone,
-        voiceExtension,
-        expiryDate
+        voiceExtension
       },
-      collectionNoticeAccepted,
+      // Provide the default and allow it to be overridden
+      collectionNoticeAccepted: false,
       ...remainder
     };
   }
 
   private enrolmentAdapterRequest(enrolment: Enrolment): HttpEnrollee {
-    if (enrolment.enrollee.physicalAddress.postal) {
-      enrolment.enrollee.physicalAddress.postal = enrolment.enrollee.physicalAddress.postal.toUpperCase();
-    }
     if (enrolment.enrollee.mailingAddress.postal) {
       enrolment.enrollee.mailingAddress.postal = enrolment.enrollee.mailingAddress.postal.toUpperCase();
     }
@@ -196,9 +220,6 @@ export class EnrolmentResource {
     enrolment.certifications = this.removeIncompleteCollegeCertifications(enrolment.certifications);
     enrolment.jobs = this.removeIncompleteJobs(enrolment.jobs);
     enrolment.organizations = this.removeIncompleteOrganizations(enrolment.organizations);
-
-    enrolment.accessAgreementNote = new EnrolleeNote();
-    enrolment.enrolmentCertificateNote = new EnrolleeNote();
 
     return this.enrolleeAdapter(enrolment);
   }

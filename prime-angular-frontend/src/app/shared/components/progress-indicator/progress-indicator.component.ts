@@ -22,6 +22,7 @@ export class ProgressIndicatorComponent implements OnInit {
     const totalPages = enrolmentRoutes.length - 1;
 
     const percentComplete = Math.trunc(currentPage / totalPages * 100);
+
     this.percentComplete = (this.inProgress)
       ? percentComplete
       : 100;

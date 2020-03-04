@@ -6,6 +6,8 @@ import { Subscription } from 'rxjs';
 import { EnrolmentCertificate } from '../../shared/models/enrolment-certificate.model';
 import moment from 'moment';
 import { ProvisionerAccessResource } from '../../shared/services/provisioner-access-resource.service';
+import { ToastService } from '@core/services/toast.service';
+import { LoggerService } from '@core/services/logger.service';
 
 @Component({
   selector: 'app-certificate',
@@ -20,6 +22,8 @@ export class CertificateComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private enrolmentCertificateResource: ProvisionerAccessResource,
+    private toastService: ToastService,
+    private logger: LoggerService
   ) { }
 
   public get hasPreferredName(): boolean {
@@ -52,10 +56,16 @@ export class CertificateComponent implements OnInit {
   public ngOnInit() {
     this.busy = this.enrolmentCertificateResource
       .getCertificate(this.route.snapshot.params.tokenId)
-      .subscribe((certificate: EnrolmentCertificate) => {
-        this.certificate = certificate;
-        this.expiryDate = moment(this.certificate.expiryDate).isAfter(moment.now())
-          ? moment(this.certificate.expiryDate).format('MMMM Do, YYYY') : null;
-      });
+      .subscribe(
+        (certificate: EnrolmentCertificate) => {
+          this.certificate = certificate;
+          this.expiryDate = moment(this.certificate.expiryDate).isAfter(moment.now())
+            ? moment(this.certificate.expiryDate).format('MMMM Do, YYYY') : null;
+        },
+        (error: any) => {
+          this.toastService.openErrorToast(`Certificate is no longer valid.`);
+          this.logger.error('[ProvisionerAccess] CertificateComponent::getCertificate error has occurred: ', error);
+        }
+      );
   }
 }

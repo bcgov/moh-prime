@@ -2,8 +2,7 @@ export interface Configuration {
   countries: Config<string>[];
   colleges: CollegeConfig[];
   jobNames: Config<number>[];
-  licenses: LicenseConfig[];
-  organizationNames: Config<number>[];
+  licenses: LicenseWeightedConfig[];
   organizationTypes: Config<number>[];
   practices: PracticeConfig[];
   provinces: ProvinceConfig[];
@@ -25,6 +24,10 @@ export class Config<T> {
 
 export interface LicenseConfig extends Config<number> {
   collegeLicenses: AssociatedCollegeConfig[];
+}
+
+export interface LicenseWeightedConfig extends LicenseConfig {
+  weight: number;
 }
 
 export interface PracticeConfig extends Config<number> {
