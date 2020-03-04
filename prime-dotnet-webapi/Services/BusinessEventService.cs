@@ -77,7 +77,7 @@ namespace Prime.Services
             {
                 EnrolleeId = enrolleeId,
                 AdminId = adminId,
-                BusinessEventTypeCode = BusinessEventType.EMAIL_CODE,
+                BusinessEventTypeCode = BusinessEventTypeCode,
                 Description = description,
                 EventDate = DateTime.Now
             };
