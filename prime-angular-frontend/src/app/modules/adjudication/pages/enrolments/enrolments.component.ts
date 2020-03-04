@@ -79,6 +79,10 @@ export class EnrolmentsComponent implements OnInit {
     return (currentStatusCode === EnrolmentStatus.ACTIVE);
   }
 
+  public isSuperAdmin(): boolean {
+    return this.authService.isSuperAdmin();
+  }
+
   public isUnderReview(currentStatusCode: EnrolmentStatus): boolean {
     return (currentStatusCode === EnrolmentStatus.UNDER_REVIEW);
   }
@@ -210,7 +214,7 @@ export class EnrolmentsComponent implements OnInit {
       actionText: 'Delete Enrolment'
     };
 
-    if (this.authService.isSuperAdmin()) {
+    if (this.isSuperAdmin()) {
       this.busy = this.dialog.open(ConfirmDialogComponent, { data })
         .afterClosed()
         .pipe(
