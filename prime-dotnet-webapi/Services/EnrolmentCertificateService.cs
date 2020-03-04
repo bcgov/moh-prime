@@ -93,7 +93,7 @@ namespace Prime.Services
             {
                 Enrollee = enrollee,
                 ViewCount = 0,
-                Expires = new DateTimeOffset(DateTime.Today.Add(TOKEN_LIFESPAN), new TimeSpan(0, -7, 0, 0, 0)),
+                Expires = DateTimeOffset.Now.Add(TOKEN_LIFESPAN),
                 Active = true
             };
             _context.EnrolmentCertificateAccessTokens.Add(token);
@@ -137,7 +137,7 @@ namespace Prime.Services
                 return;
             }
 
-            if (token.ViewCount >= MAX_VIEWS || new DateTimeOffset(DateTime.Today, new TimeSpan(0, -7, 0, 0, 0)) > token.Expires)
+            if (token.ViewCount >= MAX_VIEWS || DateTimeOffset.Now > token.Expires)
             {
                 token.Active = false;
             }
