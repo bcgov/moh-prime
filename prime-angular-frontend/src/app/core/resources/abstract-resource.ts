@@ -7,6 +7,9 @@ import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ApiHttpErrorResponse } from '@core/models/api-http-error-response.model';
 import { LoggerService } from '@core/services/logger.service';
 
+// Type for NoContent responses from the API
+export type NoContent = Observable<void>;
+
 export abstract class AbstractResource {
   constructor(
     protected logger: LoggerService
@@ -57,6 +60,7 @@ export abstract class AbstractResource {
     return ({ status, body }: HttpResponse<ApiHttpResponse<T>>): ApiHttpResponse<T> => {
       this.logger.info(`RESPONSE: ${status}`, body);
 
+      // TODO handle status of 204 NoContent using void 0
       return body;
     };
   }

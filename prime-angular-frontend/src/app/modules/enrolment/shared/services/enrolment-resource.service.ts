@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
 
-import { Observable } from 'rxjs';
+import { Observable, EMPTY } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
 import { Config } from '@config/config.model';
@@ -18,6 +18,8 @@ import { Address } from '@enrolment/shared/models/address.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
 import { Organization } from '@enrolment/shared/models/organization.model';
+import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
+import { NoContent } from '@core/resources/abstract-resource';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +28,7 @@ export class EnrolmentResource {
 
   constructor(
     private apiResource: ApiResource,
+    private apiResourceUtilsService: ApiResourceUtilsService,
     private logger: LoggerService
   ) { }
 
@@ -44,30 +47,26 @@ export class EnrolmentResource {
   public createEnrollee(payload: Enrollee): Observable<Enrolment> {
     return this.apiResource.post<HttpEnrollee>('enrollees', payload)
       .pipe(
-        map((response: ApiHttpResponse<any>) => response.result),
+        map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
         tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
         map((enrollee: HttpEnrollee) => this.enrolleeAdapterResponse(enrollee))
       );
   }
 
-  public updateEnrollee(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<any> {
+  public updateEnrollee(enrolment: Enrolment, beenThroughTheWizard: boolean = false): NoContent {
     const { id } = enrolment;
-    let params = new HttpParams();
-    if (beenThroughTheWizard) {
-      params = params.set('beenThroughTheWizard', `${beenThroughTheWizard}`);
-    }
-    return this.apiResource.put<HttpEnrollee>(`enrollees/${id}`, this.enrolmentAdapterRequest(enrolment), params);
+    const params = this.apiResourceUtilsService.makeHttpParams({ beenThroughTheWizard });
+    return this.apiResource.put<NoContent>(`enrollees/${id}`, this.enrolmentAdapterRequest(enrolment), params)
+      // TODO remove pipe when ApiResource handles NoContent
+      .pipe(map(() => { }));
   }
 
   public updateEnrolmentStatus(id: number, statusCode: number, acceptedAccessTerm: boolean = false): Observable<Config<number>[]> {
     const payload = { code: statusCode };
-    let params = new HttpParams();
-    if (acceptedAccessTerm) {
-      params = params.set('acceptedAccessTerm', `${acceptedAccessTerm}`);
-    }
-    return this.apiResource.post<HttpEnrollee>(`enrollees/${id}/statuses`, payload, params)
+    const params = this.apiResourceUtilsService.makeHttpParams({ acceptedAccessTerm });
+    return this.apiResource.post<Config<number>[]>(`enrollees/${id}/statuses`, payload, params)
       .pipe(
-        map((response: ApiHttpResponse<any>) => response.result as Config<number>[]),
+        map((response: ApiHttpResponse<Config<number>[]>) => response.result),
         tap((statuses: Config<number>[]) => this.logger.info('ENROLMENT_STATUSES', statuses))
       );
   }
