@@ -22,7 +22,7 @@ namespace Prime.Models
         [Required]
         public string Clause { get; set; }
 
-        public DateTime EffectiveDate { get; set; }
+        public DateTimeOffset EffectiveDate { get; set; }
 
         [JsonIgnore]
         public List<AccessTermLicenseClassClause> AccessTermLicenseClassClauses { get; set; }

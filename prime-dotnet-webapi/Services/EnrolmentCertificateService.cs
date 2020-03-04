@@ -58,7 +58,7 @@ namespace Prime.Services
                 var acceptedAccessTerm = await _accessTermService.GetMostRecentAcceptedEnrolleesAccessTermAsync(enrolleeId);
                 if (acceptedAccessTerm != null)
                 {
-                    var enrolleeProfileHistory = await _enroleeProfileVersionService.GetEnrolleeProfileVersionBeforeDateAsync(enrolleeId, (DateTime)acceptedAccessTerm?.AcceptedDate);
+                    var enrolleeProfileHistory = await _enroleeProfileVersionService.GetEnrolleeProfileVersionBeforeDateAsync(enrolleeId, (DateTimeOffset)acceptedAccessTerm?.AcceptedDate);
 
                     if (enrolleeProfileHistory != null)
                     {
@@ -93,7 +93,7 @@ namespace Prime.Services
             {
                 Enrollee = enrollee,
                 ViewCount = 0,
-                Expires = DateTime.Today.Add(TOKEN_LIFESPAN),
+                Expires = new DateTimeOffset(DateTime.Today.Add(TOKEN_LIFESPAN), new TimeSpan(0, -7, 0, 0, 0)),
                 Active = true
             };
             _context.EnrolmentCertificateAccessTokens.Add(token);
@@ -137,7 +137,7 @@ namespace Prime.Services
                 return;
             }
 
-            if (token.ViewCount >= MAX_VIEWS || DateTime.Today > token.Expires)
+            if (token.ViewCount >= MAX_VIEWS || new DateTimeOffset(DateTime.Today, new TimeSpan(0, -7, 0, 0, 0)) > token.Expires)
             {
                 token.Active = false;
             }

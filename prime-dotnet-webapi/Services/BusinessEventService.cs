@@ -79,7 +79,7 @@ namespace Prime.Services
                 AdminId = adminId,
                 BusinessEventTypeCode = BusinessEventType.EMAIL_CODE,
                 Description = description,
-                EventDate = DateTime.Now
+                EventDate = DateTimeOffset.Now
             };
 
             return businessEvent;

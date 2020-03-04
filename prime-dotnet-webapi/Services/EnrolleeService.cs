@@ -181,7 +181,7 @@ namespace Prime.Services
             {
                 Enrollee = enrollee,
                 StatusCode = Status.ACTIVE_CODE,
-                StatusDate = DateTime.Now,
+                StatusDate = DateTimeOffset.Now,
                 PharmaNetStatus = false
             };
 
@@ -352,7 +352,7 @@ namespace Prime.Services
             {
                 EnrolleeId = enrolleeId,
                 StatusCode = newStatus.Code,
-                StatusDate = DateTime.Now,
+                StatusDate = DateTimeOffset.Now,
                 PharmaNetStatus = false
             };
             enrollee.EnrolmentStatuses.Add(createdEnrolmentStatus);
@@ -370,7 +370,7 @@ namespace Prime.Services
                         {
                             EnrolleeId = enrolleeId,
                             StatusCode = Status.REQUIRES_TOA_CODE,
-                            StatusDate = DateTime.Now,
+                            StatusDate = DateTimeOffset.Now,
                             PharmaNetStatus = false
                         };
                         adjudicatedEnrolmentStatus.AddStatusReason(StatusReason.AUTOMATIC_CODE);
@@ -546,7 +546,7 @@ namespace Prime.Services
             {
                 EnrolleeId = enrolleeId,
                 Note = note,
-                NoteDate = DateTime.Now
+                NoteDate = DateTimeOffset.Now
             };
 
             _context.AdjudicatorNotes.Add(adjudicatorNote);
@@ -591,7 +591,7 @@ namespace Prime.Services
                 else
                 {
                     dbNote.Note = newNote.Note;
-                    dbNote.NoteDate = DateTime.Now;
+                    dbNote.NoteDate = DateTimeOffset.Now;
                     _context.Update(dbNote);
                 }
             }
