@@ -48,7 +48,7 @@ pipeline {
                 sh "./player.sh zap api"
             }
         }
-        stage('Approve Promotion of Develop') {
+        stage('Approve Promotion of Demo') {
             options {
                 timeout(time: 24, unit: 'HOURS')   // timeout on this stage
             }
@@ -56,8 +56,8 @@ pipeline {
             steps {
                 script {
                     def IS_APPROVED = input(
-                        id: 'IS_APPROVED', message: "Deploy to Develop?", ok: "Yes", parameters: [
-                            string(name: 'IS_APPROVED', defaultValue: 'Yes', description: 'Deploy to Develop?')
+                        id: 'IS_APPROVED', message: "Deploy to Demo?", ok: "Yes", parameters: [
+                            string(name: 'IS_APPROVED', defaultValue: 'Yes', description: 'Deploy to Demo?')
                             ])
                     if (IS_APPROVED != 'yes') {
                         currentBuild.result = "SUCCESS"
