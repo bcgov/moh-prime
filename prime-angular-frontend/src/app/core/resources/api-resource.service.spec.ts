@@ -1,4 +1,5 @@
 import { TestBed, inject } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { ApiResource } from './api-resource.service';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
@@ -6,6 +7,9 @@ import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 describe('ApiResource', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule,
+      ],
       providers: [
         ApiResource,
         {
