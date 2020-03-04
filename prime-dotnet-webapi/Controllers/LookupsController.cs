@@ -31,19 +31,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiOkResponse<LookupEntity>), StatusCodes.Status200OK)]
         public async Task<ActionResult<LookupEntity>> GetLookups()
         {
-            LookupEntity lookupEntity = new LookupEntity();
-
-            lookupEntity.Colleges = await _lookupService.GetLookupsAsync<int, College>(c => c.CollegeLicenses, c => c.CollegePractices);
-            lookupEntity.JobNames = await _lookupService.GetLookupsAsync<int, JobName>();
-            lookupEntity.Licenses = await _lookupService.GetLookupsAsync<int, License>(l => l.CollegeLicenses);
-            lookupEntity.OrganizationTypes = await _lookupService.GetLookupsAsync<int, OrganizationType>();
-            lookupEntity.Practices = await _lookupService.GetLookupsAsync<int, Practice>(p => p.CollegePractices);
-            lookupEntity.Statuses = await _lookupService.GetLookupsAsync<int, Status>();
-            lookupEntity.Countries = await _lookupService.GetLookupsAsync<string, Country>();
-            lookupEntity.Provinces = await _lookupService.GetLookupsAsync<string, Province>();
-            lookupEntity.StatusReasons = await _lookupService.GetLookupsAsync<int, StatusReason>();
-            lookupEntity.PrivilegeGroups = await _lookupService.GetLookupsAsync<int, PrivilegeGroup>();
-            lookupEntity.PrivilegeTypes = await _lookupService.GetLookupsAsync<int, PrivilegeType>();
+            var lookupEntity = await _lookupService.GetLookupsAsync();
 
             return Ok(new ApiOkResponse<LookupEntity>(lookupEntity));
         }
