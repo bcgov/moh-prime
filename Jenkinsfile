@@ -50,12 +50,15 @@ pipeline {
                 script {
                     checkout scm
                     if (env.BRANCH_NAME == 'develop') {
-
+                    FRONTEND_ARGS="-p REDIRECT_URL=${SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL}"
+                    API_ARGS="-p ASPNETCORE_ENVIRONMENT=Release -p VANITY_URL=${VANITY_URL}"
                     echo "Deploy to dev..."
                     sh "./player.sh deploy database dev"
                     sh "./player.sh deploy api dev ${API_ARGS}"
                     sh "./player.sh deploy frontend dev ${FRONTEND_ARGS}"
                     } else {
+                    FRONTEND_ARGS="-p REDIRECT_URL=${SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL} -p SUFFIX='-${BRANCH_LOWER}'"
+                    API_ARGS="-p ASPNETCORE_ENVIRONMENT=Release -p VANITY_URL=${VANITY_URL} -p SUFFIX='-${BRANCH_LOWER}'"
                     echo "Deploy to dev..."
                     sh "./player.sh deploy database dev -p SUFFIX='-${BRANCH_LOWER}'"
                     sh "./player.sh deploy api dev ${API_ARGS}"
