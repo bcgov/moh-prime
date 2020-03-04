@@ -244,13 +244,11 @@ export class EnrolmentsComponent implements OnInit {
 
     request$
       .subscribe((updatedEnrolment: Enrolment) => {
-        const updatedDataset = this.dataSource.data.map((enrolment: Enrolment) =>
+        this.dataSource.data = this.dataSource.data.map((enrolment: Enrolment) =>
           (enrolment.id === updatedEnrolment.id)
             ? updatedEnrolment
             : enrolment
         );
-
-        this.dataSource.connect().next(updatedDataset);
       });
   }
 
