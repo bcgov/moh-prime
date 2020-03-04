@@ -124,7 +124,8 @@ namespace Prime.Services
 
         public async Task<IEnumerable<Enrollee>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)
         {
-            var query = this.GetBaseEnrolleeQuery();
+            IQueryable<Enrollee> query = this.GetBaseEnrolleeQuery()
+                .Include(e => e.Adjudicator);
 
             if (searchOptions != null && searchOptions.TextSearch != null)
             {
