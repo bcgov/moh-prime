@@ -133,27 +133,27 @@ export class ConfigService implements IConfigService {
    * @description
    * Sort the configuration by name.
    */
-  private sortConfigByName(): (item1: Config<number | string>, item2: Config<number | string>) => SortWeight {
-    return (item1: Config<number | string>, item2: Config<number | string>) =>
-      this.sortConfig<Config<number | string>>(item1, item2, 'name');
+  private sortConfigByName(): (a: Config<number | string>, b: Config<number | string>) => SortWeight {
+    return (a: Config<number | string>, b: Config<number | string>) =>
+      this.sortConfig<Config<number | string>>(a, b, 'name');
   }
 
   /**
    * @description
    * Sort the configuration by weight.
    */
-  private sortConfigByWeight(): (item1: LicenseWeightedConfig, item2: LicenseWeightedConfig) => SortWeight {
-    return (item1: LicenseWeightedConfig, item2: LicenseWeightedConfig) =>
-      this.sortConfig<LicenseWeightedConfig>(item1, item2, 'weight');
+  private sortConfigByWeight(): (a: LicenseWeightedConfig, b: LicenseWeightedConfig) => SortWeight {
+    return (a: LicenseWeightedConfig, b: LicenseWeightedConfig) =>
+      this.sortConfig<LicenseWeightedConfig>(a, b, 'weight');
   }
 
   /**
    * @description
    * Generic sorting of a JSON object by key.
    */
-  private sortConfig<T>(item1: T, item2: T, key: string): SortWeight {
-    return (item1[key] > item2[key])
-      ? 1 : (item1[key] < item2[key])
+  private sortConfig<T>(a: T, b: T, key: string): SortWeight {
+    return (a[key] > b[key])
+      ? 1 : (a[key] < b[key])
         ? -1 : 0;
   }
 }
