@@ -105,7 +105,7 @@ RUN echo "Installing Node..." && \
     npm install -g --silent @angular/cli @angular/core && \
     echo n | npm install -g --silent @angular-devkit/build-angular @angular/compiler @angular/compiler-cli typescript jasmine karma karma-chrome-launcher karma-mocha karma-chai karma-jasmine karma-jasmine-html-reporter karma-coverage-istanbul-reporter
 
-#.NET 2.2
+#.NET 3.1
 ENV ASPNETCORE_ENVIRONMENT Development
 ENV PATH=$PATH:/home/jenkins/.dotnet/tools
 RUN echo "Installing .NET, coverlet, scanner..." && \
@@ -116,7 +116,7 @@ RUN echo "Installing .NET, coverlet, scanner..." && \
     chown root:root /etc/apt/trusted.gpg.d/microsoft.asc.gpg && \
     chown root:root /etc/apt/sources.list.d/microsoft-prod.list && \
     apt-get -yqq update && \
-    apt-get -yqq install dotnet-sdk-2.2 && \
+    apt-get -yqq install dotnet-sdk-3.1 && \
     dotnet tool install --global coverlet.console && \
     dotnet tool install --global dotnet-sonarscanner --version 4.7.1 && \
     mkdir -p /.dotnet && \
