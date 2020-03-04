@@ -15,7 +15,7 @@ namespace Prime.Controllers
     [Route("api/[controller]")]
     [ApiController]
     // User needs at least the READONLY ADMIN or ENROLLEE role to use this controller
-    [Authorize(Roles = PrimeConstants.PRIME_READONLY_ADMIN + "," + PrimeConstants.PRIME_ENROLLEE_ROLE)]
+    [Authorize(Policy = PrimeConstants.USER_POLICY)]
     public class EnrolleesController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
