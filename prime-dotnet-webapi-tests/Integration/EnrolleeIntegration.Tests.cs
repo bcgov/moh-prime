@@ -11,6 +11,7 @@ using Prime;
 using Prime.Models;
 using PrimeTests.Utils;
 using Prime.Models.Api;
+using Prime.ViewModels;
 
 namespace PrimeTests.Integration
 {
@@ -152,22 +153,23 @@ namespace PrimeTests.Integration
             {
                 Enrollee enrollee = this.CreateEnrollee(scope);
                 string expectedFirstName = "NewFirstName";
-                int enrolleeId = (int)enrollee.Id;
 
                 Assert.NotEqual(expectedFirstName, enrollee.FirstName);
 
-                //update the first name
-                enrollee.FirstName = expectedFirstName;
+                var enrolleeProfile = new EnrolleeProfileViewModel
+                {
+                    PreferredFirstName = expectedFirstName
+                };
 
                 // create a request with an AUTH token
-                var request = TestUtils.CreateRequest<Enrollee>(HttpMethod.Put, $"/api/enrollees/{enrolleeId}", enrollee.UserId, enrollee);
+                var request = TestUtils.CreateRequest<EnrolleeProfileViewModel>(HttpMethod.Put, $"/api/enrollees/{enrollee.Id}", enrollee.UserId, enrolleeProfile);
 
                 // try to update the enrollee
                 var response = await _client.SendAsync(request);
                 Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
 
-                Enrollee updatedEnrollee = this.GetEnrollee(scope, enrolleeId);
-                Assert.Equal(expectedFirstName, updatedEnrollee.FirstName);
+                Enrollee updatedEnrollee = this.GetEnrollee(scope, enrollee.Id);
+                Assert.Equal(expectedFirstName, updatedEnrollee.PreferredFirstName);
             }
         }
     }

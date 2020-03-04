@@ -17,7 +17,7 @@ namespace PrimeTests.ModelFactories
 
         public IEnumerable<Status> Statuses { get; private set; }
 
-        private StatusState(params short[] statusCodes)
+        private StatusState(params int[] statusCodes)
         {
             Statuses = statusCodes.Select(code => StatusLookup.ByCode(code));
 

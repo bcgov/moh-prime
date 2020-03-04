@@ -23,7 +23,8 @@ namespace PrimeTests.Services
             new EmailServiceMock(),
             new PrivilegeServiceMock(),
             new AccessTermServiceMock(),
-            new EnrolleeProfileVersionServiceMock()
+            new EnrolleeProfileVersionServiceMock(),
+            new BusinessEventServiceMock()
         })
         { }
 
@@ -285,7 +286,7 @@ namespace PrimeTests.Services
             int expectedEnrolleeId = (int)testEnrollee.Id;
 
             // create the enrolment status through the service layer code
-            var enrolmentStatus = await _service.CreateEnrolmentStatusAsync((int)expectedEnrolleeId, _dbContext.Statuses.Single(s => s.Code == Status.UNDER_REVIEW_CODE));
+            var enrolmentStatus = await _service.CreateEnrolmentStatusAsync((int)expectedEnrolleeId, _dbContext.Statuses.Single(s => s.Code == Status.UNDER_REVIEW_CODE), false, null);
             Assert.NotNull(enrolmentStatus);
             Assert.Equal(_dbContext.Statuses.Single(s => s.Code == Status.UNDER_REVIEW_CODE), enrolmentStatus.Status);
         }
@@ -305,7 +306,7 @@ namespace PrimeTests.Services
             int expectedEnrolleeId = (int)testEnrollee.Id;
 
             // create the enrolment status through the service layer code
-            var enrolmentStatus = await _service.CreateEnrolmentStatusAsync((int)expectedEnrolleeId, _dbContext.Statuses.Single(s => s.Code == Status.ACTIVE_CODE));
+            var enrolmentStatus = await _service.CreateEnrolmentStatusAsync((int)expectedEnrolleeId, _dbContext.Statuses.Single(s => s.Code == Status.ACTIVE_CODE), true, 1);
             Assert.NotNull(enrolmentStatus);
             Assert.Equal(_dbContext.Statuses.Single(s => s.Code == Status.ACTIVE_CODE), enrolmentStatus.Status);
 
@@ -328,8 +329,8 @@ namespace PrimeTests.Services
 
             // create the enrolment status through the service layer code
             var enrolmentStatusInProgress = await _service
-                .CreateEnrolmentStatusAsync(testEnrollee.Id.Value, _dbContext.Statuses
-                .Single(s => s.Code == Status.UNDER_REVIEW_CODE));
+                .CreateEnrolmentStatusAsync(testEnrollee.Id, _dbContext.Statuses
+                .Single(s => s.Code == Status.UNDER_REVIEW_CODE), false, null);
 
             Assert.NotNull(enrolmentStatusInProgress);
             Assert.Equal(_dbContext.Statuses.Single(s => s.Code == Status.UNDER_REVIEW_CODE), enrolmentStatusInProgress.Status);

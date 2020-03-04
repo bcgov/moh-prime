@@ -41,19 +41,19 @@ namespace PrimeTests.Utils
                                 ;
 
         public static Faker<Certification> CertificationFaker = new Faker<Certification>()
-                                .RuleFor(c => c.CollegeCode, f => f.Random.Short(1, 5))
+                                .RuleFor(c => c.CollegeCode, f => f.Random.Int(1, 5))
                                 .RuleFor(c => c.LicenseNumber, f => f.Random.Int(100000, 999999).ToString().Substring(1))
-                                .RuleFor(c => c.LicenseCode, f => f.Random.Short(1, 4))
+                                .RuleFor(c => c.LicenseCode, f => f.Random.Int(1, 4))
                                 .RuleFor(c => c.RenewalDate, f => f.Date.Future(1))
-                                .RuleFor(c => c.PracticeCode, f => f.Random.Short(1, 4))
+                                .RuleFor(c => c.PracticeCode, f => f.Random.Int(1, 4))
                                 ;
 
         public static Faker<Certification> ManualCertificationFaker = new Faker<Certification>()
-                                .RuleFor(c => c.CollegeCode, f => f.Random.Short(1, 5))
+                                .RuleFor(c => c.CollegeCode, f => f.Random.Int(1, 5))
                                 .RuleFor(c => c.LicenseNumber, f => f.Random.Int(100000, 999999).ToString().Substring(1))
-                                .RuleFor(c => c.LicenseCode, f => f.Random.Short(3, 3))
+                                .RuleFor(c => c.LicenseCode, f => f.Random.Int(3, 3))
                                 .RuleFor(c => c.RenewalDate, f => f.Date.Future(1))
-                                .RuleFor(c => c.PracticeCode, f => f.Random.Short(1, 4))
+                                .RuleFor(c => c.PracticeCode, f => f.Random.Int(1, 4))
                                 ;
 
         public static Faker<Job> JobFaker = new Faker<Job>()
@@ -61,38 +61,48 @@ namespace PrimeTests.Utils
                                 ;
 
         public static Faker<Organization> OrganizationFaker = new Faker<Organization>()
-                                .RuleFor(o => o.OrganizationTypeCode, f => f.Random.Short(1, 2))
+                                .RuleFor(o => o.OrganizationTypeCode, f => f.Random.Int(1, 2))
                                 ;
 
         public static Faker<EnrolmentStatus> EnrolmentStatusFaker = new Faker<EnrolmentStatus>()
               .RuleFor(es => es.StatusCode, f => Status.ACTIVE_CODE)
-              .RuleFor(es => es.Status, f => new Status { Code = Status.ACTIVE_CODE, Name = "Active Code" })
+              //   .RuleFor(es => es.Status, f => new Status { Code = Status.ACTIVE_CODE, Name = "Active Code" })
               .RuleFor(es => es.StatusDate, f => DateTime.Now)
               .RuleFor(es => es.PharmaNetStatus, f => false)
               ;
 
         public static Faker<Enrollee> EnrolleeFaker = new Faker<Enrollee>()
-                                .RuleFor(e => e.UserId, f => Guid.NewGuid())
-                                .RuleFor(e => e.FirstName, f => f.Name.FirstName())
-                                .RuleFor(e => e.MiddleName, f => f.Name.FirstName())
-                                .RuleFor(e => e.LastName, f => f.Name.LastName())
-                                .RuleFor(e => e.DateOfBirth, f => f.Date.Past(20, DateTime.Now.AddYears(-18)))
-                                .RuleFor(e => e.PhysicalAddress, f => PhysicalAddressFaker.Generate())
-                                .RuleFor(e => e.MailingAddress, f => MailingAddressFaker.Generate())
-                                .RuleFor(e => e.Certifications, f => CertificationFaker.Generate(2))
-                                .RuleFor(e => e.DeviceProviderNumber, TestUtils.RandomDeviceProviderNumber())
-                                .RuleFor(e => e.IsInsulinPumpProvider, f => f.Random.Bool())
-                                .RuleFor(e => e.Jobs, f => JobFaker.Generate(2))
-                                .RuleFor(e => e.HasConviction, f => f.Random.Bool())
-                                .RuleFor(e => e.HasConvictionDetails, f => f.Lorem.Paragraphs(2))
-                                .RuleFor(e => e.HasRegistrationSuspended, f => f.Random.Bool())
-                                .RuleFor(e => e.HasRegistrationSuspendedDetails, f => f.Lorem.Paragraphs(2))
-                                .RuleFor(e => e.HasDisciplinaryAction, f => f.Random.Bool())
-                                .RuleFor(e => e.HasDisciplinaryActionDetails, f => f.Lorem.Paragraphs(2))
-                                .RuleFor(e => e.HasPharmaNetSuspended, f => f.Random.Bool())
-                                .RuleFor(e => e.HasPharmaNetSuspendedDetails, f => f.Lorem.Paragraphs(2))
-                                .RuleFor(e => e.Organizations, f => OrganizationFaker.Generate(2))
-                                .RuleFor(e => e.EnrolmentStatuses, f => EnrolmentStatusFaker.Generate(1));
+            .RuleFor(e => e.UserId, f => Guid.NewGuid())
+            .RuleFor(e => e.FirstName, f => f.Name.FirstName())
+            .RuleFor(e => e.MiddleName, f => f.Name.FirstName())
+            .RuleFor(e => e.LastName, f => f.Name.LastName())
+            .RuleFor(e => e.DateOfBirth, f => f.Date.Past(20, DateTime.Now.AddYears(-18)))
+            .RuleFor(e => e.PhysicalAddress, f => PhysicalAddressFaker.Generate())
+            .RuleFor(e => e.MailingAddress, f => MailingAddressFaker.Generate())
+            .RuleFor(e => e.Certifications, f => CertificationFaker.Generate(2))
+            .RuleFor(e => e.DeviceProviderNumber, TestUtils.RandomDeviceProviderNumber())
+            .RuleFor(e => e.IsInsulinPumpProvider, f => f.Random.Bool())
+            .RuleFor(e => e.Jobs, f => JobFaker.Generate(2))
+            .RuleFor(e => e.HasConviction, f => f.Random.Bool())
+            .RuleFor(e => e.HasConvictionDetails, f => f.Lorem.Paragraphs(2))
+            .RuleFor(e => e.HasRegistrationSuspended, f => f.Random.Bool())
+            .RuleFor(e => e.HasRegistrationSuspendedDetails, f => f.Lorem.Paragraphs(2))
+            .RuleFor(e => e.HasDisciplinaryAction, f => f.Random.Bool())
+            .RuleFor(e => e.HasDisciplinaryActionDetails, f => f.Lorem.Paragraphs(2))
+            .RuleFor(e => e.HasPharmaNetSuspended, f => f.Random.Bool())
+            .RuleFor(e => e.HasPharmaNetSuspendedDetails, f => f.Lorem.Paragraphs(2))
+            .RuleFor(e => e.Organizations, f => OrganizationFaker.Generate(2))
+            .RuleFor(e => e.EnrolmentStatuses, f => EnrolmentStatusFaker.Generate(1));
+
+        public static Faker<AccessTerm> AccessTermFaker = new Faker<AccessTerm>()
+              .RuleFor(x => x.EnrolleeId, f => f.Random.Int(1, 5))
+              .RuleFor(x => x.GlobalClauseId, f => f.Random.Int(1, 5))
+              .RuleFor(x => x.UserClauseId, f => f.Random.Int(1, 5))
+              .RuleFor(x => x.LimitsConditionsClauseId, f => f.Random.Int(1, 5))
+              .RuleFor(es => es.CreatedDate, f => DateTime.Now.AddDays(-5))
+              .RuleFor(es => es.AcceptedDate, f => DateTime.Now)
+              .RuleFor(es => es.ExpiryDate, f => DateTime.Now.AddYears(1))
+              ;
 
         public static string RandomProvinceCode(params string[] excludedProvinceCodes)
         {
@@ -436,6 +446,33 @@ namespace PrimeTests.Utils
                  .ForAudience(audience)
                  .ForSubject(subject.ToString())
                  .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_ADMIN_ROLE)
+                 .BuildToken();
+
+            request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);
+
+            return request;
+        }
+
+
+        public static HttpRequestMessage CreateSuperAdminRequest<T>(
+            HttpMethod method,
+            string requestUri,
+            Guid subject,
+            T payload)
+        {
+            var request = CreateRequest<T>(method, requestUri, subject, payload);
+
+            var audience = System.Environment.GetEnvironmentVariable("JWT_AUDIENCE");
+            if (audience == null)
+            {
+                audience = Startup.StaticConfig["Jwt:Audience"];
+            }
+
+            // replace the token - with an admin version of the token
+            var _token = TestUtils.TokenBuilder()
+                 .ForAudience(audience)
+                 .ForSubject(subject.ToString())
+                 .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_SUPER_ADMIN_ROLE)
                  .BuildToken();
 
             request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);
