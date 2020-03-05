@@ -30,11 +30,13 @@ pipeline {
                     sh "./player.sh build api dev ${API_ARGS}"
                     sh "./player.sh build frontend dev ${FRONTEND_ARGS}"
                     } else {
+                    BRANCH_LOWER=BRANCH_NAME.toLowerCase()
                     SUFFIX="-${BRANCH_LOWER}"
-                    FRONTEND_ARGS="-p REDIRECT_URL=${SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL} -p SUFFIX='-${BRANCH_LOWER}'"
-                    API_ARGS="-p ASPNETCORE_ENVIRONMENT=Release -p VANITY_URL=${VANITY_URL} -p SUFFIX='-${BRANCH_LOWER}'"
+                    FRONTEND_ARGS="-p REDIRECT_URL=${SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL} -p SUFFIX=${SUFFIX}"
+                    API_ARGS="-p ASPNETCORE_ENVIRONMENT=Release -p VANITY_URL=${VANITY_URL} -p SUFFIX=${SUFFIX}"
                     echo "Building ..."
-                    sh "./player.sh build database dev -p SUFFIX='-${BRANCH_LOWER}'"
+                    sh "printenv"
+                    sh "./player.sh build database dev -p SUFFIX=${SUFFIX}"
                     sh "./player.sh build api dev ${API_ARGS}"
                     sh "./player.sh build frontend dev ${FRONTEND_ARGS}"
                     }
@@ -58,11 +60,13 @@ pipeline {
                     sh "./player.sh deploy api dev ${API_ARGS}"
                     sh "./player.sh deploy frontend dev ${FRONTEND_ARGS}"
                     } else {
+                    BRANCH_LOWER=BRANCH_NAME.toLowerCase()
                     SUFFIX="-${BRANCH_LOWER}"
-                    FRONTEND_ARGS="-p REDIRECT_URL=${SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL} -p SUFFIX='-${BRANCH_LOWER}'"
-                    API_ARGS="-p ASPNETCORE_ENVIRONMENT=Release -p VANITY_URL=${VANITY_URL} -p SUFFIX='-${BRANCH_LOWER}'"
+                    FRONTEND_ARGS="-p REDIRECT_URL=${SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL} -p SUFFIX=${SUFFIX}"
+                    API_ARGS="-p ASPNETCORE_ENVIRONMENT=Release -p VANITY_URL=${VANITY_URL} -p SUFFIX=${SUFFIX}'"
                     echo "Deploy to dev..."
-                    sh "./player.sh deploy database dev -p SUFFIX='-${BRANCH_LOWER}'"
+                    sh "printenv"
+                    sh "./player.sh deploy database dev -p SUFFIX=${SUFFIX}"
                     sh "./player.sh deploy api dev ${API_ARGS}"
                     sh "./player.sh deploy frontend dev ${FRONTEND_ARGS}"
                     }
