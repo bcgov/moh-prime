@@ -14,7 +14,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    // User needs at least the ADMIN or ENROLLEE role to use this controller
+    // User needs at least the READONLY ADMIN or ENROLLEE role to use this controller
     [Authorize(Policy = PrimeConstants.USER_POLICY)]
     public class EnrolleesController : ControllerBase
     {
@@ -51,8 +51,8 @@ namespace Prime.Controllers
         {
             IEnumerable<Enrollee> enrollees = null;
 
-            // User must have the ADMIN role to see all enrollees
-            if (User.IsAdmin())
+            // User must have the RO_ADMIN or ADMIN role to see all enrollees
+            if (User.IsAdmin() || User.HasAdminView())
             {
                 enrollees = await _enrolleeService.GetEnrolleesAsync(searchOptions);
             }
@@ -85,7 +85,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
 
-            if (!User.CanAccess(enrollee))
+            if (!User.CanView(enrollee))
             {
                 return Forbid();
             }
@@ -98,6 +98,7 @@ namespace Prime.Controllers
         /// Creates a new Enrollee.
         /// </summary>
         [HttpPost(Name = nameof(CreateEnrollee))]
+        [Authorize(Policy = PrimeConstants.USER_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -110,7 +111,7 @@ namespace Prime.Controllers
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 
-            if (!User.CanAccess(enrollee))
+            if (!User.CanEdit(enrollee))
             {
                 return Forbid();
             }
@@ -139,6 +140,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeProfile"></param>
         /// <param name="beenThroughTheWizard"></param>
         [HttpPut("{enrolleeId}", Name = nameof(UpdateEnrollee))]
+        [Authorize(Policy = PrimeConstants.USER_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -152,7 +154,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
 
-            if (!User.CanAccess(enrollee))
+            if (!User.CanEdit(enrollee))
             {
                 return Forbid();
             }
@@ -189,7 +191,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
 
-            if (!User.CanAccess(enrollee))
+            if (!User.CanEdit(enrollee))
             {
                 return Forbid();
             }
@@ -219,7 +221,7 @@ namespace Prime.Controllers
                 return NotFound(new ApiMessageResponse($"Enrollee not found with id {enrolleeId}"));
             }
 
-            if (!User.CanAccess(enrollee))
+            if (!User.CanView(enrollee))
             {
                 return Forbid();
             }
@@ -249,7 +251,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
 
-            if (!User.CanAccess(enrollee))
+            if (!User.CanView(enrollee))
             {
                 return Forbid();
             }
@@ -267,6 +269,7 @@ namespace Prime.Controllers
         /// <param name="status"></param>
         /// <param name="acceptedAccessTerm"></param>
         [HttpPost("{enrolleeId}/statuses", Name = nameof(CreateEnrolmentStatus))]
+        [Authorize(Policy = PrimeConstants.USER_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -282,7 +285,7 @@ namespace Prime.Controllers
                 return NotFound(new ApiMessageResponse($"Enrollee not found with id {enrolleeId}"));
             }
 
-            if (!User.CanAccess(enrollee))
+            if (!User.CanEdit(enrollee))
             {
                 return Forbid();
             }
@@ -315,7 +318,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}/adjudicator-notes", Name = nameof(GetAdjudicatorNotes))]
-        [Authorize(Policy = PrimeConstants.ADMIN_POLICY)]
+        [Authorize(Policy = PrimeConstants.READONLY_ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -417,7 +420,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}/versions", Name = nameof(GetEnrolleeProfileVersions))]
-        [Authorize(Policy = PrimeConstants.ADMIN_POLICY)]
+        [Authorize(Policy = PrimeConstants.READONLY_ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -442,7 +445,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="enrolleeProfileVersionId"></param>
         [HttpGet("{enrolleeId}/versions/{enrolleeProfileVersionId}", Name = nameof(GetEnrolleeProfileVersion))]
-        [Authorize(Policy = PrimeConstants.ADMIN_POLICY)]
+        [Authorize(Policy = PrimeConstants.READONLY_ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]

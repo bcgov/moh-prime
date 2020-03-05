@@ -1,12 +1,11 @@
+import { Token } from '@auth/shared/services/token.interface';
+import { User } from '@auth/shared/models/user.model';
+import { Admin } from '@auth/shared/models/admin.model';
+import { Role } from '@auth/shared/enum/role.enum';
 import * as faker from 'faker';
 import { KeycloakTokenParsed, KeycloakLoginOptions } from 'keycloak-js';
 
-import { Role } from '@auth/shared/enum/role.enum';
-import { IAuthService } from '@auth/shared/services/auth.service';
-import { User } from '@auth/shared/models/user.model';
-import { Admin } from '@auth/shared/models/admin.model';
-
-export class MockAuthService implements IAuthService {
+export class MockKeycloakTokenService implements Token {
   // tslint:disable-next-line: variable-name
   private _role: Role;
   // tslint:disable-next-line: variable-name
@@ -67,32 +66,6 @@ export class MockAuthService implements IAuthService {
     return this.getUserRoles().includes(role);
   }
 
-  public checkAssuranceLevel(assuranceLevel: number): Promise<boolean> {
-    throw new Error('Method not implemented.');
-  }
-
-  public isEnrollee(): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      resolve(this._role === Role.ENROLLEE);
-    });
-  }
-
-  public isAdmin(): boolean {
-    return this._role === Role.ADMIN;
-  }
-
-  public isSuperAdmin(): boolean {
-    return this._role === Role.SUPER_ADMIN;
-  }
-
-  public hasAdminView(): boolean {
-    return this._role === Role.READONLY_ADMIN;
-  }
-
-  hasEnrollee(): boolean {
-    return this._role === Role.ENROLLEE;
-  }
-
   public decodeToken(): Promise<KeycloakTokenParsed> {
     throw new Error('Method not implemented.');
   }
@@ -121,11 +94,4 @@ export class MockAuthService implements IAuthService {
     throw new Error('Method not implemented.');
   }
 
-  public setHasJustLoggedIn(hasJustLoggedIn: boolean) {
-    this.hasJustLoggedIn = hasJustLoggedIn;
-  }
-
-  public getHasJustLoggedIn(): boolean {
-    return this.hasJustLoggedIn;
-  }
 }

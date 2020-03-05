@@ -50,7 +50,7 @@ export class BaseGuard implements CanLoad, CanActivate, CanActivateChild {
    * Hook for customizing access, which defaults to validating
    * access based on authentication.
    */
-  protected canAccess(authenticated: boolean, roles: string[], routePath: string = null): Promise<boolean> {
+  protected canAccess(authenticated: boolean, routePath: string = null): Promise<boolean> {
     return new Promise((resolve, reject) => (authenticated) ? resolve(true) : reject(false));
   }
 
@@ -62,8 +62,7 @@ export class BaseGuard implements CanLoad, CanActivate, CanActivateChild {
     return new Promise(async (resolve, reject) => {
       try {
         this.authenticated = await this.authService.isLoggedIn();
-        const roles = this.authService.getUserRoles(true);
-        const result = await this.canAccess(this.authenticated, roles, routePath);
+        const result = await this.canAccess(this.authenticated, routePath);
         resolve(result);
       } catch (error) {
         const destination = (routePath) ? ` to ${routePath} ` : ' ';

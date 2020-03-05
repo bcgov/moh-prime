@@ -26,7 +26,7 @@ export class AuthorizationRedirectGuard extends BaseGuard {
    * destination when possible, otherwise prompt user to
    * authenticate.
    */
-  protected canAccess(authenticated: boolean, roles: string[], routePath: string): Promise<boolean> {
+  protected canAccess(authenticated: boolean, routePath: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
       if (!authenticated) {
         // Allow route to resolve for user to authenticate
@@ -35,9 +35,9 @@ export class AuthorizationRedirectGuard extends BaseGuard {
 
       let destinationRoute = this.config.routes.denied;
 
-      if (roles.includes(Role.ENROLLEE)) {
+      if (this.authService.hasEnrollee()) {
         destinationRoute = this.config.routes.enrolment;
-      } else if (roles.includes(Role.ADJUDICATOR) || roles.includes(Role.ADMIN)) {
+      } else if (this.authService.hasAdminView()) {
         destinationRoute = this.config.routes.adjudication;
       }
 

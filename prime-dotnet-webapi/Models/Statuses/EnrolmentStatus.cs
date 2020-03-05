@@ -21,7 +21,7 @@ namespace Prime.Models
 
         public Status Status { get; set; }
 
-        public DateTime StatusDate { get; set; }
+        public DateTimeOffset StatusDate { get; set; }
 
         public bool PharmaNetStatus { get; set; }
 

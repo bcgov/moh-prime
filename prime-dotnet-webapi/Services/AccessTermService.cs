@@ -110,7 +110,7 @@ namespace Prime.Services
         {
             var accessTerm = await GenerateAccessTermAsync(enrollee);
 
-            accessTerm.CreatedDate = DateTime.Now;
+            accessTerm.CreatedDate = DateTimeOffset.Now;
 
             _context.Add(accessTerm);
 
@@ -124,9 +124,9 @@ namespace Prime.Services
                 .OrderByDescending(at => at.AcceptedDate)
                 .FirstAsync();
 
-            accessTerm.AcceptedDate = DateTime.Now;
+            accessTerm.AcceptedDate = DateTimeOffset.Now;
             // Add an Expiry Date of one year in the future.
-            accessTerm.ExpiryDate = DateTime.Now.Add(ACCESS_TERM_EXPIRY);
+            accessTerm.ExpiryDate = DateTimeOffset.Now.Add(ACCESS_TERM_EXPIRY);
 
             await _context.SaveChangesAsync();
         }
@@ -204,7 +204,7 @@ namespace Prime.Services
             {
                 EnrolleeId = enrollee.Id,
                 Clause = null,
-                EffectiveDate = new DateTime()
+                EffectiveDate = new DateTimeOffset()
             };
 
             if (lastNote != null)
@@ -213,7 +213,7 @@ namespace Prime.Services
                 {
                     EnrolleeId = lastNote.EnrolleeId,
                     Clause = lastNote.Note,
-                    EffectiveDate = new DateTime()
+                    EffectiveDate = new DateTimeOffset()
                 };
 
                 _context.LimitsConditionsClauses.Add(newClause);

@@ -10,9 +10,9 @@ namespace Prime.Models
         public string firstName { get; set; }
         public string middleInitial { get; set; }
         public string lastName { get; set; }
-        public DateTime dateofBirth { get; set; }
+        public DateTimeOffset dateofBirth { get; set; }
         public string status { get; set; }
-        public DateTime effectiveDate { get; set; }
+        public DateTimeOffset effectiveDate { get; set; }
 
         public bool MatchesEnrolleeByName(Enrollee enrollee)
         {

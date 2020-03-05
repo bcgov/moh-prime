@@ -45,7 +45,7 @@ namespace Prime.Models
 
         public string PreferredLastName { get; set; }
 
-        public DateTime DateOfBirth { get; set; }
+        public DateTimeOffset DateOfBirth { get; set; }
 
         [Required]
         public PhysicalAddress PhysicalAddress { get; set; }
@@ -127,7 +127,7 @@ namespace Prime.Models
         public bool ProfileCompleted { get; set; }
 
         [NotMapped]
-        public DateTime? AppliedDate
+        public DateTimeOffset? AppliedDate
         {
             get => this.EnrolmentStatuses?
                 .OrderByDescending(en => en.StatusDate)
@@ -136,7 +136,7 @@ namespace Prime.Models
         }
 
         [NotMapped]
-        public DateTime? ApprovedDate
+        public DateTimeOffset? ApprovedDate
         {
             get
             {
@@ -150,7 +150,7 @@ namespace Prime.Models
         }
 
         [NotMapped]
-        public DateTime? ExpiryDate
+        public DateTimeOffset? ExpiryDate
         {
             // This applies to the expiry date of the most recent accepted
             // ToA

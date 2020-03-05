@@ -17,7 +17,7 @@ namespace Prime.Models
         [JsonIgnore]
         public Enrollee Enrollee { get; set; }
 
-        public DateTime Expires { get; set; }
+        public DateTimeOffset Expires { get; set; }
 
         public int ViewCount { get; set; }
 

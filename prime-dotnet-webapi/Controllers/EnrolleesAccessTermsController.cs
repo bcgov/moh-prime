@@ -14,7 +14,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/enrollees")]
     [ApiController]
-    // User needs at least the ADMIN or ENROLLEE role to use this controller
+    // User needs at least the RO_ADMIN or ENROLLEE role to use this controller
     [Authorize(Policy = PrimeConstants.USER_POLICY)]
     public class EnrolleesAccessTermsController : ControllerBase
     {
@@ -52,7 +52,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
 
-            if (!User.CanAccess(enrollee))
+            if (!User.CanView(enrollee))
             {
                 return Forbid();
             }
@@ -83,7 +83,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
 
-            if (!User.CanAccess(enrollee))
+            if (!User.CanView(enrollee))
             {
                 return Forbid();
             }
@@ -119,7 +119,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
 
-            if (!User.CanAccess(enrollee))
+            if (!User.CanView(enrollee))
             {
                 return Forbid();
             }
@@ -158,7 +158,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
 
-            if (!User.CanAccess(enrollee))
+            if (!User.CanView(enrollee))
             {
                 return Forbid();
             }
@@ -170,7 +170,7 @@ namespace Prime.Controllers
             }
 
             var enrolleeProfileHistory = await _enrolleeProfileVersionService
-                    .GetEnrolleeProfileVersionBeforeDateAsync(enrolleeId, (DateTime)acceptedAccessTerm.AcceptedDate);
+                    .GetEnrolleeProfileVersionBeforeDateAsync(enrolleeId, (DateTimeOffset)acceptedAccessTerm.AcceptedDate);
 
             if (enrolleeProfileHistory == null)
             {
