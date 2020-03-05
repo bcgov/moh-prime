@@ -240,31 +240,4 @@ namespace Prime
         // public static readonly Microsoft.Extensions.Logging.ILoggerFactory DbLoggerFactory
         //     = new Microsoft.Extensions.Logging.LoggerFactory(new[] { new Microsoft.Extensions.Logging.Debug.DebugLoggerProvider() });
     }
-
-    public static class ApiDbContextExtensions
-    {
-        public static IQueryable Set(this DbContext context, Type T)
-        {
-            // Get the generic type definition
-            MethodInfo method = typeof(DbContext).GetMethod(nameof(DbContext.Set), BindingFlags.Public | BindingFlags.Instance);
-
-            // Build a method with the specific type argument you're interested in
-            method = method.MakeGenericMethod(T);
-
-            return method.Invoke(context, null) as IQueryable;
-        }
-
-        public static IQueryable<T> Set<T>(this DbContext context, params Expression<Func<T, object>>[] includes) where T : class
-        {
-            // Get the generic type definition
-            MethodInfo method = typeof(DbContext).GetMethod(nameof(DbContext.Set), BindingFlags.Public | BindingFlags.Instance);
-
-            // Build a method with the specific type argument you're interested in
-            method = method.MakeGenericMethod(typeof(T));
-
-            var query = method.Invoke(context, null) as IQueryable<T>;
-
-            return includes.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
-        }
-    }
 }
