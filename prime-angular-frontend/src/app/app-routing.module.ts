@@ -30,7 +30,15 @@ const routes: Routes = [
     }
   },
   {
+    // Allow for direct routing to page not found
     path: AppRoutes.PAGE_NOT_FOUND,
+    component: PageNotFoundComponent,
+    data: {
+      title: 'Page Not Found'
+    }
+  },
+  {
+    path: AppRoutes.DEFAULT,
     component: PageNotFoundComponent,
     data: {
       title: 'Page Not Found'

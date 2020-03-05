@@ -490,9 +490,6 @@ namespace Prime.Controllers
             return Ok(new ApiResultResponse<Enrollee>(updatedEnrollee));
         }
 
-        // TODO add route model binding for Enrollee
-        // TODO add middleware/policy to do simple checks
-
         // PUT: api/Enrollees/5/adjudicator
         /// <summary>
         /// Add an enrollee's assigned adjudicator.
