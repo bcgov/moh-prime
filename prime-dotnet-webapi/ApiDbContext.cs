@@ -35,7 +35,7 @@ namespace Prime
 
     public class ApiDbContext : DbContext
     {
-        private readonly DateTime SEEDING_DATE = DateTime.Now;
+        private readonly DateTimeOffset SEEDING_DATE = DateTimeOffset.Now;
 
         private readonly IHttpContextAccessor _context;
 

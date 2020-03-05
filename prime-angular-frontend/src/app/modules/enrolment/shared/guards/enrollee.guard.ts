@@ -27,16 +27,16 @@ export class EnrolleeGuard extends BaseGuard {
    * Check the user is authenticated, otherwise redirect
    * them to an appropriate destination.
    */
-  protected canAccess(authenticated: boolean, roles: string[], routePath: string): Promise<boolean> {
+  protected canAccess(authenticated: boolean, routePath: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
       let destinationRoute = this.config.routes.denied;
 
       if (!authenticated) {
         destinationRoute = this.config.routes.auth;
-      } else if (roles.includes(Role.ENROLLEE)) {
+      } else if (this.authService.hasEnrollee()) {
         // Allow route to resolve
         return resolve(true);
-      } else if (roles.includes(Role.ADJUDICATOR) || roles.includes(Role.ADMIN)) {
+      } else if (this.authService.isAdmin()) {
         destinationRoute = this.config.routes.adjudication;
       }
 

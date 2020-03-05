@@ -28,6 +28,6 @@ namespace Prime.Models
 
         public string Description { get; set; }
 
-        public DateTime? EventDate { get; set; }
+        public DateTimeOffset? EventDate { get; set; }
     }
 }
