@@ -34,7 +34,7 @@ namespace Prime.Models
         [JsonIgnore]
         public License License { get; set; }
 
-        public DateTime RenewalDate { get; set; }
+        public DateTimeOffset RenewalDate { get; set; }
 
         public int? PracticeCode { get; set; }
 

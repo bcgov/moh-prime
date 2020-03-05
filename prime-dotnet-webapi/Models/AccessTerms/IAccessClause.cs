@@ -8,6 +8,6 @@ namespace Prime.Models.AccessAgreement
 
         string Clause { get; set; }
 
-        DateTime EffectiveDate { get; set; }
+        DateTimeOffset EffectiveDate { get; set; }
     }
 }

@@ -52,6 +52,10 @@ export class LimitsConditionsClausesComponent implements OnInit {
     return this.form.get('note') as FormControl;
   }
 
+  public canEdit(): boolean {
+    return this.authService.isAdmin();
+  }
+
   public canApproveOrDeny(currentStatusCode: number) {
     return (currentStatusCode === EnrolmentStatus.UNDER_REVIEW);
   }
