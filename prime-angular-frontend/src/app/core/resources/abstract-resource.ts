@@ -1,6 +1,6 @@
 import { HttpErrorResponse, HttpParams, HttpResponse } from '@angular/common/http';
 
-import { Observable, throwError, pipe } from 'rxjs';
+import { Observable, throwError, pipe, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
@@ -50,6 +50,18 @@ export abstract class AbstractResource {
       map(this.handleSuccess<T>()),
       catchError(this.handleError)
     );
+  }
+
+  /**
+   * @description
+   * Handle NoContent HTTP response.
+   */
+  // TODO handle NoContent
+  protected handleNoContent<T>() {
+    return (response: HttpResponse<ApiHttpResponse<T>>): Observable<HttpResponse<ApiHttpResponse<T>> | NoContent> =>
+      (response.status === 204)
+        ? of(void 0)
+        : of(response);
   }
 
   /**
