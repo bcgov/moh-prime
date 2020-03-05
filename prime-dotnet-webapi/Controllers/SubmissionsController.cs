@@ -40,21 +40,25 @@ namespace Prime.Controllers
         /// </summary>
         [HttpPost("{enrolleeId}/{submissionAction:submissionAction}", Name = nameof(SumbissionAction))]
         [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<Enrollee>), StatusCodes.Status200OK)]
         public async Task<ActionResult<Enrollee>> SumbissionAction(int enrolleeId, SubmissionAction submissionAction)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
             if (enrollee == null)
             {
-                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}."));
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}."));
             }
-            if (!User.CanAccess(enrollee))
+            if (!User.CanEdit(enrollee))
             {
                 return Forbid();
             }
 
             await _submissionService.PerformSubmissionActionAsync(enrolleeId, submissionAction);
 
-            return Ok(new ApiOkResponse<Enrollee>(enrollee));
+            return Ok(ApiResponse.Result(enrollee));
         }
 
         // PUT: api/enrollees/5/always-manual
@@ -66,7 +70,7 @@ namespace Prime.Controllers
         [Authorize(Policy = PrimeConstants.ADMIN_POLICY)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> SetEnrolleeManualFlag(int enrolleeId)
         {
@@ -82,7 +86,7 @@ namespace Prime.Controllers
         [Authorize(Policy = PrimeConstants.ADMIN_POLICY)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> RemoveEnrolleeManualFlag(int enrolleeId)
         {
@@ -94,7 +98,7 @@ namespace Prime.Controllers
             var enrolleeExists = await _enrolleeService.EnrolleeExistsAsync(enrolleeId);
             if (!enrolleeExists)
             {
-                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}."));
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}."));
             }
 
             await _submissionService.UpdateAlwaysManualAsync(enrolleeId, alwaysManual);
