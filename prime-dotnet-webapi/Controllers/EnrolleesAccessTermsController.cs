@@ -170,7 +170,7 @@ namespace Prime.Controllers
             }
 
             var enrolleeProfileHistory = await _enrolleeProfileVersionService
-                    .GetEnrolleeProfileVersionBeforeDateAsync(enrolleeId, (DateTime)acceptedAccessTerm.AcceptedDate);
+                    .GetEnrolleeProfileVersionBeforeDateAsync(enrolleeId, (DateTimeOffset)acceptedAccessTerm.AcceptedDate);
 
             if (enrolleeProfileHistory == null)
             {
