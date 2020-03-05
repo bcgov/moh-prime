@@ -23,22 +23,19 @@ namespace Prime.Controllers
         private readonly IEnrolleeProfileVersionService _enrolleeProfileVersionService;
         private readonly IAdminService _adminService;
         private readonly IBusinessEventService _businessEventService;
-        private readonly IPharmanetApiService _pharmanetService;
 
         public EnrolleesController(
             IEnrolleeService enrolleeService,
             IAccessTermService accessTermService,
             IEnrolleeProfileVersionService enrolleeProfileVersionService,
             IAdminService adminService,
-            IBusinessEventService businessEventService,
-            IPharmanetApiService pharmanetService)
+            IBusinessEventService businessEventService)
         {
             _enrolleeService = enrolleeService;
             _accessTermService = accessTermService;
             _enrolleeProfileVersionService = enrolleeProfileVersionService;
             _adminService = adminService;
             _businessEventService = businessEventService;
-            _pharmanetService = pharmanetService;
         }
 
 
@@ -545,27 +542,6 @@ namespace Prime.Controllers
             await _businessEventService.CreateAdminClaimEventAsync(enrolleeId, "Admin disclaimed enrollee", admin.Id);
 
             return Ok(ApiResponse.Result(updatedEnrollee));
-        }
-
-        /// <summary>
-        /// A Test
-        /// </summary>
-        [HttpPost("test", Name = nameof(LicenceCodeTest))]
-        [Authorize(Policy = PrimeConstants.SUPER_ADMIN_POLICY)]
-        public async Task<ActionResult<PharmanetCollegeRecord>> LicenceCodeTest(string prefix, string licence)
-        {
-            Certification cert = new Certification
-            {
-                LicenseNumber = licence,
-                College = new College
-                {
-                    Prefix = prefix
-                }
-            };
-
-            var record = await _pharmanetService.GetCollegeRecordAsync(cert);
-
-            return Ok(ApiResponse.Result(record));
         }
     }
 }
