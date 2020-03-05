@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Prime.Models
+namespace Prime.Models.Api
 {
     public class LookupEntity
     {
