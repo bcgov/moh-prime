@@ -28,12 +28,12 @@ namespace Prime.Controllers
         /// Gets all the lookup code values.
         /// </summary>
         [HttpGet]
-        [ProducesResponseType(typeof(ApiOkResponse<LookupEntity>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<LookupEntity>), StatusCodes.Status200OK)]
         public async Task<ActionResult<LookupEntity>> GetLookups()
         {
             var lookupEntity = await _lookupService.GetLookupsAsync();
 
-            return Ok(new ApiOkResponse<LookupEntity>(lookupEntity));
+            return Ok(ApiResponse.Result(lookupEntity));
         }
     }
 }

@@ -41,15 +41,15 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiOkResponse<AccessTerm>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<AccessTerm>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<AccessTerm>>> GetAccessTerms(int enrolleeId)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
             if (enrollee == null)
             {
-                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
 
             if (!User.CanView(enrollee))
@@ -59,7 +59,7 @@ namespace Prime.Controllers
 
             var accessTerms = await _accessTermService.GetAcceptedAccessTerms(enrolleeId);
 
-            return Ok(new ApiOkResponse<IEnumerable<AccessTerm>>(accessTerms));
+            return Ok(ApiResponse.Result(accessTerms));
         }
 
         // GET: api/Enrollees/5/access-terms
@@ -72,15 +72,15 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiOkResponse<AccessTerm>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<AccessTerm>), StatusCodes.Status200OK)]
         public async Task<ActionResult<AccessTerm>> GetAccessTerm(int enrolleeId, int accessTermId)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
             if (enrollee == null)
             {
-                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
 
             if (!User.CanView(enrollee))
@@ -90,12 +90,12 @@ namespace Prime.Controllers
 
             if (!await _accessTermService.AccessTermExistsOnEnrolleeAsync(accessTermId, enrolleeId))
             {
-                return NotFound(new ApiResponse(404, $"Access term not found with id {accessTermId} for enrollee id: {enrolleeId}"));
+                return NotFound(ApiResponse.Message($"Access term not found with id {accessTermId} for enrollee id: {enrolleeId}"));
             }
 
             var accessTerms = await _accessTermService.GetEnrolleesAccessTermAsync(enrolleeId, accessTermId);
 
-            return Ok(new ApiOkResponse<AccessTerm>(accessTerms));
+            return Ok(ApiResponse.Result(accessTerms));
         }
 
         // GET: api/Enrollees/5/access-terms/latest?signed=true
@@ -108,15 +108,15 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiOkResponse<AccessTerm>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<AccessTerm>), StatusCodes.Status200OK)]
         public async Task<ActionResult<AccessTerm>> GetAccessTermLatest(int enrolleeId, [FromQuery] bool signed)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
             if (enrollee == null)
             {
-                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
 
             if (!User.CanView(enrollee))
@@ -134,7 +134,7 @@ namespace Prime.Controllers
             {
                 accessTerm = await _accessTermService.GetMostRecentNotAcceptedEnrolleesAccessTermAsync(enrolleeId);
             }
-            return Ok(new ApiOkResponse<AccessTerm>(accessTerm));
+            return Ok(ApiResponse.Result(accessTerm));
         }
 
         // GET: api/Enrollees/5/access-terms/3/enrolment
@@ -147,15 +147,15 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiOkResponse<AccessTerm>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<AccessTerm>), StatusCodes.Status200OK)]
         public async Task<ActionResult<EnrolleeProfileVersion>> GetEnrolmentForAccessTerm(int enrolleeId, int accessTermId)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
             if (enrollee == null)
             {
-                return NotFound(new ApiResponse(404, $"Enrollee not found with id {enrolleeId}"));
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
 
             if (!User.CanView(enrollee))
@@ -166,7 +166,7 @@ namespace Prime.Controllers
             AccessTerm acceptedAccessTerm = await _accessTermService.GetEnrolleesAccessTermAsync(enrolleeId, accessTermId);
             if (acceptedAccessTerm == null)
             {
-                return NotFound(new ApiResponse(404, $"Accepted Access Term not found with id {accessTermId} for enrollee with id {enrolleeId}"));
+                return NotFound(ApiResponse.Message($"Accepted Access Term not found with id {accessTermId} for enrollee with id {enrolleeId}"));
             }
 
             var enrolleeProfileHistory = await _enrolleeProfileVersionService
@@ -174,10 +174,10 @@ namespace Prime.Controllers
 
             if (enrolleeProfileHistory == null)
             {
-                return NotFound(new ApiResponse(404, $"No enrolment profile history found for Access Term with id {accessTermId} for enrollee with id {enrolleeId}."));
+                return NotFound(ApiResponse.Message($"No enrolment profile history found for Access Term with id {accessTermId} for enrollee with id {enrolleeId}."));
             }
 
-            return Ok(new ApiOkResponse<EnrolleeProfileVersion>(enrolleeProfileHistory));
+            return Ok(ApiResponse.Result(enrolleeProfileHistory));
         }
     }
 }
