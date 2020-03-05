@@ -17,10 +17,12 @@ namespace Prime.Controllers
     public class LookupsController : ControllerBase
     {
         private readonly ILookupService _lookupService;
+        private readonly IPharmanetApiService _pharmanetApiService;
 
-        public LookupsController(ILookupService lookupService)
+        public LookupsController(ILookupService lookupService, IPharmanetApiService pharmanetApiService)
         {
             _lookupService = lookupService;
+            _pharmanetApiService = pharmanetApiService;
         }
 
         //GET: /api/Lookup
@@ -34,6 +36,28 @@ namespace Prime.Controllers
             var lookupEntity = await _lookupService.GetLookupsAsync();
 
             return Ok(ApiResponse.Result(lookupEntity));
+        }
+
+        // POST /api/lookups/validate-licence
+        /// <summary>
+        /// For testing college licence validation
+        /// </summary>
+        [HttpPost("validate-licence", Name = nameof(LicenceCodeTest))]
+        [Authorize(Policy = PrimeConstants.SUPER_ADMIN_POLICY)]
+        public async Task<ActionResult<PharmanetCollegeRecord>> LicenceCodeTest(string collegePrefix, string licenceNumber)
+        {
+            Certification cert = new Certification
+            {
+                LicenseNumber = licenceNumber,
+                College = new College
+                {
+                    Prefix = collegePrefix
+                }
+            };
+
+            var record = await _pharmanetApiService.GetCollegeRecordAsync(cert);
+
+            return Ok(ApiResponse.Result(record));
         }
     }
 }
