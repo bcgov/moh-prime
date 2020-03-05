@@ -48,7 +48,7 @@ pipeline {
                 sh "./player.sh zap api"
             }
         }
-        stage('Approve Promotion of Demo') {
+        stage('Approve Promotion of Demo & Master') {
             options {
                 timeout(time: 24, unit: 'HOURS')   // timeout on this stage
             }
@@ -88,24 +88,6 @@ pipeline {
                     sh "./player.sh deploy api test ${API_ARGS}"
                     sh "./player.sh deploy frontend test ${FRONTEND_ARGS}"
                     sh "./player.sh toolbelt schemaspy test"
-                }
-            }
-        }
-        stage('Approve Promotion of Master') {
-            options {
-                timeout(time: 24, unit: 'HOURS')   // timeout on this stage
-            }
-            when { expression { ( BRANCH_NAME == 'master' ) } }
-            steps {
-                script {
-                    def IS_APPROVED = input(
-                        id: 'IS_APPROVED', message: "Deploy to Production?", ok: "Yes", parameters: [
-                            string(name: 'IS_APPROVED', defaultValue: 'Yes', description: 'Deploy to Production?')
-                            ])
-                    if (IS_APPROVED != 'yes') {
-                        currentBuild.result = "SUCCESS"
-                        echo "User cancelled deployment"
-                    }
                 }
             }
         }

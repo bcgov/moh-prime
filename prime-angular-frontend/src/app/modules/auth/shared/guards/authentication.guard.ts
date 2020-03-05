@@ -28,10 +28,9 @@ export class AuthenticationGuard extends BaseGuard {
    * Check the user is authenticated, otherwise redirect
    * them to an appropriate destination.
    */
-  protected canAccess(authenticated: boolean, roles: string[], routePath: string): Promise<boolean> {
+  protected canAccess(authenticated: boolean, routePath: string): Promise<boolean> {
     return new Promise(async (resolve, reject) => {
       await this.configService.load().toPromise();
-
       if (authenticated) {
         // Allow route to resolve for an authenticated user
         return resolve(true);
@@ -66,7 +65,6 @@ export class AuthenticationGuard extends BaseGuard {
       } else {
         this.router.navigate([routes.auth]);
       }
-
       return reject(false);
     });
   }

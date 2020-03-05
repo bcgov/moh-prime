@@ -132,6 +132,7 @@
     <div class="row mb-4">
       <div class="col-sm-12 col-lg-6">
         <editor class="mb-4"
+                [disabled]="!canEdit()"
                 formControlName="note"
                 (onKeyUp)="handleChange($event)"
                 (onChange)="handleChange($event)"
@@ -146,6 +147,7 @@
         </editor>
         <div class="text-right">
           <button mat-flat-button
+                  [disabled]="!canEdit()"
                   color="primary">Save Clause</button>
         </div>
       </div>

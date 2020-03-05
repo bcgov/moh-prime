@@ -12,7 +12,7 @@ namespace Prime.Services
 
         Task<EnrolleeProfileVersion> GetEnrolleeProfileVersionAsync(int enrolleeProfileVersionId);
 
-        Task<EnrolleeProfileVersion> GetEnrolleeProfileVersionBeforeDateAsync(int enrolleeId, DateTime dateTime);
+        Task<EnrolleeProfileVersion> GetEnrolleeProfileVersionBeforeDateAsync(int enrolleeId, DateTimeOffset dateTime);
 
         Task CreateEnrolleeProfileVersionAsync(Enrollee enrollee);
     }

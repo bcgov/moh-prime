@@ -12,6 +12,6 @@ namespace Prime.Models
 
         string Note { get; set; }
 
-        DateTime NoteDate { get; set; }
+        DateTimeOffset NoteDate { get; set; }
     }
 }

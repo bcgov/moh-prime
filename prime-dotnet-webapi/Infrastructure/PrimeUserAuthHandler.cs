@@ -13,7 +13,7 @@ namespace Prime.Infrastructure
                 throw new ArgumentNullException(nameof(context), "The passed in AuthorizationHandlerContext cannot be null.");
             }
 
-            if (context.User.IsAdmin()
+            if (context.User.HasAdminView()
                 || (context.User.IsInRole(PrimeConstants.PRIME_ENROLLEE_ROLE)
                     && context.User.HasAssuranceLevel(3)))
             {
