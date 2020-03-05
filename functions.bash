@@ -72,8 +72,8 @@ function deploy() {
     -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
     -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
     -p SOURCE_REPOSITORY_REF="${REPOSITORY_REF}" \
-    -p OC_NAMESPACE="${PROJECT_PREFIX}" \
-    -p OC_APP="$3" ${@:4} | oc "${MODE}" -f - --namespace="${PROJECT_PREFIX}-$3" ${OC_ARGS}
+    -p OC_NAMESPACE="$PROJECT_PREFIX" \
+    -p OC_APP="$3" ${@:4} --output="yaml" | oc "${MODE}" -f - --namespace="$PROJECT_PREFIX-$3" ${OC_ARGS} #--output="yaml"
 }
 
 function toolbelt() {
