@@ -39,9 +39,9 @@ function build() {
     echo "Building $2 ($APP_NAME$SUFFIX) to $PROJECT_PREFIX-$3..."
     buildPresent=$(oc get bc/"$APP_NAME$SUFFIX" --ignore-not-found=true | wc -l)
     determineMode
-    echo "oc process -f ./${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE} -p NAME=$APP_NAME$SUFFIX -p VERSION=${BUILD_NUMBER} -p SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR} -p SOURCE_REPOSITORY_URL=${GIT_URL} -p SOURCE_REPOSITORY_REF=${BRANCH_NAME} -p OC_NAMESPACE=$PROJECT_PREFIX -p OC_APP=$3 ${@:4} | oc ${MODE} -f - --namespace=$PROJECT_PREFIX-$3"
+    echo "oc process -f ./${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE} -p NAME=$APP_NAME -p VERSION=${BUILD_NUMBER} -p SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR} -p SOURCE_REPOSITORY_URL=${GIT_URL} -p SOURCE_REPOSITORY_REF=${BRANCH_NAME} -p OC_NAMESPACE=$PROJECT_PREFIX -p OC_APP=$3 ${@:4} | oc ${MODE} -f - --namespace=$PROJECT_PREFIX-$3"
     oc process -f ./"${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE}" \
-    -p NAME="$APP_NAME$SUFFIX" \
+    -p NAME="$APP_NAME" \
     -p VERSION="${BUILD_NUMBER}" \
     -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
     -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
@@ -59,15 +59,15 @@ function build() {
 
 function deploy() {
     source ./"$2.conf"
-    echo "Deploying $2 ($APP_NAME$SUFFIX) to $3 ..."
+    echo "Deploying $2 $APP_NAME to $3 ..."
     export deployPresent=$(oc get dc/$APP_NAME$SUFFIX --ignore-not-found=true | wc -l)
     export pvcPresent=$(oc get pvc/$APP_NAME$SUFFIX --ignore-not-found=true | wc -l)
     export routePresent=$(oc get route/$APP_NAME$SUFFIX --ignore-not-found=true | wc -l)
     export servicePresent=$(oc get service/$APP_NAME$SUFFIX --ignore-not-found=true | wc -l)
     determineMode
-    echo "oc process -f ./${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE} -p NAME=$APP_NAME$SUFFIX -p VERSION=${BUILD_NUMBER} -p SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR} -p SOURCE_REPOSITORY_URL=${GIT_URL} -p SOURCE_REPOSITORY_REF=${BRANCH_NAME} -p OC_NAMESPACE=$PROJECT_PREFIX -p OC_APP=$3 ${@:4} | oc ${MODE} -f - --namespace=$PROJECT_PREFIX-$3"
+    echo "oc process -f ./${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE} -p NAME=$APP_NAME -p VERSION=${BUILD_NUMBER} -p SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR} -p SOURCE_REPOSITORY_URL=${GIT_URL} -p SOURCE_REPOSITORY_REF=${BRANCH_NAME} -p OC_NAMESPACE=$PROJECT_PREFIX -p OC_APP=$3 ${@:4} | oc ${MODE} -f - --namespace=$PROJECT_PREFIX-$3"
     oc process -f ./"${TEMPLATE_DIRECTORY}/${DEPLOY_CONFIG_TEMPLATE}" \
-    -p NAME="$APP_NAME$SUFFIX" \
+    -p NAME="$APP_NAME" \
     -p VERSION="${BUILD_NUMBER}" \
     -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \
     -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
