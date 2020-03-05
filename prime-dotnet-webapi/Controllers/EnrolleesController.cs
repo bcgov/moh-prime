@@ -98,7 +98,6 @@ namespace Prime.Controllers
         /// Creates a new Enrollee.
         /// </summary>
         [HttpPost(Name = nameof(CreateEnrollee))]
-        [Authorize(Policy = PrimeConstants.USER_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -140,7 +139,6 @@ namespace Prime.Controllers
         /// <param name="enrolleeProfile"></param>
         /// <param name="beenThroughTheWizard"></param>
         [HttpPut("{enrolleeId}", Name = nameof(UpdateEnrollee))]
-        [Authorize(Policy = PrimeConstants.USER_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -269,7 +267,6 @@ namespace Prime.Controllers
         /// <param name="status"></param>
         /// <param name="acceptedAccessTerm"></param>
         [HttpPost("{enrolleeId}/statuses", Name = nameof(CreateEnrolmentStatus))]
-        [Authorize(Policy = PrimeConstants.USER_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
