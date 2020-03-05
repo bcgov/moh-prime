@@ -125,10 +125,10 @@ export class AdjudicationResource {
   }
 
   public updateEnrolleeAlwaysManual(id: number, alwaysManual: boolean): Observable<object> {
-    const url = `${this.config.apiEndpoint}/enrollees/${id}/always-manual`;
+    const url = `enrollees/${id}/always-manual`;
     return alwaysManual
-      ? this.http.put(url, null)
-      : this.http.delete(url);
+      ? this.apiResource.put(url, null)
+      : this.apiResource.delete(url);
   }
 
   public deleteEnrolment(id: number): Observable<Enrolment> {
