@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HttpParams } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
@@ -40,9 +39,7 @@ export class AdjudicationResource {
   }
 
   public enrollees(statusCode?: number, textSearch?: string): Observable<Enrolment[]> {
-    let params = new HttpParams();
-    params = (statusCode) ? params.set('statusCode', `${statusCode}`) : params;
-    params = (textSearch) ? params.set('textSearch', textSearch) : params;
+    const params = this.apiResourceUtilsService.makeHttpParams({ statusCode, textSearch });
     return this.apiResource.get<HttpEnrollee[]>('enrollees', params)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee[]>) => response.result),
