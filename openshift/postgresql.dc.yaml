@@ -87,7 +87,6 @@ objects:
       name: '${NAME}${SUFFIX}'
       annotations:
         volume.beta.kubernetes.io/storage-class: netapp-block-standard
-        trident.netapp.io/reclaimPolicy: Retain
     spec:
       accessModes:
         - ReadWriteOnce
@@ -156,7 +155,7 @@ objects:
                 tcpSocket:
                   port: 5432
                 timeoutSeconds: 1
-              name: postgresql
+              name: postgresql${SUFFIX}
               ports:
                 - containerPort: 5432
                   protocol: TCP
