@@ -30,6 +30,7 @@ pipeline {
                     sh "./player.sh build api dev ${API_ARGS}"
                     sh "./player.sh build frontend dev ${FRONTEND_ARGS}"
                     } else {
+                    SUFFIX="-${BRANCH_LOWER}"
                     FRONTEND_ARGS="-p REDIRECT_URL=${SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL} -p SUFFIX='-${BRANCH_LOWER}'"
                     API_ARGS="-p ASPNETCORE_ENVIRONMENT=Release -p VANITY_URL=${VANITY_URL} -p SUFFIX='-${BRANCH_LOWER}'"
                     echo "Building ..."
@@ -57,6 +58,7 @@ pipeline {
                     sh "./player.sh deploy api dev ${API_ARGS}"
                     sh "./player.sh deploy frontend dev ${FRONTEND_ARGS}"
                     } else {
+                    SUFFIX="-${BRANCH_LOWER}"
                     FRONTEND_ARGS="-p REDIRECT_URL=${SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL} -p SUFFIX='-${BRANCH_LOWER}'"
                     API_ARGS="-p ASPNETCORE_ENVIRONMENT=Release -p VANITY_URL=${VANITY_URL} -p SUFFIX='-${BRANCH_LOWER}'"
                     echo "Deploy to dev..."
