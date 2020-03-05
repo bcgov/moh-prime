@@ -12,7 +12,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    // User needs at least the ADMIN or ENROLLEE role to use this controller
+    // User needs at least the READONLY ADMIN or ENROLLEE role to use this controller
     [Authorize(Policy = PrimeConstants.USER_POLICY)]
     public class LookupsController : ControllerBase
     {
@@ -28,24 +28,12 @@ namespace Prime.Controllers
         /// Gets all the lookup code values.
         /// </summary>
         [HttpGet]
-        [ProducesResponseType(typeof(ApiOkResponse<LookupEntity>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<LookupEntity>), StatusCodes.Status200OK)]
         public async Task<ActionResult<LookupEntity>> GetLookups()
         {
-            LookupEntity lookupEntity = new LookupEntity();
+            var lookupEntity = await _lookupService.GetLookupsAsync();
 
-            lookupEntity.Colleges = await _lookupService.GetLookupsAsync<int, College>(c => c.CollegeLicenses, c => c.CollegePractices);
-            lookupEntity.JobNames = await _lookupService.GetLookupsAsync<int, JobName>();
-            lookupEntity.Licenses = await _lookupService.GetLookupsAsync<int, License>(l => l.CollegeLicenses);
-            lookupEntity.OrganizationTypes = await _lookupService.GetLookupsAsync<int, OrganizationType>();
-            lookupEntity.Practices = await _lookupService.GetLookupsAsync<int, Practice>(p => p.CollegePractices);
-            lookupEntity.Statuses = await _lookupService.GetLookupsAsync<int, Status>();
-            lookupEntity.Countries = await _lookupService.GetLookupsAsync<string, Country>();
-            lookupEntity.Provinces = await _lookupService.GetLookupsAsync<string, Province>();
-            lookupEntity.StatusReasons = await _lookupService.GetLookupsAsync<int, StatusReason>();
-            lookupEntity.PrivilegeGroups = await _lookupService.GetLookupsAsync<int, PrivilegeGroup>();
-            lookupEntity.PrivilegeTypes = await _lookupService.GetLookupsAsync<int, PrivilegeType>();
-
-            return Ok(new ApiOkResponse<LookupEntity>(lookupEntity));
+            return Ok(ApiResponse.Result(lookupEntity));
         }
     }
 }

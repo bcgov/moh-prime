@@ -72,7 +72,7 @@ export class DashboardComponent implements OnInit {
   public onLogout() {
     let routePath = this.config.loginRedirectUrl;
 
-    if (this.authService.isAdmin()) {
+    if (this.authService.hasAdminView()) {
       routePath = `${routePath}/${AuthRoutes.ADMIN}`;
     }
 
@@ -83,7 +83,10 @@ export class DashboardComponent implements OnInit {
     // Initialize the side navigation based on the type of user
     this.dashboardNavSections = this.getSideNavSections();
 
-    if (this.authService.isEnrollee()) {
+    // Initialize the sidenav with properties based on current viewport
+    this.setSideNavProps(this.viewportService.device);
+
+    if (await this.authService.isEnrollee()) {
       // Listen for changes to the current enrolment status to update
       // the side navigation based on enrollee progression
       merge(
@@ -105,9 +108,6 @@ export class DashboardComponent implements OnInit {
         );
     }
 
-    // Initialize the sidenav with properties based on current viewport
-    this.setSideNavProps(this.viewportService.device);
-
     this.viewportService.onResize()
       .subscribe((device: string) => this.setSideNavProps(device));
 
@@ -116,7 +116,7 @@ export class DashboardComponent implements OnInit {
   }
 
   private getSideNavSections(): DashboardNavSection[] {
-    return (this.authService.isAdjudicator() || this.authService.isAdmin())
+    return (this.authService.hasAdminView())
       ? this.getAdjudicationSideNavSections()
       : this.getEnrolleeSideNavSections();
   }
