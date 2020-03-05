@@ -8,14 +8,19 @@ import { HelpResource } from './services/help-resource.service';
   styleUrls: ['./help.component.scss']
 })
 export class HelpComponent implements OnInit {
-  public uniqueId: number;
+  public helpIdentifier: string;
   constructor(
     private helpResource: HelpResource,
   ) {
   }
 
   async ngOnInit() {
-    await this.helpResource.enrolleeDisplayId().subscribe((id) => this.uniqueId = id);
+    await this.helpResource.enrolleeDisplayId().subscribe(
+      (help) => {
+        const num = Math.floor(Math.random() * 1000000);
+        this.helpIdentifier = `${help}-${num}`;
+      }
+    );
   }
 
 }
