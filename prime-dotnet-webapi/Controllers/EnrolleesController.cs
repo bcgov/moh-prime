@@ -551,7 +551,7 @@ namespace Prime.Controllers
         /// A Test
         /// </summary>
         [HttpPost("test", Name = nameof(LicenceCodeTest))]
-        [Authorize(Policy = PrimeConstants.ADMIN_POLICY)]
+        [Authorize(Policy = PrimeConstants.SUPER_ADMIN_POLICY)]
         public async Task<ActionResult<PharmanetCollegeRecord>> LicenceCodeTest(string prefix, string licence)
         {
             Certification cert = new Certification
