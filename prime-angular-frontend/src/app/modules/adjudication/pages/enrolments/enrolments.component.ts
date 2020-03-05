@@ -35,6 +35,7 @@ export class EnrolmentsComponent implements OnInit {
   public filteredStatus: Config<number>;
   public dataSource: MatTableDataSource<Enrolment>;
   public textSearch: string;
+  public isAdmin: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -49,6 +50,7 @@ export class EnrolmentsComponent implements OnInit {
     this.columns = ['uniqueId', 'name', 'appliedDate', 'status', 'approvedDate', 'adjudicator', 'actions'];
     this.statuses = this.configService.statuses;
     this.filteredStatus = null;
+    this.isAdmin = this.authService.isAdmin();
     this.textSearch = null;
   }
 
@@ -73,12 +75,12 @@ export class EnrolmentsComponent implements OnInit {
     return (currentStatusCode === EnrolmentStatus.UNDER_REVIEW);
   }
 
-  public isSuperAdmin(): boolean {
-    return this.authService.isSuperAdmin();
-  }
-
   public isActive(currentStatusCode: EnrolmentStatus): boolean {
     return (currentStatusCode === EnrolmentStatus.ACTIVE);
+  }
+
+  public isSuperAdmin(): boolean {
+    return this.authService.isSuperAdmin();
   }
 
   public isUnderReview(currentStatusCode: EnrolmentStatus): boolean {
@@ -211,7 +213,8 @@ export class EnrolmentsComponent implements OnInit {
       actionType: 'warn',
       actionText: 'Delete Enrolment'
     };
-    if (this.authService.isSuperAdmin()) {
+
+    if (this.isSuperAdmin()) {
       this.busy = this.dialog.open(ConfirmDialogComponent, { data })
         .afterClosed()
         .pipe(
@@ -247,6 +250,11 @@ export class EnrolmentsComponent implements OnInit {
             : enrolment
         );
       });
+  }
+
+  public refreshEnrolments() {
+    const statusCodes = this.filteredStatus.code;
+    return this.getEnrolments(statusCodes, this.textSearch);
   }
 
   public getEnrolments(statusCode?: number, textSearch?: string) {

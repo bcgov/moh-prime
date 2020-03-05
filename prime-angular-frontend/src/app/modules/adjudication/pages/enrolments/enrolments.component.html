@@ -16,7 +16,7 @@
             <button class=""
                     mat-icon-button
                     matTooltip="Refresh the list of enrolments"
-                    (click)="getEnrolments()">
+                    (click)="refreshEnrolments()">
               <mat-icon>refresh</mat-icon>
             </button>
           </div>
@@ -136,12 +136,14 @@
         <span>Review Status Reasons</span>
       </button>
       <button mat-menu-item
+              [disabled]="!isAdmin"
               *ngIf="canApproveOrDeny(enrolment.currentStatus.statusCode)"
               (click)="approveEnrolment(enrolment)">
         <mat-icon>check_circle_outline</mat-icon>
         <span>Approve Enrolment</span>
       </button>
       <button mat-menu-item
+              [disabled]="!isAdmin"
               *ngIf="canApproveOrDeny(enrolment.currentStatus.statusCode)"
               (click)="declineEnrolment(enrolment.id)">
         <mat-icon>block</mat-icon>
@@ -159,17 +161,20 @@
         <span>Limits and Conditions Clauses</span>
       </button>
       <button mat-menu-item
+              [disabled]="!isAdmin"
               *ngIf="canAllowEditing(enrolment.currentStatus.statusCode)"
               (click)="markForEditing(enrolment.id)">
         <mat-icon>undo</mat-icon>
         <span>Enable Editing</span>
       </button>
       <button mat-menu-item
+              [disabled]="!isAdmin"
               (click)="updateEnrolmentAdjudicator(enrolment)">
         <mat-icon>pan_tool</mat-icon>
         <span>{{ (enrolment?.adjudicatorId) ? 'Disclaim' : 'Claim' }} Enrolment</span>
       </button>
       <button mat-menu-item
+              [disabled]="!isAdmin"
               *ngIf="isSuperAdmin()"
               (click)="deleteEnrolment(enrolment.id)">
         <mat-icon>delete</mat-icon>
