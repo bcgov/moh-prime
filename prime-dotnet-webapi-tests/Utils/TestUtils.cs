@@ -238,10 +238,10 @@ namespace PrimeTests.Utils
 
             if (!db.Set(typeof(Status)).Any())
             {
-                db.AddRange(new Status { Code = Status.ACTIVE_CODE, Name = "In Progress" });
-                db.AddRange(new Status { Code = Status.UNDER_REVIEW_CODE, Name = "Submitted" });
-                db.AddRange(new Status { Code = Status.REQUIRES_TOA_CODE, Name = "Adjudicated/Approved" });
-                db.AddRange(new Status { Code = Status.LOCKED_CODE, Name = "Declined" });
+                db.AddRange(new Status { Code = Status.ACTIVE_CODE, Name = "Active" });
+                db.AddRange(new Status { Code = Status.UNDER_REVIEW_CODE, Name = "Under Review" });
+                db.AddRange(new Status { Code = Status.REQUIRES_TOA_CODE, Name = "Requires TOA" });
+                db.AddRange(new Status { Code = Status.LOCKED_CODE, Name = "Locked" });
             }
 
             if (!db.Set(typeof(Country)).Any())
