@@ -87,7 +87,8 @@ objects:
       name: '${NAME}${SUFFIX}'
       annotations:
     spec:
-      accessModes: ReadWriteOnce
+      accessModes:
+        - ReadWriteOnce
       storageClassName": netapp-block-standard
       resources:
         requests:
@@ -107,7 +108,6 @@ objects:
     apiVersion: v1
     metadata:
       annotations:
-        template.alpha.openshift.io/wait-for-ready: 'true'
         volume.beta.kubernetes.io/storage-class: netapp-block-standard
       name: '${NAME}${SUFFIX}'
     spec:
