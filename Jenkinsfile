@@ -25,14 +25,14 @@ pipeline {
                     checkout scm
                     if (env.BRANCH_NAME == 'develop') {
                     echo "Building ..."
-                    sh "./player.sh build database dev"
+                    sh "./player.sh build database dev -p VOLUME_CAPACITY=1Gi"
                     sh "./player.sh build api dev ${API_ARGS}"
                     sh "./player.sh build frontend dev ${FRONTEND_ARGS}"
                     } else {
                     BRANCH_LOWER=BRANCH_NAME.toLowerCase()
                     echo "Building ..."
                     sh "printenv"
-                    sh "./player.sh build database dev -p SUFFIX=${SUFFIX}"
+                    sh "./player.sh build database dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
                     sh "./player.sh build api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh build frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
                     }
@@ -50,13 +50,13 @@ pipeline {
                     checkout scm
                     if (env.BRANCH_NAME == 'develop') {
                     echo "Deploy to dev..."
-                    sh "./player.sh deploy database dev"
+                    sh "./player.sh deploy database dev -p VOLUME_CAPACITY=1Gi"
                     sh "./player.sh deploy api dev ${API_ARGS}"
                     sh "./player.sh deploy frontend dev ${FRONTEND_ARGS}"
                     } else {
                     echo "Deploy to dev..."
                     sh "printenv"
-                    sh "./player.sh deploy database dev -p SUFFIX=${SUFFIX}"
+                    sh "./player.sh deploy database dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
                     sh "./player.sh deploy api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh deploy frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
                     }
