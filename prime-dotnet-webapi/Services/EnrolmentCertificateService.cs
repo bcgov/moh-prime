@@ -67,18 +67,11 @@ namespace Prime.Services
                         var enrolleeHistory = enrolleeProfileHistory.ProfileSnapshot.ToObject<Enrollee>();
 
                         // Add the organization type to each organization from JSON profile history
-                        // TODO find simpler way to load relationships from JSON object
-                        var organizations = enrolleeHistory.Organizations;
-
-                        for (var i = 0; i < enrolleeHistory.Organizations.Count; i++)
+                        foreach (var org in enrolleeHistory.Organizations)
                         {
-                            var result = _context.Organizations
-                                .Where(o => o.Id == enrolleeHistory.Organizations.ElementAt(i).Id)
-                                .Include(o => o.OrganizationType)
-                                .FirstOrDefault();
-
-                            enrolleeHistory.Organizations.ElementAt(i).OrganizationType = result.OrganizationType;
+                            org.OrganizationType = await _context.OrganizationTypes.SingleAsync(o => o.Code == org.OrganizationTypeCode);
                         }
+
                         return EnrolmentCertificate.Create(enrolleeHistory, token.Enrollee);
                     }
                 }
