@@ -1,5 +1,4 @@
 import { Injectable, Injector, ErrorHandler } from '@angular/core';
-import { PathLocationStrategy, LocationStrategy } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 
@@ -19,7 +18,6 @@ export class ErrorHandlerService implements ErrorHandler {
 
   public handleError(error: Error | HttpErrorResponse) {
     const logger = this.injector.get(LoggerService);
-    const location = this.injector.get<LocationStrategy>(PathLocationStrategy);
     const router = this.injector.get(Router);
     const toastService = this.injector.get(ToastService);
 
@@ -40,9 +38,10 @@ export class ErrorHandlerService implements ErrorHandler {
     const message = (error.message)
       ? error.message
       : error.toString();
-    const url = location.path();
+    const url = router.url;
 
-    // TODO implement stack trace js and push to server for logging
+    // TODO implement stack trace js and push to server for logging, but
+    // for now log the error to console
     logger.error(message, { url });
 
     // TODO should this rethrow?
