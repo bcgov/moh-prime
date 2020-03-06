@@ -110,6 +110,7 @@ objects:
     metadata:
       annotations:
         template.alpha.openshift.io/wait-for-ready: 'true'
+        volume.beta.kubernetes.io/storage-provisioner: 'netapp.io/trident'
       name: '${NAME}${SUFFIX}'
     spec:
       replicas: 1
