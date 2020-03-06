@@ -1,4 +1,4 @@
-oc project ${PROJECT_PREFIX}-$3
+#oc project ${PROJECT_PREFIX}-$3
 
 export BRANCH_LOWER=`echo "${BRANCH_NAME}" | awk '{print tolower($0)}'`
 function variablePopulation() {
