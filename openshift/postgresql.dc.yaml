@@ -87,7 +87,7 @@ objects:
       name: '${NAME}${SUFFIX}'
       annotations:
     spec:
-      accessModes:
+      accessModes: ReadWriteOnce
       storageClassName": netapp-block-standard
       resources:
         requests:
