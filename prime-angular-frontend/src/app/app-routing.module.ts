@@ -6,6 +6,8 @@ import { AccessDeniedComponent } from '@ui/components/access-denied/access-denie
 import { UnsupportedComponent } from '@ui/components/unsupported/unsupported.component';
 import { MaintenanceComponent } from '@ui/components/maintenance/maintenance.component';
 import { PageNotFoundComponent } from '@ui/components/page-not-found/page-not-found.component';
+import { HelpComponent } from '@ui/components/help/help.component';
+import { EnrolleeGuard } from '@enrolment/shared/guards/enrollee.guard';
 
 const routes: Routes = [
   {
@@ -35,6 +37,13 @@ const routes: Routes = [
     component: PageNotFoundComponent,
     data: {
       title: 'Page Not Found'
+    }
+  },
+  {
+    path: AppRoutes.HELP,
+    component: HelpComponent,
+    data: {
+      title: 'Help'
     }
   },
   {
