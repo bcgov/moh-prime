@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using System.Net.Http.Headers;
 using Microsoft.EntityFrameworkCore.Internal;
+using Newtonsoft.Json.Linq;
 
 namespace PrimeTests.Utils
 {
@@ -102,6 +103,12 @@ namespace PrimeTests.Utils
               .RuleFor(es => es.CreatedDate, f => DateTime.Now.AddDays(-5))
               .RuleFor(es => es.AcceptedDate, f => DateTime.Now)
               .RuleFor(es => es.ExpiryDate, f => DateTime.Now.AddYears(1))
+              ;
+
+        public static Faker<EnrolleeProfileVersion> EnrolleeProfileVersionFaker = new Faker<EnrolleeProfileVersion>()
+              .RuleFor(x => x.EnrolleeId, f => f.Random.Int(1, 5))
+              .RuleFor(x => x.ProfileSnapshot, f => JObject.FromObject(EnrolleeFaker.Generate()))
+              .RuleFor(x => x.CreatedDate, f => DateTime.Now.AddDays(-5))
               ;
 
         public static string RandomProvinceCode(params string[] excludedProvinceCodes)
