@@ -31,7 +31,7 @@ pipeline {
                     } else {
                     BRANCH_LOWER=BRANCH_NAME.toLowerCase()
                     echo "Building ..."
-                    sh "printenv"
+                    //sh "printenv"
                     sh "./player.sh build database dev -p SUFFIX=${SUFFIX}"
                     sh "./player.sh build api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh build frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
@@ -55,7 +55,7 @@ pipeline {
                     sh "./player.sh deploy frontend dev ${FRONTEND_ARGS}"
                     } else {
                     echo "Deploy to dev..."
-                    sh "printenv"
+                    //sh "printenv"
                     sh "./player.sh deploy database dev -p SUFFIX=${SUFFIX}"
                     sh "./player.sh deploy api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh deploy frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
