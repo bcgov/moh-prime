@@ -86,11 +86,10 @@ objects:
     metadata:
       name: '${NAME}${SUFFIX}'
       annotations:
-        volume.beta.kubernetes.io/storage-class: netapp-block-standard
-        trident.netapp.io/reclaimPolicy: Retain
     spec:
       accessModes:
         - ReadWriteOnce
+      storageClassName": netapp-block-standard
       resources:
         requests:
           storage: '${VOLUME_CAPACITY}'
@@ -109,7 +108,7 @@ objects:
     apiVersion: v1
     metadata:
       annotations:
-        template.alpha.openshift.io/wait-for-ready: 'true'
+        volume.beta.kubernetes.io/storage-class: netapp-block-standard
       name: '${NAME}${SUFFIX}'
     spec:
       replicas: 1

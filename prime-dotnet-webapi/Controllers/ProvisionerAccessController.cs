@@ -39,18 +39,18 @@ namespace Prime.Controllers
         /// Gets the Enrolment Certificate based on the supplied Access Token GUID. This endpoint is not authenticated.
         /// </summary>
         [HttpGet("certificate/{accessTokenId}", Name = nameof(GetEnrolmentCertificate))]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiOkResponse<EnrolmentCertificate>), StatusCodes.Status200OK)]
         [AllowAnonymous]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolmentCertificate>), StatusCodes.Status200OK)]
         public async Task<ActionResult<EnrolmentCertificate>> GetEnrolmentCertificate(Guid accessTokenId)
         {
             var certificate = await _certificateService.GetEnrolmentCertificateAsync(accessTokenId);
             if (certificate == null)
             {
-                return NotFound(new ApiResponse(404, $"No valid Enrolment Certificate Access Token found with id {accessTokenId}"));
+                return NotFound(ApiResponse.Message($"No valid Enrolment Certificate Access Token found with id {accessTokenId}"));
             }
 
-            return Ok(new ApiOkResponse<EnrolmentCertificate>(certificate));
+            return Ok(ApiResponse.Result(certificate));
         }
 
         // GET: api/provisioner-access/token
@@ -58,15 +58,15 @@ namespace Prime.Controllers
         /// Gets all of the access tokens for the user.
         /// </summary>
         [HttpGet("token", Name = nameof(GetAccessTokens))]
+        [Authorize(Policy = PrimeConstants.USER_POLICY)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiOkResponse<IEnumerable<EnrolmentCertificateAccessToken>>), StatusCodes.Status200OK)]
-        [Authorize(Policy = PrimeConstants.USER_POLICY)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolmentCertificateAccessToken>>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<EnrolmentCertificateAccessToken>>> GetAccessTokens()
         {
             var tokens = await _certificateService.GetCertificateAccessTokensForUserIdAsync(User.GetPrimeUserId());
 
-            return Ok(new ApiOkResponse<IEnumerable<EnrolmentCertificateAccessToken>>(tokens));
+            return Ok(ApiResponse.Result(tokens));
         }
 
         // POST: api/provisioner-access/send-link
@@ -75,11 +75,11 @@ namespace Prime.Controllers
         /// then sends the link to a recipient by email.
         /// </summary>
         [HttpPost("send-link/{provisionerName}", Name = nameof(SendProvisionerLink))]
+        [Authorize(Policy = PrimeConstants.USER_POLICY)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ApiOkResponse<EnrolmentCertificateAccessToken>), StatusCodes.Status201Created)]
-        [Authorize(Policy = PrimeConstants.USER_POLICY)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolmentCertificateAccessToken>), StatusCodes.Status201Created)]
         public async Task<ActionResult<EnrolmentCertificateAccessToken>> SendProvisionerLink(string provisionerName, FromBodyText email)
         {
             string optionalEmail = (string)email;
@@ -87,19 +87,19 @@ namespace Prime.Controllers
             {
                 // Email used as Cc to enrollee organization contact, or as the recipient for other provisioners
                 this.ModelState.AddModelError("Email", "The email provided is not valid.");
-                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+                return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 
             var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(User.GetPrimeUserId());
             if (enrollee == null)
             {
                 this.ModelState.AddModelError("Enrollee.UserId", "No enrollee exists for this User Id.");
-                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+                return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
             if (enrollee.ExpiryDate == null)
             {
                 this.ModelState.AddModelError("Enrollee.UserId", "The enrollee for this User Id is not in a finished state.");
-                return BadRequest(new ApiBadRequestResponse(this.ModelState));
+                return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 
             var recipientEmail = _certificateService.GetPharmaNetProvisionerEmail(provisionerName, ref optionalEmail);
@@ -114,7 +114,7 @@ namespace Prime.Controllers
             return CreatedAtAction(
                 nameof(GetEnrolmentCertificate),
                 new { accessTokenId = createdToken.Id },
-                new ApiCreatedResponse<EnrolmentCertificateAccessToken>(createdToken)
+                ApiResponse.Result(createdToken)
             );
         }
 
@@ -123,14 +123,14 @@ namespace Prime.Controllers
         /// Gets the GPID for the user. Only a valid token is required, no role is required.
         /// </summary>
         [HttpGet("gpid", Name = nameof(GetGpid))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ApiOkResponse<string>), StatusCodes.Status200OK)]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
         public async Task<ActionResult<string>> GetGpid()
         {
             var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(User.GetPrimeUserId());
 
-            return Ok(new ApiOkResponse<string>(enrollee?.GPID));
+            return Ok(ApiResponse.Result(enrollee?.GPID));
         }
     }
 }

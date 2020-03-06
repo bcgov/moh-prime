@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Prime.Models;
+using Prime.Models.Api;
 
 namespace Prime.Services
 {
@@ -17,14 +18,30 @@ namespace Prime.Services
             : base(context, httpContext)
         { }
 
-        public async Task<List<T>> GetLookupsAsync<TKey, T>(params Expression<Func<T, object>>[] includes) where T : class, ILookup<TKey>
+        public async Task<LookupEntity> GetLookupsAsync()
         {
-            IQueryable<T> query = ApiDbContextExtensions.Set<T>(_context, includes);
+            LookupEntity lookupEntity = new LookupEntity();
 
-            var items = await query.ToListAsync();
+            lookupEntity.Colleges = await _context.Set<College>()
+                .Include(c => c.CollegeLicenses)
+                .Include(c => c.CollegePractices)
+                .ToListAsync();
+            lookupEntity.JobNames = await _context.Set<JobName>().ToListAsync();
+            lookupEntity.Licenses = await _context.Set<License>()
+                .Include(l => l.CollegeLicenses)
+                .ToListAsync();
+            lookupEntity.OrganizationTypes = await _context.Set<OrganizationType>().ToListAsync();
+            lookupEntity.Practices = await _context.Set<Practice>()
+                .Include(p => p.CollegePractices)
+                .ToListAsync();
+            lookupEntity.Statuses = await _context.Set<Status>().ToListAsync();
+            lookupEntity.Countries = await _context.Set<Country>().ToListAsync();
+            lookupEntity.Provinces = await _context.Set<Province>().ToListAsync();
+            lookupEntity.StatusReasons = await _context.Set<StatusReason>().ToListAsync();
+            lookupEntity.PrivilegeGroups = await _context.Set<PrivilegeGroup>().ToListAsync();
+            lookupEntity.PrivilegeTypes = await _context.Set<PrivilegeType>().ToListAsync();
 
-            return items;
+            return lookupEntity;
         }
-
     }
 }
