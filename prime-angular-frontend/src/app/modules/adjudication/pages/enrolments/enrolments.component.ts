@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MatTableDataSource, MatSelectChange, MatDialog } from '@angular/material';
+import { MatTableDataSource, MatDialog } from '@angular/material';
 
 import { exhaustMap } from 'rxjs/operators';
 import { EMPTY, Subscription } from 'rxjs';
@@ -18,7 +18,6 @@ import {
   EnrolmentStatusReasonsComponent
 } from '@shared/components/dialogs/content/enrolment-status-reasons/enrolment-status-reasons.component';
 
-import { Admin } from '@auth/shared/models/admin.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
@@ -253,7 +252,7 @@ export class EnrolmentsComponent implements OnInit {
   }
 
   public refreshEnrolments() {
-    const statusCodes = this.filteredStatus.code;
+    const statusCodes = (this.filteredStatus) ? this.filteredStatus.code : null;
     return this.getEnrolments(statusCodes, this.textSearch);
   }
 

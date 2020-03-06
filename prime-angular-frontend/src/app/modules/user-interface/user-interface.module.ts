@@ -6,6 +6,7 @@ import { AccessDeniedComponent } from '@ui/components/access-denied/access-denie
 import { UnsupportedComponent } from '@ui/components/unsupported/unsupported.component';
 import { PageNotFoundComponent } from '@ui/components/page-not-found/page-not-found.component';
 import { MaintenanceComponent } from '@ui/components/maintenance/maintenance.component';
+import { HelpComponent } from './components/help/help.component';
 
 @NgModule({
   imports: [
@@ -16,12 +17,14 @@ import { MaintenanceComponent } from '@ui/components/maintenance/maintenance.com
     PageNotFoundComponent,
     MaintenanceComponent,
     PageSimpleComponent,
-    UnsupportedComponent
+    UnsupportedComponent,
+    HelpComponent
   ],
   exports: [
     PageNotFoundComponent,
     AccessDeniedComponent,
-    MaintenanceComponent
+    MaintenanceComponent,
+    HelpComponent
   ]
 })
 export class UserInterfaceModule { }
