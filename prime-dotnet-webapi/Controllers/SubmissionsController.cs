@@ -51,10 +51,10 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}."));
             }
-            if (!User.CanEdit(enrollee))
-            {
-                return Forbid();
-            }
+            // if (!User.CanEdit(enrollee))
+            // {
+            //     return Forbid();
+            // }
 
             await _submissionService.PerformSubmissionActionAsync(enrolleeId, submissionAction);
 
