@@ -16,7 +16,7 @@ ENV POSTGRESQL_ADMIN_PASSWORD "${POSTGRESQL_ADMIN_PASSWORD}"
 ENV POSTGRESQL_USER "${POSTGRESQL_USER}"
 ENV SUFFIX "${SUFFIX}"
 ENV DB_HOST "$DB_HOST"
-ENV DB_CONNECTION_STRING "host=$DB_HOST;port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"
+#ENV DB_CONNECTION_STRING "host=postgresql$SUFFIX;port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"
 
 ENV KEYCLOAK_URL $KEYCLOAK_URL
 ENV KEYCLOAK_REALM $KEYCLOAK_REALM
@@ -44,7 +44,7 @@ ENV POSTGRESQL_USER "${POSTGRESQL_USER}"
 ENV PGPASSWORD "${POSTGRESQL_ADMIN_PASSWORD}"
 ENV SUFFIX "${SUFFIX}"
 ENV DB_HOST "$DB_HOST"
-ENV DB_CONNECTION_STRING "host=$DB_HOST;port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"
+#ENV DB_CONNECTION_STRING "host=postgresql$SUFFIX;port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"
 
 ENV KEYCLOAK_URL $KEYCLOAK_URL
 ENV KEYCLOAK_REALM $KEYCLOAK_REALM
@@ -62,7 +62,7 @@ RUN apt-get update && \
     echo 'deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main' >  /etc/apt/sources.list.d/pgdg.list && \
     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
     apt-get update && \
-    apt-get install -yqq --no-install-recommends postgresql-client-10 && \
+    apt-get install -yqq --no-install-recommends postgresql-client-10 net-tools && \
     chmod +x entrypoint.sh && \
     chmod 777 entrypoint.sh && \
     chmod -R 777 /var/run/ && \

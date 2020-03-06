@@ -4,12 +4,12 @@ namespace Prime.Models
 {
     public interface IAuditable
     {
-         Guid CreatedUserId { get; set; }
+        Guid CreatedUserId { get; set; }
 
-         DateTime CreatedTimeStamp { get; set; }
+        DateTimeOffset CreatedTimeStamp { get; set; }
 
-         Guid UpdatedUserId { get; set; }
+        Guid UpdatedUserId { get; set; }
 
-         DateTime UpdatedTimeStamp { get; set; }
+        DateTimeOffset UpdatedTimeStamp { get; set; }
     }
 }

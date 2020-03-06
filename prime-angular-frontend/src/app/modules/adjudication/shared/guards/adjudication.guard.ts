@@ -42,19 +42,20 @@ export class AdjudicationGuard extends BaseGuard {
             idir
           } as Admin;
 
-          return this.adjudicationResource.createAdmin(admin);
+          if (this.authService.isAdmin()) {
+            return this.adjudicationResource.createAdmin(admin);
+          }
+          return Promise.resolve(admin);
         }),
       ).toPromise();
 
     const redirect$ = new Promise(async (resolve, reject) => {
 
       const authenticated = await this.authService.isLoggedIn();
-      const roles = this.authService.getUserRoles(true);
       let destinationRoute = this.config.routes.denied;
-
       if (!authenticated) {
         destinationRoute = this.config.routes.auth;
-      } else if (roles.includes(Role.ADJUDICATOR) || roles.includes(Role.ADMIN)) {
+      } else if (this.authService.hasAdminView()) {
         // Allow route to resolve
         return resolve(true);
       }

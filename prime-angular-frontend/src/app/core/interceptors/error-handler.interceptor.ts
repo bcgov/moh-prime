@@ -1,13 +1,12 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpHandler, HttpRequest, HttpEvent, HttpErrorResponse } from '@angular/common/http';
-import { Router, NavigationExtras } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { LoggerService } from '@core/services/logger.service';
-import { AuthService } from '@auth/shared/services/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -30,15 +29,32 @@ export class ErrorHandlerInterceptor {
         catchError((error: any, caught) => {
           if (error instanceof HttpErrorResponse) {
             const status = error.status;
-            if (status === 401) {
-              this.logger.info('Unauthorized');
-              // TODO handle unauthorized
-            } else if (status === 422) {
-              // TODO handle validation error messages
-            } else if (status === 500) {
-              // TODO handle internal server errors and messages
-            } else if (status === 503) {
-              this.router.navigate([this.config.routes.maintenance]);
+            switch (status) {
+              case 400:
+                this.logger.error('Bad Request', error);
+                break;
+              case 401:
+                this.logger.error('Unauthorized', error);
+                break;
+              case 403:
+                this.logger.error('Forbidden', error);
+                break;
+              case 404:
+                this.logger.error('Not Found', error);
+                break;
+              case 422:
+                this.logger.error('Unprocessable Entity', error);
+                break;
+              case 500:
+                this.logger.error('Internal Server Error', error);
+                break;
+              case 503:
+                this.logger.error('Service Unavailable', error);
+                this.router.navigate([this.config.routes.maintenance]);
+                break;
+              default:
+                this.logger.error('Unhandled HTTP response.', error);
+                break;
             }
 
             return throwError(error);

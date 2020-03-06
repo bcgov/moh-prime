@@ -1,35 +1,62 @@
-using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
+using System;
+using System.Linq;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Prime.Models.Api
 {
-    public class ApiResponse
+    public static class ApiResponse
     {
-        public int StatusCode { get; }
-
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public string Message { get; }
-
-        public ApiResponse(int statusCode) : this(statusCode, null)
-        { }
-
-        public ApiResponse(int statusCode, string message)
+        public static ApiResultResponse<T> Result<T>(T result)
         {
-            StatusCode = statusCode;
-            Message = message ?? GetDefaultMessageForStatusCode(statusCode);
+            return new ApiResultResponse<T>(result);
         }
 
-        private static string GetDefaultMessageForStatusCode(int statusCode)
+        public static ApiMessageResponse Message(string message)
         {
-            switch (statusCode)
+            return new ApiMessageResponse(message);
+        }
+
+        public static ApiBadRequestResponse BadRequest(ModelStateDictionary modelState)
+        {
+            return new ApiBadRequestResponse(modelState);
+        }
+    }
+
+    public class ApiResultResponse<T>
+    {
+        public T Result { get; }
+
+        internal ApiResultResponse(T result)
+        {
+            Result = result;
+        }
+    }
+
+    public class ApiMessageResponse
+    {
+        public string Message { get; }
+
+        internal ApiMessageResponse(string message)
+        {
+            Message = message;
+        }
+    }
+
+    public class ApiBadRequestResponse
+    {
+        public IEnumerable<string> Errors { get; }
+
+        internal ApiBadRequestResponse(ModelStateDictionary modelState)
+        {
+            if (modelState == null || modelState.IsValid)
             {
-                case StatusCodes.Status404NotFound:
-                    return "Resource not found";
-                case StatusCodes.Status500InternalServerError:
-                    return "An unhandled error occurred";
-                default:
-                    return null;
+                throw new ArgumentException("ModelState must have errors", nameof(modelState));
             }
+
+            Errors = modelState
+                .SelectMany(x => x.Value.Errors)
+                .Select(x => x.ErrorMessage);
         }
     }
 }

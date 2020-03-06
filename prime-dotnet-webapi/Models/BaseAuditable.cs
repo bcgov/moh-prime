@@ -13,12 +13,12 @@ namespace Prime.Models
         public Guid CreatedUserId { get; set; }
 
         [JsonIgnore]
-        public DateTime CreatedTimeStamp { get; set; }
+        public DateTimeOffset CreatedTimeStamp { get; set; }
 
         [JsonIgnore]
         public Guid UpdatedUserId { get; set; }
 
         [JsonIgnore]
-        public DateTime UpdatedTimeStamp { get; set; }
+        public DateTimeOffset UpdatedTimeStamp { get; set; }
     }
 }
