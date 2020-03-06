@@ -4,11 +4,14 @@ using System.Collections.Generic;
 
 using Prime.Models;
 using Prime.Services;
+using System.Linq;
+using PrimeTests.Utils;
 
 namespace PrimeTests.Mocks
 {
     public class AccessTermServiceMock : BaseMockService, IAccessTermService
     {
+        private static readonly TimeSpan ACCESS_TERM_EXPIRY = TimeSpan.FromDays(365);
         public AccessTermServiceMock() : base()
         { }
 
@@ -17,22 +20,42 @@ namespace PrimeTests.Mocks
 
         public Task<AccessTerm> GetMostRecentNotAcceptedEnrolleesAccessTermAsync(int enrolleeId)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(
+                this.GetHolder<int, AccessTerm>().Values?
+                    .Where(at => at.EnrolleeId == enrolleeId)
+                    .Where(at => at.AcceptedDate == null)
+                    .OrderByDescending(at => at.CreatedDate)
+                    .FirstOrDefault()
+            );
         }
 
         public Task<AccessTerm> GetMostRecentAcceptedEnrolleesAccessTermAsync(int enrolleeId)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(
+               TestUtils.AccessTermFaker.Generate()
+            );
         }
 
         public Task<AccessTerm> GetEnrolleesAccessTermAsync(int enrolleeId, int accessTermId)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(
+                this.GetHolder<int, AccessTerm>().Values?
+                    .Where(at => at.EnrolleeId == enrolleeId)
+                    .Where(at => at.Id == accessTermId)
+                    .Where(at => at.AcceptedDate != null)
+                    .FirstOrDefault()
+            );
         }
 
         public Task<IEnumerable<AccessTerm>> GetAcceptedAccessTerms(int enrolleeId)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(
+                this.GetHolder<int, AccessTerm>().Values?
+                    .Where(at => at.EnrolleeId == enrolleeId)
+                    .Where(at => at.AcceptedDate != null)
+                    .OrderByDescending(at => at.AcceptedDate)
+                    .AsEnumerable()
+            );
         }
 
         public Task CreateEnrolleeAccessTermAsync(Enrollee enrollee)
@@ -42,7 +65,15 @@ namespace PrimeTests.Mocks
 
         public Task AcceptCurrentAccessTermAsync(Enrollee enrollee)
         {
-            throw new NotImplementedException();
+            // var accessTerm = this.GetHolder<int, AccessTerm>().Values?
+            //     .Where(at => at.EnrolleeId == enrollee.Id)
+            //     .OrderByDescending(at => at.AcceptedDate)
+            //     .First();
+
+            // accessTerm.AcceptedDate = DateTime.Now;
+            // // Add an Expiry Date of one year in the future.
+            // accessTerm.ExpiryDate = DateTime.Now.Add(ACCESS_TERM_EXPIRY);
+            return Task.CompletedTask;
         }
 
         public Task<bool> AccessTermExistsOnEnrolleeAsync(int accessTermId, int enrolleeId)

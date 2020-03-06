@@ -11,7 +11,7 @@ namespace PrimeTests.ModelFactories
 
         public static ICollection<License> All { get { return _seedData; } }
 
-        public static IEnumerable<License> AllowedFor(short collegeCode)
+        public static IEnumerable<License> AllowedFor(int collegeCode)
         {
             return CollegeLicenseLookup.All
                 .Where(cl => cl.CollegeCode == collegeCode)

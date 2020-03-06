@@ -14,7 +14,7 @@ namespace PrimeTests.Mocks
             // no data to seed, as it is done in the base class
         }
 
-        public Task SendProvisionerLinkAsync(string provisionerEmail, EnrolmentCertificateAccessToken token)
+        public Task SendProvisionerLinkAsync(string provisionerEmail, EnrolmentCertificateAccessToken token, string ccEmail)
         {
             throw new System.NotImplementedException();
         }

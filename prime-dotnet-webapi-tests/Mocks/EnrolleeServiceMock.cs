@@ -32,12 +32,12 @@ namespace PrimeTests.Mocks
             return Task.FromResult(this.GetHolder<int, Enrollee>().Values?.SingleOrDefault(e => e.UserId == userId));
         }
 
-        public Task<int?> CreateEnrolleeAsync(Enrollee enrollee)
+        public Task<int> CreateEnrolleeAsync(Enrollee enrollee)
         {
-            int? enrolleeId = GetNewId(this.GetHolder<int, Enrollee>().Keys);
+            int enrolleeId = GetNewId(this.GetHolder<int, Enrollee>().Keys);
             enrollee.Id = enrolleeId;
 
-            this.GetHolder<int, Enrollee>().Add(enrolleeId.Value, enrollee);
+            this.GetHolder<int, Enrollee>().Add(enrolleeId, enrollee);
             return Task.FromResult(enrolleeId);
         }
 
@@ -83,7 +83,7 @@ namespace PrimeTests.Mocks
             if (this.GetHolder<int, Enrollee>().ContainsKey(enrolleeId))
             {
                 enrollee = this.GetHolder<int, Enrollee>()[enrolleeId];
-                var results = _workflowStateMap[enrollee.CurrentStatus?.Status ?? this.GetHolder<short, Status>()[NULL_STATUS_CODE]];
+                var results = _workflowStateMap[enrollee.CurrentStatus?.Status ?? this.GetHolder<int, Status>()[NULL_STATUS_CODE]];
                 foreach (var item in results)
                 {
                     availableStatuses.Add(item.Status);
@@ -102,7 +102,7 @@ namespace PrimeTests.Mocks
             return Task.FromResult(enrollee?.EnrolmentStatuses as IEnumerable<EnrolmentStatus>);
         }
 
-        public Task<EnrolmentStatus> CreateEnrolmentStatusAsync(int enrolleeId, Status status, bool acceptedAccessTerm)
+        public Task<EnrolmentStatus> CreateEnrolmentStatusAsync(int enrolleeId, Status status, bool acceptedAccessTerm, int? adminId)
         {
             EnrolmentStatus createdEnrolmentStatus = null;
             if (this.GetHolder<int, Enrollee>().ContainsKey(enrolleeId))
@@ -110,7 +110,7 @@ namespace PrimeTests.Mocks
                 Enrollee enrollee = this.GetHolder<int, Enrollee>()[enrolleeId];
                 var currentStatusCode = enrollee.CurrentStatus?.StatusCode;
 
-                if (this.IsStatusChangeAllowed(this.GetHolder<short, Status>()[currentStatusCode ?? NULL_STATUS_CODE], status))
+                if (this.IsStatusChangeAllowed(this.GetHolder<int, Status>()[currentStatusCode ?? NULL_STATUS_CODE], status))
                 {
                     foreach (var item in enrollee.EnrolmentStatuses)
                     {
@@ -127,7 +127,7 @@ namespace PrimeTests.Mocks
         public bool IsStatusChangeAllowed(Status startingStatus, Status endingStatus)
         {
             ICollection<Status> availableStatuses = new List<Status>();
-            var results = _workflowStateMap[startingStatus ?? this.GetHolder<short, Status>()[NULL_STATUS_CODE]];
+            var results = _workflowStateMap[startingStatus ?? this.GetHolder<int, Status>()[NULL_STATUS_CODE]];
             foreach (var item in results)
             {
                 availableStatuses.Add(item.Status);
@@ -136,7 +136,7 @@ namespace PrimeTests.Mocks
             return availableStatuses.Contains(endingStatus);
         }
 
-        public Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, params short[] statusCodesToCheck)
+        public Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, params int[] statusCodesToCheck)
         {
             if (this.GetHolder<int, Enrollee>().ContainsKey(enrolleeId))
             {
@@ -153,13 +153,13 @@ namespace PrimeTests.Mocks
             return Task.FromResult(notes);
         }
 
-        public Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, string note)
+        public Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, string note, int? adminId = null)
         {
             // TODO add proper tests, but need test spike. Add adjudicatorNote to fake db.
             return Task.FromResult(new AdjudicatorNote());
         }
 
-        public Task<IEnrolleeNote> UpdateEnrolleeNoteAsync(int enrolleeId, IEnrolleeNote newNote)
+        public Task<IEnrolleeNote> UpdateEnrolleeNoteAsync(int enrolleeId, IEnrolleeNote newNote, int? adminId = null)
         {
             // TODO add proper tests, but need test spike
             IEnrolleeNote updatedNote = null;
@@ -189,10 +189,17 @@ namespace PrimeTests.Mocks
 
         public Task<Enrollee> GetEnrolleeNoTrackingAsync(int enrolleeId)
         {
-            throw new NotImplementedException();
+            var enrollee = this.GetHolder<int, Enrollee>()[enrolleeId];
+            return Task.FromResult(enrollee);
         }
 
         public Task<int> GetEnrolleeCountAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public Task<Enrollee> UpdateEnrolleeAdjudicator(int enrolleeId, Guid adminId = default)
         {
             throw new NotImplementedException();
         }
