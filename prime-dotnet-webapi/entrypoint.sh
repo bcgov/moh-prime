@@ -71,4 +71,4 @@ waitForIt localhost:${API_PORT}/api/enrollees 401 2>&1 | logger &
 waitForIt localhost:${API_PORT}/api/lookups 401 2>&1 | logger
 
 echo -e "\nThe system is up."
-tail -f /var/log/messages
+tail -f /var/log/syslog
