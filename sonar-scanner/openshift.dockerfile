@@ -35,6 +35,7 @@ RUN mkdir /home/jenkins/.jenkins && \
     chmod 644 /usr/share/jenkins/agent.jar && \
     ln -sf /usr/share/jenkins/agent.jar /usr/share/jenkins/slave.jar
     #curl --create-dirs -fsSLo /usr/share/jenkins/agent.jar http://jenkins-prod/jnlpJars/agent.jar && \
+
 VOLUME /home/jenkins/.jenkins
 VOLUME ${AGENT_WORKDIR}
 
