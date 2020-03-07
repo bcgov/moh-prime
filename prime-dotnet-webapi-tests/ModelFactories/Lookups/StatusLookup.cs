@@ -11,7 +11,7 @@ namespace PrimeTests.ModelFactories
 
         public static ICollection<Status> All { get { return _seedData; } }
 
-        public static Status ByCode(short statusCode)
+        public static Status ByCode(int statusCode)
         {
             return All.Single(x => x.Code == statusCode);
         }

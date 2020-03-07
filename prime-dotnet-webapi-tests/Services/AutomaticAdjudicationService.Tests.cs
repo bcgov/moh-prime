@@ -76,7 +76,7 @@ namespace PrimeTests.Services
             }
         }
 
-        private void AssertReasonCodes(ICollection<EnrolmentStatusReason> enrolmentStatusReasons, params short[] expectedReasonCodes)
+        private void AssertReasonCodes(ICollection<EnrolmentStatusReason> enrolmentStatusReasons, params int[] expectedReasonCodes)
         {
             if (expectedReasonCodes == null || expectedReasonCodes.Length == 0)
             {
@@ -140,7 +140,7 @@ namespace PrimeTests.Services
 
         [Theory]
         [MemberData(nameof(CertificationRuleData))]
-        public async void testCertificationRule(OperationMode[] apiModes, bool expected, short[] expectedReasonCodes)
+        public async void testCertificationRule(OperationMode[] apiModes, bool expected, int[] expectedReasonCodes)
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
             UpdateCertifications(enrollee, apiModes.Length);
@@ -176,9 +176,9 @@ namespace PrimeTests.Services
             }
         }
 
-        private static short[] GetExpectedReasonCodes(OperationMode[] modes)
+        private static int[] GetExpectedReasonCodes(OperationMode[] modes)
         {
-            var codes = new List<short>();
+            var codes = new List<int>();
             foreach (var mode in modes)
             {
                 if (mode == OperationMode.ERROR)
