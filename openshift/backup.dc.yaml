@@ -31,6 +31,9 @@ parameters:
 - name: OC_APP
   required: true
   value: dev
+- name: POSTGRESQL_HOST
+  required: true
+  value: postgresql
 objects:
 - apiVersion: v1
   kind: DeploymentConfig
@@ -59,7 +62,7 @@ objects:
         containers:
           - env:
               - name: PGHOST
-                value: postgresql
+                value: ${POSTGRESQL_HOST}
               - name: PGPASSWORD
                 valueFrom:
                   secretKeyRef:
@@ -94,7 +97,7 @@ objects:
             claimName: backup-data
         - name: postgresql
           persistentVolumeClaim:
-            claimName: postgresql
+            claimName: ${POSTGRESQL_HOST}
         - name: backup-run
           emptyDir: {}
     test: false
