@@ -19,13 +19,13 @@ USER 0
 RUN echo 'deb http://deb.debian.org/debian stretch-backports main' > /etc/apt/sources.list.d/stretch-backports.list
 RUN mkdir /home/jenkins/.jenkins && \
     mkdir -p ${AGENT_WORKDIR} && \
-    apt-get -yqq update && \
-    apt-get -yqq install -t stretch-backports \
+    apt-get update && \
+    apt-get upgrade -y &&\
+    apt-get -y install -t stretch-backports \
         software-properties-common \
         git-lfs \
         vim \
         nano \
-        curl \
         unzip \
         xvfb \
         libxi6 \
