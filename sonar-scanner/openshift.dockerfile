@@ -21,8 +21,7 @@ RUN mkdir /home/jenkins/.jenkins && \
     mkdir -p ${AGENT_WORKDIR} && \
     apt-get update && \
     apt-get upgrade -y &&\
-    apt-get install -yt stretch-backports \
-        software-properties-common \
+    apt-get install -y software-properties-common \
         git-lfs \
         vim \
         nano \
