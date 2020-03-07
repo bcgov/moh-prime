@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 using Prime.Models;
 using Prime.Services;
+using PrimeTests.Utils;
 
 namespace PrimeTests.Mocks
 {
@@ -32,7 +33,8 @@ namespace PrimeTests.Mocks
 
         public Task<EnrolleeProfileVersion> GetEnrolleeProfileVersionBeforeDateAsync(int enrolleeId, DateTime dateTime)
         {
-            throw new NotImplementedException();
+            var profileVersion = TestUtils.EnrolleeProfileVersionFaker.Generate();
+            return Task.FromResult(profileVersion);
         }
     }
 }

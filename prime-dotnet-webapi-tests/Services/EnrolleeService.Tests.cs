@@ -23,7 +23,8 @@ namespace PrimeTests.Services
             new EmailServiceMock(),
             new PrivilegeServiceMock(),
             new AccessTermServiceMock(),
-            new EnrolleeProfileVersionServiceMock()
+            new EnrolleeProfileVersionServiceMock(),
+            new BusinessEventServiceMock()
         })
         { }
 
@@ -56,7 +57,7 @@ namespace PrimeTests.Services
             // create the enrollee directly to the context
             _dbContext.Enrollees.Add(testEnrollee);
             await _dbContext.SaveChangesAsync();
-            int expectedEnrolleeId = (int)testEnrollee.Id;
+            int expectedEnrolleeId = testEnrollee.Id;
 
             // get the enrollee through the service layer code
             Enrollee enrollee = await _service.GetEnrolleeForUserIdAsync(expectedUserId);
@@ -170,7 +171,7 @@ namespace PrimeTests.Services
             string expectedName = "ChangedName";
             var testEnrollee = TestUtils.EnrolleeFaker.Generate();
 
-            testEnrollee.FirstName = "StartingName";
+            testEnrollee.PreferredFirstName = "StartingName";
 
             // create the enrollee directly to the context
             _dbContext.Enrollees.Add(testEnrollee);
@@ -209,7 +210,7 @@ namespace PrimeTests.Services
             Enrollee updatedEnrollee = await _dbContext.Enrollees.FindAsync(enrolleeId);
             Assert.NotNull(updatedEnrollee);
             Assert.Equal(enrolleeId, updatedEnrollee.Id);
-            Assert.Equal(expectedName, updatedEnrollee.FirstName);
+            Assert.Equal(expectedName, updatedEnrollee.PreferredFirstName);
         }
 
         [Fact]
@@ -251,7 +252,6 @@ namespace PrimeTests.Services
             // get the available statuses through the service layer code
             var statuses = await _service.GetAvailableEnrolmentStatusesAsync((int)expectedEnrolleeId);
             Assert.NotNull(statuses);
-            Assert.Single(statuses);
             Assert.Contains(_dbContext.Statuses.Single(s => s.Code == Status.UNDER_REVIEW_CODE), statuses);
         }
 
@@ -285,7 +285,7 @@ namespace PrimeTests.Services
             int expectedEnrolleeId = (int)testEnrollee.Id;
 
             // create the enrolment status through the service layer code
-            var enrolmentStatus = await _service.CreateEnrolmentStatusAsync((int)expectedEnrolleeId, _dbContext.Statuses.Single(s => s.Code == Status.UNDER_REVIEW_CODE));
+            var enrolmentStatus = await _service.CreateEnrolmentStatusAsync((int)expectedEnrolleeId, _dbContext.Statuses.Single(s => s.Code == Status.UNDER_REVIEW_CODE), false, null);
             Assert.NotNull(enrolmentStatus);
             Assert.Equal(_dbContext.Statuses.Single(s => s.Code == Status.UNDER_REVIEW_CODE), enrolmentStatus.Status);
         }
@@ -305,7 +305,7 @@ namespace PrimeTests.Services
             int expectedEnrolleeId = (int)testEnrollee.Id;
 
             // create the enrolment status through the service layer code
-            var enrolmentStatus = await _service.CreateEnrolmentStatusAsync((int)expectedEnrolleeId, _dbContext.Statuses.Single(s => s.Code == Status.ACTIVE_CODE));
+            var enrolmentStatus = await _service.CreateEnrolmentStatusAsync((int)expectedEnrolleeId, _dbContext.Statuses.Single(s => s.Code == Status.ACTIVE_CODE), true, 1);
             Assert.NotNull(enrolmentStatus);
             Assert.Equal(_dbContext.Statuses.Single(s => s.Code == Status.ACTIVE_CODE), enrolmentStatus.Status);
 
@@ -328,8 +328,8 @@ namespace PrimeTests.Services
 
             // create the enrolment status through the service layer code
             var enrolmentStatusInProgress = await _service
-                .CreateEnrolmentStatusAsync(testEnrollee.Id.Value, _dbContext.Statuses
-                .Single(s => s.Code == Status.UNDER_REVIEW_CODE));
+                .CreateEnrolmentStatusAsync(testEnrollee.Id, _dbContext.Statuses
+                .Single(s => s.Code == Status.UNDER_REVIEW_CODE), false, null);
 
             Assert.NotNull(enrolmentStatusInProgress);
             Assert.Equal(_dbContext.Statuses.Single(s => s.Code == Status.UNDER_REVIEW_CODE), enrolmentStatusInProgress.Status);
@@ -351,23 +351,23 @@ namespace PrimeTests.Services
             Assert.False(_service.IsStatusChangeAllowed(ACTIVE, null));
             Assert.False(_service.IsStatusChangeAllowed(ACTIVE, ACTIVE));
             Assert.True(_service.IsStatusChangeAllowed(ACTIVE, UNDER_REVIEW));
-            Assert.False(_service.IsStatusChangeAllowed(ACTIVE, REQUIRES_TOA));
-            Assert.True(_service.IsStatusChangeAllowed(ACTIVE, LOCKED));
+            Assert.True(_service.IsStatusChangeAllowed(ACTIVE, REQUIRES_TOA));
+            Assert.False(_service.IsStatusChangeAllowed(ACTIVE, LOCKED));
 
             Assert.False(_service.IsStatusChangeAllowed(UNDER_REVIEW, null));
             Assert.False(_service.IsStatusChangeAllowed(UNDER_REVIEW, ACTIVE));
             Assert.False(_service.IsStatusChangeAllowed(UNDER_REVIEW, UNDER_REVIEW));
-            Assert.True(_service.IsStatusChangeAllowed(UNDER_REVIEW, REQUIRES_TOA));
-            Assert.True(_service.IsStatusChangeAllowed(UNDER_REVIEW, LOCKED));
+            Assert.False(_service.IsStatusChangeAllowed(UNDER_REVIEW, REQUIRES_TOA));
+            Assert.False(_service.IsStatusChangeAllowed(UNDER_REVIEW, LOCKED));
 
             Assert.False(_service.IsStatusChangeAllowed(REQUIRES_TOA, null));
             Assert.True(_service.IsStatusChangeAllowed(REQUIRES_TOA, ACTIVE));
             Assert.False(_service.IsStatusChangeAllowed(REQUIRES_TOA, UNDER_REVIEW));
             Assert.False(_service.IsStatusChangeAllowed(REQUIRES_TOA, REQUIRES_TOA));
-            Assert.True(_service.IsStatusChangeAllowed(REQUIRES_TOA, LOCKED));
+            Assert.False(_service.IsStatusChangeAllowed(REQUIRES_TOA, LOCKED));
 
             Assert.False(_service.IsStatusChangeAllowed(LOCKED, null));
-            Assert.True(_service.IsStatusChangeAllowed(LOCKED, ACTIVE));
+            Assert.False(_service.IsStatusChangeAllowed(LOCKED, ACTIVE));
             Assert.False(_service.IsStatusChangeAllowed(LOCKED, UNDER_REVIEW));
             Assert.False(_service.IsStatusChangeAllowed(LOCKED, REQUIRES_TOA));
             Assert.False(_service.IsStatusChangeAllowed(LOCKED, LOCKED));
@@ -389,12 +389,12 @@ namespace PrimeTests.Services
             Assert.True(_service.IsStatusChangeAllowed(null, ACTIVE));
             Assert.False(_service.IsStatusChangeAllowed(null, UNDER_REVIEW));
             Assert.False(_service.IsStatusChangeAllowed(null, REQUIRES_TOA));
-            Assert.True(_service.IsStatusChangeAllowed(null, LOCKED));
+            Assert.False(_service.IsStatusChangeAllowed(null, LOCKED));
 
             Assert.False(_service.IsStatusChangeAllowed(ACTIVE, null));
             Assert.False(_service.IsStatusChangeAllowed(ACTIVE, ACTIVE));
             Assert.True(_service.IsStatusChangeAllowed(ACTIVE, UNDER_REVIEW));
-            Assert.False(_service.IsStatusChangeAllowed(ACTIVE, REQUIRES_TOA));
+            Assert.True(_service.IsStatusChangeAllowed(ACTIVE, REQUIRES_TOA));
             Assert.True(_service.IsStatusChangeAllowed(ACTIVE, LOCKED));
 
             Assert.False(_service.IsStatusChangeAllowed(UNDER_REVIEW, null));
