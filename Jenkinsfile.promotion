@@ -62,7 +62,7 @@ pipeline {
             steps {
                 script {
                     def IS_APPROVED = input(
-                        id: 'IS_APPROVED', message: "Deploy to Demo?", ok: "Yes", parameters: [
+                        id: 'IS_APPROVED', message: "Deploy to Demo & Production?", ok: "Yes", parameters: [
                             string(name: 'IS_APPROVED', defaultValue: 'Yes', description: 'Deploy to Demo & Production?')
                             ])
                     if (IS_APPROVED != 'yes') {
