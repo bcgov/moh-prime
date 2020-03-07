@@ -71,5 +71,5 @@ waitForIt localhost:${API_PORT}/api/enrollees 401 2>&1 | logger &
 waitForIt localhost:${API_PORT}/api/lookups 401 2>&1 | logger
 
 echo -e "\nThe system is up."
-sleep 60
-tail -f /var/log/syslog
+
+tail -f /dev/null
