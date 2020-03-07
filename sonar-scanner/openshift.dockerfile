@@ -21,7 +21,7 @@ RUN mkdir /home/jenkins/.jenkins && \
     mkdir -p ${AGENT_WORKDIR} && \
     apt-get update && \
     apt-get upgrade -y &&\
-    apt-get -y install -t stretch-backports \
+    apt-get install -y stretch-backports \
         software-properties-common \
         git-lfs \
         vim \
@@ -30,6 +30,7 @@ RUN mkdir /home/jenkins/.jenkins && \
         xvfb \
         libgl1 \
         libxi6 \
+        libglx0 \
         libgconf-2-4 \
         maven \
         pciutils \
