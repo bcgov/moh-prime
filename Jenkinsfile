@@ -67,7 +67,7 @@ pipeline {
             when { expression { ( GIT_BRANCH == 'develop' ) } }
             agent { label 'master' }
             steps {
-                sh "./player.sh toolbelt schemaspy dev -p SOURCE_CONTEXT_DIR='schemaspy'"
+                sh "./player.sh toolbelt schemaspy dev"
             }
         }
     }
