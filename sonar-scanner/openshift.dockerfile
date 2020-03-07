@@ -21,17 +21,12 @@ RUN mkdir /home/jenkins/.jenkins && \
     mkdir -p ${AGENT_WORKDIR} && \
     apt-get update && \
     apt-get upgrade -y &&\
-    apt-get install -y stretch-backports \
+    apt-get install -yt stretch-backports \
         software-properties-common \
         git-lfs \
         vim \
         nano \
         unzip \
-        xvfb \
-        libgl1 \
-        libxi6 \
-        libglx0 \
-        libgconf-2-4 \
         maven \
         pciutils \
         apt-transport-https \
@@ -52,7 +47,12 @@ ENV PATH $PATH:$JAVA_HOME:/var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunne
 #COMMON
 RUN echo "Installing common, jenkins and Sonar Scanner prerequisites..." && \
     useradd default && \
-    apt-get -yqq install openjdk-8-jre  && \
+    apt-get -y install openjdk-8-jre \
+        xvfb \
+        libgl1 \
+        libxi6 \
+        libglx0 \
+        libgconf-2-4 && \
     wget -q http://sourceforge.net/projects/sonar-pkg/files/deb/binary/sonar_6.7.4_all.deb && \
     dpkg -i sonar_6.7.4_all.deb && \
     mkdir -p /var/lib/origin && \
