@@ -28,6 +28,7 @@ RUN mkdir /home/jenkins/.jenkins && \
         nano \
         unzip \
         xvfb \
+        libgl1 \
         libxi6 \
         libgconf-2-4 \
         maven \
