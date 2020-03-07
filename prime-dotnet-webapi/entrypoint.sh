@@ -6,6 +6,7 @@ then
 export DB_CONNECTION_STRING="host=${DB_HOST};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"
 fi
 export AUTH=$(printf $PHARMANET_API_USERNAME:$PHARMANET_API_PASSWORD|base64)
+export logfile=prime.logfile.out
 # Wait for database connection
 PG_IS_READY=$(pg_isready -h $DB_HOST -U ${POSTGRESQL_USER} -d ${POSTGRESQL_DATABASE})
 n=0
@@ -29,7 +30,7 @@ psql -h $DB_HOST -U ${POSTGRESQL_USER} -d ${POSTGRESQL_DATABASE} -a -f databaseM
 echo "Resting 5 seconds to let things settle down..."
 
 echo "Running .NET..."
-dotnet prime.dll -v 2>&1 | ts > prime.logfile.out & 
+dotnet prime.dll -v 2>&1 | ts > $logfile & 
 echo "Launched, waiting for connection to API internally..."
 
 function waitForIt() {
@@ -65,4 +66,4 @@ waitForIt localhost:${API_PORT}/api/lookups 401 2>&1 | logger
 
 echo -e "\nThe system is up."
 
-tail -f prime.logfile.out
+tail -f $logfile
