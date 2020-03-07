@@ -57,7 +57,7 @@ namespace PrimeTests.Services
             // create the enrollee directly to the context
             _dbContext.Enrollees.Add(testEnrollee);
             await _dbContext.SaveChangesAsync();
-            int expectedEnrolleeId = (int)testEnrollee.Id;
+            int expectedEnrolleeId = testEnrollee.Id;
 
             // get the enrollee through the service layer code
             Enrollee enrollee = await _service.GetEnrolleeForUserIdAsync(expectedUserId);
