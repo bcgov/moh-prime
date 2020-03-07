@@ -47,8 +47,7 @@ ENV PATH $PATH:$JAVA_HOME:/var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunne
 #COMMON
 RUN echo "Installing common, jenkins and Sonar Scanner prerequisites..." && \
     useradd default && \
-    apt-get -y install openjdk-8-jre \
-        xvfb \
+    apt-get -y install xvfb \
         libgl1 \
         libxi6 \
         libglx0 \
