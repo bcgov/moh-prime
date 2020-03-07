@@ -13,6 +13,8 @@ import { EnrolleeProfileVersionsComponent } from './pages/enrollee-profile-versi
 import { EnrolleeAccessTermsComponent } from './pages/enrollee-access-terms/enrollee-access-terms.component';
 import { EnrolleeAccessTermComponent } from './pages/enrollee-access-term/enrollee-access-term.component';
 import { EnrolleeAccessTermEnrolmentComponent } from './pages/enrollee-access-term-enrolment/enrollee-access-term-enrolment.component';
+
+import { AdjudicationDashboardComponent } from './shared/components/adjudication-dashboard/adjudication-dashboard.component';
 import { SearchFormComponent } from './shared/components/search-form/search-form.component';
 
 @NgModule({
@@ -26,7 +28,8 @@ import { SearchFormComponent } from './shared/components/search-form/search-form
     EnrolleeAccessTermsComponent,
     EnrolleeAccessTermComponent,
     EnrolleeAccessTermEnrolmentComponent,
-    SearchFormComponent
+    SearchFormComponent,
+    AdjudicationDashboardComponent
   ],
   imports: [
     SharedModule,

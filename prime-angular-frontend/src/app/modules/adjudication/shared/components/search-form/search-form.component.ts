@@ -11,10 +11,11 @@ import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
   styleUrls: ['./search-form.component.scss']
 })
 export class SearchFormComponent implements OnInit {
-  public form: FormGroup;
-  public statuses: Config<number>[];
   @Output() public search: EventEmitter<string>;
   @Output() public filter: EventEmitter<EnrolmentStatus>;
+
+  public form: FormGroup;
+  public statuses: Config<number>[];
 
   constructor(
     private fb: FormBuilder,
@@ -33,7 +34,7 @@ export class SearchFormComponent implements OnInit {
     return this.form.get('statusCode') as FormControl;
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.createFormInstance();
     this.initForm();
   }
@@ -54,5 +55,4 @@ export class SearchFormComponent implements OnInit {
       debounceTime(500),
     ).subscribe((es: EnrolmentStatus) => this.filter.emit(es));
   }
-
 }
