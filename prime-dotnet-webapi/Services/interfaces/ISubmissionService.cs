@@ -6,7 +6,7 @@ namespace Prime.Services
 {
     public interface ISubmissionService
     {
-        Task<Enrollee> PerformSubmissionActionAsync(int enrolleeId, SubmissionAction action);
+        Task PerformSubmissionActionAsync(int enrolleeId, SubmissionAction action, bool isAdmin);
 
         Task UpdateAlwaysManualAsync(int enrolleeId, bool alwaysManual);
     }

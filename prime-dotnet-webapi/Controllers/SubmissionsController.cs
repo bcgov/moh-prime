@@ -38,13 +38,14 @@ namespace Prime.Controllers
         /// <summary>
         /// Performs a submission-related action on an Enrolle, such as submitting their profile for adjudication.
         /// </summary>
-        [HttpPost("{enrolleeId}/{submissionAction:submissionAction}", Name = nameof(SumbissionAction))]
+        [HttpPost("{enrolleeId}/{submissionAction:submissionAction}", Name = nameof(SubmissionAction))]
         [AllowAnonymous]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<Enrollee>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Enrollee>> SumbissionAction(int enrolleeId, SubmissionAction submissionAction)
+        public async Task<ActionResult<Enrollee>> SubmissionAction(int enrolleeId, SubmissionAction submissionAction)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
             if (enrollee == null)
@@ -56,9 +57,16 @@ namespace Prime.Controllers
             //     return Forbid();
             // }
 
-            await _submissionService.PerformSubmissionActionAsync(enrolleeId, submissionAction);
-
-            return Ok(ApiResponse.Result(enrollee));
+            try
+            {
+                await _submissionService.PerformSubmissionActionAsync(enrolleeId, submissionAction, User.IsAdmin());
+                return Ok(ApiResponse.Result(enrollee));
+            }
+            catch (InvalidOperationException ex)
+            {
+                this.ModelState.AddModelError("Enrollee.CurrentStatus", $"Action could not be performed. {ex.Message}");
+                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+            }
         }
 
         // PUT: api/enrollees/5/always-manual

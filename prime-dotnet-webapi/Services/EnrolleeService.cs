@@ -489,22 +489,22 @@ namespace Prime.Services
         private IQueryable<Enrollee> GetBaseEnrolleeQuery()
         {
             return _context.Enrollees
-                    .Include(e => e.PhysicalAddress)
-                    .Include(e => e.MailingAddress)
-                    .Include(e => e.Certifications)
-                        .ThenInclude(c => c.License)
-                            .ThenInclude(l => l.DefaultPrivileges)
-                    .Include(e => e.Jobs)
-                    .Include(e => e.Organizations)
-                    .Include(e => e.EnrolmentStatuses)
-                        .ThenInclude(es => es.Status)
-                    .Include(e => e.EnrolmentStatuses)
-                        .ThenInclude(es => es.EnrolmentStatusReasons)
+                .Include(e => e.PhysicalAddress)
+                .Include(e => e.MailingAddress)
+                .Include(e => e.Certifications)
+                    .ThenInclude(c => c.License)
+                        .ThenInclude(l => l.DefaultPrivileges)
+                .Include(e => e.Jobs)
+                .Include(e => e.Organizations)
+                .Include(e => e.EnrolmentStatuses)
+                    .ThenInclude(es => es.Status)
+                .Include(e => e.EnrolmentStatuses)
+                    .ThenInclude(es => es.EnrolmentStatusReasons)
                         .ThenInclude(esr => esr.StatusReason)
-                    .Include(e => e.AccessAgreementNote)
-                    .Include(e => e.AssignedPrivileges)
-                        .ThenInclude(AssignedPrivilege => AssignedPrivilege.Privilege)
-                    .Include(e => e.AccessTerms);
+                .Include(e => e.AccessAgreementNote)
+                .Include(e => e.AssignedPrivileges)
+                    .ThenInclude(ap => ap.Privilege)
+                .Include(e => e.AccessTerms);
         }
 
         public async Task<Enrollee> GetEnrolleeAsync(int enrolleeId)
