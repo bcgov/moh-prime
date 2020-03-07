@@ -30,11 +30,11 @@ RUN mkdir /home/jenkins/.jenkins && \
         pciutils \
         apt-transport-https \
         wget && \
-    wget -x --force-directories http://jenkins-prod/jnlpJars/agent.jar && \
+    curl --create-dirs -fsSLo /usr/share/jenkins/agent.jar http://jenkins-prod/jnlpJars/agent.jar && \
     chmod 755 /usr/share/jenkins && \
     chmod 644 /usr/share/jenkins/agent.jar && \
     ln -sf /usr/share/jenkins/agent.jar /usr/share/jenkins/slave.jar
-    #curl --create-dirs -fsSLo /usr/share/jenkins/agent.jar http://jenkins-prod/jnlpJars/agent.jar && \
+    #
 
 VOLUME /home/jenkins/.jenkins
 VOLUME ${AGENT_WORKDIR}
