@@ -29,7 +29,7 @@ psql -h $DB_HOST -U ${POSTGRESQL_USER} -d ${POSTGRESQL_DATABASE} -a -f databaseM
 echo "Resting 5 seconds to let things settle down..."
 
 echo "Running .NET..."
-dotnet prime.dll -v 2>&1 | logger & 
+dotnet prime.dll -v 2>&1 | ts > prime.logfile.out & 
 echo "Launched, waiting for connection to API internally..."
 
 function waitForIt() {
@@ -65,4 +65,4 @@ waitForIt localhost:${API_PORT}/api/lookups 401 2>&1 | logger
 
 echo -e "\nThe system is up."
 
-tail -f /dev/null
+tail -f prime.logfile.out
