@@ -34,6 +34,9 @@ parameters:
 - name: POSTGRESQL_HOST
   required: true
   value: postgresql
+- name: METABASE_HOST
+  required: true
+  value: metabase-database
 objects:
 - apiVersion: v1
   kind: DeploymentConfig
@@ -78,6 +81,23 @@ objects:
                   secretKeyRef:
                     key: database-user
                     name: postgresql-secret
+              - name: METABASE_HOST
+                value: ${METABASE_HOST}
+              - name: METABASE_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    key: password
+                    name: metabase-database-credentials
+              - name: METABASE_DATABASE
+                valueFrom:
+                  secretKeyRef:
+                    key: database
+                    name: metabase-database-credentials
+              - name: METABASE_USERNAME
+                valueFrom:
+                  secretKeyRef:
+                    key: username
+                    name: metabase-database-credentials
             image: ' '
             name: backup
             ports:
