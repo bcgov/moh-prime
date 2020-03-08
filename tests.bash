@@ -10,7 +10,6 @@ function headless(){
 
 function dotnetTests()
 {
-    headless
     source api.conf
     echo "Starting tests..."
     dotnet build
@@ -25,7 +24,10 @@ function dotnetTests()
 
 function angularTests()
 {
-    headless
+    source frontend.conf
+    /zap/zap.sh -cmd -quickurl ${SCHEMA}://${VANITY_URL} -quickout /tmp/${APP_NAME}.${uuid}.xml -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true -config spider.maxDuration=5 -addonupdate -addoninstall pscanrulesBeta -config connection.timeoutInSecs=600 -port 8080 -host 127.0.0.1
+    /sonarscanner/bin/sonar-scanner -Dsonar.projectName=${APP_NAME}.zap -Dsonar.projectKey=${APP_NAME}.zap -Dsonar.sources=${SOURCE_CONTEXT_DIR} -Dsonar.host.url=http://sonarqube:9000 -Dsonar.zaproxy.reportPath=/tmp/${APP_NAME}.${uuid}.xml
+    rm -f /tmp/${APP_NAME}.${uuid}.xml
     cd prime-angular-frontend
     npm install @angular/core
     npm run sonar
@@ -34,18 +36,14 @@ function angularTests()
 function scan()
 {
     headless
-    echo "Beginning tests on .NET ..."
-    dotnetTests > /dev/null 2>&1
     echo "Beginning tests on Angular ..."
     angularTests > /dev/null 2>&1
+    echo "Beginning tests on .NET ..."
+    dotnetTests > /dev/null 2>&1
 }
 
 function zap()
 {
-    headless
     mkdir -p zap
-    source $1.conf
-    /zap/zap.sh -cmd -quickurl ${SCHEMA}://${VANITY_URL} -quickout /tmp/${APP_NAME}.${uuid}.xml -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true -config spider.maxDuration=5 -addonupdate -addoninstall pscanrulesBeta -config connection.timeoutInSecs=600 -port 8080 -host 127.0.0.1
-    /sonarscanner/bin/sonar-scanner -Dsonar.projectName=${APP_NAME}.zap -Dsonar.projectKey=${APP_NAME}.zap -Dsonar.sources=${SOURCE_CONTEXT_DIR} -Dsonar.host.url=http://sonarqube:9000 -Dsonar.zaproxy.reportPath=/tmp/${APP_NAME}.${uuid}.xml
-    rm -f /tmp/${APP_NAME}.${uuid}.xml
+    scan
 }
