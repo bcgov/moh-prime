@@ -11,6 +11,7 @@ function fileRotate() {
         echo "${dateinfo} - Logs rotated " >> ${logfile}
 }
 function databaseBackup() {
+        cd ${backup_dir}
         echo "Starting backup of databases " >> ${logfile}
         file_size=`du -b ${logfile} | tr -s '\t' ' ' | cut -d' ' -f1`
         if [ "$file_size" -gt "$MaxFileSize" ]
@@ -28,7 +29,8 @@ function databaseBackup() {
         echo "Done backup of databases " >> ${logfile}
 }
 function metabaseBackup() {
-                echo "Starting backup of databases " >> ${logfile}
+        cd ${backup_dir}
+        echo "Starting backup of databases " >> ${logfile}
         file_size=`du -b ${logfile} | tr -s '\t' ' ' | cut -d' ' -f1`
         if [ "$file_size" -gt "$MaxFileSize" ]
         then   
