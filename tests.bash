@@ -45,8 +45,7 @@ function zap()
     headless
     mkdir -p zap
     source $1.conf
-    /zap/zap.sh -cmd -quickurl ${VANITY_URL} -quickout /tmp/${APP_NAME}.${uuid}.xml -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true -config spider.maxDuration=5 -addonupdate -addoninstall pscanrulesBeta -config connection.timeoutInSecs=600 -port 8080 -host 127.0.0.1
+    /zap/zap.sh -cmd -quickurl ${SCHEMA}://${VANITY_URL} -quickout /tmp/${APP_NAME}.${uuid}.xml -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true -config spider.maxDuration=5 -addonupdate -addoninstall pscanrulesBeta -config connection.timeoutInSecs=600 -port 8080 -host 127.0.0.1
     /sonarscanner/bin/sonar-scanner -Dsonar.projectName=${APP_NAME}.zap -Dsonar.projectKey=${APP_NAME}.zap -Dsonar.sources=${SOURCE_CONTEXT_DIR} -Dsonar.host.url=http://sonarqube:9000 -Dsonar.zaproxy.reportPath=/tmp/${APP_NAME}.${uuid}.xml
     rm -f /tmp/${APP_NAME}.${uuid}.xml
 }
-
