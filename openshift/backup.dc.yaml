@@ -106,8 +106,6 @@ objects:
             volumeMounts:
               - mountPath: /opt/backup
                 name: backup-data
-              - mountPath: /var/lib/postgresql/data
-                name: postgresql
               - mountPath: /var/run
                 name: backup-run
         restartPolicy: Always
