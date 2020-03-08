@@ -14,5 +14,5 @@ spec:
           containers:
           - name: backup
             image: backup
-            command: ["./backup.sh"]
+            command: ["/opt/backup/backup.sh"]
           restartPolicy: OnFailure 
