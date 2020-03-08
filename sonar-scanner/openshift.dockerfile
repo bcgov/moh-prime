@@ -22,7 +22,7 @@ RUN mkdir /home/jenkins/.jenkins && \
     apt-get update && \
     apt-get upgrade -y &&\
     apt-get install -y software-properties-common \
-        openjdk-8-jre-headless \
+        default-jre \
         git-lfs \
         vim \
         nano \
