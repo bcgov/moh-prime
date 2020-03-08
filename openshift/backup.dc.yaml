@@ -66,7 +66,7 @@ objects:
           - env:
               - name: PGHOST
                 value: ${POSTGRESQL_HOST}
-              - name: PGPASSWORD
+              - name: POSTGRES_PASSWORD
                 valueFrom:
                   secretKeyRef:
                     key: database-admin-password
@@ -115,9 +115,6 @@ objects:
         - name: backup-data
           persistentVolumeClaim:
             claimName: backup-data
-        - name: postgresql
-          persistentVolumeClaim:
-            claimName: ${POSTGRESQL_HOST}
         - name: backup-run
           emptyDir: {}
     test: false

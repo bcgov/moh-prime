@@ -18,6 +18,7 @@ function databaseBackup() {
                 tar czf ${logfile}.${timestamp}.tgz ${logfile}
                 touch ${logfile}
         fi
+        PGPASSWORD=${POSTGRES_PASSWORD}
         /usr/bin/vacuumdb -z -h ${PGHOST} -U ${PGUSERNAME} ${PGDATABASE} >/dev/null 2>&1
         /usr/bin/pg_dump -U ${PGUSERNAME} -F c -b ${PGDATABASE} -h ${PGHOST} -f ${backup_dir}/${PGDATABASE}-database-${timestamp}.backup
         echo "${timestamp} - Backup and Vacuum complete on ${dateinfo} for database: ${PGDATABASE} " >> ${logfile}
@@ -34,6 +35,7 @@ function metabaseBackup() {
                 tar czf ${logfile}.${timestamp}.tgz ${logfile}
                 touch ${logfile}
         fi
+        PGPASSWORD=${METABASE_PASSWORD}
         /usr/bin/vacuumdb -z -h ${METABASE_HOST} -U ${METABASE_USERNAME} ${METABASE_DATABASE} >/dev/null 2>&1
         /usr/bin/pg_dump -U ${METABASE_USERNAME} -F c -b ${METABASE_DATABASE} -h ${METABASE_HOST} -f ${backup_dir}/${METABASE_DATABASE}-database-${timestamp}.backup
         echo "${timestamp} - Backup and Vacuum complete on ${dateinfo} for database: ${METABASE_DATABASE} " >> ${logfile}
@@ -44,3 +46,4 @@ function metabaseBackup() {
 }
 fileRotate
 databaseBackup
+metabaseBackup
