@@ -63,11 +63,34 @@ pipeline {
                 }
             }
         }
-        stage('SchemaSpy Database Investigation') {
-            when { expression { ( GIT_BRANCH == 'develop' ) } }
-            agent { label 'master' }
-            steps {
-                sh "./player.sh toolbelt schemaspy dev"
+        stage('Quality Check') {
+            options {
+                timeout(time: 90, unit: 'MINUTES')   // timeout on this stage
+            }
+            when { expression { ( BRANCH_NAME == 'develop' ) } }
+            parallel {
+                stage('SonarQube Code Check') {
+                    agent { label 'code-tests' }
+                    steps {
+                        checkout scm
+                        sh "./player.sh scan"
+                    }      
+                }
+                stage('ZAP') {
+                    agent { label 'code-tests' }
+                    steps {
+                        checkout scm
+                        echo "Scanning..."
+                        sh "./player.sh zap"
+                    }
+                }
+                stage('SchemaSpy Database Investigation') {
+                    agent { label 'master' }
+                    steps {
+                        checkout scm
+                        sh "./player.sh toolbelt schemaspy dev"
+                    }
+                }
             }
         }
     }
