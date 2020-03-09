@@ -19,7 +19,7 @@ function databaseBackup() {
     MaxFileSize=2048
     dateinfo=`date '+%Y-%m-%d %H:%M:%S'`
     timestamp=`date +%s`
-    logfile="${backup_dir}/backup.${timestamp}.log"
+    logfile="${backup_dir}/backup.log"
     cd ${backup_dir}
     echo "Starting backup of databases " >> ${logfile}
     file_size=`du -b ${logfile} | tr -s '\t' ' ' | cut -d' ' -f1`
@@ -71,3 +71,4 @@ function hourlyAction() {
 
 dailyAction &disown
 hourlyAction &disown
+tail -F ${logfile}
