@@ -38,6 +38,14 @@ export class AdjudicationResource {
       );
   }
 
+  public getAdjudicators(): Observable<Admin[]> {
+    return this.apiResource.get<Admin[]>('admins')
+      .pipe(
+        map((response: ApiHttpResponse<Admin[]>) => response.result),
+        map((admins: Admin[]) => admins)
+      );
+  }
+
   public enrollees(statusCode?: number, textSearch?: string): Observable<Enrolment[]> {
     const params = this.apiResourceUtilsService.makeHttpParams({ statusCode, textSearch });
     return this.apiResource.get<HttpEnrollee[]>('enrollees', params)
