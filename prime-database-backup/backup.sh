@@ -21,7 +21,7 @@ function databaseBackup() {
     timestamp=`date +%s`
     logfile="${backup_dir}/backup.log"
     cd ${backup_dir}
-    echo "Starting backup of databases " >> ${logfile}
+    echo "${dateinfo} - Starting backup of databases " >> ${logfile}
     file_size=`du -b ${logfile} | tr -s '\t' ' ' | cut -d' ' -f1`
     if [ "$file_size" -gt "$MaxFileSize" ]
     then   
