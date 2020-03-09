@@ -4,10 +4,8 @@ import { MatTableDataSource } from '@angular/material';
 
 import { Subscription } from 'rxjs';
 
-import { LoggerService } from '@core/services/logger.service';
-import { ToastService } from '@core/services/toast.service';
-
-import { EnrolmentProfileVersion } from '@shared/models/enrollee-profile-history.model';
+import { AbstractComponent } from '@shared/classes/abstract-component';
+import { HttpEnrolleeProfileVersion } from '@shared/models/enrollee-profile-history.model';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 @Component({
@@ -15,36 +13,31 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
   templateUrl: './enrollee-profile-versions.component.html',
   styleUrls: ['./enrollee-profile-versions.component.scss']
 })
-export class EnrolleeProfileVersionsComponent implements OnInit {
+export class EnrolleeProfileVersionsComponent extends AbstractComponent implements OnInit {
   public busy: Subscription;
   public columns: string[];
-  public dataSource: MatTableDataSource<EnrolmentProfileVersion>;
+  public dataSource: MatTableDataSource<HttpEnrolleeProfileVersion>;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
+    protected route: ActivatedRoute,
+    protected router: Router,
     private adjudicationResource: AdjudicationResource,
-    private toastService: ToastService,
-    private logger: LoggerService
   ) {
+    super(route, router);
+
     this.columns = ['name', 'createdDate', 'actions'];
   }
 
+  // TODO update to pass in route from template
   public routeTo() {
-    this.router.navigate(['../../'], { relativeTo: this.route.parent });
+    super.routeTo('../../');
   }
 
   public ngOnInit() {
     const enrolleeId = this.route.snapshot.params.id;
-    this.busy = this.adjudicationResource
-      .enrolleeProfileVersions(enrolleeId)
-      .subscribe(
-        (enrolmentProfileVersions: EnrolmentProfileVersion[]) =>
-          this.dataSource = new MatTableDataSource<EnrolmentProfileVersion>(enrolmentProfileVersions),
-        (error: any) => {
-          this.toastService.openErrorToast('Enrollee history could not be retrieved');
-          this.logger.error('[Adjudication] EnrolleeProfileHistories::ngOnInit error has occurred: ', error);
-        }
+    this.busy = this.adjudicationResource.getEnrolleeProfileVersions(enrolleeId)
+      .subscribe((enrolleeProfileVersions: HttpEnrolleeProfileVersion[]) =>
+        this.dataSource = new MatTableDataSource<HttpEnrolleeProfileVersion>(enrolleeProfileVersions)
       );
   }
 }
