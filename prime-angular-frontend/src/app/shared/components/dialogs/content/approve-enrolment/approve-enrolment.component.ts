@@ -11,7 +11,7 @@ import { MatCheckboxChange } from '@angular/material';
 export class ApproveEnrolmentComponent implements OnInit, IDialogContent {
 
   public enrolment: Enrolment;
-  @Output() output = new EventEmitter<{ output: boolean }>();
+  @Output() output = new EventEmitter<boolean>();
 
   constructor() { }
 
@@ -25,7 +25,7 @@ export class ApproveEnrolmentComponent implements OnInit, IDialogContent {
   }
 
   public onChange($event: MatCheckboxChange) {
-    this.output.emit({ output: $event.checked });
+    this.output.emit($event.checked);
   }
 
   public ngOnInit() { }
