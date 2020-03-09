@@ -34,7 +34,7 @@ namespace Prime.Controllers
 
         // GET: api/Enrollees/access-terms
         /// <summary>
-        /// Get the enrollee's Access Terms.
+        /// Get a list of the enrollee's access terms.
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}/access-terms", Name = nameof(GetAccessTerms))]
@@ -64,7 +64,7 @@ namespace Prime.Controllers
 
         // GET: api/Enrollees/5/access-terms
         /// <summary>
-        /// Get the enrollee's term of access.
+        /// Get a specific access term for an enrollee.
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="accessTermId"></param>
@@ -100,7 +100,7 @@ namespace Prime.Controllers
 
         // GET: api/Enrollees/5/access-terms/latest?signed=true
         /// <summary>
-        /// Get the enrollee's term of access.
+        /// Get the latest access term for an enrollee.
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="signed"></param>
@@ -139,7 +139,7 @@ namespace Prime.Controllers
 
         // GET: api/Enrollees/5/access-terms/3/enrolment
         /// <summary>
-        /// Get the enrolment history used for the given access term
+        /// Get the enrolment used for the given access term
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="accessTermId"></param>
