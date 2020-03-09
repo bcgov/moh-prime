@@ -7,6 +7,7 @@ import { DashboardComponent } from '@shared/components/dashboard/dashboard.compo
 
 import { SiteRoutes } from './site-registration.routes';
 import { SiteCollectionNoticeComponent } from './pages/site-collection-notice/site-collection-notice.component';
+import { VendorComponent } from './pages/vendor/vendor.component';
 
 
 
@@ -27,6 +28,11 @@ const routes: Routes = [
         path: SiteRoutes.COLLECTION_NOTICE,
         component: SiteCollectionNoticeComponent,
         data: { title: 'Site Collection Notice' }
+      },
+      {
+        path: SiteRoutes.VENDOR,
+        component: VendorComponent,
+        data: { title: 'Vendor' }
       }
     ]
   }

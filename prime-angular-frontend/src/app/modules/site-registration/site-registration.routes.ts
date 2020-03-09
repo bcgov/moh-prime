@@ -1,6 +1,7 @@
 export class SiteRoutes {
   public static SITE_REGISTRATION = 'site-registration';
   public static COLLECTION_NOTICE = 'collection-notice';
+  public static VENDOR = 'vendor';
 
   public static MODULE_PATH = SiteRoutes.SITE_REGISTRATION;
 

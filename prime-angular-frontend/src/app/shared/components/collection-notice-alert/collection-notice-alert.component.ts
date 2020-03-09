@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { SiteRoutes } from 'app/modules/site-registration/site-registration.routes';
 
 @Component({
   selector: 'app-collection-notice-alert',
@@ -11,6 +12,8 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
   styleUrls: ['./collection-notice-alert.component.scss']
 })
 export class CollectionNoticeAlertComponent implements OnInit {
+  @Input() isSite = false;
+
   public isProfileCompleted: boolean;
   public EnrolmentRoutes = EnrolmentRoutes;
 
@@ -28,7 +31,7 @@ export class CollectionNoticeAlertComponent implements OnInit {
   }
 
   public show(): boolean {
-    return this.authService.hasJustLoggedIn;
+    return this.authService.hasJustLoggedIn || this.isSite;
   }
 
   public onAccept() {
@@ -44,6 +47,8 @@ export class CollectionNoticeAlertComponent implements OnInit {
       if (this.enrolmentService.isInitialEnrolment) {
         this.router.navigate([route], { relativeTo: this.route.parent });
       }
+    } else if (currentRoutePath === SiteRoutes.COLLECTION_NOTICE) {
+      this.router.navigate([SiteRoutes.VENDOR], { relativeTo: this.route.parent });
     }
   }
 
