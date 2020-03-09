@@ -1,1 +1,181 @@
-<p>adjudication-dashboard works!</p>
+<app-page [busy]="busy"
+          mode="full">
+
+  <div class="row">
+    <div class="col">
+
+      <table mat-table
+             [dataSource]="dataSource"
+             class="w-100">
+
+        <ng-container matColumnDef="uniqueId">
+          <th mat-header-cell
+              *matHeaderCellDef> Unique Id </th>
+          <td mat-cell
+              *matCellDef="let row;"> {{ row.displayId }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell
+              *matHeaderCellDef> Enrollee Name </th>
+          <td mat-cell
+              *matCellDef="let row;"> {{ row.firstName }}, {{ row.lastName }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="approvedDate">
+          <th mat-header-cell
+              *matHeaderCellDef> Approval Date </th>
+          <td mat-cell
+              *matCellDef="let row;"> {{ row.approvedDate | formatDate | default }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="appliedDate">
+          <th mat-header-cell
+              *matHeaderCellDef> Submission Date </th>
+          <td mat-cell
+              *matCellDef="let row;"> {{ row.appliedDate | formatDate }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell
+              *matHeaderCellDef> Status </th>
+          <td mat-cell
+              *matCellDef="let row;">
+            <mat-chip-list>
+              <mat-chip>{{ row.currentStatus.status.name }}</mat-chip>
+            </mat-chip-list>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="adjudicator">
+          <th mat-header-cell
+              *matHeaderCellDef> Adjudicator </th>
+          <td mat-cell
+              *matCellDef="let row;"> {{ row.adjudicator?.firstName | default }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell
+              *matHeaderCellDef>&nbsp;</th>
+          <td mat-cell
+              *matCellDef="let row;"
+              class="text-right">
+
+            <ng-container [ngTemplateOutlet]="menu"
+                          [ngTemplateOutletContext]="{ enrollee: enrollee }"></ng-container>
+
+          </td>
+        </ng-container>
+
+        <tr mat-header-row
+            *matHeaderRowDef="columns; sticky: true"></tr>
+        <tr mat-row
+            *matRowDef="let row; columns: columns;"></tr>
+      </table>
+
+      <ng-template #menu
+                   let-enrolment="enrolment">
+        <button mat-icon-button
+                [matMenuTriggerFor]="menu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item
+                  (click)="viewEnrolmentHistory(enrolment.id)">
+            <mat-icon>history</mat-icon>
+            <span>Enrolment History</span>
+          </button>
+          <button mat-menu-item
+                  (click)="viewAccessTermsHistory(enrolment.id)">
+            <mat-icon>history</mat-icon>
+            <span>Access Terms History</span>
+          </button>
+          <button mat-menu-item
+                  *ngIf="enrolment.currentStatus.enrolmentStatusReasons.length"
+                  (click)="reviewStatusReasons(enrolment)">
+            <mat-icon>flag</mat-icon>
+            <span>Review Status Reasons</span>
+          </button>
+          <button mat-menu-item>
+            <mat-icon>rate_review</mat-icon>
+            <span>Events</span>
+          </button>
+          <button mat-menu-item>
+            <mat-icon>description</mat-icon>
+            <span>Add & View Notes</span>
+          </button>
+          <button mat-menu-item
+                  [disabled]="!canEdit"
+                  (click)="updateEnrolleeAdjudicator(enrolment)">
+            <mat-icon>pan_tool</mat-icon>
+            <span>{{ (enrolment?.adjudicatorId) ? 'Disclaim' : 'Claim' }} Enrolment</span>
+          </button>
+        </mat-menu>
+      </ng-template>
+
+    </div>
+  </div>
+
+  <ng-container *ngIf="enrolleeId">
+
+    <div class="row">
+      <div class="col">
+
+        <ng-content></ng-content>
+
+      </div>
+      <div *ngIf="hasActions"
+           class="col-auto">
+
+        <button mat-button
+                [disabled]="!enrollee"
+                [matMenuTriggerFor]="actions">Adjudicator Actions</button>
+
+        <mat-menu #actions>
+          <button mat-menu-item
+                  [disabled]="!canEdit"
+                  *ngIf="canApproveOrDeny(enrollee.currentStatus.statusCode)"
+                  (click)="approveEnrollee(enrollee)">
+            <mat-icon>check_circle_outline</mat-icon>
+            <span>Approve Enrolment</span>
+          </button>
+          <button mat-menu-item
+                  [disabled]="!canEdit"
+                  *ngIf="canApproveOrDeny(enrollee.currentStatus.statusCode)"
+                  (click)="declineEnrollee(enrollee.id)">
+            <mat-icon>block</mat-icon>
+            <span>Decline Enrolment</span>
+          </button>
+          <button mat-menu-item
+                  [disabled]="!canEdit"
+                  *ngIf="canAllowEditing(enrollee.currentStatus.statusCode)"
+                  (click)="unlockEnrollee(enrollee.id)">
+            <mat-icon>undo</mat-icon>
+            <span>Unlock for Editing</span>
+          </button>
+          <!-- <button mat-menu-item
+                [routerLink]="[enrollee.id, 'adjudicator-notes']">
+          <mat-icon>message</mat-icon>
+          <span>Add Note</span>
+        </button> -->
+          <button mat-menu-item
+                  *ngIf="isUnderReview(enrollee.currentStatus.statusCode)"
+                  [routerLink]="[enrollee.id, 'limits-conditions-clauses']">
+            <mat-icon>description</mat-icon>
+            <span>Limits and Conditions</span>
+          </button>
+          <button mat-menu-item
+                  *ngIf="canDelete"
+                  (click)="deleteEnrollee(enrollee.id)">
+            <mat-icon>delete</mat-icon>
+            <span>Delete Enrolment</span>
+          </button>
+        </mat-menu>
+
+      </div>
+    </div>
+
+  </ng-container>
+
+</app-page>

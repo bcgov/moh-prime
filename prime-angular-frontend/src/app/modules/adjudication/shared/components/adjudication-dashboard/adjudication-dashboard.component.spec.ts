@@ -1,6 +1,16 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+
+import { MockConfigService } from 'test/mocks/mock-config.service';
+import { MockAuthService } from 'test/mocks/mock-auth.service';
 
 import { AdjudicationDashboardComponent } from './adjudication-dashboard.component';
+import { AdjudicationModule } from '@adjudication/adjudication.module';
+import { SharedModule } from '@shared/shared.module';
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { ConfigService } from '@config/config.service';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 describe('AdjudicationDashboardComponent', () => {
   let component: AdjudicationDashboardComponent;
@@ -8,9 +18,27 @@ describe('AdjudicationDashboardComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AdjudicationDashboardComponent ]
-    })
-    .compileComponents();
+      imports: [
+        AdjudicationModule,
+        SharedModule,
+        RouterTestingModule,
+        HttpClientTestingModule
+      ],
+      providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        },
+        {
+          provide: ConfigService,
+          useValue: MockConfigService
+        },
+        {
+          provide: AuthService,
+          useClass: MockAuthService
+        }
+      ]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
