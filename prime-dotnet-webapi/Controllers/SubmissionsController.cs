@@ -18,17 +18,20 @@ namespace Prime.Controllers
     public class SubmissionsController : ControllerBase
     {
         private readonly ISubmissionService _submissionService;
+        private readonly IAdminService _adminService;
         private readonly IEnrolleeService _enrolleeService;
         private readonly IAccessTermService _accessTermService;
         private readonly IEnrolleeProfileVersionService _enrolleeProfileVersionService;
 
         public SubmissionsController(
             ISubmissionService submissionService,
+            IAdminService adminService,
             IEnrolleeService enrolleeService,
             IAccessTermService accessTermService,
             IEnrolleeProfileVersionService enrolleeProfileVersionService)
         {
             _submissionService = submissionService;
+            _adminService = adminService;
             _enrolleeService = enrolleeService;
             _accessTermService = accessTermService;
             _enrolleeProfileVersionService = enrolleeProfileVersionService;
@@ -62,9 +65,9 @@ namespace Prime.Controllers
                 await _submissionService.PerformSubmissionActionAsync(enrolleeId, submissionAction, User.IsAdmin());
                 return Ok(ApiResponse.Result(enrollee));
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException)
             {
-                this.ModelState.AddModelError("Enrollee.CurrentStatus", $"Action could not be performed. {ex.Message}");
+                this.ModelState.AddModelError("Enrollee.CurrentStatus", $"Action could not be performed.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
         }
@@ -109,6 +112,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}."));
             }
 
+            // TODO business event
             await _submissionService.UpdateAlwaysManualAsync(enrolleeId, alwaysManual);
 
             return NoContent();

@@ -117,13 +117,6 @@ namespace Prime.Models
                 .FirstOrDefault();
         }
 
-        [NotMapped]
-        public EnrolmentStatus PharmaNetStatus
-        {
-            get => this.EnrolmentStatuses?
-                .SingleOrDefault(es => es.PharmaNetStatus);
-        }
-
         public bool ProfileCompleted { get; set; }
 
         [NotMapped]
@@ -131,8 +124,8 @@ namespace Prime.Models
         {
             get => this.EnrolmentStatuses?
                 .OrderByDescending(en => en.StatusDate)
-                .FirstOrDefault(es => es.StatusCode == Status.UNDER_REVIEW_CODE)?
-                .StatusDate;
+                .FirstOrDefault(es => es.StatusCode == (int)EnrolmentStatusCode.UnderReview)
+                ?.StatusDate;
         }
 
         [NotMapped]
@@ -142,10 +135,10 @@ namespace Prime.Models
             {
                 return this.EnrolmentStatuses?
                     .OrderByDescending(en => en.StatusDate)
-                    .Where(es => es.StatusCode == Status.REQUIRES_TOA_CODE)
+                    .Where(es => es.StatusCode == (int)EnrolmentStatusCode.RequiresToa)
                     .Where(es => es.StatusDate > this.AppliedDate)
-                    .FirstOrDefault()?
-                    .StatusDate;
+                    .FirstOrDefault()
+                    ?.StatusDate;
             }
         }
 
@@ -185,5 +178,18 @@ namespace Prime.Models
         public ICollection<EnrolleeProfileVersion> EnrolleeProfileVersions { get; set; }
 
         public bool AlwaysManual { get; set; }
+
+        public EnrolmentStatus AddEnrolmentStatus(EnrolmentStatusCode statusCode)
+        {
+            var newStatus = EnrolmentStatus.FromStatusCode(statusCode, this.Id);
+
+            if (EnrolmentStatuses == null)
+            {
+                EnrolmentStatuses = new List<EnrolmentStatus>();
+            }
+            EnrolmentStatuses.Add(newStatus);
+
+            return newStatus;
+        }
     }
 }

@@ -6,6 +6,14 @@ using Newtonsoft.Json;
 
 namespace Prime.Models
 {
+    public enum EnrolmentStatusCode
+    {
+        Active = 1,
+        UnderReview = 2,
+        RequiresToa = 3,
+        Locked = 4,
+    }
+
     [Table("EnrolmentStatus")]
     public class EnrolmentStatus : BaseAuditable
     {
@@ -23,8 +31,6 @@ namespace Prime.Models
 
         public DateTimeOffset StatusDate { get; set; }
 
-        public bool PharmaNetStatus { get; set; }
-
         public ICollection<EnrolmentStatusReason> EnrolmentStatusReasons { get; set; }
 
         public void AddStatusReason(int reasonCode, string reasonNote = null)
@@ -40,6 +46,16 @@ namespace Prime.Models
                 StatusReasonCode = reasonCode,
                 ReasonNote = reasonNote
             });
+        }
+
+        public static EnrolmentStatus FromStatusCode(EnrolmentStatusCode statusCode, int EnrolleeId)
+        {
+            return new EnrolmentStatus
+            {
+                EnrolleeId = EnrolleeId,
+                StatusCode = (int)statusCode,
+                StatusDate = DateTimeOffset.Now
+            };
         }
     }
 }

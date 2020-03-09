@@ -10,7 +10,6 @@ namespace Prime.Models.Api
     {
         Submit,
         Approve,
-        Decline,
         [EnumMember(Value = "accept-toa")]
         AcceptToa,
         [EnumMember(Value = "decline-toa")]

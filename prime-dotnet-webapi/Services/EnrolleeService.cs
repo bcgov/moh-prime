@@ -179,20 +179,7 @@ namespace Prime.Services
                 throw new ArgumentNullException(nameof(enrollee), "Could not create an enrollee, the passed in Enrollee cannot be null.");
             }
 
-            EnrolmentStatus enrolmentStatus = new EnrolmentStatus
-            {
-                Enrollee = enrollee,
-                StatusCode = Status.ACTIVE_CODE,
-                StatusDate = DateTimeOffset.Now,
-                PharmaNetStatus = false
-            };
-
-            if (enrollee.EnrolmentStatuses == null)
-            {
-                enrollee.EnrolmentStatuses = new List<EnrolmentStatus>(0);
-            }
-
-            enrollee.EnrolmentStatuses.Add(enrolmentStatus);
+            enrollee.AddEnrolmentStatus(EnrolmentStatusCode.Active);
             _context.Enrollees.Add(enrollee);
 
             var created = await _context.SaveChangesAsync();
@@ -355,7 +342,6 @@ namespace Prime.Services
                 EnrolleeId = enrolleeId,
                 StatusCode = newStatus.Code,
                 StatusDate = DateTimeOffset.Now,
-                PharmaNetStatus = false
             };
             enrollee.EnrolmentStatuses.Add(createdEnrolmentStatus);
 
@@ -373,7 +359,6 @@ namespace Prime.Services
                             EnrolleeId = enrolleeId,
                             StatusCode = Status.REQUIRES_TOA_CODE,
                             StatusDate = DateTimeOffset.Now,
-                            PharmaNetStatus = false
                         };
                         adjudicatedEnrolmentStatus.AddStatusReason(StatusReason.AUTOMATIC_CODE);
 
@@ -403,8 +388,6 @@ namespace Prime.Services
                     break;
 
                 case Status.LOCKED_CODE:
-                    await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
-                    createdEnrolmentStatus.PharmaNetStatus = true;
                     await _businessEventService.CreateStatusChangeEventAsync(enrolleeId, "Locked", adminId);
                     break;
 
@@ -419,9 +402,7 @@ namespace Prime.Services
                     // Accepted Terms of Access
                     if (oldStatus.Code == Status.REQUIRES_TOA_CODE && acceptedAccessTerm)
                     {
-                        await SetAllPharmaNetStatusesFalseAsync(enrolleeId);
                         SetGPID(enrollee);
-                        createdEnrolmentStatus.PharmaNetStatus = true;
                         await _accessTermService.AcceptCurrentAccessTermAsync(enrollee);
                         await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrolleeId, enrollee);
                         await _businessEventService.CreateStatusChangeEventAsync(enrolleeId, "Accepted TOA", adminId);
@@ -443,24 +424,6 @@ namespace Prime.Services
             }
 
             return createdEnrolmentStatus;
-        }
-
-        private async Task SetAllPharmaNetStatusesFalseAsync(int enrolleeId)
-        {
-            var existingEnrolmentStatuses = await this.GetEnrolmentStatusesAsync(enrolleeId);
-
-            foreach (var enrolmentStatus in existingEnrolmentStatuses)
-            {
-                enrolmentStatus.PharmaNetStatus = false;
-            }
-        }
-
-        private void SetGPID(Enrollee enrollee)
-        {
-            if (string.IsNullOrWhiteSpace(enrollee.GPID))
-            {
-                enrollee.GPID = Base85.Ascii85.Encode(Guid.NewGuid().ToByteArray());
-            }
         }
 
         public bool IsStatusChangeAllowed(Status startingStatus, Status endingStatus)
