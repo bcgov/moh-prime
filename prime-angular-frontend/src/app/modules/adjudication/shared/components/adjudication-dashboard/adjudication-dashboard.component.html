@@ -155,10 +155,10 @@
             <span>Unlock for Editing</span>
           </button>
           <!-- <button mat-menu-item
-                [routerLink]="[enrollee.id, 'adjudicator-notes']">
-          <mat-icon>message</mat-icon>
-          <span>Add Note</span>
-        </button> -->
+                  [routerLink]="[enrollee.id, 'adjudicator-notes']">
+            <mat-icon>message</mat-icon>
+            <span>Add Note</span>
+          </button> -->
           <button mat-menu-item
                   *ngIf="isUnderReview(enrollee.currentStatus.statusCode)"
                   [routerLink]="[enrollee.id, 'limits-conditions-clauses']">

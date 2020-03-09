@@ -133,7 +133,7 @@ export class AdjudicationDashboardComponent extends AbstractComponent implements
               enrollee.alwaysManual = result.output;
               return this.adjudicationResource.updateEnrolleeAlwaysManual(enrollee.id, result.output);
             }
-            // TODO seems unnecessary as result isn't used
+            // TODO seems unnecessary as result isn't used could be of(null)
             return this.adjudicationResource.getEnrolleeByIdV2(enrollee.id);
           }
           return EMPTY;
