@@ -55,6 +55,7 @@ import { MarkdownComponent } from '@shared/components/dialogs/content/markdown/m
 import { PrimeSupportEmailComponent } from '@shared/components/prime-support-email/prime-support-email.component';
 import { AccessTermsTableComponent } from './components/access-terms-table/access-terms-table.component';
 import { AccessTermComponent } from './components/access-term/access-term.component';
+import { CollectionNoticeAlertComponent } from './components/collection-notice-alert/collection-notice-alert.component';
 
 @NgModule({
   declarations: [
@@ -99,7 +100,8 @@ import { AccessTermComponent } from './components/access-term/access-term.compon
     MarkdownComponent,
     PrimeSupportEmailComponent,
     AccessTermsTableComponent,
-    AccessTermComponent
+    AccessTermComponent,
+    CollectionNoticeAlertComponent
   ],
   imports: [
     CommonModule,
@@ -162,6 +164,7 @@ import { AccessTermComponent } from './components/access-term/access-term.compon
     PrimeSupportEmailComponent,
     AccessTermsTableComponent,
     AccessTermComponent,
+    CollectionNoticeAlertComponent
   ],
   entryComponents: [
     ConfirmDialogComponent,

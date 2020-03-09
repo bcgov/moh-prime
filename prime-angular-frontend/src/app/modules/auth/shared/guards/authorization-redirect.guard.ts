@@ -36,10 +36,14 @@ export class AuthorizationRedirectGuard extends BaseGuard {
       let destinationRoute = this.config.routes.denied;
 
       if (this.authService.hasEnrollee()) {
+
         destinationRoute = this.config.routes.enrolment;
+
       } else if (this.authService.hasAdminView()) {
         destinationRoute = this.config.routes.adjudication;
       }
+
+      console.log('Destination Route:', destinationRoute);
 
       // Otherwise, redirect to an appropriate destination
       this.router.navigate([destinationRoute]);

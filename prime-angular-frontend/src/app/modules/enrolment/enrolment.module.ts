@@ -30,7 +30,7 @@ import { AccessTermsComponent } from './pages/access-terms/access-terms.componen
 import { PageFooterComponent } from './shared/components/page-footer/page-footer.component';
 import { CollegeCertificationFormComponent } from './shared/components/college-certification-form/college-certification-form.component';
 import { JobFormComponent } from './shared/components/job-form/job-form.component';
-import { CollectionNoticeAlertComponent } from './shared/components/collection-notice-alert/collection-notice-alert.component';
+import { CollectionNoticeAlertComponent } from '../../shared/components/collection-notice-alert/collection-notice-alert.component';
 import { RuAccessTermsComponent } from './pages/access-agreement/components/ru-access-terms/ru-access-terms.component';
 import { OboAccessTermsComponent } from './pages/access-agreement/components/obo-access-terms/obo-access-terms.component';
 import { AccessAgreementCurrentComponent } from './pages/access-agreement-current/access-agreement-current.component';
@@ -64,7 +64,6 @@ import {
     PageFooterComponent,
     CollegeCertificationFormComponent,
     JobFormComponent,
-    CollectionNoticeAlertComponent,
     OboAccessTermsComponent,
     RuAccessTermsComponent,
     AccessAgreementCurrentComponent,
