@@ -5,6 +5,8 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { SiteRoutes } from 'app/modules/site-registration/site-registration.routes';
+import { CollectionNoticeComponent } from '@enrolment/pages/collection-notice/collection-notice.component';
+import { SiteCollectionNoticeComponent } from 'app/modules/site-registration/pages/site-collection-notice/site-collection-notice.component';
 
 @Component({
   selector: 'app-collection-notice-alert',
@@ -35,11 +37,10 @@ export class CollectionNoticeAlertComponent implements OnInit {
   }
 
   public onAccept() {
-    const currentRoutePath = this.route.snapshot.routeConfig.path;
-
+    const currentRouteComponent = this.route.routeConfig.component;
     this.authService.hasJustLoggedIn = false;
 
-    if (currentRoutePath === EnrolmentRoutes.COLLECTION_NOTICE) {
+    if (currentRouteComponent === CollectionNoticeComponent) {
       const route = (!this.isProfileCompleted)
         ? EnrolmentRoutes.DEMOGRAPHIC
         : EnrolmentRoutes.OVERVIEW;
@@ -47,7 +48,7 @@ export class CollectionNoticeAlertComponent implements OnInit {
       if (this.enrolmentService.isInitialEnrolment) {
         this.router.navigate([route], { relativeTo: this.route.parent });
       }
-    } else if (currentRoutePath === SiteRoutes.COLLECTION_NOTICE) {
+    } else if (currentRouteComponent === SiteCollectionNoticeComponent) {
       this.router.navigate([SiteRoutes.VENDOR], { relativeTo: this.route.parent });
     }
   }

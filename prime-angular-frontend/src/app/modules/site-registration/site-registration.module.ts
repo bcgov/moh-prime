@@ -8,6 +8,8 @@ import { AdministratorComponent } from './pages/administrator/administrator.comp
 import { MultipleSitesComponent } from './pages/multiple-sites/multiple-sites.component';
 import { TechnicalSupportContactComponent } from './pages/technical-support-contact/technical-support-contact.component';
 import { SiteReviewComponent } from './pages/site-review/site-review.component';
+import { SiteInformationComponent } from './pages/site-information/site-information.component';
+import { HoursOperationComponent } from './pages/hours-operation/hours-operation.component';
 
 
 
@@ -19,7 +21,9 @@ import { SiteReviewComponent } from './pages/site-review/site-review.component';
     AdministratorComponent,
     MultipleSitesComponent,
     TechnicalSupportContactComponent,
-    SiteReviewComponent
+    SiteReviewComponent,
+    SiteInformationComponent,
+    HoursOperationComponent
   ],
   imports: [
     SharedModule,

@@ -27,7 +27,7 @@ import { AccessAgreementHistoryComponent } from './pages/access-agreement-histor
 import { PharmanetTransactionsComponent } from './pages/pharmanet-transactions/pharmanet-transactions.component';
 import { AccessTermsComponent } from './pages/access-terms/access-terms.component';
 
-import { PageFooterComponent } from './shared/components/page-footer/page-footer.component';
+import { PageFooterComponent } from '../../shared/components/page-footer/page-footer.component';
 import { CollegeCertificationFormComponent } from './shared/components/college-certification-form/college-certification-form.component';
 import { JobFormComponent } from './shared/components/job-form/job-form.component';
 import { CollectionNoticeAlertComponent } from '../../shared/components/collection-notice-alert/collection-notice-alert.component';
@@ -61,7 +61,6 @@ import {
     PharmanetEnrolmentSummaryComponent,
     PharmanetTransactionsComponent,
     AccessTermsComponent,
-    PageFooterComponent,
     CollegeCertificationFormComponent,
     JobFormComponent,
     OboAccessTermsComponent,

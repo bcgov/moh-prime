@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 @Component({
   selector: 'app-site-collection-notice',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SiteCollectionNoticeComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private authService: AuthService,
+  ) { }
 
   ngOnInit() {
+    this.authService.isRegistrant = true;
   }
 
 }

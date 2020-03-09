@@ -8,6 +8,10 @@ import { DashboardComponent } from '@shared/components/dashboard/dashboard.compo
 import { SiteRoutes } from './site-registration.routes';
 import { SiteCollectionNoticeComponent } from './pages/site-collection-notice/site-collection-notice.component';
 import { VendorComponent } from './pages/vendor/vendor.component';
+import { SigningAuthorityComponent } from './pages/signing-authority/signing-authority.component';
+import { MultipleSitesComponent } from './pages/multiple-sites/multiple-sites.component';
+import { SiteInformationComponent } from './pages/site-information/site-information.component';
+import { HoursOperationComponent } from './pages/hours-operation/hours-operation.component';
 
 
 
@@ -30,9 +34,29 @@ const routes: Routes = [
         data: { title: 'Site Collection Notice' }
       },
       {
+        path: SiteRoutes.MULTIPLE_SITES,
+        component: MultipleSitesComponent,
+        data: { title: 'Multiple Sites' }
+      },
+      {
+        path: SiteRoutes.SITE_INFORMATION,
+        component: SiteInformationComponent,
+        data: { title: 'Site Information' }
+      },
+      {
+        path: SiteRoutes.HOURS_OPERATION,
+        component: HoursOperationComponent,
+        data: { title: 'Hours of Operation' }
+      },
+      {
         path: SiteRoutes.VENDOR,
         component: VendorComponent,
         data: { title: 'Vendor' }
+      },
+      {
+        path: SiteRoutes.SIGNING_AUTHORITY,
+        component: SigningAuthorityComponent,
+        data: { title: 'Signing Authority' }
       }
     ]
   }

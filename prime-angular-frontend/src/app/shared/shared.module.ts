@@ -56,6 +56,7 @@ import { PrimeSupportEmailComponent } from '@shared/components/prime-support-ema
 import { AccessTermsTableComponent } from './components/access-terms-table/access-terms-table.component';
 import { AccessTermComponent } from './components/access-term/access-term.component';
 import { CollectionNoticeAlertComponent } from './components/collection-notice-alert/collection-notice-alert.component';
+import { PageFooterComponent } from './components/page-footer/page-footer.component';
 
 @NgModule({
   declarations: [
@@ -101,7 +102,9 @@ import { CollectionNoticeAlertComponent } from './components/collection-notice-a
     PrimeSupportEmailComponent,
     AccessTermsTableComponent,
     AccessTermComponent,
-    CollectionNoticeAlertComponent
+    CollectionNoticeAlertComponent,
+    PageFooterComponent
+
   ],
   imports: [
     CommonModule,
@@ -164,7 +167,8 @@ import { CollectionNoticeAlertComponent } from './components/collection-notice-a
     PrimeSupportEmailComponent,
     AccessTermsTableComponent,
     AccessTermComponent,
-    CollectionNoticeAlertComponent
+    CollectionNoticeAlertComponent,
+    PageFooterComponent
   ],
   entryComponents: [
     ConfirmDialogComponent,

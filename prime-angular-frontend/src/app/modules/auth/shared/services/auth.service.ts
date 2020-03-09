@@ -26,6 +26,7 @@ export class AuthService implements IAuthService {
   // Login event state for performing operations
   // required immediately after authentication
   private hasJustLoggedInState: boolean;
+  private isRegistrantState: boolean;
 
   constructor(
     private keycloakTokenService: KeycloakTokenService,
@@ -83,6 +84,14 @@ export class AuthService implements IAuthService {
 
   public hasAdminView(): boolean {
     return this.keycloakTokenService.isUserInRole(Role.READONLY_ADMIN);
+  }
+
+  public set isRegistrant(isRegistrant: boolean) {
+    this.isRegistrantState = isRegistrant;
+  }
+
+  public get isRegistrant(): boolean {
+    return this.isRegistrantState;
   }
 
 }

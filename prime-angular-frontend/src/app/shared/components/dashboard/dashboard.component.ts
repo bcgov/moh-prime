@@ -116,6 +116,13 @@ export class DashboardComponent implements OnInit {
   }
 
   private getSideNavSections(): DashboardNavSection[] {
+    if (this.authService.hasAdminView()) {
+      return this.getAdjudicationSideNavSections();
+    } else if (this.authService.isRegistrant) {
+      return this.getRegistrantSideNavSections();
+    } else {
+      return this.getEnrolleeSideNavSections();
+    }
     return (this.authService.hasAdminView())
       ? this.getAdjudicationSideNavSections()
       : this.getEnrolleeSideNavSections();
@@ -283,6 +290,23 @@ export class DashboardComponent implements OnInit {
         items: [
           {
             name: 'Enrolments',
+            icon: 'format_list_bulleted',
+            route: AdjudicationRoutes.ENROLMENTS,
+            showItem: true
+          }
+        ]
+      }
+    ];
+  }
+
+  private getRegistrantSideNavSections(): DashboardNavSection[] {
+    return [
+      {
+        header: 'Site Registration',
+        showHeader: false,
+        items: [
+          {
+            name: 'Site Registration',
             icon: 'format_list_bulleted',
             route: AdjudicationRoutes.ENROLMENTS,
             showItem: true
