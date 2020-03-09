@@ -1,18 +1,41 @@
-apiVersion: batch/v1beta1
-kind: CronJob
-metadata:
-  name: pi
-spec:
-  schedule: "*/5 * * * *"  
-  jobTemplate:             
+---
+  apiVersion: v1 
+  kind: Template
+  metadata:
+    creationTimestamp: null
+    generation: 1
+    labels:
+      provider: openshift
+      backup-pod-host: "true"
+      component: backup-pod
+    name: backup-pod 
+  objects:
+  - apiVersion: batch/v1beta1
+    kind: CronJob
+    metadata:
+      name: backup
     spec:
-      template:
-        metadata:
-          labels:          
-            parent: "cronjobpi"
+      schedule: "*/5 * * * *"  
+      jobTemplate:             
         spec:
-          containers:
-          - name: backup
-            image: backup
-            command: ["/opt/backup/backup.sh"]
-          restartPolicy: OnFailure 
+          template:
+            metadata:
+              labels:          
+                parent: "cronjobbackup"
+            spec:
+              containers:
+              - name: backup
+                image: "${NAMESPACE}/backup:latest"
+                command: ["/opt/backup.sh"]
+                volumeMounts:
+                - mountPath: /opt/backup
+                  name: backup-data
+              volumes:
+              - name: backup-data
+                persistentVolumeClaim:
+                  claimName: backup-data
+              restartPolicy: OnFailure 
+  parameters:
+  - description: Project name
+    name: NAMESPACE
+    value: dqszvc-test
