@@ -71,4 +71,3 @@ function hourlyAction() {
 
 dailyAction &disown
 hourlyAction &disown
-tail -F ${logfile}
