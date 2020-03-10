@@ -42,7 +42,6 @@ namespace Prime.Controllers
         /// Performs a submission-related action on an Enrolle, such as submitting their profile for adjudication.
         /// </summary>
         [HttpPost("{enrolleeId}/{submissionAction:submissionAction}", Name = nameof(SubmissionAction))]
-        [AllowAnonymous]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -55,14 +54,15 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}."));
             }
-            // if (!User.CanEdit(enrollee))
-            // {
-            //     return Forbid();
-            // }
+            if (!User.CanEdit(enrollee))
+            {
+                return Forbid();
+            }
 
             try
             {
                 await _submissionService.PerformSubmissionActionAsync(enrolleeId, submissionAction, User.IsAdmin());
+                enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
                 return Ok(ApiResponse.Result(enrollee));
             }
             catch (InvalidOperationException)

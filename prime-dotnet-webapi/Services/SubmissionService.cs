@@ -1,32 +1,13 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Appccelerate.StateMachine;
+using Appccelerate.StateMachine.AsyncMachine;
+using SimpleBase;
+
 using Prime.Models;
 using Prime.Models.Api;
-
-
-using Appccelerate.StateMachine;
-using Appccelerate.StateMachine.Infrastructure;
-using Appccelerate.StateMachine.Persistence;
-// using Appccelerate.StateMachine.Machine;
-using Appccelerate.StateMachine.AsyncMachine;
-using Appccelerate.StateMachine.Machine.Events;
-using Appccelerate.StateMachine.Machine.States;
-using Appccelerate.StateMachine.Machine.Transitions;
-using Appccelerate.StateMachine.Syntax;
-using Appccelerate.StateMachine.AsyncSyntax;
-using Appccelerate.StateMachine.Extensions;
-
-using System.Runtime.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Bson;
-using Newtonsoft.Json.Schema;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
-using SimpleBase;
 
 namespace Prime.Services
 {
@@ -36,6 +17,7 @@ namespace Prime.Services
         private readonly IAutomaticAdjudicationService _automaticAdjudicationService;
         private readonly IBusinessEventService _businessEventService;
         private readonly IEmailService _emailService;
+        private readonly IEnrolleeService _enrolleeService;
         private readonly IEnrolleeProfileVersionService _enroleeProfileVersionService;
         private readonly IPrivilegeService _privilegeService;
 
@@ -44,6 +26,7 @@ namespace Prime.Services
             IAutomaticAdjudicationService automaticAdjudicationService,
             IBusinessEventService businessEventService,
             IEmailService emailService,
+            IEnrolleeService enrolleeService,
             IEnrolleeProfileVersionService enrolleeProfileVersionService,
             IPrivilegeService privilegeService)
             : base(context, httpContext)
@@ -52,6 +35,7 @@ namespace Prime.Services
             _automaticAdjudicationService = automaticAdjudicationService;
             _businessEventService = businessEventService;
             _emailService = emailService;
+            _enrolleeService = enrolleeService;
             _enroleeProfileVersionService = enrolleeProfileVersionService;
             _privilegeService = privilegeService;
         }
@@ -76,13 +60,7 @@ namespace Prime.Services
                     .ThenInclude(l => l.License)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
-            var stateMachine = new SubmissionStateMachine(enrollee.CurrentStatus);
-            stateMachine.Submit += async (sender, e) => { await SubmitApplicationAsync(enrollee); };
-            stateMachine.Approve += async (sender, e) => { await ApproveApplicationAsync(enrollee); };
-            stateMachine.AcceptToa += async (sender, e) => { await ProccessToaAsync(enrollee, true); };
-            stateMachine.DeclineToa += async (sender, e) => { await ProccessToaAsync(enrollee, false); };
-            stateMachine.EnableEditing += async (sender, e) => { await EnableEditingAsync(enrollee); };
-            stateMachine.LockProfile += async (sender, e) => { await LockProfileAsync(enrollee); };
+            var stateMachine = new SubmissionStateMachine(enrollee, this);
 
             await stateMachine.PerformAction(action, isAdmin);
         }
@@ -96,9 +74,9 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        private async Task SubmitApplicationAsync(Enrollee enrollee)
+        private async Task SubmitApplication(Enrollee enrollee)
         {
-            enrollee.AddEnrolmentStatus(EnrolmentStatusCode.UnderReview);
+            enrollee.AddEnrolmentStatus(EnrolmentStatusType.UnderReview);
 
             await _enroleeProfileVersionService.CreateEnrolleeProfileVersionAsync(enrollee);
 
@@ -109,52 +87,62 @@ namespace Prime.Services
 
                 await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee);
 
-                //await _businessEventService.CreateStatusChangeEventAsync(enrolleeId, "Automatically Approved", adminId);
+                await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Automatically Approved");
             }
             else
             {
-                //await _businessEventService.CreateStatusChangeEventAsync(enrolleeId, "Submitted", adminId);
+                await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Submitted");
             }
+
+            await _context.SaveChangesAsync();
         }
+
         private async Task ApproveApplicationAsync(Enrollee enrollee)
         {
-            var newStatus = enrollee.AddEnrolmentStatus(EnrolmentStatusCode.Active);
+            var newStatus = enrollee.AddEnrolmentStatus(EnrolmentStatusType.Active);
             newStatus.AddStatusReason(StatusReason.MANUAL_CODE);
 
             await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee);
 
-            //await _businessEventService.CreateStatusChangeEventAsync(enrolleeId, "Manually Approved", adminId);
+            await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Manually Approved");
+            await _context.SaveChangesAsync();
+            await _emailService.SendReminderEmailAsync(enrollee);
+            await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Email to Enrollee after leaving manual adjudication");
         }
 
         private async Task ProccessToaAsync(Enrollee enrollee, bool accept)
         {
-            enrollee.AddEnrolmentStatus(EnrolmentStatusCode.Active);
+            enrollee.AddEnrolmentStatus(EnrolmentStatusType.Active);
 
             if (accept)
             {
                 SetGPID(enrollee);
                 await _accessTermService.AcceptCurrentAccessTermAsync(enrollee);
-                await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrolleeId, enrollee);
-                await _businessEventService.CreateStatusChangeEventAsync(enrolleeId, "Accepted TOA", adminId);
-                await UpdateEnrolleeAdjudicator(enrollee.Id);
-                await _businessEventService.CreateAdminClaimEventAsync(enrolleeId, "Admin disclaimed after TOA accepted");
+                await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrollee.Id, enrollee);
+                await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Accepted TOA");
+                await _enrolleeService.UpdateEnrolleeAdjudicator(enrollee.Id);
+                await _businessEventService.CreateAdminClaimEventAsync(enrollee.Id, "Admin disclaimed after TOA accepted");
             }
+            await _context.SaveChangesAsync();
+
         }
 
         private async Task EnableEditingAsync(Enrollee enrollee)
         {
-            enrollee.AddEnrolmentStatus(EnrolmentStatusCode.Active);
-            // TODO
-            //await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Enabled Editing", adminId);
+            enrollee.AddEnrolmentStatus(EnrolmentStatusType.Active);
+            await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Enabled Editing");
             await _context.SaveChangesAsync();
+            await _emailService.SendReminderEmailAsync(enrollee);
+            await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Email to Enrollee after leaving manual adjudication");
         }
 
         private async Task LockProfileAsync(Enrollee enrollee)
         {
-            enrollee.AddEnrolmentStatus(EnrolmentStatusCode.Locked);
-            // TODO
-            //await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Locked", adminId);
+            enrollee.AddEnrolmentStatus(EnrolmentStatusType.Locked);
+            await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Locked");
             await _context.SaveChangesAsync();
+            await _emailService.SendReminderEmailAsync(enrollee);
+            await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Email to Enrollee after leaving manual adjudication");
         }
 
         private void SetGPID(Enrollee enrollee)
@@ -167,19 +155,24 @@ namespace Prime.Services
 
         private class SubmissionStateMachine
         {
+            private readonly Enrollee _enrollee;
             private readonly AsyncPassiveStateMachine<EnrolleeState, SubmissionAction> _machine;
+            private readonly SubmissionService _submissionService;
 
-            public event EventHandler Submit;
-            public event EventHandler Approve;
-            public event EventHandler AcceptToa;
-            public event EventHandler DeclineToa;
-            public event EventHandler EnableEditing;
-            public event EventHandler LockProfile;
+            private async Task HandleSubmit() { await _submissionService.SubmitApplication(_enrollee); }
+            private async Task HandleApprove() { await _submissionService.ApproveApplicationAsync(_enrollee); }
+            private async Task HandleAcceptToa() { await _submissionService.ProccessToaAsync(_enrollee, true); }
+            private async Task HandleDeclineToa() { await _submissionService.ProccessToaAsync(_enrollee, false); }
+            private async Task HandleEnableEditing() { await _submissionService.EnableEditingAsync(_enrollee); }
+            private async Task HandleLockProfile() { await _submissionService.LockProfileAsync(_enrollee); }
 
-            public SubmissionStateMachine(EnrolmentStatus initialStatus)
+            public SubmissionStateMachine(Enrollee enrollee, SubmissionService submissionService)
             {
+                _enrollee = enrollee;
+                _submissionService = submissionService;
+
                 var stateMachineBuilder = InitBuilder();
-                stateMachineBuilder.WithInitialState(FromEnrolmentStatus(initialStatus));
+                stateMachineBuilder.WithInitialState(FromEnrollee(enrollee));
 
                 _machine = stateMachineBuilder.Build().CreatePassiveStateMachine();
                 _machine.TransitionDeclined += (sender, e) => { throw new InvalidOperationException(); };
@@ -225,32 +218,25 @@ namespace Prime.Services
                 return builder;
             }
 
-            private void HandleSubmit() { Submit(this, null); }
-            private void HandleApprove() { Approve(this, null); }
-            private void HandleAcceptToa() { AcceptToa(this, null); }
-            private void HandleDeclineToa() { DeclineToa(this, null); }
-            private void HandleEnableEditing() { EnableEditing(this, null); }
-            private void HandleLockProfile() { LockProfile(this, null); }
-
-            private static EnrolleeState FromEnrolmentStatus(EnrolmentStatus status)
+            private static EnrolleeState FromEnrollee(Enrollee enrollee)
             {
-                if (status == null)
+                if (enrollee == null || enrollee.CurrentStatus == null)
                 {
-                    throw new ArgumentNullException(nameof(status));
+                    throw new ArgumentNullException(nameof(enrollee));
                 }
 
-                switch (status.StatusCode)
+                switch (enrollee.CurrentStatus.StatusCode)
                 {
-                    case (int)EnrolmentStatusCode.Active:
+                    case (int)EnrolmentStatusType.Active:
                         return EnrolleeState.Active;
-                    case (int)EnrolmentStatusCode.UnderReview:
+                    case (int)EnrolmentStatusType.UnderReview:
                         return EnrolleeState.UnderReview;
-                    case (int)EnrolmentStatusCode.RequiresToa:
+                    case (int)EnrolmentStatusType.RequiresToa:
                         return EnrolleeState.RequiresToa;
-                    case (int)EnrolmentStatusCode.Locked:
+                    case (int)EnrolmentStatusType.Locked:
                         return EnrolleeState.Locked;
                     default:
-                        throw new ArgumentException($"State machine cannot recognize status code {status.StatusCode}");
+                        throw new ArgumentException($"State machine cannot recognize status code {enrollee.CurrentStatus.StatusCode}");
                 }
             }
         }
