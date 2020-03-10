@@ -282,7 +282,7 @@ namespace Prime.Controllers
             }
 
             var admin = await _adminService.GetAdminForUserIdAsync(User.GetPrimeUserId());
-            var createdAdjudicatorNote = await _enrolleeService.CreateEnrolleeAdjudicatorNoteAsync(enrolleeId, note, admin.Id);
+            var createdAdjudicatorNote = await _enrolleeService.CreateEnrolleeAdjudicatorNoteAsync(enrolleeId, note);
 
             return CreatedAtAction(
                 nameof(GetAdjudicatorNotes),
@@ -326,7 +326,7 @@ namespace Prime.Controllers
             }
 
             var admin = await _adminService.GetAdminForUserIdAsync(User.GetPrimeUserId());
-            var updatedNote = await _enrolleeService.UpdateEnrolleeNoteAsync(enrolleeId, accessAgreementNote, admin.Id);
+            var updatedNote = await _enrolleeService.UpdateEnrolleeNoteAsync(enrolleeId, accessAgreementNote);
 
             return Ok(ApiResponse.Result(updatedNote));
         }
