@@ -10,5 +10,7 @@ namespace Prime.Services
     public interface ILookupService
     {
         Task<LookupEntity> GetLookupsAsync();
+
+        Task<List<T>> GetLookupsAsync<TKey, T>(params Expression<Func<T, object>>[] includes) where T : class, ILookup<TKey>;
     }
 }

@@ -22,5 +22,18 @@ namespace PrimeTests.Mocks
         {
             return Task.FromResult(new LookupEntity());
         }
+
+        Task<List<T>> ILookupService.GetLookupsAsync<TKey, T>(params Expression<Func<T, object>>[] includes)
+        {
+            var type = typeof(T);
+            var holder = this.GetHolder<int, T>();
+            var results = new List<T>();
+            foreach (var value in holder.Values.ToList())
+            {
+                results.Add((T)value);
+            }
+
+            return Task.FromResult(results);
+        }
     }
 }
