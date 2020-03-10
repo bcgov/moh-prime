@@ -12,6 +12,10 @@ import { SigningAuthorityComponent } from './pages/signing-authority/signing-aut
 import { MultipleSitesComponent } from './pages/multiple-sites/multiple-sites.component';
 import { SiteInformationComponent } from './pages/site-information/site-information.component';
 import { HoursOperationComponent } from './pages/hours-operation/hours-operation.component';
+import { AdministratorComponent } from './pages/administrator/administrator.component';
+import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer.component';
+import { TechnicalSupportContactComponent } from './pages/technical-support-contact/technical-support-contact.component';
+import { SiteReviewComponent } from './pages/site-review/site-review.component';
 
 
 
@@ -57,6 +61,26 @@ const routes: Routes = [
         path: SiteRoutes.SIGNING_AUTHORITY,
         component: SigningAuthorityComponent,
         data: { title: 'Signing Authority' }
+      },
+      {
+        path: SiteRoutes.ADMINISTRATOR,
+        component: AdministratorComponent,
+        data: { title: 'Administrator of PharmaNet' }
+      },
+      {
+        path: SiteRoutes.PRIVACY_OFFICER,
+        component: PrivacyOfficerComponent,
+        data: { title: 'Privacy Officer' }
+      },
+      {
+        path: SiteRoutes.TECHNICAL_SUPPORT_CONTACT,
+        component: TechnicalSupportContactComponent,
+        data: { title: 'Technical Support Contact' }
+      },
+      {
+        path: SiteRoutes.SITE_REVIEW,
+        component: SiteReviewComponent,
+        data: { title: 'Site Registration Review' }
       }
     ]
   }

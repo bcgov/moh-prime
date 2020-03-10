@@ -10,6 +10,7 @@ import { TechnicalSupportContactComponent } from './pages/technical-support-cont
 import { SiteReviewComponent } from './pages/site-review/site-review.component';
 import { SiteInformationComponent } from './pages/site-information/site-information.component';
 import { HoursOperationComponent } from './pages/hours-operation/hours-operation.component';
+import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer.component';
 
 
 
@@ -23,7 +24,8 @@ import { HoursOperationComponent } from './pages/hours-operation/hours-operation
     TechnicalSupportContactComponent,
     SiteReviewComponent,
     SiteInformationComponent,
-    HoursOperationComponent
+    HoursOperationComponent,
+    PrivacyOfficerComponent
   ],
   imports: [
     SharedModule,
