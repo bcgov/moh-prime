@@ -11,74 +11,74 @@ namespace PrimeTests.Services
         {
             // College Lookups
             {
-                var results = await _service.GetLookupsAsync<int, College>();
+                var results = await _service.GetLookupsAsync();
                 Assert.NotNull(results);
-                Assert.NotEmpty(results);
-                Assert.Equal(4, results.Count);
+                Assert.NotEmpty(results.Colleges);
+                Assert.Equal(4, results.Colleges.Count);
             }
 
             // JobName Lookups
             {
-                var results = await _service.GetLookupsAsync<int, JobName>();
+                var results = await _service.GetLookupsAsync();
                 Assert.NotNull(results);
-                Assert.NotEmpty(results);
-                Assert.Equal(4, results.Count);
+                Assert.NotEmpty(results.JobNames);
+                Assert.Equal(4, results.JobNames.Count);
             }
 
             // License Lookups
             {
-                var results = await _service.GetLookupsAsync<int, License>();
+                var results = await _service.GetLookupsAsync();
                 Assert.NotNull(results);
-                Assert.NotEmpty(results);
-                Assert.Equal(5, results.Count);
+                Assert.NotEmpty(results.Licenses);
+                Assert.Equal(5, results.Licenses.Count);
             }
 
             // OrganizationType Lookups
             {
-                var results = await _service.GetLookupsAsync<int, OrganizationType>();
+                var results = await _service.GetLookupsAsync();
                 Assert.NotNull(results);
-                Assert.NotEmpty(results);
-                Assert.Equal(2, results.Count);
+                Assert.NotEmpty(results.OrganizationTypes);
+                Assert.Equal(2, results.OrganizationTypes.Count);
             }
 
             // Practice Lookups
             {
-                var results = await _service.GetLookupsAsync<int, Practice>();
+                var results = await _service.GetLookupsAsync();
                 Assert.NotNull(results);
-                Assert.NotEmpty(results);
-                Assert.Equal(4, results.Count);
+                Assert.NotEmpty(results.Practices);
+                Assert.Equal(4, results.Practices.Count);
             }
 
             // Status Lookups
             {
-                var results = await _service.GetLookupsAsync<int, Status>();
+                var results = await _service.GetLookupsAsync();
                 Assert.NotNull(results);
-                Assert.NotEmpty(results);
-                Assert.Equal(4, results.Count);
+                Assert.NotEmpty(results.Statuses);
+                Assert.Equal(4, results.Statuses.Count);
             }
 
             // Country Lookups
             {
-                var results = await _service.GetLookupsAsync<string, Country>();
+                var results = await _service.GetLookupsAsync();
                 Assert.NotNull(results);
-                Assert.NotEmpty(results);
-                Assert.Single(results);
+                Assert.NotEmpty(results.Countries);
+                Assert.Equal(1, results.Statuses.Count);
             }
 
             // Province Lookups
             {
-                var results = await _service.GetLookupsAsync<string, Province>();
+                var results = await _service.GetLookupsAsync();
                 Assert.NotNull(results);
-                Assert.NotEmpty(results);
-                Assert.Equal(13, results.Count);
+                Assert.NotEmpty(results.Provinces);
+                Assert.Equal(13, results.Provinces.Count);
             }
 
             // Status Reason Lookups
             {
-                var results = await _service.GetLookupsAsync<int, StatusReason>();
+                var results = await _service.GetLookupsAsync();
                 Assert.NotNull(results);
-                Assert.NotEmpty(results);
-                Assert.Equal(11, results.Count);
+                Assert.NotEmpty(results.StatusReasons);
+                Assert.Equal(11, results.StatusReasons.Count);
             }
         }
     }
