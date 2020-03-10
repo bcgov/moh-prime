@@ -62,7 +62,7 @@ namespace PrimeTests.Services
                 var results = await _service.GetLookupsAsync();
                 Assert.NotNull(results);
                 Assert.NotEmpty(results.Countries);
-                Assert.Equal(1, results.Statuses.Count);
+                Assert.Single(results.Statuses);
             }
 
             // Province Lookups
