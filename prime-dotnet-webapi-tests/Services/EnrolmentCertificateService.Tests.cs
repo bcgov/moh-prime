@@ -52,13 +52,15 @@ namespace PrimeTests.Services
         public async void testExpiryDate()
         {
             TimeSpan tokenLifespan = TimeSpan.FromDays(7);
+            TimeSpan tolerance = TimeSpan.FromSeconds(1);
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
 
             EnrolmentCertificateAccessToken token = await _service.CreateCertificateAccessTokenAsync(enrollee);
             Assert.NotNull(token);
-            Assert.Equal(DateTime.Today.Add(tokenLifespan), token.Expires);
+            // Assert that the difference between the computed and actual expiry date is less than some tolerance.
+            Assert.True((DateTimeOffset.Now.Add(tokenLifespan) - token.Expires).Duration() < tolerance);
 
-            token.Expires = DateTime.Today.AddDays(-1);
+            token.Expires = DateTimeOffset.Now.AddHours(-1);
             Assert.Null(await _service.GetEnrolmentCertificateAsync(token.Id));
         }
     }

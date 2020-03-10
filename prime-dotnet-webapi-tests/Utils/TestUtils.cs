@@ -453,6 +453,7 @@ namespace PrimeTests.Utils
                  .ForAudience(audience)
                  .ForSubject(subject.ToString())
                  .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_ADMIN_ROLE)
+                 .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_READONLY_ADMIN)
                  .BuildToken();
 
             request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);
