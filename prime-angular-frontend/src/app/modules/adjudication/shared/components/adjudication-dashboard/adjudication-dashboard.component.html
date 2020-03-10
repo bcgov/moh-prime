@@ -1,6 +1,8 @@
 <app-page [busy]="busy"
           mode="full">
 
+  <ng-content select="app-page-header"></ng-content>
+
   <div class="row">
     <div class="col">
 
@@ -8,6 +10,7 @@
              [dataSource]="dataSource"
              class="w-100">
 
+        <!-- Unique Id Column -->
         <ng-container matColumnDef="uniqueId">
           <th mat-header-cell
               *matHeaderCellDef> Unique Id </th>
@@ -15,6 +18,7 @@
               *matCellDef="let row;"> {{ row.displayId }} </td>
         </ng-container>
 
+        <!-- Name Column -->
         <ng-container matColumnDef="name">
           <th mat-header-cell
               *matHeaderCellDef> Enrollee Name </th>
@@ -22,6 +26,7 @@
               *matCellDef="let row;"> {{ row.firstName }}, {{ row.lastName }} </td>
         </ng-container>
 
+        <!-- Approved Date Column -->
         <ng-container matColumnDef="approvedDate">
           <th mat-header-cell
               *matHeaderCellDef> Approval Date </th>
@@ -29,6 +34,7 @@
               *matCellDef="let row;"> {{ row.approvedDate | formatDate | default }} </td>
         </ng-container>
 
+        <!-- Applied Date Column -->
         <ng-container matColumnDef="appliedDate">
           <th mat-header-cell
               *matHeaderCellDef> Submission Date </th>
@@ -36,6 +42,7 @@
               *matCellDef="let row;"> {{ row.appliedDate | formatDate }} </td>
         </ng-container>
 
+        <!-- Status Column -->
         <ng-container matColumnDef="status">
           <th mat-header-cell
               *matHeaderCellDef> Status </th>
@@ -47,6 +54,7 @@
           </td>
         </ng-container>
 
+        <!-- Adjudicator Column -->
         <ng-container matColumnDef="adjudicator">
           <th mat-header-cell
               *matHeaderCellDef> Adjudicator </th>
@@ -54,6 +62,7 @@
               *matCellDef="let row;"> {{ row.adjudicator?.firstName | default }} </td>
         </ng-container>
 
+        <!-- Actions Column -->
         <ng-container matColumnDef="actions">
           <th mat-header-cell
               *matHeaderCellDef>&nbsp;</th>
@@ -62,7 +71,7 @@
               class="text-right">
 
             <ng-container [ngTemplateOutlet]="menu"
-                          [ngTemplateOutletContext]="{ enrollee: enrollee }"></ng-container>
+                          [ngTemplateOutletContext]="{ row: row }"></ng-container>
 
           </td>
         </ng-container>
@@ -73,8 +82,13 @@
             *matRowDef="let row; columns: columns;"></tr>
       </table>
 
+      <p *ngIf="!dataSource?.data.length"
+         class="px-4 py-2 text-muted">
+        No {{ filteredStatus?.name }} Enrolments
+      </p>
+
       <ng-template #menu
-                   let-enrolment="enrolment">
+                   let-row="row">
         <button mat-icon-button
                 [matMenuTriggerFor]="menu">
           <mat-icon>more_vert</mat-icon>
@@ -82,18 +96,18 @@
 
         <mat-menu #menu="matMenu">
           <button mat-menu-item
-                  (click)="viewEnrolmentHistory(enrolment.id)">
+                  (click)="viewEnrolmentHistory(row.id)">
             <mat-icon>history</mat-icon>
             <span>Enrolment History</span>
           </button>
           <button mat-menu-item
-                  (click)="viewAccessTermsHistory(enrolment.id)">
+                  (click)="viewAccessTermsHistory(row.id)">
             <mat-icon>history</mat-icon>
             <span>Access Terms History</span>
           </button>
           <button mat-menu-item
-                  *ngIf="enrolment.currentStatus.enrolmentStatusReasons.length"
-                  (click)="reviewStatusReasons(enrolment)">
+                  *ngIf="row.currentStatus.enrolmentStatusReasons.length"
+                  (click)="reviewStatusReasons(row)">
             <mat-icon>flag</mat-icon>
             <span>Review Status Reasons</span>
           </button>
@@ -107,9 +121,9 @@
           </button>
           <button mat-menu-item
                   [disabled]="!canEdit"
-                  (click)="updateEnrolleeAdjudicator(enrolment)">
+                  (click)="updateEnrolleeAdjudicator(row)">
             <mat-icon>pan_tool</mat-icon>
-            <span>{{ (enrolment?.adjudicatorId) ? 'Disclaim' : 'Claim' }} Enrolment</span>
+            <span>{{ (row?.adjudicatorId) ? 'Disclaim' : 'Claim' }} Enrolment</span>
           </button>
         </mat-menu>
       </ng-template>
@@ -129,7 +143,7 @@
            class="col-auto">
 
         <button mat-button
-                [disabled]="!enrollee"
+                [disabled]="!dataSource?.data"
                 [matMenuTriggerFor]="actions">Adjudicator Actions</button>
 
         <mat-menu #actions>

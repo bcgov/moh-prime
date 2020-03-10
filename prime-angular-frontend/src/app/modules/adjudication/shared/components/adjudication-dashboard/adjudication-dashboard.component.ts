@@ -59,6 +59,7 @@ export class AdjudicationDashboardComponent extends AbstractComponent implements
     this.hasActions = true;
     this.enrolleeId = this.route.snapshot.params.id || null;
     this.statuses = this.configService.statuses;
+    this.columns = ['uniqueId', 'name', 'appliedDate', 'status', 'approvedDate', 'adjudicator', 'actions'];
     this.filteredStatus = null;
     this.textSearch = null;
   }
