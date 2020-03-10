@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using SimpleBase;
 using Prime.Models;
 using Prime.ViewModels;
 using Prime.Models.Api;
