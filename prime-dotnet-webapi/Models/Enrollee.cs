@@ -145,8 +145,7 @@ namespace Prime.Models
         [NotMapped]
         public DateTimeOffset? ExpiryDate
         {
-            // This applies to the expiry date of the most recent accepted
-            // ToA
+            // This applies to the expiry date of the most recent accepted ToA
             get => this.AccessTerms?
                 .OrderByDescending(at => at.AcceptedDate)
                 .FirstOrDefault(at => at.ExpiryDate != null)?
