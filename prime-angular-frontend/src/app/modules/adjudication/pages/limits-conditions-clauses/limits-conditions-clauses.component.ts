@@ -75,7 +75,7 @@ export class LimitsConditionsClausesComponent implements OnInit {
   }
 
   private getEnrollee(enrolleeId: number, statusCode?: number) {
-    this.busy = this.adjudicationResource.getEnrolleeByIdV2(enrolleeId, statusCode)
+    this.busy = this.adjudicationResource.getEnrolleeById(enrolleeId, statusCode)
       .subscribe((enrollee: HttpEnrollee) => {
         this.enrollee = enrollee;
         if (enrollee.accessAgreementNote) {

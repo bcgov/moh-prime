@@ -44,7 +44,7 @@ export class AdjudicationResource {
       );
   }
 
-  public getEnrolleeByIdV2(enrolleeId: number, statusCode?: number): Observable<HttpEnrollee> {
+  public getEnrolleeById(enrolleeId: number, statusCode?: number): Observable<HttpEnrollee> {
     const params = this.apiResourceUtilsService.makeHttpParams({ statusCode });
     return this.apiResource.get<HttpEnrollee>(`enrollees/${enrolleeId}`, params)
       .pipe(

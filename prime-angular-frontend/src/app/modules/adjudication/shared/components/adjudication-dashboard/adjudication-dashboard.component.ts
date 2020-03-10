@@ -134,14 +134,14 @@ export class AdjudicationDashboardComponent extends AbstractComponent implements
               return this.adjudicationResource.updateEnrolleeAlwaysManual(enrollee.id, result.output);
             }
             // TODO seems unnecessary as result isn't used could be of(null)
-            return this.adjudicationResource.getEnrolleeByIdV2(enrollee.id);
+            return this.adjudicationResource.getEnrolleeById(enrollee.id);
           }
           return EMPTY;
         }),
         exhaustMap(() =>
           this.adjudicationResource.createEnrolmentStatus(enrollee.id, EnrolmentStatus.REQUIRES_TOA)
         ),
-        exhaustMap(() => this.adjudicationResource.getEnrolleeByIdV2(enrollee.id))
+        exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrollee.id))
       )
       .subscribe((approvedEnrollee: HttpEnrollee) => {
         this.toastService.openSuccessToast('Enrolment has been approved');
@@ -165,7 +165,7 @@ export class AdjudicationDashboardComponent extends AbstractComponent implements
             ? this.adjudicationResource.createEnrolmentStatus(id, EnrolmentStatus.LOCKED)
             : EMPTY
         ),
-        exhaustMap(() => this.adjudicationResource.getEnrolleeByIdV2(id)),
+        exhaustMap(() => this.adjudicationResource.getEnrolleeById(id)),
       )
       .subscribe((enrollee: HttpEnrollee) => {
         this.toastService.openSuccessToast('Enrolment has been locked');
@@ -189,7 +189,7 @@ export class AdjudicationDashboardComponent extends AbstractComponent implements
             ? this.adjudicationResource.createEnrolmentStatus(id, EnrolmentStatus.ACTIVE)
             : EMPTY
         ),
-        exhaustMap(() => this.adjudicationResource.getEnrolleeByIdV2(id))
+        exhaustMap(() => this.adjudicationResource.getEnrolleeById(id))
       )
       .subscribe((enrollee: HttpEnrollee) => this.updateEnrolment(enrollee));
   }
@@ -254,7 +254,7 @@ export class AdjudicationDashboardComponent extends AbstractComponent implements
   // TODO set up request observable, and merge/pipe in search and filter results
   private getEnrollees(): Observable<HttpEnrollee[]> {
     const results$ = (this.enrolleeId)
-      ? this.adjudicationResource.getEnrolleeByIdV2(this.enrolleeId)
+      ? this.adjudicationResource.getEnrolleeById(this.enrolleeId)
         .pipe(
           map((enrollee: HttpEnrollee) => [this.enrollee = enrollee])
         )
