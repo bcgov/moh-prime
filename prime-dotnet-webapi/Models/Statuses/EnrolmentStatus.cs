@@ -6,14 +6,6 @@ using Newtonsoft.Json;
 
 namespace Prime.Models
 {
-    public enum EnrolmentStatusCode
-    {
-        Active = 1,
-        UnderReview = 2,
-        RequiresToa = 3,
-        Locked = 4,
-    }
-
     [Table("EnrolmentStatus")]
     public class EnrolmentStatus : BaseAuditable
     {
@@ -48,12 +40,17 @@ namespace Prime.Models
             });
         }
 
-        public static EnrolmentStatus FromStatusCode(EnrolmentStatusCode statusCode, int EnrolleeId)
+        public bool IsType(EnrolmentStatusType statusType)
+        {
+            return this.StatusCode == (int)statusType;
+        }
+
+        public static EnrolmentStatus FromStatusCode(EnrolmentStatusType statusType, int enrolleeId)
         {
             return new EnrolmentStatus
             {
-                EnrolleeId = EnrolleeId,
-                StatusCode = (int)statusCode,
+                EnrolleeId = enrolleeId,
+                StatusCode = (int)statusType,
                 StatusDate = DateTimeOffset.Now
             };
         }

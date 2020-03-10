@@ -104,7 +104,7 @@ namespace Prime.Services
 
             if (await _automaticAdjudicationService.QualifiesForAutomaticAdjudication(enrollee))
             {
-                var newStatus = enrollee.AddEnrolmentStatus(EnrolmentStatusCode.RequiresToa);
+                var newStatus = enrollee.AddEnrolmentStatus(EnrolmentStatusType.RequiresToa);
                 newStatus.AddStatusReason(StatusReason.AUTOMATIC_CODE);
 
                 await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee);

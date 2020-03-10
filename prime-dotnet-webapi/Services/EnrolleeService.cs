@@ -179,7 +179,7 @@ namespace Prime.Services
                 throw new ArgumentNullException(nameof(enrollee), "Could not create an enrollee, the passed in Enrollee cannot be null.");
             }
 
-            enrollee.AddEnrolmentStatus(EnrolmentStatusCode.Active);
+            enrollee.AddEnrolmentStatus(EnrolmentStatusType.Active);
             _context.Enrollees.Add(enrollee);
 
             var created = await _context.SaveChangesAsync();

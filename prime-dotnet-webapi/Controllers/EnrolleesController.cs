@@ -158,7 +158,7 @@ namespace Prime.Controllers
             }
 
             // If the enrollee is not in the status of 'Active', it cannot be updated
-            if (!(await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.ACTIVE_CODE)))
+            if (!(await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, EnrolmentStatusType.Active)))
             {
                 this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee can not be updated when the current status is not 'Active'.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
@@ -319,7 +319,7 @@ namespace Prime.Controllers
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 
-            if (!await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, Status.UNDER_REVIEW_CODE))
+            if (!await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, EnrolmentStatusType.UnderReview))
             {
                 this.ModelState.AddModelError("Enrollee.CurrentStatus", "Access agreement notes can not be updated when the current status is 'Active'.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));

@@ -124,7 +124,7 @@ namespace Prime.Models
         {
             get => this.EnrolmentStatuses?
                 .OrderByDescending(en => en.StatusDate)
-                .FirstOrDefault(es => es.StatusCode == (int)EnrolmentStatusCode.UnderReview)
+                .FirstOrDefault(es => es.IsType(EnrolmentStatusType.UnderReview))
                 ?.StatusDate;
         }
 
@@ -135,7 +135,7 @@ namespace Prime.Models
             {
                 return this.EnrolmentStatuses?
                     .OrderByDescending(en => en.StatusDate)
-                    .Where(es => es.StatusCode == (int)EnrolmentStatusCode.RequiresToa)
+                    .Where(es => es.IsType(EnrolmentStatusType.RequiresToa))
                     .Where(es => es.StatusDate > this.AppliedDate)
                     .FirstOrDefault()
                     ?.StatusDate;
@@ -179,7 +179,7 @@ namespace Prime.Models
 
         public bool AlwaysManual { get; set; }
 
-        public EnrolmentStatus AddEnrolmentStatus(EnrolmentStatusCode statusCode)
+        public EnrolmentStatus AddEnrolmentStatus(EnrolmentStatusType statusCode)
         {
             var newStatus = EnrolmentStatus.FromStatusCode(statusCode, this.Id);
 
