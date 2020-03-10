@@ -53,20 +53,20 @@ RUN echo "Installing common, jenkins and Sonar Scanner prerequisites..." && \
         libxi6 \
         libglx0 \
         libgconf-2-4 && \
-    wget -q http://sourceforge.net/projects/sonar-pkg/files/deb/binary/sonar_6.7.4_all.deb && \
-    dpkg -i sonar_6.7.4_all.deb && \
+    wget -q http://sourceforge.net/projects/sonar-pkg/files/deb/binary/sonar_7.1_all.deb && \
+    dpkg -i sonar_7.1_all.deb && \
     mkdir -p /var/lib/origin && \
     chown -R default:0 /home/jenkins && \
     chmod -R a+rwx /home/jenkins && \
     chown -R default:0 ${AGENT_WORKDIR} && \
     chmod -R a+rwx ${AGENT_WORKDIR} && \
-    wget -q https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.2.0.1873-linux.zip && \
-    unzip sonar-scanner-cli-4.2.0.1873-linux.zip && \
+    wget -q https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.3.0.2102-linux.zip && \
+    unzip sonar-scanner-cli-4.3.0.2102-linux.zip && \
     mv sonar-scanner-4.2.0.1873-linux sonarscanner && \
     mv sonarscanner / && \
     chown -R default:0 /sonarscanner && \
     chmod -R a+rwx /sonarscanner && \
-    rm -f sonar-scanner-cli-4.2.0.1873-linux.zip && \
+    rm -f sonar-scanner-cli-4.3.0.2102-linux.zip && \
     ln -s /sonarscanner/sonar-scanner /usr/bin/sonar-scanner && \
     chmod 777 /etc/passwd
 
