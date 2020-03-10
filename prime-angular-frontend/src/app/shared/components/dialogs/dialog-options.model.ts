@@ -9,6 +9,7 @@ export interface DialogOptions {
   actionText?: string;
   cancelText?: string;
   cancelHide?: boolean;
+  cancelAction?: boolean;
   component?: any;
   data?: { [key: string]: any };
 }
