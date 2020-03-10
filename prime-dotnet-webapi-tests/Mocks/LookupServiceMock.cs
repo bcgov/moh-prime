@@ -18,11 +18,6 @@ namespace PrimeTests.Mocks
             // no data to seed, as it is done in the base class for lookups
         }
 
-        public Task<LookupEntity> GetLookupsAsync()
-        {
-            return Task.FromResult(new LookupEntity());
-        }
-
         Task<List<T>> ILookupService.GetLookupsAsync<TKey, T>(params Expression<Func<T, object>>[] includes)
         {
             var type = typeof(T);
