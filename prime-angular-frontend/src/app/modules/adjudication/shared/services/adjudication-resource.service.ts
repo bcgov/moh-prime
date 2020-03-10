@@ -265,6 +265,18 @@ export class AdjudicationResource {
       );
   }
 
+  public getAdjudicators(): Observable<Admin[]> {
+    return this.apiResource.get<Admin[]>('admins')
+      .pipe(
+        map((response: ApiHttpResponse<Admin[]>) => response.result),
+        tap((admins: Admin[]) => this.logger.info('ADMINS', admins)),
+        catchError((error: any) => {
+          this.logger.error('[Adjudication] AdjudicationResource::getAdjudicators error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   // ---
   // Enrollee and Enrolment Adapters
   // ---

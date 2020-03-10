@@ -5,6 +5,8 @@ if [ -z "${DB_CONNECTION_STRING}" ]
 then
 export DB_CONNECTION_STRING="host=${DB_HOST};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"
 fi
+export AUTH=$(printf $PHARMANET_API_USERNAME:$PHARMANET_API_PASSWORD|base64)
+export logfile=prime.logfile.out
 # Wait for database connection
 PG_IS_READY=$(pg_isready -h $DB_HOST -U ${POSTGRESQL_USER} -d ${POSTGRESQL_DATABASE})
 n=0
@@ -26,10 +28,8 @@ fi
 psql -h $DB_HOST -U ${POSTGRESQL_USER} -d ${POSTGRESQL_DATABASE} -a -f databaseMigrations.sql
 
 echo "Resting 5 seconds to let things settle down..."
-
 echo "Running .NET..."
-dotnet prime.dll -v &disown
-
+dotnet prime.dll -v 2>&1 | ts > $logfile & 
 echo "Launched, waiting for connection to API internally..."
 
 function waitForIt() {
@@ -42,8 +42,33 @@ done
 echo "$1 responded $2"
 }
 
-waitForIt localhost:${API_PORT}/api/enrollees 401
-waitForIt localhost:${API_PORT}/api/lookups 401
+function pharmanetCheck() {
+    UUID=$(cat /proc/sys/kernel/random/uuid)
+    AUTH=$(printf $PHARMANET_API_USERNAME:$PHARMANET_API_PASSWORD|base64)
+    printf {\"applicationUUID\":\"${UUID}\"\,\"programArea\":\"PRIME\"\,\"licenceNumber\":\"20361\"\,\"collegeReferenceId\":\"P1\"} > /tmp/data.out
+    openssl pkcs12 -in $PHARMANET_SSL_CERT_FILENAME -out /tmp/pharmanet-api-cert.pem -nodes -passin pass:$PHARMANET_SSL_CERT_PASSWORD
+    curl -s -o /dev/null -w "%{http_code}" --cert /tmp/pharmanet-api-cert.pem \
+    -H "Authorization: Basic $AUTH" \
+    -H "Content-Type: application/json" $PHARMANET_API_URL \
+    -H "Accept: application/json" \
+    --data "@/tmp/data.out"
+}
+
+function pharmanetVerboseCheck() {
+    UUID=$(cat /proc/sys/kernel/random/uuid)
+    AUTH=$(printf $PHARMANET_API_USERNAME:$PHARMANET_API_PASSWORD|base64)
+    printf {\"applicationUUID\":\"${UUID}\"\,\"programArea\":\"PRIME\"\,\"licenceNumber\":\"20361\"\,\"collegeReferenceId\":\"P1\"} > /tmp/data.out
+    openssl pkcs12 -in $PHARMANET_SSL_CERT_FILENAME -out /tmp/pharmanet-api-cert.pem -nodes -passin pass:$PHARMANET_SSL_CERT_PASSWORD
+    curl -v -s -o /dev/null --cert /tmp/pharmanet-api-cert.pem \
+    -H "Authorization: Basic $AUTH" \
+    -H "Content-Type: application/json" $PHARMANET_API_URL \
+    -H "Accept: application/json" \
+    --data "@/tmp/data.out"
+}
+
+waitForIt localhost:${API_PORT}/api/enrollees 401 2>&1 | logger & 
+waitForIt localhost:${API_PORT}/api/lookups 401 2>&1 | logger
 
 echo -e "\nThe system is up."
-tail -f /dev/null
+
+tail -f $logfile
