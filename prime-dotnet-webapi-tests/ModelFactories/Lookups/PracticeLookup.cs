@@ -11,7 +11,7 @@ namespace PrimeTests.ModelFactories
 
         public static ICollection<Practice> All { get { return _seedData; } }
 
-        public static IEnumerable<Practice> AllowedFor(short collegeCode)
+        public static IEnumerable<Practice> AllowedFor(int collegeCode)
         {
             var practices = CollegePracticeLookup.All
                 .Where(cp => cp.CollegeCode == collegeCode)

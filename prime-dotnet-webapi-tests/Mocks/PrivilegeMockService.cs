@@ -18,7 +18,7 @@ namespace PrimeTests.Mocks
             return Task.FromResult(this.GetHolder<int, Enrollee>().Values?.SingleOrDefault(e => e.UserId == enrollee.UserId));
         }
 
-        public Task<ICollection<AssignedPrivilege>> GetAssignedPrivilegesForEnrolleeAsync(int? enrolleeId)
+        public Task<ICollection<AssignedPrivilege>> GetAssignedPrivilegesForEnrolleeAsync(int enrolleeId)
         {
             return Task.FromResult<ICollection<AssignedPrivilege>>(null);
         }

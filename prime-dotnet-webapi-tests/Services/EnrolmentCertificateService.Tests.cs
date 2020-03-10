@@ -1,17 +1,19 @@
 using System;
-using System.Linq;
-using System.Collections.Generic;
 using Xunit;
 
 using Prime.Services;
 using PrimeTests.Utils;
 using Prime.Models;
+using PrimeTests.Mocks;
 
 namespace PrimeTests.Services
 {
     public class EnrolmentCertificateServiceTests : BaseServiceTests<EnrolmentCertificateService>
     {
-        public EnrolmentCertificateServiceTests() : base()
+        public EnrolmentCertificateServiceTests() : base(new object[] {
+            new AccessTermServiceMock(),
+            new EnrolleeProfileVersionServiceMock()
+        })
         { }
 
         [Fact]
