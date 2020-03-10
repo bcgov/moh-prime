@@ -69,13 +69,6 @@ pipeline {
             }
             when { expression { ( BRANCH_NAME == 'develop' ) } }
             parallel {
-                stage('SonarQube Code Check') {
-                    agent { label 'code-tests' }
-                    steps {
-                        checkout scm
-                        sh "./player.sh scan"
-                    }      
-                }
                 stage('ZAP') {
                     agent { label 'code-tests' }
                     steps {
