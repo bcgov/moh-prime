@@ -121,7 +121,7 @@ RUN echo "Installing .NET, coverlet, scanner..." && \
     apt-get -yqq update && \
     apt-get -yqq install dotnet-sdk-3.1 && \
     dotnet tool install --global coverlet.console && \
-    dotnet tool install --global dotnet-sonarscanner --version 4.7.1 && \
+    dotnet tool install --global dotnet-sonarscanner && \
     mkdir -p /.dotnet && \
     chown -R default:0 /.dotnet && \
     chmod -R a+rwx /.dotnet && \

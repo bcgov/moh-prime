@@ -11,6 +11,10 @@ function headless(){
 function dotnetTests()
 {
     source api.conf
+    echo "Checking Prerequisites..."
+    cd prime-dotnet-webapi-tests
+    dotnet add package coverlet.msbuild
+    cd ..
     echo "Starting tests..."
     dotnet build
     echo "Beginning .NET code coverage scan..."
