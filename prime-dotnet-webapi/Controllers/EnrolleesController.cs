@@ -407,7 +407,7 @@ namespace Prime.Controllers
             var adjudicatorUserId = User.GetPrimeUserId();
             var admin = await _adminService.GetAdminForUserIdAsync(User.GetPrimeUserId());
             var updatedEnrollee = await _enrolleeService.UpdateEnrolleeAdjudicator(enrollee.Id, adjudicatorUserId);
-            await _businessEventService.CreateAdminClaimEventAsync(enrolleeId, "Admin claimed enrollee", admin.Id);
+            await _businessEventService.CreateAdminClaimEventAsync(enrolleeId, "Admin claimed enrollee");
 
             return Ok(ApiResponse.Result(updatedEnrollee));
         }
@@ -435,7 +435,7 @@ namespace Prime.Controllers
 
             var updatedEnrollee = await _enrolleeService.UpdateEnrolleeAdjudicator(enrollee.Id);
             var admin = await _adminService.GetAdminForUserIdAsync(User.GetPrimeUserId());
-            await _businessEventService.CreateAdminClaimEventAsync(enrolleeId, "Admin disclaimed enrollee", admin.Id);
+            await _businessEventService.CreateAdminClaimEventAsync(enrolleeId, "Admin disclaimed enrollee");
 
             return Ok(ApiResponse.Result(updatedEnrollee));
         }
