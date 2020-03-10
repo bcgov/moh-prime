@@ -66,7 +66,7 @@ objects:
           - env:
               - name: PGHOST
                 value: ${POSTGRESQL_HOST}
-              - name: PGPASSWORD
+              - name: POSTGRES_PASSWORD
                 valueFrom:
                   secretKeyRef:
                     key: database-admin-password
@@ -106,8 +106,6 @@ objects:
             volumeMounts:
               - mountPath: /opt/backup
                 name: backup-data
-              - mountPath: /var/lib/postgresql/data
-                name: postgresql
               - mountPath: /var/run
                 name: backup-run
         restartPolicy: Always
@@ -115,9 +113,6 @@ objects:
         - name: backup-data
           persistentVolumeClaim:
             claimName: backup-data
-        - name: postgresql
-          persistentVolumeClaim:
-            claimName: ${POSTGRESQL_HOST}
         - name: backup-run
           emptyDir: {}
     test: false
