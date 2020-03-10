@@ -26,6 +26,7 @@ export class EnrolmentComponent extends AbstractComponent implements OnInit {
     super(route, router);
   }
 
+  // TODO update to pass in route from template
   public routeTo() {
     const routePath = AdjudicationRoutes.routePath(AdjudicationRoutes.ENROLMENTS);
     super.routeTo(routePath);
