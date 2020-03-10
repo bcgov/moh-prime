@@ -31,7 +31,7 @@ namespace PrimeTests.Mocks
             throw new NotImplementedException();
         }
 
-        public Task<EnrolleeProfileVersion> GetEnrolleeProfileVersionBeforeDateAsync(int enrolleeId, DateTime dateTime)
+        public Task<EnrolleeProfileVersion> GetEnrolleeProfileVersionBeforeDateAsync(int enrolleeId, DateTimeOffset dateTime)
         {
             var profileVersion = TestUtils.EnrolleeProfileVersionFaker.Generate();
             return Task.FromResult(profileVersion);

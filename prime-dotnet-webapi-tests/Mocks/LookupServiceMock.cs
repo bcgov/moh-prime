@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-
+using Prime.Models.Api;
 using Prime.Services;
 
 namespace PrimeTests.Mocks
@@ -18,17 +18,9 @@ namespace PrimeTests.Mocks
             // no data to seed, as it is done in the base class for lookups
         }
 
-        Task<List<T>> ILookupService.GetLookupsAsync<TKey, T>(params Expression<Func<T, object>>[] includes)
+        public Task<LookupEntity> GetLookupsAsync()
         {
-            var type = typeof(T);
-            var holder = this.GetHolder<int, T>();
-            var results = new List<T>();
-            foreach (var value in holder.Values.ToList())
-            {
-                results.Add((T)value);
-            }
-
-            return Task.FromResult(results);
+            return Task.FromResult(new LookupEntity());
         }
     }
 }
