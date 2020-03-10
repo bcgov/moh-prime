@@ -27,7 +27,7 @@ namespace Prime.Models.Api
     {
         public T Result { get; }
 
-        internal ApiResultResponse(T result)
+        public ApiResultResponse(T result)
         {
             Result = result;
         }
@@ -37,7 +37,7 @@ namespace Prime.Models.Api
     {
         public string Message { get; }
 
-        internal ApiMessageResponse(string message)
+        public ApiMessageResponse(string message)
         {
             Message = message;
         }
@@ -47,7 +47,7 @@ namespace Prime.Models.Api
     {
         public IEnumerable<string> Errors { get; }
 
-        internal ApiBadRequestResponse(ModelStateDictionary modelState)
+        public ApiBadRequestResponse(ModelStateDictionary modelState)
         {
             if (modelState == null || modelState.IsValid)
             {
