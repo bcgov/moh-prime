@@ -38,13 +38,9 @@ export class CertificateComponent implements OnInit {
   }
 
   public get middleName(): string {
-    return this.hasPreferredName
-      ? (this.certificate.preferredMiddleName
-        ? this.certificate.preferredMiddleName
-        : ' ')
-      : (this.certificate.preferredMiddleName
-        ? this.certificate.preferredMiddleName
-        : ' ');
+    return (this.hasPreferredName && this.certificate.preferredMiddleName)
+      ? this.certificate.preferredMiddleName
+      : ' ';
   }
 
   public get fullName(): string {
