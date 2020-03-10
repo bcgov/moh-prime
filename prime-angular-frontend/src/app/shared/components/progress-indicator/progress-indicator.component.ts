@@ -10,6 +10,7 @@ export class ProgressIndicatorComponent implements OnInit {
   @Input() public inProgress: boolean;
   @Input() public currentRoute: EnrolmentRoutes;
   @Input() public message: string;
+  @Input() public isSiteRegistration: boolean;
 
   public percentComplete: number;
 

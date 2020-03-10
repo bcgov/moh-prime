@@ -54,6 +54,10 @@ export class VendorComponent implements OnInit {
     this.router.navigate([SiteRoutes.SIGNING_AUTHORITY], { relativeTo: this.route.parent });
   }
 
+  onBack() {
+    this.router.navigate([SiteRoutes.MULTIPLE_SITES], { relativeTo: this.route.parent });
+  }
+
   ngOnInit() {
     this.form = this.formBuilder.group({
       vendors: new FormArray([])

@@ -49,7 +49,7 @@ export class CollectionNoticeAlertComponent implements OnInit {
         this.router.navigate([route], { relativeTo: this.route.parent });
       }
     } else if (currentRouteComponent === SiteCollectionNoticeComponent) {
-      this.router.navigate([SiteRoutes.VENDOR], { relativeTo: this.route.parent });
+      this.router.navigate([SiteRoutes.MULTIPLE_SITES], { relativeTo: this.route.parent });
     }
   }
 
