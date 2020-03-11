@@ -43,8 +43,6 @@ export class AuthorizationRedirectGuard extends BaseGuard {
         destinationRoute = this.config.routes.adjudication;
       }
 
-      console.log('Destination Route:', destinationRoute);
-
       // Otherwise, redirect to an appropriate destination
       this.router.navigate([destinationRoute]);
       return reject(false);
