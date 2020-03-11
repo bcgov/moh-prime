@@ -45,7 +45,7 @@ namespace Prime.Models
 
         public string PreferredLastName { get; set; }
 
-        public DateTimeOffset DateOfBirth { get; set; }
+        public DateTime DateOfBirth { get; set; }
 
         [Required]
         public PhysicalAddress PhysicalAddress { get; set; }
