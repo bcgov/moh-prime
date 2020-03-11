@@ -10,19 +10,27 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Prime.Models;
 using Prime.Configuration;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
 
 namespace Prime
 {
     // Allow for design time creation of the ApiDbContext
     public class ApiDbContextFactory : IDesignTimeDbContextFactory<ApiDbContext>
     {
+        public IConfiguration Configuration { get; }
+
+        public ApiDbContextFactory(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
         public ApiDbContext CreateDbContext(string[] args)
         {
             // Connect to database
             var connectionString = System.Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
             if (connectionString == null)
             {
-                connectionString = "Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=postgres";
+                connectionString = Configuration.GetConnectionString("PrimeDatabase");
             }
 
             var optionsBuilder = new DbContextOptionsBuilder<ApiDbContext>();
