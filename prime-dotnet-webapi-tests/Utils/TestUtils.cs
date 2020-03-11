@@ -187,7 +187,7 @@ namespace PrimeTests.Utils
         {
             // db.Enrollees.AddRange(EnrolleeFaker.Generate(5));
 
-            if (!db.Set(typeof(College)).Any())
+            if (!db.Set<College>().Any())
             {
                 db.AddRange(new College { Code = 1, Name = "College of Physicians and Surgeons of BC (CPSBC)", Prefix = "91" });
                 db.AddRange(new College { Code = 2, Name = "College of Pharmacists of BC (CPBC)", Prefix = "P1" });
@@ -195,7 +195,7 @@ namespace PrimeTests.Utils
                 db.AddRange(new College { Code = 4, Name = "None", Prefix = null });
             }
 
-            if (!db.Set(typeof(License)).Any())
+            if (!db.Set<License>().Any())
             {
                 db.AddRange(new License { Code = 1, Manual = false, Name = "Full - Family" });
                 db.AddRange(new License { Code = 2, Manual = false, Name = "Full - Specialty" });
@@ -204,7 +204,7 @@ namespace PrimeTests.Utils
                 db.AddRange(new License { Code = 5, Manual = true, Name = "Provisional - Family" });
             }
 
-            if (!db.Set(typeof(CollegeLicense)).Any())
+            if (!db.Set<CollegeLicense>().Any())
             {
                 db.AddRange(new CollegeLicense { CollegeCode = 1, LicenseCode = 2 });
                 db.AddRange(new CollegeLicense { CollegeCode = 1, LicenseCode = 3 });
@@ -214,7 +214,7 @@ namespace PrimeTests.Utils
                 db.AddRange(new CollegeLicense { CollegeCode = 3, LicenseCode = 5 });
             }
 
-            if (!db.Set(typeof(Practice)).Any())
+            if (!db.Set<Practice>().Any())
             {
                 db.AddRange(new Practice { Code = 1, Name = "Remote Practice" });
                 db.AddRange(new Practice { Code = 2, Name = "Reproductive Care" });
@@ -222,7 +222,7 @@ namespace PrimeTests.Utils
                 db.AddRange(new Practice { Code = 4, Name = "None" });
             }
 
-            if (!db.Set(typeof(JobName)).Any())
+            if (!db.Set<JobName>().Any())
             {
                 db.AddRange(new JobName { Code = 1, Name = "Medical Office Assistant" });
                 db.AddRange(new JobName { Code = 2, Name = "Pharmacy Assistant" });
@@ -230,13 +230,13 @@ namespace PrimeTests.Utils
                 db.AddRange(new JobName { Code = 4, Name = "Ward Clerk" });
             }
 
-            if (!db.Set(typeof(OrganizationType)).Any())
+            if (!db.Set<OrganizationType>().Any())
             {
                 db.AddRange(new OrganizationType { Code = 1, Name = "Health Authority" });
                 db.AddRange(new OrganizationType { Code = 2, Name = "Pharmacy" });
             }
 
-            if (!db.Set(typeof(Status)).Any())
+            if (!db.Set<Status>().Any())
             {
                 db.AddRange(new Status { Code = Status.ACTIVE_CODE, Name = "Active" });
                 db.AddRange(new Status { Code = Status.UNDER_REVIEW_CODE, Name = "Under Review" });
@@ -244,12 +244,12 @@ namespace PrimeTests.Utils
                 db.AddRange(new Status { Code = Status.LOCKED_CODE, Name = "Locked" });
             }
 
-            if (!db.Set(typeof(Country)).Any())
+            if (!db.Set<Country>().Any())
             {
                 db.AddRange(new Country { Code = "CA", Name = "Canada" });
             }
 
-            if (!db.Set(typeof(Province)).Any())
+            if (!db.Set<Province>().Any())
             {
                 db.AddRange(new Province { Code = "AB", Name = "Alberta" });
                 db.AddRange(new Province { Code = "BC", Name = "British Columbia" });
@@ -266,7 +266,7 @@ namespace PrimeTests.Utils
                 db.AddRange(new Province { Code = "YT", Name = "Yukon" });
             }
 
-            if (!db.Set(typeof(StatusReason)).Any())
+            if (!db.Set<StatusReason>().Any())
             {
                 db.AddRange(
                     new StatusReason { Code = 1, Name = "Automatic" },
@@ -283,7 +283,7 @@ namespace PrimeTests.Utils
                 );
             }
 
-            if (!db.Set(typeof(PrivilegeGroup)).Any())
+            if (!db.Set<PrivilegeGroup>().Any())
             {
                 db.AddRange(new PrivilegeGroup { Code = 1, Name = "Submit and Access Claims" });
                 db.AddRange(new PrivilegeGroup { Code = 2, Name = "Record Medical History" });
@@ -292,7 +292,7 @@ namespace PrimeTests.Utils
                 db.AddRange(new PrivilegeGroup { Code = 5, Name = "RU with OBOs" });
             }
 
-            if (!db.Set(typeof(Privilege)).Any())
+            if (!db.Set<Privilege>().Any())
             {
                 db.AddRange(new Privilege { Id = 1, PrivilegeGroupCode = 1, TransactionType = "TAC", Description = "Update Claims History" });
                 db.AddRange(new Privilege { Id = 2, PrivilegeGroupCode = 1, TransactionType = "TDT", Description = "Query Claims History" });
@@ -315,7 +315,7 @@ namespace PrimeTests.Utils
                 db.AddRange(new Privilege { Id = 19, PrivilegeGroupCode = 5, TransactionType = "RU with OBOs", Description = "Registered User who can have OBOs" });
             }
 
-            if (!db.Set(typeof(DefaultPrivilege)).Any())
+            if (!db.Set<DefaultPrivilege>().Any())
             {
                 // Non-practicing Licensed Practical Nurse
                 db.AddRange(new DefaultPrivilege { LicenseCode = 54, PrivilegeId = 18 });
@@ -453,6 +453,7 @@ namespace PrimeTests.Utils
                  .ForAudience(audience)
                  .ForSubject(subject.ToString())
                  .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_ADMIN_ROLE)
+                 .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_READONLY_ADMIN)
                  .BuildToken();
 
             request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);
