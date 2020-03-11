@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Prime.Models;
 using Prime.Configuration;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace Prime
 {
@@ -22,7 +24,13 @@ namespace Prime
             var connectionString = System.Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
             if (connectionString == null)
             {
-                connectionString = "Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=postgres";
+                // Build the configuration
+                IConfiguration config = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json")
+                    .Build();
+
+                connectionString = config.GetConnectionString("PrimeDatabase");
             }
 
             var optionsBuilder = new DbContextOptionsBuilder<ApiDbContext>();

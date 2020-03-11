@@ -27,7 +27,7 @@ namespace PrimeTests.Integration
                 var response = await _client.SendAsync(request);
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-                var apiResponse = TestUtils.DeserializeResponse<ApiOkResponse<LookupEntity>>(response).Result;
+                var apiResponse = TestUtils.DeserializeResponse<ApiResultResponse<LookupEntity>>(response).Result;
                 Assert.NotNull(apiResponse);
                 Assert.NotEmpty(apiResponse.Result.Colleges);
                 Assert.NotEmpty(apiResponse.Result.JobNames);

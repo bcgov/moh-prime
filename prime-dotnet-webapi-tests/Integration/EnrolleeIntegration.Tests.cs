@@ -96,7 +96,7 @@ namespace PrimeTests.Integration
                 var body = await response.Content.ReadAsStringAsync();
                 Assert.Contains(testEnrollee.FirstName, body);
 
-                Enrollee createdEnrollee = JsonConvert.DeserializeObject<ApiCreatedResponse<Enrollee>>(body).Result;
+                Enrollee createdEnrollee = JsonConvert.DeserializeObject<ApiResultResponse<Enrollee>>(body).Result;
                 Assert.Equal(testEnrollee.UserId, createdEnrollee.UserId);
             }
         }
@@ -118,7 +118,7 @@ namespace PrimeTests.Integration
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
                 var body = await response.Content.ReadAsStringAsync();
-                Enrollee responseEnrollee = JsonConvert.DeserializeObject<ApiOkResponse<Enrollee>>(body).Result;
+                Enrollee responseEnrollee = JsonConvert.DeserializeObject<ApiResultResponse<Enrollee>>(body).Result;
                 Assert.Equal(expectedEnrolleeId, responseEnrollee.Id);
                 Assert.Equal(expectedUserId, responseEnrollee.UserId);
             }
@@ -141,7 +141,7 @@ namespace PrimeTests.Integration
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
                 var body = await response.Content.ReadAsStringAsync();
-                Enrollee[] responseEnrollees = JsonConvert.DeserializeObject<ApiOkResponse<Enrollee[]>>(body).Result;
+                Enrollee[] responseEnrollees = JsonConvert.DeserializeObject<ApiResultResponse<Enrollee[]>>(body).Result;
                 Assert.Equal(3, responseEnrollees.Count());
             }
         }
