@@ -11,26 +11,26 @@ using Prime.Models;
 using Prime.Configuration;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace Prime
 {
     // Allow for design time creation of the ApiDbContext
     public class ApiDbContextFactory : IDesignTimeDbContextFactory<ApiDbContext>
     {
-        public IConfiguration Configuration { get; }
-
-        public ApiDbContextFactory(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
         public ApiDbContext CreateDbContext(string[] args)
         {
             // Connect to database
             var connectionString = System.Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
             if (connectionString == null)
             {
-                connectionString = Configuration.GetConnectionString("PrimeDatabase");
+                // Build the configuration
+                IConfiguration config = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json")
+                    .Build();
+
+                connectionString = config.GetConnectionString("PrimeDatabase");
             }
 
             var optionsBuilder = new DbContextOptionsBuilder<ApiDbContext>();
