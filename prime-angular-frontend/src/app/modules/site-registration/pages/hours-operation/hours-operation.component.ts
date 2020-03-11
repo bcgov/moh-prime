@@ -14,8 +14,8 @@ import { SiteRoutes } from '../../site-registration.routes';
   styleUrls: ['./hours-operation.component.scss']
 })
 export class HoursOperationComponent implements OnInit {
-
   form: FormGroup;
+  public amHours: string[];
 
   constructor(
     protected route: ActivatedRoute,
@@ -26,10 +26,26 @@ export class HoursOperationComponent implements OnInit {
     protected utilService: UtilsService,
     private formUtilsService: FormUtilsService,
     private formBuilder: FormBuilder
-  ) { }
+  ) {
+    this.amHours = [
+      '12:00',
+      '1:00',
+      '2:00',
+      '3:00',
+      '4:00',
+      '5:00',
+      '6:00',
+      '7:00',
+      '8:00',
+      '9:00',
+      '10:00',
+      '11:00',
+      '12:00'
+    ];
+  }
 
-  public get monday(): FormControl {
-    return this.form.get('monday') as FormControl;
+  public get mondayAM(): FormControl {
+    return this.form.get('mondayAM') as FormControl;
   }
 
   public get tuesday(): FormControl {
@@ -55,7 +71,7 @@ export class HoursOperationComponent implements OnInit {
 
   protected createFormInstance() {
     this.form = this.formBuilder.group({
-      monday: [null, []],
+      mondayAM: [null, []],
       tuesday: [null, []],
       wednesday: [null, []],
       thursday: [null, []],
