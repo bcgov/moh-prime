@@ -1,5 +1,4 @@
-<app-page [busy]="busy"
-          mode="full">
+<app-adjudication-dashboard [hasActions]="hasActions">
 
   <app-page-header>Limits and Conditions Clauses</app-page-header>
 
@@ -8,7 +7,8 @@
         novalidate>
 
     <div class="row mb-4">
-      <div class="col-sm-12 col-lg-6">
+      <div class="col-sm-12 col-lg-9 col-xl-5 pb-4">
+
         <editor class="mb-4"
                 [disabled]="!canEdit"
                 formControlName="note"
@@ -23,21 +23,37 @@
                   menubar: 'false'
                 }">
         </editor>
+
         <div class="text-right">
           <button mat-flat-button
                   [disabled]="!canEdit"
                   color="primary">Save Clause</button>
         </div>
+
       </div>
 
-      <div class="col-sm-12 col-lg-6">
-        <div class="preview">
-          <p class="bold underline">Additional Limits and Conditions</p>
-          <div [innerHTML]="preview | safeHtml | default: 'No Preview Found'"></div>
-        </div>
+      <div class="col-sm-12 col-lg-9 col-xl-7">
+
+        <h2>Limits and Conditions</h2>
+
+        <ng-container *ngIf="preview; else noNotes">
+
+          <div class="col-sm-12 col-lg-6">
+            <div class="preview">
+              <p class="bold underline">Additional Limits and Conditions</p>
+              <div [innerHTML]="preview | safeHtml | default: 'No Preview Found'"></div>
+            </div>
+          </div>
+
+        </ng-container>
+
+        <ng-template #noNotes>
+          No limits and conditions have been applied
+        </ng-template>
+
       </div>
     </div>
 
   </form>
 
-</app-page>
+</app-adjudication-dashboard>

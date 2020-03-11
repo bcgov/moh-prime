@@ -3,6 +3,8 @@
 
   <ng-content select="app-page-header"></ng-content>
 
+  <ng-content select="app-search-filter"></ng-content>
+
   <div class="row">
     <div class="col">
 
@@ -10,7 +12,7 @@
              [dataSource]="dataSource"
              class="w-100">
 
-        <!-- Unique Id Column -->
+        <!-- Unique ID Column -->
         <ng-container matColumnDef="uniqueId">
           <th mat-header-cell
               *matHeaderCellDef> Unique ID </th>
@@ -192,8 +194,8 @@
           <mat-divider></mat-divider>
 
           <button mat-menu-item
-                  *ngIf="isUnderReview(row.currentStatus.statusCode)"
-                  (click)="routeTo([row.id, AdjudicationRoutes.ENROLLEE_LIMITS_CONDITIONS])">
+                  *ngIf="isUnderReview(enrollee.currentStatus.statusCode)"
+                  (click)="routeTo([enrollee.id, AdjudicationRoutes.ENROLLEE_LIMITS_CONDITIONS])">
             <mat-icon>description</mat-icon>
             <span>Add Limits and Conditions</span>
           </button>

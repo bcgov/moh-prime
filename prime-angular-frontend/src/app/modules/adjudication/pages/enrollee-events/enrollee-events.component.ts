@@ -6,7 +6,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./enrollee-events.component.scss']
 })
 export class EnrolleeEventsComponent implements OnInit {
-  constructor() { }
+  public hasActions: boolean;
+
+  constructor() {
+    this.hasActions = false;
+  }
 
   public ngOnInit() { }
 }

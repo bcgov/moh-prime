@@ -19,6 +19,7 @@ import { EnrolleeAccessTermsComponent } from './pages/enrollee-access-terms/enro
 import { EnrolleeAccessTermComponent } from './pages/enrollee-access-term/enrollee-access-term.component';
 import { EnrolleeAccessTermEnrolmentComponent } from './pages/enrollee-access-term-enrolment/enrollee-access-term-enrolment.component';
 import { EnrolleeEventsComponent } from './pages/enrollee-events/enrollee-events.component';
+import { EnrolleeReviewStatusComponent } from './pages/enrollee-review-status/enrollee-review-status.component';
 
 const routes: Routes = [
   {
@@ -103,6 +104,16 @@ const routes: Routes = [
                     path: '',
                     component: EnrolleeEventsComponent,
                     data: { title: 'Enrolment Events' }
+                  }
+                ]
+              },
+              {
+                path: AdjudicationRoutes.ENROLLEE_REVIEW_STATUS,
+                children: [
+                  {
+                    path: '',
+                    component: EnrolleeReviewStatusComponent,
+                    data: { title: 'Enrolment Review Status' }
                   }
                 ]
               }

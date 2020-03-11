@@ -23,6 +23,7 @@ export class AdjudicatorNotesComponent extends AbstractComponent implements OnIn
   public columns: string[];
   public dataSource: MatTableDataSource<Enrolment>;
   public adjudicatorNotes: BehaviorSubject<AdjudicationNote[]>;
+  public hasActions: boolean;
 
   constructor(
     protected route: ActivatedRoute,
@@ -33,6 +34,7 @@ export class AdjudicatorNotesComponent extends AbstractComponent implements OnIn
   ) {
     super(route, router);
 
+    this.hasActions = false;
     this.adjudicatorNotes = new BehaviorSubject<AdjudicationNote[]>([]);
   }
 

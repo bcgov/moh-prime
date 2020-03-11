@@ -20,6 +20,7 @@ export class LimitsConditionsClausesComponent implements OnInit {
   public columns: string[];
   public enrollee: HttpEnrollee;
   public preview: string;
+  public hasActions: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -27,7 +28,9 @@ export class LimitsConditionsClausesComponent implements OnInit {
     private fb: FormBuilder,
     private adjudicationResource: AdjudicationResource,
     private authService: AuthService
-  ) { }
+  ) {
+    this.hasActions = false;
+  }
 
   public get canEdit(): boolean {
     return this.authService.isAdmin();
