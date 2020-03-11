@@ -11,8 +11,8 @@ namespace Prime.Services
 
         protected BaseService(IServiceProvider provider)
         {
-            _context = provider.GetService<ApiDbContext>();
-            _httpContext = provider.GetService<IHttpContextAccessor>();
+            _context = provider.GetRequiredService<ApiDbContext>();
+            _httpContext = provider.GetRequiredService<IHttpContextAccessor>();
         }
     }
 }
