@@ -45,7 +45,7 @@ namespace Prime.Models
             return this.StatusCode == (int)statusType;
         }
 
-        public static EnrolmentStatus FromStatusCode(EnrolmentStatusType statusType, int enrolleeId)
+        public static EnrolmentStatus FromStatusType(EnrolmentStatusType statusType, int enrolleeId)
         {
             return new EnrolmentStatus
             {
