@@ -16,6 +16,8 @@ import { EnrolleeAccessTermEnrolmentComponent } from './pages/enrollee-access-te
 
 import { AdjudicationDashboardComponent } from './shared/components/adjudication-dashboard/adjudication-dashboard.component';
 import { SearchFormComponent } from './shared/components/search-form/search-form.component';
+import { EnrolleeEventsComponent } from './pages/enrollee-events/enrollee-events.component';
+import { EnrolleeReviewStatusComponent } from './pages/enrollee-review-status/enrollee-review-status.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,9 @@ import { SearchFormComponent } from './shared/components/search-form/search-form
     EnrolleeAccessTermComponent,
     EnrolleeAccessTermEnrolmentComponent,
     SearchFormComponent,
-    AdjudicationDashboardComponent
+    AdjudicationDashboardComponent,
+    EnrolleeEventsComponent,
+    EnrolleeReviewStatusComponent
   ],
   imports: [
     SharedModule,

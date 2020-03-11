@@ -13,7 +13,7 @@
         <!-- Unique Id Column -->
         <ng-container matColumnDef="uniqueId">
           <th mat-header-cell
-              *matHeaderCellDef> Unique Id </th>
+              *matHeaderCellDef> Unique ID </th>
           <td mat-cell
               *matCellDef="let row;"> {{ row.displayId }} </td>
         </ng-container>
@@ -96,29 +96,43 @@
 
         <mat-menu #menu="matMenu">
           <button mat-menu-item
-                  (click)="viewEnrolmentHistory(row.id)">
+                  (click)="routeTo([row.id, AdjudicationRoutes.ENROLLEE_PROFILE_HISTORY])">
             <mat-icon>history</mat-icon>
             <span>Enrolment History</span>
           </button>
           <button mat-menu-item
-                  (click)="viewAccessTermsHistory(row.id)">
+                  (click)="routeTo([row.id, AdjudicationRoutes.ENROLLEE_TERMS_HISTORY])">
             <mat-icon>history</mat-icon>
-            <span>Access Terms History</span>
+            <span>Terms of Access History</span>
           </button>
           <button mat-menu-item
-                  *ngIf="row.currentStatus.enrolmentStatusReasons.length"
-                  (click)="reviewStatusReasons(row)">
-            <mat-icon>flag</mat-icon>
-            <span>Review Status Reasons</span>
-          </button>
-          <button mat-menu-item>
+                  (click)="routeTo([row.id, AdjudicationRoutes.ENROLLEE_EVENTS])">
             <mat-icon>rate_review</mat-icon>
             <span>Events</span>
           </button>
-          <button mat-menu-item>
-            <mat-icon>description</mat-icon>
+          <button mat-menu-item
+                  (click)="routeTo([row.id, AdjudicationRoutes.ENROLLEE_ADJUDICATOR_NOTES])">
+            <mat-icon>message</mat-icon>
             <span>Add & View Notes</span>
           </button>
+
+          <mat-divider></mat-divider>
+
+          <button mat-menu-item
+                  *ngIf="row.currentStatus.enrolmentStatusReasons.length"
+                  (click)="routeTo([row.id, AdjudicationRoutes.ENROLLEE_REVIEW_STATUS])">
+            <mat-icon>flag</mat-icon>
+            <span>Review Status Reasons</span>
+          </button>
+          <button mat-menu-item
+                  *ngIf="isUnderReview(row.currentStatus.statusCode)"
+                  (click)="routeTo([row.id, AdjudicationRoutes.ENROLLEE_LIMITS_CONDITIONS])">
+            <mat-icon>description</mat-icon>
+            <span>Add Limits and Conditions</span>
+          </button>
+
+          <mat-divider></mat-divider>
+
           <button mat-menu-item
                   [disabled]="!canEdit"
                   (click)="updateEnrolleeAdjudicator(row)">
@@ -134,7 +148,7 @@
   <ng-container *ngIf="enrolleeId">
 
     <div class="row">
-      <div class="col">
+      <div class="col py-5">
 
         <ng-content></ng-content>
 
@@ -168,22 +182,20 @@
             <mat-icon>undo</mat-icon>
             <span>Unlock for Editing</span>
           </button>
-          <!-- <button mat-menu-item
-                  [routerLink]="[enrollee.id, 'adjudicator-notes']">
-            <mat-icon>message</mat-icon>
-            <span>Add Note</span>
-          </button> -->
-          <button mat-menu-item
-                  *ngIf="isUnderReview(enrollee.currentStatus.statusCode)"
-                  [routerLink]="[enrollee.id, 'limits-conditions-clauses']">
-            <mat-icon>description</mat-icon>
-            <span>Limits and Conditions</span>
-          </button>
           <button mat-menu-item
                   *ngIf="canDelete"
                   (click)="deleteEnrollee(enrollee.id)">
             <mat-icon>delete</mat-icon>
             <span>Delete Enrolment</span>
+          </button>
+
+          <mat-divider></mat-divider>
+
+          <button mat-menu-item
+                  *ngIf="isUnderReview(row.currentStatus.statusCode)"
+                  (click)="routeTo([row.id, AdjudicationRoutes.ENROLLEE_LIMITS_CONDITIONS])">
+            <mat-icon>description</mat-icon>
+            <span>Add Limits and Conditions</span>
           </button>
         </mat-menu>
 

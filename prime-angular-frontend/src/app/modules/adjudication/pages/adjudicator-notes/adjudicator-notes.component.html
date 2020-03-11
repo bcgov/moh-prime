@@ -1,16 +1,13 @@
-<app-page [busy]="busy"
-          mode="full">
+<app-adjudication-dashboard [hasActions]="hasActions">
 
-  <app-page-header>Global Adjudicator Notes</app-page-header>
-
-  <p>Ensure you verify your notes before saving since notes can not be edited or deleted after they have been saved.</p>
+  <app-page-header>Notes</app-page-header>
 
   <form (ngSubmit)="onSubmit()"
         [formGroup]="form"
         novalidate>
 
     <div class="row mb-4">
-      <div class="col-sm-12 col-lg-8">
+      <div class="col-sm-12 col-lg-9 col-xl-5 pb-4">
 
         <mat-form-field class="w-100">
           <textarea matInput
@@ -27,36 +24,40 @@
         </div>
 
       </div>
-    </div>
+      <div class="col-sm-12 col-lg-9 col-xl-7">
 
-    <div *ngIf="adjudicatorNotes.value?.length"
-         class="row mb-4">
-      <div class="col-sm-12 col-lg-8">
+        <h2>Notes List</h2>
 
-        <div class="table-responsive">
-          <table class="table">
-            <tbody>
-              <tr *ngFor="let adjudicatorNote of adjudicatorNotes | async">
-                <th class="text-nowrap">{{ adjudicatorNote.noteDate | formatDate }}</th>
-                <td>{{ adjudicatorNote.note }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <ng-container *ngIf="adjudicatorNotes.value?.length; else noNotes">
+
+          <div class="table-responsive">
+            <table class="table">
+              <tbody>
+                <tr *ngFor="let adjudicatorNote of adjudicatorNotes | async">
+                  <th class="text-right">
+                    <div class="text-nowrap">
+                      {{ adjudicatorNote.noteDate | formatDate }}
+                    </div>
+                    <small class="text-mute font-weight-normal">
+                      {{ adjudicatorNote.noteDate | formatDate: 'h:mm a' }}
+                    </small>
+                  </th>
+                  <td>{{ adjudicatorNote.note }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </ng-container>
+
+        <ng-template #noNotes>
+          No notes have been created
+        </ng-template>
 
       </div>
+
     </div>
 
   </form>
 
-  <div class="row justify-content-between">
-    <div class="col pt-4">
-
-      <button mat-stroked-button
-              type="button"
-              (click)="routeTo()">Back</button>
-
-    </div>
-  </div>
-
-</app-page>
+</app-adjudication-dashboard>

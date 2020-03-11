@@ -18,6 +18,7 @@ import { EnrolleeProfileVersionComponent } from './pages/enrollee-profile-versio
 import { EnrolleeAccessTermsComponent } from './pages/enrollee-access-terms/enrollee-access-terms.component';
 import { EnrolleeAccessTermComponent } from './pages/enrollee-access-term/enrollee-access-term.component';
 import { EnrolleeAccessTermEnrolmentComponent } from './pages/enrollee-access-term-enrolment/enrollee-access-term-enrolment.component';
+import { EnrolleeEventsComponent } from './pages/enrollee-events/enrollee-events.component';
 
 const routes: Routes = [
   {
@@ -92,6 +93,16 @@ const routes: Routes = [
                     path: ':hid',
                     component: EnrolleeProfileVersionComponent,
                     data: { title: 'Enrolment History' }
+                  }
+                ]
+              },
+              {
+                path: AdjudicationRoutes.ENROLLEE_EVENTS,
+                children: [
+                  {
+                    path: '',
+                    component: EnrolleeEventsComponent,
+                    data: { title: 'Enrolment Events' }
                   }
                 ]
               }

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 import { MatTableDataSource, MatDialog } from '@angular/material';
 
 import { Observable, Subscription, EMPTY } from 'rxjs';
@@ -15,9 +15,6 @@ import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { ApproveEnrolmentComponent } from '@shared/components/dialogs/content/approve-enrolment/approve-enrolment.component';
-import {
-  EnrolmentStatusReasonsComponent
-} from '@shared/components/dialogs/content/enrolment-status-reasons/enrolment-status-reasons.component';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
@@ -43,6 +40,8 @@ export class AdjudicationDashboardComponent extends AbstractComponent implements
   public statuses: Config<number>[];
   public filteredStatus: Config<number>;
   public textSearch: string;
+
+  public AdjudicationRoutes = AdjudicationRoutes;
 
   constructor(
     protected route: ActivatedRoute,
@@ -90,29 +89,6 @@ export class AdjudicationDashboardComponent extends AbstractComponent implements
 
   public isUnderReview(currentStatusCode: EnrolmentStatus): boolean {
     return (currentStatusCode === EnrolmentStatus.UNDER_REVIEW);
-  }
-
-  public viewEnrolmentHistory(enrolmentId: number) {
-    this.routeTo([enrolmentId, AdjudicationRoutes.PROFILE_HISTORY]);
-  }
-
-  public viewAccessTermsHistory(enrolmentId: number) {
-    this.routeTo([enrolmentId, AdjudicationRoutes.ACCESS_TERMS]);
-  }
-
-  public reviewStatusReasons(enrollee: HttpEnrollee) {
-    const data: DialogOptions = {
-      title: 'Review Status Reasons',
-      icon: 'flag',
-      actionText: 'Close',
-      data: { enrollee },
-      component: EnrolmentStatusReasonsComponent,
-      cancelHide: true
-    };
-
-    this.dialog.open(ConfirmDialogComponent, { data })
-      .afterClosed()
-      .subscribe();
   }
 
   public approveEnrollee(enrollee: HttpEnrollee) {
@@ -244,6 +220,12 @@ export class AdjudicationDashboardComponent extends AbstractComponent implements
   //   const statusCodes = (this.filteredStatus) ? this.filteredStatus.code : null;
   //   return this.getEnrolments(statusCodes, this.textSearch);
   // }
+
+  public routeTo(routePath: string | (string | number)[]): void {
+    const basePath = [AdjudicationRoutes.MODULE_PATH, AdjudicationRoutes.ENROLLEES];
+    routePath = (Array.isArray(routePath)) ? routePath : [routePath];
+    super.routeTo([...basePath, ...routePath], { relativeTo: null });
+  }
 
   public ngOnInit() {
     this.getEnrollees()
