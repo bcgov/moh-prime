@@ -26,51 +26,43 @@ namespace PrimeTests.Utils
         public static string[] provinces = new[] { "AB", "BC", "MB", "NB", "NL", "NS", "ON", "PE", "QC", "SK", "NT", "NU", "YT" };
 
         public static Faker<PhysicalAddress> PhysicalAddressFaker = new Faker<PhysicalAddress>()
-                                .RuleFor(a => a.CountryCode, f => f.PickRandom(countries))
-                                .RuleFor(a => a.ProvinceCode, TestUtils.RandomProvinceCode())
-                                .RuleFor(a => a.Street, f => f.Address.StreetAddress())
-                                .RuleFor(a => a.City, f => f.Address.City())
-                                .RuleFor(a => a.Postal, f => f.Address.ZipCode("?#?#?#"))
-                                ;
+            .RuleFor(a => a.CountryCode, f => f.PickRandom(countries))
+            .RuleFor(a => a.ProvinceCode, TestUtils.RandomProvinceCode())
+            .RuleFor(a => a.Street, f => f.Address.StreetAddress())
+            .RuleFor(a => a.City, f => f.Address.City())
+            .RuleFor(a => a.Postal, f => f.Address.ZipCode("?#?#?#"));
 
         public static Faker<MailingAddress> MailingAddressFaker = new Faker<MailingAddress>()
-                                .RuleFor(a => a.CountryCode, f => f.PickRandom(countries))
-                                .RuleFor(a => a.ProvinceCode, TestUtils.RandomProvinceCode())
-                                .RuleFor(a => a.Street, f => f.Address.StreetAddress())
-                                .RuleFor(a => a.City, f => f.Address.City())
-                                .RuleFor(a => a.Postal, f => f.Address.ZipCode("?#?#?#"))
-                                ;
+            .RuleFor(a => a.CountryCode, f => f.PickRandom(countries))
+            .RuleFor(a => a.ProvinceCode, TestUtils.RandomProvinceCode())
+            .RuleFor(a => a.Street, f => f.Address.StreetAddress())
+            .RuleFor(a => a.City, f => f.Address.City())
+            .RuleFor(a => a.Postal, f => f.Address.ZipCode("?#?#?#"));
 
         public static Faker<Certification> CertificationFaker = new Faker<Certification>()
-                                .RuleFor(c => c.CollegeCode, f => f.Random.Int(1, 5))
-                                .RuleFor(c => c.LicenseNumber, f => f.Random.Int(100000, 999999).ToString().Substring(1))
-                                .RuleFor(c => c.LicenseCode, f => f.Random.Int(1, 4))
-                                .RuleFor(c => c.RenewalDate, f => f.Date.Future(1))
-                                .RuleFor(c => c.PracticeCode, f => f.Random.Int(1, 4))
-                                ;
+            .RuleFor(c => c.CollegeCode, f => f.Random.Int(1, 5))
+            .RuleFor(c => c.LicenseNumber, f => f.Random.Int(100000, 999999).ToString().Substring(1))
+            .RuleFor(c => c.LicenseCode, f => f.Random.Int(1, 4))
+            .RuleFor(c => c.RenewalDate, f => f.Date.Future(1))
+            .RuleFor(c => c.PracticeCode, f => f.Random.Int(1, 4));
 
         public static Faker<Certification> ManualCertificationFaker = new Faker<Certification>()
-                                .RuleFor(c => c.CollegeCode, f => f.Random.Int(1, 5))
-                                .RuleFor(c => c.LicenseNumber, f => f.Random.Int(100000, 999999).ToString().Substring(1))
-                                .RuleFor(c => c.LicenseCode, f => f.Random.Int(3, 3))
-                                .RuleFor(c => c.RenewalDate, f => f.Date.Future(1))
-                                .RuleFor(c => c.PracticeCode, f => f.Random.Int(1, 4))
-                                ;
+            .RuleFor(c => c.CollegeCode, f => f.Random.Int(1, 5))
+            .RuleFor(c => c.LicenseNumber, f => f.Random.Int(100000, 999999).ToString().Substring(1))
+            .RuleFor(c => c.LicenseCode, f => f.Random.Int(3, 3))
+            .RuleFor(c => c.RenewalDate, f => f.Date.Future(1))
+            .RuleFor(c => c.PracticeCode, f => f.Random.Int(1, 4));
 
         public static Faker<Job> JobFaker = new Faker<Job>()
-                                .RuleFor(j => j.Title, f => f.Random.Word())
-                                ;
+            .RuleFor(j => j.Title, f => f.Random.Word());
 
         public static Faker<Organization> OrganizationFaker = new Faker<Organization>()
-                                .RuleFor(o => o.OrganizationTypeCode, f => f.Random.Int(1, 2))
-                                ;
+            .RuleFor(o => o.OrganizationTypeCode, f => f.Random.Int(1, 2));
 
         public static Faker<EnrolmentStatus> EnrolmentStatusFaker = new Faker<EnrolmentStatus>()
-              .RuleFor(es => es.StatusCode, f => Status.ACTIVE_CODE)
-              //   .RuleFor(es => es.Status, f => new Status { Code = Status.ACTIVE_CODE, Name = "Active Code" })
-              .RuleFor(es => es.StatusDate, f => DateTime.Now)
-              .RuleFor(es => es.PharmaNetStatus, f => false)
-              ;
+            .RuleFor(es => es.StatusCode, f => (int)EnrolmentStatusType.Active)
+            // .RuleFor(es => es.Status, f => new Status { Code = Status.ACTIVE_CODE, Name = "Active Code" })
+            .RuleFor(es => es.StatusDate, f => DateTime.Now);
 
         public static Faker<Enrollee> EnrolleeFaker = new Faker<Enrollee>()
             .RuleFor(e => e.UserId, f => Guid.NewGuid())
@@ -96,20 +88,18 @@ namespace PrimeTests.Utils
             .RuleFor(e => e.EnrolmentStatuses, f => EnrolmentStatusFaker.Generate(1));
 
         public static Faker<AccessTerm> AccessTermFaker = new Faker<AccessTerm>()
-              .RuleFor(x => x.EnrolleeId, f => f.Random.Int(1, 5))
-              .RuleFor(x => x.GlobalClauseId, f => f.Random.Int(1, 5))
-              .RuleFor(x => x.UserClauseId, f => f.Random.Int(1, 5))
-              .RuleFor(x => x.LimitsConditionsClauseId, f => f.Random.Int(1, 5))
-              .RuleFor(es => es.CreatedDate, f => DateTime.Now.AddDays(-5))
-              .RuleFor(es => es.AcceptedDate, f => DateTime.Now)
-              .RuleFor(es => es.ExpiryDate, f => DateTime.Now.AddYears(1))
-              ;
+            .RuleFor(x => x.EnrolleeId, f => f.Random.Int(1, 5))
+            .RuleFor(x => x.GlobalClauseId, f => f.Random.Int(1, 5))
+            .RuleFor(x => x.UserClauseId, f => f.Random.Int(1, 5))
+            .RuleFor(x => x.LimitsConditionsClauseId, f => f.Random.Int(1, 5))
+            .RuleFor(es => es.CreatedDate, f => DateTime.Now.AddDays(-5))
+            .RuleFor(es => es.AcceptedDate, f => DateTime.Now)
+            .RuleFor(es => es.ExpiryDate, f => DateTime.Now.AddYears(1));
 
         public static Faker<EnrolleeProfileVersion> EnrolleeProfileVersionFaker = new Faker<EnrolleeProfileVersion>()
-              .RuleFor(x => x.EnrolleeId, f => f.Random.Int(1, 5))
-              .RuleFor(x => x.ProfileSnapshot, f => JObject.FromObject(EnrolleeFaker.Generate()))
-              .RuleFor(x => x.CreatedDate, f => DateTime.Now.AddDays(-5))
-              ;
+            .RuleFor(x => x.EnrolleeId, f => f.Random.Int(1, 5))
+            .RuleFor(x => x.ProfileSnapshot, f => JObject.FromObject(EnrolleeFaker.Generate()))
+            .RuleFor(x => x.CreatedDate, f => DateTime.Now.AddDays(-5));
 
         public static string RandomProvinceCode(params string[] excludedProvinceCodes)
         {
@@ -238,10 +228,10 @@ namespace PrimeTests.Utils
 
             if (!db.Set<Status>().Any())
             {
-                db.AddRange(new Status { Code = Status.ACTIVE_CODE, Name = "Active" });
-                db.AddRange(new Status { Code = Status.UNDER_REVIEW_CODE, Name = "Under Review" });
-                db.AddRange(new Status { Code = Status.REQUIRES_TOA_CODE, Name = "Requires TOA" });
-                db.AddRange(new Status { Code = Status.LOCKED_CODE, Name = "Locked" });
+                db.AddRange(new Status { Code = (int)EnrolmentStatusType.Active, Name = "Active" });
+                db.AddRange(new Status { Code = (int)EnrolmentStatusType.UnderReview, Name = "Under Review" });
+                db.AddRange(new Status { Code = (int)EnrolmentStatusType.RequiresToa, Name = "Requires TOA" });
+                db.AddRange(new Status { Code = (int)EnrolmentStatusType.Locked, Name = "Locked" });
             }
 
             if (!db.Set<Country>().Any())
