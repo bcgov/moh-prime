@@ -50,13 +50,13 @@ namespace PrimeTests.Controllers
                 // create a request with an AUTH token
                 var request = TestUtils.CreateRequest(HttpMethod.Get, "/api/enrollees", expectedEnrollee.UserId);
 
-                // // try to get the enrollees
+                // try to get the enrollees
                 var response = await _client.SendAsync(request);
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
                 output.WriteLine(response.ToString());
 
-                // // check that the controller returned only the one user's enrollee record
-                var returnedEnrollees = (await TestUtils.DeserializeResponse<ApiOkResponse<IEnumerable<Enrollee>>>(response)).Result;
+                // check that the controller returned only the one user's enrollee record
+                var returnedEnrollees = (await TestUtils.DeserializeResponse<ApiResultResponse<IEnumerable<Enrollee>>>(response)).Result;
                 Assert.Single(returnedEnrollees);
             }
         }
@@ -82,7 +82,7 @@ namespace PrimeTests.Controllers
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
                 // check that the controller returned only the one user's enrollee record
-                var returnedEnrollees = (await TestUtils.DeserializeResponse<ApiOkResponse<IEnumerable<Enrollee>>>(response)).Result;
+                var returnedEnrollees = (await TestUtils.DeserializeResponse<ApiResultResponse<IEnumerable<Enrollee>>>(response)).Result;
                 Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, returnedEnrollees.Count());
             }
         }
@@ -145,7 +145,7 @@ namespace PrimeTests.Controllers
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
                 // check that the enrollee was returned
-                var enrollee = (await TestUtils.DeserializeResponse<ApiOkResponse<Enrollee>>(response)).Result;
+                var enrollee = (await TestUtils.DeserializeResponse<ApiResultResponse<Enrollee>>(response)).Result;
                 Assert.NotNull(enrollee);
                 Assert.Equal(expectedEnrolleeId, enrollee.Id);
 
@@ -272,7 +272,7 @@ namespace PrimeTests.Controllers
                 Assert.Contains(testEnrollee.FirstName, body);
 
                 // check that the body contains the Enrollee UserId
-                Enrollee createdEnrollee = JsonConvert.DeserializeObject<ApiCreatedResponse<Enrollee>>(body).Result;
+                Enrollee createdEnrollee = JsonConvert.DeserializeObject<ApiResultResponse<Enrollee>>(body).Result;
                 Assert.Equal(testEnrollee.UserId, createdEnrollee.UserId);
             }
         }
@@ -686,7 +686,7 @@ namespace PrimeTests.Controllers
         //         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         //         // check that the statuses were returned
-        //         var statuses = (await TestUtils.DeserializeResponse<ApiOkResponse<IEnumerable<Status>>>(response)).Result;
+        //         var statuses = (await TestUtils.DeserializeResponse<ApiResultResponse<IEnumerable<Status>>>(response)).Result;
         //         Assert.NotNull(statuses);
         //         Assert.Contains(new Status { Code = Status.UNDER_REVIEW_CODE }, statuses);
 
@@ -784,7 +784,7 @@ namespace PrimeTests.Controllers
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
                 // check that the enrollee statuses were returned
-                var enrolleeStatuses = (await TestUtils.DeserializeResponse<ApiOkResponse<IEnumerable<EnrolmentStatus>>>(response)).Result;
+                var enrolleeStatuses = (await TestUtils.DeserializeResponse<ApiResultResponse<IEnumerable<EnrolmentStatus>>>(response)).Result;
                 Assert.NotNull(enrolleeStatuses);
                 Assert.Single(enrolleeStatuses);
                 Assert.Equal(Status.ACTIVE_CODE, enrolleeStatuses.First().StatusCode);
@@ -882,7 +882,7 @@ namespace PrimeTests.Controllers
         //         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         //         // check that the statuses were returned
-        //         var enrolleeStatus = (await TestUtils.DeserializeResponse<ApiOkResponse<EnrolmentStatus>>(response)).Result;
+        //         var enrolleeStatus = (await TestUtils.DeserializeResponse<ApiResultResponse<EnrolmentStatus>>(response)).Result;
         //         Assert.NotNull(enrolleeStatus);
         //         Assert.Equal(Status.UNDER_REVIEW_CODE, enrolleeStatus.StatusCode);
 
