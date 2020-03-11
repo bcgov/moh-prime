@@ -16,6 +16,7 @@ import { AdministratorComponent } from './pages/administrator/administrator.comp
 import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer.component';
 import { TechnicalSupportContactComponent } from './pages/technical-support-contact/technical-support-contact.component';
 import { SiteReviewComponent } from './pages/site-review/site-review.component';
+import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 
 
 
@@ -81,6 +82,11 @@ const routes: Routes = [
         path: SiteRoutes.SITE_REVIEW,
         component: SiteReviewComponent,
         data: { title: 'Site Registration Review' }
+      },
+      {
+        path: SiteRoutes.CONFIRMATION,
+        component: ConfirmationComponent,
+        data: { title: 'Submission Confirmation' }
       }
     ]
   }

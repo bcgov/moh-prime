@@ -15,24 +15,41 @@
       </app-page-subheader>
 
       <div class="mb-3">
+        <ng-container *ngFor="let day of days">
+          <div class="row">
+            <div class="col col-sm-3">
+              <mat-label class="w-100">{{ day.title }}</mat-label>
+            </div>
+            <div class="col col-sm-3">
+              <mat-form-field class="w-100">
+                <mat-select [formControlName]="day.name+'AM'">
+                  <mat-option *ngFor="let hour of amHours"
+                              [value]="hour">
+                    {{ hour }}
+                  </mat-option>
+                </mat-select>
+                <mat-error>Required</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col col-sm-1">
+              <mat-label class="w-100">to</mat-label>
+            </div>
+            <div class="col col-sm-3">
+              <mat-form-field class="w-100">
+                <mat-select [formControlName]="day.name+'PM'">
+                  <mat-option *ngFor="let hour of pmHours"
+                              [value]="hour">
+                    {{ hour }}
+                  </mat-option>
+                </mat-select>
+                <mat-error>Required</mat-error>
+              </mat-form-field>
 
-        <div class="row">
-          <div class="col col-sm-10 py-3"
-               formArrayName="days">
-            <mat-form-field class="w-100">
-              <mat-label>Organization Type</mat-label>
-              <mat-select formControlName="mondayAM">
-                <mat-option *ngFor="let hour of amHours"
-                            [value]="hour">
-                  {{ hour }}
-                </mat-option>
-              </mat-select>
-              <mat-error>Required</mat-error>
-            </mat-form-field>
+            </div>
 
           </div>
 
-        </div>
+        </ng-container>
 
       </div>
     </section>

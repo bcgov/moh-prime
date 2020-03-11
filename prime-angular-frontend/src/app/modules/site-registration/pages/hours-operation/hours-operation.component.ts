@@ -16,6 +16,8 @@ import { SiteRoutes } from '../../site-registration.routes';
 export class HoursOperationComponent implements OnInit {
   form: FormGroup;
   public amHours: string[];
+  public pmHours: string[];
+  public days: { title: string, name: string }[];
 
   constructor(
     protected route: ActivatedRoute,
@@ -28,7 +30,7 @@ export class HoursOperationComponent implements OnInit {
     private formBuilder: FormBuilder
   ) {
     this.amHours = [
-      '12:00',
+      '24:00',
       '1:00',
       '2:00',
       '3:00',
@@ -42,27 +44,90 @@ export class HoursOperationComponent implements OnInit {
       '11:00',
       '12:00'
     ];
+
+    this.pmHours = [
+      '12:00',
+      '13:00',
+      '14:00',
+      '15:00',
+      '16:00',
+      '17:00',
+      '18:00',
+      '19:00',
+      '20:00',
+      '21:00',
+      '22:00',
+      '23:00',
+      '24:00'
+    ];
+
+    this.days = [
+      { title: 'Monday', name: 'monday' },
+      { title: 'Tuesday', name: 'tuesday' },
+      { title: 'Wednesday', name: 'wednesday' },
+      { title: 'Thursday', name: 'thursday' },
+      { title: 'Friday', name: 'friday' },
+      { title: 'Saturday', name: 'saturday' },
+      { title: 'Sunday', name: 'sunday' }
+    ];
   }
 
   public get mondayAM(): FormControl {
     return this.form.get('mondayAM') as FormControl;
   }
 
-  public get tuesday(): FormControl {
-    return this.form.get('tuesday') as FormControl;
+  public get mondayPM(): FormControl {
+    return this.form.get('mondayPM') as FormControl;
   }
 
-  public get wednesday(): FormControl {
-    return this.form.get('wednesday') as FormControl;
+  public get tuesdayAM(): FormControl {
+    return this.form.get('tuesdayAM') as FormControl;
   }
 
-  public get thursday(): FormControl {
-    return this.form.get('thursday') as FormControl;
+  public get tuesdayPM(): FormControl {
+    return this.form.get('tuesdayPM') as FormControl;
   }
 
-  public get friday(): FormControl {
-    return this.form.get('friday') as FormControl;
+  public get wednesdayAM(): FormControl {
+    return this.form.get('wednesdayAM') as FormControl;
   }
+
+  public get wednesdayPM(): FormControl {
+    return this.form.get('wednesdayPM') as FormControl;
+  }
+
+  public get thursdayAM(): FormControl {
+    return this.form.get('thursdayAM') as FormControl;
+  }
+
+  public get thursdayPM(): FormControl {
+    return this.form.get('thursdayPM') as FormControl;
+  }
+
+  public get fridayAM(): FormControl {
+    return this.form.get('fridayAM') as FormControl;
+  }
+
+  public get fridayPM(): FormControl {
+    return this.form.get('fridayPM') as FormControl;
+  }
+
+  public get saturdayAM(): FormControl {
+    return this.form.get('saturdayAM') as FormControl;
+  }
+
+  public get saturdayPM(): FormControl {
+    return this.form.get('saturdayPM') as FormControl;
+  }
+
+  public get sundayAM(): FormControl {
+    return this.form.get('sundayAM') as FormControl;
+  }
+
+  public get sundayPM(): FormControl {
+    return this.form.get('sundayPM') as FormControl;
+  }
+
 
   ngOnInit() {
     this.createFormInstance();
@@ -72,10 +137,19 @@ export class HoursOperationComponent implements OnInit {
   protected createFormInstance() {
     this.form = this.formBuilder.group({
       mondayAM: [null, []],
-      tuesday: [null, []],
-      wednesday: [null, []],
-      thursday: [null, []],
-      friday: [null, []]
+      mondayPM: [null, []],
+      tuesdayAM: [null, []],
+      tuesdayPM: [null, []],
+      wednesdayAM: [null, []],
+      wednesdayPM: [null, []],
+      thursdayAM: [null, []],
+      thursdayPM: [null, []],
+      fridayAM: [null, []],
+      fridayPM: [null, []],
+      saturdayAM: [null, []],
+      saturdayPM: [null, []],
+      sundayAM: [null, []],
+      sundayPM: [null, []],
     });
   }
 
