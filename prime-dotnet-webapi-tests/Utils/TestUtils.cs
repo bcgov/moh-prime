@@ -26,51 +26,43 @@ namespace PrimeTests.Utils
         public static string[] provinces = new[] { "AB", "BC", "MB", "NB", "NL", "NS", "ON", "PE", "QC", "SK", "NT", "NU", "YT" };
 
         public static Faker<PhysicalAddress> PhysicalAddressFaker = new Faker<PhysicalAddress>()
-                                .RuleFor(a => a.CountryCode, f => f.PickRandom(countries))
-                                .RuleFor(a => a.ProvinceCode, TestUtils.RandomProvinceCode())
-                                .RuleFor(a => a.Street, f => f.Address.StreetAddress())
-                                .RuleFor(a => a.City, f => f.Address.City())
-                                .RuleFor(a => a.Postal, f => f.Address.ZipCode("?#?#?#"))
-                                ;
+            .RuleFor(a => a.CountryCode, f => f.PickRandom(countries))
+            .RuleFor(a => a.ProvinceCode, TestUtils.RandomProvinceCode())
+            .RuleFor(a => a.Street, f => f.Address.StreetAddress())
+            .RuleFor(a => a.City, f => f.Address.City())
+            .RuleFor(a => a.Postal, f => f.Address.ZipCode("?#?#?#"));
 
         public static Faker<MailingAddress> MailingAddressFaker = new Faker<MailingAddress>()
-                                .RuleFor(a => a.CountryCode, f => f.PickRandom(countries))
-                                .RuleFor(a => a.ProvinceCode, TestUtils.RandomProvinceCode())
-                                .RuleFor(a => a.Street, f => f.Address.StreetAddress())
-                                .RuleFor(a => a.City, f => f.Address.City())
-                                .RuleFor(a => a.Postal, f => f.Address.ZipCode("?#?#?#"))
-                                ;
+            .RuleFor(a => a.CountryCode, f => f.PickRandom(countries))
+            .RuleFor(a => a.ProvinceCode, TestUtils.RandomProvinceCode())
+            .RuleFor(a => a.Street, f => f.Address.StreetAddress())
+            .RuleFor(a => a.City, f => f.Address.City())
+            .RuleFor(a => a.Postal, f => f.Address.ZipCode("?#?#?#"));
 
         public static Faker<Certification> CertificationFaker = new Faker<Certification>()
-                                .RuleFor(c => c.CollegeCode, f => f.Random.Int(1, 5))
-                                .RuleFor(c => c.LicenseNumber, f => f.Random.Int(100000, 999999).ToString().Substring(1))
-                                .RuleFor(c => c.LicenseCode, f => f.Random.Int(1, 4))
-                                .RuleFor(c => c.RenewalDate, f => f.Date.Future(1))
-                                .RuleFor(c => c.PracticeCode, f => f.Random.Int(1, 4))
-                                ;
+            .RuleFor(c => c.CollegeCode, f => f.Random.Int(1, 5))
+            .RuleFor(c => c.LicenseNumber, f => f.Random.Int(100000, 999999).ToString().Substring(1))
+            .RuleFor(c => c.LicenseCode, f => f.Random.Int(1, 4))
+            .RuleFor(c => c.RenewalDate, f => f.Date.Future(1))
+            .RuleFor(c => c.PracticeCode, f => f.Random.Int(1, 4));
 
         public static Faker<Certification> ManualCertificationFaker = new Faker<Certification>()
-                                .RuleFor(c => c.CollegeCode, f => f.Random.Int(1, 5))
-                                .RuleFor(c => c.LicenseNumber, f => f.Random.Int(100000, 999999).ToString().Substring(1))
-                                .RuleFor(c => c.LicenseCode, f => f.Random.Int(3, 3))
-                                .RuleFor(c => c.RenewalDate, f => f.Date.Future(1))
-                                .RuleFor(c => c.PracticeCode, f => f.Random.Int(1, 4))
-                                ;
+            .RuleFor(c => c.CollegeCode, f => f.Random.Int(1, 5))
+            .RuleFor(c => c.LicenseNumber, f => f.Random.Int(100000, 999999).ToString().Substring(1))
+            .RuleFor(c => c.LicenseCode, f => f.Random.Int(3, 3))
+            .RuleFor(c => c.RenewalDate, f => f.Date.Future(1))
+            .RuleFor(c => c.PracticeCode, f => f.Random.Int(1, 4));
 
         public static Faker<Job> JobFaker = new Faker<Job>()
-                                .RuleFor(j => j.Title, f => f.Random.Word())
-                                ;
+            .RuleFor(j => j.Title, f => f.Random.Word());
 
         public static Faker<Organization> OrganizationFaker = new Faker<Organization>()
-                                .RuleFor(o => o.OrganizationTypeCode, f => f.Random.Int(1, 2))
-                                ;
+            .RuleFor(o => o.OrganizationTypeCode, f => f.Random.Int(1, 2));
 
         public static Faker<EnrolmentStatus> EnrolmentStatusFaker = new Faker<EnrolmentStatus>()
-              .RuleFor(es => es.StatusCode, f => Status.ACTIVE_CODE)
-              //   .RuleFor(es => es.Status, f => new Status { Code = Status.ACTIVE_CODE, Name = "Active Code" })
-              .RuleFor(es => es.StatusDate, f => DateTime.Now)
-              .RuleFor(es => es.PharmaNetStatus, f => false)
-              ;
+            .RuleFor(es => es.StatusCode, f => (int)EnrolmentStatusType.Active)
+            // .RuleFor(es => es.Status, f => new Status { Code = Status.ACTIVE_CODE, Name = "Active Code" })
+            .RuleFor(es => es.StatusDate, f => DateTime.Now);
 
         public static Faker<Enrollee> EnrolleeFaker = new Faker<Enrollee>()
             .RuleFor(e => e.UserId, f => Guid.NewGuid())
@@ -96,20 +88,18 @@ namespace PrimeTests.Utils
             .RuleFor(e => e.EnrolmentStatuses, f => EnrolmentStatusFaker.Generate(1));
 
         public static Faker<AccessTerm> AccessTermFaker = new Faker<AccessTerm>()
-              .RuleFor(x => x.EnrolleeId, f => f.Random.Int(1, 5))
-              .RuleFor(x => x.GlobalClauseId, f => f.Random.Int(1, 5))
-              .RuleFor(x => x.UserClauseId, f => f.Random.Int(1, 5))
-              .RuleFor(x => x.LimitsConditionsClauseId, f => f.Random.Int(1, 5))
-              .RuleFor(es => es.CreatedDate, f => DateTime.Now.AddDays(-5))
-              .RuleFor(es => es.AcceptedDate, f => DateTime.Now)
-              .RuleFor(es => es.ExpiryDate, f => DateTime.Now.AddYears(1))
-              ;
+            .RuleFor(x => x.EnrolleeId, f => f.Random.Int(1, 5))
+            .RuleFor(x => x.GlobalClauseId, f => f.Random.Int(1, 5))
+            .RuleFor(x => x.UserClauseId, f => f.Random.Int(1, 5))
+            .RuleFor(x => x.LimitsConditionsClauseId, f => f.Random.Int(1, 5))
+            .RuleFor(es => es.CreatedDate, f => DateTime.Now.AddDays(-5))
+            .RuleFor(es => es.AcceptedDate, f => DateTime.Now)
+            .RuleFor(es => es.ExpiryDate, f => DateTime.Now.AddYears(1));
 
         public static Faker<EnrolleeProfileVersion> EnrolleeProfileVersionFaker = new Faker<EnrolleeProfileVersion>()
-              .RuleFor(x => x.EnrolleeId, f => f.Random.Int(1, 5))
-              .RuleFor(x => x.ProfileSnapshot, f => JObject.FromObject(EnrolleeFaker.Generate()))
-              .RuleFor(x => x.CreatedDate, f => DateTime.Now.AddDays(-5))
-              ;
+            .RuleFor(x => x.EnrolleeId, f => f.Random.Int(1, 5))
+            .RuleFor(x => x.ProfileSnapshot, f => JObject.FromObject(EnrolleeFaker.Generate()))
+            .RuleFor(x => x.CreatedDate, f => DateTime.Now.AddDays(-5));
 
         public static string RandomProvinceCode(params string[] excludedProvinceCodes)
         {
@@ -187,7 +177,7 @@ namespace PrimeTests.Utils
         {
             // db.Enrollees.AddRange(EnrolleeFaker.Generate(5));
 
-            if (!db.Set(typeof(College)).Any())
+            if (!db.Set<College>().Any())
             {
                 db.AddRange(new College { Code = 1, Name = "College of Physicians and Surgeons of BC (CPSBC)", Prefix = "91" });
                 db.AddRange(new College { Code = 2, Name = "College of Pharmacists of BC (CPBC)", Prefix = "P1" });
@@ -195,7 +185,7 @@ namespace PrimeTests.Utils
                 db.AddRange(new College { Code = 4, Name = "None", Prefix = null });
             }
 
-            if (!db.Set(typeof(License)).Any())
+            if (!db.Set<License>().Any())
             {
                 db.AddRange(new License { Code = 1, Manual = false, Name = "Full - Family" });
                 db.AddRange(new License { Code = 2, Manual = false, Name = "Full - Specialty" });
@@ -204,7 +194,7 @@ namespace PrimeTests.Utils
                 db.AddRange(new License { Code = 5, Manual = true, Name = "Provisional - Family" });
             }
 
-            if (!db.Set(typeof(CollegeLicense)).Any())
+            if (!db.Set<CollegeLicense>().Any())
             {
                 db.AddRange(new CollegeLicense { CollegeCode = 1, LicenseCode = 2 });
                 db.AddRange(new CollegeLicense { CollegeCode = 1, LicenseCode = 3 });
@@ -214,7 +204,7 @@ namespace PrimeTests.Utils
                 db.AddRange(new CollegeLicense { CollegeCode = 3, LicenseCode = 5 });
             }
 
-            if (!db.Set(typeof(Practice)).Any())
+            if (!db.Set<Practice>().Any())
             {
                 db.AddRange(new Practice { Code = 1, Name = "Remote Practice" });
                 db.AddRange(new Practice { Code = 2, Name = "Reproductive Care" });
@@ -222,7 +212,7 @@ namespace PrimeTests.Utils
                 db.AddRange(new Practice { Code = 4, Name = "None" });
             }
 
-            if (!db.Set(typeof(JobName)).Any())
+            if (!db.Set<JobName>().Any())
             {
                 db.AddRange(new JobName { Code = 1, Name = "Medical Office Assistant" });
                 db.AddRange(new JobName { Code = 2, Name = "Pharmacy Assistant" });
@@ -230,26 +220,26 @@ namespace PrimeTests.Utils
                 db.AddRange(new JobName { Code = 4, Name = "Ward Clerk" });
             }
 
-            if (!db.Set(typeof(OrganizationType)).Any())
+            if (!db.Set<OrganizationType>().Any())
             {
                 db.AddRange(new OrganizationType { Code = 1, Name = "Health Authority" });
                 db.AddRange(new OrganizationType { Code = 2, Name = "Pharmacy" });
             }
 
-            if (!db.Set(typeof(Status)).Any())
+            if (!db.Set<Status>().Any())
             {
-                db.AddRange(new Status { Code = Status.ACTIVE_CODE, Name = "Active" });
-                db.AddRange(new Status { Code = Status.UNDER_REVIEW_CODE, Name = "Under Review" });
-                db.AddRange(new Status { Code = Status.REQUIRES_TOA_CODE, Name = "Requires TOA" });
-                db.AddRange(new Status { Code = Status.LOCKED_CODE, Name = "Locked" });
+                db.AddRange(new Status { Code = (int)EnrolmentStatusType.Active, Name = "Active" });
+                db.AddRange(new Status { Code = (int)EnrolmentStatusType.UnderReview, Name = "Under Review" });
+                db.AddRange(new Status { Code = (int)EnrolmentStatusType.RequiresToa, Name = "Requires TOA" });
+                db.AddRange(new Status { Code = (int)EnrolmentStatusType.Locked, Name = "Locked" });
             }
 
-            if (!db.Set(typeof(Country)).Any())
+            if (!db.Set<Country>().Any())
             {
                 db.AddRange(new Country { Code = "CA", Name = "Canada" });
             }
 
-            if (!db.Set(typeof(Province)).Any())
+            if (!db.Set<Province>().Any())
             {
                 db.AddRange(new Province { Code = "AB", Name = "Alberta" });
                 db.AddRange(new Province { Code = "BC", Name = "British Columbia" });
@@ -266,7 +256,7 @@ namespace PrimeTests.Utils
                 db.AddRange(new Province { Code = "YT", Name = "Yukon" });
             }
 
-            if (!db.Set(typeof(StatusReason)).Any())
+            if (!db.Set<StatusReason>().Any())
             {
                 db.AddRange(
                     new StatusReason { Code = 1, Name = "Automatic" },
@@ -283,7 +273,7 @@ namespace PrimeTests.Utils
                 );
             }
 
-            if (!db.Set(typeof(PrivilegeGroup)).Any())
+            if (!db.Set<PrivilegeGroup>().Any())
             {
                 db.AddRange(new PrivilegeGroup { Code = 1, Name = "Submit and Access Claims" });
                 db.AddRange(new PrivilegeGroup { Code = 2, Name = "Record Medical History" });
@@ -292,7 +282,7 @@ namespace PrimeTests.Utils
                 db.AddRange(new PrivilegeGroup { Code = 5, Name = "RU with OBOs" });
             }
 
-            if (!db.Set(typeof(Privilege)).Any())
+            if (!db.Set<Privilege>().Any())
             {
                 db.AddRange(new Privilege { Id = 1, PrivilegeGroupCode = 1, TransactionType = "TAC", Description = "Update Claims History" });
                 db.AddRange(new Privilege { Id = 2, PrivilegeGroupCode = 1, TransactionType = "TDT", Description = "Query Claims History" });
@@ -315,7 +305,7 @@ namespace PrimeTests.Utils
                 db.AddRange(new Privilege { Id = 19, PrivilegeGroupCode = 5, TransactionType = "RU with OBOs", Description = "Registered User who can have OBOs" });
             }
 
-            if (!db.Set(typeof(DefaultPrivilege)).Any())
+            if (!db.Set<DefaultPrivilege>().Any())
             {
                 // Non-practicing Licensed Practical Nurse
                 db.AddRange(new DefaultPrivilege { LicenseCode = 54, PrivilegeId = 18 });
@@ -453,6 +443,7 @@ namespace PrimeTests.Utils
                  .ForAudience(audience)
                  .ForSubject(subject.ToString())
                  .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_ADMIN_ROLE)
+                 .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_READONLY_ADMIN)
                  .BuildToken();
 
             request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);

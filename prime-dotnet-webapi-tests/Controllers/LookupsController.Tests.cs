@@ -23,7 +23,7 @@ namespace PrimeTests.Controllers
             var response = await _client.SendAsync(request);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            var results = (await TestUtils.DeserializeResponse<ApiOkResponse<LookupEntity>>(response)).Result;
+            var results = (await TestUtils.DeserializeResponse<ApiResultResponse<LookupEntity>>(response)).Result;
             Assert.NotNull(results);
             Assert.NotEmpty(results.Colleges);
             Assert.NotEmpty(results.JobNames);

@@ -56,13 +56,13 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.EnrolleeProfileVersions, f => null);
             Ignore(x => x.AccessTerms); // Awaiting finialization of access terms
 
-            RuleSet("status.under_review", (set) =>
+            RuleSet("status.submitted", (set) =>
             {
-                set.RuleFor(x => x.EnrolmentStatuses, (f, x) => new StatusStateFactory(x, StatusState.UnderReview).Generate());
+                set.RuleFor(x => x.EnrolmentStatuses, (f, x) => new StatusStateFactory(x, StatusState.Submitted).Generate());
             });
             RuleSet("status.active", (set) =>
             {
-                set.RuleFor(x => x.EnrolmentStatuses, (f, x) => new StatusStateFactory(x, StatusState.Active).Generate());
+                set.RuleFor(x => x.EnrolmentStatuses, (f, x) => new StatusStateFactory(x, StatusState.PassedTos).Generate());
             });
             RuleSet("status.random", (set) =>
             {
@@ -90,7 +90,7 @@ namespace PrimeTests.ModelFactories
             {
                 x.ProfileCompleted = x.EnrolmentStatuses.Count > 1 ? true : f.Random.Bool();
 
-                if (x.CurrentStatus.StatusCode == Status.ACTIVE_CODE && x.PreviousStatus.StatusCode == Status.REQUIRES_TOA_CODE)
+                if (x.CurrentStatus.IsType(EnrolmentStatusType.Active) && x.PreviousStatus.IsType(EnrolmentStatusType.RequiresToa))
                 {
                     x.GPID = f.Random.AlphaNumeric(20);
 
