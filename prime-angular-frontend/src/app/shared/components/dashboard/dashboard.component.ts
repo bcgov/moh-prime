@@ -18,6 +18,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
+import { SiteRoutes } from 'app/modules/site-registration/site-registration.routes';
 
 @Component({
   selector: 'app-dashboard',
@@ -305,7 +306,7 @@ export class DashboardComponent implements OnInit {
           {
             name: 'Site Registration',
             icon: 'format_list_bulleted',
-            route: AdjudicationRoutes.ENROLMENTS,
+            route: SiteRoutes.MULTIPLE_SITES,
             showItem: true
           }
         ]
