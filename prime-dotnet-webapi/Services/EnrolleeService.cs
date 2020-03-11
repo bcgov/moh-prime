@@ -66,6 +66,7 @@ namespace Prime.Services
                 });
                 _workflowStateMap.Add(ACTIVE, new[] {
                     new StatusWrapper { Status = UNDER_REVIEW, AdminOnly = false },
+                    new StatusWrapper { Status = REQUIRES_TOA, AdminOnly = false },
                     new StatusWrapper { Status = LOCKED, AdminOnly = true }
                 });
                 _workflowStateMap.Add(UNDER_REVIEW, new[] {

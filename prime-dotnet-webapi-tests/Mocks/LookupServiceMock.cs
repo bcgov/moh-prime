@@ -21,7 +21,7 @@ namespace PrimeTests.Mocks
         Task<List<T>> ILookupService.GetLookupsAsync<TKey, T>(params Expression<Func<T, object>>[] includes)
         {
             var type = typeof(T);
-            var holder = this.GetHolder<short, T>();
+            var holder = this.GetHolder<int, T>();
             var results = new List<T>();
             foreach (var value in holder.Values.ToList())
             {

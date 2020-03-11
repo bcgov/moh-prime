@@ -31,6 +31,12 @@ parameters:
 - name: OC_APP
   required: true
   value: dev
+- name: POSTGRESQL_HOST
+  required: true
+  value: postgresql
+- name: METABASE_HOST
+  required: true
+  value: metabase-database
 objects:
 - apiVersion: v1
   kind: DeploymentConfig
@@ -59,8 +65,8 @@ objects:
         containers:
           - env:
               - name: PGHOST
-                value: postgresql
-              - name: PGPASSWORD
+                value: ${POSTGRESQL_HOST}
+              - name: POSTGRES_PASSWORD
                 valueFrom:
                   secretKeyRef:
                     key: database-admin-password
@@ -75,6 +81,23 @@ objects:
                   secretKeyRef:
                     key: database-user
                     name: postgresql-secret
+              - name: METABASE_HOST
+                value: ${METABASE_HOST}
+              - name: METABASE_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    key: password
+                    name: metabase-database-credentials
+              - name: METABASE_DATABASE
+                valueFrom:
+                  secretKeyRef:
+                    key: database
+                    name: metabase-database-credentials
+              - name: METABASE_USERNAME
+                valueFrom:
+                  secretKeyRef:
+                    key: username
+                    name: metabase-database-credentials
             image: ' '
             name: backup
             ports:
@@ -83,8 +106,6 @@ objects:
             volumeMounts:
               - mountPath: /opt/backup
                 name: backup-data
-              - mountPath: /var/lib/postgresql/data
-                name: postgresql
               - mountPath: /var/run
                 name: backup-run
         restartPolicy: Always
@@ -92,9 +113,6 @@ objects:
         - name: backup-data
           persistentVolumeClaim:
             claimName: backup-data
-        - name: postgresql
-          persistentVolumeClaim:
-            claimName: postgresql
         - name: backup-run
           emptyDir: {}
     test: false

@@ -81,7 +81,6 @@ function toolbelt() {
     #OC_APP=tools
     buildPresent=$(oc get bc/"$APP_NAME$SUFFIX" --ignore-not-found=true)
     MODE="apply"
-    OC_ARGS="--overwrite=false --all"
     oc process -f ./"${TEMPLATE_DIRECTORY}/$BUILD_CONFIG_TEMPLATE" \
         -p SOURCE_REPOSITORY_URL="${GIT_URL}" \
         -p SOURCE_CONTEXT_DIR="${SOURCE_CONTEXT_DIR}" \

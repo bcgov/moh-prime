@@ -5,7 +5,7 @@ pipeline {
             options {
                 timeout(time: 120, unit: 'MINUTES')   // timeout on this stage
             }
-            when { expression { ( GIT_BRANCH == 'master' ) } }
+            when { expression { ( BRANCH_NAME == 'master' ) } }
             environment {
                     BRANCH_LOWER = BRANCH_NAME.toLowerCase()
                     VANITY_URL = "test.pharmanetenrolment.gov.bc.ca"
@@ -19,7 +19,6 @@ pipeline {
             steps {
                 script {
                     echo "Test (MASTER) ..."
-                    sh "printenv"
                     sh "./player.sh build database test -p SUFFIX=${SUFFIX}"
                     sh "./player.sh build api test ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh build frontend test ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
@@ -30,29 +29,29 @@ pipeline {
                 }
             }
         }
-        stage('SonarQube Code Check') {
+        stage('Quality Check') {
             options {
                 timeout(time: 90, unit: 'MINUTES')   // timeout on this stage
             }
-            when { expression { ( GIT_BRANCH != 'master' ) } }
-            agent { label 'code-tests' }
-            steps {
-                sh "./player.sh scan"
-            }
+            when { expression { ( BRANCH_NAME == 'master' ) } }
+            parallel {
+                stage('SonarQube Code Check') {
+                    agent { label 'code-tests' }
+                    steps {
+                        sh "./player.sh scan"
+                    }      
+                }
+                stage('ZAP') {
+                    agent { label 'code-tests' }
+                    steps {
+                        checkout scm
+                        echo "Scanning..."
+                        sh "./player.sh zap frontend"
+                    }
+                }
+            }    
         }
-        stage('ZAP') {
-            options {
-                timeout(time: 90, unit: 'MINUTES')   // timeout on this stage
-            }
-            agent { label 'code-tests' }
-            steps {
-                checkout scm
-                echo "Scanning..."
-                sh "./player.sh zap frontend"
-                sh "./player.sh zap api"
-            }
-        }
-        stage('Approve Promotion of Demo & Master') {
+        stage('Approve Promotion of Demo & Production') {
             options {
                 timeout(time: 24, unit: 'HOURS')   // timeout on this stage
             }
@@ -60,8 +59,8 @@ pipeline {
             steps {
                 script {
                     def IS_APPROVED = input(
-                        id: 'IS_APPROVED', message: "Deploy to Demo?", ok: "Yes", parameters: [
-                            string(name: 'IS_APPROVED', defaultValue: 'Yes', description: 'Deploy to Demo?')
+                        id: 'IS_APPROVED', message: "Deploy to Demo & Production?", ok: "Yes", parameters: [
+                            string(name: 'IS_APPROVED', defaultValue: 'Yes', description: 'Deploy to Demo & Production?')
                             ])
                     if (IS_APPROVED != 'yes') {
                         currentBuild.result = "SUCCESS"
@@ -70,47 +69,49 @@ pipeline {
                 }
             }
         }
-        stage('Promote Master to Demo') {
-            options {
-                timeout(time: 120, unit: 'MINUTES')   // timeout on this stage
-            }
-            when { expression { ( GIT_BRANCH == 'master' ) } }
-            environment {
-                    VANITY_URL="demo.pharmanetenrolment.gov.bc.ca"
-                    SCHEMA="https"
-                    PORT="8443"
-                    FRONTEND_ARGS="-p REDIRECT_URL=${SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL}"
-                    API_ARGS="-p ASPNETCORE_ENVIRONMENT=Release -p VANITY_URL=${VANITY_URL}"
-                    SUFFIX="-demo"
-            }
-            agent { label 'master' }
-            steps {
-                script {
-                    echo "Demo (MASTER) ..."
-                    sh "./player.sh build database test -p SUFFIX='-demo'"
-                    sh "./player.sh build api test ${API_ARGS} -p SUFFIX='-demo'"
-                    sh "./player.sh build frontend test ${FRONTEND_ARGS} -p SUFFIX='-demo'"
-                    sh "./player.sh deploy database test -p SUFFIX='-demo'"
-                    sh "./player.sh deploy api test ${API_ARGS} -p SUFFIX='-demo'"
-                    sh "./player.sh deploy frontend test ${FRONTEND_ARGS} -p SUFFIX='-demo'"
-                }
-            }
-        }
-        stage('Promote Master to Production') {
+        stage('Promote to Demo & Production') {
             options {
                 timeout(time: 120, unit: 'MINUTES')   // timeout on this stage
             }
             when { expression { ( BRANCH_NAME == 'master' ) } }
-            agent { label 'master' }
-            steps {
-                echo "Deploy to Production..."
-                sh "./player.sh build database prod"
-                sh "./player.sh build api prod"
-                sh "./player.sh build frontend prod"
-                sh "./player.sh deploy database prod"
-                sh "./player.sh deploy api prod"
-                sh "./player.sh deploy frontend prod"
-                sh "./player.sh toolbelt schemaspy prod"
+            parallel {
+                stage('Promote Master to Demo') {
+                    agent { label 'master' }
+                    environment {
+                            VANITY_URL="demo.pharmanetenrolment.gov.bc.ca"
+                            SCHEMA="https"
+                            PORT="8443"
+                            FRONTEND_ARGS="-p REDIRECT_URL=${SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL}"
+                            API_ARGS="-p ASPNETCORE_ENVIRONMENT=Release -p VANITY_URL=${VANITY_URL}"
+                            SUFFIX="-demo"
+                    }
+                    steps {
+                        script {
+                            echo "Demo (MASTER) ..."
+                            sh "./player.sh build database test -p SUFFIX='-demo'"
+                            sh "./player.sh build api test ${API_ARGS} -p SUFFIX='-demo'"
+                            sh "./player.sh build frontend test ${FRONTEND_ARGS} -p SUFFIX='-demo'"
+                            sh "./player.sh deploy database test -p SUFFIX='-demo'"
+                            sh "./player.sh deploy api test ${API_ARGS} -p SUFFIX='-demo'"
+                            sh "./player.sh deploy frontend test ${FRONTEND_ARGS} -p SUFFIX='-demo'"
+                        }
+                    }
+                }
+                stage('Promote Master to Production') {
+                    agent { label 'master' }
+                    steps {
+                        script {
+                            echo "Deploy to Production..."
+                            sh "./player.sh build database prod"
+                            sh "./player.sh build api prod"
+                            sh "./player.sh build frontend prod"
+                            sh "./player.sh deploy database prod"
+                            sh "./player.sh deploy api prod"
+                            sh "./player.sh deploy frontend prod"
+                            sh "./player.sh toolbelt schemaspy prod"
+                        }
+                    }
+                }
             }
         }
     }
