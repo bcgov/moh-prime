@@ -4,36 +4,36 @@ import { EditorModule } from '@tinymce/tinymce-angular';
 import { SharedModule } from '@shared/shared.module';
 import { AdjudicationRoutingModule } from './adjudication-routing.module';
 
+import { AdjudicatorDashboardComponent } from './shared/components/adjudicator-dashboard/adjudicator-dashboard.component';
+import { AdjudicatorActionsComponent } from './shared/components/adjudicator-actions/adjudicator-actions.component';
+import { AdjudicatorNotesComponent } from './pages/adjudicator-notes/adjudicator-notes.component';
 import { EnrolmentsComponent } from './pages/enrolments/enrolments.component';
 import { EnrolmentComponent } from './pages/enrolment/enrolment.component';
-import { AdjudicatorNotesComponent } from './pages/adjudicator-notes/adjudicator-notes.component';
 import { LimitsConditionsClausesComponent } from './pages/limits-conditions-clauses/limits-conditions-clauses.component';
 import { EnrolleeProfileVersionComponent } from './pages/enrollee-profile-version/enrollee-profile-version.component';
 import { EnrolleeProfileVersionsComponent } from './pages/enrollee-profile-versions/enrollee-profile-versions.component';
 import { EnrolleeAccessTermsComponent } from './pages/enrollee-access-terms/enrollee-access-terms.component';
 import { EnrolleeAccessTermComponent } from './pages/enrollee-access-term/enrollee-access-term.component';
 import { EnrolleeAccessTermEnrolmentComponent } from './pages/enrollee-access-term-enrolment/enrollee-access-term-enrolment.component';
-
-import { AdjudicationDashboardComponent } from './shared/components/adjudication-dashboard/adjudication-dashboard.component';
-import { SearchFormComponent } from './shared/components/search-form/search-form.component';
 import { EnrolleeEventsComponent } from './pages/enrollee-events/enrollee-events.component';
 import { EnrolleeReviewStatusComponent } from './pages/enrollee-review-status/enrollee-review-status.component';
 
+
 @NgModule({
   declarations: [
+    AdjudicatorDashboardComponent,
+    AdjudicatorActionsComponent,
+    AdjudicatorNotesComponent,
     EnrolmentsComponent,
     EnrolmentComponent,
-    AdjudicatorNotesComponent,
     LimitsConditionsClausesComponent,
+    EnrolleeEventsComponent,
+    EnrolleeReviewStatusComponent,
     EnrolleeProfileVersionComponent,
     EnrolleeProfileVersionsComponent,
     EnrolleeAccessTermsComponent,
     EnrolleeAccessTermComponent,
     EnrolleeAccessTermEnrolmentComponent,
-    SearchFormComponent,
-    AdjudicationDashboardComponent,
-    EnrolleeEventsComponent,
-    EnrolleeReviewStatusComponent
   ],
   imports: [
     SharedModule,

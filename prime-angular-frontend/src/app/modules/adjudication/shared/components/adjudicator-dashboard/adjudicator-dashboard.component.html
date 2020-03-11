@@ -113,24 +113,15 @@
             <span>Events</span>
           </button>
           <button mat-menu-item
-                  (click)="routeTo([row.id, AdjudicationRoutes.ENROLLEE_ADJUDICATOR_NOTES])">
-            <mat-icon>message</mat-icon>
-            <span>Add & View Notes</span>
-          </button>
-
-          <mat-divider></mat-divider>
-
-          <button mat-menu-item
                   *ngIf="row.currentStatus.enrolmentStatusReasons.length"
                   (click)="routeTo([row.id, AdjudicationRoutes.ENROLLEE_REVIEW_STATUS])">
             <mat-icon>flag</mat-icon>
             <span>Review Status Reasons</span>
           </button>
           <button mat-menu-item
-                  *ngIf="isUnderReview(row.currentStatus.statusCode)"
-                  (click)="routeTo([row.id, AdjudicationRoutes.ENROLLEE_LIMITS_CONDITIONS])">
-            <mat-icon>description</mat-icon>
-            <span>Add Limits and Conditions</span>
+                  (click)="routeTo([row.id, AdjudicationRoutes.ENROLLEE_ADJUDICATOR_NOTES])">
+            <mat-icon>message</mat-icon>
+            <span>Add & View Notes</span>
           </button>
 
           <mat-divider></mat-divider>
@@ -155,51 +146,9 @@
         <ng-content></ng-content>
 
       </div>
-      <div *ngIf="hasActions"
-           class="col-auto">
+      <div class="col-auto py-5">
 
-        <button mat-button
-                [disabled]="!dataSource?.data"
-                [matMenuTriggerFor]="actions">Adjudicator Actions</button>
-
-        <mat-menu #actions>
-          <button mat-menu-item
-                  [disabled]="!canEdit"
-                  *ngIf="canApproveOrDeny(enrollee.currentStatus.statusCode)"
-                  (click)="approveEnrollee(enrollee)">
-            <mat-icon>check_circle_outline</mat-icon>
-            <span>Approve Enrolment</span>
-          </button>
-          <button mat-menu-item
-                  [disabled]="!canEdit"
-                  *ngIf="canApproveOrDeny(enrollee.currentStatus.statusCode)"
-                  (click)="declineEnrollee(enrollee.id)">
-            <mat-icon>block</mat-icon>
-            <span>Decline Enrolment</span>
-          </button>
-          <button mat-menu-item
-                  [disabled]="!canEdit"
-                  *ngIf="canAllowEditing(enrollee.currentStatus.statusCode)"
-                  (click)="unlockEnrollee(enrollee.id)">
-            <mat-icon>undo</mat-icon>
-            <span>Unlock for Editing</span>
-          </button>
-          <button mat-menu-item
-                  *ngIf="canDelete"
-                  (click)="deleteEnrollee(enrollee.id)">
-            <mat-icon>delete</mat-icon>
-            <span>Delete Enrolment</span>
-          </button>
-
-          <mat-divider></mat-divider>
-
-          <button mat-menu-item
-                  *ngIf="isUnderReview(enrollee.currentStatus.statusCode)"
-                  (click)="routeTo([enrollee.id, AdjudicationRoutes.ENROLLEE_LIMITS_CONDITIONS])">
-            <mat-icon>description</mat-icon>
-            <span>Add Limits and Conditions</span>
-          </button>
-        </mat-menu>
+        <ng-content select="app-adjudicator-actions"></ng-content>
 
       </div>
     </div>

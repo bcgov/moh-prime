@@ -1,4 +1,4 @@
-<app-adjudication-dashboard [hasActions]="hasActions">
+<app-adjudicator-dashboard>
 
   <app-page-header>Limits and Conditions Clauses</app-page-header>
 
@@ -31,23 +31,20 @@
         </div>
 
       </div>
-
       <div class="col-sm-12 col-lg-9 col-xl-7">
 
-        <h2>Limits and Conditions</h2>
+        <h2 class="mb-2">Limits and Conditions</h2>
 
-        <ng-container *ngIf="preview; else noNotes">
+        <ng-container *ngIf="preview; else noClause">
 
-          <div class="col-sm-12 col-lg-6">
-            <div class="preview">
-              <p class="bold underline">Additional Limits and Conditions</p>
-              <div [innerHTML]="preview | safeHtml | default: 'No Preview Found'"></div>
-            </div>
+          <div class="preview">
+            <p class="bold underline">Additional Limits and Conditions</p>
+            <div [innerHTML]="preview | safeHtml | default: 'No Preview Found'"></div>
           </div>
 
         </ng-container>
 
-        <ng-template #noNotes>
+        <ng-template #noClause>
           No limits and conditions have been applied
         </ng-template>
 
@@ -56,4 +53,4 @@
 
   </form>
 
-</app-adjudication-dashboard>
+</app-adjudicator-dashboard>

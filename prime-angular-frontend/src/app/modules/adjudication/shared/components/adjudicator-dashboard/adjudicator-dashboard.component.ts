@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, AfterContentInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatTableDataSource, MatDialog } from '@angular/material';
 
@@ -21,15 +21,11 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
-  selector: 'app-adjudication-dashboard',
-  templateUrl: './adjudication-dashboard.component.html',
-  styleUrls: ['./adjudication-dashboard.component.scss']
+  selector: 'app-adjudicator-dashboard',
+  templateUrl: './adjudicator-dashboard.component.html',
+  styleUrls: ['./adjudicator-dashboard.component.scss']
 })
-export class AdjudicationDashboardComponent extends AbstractComponent implements OnInit {
-  // Indicates that the menu for adjudicator actions should be
-  // displayed for use on a specific enrollee
-  @Input() public hasActions: boolean;
-
+export class AdjudicatorDashboardComponent extends AbstractComponent implements OnInit, AfterContentInit {
   public busy: Subscription;
   public enrolleeId: number | null;
   public columns: string[];
@@ -55,7 +51,6 @@ export class AdjudicationDashboardComponent extends AbstractComponent implements
   ) {
     super(route, router);
 
-    this.hasActions = true;
     this.enrolleeId = this.route.snapshot.params.id || null;
     this.statuses = this.configService.statuses;
     this.columns = ['uniqueId', 'name', 'appliedDate', 'status', 'approvedDate', 'adjudicator', 'actions'];
@@ -232,6 +227,10 @@ export class AdjudicationDashboardComponent extends AbstractComponent implements
       .subscribe((enrollees: HttpEnrollee[]) =>
         this.dataSource = new MatTableDataSource<HttpEnrollee>(enrollees)
       );
+  }
+
+  public ngAfterContentInit() {
+
   }
 
   // TODO set up request observable, and merge/pipe in search and filter results
