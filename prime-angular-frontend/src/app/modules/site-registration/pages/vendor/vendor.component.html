@@ -1,8 +1,6 @@
 <app-page [busy]="busy">
   <app-page-header>PharmaNet Site Registration</app-page-header>
-  <!-- <app-progress-indicator *ngIf="isInitialEnrolment"
-                          [inProgress]="isInitialEnrolment"
-                          [currentRoute]="EnrolmentRoutes.DEMOGRAPHIC"></app-progress-indicator> -->
+  <app-progress-indicator [inProgress]="true"></app-progress-indicator>
   <form (ngSubmit)="onSubmit()"
         [formGroup]="form"
         novalidate>
@@ -32,7 +30,8 @@
   </form>
 
   <app-page-footer [isInitialEnrolment]="true"
-                   [hasSecondaryAction]="false"
-                   (save)="onSubmit()"></app-page-footer>
+                   [hasSecondaryAction]="true"
+                   (save)="onSubmit()"
+                   (back)="onBack()"></app-page-footer>
 
 </app-page>

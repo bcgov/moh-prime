@@ -1,1 +1,118 @@
-<p>site-review works!</p>
+<app-page [busy]="busy">
+  <app-page-header>PharmaNet Site Registration</app-page-header>
+  <app-progress-indicator [inProgress]="true"></app-progress-indicator>
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Site Registration Review</ng-container>
+    <ng-container appPageSubheaderSummary>
+      Review all the information to ensure it is accurate, you will not get approved if any of your information is
+      incorrect. If you need to edit your information use the pencil icon to navigate to that section of the enrolment
+      to make changes.
+    </ng-container>
+  </app-page-subheader>
+
+  <section class="mb-4">
+
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>Organization Information</ng-container>
+      <mat-icon matTooltip="Edit Organizations"
+                (click)="onRoute(SiteRoutes.MULTIPLE_SITES)">edit</mat-icon>
+    </app-page-subheader>
+
+
+    <app-enrollee-property title="Organization Number"
+                           [makeBold]="true">
+      --
+    </app-enrollee-property>
+
+    <app-enrollee-property title="Vendor"
+                           [makeBold]="true">
+      --
+    </app-enrollee-property>
+
+  </section>
+
+  <section class="mb-4">
+
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>Signing Authority</ng-container>
+      <mat-icon matTooltip="Edit Signing Authority"
+                (click)="onRoute(SiteRoutes.SIGNING_AUTHORITY)">edit</mat-icon>
+    </app-page-subheader>
+
+    <app-registrant-profile-review></app-registrant-profile-review>
+
+  </section>
+
+  <section class="mb-4">
+
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>Administrator of PharmaNet Onboarding</ng-container>
+      <mat-icon matTooltip="Edit Administrator"
+                (click)="onRoute(SiteRoutes.ADMINISTRATOR)">edit</mat-icon>
+    </app-page-subheader>
+
+    <app-registrant-profile-review></app-registrant-profile-review>
+
+  </section>
+
+
+  <section class="mb-4">
+
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>Administrator of PharmaNet Onboarding</ng-container>
+      <mat-icon matTooltip="Edit Administrator"
+                (click)="onRoute(SiteRoutes.ADMINISTRATOR)">edit</mat-icon>
+    </app-page-subheader>
+
+    <app-registrant-profile-review></app-registrant-profile-review>
+
+  </section>
+
+  <section class="mb-4">
+
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>Privacy Officer</ng-container>
+      <mat-icon matTooltip="Edit Privacy Officer"
+                (click)="onRoute(SiteRoutes.PRIVACY_OFFICER)">edit</mat-icon>
+    </app-page-subheader>
+
+    <app-registrant-profile-review></app-registrant-profile-review>
+
+  </section>
+
+  <section class="mb-4">
+
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>Technical Support Contact</ng-container>
+      <mat-icon matTooltip="Edit Technical Support Contact"
+                (click)="onRoute(SiteRoutes.TECHNICAL_SUPPORT_CONTACT)">edit</mat-icon>
+    </app-page-subheader>
+
+    <app-registrant-profile-review></app-registrant-profile-review>
+
+  </section>
+
+  <div class="footer">
+
+    <mat-checkbox #accept>
+      <div class="pl-3">
+        By submitting this form, I hereby certify that all information provided on this form is true and I understand
+        that the Ministry of Health and/or Health Insurance BC (HIBC) may verify this information with my regulatory
+        body, software vendor, and others as required.
+      </div>
+    </mat-checkbox>
+  </div>
+
+  <div class="row justify-content-end">
+    <div class="col pt-4 text-right">
+
+      <button mat-flat-button
+              color="primary"
+              [disabled]="!accept.checked"
+              (click)="onSubmit()">Submit Enrolment</button>
+
+    </div>
+  </div>
+
+</app-page>

@@ -11,6 +11,9 @@ import { SiteReviewComponent } from './pages/site-review/site-review.component';
 import { SiteInformationComponent } from './pages/site-information/site-information.component';
 import { HoursOperationComponent } from './pages/hours-operation/hours-operation.component';
 import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer.component';
+import { RegistrantProfileFormComponent } from './shared/components/registrant-profile-form/registrant-profile-form.component';
+import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
+import { RegistrantProfileReviewComponent } from './shared/components/registrant-profile-review/registrant-profile-review.component';
 
 
 
@@ -25,7 +28,10 @@ import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer
     SiteReviewComponent,
     SiteInformationComponent,
     HoursOperationComponent,
-    PrivacyOfficerComponent
+    PrivacyOfficerComponent,
+    RegistrantProfileFormComponent,
+    ConfirmationComponent,
+    RegistrantProfileReviewComponent
   ],
   imports: [
     SharedModule,

@@ -118,6 +118,7 @@ import { PageFooterComponent } from './components/page-footer/page-footer.compon
     NgxProgressModule,
     ReactiveFormsModule,
     MarkdownModule.forRoot()
+
   ],
   exports: [
     CommonModule,

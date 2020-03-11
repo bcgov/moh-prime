@@ -55,7 +55,7 @@ export class VendorComponent implements OnInit {
   }
 
   onBack() {
-    this.router.navigate([SiteRoutes.MULTIPLE_SITES], { relativeTo: this.route.parent });
+    this.router.navigate([SiteRoutes.HOURS_OPERATION], { relativeTo: this.route.parent });
   }
 
   ngOnInit() {

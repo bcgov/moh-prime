@@ -1,1 +1,28 @@
-<p>privacy-officer works!</p>
+<app-page [busy]="busy">
+  <app-page-header>PharmaNet Site Registration</app-page-header>
+  <app-progress-indicator [inProgress]="true"></app-progress-indicator>
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Privacy Officer</ng-container>
+    <ng-container appPageSubheaderSummary>
+      Under the Personal Information Protection Act of Information and Protection of Privacy Act, organizations holding
+      or accessing personal information must designate a Privacy Officer who can respond to privacy and information
+      management concerns on the organization's behalf.
+    </ng-container>
+  </app-page-subheader>
+
+  <section class="mb-3">
+    <mat-slide-toggle class="mb-3"
+                      color="primary">
+      Same as Signing Authority
+    </mat-slide-toggle>
+  </section>
+
+  <app-registrant-profile-form></app-registrant-profile-form>
+
+  <app-page-footer [isInitialEnrolment]="true"
+                   [hasSecondaryAction]="true"
+                   (save)="onSubmit()"
+                   (back)="onBack()"></app-page-footer>
+
+</app-page>

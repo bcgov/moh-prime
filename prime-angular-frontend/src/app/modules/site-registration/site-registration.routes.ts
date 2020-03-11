@@ -10,6 +10,7 @@ export class SiteRoutes {
   public static PRIVACY_OFFICER = 'privacy-officer';
   public static TECHNICAL_SUPPORT_CONTACT = 'technical-support-contact';
   public static SITE_REVIEW = 'site-review';
+  public static CONFIRMATION = 'confirmation';
 
   public static MODULE_PATH = SiteRoutes.SITE_REGISTRATION;
 
