@@ -10,10 +10,8 @@ namespace Prime.Services
 {
     public class AdminService : BaseService, IAdminService
     {
-        public AdminService(
-            ApiDbContext context,
-            IHttpContextAccessor httpContext)
-            : base(context, httpContext)
+        public AdminService(IServiceProvider provider)
+            : base(provider)
         { }
 
         public async Task<bool> AdminExistsAsync(int adminId)

@@ -14,9 +14,9 @@ namespace Prime.Services
     {
         private readonly List<IAutomaticAdjudicationRule> _rules;
 
-        public AutomaticAdjudicationService(
-            ApiDbContext context, IHttpContextAccessor httpContext, IPharmanetApiService pharmanetApiService)
-            : base(context, httpContext)
+        public AutomaticAdjudicationService(IServiceProvider provider,
+            IPharmanetApiService pharmanetApiService)
+            : base(provider)
         {
             _rules = new List<IAutomaticAdjudicationRule>
             {

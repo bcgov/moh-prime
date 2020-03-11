@@ -10,19 +10,17 @@ namespace Prime.Services
 {
     public class PrivilegeService : BaseService, IPrivilegeService
     {
-        public PrivilegeService(
-            ApiDbContext context,
-            IHttpContextAccessor httpContext)
-            : base(context, httpContext)
+        public PrivilegeService(IServiceProvider provider)
+            : base(provider)
         { }
 
         public async Task AssignPrivilegesToEnrolleeAsync(int enrolleeId, Enrollee enrollee)
         {
             var _enrolleeDb = _context.Enrollees
-                                .Include(e => e.Certifications)
-                                .Where(e => e.Id == enrollee.Id)
-                                .AsNoTracking()
-                                .SingleOrDefault();
+                .Include(e => e.Certifications)
+                .Where(e => e.Id == enrollee.Id)
+                .AsNoTracking()
+                .SingleOrDefault();
 
             ICollection<AssignedPrivilege> assignedPrivileges = await this.GetAssignedPrivilegesForEnrolleeAsync(enrolleeId);
 

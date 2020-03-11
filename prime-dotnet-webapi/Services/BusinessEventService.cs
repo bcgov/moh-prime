@@ -9,9 +9,9 @@ namespace Prime.Services
     {
         private readonly IAdminService _adminService;
 
-        public BusinessEventService(ApiDbContext context, IHttpContextAccessor httpContext,
+        public BusinessEventService(IServiceProvider provider,
             IAdminService adminService)
-            : base(context, httpContext)
+            : base(provider)
         {
             _adminService = adminService;
         }

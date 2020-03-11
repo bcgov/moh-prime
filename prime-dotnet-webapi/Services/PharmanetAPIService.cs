@@ -19,10 +19,8 @@ namespace Prime.Services
     {
         private static HttpClient Client = InitHttpClient();
 
-        public PharmanetApiService(
-            ApiDbContext context,
-            IHttpContextAccessor httpContext)
-            : base(context, httpContext)
+        public PharmanetApiService(IServiceProvider provider)
+            : base(provider)
         { }
 
         private static HttpClient InitHttpClient()

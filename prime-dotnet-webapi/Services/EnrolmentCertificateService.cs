@@ -25,12 +25,10 @@ namespace Prime.Services
             { "Plexia", "service@plexia.ca" }
         }.ToImmutableDictionary();
 
-        public EnrolmentCertificateService(
-            ApiDbContext context,
-            IHttpContextAccessor httpContext,
+        public EnrolmentCertificateService(IServiceProvider provider,
             IAccessTermService accessTermService,
             IEnrolleeProfileVersionService enroleeProfileVersionService)
-            : base(context, httpContext)
+            : base(provider)
         {
             _accessTermService = accessTermService;
             _enroleeProfileVersionService = enroleeProfileVersionService;

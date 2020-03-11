@@ -21,7 +21,7 @@ namespace Prime.Services
         private readonly IEnrolleeProfileVersionService _enroleeProfileVersionService;
         private readonly IPrivilegeService _privilegeService;
 
-        public SubmissionService(ApiDbContext context, IHttpContextAccessor httpContext,
+        public SubmissionService(IServiceProvider provider,
             IAccessTermService accessTermService,
             IAutomaticAdjudicationService automaticAdjudicationService,
             IBusinessEventService businessEventService,
@@ -29,7 +29,7 @@ namespace Prime.Services
             IEnrolleeService enrolleeService,
             IEnrolleeProfileVersionService enrolleeProfileVersionService,
             IPrivilegeService privilegeService)
-            : base(context, httpContext)
+            : base(provider)
         {
             _accessTermService = accessTermService;
             _automaticAdjudicationService = automaticAdjudicationService;
