@@ -19,24 +19,23 @@ USER 0
 RUN echo 'deb http://deb.debian.org/debian stretch-backports main' > /etc/apt/sources.list.d/stretch-backports.list
 RUN mkdir /home/jenkins/.jenkins && \
     mkdir -p ${AGENT_WORKDIR} && \
-    apt-get -yqq update && \
-    apt-get -yqq install -t stretch-backports \
-        software-properties-common \
+    apt-get update && \
+    apt-get upgrade -y &&\
+    apt-get install -y software-properties-common \
+        default-jre \
         git-lfs \
         vim \
         nano \
-        curl \
         unzip \
-        xvfb \
-        libxi6 \
-        libgconf-2-4 \
         maven \
         pciutils \
-        apt-transport-https && \
+        apt-transport-https \
+        wget && \
     curl --create-dirs -fsSLo /usr/share/jenkins/agent.jar http://jenkins-prod/jnlpJars/agent.jar && \
     chmod 755 /usr/share/jenkins && \
     chmod 644 /usr/share/jenkins/agent.jar && \
     ln -sf /usr/share/jenkins/agent.jar /usr/share/jenkins/slave.jar
+    #
 
 VOLUME /home/jenkins/.jenkins
 VOLUME ${AGENT_WORKDIR}
@@ -49,21 +48,25 @@ ENV PATH $PATH:$JAVA_HOME:/var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunne
 #COMMON
 RUN echo "Installing common, jenkins and Sonar Scanner prerequisites..." && \
     useradd default && \
-    apt-get -yqq install openjdk-8-jre  && \
-    wget -q http://sourceforge.net/projects/sonar-pkg/files/deb/binary/sonar_6.7.4_all.deb && \
-    dpkg -i sonar_6.7.4_all.deb && \
+    apt-get -y install xvfb \
+        libgl1 \
+        libxi6 \
+        libglx0 \
+        libgconf-2-4 && \
+    wget -q http://sourceforge.net/projects/sonar-pkg/files/deb/binary/sonar_7.1_all.deb && \
+    dpkg -i sonar_7.1_all.deb && \
     mkdir -p /var/lib/origin && \
     chown -R default:0 /home/jenkins && \
     chmod -R a+rwx /home/jenkins && \
     chown -R default:0 ${AGENT_WORKDIR} && \
     chmod -R a+rwx ${AGENT_WORKDIR} && \
-    wget -q https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.2.0.1873-linux.zip && \
-    unzip sonar-scanner-cli-4.2.0.1873-linux.zip && \
+    wget -q https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.3.0.2102-linux.zip && \
+    unzip sonar-scanner-cli-4.3.0.2102-linux.zip && \
     mv sonar-scanner-4.2.0.1873-linux sonarscanner && \
     mv sonarscanner / && \
     chown -R default:0 /sonarscanner && \
     chmod -R a+rwx /sonarscanner && \
-    rm -f sonar-scanner-cli-4.2.0.1873-linux.zip && \
+    rm -f sonar-scanner-cli-4.3.0.2102-linux.zip && \
     ln -s /sonarscanner/sonar-scanner /usr/bin/sonar-scanner && \
     chmod 777 /etc/passwd
 
@@ -118,7 +121,7 @@ RUN echo "Installing .NET, coverlet, scanner..." && \
     apt-get -yqq update && \
     apt-get -yqq install dotnet-sdk-3.1 && \
     dotnet tool install --global coverlet.console && \
-    dotnet tool install --global dotnet-sonarscanner --version 4.7.1 && \
+    dotnet tool install --global dotnet-sonarscanner && \
     mkdir -p /.dotnet && \
     chown -R default:0 /.dotnet && \
     chmod -R a+rwx /.dotnet && \

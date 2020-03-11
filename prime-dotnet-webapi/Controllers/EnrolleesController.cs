@@ -38,7 +38,6 @@ namespace Prime.Controllers
             _businessEventService = businessEventService;
         }
 
-
         // GET: api/Enrollees
         /// <summary>
         /// Gets all of the enrollees for the user, or all enrollees if user has ADMIN role.

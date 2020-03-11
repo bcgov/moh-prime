@@ -31,7 +31,7 @@ pipeline {
         }
         stage('Quality Check') {
             options {
-                timeout(time: 90, unit: 'MINUTES')   // timeout on this stage
+                timeout(time: 5, unit: 'MINUTES')   // timeout on this stage
             }
             when { expression { ( BRANCH_NAME == 'master' ) } }
             parallel {
@@ -47,10 +47,9 @@ pipeline {
                         checkout scm
                         echo "Scanning..."
                         sh "./player.sh zap frontend"
-                        sh "./player.sh zap api"
                     }
                 }
-            }    
+            }
         }
         stage('Approve Promotion of Demo & Production') {
             options {
