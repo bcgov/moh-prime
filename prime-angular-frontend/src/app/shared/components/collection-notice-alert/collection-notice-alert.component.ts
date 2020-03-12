@@ -14,8 +14,6 @@ import { SiteCollectionNoticeComponent } from 'app/modules/site-registration/pag
   styleUrls: ['./collection-notice-alert.component.scss']
 })
 export class CollectionNoticeAlertComponent implements OnInit {
-  @Input() isSite = false;
-
   public isProfileCompleted: boolean;
   public EnrolmentRoutes = EnrolmentRoutes;
 
@@ -33,24 +31,20 @@ export class CollectionNoticeAlertComponent implements OnInit {
   }
 
   public show(): boolean {
-    return this.authService.hasJustLoggedIn || this.isSite;
+    return this.authService.hasJustLoggedIn;
   }
 
   public onAccept() {
-    const currentRouteComponent = this.route.routeConfig.component;
     this.authService.hasJustLoggedIn = false;
 
-    if (currentRouteComponent === CollectionNoticeComponent) {
-      const route = (!this.isProfileCompleted)
-        ? EnrolmentRoutes.DEMOGRAPHIC
-        : EnrolmentRoutes.OVERVIEW;
+    const route = (!this.isProfileCompleted)
+      ? EnrolmentRoutes.DEMOGRAPHIC
+      : EnrolmentRoutes.OVERVIEW;
 
-      if (this.enrolmentService.isInitialEnrolment) {
-        this.router.navigate([route], { relativeTo: this.route.parent });
-      }
-    } else if (currentRouteComponent === SiteCollectionNoticeComponent) {
-      this.router.navigate([SiteRoutes.MULTIPLE_SITES], { relativeTo: this.route.parent });
+    if (this.enrolmentService.isInitialEnrolment) {
+      this.router.navigate([route], { relativeTo: this.route.parent });
     }
+
   }
 
   public ngOnInit() {

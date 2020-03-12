@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SiteRoutes } from '../../site-registration.routes';
 
 @Component({
   selector: 'app-site-collection-notice',
@@ -7,7 +9,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SiteCollectionNoticeComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router
+  ) { }
+
+  public onAccept() {
+
+    this.router.navigate([SiteRoutes.MULTIPLE_SITES], { relativeTo: this.route.parent });
+
+  }
 
   public ngOnInit() { }
 
