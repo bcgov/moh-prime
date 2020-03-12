@@ -30,7 +30,6 @@ export class HoursOperationComponent implements OnInit {
     private formBuilder: FormBuilder
   ) {
     this.amHours = [
-      '24:00',
       '1:00',
       '2:00',
       '3:00',
@@ -46,7 +45,6 @@ export class HoursOperationComponent implements OnInit {
     ];
 
     this.pmHours = [
-      '12:00',
       '13:00',
       '14:00',
       '15:00',
