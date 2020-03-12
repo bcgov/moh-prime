@@ -1,10 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatDialog } from '@angular/material';
-import { ToastService } from '@core/services/toast.service';
-import { LoggerService } from '@core/services/logger.service';
-import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@enrolment/shared/services/form-utils.service';
 import { FormControlValidators } from '@shared/validators/form-control.validators';
 import { SiteRoutes } from 'app/modules/site-registration/site-registration.routes';
@@ -15,16 +11,12 @@ import { SiteRoutes } from 'app/modules/site-registration/site-registration.rout
   styleUrls: ['./registrant-profile-form.component.scss']
 })
 export class RegistrantProfileFormComponent implements OnInit {
-  form: FormGroup;
+  public form: FormGroup;
   public hasSeparateAddress: boolean;
 
   constructor(
-    protected route: ActivatedRoute,
-    protected router: Router,
-    protected dialog: MatDialog,
-    protected toastService: ToastService,
-    protected logger: LoggerService,
-    protected utilService: UtilsService,
+    private route: ActivatedRoute,
+    private router: Router,
     private formUtilsService: FormUtilsService,
     private formBuilder: FormBuilder
   ) { }
@@ -71,12 +63,12 @@ export class RegistrantProfileFormComponent implements OnInit {
   }
 
 
-  ngOnInit() {
+  public ngOnInit() {
     this.createFormInstance();
     this.initForm();
   }
 
-  protected createFormInstance() {
+  private createFormInstance() {
     this.form = this.formBuilder.group({
       name: [null, []],
       jobRole: [null, []],
@@ -106,7 +98,7 @@ export class RegistrantProfileFormComponent implements OnInit {
     });
   }
 
-  protected initForm() {
+  private initForm() {
     // Show separate address if it exists
     this.hasSeparateAddress = !!(
       this.separateAddress.get('countryCode').value ||
@@ -118,14 +110,6 @@ export class RegistrantProfileFormComponent implements OnInit {
     );
 
     this.toggleSeparateAddressValidators(this.separateAddress, ['street2']);
-  }
-
-  onSubmit() {
-
-  }
-
-  onBack() {
-    this.router.navigate([SiteRoutes.VENDOR], { relativeTo: this.route.parent });
   }
 
   private toggleSeparateAddressValidators(separateAddress: FormGroup, blacklist: string[] = []) {

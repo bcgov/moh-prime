@@ -1,12 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, FormControl } from '@angular/forms';
-import { FormUtilsService } from '@enrolment/shared/services/form-utils.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatDialog } from '@angular/material';
 import { ToastService } from '@core/services/toast.service';
-import { LoggerService } from '@core/services/logger.service';
-import { UtilsService } from '@core/services/utils.service';
-import { BehaviorSubject } from 'rxjs';
 import { SiteRoutes } from '../../site-registration.routes';
 
 @Component({
@@ -15,8 +10,8 @@ import { SiteRoutes } from '../../site-registration.routes';
   styleUrls: ['./vendor.component.scss']
 })
 export class VendorComponent implements OnInit {
-  form: FormGroup;
-  vendorsData = [
+  public form: FormGroup;
+  public vendorsData = [
     { id: 0, name: 'Excelleris' },
     { id: 1, name: 'iClinic Inc.' },
     { id: 2, name: 'Medinet' },
@@ -25,18 +20,14 @@ export class VendorComponent implements OnInit {
   ];
 
   constructor(
-    protected route: ActivatedRoute,
-    protected router: Router,
-    protected dialog: MatDialog,
-    protected toastService: ToastService,
-    protected logger: LoggerService,
-    protected utilService: UtilsService,
-    private formUtilsService: FormUtilsService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private toastService: ToastService,
     private formBuilder: FormBuilder
   ) {
   }
 
-  onChangeEventFunc(name: string, isChecked: boolean) {
+  public onChangeEventFunc(name: string, isChecked: boolean) {
     const vendors = (this.form.controls.vendors as FormArray);
 
     if (isChecked) {
@@ -47,24 +38,20 @@ export class VendorComponent implements OnInit {
     }
   }
 
-  onSubmit() {
-    console.log(this.form.value.vendors);
+  public onSubmit() {
     this.toastService.openSuccessToast('Enrolment information has been saved');
     this.form.markAsPristine();
     this.router.navigate([SiteRoutes.SIGNING_AUTHORITY], { relativeTo: this.route.parent });
   }
 
-  onBack() {
+  public onBack() {
     this.router.navigate([SiteRoutes.HOURS_OPERATION], { relativeTo: this.route.parent });
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.form = this.formBuilder.group({
       vendors: new FormArray([])
     });
 
   }
-
-
-
 }

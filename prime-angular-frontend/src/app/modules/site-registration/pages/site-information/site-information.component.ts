@@ -1,12 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatDialog } from '@angular/material';
 import { ToastService } from '@core/services/toast.service';
-import { LoggerService } from '@core/services/logger.service';
-import { UtilsService } from '@core/services/utils.service';
-import { FormUtilsService } from '@enrolment/shared/services/form-utils.service';
-import { FormControlValidators } from '@shared/validators/form-control.validators';
 import { SiteRoutes } from '../../site-registration.routes';
 
 @Component({
@@ -15,16 +10,12 @@ import { SiteRoutes } from '../../site-registration.routes';
   styleUrls: ['./site-information.component.scss']
 })
 export class SiteInformationComponent implements OnInit {
-  form: FormGroup;
+  public form: FormGroup;
 
   constructor(
-    protected route: ActivatedRoute,
-    protected router: Router,
-    protected dialog: MatDialog,
-    protected toastService: ToastService,
-    protected logger: LoggerService,
-    protected utilService: UtilsService,
-    private formUtilsService: FormUtilsService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private toastService: ToastService,
     private formBuilder: FormBuilder
   ) { }
 
@@ -48,12 +39,21 @@ export class SiteInformationComponent implements OnInit {
     return this.form.get('postal') as FormControl;
   }
 
-  ngOnInit() {
-    this.createFormInstance();
-    this.initForm();
+  public onSubmit() {
+    this.toastService.openSuccessToast('Enrolment information has been saved');
+    this.form.markAsPristine();
+    this.router.navigate([SiteRoutes.HOURS_OPERATION], { relativeTo: this.route.parent });
   }
 
-  protected createFormInstance() {
+  public onBack() {
+    this.router.navigate([SiteRoutes.MULTIPLE_SITES], { relativeTo: this.route.parent });
+  }
+
+  public ngOnInit() {
+    this.createFormInstance();
+  }
+
+  private createFormInstance() {
     this.form = this.formBuilder.group({
       siteName: [null, []],
       doingBusinessAs: [null, []],
@@ -61,20 +61,6 @@ export class SiteInformationComponent implements OnInit {
       city: [{ value: null, disabled: false }, []],
       postal: [{ value: null, disabled: false }, []]
     });
-  }
-
-  protected initForm() {
-
-  }
-
-  onSubmit() {
-    this.toastService.openSuccessToast('Enrolment information has been saved');
-    this.form.markAsPristine();
-    this.router.navigate([SiteRoutes.HOURS_OPERATION], { relativeTo: this.route.parent });
-  }
-
-  onBack() {
-    this.router.navigate([SiteRoutes.MULTIPLE_SITES], { relativeTo: this.route.parent });
   }
 
 }

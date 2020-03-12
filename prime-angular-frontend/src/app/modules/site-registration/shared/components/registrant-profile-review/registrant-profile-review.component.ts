@@ -9,7 +9,6 @@ export class RegistrantProfileReviewComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
-  }
+  public ngOnInit() { }
 
 }

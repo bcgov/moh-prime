@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '@auth/shared/services/auth.service';
 
 @Component({
   selector: 'app-site-collection-notice',
@@ -8,11 +7,8 @@ import { AuthService } from '@auth/shared/services/auth.service';
 })
 export class SiteCollectionNoticeComponent implements OnInit {
 
-  constructor(
-    private authService: AuthService,
-  ) { }
+  constructor() { }
 
-  ngOnInit() {
-  }
+  public ngOnInit() { }
 
 }

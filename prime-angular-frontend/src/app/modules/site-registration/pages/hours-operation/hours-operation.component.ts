@@ -1,11 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatDialog } from '@angular/material';
 import { ToastService } from '@core/services/toast.service';
-import { LoggerService } from '@core/services/logger.service';
-import { UtilsService } from '@core/services/utils.service';
-import { FormUtilsService } from '@enrolment/shared/services/form-utils.service';
 import { SiteRoutes } from '../../site-registration.routes';
 
 @Component({
@@ -14,19 +10,15 @@ import { SiteRoutes } from '../../site-registration.routes';
   styleUrls: ['./hours-operation.component.scss']
 })
 export class HoursOperationComponent implements OnInit {
-  form: FormGroup;
+  public form: FormGroup;
   public amHours: string[];
   public pmHours: string[];
   public days: { title: string, name: string }[];
 
   constructor(
-    protected route: ActivatedRoute,
-    protected router: Router,
-    protected dialog: MatDialog,
-    protected toastService: ToastService,
-    protected logger: LoggerService,
-    protected utilService: UtilsService,
-    private formUtilsService: FormUtilsService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private toastService: ToastService,
     private formBuilder: FormBuilder
   ) {
     this.amHours = [
@@ -129,10 +121,9 @@ export class HoursOperationComponent implements OnInit {
 
   ngOnInit() {
     this.createFormInstance();
-    this.initForm();
   }
 
-  protected createFormInstance() {
+  private createFormInstance() {
     this.form = this.formBuilder.group({
       mondayAM: [null, []],
       mondayPM: [null, []],
@@ -149,10 +140,6 @@ export class HoursOperationComponent implements OnInit {
       sundayAM: [null, []],
       sundayPM: [null, []],
     });
-  }
-
-  protected initForm() {
-
   }
 
   onSubmit() {
