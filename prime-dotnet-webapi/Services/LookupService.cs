@@ -12,10 +12,8 @@ namespace Prime.Services
 {
     public class LookupService : BaseService, ILookupService
     {
-        public LookupService(
-            ApiDbContext context,
-            IHttpContextAccessor httpContext)
-            : base(context, httpContext)
+        public LookupService(IServiceProvider provider)
+            : base(provider)
         { }
 
         public async Task<LookupEntity> GetLookupsAsync()

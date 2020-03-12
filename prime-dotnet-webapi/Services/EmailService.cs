@@ -12,8 +12,8 @@ namespace Prime.Services
     {
         private const string PRIME_EMAIL = "no-reply-prime@gov.bc.ca";
 
-        public EmailService(ApiDbContext context, IHttpContextAccessor httpContext)
-            : base(context, httpContext)
+        public EmailService(IServiceProvider provider)
+            : base(provider)
         { }
 
         public static bool IsValidEmail(string email)

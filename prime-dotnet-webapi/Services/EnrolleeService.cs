@@ -20,6 +20,7 @@ namespace Prime.Services
         private readonly IEnrolleeProfileVersionService _enroleeProfileVersionService;
         private readonly IBusinessEventService _businessEventService;
 
+<<<<<<<
         private class StatusWrapper
         {
             public Status Status { get; set; }
@@ -33,13 +34,16 @@ namespace Prime.Services
         public EnrolleeService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
+=======
+        public EnrolleeService(IServiceProvider provider,
+>>>>>>>
             IAutomaticAdjudicationService automaticAdjudicationService,
             IEmailService emailService,
             IPrivilegeService privilegeService,
             IAccessTermService accessTermService,
             IEnrolleeProfileVersionService enroleeProfileVersionService,
             IBusinessEventService businessEventService)
-            : base(context, httpContext)
+            : base(provider)
         {
             _automaticAdjudicationService = automaticAdjudicationService;
             _emailService = emailService;

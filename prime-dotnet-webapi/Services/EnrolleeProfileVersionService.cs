@@ -20,10 +20,8 @@ namespace Prime.Services
             }
         );
 
-        public EnrolleeProfileVersionService(
-            ApiDbContext context,
-            IHttpContextAccessor httpContext
-            ) : base(context, httpContext)
+        public EnrolleeProfileVersionService(IServiceProvider provider)
+            : base(provider)
         { }
 
         public async Task<IEnumerable<EnrolleeProfileVersion>> GetEnrolleeProfileVersionsAsync(int enrolleeId)

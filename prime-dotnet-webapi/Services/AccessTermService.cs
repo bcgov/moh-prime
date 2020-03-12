@@ -11,8 +11,8 @@ namespace Prime.Services
     public class AccessTermService : BaseService, IAccessTermService
     {
         private static readonly TimeSpan ACCESS_TERM_EXPIRY = TimeSpan.FromDays(365);
-        public AccessTermService(
-            ApiDbContext context, IHttpContextAccessor httpContext) : base(context, httpContext)
+        public AccessTermService(IServiceProvider provider)
+            : base(provider)
         { }
 
         /**
