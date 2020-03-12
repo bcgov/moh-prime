@@ -1,6 +1,6 @@
 namespace Prime.Models
 {
-    public enum EnrolmentStatusType
+    public enum StatusType
     {
         Active = 1,
         UnderReview = 2,

@@ -65,16 +65,22 @@ pipeline {
         }
         stage('Quality Check') {
             options {
-                timeout(time: 90, unit: 'MINUTES')   // timeout on this stage
+                timeout(time: 3, unit: 'MINUTES')   // timeout on this stage
             }
             when { expression { ( BRANCH_NAME == 'develop' ) } }
             parallel {
+                stage('SonarQube Code Check') {
+                    agent { label 'code-tests' }
+                    steps {
+                        sh "./player.sh scan"
+                    }      
+                }
                 stage('ZAP') {
                     agent { label 'code-tests' }
                     steps {
                         checkout scm
                         echo "Scanning..."
-                        sh "./player.sh zap"
+                        sh "./player.sh zap frontend"
                     }
                 }
                 stage('SchemaSpy Database Investigation') {
