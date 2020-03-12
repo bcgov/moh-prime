@@ -23,6 +23,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 export class EnrolleeEventsComponent extends AbstractComponent implements OnInit {
   public busy: Subscription;
   public enrollee: HttpEnrollee;
+  public hasActions: boolean;
 
   constructor(
     protected route: ActivatedRoute,
@@ -34,6 +35,7 @@ export class EnrolleeEventsComponent extends AbstractComponent implements OnInit
     super(route, router);
 
     this.baseRoutePath = [AdjudicationRoutes.MODULE_PATH, AdjudicationRoutes.ENROLLEES];
+    this.hasActions = true;
   }
 
   public onClaim(enrolleeId: number) {

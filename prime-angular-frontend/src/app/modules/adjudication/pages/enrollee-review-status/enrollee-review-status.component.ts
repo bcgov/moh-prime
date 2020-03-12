@@ -9,7 +9,7 @@ export class EnrolleeReviewStatusComponent implements OnInit {
   public hasActions: boolean;
 
   constructor() {
-    this.hasActions = false;
+    this.hasActions = true;
   }
 
   public ngOnInit() { }

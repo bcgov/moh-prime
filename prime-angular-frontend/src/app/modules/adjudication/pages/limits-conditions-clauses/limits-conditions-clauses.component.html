@@ -1,8 +1,8 @@
-<app-adjudication-container>
+<app-adjudication-container [content]="content">
 
   <app-page-header>Limits and Conditions Clauses</app-page-header>
 
-  <slot name="content">
+  <ng-template #content>
 
     <form (ngSubmit)="onSubmit()"
           [formGroup]="form"
@@ -14,8 +14,8 @@
           <editor class="mb-4"
                   [disabled]="!canEdit"
                   formControlName="note"
-                  (onKeyUp)="handleChange($event)"
-                  (onChange)="handleChange($event)"
+                  (onKeyUp)="onUpdate($event)"
+                  (onChange)="onUpdate($event)"
                   [init]="{
                   height: '25rem',
                   base_url: '/tinymce',
@@ -55,6 +55,6 @@
 
     </form>
 
-  </slot>
+  </ng-template>
 
 </app-adjudication-container>

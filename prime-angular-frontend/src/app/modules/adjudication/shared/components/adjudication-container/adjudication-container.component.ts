@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, TemplateRef, AfterContentInit } from '@angular/core';
+import { Component, OnInit, Input, TemplateRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatTableDataSource, MatDialog } from '@angular/material';
 
@@ -15,7 +15,6 @@ import { ApproveEnrolmentComponent } from '@shared/components/dialogs/content/ap
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { AdjudicatorActionsComponent } from '../adjudicator-actions/adjudicator-actions.component';
 
 @Component({
   selector: 'app-adjudication-container',
