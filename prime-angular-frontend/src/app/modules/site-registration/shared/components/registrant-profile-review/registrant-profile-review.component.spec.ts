@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RegistrantProfileReviewComponent } from './registrant-profile-review.component';
+import { SharedModule } from '@shared/shared.module';
+import { SiteRegistrationModule } from 'app/modules/site-registration/site-registration.module';
 
 describe('RegistrantProfileReviewComponent', () => {
   let component: RegistrantProfileReviewComponent;
@@ -8,9 +10,12 @@ describe('RegistrantProfileReviewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RegistrantProfileReviewComponent ]
+      imports: [
+        SiteRegistrationModule,
+        SharedModule
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

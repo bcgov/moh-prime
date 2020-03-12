@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { FormUtilsService } from '@enrolment/shared/services/form-utils.service';
 import { FormControlValidators } from '@shared/validators/form-control.validators';
-import { SiteRoutes } from 'app/modules/site-registration/site-registration.routes';
 
 @Component({
   selector: 'app-registrant-profile-form',
@@ -15,8 +13,6 @@ export class RegistrantProfileFormComponent implements OnInit {
   public hasSeparateAddress: boolean;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
     private formUtilsService: FormUtilsService,
     private formBuilder: FormBuilder
   ) { }

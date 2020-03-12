@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PrivacyOfficerComponent } from './privacy-officer.component';
+import { SiteRegistrationModule } from '../../site-registration.module';
+import { RouterTestingModule } from '@angular/router/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('PrivacyOfficerComponent', () => {
   let component: PrivacyOfficerComponent;
@@ -8,9 +11,13 @@ describe('PrivacyOfficerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PrivacyOfficerComponent ]
+      imports: [
+        SiteRegistrationModule,
+        RouterTestingModule,
+        BrowserAnimationsModule
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

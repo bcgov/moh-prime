@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AdministratorComponent } from './administrator.component';
+import { SiteRegistrationModule } from '../../site-registration.module';
+import { RouterTestingModule } from '@angular/router/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('AdministratorComponent', () => {
   let component: AdministratorComponent;
@@ -8,9 +11,13 @@ describe('AdministratorComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AdministratorComponent ]
+      imports: [
+        SiteRegistrationModule,
+        RouterTestingModule,
+        BrowserAnimationsModule
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

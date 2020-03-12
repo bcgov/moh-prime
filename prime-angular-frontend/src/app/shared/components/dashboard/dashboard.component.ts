@@ -81,11 +81,12 @@ export class DashboardComponent implements OnInit {
   }
 
   public async ngOnInit() {
-    // Initialize the side navigation based on the type of user
-    this.dashboardNavSections = this.getSideNavSections();
 
     // Initialize the sidenav with properties based on current viewport
     this.setSideNavProps(this.viewportService.device);
+
+    // Initialize the side navigation based on the type of user
+    this.dashboardNavSections = this.getSideNavSections();
 
     if (await this.authService.isEnrollee()) {
       // Listen for changes to the current enrolment status to update

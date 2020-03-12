@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TechnicalSupportContactComponent } from './technical-support-contact.component';
+import { SiteRegistrationModule } from '../../site-registration.module';
+import { RouterTestingModule } from '@angular/router/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('TechnicalSupportContactComponent', () => {
   let component: TechnicalSupportContactComponent;
@@ -8,9 +11,13 @@ describe('TechnicalSupportContactComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TechnicalSupportContactComponent ]
+      imports: [
+        SiteRegistrationModule,
+        RouterTestingModule,
+        BrowserAnimationsModule
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

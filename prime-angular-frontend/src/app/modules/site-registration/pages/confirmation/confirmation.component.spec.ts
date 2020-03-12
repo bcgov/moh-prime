@@ -1,6 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ConfirmationComponent } from './confirmation.component';
+import { SiteRegistrationModule } from '../../site-registration.module';
+import { RouterTestingModule } from '@angular/router/testing';
+import { KeycloakService } from 'keycloak-angular';
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { SharedModule } from '@shared/shared.module';
 
 describe('ConfirmationComponent', () => {
   let component: ConfirmationComponent;
@@ -8,9 +13,20 @@ describe('ConfirmationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ConfirmationComponent ]
+      imports: [
+        SiteRegistrationModule,
+        RouterTestingModule,
+        SharedModule
+      ],
+      providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        },
+        KeycloakService
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

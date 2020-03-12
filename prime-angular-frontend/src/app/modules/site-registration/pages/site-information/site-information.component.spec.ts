@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SiteInformationComponent } from './site-information.component';
+import { SiteRegistrationModule } from '../../site-registration.module';
+import { RouterTestingModule } from '@angular/router/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('SiteInformationComponent', () => {
   let component: SiteInformationComponent;
@@ -8,9 +11,13 @@ describe('SiteInformationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SiteInformationComponent ]
+      imports: [
+        SiteRegistrationModule,
+        RouterTestingModule,
+        BrowserAnimationsModule
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

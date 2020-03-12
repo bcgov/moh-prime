@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SigningAuthorityComponent } from './signing-authority.component';
+import { SiteRegistrationModule } from '../../site-registration.module';
+import { RouterTestingModule } from '@angular/router/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('SigningAuthorityComponent', () => {
   let component: SigningAuthorityComponent;
@@ -8,9 +11,13 @@ describe('SigningAuthorityComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SigningAuthorityComponent ]
+      imports: [
+        SiteRegistrationModule,
+        RouterTestingModule,
+        BrowserAnimationsModule
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
