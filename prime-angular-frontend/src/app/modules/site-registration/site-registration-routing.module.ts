@@ -19,8 +19,6 @@ import { SiteReviewComponent } from './pages/site-review/site-review.component';
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 
-
-
 const routes: Routes = [
   {
     path: SiteRoutes.MODULE_PATH,
