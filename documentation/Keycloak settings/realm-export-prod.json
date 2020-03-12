@@ -41,6 +41,19 @@
   "roles": {
     "realm": [
       {
+        "id": "ced33b81-df4d-4cfe-a6c7-808bd6b68faa",
+        "name": "prime_super_admin",
+        "composite": true,
+        "composites": {
+          "realm": [
+            "prime_admin"
+          ]
+        },
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
         "id": "def9681d-e4c8-41cd-8909-81abbd6c2a33",
         "name": "offline_access",
         "description": "${role_offline-access}",
@@ -1800,6 +1813,15 @@
       "config": {
         "claim": "address.locality",
         "user.attribute": "locality"
+      }
+    },
+    {
+      "id": "bac13a19-a4fa-4cd2-abaa-4784a08744a2",
+      "name": "prime_user role",
+      "identityProviderAlias": "bcsc",
+      "identityProviderMapper": "oidc-hardcoded-role-idp-mapper",
+      "config": {
+        "role": "prime_user"
       }
     }
   ],

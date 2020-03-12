@@ -85,6 +85,15 @@
         "attributes": {}
       },
       {
+        "id": "30f9e848-4864-4465-9d29-5a5b0f24553c",
+        "name": "feature_site_registration",
+        "description": "Feature flag for site registration",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
         "id": "790e6ec6-559c-4ee2-a070-e98e86d080dc",
         "name": "uma_authorization",
         "description": "${role_uma_authorization}",
@@ -488,6 +497,16 @@
           }
         },
         {
+          "id": "f266a2d1-fe9f-45d4-a108-0d46def410cf",
+          "name": "feature-site_registration",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-hardcoded-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "role": "feature_site_registration"
+          }
+        },
+        {
           "id": "35b32da0-9b10-41e0-bb0d-d0c45040ae58",
           "name": "Client IP Address",
           "protocol": "openid-connect",
@@ -644,6 +663,16 @@
             "access.token.claim": "true",
             "claim.name": "aud",
             "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "789b61d3-bdd4-4a53-b322-8010fbd34388",
+          "name": "feature-site_registration",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-hardcoded-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "role": "feature_site_registration"
           }
         },
         {
