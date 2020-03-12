@@ -787,7 +787,7 @@ namespace PrimeTests.Controllers
                 var enrolleeStatuses = (await TestUtils.DeserializeResponse<ApiResultResponse<IEnumerable<EnrolmentStatus>>>(response)).Result;
                 Assert.NotNull(enrolleeStatuses);
                 Assert.Single(enrolleeStatuses);
-                Assert.True(enrolleeStatuses.First().IsType(EnrolmentStatusType.Active));
+                Assert.True(enrolleeStatuses.First().IsType(StatusType.Active));
 
                 // make sure the same amount of enrollees exist
                 enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
