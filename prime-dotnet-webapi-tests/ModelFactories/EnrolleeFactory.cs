@@ -90,7 +90,7 @@ namespace PrimeTests.ModelFactories
             {
                 x.ProfileCompleted = x.EnrolmentStatuses.Count > 1 ? true : f.Random.Bool();
 
-                if (x.CurrentStatus.IsType(EnrolmentStatusType.Active) && x.PreviousStatus.IsType(EnrolmentStatusType.RequiresToa))
+                if (x.CurrentStatus.IsType(StatusType.Active) && x.PreviousStatus.IsType(StatusType.RequiresToa))
                 {
                     x.GPID = f.Random.AlphaNumeric(20);
 

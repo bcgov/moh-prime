@@ -60,7 +60,7 @@ namespace PrimeTests.Utils
             .RuleFor(o => o.OrganizationTypeCode, f => f.Random.Int(1, 2));
 
         public static Faker<EnrolmentStatus> EnrolmentStatusFaker = new Faker<EnrolmentStatus>()
-            .RuleFor(es => es.StatusCode, f => (int)EnrolmentStatusType.Active)
+            .RuleFor(es => es.StatusCode, f => (int)StatusType.Active)
             // .RuleFor(es => es.Status, f => new Status { Code = Status.ACTIVE_CODE, Name = "Active Code" })
             .RuleFor(es => es.StatusDate, f => DateTime.Now);
 
@@ -228,10 +228,10 @@ namespace PrimeTests.Utils
 
             if (!db.Set<Status>().Any())
             {
-                db.AddRange(new Status { Code = (int)EnrolmentStatusType.Active, Name = "Active" });
-                db.AddRange(new Status { Code = (int)EnrolmentStatusType.UnderReview, Name = "Under Review" });
-                db.AddRange(new Status { Code = (int)EnrolmentStatusType.RequiresToa, Name = "Requires TOA" });
-                db.AddRange(new Status { Code = (int)EnrolmentStatusType.Locked, Name = "Locked" });
+                db.AddRange(new Status { Code = (int)StatusType.Active, Name = "Active" });
+                db.AddRange(new Status { Code = (int)StatusType.UnderReview, Name = "Under Review" });
+                db.AddRange(new Status { Code = (int)StatusType.RequiresToa, Name = "Requires TOA" });
+                db.AddRange(new Status { Code = (int)StatusType.Locked, Name = "Locked" });
             }
 
             if (!db.Set<Country>().Any())

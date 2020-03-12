@@ -18,7 +18,7 @@ namespace PrimeTests.ModelFactories
 
         public static Status InProgress
         {
-            get { return ByCode((int)EnrolmentStatusType.Active); }
+            get { return ByCode((int)StatusType.Active); }
         }
     }
 }

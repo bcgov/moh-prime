@@ -155,12 +155,12 @@ namespace PrimeTests.Services
             await _dbContext.SaveChangesAsync();
 
             // get the enrollees through the service layer code
-            var enrolleesActive = await _service.GetEnrolleesAsync(new EnrolleeSearchOptions { StatusCode = (int)EnrolmentStatusType.Active });
+            var enrolleesActive = await _service.GetEnrolleesAsync(new EnrolleeSearchOptions { StatusCode = (int)StatusType.Active });
             Assert.NotNull(enrolleesActive);
             Assert.Equal(3, enrolleesActive.Count());
 
             // get the enrollees through the service layer code
-            var enrolleesUnderReview = await _service.GetEnrolleesAsync(new EnrolleeSearchOptions { StatusCode = (int)EnrolmentStatusType.UnderReview });
+            var enrolleesUnderReview = await _service.GetEnrolleesAsync(new EnrolleeSearchOptions { StatusCode = (int)StatusType.UnderReview });
             Assert.NotNull(enrolleesUnderReview);
             Assert.Empty(enrolleesUnderReview);
         }
@@ -250,7 +250,7 @@ namespace PrimeTests.Services
             var enrolmentStatuses = await _service.GetEnrolmentStatusesAsync(expectedEnrolleeId);
             Assert.NotNull(enrolmentStatuses);
             Assert.Single(enrolmentStatuses);
-            Assert.True(enrolmentStatuses.First().IsType(EnrolmentStatusType.Active));
+            Assert.True(enrolmentStatuses.First().IsType(StatusType.Active));
         }
 
         // TODO move to submission service tests

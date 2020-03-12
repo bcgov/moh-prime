@@ -76,16 +76,16 @@ namespace PrimeTests.Services
             }
         }
 
-        private void AssertReasonCodes(ICollection<EnrolmentStatusReason> enrolmentStatusReasons, params int[] expectedReasonCodes)
+        private void AssertReasons(ICollection<EnrolmentStatusReason> enrolmentStatusReasons, params StatusReasonType[] expectedReasons)
         {
-            if (expectedReasonCodes == null || expectedReasonCodes.Length == 0)
+            if (expectedReasons == null || expectedReasons.Length == 0)
             {
                 Assert.Empty(enrolmentStatusReasons ?? new List<EnrolmentStatusReason>(0));
             }
             else
             {
                 var actualCodes = enrolmentStatusReasons.Select(r => r.StatusReasonCode);
-                Assert.Equal(expectedReasonCodes.OrderBy(c => c), actualCodes.OrderBy(c => c));
+                Assert.Equal(expectedReasons.Cast<int>().OrderBy(c => c), actualCodes.OrderBy(c => c));
             }
         }
 
@@ -96,7 +96,7 @@ namespace PrimeTests.Services
             QualifyEnrolleeForAuto(enrollee);
 
             Assert.True(await _service.QualifiesForAutomaticAdjudication(enrollee));
-            AssertReasonCodes(enrollee.CurrentStatus?.EnrolmentStatusReasons);
+            AssertReasons(enrollee.CurrentStatus?.EnrolmentStatusReasons);
         }
 
         [Theory]
@@ -115,11 +115,11 @@ namespace PrimeTests.Services
             Assert.Equal(expected, await rule.ProcessRule(enrollee));
             if (expected)
             {
-                AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons);
+                AssertReasons(enrollee.CurrentStatus.EnrolmentStatusReasons);
             }
             else
             {
-                AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, StatusReason.SELF_DECLARATION_CODE);
+                AssertReasons(enrollee.CurrentStatus.EnrolmentStatusReasons, StatusReasonType.SelfDeclaration);
             }
         }
 
@@ -131,86 +131,100 @@ namespace PrimeTests.Services
 
             UpdateAddresses(enrollee);
             Assert.True(await rule.ProcessRule(enrollee));
-            AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons);
+            AssertReasons(enrollee.CurrentStatus.EnrolmentStatusReasons);
 
             UpdateAddresses(enrollee, false);
             Assert.False(await rule.ProcessRule(enrollee));
-            AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, StatusReason.ADDRESS_CODE);
+            AssertReasons(enrollee.CurrentStatus.EnrolmentStatusReasons, StatusReasonType.Address);
         }
 
         [Theory]
         [MemberData(nameof(CertificationRuleData))]
-        public async void testCertificationRule(OperationMode[] apiModes, bool expected, int[] expectedReasonCodes)
+        public async void testCertificationRule(OperationMode[] apiModes, bool expected, StatusReasonType[] expectedReasons)
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
             UpdateCertifications(enrollee, apiModes.Length);
             var rule = new AutomaticAdjudicationService.PharmanetValidationRule(new PharmanetApiServiceMock(enrollee, apiModes));
 
             Assert.Equal(expected, await rule.ProcessRule(enrollee));
-            AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, expectedReasonCodes);
+            AssertReasons(enrollee.CurrentStatus.EnrolmentStatusReasons, expectedReasons);
         }
 
         public static IEnumerable<object[]> CertificationRuleData()
         {
-            yield return new object[] { new[] { OperationMode.MATCHING_RECORD }, true, null };
-            yield return new object[] { new[] { OperationMode.MATCHING_RECORD, OperationMode.MATCHING_RECORD }, true, null };
+            var passingCases = new[]
+            {
+                new CertTestData(null, null),
+                new CertTestData(new[] { OperationMode.MatchingRecord }, null),
+                new CertTestData(new[] { OperationMode.MatchingRecord, OperationMode.MatchingRecord }, null),
+            };
 
             var failingCases = new[]
             {
-                new[] { OperationMode.ERROR },
-                new[] { OperationMode.NO_RECORD },
-                new[] { OperationMode.NAME_DISCREPANCY },
-                new[] { OperationMode.DATE_DISCREPANCY },
-                new[] { OperationMode.NOT_PRACTICING },
-                new[] { OperationMode.NAME_DISCREPANCY | OperationMode.DATE_DISCREPANCY },
-                new[] { OperationMode.NAME_DISCREPANCY | OperationMode.DATE_DISCREPANCY | OperationMode.NOT_PRACTICING },
-                new[] { OperationMode.MATCHING_RECORD, OperationMode.NO_RECORD },
-                new[] { OperationMode.MATCHING_RECORD, OperationMode.NAME_DISCREPANCY | OperationMode.DATE_DISCREPANCY },
-                new[] { OperationMode.NO_RECORD, OperationMode.NOT_PRACTICING },
-                new[] { OperationMode.ERROR, OperationMode.NAME_DISCREPANCY | OperationMode.DATE_DISCREPANCY }
+                // One bad cert
+                new CertTestData(new[] { OperationMode.Error }, new[] { StatusReasonType.PharmanetError }),
+                new CertTestData(new[] { OperationMode.NoRecord }, new[] { StatusReasonType.NotInPharmanet }),
+                new CertTestData(new[] { OperationMode.NameDiscrepancy }, new[] { StatusReasonType.NameDiscrepancy }),
+                new CertTestData(new[] { OperationMode.DateDiscrepancy }, new[] { StatusReasonType.BirthdateDiscrepancy }),
+                new CertTestData(new[] { OperationMode.NotPracticing }, new[] { StatusReasonType.Practicing }),
+                new CertTestData(
+                    new[] { OperationMode.NameDiscrepancy | OperationMode.DateDiscrepancy },
+                    new[] { StatusReasonType.NameDiscrepancy, StatusReasonType.BirthdateDiscrepancy }
+                ),
+                new CertTestData(
+                    new[] { OperationMode.NameDiscrepancy | OperationMode.DateDiscrepancy | OperationMode.NotPracticing },
+                    new[] { StatusReasonType.NameDiscrepancy, StatusReasonType.BirthdateDiscrepancy, StatusReasonType.Practicing }
+                ),
+                // One good cert, one bad
+                new CertTestData(
+                    new[] { OperationMode.MatchingRecord, OperationMode.NoRecord },
+                    new[] { StatusReasonType.NotInPharmanet }
+                ),
+                new CertTestData(
+                    new[] { OperationMode.MatchingRecord, OperationMode.NameDiscrepancy | OperationMode.DateDiscrepancy },
+                    new[] { StatusReasonType.NameDiscrepancy, StatusReasonType.BirthdateDiscrepancy }
+                ),
+                // Two bad certs
+                new CertTestData(
+                    new[] { OperationMode.NoRecord, OperationMode.NotPracticing },
+                    new[] { StatusReasonType.NotInPharmanet, StatusReasonType.Practicing }
+                ),
+                new CertTestData(
+                    new[] { OperationMode.Error, OperationMode.NameDiscrepancy | OperationMode.DateDiscrepancy },
+                    new[] { StatusReasonType.PharmanetError, StatusReasonType.NameDiscrepancy, StatusReasonType.BirthdateDiscrepancy }
+                ),
+                new CertTestData(
+                    new[] { OperationMode.NameDiscrepancy, OperationMode.NameDiscrepancy },
+                    new[] { StatusReasonType.NameDiscrepancy, StatusReasonType.NameDiscrepancy }
+                ),
             };
 
-            foreach (var modes in failingCases)
+            foreach (var data in passingCases)
             {
-                yield return new object[] { modes, false, GetExpectedReasonCodes(modes) };
+                yield return data.AsTestCase(true);
+            }
+
+            foreach (var data in failingCases)
+            {
+                yield return data.AsTestCase(false);
             }
         }
 
-        private static int[] GetExpectedReasonCodes(OperationMode[] modes)
+        private struct CertTestData
         {
-            var codes = new List<int>();
-            foreach (var mode in modes)
-            {
-                if (mode == OperationMode.ERROR)
-                {
-                    codes.Add(StatusReason.PHARMANET_ERROR_CODE);
-                    continue;
-                }
-                if (mode == OperationMode.MATCHING_RECORD)
-                {
-                    continue;
-                }
-                if (mode.HasFlag(OperationMode.NO_RECORD))
-                {
-                    codes.Add(StatusReason.NOT_IN_PHARMANET_CODE);
-                    continue;
-                }
+            public OperationMode[] Modes;
+            public StatusReasonType[] ExpectedReasons;
 
-                if (mode.HasFlag(OperationMode.NAME_DISCREPANCY))
-                {
-                    codes.Add(StatusReason.NAME_DISCREPANCY_CODE);
-                }
-                if (mode.HasFlag(OperationMode.DATE_DISCREPANCY))
-                {
-                    codes.Add(StatusReason.BIRTHDATE_DISCREPANCY_CODE);
-                }
-                if (mode.HasFlag(OperationMode.NOT_PRACTICING))
-                {
-                    codes.Add(StatusReason.PRACTICING_CODE);
-                }
+            public CertTestData(OperationMode[] modes, StatusReasonType[] expectedReasons)
+            {
+                Modes = modes ?? new OperationMode[0];
+                ExpectedReasons = expectedReasons;
             }
 
-            return codes.ToArray();
+            public object[] AsTestCase(bool passingCase)
+            {
+                return new Object[] { Modes, passingCase, ExpectedReasons };
+            }
         }
 
         [Theory]
@@ -228,11 +242,11 @@ namespace PrimeTests.Services
             Assert.Equal(expected, await rule.ProcessRule(enrollee));
             if (expected)
             {
-                AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons);
+                AssertReasons(enrollee.CurrentStatus.EnrolmentStatusReasons);
             }
             else
             {
-                AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, StatusReason.PUMP_PROVIDER_CODE);
+                AssertReasons(enrollee.CurrentStatus.EnrolmentStatusReasons, StatusReasonType.PumpProvider);
             }
         }
 
@@ -251,11 +265,11 @@ namespace PrimeTests.Services
             Assert.Equal(expected, await rule.ProcessRule(enrollee));
             if (expected)
             {
-                AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons);
+                AssertReasons(enrollee.CurrentStatus.EnrolmentStatusReasons);
             }
             else
             {
-                AssertReasonCodes(enrollee.CurrentStatus.EnrolmentStatusReasons, StatusReason.LICENCE_CLASS_CODE);
+                AssertReasons(enrollee.CurrentStatus.EnrolmentStatusReasons, StatusReasonType.LicenceClass);
             }
         }
     }

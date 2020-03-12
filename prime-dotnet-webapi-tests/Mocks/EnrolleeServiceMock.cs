@@ -154,7 +154,7 @@ namespace PrimeTests.Mocks
             throw new NotImplementedException();
         }
 
-        public Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, params EnrolmentStatusType[] statusCodesToCheck)
+        public Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, params StatusType[] statusCodesToCheck)
         {
             var enrollee = this.GetHolder<int, Enrollee>()[enrolleeId];
             bool inStatus = statusCodesToCheck.Cast<int>().Any(sc => sc == enrollee?.CurrentStatus?.StatusCode);

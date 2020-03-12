@@ -8,18 +8,18 @@ namespace PrimeTests.ModelFactories
 {
     public class StatusState
     {
-        public static readonly StatusState Submitted = new StatusState(EnrolmentStatusType.Active, EnrolmentStatusType.UnderReview);
-        public static readonly StatusState Approved = new StatusState(EnrolmentStatusType.Active, EnrolmentStatusType.UnderReview, EnrolmentStatusType.RequiresToa);
-        public static readonly StatusState Declined = new StatusState(EnrolmentStatusType.Active, EnrolmentStatusType.UnderReview, EnrolmentStatusType.Locked);
-        public static readonly StatusState PassedTos = new StatusState(EnrolmentStatusType.Active, EnrolmentStatusType.UnderReview, EnrolmentStatusType.RequiresToa, EnrolmentStatusType.Active);
-        public static readonly StatusState Unlocked = new StatusState(EnrolmentStatusType.Active, EnrolmentStatusType.UnderReview, EnrolmentStatusType.Active);
-        public static readonly StatusState SecondSubmission = new StatusState(EnrolmentStatusType.Active, EnrolmentStatusType.UnderReview, EnrolmentStatusType.Active, EnrolmentStatusType.UnderReview);
+        public static readonly StatusState Submitted = new StatusState(StatusType.Active, StatusType.UnderReview);
+        public static readonly StatusState Approved = new StatusState(StatusType.Active, StatusType.UnderReview, StatusType.RequiresToa);
+        public static readonly StatusState Declined = new StatusState(StatusType.Active, StatusType.UnderReview, StatusType.Locked);
+        public static readonly StatusState PassedTos = new StatusState(StatusType.Active, StatusType.UnderReview, StatusType.RequiresToa, StatusType.Active);
+        public static readonly StatusState Unlocked = new StatusState(StatusType.Active, StatusType.UnderReview, StatusType.Active);
+        public static readonly StatusState SecondSubmission = new StatusState(StatusType.Active, StatusType.UnderReview, StatusType.Active, StatusType.UnderReview);
 
         public static ICollection<StatusState> States { get; private set; }
 
         public IEnumerable<Status> Statuses { get; private set; }
 
-        private StatusState(params EnrolmentStatusType[] statusTypes)
+        private StatusState(params StatusType[] statusTypes)
         {
             Statuses = statusTypes.Select(type => StatusLookup.ByCode((int)type));
 
@@ -56,8 +56,8 @@ namespace PrimeTests.ModelFactories
         {
             var enrolmentStatuses = new EnrolmentStatusFactory(_owner, _statuses).Generate(_statuses.Count());
 
-            var approvedStatus = enrolmentStatuses.SingleOrDefault(s => s.IsType(EnrolmentStatusType.RequiresToa));
-            if (approvedStatus != null) { approvedStatus.AddStatusReason(_automatic ? StatusReason.AUTOMATIC_CODE : StatusReason.MANUAL_CODE); }
+            var approvedStatus = enrolmentStatuses.SingleOrDefault(s => s.IsType(StatusType.RequiresToa));
+            if (approvedStatus != null) { approvedStatus.AddStatusReason(_automatic ? StatusReasonType.Automatic : StatusReasonType.Manual); }
 
             return enrolmentStatuses;
         }
