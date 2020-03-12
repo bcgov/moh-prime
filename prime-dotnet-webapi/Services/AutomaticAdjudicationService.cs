@@ -60,7 +60,7 @@ namespace Prime.Services
                 return await ProcessRuleInternal(enrollee);
             }
 
-            protected void AddReason(Enrollee enrollee, int statusReasonCode, string statusReasonNote = null)
+            protected void AddReason(Enrollee enrollee, StatusReasonType type, string statusReasonNote = null)
             {
                 var currentStatus = enrollee.CurrentStatus;
                 if (currentStatus == null)
@@ -68,7 +68,7 @@ namespace Prime.Services
                     throw new InvalidOperationException($"Could not add Status Reason for Enrollee with UserId \"{enrollee.UserId}\", Current Status is invalid.");
                 }
 
-                currentStatus.AddStatusReason(statusReasonCode, statusReasonNote);
+                currentStatus.AddStatusReason(type, statusReasonNote);
             }
 
             protected abstract Task<bool> ProcessRuleInternal(Enrollee enrollee);
@@ -86,7 +86,7 @@ namespace Prime.Services
                     || enrollee.HasPharmaNetSuspended.GetValueOrDefault(true)
                     || enrollee.HasRegistrationSuspended.GetValueOrDefault(true))
                 {
-                    AddReason(enrollee, StatusReason.SELF_DECLARATION_CODE);
+                    AddReason(enrollee, StatusReasonType.SelfDeclaration);
                     return Task.FromResult(false);
                 }
 
@@ -104,7 +104,7 @@ namespace Prime.Services
                 if (provinceCodes.Any(p => p != null
                     && !p.Equals(Province.BRITISH_COLUMBIA_CODE, StringComparison.OrdinalIgnoreCase)))
                 {
-                    AddReason(enrollee, StatusReason.ADDRESS_CODE);
+                    AddReason(enrollee, StatusReasonType.Address);
                     return Task.FromResult(false);
                 }
 
@@ -141,30 +141,30 @@ namespace Prime.Services
                     }
                     catch (PharmanetApiService.PharmanetCollegeApiException)
                     {
-                        AddReason(enrollee, StatusReason.PHARMANET_ERROR_CODE, $"{cert.FullLicenseNumber}");
+                        AddReason(enrollee, StatusReasonType.PharmanetError, $"{cert.FullLicenseNumber}");
                         passed = false;
                         continue;
                     }
                     if (record == null)
                     {
-                        AddReason(enrollee, StatusReason.NOT_IN_PHARMANET_CODE, $"{cert.FullLicenseNumber}");
+                        AddReason(enrollee, StatusReasonType.NotInPharmanet, $"{cert.FullLicenseNumber}");
                         passed = false;
                         continue;
                     }
 
                     if (!record.MatchesEnrolleeByName(enrollee))
                     {
-                        AddReason(enrollee, StatusReason.NAME_DISCREPANCY_CODE, $"{cert.FullLicenseNumber} returned \"{record.firstName} {record.lastName}\".");
+                        AddReason(enrollee, StatusReasonType.NameDiscrepancy, $"{cert.FullLicenseNumber} returned \"{record.firstName} {record.lastName}\".");
                         passed = false;
                     }
                     if (record.dateofBirth.Date != enrollee.DateOfBirth.Date)
                     {
-                        AddReason(enrollee, StatusReason.BIRTHDATE_DISCREPANCY_CODE, $"{cert.FullLicenseNumber} returned {record.dateofBirth.ToString("d MMM yyyy")}");
+                        AddReason(enrollee, StatusReasonType.BirthdateDiscrepancy, $"{cert.FullLicenseNumber} returned {record.dateofBirth.ToString("d MMM yyyy")}");
                         passed = false;
                     }
                     if (record.status != "P")
                     {
-                        AddReason(enrollee, StatusReason.PRACTICING_CODE, $"{cert.FullLicenseNumber}");
+                        AddReason(enrollee, StatusReasonType.Practicing, $"{cert.FullLicenseNumber}");
                         passed = false;
                     }
                 }
@@ -181,7 +181,7 @@ namespace Prime.Services
                 if (!string.IsNullOrWhiteSpace(enrollee.DeviceProviderNumber)
                     || enrollee.IsInsulinPumpProvider.GetValueOrDefault(true))
                 {
-                    AddReason(enrollee, StatusReason.PUMP_PROVIDER_CODE);
+                    AddReason(enrollee, StatusReasonType.PumpProvider);
                     return Task.FromResult(false);
                 }
 
@@ -201,7 +201,7 @@ namespace Prime.Services
                     {
                         if (item.License.Manual)
                         {
-                            AddReason(enrollee, StatusReason.LICENCE_CLASS_CODE);
+                            AddReason(enrollee, StatusReasonType.LicenceClass);
                             passed = false;
                             break;
                         }
@@ -220,7 +220,7 @@ namespace Prime.Services
             {
                 if (enrollee.AlwaysManual)
                 {
-                    AddReason(enrollee, StatusReason.ALWAYS_MANUAL_CODE);
+                    AddReason(enrollee, StatusReasonType.AlwaysManual);
                 }
 
                 return Task.FromResult(!enrollee.AlwaysManual);

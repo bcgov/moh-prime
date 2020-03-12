@@ -83,7 +83,7 @@ namespace Prime.Services
             if (await _automaticAdjudicationService.QualifiesForAutomaticAdjudication(enrollee))
             {
                 var newStatus = enrollee.AddEnrolmentStatus(StatusType.RequiresToa);
-                newStatus.AddStatusReason(StatusReason.AUTOMATIC_CODE);
+                newStatus.AddStatusReason(StatusReasonType.Automatic);
 
                 await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee);
 
@@ -100,7 +100,7 @@ namespace Prime.Services
         private async Task ApproveApplicationAsync(Enrollee enrollee)
         {
             var newStatus = enrollee.AddEnrolmentStatus(StatusType.Active);
-            newStatus.AddStatusReason(StatusReason.MANUAL_CODE);
+            newStatus.AddStatusReason(StatusReasonType.Manual);
 
             await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee);
 

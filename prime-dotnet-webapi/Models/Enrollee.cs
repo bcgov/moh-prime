@@ -180,7 +180,7 @@ namespace Prime.Models
 
         public EnrolmentStatus AddEnrolmentStatus(StatusType statusType)
         {
-            var newStatus = EnrolmentStatus.FromStatusType(statusType, this.Id);
+            var newStatus = EnrolmentStatus.FromType(statusType, this.Id);
 
             if (EnrolmentStatuses == null)
             {
