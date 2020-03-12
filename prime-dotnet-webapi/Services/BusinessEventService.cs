@@ -7,17 +7,11 @@ namespace Prime.Services
 {
     public class BusinessEventService : BaseService, IBusinessEventService
     {
-        public BusinessEventService(
-            ApiDbContext context, IHttpContextAccessor httpContext) : base(context, httpContext)
+        public BusinessEventService(IServiceProvider provider)
+            : base(provider)
         { }
 
-<<<<<<< HEAD
         public async Task<BusinessEvent> CreateStatusChangeEventAsync(int enrolleeId, string description, int? adminId = null)
-=======
-        public BusinessEventService(IServiceProvider provider,
-            IAdminService adminService)
-            : base(provider)
->>>>>>> 64d2346... di
         {
             var businessEvent = this.CreateBusinessEvent(BusinessEventType.STATUS_CHANGE_CODE, enrolleeId, description, adminId);
             _context.BusinessEvents.Add(businessEvent);
