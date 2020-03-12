@@ -1,159 +1,162 @@
-<app-page [busy]="busy"
-          mode="full">
+<ng-content select="app-page-header"></ng-content>
 
-  <ng-content select="app-page-header"></ng-content>
+<ng-content select="app-search-filter"></ng-content>
 
-  <ng-content select="app-search-filter"></ng-content>
+<div class="row">
+  <div class="col">
 
-  <div class="row">
-    <div class="col">
+    <table mat-table
+           [dataSource]="dataSource"
+           class="w-100">
 
-      <table mat-table
-             [dataSource]="dataSource"
-             class="w-100">
+      <!-- Unique ID Column -->
+      <ng-container matColumnDef="uniqueId">
+        <th mat-header-cell
+            *matHeaderCellDef> Unique ID </th>
+        <td mat-cell
+            *matCellDef="let row;"> {{ row.displayId }} </td>
+      </ng-container>
 
-        <!-- Unique ID Column -->
-        <ng-container matColumnDef="uniqueId">
-          <th mat-header-cell
-              *matHeaderCellDef> Unique ID </th>
-          <td mat-cell
-              *matCellDef="let row;"> {{ row.displayId }} </td>
-        </ng-container>
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell
+            *matHeaderCellDef> Enrollee Name </th>
+        <td mat-cell
+            *matCellDef="let row;"> {{ row.firstName }}, {{ row.lastName }} </td>
+      </ng-container>
 
-        <!-- Name Column -->
-        <ng-container matColumnDef="name">
-          <th mat-header-cell
-              *matHeaderCellDef> Enrollee Name </th>
-          <td mat-cell
-              *matCellDef="let row;"> {{ row.firstName }}, {{ row.lastName }} </td>
-        </ng-container>
+      <!-- Approved Date Column -->
+      <ng-container matColumnDef="approvedDate">
+        <th mat-header-cell
+            *matHeaderCellDef> Approval Date </th>
+        <td mat-cell
+            *matCellDef="let row;"> {{ row.approvedDate | formatDate | default }} </td>
+      </ng-container>
 
-        <!-- Approved Date Column -->
-        <ng-container matColumnDef="approvedDate">
-          <th mat-header-cell
-              *matHeaderCellDef> Approval Date </th>
-          <td mat-cell
-              *matCellDef="let row;"> {{ row.approvedDate | formatDate | default }} </td>
-        </ng-container>
+      <!-- Applied Date Column -->
+      <ng-container matColumnDef="appliedDate">
+        <th mat-header-cell
+            *matHeaderCellDef> Submission Date </th>
+        <td mat-cell
+            *matCellDef="let row;"> {{ row.appliedDate | formatDate }} </td>
+      </ng-container>
 
-        <!-- Applied Date Column -->
-        <ng-container matColumnDef="appliedDate">
-          <th mat-header-cell
-              *matHeaderCellDef> Submission Date </th>
-          <td mat-cell
-              *matCellDef="let row;"> {{ row.appliedDate | formatDate }} </td>
-        </ng-container>
+      <!-- Status Column -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell
+            *matHeaderCellDef> Status </th>
+        <td mat-cell
+            *matCellDef="let row;">
+          <mat-chip-list>
+            <mat-chip>{{ row.currentStatus.status.name }}</mat-chip>
+          </mat-chip-list>
+        </td>
+      </ng-container>
 
-        <!-- Status Column -->
-        <ng-container matColumnDef="status">
-          <th mat-header-cell
-              *matHeaderCellDef> Status </th>
-          <td mat-cell
-              *matCellDef="let row;">
-            <mat-chip-list>
-              <mat-chip>{{ row.currentStatus.status.name }}</mat-chip>
-            </mat-chip-list>
-          </td>
-        </ng-container>
+      <!-- Adjudicator Column -->
+      <ng-container matColumnDef="adjudicator">
+        <th mat-header-cell
+            *matHeaderCellDef> Adjudicator </th>
+        <td mat-cell
+            *matCellDef="let row;"> {{ row.adjudicator?.firstName | default }} </td>
+      </ng-container>
 
-        <!-- Adjudicator Column -->
-        <ng-container matColumnDef="adjudicator">
-          <th mat-header-cell
-              *matHeaderCellDef> Adjudicator </th>
-          <td mat-cell
-              *matCellDef="let row;"> {{ row.adjudicator?.firstName | default }} </td>
-        </ng-container>
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell
+            *matHeaderCellDef>&nbsp;</th>
+        <td mat-cell
+            *matCellDef="let row;"
+            class="text-right">
 
-        <!-- Actions Column -->
-        <ng-container matColumnDef="actions">
-          <th mat-header-cell
-              *matHeaderCellDef>&nbsp;</th>
-          <td mat-cell
-              *matCellDef="let row;"
-              class="text-right">
+          <ng-container [ngTemplateOutlet]="menu"
+                        [ngTemplateOutletContext]="{ row: row }"></ng-container>
 
-            <ng-container [ngTemplateOutlet]="menu"
-                          [ngTemplateOutletContext]="{ row: row }"></ng-container>
+        </td>
+      </ng-container>
 
-          </td>
-        </ng-container>
+      <tr mat-header-row
+          *matHeaderRowDef="columns; sticky: true"></tr>
+      <tr mat-row
+          *matRowDef="let row; columns: columns;"></tr>
+    </table>
 
-        <tr mat-header-row
-            *matHeaderRowDef="columns; sticky: true"></tr>
-        <tr mat-row
-            *matRowDef="let row; columns: columns;"></tr>
-      </table>
+    <p *ngIf="!dataSource?.data.length"
+       class="px-4 py-2 text-muted">
+      No {{ filteredStatus?.name }} Enrolments
+    </p>
 
-      <p *ngIf="!dataSource?.data.length"
-         class="px-4 py-2 text-muted">
-        No {{ filteredStatus?.name }} Enrolments
-      </p>
+    <ng-template #menu
+                 let-row="row">
+      <button mat-icon-button
+              [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
 
-      <ng-template #menu
-                   let-row="row">
-        <button mat-icon-button
-                [matMenuTriggerFor]="menu">
-          <mat-icon>more_vert</mat-icon>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item
+                (click)="onRoute([row.id, AdjudicationRoutes.ENROLLEE_PROFILE_HISTORY])">
+          <mat-icon>history</mat-icon>
+          <span>Enrolment History</span>
+        </button>
+        <button mat-menu-item
+                (click)="onRoute([row.id, AdjudicationRoutes.ENROLLEE_TERMS_HISTORY])">
+          <mat-icon>history</mat-icon>
+          <span>Terms of Access History</span>
+        </button>
+        <button mat-menu-item
+                (click)="onRoute([row.id, AdjudicationRoutes.ENROLLEE_EVENTS])">
+          <mat-icon>rate_review</mat-icon>
+          <span>Events</span>
+        </button>
+        <button mat-menu-item
+                *ngIf="row.currentStatus.enrolmentStatusReasons.length"
+                (click)="onRoute([row.id, AdjudicationRoutes.ENROLLEE_REVIEW_STATUS])">
+          <mat-icon>flag</mat-icon>
+          <span>Review Status Reasons</span>
+        </button>
+        <button mat-menu-item
+                (click)="onRoute([row.id, AdjudicationRoutes.ENROLLEE_ADJUDICATOR_NOTES])">
+          <mat-icon>message</mat-icon>
+          <span>Add & View Notes</span>
         </button>
 
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item
-                  (click)="routeTo([row.id, AdjudicationRoutes.ENROLLEE_PROFILE_HISTORY])">
-            <mat-icon>history</mat-icon>
-            <span>Enrolment History</span>
-          </button>
-          <button mat-menu-item
-                  (click)="routeTo([row.id, AdjudicationRoutes.ENROLLEE_TERMS_HISTORY])">
-            <mat-icon>history</mat-icon>
-            <span>Terms of Access History</span>
-          </button>
-          <button mat-menu-item
-                  (click)="routeTo([row.id, AdjudicationRoutes.ENROLLEE_EVENTS])">
-            <mat-icon>rate_review</mat-icon>
-            <span>Events</span>
-          </button>
-          <button mat-menu-item
-                  *ngIf="row.currentStatus.enrolmentStatusReasons.length"
-                  (click)="routeTo([row.id, AdjudicationRoutes.ENROLLEE_REVIEW_STATUS])">
-            <mat-icon>flag</mat-icon>
-            <span>Review Status Reasons</span>
-          </button>
-          <button mat-menu-item
-                  (click)="routeTo([row.id, AdjudicationRoutes.ENROLLEE_ADJUDICATOR_NOTES])">
-            <mat-icon>message</mat-icon>
-            <span>Add & View Notes</span>
-          </button>
+        <mat-divider></mat-divider>
 
-          <mat-divider></mat-divider>
+        <button mat-menu-item
+                *ngIf="!row?.adjudicatorId"
+                [disabled]="!canEdit"
+                (click)="onClaim(row.id)">
+          <mat-icon>pan_tool</mat-icon>
+          <span>Claim Enrolment</span>
+        </button>
+        <button mat-menu-item
+                *ngIf="row?.adjudicatorId"
+                [disabled]="!canEdit"
+                (click)="onDisclaim(row.id)">
+          <mat-icon>pan_tool</mat-icon>
+          <span>Disclaim Enrolment</span>
+        </button>
+      </mat-menu>
+    </ng-template>
 
-          <button mat-menu-item
-                  [disabled]="!canEdit"
-                  (click)="updateEnrolleeAdjudicator(row)">
-            <mat-icon>pan_tool</mat-icon>
-            <span>{{ (row?.adjudicatorId) ? 'Disclaim' : 'Claim' }} Enrolment</span>
-          </button>
-        </mat-menu>
-      </ng-template>
+  </div>
+</div>
+
+<ng-container>
+
+  <div class="row">
+    <div class="col py-5">
+
+      <ng-content select="slot[name=content]"></ng-content>
+
+    </div>
+    <div *ngIf="adjudicatorActionsComponent"
+         class="col-auto py-5">
+
+      <ng-content select="app-adjudicator-actions"></ng-content>
 
     </div>
   </div>
 
-  <ng-container *ngIf="enrolleeId">
-
-    <div class="row">
-      <div class="col py-5">
-
-        <ng-content></ng-content>
-
-      </div>
-      <div *ngIf="adjudicatorActionsComponent"
-           class="col-auto py-5">
-
-        <ng-content select="app-adjudicator-actions"></ng-content>
-
-      </div>
-    </div>
-
-  </ng-container>
-
-</app-page>
+</ng-container>

@@ -6,11 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./enrolments.component.scss']
 })
 export class EnrolmentsComponent implements OnInit {
-  public hasActions: boolean;
-
-  constructor() {
-    this.hasActions = false;
-  }
+  constructor() { }
 
   public ngOnInit() { }
 }

@@ -1,7 +1,25 @@
-<app-adjudicator-dashboard>
+<app-page [busy]="busy"
+          mode="full">
 
-  <app-page-header>Events</app-page-header>
+  <app-adjudicator-dashboard [enrollees]="enrollee"
+                             (claim)="onClaim($event)"
+                             (disclaim)="onDisclaim($event)"
+                             (route)="onRoute($event)">
 
-  <app-adjudicator-actions></app-adjudicator-actions>
+    <app-page-header>Events</app-page-header>
 
-</app-adjudicator-dashboard>
+    <slot name="content">
+      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Esse quos provident neque odio sapiente dolores autem
+      officia. Beatae incidunt eligendi, ipsam sed repellat, facere voluptate expedita a ut tempora quaerat.
+    </slot>
+
+    <app-adjudicator-actions [enrollee]="enrollee"
+                             (approve)="onApprove($event)"
+                             (decline)="onDecline($event)"
+                             (unlock)="onUnlock($event)"
+                             (delete)="onDelete($event)"
+                             (route)="onRoute($event)"></app-adjudicator-actions>
+
+  </app-adjudicator-dashboard>
+
+</app-page>
