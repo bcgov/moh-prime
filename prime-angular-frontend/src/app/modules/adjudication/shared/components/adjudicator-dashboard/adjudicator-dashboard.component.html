@@ -146,7 +146,8 @@
         <ng-content></ng-content>
 
       </div>
-      <div class="col-auto py-5">
+      <div *ngIf="adjudicatorActionsComponent"
+           class="col-auto py-5">
 
         <ng-content select="app-adjudicator-actions"></ng-content>
 

@@ -15,8 +15,8 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 })
 export class EnrolleeProfileVersionsComponent extends AbstractComponent implements OnInit {
   public busy: Subscription;
-  public columns: string[];
   public dataSource: MatTableDataSource<HttpEnrolleeProfileVersion>;
+  public columns: string[];
 
   constructor(
     protected route: ActivatedRoute,

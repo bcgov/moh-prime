@@ -76,18 +76,18 @@ export class EnrolmentResource {
   // ---
 
   public enrolmentCertificateAccessTokens(): Observable<EnrolmentCertificateAccessToken[]> {
-    return this.apiResource.get<HttpEnrollee[]>('provisioner-access/token')
+    return this.apiResource.get<EnrolmentCertificateAccessToken[]>('provisioner-access/token')
       .pipe(
-        map((response: ApiHttpResponse<any>) => response.result),
+        map((response: ApiHttpResponse<EnrolmentCertificateAccessToken[]>) => response.result),
         tap((tokens: EnrolmentCertificateAccessToken[]) => this.logger.info('ACCESS_TOKENS', tokens))
       );
   }
 
   public sendProvisionerAccessLink(provisionerName: string, ccEmail: string = null): Observable<EnrolmentCertificateAccessToken> {
     const payload = { data: ccEmail };
-    return this.apiResource.post<HttpEnrollee>(`provisioner-access/send-link/${provisionerName}`, payload)
+    return this.apiResource.post<EnrolmentCertificateAccessToken>(`provisioner-access/send-link/${provisionerName}`, payload)
       .pipe(
-        map((response: ApiHttpResponse<any>) => response.result as EnrolmentCertificateAccessToken),
+        map((response: ApiHttpResponse<EnrolmentCertificateAccessToken>) => response.result),
         tap((token: EnrolmentCertificateAccessToken) => this.logger.info('ACCESS_TOKEN', token))
       );
   }
@@ -97,34 +97,34 @@ export class EnrolmentResource {
   // ---
 
   public getAccessTerms(enrolleeId: number): Observable<AccessTerm[]> {
-    return this.apiResource.get<HttpEnrollee[]>(`enrollees/${enrolleeId}/access-terms`)
+    return this.apiResource.get<AccessTerm[]>(`enrollees/${enrolleeId}/access-terms`)
       .pipe(
-        map((response: ApiHttpResponse<any>) => response.result as AccessTerm[]),
+        map((response: ApiHttpResponse<AccessTerm[]>) => response.result),
         tap((accessTerms: AccessTerm[]) => this.logger.info('ACCESS_TERM', accessTerms))
       );
   }
 
   public getAccessTerm(enrolleeId: number, id: number): Observable<AccessTerm> {
-    return this.apiResource.get<HttpEnrollee[]>(`enrollees/${enrolleeId}/access-terms/${id}`)
+    return this.apiResource.get<AccessTerm>(`enrollees/${enrolleeId}/access-terms/${id}`)
       .pipe(
-        map((response: ApiHttpResponse<any>) => response.result as AccessTerm),
+        map((response: ApiHttpResponse<AccessTerm>) => response.result),
         tap((accessTerm: AccessTerm) => this.logger.info('ACCESS_TERM', accessTerm))
       );
   }
 
   public getAccessTermLatest(enrolleeId: number, signed: boolean): Observable<AccessTerm> {
     const params = new HttpParams({ fromObject: { signed: signed.toString() } });
-    return this.apiResource.get<HttpEnrollee[]>(`enrollees/${enrolleeId}/access-terms/latest`, params)
+    return this.apiResource.get<AccessTerm>(`enrollees/${enrolleeId}/access-terms/latest`, params)
       .pipe(
-        map((response: ApiHttpResponse<any>) => response.result as AccessTerm),
+        map((response: ApiHttpResponse<AccessTerm>) => response.result),
         tap((accessTerm: AccessTerm) => this.logger.info('ACCESS_TERM', accessTerm))
       );
   }
 
   public getEnrolmentProfileForAccessTerm(enrolleeId: number, accessTermId: number): Observable<EnrolmentProfileVersion> {
-    return this.apiResource.get<HttpEnrollee[]>(`enrollees/${enrolleeId}/access-terms/${accessTermId}/enrolment`)
+    return this.apiResource.get<EnrolmentProfileVersion>(`enrollees/${enrolleeId}/access-terms/${accessTermId}/enrolment`)
       .pipe(
-        map((response: ApiHttpResponse<any>) => response.result as EnrolmentProfileVersion),
+        map((response: ApiHttpResponse<EnrolmentProfileVersion>) => response.result),
         tap((enrolmentProfileVersion: EnrolmentProfileVersion) => this.logger.info('ENROLMENT_PROFILE_VERSION', enrolmentProfileVersion)),
         map(this.enrolleeVersionAdapterResponse.bind(this))
       );

@@ -6,10 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./adjudicator-actions.component.scss']
 })
 export class AdjudicatorActionsComponent implements OnInit {
-
   constructor() { }
 
-  ngOnInit() {
-  }
-
+  public ngOnInit() { }
 }

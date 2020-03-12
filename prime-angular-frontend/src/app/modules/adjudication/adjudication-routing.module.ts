@@ -63,7 +63,7 @@ const routes: Routes = [
                   {
                     path: '',
                     component: EnrolleeAccessTermsComponent,
-                    data: { title: 'Enrollee Access Terms' }
+                    data: { title: 'Terms of Access History' }
                   },
                   {
                     path: ':hid',
@@ -71,12 +71,12 @@ const routes: Routes = [
                       {
                         path: '',
                         component: EnrolleeAccessTermComponent,
-                        data: { title: 'Enrollee Access Term' }
+                        data: { title: 'Terms of Access' }
                       },
                       {
                         path: AdjudicationRoutes.ENROLLEE,
                         component: EnrolleeAccessTermEnrolmentComponent,
-                        data: { title: 'Access Term Enrolment' }
+                        data: { title: 'Enrolment' }
                       },
                     ]
                   },

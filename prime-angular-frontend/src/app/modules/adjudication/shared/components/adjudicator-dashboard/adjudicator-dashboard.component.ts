@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, AfterContentInit } from '@angular/core';
+import { Component, OnInit, Input, AfterContentInit, ContentChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatTableDataSource, MatDialog } from '@angular/material';
 
@@ -19,6 +19,7 @@ import { ApproveEnrolmentComponent } from '@shared/components/dialogs/content/ap
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { AdjudicatorActionsComponent } from '../adjudicator-actions/adjudicator-actions.component';
 
 @Component({
   selector: 'app-adjudicator-dashboard',
@@ -26,6 +27,8 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
   styleUrls: ['./adjudicator-dashboard.component.scss']
 })
 export class AdjudicatorDashboardComponent extends AbstractComponent implements OnInit, AfterContentInit {
+  @ContentChild(AdjudicatorActionsComponent, { static: false }) public adjudicatorActionsComponent: AdjudicatorActionsComponent;
+
   public busy: Subscription;
   public enrolleeId: number | null;
   public columns: string[];
