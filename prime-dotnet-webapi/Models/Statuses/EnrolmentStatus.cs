@@ -40,12 +40,12 @@ namespace Prime.Models
             });
         }
 
-        public bool IsType(EnrolmentStatusType statusType)
+        public bool IsType(StatusType statusType)
         {
             return this.StatusCode == (int)statusType;
         }
 
-        public static EnrolmentStatus FromStatusType(EnrolmentStatusType statusType, int enrolleeId)
+        public static EnrolmentStatus FromStatusType(StatusType statusType, int enrolleeId)
         {
             return new EnrolmentStatus
             {

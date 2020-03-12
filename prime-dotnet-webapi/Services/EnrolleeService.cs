@@ -120,7 +120,7 @@ namespace Prime.Services
                 throw new ArgumentNullException(nameof(enrollee), "Could not create an enrollee, the passed in Enrollee cannot be null.");
             }
 
-            enrollee.AddEnrolmentStatus(EnrolmentStatusType.Active);
+            enrollee.AddEnrolmentStatus(StatusType.Active);
             _context.Enrollees.Add(enrollee);
 
             var created = await _context.SaveChangesAsync();
@@ -237,7 +237,7 @@ namespace Prime.Services
             return items;
         }
 
-        public async Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, params EnrolmentStatusType[] statusCodesToCheck)
+        public async Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, params StatusType[] statusCodesToCheck)
         {
             var enrollee = await _context.Enrollees
                 .AsNoTracking()

@@ -76,13 +76,13 @@ namespace Prime.Services
 
         private async Task SubmitApplication(Enrollee enrollee)
         {
-            enrollee.AddEnrolmentStatus(EnrolmentStatusType.UnderReview);
+            enrollee.AddEnrolmentStatus(StatusType.UnderReview);
 
             await _enroleeProfileVersionService.CreateEnrolleeProfileVersionAsync(enrollee);
 
             if (await _automaticAdjudicationService.QualifiesForAutomaticAdjudication(enrollee))
             {
-                var newStatus = enrollee.AddEnrolmentStatus(EnrolmentStatusType.RequiresToa);
+                var newStatus = enrollee.AddEnrolmentStatus(StatusType.RequiresToa);
                 newStatus.AddStatusReason(StatusReason.AUTOMATIC_CODE);
 
                 await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee);
@@ -99,7 +99,7 @@ namespace Prime.Services
 
         private async Task ApproveApplicationAsync(Enrollee enrollee)
         {
-            var newStatus = enrollee.AddEnrolmentStatus(EnrolmentStatusType.Active);
+            var newStatus = enrollee.AddEnrolmentStatus(StatusType.Active);
             newStatus.AddStatusReason(StatusReason.MANUAL_CODE);
 
             await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee);
@@ -112,7 +112,7 @@ namespace Prime.Services
 
         private async Task ProccessToaAsync(Enrollee enrollee, bool accept)
         {
-            enrollee.AddEnrolmentStatus(EnrolmentStatusType.Active);
+            enrollee.AddEnrolmentStatus(StatusType.Active);
 
             if (accept)
             {
@@ -129,7 +129,7 @@ namespace Prime.Services
 
         private async Task EnableEditingAsync(Enrollee enrollee)
         {
-            enrollee.AddEnrolmentStatus(EnrolmentStatusType.Active);
+            enrollee.AddEnrolmentStatus(StatusType.Active);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Enabled Editing");
             await _context.SaveChangesAsync();
             await _emailService.SendReminderEmailAsync(enrollee);
@@ -138,7 +138,7 @@ namespace Prime.Services
 
         private async Task LockProfileAsync(Enrollee enrollee)
         {
-            enrollee.AddEnrolmentStatus(EnrolmentStatusType.Locked);
+            enrollee.AddEnrolmentStatus(StatusType.Locked);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Locked");
             await _context.SaveChangesAsync();
             await _emailService.SendReminderEmailAsync(enrollee);
@@ -227,13 +227,13 @@ namespace Prime.Services
 
                 switch (enrollee.CurrentStatus.StatusCode)
                 {
-                    case (int)EnrolmentStatusType.Active:
+                    case (int)StatusType.Active:
                         return EnrolleeState.Active;
-                    case (int)EnrolmentStatusType.UnderReview:
+                    case (int)StatusType.UnderReview:
                         return EnrolleeState.UnderReview;
-                    case (int)EnrolmentStatusType.RequiresToa:
+                    case (int)StatusType.RequiresToa:
                         return EnrolleeState.RequiresToa;
-                    case (int)EnrolmentStatusType.Locked:
+                    case (int)StatusType.Locked:
                         return EnrolleeState.Locked;
                     default:
                         throw new ArgumentException($"State machine cannot recognize status code {enrollee.CurrentStatus.StatusCode}");
