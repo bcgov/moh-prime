@@ -74,7 +74,4 @@ export class MultipleSitesComponent implements OnInit {
     this.form.markAsPristine();
     this.router.navigate([SiteRoutes.SITE_INFORMATION], { relativeTo: this.route.parent });
   }
-
-
-
 }
