@@ -18,6 +18,7 @@ import { EnrolleeAccessTermEnrolmentComponent } from './pages/enrollee-access-te
 import { EnrolleeEventsComponent } from './pages/enrollee-events/enrollee-events.component';
 import { EnrolleeReviewStatusComponent } from './pages/enrollee-review-status/enrollee-review-status.component';
 import { EnrolleeTableComponent } from './shared/components/enrollee-table/enrollee-table.component';
+import { AdjudicationContainerComponent } from './shared/components/adjudication-container/adjudication-container.component';
 
 
 @NgModule({
@@ -36,6 +37,7 @@ import { EnrolleeTableComponent } from './shared/components/enrollee-table/enrol
     EnrolleeAccessTermComponent,
     EnrolleeAccessTermEnrolmentComponent,
     EnrolleeTableComponent,
+    AdjudicationContainerComponent,
   ],
   imports: [
     SharedModule,

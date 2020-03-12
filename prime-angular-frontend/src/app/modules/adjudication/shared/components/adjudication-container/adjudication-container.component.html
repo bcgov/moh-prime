@@ -1,0 +1,37 @@
+<app-page [busy]="busy"
+          mode="full">
+
+  <ng-content select="app-page-header"></ng-content>
+
+  <ng-content select="app-search-filter"></ng-content>
+
+  <app-enrollee-table [dataSource]="dataSource"
+                      (claim)="onClaim($event)"
+                      (disclaim)="onDisclaim($event)"
+                      (route)="onRoute($event)"></app-enrollee-table>
+
+  <ng-container *ngIf="content">
+
+    <div class="row">
+      <div class="col py-5">
+
+        <ng-container [ngTemplateOutlet]="content"
+                      [ngTemplateOutletContext]="{ enrollee: dataSource?.data[0] }"></ng-container>
+
+      </div>
+      <div *ngIf="hasActions"
+           class="col-auto py-5">
+
+        <app-adjudicator-actions [enrollee]="dataSource?.data[0]"
+                                 (approve)="onApprove($event)"
+                                 (decline)="onDecline($event)"
+                                 (unlock)="onUnlock($event)"
+                                 (delete)="onDelete($event)"
+                                 (route)="onRoute($event)"></app-adjudicator-actions>
+
+      </div>
+    </div>
+
+  </ng-container>
+
+</app-page>
