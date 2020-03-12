@@ -7,12 +7,9 @@ import { AuthService } from '@auth/shared/services/auth.service';
   styleUrls: ['./site-collection-notice.component.scss']
 })
 export class SiteCollectionNoticeComponent implements OnInit {
-
   constructor(
     private authService: AuthService,
   ) { }
 
-  ngOnInit() {
-  }
-
+  public ngOnInit() { }
 }
