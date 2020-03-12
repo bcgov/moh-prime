@@ -5,6 +5,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { User } from '../models/user.model';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Admin } from '../models/admin.model';
+import { Role } from '../enum/role.enum';
 
 export interface KeycloakAttributes {
   attributes: {
@@ -80,6 +81,8 @@ export class KeycloakTokenService implements Token {
     const userId = await this.getUserId();
     const hpdid = await this._getPreferredUsername();
 
+    console.log('ROLES: ', this.getUserRoles(true));
+
     return {
       userId,
       hpdid,
@@ -107,6 +110,8 @@ export class KeycloakTokenService implements Token {
     const userId = await this.getUserId();
     const idir = await this._getPreferredUsername();
 
+
+
     return {
       userId,
       firstName,
@@ -121,6 +126,10 @@ export class KeycloakTokenService implements Token {
   }
 
   public isUserInRole(role: string): boolean {
+
+    if (this.getUserRoles().includes(role)) {
+      return true;
+    }
     return this.keycloakService.isUserInRole(role);
   }
 

@@ -119,7 +119,7 @@ export class DashboardComponent implements OnInit {
   private getSideNavSections(): DashboardNavSection[] {
     if (this.authService.hasAdminView()) {
       return this.getAdjudicationSideNavSections();
-    } else if (this.authService.isRegistrant) {
+    } else if (this.authService.isRegistrant()) {
       return this.getRegistrantSideNavSections();
     } else {
       return this.getEnrolleeSideNavSections();

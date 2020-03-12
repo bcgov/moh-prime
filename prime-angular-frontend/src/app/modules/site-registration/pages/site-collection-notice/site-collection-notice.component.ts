@@ -13,7 +13,6 @@ export class SiteCollectionNoticeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.authService.isRegistrant = true;
   }
 
 }

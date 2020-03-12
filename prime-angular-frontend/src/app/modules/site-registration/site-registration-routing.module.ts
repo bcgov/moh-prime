@@ -17,6 +17,7 @@ import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer
 import { TechnicalSupportContactComponent } from './pages/technical-support-contact/technical-support-contact.component';
 import { SiteReviewComponent } from './pages/site-review/site-review.component';
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
+import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 
 
 
