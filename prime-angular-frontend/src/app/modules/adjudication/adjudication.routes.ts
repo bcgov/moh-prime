@@ -1,9 +1,13 @@
 export class AdjudicationRoutes {
   public static ADJUDICATION = 'adjudication';
-  public static ENROLMENTS = 'enrolments';
-  public static ENROLMENT = 'enrolment';
-  public static PROFILE_HISTORY = 'history';
-  public static ACCESS_TERMS = 'access-terms';
+  public static ENROLLEES = 'enrolments';
+  public static ENROLLEE = 'enrolment';
+  public static ENROLLEE_EVENTS = 'events';
+  public static ENROLLEE_REVIEW_STATUS = 'review-status';
+  public static ENROLLEE_PROFILE_HISTORY = 'history';
+  public static ENROLLEE_TERMS_HISTORY = 'terms-of-access-history';
+  public static ENROLLEE_LIMITS_CONDITIONS = 'limits-and-conditions';
+  public static ENROLLEE_ADJUDICATOR_NOTES = 'notes';
 
   public static MODULE_PATH = AdjudicationRoutes.ADJUDICATION;
 
