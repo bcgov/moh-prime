@@ -9,7 +9,7 @@ using Prime.Services.Rules;
 
 namespace Prime.Services
 {
-    public class SubmissionRulesService : BaseService, IAutomaticAdjudicationService
+    public class SubmissionRulesService : BaseService, ISubmissionRulesService
     {
         private readonly IPharmanetApiService _pharmanetApiService;
 

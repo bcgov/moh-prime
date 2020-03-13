@@ -12,7 +12,7 @@ namespace Prime.Services
 {
     public class EnrolleeService : BaseService, IEnrolleeService
     {
-        private readonly IAutomaticAdjudicationService _automaticAdjudicationService;
+        private readonly ISubmissionRulesService _automaticAdjudicationService;
         private readonly IEmailService _emailService;
         private readonly IPrivilegeService _privilegeService;
         private readonly IAccessTermService _accessTermService;
@@ -22,7 +22,7 @@ namespace Prime.Services
         public EnrolleeService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
-            IAutomaticAdjudicationService automaticAdjudicationService,
+            ISubmissionRulesService automaticAdjudicationService,
             IEmailService emailService,
             IPrivilegeService privilegeService,
             IAccessTermService accessTermService,

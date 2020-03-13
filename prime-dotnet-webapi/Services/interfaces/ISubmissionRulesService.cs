@@ -4,7 +4,7 @@ using Prime.Models;
 
 namespace Prime.Services
 {
-    public interface IAutomaticAdjudicationService
+    public interface ISubmissionRulesService
     {
         Task<bool> QualifiesForAutomaticAdjudication(Enrollee enrollee);
     }

@@ -46,7 +46,7 @@ namespace Prime
         {
             services.AddScoped<ILookupService, LookupService>();
             services.AddScoped<IEnrolleeService, EnrolleeService>();
-            services.AddScoped<IAutomaticAdjudicationService, SubmissionRulesService>();
+            services.AddScoped<ISubmissionRulesService, SubmissionRulesService>();
             services.AddScoped<IEnrolmentCertificateService, EnrolmentCertificateService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IPharmanetApiService, PharmanetApiService>();

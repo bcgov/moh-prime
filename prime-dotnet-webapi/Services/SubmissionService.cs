@@ -14,7 +14,7 @@ namespace Prime.Services
     public class SubmissionService : BaseService, ISubmissionService
     {
         private readonly IAccessTermService _accessTermService;
-        private readonly IAutomaticAdjudicationService _automaticAdjudicationService;
+        private readonly ISubmissionRulesService _automaticAdjudicationService;
         private readonly IBusinessEventService _businessEventService;
         private readonly IEmailService _emailService;
         private readonly IEnrolleeService _enrolleeService;
@@ -23,7 +23,7 @@ namespace Prime.Services
 
         public SubmissionService(ApiDbContext context, IHttpContextAccessor httpContext,
             IAccessTermService accessTermService,
-            IAutomaticAdjudicationService automaticAdjudicationService,
+            ISubmissionRulesService automaticAdjudicationService,
             IBusinessEventService businessEventService,
             IEmailService emailService,
             IEnrolleeService enrolleeService,
