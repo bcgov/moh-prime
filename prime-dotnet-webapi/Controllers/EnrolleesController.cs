@@ -542,5 +542,31 @@ namespace Prime.Controllers
 
             return Ok(ApiResponse.Result(updatedEnrollee));
         }
+
+        // GET: api/Enrollees/5/events
+        /// <summary>
+        /// Gets a list of enrollee events.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpGet("{enrolleeId}/events", Name = nameof(GetEnrolleeEvents))]
+        [Authorize(Policy = PrimeConstants.READONLY_ADMIN_POLICY)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<BusinessEvent>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<BusinessEvent>>> GetEnrolleeEvents(int enrolleeId)
+        {
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+
+            if (enrollee == null)
+            {
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+            }
+
+            var events = await _enrolleeService.GetEnrolleeBusinessEvents(enrolleeId);
+
+            return Ok(ApiResponse.Result(events));
+        }
     }
 }

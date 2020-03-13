@@ -658,5 +658,9 @@ namespace Prime.Services
             return enrollee;
         }
 
+        public async Task<IEnumerable<BusinessEvent>> GetEnrolleeBusinessEvents(int enrolleeId)
+        {
+            return await _context.BusinessEvents.Where((e) => e.EnrolleeId == enrolleeId).ToListAsync();
+        }
     }
 }
