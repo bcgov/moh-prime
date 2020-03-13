@@ -45,7 +45,10 @@ export interface HttpEnrollee extends Enrollee {
   adjudicator: Admin;
 }
 
-// TODO outgoing enrolment model
+
+/**
+ * @deprecated
+ */
 export interface Enrolment {
   id?: number;
   displayId?: number;
