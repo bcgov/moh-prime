@@ -1,8 +1,12 @@
-<app-adjudication-container>
+<app-adjudication-container [content]="content">
 
   <app-page-header>Terms of Access History</app-page-header>
 
-  <!-- <app-access-terms-table [dataSource]="dataSource"
-                          enrolmentRoute="enrolment"></app-access-terms-table> -->
+  <ng-template #content>
+
+    <app-access-terms-table [dataSource]="dataSource"
+                            [enrolmentRoute]="AdjudicationRoutes.ENROLLEE"></app-access-terms-table>
+
+  </ng-template>
 
 </app-adjudication-container>

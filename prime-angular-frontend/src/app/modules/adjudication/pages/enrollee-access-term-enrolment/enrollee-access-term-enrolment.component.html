@@ -1,4 +1,4 @@
-<app-page [busy]="busy">
+<app-adjudication-container>
 
   <app-page-header>Enrolment History</app-page-header>
 
@@ -8,16 +8,20 @@
     </ng-container>
   </app-page-subheader>
 
-  <app-enrollee-review [enrolment]="enrolmentProfileHistory?.profileSnapshot"></app-enrollee-review>
+  <ng-template #content>
 
-  <div class="row justify-content-between">
-    <div class="col pt-4">
+    <!-- <app-enrollee-review [enrolment]="enrolmentProfileHistory?.profileSnapshot"></app-enrollee-review> -->
 
-      <button mat-stroked-button
-              type="button"
-              (click)="routeTo()">Back</button>
+    <div class="row justify-content-between">
+      <div class="col pt-4">
 
+        <button mat-stroked-button
+                type="button"
+                (click)="routeTo()">Back</button>
+
+      </div>
     </div>
-  </div>
 
-</app-page>
+  </ng-template>
+
+</app-adjudication-container>

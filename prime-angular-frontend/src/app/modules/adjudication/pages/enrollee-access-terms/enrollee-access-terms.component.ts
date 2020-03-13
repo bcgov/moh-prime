@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material';
 
 import { Subscription } from 'rxjs';
 
 import { AccessTerm } from '@shared/models/access-term.model';
 
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 @Component({
@@ -17,9 +18,10 @@ export class EnrolleeAccessTermsComponent implements OnInit {
   public busy: Subscription;
   public dataSource: MatTableDataSource<AccessTerm>;
 
+  public AdjudicationRoutes = AdjudicationRoutes;
+
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private adjudicationResource: AdjudicationResource
   ) { }
 
