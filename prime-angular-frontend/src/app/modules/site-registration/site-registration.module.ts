@@ -16,8 +16,6 @@ import { ConfirmationComponent } from './pages/confirmation/confirmation.compone
 import { RegistrantProfileReviewComponent } from './shared/components/registrant-profile-review/registrant-profile-review.component';
 import { SiteProgressIndicatorComponent } from './shared/components/site-progress-indicator/site-progress-indicator.component';
 
-
-
 @NgModule({
   declarations: [
     SiteCollectionNoticeComponent,
