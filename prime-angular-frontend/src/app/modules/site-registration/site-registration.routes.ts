@@ -18,4 +18,23 @@ export class SiteRoutes {
   public static routePath(route: string): string {
     return `/${SiteRoutes.MODULE_PATH}/${route}`;
   }
+
+  // Use by the progress indicator to calculate percent completion
+  // of the registration process
+  public static routeOrder(): string[] {
+    return [
+      SiteRoutes.SITE_REGISTRATION,
+      SiteRoutes.COLLECTION_NOTICE,
+      SiteRoutes.MULTIPLE_SITES,
+      SiteRoutes.SITE_INFORMATION,
+      SiteRoutes.HOURS_OPERATION,
+      SiteRoutes.VENDOR,
+      SiteRoutes.SIGNING_AUTHORITY,
+      SiteRoutes.ADMINISTRATOR,
+      SiteRoutes.PRIVACY_OFFICER,
+      SiteRoutes.TECHNICAL_SUPPORT_CONTACT,
+      SiteRoutes.SITE_REVIEW,
+      SiteRoutes.CONFIRMATION
+    ];
+  }
 }

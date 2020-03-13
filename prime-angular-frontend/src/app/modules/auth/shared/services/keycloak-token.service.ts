@@ -81,8 +81,6 @@ export class KeycloakTokenService implements Token {
     const userId = await this.getUserId();
     const hpdid = await this._getPreferredUsername();
 
-    console.log('ROLES: ', this.getUserRoles(true));
-
     return {
       userId,
       hpdid,

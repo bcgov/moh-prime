@@ -8,19 +8,21 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 })
 export class ProgressIndicatorComponent implements OnInit {
   @Input() public inProgress: boolean;
-  @Input() public currentRoute: EnrolmentRoutes;
+  @Input() public currentRoute: any;
   @Input() public message: string;
-  @Input() public isSiteRegistration: boolean;
+  @Input() public routes: any;
 
   public percentComplete: number;
 
-  constructor() { }
+  constructor() {
+    this.routes = EnrolmentRoutes.initialEnrolmentRouteOrder();
+  }
 
   public ngOnInit() {
-    const enrolmentRoutes = EnrolmentRoutes.initialEnrolmentRouteOrder();
-    const currentRoute = enrolmentRoutes.findIndex(er => er === this.currentRoute);
+
+    const currentRoute = this.routes.findIndex(er => er === this.currentRoute);
     const currentPage = (currentRoute > -1) ? currentRoute : 0;
-    const totalPages = enrolmentRoutes.length - 1;
+    const totalPages = this.routes.length - 1;
 
     const percentComplete = Math.trunc(currentPage / totalPages * 100);
 

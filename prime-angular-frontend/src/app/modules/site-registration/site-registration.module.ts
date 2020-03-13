@@ -14,6 +14,7 @@ import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer
 import { RegistrantProfileFormComponent } from './shared/components/registrant-profile-form/registrant-profile-form.component';
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 import { RegistrantProfileReviewComponent } from './shared/components/registrant-profile-review/registrant-profile-review.component';
+import { SiteProgressIndicatorComponent } from './shared/components/site-progress-indicator/site-progress-indicator.component';
 
 
 
@@ -31,7 +32,8 @@ import { RegistrantProfileReviewComponent } from './shared/components/registrant
     PrivacyOfficerComponent,
     RegistrantProfileFormComponent,
     ConfirmationComponent,
-    RegistrantProfileReviewComponent
+    RegistrantProfileReviewComponent,
+    SiteProgressIndicatorComponent
   ],
   imports: [
     SharedModule,
