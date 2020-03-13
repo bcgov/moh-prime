@@ -6,14 +6,14 @@ import { Enrolment } from '@shared/models/enrolment.model';
 import { MatDialogRef } from '@angular/material';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 
+export enum ClaimActionEnum {
+  UnClaim = 0,
+  Claim = 1
+}
+
 export class ClaimEnrolleeAction {
   public action: ClaimActionEnum;
   public adjudicatorId?: number;
-}
-
-export enum ClaimActionEnum {
-  UnClaim = 0,
-  Claim = 1,
 }
 
 @Component({
@@ -34,14 +34,14 @@ export class ClaimEnrolleeComponent implements OnInit {
   public unClaim(): void {
     const output = new ClaimEnrolleeAction();
     output.action = ClaimActionEnum.UnClaim;
-    this.dialogRef.close({ output, });
+    this.dialogRef.close({ output });
   }
 
   public claim(adminId: number): void {
     const output = new ClaimEnrolleeAction();
     output.action = ClaimActionEnum.Claim;
     output.adjudicatorId = adminId;
-    this.dialogRef.close({ output, });
+    this.dialogRef.close({ output });
   }
 
   public async ngOnInit() {
