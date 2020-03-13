@@ -34,14 +34,14 @@ export class ClaimEnrolleeComponent implements OnInit {
   public unClaim(): void {
     const output = new ClaimEnrolleeAction();
     output.action = ClaimActionEnum.UnClaim;
-    this.dialogRef.close({ output, });
+    this.dialogRef.close({ output });
   }
 
   public claim(adminId: number): void {
     const output = new ClaimEnrolleeAction();
     output.action = ClaimActionEnum.Claim;
     output.adjudicatorId = adminId;
-    this.dialogRef.close({ output, });
+    this.dialogRef.close({ output });
   }
 
   public async ngOnInit() {
