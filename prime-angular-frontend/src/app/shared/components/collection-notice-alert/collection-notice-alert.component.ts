@@ -44,7 +44,6 @@ export class CollectionNoticeAlertComponent implements OnInit {
     if (this.enrolmentService.isInitialEnrolment) {
       this.router.navigate([route], { relativeTo: this.route.parent });
     }
-
   }
 
   public ngOnInit() {
