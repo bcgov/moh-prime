@@ -190,5 +190,15 @@ namespace Prime.Models
 
             return newStatus;
         }
+
+        public void AddReasonToCurrentStatus(StatusReasonType type, string statusReasonNote = null)
+        {
+            if (CurrentStatus == null)
+            {
+                throw new InvalidOperationException($"Could not add Status Reason, Current Status is null.");
+            }
+
+            CurrentStatus.AddStatusReason(type, statusReasonNote);
+        }
     }
 }
