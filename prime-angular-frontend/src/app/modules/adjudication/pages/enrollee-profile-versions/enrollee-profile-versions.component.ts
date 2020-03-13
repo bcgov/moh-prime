@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material';
 
 import { Subscription } from 'rxjs';
 
-import { AbstractComponent } from '@shared/classes/abstract-component';
 import { HttpEnrolleeProfileVersion } from '@shared/models/enrollee-profile-history.model';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
@@ -13,24 +12,16 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
   templateUrl: './enrollee-profile-versions.component.html',
   styleUrls: ['./enrollee-profile-versions.component.scss']
 })
-export class EnrolleeProfileVersionsComponent extends AbstractComponent implements OnInit {
+export class EnrolleeProfileVersionsComponent implements OnInit {
   public busy: Subscription;
   public dataSource: MatTableDataSource<HttpEnrolleeProfileVersion>;
   public columns: string[];
 
   constructor(
-    protected route: ActivatedRoute,
-    protected router: Router,
+    private route: ActivatedRoute,
     private adjudicationResource: AdjudicationResource,
   ) {
-    super(route, router);
-
     this.columns = ['name', 'createdDate', 'actions'];
-  }
-
-  // TODO update to pass in route from template
-  public routeTo() {
-    super.routeTo('../../');
   }
 
   public ngOnInit() {

@@ -7,7 +7,7 @@ export class AdjudicationRoutes {
   public static ENROLLEE_PROFILE_HISTORY = 'history';
   public static ENROLLEE_TERMS_HISTORY = 'terms-of-access-history';
   public static ENROLLEE_LIMITS_CONDITIONS = 'limits-and-conditions';
-  public static ENROLLEE_ADJUDICATOR_NOTES = 'adjudicator-notes';
+  public static ENROLLEE_ADJUDICATOR_NOTES = 'notes';
 
   public static MODULE_PATH = AdjudicationRoutes.ADJUDICATION;
 

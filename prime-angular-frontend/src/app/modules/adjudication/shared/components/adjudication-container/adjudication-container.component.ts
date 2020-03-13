@@ -1,29 +1,36 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, Input, TemplateRef } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { MatTableDataSource, MatDialog } from '@angular/material';
 
-import { Subscription, EMPTY, noop, of } from 'rxjs';
+import { Observable, Subscription, EMPTY, of, noop } from 'rxjs';
+import { map, exhaustMap, tap } from 'rxjs/operators';
 
-import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { AbstractComponent } from '@shared/classes/abstract-component';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
-import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { exhaustMap } from 'rxjs/operators';
+import { HttpEnrollee } from '@shared/models/enrolment.model';
+import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { ApproveEnrolmentComponent } from '@shared/components/dialogs/content/approve-enrolment/approve-enrolment.component';
-import { MatDialog } from '@angular/material';
-import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+
 import { AuthService } from '@auth/shared/services/auth.service';
+import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
-  selector: 'app-enrollee-events',
-  templateUrl: './enrollee-events.component.html',
-  styleUrls: ['./enrollee-events.component.scss']
+  selector: 'app-adjudication-container',
+  templateUrl: './adjudication-container.component.html',
+  styleUrls: ['./adjudication-container.component.scss']
 })
-export class EnrolleeEventsComponent extends AbstractComponent implements OnInit {
+export class AdjudicationContainerComponent extends AbstractComponent implements OnInit {
+  @Input() public hasActions: boolean;
+  @Input() public content: TemplateRef<any>;
+
   public busy: Subscription;
-  public enrollee: HttpEnrollee;
-  public hasActions: boolean;
+  public columns: string[];
+  public dataSource: MatTableDataSource<HttpEnrollee>;
+
+  public showSearchFilter: boolean;
+  public AdjudicationRoutes = AdjudicationRoutes;
 
   constructor(
     protected route: ActivatedRoute,
@@ -34,20 +41,38 @@ export class EnrolleeEventsComponent extends AbstractComponent implements OnInit
   ) {
     super(route, router);
 
+    this.hasActions = false;
+    this.columns = ['uniqueId', 'name', 'appliedDate', 'status', 'approvedDate', 'adjudicator', 'actions'];
+    this.dataSource = new MatTableDataSource<HttpEnrollee>([]);
+
+    this.showSearchFilter = !!this.route.snapshot.params.id;
     this.baseRoutePath = [AdjudicationRoutes.MODULE_PATH, AdjudicationRoutes.ENROLLEES];
-    this.hasActions = true;
+  }
+
+  public onSearch(search: string | null): void {
+    this.setQueryParams({ search });
+    this.getDataset();
+  }
+
+  public onFilter(status: EnrolmentStatus | null): void {
+    this.setQueryParams({ status });
+    this.getDataset();
+  }
+
+  public onRefresh(): void {
+    this.getDataset();
   }
 
   public onClaim(enrolleeId: number) {
     this.adjudicationResource
       .setEnrolleeAdjudicator(enrolleeId)
-      .subscribe((updatedEnrollee: HttpEnrollee) => this.enrollee = updatedEnrollee);
+      .subscribe((updatedEnrollee: HttpEnrollee) => this.updateEnrollee(updatedEnrollee));
   }
 
   public onDisclaim(enrolleeId: number) {
     this.adjudicationResource
       .removeEnrolleeAdjudicator(enrolleeId)
-      .subscribe((updatedEnrollee: HttpEnrollee) => this.enrollee = updatedEnrollee);
+      .subscribe((updatedEnrollee: HttpEnrollee) => this.updateEnrollee(updatedEnrollee));
   }
 
   public onApprove(enrollee: HttpEnrollee) {
@@ -76,7 +101,7 @@ export class EnrolleeEventsComponent extends AbstractComponent implements OnInit
         ),
         exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrollee.id))
       )
-      .subscribe((approvedEnrollee: HttpEnrollee) => this.enrollee = approvedEnrollee);
+      .subscribe((approvedEnrollee: HttpEnrollee) => this.updateEnrollee(approvedEnrollee));
   }
 
   public onDecline(enrolleeId: number) {
@@ -97,13 +122,13 @@ export class EnrolleeEventsComponent extends AbstractComponent implements OnInit
         ),
         exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrolleeId)),
       )
-      .subscribe((declinedEnrollee: HttpEnrollee) => this.enrollee = declinedEnrollee);
+      .subscribe((declinedEnrollee: HttpEnrollee) => this.updateEnrollee(declinedEnrollee));
   }
 
   public onUnlock(enrolleeId: number) {
     const data: DialogOptions = {
       title: 'Unlock for Editing',
-      message: 'When unlocked the enrollee will be able to edit and update their enrolment. Are you sure you want to unlock this enrolment?',
+      message: 'When unlocked the enrollee will be able to update their enrolment. Are you sure you want to unlock this enrolment?',
       actionType: 'warn',
       actionText: 'Unlock for Editing'
     };
@@ -118,7 +143,7 @@ export class EnrolleeEventsComponent extends AbstractComponent implements OnInit
         ),
         exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrolleeId))
       )
-      .subscribe((lockedEnrollee: HttpEnrollee) => this.enrollee = lockedEnrollee);
+      .subscribe((lockedEnrollee: HttpEnrollee) => this.updateEnrollee(lockedEnrollee));
   }
 
   public onDelete(enrolleeId: number) {
@@ -130,7 +155,6 @@ export class EnrolleeEventsComponent extends AbstractComponent implements OnInit
     };
 
     if (this.authService.isSuperAdmin()) {
-      // TODO if they delete the enrollee they are on need to route
       this.busy = this.dialog.open(ConfirmDialogComponent, { data })
         .afterClosed()
         .pipe(
@@ -149,13 +173,53 @@ export class EnrolleeEventsComponent extends AbstractComponent implements OnInit
   }
 
   public ngOnInit() {
-    this.getEnrolleeById();
+    this.getDataset();
   }
 
-  private getEnrolleeById() {
+  private getDataset() {
     const enrolleeId = this.route.snapshot.params.id;
-    this.busy = this.adjudicationResource
+    const results$ = (enrolleeId)
+      ? this.getEnrolleeById(enrolleeId)
+      : this.getEnrollees();
+
+    this.busy = results$
+      .subscribe((enrollees: HttpEnrollee[]) => this.dataSource.data = enrollees);
+  }
+
+  private getEnrolleeById(enrolleeId: number): Observable<HttpEnrollee[]> {
+    return this.adjudicationResource
       .getEnrolleeById(enrolleeId)
-      .subscribe((enrollee: HttpEnrollee) => this.enrollee = enrollee);
+      .pipe(
+        map((enrollee: HttpEnrollee) => [enrollee]),
+        tap(() => this.showSearchFilter = false)
+      );
+  }
+
+  private getEnrollees() {
+    const { search, status } = this.route.snapshot.queryParams;
+    return this.adjudicationResource.getEnrollees(search, status)
+      .pipe(
+        tap(() => this.showSearchFilter = true)
+      );
+  }
+
+  private setQueryParams(params: { search?: string, status?: number, page?: number } = { search: null, status: null, page: null }) {
+    // Passing `null` removes the query parameter from the URL
+    const queryParams = { ...this.route.snapshot.queryParams, ...params };
+    this.router.navigate([], { queryParams });
+  }
+
+  // TODO split out into service and use generics for managing data tables, and update with add row
+  private updateEnrollee(enrollee: HttpEnrollee) {
+    this.dataSource.data = this.dataSource.data
+      .map((currentEnrollee: HttpEnrollee) =>
+        (currentEnrollee.id === enrollee.id) ? enrollee : currentEnrollee
+      );
+  }
+
+  // TODO split out into service and use generics for managing data tables, and update with add row
+  private removeEnrollee(enrollee: HttpEnrollee) {
+    this.dataSource.data = this.dataSource.data
+      .filter((currentEnrollee: HttpEnrollee) => currentEnrollee.id !== enrollee.id);
   }
 }

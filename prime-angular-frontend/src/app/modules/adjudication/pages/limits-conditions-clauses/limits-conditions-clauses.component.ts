@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 
@@ -24,7 +24,6 @@ export class LimitsConditionsClausesComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private fb: FormBuilder,
     private adjudicationResource: AdjudicationResource,
     private authService: AuthService
@@ -40,19 +39,16 @@ export class LimitsConditionsClausesComponent implements OnInit {
     return this.form.get('note') as FormControl;
   }
 
-  /**
-   * Updates the preview with the editor content
-   */
-  public handleChange(event: { editor: any }) {
-    if (!event.editor) { return; }
-    this.preview = event.editor.getContent();
-  }
-
   public onSubmit() {
     if (this.form.valid) {
       this.busy = this.adjudicationResource.updateAccessAgreementNote(this.enrollee.id, this.note.value)
         .subscribe();
     }
+  }
+
+  public onUpdate(event: { editor: any }) {
+    if (!event.editor) { return; }
+    this.preview = event.editor.getContent();
   }
 
   public ngOnInit() {
@@ -61,11 +57,11 @@ export class LimitsConditionsClausesComponent implements OnInit {
     this.getEnrollee(this.route.snapshot.params.id);
   }
 
-  protected initForm() {
+  private initForm() {
     this.note.valueChanges.subscribe((value: string) => this.preview = value);
   }
 
-  protected createFormInstance() {
+  private createFormInstance() {
     this.form = this.fb.group({
       note: [
         {

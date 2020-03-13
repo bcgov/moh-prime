@@ -1,6 +1,12 @@
-<app-adjudicator-dashboard>
+<app-adjudication-container [content]="content">
 
   <app-page-header>Notes</app-page-header>
+
+  <app-adjudicator-actions></app-adjudicator-actions>
+
+</app-adjudication-container>
+
+<ng-template #content>
 
   <form (ngSubmit)="onSubmit()"
         [formGroup]="form"
@@ -39,8 +45,8 @@
                       {{ adjudicatorNote.noteDate | formatDate }}
                     </div>
                     <small class="text-mute font-weight-normal">
-                      {{ adjudicatorNote.noteDate | formatDate: 'h:mm a' }}
-                    </small>
+                    {{ adjudicatorNote.noteDate | formatDate: 'h:mm a' }}
+                  </small>
                   </th>
                   <td>{{ adjudicatorNote.note }}</td>
                 </tr>
@@ -59,4 +65,4 @@
 
   </form>
 
-</app-adjudicator-dashboard>
+</ng-template>

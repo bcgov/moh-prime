@@ -29,8 +29,8 @@ export class AdjudicationResource {
     private logger: LoggerService
   ) { }
 
-  public getEnrollees(statusCode?: number, textSearch?: string): Observable<HttpEnrollee[]> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ statusCode, textSearch });
+  public getEnrollees(textSearch?: string, statusCode?: number): Observable<HttpEnrollee[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ textSearch, statusCode });
     return this.apiResource.get<HttpEnrollee[]>('enrollees', params)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee[]>) => response.result),

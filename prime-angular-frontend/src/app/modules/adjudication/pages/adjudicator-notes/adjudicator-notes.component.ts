@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material';
 
 import { Subscription, BehaviorSubject } from 'rxjs';
 
-import { AbstractComponent } from '@shared/classes/abstract-component';
 import { Enrolment } from '@shared/models/enrolment.model';
 
 import { AuthService } from '@auth/shared/services/auth.service';
@@ -17,7 +16,7 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
   templateUrl: './adjudicator-notes.component.html',
   styleUrls: ['./adjudicator-notes.component.scss']
 })
-export class AdjudicatorNotesComponent extends AbstractComponent implements OnInit {
+export class AdjudicatorNotesComponent implements OnInit {
   public busy: Subscription;
   public form: FormGroup;
   public columns: string[];
@@ -26,14 +25,11 @@ export class AdjudicatorNotesComponent extends AbstractComponent implements OnIn
   public hasActions: boolean;
 
   constructor(
-    protected route: ActivatedRoute,
-    protected router: Router,
+    private route: ActivatedRoute,
     private fb: FormBuilder,
     private adjudicationResource: AdjudicationResource,
     private authService: AuthService
   ) {
-    super(route, router);
-
     this.hasActions = false;
     this.adjudicatorNotes = new BehaviorSubject<AdjudicationNote[]>([]);
   }
@@ -56,11 +52,6 @@ export class AdjudicatorNotesComponent extends AbstractComponent implements OnIn
           this.note.reset();
         });
     }
-  }
-
-  // TODO update to pass in route from template
-  public routeTo() {
-    super.routeTo('../../');
   }
 
   public ngOnInit() {

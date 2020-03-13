@@ -6,7 +6,6 @@ import { Subscription } from 'rxjs';
 import { AbstractComponent } from '@shared/classes/abstract-component';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 
-import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 @Component({
@@ -24,12 +23,6 @@ export class EnrolmentComponent extends AbstractComponent implements OnInit {
     private adjudicationResource: AdjudicationResource
   ) {
     super(route, router);
-  }
-
-  // TODO update to pass in route from template
-  public routeTo() {
-    const routePath = AdjudicationRoutes.routePath(AdjudicationRoutes.ENROLLEES);
-    super.routeTo(routePath);
   }
 
   public ngOnInit() {

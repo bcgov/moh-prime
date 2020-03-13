@@ -3,6 +3,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
   selector: 'app-adjudicator-actions',
@@ -18,6 +19,7 @@ export class AdjudicatorActionsComponent implements OnInit {
   @Output() public route: EventEmitter<string | (string | number)[]>;
 
   public EnrolmentStatus = EnrolmentStatus;
+  public AdjudicationRoutes = AdjudicationRoutes;
 
   constructor(
     private authService: AuthService
