@@ -51,16 +51,14 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
 
   public onSearch(search: string | null): void {
     this.setQueryParams({ search });
-    this.getDataset();
   }
 
   public onFilter(status: EnrolmentStatus | null): void {
     this.setQueryParams({ status });
-    this.getDataset();
   }
 
   public onRefresh(): void {
-    this.getDataset();
+    this.getDataset(this.route.snapshot.queryParams);
   }
 
   public onClaim(enrolleeId: number) {
@@ -173,14 +171,19 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
   }
 
   public ngOnInit() {
-    this.getDataset();
+    // Use existing query params for initial search
+    this.getDataset(this.route.snapshot.queryParams);
+
+    // Update results on query param change
+    this.route.queryParams
+      .subscribe((queryParams: { [key: string]: any }) => this.getDataset(queryParams));
   }
 
-  private getDataset() {
+  private getDataset(queryParams: { search?: string, status?: number }) {
     const enrolleeId = this.route.snapshot.params.id;
     const results$ = (enrolleeId)
       ? this.getEnrolleeById(enrolleeId)
-      : this.getEnrollees();
+      : this.getEnrollees(queryParams);
 
     this.busy = results$
       .subscribe((enrollees: HttpEnrollee[]) => this.dataSource.data = enrollees);
@@ -195,18 +198,21 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
       );
   }
 
-  private getEnrollees() {
-    const { search, status } = this.route.snapshot.queryParams;
+  private getEnrollees({ search, status }: { search?: string, status?: number }) {
     return this.adjudicationResource.getEnrollees(search, status)
       .pipe(
         tap(() => this.showSearchFilter = true)
       );
   }
 
-  private setQueryParams(params: { search?: string, status?: number, page?: number } = { search: null, status: null, page: null }) {
+  private setQueryParams(queryParams: { search?: string, status?: number } = { search: null, status: null }) {
     // Passing `null` removes the query parameter from the URL
-    const queryParams = { ...this.route.snapshot.queryParams, ...params };
+    queryParams = { ...this.route.snapshot.queryParams, ...queryParams };
     this.router.navigate([], { queryParams });
+  }
+
+  private resetQueryParams() {
+    this.setQueryParams();
   }
 
   // TODO split out into service and use generics for managing data tables, and update with add row
