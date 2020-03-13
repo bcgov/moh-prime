@@ -44,7 +44,7 @@ export class ClaimEnrolleeComponent implements OnInit {
     this.dialogRef.close({ output, });
   }
 
-  async ngOnInit() {
+  public async ngOnInit() {
     this.getAdjudicators();
   }
 
