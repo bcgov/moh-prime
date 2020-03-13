@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 import { debounceTime } from 'rxjs/operators';
 
@@ -20,6 +21,7 @@ export class SearchFormComponent implements OnInit {
   public statuses: Config<number>[];
 
   constructor(
+    private route: ActivatedRoute,
     private fb: FormBuilder,
     private configService: ConfigService,
   ) {
@@ -44,11 +46,14 @@ export class SearchFormComponent implements OnInit {
   private createFormInstance() {
     this.form = this.fb.group({
       textSearch: [null, []],
-      statusCode: ['', []],
+      statusCode: ['', []]
     });
   }
 
   private initForm() {
+    const queryParams = this.route.snapshot.queryParams;
+    this.form.patchValue(queryParams);
+
     this.textSearch.valueChanges
       .pipe(debounceTime(500))
       // Passing `null` removes the query parameter from the URL
