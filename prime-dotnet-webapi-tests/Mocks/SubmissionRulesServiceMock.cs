@@ -5,9 +5,9 @@ using Prime.Services;
 
 namespace PrimeTests.Mocks
 {
-    public class AutomaticAdjudicationServiceMock : BaseMockService, IAutomaticAdjudicationService
+    public class SubmissionRulesServiceMock : BaseMockService, ISubmissionRulesService
     {
-        public AutomaticAdjudicationServiceMock() : base()
+        public SubmissionRulesServiceMock() : base()
         { }
 
         public override void SeedData()

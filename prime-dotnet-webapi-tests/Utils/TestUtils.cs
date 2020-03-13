@@ -126,53 +126,6 @@ namespace PrimeTests.Utils
             identity.RemoveClaim(claim);
         }
 
-        public static int? CreateEnrollee(
-            ApiDbContext apiDbContext,
-            HttpContextAccessor httpContext,
-            IAutomaticAdjudicationService automaticAdjudicationService,
-            IEmailService emailService,
-            IPrivilegeService privilegeService,
-            IAccessTermService accessTermService,
-            IEnrolleeProfileVersionService enrolleeProfileVersionService,
-            IBusinessEventService businessEventService
-        )
-        {
-            return new EnrolleeService(
-                apiDbContext,
-                httpContext,
-                automaticAdjudicationService,
-                emailService,
-                privilegeService,
-                accessTermService,
-                enrolleeProfileVersionService,
-                businessEventService
-            ).CreateEnrolleeAsync(TestUtils.EnrolleeFaker.Generate()).Result;
-        }
-
-        public static Enrollee GetEnrolleeById(
-            ApiDbContext apiDbContext,
-            HttpContextAccessor httpContext,
-            IAutomaticAdjudicationService automaticAdjudicationService,
-            int enrolmentId,
-            IEmailService emailService,
-            IPrivilegeService privilegeService,
-            IAccessTermService accessTermService,
-            IEnrolleeProfileVersionService enrolleeProfileVersionService,
-            IBusinessEventService businessEventService
-        )
-        {
-            return new EnrolleeService(
-                apiDbContext,
-                httpContext,
-                automaticAdjudicationService,
-                emailService,
-                privilegeService,
-                accessTermService,
-                enrolleeProfileVersionService,
-                businessEventService
-            ).GetEnrolleeAsync(enrolmentId).Result;
-        }
-
         public static void InitializeDbForTests(ApiDbContext db)
         {
             // db.Enrollees.AddRange(EnrolleeFaker.Generate(5));
