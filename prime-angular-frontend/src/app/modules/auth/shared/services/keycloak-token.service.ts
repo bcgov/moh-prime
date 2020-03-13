@@ -108,8 +108,6 @@ export class KeycloakTokenService implements Token {
     const userId = await this.getUserId();
     const idir = await this._getPreferredUsername();
 
-
-
     return {
       userId,
       firstName,
