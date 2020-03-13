@@ -27,5 +27,4 @@ export class SiteReviewComponent implements OnInit {
   }
 
   public ngOnInit() { }
-
 }
