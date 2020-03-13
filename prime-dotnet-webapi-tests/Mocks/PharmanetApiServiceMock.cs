@@ -8,7 +8,7 @@ using Prime.Services;
 
 namespace PrimeTests.Mocks
 {
-    public class PharmanetApiServiceMock : BaseMockService, IPharmanetApiService
+    public class PharmanetApiServiceMock : IPharmanetApiService
     {
         [Flags]
         public enum OperationMode
@@ -24,13 +24,11 @@ namespace PrimeTests.Mocks
         private Enrollee _expectedEnrollee;
         private IEnumerator<OperationMode> _modeEnumerator;
 
-        public PharmanetApiServiceMock(Enrollee expectedEnrollee = null, params OperationMode[] modes) : base()
+        public PharmanetApiServiceMock(Enrollee expectedEnrollee = null, params OperationMode[] modes)
         {
             _modeEnumerator = modes.AsEnumerable().GetEnumerator();
             _expectedEnrollee = expectedEnrollee;
         }
-
-        public override void SeedData() { }
 
         public Task<PharmanetCollegeRecord> GetCollegeRecordAsync(Certification certification)
         {

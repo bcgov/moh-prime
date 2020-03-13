@@ -5,6 +5,7 @@ using Xunit;
 
 using Prime.Models;
 using Prime.Services;
+using Prime.Services.Rules;
 using PrimeTests.Utils;
 using PrimeTests.Mocks;
 using static PrimeTests.Mocks.PharmanetApiServiceMock;
@@ -110,7 +111,7 @@ namespace PrimeTests.Services
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
             UpdateSelfDeclaration(enrollee, declaration);
-            var rule = new AutomaticAdjudicationService.SelfDeclarationRule();
+            var rule = new SelfDeclarationRule();
 
             Assert.Equal(expected, await rule.ProcessRule(enrollee));
             if (expected)
@@ -127,7 +128,7 @@ namespace PrimeTests.Services
         public async void testAddressRule()
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
-            var rule = new AutomaticAdjudicationService.AddressRule();
+            var rule = new AddressRule();
 
             UpdateAddresses(enrollee);
             Assert.True(await rule.ProcessRule(enrollee));
@@ -144,7 +145,7 @@ namespace PrimeTests.Services
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
             UpdateCertifications(enrollee, apiModes.Length);
-            var rule = new AutomaticAdjudicationService.PharmanetValidationRule(new PharmanetApiServiceMock(enrollee, apiModes));
+            var rule = new PharmanetValidationRule(new PharmanetApiServiceMock(enrollee, apiModes));
 
             Assert.Equal(expected, await rule.ProcessRule(enrollee));
             AssertReasons(enrollee.CurrentStatus.EnrolmentStatusReasons, expectedReasons);
@@ -237,7 +238,7 @@ namespace PrimeTests.Services
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
             UpdateDeviceProvider(enrollee, isProvider, isPumpProvider);
 
-            var rule = new AutomaticAdjudicationService.DeviceProviderRule();
+            var rule = new DeviceProviderRule();
 
             Assert.Equal(expected, await rule.ProcessRule(enrollee));
             if (expected)
@@ -260,7 +261,7 @@ namespace PrimeTests.Services
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
             UpdateCertifications(enrollee, licenseCount, isManual);
 
-            var rule = new AutomaticAdjudicationService.LicenceClassRule();
+            var rule = new LicenceClassRule();
 
             Assert.Equal(expected, await rule.ProcessRule(enrollee));
             if (expected)

@@ -65,7 +65,7 @@ namespace Prime.Controllers
                 enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
                 return Ok(ApiResponse.Result(enrollee));
             }
-            catch (InvalidOperationException)
+            catch (SubmissionService.InvalidActionException)
             {
                 this.ModelState.AddModelError("Enrollee.CurrentStatus", $"Action could not be performed.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));

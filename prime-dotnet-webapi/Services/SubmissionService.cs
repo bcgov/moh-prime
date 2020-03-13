@@ -43,7 +43,7 @@ namespace Prime.Services
         /// <summary>
         /// Performs a submission action on an Enrollee.
         /// </summary>
-        /// <exception cref="System.InvalidOperationException"> Thrown when the action is invalid on the given Enrollee due to current state or admin access </exception>
+        /// <exception cref="Prime.Services.SubmissionService.InvalidActionException"> Thrown when the action is invalid on the given Enrollee due to current state or admin access </exception>
         public async Task PerformSubmissionActionAsync(int enrolleeId, SubmissionAction action, bool isAdmin)
         {
             var enrollee = await _context.Enrollees
@@ -153,6 +153,13 @@ namespace Prime.Services
             }
         }
 
+        public class InvalidActionException : Exception
+        {
+            public InvalidActionException() : base() { }
+            public InvalidActionException(string message) : base(message) { }
+            public InvalidActionException(string message, Exception inner) : base(message, inner) { }
+        }
+
         private class SubmissionStateMachine
         {
             private readonly Enrollee _enrollee;
@@ -175,7 +182,7 @@ namespace Prime.Services
                 stateMachineBuilder.WithInitialState(FromEnrollee(enrollee));
 
                 _machine = stateMachineBuilder.Build().CreatePassiveStateMachine();
-                _machine.TransitionDeclined += (sender, e) => { throw new InvalidOperationException(); };
+                _machine.TransitionDeclined += (sender, e) => { throw new InvalidActionException(); };
 
                 _machine.Start();
             }
