@@ -10,7 +10,7 @@ import { Enrolment } from '@shared/models/enrolment.model';
   styleUrls: ['./approve-enrolment.component.scss']
 })
 export class ApproveEnrolmentComponent implements OnInit, IDialogContent {
-  @Output() output = new EventEmitter<boolean>();
+  @Output() public output = new EventEmitter<boolean>();
 
   public enrolment: Enrolment;
 
