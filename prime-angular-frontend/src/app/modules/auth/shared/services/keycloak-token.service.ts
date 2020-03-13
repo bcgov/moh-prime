@@ -122,10 +122,10 @@ export class KeycloakTokenService implements Token {
   }
 
   public isUserInRole(role: string): boolean {
-
     if (this.getUserRoles().includes(role)) {
       return true;
     }
+    
     return this.keycloakService.isUserInRole(role);
   }
 
