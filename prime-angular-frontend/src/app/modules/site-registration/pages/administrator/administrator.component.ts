@@ -27,5 +27,4 @@ export class AdministratorComponent implements OnInit {
   }
 
   public ngOnInit() { }
-
 }
