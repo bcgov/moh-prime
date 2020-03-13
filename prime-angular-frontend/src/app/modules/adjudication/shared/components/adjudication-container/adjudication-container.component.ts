@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatTableDataSource, MatDialog } from '@angular/material';
 
 import { Observable, Subscription, EMPTY, of, noop } from 'rxjs';
-import { map, exhaustMap } from 'rxjs/operators';
+import { map, exhaustMap, tap } from 'rxjs/operators';
 
 import { AbstractComponent } from '@shared/classes/abstract-component';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
@@ -29,6 +29,7 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
   public columns: string[];
   public dataSource: MatTableDataSource<HttpEnrollee>;
 
+  public showSearchFilter: boolean;
   public AdjudicationRoutes = AdjudicationRoutes;
 
   constructor(
@@ -43,6 +44,8 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
     this.hasActions = false;
     this.columns = ['uniqueId', 'name', 'appliedDate', 'status', 'approvedDate', 'adjudicator', 'actions'];
     this.dataSource = new MatTableDataSource<HttpEnrollee>([]);
+
+    this.showSearchFilter = !!this.route.snapshot.params.id;
     this.baseRoutePath = [AdjudicationRoutes.MODULE_PATH, AdjudicationRoutes.ENROLLEES];
   }
 
@@ -187,13 +190,17 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
     return this.adjudicationResource
       .getEnrolleeById(enrolleeId)
       .pipe(
-        map((enrollee: HttpEnrollee) => [enrollee])
+        map((enrollee: HttpEnrollee) => [enrollee]),
+        tap(() => this.showSearchFilter = false)
       );
   }
 
   private getEnrollees() {
     const { search, status } = this.route.snapshot.queryParams;
-    return this.adjudicationResource.getEnrollees(search, status);
+    return this.adjudicationResource.getEnrollees(search, status)
+      .pipe(
+        tap(() => this.showSearchFilter = true)
+      );
   }
 
   private setQueryParams(params: { search?: string, status?: number, page?: number } = { search: null, status: null, page: null }) {
@@ -209,6 +216,7 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
         (currentEnrollee.id === enrollee.id) ? enrollee : currentEnrollee
       );
   }
+
   // TODO split out into service and use generics for managing data tables, and update with add row
   private removeEnrollee(enrollee: HttpEnrollee) {
     this.dataSource.data = this.dataSource.data
