@@ -13,7 +13,7 @@ export class ClaimEnrolleeAction {
 
 export enum ClaimActionEnum {
   UnClaim = 0,
-  Claim = 1,
+  Claim = 1
 }
 
 @Component({
