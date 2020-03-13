@@ -19,6 +19,7 @@ import { EnrolleeEventsComponent } from './pages/enrollee-events/enrollee-events
 import { EnrolleeReviewStatusComponent } from './pages/enrollee-review-status/enrollee-review-status.component';
 import { EnrolleeTableComponent } from './shared/components/enrollee-table/enrollee-table.component';
 import { SearchFormComponent } from './shared/components/search-form/search-form.component';
+import { DatedContentTableComponent } from './shared/components/dated-content-table/dated-content-table.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { SearchFormComponent } from './shared/components/search-form/search-form
     EnrolleeAccessTermComponent,
     EnrolleeAccessTermEnrolmentComponent,
     EnrolleeTableComponent,
-    SearchFormComponent
+    SearchFormComponent,
+    DatedContentTableComponent
   ],
   imports: [
     SharedModule,
