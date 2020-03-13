@@ -63,5 +63,4 @@ export class SiteInformationComponent implements OnInit {
       postal: [{ value: null, disabled: false }, []]
     });
   }
-
 }
