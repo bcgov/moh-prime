@@ -26,5 +26,4 @@ export class TechnicalSupportContactComponent implements OnInit {
     this.router.navigate([SiteRoutes.PRIVACY_OFFICER], { relativeTo: this.route.parent });
   }
   public ngOnInit() { }
-
 }
