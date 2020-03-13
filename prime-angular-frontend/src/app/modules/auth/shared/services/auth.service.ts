@@ -88,7 +88,4 @@ export class AuthService implements IAuthService {
   public isRegistrant(): boolean {
     return this.keycloakTokenService.isUserInRole(Role.FEATURE_SITE_REGISTRATION);
   }
-
-
-
 }
