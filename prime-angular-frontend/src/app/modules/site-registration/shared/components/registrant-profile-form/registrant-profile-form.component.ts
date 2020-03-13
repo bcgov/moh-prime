@@ -115,5 +115,4 @@ export class RegistrantProfileFormComponent implements OnInit {
       this.formUtilsService.setValidators(separateAddress, [Validators.required], blacklist);
     }
   }
-
 }
