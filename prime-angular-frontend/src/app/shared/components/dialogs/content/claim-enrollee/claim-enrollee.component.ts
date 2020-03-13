@@ -54,5 +54,4 @@ export class ClaimEnrolleeComponent implements OnInit {
         this.adjudicators.next(adjudicators);
       });
   }
-
 }
