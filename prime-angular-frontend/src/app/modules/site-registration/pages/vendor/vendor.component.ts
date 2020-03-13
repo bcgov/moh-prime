@@ -54,6 +54,5 @@ export class VendorComponent implements OnInit {
     this.form = this.formBuilder.group({
       vendors: new FormArray([])
     });
-
   }
 }

@@ -27,5 +27,4 @@ export class SigningAuthorityComponent implements OnInit {
   }
 
   public ngOnInit() { }
-
 }

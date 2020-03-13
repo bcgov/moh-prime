@@ -13,7 +13,5 @@ export class SiteProgressIndicatorComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
-  }
-
+  public ngOnInit() { }
 }

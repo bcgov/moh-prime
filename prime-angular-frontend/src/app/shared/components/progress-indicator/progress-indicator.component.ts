@@ -19,7 +19,6 @@ export class ProgressIndicatorComponent implements OnInit {
   }
 
   public ngOnInit() {
-
     const currentRoute = this.routes.findIndex(er => er === this.currentRoute);
     const currentPage = (currentRoute > -1) ? currentRoute : 0;
     const totalPages = this.routes.length - 1;

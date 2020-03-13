@@ -43,7 +43,7 @@ export class MultipleSitesComponent implements OnInit {
     this.router.navigate([SiteRoutes.SITE_INFORMATION], { relativeTo: this.route.parent });
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.createFormInstance();
     this.initForm();
   }
@@ -69,5 +69,4 @@ export class MultipleSitesComponent implements OnInit {
       this.formUtilsService.setValidators(control, [Validators.required]);
     }
   }
-
 }

@@ -15,11 +15,8 @@ export class SiteCollectionNoticeComponent implements OnInit {
   ) { }
 
   public onAccept() {
-
     this.router.navigate([SiteRoutes.MULTIPLE_SITES], { relativeTo: this.route.parent });
-
   }
 
   public ngOnInit() { }
-
 }
