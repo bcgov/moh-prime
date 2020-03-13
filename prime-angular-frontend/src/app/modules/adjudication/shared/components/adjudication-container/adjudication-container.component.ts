@@ -42,8 +42,22 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
 
     this.hasActions = false;
     this.columns = ['uniqueId', 'name', 'appliedDate', 'status', 'approvedDate', 'adjudicator', 'actions'];
-
+    this.dataSource = new MatTableDataSource<HttpEnrollee>([]);
     this.baseRoutePath = [AdjudicationRoutes.MODULE_PATH, AdjudicationRoutes.ENROLLEES];
+  }
+
+  public onSearch(search: string | null): void {
+    this.setQueryParams({ search });
+    this.getDataset();
+  }
+
+  public onFilter(status: EnrolmentStatus | null): void {
+    this.setQueryParams({ status });
+    this.getDataset();
+  }
+
+  public onRefresh(): void {
+    this.getDataset();
   }
 
   public onClaim(enrolleeId: number) {
@@ -156,21 +170,17 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
   }
 
   public ngOnInit() {
-    this.busy = this.getEnrollees()
-      .subscribe((enrollees: HttpEnrollee[]) =>
-        this.dataSource = new MatTableDataSource<HttpEnrollee>(enrollees)
-      );
+    this.getDataset();
   }
 
-  private getEnrollees(): Observable<HttpEnrollee[]> {
-    // TODO set up route observable, and merge/pipe in search and filter results
+  private getDataset() {
     const enrolleeId = this.route.snapshot.params.id;
     const results$ = (enrolleeId)
       ? this.getEnrolleeById(enrolleeId)
-      // TODO add search, filter, and pagination params
-      : this.adjudicationResource.getEnrollees();
+      : this.getEnrollees();
 
-    return results$;
+    this.busy = results$
+      .subscribe((enrollees: HttpEnrollee[]) => this.dataSource.data = enrollees);
   }
 
   private getEnrolleeById(enrolleeId: number): Observable<HttpEnrollee[]> {
@@ -179,6 +189,17 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
       .pipe(
         map((enrollee: HttpEnrollee) => [enrollee])
       );
+  }
+
+  private getEnrollees() {
+    const { search, status } = this.route.snapshot.queryParams;
+    return this.adjudicationResource.getEnrollees(search, status);
+  }
+
+  private setQueryParams(params: { search?: string, status?: number, page?: number } = { search: null, status: null, page: null }) {
+    // Passing `null` removes the query parameter from the URL
+    const queryParams = { ...this.route.snapshot.queryParams, ...params };
+    this.router.navigate([], { queryParams });
   }
 
   // TODO split out into service and use generics for managing data tables, and update with add row
