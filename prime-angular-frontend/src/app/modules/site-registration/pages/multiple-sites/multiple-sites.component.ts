@@ -14,6 +14,7 @@ import { SiteRoutes } from '../../site-registration.routes';
 export class MultipleSitesComponent implements OnInit {
   public form: FormGroup;
   public decisions: { code: boolean, name: string }[];
+  public SiteRoutes = SiteRoutes;
 
   constructor(
     private route: ActivatedRoute,

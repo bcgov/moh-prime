@@ -11,6 +11,7 @@ import { SiteRoutes } from '../../site-registration.routes';
 })
 export class SiteInformationComponent implements OnInit {
   public form: FormGroup;
+  public SiteRoutes = SiteRoutes;
 
   constructor(
     private route: ActivatedRoute,

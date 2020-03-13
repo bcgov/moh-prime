@@ -9,6 +9,8 @@ import { SiteRoutes } from 'app/modules/site-registration/site-registration.rout
 export class SiteProgressIndicatorComponent implements OnInit {
   @Input() public currentRoute: SiteRoutes;
 
+  public SiteRoutes = SiteRoutes;
+
   constructor() { }
 
   ngOnInit() {

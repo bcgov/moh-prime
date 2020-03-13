@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SiteRoutes } from '../../site-registration.routes';
 
 @Component({
   selector: 'app-confirmation',
@@ -6,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./confirmation.component.scss']
 })
 export class ConfirmationComponent implements OnInit {
+  public SiteRoutes = SiteRoutes;
 
   constructor() { }
 

@@ -11,13 +11,8 @@ import { SiteRoutes } from '../../site-registration.routes';
 })
 export class VendorComponent implements OnInit {
   public form: FormGroup;
-  public vendorsData = [
-    { id: 0, name: 'Excelleris' },
-    { id: 1, name: 'iClinic Inc.' },
-    { id: 2, name: 'Medinet' },
-    { id: 3, name: 'Plexia Electronic Medical Systems' },
-    { id: 4, name: 'CareConnect (geographically limited access)' }
-  ];
+  public vendorsData = [];
+  public SiteRoutes = SiteRoutes;
 
   constructor(
     private route: ActivatedRoute,
@@ -25,6 +20,13 @@ export class VendorComponent implements OnInit {
     private toastService: ToastService,
     private formBuilder: FormBuilder
   ) {
+    this.vendorsData = [
+      { id: 0, name: 'Excelleris' },
+      { id: 1, name: 'iClinic Inc.' },
+      { id: 2, name: 'Medinet' },
+      { id: 3, name: 'Plexia Electronic Medical Systems' },
+      { id: 4, name: 'CareConnect (geographically limited access)' }
+    ];
   }
 
   public onChangeEventFunc(name: string, isChecked: boolean) {

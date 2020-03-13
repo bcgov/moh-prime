@@ -11,6 +11,7 @@ import { SiteRoutes } from '../../site-registration.routes';
 export class SigningAuthorityComponent implements OnInit {
   public form: FormGroup;
   public hasSeparateAddress: boolean;
+  public SiteRoutes = SiteRoutes;
 
   constructor(
     private route: ActivatedRoute,

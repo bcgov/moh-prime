@@ -14,6 +14,7 @@ export class HoursOperationComponent implements OnInit {
   public amHours: string[];
   public pmHours: string[];
   public days: { title: string, name: string }[];
+  public SiteRoutes = SiteRoutes;
 
   constructor(
     private route: ActivatedRoute,
