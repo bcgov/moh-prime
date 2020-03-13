@@ -6,14 +6,14 @@ import { Enrolment } from '@shared/models/enrolment.model';
 import { MatDialogRef } from '@angular/material';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 
-export class ClaimEnrolleeAction {
-  public action: ClaimActionEnum;
-  public adjudicatorId?: number;
-}
-
 export enum ClaimActionEnum {
   UnClaim = 0,
   Claim = 1
+}
+
+export class ClaimEnrolleeAction {
+  public action: ClaimActionEnum;
+  public adjudicatorId?: number;
 }
 
 @Component({
