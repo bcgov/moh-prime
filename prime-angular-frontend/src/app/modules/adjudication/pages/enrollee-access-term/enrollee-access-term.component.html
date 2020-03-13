@@ -4,7 +4,7 @@
 
   <app-page-subheader *ngIf="accessTerm?.acceptedDate">
     <ng-container appPageSubheaderSummary>
-      Accepted on {{ accessTerm?.acceptedDate | formatDate }}.<br />
+      Accepted on {{ accessTerm?.acceptedDate | formatDate }}.<br>
     </ng-container>
   </app-page-subheader>
 
@@ -16,7 +16,7 @@
 
       <button mat-stroked-button
               type="button"
-              (click)="routeTo()">Back</button>
+              (click)="routeRelativeTo(['./'])">Back</button>
 
     </div>
   </div>

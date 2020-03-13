@@ -25,11 +25,6 @@ export class EnrolleeAccessTermComponent extends AbstractComponent implements On
     super(route, router);
   }
 
-  // TODO update to pass in route from template
-  public routeTo() {
-    super.routeTo('../');
-  }
-
   public ngOnInit() {
     this.getAccessTerm();
   }

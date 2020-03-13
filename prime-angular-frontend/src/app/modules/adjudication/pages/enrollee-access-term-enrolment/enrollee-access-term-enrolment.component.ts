@@ -25,11 +25,6 @@ export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent impl
     super(route, router);
   }
 
-  // TODO update to pass in route from template
-  public routeTo() {
-    super.routeTo('../');
-  }
-
   public ngOnInit() {
     const enrolleeId = this.route.snapshot.params.id;
     const accessTermId = this.route.snapshot.params.hid;
