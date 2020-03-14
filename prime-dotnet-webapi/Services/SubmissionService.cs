@@ -79,6 +79,7 @@ namespace Prime.Services
             enrollee.AddEnrolmentStatus(StatusType.UnderReview);
 
             await _enroleeProfileVersionService.CreateEnrolleeProfileVersionAsync(enrollee);
+            await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Submitted");
 
             if (await _automaticAdjudicationService.QualifiesForAutomaticAdjudication(enrollee))
             {
@@ -88,10 +89,6 @@ namespace Prime.Services
                 await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee);
 
                 await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Automatically Approved");
-            }
-            else
-            {
-                await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Submitted");
             }
 
             await _context.SaveChangesAsync();
