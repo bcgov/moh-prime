@@ -120,14 +120,13 @@ namespace Prime.Services
                 await _accessTermService.AcceptCurrentAccessTermAsync(enrollee);
                 await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrollee.Id, enrollee);
                 await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Accepted TOA");
-                if (enrollee.AdjudicatorId !== null)
+                if (enrollee.AdjudicatorId != null)
                 {
                     await _enrolleeService.UpdateEnrolleeAdjudicator(enrollee.Id);
                     await _businessEventService.CreateAdminClaimEventAsync(enrollee.Id, "Admin disclaimed after TOA accepted");
                 }
             }
             await _context.SaveChangesAsync();
-
         }
 
         private async Task EnableEditingAsync(Enrollee enrollee)
