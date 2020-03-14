@@ -42,8 +42,8 @@ export class CertificateComponent implements OnInit {
       ? (this.certificate.preferredMiddleName)
         ? this.certificate.preferredMiddleName
         : ''
-      : (this.middleName)
-        ? this.middleName
+      : (this.certificate.middleName)
+        ? this.certificate.middleName
         : '';
   }
 
