@@ -30,7 +30,6 @@ namespace Prime.Services
             return businessEvent;
         }
 
-
         public async Task<BusinessEvent> CreateEmailEventAsync(int enrolleeId, string description)
         {
             var businessEvent = await CreateBusinessEvent(BusinessEventType.EMAIL_CODE, enrolleeId, description);
@@ -45,7 +44,6 @@ namespace Prime.Services
             return businessEvent;
         }
 
-
         public async Task<BusinessEvent> CreateNoteEventAsync(int enrolleeId, string description)
         {
             var businessEvent = await CreateBusinessEvent(BusinessEventType.NOTE_CODE, enrolleeId, description);
@@ -54,12 +52,11 @@ namespace Prime.Services
 
             if (created < 1)
             {
-                throw new InvalidOperationException("Could not create email business event.");
+                throw new InvalidOperationException("Could not create note business event.");
             };
 
             return businessEvent;
         }
-
 
         public async Task<BusinessEvent> CreateAdminClaimEventAsync(int enrolleeId, string description)
         {
@@ -75,6 +72,19 @@ namespace Prime.Services
             return businessEvent;
         }
 
+        public async Task<BusinessEvent> CreateEnrolleeEventAsync(int enrolleeId, string description)
+        {
+            var businessEvent = await this.CreateBusinessEvent(BusinessEventType.ENROLLEE_CODE, enrolleeId, description);
+            _context.BusinessEvents.Add(businessEvent);
+            var created = await _context.SaveChangesAsync();
+
+            if (created < 1)
+            {
+                throw new InvalidOperationException("Could not create enrollee business event.");
+            };
+
+            return businessEvent;
+        }
 
         private async Task<BusinessEvent> CreateBusinessEvent(int BusinessEventTypeCode, int enrolleeId, string description)
         {
