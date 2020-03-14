@@ -9,53 +9,6 @@ namespace PrimeTests.Mocks
     {
         public const int DEFAULT_ENROLMENTS_SIZE = 5;
         public const int DEFAULT_ENROLLEES_SIZE = 5;
-        protected static int NULL_STATUS_CODE = -1;
-
-        private static Dictionary<int, Status> _statusMap = new Dictionary<int, Status> {
-            { NULL_STATUS_CODE, new Status { Code = NULL_STATUS_CODE, Name = "No Status" } },
-            { Status.ACTIVE_CODE, new Status { Code = Status.ACTIVE_CODE, Name = "Active" } },
-            { Status.UNDER_REVIEW_CODE, new Status { Code = Status.UNDER_REVIEW_CODE, Name = "Under Review" } },
-            { Status.REQUIRES_TOA_CODE, new Status { Code = Status.REQUIRES_TOA_CODE, Name = "Requires TOA" } },
-            { Status.LOCKED_CODE, new Status { Code = Status.LOCKED_CODE, Name = "Locked" } }
-         };
-
-        protected class StatusWrapper
-        {
-            public Status Status { get; set; }
-            public bool AdminOnly { get; set; }
-        }
-
-        protected static Dictionary<Status, StatusWrapper[]> _workflowStateMap = new Dictionary<Status, StatusWrapper[]> {
-            // construct the workflow map
-            { _statusMap[NULL_STATUS_CODE], new StatusWrapper[] {
-                    new StatusWrapper { Status = _statusMap[Status.ACTIVE_CODE], AdminOnly = false }
-                }
-            },
-            { _statusMap[Status.ACTIVE_CODE], new StatusWrapper[]
-                {
-                    new StatusWrapper { Status = _statusMap[Status.UNDER_REVIEW_CODE], AdminOnly = false },
-                    new StatusWrapper { Status = _statusMap[Status.LOCKED_CODE], AdminOnly = true }
-                }
-            },
-            { _statusMap[Status.UNDER_REVIEW_CODE], new StatusWrapper[]
-                {
-                    new StatusWrapper { Status = _statusMap[Status.ACTIVE_CODE], AdminOnly = true },
-                    new StatusWrapper { Status = _statusMap[Status.REQUIRES_TOA_CODE], AdminOnly = true },
-                    new StatusWrapper { Status = _statusMap[Status.LOCKED_CODE], AdminOnly = true }
-                }
-            },
-            { _statusMap[Status.REQUIRES_TOA_CODE], new StatusWrapper[]
-                {
-                    new StatusWrapper { Status = _statusMap[Status.ACTIVE_CODE], AdminOnly = false },
-                    new StatusWrapper { Status = _statusMap[Status.LOCKED_CODE], AdminOnly = true }
-                }
-            },
-            { _statusMap[Status.LOCKED_CODE], new StatusWrapper[]
-                {
-                    new StatusWrapper { Status = _statusMap[Status.ACTIVE_CODE], AdminOnly = true }
-                }
-            }
-        };
 
         private Dictionary<string, object> _fakeDb;
 
@@ -120,8 +73,6 @@ namespace PrimeTests.Mocks
                 { 1, new OrganizationType { Code = 1, Name = "Health Authority" } },
                 { 2, new OrganizationType { Code = 2, Name = "Pharmacy" } }
             });
-
-            _fakeDb.Add(STATUS_KEY, _statusMap);
 
             _fakeDb.Add(COUNTRY_KEY, new Dictionary<int, Country> {
                 { 1, new Country { Code = "CA", Name = "Canada" } }

@@ -76,22 +76,6 @@ namespace PrimeTests.Mocks
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Status>> GetAvailableEnrolmentStatusesAsync(int enrolleeId)
-        {
-            ICollection<Status> availableStatuses = new List<Status>();
-            Enrollee enrollee = null;
-            if (this.GetHolder<int, Enrollee>().ContainsKey(enrolleeId))
-            {
-                enrollee = this.GetHolder<int, Enrollee>()[enrolleeId];
-                var results = _workflowStateMap[enrollee.CurrentStatus?.Status ?? this.GetHolder<int, Status>()[NULL_STATUS_CODE]];
-                foreach (var item in results)
-                {
-                    availableStatuses.Add(item.Status);
-                }
-            }
-            return Task.FromResult(availableStatuses as IEnumerable<Status>);
-        }
-
         public Task<IEnumerable<EnrolmentStatus>> GetEnrolmentStatusesAsync(int enrolleeId)
         {
             Enrollee enrollee = null;
@@ -100,40 +84,6 @@ namespace PrimeTests.Mocks
                 enrollee = this.GetHolder<int, Enrollee>()[enrolleeId];
             }
             return Task.FromResult(enrollee?.EnrolmentStatuses as IEnumerable<EnrolmentStatus>);
-        }
-
-        public Task<EnrolmentStatus> CreateEnrolmentStatusAsync(int enrolleeId, Status status, bool acceptedAccessTerm, int? adminId)
-        {
-            EnrolmentStatus createdEnrolmentStatus = null;
-            if (this.GetHolder<int, Enrollee>().ContainsKey(enrolleeId))
-            {
-                Enrollee enrollee = this.GetHolder<int, Enrollee>()[enrolleeId];
-                var currentStatusCode = enrollee.CurrentStatus?.StatusCode;
-
-                if (this.IsStatusChangeAllowed(this.GetHolder<int, Status>()[currentStatusCode ?? NULL_STATUS_CODE], status))
-                {
-                    foreach (var item in enrollee.EnrolmentStatuses)
-                    {
-                        item.PharmaNetStatus = false;
-                    }
-                    createdEnrolmentStatus = new EnrolmentStatus { Enrollee = enrollee, EnrolleeId = (int)enrollee.Id, Status = status, StatusCode = status.Code, StatusDate = DateTime.Now, PharmaNetStatus = false };
-                    enrollee.EnrolmentStatuses.Add(createdEnrolmentStatus);
-                }
-            }
-
-            return Task.FromResult(createdEnrolmentStatus);
-        }
-
-        public bool IsStatusChangeAllowed(Status startingStatus, Status endingStatus)
-        {
-            ICollection<Status> availableStatuses = new List<Status>();
-            var results = _workflowStateMap[startingStatus ?? this.GetHolder<int, Status>()[NULL_STATUS_CODE]];
-            foreach (var item in results)
-            {
-                availableStatuses.Add(item.Status);
-            }
-
-            return availableStatuses.Contains(endingStatus);
         }
 
         public Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, params int[] statusCodesToCheck)
@@ -153,13 +103,13 @@ namespace PrimeTests.Mocks
             return Task.FromResult(notes);
         }
 
-        public Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, string note, int? adminId = null)
+        public Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, string note)
         {
             // TODO add proper tests, but need test spike. Add adjudicatorNote to fake db.
             return Task.FromResult(new AdjudicatorNote());
         }
 
-        public Task<IEnrolleeNote> UpdateEnrolleeNoteAsync(int enrolleeId, IEnrolleeNote newNote, int? adminId = null)
+        public Task<IEnrolleeNote> UpdateEnrolleeNoteAsync(int enrolleeId, IEnrolleeNote newNote)
         {
             // TODO add proper tests, but need test spike
             IEnrolleeNote updatedNote = null;
@@ -202,6 +152,13 @@ namespace PrimeTests.Mocks
         public Task<Enrollee> UpdateEnrolleeAdjudicator(int enrolleeId, Guid adminId = default)
         {
             throw new NotImplementedException();
+        }
+
+        public Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, params StatusType[] statusCodesToCheck)
+        {
+            var enrollee = this.GetHolder<int, Enrollee>()[enrolleeId];
+            bool inStatus = statusCodesToCheck.Cast<int>().Any(sc => sc == enrollee?.CurrentStatus?.StatusCode);
+            return Task.FromResult(inStatus);
         }
     }
 }

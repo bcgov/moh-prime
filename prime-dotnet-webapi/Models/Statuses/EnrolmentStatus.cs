@@ -23,8 +23,6 @@ namespace Prime.Models
 
         public DateTimeOffset StatusDate { get; set; }
 
-        public bool PharmaNetStatus { get; set; }
-
         public ICollection<EnrolmentStatusReason> EnrolmentStatusReasons { get; set; }
 
         public void AddStatusReason(int reasonCode, string reasonNote = null)
@@ -40,6 +38,21 @@ namespace Prime.Models
                 StatusReasonCode = reasonCode,
                 ReasonNote = reasonNote
             });
+        }
+
+        public bool IsType(StatusType statusType)
+        {
+            return this.StatusCode == (int)statusType;
+        }
+
+        public static EnrolmentStatus FromStatusType(StatusType statusType, int enrolleeId)
+        {
+            return new EnrolmentStatus
+            {
+                EnrolleeId = enrolleeId,
+                StatusCode = (int)statusType,
+                StatusDate = DateTimeOffset.Now
+            };
         }
     }
 }
