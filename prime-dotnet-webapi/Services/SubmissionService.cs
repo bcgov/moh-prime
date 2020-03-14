@@ -110,7 +110,7 @@ namespace Prime.Services
             await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Email to Enrollee after leaving manual adjudication");
         }
 
-        private async Task ProccessToaAsync(Enrollee enrollee, bool accept)
+        private async Task ProcessToaAsync(Enrollee enrollee, bool accept)
         {
             enrollee.AddEnrolmentStatus(StatusType.Active);
 
@@ -120,8 +120,11 @@ namespace Prime.Services
                 await _accessTermService.AcceptCurrentAccessTermAsync(enrollee);
                 await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrollee.Id, enrollee);
                 await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Accepted TOA");
-                await _enrolleeService.UpdateEnrolleeAdjudicator(enrollee.Id);
-                await _businessEventService.CreateAdminClaimEventAsync(enrollee.Id, "Admin disclaimed after TOA accepted");
+                if (enrollee.AdjudicatorId !== null)
+                {
+                    await _enrolleeService.UpdateEnrolleeAdjudicator(enrollee.Id);
+                    await _businessEventService.CreateAdminClaimEventAsync(enrollee.Id, "Admin disclaimed after TOA accepted");
+                }
             }
             await _context.SaveChangesAsync();
 
@@ -161,8 +164,8 @@ namespace Prime.Services
 
             private async Task HandleSubmit() { await _submissionService.SubmitApplication(_enrollee); }
             private async Task HandleApprove() { await _submissionService.ApproveApplicationAsync(_enrollee); }
-            private async Task HandleAcceptToa() { await _submissionService.ProccessToaAsync(_enrollee, true); }
-            private async Task HandleDeclineToa() { await _submissionService.ProccessToaAsync(_enrollee, false); }
+            private async Task HandleAcceptToa() { await _submissionService.ProcessToaAsync(_enrollee, true); }
+            private async Task HandleDeclineToa() { await _submissionService.ProcessToaAsync(_enrollee, false); }
             private async Task HandleEnableEditing() { await _submissionService.EnableEditingAsync(_enrollee); }
             private async Task HandleLockProfile() { await _submissionService.LockProfileAsync(_enrollee); }
 
