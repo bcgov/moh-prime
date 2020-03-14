@@ -25,7 +25,6 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.EnrolleeId, f => owner.Id);
             RuleFor(x => x.StatusCode, f => (GetNextStatus() ?? f.PickRandom(StatusLookup.All)).Code);
             RuleFor(x => x.StatusDate, f => DateTime.Now);
-            RuleFor(x => x.PharmaNetStatus, false);
             RuleFor(x => x.EnrolmentStatusReasons, f => null);
 
             Ignore(x => x.Status);
@@ -33,10 +32,6 @@ namespace PrimeTests.ModelFactories
             RuleSet("inProgress", (set) =>
             {
                 RuleFor(x => x.StatusCode, f => StatusLookup.InProgress.Code);
-            });
-            RuleSet("pharmanet", (set) =>
-            {
-                RuleFor(x => x.PharmaNetStatus, true);
             });
         }
 

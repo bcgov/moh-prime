@@ -10,7 +10,7 @@ namespace Prime.Models
         public string firstName { get; set; }
         public string middleInitial { get; set; }
         public string lastName { get; set; }
-        public DateTimeOffset dateofBirth { get; set; }
+        public DateTime dateofBirth { get; set; }
         public string status { get; set; }
         public DateTimeOffset effectiveDate { get; set; }
 

@@ -21,6 +21,7 @@ import {
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { SubmissionAction } from '@shared/enums/submission-action.enum';
 
 @Component({
   selector: 'app-enrolments',
@@ -131,7 +132,7 @@ export class EnrolmentsComponent implements OnInit {
         }),
         exhaustMap(() =>
           this.adjudicationResource
-            .updateEnrolmentStatus(enrolment.id, EnrolmentStatus.REQUIRES_TOA)
+            .submissionAction(enrolment.id, SubmissionAction.APPROVE)
         ),
         exhaustMap(() => this.adjudicationResource.enrollee(enrolment.id))
       )
@@ -159,7 +160,7 @@ export class EnrolmentsComponent implements OnInit {
       .pipe(
         exhaustMap((result: boolean) =>
           (result)
-            ? this.adjudicationResource.updateEnrolmentStatus(id, EnrolmentStatus.LOCKED)
+            ? this.adjudicationResource.submissionAction(id, SubmissionAction.LOCK_PROFILE)
             : EMPTY
         ),
         exhaustMap(() => this.adjudicationResource.enrollee(id)),
@@ -188,7 +189,7 @@ export class EnrolmentsComponent implements OnInit {
       .pipe(
         exhaustMap((result: boolean) =>
           (result)
-            ? this.adjudicationResource.updateEnrolmentStatus(id, EnrolmentStatus.ACTIVE)
+            ? this.adjudicationResource.submissionAction(id, SubmissionAction.ENABLE_EDITING)
             : EMPTY
         ),
         exhaustMap(() => this.adjudicationResource.enrollee(id))
