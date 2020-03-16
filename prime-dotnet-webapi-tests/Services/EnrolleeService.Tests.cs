@@ -155,12 +155,12 @@ namespace PrimeTests.Services
             await _dbContext.SaveChangesAsync();
 
             // get the enrollees through the service layer code
-            var enrolleesActive = await _service.GetEnrolleesAsync(new EnrolleeSearchOptions { StatusCode = Status.ACTIVE_CODE });
+            var enrolleesActive = await _service.GetEnrolleesAsync(new EnrolleeSearchOptions { StatusCode = (int)StatusType.Active });
             Assert.NotNull(enrolleesActive);
             Assert.Equal(3, enrolleesActive.Count());
 
             // get the enrollees through the service layer code
-            var enrolleesUnderReview = await _service.GetEnrolleesAsync(new EnrolleeSearchOptions { StatusCode = Status.UNDER_REVIEW_CODE });
+            var enrolleesUnderReview = await _service.GetEnrolleesAsync(new EnrolleeSearchOptions { StatusCode = (int)StatusType.UnderReview });
             Assert.NotNull(enrolleesUnderReview);
             Assert.Empty(enrolleesUnderReview);
         }
@@ -181,21 +181,18 @@ namespace PrimeTests.Services
 
             // get the enrollee directly from the context
             Enrollee enrollee = await _dbContext.Enrollees
-                            .Include(e => e.PhysicalAddress)
-                            .Include(e => e.MailingAddress)
-                            .Include(e => e.Certifications)
-                            .Include(e => e.Jobs)
-                            .Include(e => e.Organizations)
-                            .AsNoTracking()
-                            .Where(e => e.Id == enrolleeId)
-                            .SingleOrDefaultAsync();
+                .Include(e => e.PhysicalAddress)
+                .Include(e => e.MailingAddress)
+                .Include(e => e.Certifications)
+                .Include(e => e.Jobs)
+                .Include(e => e.Organizations)
+                .AsNoTracking()
+                .Where(e => e.Id == enrolleeId)
+                .SingleOrDefaultAsync();
             Assert.NotNull(enrollee);
 
             // make sure we are not tracking anything - i.e. isolate following transaction
             TestUtils.DetachAllEntities(_dbContext);
-
-
-
 
             // update the enrollee through the service layer code
             EnrolleeProfileViewModel enrolleeProfile = new EnrolleeProfileViewModel
@@ -222,7 +219,7 @@ namespace PrimeTests.Services
             // create the enrollee directly to the context
             _dbContext.Enrollees.Add(testEnrollee);
             await _dbContext.SaveChangesAsync();
-            int enrolleeId = (int)testEnrollee.Id;
+            int enrolleeId = testEnrollee.Id;
 
             // check that the enrollee save actually saved to the context
             Enrollee enrollee = await _dbContext.Enrollees.FindAsync(enrolleeId);
@@ -239,23 +236,6 @@ namespace PrimeTests.Services
         }
 
         [Fact]
-        public async void testGetAvailableEnrolmentStatuses()
-        {
-            var testEnrollee = TestUtils.EnrolleeFaker.Generate();
-            Guid expectedUserId = testEnrollee.UserId;
-
-            // create the enrollee directly to the context
-            _dbContext.Enrollees.Add(testEnrollee);
-            await _dbContext.SaveChangesAsync();
-            int expectedEnrolleeId = (int)testEnrollee.Id;
-
-            // get the available statuses through the service layer code
-            var statuses = await _service.GetAvailableEnrolmentStatusesAsync((int)expectedEnrolleeId);
-            Assert.NotNull(statuses);
-            Assert.Contains(_dbContext.Statuses.Single(s => s.Code == Status.UNDER_REVIEW_CODE), statuses);
-        }
-
-        [Fact]
         public async void testGetEnrolmentStatuses()
         {
             var testEnrollee = TestUtils.EnrolleeFaker.Generate();
@@ -264,158 +244,141 @@ namespace PrimeTests.Services
             // create the enrollee directly to the context
             _dbContext.Enrollees.Add(testEnrollee);
             await _dbContext.SaveChangesAsync();
-            int expectedEnrolleeId = (int)testEnrollee.Id;
+            int expectedEnrolleeId = testEnrollee.Id;
 
             // get the enrolment statuses through the service layer code
-            var enrolmentStatuses = await _service.GetEnrolmentStatusesAsync((int)expectedEnrolleeId);
+            var enrolmentStatuses = await _service.GetEnrolmentStatusesAsync(expectedEnrolleeId);
             Assert.NotNull(enrolmentStatuses);
             Assert.Single(enrolmentStatuses);
-            Assert.Equal(_dbContext.Statuses.Single(s => s.Code == Status.ACTIVE_CODE), enrolmentStatuses.First().Status);
+            Assert.True(enrolmentStatuses.First().IsType(StatusType.Active));
         }
 
-        [Fact]
-        public async void testCreateEnrolmentStatus()
-        {
-            var testEnrollee = TestUtils.EnrolleeFaker.Generate();
-            Guid expectedUserId = testEnrollee.UserId;
+        // TODO move to submission service tests
+        // [Fact]
+        // public async void testCreateEnrolmentStatus_Generate_LicensePlate()
+        // {
+        //     var testEnrollee = TestUtils.EnrolleeFaker.Generate();
+        //     // manually change the status to approved
+        //     testEnrollee.CurrentStatus.StatusCode = Status.REQUIRES_TOA_CODE;
+        //     Guid expectedUserId = testEnrollee.UserId;
 
-            // create the enrollee directly to the context
-            _dbContext.Enrollees.Add(testEnrollee);
-            await _dbContext.SaveChangesAsync();
-            int expectedEnrolleeId = (int)testEnrollee.Id;
+        //     // create the enrollee directly to the context
+        //     _dbContext.Enrollees.Add(testEnrollee);
+        //     await _dbContext.SaveChangesAsync();
+        //     int expectedEnrolleeId = (int)testEnrollee.Id;
 
-            // create the enrolment status through the service layer code
-            var enrolmentStatus = await _service.CreateEnrolmentStatusAsync((int)expectedEnrolleeId, _dbContext.Statuses.Single(s => s.Code == Status.UNDER_REVIEW_CODE), false, null);
-            Assert.NotNull(enrolmentStatus);
-            Assert.Equal(_dbContext.Statuses.Single(s => s.Code == Status.UNDER_REVIEW_CODE), enrolmentStatus.Status);
-        }
+        //     // create the enrolment status through the service layer code
+        //     var enrolmentStatus = await _service.CreateEnrolmentStatusAsync((int)expectedEnrolleeId, _dbContext.Statuses.Single(s => s.Code == Status.ACTIVE_CODE), true, 1);
+        //     Assert.NotNull(enrolmentStatus);
+        //     Assert.Equal(_dbContext.Statuses.Single(s => s.Code == Status.ACTIVE_CODE), enrolmentStatus.Status);
 
+        //     // get the enrollee object, and check that there is a 20 character license plate
+        //     var enrollee = _dbContext.Enrollees.Single(e => e.UserId == expectedUserId);
+        //     Assert.NotNull(enrollee);
+        //     Assert.NotNull(enrollee.GPID);
+        //     Assert.Equal(20, enrollee.GPID.Length);
+        // }
 
-        [Fact]
-        public async void testCreateEnrolmentStatus_Generate_LicensePlate()
-        {
-            var testEnrollee = TestUtils.EnrolleeFaker.Generate();
-            // manually change the status to approved
-            testEnrollee.CurrentStatus.StatusCode = Status.REQUIRES_TOA_CODE;
-            Guid expectedUserId = testEnrollee.UserId;
+        // [Fact]
+        // public async void testCreateEnrolmentStatus_AcceptedTOS_to_Submitted()
+        // {
+        //     var testEnrollee = TestUtils.EnrolleeFaker.Generate();
+        //     testEnrollee.CurrentStatus.StatusCode = Status.ACTIVE_CODE;
 
-            // create the enrollee directly to the context
-            _dbContext.Enrollees.Add(testEnrollee);
-            await _dbContext.SaveChangesAsync();
-            int expectedEnrolleeId = (int)testEnrollee.Id;
+        //     // create the enrollee directly to the context
+        //     _dbContext.Enrollees.Add(testEnrollee);
+        //     await _dbContext.SaveChangesAsync();
 
-            // create the enrolment status through the service layer code
-            var enrolmentStatus = await _service.CreateEnrolmentStatusAsync((int)expectedEnrolleeId, _dbContext.Statuses.Single(s => s.Code == Status.ACTIVE_CODE), true, 1);
-            Assert.NotNull(enrolmentStatus);
-            Assert.Equal(_dbContext.Statuses.Single(s => s.Code == Status.ACTIVE_CODE), enrolmentStatus.Status);
+        //     // create the enrolment status through the service layer code
+        //     var enrolmentStatusInProgress = await _service
+        //         .CreateEnrolmentStatusAsync(testEnrollee.Id, _dbContext.Statuses
+        //         .Single(s => s.Code == Status.UNDER_REVIEW_CODE), false, null);
 
-            // get the enrollee object, and check that there is a 20 character license plate
-            var enrollee = _dbContext.Enrollees.Single(e => e.UserId == expectedUserId);
-            Assert.NotNull(enrollee);
-            Assert.NotNull(enrollee.GPID);
-            Assert.Equal(20, enrollee.GPID.Length);
-        }
+        //     Assert.NotNull(enrolmentStatusInProgress);
+        //     Assert.Equal(_dbContext.Statuses.Single(s => s.Code == Status.UNDER_REVIEW_CODE), enrolmentStatusInProgress.Status);
+        // }
 
-        [Fact]
-        public async void testCreateEnrolmentStatus_AcceptedTOS_to_Submitted()
-        {
-            var testEnrollee = TestUtils.EnrolleeFaker.Generate();
-            testEnrollee.CurrentStatus.StatusCode = Status.ACTIVE_CODE;
+        // [Fact]
+        // public void IsStatusChangeAllowed()
+        // {
+        //     Status ACTIVE = _dbContext.Statuses.Single(s => s.Code == Status.ACTIVE_CODE);
+        //     Status UNDER_REVIEW = _dbContext.Statuses.Single(s => s.Code == Status.UNDER_REVIEW_CODE);
+        //     Status REQUIRES_TOA = _dbContext.Statuses.Single(s => s.Code == Status.REQUIRES_TOA_CODE);
+        //     Status LOCKED = _dbContext.Statuses.Single(s => s.Code == Status.LOCKED_CODE);
 
-            // create the enrollee directly to the context
-            _dbContext.Enrollees.Add(testEnrollee);
-            await _dbContext.SaveChangesAsync();
+        //     Assert.True(_service.IsStatusChangeAllowed(null, ACTIVE));
+        //     Assert.False(_service.IsStatusChangeAllowed(null, UNDER_REVIEW));
+        //     Assert.False(_service.IsStatusChangeAllowed(null, REQUIRES_TOA));
+        //     Assert.False(_service.IsStatusChangeAllowed(null, LOCKED));
 
-            // create the enrolment status through the service layer code
-            var enrolmentStatusInProgress = await _service
-                .CreateEnrolmentStatusAsync(testEnrollee.Id, _dbContext.Statuses
-                .Single(s => s.Code == Status.UNDER_REVIEW_CODE), false, null);
+        //     Assert.False(_service.IsStatusChangeAllowed(ACTIVE, null));
+        //     Assert.False(_service.IsStatusChangeAllowed(ACTIVE, ACTIVE));
+        //     Assert.True(_service.IsStatusChangeAllowed(ACTIVE, UNDER_REVIEW));
+        //     Assert.True(_service.IsStatusChangeAllowed(ACTIVE, REQUIRES_TOA));
+        //     Assert.False(_service.IsStatusChangeAllowed(ACTIVE, LOCKED));
 
-            Assert.NotNull(enrolmentStatusInProgress);
-            Assert.Equal(_dbContext.Statuses.Single(s => s.Code == Status.UNDER_REVIEW_CODE), enrolmentStatusInProgress.Status);
-        }
+        //     Assert.False(_service.IsStatusChangeAllowed(UNDER_REVIEW, null));
+        //     Assert.False(_service.IsStatusChangeAllowed(UNDER_REVIEW, ACTIVE));
+        //     Assert.False(_service.IsStatusChangeAllowed(UNDER_REVIEW, UNDER_REVIEW));
+        //     Assert.False(_service.IsStatusChangeAllowed(UNDER_REVIEW, REQUIRES_TOA));
+        //     Assert.False(_service.IsStatusChangeAllowed(UNDER_REVIEW, LOCKED));
 
-        [Fact]
-        public void IsStatusChangeAllowed()
-        {
-            Status ACTIVE = _dbContext.Statuses.Single(s => s.Code == Status.ACTIVE_CODE);
-            Status UNDER_REVIEW = _dbContext.Statuses.Single(s => s.Code == Status.UNDER_REVIEW_CODE);
-            Status REQUIRES_TOA = _dbContext.Statuses.Single(s => s.Code == Status.REQUIRES_TOA_CODE);
-            Status LOCKED = _dbContext.Statuses.Single(s => s.Code == Status.LOCKED_CODE);
+        //     Assert.False(_service.IsStatusChangeAllowed(REQUIRES_TOA, null));
+        //     Assert.True(_service.IsStatusChangeAllowed(REQUIRES_TOA, ACTIVE));
+        //     Assert.False(_service.IsStatusChangeAllowed(REQUIRES_TOA, UNDER_REVIEW));
+        //     Assert.False(_service.IsStatusChangeAllowed(REQUIRES_TOA, REQUIRES_TOA));
+        //     Assert.False(_service.IsStatusChangeAllowed(REQUIRES_TOA, LOCKED));
 
-            Assert.True(_service.IsStatusChangeAllowed(null, ACTIVE));
-            Assert.False(_service.IsStatusChangeAllowed(null, UNDER_REVIEW));
-            Assert.False(_service.IsStatusChangeAllowed(null, REQUIRES_TOA));
-            Assert.False(_service.IsStatusChangeAllowed(null, LOCKED));
+        //     Assert.False(_service.IsStatusChangeAllowed(LOCKED, null));
+        //     Assert.False(_service.IsStatusChangeAllowed(LOCKED, ACTIVE));
+        //     Assert.False(_service.IsStatusChangeAllowed(LOCKED, UNDER_REVIEW));
+        //     Assert.False(_service.IsStatusChangeAllowed(LOCKED, REQUIRES_TOA));
+        //     Assert.False(_service.IsStatusChangeAllowed(LOCKED, LOCKED));
+        // }
 
-            Assert.False(_service.IsStatusChangeAllowed(ACTIVE, null));
-            Assert.False(_service.IsStatusChangeAllowed(ACTIVE, ACTIVE));
-            Assert.True(_service.IsStatusChangeAllowed(ACTIVE, UNDER_REVIEW));
-            Assert.True(_service.IsStatusChangeAllowed(ACTIVE, REQUIRES_TOA));
-            Assert.False(_service.IsStatusChangeAllowed(ACTIVE, LOCKED));
+        // [Fact]
+        // public void IsStatusChangeAllowed_As_Admin()
+        // {
+        //     Status ACTIVE = _dbContext.Statuses.Single(s => s.Code == Status.ACTIVE_CODE);
+        //     Status UNDER_REVIEW = _dbContext.Statuses.Single(s => s.Code == Status.UNDER_REVIEW_CODE);
+        //     Status REQUIRES_TOA = _dbContext.Statuses.Single(s => s.Code == Status.REQUIRES_TOA_CODE);
+        //     Status LOCKED = _dbContext.Statuses.Single(s => s.Code == Status.LOCKED_CODE);
 
-            Assert.False(_service.IsStatusChangeAllowed(UNDER_REVIEW, null));
-            Assert.False(_service.IsStatusChangeAllowed(UNDER_REVIEW, ACTIVE));
-            Assert.False(_service.IsStatusChangeAllowed(UNDER_REVIEW, UNDER_REVIEW));
-            Assert.False(_service.IsStatusChangeAllowed(UNDER_REVIEW, REQUIRES_TOA));
-            Assert.False(_service.IsStatusChangeAllowed(UNDER_REVIEW, LOCKED));
+        //     // TODO This is dangerous, as it sets the admin flag for this entire context.
+        //     // By default tests in the same test collection run sequentially but if they were run in parallel this could cause unintended side effects in other tests.
+        //     // Also, Assertions throw errors and stop the current test, so the RemoveAdminRoleFromUser method will not be called if any assertions fail.
+        //     TestUtils.AddAdminRoleToUser(_httpContext?.HttpContext?.User);
 
-            Assert.False(_service.IsStatusChangeAllowed(REQUIRES_TOA, null));
-            Assert.True(_service.IsStatusChangeAllowed(REQUIRES_TOA, ACTIVE));
-            Assert.False(_service.IsStatusChangeAllowed(REQUIRES_TOA, UNDER_REVIEW));
-            Assert.False(_service.IsStatusChangeAllowed(REQUIRES_TOA, REQUIRES_TOA));
-            Assert.False(_service.IsStatusChangeAllowed(REQUIRES_TOA, LOCKED));
+        //     Assert.True(_service.IsStatusChangeAllowed(null, ACTIVE));
+        //     Assert.False(_service.IsStatusChangeAllowed(null, UNDER_REVIEW));
+        //     Assert.False(_service.IsStatusChangeAllowed(null, REQUIRES_TOA));
+        //     Assert.False(_service.IsStatusChangeAllowed(null, LOCKED));
 
-            Assert.False(_service.IsStatusChangeAllowed(LOCKED, null));
-            Assert.False(_service.IsStatusChangeAllowed(LOCKED, ACTIVE));
-            Assert.False(_service.IsStatusChangeAllowed(LOCKED, UNDER_REVIEW));
-            Assert.False(_service.IsStatusChangeAllowed(LOCKED, REQUIRES_TOA));
-            Assert.False(_service.IsStatusChangeAllowed(LOCKED, LOCKED));
-        }
+        //     Assert.False(_service.IsStatusChangeAllowed(ACTIVE, null));
+        //     Assert.False(_service.IsStatusChangeAllowed(ACTIVE, ACTIVE));
+        //     Assert.True(_service.IsStatusChangeAllowed(ACTIVE, UNDER_REVIEW));
+        //     Assert.True(_service.IsStatusChangeAllowed(ACTIVE, REQUIRES_TOA));
+        //     Assert.True(_service.IsStatusChangeAllowed(ACTIVE, LOCKED));
 
-        [Fact]
-        public void IsStatusChangeAllowed_As_Admin()
-        {
-            Status ACTIVE = _dbContext.Statuses.Single(s => s.Code == Status.ACTIVE_CODE);
-            Status UNDER_REVIEW = _dbContext.Statuses.Single(s => s.Code == Status.UNDER_REVIEW_CODE);
-            Status REQUIRES_TOA = _dbContext.Statuses.Single(s => s.Code == Status.REQUIRES_TOA_CODE);
-            Status LOCKED = _dbContext.Statuses.Single(s => s.Code == Status.LOCKED_CODE);
+        //     Assert.False(_service.IsStatusChangeAllowed(UNDER_REVIEW, null));
+        //     Assert.True(_service.IsStatusChangeAllowed(UNDER_REVIEW, ACTIVE));
+        //     Assert.False(_service.IsStatusChangeAllowed(UNDER_REVIEW, UNDER_REVIEW));
+        //     Assert.True(_service.IsStatusChangeAllowed(UNDER_REVIEW, REQUIRES_TOA));
+        //     Assert.True(_service.IsStatusChangeAllowed(UNDER_REVIEW, LOCKED));
 
-            // TODO This is dangerous, as it sets the admin flag for this entire context.
-            // By default tests in the same test collection run sequentially but if they were run in parallel this could cause unintended side effects in other tests.
-            // Also, Assertions throw errors and stop the current test, so the RemoveAdminRoleFromUser method will not be called if any assertions fail.
-            TestUtils.AddAdminRoleToUser(_httpContext?.HttpContext?.User);
+        //     Assert.False(_service.IsStatusChangeAllowed(REQUIRES_TOA, null));
+        //     Assert.True(_service.IsStatusChangeAllowed(REQUIRES_TOA, ACTIVE));
+        //     Assert.False(_service.IsStatusChangeAllowed(REQUIRES_TOA, UNDER_REVIEW));
+        //     Assert.False(_service.IsStatusChangeAllowed(REQUIRES_TOA, REQUIRES_TOA));
+        //     Assert.True(_service.IsStatusChangeAllowed(REQUIRES_TOA, LOCKED)); ;
 
-            Assert.True(_service.IsStatusChangeAllowed(null, ACTIVE));
-            Assert.False(_service.IsStatusChangeAllowed(null, UNDER_REVIEW));
-            Assert.False(_service.IsStatusChangeAllowed(null, REQUIRES_TOA));
-            Assert.False(_service.IsStatusChangeAllowed(null, LOCKED));
+        //     Assert.False(_service.IsStatusChangeAllowed(LOCKED, null));
+        //     Assert.True(_service.IsStatusChangeAllowed(LOCKED, ACTIVE));
+        //     Assert.False(_service.IsStatusChangeAllowed(LOCKED, UNDER_REVIEW));
+        //     Assert.False(_service.IsStatusChangeAllowed(LOCKED, REQUIRES_TOA));
+        //     Assert.False(_service.IsStatusChangeAllowed(LOCKED, LOCKED));
 
-            Assert.False(_service.IsStatusChangeAllowed(ACTIVE, null));
-            Assert.False(_service.IsStatusChangeAllowed(ACTIVE, ACTIVE));
-            Assert.True(_service.IsStatusChangeAllowed(ACTIVE, UNDER_REVIEW));
-            Assert.True(_service.IsStatusChangeAllowed(ACTIVE, REQUIRES_TOA));
-            Assert.True(_service.IsStatusChangeAllowed(ACTIVE, LOCKED));
-
-            Assert.False(_service.IsStatusChangeAllowed(UNDER_REVIEW, null));
-            Assert.True(_service.IsStatusChangeAllowed(UNDER_REVIEW, ACTIVE));
-            Assert.False(_service.IsStatusChangeAllowed(UNDER_REVIEW, UNDER_REVIEW));
-            Assert.True(_service.IsStatusChangeAllowed(UNDER_REVIEW, REQUIRES_TOA));
-            Assert.True(_service.IsStatusChangeAllowed(UNDER_REVIEW, LOCKED));
-
-            Assert.False(_service.IsStatusChangeAllowed(REQUIRES_TOA, null));
-            Assert.True(_service.IsStatusChangeAllowed(REQUIRES_TOA, ACTIVE));
-            Assert.False(_service.IsStatusChangeAllowed(REQUIRES_TOA, UNDER_REVIEW));
-            Assert.False(_service.IsStatusChangeAllowed(REQUIRES_TOA, REQUIRES_TOA));
-            Assert.True(_service.IsStatusChangeAllowed(REQUIRES_TOA, LOCKED)); ;
-
-            Assert.False(_service.IsStatusChangeAllowed(LOCKED, null));
-            Assert.True(_service.IsStatusChangeAllowed(LOCKED, ACTIVE));
-            Assert.False(_service.IsStatusChangeAllowed(LOCKED, UNDER_REVIEW));
-            Assert.False(_service.IsStatusChangeAllowed(LOCKED, REQUIRES_TOA));
-            Assert.False(_service.IsStatusChangeAllowed(LOCKED, LOCKED));
-
-            TestUtils.RemoveAdminRoleFromUser(_httpContext?.HttpContext?.User);
-        }
+        //     TestUtils.RemoveAdminRoleFromUser(_httpContext?.HttpContext?.User);
+        // }
     }
 }

@@ -20,6 +20,7 @@ import { Job } from '@enrolment/shared/models/job.model';
 import { Organization } from '@enrolment/shared/models/organization.model';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { NoContent } from '@core/resources/abstract-resource';
+import { SubmissionAction } from '@shared/enums/submission-action.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -61,13 +62,11 @@ export class EnrolmentResource {
       .pipe(map(() => { }));
   }
 
-  public updateEnrolmentStatus(id: number, statusCode: number, acceptedAccessTerm: boolean = false): Observable<Config<number>[]> {
-    const payload = { code: statusCode };
-    const params = this.apiResourceUtilsService.makeHttpParams({ acceptedAccessTerm });
-    return this.apiResource.post<Config<number>[]>(`enrollees/${id}/statuses`, payload, params)
+  public submissionAction(id: number, action: SubmissionAction): Observable<HttpEnrollee> {
+    return this.apiResource.post<HttpEnrollee>(`enrollees/${id}/${action}`)
       .pipe(
-        map((response: ApiHttpResponse<Config<number>[]>) => response.result),
-        tap((statuses: Config<number>[]) => this.logger.info('ENROLMENT_STATUSES', statuses))
+        map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
+        tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
       );
   }
 

@@ -20,6 +20,7 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { AccessTerm } from '@shared/models/access-term.model';
 import { ViewportService } from '@core/services/viewport.service';
+import { SubmissionAction } from '@shared/enums/submission-action.enum';
 
 @Component({
   selector: 'app-access-agreement',
@@ -90,7 +91,9 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
         .pipe(
           exhaustMap((result: boolean) =>
             (result)
-              ? this.enrolmentResource.updateEnrolmentStatus(this.enrolment.id, EnrolmentStatus.ACTIVE, isAcceptingToa)
+              ? this.enrolmentResource.submissionAction(
+                this.enrolment.id,
+                isAcceptingToa ? SubmissionAction.ACCEPT_TOA : SubmissionAction.DECLINE_TOA)
               : EMPTY
           )
         )
