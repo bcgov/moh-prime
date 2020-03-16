@@ -127,7 +127,8 @@ export class EnrolmentStateService {
       // this.isDeviceProviderValid() &&
       this.isJobsValid() &&
       this.isSelfDeclarationValid() &&
-      this.isOrganizationValid()
+      this.isOrganizationValid() &&
+      this.hasRegOrJob()
     );
   }
 
@@ -153,6 +154,13 @@ export class EnrolmentStateService {
 
   public isOrganizationValid(): boolean {
     return this.organizationForm.valid;
+  }
+
+  public hasRegOrJob(): boolean {
+    const jobs = this.jobsForm.get('jobs') as FormArray;
+    const certifications = this.regulatoryForm.get('certifications') as FormArray;
+    // When you set cert to 'None' there still exists an item in FormArray, this checks for that state
+    return jobs.length > 0 || (certifications.length > 0 && (certifications.value[0].licenseNumber !== null));
   }
 
   /**
