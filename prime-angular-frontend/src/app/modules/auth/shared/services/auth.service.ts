@@ -12,6 +12,7 @@ export interface IAuthService {
   hasAdminView(): boolean;
   hasEnrollee(): boolean;
   isLoggedIn(): Promise<boolean>;
+  isRegistrant(): boolean;
 
   logout(redirectUri?: string): Promise<void>;
   login(options?: any): Promise<void>;

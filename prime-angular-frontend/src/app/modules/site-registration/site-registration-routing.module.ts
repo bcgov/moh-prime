@@ -18,6 +18,7 @@ import { TechnicalSupportContactComponent } from './pages/technical-support-cont
 import { SiteReviewComponent } from './pages/site-review/site-review.component';
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
+import { SiteRegistrationGuard } from './shared/guards/site-registration.guard';
 
 const routes: Routes = [
   {
@@ -25,8 +26,8 @@ const routes: Routes = [
     component: DashboardComponent,
     canActivate: [UnsupportedGuard],
     canActivateChild: [
-      // AuthenticationGuard,
-      // SiteRegistrationGuard
+      AuthenticationGuard,
+      SiteRegistrationGuard
     ],
     // Ensure that the configuration is loaded, otherwise
     // if it already exists NOOP

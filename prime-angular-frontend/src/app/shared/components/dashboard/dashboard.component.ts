@@ -118,9 +118,12 @@ export class DashboardComponent implements OnInit {
   }
 
   private getSideNavSections(): DashboardNavSection[] {
+
+    const currentBaseRoute = this.router.url.slice(1).split('/')[0];
+
     if (this.authService.hasAdminView()) {
       return this.getAdjudicationSideNavSections();
-    } else if (this.authService.isRegistrant()) {
+    } else if (this.authService.isRegistrant() && currentBaseRoute === 'site-registration') {
       return this.getRegistrantSideNavSections();
     } else {
       return this.getEnrolleeSideNavSections();
