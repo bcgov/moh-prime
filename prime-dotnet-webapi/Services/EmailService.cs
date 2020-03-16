@@ -139,6 +139,16 @@ namespace Prime.Services
             }
         }
 
+        private string getVendorEmailText(Enrollee enrollee, EnrolmentCertificateAccessToken token)
+        {
+            var body = $"To: /[pos vendor/]/n/n"
+            + "{ enrollee.FirstName } { enrollee.lastName}/n"
+            + "has been approved for PharmaNet access.Please see PRIME enrolment information in URL below./n"
+            + "<a href=\"{token.FrontendUrl}\">.This link will expire after 3 views or 7 days./n/n"
+            + "Thank you.";
+            return body;
+        }
+
         public class EmailServiceException : Exception
         {
             public EmailServiceException() { }
