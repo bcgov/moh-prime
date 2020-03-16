@@ -15,6 +15,8 @@ import { ApproveEnrolmentComponent } from '@shared/components/dialogs/content/ap
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
+import { ManualFlagNoteComponent, ManualFlagNoteOutput } from '@shared/components/dialogs/content/manual-flag-note/manual-flag-note.component';
 
 @Component({
   selector: 'app-adjudication-container',
@@ -79,21 +81,26 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
       message: 'Are you sure you want to approve this enrolment?',
       actionText: 'Approve Enrolment',
       data: { enrollee },
-      component: ApproveEnrolmentComponent
+      component: ManualFlagNoteComponent
     };
+
+    let manualFlagNote: ManualFlagNoteOutput;
 
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        exhaustMap((result: { output: boolean }) => {
-          if (result) {
-            (result.output)
-              ? this.adjudicationResource.updateEnrolleeAlwaysManual(enrollee.id, result.output)
-              : of(noop);
+        exhaustMap((result: { output: ManualFlagNoteOutput }) => {
+          if (result && result.output) {
+            manualFlagNote = result.output;
+            return of(noop);
           }
-
           return EMPTY;
         }),
+        exhaustMap(() =>
+          this.adjudicationResource.updateEnrolleeAlwaysManual(enrollee.id, manualFlagNote.alwaysManual)),
+        exhaustMap(() => (manualFlagNote.note)
+          ? this.adjudicationResource.createAdjudicatorNote(enrollee.id, manualFlagNote.note)
+          : of(noop)),
         exhaustMap(() =>
           this.adjudicationResource.createEnrolmentStatus(enrollee.id, EnrolmentStatus.REQUIRES_TOA)
         ),
@@ -107,17 +114,23 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
       title: 'Decline Enrolment',
       message: 'Are you sure you want to decline this enrolment?',
       actionType: 'warn',
-      actionText: 'Decline Enrolment'
+      actionText: 'Decline Enrolment',
+      component: NoteComponent,
     };
 
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        exhaustMap((result: boolean) =>
-          (result)
-            ? this.adjudicationResource.createEnrolmentStatus(enrolleeId, EnrolmentStatus.LOCKED)
-            : EMPTY
+        exhaustMap((result: { output: string }) => {
+          if (result) {
+            return (result.output)
+              ? this.adjudicationResource.createAdjudicatorNote(enrolleeId, result.output)
+              : of(noop);
+          }
+          return EMPTY;
+        }
         ),
+        exhaustMap(() => this.adjudicationResource.createEnrolmentStatus(enrolleeId, EnrolmentStatus.LOCKED)),
         exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrolleeId)),
       )
       .subscribe((declinedEnrollee: HttpEnrollee) => this.updateEnrollee(declinedEnrollee));
@@ -128,17 +141,23 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
       title: 'Unlock for Editing',
       message: 'When unlocked the enrollee will be able to update their enrolment. Are you sure you want to unlock this enrolment?',
       actionType: 'warn',
-      actionText: 'Unlock for Editing'
+      actionText: 'Unlock for Editing',
+      component: NoteComponent,
     };
 
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        exhaustMap((result: boolean) =>
-          (result)
-            ? this.adjudicationResource.createEnrolmentStatus(enrolleeId, EnrolmentStatus.ACTIVE)
-            : EMPTY
+        exhaustMap((result: { output: string }) => {
+          if (result) {
+            return (result.output)
+              ? this.adjudicationResource.createAdjudicatorNote(enrolleeId, result.output)
+              : of(noop);
+          }
+          return EMPTY;
+        }
         ),
+        exhaustMap(() => this.adjudicationResource.createEnrolmentStatus(enrolleeId, EnrolmentStatus.ACTIVE)),
         exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrolleeId))
       )
       .subscribe((lockedEnrollee: HttpEnrollee) => this.updateEnrollee(lockedEnrollee));
@@ -149,18 +168,24 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
       title: 'Delete Enrolment',
       message: 'Are you sure you want to delete this enrolment?',
       actionType: 'warn',
-      actionText: 'Delete Enrolment'
+      actionText: 'Delete Enrolment',
+      component: NoteComponent,
     };
 
     if (this.authService.isSuperAdmin()) {
       this.busy = this.dialog.open(ConfirmDialogComponent, { data })
         .afterClosed()
         .pipe(
-          exhaustMap((result: boolean) =>
-            (result)
-              ? this.adjudicationResource.deleteEnrollee(enrolleeId)
-              : EMPTY
-          )
+          exhaustMap((result: { output: string }) => {
+            if (result) {
+              return (result.output)
+                ? this.adjudicationResource.createAdjudicatorNote(enrolleeId, result.output)
+                : of(noop);
+            }
+            return EMPTY;
+          }
+          ),
+          exhaustMap(() => this.adjudicationResource.deleteEnrollee(enrolleeId)),
         )
         .subscribe((enrollee: HttpEnrollee) => this.routeTo(this.baseRoutePath));
     }

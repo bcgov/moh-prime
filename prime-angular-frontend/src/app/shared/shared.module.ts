@@ -57,6 +57,7 @@ import { AccessTermsTableComponent } from './components/access-terms-table/acces
 import { AccessTermComponent } from './components/access-term/access-term.component';
 import { NoteComponent } from './components/dialogs/content/note/note.component';
 import { ClaimEnrolleeComponent } from './components/dialogs/content/claim-enrollee/claim-enrollee.component';
+import { ManualFlagNoteComponent } from './components/dialogs/content/manual-flag-note/manual-flag-note.component';
 
 @NgModule({
   declarations: [
@@ -103,7 +104,8 @@ import { ClaimEnrolleeComponent } from './components/dialogs/content/claim-enrol
     AccessTermsTableComponent,
     AccessTermComponent,
     NoteComponent,
-    ClaimEnrolleeComponent
+    ClaimEnrolleeComponent,
+    ManualFlagNoteComponent
   ],
   imports: [
     CommonModule,
@@ -173,7 +175,8 @@ import { ClaimEnrolleeComponent } from './components/dialogs/content/claim-enrol
     ApproveEnrolmentComponent,
     MarkdownComponent,
     NoteComponent,
-    ClaimEnrolleeComponent
+    ClaimEnrolleeComponent,
+    ManualFlagNoteComponent
   ]
 })
 export class SharedModule { }
