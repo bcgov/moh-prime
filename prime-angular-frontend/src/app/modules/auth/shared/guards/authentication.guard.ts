@@ -33,8 +33,6 @@ export class AuthenticationGuard extends BaseGuard {
       await this.configService.load().toPromise();
       if (authenticated) {
         // Allow route to resolve for an authenticated user
-        const currentBaseRoute = this.router.url.slice(1).split('/')[0];
-        const currentRoute = this.router.url.slice(1).split('/')[1];
         return resolve(true);
       }
 
