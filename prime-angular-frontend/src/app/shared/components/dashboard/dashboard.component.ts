@@ -123,7 +123,7 @@ export class DashboardComponent implements OnInit {
 
     if (this.authService.hasAdminView()) {
       return this.getAdjudicationSideNavSections();
-    } else if (this.authService.isRegistrant() && currentBaseRoute === 'site-registration') {
+    } else if (this.authService.isRegistrant() && currentBaseRoute === AuthRoutes.SITE) {
       return this.getRegistrantSideNavSections();
     } else {
       return this.getEnrolleeSideNavSections();
