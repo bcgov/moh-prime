@@ -40,8 +40,6 @@ export class SiteRegistrationGuard extends BaseGuard {
     return new Promise(async (resolve, reject) => {
       const currentBaseRoute = this.router.url.slice(1).split('/')[0];
       const currentRoute = this.router.url.slice(1).split('/')[1];
-      // console.log('currentBaseRoute: ', currentBaseRoute);
-      // console.log('currentRoute: ', currentRoute);
 
       if (this.authService.isRegistrant()) {
         if (currentRoute === '') {
@@ -54,7 +52,4 @@ export class SiteRegistrationGuard extends BaseGuard {
       return reject(false);
     });
   }
-
-
-
 }
