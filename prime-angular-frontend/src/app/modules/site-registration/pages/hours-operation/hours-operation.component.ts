@@ -13,7 +13,7 @@ export class HoursOperationComponent implements OnInit {
   public form: FormGroup;
   public amHours: string[];
   public pmHours: string[];
-  public days: { title: string, name: string }[];
+  public days: string[];
   public SiteRoutes = SiteRoutes;
 
   constructor(
@@ -53,14 +53,15 @@ export class HoursOperationComponent implements OnInit {
     ];
 
     this.days = [
-      { title: 'Monday', name: 'monday' },
-      { title: 'Tuesday', name: 'tuesday' },
-      { title: 'Wednesday', name: 'wednesday' },
-      { title: 'Thursday', name: 'thursday' },
-      { title: 'Friday', name: 'friday' },
-      { title: 'Saturday', name: 'saturday' },
-      { title: 'Sunday', name: 'sunday' }
+      'monday',
+      'tuesday',
+      'wednesday',
+      'thursday',
+      'friday',
+      'saturday',
+      'sunday'
     ];
+
   }
 
   public get mondayAM(): FormControl {

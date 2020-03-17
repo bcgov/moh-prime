@@ -18,11 +18,11 @@
         <ng-container *ngFor="let day of days">
           <div class="row">
             <div class="col col-sm-3">
-              <mat-label class="w-100">{{ day.title }}</mat-label>
+              <mat-label class="w-100">{{ day | capitalize }}</mat-label>
             </div>
             <div class="col col-sm-3">
               <mat-form-field class="w-100">
-                <mat-select [formControlName]="day.name+'AM'">
+                <mat-select [formControlName]="day+'AM'">
                   <mat-option *ngFor="let hour of amHours"
                               [value]="hour">
                     {{ hour }}
@@ -36,7 +36,7 @@
             </div>
             <div class="col col-sm-3">
               <mat-form-field class="w-100">
-                <mat-select [formControlName]="day.name+'PM'">
+                <mat-select [formControlName]="day+'PM'">
                   <mat-option *ngFor="let hour of pmHours"
                               [value]="hour">
                     {{ hour }}
