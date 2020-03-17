@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { KeycloakService } from 'keycloak-angular';
+
 import { AdjudicatorActionsComponent } from './adjudicator-actions.component';
+import { AdjudicationModule } from '@adjudication/adjudication.module';
 
 describe('AdjudicatorActionsComponent', () => {
   let component: AdjudicatorActionsComponent;
@@ -8,9 +11,18 @@ describe('AdjudicatorActionsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AdjudicatorActionsComponent ]
-    })
-    .compileComponents();
+      imports: [
+        AdjudicationModule
+      ],
+      declarations: [],
+      providers: [
+        // {
+        //   provide: APP_CONFIG,
+        //   useValue: APP_DI_CONFIG
+        // },
+        KeycloakService
+      ]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

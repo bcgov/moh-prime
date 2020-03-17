@@ -2,6 +2,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
+import { KeycloakService } from 'keycloak-angular';
+
 import { EnrolleeProfileVersionsComponent } from './enrollee-profile-versions.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
@@ -26,7 +28,8 @@ describe('EnrolleeProfileVersionsComponent', () => {
           {
             provide: APP_CONFIG,
             useValue: APP_DI_CONFIG
-          }
+          },
+          KeycloakService
         ]
       }
     ).compileComponents();
