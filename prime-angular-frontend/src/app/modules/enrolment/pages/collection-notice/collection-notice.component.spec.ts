@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
@@ -10,12 +11,11 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
 import { CollectionNoticeComponent } from './collection-notice.component';
+import { SharedModule } from '@shared/shared.module';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
 import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
-import { SharedModule } from '@shared/shared.module';
-// import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 
 describe('CollectionNoticeComponent', () => {
   let component: CollectionNoticeComponent;
@@ -25,6 +25,7 @@ describe('CollectionNoticeComponent', () => {
     TestBed.configureTestingModule(
       {
         imports: [
+          HttpClientTestingModule,
           RouterTestingModule,
           NgxMaterialModule,
           NgxBusyModule,

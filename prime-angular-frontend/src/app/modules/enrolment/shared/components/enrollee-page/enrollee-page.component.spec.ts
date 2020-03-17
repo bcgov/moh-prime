@@ -8,6 +8,7 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
 import { APP_DI_CONFIG, APP_CONFIG } from 'app/app-config.module';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('EnrolleePageComponent', () => {
   let component: EnrolleePageComponent;
@@ -16,10 +17,11 @@ describe('EnrolleePageComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
+        HttpClientTestingModule,
+        RouterTestingModule,
         NgxBusyModule,
         NgxMaterialModule,
-        SharedModule,
-        RouterTestingModule,
+        SharedModule
       ],
       declarations: [EnrolleePageComponent],
       providers: [
