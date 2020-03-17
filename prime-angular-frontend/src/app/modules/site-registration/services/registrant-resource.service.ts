@@ -15,7 +15,7 @@ export class RegistrantResource {
     private logger: LoggerService
   ) { }
 
-  createRegistrant(registrant: Registrant): any {
+  createRegistrant(registrant: Registrant): Registrant {
     return registrant;
   }
 
