@@ -123,6 +123,7 @@ export class DashboardComponent implements OnInit {
 
     if (this.authService.hasAdminView()) {
       return this.getAdjudicationSideNavSections();
+      // TODO use of routes creates coupling between modules
     } else if (this.authService.isRegistrant() && currentBaseRoute === AuthRoutes.SITE) {
       return this.getRegistrantSideNavSections();
     } else {
