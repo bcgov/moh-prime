@@ -24,7 +24,6 @@ export class EnrolleePageComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     protected enrolmentService: EnrolmentService,
-    protected enrolmentResource: EnrolmentResource,
     protected feedbackResource: FeedbackResourceService,
     protected toastService: ToastService,
     protected logger: LoggerService,

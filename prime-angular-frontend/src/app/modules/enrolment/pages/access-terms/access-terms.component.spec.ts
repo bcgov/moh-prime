@@ -12,6 +12,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 import { SharedModule } from '@shared/shared.module';
+import { EnrolmentModule } from '@enrolment/enrolment.module';
 
 describe('AccessTermsComponent', () => {
   let component: AccessTermsComponent;
@@ -26,10 +27,10 @@ describe('AccessTermsComponent', () => {
           RouterTestingModule,
           HttpClientTestingModule,
           RouterTestingModule,
-          SharedModule
+          SharedModule,
+          EnrolmentModule
         ],
         declarations: [
-          AccessTermsComponent,
         ],
         providers: [
           {

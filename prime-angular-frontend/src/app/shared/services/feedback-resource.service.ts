@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { LoggerService } from '@core/services/logger.service';
-import { ToastService } from '@core/services/toast.service';
 import { ApiResource } from '@core/resources/api-resource.service';
-import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { Observable } from 'rxjs';
 import { Feedback } from '@shared/components/dialogs/content/feedback/feedback.component';
 import { tap, map } from 'rxjs/operators';
@@ -15,8 +13,6 @@ export class FeedbackResourceService {
 
   constructor(
     private apiResource: ApiResource,
-    private apiResourceUtilsService: ApiResourceUtilsService,
-    private toastService: ToastService,
     private logger: LoggerService
   ) { }
 
