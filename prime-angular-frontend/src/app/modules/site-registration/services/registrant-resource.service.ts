@@ -18,6 +18,4 @@ export class RegistrantResource {
   createRegistrant(registrant: Registrant): Registrant {
     return registrant;
   }
-
-
 }
