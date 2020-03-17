@@ -47,7 +47,7 @@ export class EnrolleeAccessTermsComponent implements OnInit {
   }
 
   private getYears() {
-    const initialYear = 2018;
+    const initialYear = 2020; // Deployed to production
     this.currentYear = +moment().format('YYYY');
     this.years = [];
 

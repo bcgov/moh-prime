@@ -84,14 +84,19 @@
 
       <mat-menu #menu="matMenu">
         <button mat-menu-item
+                (click)="onRoute([row.id])">
+          <mat-icon>remove_red_eye</mat-icon>
+          <span>View Enrolment</span>
+        </button>
+        <!-- <button mat-menu-item
                 (click)="onRoute([row.id, AdjudicationRoutes.ENROLLEE_PROFILE_HISTORY])">
           <mat-icon>history</mat-icon>
           <span>Enrolment History</span>
-        </button>
+        </button> -->
         <button mat-menu-item
                 (click)="onRoute([row.id, AdjudicationRoutes.ENROLLEE_TERMS_HISTORY])">
           <mat-icon>history</mat-icon>
-          <span>Terms of Access History</span>
+          <span>PRIME History</span>
         </button>
         <button mat-menu-item
                 (click)="onRoute([row.id, AdjudicationRoutes.ENROLLEE_EVENTS])">
