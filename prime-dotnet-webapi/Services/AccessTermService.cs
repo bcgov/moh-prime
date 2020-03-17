@@ -84,7 +84,7 @@ namespace Prime.Services
         /**
          *  Get list of ACCEPTED access terms for an enrollee
          */
-        public async Task<IEnumerable<AccessTerm>> GetAcceptedAccessTerms(int enrolleeId)
+        public async Task<IEnumerable<AccessTerm>> GetAcceptedAccessTerms(int enrolleeId, int? year)
         {
             var accessTerms = await _context.AccessTerms
                 .Include(at => at.GlobalClause)

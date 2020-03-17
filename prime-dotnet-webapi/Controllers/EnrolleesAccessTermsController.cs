@@ -37,13 +37,14 @@ namespace Prime.Controllers
         /// Get a list of the enrollee's access terms.
         /// </summary>
         /// <param name="enrolleeId"></param>
+        /// <param name="year"></param>
         [HttpGet("{enrolleeId}/access-terms", Name = nameof(GetAccessTerms))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<AccessTerm>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<AccessTerm>>> GetAccessTerms(int enrolleeId)
+        public async Task<ActionResult<IEnumerable<AccessTerm>>> GetAccessTerms(int enrolleeId, [FromQuery]int year)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
@@ -57,7 +58,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            var accessTerms = await _accessTermService.GetAcceptedAccessTerms(enrolleeId);
+            var accessTerms = await _accessTermService.GetAcceptedAccessTerms(enrolleeId, year);
 
             return Ok(ApiResponse.Result(accessTerms));
         }
