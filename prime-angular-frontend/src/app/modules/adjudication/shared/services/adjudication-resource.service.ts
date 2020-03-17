@@ -17,6 +17,7 @@ import { Admin } from '@auth/shared/models/admin.model';
 import { Address } from '@enrolment/shared/models/address.model';
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
+import { NoContent } from '@core/resources/abstract-resource';
 
 @Injectable({
   providedIn: 'root'
@@ -138,14 +139,16 @@ export class AdjudicationResource {
       );
   }
 
-  public updateEnrolleeAlwaysManual(enrolleeId: number, alwaysManual: boolean): Observable<void> {
+  public updateEnrolleeAlwaysManual(enrolleeId: number, alwaysManual: boolean): NoContent {
     const url = `enrollees/${enrolleeId}/always-manual`;
     const request$ = (alwaysManual)
-      ? this.apiResource.put(url, null)
-      : this.apiResource.delete(url);
+      ? this.apiResource.put<NoContent>(url, null)
+      : this.apiResource.delete<NoContent>(url);
 
-    request$
+    return request$
       .pipe(
+        // TODO remove pipe when ApiResource handles NoContent
+        map(() => { }),
         tap(() => this.logger.info('UPDATED_ENROLLEE', alwaysManual)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee could not be marked as always manual');

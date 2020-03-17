@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 
 import { AuthService } from '@auth/shared/services/auth.service';
-import { SubmissionAction } from '@shared/enums/submission-action.enum';
+import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 @Component({
   selector: 'app-limits-conditions-clauses',
