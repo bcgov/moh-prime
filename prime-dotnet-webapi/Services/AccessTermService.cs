@@ -84,7 +84,7 @@ namespace Prime.Services
         /**
          *  Get list of ACCEPTED access terms for an enrollee
          */
-        public async Task<IEnumerable<AccessTerm>> GetAcceptedAccessTerms(int enrolleeId)
+        public async Task<IEnumerable<AccessTerm>> GetAcceptedAccessTerms(int enrolleeId, int year)
         {
             var accessTerms = await _context.AccessTerms
                 .Include(at => at.GlobalClause)
@@ -97,10 +97,16 @@ namespace Prime.Services
                 .OrderByDescending(at => at.AcceptedDate)
                 .ToListAsync();
 
+            if (year != 0)
+            {
+                accessTerms = accessTerms.Where(at => at.AcceptedDate.HasValue && at.AcceptedDate.Value.Year == year).ToList();
+            }
+
             accessTerms.ForEach(at =>
             {
                 at.LicenseClassClauses = at.AccessTermLicenseClassClauses
-                .Select(talc => talc.LicenseClassClause).ToList();
+                    .Select(talc => talc.LicenseClassClause)
+                    .ToList();
             });
 
             return accessTerms;

@@ -50,7 +50,7 @@ export class ClaimEnrolleeComponent implements OnInit {
 
   private async getAdjudicators(): Promise<void> {
     await this.adjudicationResource.getAdjudicators()
-      .subscribe((adjudicators: Admin[]) => 
+      .subscribe((adjudicators: Admin[]) =>
         this.adjudicators.next(adjudicators)
       );
   }

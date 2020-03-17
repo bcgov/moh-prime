@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { SubmissionAction } from '@shared/enums/submission-action.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';

@@ -8,18 +8,20 @@ namespace PrimeTests.ModelFactories
 {
     public class StatusState
     {
-        public static readonly StatusState Active = new StatusState(Status.ACTIVE_CODE, Status.UNDER_REVIEW_CODE);
-        public static readonly StatusState UnderReview = new StatusState(Status.ACTIVE_CODE, Status.UNDER_REVIEW_CODE);
-        public static readonly StatusState RequiresTOA = new StatusState(Status.ACTIVE_CODE, Status.UNDER_REVIEW_CODE);
-        public static readonly StatusState Locked = new StatusState(Status.ACTIVE_CODE, Status.UNDER_REVIEW_CODE, Status.LOCKED_CODE);
+        public static readonly StatusState Submitted = new StatusState(StatusType.Active, StatusType.UnderReview);
+        public static readonly StatusState Approved = new StatusState(StatusType.Active, StatusType.UnderReview, StatusType.RequiresToa);
+        public static readonly StatusState Declined = new StatusState(StatusType.Active, StatusType.UnderReview, StatusType.Locked);
+        public static readonly StatusState PassedTos = new StatusState(StatusType.Active, StatusType.UnderReview, StatusType.RequiresToa, StatusType.Active);
+        public static readonly StatusState Unlocked = new StatusState(StatusType.Active, StatusType.UnderReview, StatusType.Active);
+        public static readonly StatusState SecondSubmission = new StatusState(StatusType.Active, StatusType.UnderReview, StatusType.Active, StatusType.UnderReview);
 
         public static ICollection<StatusState> States { get; private set; }
 
         public IEnumerable<Status> Statuses { get; private set; }
 
-        private StatusState(params int[] statusCodes)
+        private StatusState(params StatusType[] statusTypes)
         {
-            Statuses = statusCodes.Select(code => StatusLookup.ByCode(code));
+            Statuses = statusTypes.Select(type => StatusLookup.ByCode((int)type));
 
             if (States == null) { States = new List<StatusState>(); }
             States.Add(this);
@@ -54,11 +56,8 @@ namespace PrimeTests.ModelFactories
         {
             var enrolmentStatuses = new EnrolmentStatusFactory(_owner, _statuses).Generate(_statuses.Count());
 
-            var approvedStatus = enrolmentStatuses.SingleOrDefault(s => s.StatusCode == Status.REQUIRES_TOA_CODE);
+            var approvedStatus = enrolmentStatuses.SingleOrDefault(s => s.IsType(StatusType.RequiresToa));
             if (approvedStatus != null) { approvedStatus.AddStatusReason(_automatic ? StatusReason.AUTOMATIC_CODE : StatusReason.MANUAL_CODE); }
-
-            var pharmanetStatus = enrolmentStatuses.FindLast(s => new[] { Status.LOCKED_CODE, Status.ACTIVE_CODE }.Contains(s.StatusCode));
-            if (pharmanetStatus != null) { pharmanetStatus.PharmaNetStatus = true; }
 
             return enrolmentStatuses;
         }

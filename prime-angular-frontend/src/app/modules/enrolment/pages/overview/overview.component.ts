@@ -16,6 +16,7 @@ import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { SubmissionAction } from '@shared/enums/submission-action.enum';
 
 @Component({
   selector: 'app-overview',
@@ -63,7 +64,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
               : EMPTY
           ),
           exhaustMap(() =>
-            this.enrolmentResource.updateEnrolmentStatus(enrolment.id, EnrolmentStatus.UNDER_REVIEW)
+            this.enrolmentResource.submissionAction(enrolment.id, SubmissionAction.SUBMIT)
           )
         )
         .subscribe(

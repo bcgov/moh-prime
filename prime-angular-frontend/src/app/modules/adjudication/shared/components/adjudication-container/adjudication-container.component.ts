@@ -6,17 +6,20 @@ import { Observable, Subscription, EMPTY, of, noop } from 'rxjs';
 import { map, exhaustMap, tap } from 'rxjs/operators';
 
 import { AbstractComponent } from '@shared/classes/abstract-component';
-import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+import { SubmissionAction } from '@shared/enums/submission-action.enum';
+import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { ApproveEnrolmentComponent } from '@shared/components/dialogs/content/approve-enrolment/approve-enrolment.component';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
-import { ManualFlagNoteComponent, ManualFlagNoteOutput } from '@shared/components/dialogs/content/manual-flag-note/manual-flag-note.component';
+import {
+  ManualFlagNoteComponent,
+  ManualFlagNoteOutput
+} from '@shared/components/dialogs/content/manual-flag-note/manual-flag-note.component';
 
 @Component({
   selector: 'app-adjudication-container',
@@ -97,12 +100,15 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
           return EMPTY;
         }),
         exhaustMap(() =>
-          this.adjudicationResource.updateEnrolleeAlwaysManual(enrollee.id, manualFlagNote.alwaysManual)),
-        exhaustMap(() => (manualFlagNote.note)
-          ? this.adjudicationResource.createAdjudicatorNote(enrollee.id, manualFlagNote.note)
-          : of(noop)),
+          this.adjudicationResource.updateEnrolleeAlwaysManual(enrollee.id, manualFlagNote.alwaysManual)
+        ),
         exhaustMap(() =>
-          this.adjudicationResource.createEnrolmentStatus(enrollee.id, EnrolmentStatus.REQUIRES_TOA)
+          (manualFlagNote.note)
+            ? this.adjudicationResource.createAdjudicatorNote(enrollee.id, manualFlagNote.note)
+            : of(noop)
+        ),
+        exhaustMap(() =>
+          this.adjudicationResource.submissionAction(enrollee.id, SubmissionAction.APPROVE)
         ),
         exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrollee.id))
       )
@@ -128,9 +134,8 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
               : of(noop);
           }
           return EMPTY;
-        }
-        ),
-        exhaustMap(() => this.adjudicationResource.createEnrolmentStatus(enrolleeId, EnrolmentStatus.LOCKED)),
+        }),
+        exhaustMap(() => this.adjudicationResource.submissionAction(enrolleeId, SubmissionAction.LOCK_PROFILE)),
         exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrolleeId)),
       )
       .subscribe((declinedEnrollee: HttpEnrollee) => this.updateEnrollee(declinedEnrollee));
@@ -157,7 +162,7 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
           return EMPTY;
         }
         ),
-        exhaustMap(() => this.adjudicationResource.createEnrolmentStatus(enrolleeId, EnrolmentStatus.ACTIVE)),
+        exhaustMap(() => this.adjudicationResource.submissionAction(enrolleeId, SubmissionAction.ENABLE_EDITING)),
         exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrolleeId))
       )
       .subscribe((lockedEnrollee: HttpEnrollee) => this.updateEnrollee(lockedEnrollee));

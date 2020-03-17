@@ -17,6 +17,8 @@ import { Admin } from '@auth/shared/models/admin.model';
 import { Address } from '@enrolment/shared/models/address.model';
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
 import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
+import { SubmissionAction } from '@shared/enums/submission-action.enum';
+import { NoContent } from '@core/resources/abstract-resource';
 
 @Injectable({
   providedIn: 'root'
@@ -94,18 +96,17 @@ export class AdjudicationResource {
       );
   }
 
-  public createEnrolmentStatus(enrolleeId: number, statusCode: number): Observable<Config<number>[]> {
-    const payload = { code: statusCode };
-    return this.apiResource.post<Config<number>[]>(`enrollees/${enrolleeId}/statuses`, payload)
+  public submissionAction(enrolleeId: number, action: SubmissionAction): Observable<HttpEnrollee> {
+    return this.apiResource.post<HttpEnrollee>(`enrollees/${enrolleeId}/${action}`)
       .pipe(
-        map((response: ApiHttpResponse<Config<number>[]>) => response.result),
-        tap((statuses: Config<number>[]) => {
+        map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
+        tap((enrollee: HttpEnrollee) => {
           this.toastService.openErrorToast('Enrolment status has been updated');
-          this.logger.info('ENROLMENT_STATUSES', statuses);
+          this.logger.info('UPDATED_ENROLLEE', enrollee);
         }),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrolment status could not be updated');
-          this.logger.error('[Adjudication] AdjudicationResource::createEnrolmentStatus error has occurred: ', error);
+          this.logger.error('[Adjudication] AdjudicationResource::submissionAction error has occurred: ', error);
           throw error;
         })
       );
@@ -139,12 +140,17 @@ export class AdjudicationResource {
       );
   }
 
-  public updateEnrolleeAlwaysManual(enrolleeId: number, alwaysManual: boolean): Observable<HttpEnrollee> {
-    const payload = { data: alwaysManual };
-    return this.apiResource.patch(`enrollees/${enrolleeId}/always-manual`, payload)
+  public updateEnrolleeAlwaysManual(enrolleeId: number, alwaysManual: boolean): NoContent {
+    const url = `enrollees/${enrolleeId}/always-manual`;
+    const request$ = (alwaysManual)
+      ? this.apiResource.put<NoContent>(url, null)
+      : this.apiResource.delete<NoContent>(url);
+
+    return request$
       .pipe(
-        map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
-        tap((enrollee: HttpEnrollee) => this.logger.info('UPDATED_ENROLLEE', enrollee)),
+        // TODO remove pipe when ApiResource handles NoContent
+        map(() => { }),
+        tap(() => this.logger.info('UPDATED_ENROLLEE', alwaysManual)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee could not be marked as always manual');
           this.logger.error('[Adjudication] AdjudicationResource::updateEnrolleeAlwaysManual error has occurred: ', error);
@@ -238,8 +244,9 @@ export class AdjudicationResource {
   // Access Terms
   // ---
 
-  public getAccessTerms(enrolleeId: number): Observable<AccessTerm[]> {
-    return this.apiResource.get<AccessTerm[]>(`enrollees/${enrolleeId}/access-terms`)
+  public getAccessTerms(enrolleeId: number, year: number): Observable<AccessTerm[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ year });
+    return this.apiResource.get<AccessTerm[]>(`enrollees/${enrolleeId}/access-terms`, params)
       .pipe(
         map((response: ApiHttpResponse<AccessTerm[]>) => response.result),
         tap((accessTerms: AccessTerm[]) => this.logger.info('ACCESS_TERMS', accessTerms)),

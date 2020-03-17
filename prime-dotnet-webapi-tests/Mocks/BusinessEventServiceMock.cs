@@ -16,12 +16,12 @@ namespace PrimeTests.Mocks
         public override void SeedData()
         { }
 
-        public Task<BusinessEvent> CreateAdminClaimEventAsync(int enrolleeId, string description, int? adminId = null)
+        public Task<BusinessEvent> CreateAdminClaimEventAsync(int enrolleeId, string description)
         {
             var businessEvent = new BusinessEvent
             {
                 EnrolleeId = enrolleeId,
-                AdminId = adminId,
+                AdminId = 0,
                 BusinessEventTypeCode = BusinessEventType.ADMIN_CLAIM_CODE,
                 Description = description,
                 EventDate = DateTime.Now
@@ -29,12 +29,12 @@ namespace PrimeTests.Mocks
             return Task.FromResult(businessEvent);
         }
 
-        public Task<BusinessEvent> CreateEmailEventAsync(int enrolleeId, string description, int? adminId = null)
+        public Task<BusinessEvent> CreateEmailEventAsync(int enrolleeId, string description)
         {
             var businessEvent = new BusinessEvent
             {
                 EnrolleeId = enrolleeId,
-                AdminId = adminId,
+                AdminId = 0,
                 BusinessEventTypeCode = BusinessEventType.EMAIL_CODE,
                 Description = description,
                 EventDate = DateTime.Now
@@ -42,12 +42,12 @@ namespace PrimeTests.Mocks
             return Task.FromResult(businessEvent);
         }
 
-        public Task<BusinessEvent> CreateNoteEventAsync(int enrolleeId, string description, int? adminId = null)
+        public Task<BusinessEvent> CreateNoteEventAsync(int enrolleeId, string description)
         {
             var businessEvent = new BusinessEvent
             {
                 EnrolleeId = enrolleeId,
-                AdminId = adminId,
+                AdminId = 0,
                 BusinessEventTypeCode = BusinessEventType.NOTE_CODE,
                 Description = description,
                 EventDate = DateTime.Now
@@ -55,12 +55,12 @@ namespace PrimeTests.Mocks
             return Task.FromResult(businessEvent);
         }
 
-        public Task<BusinessEvent> CreateStatusChangeEventAsync(int enrolleeId, string description, int? adminId = null)
+        public Task<BusinessEvent> CreateStatusChangeEventAsync(int enrolleeId, string description)
         {
             var businessEvent = new BusinessEvent
             {
                 EnrolleeId = enrolleeId,
-                AdminId = adminId,
+                AdminId = 0,
                 BusinessEventTypeCode = BusinessEventType.STATUS_CHANGE_CODE,
                 Description = description,
                 EventDate = DateTime.Now
