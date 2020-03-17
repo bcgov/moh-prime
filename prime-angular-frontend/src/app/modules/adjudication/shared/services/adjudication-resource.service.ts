@@ -93,30 +93,22 @@ export class AdjudicationResource {
         })
       );
   }
-  // TODO MERGE_CONFLICT
-  public submissionAction(id: number, action: SubmissionAction): Observable<HttpEnrollee> {
-    return this.apiResource.post<HttpEnrollee>(`enrollees/${id}/${action}`)
+
+  public submissionAction(enrolleeId: number, action: SubmissionAction): Observable<HttpEnrollee> {
+    return this.apiResource.post<HttpEnrollee>(`enrollees/${enrolleeId}/${action}`)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
-        tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
-      );
-  }
-
-  public createEnrolmentStatus(enrolleeId: number, statusCode: number): Observable<Config<number>[]> {
-    const payload = { code: statusCode };
-    return this.apiResource.post<Config<number>[]>(`enrollees/${enrolleeId}/statuses`, payload)
-      .pipe(
-        map((response: ApiHttpResponse<Config<number>[]>) => response.result),
-        tap((statuses: Config<number>[]) => {
+        tap((enrollee: HttpEnrollee) => {
           this.toastService.openErrorToast('Enrolment status has been updated');
-          this.logger.info('ENROLMENT_STATUSES', statuses);
+          this.logger.info('UPDATED_ENROLLEE', enrollee);
         }),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrolment status could not be updated');
-          this.logger.error('[Adjudication] AdjudicationResource::createEnrolmentStatus error has occurred: ', error);
+          this.logger.error('[Adjudication] AdjudicationResource::submissionAction error has occurred: ', error);
           throw error;
         })
       );
+  }
 
   public setEnrolleeAdjudicator(enrolleeId: number): Observable<HttpEnrollee> {
     return this.apiResource.put<HttpEnrollee>(`enrollees/${enrolleeId}/adjudicator`)
@@ -146,20 +138,15 @@ export class AdjudicationResource {
       );
   }
 
-  // TODO MERGE_CONFLICT
-  public updateEnrolleeAlwaysManual(id: number, alwaysManual: boolean): Observable<object> {
-    const url = `enrollees/${id}/always-manual`;
-    return alwaysManual
+  public updateEnrolleeAlwaysManual(enrolleeId: number, alwaysManual: boolean): Observable<void> {
+    const url = `enrollees/${enrolleeId}/always-manual`;
+    const request$ = (alwaysManual)
       ? this.apiResource.put(url, null)
       : this.apiResource.delete(url);
-  }
 
-  public updateEnrolleeAlwaysManual(enrolleeId: number, alwaysManual: boolean): Observable<HttpEnrollee> {
-    const payload = { data: alwaysManual };
-    return this.apiResource.patch(`enrollees/${enrolleeId}/always-manual`, payload)
+    request$
       .pipe(
-        map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
-        tap((enrollee: HttpEnrollee) => this.logger.info('UPDATED_ENROLLEE', enrollee)),
+        tap(() => this.logger.info('UPDATED_ENROLLEE', alwaysManual)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee could not be marked as always manual');
           this.logger.error('[Adjudication] AdjudicationResource::updateEnrolleeAlwaysManual error has occurred: ', error);
