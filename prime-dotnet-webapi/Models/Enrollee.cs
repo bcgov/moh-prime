@@ -117,13 +117,6 @@ namespace Prime.Models
                 .FirstOrDefault();
         }
 
-        [NotMapped]
-        public EnrolmentStatus PharmaNetStatus
-        {
-            get => this.EnrolmentStatuses?
-                .SingleOrDefault(es => es.PharmaNetStatus);
-        }
-
         public bool ProfileCompleted { get; set; }
 
         [NotMapped]
@@ -131,8 +124,8 @@ namespace Prime.Models
         {
             get => this.EnrolmentStatuses?
                 .OrderByDescending(en => en.StatusDate)
-                .FirstOrDefault(es => es.StatusCode == Status.UNDER_REVIEW_CODE)?
-                .StatusDate;
+                .FirstOrDefault(es => es.IsType(StatusType.UnderReview))
+                ?.StatusDate;
         }
 
         [NotMapped]
@@ -142,18 +135,17 @@ namespace Prime.Models
             {
                 return this.EnrolmentStatuses?
                     .OrderByDescending(en => en.StatusDate)
-                    .Where(es => es.StatusCode == Status.REQUIRES_TOA_CODE)
+                    .Where(es => es.IsType(StatusType.RequiresToa))
                     .Where(es => es.StatusDate > this.AppliedDate)
-                    .FirstOrDefault()?
-                    .StatusDate;
+                    .FirstOrDefault()
+                    ?.StatusDate;
             }
         }
 
         [NotMapped]
         public DateTimeOffset? ExpiryDate
         {
-            // This applies to the expiry date of the most recent accepted
-            // ToA
+            // This applies to the expiry date of the most recent accepted ToA
             get => this.AccessTerms?
                 .OrderByDescending(at => at.AcceptedDate)
                 .FirstOrDefault(at => at.ExpiryDate != null)?
@@ -185,5 +177,18 @@ namespace Prime.Models
         public ICollection<EnrolleeProfileVersion> EnrolleeProfileVersions { get; set; }
 
         public bool AlwaysManual { get; set; }
+
+        public EnrolmentStatus AddEnrolmentStatus(StatusType statusType)
+        {
+            var newStatus = EnrolmentStatus.FromStatusType(statusType, this.Id);
+
+            if (EnrolmentStatuses == null)
+            {
+                EnrolmentStatuses = new List<EnrolmentStatus>();
+            }
+            EnrolmentStatuses.Add(newStatus);
+
+            return newStatus;
+        }
     }
 }

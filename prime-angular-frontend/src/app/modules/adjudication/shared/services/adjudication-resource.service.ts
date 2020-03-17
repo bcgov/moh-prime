@@ -16,6 +16,7 @@ import { HttpEnrolleeProfileVersion } from '@shared/models/enrollee-profile-hist
 import { Admin } from '@auth/shared/models/admin.model';
 import { Address } from '@enrolment/shared/models/address.model';
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
+import { SubmissionAction } from '@shared/enums/submission-action.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -92,6 +93,14 @@ export class AdjudicationResource {
         })
       );
   }
+  // TODO MERGE_CONFLICT
+  public submissionAction(id: number, action: SubmissionAction): Observable<HttpEnrollee> {
+    return this.apiResource.post<HttpEnrollee>(`enrollees/${id}/${action}`)
+      .pipe(
+        map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
+        tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
+      );
+  }
 
   public createEnrolmentStatus(enrolleeId: number, statusCode: number): Observable<Config<number>[]> {
     const payload = { code: statusCode };
@@ -108,7 +117,6 @@ export class AdjudicationResource {
           throw error;
         })
       );
-  }
 
   public setEnrolleeAdjudicator(enrolleeId: number): Observable<HttpEnrollee> {
     return this.apiResource.put<HttpEnrollee>(`enrollees/${enrolleeId}/adjudicator`)
@@ -136,6 +144,14 @@ export class AdjudicationResource {
           throw error;
         })
       );
+  }
+
+  // TODO MERGE_CONFLICT
+  public updateEnrolleeAlwaysManual(id: number, alwaysManual: boolean): Observable<object> {
+    const url = `enrollees/${id}/always-manual`;
+    return alwaysManual
+      ? this.apiResource.put(url, null)
+      : this.apiResource.delete(url);
   }
 
   public updateEnrolleeAlwaysManual(enrolleeId: number, alwaysManual: boolean): Observable<HttpEnrollee> {

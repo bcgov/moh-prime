@@ -28,23 +28,15 @@ namespace Prime.Services
 
         Task DeleteEnrolleeAsync(int enrolleeId);
 
-        Task<IEnumerable<Status>> GetAvailableEnrolmentStatusesAsync(int enrolleeId);
-
         Task<IEnumerable<EnrolmentStatus>> GetEnrolmentStatusesAsync(int enrolleeId);
 
-        Task<EnrolmentStatus> CreateEnrolmentStatusAsync(int enrolleeId, Status status, bool acceptedAccessTerm, int? adminId);
-
-        bool IsStatusChangeAllowed(Status startingStatus, Status endingStatus);
-
-        Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, params int[] statusCodesToCheck);
+        Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, params StatusType[] statusCodesToCheck);
 
         Task<IEnumerable<AdjudicatorNote>> GetEnrolleeAdjudicatorNotesAsync(Enrollee enrollee);
 
-        Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, string note, int? adminId = null);
+        Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, string note);
 
-        Task<IEnrolleeNote> UpdateEnrolleeNoteAsync(int enrolleeId, IEnrolleeNote newNote, int? adminId = null);
-
-        Task<Enrollee> UpdateEnrolleeAlwaysManualAsync(int enrolleeId, bool alwaysManual);
+        Task<IEnrolleeNote> UpdateEnrolleeNoteAsync(int enrolleeId, IEnrolleeNote newNote);
 
         Task<int> GetEnrolleeCountAsync();
 
