@@ -24,6 +24,6 @@ export class AccessTermComponent implements OnInit, OnChanges {
       this.clause = tempClause.replace(PLACEHOLDER, content);
     }
   }
-  
+
   public ngOnInit() { }
 }
