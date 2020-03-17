@@ -6,6 +6,7 @@ export class Feedback {
   public satisfied: boolean;
   public comment: string;
   public enrolleeId: number;
+  public route: string;
 }
 
 @Component({

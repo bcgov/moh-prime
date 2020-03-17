@@ -20,6 +20,7 @@ namespace Prime.Migrations
                     UpdatedTimeStamp = table.Column<DateTimeOffset>(nullable: false),
                     EnrolleeId = table.Column<int>(nullable: false),
                     Satisfied = table.Column<bool>(nullable: false),
+                    route = table.Column<string>(nullable: false),
                     Comment = table.Column<string>(nullable: true)
                 },
                 constraints: table =>

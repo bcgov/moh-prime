@@ -11,7 +11,7 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20200316220053_feedback")]
+    [Migration("20200317191818_feedback")]
     partial class feedback
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -5276,6 +5276,10 @@ namespace Prime.Migrations
 
                     b.Property<Guid>("UpdatedUserId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("route")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 

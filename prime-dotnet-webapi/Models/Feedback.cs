@@ -17,13 +17,10 @@ namespace Prime.Models
         [Required]
         public Boolean Satisfied { get; set; }
 
+        [Required]
+        public string route { get; set; }
+
         public string Comment { get; set; }
 
-        public Feedback(int enrolleeId, Boolean satisfied, string comment)
-        {
-            this.EnrolleeId = enrolleeId;
-            this.Satisfied = satisfied;
-            this.Comment = comment;
-        }
     }
 }

@@ -10,6 +10,7 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { FeedbackResourceService } from '@shared/services/feedback-resource.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-enrollee-page',
@@ -27,6 +28,7 @@ export class EnrolleePageComponent implements OnInit {
     protected feedbackResource: FeedbackResourceService,
     protected toastService: ToastService,
     protected logger: LoggerService,
+    protected router: Router,
   ) {
     this.mode = 'default';
   }
@@ -44,6 +46,7 @@ export class EnrolleePageComponent implements OnInit {
         map((result: { output: Feedback }) => {
           if (result) {
             result.output.enrolleeId = this.enrolmentService.enrolment.id;
+            result.output.route = this.router.url;
             return result.output;
           }
           return EMPTY;
