@@ -7,7 +7,11 @@ dateinfo=`date '+%Y-%m-%d %H:%M:%S'`
 timestamp=`date +%s`
 
 function fileRotate() {
-    ls -tp ${backup_dir}/*-database-*.backup.tgz | tail -n +${retentionNumber} | xargs -I {} rm -- {}
+    ls -tp ${backup_dir}/backup.*.tgz | tail -n +${retentionNumber} | xargs -I {} rm -- {}
+    ls -tp ${logfile}.*.tgz | tail -n +${retentionNumber} | xargs -I {} rm -- {}
+    ls -tp ${backup_dir}/metabase-database*.backup.tgz | tail -n +${retentionNumber} | xargs -I {} rm -- {}
+    ls -tp ${logfile}.*.tgz | tail -n +${retentionNumber} | xargs -I {} rm -- {}
+    ls -tp ${backup_dir}/postgres-database*.backup.tgz | tail -n +${retentionNumber} | xargs -I {} rm -- {}
     ls -tp ${logfile}.*.tgz | tail -n +${retentionNumber} | xargs -I {} rm -- {}
     echo "${dateinfo} - Logs rotated" >> ${logfile}
     echo "${dateinfo} - Logs rotated"
