@@ -1,13 +1,10 @@
-import { Component, OnInit, ContentChild, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 
-import { Config } from '@config/config.model';
-import { ConfigService } from '@config/config.service';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { AdjudicatorActionsComponent } from '@adjudication/shared/components/adjudicator-actions/adjudicator-actions.component';
 
 @Component({
   selector: 'app-enrollee-table',

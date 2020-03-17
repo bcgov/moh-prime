@@ -5,7 +5,6 @@
            [dataSource]="dataSource"
            class="w-100">
 
-      <!-- Unique ID Column -->
       <ng-container matColumnDef="uniqueId">
         <th mat-header-cell
             *matHeaderCellDef> Unique ID </th>
@@ -13,7 +12,6 @@
             *matCellDef="let row;"> {{ row.displayId }} </td>
       </ng-container>
 
-      <!-- Name Column -->
       <ng-container matColumnDef="name">
         <th mat-header-cell
             *matHeaderCellDef> Enrollee Name </th>
@@ -21,7 +19,6 @@
             *matCellDef="let row;"> {{ row.firstName }}, {{ row.lastName }} </td>
       </ng-container>
 
-      <!-- Approved Date Column -->
       <ng-container matColumnDef="approvedDate">
         <th mat-header-cell
             *matHeaderCellDef> Approval Date </th>
@@ -29,7 +26,6 @@
             *matCellDef="let row;"> {{ row.approvedDate | formatDate | default }} </td>
       </ng-container>
 
-      <!-- Applied Date Column -->
       <ng-container matColumnDef="appliedDate">
         <th mat-header-cell
             *matHeaderCellDef> Submission Date </th>
@@ -37,7 +33,6 @@
             *matCellDef="let row;"> {{ row.appliedDate | formatDate }} </td>
       </ng-container>
 
-      <!-- Status Column -->
       <ng-container matColumnDef="status">
         <th mat-header-cell
             *matHeaderCellDef> Status </th>
@@ -49,15 +44,13 @@
         </td>
       </ng-container>
 
-      <!-- Adjudicator Column -->
       <ng-container matColumnDef="adjudicator">
         <th mat-header-cell
             *matHeaderCellDef> Adjudicator </th>
         <td mat-cell
-            *matCellDef="let row;"> {{ row.adjudicator?.firstName | default }} </td>
+            *matCellDef="let row;"> {{ row.adjudicator?.idir | default }} </td>
       </ng-container>
 
-      <!-- Actions Column -->
       <ng-container matColumnDef="actions">
         <th mat-header-cell
             *matHeaderCellDef>&nbsp;</th>
@@ -77,13 +70,10 @@
           *matRowDef="let row; columns: columns;"></tr>
     </table>
 
-    <!--
-    TODO reintroduce search and filter
     <p *ngIf="!dataSource?.data.length"
        class="px-4 py-2 text-muted">
-      No {{ filteredStatus?.name }} Enrolments
+      No Enrolments Found
     </p>
-    -->
 
     <ng-template #menu
                  let-row="row">

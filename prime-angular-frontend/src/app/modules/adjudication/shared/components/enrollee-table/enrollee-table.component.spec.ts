@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { KeycloakService } from 'keycloak-angular';
+
 import { EnrolleeTableComponent } from './enrollee-table.component';
+import { AdjudicationModule } from '@adjudication/adjudication.module';
 
 describe('EnrolleeTableComponent', () => {
   let component: EnrolleeTableComponent;
@@ -8,9 +11,14 @@ describe('EnrolleeTableComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EnrolleeTableComponent ]
-    })
-    .compileComponents();
+      imports: [
+        AdjudicationModule
+      ],
+      declarations: [],
+      providers: [
+        KeycloakService
+      ]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
