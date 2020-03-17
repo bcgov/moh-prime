@@ -96,7 +96,7 @@ namespace Prime.Services
 
         private async Task ApproveApplicationAsync(Enrollee enrollee)
         {
-            var newStatus = enrollee.AddEnrolmentStatus(StatusType.Active);
+            var newStatus = enrollee.AddEnrolmentStatus(StatusType.RequiresToa);
             newStatus.AddStatusReason(StatusReasonType.Manual);
 
             await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee);
