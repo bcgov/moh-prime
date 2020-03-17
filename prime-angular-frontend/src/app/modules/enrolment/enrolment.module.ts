@@ -37,6 +37,7 @@ import { AccessAgreementCurrentComponent } from './pages/access-agreement-curren
 import {
   AccessAgreementHistoryEnrolmentComponent
 } from './pages/access-agreement-history-enrolment/access-agreement-history-enrolment.component';
+import { EnrolleePageComponent } from './shared/components/enrollee-page/enrollee-page.component';
 
 @NgModule({
   declarations: [
@@ -68,7 +69,8 @@ import {
     OboAccessTermsComponent,
     RuAccessTermsComponent,
     AccessAgreementCurrentComponent,
-    AccessAgreementHistoryEnrolmentComponent
+    AccessAgreementHistoryEnrolmentComponent,
+    EnrolleePageComponent
   ],
   imports: [
     SharedModule,

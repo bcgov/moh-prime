@@ -1,0 +1,20 @@
+<form [formGroup]="form">
+  <div class="row mb-4">
+    <button class="col-6"
+            mat-flat-button
+            (click)="onSatisfiedChange(true)"
+            color="{{feedback.satisfied ? 'primary' : ''}}">Yes</button>
+    <button mat-flat-button
+            class="col-6"
+            (click)="onSatisfiedChange(false)"
+            color="{{(feedback.satisfied || feedback.satisfied == null) ? '' : 'primary'}}">No</button>
+  </div>
+  <div class="row">
+    <mat-form-field class="w-100 col-0">
+      <textarea matInput
+                placeholder="Comment"
+                rows="5"
+                formControlName="comment"></textarea>
+    </mat-form-field>
+  </div>
+</form>

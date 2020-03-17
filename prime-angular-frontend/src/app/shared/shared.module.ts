@@ -55,6 +55,7 @@ import { MarkdownComponent } from '@shared/components/dialogs/content/markdown/m
 import { PrimeSupportEmailComponent } from '@shared/components/prime-support-email/prime-support-email.component';
 import { AccessTermsTableComponent } from './components/access-terms-table/access-terms-table.component';
 import { AccessTermComponent } from './components/access-term/access-term.component';
+import { FeedbackComponent } from './components/dialogs/content/feedback/feedback.component';
 
 @NgModule({
   declarations: [
@@ -99,7 +100,8 @@ import { AccessTermComponent } from './components/access-term/access-term.compon
     MarkdownComponent,
     PrimeSupportEmailComponent,
     AccessTermsTableComponent,
-    AccessTermComponent
+    AccessTermComponent,
+    FeedbackComponent,
   ],
   imports: [
     CommonModule,
@@ -167,7 +169,8 @@ import { AccessTermComponent } from './components/access-term/access-term.compon
     ConfirmDialogComponent,
     EnrolmentStatusReasonsComponent,
     ApproveEnrolmentComponent,
-    MarkdownComponent
+    MarkdownComponent,
+    FeedbackComponent
   ]
 })
 export class SharedModule { }
