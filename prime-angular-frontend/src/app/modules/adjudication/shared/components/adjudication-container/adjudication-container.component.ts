@@ -11,13 +11,15 @@ import { SubmissionAction } from '@shared/enums/submission-action.enum';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { ApproveEnrolmentComponent } from '@shared/components/dialogs/content/approve-enrolment/approve-enrolment.component';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
-import { ManualFlagNoteComponent, ManualFlagNoteOutput } from '@shared/components/dialogs/content/manual-flag-note/manual-flag-note.component';
+import {
+  ManualFlagNoteComponent,
+  ManualFlagNoteOutput
+} from '@shared/components/dialogs/content/manual-flag-note/manual-flag-note.component';
 
 @Component({
   selector: 'app-adjudication-container',
