@@ -13,7 +13,7 @@ namespace Prime.Services
 
         Task<AccessTerm> GetEnrolleesAccessTermAsync(int enrolleeId, int accessTermId);
 
-        Task<IEnumerable<AccessTerm>> GetAcceptedAccessTerms(int enrolleeId, int? year);
+        Task<IEnumerable<AccessTerm>> GetAcceptedAccessTerms(int enrolleeId, int year);
 
         Task CreateEnrolleeAccessTermAsync(Enrollee enrollee);
 
