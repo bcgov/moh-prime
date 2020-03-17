@@ -65,7 +65,7 @@ pipeline {
         }
         stage('Quality Check') {
             options {
-                timeout(time: 3, unit: 'MINUTES')   // timeout on this stage
+                timeout(time: 10, unit: 'MINUTES')   // timeout on this stage
             }
             when { expression { ( BRANCH_NAME == 'develop' ) } }
             parallel {
