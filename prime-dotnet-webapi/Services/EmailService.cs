@@ -73,6 +73,8 @@ namespace Prime.Services
             string subject = "New Access Request";
             string body = $"This user has been approved for PharmaNet access. Please click <a href=\"{token.FrontendUrl}\">here</a> to view their information.";
 
+            body = this.GetVendorEmailBody(token.Enrollee, token);
+
             await Send(PRIME_EMAIL, new[] { provisionerEmail }, ccEmails, subject, body);
         }
 
@@ -139,13 +141,13 @@ namespace Prime.Services
             }
         }
 
-        private string getVendorEmailText(Enrollee enrollee, EnrolmentCertificateAccessToken token)
+        private string GetVendorEmailBody(Enrollee enrollee, EnrolmentCertificateAccessToken token)
         {
-            var body = $"To: /[pos vendor/]/n/n"
-            + "{ enrollee.FirstName } { enrollee.lastName}/n"
-            + "has been approved for PharmaNet access.Please see PRIME enrolment information in URL below./n"
-            + "<a href=\"{token.FrontendUrl}\">.This link will expire after 3 views or 7 days./n/n"
-            + "Thank you.";
+            var body = $"To: /[pos vendor/]/n/n";
+            body += $"{enrollee.FirstName} { enrollee.LastName}/n";
+            body += "has been approved for PharmaNet access.Please see PRIME enrolment information in URL below./n";
+            body += $"<a href=\"{token.FrontendUrl}\">.This link will expire after 3 views or 7 days./n/n";
+            body += "Thank you.";
             return body;
         }
 
