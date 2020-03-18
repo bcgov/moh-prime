@@ -132,9 +132,9 @@ namespace Prime.Services
             catch (Exception ex)
             {
                 if (ex is InvalidOperationException
-                 || ex is SmtpException
-                 || ex is SmtpFailedRecipientException
-                 || ex is SmtpFailedRecipientsException)
+                    || ex is SmtpException
+                    || ex is SmtpFailedRecipientException
+                    || ex is SmtpFailedRecipientsException)
                 {
                     // TODO log mail exception, perhaps in a table in the database?
                 }
