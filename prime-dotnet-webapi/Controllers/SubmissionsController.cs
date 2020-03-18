@@ -42,16 +42,13 @@ namespace Prime.Controllers
         /// <summary>
         /// Submits the given enrollee through Auto/manual adjudication.
         /// </summary>
-        /// <param name="enrolleeId"> The ID of the enrollee, from route params. </param>
-        /// <param name="enrolleeProfile"> Null, in the case of the first enrolment; or the new Enrollee profile, in the case of a re-submission. </param>
-        /// <returns> The new Enrollee object </returns>
         [HttpPost("{enrolleeId}/submission", Name = nameof(Submit))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<Enrollee>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Enrollee>> Submit(int enrolleeId, EnrolleeProfileViewModel enrolleeProfile)
+        public async Task<ActionResult<Enrollee>> Submit(int enrolleeId, EnrolleeProfileViewModel updatedProfile)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
             if (enrollee == null)
@@ -63,13 +60,18 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
+            if (updatedProfile == null)
+            {
+                this.ModelState.AddModelError("EnrolleeProfileViewModel", "New profile cannot be null.");
+                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+            }
             if (!(await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.Active)))
             {
                 this.ModelState.AddModelError("Enrollee.CurrentStatus", "Application can not be submitted when the current status is not 'Active'.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 
-            await _submissionService.SubmitApplicationAsync(enrolleeId, enrolleeProfile);
+            await _submissionService.SubmitApplicationAsync(enrolleeId, updatedProfile);
             enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
             return Ok(ApiResponse.Result(enrollee));
         }
