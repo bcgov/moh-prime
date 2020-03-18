@@ -1,7 +1,9 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using KellermanSoftware.CompareNetObjects;
 using Prime.Models;
+using Prime.ViewModels;
 
 namespace Prime.Services.Rules
 {
@@ -68,9 +70,53 @@ namespace Prime.Services.Rules
     /// </summary>
     public class AllowableChangesRule : MinorUpdateRule
     {
+        private EnrolleeProfileViewModel _updatedProfile;
+
+        public AllowableChangesRule(EnrolleeProfileViewModel updatedProfile)
+        {
+            _updatedProfile = updatedProfile;
+        }
+
         public override Task<bool> ProcessRule(Enrollee enrollee)
         {
-            throw new System.NotImplementedException();
+            CompareLogic compareLogic = new CompareLogic();
+            compareLogic.Config.IgnoreObjectTypes = true;
+            compareLogic.Config.CompareFields = false;
+            compareLogic.Config.MaxDifferences = 10;
+            compareLogic.Config.IgnoreCollectionOrder = true;
+
+            var result = compareLogic.Compare(_updatedProfile, enrollee);
+
+            if (result.AreEqual)
+            {
+                return Task.FromResult(true);
+            }
+
+            var ignoredProperties = new[]
+            {
+                nameof(Enrollee.ContactEmail),
+                nameof(Enrollee.ContactPhone),
+                nameof(Enrollee.VoicePhone),
+                nameof(Enrollee.VoiceExtension)
+            };
+
+            foreach (var diff in result.Differences)
+            {
+                if (ignoredProperties.Contains(diff.PropertyName))
+                {
+                    continue;
+                }
+                if (true // TODO enrollee is OBO
+                    && diff.PropertyName == nameof(Enrollee.Jobs))
+                {
+                    // OBOs can change their job titles(s)
+                    continue;
+                }
+
+                return Task.FromResult(false);
+            }
+
+            return Task.FromResult(true);
         }
     }
 }

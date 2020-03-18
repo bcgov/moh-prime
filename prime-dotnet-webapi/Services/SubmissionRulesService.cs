@@ -13,12 +13,16 @@ namespace Prime.Services
     public class SubmissionRulesService : BaseService, ISubmissionRulesService
     {
         private readonly IPharmanetApiService _pharmanetApiService;
+        private readonly IAccessTermService _accessTermService;
 
         public SubmissionRulesService(
-            ApiDbContext context, IHttpContextAccessor httpContext, IPharmanetApiService pharmanetApiService)
+            ApiDbContext context, IHttpContextAccessor httpContext,
+            IPharmanetApiService pharmanetApiService,
+            IAccessTermService accessTermService)
             : base(context, httpContext)
         {
             _pharmanetApiService = pharmanetApiService;
+            _accessTermService = accessTermService;
         }
 
         /// <summary>
@@ -49,9 +53,9 @@ namespace Prime.Services
         {
             var rules = new List<MinorUpdateRule>
             {
-                new DateRule(),
-                new CurrentToaRule(),
-                new AllowableChangesRule()
+                //new DateRule(),
+                new CurrentToaRule(_accessTermService),
+                new AllowableChangesRule(profileUpdate)
             };
 
             return await ProcessRules(rules, enrollee);
