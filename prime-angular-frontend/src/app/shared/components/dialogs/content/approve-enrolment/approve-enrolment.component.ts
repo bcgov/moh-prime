@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Enrolment } from '@shared/models/enrolment.model';
-import { IDialogContent } from '../../dialog-content.model';
 import { MatCheckboxChange } from '@angular/material';
+
+import { IDialogContent } from '@shared/components/dialogs/dialog-content.model';
+import { Enrolment } from '@shared/models/enrolment.model';
 
 @Component({
   selector: 'app-approve-enrolment',
@@ -9,9 +10,9 @@ import { MatCheckboxChange } from '@angular/material';
   styleUrls: ['./approve-enrolment.component.scss']
 })
 export class ApproveEnrolmentComponent implements OnInit, IDialogContent {
+  @Output() public output = new EventEmitter<boolean>();
 
   public enrolment: Enrolment;
-  @Output() output = new EventEmitter<boolean>();
 
   constructor() { }
 

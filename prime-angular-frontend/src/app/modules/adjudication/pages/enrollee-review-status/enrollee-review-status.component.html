@@ -1,0 +1,11 @@
+<app-adjudication-container [content]="content"
+                            [hasActions]="hasActions">
+
+  <app-page-header>Review Status Reasons</app-page-header>
+
+  <ng-template #content
+               let-enrollee="enrollee">
+    <app-review-status-content [reasons]="enrollee | statusReasons"></app-review-status-content>
+  </ng-template>
+
+</app-adjudication-container>

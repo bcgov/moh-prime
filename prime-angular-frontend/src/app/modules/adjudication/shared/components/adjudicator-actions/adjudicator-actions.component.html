@@ -1,0 +1,49 @@
+<ng-container *ngIf="enrollee">
+
+  <button mat-flat-button
+          color="primary"
+          [disabled]="!enrollee"
+          [matMenuTriggerFor]="menu">
+    Adjudicator Actions <mat-icon>keyboard_arrow_down</mat-icon>
+  </button>
+
+  <mat-menu #menu>
+    <button mat-menu-item
+            [disabled]="!canEdit"
+            *ngIf="isUnderReview"
+            (click)="onApprove()">
+      <mat-icon>check_circle_outline</mat-icon>
+      <span>Approve Enrolment</span>
+    </button>
+    <button mat-menu-item
+            [disabled]="!canEdit"
+            *ngIf="isUnderReview"
+            (click)="onDecline()">
+      <mat-icon>block</mat-icon>
+      <span>Decline Enrolment</span>
+    </button>
+    <button mat-menu-item
+            [disabled]="!canEdit"
+            *ngIf="isUnderReview"
+            (click)="onUnlock()">
+      <mat-icon>lock_open</mat-icon>
+      <span>Unlock for Editing</span>
+    </button>
+    <button mat-menu-item
+            *ngIf="canDelete"
+            (click)="onDelete()">
+      <mat-icon>delete</mat-icon>
+      <span>Delete Enrolment</span>
+    </button>
+
+    <mat-divider *ngIf="isUnderReview"></mat-divider>
+
+    <button mat-menu-item
+            *ngIf="isUnderReview"
+            (click)="onRoute([enrollee.id, AdjudicationRoutes.ENROLLEE_LIMITS_CONDITIONS])">
+      <mat-icon>description</mat-icon>
+      <span>Add Limits and Conditions</span>
+    </button>
+  </mat-menu>
+
+</ng-container>
