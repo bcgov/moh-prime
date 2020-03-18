@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Prime.Models;
 using Prime.Services;
 using Prime.Models.Api;
+using Prime.ViewModels;
 
 namespace Prime.Controllers
 {
@@ -37,11 +38,47 @@ namespace Prime.Controllers
             _enrolleeProfileVersionService = enrolleeProfileVersionService;
         }
 
-        // POST: api/enrollees/5/submit
+        // POST: api/enrollees/5/submission
         /// <summary>
-        /// Performs a submission-related action on an Enrolle, such as submitting their profile for adjudication.
+        /// Submits the given enrollee through Auto/manual adjudication.
         /// </summary>
-        [HttpPost("{enrolleeId}/{submissionAction:submissionAction}", Name = nameof(SubmissionAction))]
+        /// <param name="enrolleeId"> The ID of the enrollee, from route params. </param>
+        /// <param name="enrolleeProfile"> Null, in the case of the first enrolment; or the new Enrollee profile, in the case of a re-submission. </param>
+        /// <returns> The new Enrollee object </returns>
+        [HttpPost("{enrolleeId}/submission", Name = nameof(Submit))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<Enrollee>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<Enrollee>> Submit(int enrolleeId, EnrolleeProfileViewModel enrolleeProfile)
+        {
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+            if (enrollee == null)
+            {
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}."));
+            }
+            if (!User.CanEdit(enrollee))
+            {
+                return Forbid();
+            }
+
+            if (!(await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.Active)))
+            {
+                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Application can not be submitted when the current status is not 'Active'.");
+                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+            }
+
+            await _submissionService.SubmitApplicationAsync(enrolleeId, enrolleeProfile);
+            enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+            return Ok(ApiResponse.Result(enrollee));
+        }
+
+        // POST: api/enrollees/5/submission/accept-toa
+        /// <summary>
+        /// Performs a submission-related action on an Enrolle, such as an adjudicator approving an application.
+        /// </summary>
+        [HttpPost("{enrolleeId}/submission/{submissionAction:submissionAction}", Name = nameof(SubmissionAction))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
