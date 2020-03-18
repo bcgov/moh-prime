@@ -1,20 +1,32 @@
 <form [formGroup]="form">
   <div class="row mb-4">
-    <button class="col-6"
-            mat-flat-button
-            (click)="onSatisfiedChange(true)"
-            color="{{feedback.satisfied ? 'primary' : ''}}">Yes</button>
-    <button mat-flat-button
-            class="col-6"
-            (click)="onSatisfiedChange(false)"
-            color="{{(feedback.satisfied || feedback.satisfied == null) ? '' : 'primary'}}">No</button>
+    <div class="col">
+
+      <button mat-flat-button
+              class="w-100"
+              color="{{ (feedback.satisfied) ? 'primary' : '' }}"
+              (click)="onSatisfiedChange(true)">Yes</button>
+
+    </div>
+    <div class="col">
+
+      <button mat-flat-button
+              class="w-100"
+              color="{{ (feedback.satisfied || feedback.satisfied == null) ? '' : 'primary' }}"
+              (click)="onSatisfiedChange(false)">No</button>
+
+    </div>
   </div>
   <div class="row">
-    <mat-form-field class="w-100 col-0">
-      <textarea matInput
-                placeholder="Comment"
-                rows="5"
-                formControlName="comment"></textarea>
-    </mat-form-field>
+    <div class="col">
+
+      <mat-form-field class="w-100">
+        <textarea matInput
+                  rows="5"
+                  placeholder="Comment"
+                  formControlName="comment"></textarea>
+      </mat-form-field>
+
+    </div>
   </div>
 </form>
