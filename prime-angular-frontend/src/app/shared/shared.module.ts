@@ -56,6 +56,8 @@ import { MarkdownComponent } from '@shared/components/dialogs/content/markdown/m
 import { PrimeSupportEmailComponent } from '@shared/components/prime-support-email/prime-support-email.component';
 import { AccessTermsTableComponent } from './components/access-terms-table/access-terms-table.component';
 import { AccessTermComponent } from './components/access-term/access-term.component';
+import { CollectionNoticeAlertComponent } from './components/collection-notice-alert/collection-notice-alert.component';
+import { PageFooterComponent } from './components/page-footer/page-footer.component';
 
 @NgModule({
   declarations: [
@@ -101,7 +103,10 @@ import { AccessTermComponent } from './components/access-term/access-term.compon
     MarkdownComponent,
     PrimeSupportEmailComponent,
     AccessTermsTableComponent,
-    AccessTermComponent
+    AccessTermComponent,
+    CollectionNoticeAlertComponent,
+    PageFooterComponent
+
   ],
   imports: [
     CommonModule,
@@ -115,6 +120,7 @@ import { AccessTermComponent } from './components/access-term/access-term.compon
     NgxProgressModule,
     ReactiveFormsModule,
     MarkdownModule.forRoot()
+
   ],
   exports: [
     CommonModule,
@@ -164,6 +170,8 @@ import { AccessTermComponent } from './components/access-term/access-term.compon
     PrimeSupportEmailComponent,
     AccessTermsTableComponent,
     AccessTermComponent,
+    CollectionNoticeAlertComponent,
+    PageFooterComponent
   ],
   entryComponents: [
     ConfirmDialogComponent,

@@ -12,6 +12,7 @@ export interface IAuthService {
   hasAdminView(): boolean;
   hasEnrollee(): boolean;
   isLoggedIn(): Promise<boolean>;
+  isRegistrant(): boolean;
 
   logout(redirectUri?: string): Promise<void>;
   login(options?: any): Promise<void>;
@@ -85,4 +86,7 @@ export class AuthService implements IAuthService {
     return this.keycloakTokenService.isUserInRole(Role.READONLY_ADMIN);
   }
 
+  public isRegistrant(): boolean {
+    return this.keycloakTokenService.isUserInRole(Role.FEATURE_SITE_REGISTRATION);
+  }
 }
