@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DatedContentTableComponent } from './dated-content-table.component';
+import { AdjudicationModule } from '@adjudication/adjudication.module';
 
 describe('DatedContentTableComponent', () => {
   let component: DatedContentTableComponent;
@@ -8,9 +9,11 @@ describe('DatedContentTableComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DatedContentTableComponent ]
-    })
-    .compileComponents();
+      imports: [
+        AdjudicationModule
+      ],
+      declarations: []
+    }).compileComponents();
   }));
 
   beforeEach(() => {
