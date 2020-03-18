@@ -3,9 +3,9 @@
 
   <app-page-header>Events</app-page-header>
 
-  <ng-template #content>
-    <app-dated-content-table *ngIf="businessEvents$"
-                             [items$]="businessEvents$"></app-dated-content-table>
-  </ng-template>
-
 </app-adjudication-container>
+
+<ng-template #content>
+  <app-dated-content-table *ngIf="businessEvents$"
+                           [items$]="businessEvents$"></app-dated-content-table>
+</ng-template>
