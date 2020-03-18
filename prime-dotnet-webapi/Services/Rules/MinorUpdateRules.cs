@@ -41,5 +41,14 @@ namespace Prime.Services.Rules
         }
     }
 
-
+    /// <summary>
+    /// Update must only change certain allowed properties
+    /// </summary>
+    public class AllowableChangesRule : MinorUpdateRule
+    {
+        public override Task<bool> ProcessRule(Enrollee enrollee)
+        {
+            throw new System.NotImplementedException();
+        }
+    }
 }

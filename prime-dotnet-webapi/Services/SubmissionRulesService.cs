@@ -50,7 +50,8 @@ namespace Prime.Services
             var rules = new List<MinorUpdateRule>
             {
                 new DateRule(),
-                new CurrentToaRule()
+                new CurrentToaRule(),
+                new AllowableChangesRule()
             };
 
             return await ProcessRules(rules, enrollee);
