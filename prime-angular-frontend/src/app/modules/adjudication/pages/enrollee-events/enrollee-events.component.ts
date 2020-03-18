@@ -12,5 +12,6 @@ export class EnrolleeEventsComponent implements OnInit {
     this.hasActions = true;
   }
 
-  public ngOnInit() { }
+  public ngOnInit() {
+  }
 }

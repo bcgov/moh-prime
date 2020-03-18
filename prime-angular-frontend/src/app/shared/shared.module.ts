@@ -111,7 +111,7 @@ import { PageFooterComponent } from './components/page-footer/page-footer.compon
     ClaimEnrolleeComponent,
     ManualFlagNoteComponent,
     CollectionNoticeAlertComponent,
-    PageFooterComponent
+    PageFooterComponent,
   ],
   imports: [
     CommonModule,
