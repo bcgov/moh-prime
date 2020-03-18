@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { SiteRoutes } from 'app/modules/site-registration/site-registration.routes';
+import { CollectionNoticeComponent } from '@enrolment/pages/collection-notice/collection-notice.component';
+import { SiteCollectionNoticeComponent } from 'app/modules/site-registration/pages/site-collection-notice/site-collection-notice.component';
 
 @Component({
   selector: 'app-collection-notice-alert',
@@ -32,18 +35,14 @@ export class CollectionNoticeAlertComponent implements OnInit {
   }
 
   public onAccept() {
-    const currentRoutePath = this.route.snapshot.routeConfig.path;
-
     this.authService.hasJustLoggedIn = false;
 
-    if (currentRoutePath === EnrolmentRoutes.COLLECTION_NOTICE) {
-      const route = (!this.isProfileCompleted)
-        ? EnrolmentRoutes.DEMOGRAPHIC
-        : EnrolmentRoutes.OVERVIEW;
+    const route = (!this.isProfileCompleted)
+      ? EnrolmentRoutes.DEMOGRAPHIC
+      : EnrolmentRoutes.OVERVIEW;
 
-      if (this.enrolmentService.isInitialEnrolment) {
-        this.router.navigate([route], { relativeTo: this.route.parent });
-      }
+    if (this.enrolmentService.isInitialEnrolment) {
+      this.router.navigate([route], { relativeTo: this.route.parent });
     }
   }
 

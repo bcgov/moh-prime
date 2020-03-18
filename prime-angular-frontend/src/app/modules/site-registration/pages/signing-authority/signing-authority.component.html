@@ -1,0 +1,21 @@
+<app-page>
+
+  <app-page-header>PharmaNet Site Registration</app-page-header>
+
+  <app-site-progress-indicator [currentRoute]="SiteRoutes.SIGNING_AUTHORITY"></app-site-progress-indicator>
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Signing Authority</ng-container>
+    <ng-container appPageSubheaderSummary>
+      To be completed by the person responsible for PharmaNet activities at this location
+    </ng-container>
+  </app-page-subheader>
+
+  <app-registrant-profile-form></app-registrant-profile-form>
+
+  <app-page-footer [isInitialEnrolment]="true"
+                   [hasSecondaryAction]="true"
+                   (save)="onSubmit()"
+                   (back)="onBack()"></app-page-footer>
+
+</app-page>

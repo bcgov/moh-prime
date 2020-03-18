@@ -14,11 +14,11 @@ export class ManualFlagNoteOutput {
   styleUrls: ['./manual-flag-note.component.scss']
 })
 export class ManualFlagNoteComponent implements OnInit {
-
+  @Output() output = new EventEmitter<ManualFlagNoteOutput>();
+  
   public form: FormGroup;
   public isEmpty: boolean;
   public enrolment: Enrolment;
-  @Output() output = new EventEmitter<ManualFlagNoteOutput>();
   public outputValue: ManualFlagNoteOutput;
 
   constructor(
@@ -38,12 +38,12 @@ export class ManualFlagNoteComponent implements OnInit {
     return this.form.get('alwaysManual') as FormControl;
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.createFormInstance();
     this.initForm();
   }
 
-  protected createFormInstance() {
+  private createFormInstance() {
     this.form = this.fb.group({
       note: [
         {
@@ -62,7 +62,7 @@ export class ManualFlagNoteComponent implements OnInit {
     });
   }
 
-  protected initForm() {
+  private initForm() {
     this.outputValue = new ManualFlagNoteOutput();
     this.outputValue.note = this.note.value;
     this.outputValue.alwaysManual = this.alwaysManual.value;
@@ -76,5 +76,4 @@ export class ManualFlagNoteComponent implements OnInit {
 
     this.output.emit(this.outputValue);
   }
-
 }
