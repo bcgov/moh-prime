@@ -129,19 +129,21 @@ namespace Prime.Services
                 throw new InvalidOperationException("Could not create enrollee.");
             }
 
+            await this._businessEventService.CreateEnrolleeEventAsync(enrollee.Id, "Enrollee Created");
+
             return enrollee.Id;
         }
 
         public async Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeProfileViewModel enrolleeProfile, bool profileCompleted = false)
         {
             var _enrolleeDb = await _context.Enrollees
-                 .Include(e => e.MailingAddress)
-                 .Include(e => e.Certifications)
-                 .Include(e => e.Jobs)
-                 .Include(e => e.Organizations)
-                 .AsNoTracking()
-                 .Where(e => e.Id == enrolleeId)
-                 .SingleOrDefaultAsync();
+                .Include(e => e.MailingAddress)
+                .Include(e => e.Certifications)
+                .Include(e => e.Jobs)
+                .Include(e => e.Organizations)
+                .AsNoTracking()
+                .Where(e => e.Id == enrolleeId)
+                .SingleOrDefaultAsync();
 
             // Remove existing, and recreate if necessary
             this.ReplaceExistingAddress(_enrolleeDb.MailingAddress, enrolleeProfile.MailingAddress, enrolleeProfile, enrolleeId);
@@ -387,7 +389,7 @@ namespace Prime.Services
         public async Task<int> GetEnrolleeCountAsync()
         {
             return await _context.Enrollees
-                   .CountAsync();
+                .CountAsync();
         }
 
         public async Task<Enrollee> UpdateEnrolleeAdjudicator(int enrolleeId, Guid adjudicatorUserId = default(Guid))
