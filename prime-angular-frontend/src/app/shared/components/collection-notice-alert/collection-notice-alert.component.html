@@ -1,8 +1,7 @@
 <ng-container *ngIf="show()">
 
   <ng-container *ngIf="isProfileCompleted; else fullPage">
-    <app-alert type="info"
-               icon="none">
+    <app-alert type="info">
       <ng-container #alertTitle
                     class="alert-title">Collection of Personal Information Notice</ng-container>
       <ng-container #alertContent
