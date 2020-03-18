@@ -30,13 +30,13 @@ export class ClaimEnrolleeComponent implements OnInit {
     this.adjudicators$ = new BehaviorSubject<Admin[]>([]);
   }
 
-  public unClaim(): void {
+  public onDisclaim(): void {
     const output = new ClaimEnrolleeAction();
     output.action = ClaimActionEnum.UnClaim;
     this.dialogRef.close({ output });
   }
 
-  public claim(adminId: number): void {
+  public onClaim(adminId: number): void {
     const output = new ClaimEnrolleeAction();
     output.action = ClaimActionEnum.Claim;
     output.adjudicatorId = adminId;

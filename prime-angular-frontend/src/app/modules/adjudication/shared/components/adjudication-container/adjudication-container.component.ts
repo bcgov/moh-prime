@@ -2,7 +2,7 @@ import { Component, OnInit, Input, TemplateRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatTableDataSource, MatDialog } from '@angular/material';
 
-import { Observable, Subscription, EMPTY, of, noop } from 'rxjs';
+import { Observable, Subscription, EMPTY, of, noop, concat } from 'rxjs';
 import { map, exhaustMap, tap } from 'rxjs/operators';
 
 import { AbstractComponent } from '@shared/classes/abstract-component';
@@ -11,15 +11,20 @@ import { SubmissionAction } from '@shared/enums/submission-action.enum';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-
-import { AuthService } from '@auth/shared/services/auth.service';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
-import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
+import {
+  ClaimEnrolleeComponent,
+  ClaimEnrolleeAction,
+  ClaimActionEnum
+} from '@shared/components/dialogs/content/claim-enrollee/claim-enrollee.component';
 import {
   ManualFlagNoteComponent,
   ManualFlagNoteOutput
 } from '@shared/components/dialogs/content/manual-flag-note/manual-flag-note.component';
+
+import { AuthService } from '@auth/shared/services/auth.service';
+import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
   selector: 'app-adjudication-container',
@@ -73,8 +78,22 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
   }
 
   public onDisclaim(enrolleeId: number) {
-    this.adjudicationResource
-      .removeEnrolleeAdjudicator(enrolleeId)
+    this.busy = this.dialog.open(ClaimEnrolleeComponent)
+      .afterClosed()
+      .pipe(
+        exhaustMap((result: { output: ClaimEnrolleeAction }) => {
+          if (!result) { return EMPTY; }
+
+          if (result.output.action === ClaimActionEnum.UnClaim) {
+            return this.adjudicationResource.removeEnrolleeAdjudicator(enrolleeId);
+          } else if (result.output.action === ClaimActionEnum.Claim) {
+            return concat(
+              this.adjudicationResource.removeEnrolleeAdjudicator(enrolleeId),
+              this.adjudicationResource.setEnrolleeAdjudicator(enrolleeId)
+            );
+          }
+        })
+      )
       .subscribe((updatedEnrollee: HttpEnrollee) => this.updateEnrollee(updatedEnrollee));
   }
 
