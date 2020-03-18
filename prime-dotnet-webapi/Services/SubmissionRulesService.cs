@@ -47,15 +47,10 @@ namespace Prime.Services
         /// </summary>
         public async Task<bool> QualifiesAsMinorUpdateAsync(Enrollee enrollee, EnrolleeProfileViewModel profileUpdate)
         {
-            var rules = new List<AutomaticAdjudicationRule>
+            var rules = new List<MinorUpdateRule>
             {
-                new SelfDeclarationRule(),
-                new AddressRule(),
-                new PharmanetValidationRule(_pharmanetApiService),
-                // TODO removed until after Community Practice
-                // new DeviceProviderRule(),
-                new LicenceClassRule(),
-                new AlwaysManualRule()
+                new DateRule(),
+                new CurrentToaRule()
             };
 
             return await ProcessRules(rules, enrollee);
