@@ -127,7 +127,6 @@ import { PageFooterComponent } from './components/page-footer/page-footer.compon
     NgxProgressModule,
     ReactiveFormsModule,
     MarkdownModule.forRoot()
-
   ],
   exports: [
     CommonModule,
@@ -187,7 +186,7 @@ import { PageFooterComponent } from './components/page-footer/page-footer.compon
     MarkdownComponent,
     NoteComponent,
     ClaimEnrolleeComponent,
-    ManualFlagNoteComponent
+    ManualFlagNoteComponent,
     FeedbackComponent
   ]
 })

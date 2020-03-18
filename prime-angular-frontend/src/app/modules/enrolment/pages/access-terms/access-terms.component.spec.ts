@@ -6,12 +6,9 @@ import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
 import { AccessTermsComponent } from './access-terms.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
-import { SharedModule } from '@shared/shared.module';
 import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
-import { SharedModule } from '@shared/shared.module';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
 
 describe('AccessTermsComponent', () => {
@@ -27,7 +24,6 @@ describe('AccessTermsComponent', () => {
           RouterTestingModule,
           HttpClientTestingModule,
           RouterTestingModule,
-          SharedModule,
           EnrolmentModule
         ],
         declarations: [
