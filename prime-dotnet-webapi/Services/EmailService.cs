@@ -65,8 +65,6 @@ namespace Prime.Services
             }
 
             string subject = "New Access Request";
-            // string body = $"This user has been approved for PharmaNet access. Please click <a href=\"{token.FrontendUrl}\">here</a> to view their information.";
-
             string vendorBody = this.GetVendorEmailBody(token.Enrollee, token, provisionerName);
 
             await Send(PRIME_EMAIL, new[] { provisionerEmail }, ccEmails, subject, vendorBody);
