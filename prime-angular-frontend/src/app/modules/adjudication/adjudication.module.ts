@@ -40,9 +40,9 @@ import { StatusReasonsPipe } from './pages/enrollee-review-status/pipes/status-r
     EnrolleeAccessTermEnrolmentComponent,
     EnrolleeTableComponent,
     SearchFormComponent,
-    DatedContentTableComponent
+    DatedContentTableComponent,
     ReviewStatusContentComponent,
-    StatusReasonsPipe,
+    StatusReasonsPipe
   ],
   imports: [
     SharedModule,
