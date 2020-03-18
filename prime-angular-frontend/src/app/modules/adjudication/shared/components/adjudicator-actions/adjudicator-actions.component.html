@@ -36,7 +36,7 @@
       <span>Delete Enrolment</span>
     </button>
 
-    <mat-divider></mat-divider>
+    <mat-divider *ngIf="isUnderReview"></mat-divider>
 
     <button mat-menu-item
             *ngIf="isUnderReview"
