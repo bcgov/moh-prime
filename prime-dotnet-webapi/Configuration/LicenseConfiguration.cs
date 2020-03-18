@@ -14,7 +14,7 @@ namespace Prime.Configuration
                     new License { Code = 1,  Weight = 1, Manual = false, Name = "Full - Family", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new License { Code = 2,  Weight = 2, Manual = false, Name = "Full - Specialty", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new License { Code = 5,  Weight = 3, Manual = false, Name = "Provisional - Family", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new License { Code = 6,  Weight = 4, Manual = false, Name = "Provisional - Speciality", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new License { Code = 6,  Weight = 4, Manual = false, Name = "Provisional - Specialty", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new License { Code = 9,  Weight = 5, Manual = true, Name = "Conditional - Practice Setting", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new License { Code = 8,  Weight = 6, Manual = true, Name = "Conditional - Practice Limitations", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new License { Code = 10, Weight = 7, Manual = true, Name = "Conditional - Disciplined", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
