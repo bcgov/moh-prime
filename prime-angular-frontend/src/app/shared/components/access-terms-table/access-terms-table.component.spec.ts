@@ -1,11 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { KeycloakService } from 'keycloak-angular';
+
 import { AccessTermsTableComponent } from './access-terms-table.component';
-import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
-import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { SharedModule } from '@shared/shared.module';
+import { AdjudicationModule } from '@adjudication/adjudication.module';
 
 describe('AccessTermsTableComponent', () => {
   let component: AccessTermsTableComponent;
@@ -14,12 +12,13 @@ describe('AccessTermsTableComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        NgxMaterialModule,
-        SharedModule
+        AdjudicationModule
       ],
-      declarations: []
-    })
-      .compileComponents();
+      declarations: [],
+      providers: [
+        KeycloakService
+      ]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

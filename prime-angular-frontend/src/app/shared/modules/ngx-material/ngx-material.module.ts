@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import {
-  MatAutocompleteModule, MatButtonModule, MatCheckboxModule, MatChipsModule,
+  MatAutocompleteModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatChipsModule,
   MatDatepickerModule, MatDialogModule, MatExpansionModule, MatFormFieldDefaultOptions,
   MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatProgressBarModule,
   MatSelectModule, MatSidenavModule, MatSlideToggleModule, MatSnackBarModule,
@@ -33,6 +33,7 @@ const matFormFieldCustomOptions: MatFormFieldDefaultOptions = {
   exports: [
     MatAutocompleteModule,
     MatButtonModule,
+    MatCardModule,
     MatCheckboxModule,
     MatChipsModule,
     MatDatepickerModule,

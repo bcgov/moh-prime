@@ -1,6 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
-import { debounceTime, map } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
+
+import { debounceTime } from 'rxjs/operators';
+
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
@@ -11,12 +14,14 @@ import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
   styleUrls: ['./search-form.component.scss']
 })
 export class SearchFormComponent implements OnInit {
-  public form: FormGroup;
-  public statuses: Config<number>[];
   @Output() public search: EventEmitter<string>;
   @Output() public filter: EventEmitter<EnrolmentStatus>;
 
+  public form: FormGroup;
+  public statuses: Config<number>[];
+
   constructor(
+    private route: ActivatedRoute,
     private fb: FormBuilder,
     private configService: ConfigService,
   ) {
@@ -33,26 +38,30 @@ export class SearchFormComponent implements OnInit {
     return this.form.get('statusCode') as FormControl;
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.createFormInstance();
     this.initForm();
   }
 
-  protected createFormInstance() {
+  private createFormInstance() {
     this.form = this.fb.group({
       textSearch: [null, []],
-      statusCode: ['', []],
+      statusCode: ['', []]
     });
   }
 
-  protected initForm() {
-    this.textSearch.valueChanges.pipe(
-      debounceTime(500),
-    ).subscribe((t: string) => this.search.emit(t));
+  private initForm() {
+    const queryParams = this.route.snapshot.queryParams;
+    this.form.patchValue(queryParams);
 
-    this.statusCode.valueChanges.pipe(
-      debounceTime(500),
-    ).subscribe((es: EnrolmentStatus) => this.filter.emit(es));
+    this.textSearch.valueChanges
+      .pipe(debounceTime(500))
+      // Passing `null` removes the query parameter from the URL
+      .subscribe((search: string) => this.search.emit(search || null));
+
+    this.statusCode.valueChanges
+      .pipe(debounceTime(500))
+      // Passing `null` removes the query parameter from the URL
+      .subscribe((enrolmentStatus: EnrolmentStatus) => this.filter.emit(enrolmentStatus || null));
   }
-
 }
