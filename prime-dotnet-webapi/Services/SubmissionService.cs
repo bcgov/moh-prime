@@ -41,7 +41,7 @@ namespace Prime.Services
             _privilegeService = privilegeService;
         }
 
-        public async Task SubmitApplicationAsync(int enrolleeId, EnrolleeProfileViewModel enrolleProfile)
+        public async Task SubmitApplicationAsync(int enrolleeId, EnrolleeProfileViewModel updatedProfile)
         {
             var enrollee = await _context.Enrollees
                 .Include(e => e.PhysicalAddress)
@@ -55,8 +55,15 @@ namespace Prime.Services
                 .Include(e => e.AccessTerms)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
-            enrollee.AddEnrolmentStatus(StatusType.UnderReview);
+            bool minorUpdate = await _automaticAdjudicationService.QualifiesAsMinorUpdateAsync(enrollee, updatedProfile);
+            await _enrolleeService.UpdateEnrolleeAsync(enrolleeId, updatedProfile);
 
+            if (minorUpdate)
+            {
+                return;
+            }
+
+            enrollee.AddEnrolmentStatus(StatusType.UnderReview);
             await _enroleeProfileVersionService.CreateEnrolleeProfileVersionAsync(enrollee);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Submitted");
 
@@ -66,7 +73,6 @@ namespace Prime.Services
                 newStatus.AddStatusReason(StatusReasonType.Automatic);
 
                 await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee);
-
                 await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Automatically Approved");
             }
 
