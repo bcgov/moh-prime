@@ -11,7 +11,8 @@ namespace Prime.Services
 {
     public class EnrolmentCertificateService : BaseService, IEnrolmentCertificateService
     {
-        private static readonly TimeSpan TOKEN_LIFESPAN = TimeSpan.FromDays(7);
+        private const int EXPIRY_DAYS = 7;
+        private static readonly TimeSpan TOKEN_LIFESPAN = TimeSpan.FromDays(EXPIRY_DAYS);
         private const int MAX_VIEWS = 3;
         private readonly IAccessTermService _accessTermService;
         private readonly IEnrolleeProfileVersionService _enroleeProfileVersionService;
@@ -121,6 +122,16 @@ namespace Prime.Services
             }
 
             return recipientEmail;
+        }
+
+        public int GetMaxViews()
+        {
+            return MAX_VIEWS;
+        }
+
+        public int GetExpiryDays()
+        {
+            return EXPIRY_DAYS;
         }
 
         private async Task UpdateTokenMetadataAsync(EnrolmentCertificateAccessToken token)
