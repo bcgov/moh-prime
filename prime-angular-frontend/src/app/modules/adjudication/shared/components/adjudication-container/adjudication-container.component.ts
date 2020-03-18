@@ -50,7 +50,7 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
     this.columns = ['uniqueId', 'name', 'appliedDate', 'status', 'approvedDate', 'adjudicator', 'actions'];
     this.dataSource = new MatTableDataSource<HttpEnrollee>([]);
 
-    this.showSearchFilter = !!this.route.snapshot.params.id;
+    this.showSearchFilter = false;
     this.baseRoutePath = [AdjudicationRoutes.MODULE_PATH, AdjudicationRoutes.ENROLLEES];
   }
 
