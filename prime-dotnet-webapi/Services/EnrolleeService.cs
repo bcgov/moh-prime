@@ -129,6 +129,8 @@ namespace Prime.Services
                 throw new InvalidOperationException("Could not create enrollee.");
             }
 
+            await this._businessEventService.CreateEnrolleeEventAsync(enrollee.Id, "Enrollee Created");
+
             return enrollee.Id;
         }
 
