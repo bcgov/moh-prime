@@ -79,6 +79,7 @@ namespace Prime
         public DbSet<LicenseClassClause> LicenseClassClauses { get; set; }
         public DbSet<LimitsConditionsClause> LimitsConditionsClauses { get; set; }
         public DbSet<BusinessEvent> BusinessEvents { get; set; }
+        public DbSet<Feedback> Feedback { get; set; }
 
         public override int SaveChanges()
         {

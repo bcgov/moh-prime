@@ -1,0 +1,11 @@
+<app-page [busy]="busy"
+          [mode]="mode">
+  <ng-content></ng-content>
+</app-page>
+<button class="feedback"
+        mat-raised-button
+        color="primary"
+        (click)="feedback()">
+  <mat-icon class="mr-2">message</mat-icon>
+  Feedback
+</button>
