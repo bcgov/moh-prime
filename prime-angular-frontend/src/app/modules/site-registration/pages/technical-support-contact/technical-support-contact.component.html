@@ -1,0 +1,38 @@
+<app-page>
+  <app-page-header>PharmaNet Site Registration</app-page-header>
+
+  <app-site-progress-indicator [currentRoute]="SiteRoutes.TECHNICAL_SUPPORT_CONTACT"></app-site-progress-indicator>
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Technical Support Contact</ng-container>
+    <ng-container appPageSubheaderSummary>
+      To be completed by the person who can be contacted in the event of technology related issues (e.g. malware). This
+      person should be familiar with the setup of the PharmaNet software application, general security mechanisms such
+      as firewalls and anti-virus measures, and the details of the network structure or internet connections in use at
+      the site.
+    </ng-container>
+  </app-page-subheader>
+
+  <div class="col">
+    <div class="row">
+      <mat-slide-toggle class="mb-3"
+                        color="primary">
+        Same as Signing Authority
+      </mat-slide-toggle>
+    </div>
+    <div class="row">
+      <mat-slide-toggle class="mb-3"
+                        color="primary">
+        Same as Privacy Officer
+      </mat-slide-toggle>
+    </div>
+  </div>
+
+  <app-registrant-profile-form></app-registrant-profile-form>
+
+  <app-page-footer [isInitialEnrolment]="true"
+                   [hasSecondaryAction]="true"
+                   (save)="onSubmit()"
+                   (back)="onBack()"></app-page-footer>
+
+</app-page>

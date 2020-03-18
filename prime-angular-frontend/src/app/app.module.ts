@@ -13,6 +13,7 @@ import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { AdjudicationModule } from '@adjudication/adjudication.module';
 import { ProvisionerAccessModule } from './modules/provisioner-access/provisioner-access.module';
 import { UserInterfaceModule } from '@ui/user-interface.module';
+import { SiteRegistrationModule } from './modules/site-registration/site-registration.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,6 +26,7 @@ import { UserInterfaceModule } from '@ui/user-interface.module';
     EnrolmentModule, // TODO lazy load this module
     AdjudicationModule, // TODO lazy load this module
     ProvisionerAccessModule, // TODO lazy load this module
+    SiteRegistrationModule, // TODO lazy load this module
     UserInterfaceModule,
     AppRoutingModule // WARNING: MUST be the last routing module imported!!!
   ],

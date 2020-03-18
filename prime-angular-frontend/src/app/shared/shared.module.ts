@@ -58,6 +58,8 @@ import { AccessTermComponent } from './components/access-term/access-term.compon
 import { NoteComponent } from './components/dialogs/content/note/note.component';
 import { ClaimEnrolleeComponent } from './components/dialogs/content/claim-enrollee/claim-enrollee.component';
 import { ManualFlagNoteComponent } from './components/dialogs/content/manual-flag-note/manual-flag-note.component';
+import { CollectionNoticeAlertComponent } from './components/collection-notice-alert/collection-notice-alert.component';
+import { PageFooterComponent } from './components/page-footer/page-footer.component';
 
 @NgModule({
   declarations: [
@@ -105,7 +107,9 @@ import { ManualFlagNoteComponent } from './components/dialogs/content/manual-fla
     AccessTermComponent,
     NoteComponent,
     ClaimEnrolleeComponent,
-    ManualFlagNoteComponent
+    ManualFlagNoteComponent,
+    CollectionNoticeAlertComponent,
+    PageFooterComponent
   ],
   imports: [
     CommonModule,
@@ -119,6 +123,7 @@ import { ManualFlagNoteComponent } from './components/dialogs/content/manual-fla
     NgxProgressModule,
     ReactiveFormsModule,
     MarkdownModule.forRoot()
+
   ],
   exports: [
     CommonModule,
@@ -168,6 +173,8 @@ import { ManualFlagNoteComponent } from './components/dialogs/content/manual-fla
     PrimeSupportEmailComponent,
     AccessTermsTableComponent,
     AccessTermComponent,
+    CollectionNoticeAlertComponent,
+    PageFooterComponent
   ],
   entryComponents: [
     ConfirmDialogComponent,
