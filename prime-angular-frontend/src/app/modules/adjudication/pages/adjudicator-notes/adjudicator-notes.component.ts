@@ -1,16 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { MatTableDataSource } from '@angular/material';
 
 import { Subscription, BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
-import { Enrolment } from '@shared/models/enrolment.model';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
-
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { DateContent } from '@adjudication/shared/components/dated-content-table/dated-content-table.component';
 
 @Component({
   selector: 'app-adjudicator-notes',
@@ -21,8 +20,7 @@ export class AdjudicatorNotesComponent implements OnInit {
   public busy: Subscription;
   public form: FormGroup;
   public columns: string[];
-  public dataSource: MatTableDataSource<Enrolment>;
-  public adjudicatorNotes: BehaviorSubject<AdjudicationNote[]>;
+  public adjudicatorNotes$: BehaviorSubject<DateContent[]>;
   public hasActions: boolean;
 
   constructor(
@@ -32,7 +30,7 @@ export class AdjudicatorNotesComponent implements OnInit {
     private authService: AuthService
   ) {
     this.hasActions = false;
-    this.adjudicatorNotes = new BehaviorSubject<AdjudicationNote[]>([]);
+    this.adjudicatorNotes$ = new BehaviorSubject<DateContent[]>(null);
   }
 
   public get canEdit(): boolean {
@@ -45,11 +43,19 @@ export class AdjudicatorNotesComponent implements OnInit {
 
   public onSubmit() {
     if (this.form.valid) {
-      this.busy = this.adjudicationResource
+      const request$ = this.adjudicationResource
         .createAdjudicatorNote(this.route.snapshot.params.id, this.note.value)
-        .subscribe((adjudicatorNote: AdjudicationNote) => {
-          const notes = [adjudicatorNote, ...this.adjudicatorNotes.value];
-          this.adjudicatorNotes.next(notes);
+        .pipe(
+          map((adjudicationNote: AdjudicationNote) => {
+            return {
+              date: adjudicationNote.noteDate,
+              content: adjudicationNote.note
+            };
+          })
+        )
+        .subscribe((adjudicatorNote: DateContent) => {
+          const notes = [adjudicatorNote, ...this.adjudicatorNotes$.value];
+          this.adjudicatorNotes$.next(notes);
           this.note.reset();
         });
     }
@@ -74,8 +80,18 @@ export class AdjudicatorNotesComponent implements OnInit {
 
   private getAdjudicatorNotes(enrolleeId: number) {
     this.busy = this.adjudicationResource.getAdjudicatorNotes(enrolleeId)
-      .subscribe((adjudicatorNotes: AdjudicationNote[]) =>
-        this.adjudicatorNotes.next(adjudicatorNotes)
+      .pipe(
+        map((adjudicationNotes: AdjudicationNote[]) =>
+          adjudicationNotes.map((adjudicationNote: AdjudicationNote) => {
+            return {
+              date: adjudicationNote.noteDate,
+              content: adjudicationNote.note
+            };
+          })
+        )
+      )
+      .subscribe((datedContent: DateContent[]) =>
+        this.adjudicatorNotes$.next(datedContent)
       );
   }
 }

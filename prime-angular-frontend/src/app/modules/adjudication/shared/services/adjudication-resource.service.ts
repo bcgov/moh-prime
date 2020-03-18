@@ -16,6 +16,7 @@ import { HttpEnrolleeProfileVersion } from '@shared/models/enrollee-profile-hist
 import { Admin } from '@auth/shared/models/admin.model';
 import { Address } from '@enrolment/shared/models/address.model';
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
+import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
 import { NoContent } from '@core/resources/abstract-resource';
 
@@ -153,6 +154,21 @@ export class AdjudicationResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee could not be marked as always manual');
           this.logger.error('[Adjudication] AdjudicationResource::updateEnrolleeAlwaysManual error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getEnrolleeBusinessEvents(enrolleeId: number): Observable<BusinessEvent[]> {
+    return this.apiResource.get<BusinessEvent[]>(`enrollees/${enrolleeId}/events`)
+      .pipe(
+        map((response: ApiHttpResponse<BusinessEvent[]>) => response.result),
+        tap((businessEvents: BusinessEvent[]) =>
+          this.logger.info('ENROLLEE_BUSINESS_EVENTS', businessEvents)
+        ),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollee business events could not be retrieved');
+          this.logger.error('[Adjudication] AdjudicationResource::getEnrolleeBusinessEvents error has occurred: ', error);
           throw error;
         })
       );

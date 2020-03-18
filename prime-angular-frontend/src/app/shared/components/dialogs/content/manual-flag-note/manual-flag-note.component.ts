@@ -1,7 +1,9 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+
 import { debounceTime } from 'rxjs/operators';
-import { Enrolment } from '@shared/models/enrolment.model';
+
+import { HttpEnrollee } from '@shared/models/enrolment.model';
 
 export class ManualFlagNoteOutput {
   public note: string;
@@ -15,19 +17,18 @@ export class ManualFlagNoteOutput {
 })
 export class ManualFlagNoteComponent implements OnInit {
   @Output() output = new EventEmitter<ManualFlagNoteOutput>();
-  
+
   public form: FormGroup;
   public isEmpty: boolean;
-  public enrolment: Enrolment;
+  public enrollee: HttpEnrollee;
   public outputValue: ManualFlagNoteOutput;
 
   constructor(
     private fb: FormBuilder,
   ) { }
 
-  @Input()
-  public set data({ enrolment }: { enrolment: Enrolment }) {
-    this.enrolment = enrolment;
+  @Input() public set data({ enrollee }: { enrollee: HttpEnrollee }) {
+    this.enrollee = enrollee;
   }
 
   public get note(): FormControl {
@@ -54,7 +55,7 @@ export class ManualFlagNoteComponent implements OnInit {
       ],
       alwaysManual: [
         {
-          value: this.enrolment ? this.enrolment.alwaysManual : false,
+          value: (this.enrollee) ? this.enrollee.alwaysManual : false,
           disabled: false,
         },
         []

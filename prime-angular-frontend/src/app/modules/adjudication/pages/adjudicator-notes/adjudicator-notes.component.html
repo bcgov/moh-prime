@@ -30,28 +30,10 @@
       </div>
       <div class="col-sm-12 col-lg-9 col-xl-7">
 
-        <h2>Notes List</h2>
+        <h2 class="mb-2">Notes List</h2>
 
-        <ng-container *ngIf="adjudicatorNotes.value?.length; else noNotes">
-
-          <div class="table-responsive">
-            <table class="table">
-              <tbody>
-                <tr *ngFor="let adjudicatorNote of adjudicatorNotes | async">
-                  <th class="text-right">
-                    <div class="text-nowrap">
-                      {{ adjudicatorNote.noteDate | formatDate }}
-                    </div>
-                    <small class="text-mute font-weight-normal">
-                    {{ adjudicatorNote.noteDate | formatDate: 'h:mm a' }}
-                  </small>
-                  </th>
-                  <td>{{ adjudicatorNote.note }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
+        <ng-container *ngIf="adjudicatorNotes$.value?.length; else noNotes">
+          <app-dated-content-table [items$]="adjudicatorNotes$"></app-dated-content-table>
         </ng-container>
 
         <ng-template #noNotes>

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { MatSelectChange } from '@angular/material';
 
-import { Subscription, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 import moment from 'moment';
 
@@ -10,7 +10,6 @@ import { AccessTerm } from '@shared/models/access-term.model';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
-import { MatSelectChange, yearsPerRow } from '@angular/material';
 
 @Component({
   selector: 'app-enrollee-access-terms',

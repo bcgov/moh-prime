@@ -31,7 +31,8 @@
     </div>
   </div>
 
-  <app-enrollee-table [dataSource]="dataSource"
+  <app-enrollee-table *ngIf="busy.closed || dataSource.data.length"
+                      [dataSource]="dataSource"
                       (claim)="onClaim($event)"
                       (disclaim)="onDisclaim($event)"
                       (route)="onRoute($event)"></app-enrollee-table>

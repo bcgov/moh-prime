@@ -19,6 +19,7 @@ import { EnrolleeEventsComponent } from './pages/enrollee-events/enrollee-events
 import { EnrolleeReviewStatusComponent } from './pages/enrollee-review-status/enrollee-review-status.component';
 import { EnrolleeTableComponent } from './shared/components/enrollee-table/enrollee-table.component';
 import { SearchFormComponent } from './shared/components/search-form/search-form.component';
+import { DatedContentTableComponent } from './shared/components/dated-content-table/dated-content-table.component';
 import { ReviewStatusContentComponent } from './pages/enrollee-review-status/components/review-status-content/review-status-content.component';
 import { StatusReasonsPipe } from './pages/enrollee-review-status/pipes/status-reasons.pipe';
 
@@ -39,8 +40,9 @@ import { StatusReasonsPipe } from './pages/enrollee-review-status/pipes/status-r
     EnrolleeAccessTermEnrolmentComponent,
     EnrolleeTableComponent,
     SearchFormComponent,
+    DatedContentTableComponent,
     ReviewStatusContentComponent,
-    StatusReasonsPipe,
+    StatusReasonsPipe
   ],
   imports: [
     SharedModule,
