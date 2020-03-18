@@ -78,13 +78,18 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
   }
 
   public onDisclaim(enrolleeId: number) {
-    this.busy = this.dialog.open(ClaimEnrolleeComponent)
+    const data: DialogOptions = {
+      title: 'Disclaim Enrolment',
+      component: ManualFlagNoteComponent
+    };
+
+    this.busy = this.dialog.open(ClaimEnrolleeComponent, { data })
       .afterClosed()
       .pipe(
         exhaustMap((result: { output: ClaimEnrolleeAction }) => {
           if (!result) { return EMPTY; }
 
-          if (result.output.action === ClaimActionEnum.UnClaim) {
+          if (result.output.action === ClaimActionEnum.Disclaim) {
             return this.adjudicationResource.removeEnrolleeAdjudicator(enrolleeId);
           } else if (result.output.action === ClaimActionEnum.Claim) {
             return concat(

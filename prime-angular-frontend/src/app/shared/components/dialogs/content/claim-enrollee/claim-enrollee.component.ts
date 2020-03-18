@@ -6,7 +6,7 @@ import { MatDialogRef } from '@angular/material';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 
 export enum ClaimActionEnum {
-  UnClaim = 0,
+  Disclaim = 0,
   Claim = 1
 }
 
@@ -32,7 +32,7 @@ export class ClaimEnrolleeComponent implements OnInit {
 
   public onDisclaim(): void {
     const output = new ClaimEnrolleeAction();
-    output.action = ClaimActionEnum.UnClaim;
+    output.action = ClaimActionEnum.Disclaim;
     this.dialogRef.close({ output });
   }
 
