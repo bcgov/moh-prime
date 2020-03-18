@@ -54,6 +54,7 @@ namespace Prime
             services.AddScoped<IAccessTermService, AccessTermService>();
             services.AddScoped<IEnrolleeProfileVersionService, EnrolleeProfileVersionService>();
             services.AddScoped<IAdminService, AdminService>();
+            services.AddScoped<IFeedbackService, FeedbackService>();
             services.AddScoped<IBusinessEventService, BusinessEventService>();
             services.AddScoped<ISubmissionService, SubmissionService>();
 

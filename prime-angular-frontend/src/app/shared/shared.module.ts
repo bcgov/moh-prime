@@ -59,6 +59,7 @@ import { AccessTermComponent } from './components/access-term/access-term.compon
 import { NoteComponent } from './components/dialogs/content/note/note.component';
 import { ClaimEnrolleeComponent } from './components/dialogs/content/claim-enrollee/claim-enrollee.component';
 import { ManualFlagNoteComponent } from './components/dialogs/content/manual-flag-note/manual-flag-note.component';
+import { FeedbackComponent } from './components/dialogs/content/feedback/feedback.component';
 import { CollectionNoticeAlertComponent } from './components/collection-notice-alert/collection-notice-alert.component';
 import { PageFooterComponent } from './components/page-footer/page-footer.component';
 
@@ -110,8 +111,9 @@ import { PageFooterComponent } from './components/page-footer/page-footer.compon
     NoteComponent,
     ClaimEnrolleeComponent,
     ManualFlagNoteComponent,
+    FeedbackComponent,
     CollectionNoticeAlertComponent,
-    PageFooterComponent,
+    PageFooterComponent
   ],
   imports: [
     CommonModule,
@@ -125,7 +127,6 @@ import { PageFooterComponent } from './components/page-footer/page-footer.compon
     NgxProgressModule,
     ReactiveFormsModule,
     MarkdownModule.forRoot()
-
   ],
   exports: [
     CommonModule,
@@ -185,7 +186,8 @@ import { PageFooterComponent } from './components/page-footer/page-footer.compon
     MarkdownComponent,
     NoteComponent,
     ClaimEnrolleeComponent,
-    ManualFlagNoteComponent
+    ManualFlagNoteComponent,
+    FeedbackComponent
   ]
 })
 export class SharedModule { }
