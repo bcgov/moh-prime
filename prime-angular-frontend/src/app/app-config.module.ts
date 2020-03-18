@@ -7,6 +7,7 @@ import { environment } from '@env/environment';
 import { AuthRoutes } from '@auth/auth.routes';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { SiteRoutes } from './modules/site-registration/site-registration.routes';
 
 export let APP_CONFIG = new InjectionToken<AppConfig>('app.config');
 
@@ -25,6 +26,7 @@ export class AppConfig {
     auth: string;
     enrolment: string;
     adjudication: string;
+    site: string;
   };
 }
 
@@ -42,7 +44,8 @@ export const APP_DI_CONFIG: AppConfig = {
     maintenance: AppRoutes.MAINTENANCE,
     auth: AuthRoutes.MODULE_PATH,
     enrolment: EnrolmentRoutes.MODULE_PATH,
-    adjudication: AdjudicationRoutes.MODULE_PATH
+    adjudication: AdjudicationRoutes.MODULE_PATH,
+    site: SiteRoutes.MODULE_PATH
   }
 };
 

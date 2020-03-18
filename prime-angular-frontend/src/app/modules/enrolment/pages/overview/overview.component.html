@@ -8,7 +8,7 @@
                           [inProgress]="isInitialEnrolment"
                           [currentRoute]="EnrolmentRoutes.OVERVIEW"></app-progress-indicator>
 
-  <div class="mb-5">
+  <div [ngClass]="{ 'mb-5': hasRegOrJob() }">
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>Enrolment Review</ng-container>
       <ng-container appPageSubheaderSummary>
@@ -17,6 +17,15 @@
       </ng-container>
     </app-page-subheader>
   </div>
+
+  <app-alert *ngIf="!hasRegOrJob()"
+             type="danger"
+             icon="warning">
+    <ng-container #alertContent
+                  class="alert-content">
+      Your enrolment contains an error that will need to be updated before submission.
+    </ng-container>
+  </app-alert>
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Personal Information from BC Services Card</ng-container>
@@ -28,7 +37,6 @@
                        (route)="routeTo($event)"></app-enrollee-review>
 
   <div class="footer">
-
     <app-alert *ngIf="currentStatus !== EnrolmentStatus.ACTIVE"
                type="danger"
                icon="warning">
@@ -38,7 +46,6 @@
         contact us at <app-prime-phone></app-prime-phone> or <app-prime-support-email></app-prime-support-email>.
       </ng-container>
     </app-alert>
-
 
     <mat-checkbox #accept
                   [disabled]="currentStatus !== EnrolmentStatus.ACTIVE">
@@ -54,7 +61,7 @@
 
       <button mat-flat-button
               color="primary"
-              [disabled]="!accept.checked"
+              [disabled]="!accept.checked || !hasRegOrJob()"
               (click)="onSubmit()">Submit Enrolment</button>
 
     </div>
