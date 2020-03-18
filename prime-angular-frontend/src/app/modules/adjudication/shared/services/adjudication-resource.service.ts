@@ -16,6 +16,7 @@ import { EnrolmentProfileVersion, HttpEnrolleeProfileVersion } from '@shared/mod
 import { Admin } from '@auth/shared/models/admin.model';
 import { Address } from '@enrolment/shared/models/address.model';
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
+import { SubmissionAction } from '@shared/enums/submission-action.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -84,12 +85,11 @@ export class AdjudicationResource {
       );
   }
 
-  public updateEnrolmentStatus(id: number, statusCode: number): Observable<Config<number>[]> {
-    const payload = { code: statusCode };
-    return this.apiResource.post<Config<number>[]>(`enrollees/${id}/statuses`, payload)
+  public submissionAction(id: number, action: SubmissionAction): Observable<HttpEnrollee> {
+    return this.apiResource.post<HttpEnrollee>(`enrollees/${id}/${action}`)
       .pipe(
-        map((response: ApiHttpResponse<Config<number>[]>) => response.result),
-        tap((statuses: Config<number>[]) => this.logger.info('ENROLMENT_STATUSES', statuses))
+        map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
+        tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
       );
   }
 
@@ -121,14 +121,11 @@ export class AdjudicationResource {
       );
   }
 
-  public updateEnrolleeAlwaysManual(id: number, alwaysManual: boolean): Observable<Enrolment> {
-    const payload = { data: alwaysManual };
-    return this.apiResource.patch(`enrollees/${id}/always-manual`, payload)
-      .pipe(
-        map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
-        map((enrollee: HttpEnrollee) => this.enrolmentAdapter(enrollee)),
-        tap((enrolment: Enrolment) => this.logger.info('UPDATED_ENROLMENT', enrolment))
-      );
+  public updateEnrolleeAlwaysManual(id: number, alwaysManual: boolean): Observable<object> {
+    const url = `enrollees/${id}/always-manual`;
+    return alwaysManual
+      ? this.apiResource.put(url, null)
+      : this.apiResource.delete(url);
   }
 
   public deleteEnrolment(id: number): Observable<Enrolment> {

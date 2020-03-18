@@ -31,6 +31,10 @@ following command:
 	
 Your changes will be deployed automatically next time the app starts.
 
+## DOCUMENTATION
+
+We have further [Documentation](documentation/Readme.md.md) available.
+
 ## APACHE 2.0 LICENSE
 
 Licensed under the Apache License, Version 2.0 (the "License");

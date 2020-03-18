@@ -9,11 +9,6 @@ namespace Prime.Models
     [Table("StatusLookup")]
     public sealed class Status : BaseAuditable, ILookup<int>, IEquatable<Status>
     {
-        public const int ACTIVE_CODE = 1;
-        public const int UNDER_REVIEW_CODE = 2;
-        public const int REQUIRES_TOA_CODE = 3;
-        public const int LOCKED_CODE = 4;
-
         [Key]
         public int Code { get; set; }
 

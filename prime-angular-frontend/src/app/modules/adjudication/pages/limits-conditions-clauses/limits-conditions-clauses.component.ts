@@ -21,6 +21,7 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { NoteType } from '@adjudication/shared/enums/note-type.enum';
 import { ApproveEnrolmentComponent } from '@shared/components/dialogs/content/approve-enrolment/approve-enrolment.component';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { SubmissionAction } from '@shared/enums/submission-action.enum';
 
 @Component({
   selector: 'app-limits-conditions-clauses',
@@ -137,7 +138,7 @@ export class LimitsConditionsClausesComponent implements OnInit {
         }),
         exhaustMap(() =>
           this.adjudicationResource
-            .updateEnrolmentStatus(enrolment.id, EnrolmentStatus.REQUIRES_TOA)
+            .submissionAction(enrolment.id, SubmissionAction.APPROVE)
         ),
         exhaustMap(() => this.adjudicationResource.enrollee(enrolment.id))
       )
@@ -166,7 +167,7 @@ export class LimitsConditionsClausesComponent implements OnInit {
       .pipe(
         exhaustMap((result: boolean) =>
           (result)
-            ? this.adjudicationResource.updateEnrolmentStatus(id, EnrolmentStatus.LOCKED)
+            ? this.adjudicationResource.submissionAction(id, SubmissionAction.LOCK_PROFILE)
             : EMPTY
         ),
         exhaustMap(() => this.adjudicationResource.enrollee(id)),
@@ -195,7 +196,7 @@ export class LimitsConditionsClausesComponent implements OnInit {
       .pipe(
         exhaustMap((result: boolean) =>
           (result)
-            ? this.adjudicationResource.updateEnrolmentStatus(id, EnrolmentStatus.ACTIVE)
+            ? this.adjudicationResource.submissionAction(id, SubmissionAction.ENABLE_EDITING)
             : EMPTY
         ),
         exhaustMap(() => this.adjudicationResource.enrollee(id))

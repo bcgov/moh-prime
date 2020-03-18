@@ -7,13 +7,18 @@ namespace Prime.Services
 {
     public class BusinessEventService : BaseService, IBusinessEventService
     {
-        public BusinessEventService(
-            ApiDbContext context, IHttpContextAccessor httpContext) : base(context, httpContext)
-        { }
+        private readonly IAdminService _adminService;
 
-        public async Task<BusinessEvent> CreateStatusChangeEventAsync(int enrolleeId, string description, int? adminId = null)
+        public BusinessEventService(ApiDbContext context, IHttpContextAccessor httpContext,
+            IAdminService adminService)
+            : base(context, httpContext)
         {
-            var businessEvent = this.CreateBusinessEvent(BusinessEventType.STATUS_CHANGE_CODE, enrolleeId, description, adminId);
+            _adminService = adminService;
+        }
+
+        public async Task<BusinessEvent> CreateStatusChangeEventAsync(int enrolleeId, string description)
+        {
+            var businessEvent = await CreateBusinessEvent(BusinessEventType.STATUS_CHANGE_CODE, enrolleeId, description);
             _context.BusinessEvents.Add(businessEvent);
             var created = await _context.SaveChangesAsync();
 
@@ -25,10 +30,9 @@ namespace Prime.Services
             return businessEvent;
         }
 
-
-        public async Task<BusinessEvent> CreateEmailEventAsync(int enrolleeId, string description, int? adminId = null)
+        public async Task<BusinessEvent> CreateEmailEventAsync(int enrolleeId, string description)
         {
-            var businessEvent = this.CreateBusinessEvent(BusinessEventType.EMAIL_CODE, enrolleeId, description, adminId);
+            var businessEvent = await CreateBusinessEvent(BusinessEventType.EMAIL_CODE, enrolleeId, description);
             _context.BusinessEvents.Add(businessEvent);
             var created = await _context.SaveChangesAsync();
 
@@ -40,25 +44,23 @@ namespace Prime.Services
             return businessEvent;
         }
 
-
-        public async Task<BusinessEvent> CreateNoteEventAsync(int enrolleeId, string description, int? adminId = null)
+        public async Task<BusinessEvent> CreateNoteEventAsync(int enrolleeId, string description)
         {
-            var businessEvent = this.CreateBusinessEvent(BusinessEventType.NOTE_CODE, enrolleeId, description, adminId);
+            var businessEvent = await CreateBusinessEvent(BusinessEventType.NOTE_CODE, enrolleeId, description);
             _context.BusinessEvents.Add(businessEvent);
             var created = await _context.SaveChangesAsync();
 
             if (created < 1)
             {
-                throw new InvalidOperationException("Could not create email business event.");
+                throw new InvalidOperationException("Could not create note business event.");
             };
 
             return businessEvent;
         }
 
-
-        public async Task<BusinessEvent> CreateAdminClaimEventAsync(int enrolleeId, string description, int? adminId = null)
+        public async Task<BusinessEvent> CreateAdminClaimEventAsync(int enrolleeId, string description)
         {
-            var businessEvent = this.CreateBusinessEvent(BusinessEventType.ADMIN_CLAIM_CODE, enrolleeId, description, adminId);
+            var businessEvent = await CreateBusinessEvent(BusinessEventType.ADMIN_CLAIM_CODE, enrolleeId, description);
             _context.BusinessEvents.Add(businessEvent);
             var created = await _context.SaveChangesAsync();
 
@@ -70,9 +72,26 @@ namespace Prime.Services
             return businessEvent;
         }
 
-
-        private BusinessEvent CreateBusinessEvent(int BusinessEventTypeCode, int enrolleeId, string description, int? adminId = null)
+        public async Task<BusinessEvent> CreateEnrolleeEventAsync(int enrolleeId, string description)
         {
+            var businessEvent = await this.CreateBusinessEvent(BusinessEventType.ENROLLEE_CODE, enrolleeId, description);
+            _context.BusinessEvents.Add(businessEvent);
+            var created = await _context.SaveChangesAsync();
+
+            if (created < 1)
+            {
+                throw new InvalidOperationException("Could not create enrollee business event.");
+            };
+
+            return businessEvent;
+        }
+
+        private async Task<BusinessEvent> CreateBusinessEvent(int BusinessEventTypeCode, int enrolleeId, string description)
+        {
+            var userId = _httpContext.HttpContext.User.GetPrimeUserId();
+            Admin admin = await _adminService.GetAdminForUserIdAsync(userId);
+            int? adminId = admin?.Id;
+
             var businessEvent = new BusinessEvent
             {
                 EnrolleeId = enrolleeId,
