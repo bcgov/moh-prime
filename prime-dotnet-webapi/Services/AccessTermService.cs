@@ -99,7 +99,9 @@ namespace Prime.Services
 
             if (year != 0)
             {
-                accessTerms = accessTerms.Where(at => at.AcceptedDate.HasValue && at.AcceptedDate.Value.Year == year).ToList();
+                accessTerms = accessTerms
+                    .Where(at => at.AcceptedDate.HasValue && at.AcceptedDate.Value.Year == year)
+                    .ToList();
             }
 
             accessTerms.ForEach(at =>
