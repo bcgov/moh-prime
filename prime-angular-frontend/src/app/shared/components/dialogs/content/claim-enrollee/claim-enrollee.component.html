@@ -14,5 +14,6 @@
 <mat-menu #menu="matMenu">
   <button mat-menu-item
           (click)="claim(adjudicator.id)"
-          *ngFor="let adjudicator of adjudicators | async">{{ adjudicator.lastName }}, {{ adjudicator.firstName }}</button>
+          *ngFor="let adjudicator of adjudicators$ | async">{{ adjudicator.lastName }},
+    {{ adjudicator.firstName }}</button>
 </mat-menu>
