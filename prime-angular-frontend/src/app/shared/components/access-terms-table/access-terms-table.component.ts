@@ -8,8 +8,9 @@ import { MatTableDataSource } from '@angular/material';
   styleUrls: ['./access-terms-table.component.scss']
 })
 export class AccessTermsTableComponent implements OnInit {
-  @Input() dataSource: MatTableDataSource<AccessTerm>;
-  @Input() enrolmentRoute: string;
+  @Input() public dataSource: MatTableDataSource<AccessTerm>;
+  @Input() public enrolmentRoute: string;
+
   public columns: string[];
 
   constructor(
@@ -17,6 +18,5 @@ export class AccessTermsTableComponent implements OnInit {
     this.columns = ['current', 'applicationDate', 'approvalDate', 'actions'];
   }
 
-  public ngOnInit() {
-  }
+  public ngOnInit() { }
 }

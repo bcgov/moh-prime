@@ -1,11 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { LoggerService } from '@core/services/logger.service';
-import { ToastService } from '@core/services/toast.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+
+import { Subscription, Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+
+import moment from 'moment';
+
 import { AccessTerm } from '@shared/models/access-term.model';
-import { MatTableDataSource } from '@angular/material';
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { MatSelectChange, yearsPerRow } from '@angular/material';
 
 @Component({
   selector: 'app-enrollee-access-terms',
@@ -13,35 +18,41 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
   styleUrls: ['./enrollee-access-terms.component.scss']
 })
 export class EnrolleeAccessTermsComponent implements OnInit {
-  public dataSource: MatTableDataSource<AccessTerm>;
   public busy: Subscription;
-  public columns: string[];
+  public accessTerms: AccessTerm[];
+  public years: number[];
+  public currentYear: number;
+
+  public AdjudicationRoutes = AdjudicationRoutes;
 
   constructor(
-    protected router: Router,
-    protected route: ActivatedRoute,
-    private enrolmentResource: EnrolmentResource,
-    private logger: LoggerService,
-    private toastService: ToastService
+    private route: ActivatedRoute,
+    private adjudicationResource: AdjudicationResource
   ) {
+    this.getYears();
+  }
+
+  public onChange({ value: year }: MatSelectChange) {
+    this.getAccessTerms(year);
   }
 
   public ngOnInit() {
-    this.getAccessTerms();
+    this.getAccessTerms(this.currentYear);
   }
 
-  private getAccessTerms() {
+  private getAccessTerms(year: number = null) {
     const enrolleeId = this.route.snapshot.params.id;
-    this.busy = this.enrolmentResource.getAccessTerms(enrolleeId)
-      .subscribe(
-        (accessTerms: AccessTerm[]) => {
-          this.logger.info('ACCESS TERMS', accessTerms);
-          this.dataSource = new MatTableDataSource<AccessTerm>(accessTerms);
-        },
-        (error: any) => {
-          this.toastService.openErrorToast('Access Terms could not be retrieved');
-          this.logger.error('[ADJUDICATION] EnrolleeAccessTerms::getAccessTerms error has occurred: ', error);
-        }
-      );
+    this.busy = this.adjudicationResource.getAccessTerms(enrolleeId, year)
+      .subscribe((accessTerms: AccessTerm[]) => this.accessTerms = accessTerms);
+  }
+
+  private getYears() {
+    const initialYear = 2020; // Deployed to production
+    this.currentYear = +moment().format('YYYY');
+    this.years = [];
+
+    for (let i = this.currentYear; i >= initialYear; i--) {
+      this.years.push(i);
+    }
   }
 }

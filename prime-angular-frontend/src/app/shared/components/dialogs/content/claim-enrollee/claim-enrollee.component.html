@@ -1,0 +1,20 @@
+<span>You can unclaim the enrollee or assign them to a colleague.</span>
+
+<div class="mt-4">
+  <button mat-flat-button
+          color="primary"
+          (click)="onDisclaim()"
+          class="mr-4">Unclaim Enrollee</button>
+  <button mat-flat-button
+          color="primary"
+          [matMenuTriggerFor]="menu"
+          class="">Assign To...</button>
+</div>
+
+<mat-menu #menu="matMenu">
+  <button mat-menu-item
+          (click)="onClaim(adjudicator.id)"
+          *ngFor="let adjudicator of adjudicators$ | async">{{ adjudicator.lastName }},
+    {{ adjudicator.firstName }}
+  </button>
+</mat-menu>

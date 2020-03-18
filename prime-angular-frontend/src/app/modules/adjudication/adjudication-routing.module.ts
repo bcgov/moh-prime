@@ -18,6 +18,8 @@ import { EnrolleeProfileVersionComponent } from './pages/enrollee-profile-versio
 import { EnrolleeAccessTermsComponent } from './pages/enrollee-access-terms/enrollee-access-terms.component';
 import { EnrolleeAccessTermComponent } from './pages/enrollee-access-term/enrollee-access-term.component';
 import { EnrolleeAccessTermEnrolmentComponent } from './pages/enrollee-access-term-enrolment/enrollee-access-term-enrolment.component';
+import { EnrolleeEventsComponent } from './pages/enrollee-events/enrollee-events.component';
+import { EnrolleeReviewStatusComponent } from './pages/enrollee-review-status/enrollee-review-status.component';
 
 const routes: Routes = [
   {
@@ -31,7 +33,7 @@ const routes: Routes = [
     resolve: [ConfigResolver],
     children: [
       {
-        path: AdjudicationRoutes.ENROLMENTS,
+        path: AdjudicationRoutes.ENROLLEES,
         children: [
           {
             path: '',
@@ -46,22 +48,22 @@ const routes: Routes = [
                 data: { title: 'Enrollee' }
               },
               {
-                path: 'adjudicator-notes',
+                path: AdjudicationRoutes.ENROLLEE_ADJUDICATOR_NOTES,
                 component: AdjudicatorNotesComponent,
                 data: { title: 'Adjudicator Notes' }
               },
               {
-                path: 'limits-conditions-clauses',
+                path: AdjudicationRoutes.ENROLLEE_LIMITS_CONDITIONS,
                 component: LimitsConditionsClausesComponent,
                 data: { title: 'Limits and Conditions Clauses' }
               },
               {
-                path: AdjudicationRoutes.ACCESS_TERMS,
+                path: AdjudicationRoutes.ENROLLEE_TERMS_HISTORY,
                 children: [
                   {
                     path: '',
                     component: EnrolleeAccessTermsComponent,
-                    data: { title: 'Enrollee Access Terms' }
+                    data: { title: 'Terms of Access History' }
                   },
                   {
                     path: ':hid',
@@ -69,19 +71,19 @@ const routes: Routes = [
                       {
                         path: '',
                         component: EnrolleeAccessTermComponent,
-                        data: { title: 'Enrollee Access Term' }
+                        data: { title: 'Terms of Access' }
                       },
                       {
-                        path: AdjudicationRoutes.ENROLMENT,
+                        path: AdjudicationRoutes.ENROLLEE,
                         component: EnrolleeAccessTermEnrolmentComponent,
-                        data: { title: 'Access Term Enrolment' }
+                        data: { title: 'Enrolment' }
                       },
                     ]
                   },
                 ],
               },
               {
-                path: 'history',
+                path: AdjudicationRoutes.ENROLLEE_PROFILE_HISTORY,
                 children: [
                   {
                     path: '',
@@ -94,6 +96,26 @@ const routes: Routes = [
                     data: { title: 'Enrolment History' }
                   }
                 ]
+              },
+              {
+                path: AdjudicationRoutes.ENROLLEE_EVENTS,
+                children: [
+                  {
+                    path: '',
+                    component: EnrolleeEventsComponent,
+                    data: { title: 'Enrolment Events' }
+                  }
+                ]
+              },
+              {
+                path: AdjudicationRoutes.ENROLLEE_REVIEW_STATUS,
+                children: [
+                  {
+                    path: '',
+                    component: EnrolleeReviewStatusComponent,
+                    data: { title: 'Enrolment Review Status' }
+                  }
+                ]
               }
             ]
           }
@@ -101,7 +123,7 @@ const routes: Routes = [
       },
       {
         path: '', // Equivalent to `/` and alias for `enrolments`
-        redirectTo: AdjudicationRoutes.ENROLMENTS,
+        redirectTo: AdjudicationRoutes.ENROLLEES,
         pathMatch: 'full'
       }
     ]

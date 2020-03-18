@@ -1,8 +1,48 @@
-<app-page>
+<app-adjudication-container [content]="content">
 
   <app-page-header>PRIME History</app-page-header>
 
-  <app-access-terms-table [dataSource]="dataSource"
-                          enrolmentRoute="enrolment"></app-access-terms-table>
+  <ng-template #content>
 
-</app-page>
+    <p>View the history of the signed TOA's and the Enrolment associated with the each signed TOA</p>
+
+    <mat-form-field (selectionChange)="onChange($event)">
+      <mat-label>Filter By Year</mat-label>
+      <mat-select [value]="currentYear">
+        <mat-option *ngFor="let year of years"
+                    [value]="year">
+          {{ year }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <ng-container *ngFor="let accessTerm of accessTerms">
+
+      <mat-card class="card-width mb-4">
+        <mat-card-header>
+          <mat-card-title class="no-avatar">
+            <small class="d-block">Applied {{ accessTerm.createdDate | formatDate: 'MMMM Do YYYY' }}</small>
+            {{ accessTerm.createdDate | formatDate: 'YYYY' }} Enrolment
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="mb-0">
+          <p class="text-muted">
+            This PharmaNet enrolment was approved on {{ accessTerm.acceptedDate | formatDate: 'MMMM Do YYYY' }}
+          </p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button
+                  class="mb-2 mr-1"
+                  color="primary"
+                  [routerLink]="[accessTerm.id]">View Terms of Access</button>
+          <button mat-button
+                  class="mb-2 mx-0"
+                  color="primary"
+                  [routerLink]="[accessTerm.id, AdjudicationRoutes.ENROLLEE]">View Enrolment</button>
+        </mat-card-actions>
+      </mat-card>
+
+    </ng-container>
+  </ng-template>
+
+</app-adjudication-container>
