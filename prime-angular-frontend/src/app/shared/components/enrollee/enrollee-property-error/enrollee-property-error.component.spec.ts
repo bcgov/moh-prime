@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EnrolleePropertyErrorComponent } from './enrollee-property-error.component';
+import { SharedModule } from '@shared/shared.module';
 
 describe('EnrolleePropertyErrorComponent', () => {
   let component: EnrolleePropertyErrorComponent;
@@ -8,9 +9,12 @@ describe('EnrolleePropertyErrorComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EnrolleePropertyErrorComponent ]
+      imports: [
+        SharedModule
+      ],
+      declarations: []
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
