@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Prime.Models;
 
@@ -18,9 +19,30 @@ namespace Prime.Services.Rules
     /// </summary>
     public class CurrentToaRule : MinorUpdateRule
     {
-        public override Task<bool> ProcessRule(Enrollee enrollee)
+        private readonly IAccessTermService _accessTermService;
+
+        public CurrentToaRule(IAccessTermService accessTermService)
         {
-            throw new System.NotImplementedException();
+            _accessTermService = accessTermService;
+        }
+
+        public override async Task<bool> ProcessRule(Enrollee enrollee)
+        {
+            if (enrollee.AccessTerms == null)
+            {
+                return false;
+            }
+
+            var signedToa = enrollee.AccessTerms
+                .OrderByDescending(at => at.AcceptedDate)
+                .FirstOrDefault(at => at.AcceptedDate != null);
+
+            if (signedToa == null)
+            {
+                return false;
+            }
+
+            return await _accessTermService.IsCurrentAsync(signedToa.Id);
         }
     }
 
