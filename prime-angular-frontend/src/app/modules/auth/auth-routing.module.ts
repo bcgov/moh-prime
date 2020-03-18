@@ -9,6 +9,7 @@ import { AuthRoutes } from './auth.routes';
 
 import { InfoComponent } from './pages/info/info.component';
 import { AdminComponent } from './pages/admin/admin.component';
+import { SiteComponent } from './pages/site/site.component';
 
 const routes: Routes = [
   {
@@ -28,6 +29,11 @@ const routes: Routes = [
         path: AuthRoutes.ADMIN,
         component: AdminComponent,
         data: { title: 'Welcome to PRIME' }
+      },
+      {
+        path: AuthRoutes.SITE,
+        component: SiteComponent,
+        data: { title: 'Welcome to PRIME - Site Registration' }
       },
       {
         path: '', // Equivalent to `/` and alias for `info`

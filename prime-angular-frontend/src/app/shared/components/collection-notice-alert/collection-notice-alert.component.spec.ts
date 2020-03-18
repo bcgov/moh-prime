@@ -26,9 +26,6 @@ describe('CollectionNoticeAlertComponent', () => {
           RouterTestingModule,
           SharedModule
         ],
-        declarations: [
-          CollectionNoticeAlertComponent
-        ],
         providers: [
           {
             provide: APP_CONFIG,
