@@ -16,7 +16,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class AccessTermsComponent extends BaseEnrolmentPage implements OnInit {
   public dataSource: MatTableDataSource<AccessTerm>;
-  public busy: Subscription;
   public columns: string[];
 
   constructor(

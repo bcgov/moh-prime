@@ -1,13 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material';
 
 import { Subscription } from 'rxjs';
 
-import { LoggerService } from '@core/services/logger.service';
-import { ToastService } from '@core/services/toast.service';
-
-import { EnrolmentProfileVersion } from '@shared/models/enrollee-profile-history.model';
+import { HttpEnrolleeProfileVersion } from '@shared/models/enrollee-profile-history.model';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 @Component({
@@ -17,34 +14,21 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 })
 export class EnrolleeProfileVersionsComponent implements OnInit {
   public busy: Subscription;
+  public dataSource: MatTableDataSource<HttpEnrolleeProfileVersion>;
   public columns: string[];
-  public dataSource: MatTableDataSource<EnrolmentProfileVersion>;
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private adjudicationResource: AdjudicationResource,
-    private toastService: ToastService,
-    private logger: LoggerService
   ) {
     this.columns = ['name', 'createdDate', 'actions'];
   }
 
-  public routeTo() {
-    this.router.navigate(['../../'], { relativeTo: this.route.parent });
-  }
-
   public ngOnInit() {
     const enrolleeId = this.route.snapshot.params.id;
-    this.busy = this.adjudicationResource
-      .enrolleeProfileVersions(enrolleeId)
-      .subscribe(
-        (enrolmentProfileVersions: EnrolmentProfileVersion[]) =>
-          this.dataSource = new MatTableDataSource<EnrolmentProfileVersion>(enrolmentProfileVersions),
-        (error: any) => {
-          this.toastService.openErrorToast('Enrollee history could not be retrieved');
-          this.logger.error('[Adjudication] EnrolleeProfileHistories::ngOnInit error has occurred: ', error);
-        }
+    this.busy = this.adjudicationResource.getEnrolleeProfileVersions(enrolleeId)
+      .subscribe((enrolleeProfileVersions: HttpEnrolleeProfileVersion[]) =>
+        this.dataSource = new MatTableDataSource<HttpEnrolleeProfileVersion>(enrolleeProfileVersions)
       );
   }
 }

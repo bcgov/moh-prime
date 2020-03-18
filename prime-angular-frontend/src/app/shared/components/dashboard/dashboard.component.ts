@@ -294,7 +294,7 @@ export class DashboardComponent implements OnInit {
           {
             name: 'Enrolments',
             icon: 'format_list_bulleted',
-            route: AdjudicationRoutes.ENROLMENTS,
+            route: AdjudicationRoutes.ENROLLEES,
             showItem: true
           }
         ]

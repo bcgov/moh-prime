@@ -76,12 +76,17 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     } else {
       this.toastService.openErrorToast('Your enrolment has an error that needs to be corrected before you will be able to submit');
 
-      console.log('DEMOGRAPHIC', this.enrolmentStateService.isProfileInfoValid());
-      console.log('REGULATORY', this.enrolmentStateService.isRegulatoryValid());
-      console.log('JOBS', this.enrolmentStateService.isJobsValid());
-      console.log('ORGANIZATION', this.enrolmentStateService.isOrganizationValid());
-      console.log('SELF DECLARATION', this.enrolmentStateService.isSelfDeclarationValid());
+      this.logger.warn('DEMOGRAPHIC', this.enrolmentStateService.isProfileInfoValid());
+      this.logger.warn('REGULATORY', this.enrolmentStateService.isRegulatoryValid());
+      this.logger.warn('JOBS', this.enrolmentStateService.isJobsValid());
+      this.logger.warn('HAS_REG_OR_JOB', this.enrolmentStateService.hasRegOrJob());
+      this.logger.warn('SELF DECLARATION', this.enrolmentStateService.isSelfDeclarationValid());
+      this.logger.warn('ORGANIZATION', this.enrolmentStateService.isOrganizationValid());
     }
+  }
+
+  public hasRegOrJob(): boolean {
+    return this.enrolmentStateService.hasRegOrJob();
   }
 
   public routeTo(routePath: EnrolmentRoutes, navigationExtras: NavigationExtras = {}) {

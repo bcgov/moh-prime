@@ -2,15 +2,15 @@
 
   <app-page-header>Enrolment</app-page-header>
 
-  <app-enrollee-review *ngIf="enrolment"
-                       [enrolment]="enrolment"></app-enrollee-review>
+  <app-enrollee-review *ngIf="enrollee"
+                       [enrolment]="enrollee"></app-enrollee-review>
 
   <div class="row justify-content-between">
     <div class="col pt-4">
 
       <button mat-stroked-button
               type="button"
-              (click)="routeToEnrolments()">Back</button>
+              (click)="routeRelativeTo(['../'])">Back</button>
 
     </div>
   </div>

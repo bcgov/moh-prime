@@ -1,46 +1,125 @@
 import { Component, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { EnrolmentProfileVersion } from '@shared/models/enrollee-profile-history.model';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { HttpEnrollee, Enrolment } from '@shared/models/enrolment.model';
+import { AbstractComponent } from '@shared/classes/abstract-component';
+import { HttpEnrolleeProfileVersion, EnrolmentProfileVersion } from '@shared/models/enrollee-profile-history.model';
+
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
-import { ToastService } from '@core/services/toast.service';
-import { LoggerService } from '@core/services/logger.service';
+import { Address } from '@enrolment/shared/models/address.model';
 
 @Component({
   selector: 'app-enrollee-access-term-enrolment',
   templateUrl: './enrollee-access-term-enrolment.component.html',
   styleUrls: ['./enrollee-access-term-enrolment.component.scss']
 })
-export class EnrolleeAccessTermEnrolmentComponent implements OnInit {
+export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent implements OnInit {
   public busy: Subscription;
+  // TODO replace when Enrolemnt is refactored out of the EnrolmentModule
+  // public enrolleeProfileVersion: HttpEnrolleeProfileVersion;
   public enrolmentProfileHistory: EnrolmentProfileVersion;
 
   constructor(
     protected route: ActivatedRoute,
     protected router: Router,
     private adjudicationResource: AdjudicationResource,
-    private toastService: ToastService,
-    private logger: LoggerService,
-  ) { }
-
-  public routeTo() {
-    this.router.navigate(
-      ['../'],
-      { relativeTo: this.route.parent }
-    );
+  ) {
+    super(route, router);
   }
 
   public ngOnInit() {
     const enrolleeId = this.route.snapshot.params.id;
     const accessTermId = this.route.snapshot.params.hid;
-    this.busy = this.adjudicationResource
-      .getEnrolmentProfileForAccessTerm(enrolleeId, accessTermId)
-      .subscribe(
-        (enrolmentProfileVersion: EnrolmentProfileVersion) => this.enrolmentProfileHistory = enrolmentProfileVersion,
-        (error: any) => {
-          this.toastService.openErrorToast('Enrollee history could not be retrieved');
-          this.logger.error('[ADJUDICATION] EnrolleeAccessTermEnrolmentComponent::ngOnInit error has occurred: ', error);
-        }
+    this.busy = this.adjudicationResource.getEnrolmentForAccessTerm(enrolleeId, accessTermId)
+      .pipe(
+        map((enrolmentProfileVersion: HttpEnrolleeProfileVersion) => this.enrolleeVersionAdapterResponse(enrolmentProfileVersion))
+      )
+      // TODO replace when Enrolemnt is refactored out of the EnrolmentModule
+      // .subscribe((enrolleeProfileVersion: HttpEnrolleeProfileVersion) =>
+      //   this.enrolleeProfileVersion = enrolleeProfileVersion
+      // );
+      .subscribe((enrolmentProfileVersion: EnrolmentProfileVersion) =>
+        this.enrolmentProfileHistory = enrolmentProfileVersion
       );
+  }
+
+  private enrolleeVersionAdapterResponse(
+    { id, enrolleeId, profileSnapshot, createdDate }: HttpEnrolleeProfileVersion
+  ): EnrolmentProfileVersion {
+    return {
+      id,
+      enrolleeId,
+      profileSnapshot: this.enrolleeAdapterResponse(profileSnapshot),
+      createdDate
+    };
+  }
+
+  private enrolleeAdapterResponse(enrollee: HttpEnrollee): Enrolment {
+    if (!enrollee.mailingAddress) {
+      enrollee.mailingAddress = new Address();
+    }
+
+    if (!enrollee.certifications) {
+      enrollee.certifications = [];
+    }
+
+    if (!enrollee.jobs) {
+      enrollee.jobs = [];
+    }
+
+    if (!enrollee.organizations) {
+      enrollee.organizations = [];
+    }
+
+    return this.enrolmentAdapter(enrollee);
+  }
+
+  private enrolmentAdapter(enrollee: HttpEnrollee): Enrolment {
+    const {
+      userId,
+      firstName,
+      middleName,
+      lastName,
+      preferredFirstName,
+      preferredMiddleName,
+      preferredLastName,
+      dateOfBirth,
+      gpid,
+      hpdid,
+      physicalAddress,
+      mailingAddress,
+      contactEmail,
+      contactPhone,
+      voicePhone,
+      voiceExtension,
+      ...remainder
+    } = enrollee;
+
+    return {
+      enrollee: {
+        userId,
+        firstName,
+        middleName,
+        lastName,
+        preferredFirstName,
+        preferredMiddleName,
+        preferredLastName,
+        dateOfBirth,
+        gpid,
+        hpdid,
+        physicalAddress,
+        mailingAddress,
+        contactEmail,
+        contactPhone,
+        voicePhone,
+        voiceExtension
+      },
+      // Provide the default and allow it to be overridden
+      collectionNoticeAccepted: false,
+      ...remainder
+    };
   }
 }

@@ -1,0 +1,18 @@
+<div class="table-responsive">
+  <table class="table">
+    <tbody>
+      <tr *ngFor="let item of items$ | async">
+        <th class="text-right">
+          <div class="text-nowrap">
+            {{ item.date | formatDate }}
+          </div>
+          <small *ngIf="hasTime"
+                 class="text-mute font-weight-normal">
+            {{ item.date | formatDate: 'h:mm a' }}
+          </small>
+        </th>
+        <td>{{ item.content }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

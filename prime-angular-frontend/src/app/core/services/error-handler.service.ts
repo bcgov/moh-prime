@@ -32,7 +32,6 @@ export class ErrorHandlerService implements ErrorHandler {
       }
     } else {
       // Client error has occurred (Angular Error, ReferenceError...)
-      router.navigate([], { queryParams: { error } });
     }
 
     const message = (error.message)
