@@ -12,7 +12,7 @@ namespace Prime.Configuration
                 return new[] {
                     // CPSBC
                     new License { Code = 1,  Weight = 1, Manual = false, Name = "Full - Family", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new License { Code = 2,  Weight = 2, Manual = false, Name = "Full - Specialty", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new License { Code = 2,  Weight = 2, Manual = false, Name = "Full - Speciality", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new License { Code = 5,  Weight = 3, Manual = false, Name = "Provisional - Family", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new License { Code = 6,  Weight = 4, Manual = false, Name = "Provisional - Speciality", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new License { Code = 9,  Weight = 5, Manual = true, Name = "Conditional - Practice Setting", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
@@ -33,7 +33,7 @@ namespace Prime.Configuration
                     new License { Code = 20, Weight = 20, Manual = true, Name = "Retired - Life ", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new License { Code = 24, Weight = 21, Manual = true, Name = "Assessment", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new License { Code = 18, Weight = 22, Manual = false, Name = "Emergency - Family", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new License { Code = 19, Weight = 23, Manual = false, Name = "Emergency - Specialty", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new License { Code = 19, Weight = 23, Manual = false, Name = "Emergency - Speciality", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new License { Code = 21, Weight = 24, Manual = true, Name = "Temporarily Inactive", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Pharmacy

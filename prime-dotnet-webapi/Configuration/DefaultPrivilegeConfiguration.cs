@@ -143,7 +143,7 @@ namespace Prime.Configuration
                     new DefaultPrivilege { LicenseCode = 1, PrivilegeId = 17, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new DefaultPrivilege { LicenseCode = 1, PrivilegeId = 19, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
-                    // Full - specialty
+                    // Full - speciality
                     new DefaultPrivilege { LicenseCode = 2, PrivilegeId = 5,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new DefaultPrivilege { LicenseCode = 2, PrivilegeId = 6,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new DefaultPrivilege { LicenseCode = 2, PrivilegeId = 7,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
