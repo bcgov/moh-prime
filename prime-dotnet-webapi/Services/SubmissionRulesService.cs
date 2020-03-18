@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 
 using Prime.Models;
+using Prime.ViewModels;
 using Prime.Services.Rules;
 
 namespace Prime.Services
@@ -24,7 +25,27 @@ namespace Prime.Services
         /// All rules must pass for this enrollee to qualify to be automatically adjudicated.
         /// Failing rules will add Status Reasons to the current status.
         /// </summary>
-        public async Task<bool> QualifiesForAutomaticAdjudication(Enrollee enrollee)
+        public async Task<bool> QualifiesForAutomaticAdjudicationAsync(Enrollee enrollee)
+        {
+            var rules = new List<AutomaticAdjudicationRule>
+            {
+                new SelfDeclarationRule(),
+                new AddressRule(),
+                new PharmanetValidationRule(_pharmanetApiService),
+                // TODO removed until after Community Practice
+                // new DeviceProviderRule(),
+                new LicenceClassRule(),
+                new AlwaysManualRule()
+            };
+
+            return await ProcessRules(rules, enrollee);
+        }
+
+        /// <summary>
+        /// All rules must pass for an update to be considered minor enough to not warrant going through the (Auto) adjudication proccess.
+        /// These rules will not alter the enrollee object.
+        /// </summary>
+        public async Task<bool> QualifiesAsMinorUpdateAsync(Enrollee enrollee, EnrolleeProfileViewModel profileUpdate)
         {
             var rules = new List<AutomaticAdjudicationRule>
             {
