@@ -10,7 +10,7 @@ export class ToastService {
   constructor(
     private snackBar: MatSnackBar
   ) {
-    this.duration = 2000; // ms
+    this.duration = 4000; // ms
   }
 
   /**
