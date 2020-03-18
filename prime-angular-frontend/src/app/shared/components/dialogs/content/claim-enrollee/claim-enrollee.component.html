@@ -3,7 +3,7 @@
 <div class="mt-4">
   <button mat-flat-button
           color="primary"
-          (click)="unClaim()"
+          (click)="onDisclaim()"
           class="mr-4">Unclaim Enrollee</button>
   <button mat-flat-button
           color="primary"
@@ -13,7 +13,8 @@
 
 <mat-menu #menu="matMenu">
   <button mat-menu-item
-          (click)="claim(adjudicator.id)"
+          (click)="onClaim(adjudicator.id)"
           *ngFor="let adjudicator of adjudicators$ | async">{{ adjudicator.lastName }},
-    {{ adjudicator.firstName }}</button>
+    {{ adjudicator.firstName }}
+  </button>
 </mat-menu>
