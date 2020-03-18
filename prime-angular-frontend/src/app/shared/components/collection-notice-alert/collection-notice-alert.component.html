@@ -1,8 +1,7 @@
 <ng-container *ngIf="show()">
 
   <ng-container *ngIf="isProfileCompleted; else fullPage">
-    <app-alert type="info"
-               icon="none">
+    <app-alert type="info">
       <ng-container #alertTitle
                     class="alert-title">Collection of Personal Information Notice</ng-container>
       <ng-container #alertContent
@@ -23,6 +22,7 @@
 </ng-template>
 
 <ng-template #collectionNotice>
+
   <p>
     The personal information you provide to the PRIME application is collected by the British Columbia Ministry of
     Health under the authority of s. 26(a) and 26(c) of the Freedom of Information and Protection of Privacy Act

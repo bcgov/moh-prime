@@ -7,6 +7,7 @@ export interface DialogOptions {
   message?: string;
   actionType?: 'primary' | 'accent' | 'warn';
   actionText?: string;
+  actionHide?: boolean;
   cancelText?: string;
   cancelHide?: boolean;
   component?: any;

@@ -398,6 +398,15 @@ namespace Prime.Migrations
                             Name = "Admin Claim",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = 5,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Enrollee",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
 
@@ -5247,6 +5256,43 @@ namespace Prime.Migrations
                     b.ToTable("EnrolmentStatusReason");
                 });
 
+            modelBuilder.Entity("Prime.Models.Feedback", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("Satisfied")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("route")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Feedback");
+                });
+
             modelBuilder.Entity("Prime.Models.GlobalClause", b =>
                 {
                     b.Property<int>("Id")
@@ -5471,7 +5517,7 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Manual = false,
-                            Name = "Provisional - Speciality",
+                            Name = "Provisional - Specialty",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Weight = 4
@@ -7534,7 +7580,7 @@ namespace Prime.Migrations
                             Code = 1,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Automatic",
+                            Name = "Automatically Adjudicated",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -7543,7 +7589,7 @@ namespace Prime.Migrations
                             Code = 2,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Manual",
+                            Name = "Manually Adjudicated",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -7552,7 +7598,7 @@ namespace Prime.Migrations
                             Code = 3,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "PharmaNet Error, Licence could not be Validated",
+                            Name = "PharmaNet Error, Licence could not be validated",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -7561,7 +7607,7 @@ namespace Prime.Migrations
                             Code = 4,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "College Licence not in PharmaNet",
+                            Name = "College Licence not in PharmaNet practitioner table",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -7570,7 +7616,7 @@ namespace Prime.Migrations
                             Code = 6,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Birthdate Discrepancy with PharmaNet College Licence",
+                            Name = "Birthdate discrepancy in PharmaNet practitioner table",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -7579,7 +7625,7 @@ namespace Prime.Migrations
                             Code = 5,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Name Discrepancy with PharmaNet College Licence",
+                            Name = "Name discrepancy in PharmaNet practitioner table",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -7588,7 +7634,7 @@ namespace Prime.Migrations
                             Code = 7,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Listed as Non-Practicing on PharmaNet College Licence",
+                            Name = "Listed as Non-Practicing in PharmaNet practitioner table",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -7606,7 +7652,7 @@ namespace Prime.Migrations
                             Code = 9,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Licence Class",
+                            Name = "Licence Class requires manual adjudication",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -7633,7 +7679,7 @@ namespace Prime.Migrations
                             Code = 12,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Always Manual Rule Set",
+                            Name = "Admin has flagged the applicant for manual adjudication",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });

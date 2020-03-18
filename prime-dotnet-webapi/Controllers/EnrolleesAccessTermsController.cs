@@ -34,16 +34,17 @@ namespace Prime.Controllers
 
         // GET: api/Enrollees/access-terms
         /// <summary>
-        /// Get the enrollee's Access Terms.
+        /// Get a list of the enrollee's access terms.
         /// </summary>
         /// <param name="enrolleeId"></param>
+        /// <param name="year"></param>
         [HttpGet("{enrolleeId}/access-terms", Name = nameof(GetAccessTerms))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<AccessTerm>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<AccessTerm>>> GetAccessTerms(int enrolleeId)
+        public async Task<ActionResult<IEnumerable<AccessTerm>>> GetAccessTerms(int enrolleeId, [FromQuery]int year)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
@@ -57,14 +58,14 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            var accessTerms = await _accessTermService.GetAcceptedAccessTerms(enrolleeId);
+            var accessTerms = await _accessTermService.GetAcceptedAccessTerms(enrolleeId, year);
 
             return Ok(ApiResponse.Result(accessTerms));
         }
 
         // GET: api/Enrollees/5/access-terms
         /// <summary>
-        /// Get the enrollee's term of access.
+        /// Get a specific access term for an enrollee.
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="accessTermId"></param>
@@ -100,7 +101,7 @@ namespace Prime.Controllers
 
         // GET: api/Enrollees/5/access-terms/latest?signed=true
         /// <summary>
-        /// Get the enrollee's term of access.
+        /// Get the latest access term for an enrollee.
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="signed"></param>
@@ -139,7 +140,7 @@ namespace Prime.Controllers
 
         // GET: api/Enrollees/5/access-terms/3/enrolment
         /// <summary>
-        /// Get the enrolment history used for the given access term
+        /// Get the enrolment used for the given access term
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="accessTermId"></param>

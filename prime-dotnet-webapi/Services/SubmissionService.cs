@@ -68,7 +68,7 @@ namespace Prime.Services
         public async Task UpdateAlwaysManualAsync(int enrolleeId, bool alwaysManual)
         {
             var enrollee = await _context.Enrollees
-               .SingleAsync(e => e.Id == enrolleeId);
+                .SingleAsync(e => e.Id == enrolleeId);
 
             enrollee.AlwaysManual = alwaysManual;
             await _context.SaveChangesAsync();
@@ -96,7 +96,7 @@ namespace Prime.Services
 
         private async Task ApproveApplicationAsync(Enrollee enrollee)
         {
-            var newStatus = enrollee.AddEnrolmentStatus(StatusType.Active);
+            var newStatus = enrollee.AddEnrolmentStatus(StatusType.RequiresToa);
             newStatus.AddStatusReason(StatusReason.MANUAL_CODE);
 
             await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee);

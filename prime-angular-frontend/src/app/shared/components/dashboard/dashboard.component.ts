@@ -18,6 +18,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
+import { SiteRoutes } from 'app/modules/site-registration/site-registration.routes';
 
 @Component({
   selector: 'app-dashboard',
@@ -80,11 +81,12 @@ export class DashboardComponent implements OnInit {
   }
 
   public async ngOnInit() {
-    // Initialize the side navigation based on the type of user
-    this.dashboardNavSections = this.getSideNavSections();
 
     // Initialize the sidenav with properties based on current viewport
     this.setSideNavProps(this.viewportService.device);
+
+    // Initialize the side navigation based on the type of user
+    this.dashboardNavSections = this.getSideNavSections();
 
     if (await this.authService.isEnrollee()) {
       // Listen for changes to the current enrolment status to update
@@ -116,9 +118,17 @@ export class DashboardComponent implements OnInit {
   }
 
   private getSideNavSections(): DashboardNavSection[] {
-    return (this.authService.hasAdminView())
-      ? this.getAdjudicationSideNavSections()
-      : this.getEnrolleeSideNavSections();
+
+    const currentBaseRoute = this.router.url.slice(1).split('/')[0];
+
+    if (this.authService.hasAdminView()) {
+      return this.getAdjudicationSideNavSections();
+      // TODO use of routes creates coupling between modules
+    } else if (this.authService.isRegistrant() && currentBaseRoute === AuthRoutes.SITE) {
+      return this.getRegistrantSideNavSections();
+    } else {
+      return this.getEnrolleeSideNavSections();
+    }
   }
 
   private getEnrolleeSideNavSections(): DashboardNavSection[] {
@@ -284,7 +294,24 @@ export class DashboardComponent implements OnInit {
           {
             name: 'Enrolments',
             icon: 'format_list_bulleted',
-            route: AdjudicationRoutes.ENROLMENTS,
+            route: AdjudicationRoutes.ENROLLEES,
+            showItem: true
+          }
+        ]
+      }
+    ];
+  }
+
+  private getRegistrantSideNavSections(): DashboardNavSection[] {
+    return [
+      {
+        header: 'Site Registration',
+        showHeader: false,
+        items: [
+          {
+            name: 'Site Registration',
+            icon: 'format_list_bulleted',
+            route: SiteRoutes.MULTIPLE_SITES,
             showItem: true
           }
         ]

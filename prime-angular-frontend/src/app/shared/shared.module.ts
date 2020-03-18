@@ -41,6 +41,7 @@ import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-
 import { AlertComponent } from '@shared/components/alert/alert.component';
 import { ProgressIndicatorComponent } from '@shared/components/progress-indicator/progress-indicator.component';
 import { EnrolleePropertyComponent } from '@shared/components/enrollee/enrollee-property/enrollee-property.component';
+import { EnrolleePropertyErrorComponent } from '@shared/components/enrollee/enrollee-property-error/enrollee-property-error.component';
 import { EnrolleeReviewComponent } from '@shared/components/enrollee/enrollee-review/enrollee-review.component';
 import { EnrolleeProfileComponent } from '@shared/components/enrollee/enrollee-profile/enrollee-profile.component';
 import { EnrolleeAddressComponent } from '@shared/components/enrollee/enrollee-address/enrollee-address.component';
@@ -55,6 +56,12 @@ import { MarkdownComponent } from '@shared/components/dialogs/content/markdown/m
 import { PrimeSupportEmailComponent } from '@shared/components/prime-support-email/prime-support-email.component';
 import { AccessTermsTableComponent } from './components/access-terms-table/access-terms-table.component';
 import { AccessTermComponent } from './components/access-term/access-term.component';
+import { NoteComponent } from './components/dialogs/content/note/note.component';
+import { ClaimEnrolleeComponent } from './components/dialogs/content/claim-enrollee/claim-enrollee.component';
+import { ManualFlagNoteComponent } from './components/dialogs/content/manual-flag-note/manual-flag-note.component';
+import { FeedbackComponent } from './components/dialogs/content/feedback/feedback.component';
+import { CollectionNoticeAlertComponent } from './components/collection-notice-alert/collection-notice-alert.component';
+import { PageFooterComponent } from './components/page-footer/page-footer.component';
 
 @NgModule({
   declarations: [
@@ -91,6 +98,7 @@ import { AccessTermComponent } from './components/access-term/access-term.compon
     EnrolleePrivilegesComponent,
     EnrolleeOrganizationsComponent,
     EnrolleePropertyComponent,
+    EnrolleePropertyErrorComponent,
     PrimeEmailComponent,
     PrimePhoneComponent,
     PrimeLogoComponent,
@@ -99,7 +107,13 @@ import { AccessTermComponent } from './components/access-term/access-term.compon
     MarkdownComponent,
     PrimeSupportEmailComponent,
     AccessTermsTableComponent,
-    AccessTermComponent
+    AccessTermComponent,
+    NoteComponent,
+    ClaimEnrolleeComponent,
+    ManualFlagNoteComponent,
+    FeedbackComponent,
+    CollectionNoticeAlertComponent,
+    PageFooterComponent
   ],
   imports: [
     CommonModule,
@@ -162,12 +176,18 @@ import { AccessTermComponent } from './components/access-term/access-term.compon
     PrimeSupportEmailComponent,
     AccessTermsTableComponent,
     AccessTermComponent,
+    CollectionNoticeAlertComponent,
+    PageFooterComponent
   ],
   entryComponents: [
     ConfirmDialogComponent,
     EnrolmentStatusReasonsComponent,
     ApproveEnrolmentComponent,
-    MarkdownComponent
+    MarkdownComponent,
+    NoteComponent,
+    ClaimEnrolleeComponent,
+    ManualFlagNoteComponent,
+    FeedbackComponent
   ]
 })
 export class SharedModule { }

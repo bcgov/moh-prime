@@ -54,6 +54,7 @@ namespace Prime
             services.AddScoped<IAccessTermService, AccessTermService>();
             services.AddScoped<IEnrolleeProfileVersionService, EnrolleeProfileVersionService>();
             services.AddScoped<IAdminService, AdminService>();
+            services.AddScoped<IFeedbackService, FeedbackService>();
             services.AddScoped<IBusinessEventService, BusinessEventService>();
             services.AddScoped<ISubmissionService, SubmissionService>();
 
@@ -108,7 +109,7 @@ namespace Prime
                 app.UseDeveloperExceptionPage();
             }
 
-            // this.ConfigureHealthCheck(app);
+            this.ConfigureHealthCheck(app);
 
             // TODO Turn on when there is an actual cert
             // app.UseHttpsRedirection();
@@ -133,7 +134,7 @@ namespace Prime
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                // endpoints.MapHealthChecks("/health");
+                endpoints.MapHealthChecks("/health");
             });
         }
 
