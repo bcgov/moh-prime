@@ -104,7 +104,7 @@ namespace Prime.Controllers
 
             var recipientEmail = _certificateService.GetPharmaNetProvisionerEmail(provisionerName, ref optionalEmail);
             var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrollee);
-            await _emailService.SendProvisionerLinkAsync(recipientEmail, createdToken, optionalEmail);
+            await _emailService.SendProvisionerLinkAsync(provisionerName, recipientEmail, createdToken, optionalEmail);
 
             var emailLogMessage = string.IsNullOrEmpty(optionalEmail)
                 ? "Provisioner link sent to email: " + recipientEmail
