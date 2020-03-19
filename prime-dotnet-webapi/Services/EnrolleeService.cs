@@ -394,15 +394,11 @@ namespace Prime.Services
                 .CountAsync();
         }
 
-        public async Task<Enrollee> UpdateEnrolleeAdjudicator(int enrolleeId, Guid adjudicatorUserId = default(Guid))
+        public async Task<Enrollee> UpdateEnrolleeAdjudicator(int enrolleeId, Admin admin = null)
         {
             var enrollee = await GetBaseEnrolleeQuery()
                 .Include(e => e.Adjudicator)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
-
-            // Admin is set to null if no adjudicatorUserId is provided
-            var admin = await _context.Admins
-                .SingleOrDefaultAsync(a => a.UserId == adjudicatorUserId);
 
             enrollee.Adjudicator = admin;
 
