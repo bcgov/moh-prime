@@ -160,5 +160,10 @@ namespace PrimeTests.Mocks
             bool inStatus = statusCodesToCheck.Cast<int>().Any(sc => sc == enrollee?.CurrentStatus?.StatusCode);
             return Task.FromResult(inStatus);
         }
+
+        public Task<IEnumerable<BusinessEvent>> GetEnrolleeBusinessEvents(int enrolleeId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
