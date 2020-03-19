@@ -15,6 +15,8 @@ namespace Prime.Models
 
         public bool Manual { get; set; }
 
+        public bool Validate { get; set; }
+
         [Required]
         public string Name { get; set; }
 
