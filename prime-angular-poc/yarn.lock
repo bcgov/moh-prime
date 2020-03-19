@@ -230,6 +230,13 @@
   dependencies:
     tslib "^1.9.0"
 
+"@auth0/angular-jwt@^3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@auth0/angular-jwt/-/angular-jwt-3.0.1.tgz#7b4dbfc160e0d7ea3f44d7f79d3865d9915ad9a0"
+  integrity sha512-hfWfgbpgtcvyU/agNxQ6cBk81mmASiNxQeZ6xn/3zJo8uLFHk2eQIy2yt2ztktcOQ6V2uc6GlKLRKjVIgyc1Sw==
+  dependencies:
+    url "^0.11.0"
+
 "@babel/code-frame@^7.5.5", "@babel/code-frame@^7.8.3":
   version "7.8.3"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.8.3.tgz#33e25903d7481181534e12ec0a25f16b6fcf419e"
@@ -916,6 +923,27 @@
     tree-kill "1.2.2"
     webpack-sources "1.4.3"
 
+"@ngx-progressbar/core@^5.3.2":
+  version "5.3.2"
+  resolved "https://registry.yarnpkg.com/@ngx-progressbar/core/-/core-5.3.2.tgz#d2e76034324d459dbbd7b9d89aa3b550db5e46f6"
+  integrity sha512-z0VzsJpgWxoU7wLXviCutXPXDop1Ry/SPOlVOtXHlkUGFAzHs3soDeXpTyigSdBB8Q16Nisow4EVuOKCByp6PQ==
+  dependencies:
+    tslib "^1.9.0"
+
+"@ngx-progressbar/http@^5.3.2":
+  version "5.3.2"
+  resolved "https://registry.yarnpkg.com/@ngx-progressbar/http/-/http-5.3.2.tgz#8c61245390fe9b5c0935d665c7f2920f07977c1b"
+  integrity sha512-QijNeXRw1bLdYQ3yU4UJnoWV/aMM3FWOq0FYVVjazMoXfirz3OgaI298TuBRKsA0OGYXSZ3p2VTiEKb/bIYf4g==
+  dependencies:
+    tslib "^1.9.0"
+
+"@ngx-progressbar/router@^5.3.2":
+  version "5.3.2"
+  resolved "https://registry.yarnpkg.com/@ngx-progressbar/router/-/router-5.3.2.tgz#b1ff7f1082e6e2ecd459a6a02973e334a3d9a797"
+  integrity sha512-oZSf88WQop2gJZGYpQsh+JpVylMeB2l5FutijWNjtZFQ8WT3UbnizhSg0zCipUX4sXr1TxEPWlEUzGnImj8wjQ==
+  dependencies:
+    tslib "^1.9.0"
+
 "@schematics/angular@8.3.23":
   version "8.3.23"
   resolved "https://registry.yarnpkg.com/@schematics/angular/-/angular-8.3.23.tgz#8f46c4673eca3fadc46b2d43c4367e5542be624e"
@@ -1186,9 +1214,9 @@ accepts@~1.3.4, accepts@~1.3.5, accepts@~1.3.7:
     negotiator "0.6.2"
 
 acorn@^6.2.1:
-  version "6.4.0"
-  resolved "https://registry.yarnpkg.com/acorn/-/acorn-6.4.0.tgz#b659d2ffbafa24baf5db1cdbb2c94a983ecd2784"
-  integrity sha512-gac8OEcQ2Li1dxIEWGZzsp2BitJxwkwcOm0zHAJLcPJaVvm58FRnk6RkuLRpU1EujipU2ZFODv2P9DLMfnV8mw==
+  version "6.4.1"
+  resolved "https://registry.yarnpkg.com/acorn/-/acorn-6.4.1.tgz#531e58ba3f51b9dacb9a6646ca4debf5b14ca474"
+  integrity sha512-ZVA9k326Nwrj3Cj9jlh3wGFutC2ZornPNARZwsNYqQYgN0EsV2d53w5RN/co65Ohn4sUAUtb1rSUAOD6XN9idA==
 
 adm-zip@^0.4.9:
   version "0.4.13"
@@ -1645,6 +1673,11 @@ bonjour@^3.5.0:
     dns-txt "^2.0.2"
     multicast-dns "^6.0.1"
     multicast-dns-service-types "^1.1.0"
+
+bootstrap@^4.4.1:
+  version "4.4.1"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.4.1.tgz#8582960eea0c5cd2bede84d8b0baf3789c3e8b01"
+  integrity sha512-tbx5cHubwE6e2ZG7nqM3g/FZ5PQEDMWmMGNrCUBVRPHXTJaH7CBDdsLeu3eCh3B1tzAxTnAbtmrzvWEvT2NNEA==
 
 brace-expansion@^1.1.7:
   version "1.1.11"
@@ -3055,6 +3088,11 @@ extsprintf@^1.2.0:
   resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.4.0.tgz#e2689f8f356fad62cca65a3a91c5df5f9551692f"
   integrity sha1-4mifjzVvrWLMplo6kcXfX5VRaS8=
 
+faker@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/faker/-/faker-4.1.0.tgz#1e45bbbecc6774b3c195fad2835109c6d748cc3f"
+  integrity sha1-HkW7vsxndLPBlfrSg1EJxtdIzD8=
+
 fast-deep-equal@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-2.0.1.tgz#7b05218ddf9667bf7f370bf7fdb2cb15fdd0aa49"
@@ -4447,6 +4485,18 @@ karma@~4.1.0:
     tmp "0.0.33"
     useragent "2.3.0"
 
+keycloak-angular@^7.0.1:
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/keycloak-angular/-/keycloak-angular-7.2.0.tgz#6dcb2eb5e757a52617e55ca1781071ac0c4def62"
+  integrity sha512-hzYzL2gNuQyBP6drgVAjSb+fZjdjkU8DtrroB8Pd0xhN340D6WcTFx0/sMId4mhDCwyh+uV6HXpKm5/lE5rpUg==
+  dependencies:
+    tslib "^1.9.0"
+
+keycloak-js@^6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/keycloak-js/-/keycloak-js-6.0.1.tgz#329a5e77210dfc4a7d4acf96f95dd0132455bea3"
+  integrity sha512-p02dBCA9pSH1xvTmRIEMdeMz00eCGKmZF+rjMeqrkiQD4xhXkzu50J9sQjaANolMlLhazOtfql70+N5QWm8Upg==
+
 killable@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/killable/-/killable-1.0.1.tgz#4c8ce441187a061c7474fb87ca08e2a638194892"
@@ -4954,6 +5004,18 @@ neo-async@^2.5.0, neo-async@^2.6.1:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.1.tgz#ac27ada66167fa8849a6addd837f6b189ad2081c"
   integrity sha512-iyam8fBuCUpWeKPGpaNMetEocMt364qkCsfL9JuhjXX6dRnguRVOfk2GZaDpPjcOKiiXCPINZC1GczQ7iTq3Zw==
+
+ng-busy@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/ng-busy/-/ng-busy-8.0.0.tgz#7a914de73467a506178b9fcaf2fc45c91ab0ddc4"
+  integrity sha512-vYZXsf+mQCgcXTJaTxYhZ0NGyEWj9DSJBr0TQ1c8Pmtvn04WNmq+URuDWcFJjwbqg3ZqS1VVqDolo2vuaiIxgA==
+  dependencies:
+    tslib "^1.9.0"
+
+ngx-progressbar@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/ngx-progressbar/-/ngx-progressbar-2.1.1.tgz#cecd88435ac660be445caeaded19b85f4a1e47be"
+  integrity sha512-RyfW1Dhp9G+QZRhp0SsVZJOxvfXHq335aea9rAwVOORSzch6NFBuE+XYx3etlEh2avOYfigyWUX8vAlEXrHXKQ==
 
 nice-try@^1.0.4:
   version "1.0.5"
