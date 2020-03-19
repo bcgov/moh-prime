@@ -1,0 +1,31 @@
+<app-enrollee-page [busy]="busy">
+
+  <app-collection-notice-alert></app-collection-notice-alert>
+
+  <app-page-header>PharmaNet Enrolment</app-page-header>
+
+  <div class="mb-4">
+    <app-alert type="success">
+      <ng-container #alertTitle
+                    class="alert-title">
+        Your changes have been saved
+      </ng-container>
+    </app-alert>
+  </div>
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Next Steps</ng-container>
+  </app-page-subheader>
+
+  <p>
+    You have made changes to your profile, no further actions are needed.
+  </p>
+
+  <p class="mb-4">
+    Questions about your enrolment should be directed to:
+  </p>
+
+  <app-prime-phone></app-prime-phone><br />
+  <app-prime-support-email></app-prime-support-email>
+
+</app-enrollee-page>
