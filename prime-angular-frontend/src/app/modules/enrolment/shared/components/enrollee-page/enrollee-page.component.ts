@@ -1,12 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { Subscription, EMPTY, Observable } from 'rxjs';
+import { Subscription, EMPTY } from 'rxjs';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { FeedbackComponent, Feedback } from '@shared/components/dialogs/content/feedback/feedback.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { exhaustMap, map } from 'rxjs/operators';
+import { exhaustMap } from 'rxjs/operators';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { FeedbackResourceService } from '@shared/services/feedback-resource.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
@@ -42,15 +41,18 @@ export class EnrolleePageComponent implements OnInit {
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        map((result: { output: Feedback }) => {
+        exhaustMap((result: { output: Feedback }) => {
           if (result) {
+            if (result.output.satisfied === undefined && result.output.comment === undefined) {
+              this.toastService.openSuccessToast('No Feedback entered.');
+              return EMPTY;
+            }
             result.output.enrolleeId = this.enrolmentService.enrolment.id;
             result.output.route = this.router.url;
-            return result.output;
+            return this.feedbackResource.createFeedback(result.output);
           }
           return EMPTY;
         }),
-        exhaustMap((feedback: Feedback) => this.feedbackResource.createFeedback(feedback))
       )
       .subscribe(
         (feedback: Feedback) => {
