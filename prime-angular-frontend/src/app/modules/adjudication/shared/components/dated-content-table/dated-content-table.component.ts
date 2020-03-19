@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 export interface DateContent {
   date: string;
+  name?: string;
   content: string;
 }
 
