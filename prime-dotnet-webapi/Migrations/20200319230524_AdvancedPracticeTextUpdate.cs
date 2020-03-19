@@ -2,7 +2,7 @@
 
 namespace Prime.Migrations
 {
-    public partial class advancePracticeTextUpdate : Migration
+    public partial class AdvancedPracticeTextUpdate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

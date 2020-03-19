@@ -11,8 +11,8 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20200319191742_advancePracticeTextUpdate")]
-    partial class advancePracticeTextUpdate
+    [Migration("20200319230524_AdvancedPracticeTextUpdate")]
+    partial class AdvancedPracticeTextUpdate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
