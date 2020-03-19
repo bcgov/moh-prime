@@ -12,6 +12,7 @@ const SUFFIX = '</li>';
 })
 export class AccessTermComponent implements OnInit, OnChanges {
   @Input() public accessTerms: AccessTerm;
+
   public clause: string;
 
   constructor() { }
@@ -20,10 +21,10 @@ export class AccessTermComponent implements OnInit, OnChanges {
     if (change.accessTerms.currentValue) {
       const tempClause: string = this.accessTerms.userClause.clause;
       const limits: string = this.accessTerms.limitsConditionsClause.clause;
-      const content = limits == null ? '' : PREFIX + limits + SUFFIX;
+      const content = (limits === null) ? '' : PREFIX + limits + SUFFIX;
       this.clause = tempClause.replace(PLACEHOLDER, content);
     }
   }
-  
+
   public ngOnInit() { }
 }

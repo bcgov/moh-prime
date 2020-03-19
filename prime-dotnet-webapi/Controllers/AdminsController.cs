@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -61,6 +62,20 @@ namespace Prime.Controllers
                 new { adminId = createdAdminId },
                 ApiResponse.Result(admin)
             );
+        }
+
+        // GET: api/Admins
+        /// <summary>
+        /// Gets all the admins.
+        /// </summary>
+        [HttpGet(Name = nameof(GetAdmins))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ApiResultResponse<Admin>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<Admin>>> GetAdmins()
+        {
+            var admins = await _adminService.GetAdminsAsync();
+            return Ok(ApiResponse.Result(admins));
         }
 
 

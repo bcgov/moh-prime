@@ -207,7 +207,7 @@ namespace Prime.Configuration
                     new DefaultPrivilege { LicenseCode = 5, PrivilegeId = 17, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new DefaultPrivilege { LicenseCode = 5, PrivilegeId = 19, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
-                    // Provisional - speciality
+                    // Provisional - specialty
                     new DefaultPrivilege { LicenseCode = 6, PrivilegeId = 5,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new DefaultPrivilege { LicenseCode = 6, PrivilegeId = 6,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new DefaultPrivilege { LicenseCode = 6, PrivilegeId = 7,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
@@ -363,7 +363,7 @@ namespace Prime.Configuration
                     new DefaultPrivilege { LicenseCode = 18, PrivilegeId = 17, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new DefaultPrivilege { LicenseCode = 18, PrivilegeId = 19, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
-                    // Emergency - speciality
+                    // Emergency - specialty
                     new DefaultPrivilege { LicenseCode = 19, PrivilegeId = 5,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new DefaultPrivilege { LicenseCode = 19, PrivilegeId = 6,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new DefaultPrivilege { LicenseCode = 19, PrivilegeId = 7,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },

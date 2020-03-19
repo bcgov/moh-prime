@@ -16,6 +16,7 @@ import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { SubmissionAction } from '@shared/enums/submission-action.enum';
 
 @Component({
   selector: 'app-overview',
@@ -63,7 +64,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
               : EMPTY
           ),
           exhaustMap(() =>
-            this.enrolmentResource.updateEnrolmentStatus(enrolment.id, EnrolmentStatus.UNDER_REVIEW)
+            this.enrolmentResource.submissionAction(enrolment.id, SubmissionAction.SUBMIT)
           )
         )
         .subscribe(
@@ -78,12 +79,17 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     } else {
       this.toastService.openErrorToast('Your enrolment has an error that needs to be corrected before you will be able to submit');
 
-      console.log('DEMOGRAPHIC', this.enrolmentStateService.isProfileInfoValid());
-      console.log('REGULATORY', this.enrolmentStateService.isRegulatoryValid());
-      console.log('JOBS', this.enrolmentStateService.isJobsValid());
-      console.log('ORGANIZATION', this.enrolmentStateService.isOrganizationValid());
-      console.log('SELF DECLARATION', this.enrolmentStateService.isSelfDeclarationValid());
+      this.logger.warn('DEMOGRAPHIC', this.enrolmentStateService.isProfileInfoValid());
+      this.logger.warn('REGULATORY', this.enrolmentStateService.isRegulatoryValid());
+      this.logger.warn('JOBS', this.enrolmentStateService.isJobsValid());
+      this.logger.warn('HAS_REG_OR_JOB', this.enrolmentStateService.hasRegOrJob());
+      this.logger.warn('SELF DECLARATION', this.enrolmentStateService.isSelfDeclarationValid());
+      this.logger.warn('ORGANIZATION', this.enrolmentStateService.isOrganizationValid());
     }
+  }
+
+  public hasRegOrJob(): boolean {
+    return this.enrolmentStateService.hasRegOrJob();
   }
 
   public routeTo(routePath: EnrolmentRoutes, navigationExtras: NavigationExtras = {}) {

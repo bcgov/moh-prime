@@ -24,7 +24,7 @@ export class AlertComponent {
   }
 
   public hasIcon(): boolean {
-    return this.icon === null;
+    return this.icon !== null;
   }
 
   public getType(): string {

@@ -1,0 +1,16 @@
+<form [formGroup]="form">
+  <mat-checkbox class="mr-4 mb-2"
+                name="alwaysManualFlag"
+                formControlName="alwaysManual">
+    Always send this enrollee to manual adjudication?
+  </mat-checkbox>
+  <mat-form-field class="w-100">
+    <textarea matInput
+              placeholder="Note"
+              rows="10"
+              formControlName="note"></textarea>
+    <mat-hint [ngClass]="{ 'green-text': !!note.value }">
+      {{ (note.value) ? 'Your note will be saved upon submission.' : 'Enter a note to be saved upon submission.' }}
+    </mat-hint>
+  </mat-form-field>
+</form>

@@ -187,11 +187,13 @@
     </app-enrollee-property>
   </ng-container>
 
-  <app-enrollee-property *ngIf="!hasJob"
-                         title="Job Title"
-                         [makeBold]="true">
-    None
-  </app-enrollee-property>
+  <app-enrollee-property-error *ngIf="!hasJob"
+                               message="When no College Certification is present a Job Title is required.">
+    <app-enrollee-property title="Job Title"
+                           [makeBold]="true">
+      None
+    </app-enrollee-property>
+  </app-enrollee-property-error>
 
 </section>
 

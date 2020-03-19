@@ -1,0 +1,44 @@
+<ng-container *ngIf="show()">
+
+  <ng-container *ngIf="isProfileCompleted; else fullPage">
+    <app-alert type="info">
+      <ng-container #alertTitle
+                    class="alert-title">Collection of Personal Information Notice</ng-container>
+      <ng-container #alertContent
+                    class="alert-content">
+
+        <ng-container *ngTemplateOutlet="collectionNotice"></ng-container>
+      </ng-container>
+
+    </app-alert>
+  </ng-container>
+
+</ng-container>
+
+<ng-template #fullPage>
+  <app-page-header>Collection of Personal Information Notice</app-page-header>
+
+  <ng-container *ngTemplateOutlet="collectionNotice"></ng-container>
+</ng-template>
+
+<ng-template #collectionNotice>
+
+  <p>
+    The personal information you provide to the PRIME application is collected by the British Columbia Ministry of
+    Health under the authority of s. 26(a) and 26(c) of the Freedom of Information and Protection of Privacy Act
+    (FOIPPA) and s. 22(1)(b) of the Pharmaceutical Services Act for the purpose of managing your access to, and use of,
+    PharmaNet. If you have any questions about the collection or use of this information, call Health Insurance BC toll
+    free at <app-prime-phone></app-prime-phone> or <app-prime-support-email></app-prime-support-email>.
+  </p>
+
+  <div class="col text-right">
+
+    <button mat-flat-button
+            type="button"
+            color="primary"
+            (click)="onAccept()">
+      {{ label }}
+    </button>
+
+  </div>
+</ng-template>
