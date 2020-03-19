@@ -39,17 +39,10 @@ namespace PrimeTests.Utils
             .RuleFor(a => a.City, f => f.Address.City())
             .RuleFor(a => a.Postal, f => f.Address.ZipCode("?#?#?#"));
 
-        public static Faker<License> LicenseFaker = new Faker<License>()
-            .RuleFor(c => c.Code, f => f.Random.Int(1, 5))
-            .RuleFor(c => c.Weight, f => f.Random.Int(1, 100))
-            .RuleFor(c => c.Validate, f => true)
-            .RuleFor(c => c.Name, f => f.Random.Word());
-
         public static Faker<Certification> CertificationFaker = new Faker<Certification>()
             .RuleFor(c => c.CollegeCode, f => f.Random.Int(1, 5))
             .RuleFor(c => c.LicenseNumber, f => f.Random.Int(100000, 999999).ToString().Substring(1))
             .RuleFor(c => c.LicenseCode, f => f.Random.Int(1, 4))
-            .RuleFor(c => c.License, f => LicenseFaker.Generate())
             .RuleFor(c => c.RenewalDate, f => f.Date.Future(1))
             .RuleFor(c => c.PracticeCode, f => f.Random.Int(1, 4));
 
