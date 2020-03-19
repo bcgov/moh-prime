@@ -16,7 +16,7 @@ namespace Prime.Services
 
         Task<bool> EnrolleeUserIdExistsAsync(Guid userId);
 
-        Task<Enrollee> GetEnrolleeAsync(int enrolleeId);
+        Task<Enrollee> GetEnrolleeAsync(int enrolleeId, bool isAdmin = false);
 
         Task<Enrollee> GetEnrolleeNoTrackingAsync(int enrolleeId);
 
