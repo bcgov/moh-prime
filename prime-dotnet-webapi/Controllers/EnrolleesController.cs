@@ -77,7 +77,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<Enrollee>), StatusCodes.Status200OK)]
         public async Task<ActionResult<Enrollee>> GetEnrolleeById(int enrolleeId)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId, User.IsAdmin());
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId, User.HasAdminView());
 
             if (enrollee == null)
             {
