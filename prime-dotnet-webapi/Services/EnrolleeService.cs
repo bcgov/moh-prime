@@ -308,15 +308,17 @@ namespace Prime.Services
         {
             return await _context.AdjudicatorNotes
                 .Where(an => an.EnrolleeId == enrollee.Id)
+                .Include(an => an.Adjudicator)
                 .OrderByDescending(an => an.NoteDate)
                 .ToListAsync();
         }
 
-        public async Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, string note)
+        public async Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, string note, int adminId)
         {
             var adjudicatorNote = new AdjudicatorNote
             {
                 EnrolleeId = enrolleeId,
+                AdjudicatorId = adminId,
                 Note = note,
                 NoteDate = DateTimeOffset.Now
             };
