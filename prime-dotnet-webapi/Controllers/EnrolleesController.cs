@@ -77,7 +77,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<Enrollee>), StatusCodes.Status200OK)]
         public async Task<ActionResult<Enrollee>> GetEnrolleeById(int enrolleeId)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId, User.IsAdmin());
 
             if (enrollee == null)
             {
@@ -378,9 +378,6 @@ namespace Prime.Controllers
 
             return Ok(ApiResponse.Result(enrolleeProfileVersion));
         }
-
-        // TODO add route model binding for Enrollee
-        // TODO add middleware/policy to do simple checks
 
         // PUT: api/Enrollees/5/adjudicator
         /// <summary>
