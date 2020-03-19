@@ -277,9 +277,16 @@ namespace Prime.Services
                 .Include(e => e.AccessTerms);
         }
 
-        public async Task<Enrollee> GetEnrolleeAsync(int enrolleeId)
+        public async Task<Enrollee> GetEnrolleeAsync(int enrolleeId, bool isAdmin = false)
         {
-            var entity = await this.GetBaseEnrolleeQuery()
+            IQueryable<Enrollee> query = this.GetBaseEnrolleeQuery();
+
+            if (isAdmin)
+            {
+                query = query.Include(e => e.Adjudicator);
+            }
+
+            var entity = await query
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
             if (entity != null)
