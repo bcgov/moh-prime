@@ -58,7 +58,7 @@ namespace PrimeTests.Mocks
             return Task.FromResult(enrollees.Any(e => e.UserId == userId));
         }
 
-        public Task<Enrollee> GetEnrolleeAsync(int enrolleeId)
+        public Task<Enrollee> GetEnrolleeAsync(int enrolleeId, bool isAdmin = false)
         {
             Enrollee enrollee = null;
             this.GetHolder<int, Enrollee>().TryGetValue(enrolleeId, out enrollee);
@@ -103,7 +103,7 @@ namespace PrimeTests.Mocks
             return Task.FromResult(notes);
         }
 
-        public Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, string note)
+        public Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, string note, int adminId)
         {
             // TODO add proper tests, but need test spike. Add adjudicatorNote to fake db.
             return Task.FromResult(new AdjudicatorNote());
@@ -149,7 +149,7 @@ namespace PrimeTests.Mocks
         }
 
 
-        public Task<Enrollee> UpdateEnrolleeAdjudicator(int enrolleeId, Guid adminId = default)
+        public Task<Enrollee> UpdateEnrolleeAdjudicator(int enrolleeId, Admin admin = null)
         {
             throw new NotImplementedException();
         }
