@@ -621,7 +621,7 @@ namespace PrimeTests.Controllers
 
         //         // check for the expected error messages
         //         var body = await response.Content.ReadAsStringAsync();
-        //         Assert.Contains("Enrollee can not be updated when the current status is not 'Active'.", body);
+        //         Assert.Contains("Enrollee can not be updated when the current status is not 'Editable'.", body);
 
         //         // make sure the same amount of enrollees exist
         //         enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
@@ -787,7 +787,7 @@ namespace PrimeTests.Controllers
                 var enrolleeStatuses = (await TestUtils.DeserializeResponse<ApiResultResponse<IEnumerable<EnrolmentStatus>>>(response)).Result;
                 Assert.NotNull(enrolleeStatuses);
                 Assert.Single(enrolleeStatuses);
-                Assert.True(enrolleeStatuses.First().IsType(StatusType.Active));
+                Assert.True(enrolleeStatuses.First().IsType(StatusType.Editable));
 
                 // make sure the same amount of enrollees exist
                 enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
