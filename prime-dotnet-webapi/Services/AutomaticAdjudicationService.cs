@@ -132,7 +132,7 @@ namespace Prime.Services
 
                 bool passed = true;
 
-                foreach (var cert in enrollee.Certifications)
+                foreach (var cert in enrollee.Certifications.Where(c => c.License.Validate))
                 {
                     PharmanetCollegeRecord record = null;
                     try
@@ -167,6 +167,7 @@ namespace Prime.Services
                         AddReason(enrollee, StatusReason.PRACTICING_CODE, $"{cert.FullLicenseNumber}");
                         passed = false;
                     }
+
                 }
 
                 return passed;
