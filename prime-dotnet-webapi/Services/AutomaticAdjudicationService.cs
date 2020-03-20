@@ -132,44 +132,42 @@ namespace Prime.Services
 
                 bool passed = true;
 
-                foreach (var cert in enrollee.Certifications)
+                foreach (var cert in enrollee.Certifications.Where(c => c.License.Validate))
                 {
-                    if (cert.License.Validate)
+                    PharmanetCollegeRecord record = null;
+                    try
                     {
-                        PharmanetCollegeRecord record = null;
-                        try
-                        {
-                            record = await _pharmanetApiService.GetCollegeRecordAsync(cert);
-                        }
-                        catch (PharmanetApiService.PharmanetCollegeApiException)
-                        {
-                            AddReason(enrollee, StatusReason.PHARMANET_ERROR_CODE, $"{cert.FullLicenseNumber}");
-                            passed = false;
-                            continue;
-                        }
-                        if (record == null)
-                        {
-                            AddReason(enrollee, StatusReason.NOT_IN_PHARMANET_CODE, $"{cert.FullLicenseNumber}");
-                            passed = false;
-                            continue;
-                        }
-
-                        if (!record.MatchesEnrolleeByName(enrollee))
-                        {
-                            AddReason(enrollee, StatusReason.NAME_DISCREPANCY_CODE, $"{cert.FullLicenseNumber} returned \"{record.firstName} {record.lastName}\".");
-                            passed = false;
-                        }
-                        if (record.dateofBirth.Date != enrollee.DateOfBirth.Date)
-                        {
-                            AddReason(enrollee, StatusReason.BIRTHDATE_DISCREPANCY_CODE, $"{cert.FullLicenseNumber} returned {record.dateofBirth.ToString("d MMM yyyy")}");
-                            passed = false;
-                        }
-                        if (record.status != "P")
-                        {
-                            AddReason(enrollee, StatusReason.PRACTICING_CODE, $"{cert.FullLicenseNumber}");
-                            passed = false;
-                        }
+                        record = await _pharmanetApiService.GetCollegeRecordAsync(cert);
                     }
+                    catch (PharmanetApiService.PharmanetCollegeApiException)
+                    {
+                        AddReason(enrollee, StatusReason.PHARMANET_ERROR_CODE, $"{cert.FullLicenseNumber}");
+                        passed = false;
+                        continue;
+                    }
+                    if (record == null)
+                    {
+                        AddReason(enrollee, StatusReason.NOT_IN_PHARMANET_CODE, $"{cert.FullLicenseNumber}");
+                        passed = false;
+                        continue;
+                    }
+
+                    if (!record.MatchesEnrolleeByName(enrollee))
+                    {
+                        AddReason(enrollee, StatusReason.NAME_DISCREPANCY_CODE, $"{cert.FullLicenseNumber} returned \"{record.firstName} {record.lastName}\".");
+                        passed = false;
+                    }
+                    if (record.dateofBirth.Date != enrollee.DateOfBirth.Date)
+                    {
+                        AddReason(enrollee, StatusReason.BIRTHDATE_DISCREPANCY_CODE, $"{cert.FullLicenseNumber} returned {record.dateofBirth.ToString("d MMM yyyy")}");
+                        passed = false;
+                    }
+                    if (record.status != "P")
+                    {
+                        AddReason(enrollee, StatusReason.PRACTICING_CODE, $"{cert.FullLicenseNumber}");
+                        passed = false;
+                    }
+
                 }
 
                 return passed;
