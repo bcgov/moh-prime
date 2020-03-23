@@ -39,6 +39,17 @@ namespace PrimeTests.Services
             {
                 enrollee.Certifications = TestUtils.CertificationFaker.Generate(certCount);
             }
+
+            foreach (var cert in enrollee.Certifications)
+            {
+                cert.License = new License
+                {
+                    Code = cert.LicenseCode,
+                    Weight = 1,
+                    Manual = false,
+                    Validate = true
+                };
+            }
         }
 
         private void UpdateDeviceProvider(Enrollee enrollee, bool provider = false, bool pumpProvider = false)

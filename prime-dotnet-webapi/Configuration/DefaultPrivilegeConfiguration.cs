@@ -398,7 +398,7 @@ namespace Prime.Configuration
                     new DefaultPrivilege { LicenseCode = 11, PrivilegeId = 18, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Clinical observership
-                    new DefaultPrivilege { LicenseCode = 16, PrivilegeId = 18,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new DefaultPrivilege { LicenseCode = 16, PrivilegeId = 17,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Visitor
                     new DefaultPrivilege { LicenseCode = 17, PrivilegeId = 8,  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },

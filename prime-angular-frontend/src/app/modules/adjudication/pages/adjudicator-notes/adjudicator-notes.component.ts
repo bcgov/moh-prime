@@ -2,10 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
-import { Subscription, BehaviorSubject } from 'rxjs';
+import { Subscription, BehaviorSubject, pipe } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { SubmissionAction } from '@shared/enums/submission-action.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
@@ -45,14 +44,7 @@ export class AdjudicatorNotesComponent implements OnInit {
     if (this.form.valid) {
       const request$ = this.adjudicationResource
         .createAdjudicatorNote(this.route.snapshot.params.id, this.note.value)
-        .pipe(
-          map((adjudicationNote: AdjudicationNote) => {
-            return {
-              date: adjudicationNote.noteDate,
-              content: adjudicationNote.note
-            };
-          })
-        )
+        .pipe(this.toDateContentPipe())
         .subscribe((adjudicatorNote: DateContent) => {
           const notes = [adjudicatorNote, ...this.adjudicatorNotes$.value];
           this.adjudicatorNotes$.next(notes);
@@ -80,18 +72,27 @@ export class AdjudicatorNotesComponent implements OnInit {
 
   private getAdjudicatorNotes(enrolleeId: number) {
     this.busy = this.adjudicationResource.getAdjudicatorNotes(enrolleeId)
-      .pipe(
-        map((adjudicationNotes: AdjudicationNote[]) =>
-          adjudicationNotes.map((adjudicationNote: AdjudicationNote) => {
-            return {
-              date: adjudicationNote.noteDate,
-              content: adjudicationNote.note
-            };
-          })
-        )
-      )
+      .pipe(this.toDateContentPipe())
       .subscribe((datedContent: DateContent[]) =>
         this.adjudicatorNotes$.next(datedContent)
       );
+  }
+
+  private toDateContentPipe() {
+    return pipe(
+      map((adjudicationNotes: AdjudicationNote | AdjudicationNote[]) =>
+        (Array.isArray(adjudicationNotes))
+          ? adjudicationNotes.map(this.toDateContent.bind(this))
+          : this.toDateContent(adjudicationNotes)
+      )
+    );
+  }
+
+  private toDateContent(adjudicationNote: AdjudicationNote): DateContent {
+    return {
+      date: adjudicationNote.noteDate,
+      name: adjudicationNote.adjudicator.idir,
+      content: adjudicationNote.note
+    };
   }
 }
