@@ -73,16 +73,16 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
       : null;
   }
 
-  public get careconnectRecipient(): FormControl {
-    return this.form.get('careconnectRecipient') as FormControl;
+  public get careconnectRecipients(): FormControl {
+    return this.form.get('careconnectRecipients') as FormControl;
   }
 
-  public get excellerisRecipient(): FormControl {
-    return this.form.get('excellerisRecipient') as FormControl;
+  public get excellerisRecipients(): FormControl {
+    return this.form.get('excellerisRecipients') as FormControl;
   }
 
-  public get plexiaRecipient(): FormControl {
-    return this.form.get('plexiaRecipient') as FormControl;
+  public get plexiaRecipients(): FormControl {
+    return this.form.get('plexiaRecipients') as FormControl;
   }
 
   public get otherRecipient(): FormControl {
@@ -165,9 +165,9 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
 
   private buildVendorEmailGroup(): FormGroup {
     return this.fb.group({
-      careconnectRecipient: [null, [Validators.required, FormControlValidators.email]],
-      excellerisRecipient: [null, [Validators.required, FormControlValidators.email]],
-      plexiaRecipient: [null, [Validators.required, FormControlValidators.email]],
+      careconnectRecipients: [null, [Validators.required, FormControlValidators.multipleEmails]],
+      excellerisRecipients: [null, [Validators.required, FormControlValidators.multipleEmails]],
+      plexiaRecipients: [null, [Validators.required, FormControlValidators.multipleEmails]],
       otherRecipient: [null, [Validators.required, FormControlValidators.email]]
     });
   }

@@ -39,9 +39,9 @@
               <mat-form-field class="w-100 mb-3">
                 <input matInput
                        placeholder="Email"
-                       formControlName="careconnectRecipient">
-                <mat-error *ngIf="careconnectRecipient.hasError('required')">Required</mat-error>
-                <mat-error *ngIf="careconnectRecipient.hasError('email')">Must be a valid email address</mat-error>
+                       formControlName="careconnectRecipients">
+                <mat-error *ngIf="careconnectRecipients.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="careconnectRecipients.hasError('email')">Must be a valid email address</mat-error>
               </mat-form-field>
 
             </div>
@@ -73,9 +73,9 @@
               <mat-form-field class="w-100 mb-3">
                 <input matInput
                        placeholder="Email"
-                       formControlName="excellerisRecipient">
-                <mat-error *ngIf="excellerisRecipient.hasError('required')">Required</mat-error>
-                <mat-error *ngIf="excellerisRecipient.hasError('email')">Must be a valid email address</mat-error>
+                       formControlName="excellerisRecipients">
+                <mat-error *ngIf="excellerisRecipients.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="excellerisRecipients.hasError('email')">Must be a valid email address</mat-error>
               </mat-form-field>
 
             </div>
@@ -161,9 +161,9 @@
               <mat-form-field class="w-100 mb-3">
                 <input matInput
                        placeholder="Email"
-                       formControlName="plexiaRecipient">
-                <mat-error *ngIf="plexiaRecipient.hasError('required')">Required</mat-error>
-                <mat-error *ngIf="plexiaRecipient.hasError('email')">Must be a valid email address</mat-error>
+                       formControlName="plexiaRecipients">
+                <mat-error *ngIf="plexiaRecipients.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="plexiaRecipients.hasError('email')">Must be a valid email address</mat-error>
               </mat-form-field>
 
             </div>
@@ -231,8 +231,8 @@
                  let-provisioner="provisioner">
       <p class="mb-4">
         Provide the email address of the person in your organization who is responsible for contacting {{ provisioner }}
-        to set up accounts (e.g., your Office Manager or MOA). Do not enter your own email as you will be copied on the
-        communication.
+        to set up accounts (e.g., your Office Manager or MOA). Use a comma to separate multiple emails addresses. Do not
+        enter your own email as you will be copied on the communication.
       </p>
     </ng-template>
 

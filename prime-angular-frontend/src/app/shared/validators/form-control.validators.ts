@@ -55,6 +55,13 @@ export class FormControlValidators {
     return (valid) ? null : { email: true };
   }
 
+  static multipleEmails(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) { return null; }
+    const regExp = /^([a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,})(,[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,})*$/i;
+    const valid = (control.valid && regExp.test(control.value));
+    return (valid) ? null : { email: true };
+  }
+
   /**
    * @description
    * Checks the form control value is an phone number.
