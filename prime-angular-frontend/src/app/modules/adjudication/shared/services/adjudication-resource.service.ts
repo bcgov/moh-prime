@@ -97,7 +97,7 @@ export class AdjudicationResource {
   }
 
   public submissionAction(enrolleeId: number, action: SubmissionAction): Observable<HttpEnrollee> {
-    return this.apiResource.post<HttpEnrollee>(`enrollees/${enrolleeId}/${action}`)
+    return this.apiResource.post<HttpEnrollee>(`enrollees/${enrolleeId}/submission/${action}`)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
         tap((enrollee: HttpEnrollee) => {
