@@ -68,7 +68,7 @@ namespace Prime.Services.Rules
 
             bool passed = true;
 
-            foreach (var cert in enrollee.Certifications)
+            foreach (var cert in enrollee.Certifications.Where(c => c.License.Validate))
             {
                 PharmanetCollegeRecord record = null;
                 try
