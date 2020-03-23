@@ -11,6 +11,7 @@ export class EnrolmentRoutes {
   public static ORGANIZATION = 'organization';
   public static SELF_DECLARATION = 'self-declaration';
   // Enrolment submission:
+  public static CHANGES_SAVED = 'changes-saved';
   public static SUBMISSION_CONFIRMATION = 'submission-confirmation';
   public static PENDING_ACCESS_TERM = 'pending-access-term';
   public static ACCESS_LOCKED = 'access-locked';
@@ -58,6 +59,8 @@ export class EnrolmentRoutes {
   // or automatic adjudication
   public static enrolmentSubmissionRoutes(): string[] {
     return [
+      // Enrolment update was small, no auto or manual adjudication
+      EnrolmentRoutes.CHANGES_SAVED,
       // Enrolment was flagged for manual adjudication
       EnrolmentRoutes.SUBMISSION_CONFIRMATION,
       EnrolmentRoutes.ACCESS_LOCKED,

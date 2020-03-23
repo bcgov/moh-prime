@@ -226,6 +226,9 @@ export class EnrolmentResource {
     if (enrolment.enrollee.mailingAddress.postal) {
       enrolment.enrollee.mailingAddress.postal = enrolment.enrollee.mailingAddress.postal.toUpperCase();
     }
+    else {
+      enrolment.enrollee.mailingAddress = null;
+    }
 
     enrolment.certifications = this.removeIncompleteCollegeCertifications(enrolment.certifications);
     enrolment.jobs = this.removeIncompleteJobs(enrolment.jobs);

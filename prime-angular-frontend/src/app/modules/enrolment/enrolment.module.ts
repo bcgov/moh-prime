@@ -11,6 +11,7 @@ import { JobComponent } from './pages/job/job.component';
 import { SelfDeclarationComponent } from './pages/self-declaration/self-declaration.component';
 import { OrganizationComponent } from './pages/organization/organization.component';
 import { OverviewComponent } from './pages/overview/overview.component';
+import { MinorUpdateConfirmationComponent } from './pages/minor-update-confirmation/minor-update-confirmation.component';
 import { SubmissionConfirmationComponent } from './pages/submission-confirmation/submission-confirmation.component';
 import { AccessAgreementComponent } from './pages/access-agreement/access-agreement.component';
 import { PageRefDirective } from './pages/access-agreement/page-ref.directive';
@@ -47,6 +48,7 @@ import { EnrolleePageComponent } from './shared/components/enrollee-page/enrolle
     SelfDeclarationComponent,
     OrganizationComponent,
     OverviewComponent,
+    MinorUpdateConfirmationComponent,
     SubmissionConfirmationComponent,
     AccessAgreementComponent,
     PageRefDirective,

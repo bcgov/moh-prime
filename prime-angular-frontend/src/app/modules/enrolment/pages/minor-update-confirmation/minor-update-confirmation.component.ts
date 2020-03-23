@@ -8,9 +8,9 @@ import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 @Component({
-  selector: 'app-submission-confirmation',
-  templateUrl: './submission-confirmation.component.html',
-  styleUrls: ['./submission-confirmation.component.scss']
+  selector: 'app-minor-update-confirmation',
+  templateUrl: './minor-update-confirmation.component.html',
+  styleUrls: ['./minor-update-confirmation.component.scss']
 })
 export class MinorUpdateConfirmationComponent extends BaseEnrolmentPage implements OnInit {
   constructor(
