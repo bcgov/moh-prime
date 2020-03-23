@@ -202,7 +202,7 @@
         <div *ngIf="other.checked"
              class="pt-2">
           <p class="mb-4">
-            Enter an email address that may be used to send your PRIME approval information.
+            Enter an email address that may be used to send your PRIME approval notification.
           </p>
 
           <div class="row">
@@ -237,7 +237,7 @@
     <ng-template #concise
                  let-provisioner="provisioner">
       <p class="mb-4">
-        Your PharmaNet approval information will be sent to {{ provisioner }}.
+        Your PharmaNet approval notification will be sent to {{ provisioner }}.
       </p>
     </ng-template>
 
@@ -245,9 +245,8 @@
                  let-provisioner="provisioner">
       <p class="mb-4">
         Provide the email address of the person in your organization who is responsible for contacting {{ provisioner }}
-        to set up accounts (e.g., your Office Manager or MOA). This contact must forward your approval notification to
-        {{ provisioner }} for your account to be created. {{ provisioner }} will also receive confirmation that your
-        notification has been sent.
+        to set up accounts (e.g., your Office Manager or MOA). Do not enter your own email as you will be copied on the
+        communication.
       </p>
     </ng-template>
 

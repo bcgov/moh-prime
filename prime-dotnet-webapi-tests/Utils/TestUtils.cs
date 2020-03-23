@@ -187,11 +187,11 @@ namespace PrimeTests.Utils
 
             if (!db.Set<License>().Any())
             {
-                db.AddRange(new License { Code = 1, Manual = false, Name = "Full - Family" });
-                db.AddRange(new License { Code = 2, Manual = false, Name = "Full - Specialty" });
-                db.AddRange(new License { Code = 3, Manual = true, Name = "Special" });
-                db.AddRange(new License { Code = 4, Manual = false, Name = "Osteopathic" });
-                db.AddRange(new License { Code = 5, Manual = true, Name = "Provisional - Family" });
+                db.AddRange(new License { Code = 1, Manual = false, Validate = true, Name = "Full - Family" });
+                db.AddRange(new License { Code = 2, Manual = false, Validate = true, Name = "Full - Specialty" });
+                db.AddRange(new License { Code = 3, Manual = true, Validate = true, Name = "Special" });
+                db.AddRange(new License { Code = 4, Manual = false, Validate = true, Name = "Osteopathic" });
+                db.AddRange(new License { Code = 5, Manual = true, Validate = true, Name = "Provisional - Family" });
             }
 
             if (!db.Set<CollegeLicense>().Any())
