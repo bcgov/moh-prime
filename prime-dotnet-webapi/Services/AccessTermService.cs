@@ -167,12 +167,13 @@ namespace Prime.Services
         }
 
         /// <summary>
-        /// Returns true if the enrollees' most recent access term has no newer versions
+        /// Returns true if the enrollees' most recent accepted access term has no newer versions
         /// </summary>
         public async Task<bool> IsCurrentByEnrolleeAsync(int enrolleeId)
         {
             var accessTermId = await _context.AccessTerms
                 .Where(at => at.EnrolleeId == enrolleeId)
+                .Where(at => at.AcceptedDate != null)
                 .OrderByDescending(at => at.AcceptedDate)
                 .Select(at => at.Id)
                 .SingleOrDefaultAsync();
