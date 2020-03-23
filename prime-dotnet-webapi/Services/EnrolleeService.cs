@@ -136,33 +136,26 @@ namespace Prime.Services
 
         public async Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeProfileViewModel enrolleeProfile, bool profileCompleted = false)
         {
-            var _enrolleeDb = await _context.Enrollees
+            var enrollee = await _context.Enrollees
                 .Include(e => e.MailingAddress)
                 .Include(e => e.Certifications)
                 .Include(e => e.Jobs)
                 .Include(e => e.Organizations)
-                .AsNoTracking()
-                .Where(e => e.Id == enrolleeId)
-                .SingleOrDefaultAsync();
+                .SingleAsync(e => e.Id == enrolleeId);
 
-            // Remove existing, and recreate if necessary
-            this.ReplaceExistingAddress(_enrolleeDb.MailingAddress, enrolleeProfile.MailingAddress, enrolleeProfile, enrolleeId);
-            this.ReplaceExistingItems(_enrolleeDb.Certifications, enrolleeProfile.Certifications, enrolleeProfile, enrolleeId);
-            this.ReplaceExistingItems(_enrolleeDb.Jobs, enrolleeProfile.Jobs, enrolleeProfile, enrolleeId);
-            this.ReplaceExistingItems(_enrolleeDb.Organizations, enrolleeProfile.Organizations, enrolleeProfile, enrolleeId);
+            _context.Entry(enrollee).CurrentValues.SetValues(enrolleeProfile);
 
-            var enrolleeTrack = await _context.Enrollees
-                .Where(e => e.Id == enrolleeId)
-                .SingleOrDefaultAsync();
-
-            _context.Entry(enrolleeTrack).CurrentValues.SetValues(enrolleeProfile); // reflection
+            UpdateMailingAddress(enrollee.MailingAddress, enrolleeProfile.MailingAddress, enrolleeId);
+            ReplaceExistingItems(enrollee.Certifications, enrolleeProfile.Certifications, enrolleeId);
+            ReplaceExistingItems(enrollee.Jobs, enrolleeProfile.Jobs, enrolleeId);
+            ReplaceExistingItems(enrollee.Organizations, enrolleeProfile.Organizations, enrolleeId);
 
             // If profileCompleted is true, this is the first time the enrollee
             // has completed their profile by traversing the wizard, and indicates
             // a change in routing for the enrollee
             if (profileCompleted)
             {
-                enrolleeTrack.ProfileCompleted = profileCompleted;
+                enrollee.ProfileCompleted = true;
             }
 
             try
@@ -175,12 +168,11 @@ namespace Prime.Services
             }
         }
 
-        private void ReplaceExistingAddress(Address dbAddress, Address newAddress, EnrolleeProfileViewModel enrollee, int enrolleeId)
+        private void UpdateMailingAddress(MailingAddress dbAddress, MailingAddress newAddress, int enrolleeId)
         {
             // Remove existing addresses
             if (dbAddress != null)
             {
-                dbAddress.Enrollee = null;
                 _context.Addresses.Remove(dbAddress);
             }
 
@@ -193,12 +185,11 @@ namespace Prime.Services
             }
         }
 
-        private void ReplaceExistingItems<T>(ICollection<T> dbCollection, ICollection<T> newCollection, EnrolleeProfileViewModel enrollee, int enrolleeId) where T : class, IEnrolleeNavigationProperty
+        private void ReplaceExistingItems<T>(ICollection<T> dbCollection, ICollection<T> newCollection, int enrolleeId) where T : class, IEnrolleeNavigationProperty
         {
             // Remove existing items
             foreach (var item in dbCollection)
             {
-                item.Enrollee = null;
                 _context.Remove(item);
             }
 
