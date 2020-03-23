@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using KellermanSoftware.CompareNetObjects;
+using KellermanSoftware.CompareNetObjects.TypeComparers;
 using Prime.Models;
 using Prime.ViewModels;
 
@@ -79,33 +80,16 @@ namespace Prime.Services.Rules
 
         public override Task<bool> ProcessRule(Enrollee enrollee)
         {
-            CompareLogic compareLogic = new CompareLogic();
-            compareLogic.Config.IgnoreObjectTypes = true;
-            compareLogic.Config.CompareFields = false;
-            compareLogic.Config.MaxDifferences = 10;
-            compareLogic.Config.IgnoreCollectionOrder = true;
-
-            var result = compareLogic.Compare(_updatedProfile, enrollee);
+            var comparitor = InitComparitor();
+            var result = comparitor.Compare(_updatedProfile, enrollee);
 
             if (result.AreEqual)
             {
                 return Task.FromResult(true);
             }
 
-            var ignoredProperties = new[]
-            {
-                nameof(Enrollee.ContactEmail),
-                nameof(Enrollee.ContactPhone),
-                nameof(Enrollee.VoicePhone),
-                nameof(Enrollee.VoiceExtension)
-            };
-
             foreach (var diff in result.Differences)
             {
-                if (ignoredProperties.Contains(diff.PropertyName))
-                {
-                    continue;
-                }
                 if (true // TODO enrollee is OBO
                     && diff.PropertyName == nameof(Enrollee.Jobs))
                 {
@@ -117,6 +101,47 @@ namespace Prime.Services.Rules
             }
 
             return Task.FromResult(true);
+        }
+
+        private static CompareLogic InitComparitor()
+        {
+            ComparisonConfig config = new ComparisonConfig();
+            config.IgnoreObjectTypes = true;
+            config.CompareFields = false;
+            config.MaxDifferences = 100;
+            config.IgnoreCollectionOrder = true;
+
+            // Fields considered "minor" changes
+            config.IgnoreProperty<Enrollee>(x => x.ContactEmail);
+            config.IgnoreProperty<Enrollee>(x => x.ContactPhone);
+            config.IgnoreProperty<Enrollee>(x => x.VoicePhone);
+            config.IgnoreProperty<Enrollee>(x => x.VoiceExtension);
+
+            // Ignored fields on child models due to how the frontend sends objects.
+            config.IgnoreProperty<BaseAuditable>(x => x.CreatedUserId);
+            config.IgnoreProperty<BaseAuditable>(x => x.CreatedTimeStamp);
+            config.IgnoreProperty<BaseAuditable>(x => x.UpdatedUserId);
+            config.IgnoreProperty<BaseAuditable>(x => x.UpdatedTimeStamp);
+
+            config.IgnoreProperty<Certification>(x => x.Id);
+            config.IgnoreProperty<Certification>(x => x.EnrolleeId);
+            config.IgnoreProperty<Certification>(x => x.Enrollee);
+            config.IgnoreProperty<Certification>(x => x.College);
+            config.IgnoreProperty<Certification>(x => x.License);
+            config.IgnoreProperty<Certification>(x => x.Practice);
+            config.IgnoreProperty<Certification>(x => x.FullLicenseNumber);
+
+            config.IgnoreProperty<Job>(x => x.Id);
+            config.IgnoreProperty<Job>(x => x.EnrolleeId);
+            config.IgnoreProperty<Job>(x => x.Enrollee);
+
+            config.IgnoreProperty<MailingAddress>(x => x.Id);
+            config.IgnoreProperty<MailingAddress>(x => x.EnrolleeId);
+            config.IgnoreProperty<MailingAddress>(x => x.Enrollee);
+            config.IgnoreProperty<MailingAddress>(x => x.Country);
+            config.IgnoreProperty<MailingAddress>(x => x.Province);
+
+            return new CompareLogic(config);
         }
     }
 }
