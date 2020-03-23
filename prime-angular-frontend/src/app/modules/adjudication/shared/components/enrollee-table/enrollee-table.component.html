@@ -85,8 +85,8 @@
       <mat-menu #menu="matMenu">
         <button mat-menu-item
                 (click)="onRoute([row.id])">
-          <mat-icon>remove_red_eye</mat-icon>
-          <span>View Enrolment</span>
+          <mat-icon>assignment</mat-icon>
+          <span>Enrolment</span>
         </button>
         <!-- <button mat-menu-item
                 (click)="onRoute([row.id, AdjudicationRoutes.ENROLLEE_PROFILE_HISTORY])">
@@ -100,13 +100,13 @@
         </button>
         <button mat-menu-item
                 (click)="onRoute([row.id, AdjudicationRoutes.ENROLLEE_EVENTS])">
-          <mat-icon>rate_review</mat-icon>
+          <mat-icon>list_alt</mat-icon>
           <span>Events</span>
         </button>
         <button mat-menu-item
                 *ngIf="row.currentStatus.enrolmentStatusReasons.length"
                 (click)="onRoute([row.id, AdjudicationRoutes.ENROLLEE_REVIEW_STATUS])">
-          <mat-icon>flag</mat-icon>
+          <mat-icon>rate_review</mat-icon>
           <span>Review Status Reasons</span>
         </button>
         <button mat-menu-item
