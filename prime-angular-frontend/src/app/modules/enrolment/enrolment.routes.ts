@@ -59,8 +59,6 @@ export class EnrolmentRoutes {
   // or automatic adjudication
   public static enrolmentSubmissionRoutes(): string[] {
     return [
-      // Enrolment update was small, no auto or manual adjudication
-      EnrolmentRoutes.CHANGES_SAVED,
       // Enrolment was flagged for manual adjudication
       EnrolmentRoutes.SUBMISSION_CONFIRMATION,
       EnrolmentRoutes.ACCESS_LOCKED,
@@ -69,8 +67,10 @@ export class EnrolmentRoutes {
     ];
   }
 
-  public static enrolmentAcceptedToaRoutes(): string[] {
+  public static enrolmentEditableRoutes(): string[] {
     return [
+      // Enrolment update was small, no auto or manual adjudication required
+      EnrolmentRoutes.CHANGES_SAVED,
       EnrolmentRoutes.CURRENT_ACCESS_TERM,
       EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY,
       EnrolmentRoutes.PHARMANET_TRANSACTIONS,
@@ -83,7 +83,7 @@ export class EnrolmentRoutes {
   public static enrolleeRoutes(): string[] {
     return [
       ...EnrolmentRoutes.enrolmentProfileRoutes(),
-      ...EnrolmentRoutes.enrolmentAcceptedToaRoutes()
+      ...EnrolmentRoutes.enrolmentEditableRoutes()
     ];
   }
 }

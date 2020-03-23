@@ -102,7 +102,7 @@ export class EnrolmentGuard extends BaseGuard {
     } else if (enrolment) {
       switch (enrolment.currentStatus.statusCode) {
         case EnrolmentStatus.ACTIVE:
-          return this.manageActiveRouting(routePath, enrolment);
+          return this.manageEditableRouting(routePath, enrolment);
         case EnrolmentStatus.UNDER_REVIEW:
           return this.manageUnderReviewRouting(routePath, enrolment);
         case EnrolmentStatus.REQUIRES_TOA:
@@ -122,27 +122,23 @@ export class EnrolmentGuard extends BaseGuard {
    * out their initial enrolment, which prevents access to
    * post-enrolment routes.
    */
-  private manageActiveRouting(routePath: string, enrolment: Enrolment): boolean {
-    const enrolmentSubmissionRoutes = [
-      ...EnrolmentRoutes.enrolmentSubmissionRoutes()
-    ];
+  private manageEditableRouting(routePath: string, enrolment: Enrolment): boolean {
     const route = this.route(routePath);
-
     const redirectionRoute = (!enrolment.profileCompleted)
       ? EnrolmentRoutes.DEMOGRAPHIC // Only for new enrolments with incomplete profiles
       : EnrolmentRoutes.OVERVIEW;
+    const blacklistedRoutes = [
+      ...EnrolmentRoutes.enrolmentSubmissionRoutes()
+    ];
 
-    if (
-      !enrolment.profileCompleted &&
-      [...enrolmentSubmissionRoutes, EnrolmentRoutes.OVERVIEW].includes(route)
-    ) {
-      this.navigate(routePath, redirectionRoute);
+    const hasNotCompletedProfile = !enrolment.profileCompleted;
+
+    if (hasNotCompletedProfile) {
+      // No access to overview if you've not completed the wizard
+      blacklistedRoutes.push(EnrolmentRoutes.OVERVIEW);
     }
 
-    const hasNotCompletedProfile = !enrolment.profileCompleted && route === EnrolmentRoutes.OVERVIEW;
-    const hasNotSubmittedEnrolment = enrolmentSubmissionRoutes.includes(route);
-
-    return (hasNotCompletedProfile || hasNotSubmittedEnrolment)
+    return (hasNotCompletedProfile || blacklistedRoutes.includes(route))
       // Prevent access to post enrolment routes
       ? this.navigate(routePath, redirectionRoute)
       // Otherwise, allow the route to resolve
@@ -162,7 +158,7 @@ export class EnrolmentGuard extends BaseGuard {
     // has accepted at least one TOA
     const whiteListedRoutes = (!!enrolment.expiryDate)
       ? [
-        ...EnrolmentRoutes.enrolmentAcceptedToaRoutes(),
+        ...EnrolmentRoutes.enrolmentEditableRoutes(),
         // Allow read-only access to the enrollee profile
         EnrolmentRoutes.OVERVIEW
       ]
