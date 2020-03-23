@@ -95,7 +95,6 @@ namespace Prime.Services
             foreach (var item in items)
             {
                 item.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(item);
-
                 // Attach to the enrollee if they have signed the most recent ToA
                 item.HasMostRecentAccessTermSigned = await _accessTermService.IsCurrentByEnrolleeAsync(item.Id);
             }
