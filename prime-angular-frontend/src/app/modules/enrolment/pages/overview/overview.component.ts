@@ -17,6 +17,7 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
+import moment from 'moment';
 
 @Component({
   selector: 'app-overview',
@@ -28,6 +29,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public enrolment: Enrolment;
   public currentStatus: EnrolmentStatus;
   public EnrolmentStatus = EnrolmentStatus;
+  public expiryDate: string;
 
   protected allowRoutingWhenDirty: boolean;
 
@@ -111,6 +113,12 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
 
     // Store current status as it will be truncated for initial enrolment
     this.currentStatus = enrolment.currentStatus.statusCode;
+
+    if (enrolment.expiryDate) {
+      const expiryMoment = moment(enrolment.expiryDate);
+      this.expiryDate = expiryMoment.isAfter(moment.now())
+        ? expiryMoment.format('MMMM Do, YYYY') : null;
+    }
 
     if (this.enrolmentStateService.isPatched) {
       enrolment = this.enrolmentStateService.enrolment;
