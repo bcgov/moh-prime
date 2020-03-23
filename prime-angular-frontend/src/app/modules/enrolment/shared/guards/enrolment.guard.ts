@@ -154,6 +154,7 @@ export class EnrolmentGuard extends BaseGuard {
   }
 
   private manageRouting(routePath: string, defaultRoute: string, enrolment: Enrolment): boolean {
+    const route = this.route(routePath);
     // Allow access to an extend set of routes if the enrollee
     // has accepted at least one TOA
     const whiteListedRoutes = (!!enrolment.expiryDate)
@@ -163,7 +164,6 @@ export class EnrolmentGuard extends BaseGuard {
         EnrolmentRoutes.OVERVIEW
       ]
       : [];
-    const route = this.route(routePath);
 
     if (!whiteListedRoutes.includes(route)) {
       return this.navigate(routePath, defaultRoute);
