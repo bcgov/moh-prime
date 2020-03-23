@@ -139,7 +139,7 @@ export class EnrolmentGuard extends BaseGuard {
     }
 
     return (hasNotCompletedProfile || blacklistedRoutes.includes(route))
-      // Prevent access to post enrolment routes
+      // Prevent access to post enrolment/blacklisted routes
       ? this.navigate(routePath, redirectionRoute)
       // Otherwise, allow the route to resolve
       : true;
