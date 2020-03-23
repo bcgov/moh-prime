@@ -86,6 +86,9 @@ namespace Prime.Models
 
         public string HasPharmaNetSuspendedDetails { get; set; }
 
+        [NotMapped]
+        public bool HasMostRecentAccessTermSigned { get; set; }
+
         [JsonIgnore]
         public ICollection<AssignedPrivilege> AssignedPrivileges { get; set; }
 
@@ -177,6 +180,7 @@ namespace Prime.Models
         public ICollection<EnrolleeProfileVersion> EnrolleeProfileVersions { get; set; }
 
         public bool AlwaysManual { get; set; }
+
 
         public EnrolmentStatus AddEnrolmentStatus(StatusType statusType)
         {
