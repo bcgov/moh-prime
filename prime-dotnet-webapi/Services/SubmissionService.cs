@@ -128,7 +128,7 @@ namespace Prime.Services
 
         private async Task ProcessToaAsync(Enrollee enrollee, bool accept)
         {
-            enrollee.AddEnrolmentStatus(StatusType.Active);
+            enrollee.AddEnrolmentStatus(StatusType.Editable);
 
             if (accept)
             {
@@ -147,7 +147,7 @@ namespace Prime.Services
 
         private async Task EnableEditingAsync(Enrollee enrollee)
         {
-            enrollee.AddEnrolmentStatus(StatusType.Active);
+            enrollee.AddEnrolmentStatus(StatusType.Editable);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Enabled Editing");
             await _context.SaveChangesAsync();
             await _emailService.SendReminderEmailAsync(enrollee);
@@ -211,7 +211,7 @@ namespace Prime.Services
 
             private enum EnrolleeState
             {
-                Active,
+                Editable,
                 UnderReview,
                 RequiresToa,
                 Locked

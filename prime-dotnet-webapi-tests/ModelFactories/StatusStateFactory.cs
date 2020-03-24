@@ -8,12 +8,12 @@ namespace PrimeTests.ModelFactories
 {
     public class StatusState
     {
-        public static readonly StatusState Submitted = new StatusState(StatusType.Active, StatusType.UnderReview);
-        public static readonly StatusState Approved = new StatusState(StatusType.Active, StatusType.UnderReview, StatusType.RequiresToa);
-        public static readonly StatusState Declined = new StatusState(StatusType.Active, StatusType.UnderReview, StatusType.Locked);
-        public static readonly StatusState PassedTos = new StatusState(StatusType.Active, StatusType.UnderReview, StatusType.RequiresToa, StatusType.Active);
-        public static readonly StatusState Unlocked = new StatusState(StatusType.Active, StatusType.UnderReview, StatusType.Active);
-        public static readonly StatusState SecondSubmission = new StatusState(StatusType.Active, StatusType.UnderReview, StatusType.Active, StatusType.UnderReview);
+        public static readonly StatusState Submitted = new StatusState(StatusType.Editable, StatusType.UnderReview);
+        public static readonly StatusState Approved = new StatusState(StatusType.Editable, StatusType.UnderReview, StatusType.RequiresToa);
+        public static readonly StatusState Declined = new StatusState(StatusType.Editable, StatusType.UnderReview, StatusType.Locked);
+        public static readonly StatusState PassedTos = new StatusState(StatusType.Editable, StatusType.UnderReview, StatusType.RequiresToa, StatusType.Editable);
+        public static readonly StatusState Unlocked = new StatusState(StatusType.Editable, StatusType.UnderReview, StatusType.Editable);
+        public static readonly StatusState SecondSubmission = new StatusState(StatusType.Editable, StatusType.UnderReview, StatusType.Editable, StatusType.UnderReview);
 
         public static ICollection<StatusState> States { get; private set; }
 

@@ -101,7 +101,7 @@ export class EnrolmentGuard extends BaseGuard {
       return this.navigate(routePath, EnrolmentRoutes.DEMOGRAPHIC);
     } else if (enrolment) {
       switch (enrolment.currentStatus.statusCode) {
-        case EnrolmentStatus.ACTIVE:
+        case EnrolmentStatus.EDITABLE:
           return this.manageEditableRouting(routePath, enrolment);
         case EnrolmentStatus.UNDER_REVIEW:
           return this.manageUnderReviewRouting(routePath, enrolment);
@@ -123,6 +123,9 @@ export class EnrolmentGuard extends BaseGuard {
    * post-enrolment routes.
    */
   private manageEditableRouting(routePath: string, enrolment: Enrolment): boolean {
+    const enrolmentSubmissionRoutes = [
+      ...EnrolmentRoutes.enrolmentSubmissionRoutes()
+    ];
     const route = this.route(routePath);
     const redirectionRoute = (!enrolment.profileCompleted)
       ? EnrolmentRoutes.DEMOGRAPHIC // Only for new enrolments with incomplete profiles
