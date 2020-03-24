@@ -38,13 +38,7 @@ export class AccessAgreementHistoryEnrolmentComponent extends BaseEnrolmentPage 
   public ngOnInit() {
     const enrolleeId = this.enrolmentService.enrolment.id;
     const accessTermId = this.route.snapshot.params.id;
-    const enrolment = this.enrolmentService.enrolment;
-
-    if (enrolment.expiryDate) {
-      const expiryMoment = moment(enrolment.expiryDate);
-      this.expiryDate = expiryMoment.isAfter(moment.now())
-        ? expiryMoment.format('MMMM Do, YYYY') : null;
-    }
+    this.expiryDate = this.enrolmentService.enrolment.expiryDate;
 
     this.busy = this.enrolmentResource
       .getEnrolmentProfileForAccessTerm(enrolleeId, accessTermId)

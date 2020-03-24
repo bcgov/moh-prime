@@ -16,7 +16,7 @@
         </ng-container>
         <ng-container #alertContent
                       class="alert-content">
-          Renew your PRIME enrolment by {{ expiryDate }}
+          Renew your PRIME enrolment by {{ enrolment?.expiryDate | formatDate }}
         </ng-container>
       </app-alert>
     </div>
