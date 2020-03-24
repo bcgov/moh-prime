@@ -86,6 +86,9 @@ namespace Prime.Models
 
         public string HasPharmaNetSuspendedDetails { get; set; }
 
+        [NotMapped]
+        public bool HasMostRecentAccessTermSigned { get; set; }
+
         [JsonIgnore]
         public ICollection<AssignedPrivilege> AssignedPrivileges { get; set; }
 
