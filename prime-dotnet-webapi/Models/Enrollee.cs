@@ -181,7 +181,6 @@ namespace Prime.Models
 
         public bool AlwaysManual { get; set; }
 
-
         public EnrolmentStatus AddEnrolmentStatus(StatusType statusType)
         {
             var newStatus = EnrolmentStatus.FromStatusType(statusType, this.Id);
