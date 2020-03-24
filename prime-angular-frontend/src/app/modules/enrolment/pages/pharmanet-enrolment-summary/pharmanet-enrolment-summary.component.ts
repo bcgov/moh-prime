@@ -103,7 +103,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     const formControl = this.form.get(`${provisionerName.toLowerCase()}Recipients`) as FormControl;
     if (!formControl) { return; }
 
-    const emails = formControl.value.split(',').map((email: string) => email.trim()).join(",");
+    const emails = formControl.value.split(',').map((email: string) => email.trim()).join(',');
 
     (formControl.valid)
       ? this.sendProvisionerAccessLink(provisionerName, emails, formControl)
