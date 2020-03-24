@@ -89,9 +89,9 @@ namespace Prime.Controllers
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 
-            string providedEmailsCast = (string)providedEmails;
-            string[] emails = (!string.IsNullOrEmpty(providedEmailsCast))
-                ? (providedEmailsCast).Split(",")
+            string providedEmailsTemp = (string)providedEmails;
+            string[] emails = (!string.IsNullOrEmpty(providedEmailsTemp))
+                ? (providedEmailsTemp).Split(",")
                 : new string[] { };
 
             // Emails are either "Other" provisioners, or office manager(s)
