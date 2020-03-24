@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 
 using Prime.Models;
 using Prime.Services;
+using Prime.ViewModels;
 
 namespace PrimeTests.Mocks
 {
@@ -19,6 +20,16 @@ namespace PrimeTests.Mocks
         {
             // TODO - make this have more logic to help testing
             return Task.FromResult(false);
+        }
+
+        public Task<bool> QualifiesForAutomaticAdjudicationAsync(Enrollee enrollee)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<bool> QualifiesAsMinorUpdateAsync(Enrollee enrollee, EnrolleeProfileViewModel profileUpdate)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
