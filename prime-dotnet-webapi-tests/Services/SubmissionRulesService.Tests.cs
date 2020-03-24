@@ -107,7 +107,7 @@ namespace PrimeTests.Services
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
             QualifyEnrolleeForAuto(enrollee);
 
-            Assert.True(await _service.QualifiesForAutomaticAdjudication(enrollee));
+            Assert.True(await _service.QualifiesForAutomaticAdjudicationAsync(enrollee));
             AssertReasons(enrollee.CurrentStatus?.EnrolmentStatusReasons);
         }
 
