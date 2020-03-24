@@ -153,10 +153,16 @@ namespace Prime.Services
         public async Task<bool> IsCurrentAsync(int accessTermId)
         {
             // Currently, only the User Clause is versioned, and has different versions based on user class (OBO vs RU)
+            // Uses an anonymous object select to avoid fetching the user clause text, which we dont need.
+            // TODO: perhaps LINQ GroupBy to make this 1 DB call?
 
             var userClause = await _context.AccessTerms
                 .Where(at => at.Id == accessTermId)
-                .Select(at => at.UserClause)
+                .Select(at => new
+                {
+                    EnrolleeClassification = at.UserClause.EnrolleeClassification,
+                    EffectiveDate = at.UserClause.EffectiveDate
+                })
                 .SingleAsync();
 
             bool aNewerUserClause = await _context.UserClauses
