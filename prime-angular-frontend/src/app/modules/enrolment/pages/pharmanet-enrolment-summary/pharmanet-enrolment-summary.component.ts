@@ -103,7 +103,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     const formControl = this.form.get(`${provisionerName.toLowerCase()}Recipients`) as FormControl;
     if (!formControl) { return; }
 
-    const emails = formControl.value.split(',').map((email: string) => email.trim()).join(',');
+    const emails = formControl.value.split(',').map((email: string) => email.trim()).join(',') || null;
 
     (formControl.valid)
       ? this.sendProvisionerAccessLink(provisionerName, emails, formControl)
@@ -170,7 +170,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
       careconnectRecipients: [null, [Validators.required, FormControlValidators.multipleEmails]],
       excellerisRecipients: [null, [Validators.required, FormControlValidators.multipleEmails]],
       plexiaRecipients: [null, [Validators.required, FormControlValidators.multipleEmails]],
-      otherRecipient: [null, [Validators.required, FormControlValidators.email]]
+      otherRecipients: [null, [Validators.required, FormControlValidators.email]]
     });
   }
 }
