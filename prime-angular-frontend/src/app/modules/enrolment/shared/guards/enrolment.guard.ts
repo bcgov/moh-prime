@@ -138,8 +138,6 @@ export class EnrolmentGuard extends BaseGuard {
       blacklistedRoutes.push(EnrolmentRoutes.OVERVIEW);
     }
 
-    const test = blacklistedRoutes.includes(route);
-
     return (blacklistedRoutes.includes(route))
       // Prevent access to post enrolment/blacklisted routes
       ? this.navigate(routePath, redirectionRoute)
