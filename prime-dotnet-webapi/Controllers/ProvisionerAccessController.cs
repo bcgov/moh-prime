@@ -120,6 +120,7 @@ namespace Prime.Controllers
 
             var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrollee);
 
+            // Only a few provisioners want emails sent directly, otherwise sent only to managers
             if (provisionerName == "iClinic" || provisionerName == "MediNet" || provisionerName == "Other")
             {
                 var provisionerEmail = (provisionerName != "Other")
@@ -134,7 +135,7 @@ namespace Prime.Controllers
             }
 
             await _emailService.SendProvisionerLinkAsync(emails, createdToken, provisionerName);
-            await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Provisioner link sent to emails: " + string.Join(",", emails));
+            await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Provisioner link sent to email(s): " + string.Join(",", emails));
 
             return CreatedAtAction(
                 nameof(GetEnrolmentCertificate),
