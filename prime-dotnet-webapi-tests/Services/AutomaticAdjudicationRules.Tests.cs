@@ -12,9 +12,9 @@ using static PrimeTests.Mocks.PharmanetApiServiceMock;
 
 namespace PrimeTests.Services
 {
-    public class SubmissionRulesServiceTests : BaseServiceTests<SubmissionRulesService>
+    public class AutomaticAdjudicationRulesTests : BaseServiceTests<SubmissionRulesService>
     {
-        public SubmissionRulesServiceTests() : base(new object[] { new PharmanetApiServiceMock() })
+        public AutomaticAdjudicationRulesTests() : base(new object[] { new PharmanetApiServiceMock(), new AccessTermServiceMock() })
         { }
 
         private void QualifyEnrolleeForAuto(Enrollee enrollee)
