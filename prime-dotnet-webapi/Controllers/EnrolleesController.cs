@@ -156,10 +156,10 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            // If the enrollee is not in the status of 'Active', it cannot be updated
-            if (!(await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.Active)))
+            // If the enrollee is not in the status of 'Editable', it cannot be updated
+            if (!(await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.Editable)))
             {
-                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee can not be updated when the current status is not 'Active'.");
+                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee can not be updated when the current status is not 'Editable'.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 
@@ -320,7 +320,7 @@ namespace Prime.Controllers
 
             if (!await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.UnderReview))
             {
-                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Access agreement notes can not be updated when the current status is 'Active'.");
+                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Access agreement notes can not be updated when the current status is 'Editable'.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 

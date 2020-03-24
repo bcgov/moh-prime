@@ -95,6 +95,8 @@ namespace Prime.Services
             foreach (var item in items)
             {
                 item.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(item);
+                // Attach to the enrollee if they have signed the most recent ToA
+                item.HasMostRecentAccessTermSigned = await _accessTermService.IsCurrentByEnrolleeAsync(item.Id);
             }
 
             return items;
@@ -120,7 +122,7 @@ namespace Prime.Services
                 throw new ArgumentNullException(nameof(enrollee), "Could not create an enrollee, the passed in Enrollee cannot be null.");
             }
 
-            enrollee.AddEnrolmentStatus(StatusType.Active);
+            enrollee.AddEnrolmentStatus(StatusType.Editable);
             _context.Enrollees.Add(enrollee);
 
             var created = await _context.SaveChangesAsync();

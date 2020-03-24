@@ -34,12 +34,12 @@
   </app-page-subheader>
 
   <app-enrollee-review *ngIf="enrolment"
-                       [showEditRedirect]="currentStatus === EnrolmentStatus.ACTIVE"
+                       [showEditRedirect]="currentStatus === EnrolmentStatus.EDITABLE"
                        [enrolment]="enrolment"
                        (route)="routeTo($event)"></app-enrollee-review>
 
   <div class="footer">
-    <app-alert *ngIf="currentStatus !== EnrolmentStatus.ACTIVE"
+    <app-alert *ngIf="currentStatus !== EnrolmentStatus.EDITABLE"
                type="danger"
                icon="warning">
       <ng-container #alertContent
@@ -50,7 +50,7 @@
     </app-alert>
 
     <mat-checkbox #accept
-                  [disabled]="currentStatus !== EnrolmentStatus.ACTIVE">
+                  [disabled]="currentStatus !== EnrolmentStatus.EDITABLE">
       <div class="pl-3">
         I certify that all information provided is true and complete. I understand it is an offence under the
         Pharmaceutical Services Act to knowingly provide false or misleading information.

@@ -190,7 +190,7 @@ export class MockConfigService extends ConfigService implements IConfigService {
           { code: 'YT', name: 'Yukon', countryCode: 'CA' }
         ],
         statuses: [
-          { code: 1, name: 'Active' },
+          { code: 1, name: 'Editable' },
           { code: 4, name: 'Locked' },
           { code: 3, name: 'Requires TOA' },
           { code: 2, name: 'Under Review' }
