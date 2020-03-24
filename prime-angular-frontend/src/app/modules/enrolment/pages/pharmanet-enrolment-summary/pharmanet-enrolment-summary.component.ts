@@ -85,8 +85,8 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     return this.form.get('plexiaRecipients') as FormControl;
   }
 
-  public get otherRecipient(): FormControl {
-    return this.form.get('otherRecipient') as FormControl;
+  public get otherRecipients(): FormControl {
+    return this.form.get('otherRecipients') as FormControl;
   }
 
   public get isRu(): boolean {

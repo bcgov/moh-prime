@@ -202,9 +202,9 @@
               <mat-form-field class="w-100 mb-3">
                 <input matInput
                        placeholder="Email"
-                       formControlName="otherRecipient">
-                <mat-error *ngIf="otherRecipient.hasError('required')">Required</mat-error>
-                <mat-error *ngIf="otherRecipient.hasError('email')">Must be a valid email address</mat-error>
+                       formControlName="otherRecipients">
+                <mat-error *ngIf="otherRecipients.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="otherRecipients.hasError('email')">Must be a valid email address</mat-error>
               </mat-form-field>
 
             </div>
