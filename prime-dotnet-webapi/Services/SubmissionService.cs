@@ -136,11 +136,16 @@ namespace Prime.Services
                 await _accessTermService.AcceptCurrentAccessTermAsync(enrollee);
                 await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrollee.Id, enrollee);
                 await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Accepted TOA");
+
                 if (enrollee.AdjudicatorId != null)
                 {
                     await _enrolleeService.UpdateEnrolleeAdjudicator(enrollee.Id);
                     await _businessEventService.CreateAdminClaimEventAsync(enrollee.Id, "Admin disclaimed after TOA accepted");
                 }
+            }
+            else
+            {
+                await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Declined TOA");
             }
             await _context.SaveChangesAsync();
         }
@@ -221,7 +226,7 @@ namespace Prime.Services
             {
                 var builder = new StateMachineDefinitionBuilder<EnrolleeState, SubmissionAction>();
 
-                builder.In(EnrolleeState.Active)
+                builder.In(EnrolleeState.Editable)
                     .On(SubmissionAction.LockProfile).If<bool>(isAdmin => isAdmin).Execute(HandleLockProfile);
 
                 builder.In(EnrolleeState.UnderReview)
@@ -250,6 +255,8 @@ namespace Prime.Services
 
                 switch (enrollee.CurrentStatus.StatusCode)
                 {
+                    case (int)StatusType.Editable:
+                        return EnrolleeState.Editable;
                     case (int)StatusType.UnderReview:
                         return EnrolleeState.UnderReview;
                     case (int)StatusType.RequiresToa:

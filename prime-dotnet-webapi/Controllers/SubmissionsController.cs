@@ -65,7 +65,7 @@ namespace Prime.Controllers
                 this.ModelState.AddModelError("EnrolleeProfileViewModel", "New profile cannot be null.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
-            if (!(await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.Active)))
+            if (!(await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.Editable)))
             {
                 this.ModelState.AddModelError("Enrollee.CurrentStatus", "Application can not be submitted when the current status is not 'Active'.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));

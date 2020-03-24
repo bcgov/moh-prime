@@ -250,7 +250,7 @@ namespace PrimeTests.Services
             var enrolmentStatuses = await _service.GetEnrolmentStatusesAsync(expectedEnrolleeId);
             Assert.NotNull(enrolmentStatuses);
             Assert.Single(enrolmentStatuses);
-            Assert.True(enrolmentStatuses.First().IsType(StatusType.Editable));
+            Assert.True(enrolmentStatuses.Single().IsType(StatusType.Editable));
         }
 
         // TODO move to submission service tests
