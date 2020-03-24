@@ -178,6 +178,17 @@ namespace Prime.Models
 
         public bool AlwaysManual { get; set; }
 
+        [NotMapped]
+        [JsonIgnore]
+        public bool? IsObo
+        {
+            get => AccessTerms?
+                .Where(at => at.AcceptedDate != null)
+                .OrderByDescending(at => at.AcceptedDate)
+                .FirstOrDefault()?
+                .UserClause?.EnrolleeClassification == PrimeConstants.PRIME_OBO;
+        }
+
         public EnrolmentStatus AddEnrolmentStatus(StatusType statusType)
         {
             var newStatus = EnrolmentStatus.FromType(statusType, this.Id);

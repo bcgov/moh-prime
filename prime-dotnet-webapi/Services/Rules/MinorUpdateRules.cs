@@ -2,9 +2,9 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using KellermanSoftware.CompareNetObjects;
-using KellermanSoftware.CompareNetObjects.TypeComparers;
 using Prime.Models;
 using Prime.ViewModels;
+
 
 namespace Prime.Services.Rules
 {
@@ -71,7 +71,7 @@ namespace Prime.Services.Rules
     /// </summary>
     public class AllowableChangesRule : MinorUpdateRule
     {
-        private EnrolleeProfileViewModel _updatedProfile;
+        private readonly EnrolleeProfileViewModel _updatedProfile;
 
         public AllowableChangesRule(EnrolleeProfileViewModel updatedProfile)
         {
@@ -81,22 +81,27 @@ namespace Prime.Services.Rules
         public override Task<bool> ProcessRule(Enrollee enrollee)
         {
             var comparitor = InitComparitor();
-            var result = comparitor.Compare(_updatedProfile, enrollee);
 
-            if (result.AreEqual)
+            if (!comparitor.Compare(enrollee, _updatedProfile).AreEqual)
             {
-                return Task.FromResult(true);
+                return Task.FromResult(false);
             }
 
-            foreach (var diff in result.Differences)
-            {
-                if (true // TODO enrollee is OBO
-                    && diff.PropertyName == nameof(Enrollee.Jobs))
-                {
-                    // OBOs can change their job titles(s)
-                    continue;
-                }
+            comparitor.Config.IgnoreObjectTypes = false; // To properly match collections
 
+            if (!comparitor.Compare(enrollee.Certifications, _updatedProfile.Certifications).AreEqual)
+            {
+                return Task.FromResult(false);
+            }
+
+            if (!comparitor.Compare(enrollee.Jobs, _updatedProfile.Jobs).AreEqual
+                && enrollee.IsObo != true)
+            {
+                return Task.FromResult(false);
+            }
+
+            if (!comparitor.Compare(enrollee.Organizations, _updatedProfile.Organizations).AreEqual)
+            {
                 return Task.FromResult(false);
             }
 
@@ -106,7 +111,7 @@ namespace Prime.Services.Rules
         private static CompareLogic InitComparitor()
         {
             ComparisonConfig config = new ComparisonConfig();
-            config.IgnoreObjectTypes = true;
+            config.IgnoreObjectTypes = true; // to match Enrollee to EnrolleeViewModel
             config.CompareFields = false;
             config.MaxDifferences = 100;
             config.IgnoreCollectionOrder = true;
@@ -117,7 +122,10 @@ namespace Prime.Services.Rules
             config.IgnoreProperty<Enrollee>(x => x.VoicePhone);
             config.IgnoreProperty<Enrollee>(x => x.VoiceExtension);
 
-            // Ignored fields on child models due to how the frontend sends objects.
+            config.IgnoreProperty<Enrollee>(x => x.Certifications);
+            config.IgnoreProperty<Enrollee>(x => x.Jobs);
+            config.IgnoreProperty<Enrollee>(x => x.Organizations);
+
             config.IgnoreProperty<BaseAuditable>(x => x.CreatedUserId);
             config.IgnoreProperty<BaseAuditable>(x => x.CreatedTimeStamp);
             config.IgnoreProperty<BaseAuditable>(x => x.UpdatedUserId);
@@ -140,6 +148,11 @@ namespace Prime.Services.Rules
             config.IgnoreProperty<MailingAddress>(x => x.Enrollee);
             config.IgnoreProperty<MailingAddress>(x => x.Country);
             config.IgnoreProperty<MailingAddress>(x => x.Province);
+
+            config.IgnoreProperty<Organization>(x => x.Id);
+            config.IgnoreProperty<Organization>(x => x.EnrolleeId);
+            config.IgnoreProperty<Organization>(x => x.Enrollee);
+            config.IgnoreProperty<Organization>(x => x.OrganizationType);
 
             return new CompareLogic(config);
         }
