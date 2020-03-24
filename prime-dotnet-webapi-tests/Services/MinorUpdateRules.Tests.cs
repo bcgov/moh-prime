@@ -97,7 +97,7 @@ namespace PrimeTests.Services
             Assert.Empty(reasons);
         }
 
-        [Fact(Skip = "Not Implemented")]
+        [Fact]
         public async void testCurrentToaRule()
         {
             // Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
@@ -117,14 +117,14 @@ namespace PrimeTests.Services
 
         [Theory]
         [MemberData(nameof(DateRuleData))]
-        public async void testDateRule(TimeSpan expiryDiff, bool expected)
+        public async void testDateRule(DateTimeOffset expiryDate, bool expected)
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
             enrollee.AccessTerms = new[]
             {
                 new AccessTerm
                 {
-                    ExpiryDate = DateTimeOffset.Now.Add(expiryDiff)
+                    ExpiryDate = expiryDate
                 }
             };
 
@@ -139,9 +139,10 @@ namespace PrimeTests.Services
         {
             return new[]
             {
-                new object[] { TimeSpan.FromDays(100), true },
-                new object[] { TimeSpan.FromDays(89), false },
-                new object[] { TimeSpan.FromDays(-1), false },
+                new object[] { null, true },
+                new object[] { DateTimeOffset.Now.AddDays(91), true },
+                new object[] { DateTimeOffset.Now.AddDays(89), false },
+                new object[] { DateTimeOffset.Now.AddDays(-1), false },
             };
         }
 
