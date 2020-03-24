@@ -27,7 +27,7 @@ export class EnrolleeTableComponent implements OnInit {
     this.claim = new EventEmitter<number>();
     this.disclaim = new EventEmitter<number>();
     this.route = new EventEmitter<string | (string | number)[]>();
-    this.columns = ['uniqueId', 'name', 'appliedDate', 'status', 'approvedDate', 'adjudicator', 'actions'];
+    this.columns = ['uniqueId', 'name', 'appliedDate', 'status', 'approvedDate', 'hasMostRecentAccessTermSigned', 'adjudicator', 'actions'];
     this.dataSource = new MatTableDataSource<HttpEnrollee>([]);
   }
 
