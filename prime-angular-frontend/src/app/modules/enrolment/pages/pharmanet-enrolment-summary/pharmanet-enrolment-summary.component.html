@@ -7,6 +7,20 @@
     <app-progress-indicator *ngIf="showProgressBar"
                             [currentRoute]="EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY"></app-progress-indicator>
 
+    <div class="mb-4"
+         *ngIf="expiryDate">
+      <app-alert type="success">
+        <ng-container #alertTitle
+                      class="alert-title">
+          You Have Been Approved to use PharmaNet
+        </ng-container>
+        <ng-container #alertContent
+                      class="alert-content">
+          Renew your PRIME enrolment by {{ enrolment?.expiryDate | formatDate }}
+        </ng-container>
+      </app-alert>
+    </div>
+
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>Next Steps</ng-container>
       <ng-container appContextualContent>
