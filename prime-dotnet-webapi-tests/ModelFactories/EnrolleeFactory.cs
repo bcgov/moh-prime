@@ -60,7 +60,7 @@ namespace PrimeTests.ModelFactories
             {
                 set.RuleFor(x => x.EnrolmentStatuses, (f, x) => new StatusStateFactory(x, StatusState.Submitted).Generate());
             });
-            RuleSet("status.active", (set) =>
+            RuleSet("status.editable", (set) =>
             {
                 set.RuleFor(x => x.EnrolmentStatuses, (f, x) => new StatusStateFactory(x, StatusState.PassedTos).Generate());
             });
@@ -90,7 +90,7 @@ namespace PrimeTests.ModelFactories
             {
                 x.ProfileCompleted = x.EnrolmentStatuses.Count > 1 ? true : f.Random.Bool();
 
-                if (x.CurrentStatus.IsType(StatusType.Active) && x.PreviousStatus.IsType(StatusType.RequiresToa))
+                if (x.CurrentStatus.IsType(StatusType.Editable) && x.PreviousStatus.IsType(StatusType.RequiresToa))
                 {
                     x.GPID = f.Random.AlphaNumeric(20);
 

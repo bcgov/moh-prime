@@ -135,7 +135,7 @@ export class DashboardComponent implements OnInit {
     const enrolment = this.enrolmentService.enrolment;
     const enrolmentStatus = (enrolment)
       ? enrolment.currentStatus.statusCode
-      : EnrolmentStatus.ACTIVE;
+      : EnrolmentStatus.EDITABLE;
     // Check if the enrollee is within their initial enrolment
     const hasAcceptedAtLeastOneToa = (enrolment)
       ? !!enrolment.expiryDate
@@ -256,7 +256,7 @@ export class DashboardComponent implements OnInit {
       certificate = 'lock';
 
       switch (enrolmentStatus) {
-        case EnrolmentStatus.ACTIVE:
+        case EnrolmentStatus.EDITABLE:
           break;
         case EnrolmentStatus.UNDER_REVIEW:
         case EnrolmentStatus.REQUIRES_TOA:
@@ -268,7 +268,7 @@ export class DashboardComponent implements OnInit {
       }
     } else {
       switch (enrolmentStatus) {
-        case EnrolmentStatus.ACTIVE:
+        case EnrolmentStatus.EDITABLE:
           break;
         case EnrolmentStatus.UNDER_REVIEW:
         case EnrolmentStatus.REQUIRES_TOA:
