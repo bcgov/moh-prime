@@ -97,11 +97,9 @@ namespace PrimeTests.Services
             Assert.Empty(reasons);
         }
 
-        [Theory]
-        [InlineData()]
+        [Fact(Skip = "Not Implemented")]
         public async void testCurrentToaRule()
         {
-            throw new NotImplementedException();
             // Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
             // UpdateSelfDeclaration(enrollee, declaration);
             // var rule = new SelfDeclarationRule();
@@ -117,11 +115,9 @@ namespace PrimeTests.Services
             // }
         }
 
-        [Theory]
-        [InlineData()]
+        [Fact(Skip = "Not Implemented")]
         public async void testDateRule()
         {
-            throw new NotImplementedException();
             // Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
             // var rule = new AddressRule();
 
@@ -134,11 +130,9 @@ namespace PrimeTests.Services
             // AssertReasons(enrollee.CurrentStatus.EnrolmentStatusReasons, StatusReasonType.Address);
         }
 
-        [Theory]
-        [InlineData()]
+        [Fact(Skip = "Not Implemented")]
         public async void testAllowableChangesRule()
         {
-            throw new NotImplementedException();
             // Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
             // UpdateCertifications(enrollee, apiModes.Length);
             // var rule = new PharmanetValidationRule(new PharmanetApiServiceMock(enrollee, apiModes));
