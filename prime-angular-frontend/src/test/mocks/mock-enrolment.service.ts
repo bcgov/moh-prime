@@ -64,7 +64,7 @@ export class MockEnrolmentService implements IEnrolmentService {
         enrolmentId,
         statusCode: null,
         status: {
-          code: EnrolmentStatus.ACTIVE,
+          code: EnrolmentStatus.EDITABLE,
           name: null
         },
         statusDate: null,
