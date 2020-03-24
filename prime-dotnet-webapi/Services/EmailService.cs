@@ -54,46 +54,27 @@ namespace Prime.Services
             await Send(PRIME_EMAIL, enrollee.ContactEmail, subject, body);
         }
 
-        public async Task SendProvisionerLinkAsync(string provisionerName, string provisionerEmail, EnrolmentCertificateAccessToken token)
+        public async Task SendProvisionerLinkAsync(string[] recipients, EnrolmentCertificateAccessToken token, string provisionerName = null)
         {
-            // Always send a copy to the enrollee
-            var ccEmails = new List<string>() { token.Enrollee.ContactEmail };
-
-            if (!IsValidEmail(provisionerEmail))
-            {
-                throw new ArgumentException("Cannot send provisioner link, supplied provisioner email address is invalid.");
-            }
-
             if (token.Enrollee == null)
             {
                 await _context.Entry(token).Reference(t => t.Enrollee).LoadAsync();
             }
 
-            string subject = "New Access Request";
-            string vendorBody = this.GetVendorEmailBody(token.Enrollee, token, provisionerName);
-
-            await Send(PRIME_EMAIL, new[] { provisionerEmail }, ccEmails, subject, vendorBody);
-        }
-
-        public async Task SendOfficeManagerEmailAsync(string[] officeManagerEmails, EnrolmentCertificateAccessToken token)
-        {
             // Always send a copy to the enrollee
             var ccEmails = new List<string>() { token.Enrollee.ContactEmail };
 
-            if (!AreValidEmails(officeManagerEmails))
+            if (!AreValidEmails(recipients))
             {
-                throw new ArgumentException("Cannot send provisioner link to office manager, supplied email address(es) are invalid.");
-            }
-
-            if (token.Enrollee == null)
-            {
-                await _context.Entry(token).Reference(t => t.Enrollee).LoadAsync();
+                throw new ArgumentException("Cannot send provisioner link, supplied email address(es) are invalid.");
             }
 
             string subject = "New Access Request";
-            string officeManagerBody = this.GetOfficeManagerEmailBody(token.Enrollee, token);
+            string emailBody = (string.IsNullOrEmpty(provisionerName))
+                ? this.GetOfficeManagerEmailBody(token.Enrollee, token)
+                : this.GetVendorEmailBody(token.Enrollee, token, provisionerName);
 
-            await Send(PRIME_EMAIL, officeManagerEmails, ccEmails, subject, officeManagerBody);
+            await Send(PRIME_EMAIL, recipients, ccEmails, subject, emailBody);
         }
 
         private async Task Send(string from, string to, string subject, string body)

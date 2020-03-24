@@ -122,18 +122,19 @@ namespace Prime.Controllers
 
             if (provisionerName == "iClinic" || provisionerName == "MediNet" || provisionerName == "Other")
             {
-                var recipientEmail = (provisionerName != "Other")
+                var provisionerEmail = (provisionerName != "Other")
                     ? _certificateService.GetPharmaNetProvisionerEmail(provisionerName)
                     : emails[0];
 
-                await _emailService.SendProvisionerLinkAsync(provisionerName, recipientEmail, createdToken);
-                await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Provisioner link sent to email: " + recipientEmail);
+                emails = new[] { provisionerEmail };
             }
             else
             {
-                await _emailService.SendOfficeManagerEmailAsync(emails, createdToken);
-                await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Provisioner link sent to emails: " + string.Join(",", emails));
+                provisionerName = null;
             }
+
+            await _emailService.SendProvisionerLinkAsync(emails, createdToken, provisionerName);
+            await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Provisioner link sent to emails: " + string.Join(",", emails));
 
             return CreatedAtAction(
                 nameof(GetEnrolmentCertificate),
