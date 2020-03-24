@@ -123,25 +123,24 @@ export class EnrolmentGuard extends BaseGuard {
    * post-enrolment routes.
    */
   private manageEditableRouting(routePath: string, enrolment: Enrolment): boolean {
-    const enrolmentSubmissionRoutes = [
-      ...EnrolmentRoutes.enrolmentSubmissionRoutes()
-    ];
+    const hasNotCompletedProfile = !enrolment.profileCompleted;
+
     const route = this.route(routePath);
-    const redirectionRoute = (!enrolment.profileCompleted)
+    const redirectionRoute = (hasNotCompletedProfile)
       ? EnrolmentRoutes.DEMOGRAPHIC // Only for new enrolments with incomplete profiles
       : EnrolmentRoutes.OVERVIEW;
     const blacklistedRoutes = [
       ...EnrolmentRoutes.enrolmentSubmissionRoutes()
     ];
 
-    const hasNotCompletedProfile = !enrolment.profileCompleted;
-
     if (hasNotCompletedProfile) {
       // No access to overview if you've not completed the wizard
       blacklistedRoutes.push(EnrolmentRoutes.OVERVIEW);
     }
 
-    return (hasNotCompletedProfile || blacklistedRoutes.includes(route))
+    const test = blacklistedRoutes.includes(route);
+
+    return (blacklistedRoutes.includes(route))
       // Prevent access to post enrolment/blacklisted routes
       ? this.navigate(routePath, redirectionRoute)
       // Otherwise, allow the route to resolve
