@@ -80,13 +80,29 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<EnrolmentCertificateAccessToken>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<EnrolmentCertificateAccessToken>> SendProvisionerLink(string provisionerName, FromBodyText email)
+        public async Task<ActionResult<EnrolmentCertificateAccessToken>> SendProvisionerLink(string provisionerName, FromBodyText providedEmails)
         {
-            string optionalEmail = (string)email;
-            if (!string.IsNullOrEmpty(optionalEmail) && !EmailService.IsValidEmail(optionalEmail))
+            var provisionerNames = _certificateService.GetPharmaNetProvisionerNames();
+            if (!provisionerNames.Contains(provisionerName) && provisionerName != "Other")
             {
-                // Email used as Cc to enrollee organization contact, or as the recipient for other provisioners
-                this.ModelState.AddModelError("Email", "The email provided is not valid.");
+                this.ModelState.AddModelError("Provisioner", "The provisioner provided is not valid.");
+                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+            }
+
+            string providedEmailsCast = (string)providedEmails;
+            string[] emails = (!string.IsNullOrEmpty(providedEmailsCast))
+                ? (providedEmailsCast).Split(",")
+                : new string[] { };
+
+            // Emails are either "Other" provisioners, or office manager(s)
+            if (emails.Count() > 0 && !EmailService.AreValidEmails(emails))
+            {
+                this.ModelState.AddModelError("Email(s)", "The email(s) provided are not valid.");
+                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+            }
+            if (provisionerName == "Other" && emails.Count() > 1)
+            {
+                this.ModelState.AddModelError("Email", "Other provisioners can only provide a single email address.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 
@@ -102,14 +118,22 @@ namespace Prime.Controllers
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 
-            var recipientEmail = _certificateService.GetPharmaNetProvisionerEmail(provisionerName, ref optionalEmail);
             var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrollee);
-            await _emailService.SendProvisionerLinkAsync(provisionerName, recipientEmail, createdToken, optionalEmail);
 
-            var emailLogMessage = string.IsNullOrEmpty(optionalEmail)
-                ? "Provisioner link sent to email: " + recipientEmail
-                : "Provisioner link sent to emails: " + recipientEmail + ", " + optionalEmail;
-            await _businessEventService.CreateEmailEventAsync(enrollee.Id, emailLogMessage);
+            if (provisionerName == "iClinic" || provisionerName == "MediNet" || provisionerName == "Other")
+            {
+                var recipientEmail = (provisionerName != "Other")
+                    ? _certificateService.GetPharmaNetProvisionerEmail(provisionerName)
+                    : emails[0];
+
+                await _emailService.SendProvisionerLinkAsync(provisionerName, recipientEmail, createdToken);
+                await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Provisioner link sent to email: " + recipientEmail);
+            }
+            else
+            {
+                await _emailService.SendOfficeManagerEmailAsync(emails, createdToken);
+                await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Provisioner link sent to emails: " + string.Join(",", emails));
+            }
 
             return CreatedAtAction(
                 nameof(GetEnrolmentCertificate),

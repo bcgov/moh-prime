@@ -54,7 +54,7 @@ namespace Prime.Services
             await Send(PRIME_EMAIL, enrollee.ContactEmail, subject, body);
         }
 
-        public async Task SendProvisionerLinkAsync(string provisionerName, string provisionerEmail, EnrolmentCertificateAccessToken token, string officeManagerEmail)
+        public async Task SendProvisionerLinkAsync(string provisionerName, string provisionerEmail, EnrolmentCertificateAccessToken token)
         {
             // Always send a copy to the enrollee
             var ccEmails = new List<string>() { token.Enrollee.ContactEmail };
@@ -73,22 +73,28 @@ namespace Prime.Services
             string vendorBody = this.GetVendorEmailBody(token.Enrollee, token, provisionerName);
 
             await Send(PRIME_EMAIL, new[] { provisionerEmail }, ccEmails, subject, vendorBody);
-
-            if (!String.IsNullOrEmpty(officeManagerEmail))
-            {
-                if (IsValidEmail(officeManagerEmail))
-                {
-                    string officeManagerBody = this.GetOfficeManagerEmailBody(token.Enrollee, token);
-
-                    await Send(PRIME_EMAIL, new[] { officeManagerEmail }, ccEmails, subject, officeManagerBody);
-                }
-                else
-                {
-                    throw new ArgumentException("Cannot send provisioner link to office manager, supplied carbon copy email address is invalid.");
-                }
-            }
         }
 
+        public async Task SendOfficeManagerEmailAsync(string[] officeManagerEmails, EnrolmentCertificateAccessToken token)
+        {
+            // Always send a copy to the enrollee
+            var ccEmails = new List<string>() { token.Enrollee.ContactEmail };
+
+            if (!AreValidEmails(officeManagerEmails))
+            {
+                throw new ArgumentException("Cannot send provisioner link to office manager, supplied email address(es) are invalid.");
+            }
+
+            if (token.Enrollee == null)
+            {
+                await _context.Entry(token).Reference(t => t.Enrollee).LoadAsync();
+            }
+
+            string subject = "New Access Request";
+            string officeManagerBody = this.GetOfficeManagerEmailBody(token.Enrollee, token);
+
+            await Send(PRIME_EMAIL, officeManagerEmails, ccEmails, subject, officeManagerBody);
+        }
 
         private async Task Send(string from, string to, string subject, string body)
         {
