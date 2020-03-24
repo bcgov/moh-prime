@@ -53,7 +53,7 @@ namespace Prime.Services
         {
             var rules = new List<MinorUpdateRule>
             {
-                //new DateRule(),
+                new DateRule(),
                 new CurrentToaRule(_accessTermService),
                 new AllowableChangesRule(profileUpdate)
             };
