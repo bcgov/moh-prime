@@ -57,9 +57,9 @@ export class FormControlValidators {
 
   static multipleEmails(control: AbstractControl): ValidationErrors | null {
     if (!control.value) { return null; }
-    const regExp = /^([a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,})(,[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,})*$/i;
+    const regExp = /^([a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,})(,(\s)?[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,})*$/i;
     const valid = (control.valid && regExp.test(control.value));
-    return (valid) ? null : { email: true };
+    return (valid) ? null : { emails: true };
   }
 
   /**

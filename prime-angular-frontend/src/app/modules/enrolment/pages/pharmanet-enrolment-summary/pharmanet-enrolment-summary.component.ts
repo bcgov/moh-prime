@@ -99,16 +99,18 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     return `${this.config.loginRedirectUrl}/provisioner-access/${tokenId}`;
   }
 
-  public sendProvisionerAccessLinkWithCc(provisionerName: string) {
-    const formControl = this.form.get(`${provisionerName.toLowerCase()}Recipient`) as FormControl;
+  public sendProvisionerAccessLinkTo(provisionerName: string) {
+    const formControl = this.form.get(`${provisionerName.toLowerCase()}Recipients`) as FormControl;
     if (!formControl) { return; }
 
+    const emails = formControl.value.split(',').map((email: string) => email.trim()).join(",");
+
     (formControl.valid)
-      ? this.sendProvisionerAccessLink(provisionerName, formControl.value, formControl)
+      ? this.sendProvisionerAccessLink(provisionerName, emails, formControl)
       : formControl.markAllAsTouched();
   }
 
-  public sendProvisionerAccessLink(provisionerName: string, email: string = null, formControl: FormControl = null) {
+  public sendProvisionerAccessLink(provisionerName: string, emails: string = null, formControl: FormControl = null) {
     const data: DialogOptions = {
       title: 'Confirm Email',
       message: `Are you sure you want to send your PharmaNet certificate to ${provisionerName}?`,
@@ -119,7 +121,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
       .pipe(
         exhaustMap((result: boolean) =>
           result
-            ? this.enrolmentResource.sendProvisionerAccessLink(provisionerName, email)
+            ? this.enrolmentResource.sendProvisionerAccessLink(provisionerName, emails)
             : EMPTY
         )
       )

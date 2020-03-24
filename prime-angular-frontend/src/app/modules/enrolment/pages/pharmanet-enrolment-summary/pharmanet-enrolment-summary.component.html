@@ -41,7 +41,8 @@
                        placeholder="Email"
                        formControlName="careconnectRecipients">
                 <mat-error *ngIf="careconnectRecipients.hasError('required')">Required</mat-error>
-                <mat-error *ngIf="careconnectRecipients.hasError('email')">Must be a valid email address</mat-error>
+                <mat-error *ngIf="careconnectRecipients.hasError('emails')">Must be a valid email address(es)
+                </mat-error>
               </mat-form-field>
 
             </div>
@@ -51,7 +52,7 @@
                       type="button"
                       color="primary"
                       class="w-100 mb-4"
-                      (click)="sendProvisionerAccessLinkWithCc('CareConnect')">
+                      (click)="sendProvisionerAccessLinkTo('CareConnect')">
                 Send
               </button>
 
@@ -75,7 +76,7 @@
                        placeholder="Email"
                        formControlName="excellerisRecipients">
                 <mat-error *ngIf="excellerisRecipients.hasError('required')">Required</mat-error>
-                <mat-error *ngIf="excellerisRecipients.hasError('email')">Must be a valid email address</mat-error>
+                <mat-error *ngIf="excellerisRecipients.hasError('emails')">Must be a valid email address(es)</mat-error>
               </mat-form-field>
 
             </div>
@@ -85,7 +86,7 @@
                       type="button"
                       color="primary"
                       class="w-100 mb-4"
-                      (click)="sendProvisionerAccessLinkWithCc('Excelleris')">
+                      (click)="sendProvisionerAccessLinkTo('Excelleris')">
                 Send
               </button>
 
@@ -163,7 +164,7 @@
                        placeholder="Email"
                        formControlName="plexiaRecipients">
                 <mat-error *ngIf="plexiaRecipients.hasError('required')">Required</mat-error>
-                <mat-error *ngIf="plexiaRecipients.hasError('email')">Must be a valid email address</mat-error>
+                <mat-error *ngIf="plexiaRecipients.hasError('emails')">Must be a valid email address(es)</mat-error>
               </mat-form-field>
 
             </div>
@@ -173,7 +174,7 @@
                       type="button"
                       color="primary"
                       class="w-100 mb-4"
-                      (click)="sendProvisionerAccessLinkWithCc('Plexia')">
+                      (click)="sendProvisionerAccessLinkTo('Plexia')">
                 Send
               </button>
 
@@ -209,7 +210,7 @@
                       type="button"
                       color="primary"
                       class="w-100 mb-4"
-                      (click)="sendProvisionerAccessLinkWithCc('Other')">
+                      (click)="sendProvisionerAccessLinkTo('Other')">
                 Send
               </button>
 
