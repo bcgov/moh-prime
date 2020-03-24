@@ -173,25 +173,6 @@ namespace Prime.Services
         }
 
         /// <summary>
-        /// Returns true if this access term has no newer versions
-        /// </summary>
-        public async Task<bool> IsCurrentAsync(int accessTermId)
-        {
-            // Currently, only the User Clause is versioned, and has different versions based on user class (OBO vs RU)
-
-            var userClause = await _context.AccessTerms
-                .Where(at => at.Id == accessTermId)
-                .Select(at => at.UserClause)
-                .SingleAsync();
-
-            bool aNewerUserClause = await _context.UserClauses
-                .Where(uc => uc.EnrolleeClassification == userClause.EnrolleeClassification)
-                .AnyAsync(uc => uc.EffectiveDate > userClause.EffectiveDate);
-
-            return !aNewerUserClause;
-        }
-
-        /// <summary>
         /// Returns true if the enrollees' most recent accepted access term has no newer versions
         /// </summary>
         public async Task<bool> IsCurrentByEnrolleeAsync(int enrolleeId)
