@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, TemplateRef } from '@angular/core';
+import { Component, OnInit, Input, TemplateRef, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatTableDataSource, MatDialog } from '@angular/material';
 
@@ -34,6 +34,7 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 export class AdjudicationContainerComponent extends AbstractComponent implements OnInit {
   @Input() public hasActions: boolean;
   @Input() public content: TemplateRef<any>;
+  @Output() public refresh: EventEmitter<void>;
 
   public busy: Subscription;
   public columns: string[];
@@ -50,6 +51,8 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
     private dialog: MatDialog
   ) {
     super(route, router);
+
+    this.refresh = new EventEmitter<void>();
 
     this.hasActions = false;
     this.columns = ['uniqueId', 'name', 'appliedDate', 'status', 'approvedDate', 'adjudicator', 'actions'];
