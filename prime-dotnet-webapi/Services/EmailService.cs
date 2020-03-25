@@ -37,7 +37,7 @@ namespace Prime.Services
 
         public static bool AreValidEmails(string[] emails)
         {
-            return emails.Select(e => IsValidEmail(e)).Aggregate((x, y) => x && y);
+            return emails.Select(e => IsValidEmail(e)).All(x => x);
         }
 
         public async Task SendReminderEmailAsync(Enrollee enrollee)
