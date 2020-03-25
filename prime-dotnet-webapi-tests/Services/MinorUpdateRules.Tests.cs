@@ -13,81 +13,9 @@ using PrimeTests.Mocks;
 
 namespace PrimeTests.Services
 {
-    public class MinorUpdateRulesTests : BaseServiceTests<SubmissionRulesService>
+    public class MinorUpdateRulesTests : IClassFixture<CustomWebApplicationFactory<TestStartup>>
     {
-        public MinorUpdateRulesTests() : base(new object[] { new PharmanetApiServiceMock(), new AccessTermServiceMock() })
-        { }
-
-        private void QualifyEnrolleeForAuto(Enrollee enrollee)
-        {
-            this.UpdateAddresses(enrollee);
-            this.UpdateCertifications(enrollee);
-            this.UpdateDeviceProvider(enrollee);
-            this.UpdateSelfDeclaration(enrollee);
-        }
-
-        private void UpdateCertifications(Enrollee enrollee, int certCount = 0, bool manual = false)
-        {
-            if (certCount == 0)
-            {
-                enrollee.Certifications.Clear();
-            }
-            if (manual)
-            {
-                enrollee.Certifications = TestUtils.ManualCertificationFaker.Generate(certCount);
-            }
-            else
-            {
-                enrollee.Certifications = TestUtils.CertificationFaker.Generate(certCount);
-            }
-
-            foreach (var cert in enrollee.Certifications)
-            {
-                cert.License = new License
-                {
-                    Code = cert.LicenseCode,
-                    Weight = 1,
-                    Manual = false,
-                    Validate = true
-                };
-            }
-        }
-
-        private void UpdateDeviceProvider(Enrollee enrollee, bool provider = false, bool pumpProvider = false)
-        {
-            enrollee.DeviceProviderNumber = provider ? TestUtils.RandomDeviceProviderNumber() : null;
-            enrollee.IsInsulinPumpProvider = pumpProvider;
-        }
-
-        [Flags]
-        public enum SelfDeclaration
-        {
-            NONE = 0,
-            CONVICTION = 1,
-            DISCIPLINARY = 2,
-            PHARMANET_SUSPENDED = 4,
-            REGISTRATION_SUSPENDED = 8
-        }
-        private void UpdateSelfDeclaration(Enrollee enrollee, SelfDeclaration declarations = SelfDeclaration.NONE)
-        {
-            enrollee.HasConviction = declarations.HasFlag(SelfDeclaration.CONVICTION);
-            enrollee.HasDisciplinaryAction = declarations.HasFlag(SelfDeclaration.DISCIPLINARY);
-            enrollee.HasPharmaNetSuspended = declarations.HasFlag(SelfDeclaration.PHARMANET_SUSPENDED);
-            enrollee.HasRegistrationSuspended = declarations.HasFlag(SelfDeclaration.REGISTRATION_SUSPENDED);
-        }
-
-        private void UpdateAddresses(Enrollee enrollee, bool inBC = true)
-        {
-            // update all addresses to 'BC', or a random province outside BC
-            if (enrollee.PhysicalAddress != null)
-            {
-                enrollee.PhysicalAddress.ProvinceCode = inBC ? Province.BRITISH_COLUMBIA_CODE : TestUtils.RandomProvinceCode(Province.BRITISH_COLUMBIA_CODE);
-            }
-            if (enrollee.MailingAddress != null)
-            {
-                enrollee.MailingAddress.ProvinceCode = inBC ? Province.BRITISH_COLUMBIA_CODE : TestUtils.RandomProvinceCode(Province.BRITISH_COLUMBIA_CODE);
-            }
-        }
+        public MinorUpdateRulesTests() : base() { }
 
         /// <summary>
         /// Minor update rules should not add any staus reasons
@@ -101,7 +29,7 @@ namespace PrimeTests.Services
         [Fact(Skip = "Awaiting test refactor")]
         public void testCurrentToaRule()
         {
-            // TODO: implement with better control over test DB.
+            // TODO: implement with better control over test DB and access term service.
         }
 
         [Theory]
@@ -183,6 +111,35 @@ namespace PrimeTests.Services
             rule = new AllowableChangesRule(profile);
             Assert.True(await rule.ProcessRule(enrollee));
             AssertNoReasons(enrollee);
+        }
+
+        [Theory]
+        [MemberData(nameof(DissallowedChangesData))]
+        public async void testAllowableChangesRule_DissallowedChanges()
+        {
+            Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
+            EnrolleeProfileViewModel profile = new EnrolleeProfileViewModel();
+            enrollee.CopyPropertiesTo(profile);
+
+            // New job
+            profile.Jobs.Add(new Job { Title = "Snake sweater knitter" });
+
+            var rule = new AllowableChangesRule(profile);
+            Assert.True(await rule.ProcessRule(enrollee));
+            AssertNoReasons(enrollee);
+
+            // Edit job
+            profile.Jobs = enrollee.Jobs;
+            profile.Jobs.First().Title = "Bespoke lifehack crafter";
+
+            rule = new AllowableChangesRule(profile);
+            Assert.True(await rule.ProcessRule(enrollee));
+            AssertNoReasons(enrollee);
+        }
+
+        public static IEnumerable<object[]> DissallowedChangesData()
+        {
+            throw new NotImplementedException();
         }
     }
 }
