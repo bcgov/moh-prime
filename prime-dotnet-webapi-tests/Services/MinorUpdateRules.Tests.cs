@@ -139,10 +139,10 @@ namespace PrimeTests.Services
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
 
-            var rule = new AllowableChangesRule();
+            //var rule = new AllowableChangesRule();
 
             // Assert.Equal(expected, await rule.ProcessRule(enrollee));
-            // AssertReasons(enrollee.CurrentStatus.EnrolmentStatusReasons, expectedReasons);
+            AssertNoReasons(enrollee);
         }
     }
 }
