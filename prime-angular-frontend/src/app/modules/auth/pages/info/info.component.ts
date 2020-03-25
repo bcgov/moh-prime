@@ -25,6 +25,7 @@ export class InfoComponent implements OnInit {
   }
 
   public loginUsingBCSC() {
+    // Send the user to COLLECTION_NOTICE which determines the direction of routing
     const redirectUri = `${this.config.loginRedirectUrl}${EnrolmentRoutes.routePath(EnrolmentRoutes.COLLECTION_NOTICE)}`;
 
     this.authService.login({
