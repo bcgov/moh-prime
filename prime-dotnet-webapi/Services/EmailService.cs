@@ -56,6 +56,11 @@ namespace Prime.Services
 
         public async Task SendProvisionerLinkAsync(string[] recipients, EnrolmentCertificateAccessToken token, string provisionerName = null)
         {
+            if (!AreValidEmails(recipients))
+            {
+                throw new ArgumentException("Cannot send provisioner link, supplied email address(es) are invalid.");
+            }
+
             if (token.Enrollee == null)
             {
                 await _context.Entry(token).Reference(t => t.Enrollee).LoadAsync();
@@ -63,11 +68,6 @@ namespace Prime.Services
 
             // Always send a copy to the enrollee
             var ccEmails = new List<string>() { token.Enrollee.ContactEmail };
-
-            if (!AreValidEmails(recipients))
-            {
-                throw new ArgumentException("Cannot send provisioner link, supplied email address(es) are invalid.");
-            }
 
             string subject = "New Access Request";
             string emailBody = (string.IsNullOrEmpty(provisionerName))
