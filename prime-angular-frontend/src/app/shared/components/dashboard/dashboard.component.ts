@@ -184,7 +184,7 @@ export class DashboardComponent implements OnInit {
             ].includes(currentRoute)
           },
           {
-            name: 'PharmaNet Enrolment Certificate',
+            name: 'Next Steps to get PharmaNet',
             icon: statusIcons.certificate,
             route: EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY,
             showItem: true,

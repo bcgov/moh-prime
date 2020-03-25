@@ -130,7 +130,7 @@ const routes: Routes = [
       {
         path: EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY,
         component: PharmanetEnrolmentSummaryComponent,
-        data: { title: 'PharmaNet Enrolment Summary' }
+        data: { title: 'Next Steps to get PharmaNet' }
       },
       // TODO removed until the page has been implemented
       // {
