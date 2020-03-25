@@ -24,7 +24,15 @@ export class EnrolleeEventsComponent implements OnInit {
     this.hasActions = true;
   }
 
+  public onRefresh() {
+    this.getBusinessEvents();
+  }
+
   public ngOnInit() {
+    this.getBusinessEvents();
+  }
+
+  private getBusinessEvents() {
     const enrolleeId = this.route.snapshot.params.id;
     this.businessEvents$ = this.adjucationResource.getEnrolleeBusinessEvents(enrolleeId)
       .pipe(
