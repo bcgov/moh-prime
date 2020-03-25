@@ -47,7 +47,7 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
     protected router: Router,
     private authService: AuthService,
     private adjudicationResource: AdjudicationResource,
-    private dialog: MatDialog
+    private dialog: MatDialog,
   ) {
     super(route, router);
 
