@@ -30,6 +30,7 @@
             <app-college-certification-form [form]="certificate"
                                             [index]="i"
                                             [total]="certifications.controls.length"
+                                            [selectedColleges]="selectedCollegeCodes"
                                             (remove)="removeCertification($event)">
             </app-college-certification-form>
 

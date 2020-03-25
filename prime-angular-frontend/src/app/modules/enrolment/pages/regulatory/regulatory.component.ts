@@ -3,16 +3,15 @@ import { FormGroup, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
-import { Config } from '@config/config.model';
-import { ConfigService } from '@config/config.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
+import { UtilsService } from '@core/services/utils.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
-import { UtilsService } from '@core/services/utils.service';
+import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 
 @Component({
   selector: 'app-regulatory',
@@ -20,9 +19,6 @@ import { UtilsService } from '@core/services/utils.service';
   styleUrls: ['./regulatory.component.scss']
 })
 export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnInit, OnDestroy {
-  public colleges: Config<number>[];
-  public licenses: Config<number>[];
-
   constructor(
     protected route: ActivatedRoute,
     protected router: Router,
@@ -32,17 +28,18 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     protected enrolmentStateService: EnrolmentStateService,
     protected toastService: ToastService,
     protected logger: LoggerService,
-    protected utilService: UtilsService,
-    private configService: ConfigService
+    protected utilService: UtilsService
   ) {
     super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger, utilService);
-
-    this.colleges = this.configService.colleges;
-    this.licenses = this.configService.licenses;
   }
 
   public get certifications(): FormArray {
     return this.form.get('certifications') as FormArray;
+  }
+
+  public get selectedCollegeCodes(): number[] {
+    return this.certifications.value
+      .map((certification: CollegeCertification) => +certification.collegeCode);
   }
 
   public addCertification() {
