@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Xunit;
 
 using Prime.Models;
+using Prime.ViewModels;
 using Prime.Services;
 using Prime.Services.Rules;
 using PrimeTests.Utils;
@@ -105,7 +106,7 @@ namespace PrimeTests.Services
 
         [Theory]
         [MemberData(nameof(DateRuleData))]
-        public async void testDateRule(DateTimeOffset expiryDate, bool expected)
+        public async void testDateRule(DateTimeOffset? expiryDate, bool expected)
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
             enrollee.AccessTerms = new[]
@@ -138,7 +139,10 @@ namespace PrimeTests.Services
         public async void testAllowableChangesRule_AllowedUpdates()
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
+            EnrolleeProfileViewModel profile = new EnrolleeProfileViewModel
+            {
 
+            };
             //var rule = new AllowableChangesRule();
 
             // Assert.Equal(expected, await rule.ProcessRule(enrollee));
