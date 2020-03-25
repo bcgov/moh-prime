@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using KellermanSoftware.CompareNetObjects;
@@ -88,20 +89,21 @@ namespace Prime.Services.Rules
                 return Task.FromResult(false);
             }
 
-            comparitor.Config.IgnoreObjectTypes = false; // To match collection objects
+            // Now compare all collection properties
+            comparitor.Config.IgnoreObjectTypes = false;
 
-            if (!comparitor.Compare(enrollee.Certifications.ToArray(), _updatedProfile.Certifications.ToArray()).AreEqual)
+            if (!CompareCollections(comparitor, enrollee.Certifications, _updatedProfile.Certifications))
             {
                 return Task.FromResult(false);
             }
 
             if (enrollee.IsObo != true // OBOs can change Job titles
-                && !comparitor.Compare(enrollee.Jobs.ToArray(), _updatedProfile.Jobs.ToArray()).AreEqual)
+                && !CompareCollections(comparitor, enrollee.Jobs, _updatedProfile.Jobs))
             {
                 return Task.FromResult(false);
             }
 
-            if (!comparitor.Compare(enrollee.Organizations.ToArray(), _updatedProfile.Organizations.ToArray()).AreEqual)
+            if (!CompareCollections(comparitor, enrollee.Organizations, _updatedProfile.Organizations))
             {
                 return Task.FromResult(false);
             }
@@ -129,6 +131,24 @@ namespace Prime.Services.Rules
             config.CustomComparers.Add(new OrganizationComparer(RootComparerFactory.GetRootComparer()));
 
             return new CompareLogic(config);
+        }
+
+        private bool CompareCollections<T>(CompareLogic comparitor, ICollection<T> coll1, ICollection<T> coll2)
+        {
+            if (coll1.Count != coll2.Count)
+            {
+                return false;
+            }
+
+            foreach (T item in coll1)
+            {
+                if (!coll2.Any(i => comparitor.Compare(item, i).AreEqual))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private class CertificationComparer : BaseTypeComparer
