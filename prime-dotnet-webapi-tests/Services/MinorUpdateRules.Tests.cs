@@ -3,13 +3,13 @@ using System.Linq;
 using System.Collections.Generic;
 using Xunit;
 
+using Prime;
 using Prime.Models;
 using Prime.ViewModels;
 using Prime.Services;
 using Prime.Services.Rules;
 using PrimeTests.Utils;
 using PrimeTests.Mocks;
-using static PrimeTests.Mocks.PharmanetApiServiceMock;
 
 namespace PrimeTests.Services
 {
@@ -135,17 +135,53 @@ namespace PrimeTests.Services
             };
         }
 
-        [Fact(Skip = "Not Implemented")]
+        [Fact]
         public async void testAllowableChangesRule_AllowedUpdates()
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
-            EnrolleeProfileViewModel profile = new EnrolleeProfileViewModel
+            EnrolleeProfileViewModel profile = new EnrolleeProfileViewModel();
+            enrollee.CopyPropertiesTo(profile);
+
+            profile.ContactEmail += "change";
+            profile.ContactPhone += "change";
+            profile.VoicePhone += "change";
+            profile.VoiceExtension += "change";
+
+            var rule = new AllowableChangesRule(profile);
+
+            Assert.True(await rule.ProcessRule(enrollee));
+            AssertNoReasons(enrollee);
+        }
+
+        [Fact]
+        public async void testAllowableChangesRule_OBOCanUpdateJobs()
+        {
+            Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
+            // Set the enrollee as OBO via the access term
+            enrollee.AccessTerms = new[]
             {
-
+                new AccessTerm
+                {
+                    AcceptedDate = DateTimeOffset.Now,
+                    UserClause = new UserClause { EnrolleeClassification = PrimeConstants.PRIME_OBO  }
+                }
             };
-            //var rule = new AllowableChangesRule();
+            EnrolleeProfileViewModel profile = new EnrolleeProfileViewModel();
+            enrollee.CopyPropertiesTo(profile);
 
-            // Assert.Equal(expected, await rule.ProcessRule(enrollee));
+            // New job
+            profile.Jobs.Add(new Job { Title = "Snake sweater knitter" });
+
+            var rule = new AllowableChangesRule(profile);
+            Assert.True(await rule.ProcessRule(enrollee));
+            AssertNoReasons(enrollee);
+
+            // Edit job
+            profile.Jobs = enrollee.Jobs;
+            profile.Jobs.First().Title = "Bespoke lifehack crafter";
+
+            rule = new AllowableChangesRule(profile);
+            Assert.True(await rule.ProcessRule(enrollee));
             AssertNoReasons(enrollee);
         }
     }

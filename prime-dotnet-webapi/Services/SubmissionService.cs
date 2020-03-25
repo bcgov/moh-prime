@@ -73,7 +73,8 @@ namespace Prime.Services
                 .Include(e => e.Certifications)
                     .ThenInclude(cer => cer.College)
                 .Include(e => e.Certifications)
-                    .ThenInclude(l => l.License)
+                    .ThenInclude(c => c.License)
+                        .ThenInclude(l => l.DefaultPrivileges)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
             if (await _automaticAdjudicationService.QualifiesForAutomaticAdjudicationAsync(enrollee))
