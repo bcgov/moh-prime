@@ -35,6 +35,11 @@ namespace Prime.Services
             }
         }
 
+        public static bool AreValidEmails(string[] emails)
+        {
+            return emails.Select(e => IsValidEmail(e)).All(x => x);
+        }
+
         public async Task SendReminderEmailAsync(Enrollee enrollee)
         {
             if (!IsValidEmail(enrollee.ContactEmail))
@@ -49,14 +54,11 @@ namespace Prime.Services
             await Send(PRIME_EMAIL, enrollee.ContactEmail, subject, body);
         }
 
-        public async Task SendProvisionerLinkAsync(string provisionerName, string provisionerEmail, EnrolmentCertificateAccessToken token, string officeManagerEmail)
+        public async Task SendProvisionerLinkAsync(string[] recipients, EnrolmentCertificateAccessToken token, string provisionerName = null)
         {
-            // Always send a copy to the enrollee
-            var ccEmails = new List<string>() { token.Enrollee.ContactEmail };
-
-            if (!IsValidEmail(provisionerEmail))
+            if (!AreValidEmails(recipients))
             {
-                throw new ArgumentException("Cannot send provisioner link, supplied provisioner email address is invalid.");
+                throw new ArgumentException("Cannot send provisioner link, supplied email address(es) are invalid.");
             }
 
             if (token.Enrollee == null)
@@ -64,26 +66,16 @@ namespace Prime.Services
                 await _context.Entry(token).Reference(t => t.Enrollee).LoadAsync();
             }
 
+            // Always send a copy to the enrollee
+            var ccEmails = new List<string>() { token.Enrollee.ContactEmail };
+
             string subject = "New Access Request";
-            string vendorBody = this.GetVendorEmailBody(token.Enrollee, token, provisionerName);
+            string emailBody = (string.IsNullOrEmpty(provisionerName))
+                ? this.GetClinicManagerEmailBody(token.Enrollee, token)
+                : this.GetVendorEmailBody(token.Enrollee, token, provisionerName);
 
-            await Send(PRIME_EMAIL, new[] { provisionerEmail }, ccEmails, subject, vendorBody);
-
-            if (!String.IsNullOrEmpty(officeManagerEmail))
-            {
-                if (IsValidEmail(officeManagerEmail))
-                {
-                    string officeManagerBody = this.GetClinicManagerEmailBody(token.Enrollee, token);
-
-                    await Send(PRIME_EMAIL, new[] { officeManagerEmail }, ccEmails, subject, officeManagerBody);
-                }
-                else
-                {
-                    throw new ArgumentException("Cannot send provisioner link to office manager, supplied carbon copy email address is invalid.");
-                }
-            }
+            await Send(PRIME_EMAIL, recipients, ccEmails, subject, emailBody);
         }
-
 
         private async Task Send(string from, string to, string subject, string body)
         {

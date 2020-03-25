@@ -73,20 +73,20 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
       : null;
   }
 
-  public get careconnectRecipient(): FormControl {
-    return this.form.get('careconnectRecipient') as FormControl;
+  public get careconnectRecipients(): FormControl {
+    return this.form.get('careconnectRecipients') as FormControl;
   }
 
-  public get excellerisRecipient(): FormControl {
-    return this.form.get('excellerisRecipient') as FormControl;
+  public get excellerisRecipients(): FormControl {
+    return this.form.get('excellerisRecipients') as FormControl;
   }
 
-  public get plexiaRecipient(): FormControl {
-    return this.form.get('plexiaRecipient') as FormControl;
+  public get plexiaRecipients(): FormControl {
+    return this.form.get('plexiaRecipients') as FormControl;
   }
 
-  public get otherRecipient(): FormControl {
-    return this.form.get('otherRecipient') as FormControl;
+  public get otherRecipients(): FormControl {
+    return this.form.get('otherRecipients') as FormControl;
   }
 
   public get isRu(): boolean {
@@ -99,16 +99,18 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     return `${this.config.loginRedirectUrl}/provisioner-access/${tokenId}`;
   }
 
-  public sendProvisionerAccessLinkWithCc(provisionerName: string) {
-    const formControl = this.form.get(`${provisionerName.toLowerCase()}Recipient`) as FormControl;
+  public sendProvisionerAccessLinkTo(provisionerName: string) {
+    const formControl = this.form.get(`${provisionerName.toLowerCase()}Recipients`) as FormControl;
     if (!formControl) { return; }
 
+    const emails = formControl.value.split(',').map((email: string) => email.trim()).join(',') || null;
+
     (formControl.valid)
-      ? this.sendProvisionerAccessLink(provisionerName, formControl.value, formControl)
+      ? this.sendProvisionerAccessLink(provisionerName, emails, formControl)
       : formControl.markAllAsTouched();
   }
 
-  public sendProvisionerAccessLink(provisionerName: string, email: string = null, formControl: FormControl = null) {
+  public sendProvisionerAccessLink(provisionerName: string, emails: string = null, formControl: FormControl = null) {
     const data: DialogOptions = {
       title: 'Confirm Email',
       message: `Are you sure you want to send your PharmaNet certificate to ${provisionerName}?`,
@@ -119,7 +121,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
       .pipe(
         exhaustMap((result: boolean) =>
           result
-            ? this.enrolmentResource.sendProvisionerAccessLink(provisionerName, email)
+            ? this.enrolmentResource.sendProvisionerAccessLink(provisionerName, emails)
             : EMPTY
         )
       )
@@ -165,10 +167,10 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
 
   private buildVendorEmailGroup(): FormGroup {
     return this.fb.group({
-      careconnectRecipient: [null, [Validators.required, FormControlValidators.email]],
-      excellerisRecipient: [null, [Validators.required, FormControlValidators.email]],
-      plexiaRecipient: [null, [Validators.required, FormControlValidators.email]],
-      otherRecipient: [null, [Validators.required, FormControlValidators.email]]
+      careconnectRecipients: [null, [Validators.required, FormControlValidators.multipleEmails]],
+      excellerisRecipients: [null, [Validators.required, FormControlValidators.multipleEmails]],
+      plexiaRecipients: [null, [Validators.required, FormControlValidators.multipleEmails]],
+      otherRecipients: [null, [Validators.required, FormControlValidators.email]]
     });
   }
 }

@@ -4,9 +4,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { SiteRoutes } from 'app/modules/site-registration/site-registration.routes';
-import { CollectionNoticeComponent } from '@enrolment/pages/collection-notice/collection-notice.component';
-import { SiteCollectionNoticeComponent } from 'app/modules/site-registration/pages/site-collection-notice/site-collection-notice.component';
 
 @Component({
   selector: 'app-collection-notice-alert',

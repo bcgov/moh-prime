@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormControl, Validators, ValidatorFn } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import * as moment from 'moment';
 
@@ -18,6 +18,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   @Input() public form: FormGroup;
   @Input() public index: number;
   @Input() public total: number;
+  @Input() public selectedColleges: number[];
   @Output() public remove: EventEmitter<number>;
 
   public colleges: CollegeConfig[];
@@ -63,6 +64,13 @@ export class CollegeCertificationFormComponent implements OnInit {
 
   public get practiceCode(): FormControl {
     return this.form.get('practiceCode') as FormControl;
+  }
+
+  public get filteredColleges(): CollegeConfig[] {
+    return this.colleges.filter((college: CollegeConfig) =>
+      // Allow the currently chosen value to persist
+      this.collegeCode.value === college.code || !this.selectedColleges.includes(college.code)
+    );
   }
 
   public removeCertification() {
@@ -126,5 +134,4 @@ export class CollegeCertificationFormComponent implements OnInit {
   private filterPractices(collegeCode: number): PracticeConfig[] {
     return this.practices.filter(p => p.collegePractices.map(cl => cl.collegeCode).includes(collegeCode));
   }
-
 }

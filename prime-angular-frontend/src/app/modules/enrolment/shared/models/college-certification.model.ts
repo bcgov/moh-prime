@@ -1,5 +1,5 @@
 export interface CollegeCertification {
-  id: number;
+  id?: number;
   collegeCode: number;
   licenseNumber: string;
   licenseCode: number;

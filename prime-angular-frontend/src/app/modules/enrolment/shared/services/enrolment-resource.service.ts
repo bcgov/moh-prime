@@ -91,8 +91,8 @@ export class EnrolmentResource {
       );
   }
 
-  public sendProvisionerAccessLink(provisionerName: string, ccEmail: string = null): Observable<EnrolmentCertificateAccessToken> {
-    const payload = { data: ccEmail };
+  public sendProvisionerAccessLink(provisionerName: string, emails: string = null): Observable<EnrolmentCertificateAccessToken> {
+    const payload = { data: emails };
     return this.apiResource.post<EnrolmentCertificateAccessToken>(`provisioner-access/send-link/${provisionerName}`, payload)
       .pipe(
         map((response: ApiHttpResponse<EnrolmentCertificateAccessToken>) => response.result),
