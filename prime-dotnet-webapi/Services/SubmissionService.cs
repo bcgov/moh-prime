@@ -44,14 +44,10 @@ namespace Prime.Services
         public async Task SubmitApplicationAsync(int enrolleeId, EnrolleeProfileViewModel updatedProfile)
         {
             var enrollee = await _context.Enrollees
-                .Include(e => e.PhysicalAddress)
                 .Include(e => e.MailingAddress)
-                .Include(e => e.EnrolmentStatuses)
-                    .ThenInclude(es => es.EnrolmentStatusReasons)
                 .Include(e => e.Certifications)
-                    .ThenInclude(cer => cer.College)
-                .Include(e => e.Certifications)
-                    .ThenInclude(l => l.License)
+                .Include(e => e.Jobs)
+                .Include(e => e.Organizations)
                 .Include(e => e.AccessTerms)
                     .ThenInclude(at => at.UserClause)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
@@ -67,6 +63,18 @@ namespace Prime.Services
             enrollee.AddEnrolmentStatus(StatusType.UnderReview);
             await _enroleeProfileVersionService.CreateEnrolleeProfileVersionAsync(enrollee);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Submitted");
+
+            // TODO: UpdateEnrollee re-fetches the model, removing the includes we need for the adjudication rules. Fix how this model loading is done.
+            enrollee = await _context.Enrollees
+                .Include(e => e.PhysicalAddress)
+                .Include(e => e.MailingAddress)
+                .Include(e => e.EnrolmentStatuses)
+                    .ThenInclude(es => es.EnrolmentStatusReasons)
+                .Include(e => e.Certifications)
+                    .ThenInclude(cer => cer.College)
+                .Include(e => e.Certifications)
+                    .ThenInclude(l => l.License)
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
             if (await _automaticAdjudicationService.QualifiesForAutomaticAdjudicationAsync(enrollee))
             {
