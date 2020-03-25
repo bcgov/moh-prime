@@ -7,6 +7,6 @@ namespace Prime.Services
     {
         Task SendReminderEmailAsync(Enrollee enrollee);
 
-        Task SendProvisionerLinkAsync(string provisionerName, string provisionerEmail, EnrolmentCertificateAccessToken token, string ccEmail);
+        Task SendProvisionerLinkAsync(string[] recipients, EnrolmentCertificateAccessToken token, string provisionerName = null);
     }
 }
