@@ -176,7 +176,7 @@ namespace Prime.Services
                 .Where(at => at.AcceptedDate != null)
                 .OrderByDescending(at => at.AcceptedDate)
                 .Select(at => at.Id)
-                .SingleOrDefaultAsync();
+                .FirstOrDefaultAsync();
 
             if (accessTermId == 0)
             {
