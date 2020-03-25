@@ -4,7 +4,8 @@
 
     <app-page-header>Next Steps to get PharmaNet</app-page-header>
 
-    <app-progress-indicator [currentRoute]="EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY"></app-progress-indicator>
+    <app-progress-indicator *ngIf="showProgressBar"
+                            [currentRoute]="EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY"></app-progress-indicator>
 
     <app-next-steps-infographic></app-next-steps-infographic>
 

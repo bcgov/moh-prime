@@ -248,7 +248,7 @@ export class DashboardComponent implements OnInit {
   private getEnrolmentStatusIcons(enrolmentStatus: EnrolmentStatus, hasAcceptedAtLeastOneToa: boolean) {
     let enrollee = 'assignment_ind';
     let accessAgreement = 'assignment';
-    let certificate = 'card_membership';
+    let certificate = 'mail';
 
     if (!hasAcceptedAtLeastOneToa) {
       // Default icons when performing initial enrolment

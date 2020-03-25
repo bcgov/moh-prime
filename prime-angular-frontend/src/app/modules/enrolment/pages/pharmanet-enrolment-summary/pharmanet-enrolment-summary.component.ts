@@ -47,7 +47,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     private fb: FormBuilder
   ) {
     super(route, router);
-    this.showProgressBar = true;
+    this.showProgressBar = false;
     this.form = this.buildVendorEmailGroup();
   }
 
