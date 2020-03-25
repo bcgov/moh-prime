@@ -87,7 +87,7 @@ namespace Prime.Services.Rules
                 return Task.FromResult(false);
             }
 
-            comparitor.Config.IgnoreObjectTypes = false; // To properly match collections
+            // /comparitor.Config.IgnoreObjectTypes = false; // To properly match collections
 
             if (!comparitor.Compare(enrollee.Certifications, _updatedProfile.Certifications).AreEqual)
             {

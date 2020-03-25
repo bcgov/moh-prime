@@ -97,22 +97,10 @@ namespace PrimeTests.Services
             Assert.Empty(reasons);
         }
 
-        [Fact]
-        public async void testCurrentToaRule()
+        [Fact(Skip = "Awaiting test refactor")]
+        public void testCurrentToaRule()
         {
-            // Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
-            // UpdateSelfDeclaration(enrollee, declaration);
-            // var rule = new SelfDeclarationRule();
-
-            // Assert.Equal(expected, await rule.ProcessRule(enrollee));
-            // if (expected)
-            // {
-            //     AssertReasons(enrollee.CurrentStatus.EnrolmentStatusReasons);
-            // }
-            // else
-            // {
-            //     AssertReasons(enrollee.CurrentStatus.EnrolmentStatusReasons, StatusReasonType.SelfDeclaration);
-            // }
+            // TODO: implement with better control over test DB.
         }
 
         [Theory]
@@ -147,11 +135,11 @@ namespace PrimeTests.Services
         }
 
         [Fact(Skip = "Not Implemented")]
-        public async void testAllowableChangesRule()
+        public async void testAllowableChangesRule_AllowedUpdates()
         {
-            // Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
-            // UpdateCertifications(enrollee, apiModes.Length);
-            // var rule = new PharmanetValidationRule(new PharmanetApiServiceMock(enrollee, apiModes));
+            Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
+
+            var rule = new AllowableChangesRule();
 
             // Assert.Equal(expected, await rule.ProcessRule(enrollee));
             // AssertReasons(enrollee.CurrentStatus.EnrolmentStatusReasons, expectedReasons);

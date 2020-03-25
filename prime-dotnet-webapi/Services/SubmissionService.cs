@@ -53,6 +53,7 @@ namespace Prime.Services
                 .Include(e => e.Certifications)
                     .ThenInclude(l => l.License)
                 .Include(e => e.AccessTerms)
+                    .ThenInclude(at => at.UserClause)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
             bool minorUpdate = await _automaticAdjudicationService.QualifiesAsMinorUpdateAsync(enrollee, updatedProfile);
