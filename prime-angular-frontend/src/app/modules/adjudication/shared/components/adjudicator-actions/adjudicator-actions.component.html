@@ -23,11 +23,18 @@
       <span>Decline Enrolment</span>
     </button>
     <button mat-menu-item
+            *ngIf="enrollee.currentStatus.statusCode !== EnrolmentStatus.LOCKED"
             [disabled]="!canEdit"
-            *ngIf="isUnderReview"
+            (click)="onLock()">
+      <mat-icon>lock_open</mat-icon>
+      <span>Lock Enrollee</span>
+    </button>
+    <button mat-menu-item
+            *ngIf="enrollee.currentStatus.statusCode === EnrolmentStatus.LOCKED"
+            [disabled]="!canEdit"
             (click)="onUnlock()">
       <mat-icon>lock_open</mat-icon>
-      <span>Unlock for Editing</span>
+      <span>Unlock Enrollee</span>
     </button>
     <button mat-menu-item
             *ngIf="canDelete"
