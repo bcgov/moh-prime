@@ -3,6 +3,7 @@ using System.Linq;
 using System.Security.Claims;
 
 using Prime.Models;
+using Prime.Auth;
 
 namespace Prime
 {
@@ -42,17 +43,17 @@ namespace Prime
 
         public static bool IsAdmin(this ClaimsPrincipal User)
         {
-            return User.IsInRole(PrimeConstants.PRIME_ADMIN_ROLE);
+            return User.IsInRole(AuthConstants.PRIME_ADMIN_ROLE);
         }
 
         public static bool HasAdminView(this ClaimsPrincipal User)
         {
-            return User.IsInRole(PrimeConstants.PRIME_READONLY_ADMIN);
+            return User.IsInRole(AuthConstants.PRIME_READONLY_ADMIN);
         }
 
         public static bool HasAssuranceLevel(this ClaimsPrincipal User, int level)
         {
-            Claim assuranceLevelClaim = User?.Claims?.SingleOrDefault(c => c.Type == PrimeConstants.ASSURANCE_LEVEL_CLAIM_TYPE);
+            Claim assuranceLevelClaim = User?.Claims?.SingleOrDefault(c => c.Type == AuthConstants.ASSURANCE_LEVEL_CLAIM_TYPE);
 
             int assuranceLevel;
             return Int32.TryParse(assuranceLevelClaim?.Value, out assuranceLevel) && assuranceLevel == level;

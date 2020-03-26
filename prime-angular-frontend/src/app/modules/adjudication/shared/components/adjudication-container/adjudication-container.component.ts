@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, TemplateRef } from '@angular/core';
+import { Component, OnInit, Input, TemplateRef, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatTableDataSource, MatDialog } from '@angular/material';
 
@@ -34,6 +34,7 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 export class AdjudicationContainerComponent extends AbstractComponent implements OnInit {
   @Input() public hasActions: boolean;
   @Input() public content: TemplateRef<any>;
+  @Output() public action: EventEmitter<void>;
 
   public busy: Subscription;
   public columns: string[];
@@ -50,6 +51,8 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
     private dialog: MatDialog
   ) {
     super(route, router);
+
+    this.action = new EventEmitter<void>();
 
     this.hasActions = false;
     this.columns = ['uniqueId', 'name', 'appliedDate', 'status', 'approvedDate', 'adjudicator', 'actions'];
@@ -134,7 +137,10 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
         exhaustMap(() => this.adjudicationResource.submissionAction(enrollee.id, SubmissionAction.APPROVE)),
         exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrollee.id))
       )
-      .subscribe((approvedEnrollee: HttpEnrollee) => this.updateEnrollee(approvedEnrollee));
+      .subscribe((approvedEnrollee: HttpEnrollee) => {
+        this.updateEnrollee(approvedEnrollee);
+        this.action.emit();
+      });
   }
 
   public onDecline(enrolleeId: number) {
@@ -160,7 +166,10 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
         exhaustMap(() => this.adjudicationResource.submissionAction(enrolleeId, SubmissionAction.LOCK_PROFILE)),
         exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrolleeId))
       )
-      .subscribe((declinedEnrollee: HttpEnrollee) => this.updateEnrollee(declinedEnrollee));
+      .subscribe((declinedEnrollee: HttpEnrollee) => {
+        this.updateEnrollee(declinedEnrollee);
+        this.action.emit();
+      });
   }
 
   public onLock(enrolleeId: number) {
@@ -186,7 +195,10 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
         exhaustMap(() => this.adjudicationResource.submissionAction(enrolleeId, SubmissionAction.LOCK_PROFILE)),
         exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrolleeId))
       )
-      .subscribe((lockedEnrollee: HttpEnrollee) => this.updateEnrollee(lockedEnrollee));
+      .subscribe((lockedEnrollee: HttpEnrollee) => {
+        this.updateEnrollee(lockedEnrollee);
+        this.action.emit();
+      });
   }
 
   public onUnlock(enrolleeId: number) {
@@ -212,7 +224,10 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
         exhaustMap(() => this.adjudicationResource.submissionAction(enrolleeId, SubmissionAction.ENABLE_EDITING)),
         exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrolleeId))
       )
-      .subscribe((lockedEnrollee: HttpEnrollee) => this.updateEnrollee(lockedEnrollee));
+      .subscribe((lockedEnrollee: HttpEnrollee) => {
+        this.updateEnrollee(lockedEnrollee);
+        this.action.emit();
+      });
   }
 
   public onDelete(enrolleeId: number) {
