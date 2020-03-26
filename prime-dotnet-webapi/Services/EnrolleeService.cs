@@ -429,10 +429,10 @@ namespace Prime.Services
 
         public async Task<string> GetGpidForHpdidAsync(string hpdid)
         {
-            var enrollee = await _context.Enrollees
-                .SingleOrDefaultAsync(e => e.HPDID == hpdid);
-
-            return enrollee?.GPID;
+            return await _context.Enrollees
+                .Where(e => e.HPDID == hpdid)
+                .Select(e => e.GPID)
+                .SingleOrDefaultAsync();
         }
     }
 }
