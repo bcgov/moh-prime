@@ -158,5 +158,21 @@ namespace Prime.Controllers
 
             return Ok(ApiResponse.Result(enrollee?.GPID));
         }
+
+        // GET: api/provisioner-access/gpid/12345
+        /// <summary>
+        /// Gets the corresponding GPID for the user with the provided HPDID (if it exists). Requires a valid direct access grant token.
+        /// </summary>
+        [HttpGet("gpid/{hpdid}", Name = nameof(GetGpidByHpdid))]
+        [Authorize(Policy = PrimeConstants.EXTERNAL_HPDID_ACCESS_POLICY)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<string>> GetGpidByHpdid(string hpdid)
+        {
+            var gpid = await _enrolleeService.GetGpidForHpdidAsync(hpdid);
+
+            return Ok(ApiResponse.Result(gpid));
+        }
     }
 }
