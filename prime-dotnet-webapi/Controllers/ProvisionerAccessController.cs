@@ -161,7 +161,7 @@ namespace Prime.Controllers
 
         // GET: api/provisioner-access/gpid/12345
         /// <summary>
-        /// Gets the corresponding GPID for the user with the provided HPDID (if it exists). Requres a valid direct access grant token.
+        /// Gets the corresponding GPID for the user with the provided HPDID (if it exists). Requires a valid direct access grant token.
         /// </summary>
         [HttpGet("gpid/{hpdid}", Name = nameof(GetGpidByHpdid))]
         [Authorize(Policy = PrimeConstants.EXTERNAL_HPDID_ACCESS_POLICY)]
