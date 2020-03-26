@@ -54,7 +54,7 @@ RUN npm install @angular/cli -g && \
 # COPY --from=buildDeps /usr/src/app/entrypoint.sh /etc/nginx
 RUN rm -fr /usr/share/nginx/html && \
     chmod -R 777 /usr/src/app/src && \
-    ln -s  /usr/share/nginx/html /usr/src/app/src 
+    ln -s /usr/src/app/src /usr/share/nginx/html 
 RUN chmod +x /entrypoint.sh && \ 
     chmod 777 /entrypoint.sh && \
     echo "Build completed." 
