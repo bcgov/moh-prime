@@ -21,7 +21,7 @@ RUN cat /usr/src/app/src/environments/environment.prod.ts && \
     npm install @angular/cli -g --silent && \ 
     npm install && \ 
     npm audit fix --only=prod && \ 
-    npm i @angular-devkit/build-angular@0.803.24 \ 
+    npm install @angular-devkit/build-angular@0.803.24 \ 
     ng build --prod && \ 
     echo "NPM packages installed..."
 
