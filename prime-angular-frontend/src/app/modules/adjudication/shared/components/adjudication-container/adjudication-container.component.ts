@@ -137,7 +137,10 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
         exhaustMap(() => this.adjudicationResource.submissionAction(enrollee.id, SubmissionAction.APPROVE)),
         exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrollee.id))
       )
-      .subscribe((approvedEnrollee: HttpEnrollee) => this.updateEnrollee(approvedEnrollee));
+      .subscribe((approvedEnrollee: HttpEnrollee) => {
+        this.updateEnrollee(approvedEnrollee);
+        this.refresh.emit();
+      });
   }
 
   public onDecline(enrolleeId: number) {
@@ -163,7 +166,10 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
         exhaustMap(() => this.adjudicationResource.submissionAction(enrolleeId, SubmissionAction.LOCK_PROFILE)),
         exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrolleeId))
       )
-      .subscribe((declinedEnrollee: HttpEnrollee) => this.updateEnrollee(declinedEnrollee));
+      .subscribe((declinedEnrollee: HttpEnrollee) => {
+        this.updateEnrollee(declinedEnrollee);
+        this.refresh.emit();
+      });
   }
 
   public onLock(enrolleeId: number) {
@@ -189,7 +195,10 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
         exhaustMap(() => this.adjudicationResource.submissionAction(enrolleeId, SubmissionAction.LOCK_PROFILE)),
         exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrolleeId))
       )
-      .subscribe((lockedEnrollee: HttpEnrollee) => this.updateEnrollee(lockedEnrollee));
+      .subscribe((lockedEnrollee: HttpEnrollee) => {
+        this.updateEnrollee(lockedEnrollee);
+        this.refresh.emit();
+      });
   }
 
   public onUnlock(enrolleeId: number) {
@@ -215,7 +224,10 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
         exhaustMap(() => this.adjudicationResource.submissionAction(enrolleeId, SubmissionAction.ENABLE_EDITING)),
         exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrolleeId))
       )
-      .subscribe((lockedEnrollee: HttpEnrollee) => this.updateEnrollee(lockedEnrollee));
+      .subscribe((lockedEnrollee: HttpEnrollee) => {
+        this.updateEnrollee(lockedEnrollee);
+        this.refresh.emit();
+      });
   }
 
   public onDelete(enrolleeId: number) {
