@@ -7,6 +7,9 @@ ENV NODE_ROOT /usr/src/app
 ENV REDIRECT_URL $REDIRECT_URL
 ENV OC_APP $OC_APP
 RUN mkdir -p /usr/src/app
+RUN printenv && \
+    pwd && \
+    ls -alh
 WORKDIR /usr/src/app
 
 COPY . .
