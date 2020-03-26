@@ -14,6 +14,7 @@ export class AdjudicatorActionsComponent implements OnInit {
   @Input() public enrollee: HttpEnrollee;
   @Output() public approve: EventEmitter<HttpEnrollee>;
   @Output() public decline: EventEmitter<number>;
+  @Output() public lock: EventEmitter<number>;
   @Output() public unlock: EventEmitter<number>;
   @Output() public delete: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
@@ -26,6 +27,7 @@ export class AdjudicatorActionsComponent implements OnInit {
   ) {
     this.approve = new EventEmitter<HttpEnrollee>();
     this.decline = new EventEmitter<number>();
+    this.lock = new EventEmitter<number>();
     this.unlock = new EventEmitter<number>();
     this.delete = new EventEmitter<number>();
     this.route = new EventEmitter<string | (string | number)[]>();
@@ -44,7 +46,7 @@ export class AdjudicatorActionsComponent implements OnInit {
   }
 
   public onApprove() {
-    // TODO might be better to pass the enrolle ID and find it on the other side
+    // TODO more consistent to pass enrollee ID and find them on the other side
     if (this.canEdit && this.isUnderReview) {
       this.approve.emit(this.enrollee);
     }
@@ -56,8 +58,14 @@ export class AdjudicatorActionsComponent implements OnInit {
     }
   }
 
+  public onLock() {
+    if (this.canEdit) {
+      this.lock.emit(this.enrollee.id);
+    }
+  }
+
   public onUnlock() {
-    if (this.canEdit && this.isUnderReview) {
+    if (this.canEdit) {
       this.unlock.emit(this.enrollee.id);
     }
   }

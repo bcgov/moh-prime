@@ -131,9 +131,7 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
             ? this.adjudicationResource.createAdjudicatorNote(enrollee.id, manualFlagNote.note)
             : of(noop)
         ),
-        exhaustMap(() =>
-          this.adjudicationResource.submissionAction(enrollee.id, SubmissionAction.APPROVE)
-        ),
+        exhaustMap(() => this.adjudicationResource.submissionAction(enrollee.id, SubmissionAction.APPROVE)),
         exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrollee.id))
       )
       .subscribe((approvedEnrollee: HttpEnrollee) => this.updateEnrollee(approvedEnrollee));
@@ -160,17 +158,17 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
           return EMPTY;
         }),
         exhaustMap(() => this.adjudicationResource.submissionAction(enrolleeId, SubmissionAction.LOCK_PROFILE)),
-        exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrolleeId)),
+        exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrolleeId))
       )
       .subscribe((declinedEnrollee: HttpEnrollee) => this.updateEnrollee(declinedEnrollee));
   }
 
-  public onUnlock(enrolleeId: number) {
+  public onLock(enrolleeId: number) {
     const data: DialogOptions = {
-      title: 'Unlock for Editing',
-      message: 'When unlocked the enrollee will be able to update their enrolment. Are you sure you want to unlock this enrolment?',
+      title: 'Lock Enrollee',
+      message: 'When locked the enrollee will not have access to PRIME. Are you sure you want to lock this enrollee?',
       actionType: 'warn',
-      actionText: 'Unlock for Editing',
+      actionText: 'Lock Enrollee',
       component: NoteComponent,
     };
 
@@ -184,8 +182,33 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
               : of(noop);
           }
           return EMPTY;
-        }
-        ),
+        }),
+        exhaustMap(() => this.adjudicationResource.submissionAction(enrolleeId, SubmissionAction.LOCK_PROFILE)),
+        exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrolleeId))
+      )
+      .subscribe((lockedEnrollee: HttpEnrollee) => this.updateEnrollee(lockedEnrollee));
+  }
+
+  public onUnlock(enrolleeId: number) {
+    const data: DialogOptions = {
+      title: 'Unlock Enrollee',
+      message: 'When unlocked the enrollee will be able to update their enrolment. Are you sure you want to unlock this enrollee?',
+      actionType: 'warn',
+      actionText: 'Unlock Enrollee',
+      component: NoteComponent,
+    };
+
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result: { output: string }) => {
+          if (result) {
+            return (result.output)
+              ? this.adjudicationResource.createAdjudicatorNote(enrolleeId, result.output)
+              : of(noop);
+          }
+          return EMPTY;
+        }),
         exhaustMap(() => this.adjudicationResource.submissionAction(enrolleeId, SubmissionAction.ENABLE_EDITING)),
         exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrolleeId))
       )
@@ -212,8 +235,7 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
                 : of(noop);
             }
             return EMPTY;
-          }
-          ),
+          }),
           exhaustMap(() => this.adjudicationResource.deleteEnrollee(enrolleeId)),
         )
         .subscribe((enrollee: HttpEnrollee) => this.routeTo(this.baseRoutePath));
