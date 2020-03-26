@@ -93,6 +93,7 @@ namespace Prime
                 options.AddPolicy(PrimeConstants.ADMIN_POLICY, policy => policy.RequireRole(PrimeConstants.PRIME_ADMIN_ROLE));
                 options.AddPolicy(PrimeConstants.SUPER_ADMIN_POLICY, policy => policy.RequireRole(PrimeConstants.PRIME_SUPER_ADMIN_ROLE));
                 options.AddPolicy(PrimeConstants.READONLY_ADMIN_POLICY, policy => policy.RequireRole(PrimeConstants.PRIME_READONLY_ADMIN));
+                options.AddPolicy(PrimeConstants.EXTERNAL_HPDID_ACCESS_POLICY, policy => policy.RequireRole(PrimeConstants.EXTERNAL_HPDID_ACCESS_ROLE));
             });
         }
 
