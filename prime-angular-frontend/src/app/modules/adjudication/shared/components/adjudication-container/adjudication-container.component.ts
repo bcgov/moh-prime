@@ -34,7 +34,7 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 export class AdjudicationContainerComponent extends AbstractComponent implements OnInit {
   @Input() public hasActions: boolean;
   @Input() public content: TemplateRef<any>;
-  @Output() public refresh: EventEmitter<void>;
+  @Output() public action: EventEmitter<void>;
 
   public busy: Subscription;
   public columns: string[];
@@ -52,7 +52,7 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
   ) {
     super(route, router);
 
-    this.refresh = new EventEmitter<void>();
+    this.action = new EventEmitter<void>();
 
     this.hasActions = false;
     this.columns = ['uniqueId', 'name', 'appliedDate', 'status', 'approvedDate', 'adjudicator', 'actions'];
@@ -139,7 +139,7 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
       )
       .subscribe((approvedEnrollee: HttpEnrollee) => {
         this.updateEnrollee(approvedEnrollee);
-        this.refresh.emit();
+        this.action.emit();
       });
   }
 
@@ -168,7 +168,7 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
       )
       .subscribe((declinedEnrollee: HttpEnrollee) => {
         this.updateEnrollee(declinedEnrollee);
-        this.refresh.emit();
+        this.action.emit();
       });
   }
 
@@ -197,7 +197,7 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
       )
       .subscribe((lockedEnrollee: HttpEnrollee) => {
         this.updateEnrollee(lockedEnrollee);
-        this.refresh.emit();
+        this.action.emit();
       });
   }
 
@@ -226,7 +226,7 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
       )
       .subscribe((lockedEnrollee: HttpEnrollee) => {
         this.updateEnrollee(lockedEnrollee);
-        this.refresh.emit();
+        this.action.emit();
       });
   }
 

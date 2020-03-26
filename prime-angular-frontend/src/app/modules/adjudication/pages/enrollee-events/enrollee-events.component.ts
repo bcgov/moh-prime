@@ -24,7 +24,7 @@ export class EnrolleeEventsComponent implements OnInit {
     this.hasActions = true;
   }
 
-  public onRefresh() {
+  public onAction() {
     this.getBusinessEvents();
   }
 
