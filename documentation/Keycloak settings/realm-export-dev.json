@@ -621,7 +621,7 @@
           "config": {
             "claim.value": "prime-web-api",
             "userinfo.token.claim": "false",
-            "id.token.claim": "true",
+            "id.token.claim": "false",
             "access.token.claim": "true",
             "claim.name": "aud",
             "jsonType.label": "String"
