@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Prime.Auth;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
@@ -14,7 +15,7 @@ namespace Prime.Controllers
     [Route("api/[controller]")]
     [ApiController]
     // User needs the ADMIN role to use this controller
-    [Authorize(Policy = PrimeConstants.ADMIN_POLICY)]
+    [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
     public class AdminsController : ControllerBase
     {
         private readonly IAdminService _adminService;
