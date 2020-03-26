@@ -1,5 +1,5 @@
 # base image
-FROM node:10.16 as build-deps
+FROM node:10.16
 #SHELL [ "/bin/bash","-c"]
 # set working directory
 USER 0
