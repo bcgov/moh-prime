@@ -18,7 +18,7 @@ ENV KEYCLOAK_REALM $KEYCLOAK_REALM
 ENV KEYCLOAK_CLIENT_ID $KEYCLOAK_CLIENT_ID
 ENV JWT_WELL_KNOWN_CONFIG $JWT_WELL_KNOWN_CONFIG
 RUN apt-get update && \
-    apt-get install -y nginx && \
+    apt-get install -y nginx gettext-base && \
     mkdir -p /var/cache/nginx && \ 
     mkdir -p /var/cache/nginx/client_temp && \ 
     touch /etc/nginx/conf.d/default.conf && \ 
