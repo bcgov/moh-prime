@@ -1,10 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
+using Prime.Auth;
 using Prime.Models;
 using Prime.Services;
 using Prime.Models.Api;
@@ -14,7 +14,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/enrollees")]
     [ApiController]
-    [Authorize(Policy = PrimeConstants.USER_POLICY)]
+    [Authorize(Policy = AuthConstants.USER_POLICY)]
     public class SubmissionsController : ControllerBase
     {
         private readonly ISubmissionService _submissionService;
@@ -78,7 +78,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpPut("{enrolleeId}/always-manual", Name = nameof(SetEnrolleeManualFlag))]
-        [Authorize(Policy = PrimeConstants.ADMIN_POLICY)]
+        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -94,7 +94,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpDelete("{enrolleeId}/always-manual", Name = nameof(RemoveEnrolleeManualFlag))]
-        [Authorize(Policy = PrimeConstants.ADMIN_POLICY)]
+        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]

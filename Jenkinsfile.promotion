@@ -53,7 +53,7 @@ pipeline {
         }
         stage('Approve Promotion of Demo & Production') {
             options {
-                timeout(time: 24, unit: 'HOURS')   // timeout on this stage
+                timeout(time: 6, unit: 'DAYS')   // timeout on this stage
             }
             when { expression { ( BRANCH_NAME == 'master' ) } }
             steps {
