@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
+using Prime.Auth;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
@@ -58,7 +59,7 @@ namespace Prime.Controllers
         /// Gets all of the access tokens for the user.
         /// </summary>
         [HttpGet("token", Name = nameof(GetAccessTokens))]
-        [Authorize(Policy = PrimeConstants.USER_POLICY)]
+        [Authorize(Policy = AuthConstants.USER_POLICY)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolmentCertificateAccessToken>>), StatusCodes.Status200OK)]
@@ -75,7 +76,7 @@ namespace Prime.Controllers
         /// then sends the link to a recipient by email.
         /// </summary>
         [HttpPost("send-link/{provisionerName}", Name = nameof(SendProvisionerLink))]
-        [Authorize(Policy = PrimeConstants.USER_POLICY)]
+        [Authorize(Policy = AuthConstants.USER_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -164,7 +165,7 @@ namespace Prime.Controllers
         /// Gets the corresponding GPID for the user with the provided HPDID (if it exists). Requires a valid direct access grant token.
         /// </summary>
         [HttpGet("gpid/{hpdid}", Name = nameof(GetGpidByHpdid))]
-        [Authorize(Policy = PrimeConstants.EXTERNAL_HPDID_ACCESS_POLICY)]
+        [Authorize(Policy = AuthConstants.EXTERNAL_HPDID_ACCESS_POLICY)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
