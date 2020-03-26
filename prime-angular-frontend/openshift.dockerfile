@@ -18,10 +18,9 @@ ENV JWT_WELL_KNOWN_CONFIG $JWT_WELL_KNOWN_CONFIG
 RUN echo "Populating environment..." && \
     (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
 RUN cat /usr/src/app/src/environments/environment.prod.ts && \ 
-    npm install @angular/cli -g --silent && \ 
+    npm install @angular/cli@8.3.24  -g --silent && \ 
     npm install && \ 
     npm audit fix --only=prod && \ 
-    npm i @angular-devkit/build-angular@0.803.24 \ 
     ng build --prod && \ 
     echo "NPM packages installed..."
 
