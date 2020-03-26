@@ -43,5 +43,7 @@ namespace Prime.Services
         Task<Enrollee> UpdateEnrolleeAdjudicator(int enrolleeId, Admin admin = null);
 
         Task<IEnumerable<BusinessEvent>> GetEnrolleeBusinessEvents(int enrolleeId);
+
+        Task<string> GetGpidForHpdidAsync(string hpdid);
     }
 }
