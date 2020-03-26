@@ -37,7 +37,7 @@ COPY entrypoint.sh /
 RUN echo "Populating environment..." && \
     (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
 RUN cat /usr/src/app/src/environments/environment.prod.ts
-RUN npm install @angular/cli -g && \ 
+RUN npm install @angular/cli@8.3.24 -g && \ 
     npm install && \ 
     npm i @angular-devkit/build-angular@0.803.24 \ 
     ng build --prod && \ 
