@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
+using Prime.Auth;
 using Prime.Models;
 using Prime.Services;
 using Prime.Models.Api;
@@ -15,7 +16,7 @@ namespace Prime.Controllers
     [Route("api/enrollees")]
     [ApiController]
     // User needs at least the RO_ADMIN or ENROLLEE role to use this controller
-    [Authorize(Policy = PrimeConstants.USER_POLICY)]
+    [Authorize(Policy = AuthConstants.USER_POLICY)]
     public class EnrolleesAccessTermsController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;

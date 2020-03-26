@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
+using Prime.Auth;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
@@ -13,7 +14,7 @@ namespace Prime.Controllers
     [Route("api/[controller]")]
     [ApiController]
     // User needs at least the READONLY ADMIN or ENROLLEE role to use this controller
-    [Authorize(Policy = PrimeConstants.USER_POLICY)]
+    [Authorize(Policy = AuthConstants.USER_POLICY)]
     public class LookupsController : ControllerBase
     {
         private readonly ILookupService _lookupService;
@@ -43,7 +44,7 @@ namespace Prime.Controllers
         /// For testing college licence validation
         /// </summary>
         [HttpPost("validate-licence", Name = nameof(LicenceCodeTest))]
-        [Authorize(Policy = PrimeConstants.SUPER_ADMIN_POLICY)]
+        [Authorize(Policy = AuthConstants.SUPER_ADMIN_POLICY)]
         public async Task<ActionResult<PharmanetCollegeRecord>> LicenceCodeTest(string collegePrefix, string licenceNumber)
         {
             Certification cert = new Certification
