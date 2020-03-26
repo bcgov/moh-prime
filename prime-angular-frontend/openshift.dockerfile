@@ -21,12 +21,15 @@ ENV JWT_WELL_KNOWN_CONFIG $JWT_WELL_KNOWN_CONFIG
 RUN apt-get update && \
     apt-get install -y nginx gettext-base && \
     mkdir -p /var/cache/nginx && \ 
+    mkdir -p /var/lib/nginx && \
     mkdir -p /var/log/nginx && \ 
     mkdir -p /var/cache/nginx/client_temp && \ 
     touch /etc/nginx/conf.d/default.conf && \ 
     chmod -R 777 /etc/nginx && \ 
     chmod -R 777 /var/cache/nginx && \ 
+    chmod -R 777 /var/lib/nginx && \
     chmod -R 777 /var/run && \
+    chmod -R 777 /var/lib && \
     chmod -R 777 /var/log
 COPY nginx.conf /etc/nginx/
 COPY nginx.template.conf /etc/nginx/nginx.template.conf
