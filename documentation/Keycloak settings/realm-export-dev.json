@@ -85,6 +85,15 @@
         "attributes": {}
       },
       {
+        "id": "33ba3d4c-92d3-4c41-ac30-8de902c046fb",
+        "name": "external_hpdid_access",
+        "description": "Access to the HPDID => GPID API endpoint",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
         "id": "30f9e848-4864-4465-9d29-5a5b0f24553c",
         "name": "feature_site_registration",
         "description": "Feature flag for site registration",
@@ -328,6 +337,7 @@
         }
       ],
       "prime-pos-gpid": [],
+      "prime-careconnect-access": [],
       "security-admin-console": [],
       "admin-cli": [],
       "broker": [
@@ -497,7 +507,7 @@
           }
         },
         {
-          "id": "f266a2d1-fe9f-45d4-a108-0d46def410cf",
+          "id": "87baf495-7163-4aaf-bd67-2e661a3d6f7e",
           "name": "feature-site_registration",
           "protocol": "openid-connect",
           "protocolMapper": "oidc-hardcoded-role-mapper",
@@ -549,6 +559,108 @@
       "optionalClientScopes": [
         "offline_access"
       ]
+    },
+    {
+      "id": "f774dec3-891f-45d4-9fb8-3e786cd56ddd",
+      "clientId": "prime-careconnect-access",
+      "surrogateAuthRequired": false,
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "**********",
+      "redirectUris": [],
+      "webOrigins": [],
+      "notBefore": 0,
+      "bearerOnly": false,
+      "consentRequired": false,
+      "standardFlowEnabled": false,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "publicClient": false,
+      "frontchannelLogout": false,
+      "protocol": "openid-connect",
+      "attributes": {
+        "saml.assertion.signature": "false",
+        "saml.force.post.binding": "false",
+        "saml.multivalued.roles": "false",
+        "saml.encrypt": "false",
+        "saml.server.signature": "false",
+        "saml.server.signature.keyinfo.ext": "false",
+        "exclude.session.state.from.auth.response": "false",
+        "saml_force_name_id_format": "false",
+        "tls.client.certificate.bound.access.tokens": "false",
+        "saml.client.signature": "false",
+        "saml.authnstatement": "false",
+        "display.on.consent.screen": "false",
+        "saml.onetimeuse.condition": "false"
+      },
+      "authenticationFlowBindingOverrides": {},
+      "fullScopeAllowed": true,
+      "nodeReRegistrationTimeout": -1,
+      "protocolMappers": [
+        {
+          "id": "bc350e75-1bc6-4c23-95ce-1a93d226274f",
+          "name": "Client IP Address",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientAddress",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientAddress",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "c6f91c73-fcf7-4013-88e3-45f996c4ff8f",
+          "name": "set audience to prime-web-api",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-hardcoded-claim-mapper",
+          "consentRequired": false,
+          "config": {
+            "claim.value": "prime-web-api",
+            "userinfo.token.claim": "false",
+            "id.token.claim": "false",
+            "access.token.claim": "true",
+            "claim.name": "aud",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "a1975b80-6594-4059-8aec-c0e53b656397",
+          "name": "Client ID",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientId",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientId",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "0984f0a4-3f7e-4f2a-b9c8-d811a70e6aae",
+          "name": "Client Host",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientHost",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientHost",
+            "jsonType.label": "String"
+          }
+        }
+      ],
+      "defaultClientScopes": [
+        "web-origins",
+        "roles"
+      ],
+      "optionalClientScopes": []
     },
     {
       "id": "f8df3aeb-6e65-406d-b172-02bce11e4298",

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
+using Prime.Auth;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
@@ -15,7 +16,7 @@ namespace Prime.Controllers
     [Route("api/[controller]")]
     [ApiController]
     // User needs at least the READONLY ADMIN or ENROLLEE role to use this controller
-    [Authorize(Policy = PrimeConstants.USER_POLICY)]
+    [Authorize(Policy = AuthConstants.USER_POLICY)]
     public class EnrolleesController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
@@ -174,7 +175,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpDelete("{enrolleeId}", Name = nameof(DeleteEnrollee))]
-        [Authorize(Policy = PrimeConstants.SUPER_ADMIN_POLICY)]
+        [Authorize(Policy = AuthConstants.SUPER_ADMIN_POLICY)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -234,7 +235,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}/adjudicator-notes", Name = nameof(GetAdjudicatorNotes))]
-        [Authorize(Policy = PrimeConstants.READONLY_ADMIN_POLICY)]
+        [Authorize(Policy = AuthConstants.READONLY_ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -261,7 +262,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="note"></param>
         [HttpPost("{enrolleeId}/adjudicator-notes", Name = nameof(CreateAdjudicatorNote))]
-        [Authorize(Policy = PrimeConstants.ADMIN_POLICY)]
+        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -297,7 +298,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="accessAgreementNote"></param>
         [HttpPut("{enrolleeId}/access-agreement-notes", Name = nameof(UpdateAccessAgreementNote))]
-        [Authorize(Policy = PrimeConstants.ADMIN_POLICY)]
+        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -335,7 +336,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}/versions", Name = nameof(GetEnrolleeProfileVersions))]
-        [Authorize(Policy = PrimeConstants.READONLY_ADMIN_POLICY)]
+        [Authorize(Policy = AuthConstants.READONLY_ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -360,7 +361,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="enrolleeProfileVersionId"></param>
         [HttpGet("{enrolleeId}/versions/{enrolleeProfileVersionId}", Name = nameof(GetEnrolleeProfileVersion))]
-        [Authorize(Policy = PrimeConstants.READONLY_ADMIN_POLICY)]
+        [Authorize(Policy = AuthConstants.READONLY_ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -384,7 +385,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpPut("{enrolleeId}/adjudicator", Name = nameof(SetEnrolleeAdjudicator))]
-        [Authorize(Policy = PrimeConstants.ADMIN_POLICY)]
+        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -412,7 +413,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpDelete("{enrolleeId}/adjudicator", Name = nameof(RemoveEnrolleeAdjudicator))]
-        [Authorize(Policy = PrimeConstants.ADMIN_POLICY)]
+        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -439,7 +440,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}/events", Name = nameof(getEnrolleeBusinessEvents))]
-        [Authorize(Policy = PrimeConstants.READONLY_ADMIN_POLICY)]
+        [Authorize(Policy = AuthConstants.READONLY_ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]

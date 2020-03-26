@@ -1,29 +1,26 @@
 using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Net.Mime;
+using System.Reflection;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Prime.Services;
-using Prime.Infrastructure;
 using Microsoft.OpenApi.Models;
-using System.Reflection;
-using System.IO;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using System.Net.Mime;
 using Newtonsoft.Json;
-using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using Microsoft.AspNetCore.Routing;
+
+using Prime.Auth;
+using Prime.Services;
 using Prime.Models.Api;
+using Prime.Infrastructure;
 
 namespace Prime
 {

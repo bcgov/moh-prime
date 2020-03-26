@@ -2,6 +2,8 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 
+using Prime.Auth;
+
 namespace Prime.Infrastructure
 {
     public class PrimeUserAuthHandler : AuthorizationHandler<PrimeUserRequirement>
@@ -14,7 +16,7 @@ namespace Prime.Infrastructure
             }
 
             if (context.User.HasAdminView()
-                || (context.User.IsInRole(PrimeConstants.PRIME_ENROLLEE_ROLE)
+                || (context.User.IsInRole(AuthConstants.PRIME_ENROLLEE_ROLE)
                     && context.User.HasAssuranceLevel(3)))
             {
                 context.Succeed(requirement);

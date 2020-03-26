@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+
+using Prime.Auth;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
@@ -13,7 +15,7 @@ namespace Prime.Controllers
     [Route("api/[controller]")]
     [ApiController]
     // User needs the User role to use this controller
-    [Authorize(Policy = PrimeConstants.USER_POLICY)]
+    [Authorize(Policy = AuthConstants.USER_POLICY)]
     public class FeedbackController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
