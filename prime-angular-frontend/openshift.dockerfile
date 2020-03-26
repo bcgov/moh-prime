@@ -1,5 +1,5 @@
 # base image
-FROM node:10.16 as build-deps
+FROM node:10.16 as buildDeps
 #SHELL [ "/bin/bash","-c"]
 # set working directory
 USER 0
@@ -26,12 +26,12 @@ RUN cat /usr/src/app/src/environments/environment.prod.ts && \
     echo "NPM packages installed..."
 
 FROM nginx:1.15-alpine
-COPY --from=build-deps /usr/src/app/dist/angular-frontend /usr/share/nginx/html
+COPY --from=buildDeps /usr/src/app/dist/angular-frontend /usr/share/nginx/html
 RUN rm -f /etc/nginx/conf.d/default.conf
-COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/
-COPY --from=build-deps /usr/src/app/nginx.template.conf /etc/nginx/nginx.template.conf
+COPY --from=buildDeps /usr/src/app/nginx.conf /etc/nginx/
+COPY --from=buildDeps /usr/src/app/nginx.template.conf /etc/nginx/nginx.template.conf
 #COPY --from=build-deps /usr/src/app/nginx${OC_APP}.conf /etc/nginx/nginx.template.conf
-COPY --from=build-deps /usr/src/app/entrypoint.sh /etc/nginx
+COPY --from=buildDeps /usr/src/app/entrypoint.sh /etc/nginx
 
 EXPOSE 8080
 RUN mkdir -p /var/cache/nginx && \ 
