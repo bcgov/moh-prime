@@ -36,9 +36,10 @@ COPY nginx.template.conf /etc/nginx/nginx.template.conf
 COPY entrypoint.sh /
 RUN echo "Populating environment..." && \
     (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
-RUN cat /usr/src/app/src/environments/environment.prod.ts
-RUN npm install @angular/cli@8.3.24 -g && \ 
+RUN cat /usr/src/app/src/environments/environment.prod.ts && \ 
+    npm install @angular/cli@8.3.24  -g --silent && \ 
     npm install && \ 
+    npm audit fix --only=prod && \ 
     ng build --prod && \ 
     echo "NPM packages installed..."
 
