@@ -109,7 +109,7 @@ namespace Prime.Services
 
         private async Task ProcessToaAsync(Enrollee enrollee, bool accept)
         {
-            enrollee.AddEnrolmentStatus(StatusType.Active);
+            enrollee.AddEnrolmentStatus(StatusType.Editable);
 
             if (accept)
             {
@@ -128,7 +128,7 @@ namespace Prime.Services
 
         private async Task EnableEditingAsync(Enrollee enrollee)
         {
-            enrollee.AddEnrolmentStatus(StatusType.Active);
+            enrollee.AddEnrolmentStatus(StatusType.Editable);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Enabled Editing");
             await _context.SaveChangesAsync();
             await _emailService.SendReminderEmailAsync(enrollee);
@@ -186,7 +186,7 @@ namespace Prime.Services
 
             private enum EnrolleeState
             {
-                Active,
+                Editable,
                 UnderReview,
                 RequiresToa,
                 Locked
@@ -196,7 +196,7 @@ namespace Prime.Services
             {
                 var builder = new StateMachineDefinitionBuilder<EnrolleeState, SubmissionAction>();
 
-                builder.In(EnrolleeState.Active)
+                builder.In(EnrolleeState.Editable)
                     .On(SubmissionAction.Submit).Execute(HandleSubmit)
                     .On(SubmissionAction.LockProfile).If<bool>(isAdmin => isAdmin).Execute(HandleLockProfile);
 
@@ -226,8 +226,8 @@ namespace Prime.Services
 
                 switch (enrollee.CurrentStatus.StatusCode)
                 {
-                    case (int)StatusType.Active:
-                        return EnrolleeState.Active;
+                    case (int)StatusType.Editable:
+                        return EnrolleeState.Editable;
                     case (int)StatusType.UnderReview:
                         return EnrolleeState.UnderReview;
                     case (int)StatusType.RequiresToa:

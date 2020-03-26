@@ -15,9 +15,8 @@
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>College Licence Information</ng-container>
         <ng-container appPageSubheaderSummary>
-          Provide details for all your active College licences, or select <strong>none</strong> if you are not licensed
-          by a professional College. If you do not see your college information on this list, select none and PRIME will
-          assess your application as an on behalf of user.
+          Provide details for all of your active College licenses. If you do not have a licence from one of the colleges
+          listed here, select <strong>None</strong>.
         </ng-container>
       </app-page-subheader>
 
@@ -31,6 +30,7 @@
             <app-college-certification-form [form]="certificate"
                                             [index]="i"
                                             [total]="certifications.controls.length"
+                                            [selectedColleges]="selectedCollegeCodes"
                                             (remove)="removeCertification($event)">
             </app-college-certification-form>
 
@@ -41,7 +41,7 @@
                   color="primary"
                   (click)="addCertification()">
             <mat-icon class="add-icon">add</mat-icon>
-            Add Additional Certification
+            Add Additional Licences
           </button>
 
         </div>

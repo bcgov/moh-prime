@@ -7,25 +7,35 @@
     <app-progress-indicator *ngIf="showProgressBar"
                             [currentRoute]="EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY"></app-progress-indicator>
 
+    <div class="mb-4"
+         *ngIf="expiryDate">
+      <app-alert type="success">
+        <ng-container #alertTitle
+                      class="alert-title">
+          You Have Been Approved to use PharmaNet
+        </ng-container>
+        <ng-container #alertContent
+                      class="alert-content">
+          Renew your PRIME enrolment by {{ enrolment?.expiryDate | formatDate }}
+        </ng-container>
+      </app-alert>
+    </div>
+
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>Next Steps</ng-container>
+      <ng-container appContextualContent>
+        Your PharmaNet Administrator may be your software vendor or your Office Manager/Medical Office Assistant. If you
+        are unsure, contact your Office Manager.
+      </ng-container>
     </app-page-subheader>
 
     <p>
-      Your PharmaNet Enrolment summary is below. You will need to provide this information to the person who will set up
-      your local PharmaNet access account. For most community practices, this will be the vendor for your PharmaNet
-      access software. Use the email option below to send your vendor (or system administrator) the information they
-      will require to provision your access to PharmaNet.
+      Get your access to PharmaNet set up.
     </p>
-
-    <app-page-subheader>
-      <ng-container appPageSubheaderTitle>Notify your PharmaNet Software Vendor</ng-container>
-    </app-page-subheader>
-
     <p class="mb-4">
-      Select your PharmaNet software vendor(s) to notify them of your completed enrolment. Select “Other” to notify a
-      different system administrator responsible for your access to PharmaNet. Check your inbox for a confirmation
-      email.
+      Use the email option below to notify your PharmaNet administrator of your completed enrolment.
+      Select your type of PharmaNet software for specific instructions on how to send the notification.
+      Select 'Other' to send to a different administrator.
     </p>
 
     <form [formGroup]="form">
@@ -41,9 +51,10 @@
               <mat-form-field class="w-100 mb-3">
                 <input matInput
                        placeholder="Email"
-                       formControlName="careconnectRecipient">
-                <mat-error *ngIf="careconnectRecipient.hasError('required')">Required</mat-error>
-                <mat-error *ngIf="careconnectRecipient.hasError('email')">Must be a valid email address</mat-error>
+                       formControlName="careconnectRecipients">
+                <mat-error *ngIf="careconnectRecipients.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="careconnectRecipients.hasError('emails')">Must be a valid email address(es)
+                </mat-error>
               </mat-form-field>
 
             </div>
@@ -53,7 +64,7 @@
                       type="button"
                       color="primary"
                       class="w-100 mb-4"
-                      (click)="sendProvisionerAccessLinkWithCc('CareConnect')">
+                      (click)="sendProvisionerAccessLinkTo('CareConnect')">
                 Send
               </button>
 
@@ -75,9 +86,9 @@
               <mat-form-field class="w-100 mb-3">
                 <input matInput
                        placeholder="Email"
-                       formControlName="excellerisRecipient">
-                <mat-error *ngIf="excellerisRecipient.hasError('required')">Required</mat-error>
-                <mat-error *ngIf="excellerisRecipient.hasError('email')">Must be a valid email address</mat-error>
+                       formControlName="excellerisRecipients">
+                <mat-error *ngIf="excellerisRecipients.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="excellerisRecipients.hasError('emails')">Must be a valid email address(es)</mat-error>
               </mat-form-field>
 
             </div>
@@ -87,7 +98,7 @@
                       type="button"
                       color="primary"
                       class="w-100 mb-4"
-                      (click)="sendProvisionerAccessLinkWithCc('Excelleris')">
+                      (click)="sendProvisionerAccessLinkTo('Excelleris')">
                 Send
               </button>
 
@@ -163,9 +174,9 @@
               <mat-form-field class="w-100 mb-3">
                 <input matInput
                        placeholder="Email"
-                       formControlName="plexiaRecipient">
-                <mat-error *ngIf="plexiaRecipient.hasError('required')">Required</mat-error>
-                <mat-error *ngIf="plexiaRecipient.hasError('email')">Must be a valid email address</mat-error>
+                       formControlName="plexiaRecipients">
+                <mat-error *ngIf="plexiaRecipients.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="plexiaRecipients.hasError('emails')">Must be a valid email address(es)</mat-error>
               </mat-form-field>
 
             </div>
@@ -175,7 +186,7 @@
                       type="button"
                       color="primary"
                       class="w-100 mb-4"
-                      (click)="sendProvisionerAccessLinkWithCc('Plexia')">
+                      (click)="sendProvisionerAccessLinkTo('Plexia')">
                 Send
               </button>
 
@@ -190,7 +201,7 @@
         <div *ngIf="other.checked"
              class="pt-2">
           <p class="mb-4">
-            Enter an email address that may be used to send your PRIME approval information.
+            Enter an email address that may be used to send your PRIME approval notification.
           </p>
 
           <div class="row">
@@ -199,9 +210,9 @@
               <mat-form-field class="w-100 mb-3">
                 <input matInput
                        placeholder="Email"
-                       formControlName="otherRecipient">
-                <mat-error *ngIf="otherRecipient.hasError('required')">Required</mat-error>
-                <mat-error *ngIf="otherRecipient.hasError('email')">Must be a valid email address</mat-error>
+                       formControlName="otherRecipients">
+                <mat-error *ngIf="otherRecipients.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="otherRecipients.hasError('email')">Must be a valid email address</mat-error>
               </mat-form-field>
 
             </div>
@@ -211,7 +222,7 @@
                       type="button"
                       color="primary"
                       class="w-100 mb-4"
-                      (click)="sendProvisionerAccessLinkWithCc('Other')">
+                      (click)="sendProvisionerAccessLinkTo('Other')">
                 Send
               </button>
 
@@ -225,7 +236,7 @@
     <ng-template #concise
                  let-provisioner="provisioner">
       <p class="mb-4">
-        Your PharmaNet approval information will be sent to {{ provisioner }}.
+        Your PharmaNet approval notification will be sent to {{ provisioner }}.
       </p>
     </ng-template>
 
@@ -233,9 +244,8 @@
                  let-provisioner="provisioner">
       <p class="mb-4">
         Provide the email address of the person in your organization who is responsible for contacting {{ provisioner }}
-        to set up accounts (e.g., your Office Manager or MOA). This contact must forward your approval notification to
-        {{ provisioner }} for your account to be created. {{ provisioner }} will also receive confirmation that your
-        notification has been sent.
+        to set up accounts (e.g., your Office Manager or MOA). Use a comma to separate multiple emails addresses. Do not
+        enter your own email as you will be copied on the communication.
       </p>
     </ng-template>
 

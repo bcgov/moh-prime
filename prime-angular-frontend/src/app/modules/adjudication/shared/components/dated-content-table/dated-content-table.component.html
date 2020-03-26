@@ -7,9 +7,15 @@
             {{ item.date | formatDate }}
           </div>
           <small *ngIf="hasTime"
-                 class="text-mute font-weight-normal">
+                 class="d-block text-mute font-weight-normal mb-2">
             {{ item.date | formatDate: 'h:mm a' }}
           </small>
+          <mat-chip-list *ngIf="item?.name"
+                         [selectable]="false">
+            <mat-chip selected
+                      color="primary"
+                      [disableRipple]="true">{{ item.name | replace: '@idir': '' }}</mat-chip>
+          </mat-chip-list>
         </th>
         <td>{{ item.content }}</td>
       </tr>

@@ -35,6 +35,11 @@ namespace Prime.Services
             }
         }
 
+        public static bool AreValidEmails(string[] emails)
+        {
+            return emails.Select(e => IsValidEmail(e)).All(x => x);
+        }
+
         public async Task SendReminderEmailAsync(Enrollee enrollee)
         {
             if (!IsValidEmail(enrollee.ContactEmail))
@@ -49,14 +54,11 @@ namespace Prime.Services
             await Send(PRIME_EMAIL, enrollee.ContactEmail, subject, body);
         }
 
-        public async Task SendProvisionerLinkAsync(string provisionerName, string provisionerEmail, EnrolmentCertificateAccessToken token, string officeManagerEmail)
+        public async Task SendProvisionerLinkAsync(string[] recipients, EnrolmentCertificateAccessToken token, string provisionerName = null)
         {
-            // Always send a copy to the enrollee
-            var ccEmails = new List<string>() { token.Enrollee.ContactEmail };
-
-            if (!IsValidEmail(provisionerEmail))
+            if (!AreValidEmails(recipients))
             {
-                throw new ArgumentException("Cannot send provisioner link, supplied provisioner email address is invalid.");
+                throw new ArgumentException("Cannot send provisioner link, supplied email address(es) are invalid.");
             }
 
             if (token.Enrollee == null)
@@ -64,26 +66,16 @@ namespace Prime.Services
                 await _context.Entry(token).Reference(t => t.Enrollee).LoadAsync();
             }
 
+            // Always send a copy to the enrollee
+            var ccEmails = new List<string>() { token.Enrollee.ContactEmail };
+
             string subject = "New Access Request";
-            string vendorBody = this.GetVendorEmailBody(token.Enrollee, token, provisionerName);
+            string emailBody = (string.IsNullOrEmpty(provisionerName))
+                ? this.GetClinicManagerEmailBody(token.Enrollee, token)
+                : this.GetVendorEmailBody(token.Enrollee, token, provisionerName);
 
-            await Send(PRIME_EMAIL, new[] { provisionerEmail }, ccEmails, subject, vendorBody);
-
-            if (!String.IsNullOrEmpty(officeManagerEmail))
-            {
-                if (IsValidEmail(officeManagerEmail))
-                {
-                    string officeManagerBody = this.GetOfficeManagerEmailBody(token.Enrollee, token);
-
-                    await Send(PRIME_EMAIL, new[] { officeManagerEmail }, ccEmails, subject, officeManagerBody);
-                }
-                else
-                {
-                    throw new ArgumentException("Cannot send provisioner link to office manager, supplied carbon copy email address is invalid.");
-                }
-            }
+            await Send(PRIME_EMAIL, recipients, ccEmails, subject, emailBody);
         }
-
 
         private async Task Send(string from, string to, string subject, string body)
         {
@@ -159,14 +151,55 @@ namespace Prime.Services
             return body;
         }
 
-        private string GetOfficeManagerEmailBody(Enrollee enrollee, EnrolmentCertificateAccessToken token)
+        private string GetClinicManagerEmailBody(Enrollee enrollee, EnrolmentCertificateAccessToken token)
         {
-            var body = $"To: Office Manager (person responsible for PharmaNet software at your clinic):<br><br>";
-            body += $"{enrollee.FirstName} { enrollee.LastName} has been approved for <b>PharmaNet</b> access.";
-            body += "To set up the user’s access, you must forward the <b>PRIME enrolment URL</b> below to your PharmaNet software vendor.<br><br>";
+            var body = "To: Clinic Manager (person responsible for coordinating PharmaNet access):<br><br>";
+
+            body += $"{enrollee.FirstName} { enrollee.LastName} has been approved for Community Practice Access to PharmaNet.<br><br>";
+
+            body += "<b>To set up their access, you must forward this PRIME Enrolment Confirmation";
+            body += " and the information specified below to your <u>PharmaNet Software Vendor</u>.</b><br><br>";
+
+            body += "<ol>";
+
+            body += "<li style='margin-bottom:0.75rem;'>";
+            body += "Name of Medical Clinic:";
+            body += "</li>";
+
+            body += "<li style='margin-bottom:0.75rem;'>";
+            body += "Clinic Address:";
+            body += "</li>";
+
+            body += "<li style='margin-bottom:0.75rem;'>";
+            body += "Pharmacy Equivalency Code (PEC): <i>(this is your PharmaNet site ID - ask your Vendor, if you are unsure)</i>";
+            body += "</li>";
+
+            body += "<li style='margin-bottom:0.75rem;'>";
+            body += "For <b>Physicians, Pharmacists, and Nurse Practitioners:</b><br><br>";
+            body += "College Name and College ID of this user: ";
+            body += "<i>(leave this blank if this user is not a Physician, Pharmacist or Nurse Practitioner)</i>";
+            body += "</li>";
+
+            body += "<li style='margin-bottom:0.75rem;'>";
+            body += "For users who work <b>On Behalf Of</b> a Physician, Pharmacist, or Nurse Practitioner:<br><br>";
+            body += "College Name(s) and College ID(s) of the Physicians, Pharmacists or Nurse Practitioners ";
+            body += "who this user will access PharmaNet on behalf of: ";
+            body += "<i>(leave this blank if this user is a Pharmacist, Nurse Practitioner or Physician)</i>";
+            body += "</li>";
+
+            body += "</ol>";
+
             body += $"<a href=\"{token.FrontendUrl}\">{token.FrontendUrl}</a>. ";
             body += $"<b>This link will expire after {_certificateService.GetMaxViews()} views or {_certificateService.GetExpiryDays()} days.</b><br><br>";
-            body += "Thank you.";
+
+            body += "Thank you,<br><br>";
+
+            body += "PRIME<br><br>";
+            //TODO: Is this stored as an attribute in the backend?
+            body += "1-844-39PRIME<br><br>";
+            //TODO: Is this stored as an attribute in the backend?
+            body += "<a href='mailto:PRIMEsupport@gov.bc.ca' target='_top'>PRIMEsupport@gov.bc.ca</a>";
+
             return body;
         }
 

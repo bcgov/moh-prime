@@ -107,19 +107,16 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public string GetPharmaNetProvisionerEmail(string provisionerName, ref string otherEmail)
+        public string[] GetPharmaNetProvisionerNames()
+        {
+            return PharmaNetProvisioners.Keys.ToArray();
+        }
+
+        public string GetPharmaNetProvisionerEmail(string provisionerName)
         {
             string recipientEmail;
 
-            if (provisionerName == "Other")
-            {
-                recipientEmail = otherEmail;
-                otherEmail = "";
-            }
-            else
-            {
-                PharmaNetProvisioners.TryGetValue(provisionerName, out recipientEmail);
-            }
+            PharmaNetProvisioners.TryGetValue(provisionerName, out recipientEmail);
 
             return recipientEmail;
         }

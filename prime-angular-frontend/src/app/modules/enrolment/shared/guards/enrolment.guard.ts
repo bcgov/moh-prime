@@ -101,8 +101,8 @@ export class EnrolmentGuard extends BaseGuard {
       return this.navigate(routePath, EnrolmentRoutes.DEMOGRAPHIC);
     } else if (enrolment) {
       switch (enrolment.currentStatus.statusCode) {
-        case EnrolmentStatus.ACTIVE:
-          return this.manageActiveRouting(routePath, enrolment);
+        case EnrolmentStatus.EDITABLE:
+          return this.manageEditableRouting(routePath, enrolment);
         case EnrolmentStatus.UNDER_REVIEW:
           return this.manageUnderReviewRouting(routePath, enrolment);
         case EnrolmentStatus.REQUIRES_TOA:
@@ -122,7 +122,7 @@ export class EnrolmentGuard extends BaseGuard {
    * out their initial enrolment, which prevents access to
    * post-enrolment routes.
    */
-  private manageActiveRouting(routePath: string, enrolment: Enrolment): boolean {
+  private manageEditableRouting(routePath: string, enrolment: Enrolment): boolean {
     const enrolmentSubmissionRoutes = [
       ...EnrolmentRoutes.enrolmentSubmissionRoutes()
     ];

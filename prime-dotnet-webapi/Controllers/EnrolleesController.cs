@@ -77,7 +77,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<Enrollee>), StatusCodes.Status200OK)]
         public async Task<ActionResult<Enrollee>> GetEnrolleeById(int enrolleeId)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId, User.HasAdminView());
 
             if (enrollee == null)
             {
@@ -156,10 +156,10 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            // If the enrollee is not in the status of 'Active', it cannot be updated
-            if (!(await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.Active)))
+            // If the enrollee is not in the status of 'Editable', it cannot be updated
+            if (!(await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.Editable)))
             {
-                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee can not be updated when the current status is not 'Active'.");
+                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee can not be updated when the current status is not 'Editable'.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 
@@ -281,7 +281,7 @@ namespace Prime.Controllers
             }
 
             var admin = await _adminService.GetAdminForUserIdAsync(User.GetPrimeUserId());
-            var createdAdjudicatorNote = await _enrolleeService.CreateEnrolleeAdjudicatorNoteAsync(enrolleeId, note);
+            var createdAdjudicatorNote = await _enrolleeService.CreateEnrolleeAdjudicatorNoteAsync(enrolleeId, note, admin.Id);
 
             return CreatedAtAction(
                 nameof(GetAdjudicatorNotes),
@@ -320,11 +320,10 @@ namespace Prime.Controllers
 
             if (!await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.UnderReview))
             {
-                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Access agreement notes can not be updated when the current status is 'Active'.");
+                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Access agreement notes can not be updated when the current status is 'Editable'.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 
-            var admin = await _adminService.GetAdminForUserIdAsync(User.GetPrimeUserId());
             var updatedNote = await _enrolleeService.UpdateEnrolleeNoteAsync(enrolleeId, accessAgreementNote);
 
             return Ok(ApiResponse.Result(updatedNote));
@@ -379,9 +378,6 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(enrolleeProfileVersion));
         }
 
-        // TODO add route model binding for Enrollee
-        // TODO add middleware/policy to do simple checks
-
         // PUT: api/Enrollees/5/adjudicator
         /// <summary>
         /// Add an enrollee's assigned adjudicator.
@@ -403,9 +399,8 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}."));
             }
 
-            var adjudicatorUserId = User.GetPrimeUserId();
             var admin = await _adminService.GetAdminForUserIdAsync(User.GetPrimeUserId());
-            var updatedEnrollee = await _enrolleeService.UpdateEnrolleeAdjudicator(enrollee.Id, adjudicatorUserId);
+            var updatedEnrollee = await _enrolleeService.UpdateEnrolleeAdjudicator(enrollee.Id, admin);
             await _businessEventService.CreateAdminClaimEventAsync(enrolleeId, "Admin claimed enrollee");
 
             return Ok(ApiResponse.Result(updatedEnrollee));
@@ -433,7 +428,6 @@ namespace Prime.Controllers
             }
 
             var updatedEnrollee = await _enrolleeService.UpdateEnrolleeAdjudicator(enrollee.Id);
-            var admin = await _adminService.GetAdminForUserIdAsync(User.GetPrimeUserId());
             await _businessEventService.CreateAdminClaimEventAsync(enrolleeId, "Admin disclaimed enrollee");
 
             return Ok(ApiResponse.Result(updatedEnrollee));
