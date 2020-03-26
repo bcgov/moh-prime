@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Bogus;
 using Prime;
+using Prime.Auth;
 using Prime.Models;
 using Prime.Services;
 using PrimeTests.Utils.Auth;
@@ -114,13 +115,13 @@ namespace PrimeTests.Utils
         public static void AddAdminRoleToUser(ClaimsPrincipal user)
         {
             var identity = user.Identity as ClaimsIdentity;
-            identity.AddClaim(new Claim(ClaimTypes.Role, PrimeConstants.PRIME_ADMIN_ROLE));
+            identity.AddClaim(new Claim(ClaimTypes.Role, AuthConstants.PRIME_ADMIN_ROLE));
         }
 
         public static void RemoveAdminRoleFromUser(ClaimsPrincipal user)
         {
             var claim = user.Claims
-                .Where(c => c.Value == PrimeConstants.PRIME_ADMIN_ROLE)
+                .Where(c => c.Value == AuthConstants.PRIME_ADMIN_ROLE)
                 .Single();
             var identity = user.Identity as ClaimsIdentity;
             identity.RemoveClaim(claim);
@@ -363,8 +364,8 @@ namespace PrimeTests.Utils
             var _token = TestUtils.TokenBuilder()
                 .ForAudience(Startup.StaticConfig["Jwt:Audience"])
                 .ForSubject(subject.ToString())
-                .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_ENROLLEE_ROLE)
-                .WithClaim(PrimeConstants.ASSURANCE_LEVEL_CLAIM_TYPE, "3")
+                .WithClaim(ClaimTypes.Role, AuthConstants.PRIME_ENROLLEE_ROLE)
+                .WithClaim(AuthConstants.ASSURANCE_LEVEL_CLAIM_TYPE, "3")
                 .BuildToken();
 
             request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);
@@ -395,8 +396,8 @@ namespace PrimeTests.Utils
             var _token = TestUtils.TokenBuilder()
                  .ForAudience(audience)
                  .ForSubject(subject.ToString())
-                 .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_ADMIN_ROLE)
-                 .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_READONLY_ADMIN)
+                 .WithClaim(ClaimTypes.Role, AuthConstants.PRIME_ADMIN_ROLE)
+                 .WithClaim(ClaimTypes.Role, AuthConstants.PRIME_READONLY_ADMIN)
                  .BuildToken();
 
             request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);
@@ -423,7 +424,7 @@ namespace PrimeTests.Utils
             var _token = TestUtils.TokenBuilder()
                  .ForAudience(audience)
                  .ForSubject(subject.ToString())
-                 .WithClaim(ClaimTypes.Role, PrimeConstants.PRIME_SUPER_ADMIN_ROLE)
+                 .WithClaim(ClaimTypes.Role, AuthConstants.PRIME_SUPER_ADMIN_ROLE)
                  .BuildToken();
 
             request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);

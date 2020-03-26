@@ -165,5 +165,10 @@ namespace PrimeTests.Mocks
         {
             throw new NotImplementedException();
         }
+
+        public Task<string> GetGpidForHpdidAsync(string hpdid)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
