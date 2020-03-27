@@ -158,7 +158,8 @@ objects:
           uri: "${SOURCE_REPOSITORY_URL}"
         type: Git
       strategy:
-        dockerStrategy: 
+        dockerStrategy:
+          noCache: true
           dockerfilePath: openshift.dockerfile
           env:
           - name: POSTGRESQL_USER
