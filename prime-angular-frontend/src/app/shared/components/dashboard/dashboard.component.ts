@@ -184,7 +184,7 @@ export class DashboardComponent implements OnInit {
             ].includes(currentRoute)
           },
           {
-            name: 'PharmaNet Enrolment Certificate',
+            name: 'Next Steps to get PharmaNet',
             icon: statusIcons.certificate,
             route: EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY,
             showItem: true,
@@ -248,7 +248,7 @@ export class DashboardComponent implements OnInit {
   private getEnrolmentStatusIcons(enrolmentStatus: EnrolmentStatus, hasAcceptedAtLeastOneToa: boolean) {
     let enrollee = 'assignment_ind';
     let accessAgreement = 'assignment';
-    let certificate = 'card_membership';
+    let certificate = 'mail';
 
     if (!hasAcceptedAtLeastOneToa) {
       // Default icons when performing initial enrolment
