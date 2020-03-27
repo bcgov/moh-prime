@@ -4,7 +4,7 @@ import { NoteComponent } from './note.component';
 import { SharedModule } from '@shared/shared.module';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('NoteComponent', () => {

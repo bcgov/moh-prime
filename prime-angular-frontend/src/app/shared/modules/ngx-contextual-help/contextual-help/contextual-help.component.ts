@@ -1,5 +1,5 @@
 import { Component, Input, ContentChildren, QueryList } from '@angular/core';
-import { MenuPositionX, MenuPositionY } from '@angular/material';
+import { MenuPositionX, MenuPositionY } from '@angular/material/menu';
 import { ContextualTitleDirective } from '../contextual-title.directive';
 import { ContextualContentDirective } from '../contextual-content.directive';
 

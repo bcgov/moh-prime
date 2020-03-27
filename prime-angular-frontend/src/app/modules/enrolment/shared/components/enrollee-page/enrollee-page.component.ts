@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { Subscription, EMPTY } from 'rxjs';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { FeedbackComponent, Feedback } from '@shared/components/dialogs/content/feedback/feedback.component';
