@@ -225,8 +225,7 @@ export class EnrolmentResource {
   private enrolmentAdapterRequest(enrolment: Enrolment): HttpEnrollee {
     if (enrolment.enrollee.mailingAddress.postal) {
       enrolment.enrollee.mailingAddress.postal = enrolment.enrollee.mailingAddress.postal.toUpperCase();
-    }
-    else {
+    } else {
       enrolment.enrollee.mailingAddress = null;
     }
 

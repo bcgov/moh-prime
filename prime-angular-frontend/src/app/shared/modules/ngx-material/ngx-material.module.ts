@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
-import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MAT_LABEL_GLOBAL_OPTIONS } from '@angular/material/core';
+import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -87,7 +87,7 @@ const matFormFieldCustomOptions: MatFormFieldDefaultOptions = {
       }
     },
     {
-      provide: MAT_LABEL_GLOBAL_OPTIONS,
+      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: { float: 'always' }
     },
     {
