@@ -13,7 +13,7 @@ describe('EnrolmentStateService', () => {
   }));
 
   it('should create', () => {
-    const service: EnrolmentStateService = TestBed.get(EnrolmentStateService);
+    const service: EnrolmentStateService = TestBed.inject(EnrolmentStateService);
     expect(service).toBeTruthy();
   });
 });
