@@ -124,6 +124,10 @@ namespace Prime.Services.Rules
             config.IgnoreProperty<Enrollee>(x => x.ContactPhone);
             config.IgnoreProperty<Enrollee>(x => x.VoicePhone);
             config.IgnoreProperty<Enrollee>(x => x.VoiceExtension);
+            if (enrollee.IsObo == true)
+            {
+                config.IgnoreProperty<Enrollee>(x => x.Jobs);
+            }
 
             config.CustomComparers.Add(new CertificationComparer(RootComparerFactory.GetRootComparer()));
             config.CustomComparers.Add(new JobComparer(RootComparerFactory.GetRootComparer()));

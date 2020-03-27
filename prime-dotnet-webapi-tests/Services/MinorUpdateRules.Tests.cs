@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using Xunit;
 
@@ -10,6 +11,7 @@ using Prime.Services;
 using Prime.Services.Rules;
 using PrimeTests.Utils;
 using PrimeTests.Mocks;
+using System.Collections;
 
 namespace PrimeTests.Services
 {
@@ -63,83 +65,147 @@ namespace PrimeTests.Services
             };
         }
 
+        private async Task AssertAllowableChanges(bool expected, Enrollee enrollee, EnrolleeProfileViewModel profile)
+        {
+            var rule = new AllowableChangesRule(profile);
+            Assert.Equal(expected, await rule.ProcessRule(enrollee));
+            AssertNoReasons(enrollee);
+        }
+
         [Fact]
         public async void testAllowableChangesRule_AllowedUpdates()
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
-            EnrolleeProfileViewModel profile = new EnrolleeProfileViewModel();
-            enrollee.CopyPropertiesTo(profile);
+            EnrolleeProfileViewModel profile = enrollee.ToViewModel();
 
             profile.ContactEmail += "change";
             profile.ContactPhone += "change";
             profile.VoicePhone += "change";
             profile.VoiceExtension += "change";
 
-            var rule = new AllowableChangesRule(profile);
-
-            Assert.True(await rule.ProcessRule(enrollee));
-            AssertNoReasons(enrollee);
+            await AssertAllowableChanges(true, enrollee, profile);
         }
 
         [Fact]
-        public async void testAllowableChangesRule_OBOCanUpdateJobs()
+        public async void testAllowableChangesRule_SimpleDissallowedChange()
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
-            // Set the enrollee as OBO via the access term
-            enrollee.AccessTerms = new[]
-            {
-                new AccessTerm
-                {
-                    AcceptedDate = DateTimeOffset.Now,
-                    UserClause = new UserClause { EnrolleeClassification = PrimeConstants.PRIME_OBO  }
-                }
-            };
-            EnrolleeProfileViewModel profile = new EnrolleeProfileViewModel();
-            enrollee.CopyPropertiesTo(profile);
+            EnrolleeProfileViewModel profile;
 
-            // New job
-            profile.Jobs.Add(new Job { Title = "Snake sweater knitter" });
+            // Simple property
+            profile = enrollee.ToViewModel();
+            profile.PreferredFirstName = "BIG CHANGES";
+            await AssertAllowableChanges(false, enrollee, profile);
 
-            var rule = new AllowableChangesRule(profile);
-            Assert.True(await rule.ProcessRule(enrollee));
-            AssertNoReasons(enrollee);
+            // Property on child object
+            profile = enrollee.ToViewModel();
+            profile.MailingAddress.City = "Flavortown, USA";
+            await AssertAllowableChanges(false, enrollee, profile);
+        }
 
-            // Edit job
-            profile.Jobs = enrollee.Jobs;
-            profile.Jobs.First().Title = "Bespoke lifehack crafter";
+        [Fact]
+        public async void testAllowableChangesRule_Certifications()
+        {
+            Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
 
-            rule = new AllowableChangesRule(profile);
-            Assert.True(await rule.ProcessRule(enrollee));
-            AssertNoReasons(enrollee);
+            // New cert
+            EnrolleeProfileViewModel profile = enrollee.ToViewModel();
+            profile.Certifications.Add(new Certification { CollegeCode = 1 });
+            await AssertAllowableChanges(false, enrollee, profile);
+
+            // Edit cert
+            profile = enrollee.ToViewModel();
+            profile.Certifications.First().LicenseNumber += "6";
+            await AssertAllowableChanges(false, enrollee, profile);
+
+            // Remove cert
+            profile = enrollee.ToViewModel();
+            profile.Certifications = profile.Certifications.Skip(1).ToList();
+            await AssertAllowableChanges(false, enrollee, profile);
         }
 
         [Theory]
-        [MemberData(nameof(DissallowedChangesData))]
-        public async void testAllowableChangesRule_DissallowedChanges()
+        [InlineData(true, true)]
+        [InlineData(false, false)]
+        [InlineData(null, false)]
+        public async void testAllowableChangesRule_Jobs(bool? isObo, bool expected)
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
-            EnrolleeProfileViewModel profile = new EnrolleeProfileViewModel();
-            enrollee.CopyPropertiesTo(profile);
+            // Set the enrollee's user class via the access term
+            if (isObo.HasValue)
+            {
+                enrollee.AccessTerms = new[]
+                {
+                    new AccessTerm
+                    {
+                        AcceptedDate = DateTimeOffset.Now,
+                        UserClause = new UserClause { EnrolleeClassification = isObo == true ? PrimeConstants.PRIME_OBO : PrimeConstants.PRIME_RU }
+                    }
+                };
+            }
+            else
+            {
+                enrollee.AccessTerms = new AccessTerm[] { };
+            }
 
             // New job
+            EnrolleeProfileViewModel profile = enrollee.ToViewModel();
             profile.Jobs.Add(new Job { Title = "Snake sweater knitter" });
-
-            var rule = new AllowableChangesRule(profile);
-            Assert.True(await rule.ProcessRule(enrollee));
-            AssertNoReasons(enrollee);
+            await AssertAllowableChanges(expected, enrollee, profile);
 
             // Edit job
-            profile.Jobs = enrollee.Jobs;
+            profile = enrollee.ToViewModel();
             profile.Jobs.First().Title = "Bespoke lifehack crafter";
+            await AssertAllowableChanges(expected, enrollee, profile);
 
-            rule = new AllowableChangesRule(profile);
-            Assert.True(await rule.ProcessRule(enrollee));
-            AssertNoReasons(enrollee);
+            // Remove job
+            profile = enrollee.ToViewModel();
+            profile.Jobs = profile.Jobs.Skip(1).ToList();
+            await AssertAllowableChanges(expected, enrollee, profile);
         }
 
-        public static IEnumerable<object[]> DissallowedChangesData()
+        [Fact]
+        public async void testAllowableChangesRule_Organizations()
         {
-            throw new NotImplementedException();
+            Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
+
+            // New org
+            EnrolleeProfileViewModel profile = enrollee.ToViewModel();
+            profile.Organizations.Add(new Organization { OrganizationTypeCode = 1 });
+            await AssertAllowableChanges(false, enrollee, profile);
+
+            // Edit org
+            profile = enrollee.ToViewModel();
+            profile.Organizations.First().OrganizationTypeCode++;
+            await AssertAllowableChanges(false, enrollee, profile);
+
+            // Remove org
+            profile = enrollee.ToViewModel();
+            profile.Organizations = profile.Organizations.Skip(1).ToList();
+            await AssertAllowableChanges(false, enrollee, profile);
+        }
+
+        [Fact]
+        public async void testAllowableChangesRule_SPEC()
+        {
+            // Make sure there are no new types we don't know how to compare
+            var knownTypes = new[]
+            {
+                typeof(string),
+                typeof(bool?),
+                typeof(MailingAddress),
+                typeof(ICollection<Certification>),
+                typeof(ICollection<Job>),
+                typeof(ICollection<Organization>),
+            };
+
+            var unknownTypes = typeof(EnrolleeProfileViewModel)
+                .GetProperties()
+                .Select(p => p.PropertyType)
+                .Distinct()
+                .Where(t => !knownTypes.Contains(t));
+
+            Assert.False(unknownTypes.Any(), $"At least one new type has been added to {nameof(EnrolleeProfileViewModel)}. Please update {nameof(AllowableChangesRule)} and/or {nameof(testAllowableChangesRule_SPEC)}");
         }
     }
 }
