@@ -25,7 +25,7 @@ namespace Prime.Models
 
         public ICollection<EnrolmentStatusReason> EnrolmentStatusReasons { get; set; }
 
-        public void AddStatusReason(int reasonCode, string reasonNote = null)
+        public void AddStatusReason(StatusReasonType type, string reasonNote = null)
         {
             if (EnrolmentStatusReasons == null)
             {
@@ -35,7 +35,7 @@ namespace Prime.Models
             EnrolmentStatusReasons.Add(new EnrolmentStatusReason
             {
                 EnrolmentStatus = this,
-                StatusReasonCode = reasonCode,
+                StatusReasonCode = (int)type,
                 ReasonNote = reasonNote
             });
         }
@@ -45,7 +45,7 @@ namespace Prime.Models
             return this.StatusCode == (int)statusType;
         }
 
-        public static EnrolmentStatus FromStatusType(StatusType statusType, int enrolleeId)
+        public static EnrolmentStatus FromType(StatusType statusType, int enrolleeId)
         {
             return new EnrolmentStatus
             {

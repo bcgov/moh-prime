@@ -62,8 +62,17 @@ export class EnrolmentResource {
       .pipe(map(() => { }));
   }
 
+  public submitApplication(enrolment: Enrolment): Observable<HttpEnrollee> {
+    const { id } = enrolment;
+    return this.apiResource.post<HttpEnrollee>(`enrollees/${id}/submission`, this.enrolmentAdapterRequest(enrolment))
+      .pipe(
+        map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
+        tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
+      );
+  }
+
   public submissionAction(id: number, action: SubmissionAction): Observable<HttpEnrollee> {
-    return this.apiResource.post<HttpEnrollee>(`enrollees/${id}/${action}`)
+    return this.apiResource.post<HttpEnrollee>(`enrollees/${id}/submission/${action}`)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
         tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
@@ -216,6 +225,9 @@ export class EnrolmentResource {
   private enrolmentAdapterRequest(enrolment: Enrolment): HttpEnrollee {
     if (enrolment.enrollee.mailingAddress.postal) {
       enrolment.enrollee.mailingAddress.postal = enrolment.enrollee.mailingAddress.postal.toUpperCase();
+    }
+    else {
+      enrolment.enrollee.mailingAddress = null;
     }
 
     enrolment.certifications = this.removeIncompleteCollegeCertifications(enrolment.certifications);

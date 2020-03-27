@@ -123,27 +123,23 @@ export class EnrolmentGuard extends BaseGuard {
    * post-enrolment routes.
    */
   private manageEditableRouting(routePath: string, enrolment: Enrolment): boolean {
-    const enrolmentSubmissionRoutes = [
-      ...EnrolmentRoutes.enrolmentSubmissionRoutes()
-    ];
-    const route = this.route(routePath);
+    const hasNotCompletedProfile = !enrolment.profileCompleted;
 
-    const redirectionRoute = (!enrolment.profileCompleted)
+    const route = this.route(routePath);
+    const redirectionRoute = (hasNotCompletedProfile)
       ? EnrolmentRoutes.DEMOGRAPHIC // Only for new enrolments with incomplete profiles
       : EnrolmentRoutes.OVERVIEW;
+    const blacklistedRoutes = [
+      ...EnrolmentRoutes.enrolmentSubmissionRoutes()
+    ];
 
-    if (
-      !enrolment.profileCompleted &&
-      [...enrolmentSubmissionRoutes, EnrolmentRoutes.OVERVIEW].includes(route)
-    ) {
-      this.navigate(routePath, redirectionRoute);
+    if (hasNotCompletedProfile) {
+      // No access to overview if you've not completed the wizard
+      blacklistedRoutes.push(EnrolmentRoutes.OVERVIEW);
     }
 
-    const hasNotCompletedProfile = !enrolment.profileCompleted && route === EnrolmentRoutes.OVERVIEW;
-    const hasNotSubmittedEnrolment = enrolmentSubmissionRoutes.includes(route);
-
-    return (hasNotCompletedProfile || hasNotSubmittedEnrolment)
-      // Prevent access to post enrolment routes
+    return (blacklistedRoutes.includes(route))
+      // Prevent access to post enrolment/blacklisted routes
       ? this.navigate(routePath, redirectionRoute)
       // Otherwise, allow the route to resolve
       : true;
@@ -158,16 +154,16 @@ export class EnrolmentGuard extends BaseGuard {
   }
 
   private manageRouting(routePath: string, defaultRoute: string, enrolment: Enrolment): boolean {
+    const route = this.route(routePath);
     // Allow access to an extend set of routes if the enrollee
     // has accepted at least one TOA
     const whiteListedRoutes = (!!enrolment.expiryDate)
       ? [
-        ...EnrolmentRoutes.enrolmentAcceptedToaRoutes(),
+        ...EnrolmentRoutes.enrolmentEditableRoutes(),
         // Allow read-only access to the enrollee profile
         EnrolmentRoutes.OVERVIEW
       ]
       : [];
-    const route = this.route(routePath);
 
     if (!whiteListedRoutes.includes(route)) {
       return this.navigate(routePath, defaultRoute);
