@@ -178,16 +178,6 @@ import { PageFooterComponent } from './components/page-footer/page-footer.compon
     AccessTermComponent,
     CollectionNoticeAlertComponent,
     PageFooterComponent
-  ],
-  entryComponents: [
-    ConfirmDialogComponent,
-    EnrolmentStatusReasonsComponent,
-    ApproveEnrolmentComponent,
-    MarkdownComponent,
-    NoteComponent,
-    ClaimEnrolleeComponent,
-    ManualFlagNoteComponent,
-    FeedbackComponent
   ]
 })
 export class SharedModule { }
