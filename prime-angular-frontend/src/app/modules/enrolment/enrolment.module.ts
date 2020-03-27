@@ -36,6 +36,7 @@ import {
   AccessAgreementHistoryEnrolmentComponent
 } from './pages/access-agreement-history-enrolment/access-agreement-history-enrolment.component';
 import { EnrolleePageComponent } from './shared/components/enrollee-page/enrollee-page.component';
+import { NextStepsInfographicComponent } from './shared/components/next-steps-infographic/next-steps-infographic.component';
 
 @NgModule({
   declarations: [
@@ -66,7 +67,8 @@ import { EnrolleePageComponent } from './shared/components/enrollee-page/enrolle
     RuAccessTermsComponent,
     AccessAgreementCurrentComponent,
     AccessAgreementHistoryEnrolmentComponent,
-    EnrolleePageComponent
+    EnrolleePageComponent,
+    NextStepsInfographicComponent
   ],
   imports: [
     SharedModule,

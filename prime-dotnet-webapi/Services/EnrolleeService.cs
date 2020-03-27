@@ -424,7 +424,18 @@ namespace Prime.Services
 
         public async Task<IEnumerable<BusinessEvent>> GetEnrolleeBusinessEvents(int enrolleeId)
         {
-            return await _context.BusinessEvents.Where((e) => e.EnrolleeId == enrolleeId).ToListAsync();
+            return await _context.BusinessEvents
+                .Where(e => e.EnrolleeId == enrolleeId)
+                .OrderByDescending(e => e.EventDate)
+                .ToListAsync();
+        }
+
+        public async Task<string> GetGpidForHpdidAsync(string hpdid)
+        {
+            return await _context.Enrollees
+                .Where(e => e.HPDID == hpdid)
+                .Select(e => e.GPID)
+                .SingleOrDefaultAsync();
         }
     }
 }
