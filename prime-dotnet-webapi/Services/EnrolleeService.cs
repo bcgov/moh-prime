@@ -95,6 +95,8 @@ namespace Prime.Services
             foreach (var item in items)
             {
                 item.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(item);
+                // Attach to the enrollee if they have signed the most recent ToA
+                item.HasMostRecentAccessTermSigned = await _accessTermService.IsCurrentByEnrolleeAsync(item.Id);
             }
 
             return items;
@@ -120,7 +122,7 @@ namespace Prime.Services
                 throw new ArgumentNullException(nameof(enrollee), "Could not create an enrollee, the passed in Enrollee cannot be null.");
             }
 
-            enrollee.AddEnrolmentStatus(StatusType.Active);
+            enrollee.AddEnrolmentStatus(StatusType.Editable);
             _context.Enrollees.Add(enrollee);
 
             var created = await _context.SaveChangesAsync();
@@ -277,9 +279,16 @@ namespace Prime.Services
                 .Include(e => e.AccessTerms);
         }
 
-        public async Task<Enrollee> GetEnrolleeAsync(int enrolleeId)
+        public async Task<Enrollee> GetEnrolleeAsync(int enrolleeId, bool isAdmin = false)
         {
-            var entity = await this.GetBaseEnrolleeQuery()
+            IQueryable<Enrollee> query = this.GetBaseEnrolleeQuery();
+
+            if (isAdmin)
+            {
+                query = query.Include(e => e.Adjudicator);
+            }
+
+            var entity = await query
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
             if (entity != null)
@@ -308,15 +317,17 @@ namespace Prime.Services
         {
             return await _context.AdjudicatorNotes
                 .Where(an => an.EnrolleeId == enrollee.Id)
+                .Include(an => an.Adjudicator)
                 .OrderByDescending(an => an.NoteDate)
                 .ToListAsync();
         }
 
-        public async Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, string note)
+        public async Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, string note, int adminId)
         {
             var adjudicatorNote = new AdjudicatorNote
             {
                 EnrolleeId = enrolleeId,
+                AdjudicatorId = adminId,
                 Note = note,
                 NoteDate = DateTimeOffset.Now
             };
@@ -392,15 +403,11 @@ namespace Prime.Services
                 .CountAsync();
         }
 
-        public async Task<Enrollee> UpdateEnrolleeAdjudicator(int enrolleeId, Guid adjudicatorUserId = default(Guid))
+        public async Task<Enrollee> UpdateEnrolleeAdjudicator(int enrolleeId, Admin admin = null)
         {
             var enrollee = await GetBaseEnrolleeQuery()
                 .Include(e => e.Adjudicator)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
-
-            // Admin is set to null if no adjudicatorUserId is provided
-            var admin = await _context.Admins
-                .SingleOrDefaultAsync(a => a.UserId == adjudicatorUserId);
 
             enrollee.Adjudicator = admin;
 
@@ -417,7 +424,18 @@ namespace Prime.Services
 
         public async Task<IEnumerable<BusinessEvent>> GetEnrolleeBusinessEvents(int enrolleeId)
         {
-            return await _context.BusinessEvents.Where((e) => e.EnrolleeId == enrolleeId).ToListAsync();
+            return await _context.BusinessEvents
+                .Where(e => e.EnrolleeId == enrolleeId)
+                .OrderByDescending(e => e.EventDate)
+                .ToListAsync();
+        }
+
+        public async Task<string> GetGpidForHpdidAsync(string hpdid)
+        {
+            return await _context.Enrollees
+                .Where(e => e.HPDID == hpdid)
+                .Select(e => e.GPID)
+                .SingleOrDefaultAsync();
         }
     }
 }

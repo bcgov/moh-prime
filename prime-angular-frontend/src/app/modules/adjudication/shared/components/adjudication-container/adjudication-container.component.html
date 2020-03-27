@@ -52,6 +52,7 @@
         <app-adjudicator-actions [enrollee]="dataSource?.data[0]"
                                  (approve)="onApprove($event)"
                                  (decline)="onDecline($event)"
+                                 (lock)="onLock($event)"
                                  (unlock)="onUnlock($event)"
                                  (delete)="onDelete($event)"
                                  (route)="onRoute($event)"></app-adjudicator-actions>

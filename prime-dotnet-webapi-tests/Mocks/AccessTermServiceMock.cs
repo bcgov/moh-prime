@@ -47,7 +47,7 @@ namespace PrimeTests.Mocks
             );
         }
 
-        public Task<IEnumerable<AccessTerm>> GetAcceptedAccessTerms(int enrolleeId)
+        public Task<IEnumerable<AccessTerm>> GetAcceptedAccessTerms(int enrolleeId, int year)
         {
             return Task.FromResult(
                 this.GetHolder<int, AccessTerm>().Values?

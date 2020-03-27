@@ -17,6 +17,7 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
+import moment from 'moment';
 
 @Component({
   selector: 'app-overview',

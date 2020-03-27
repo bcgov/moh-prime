@@ -16,6 +16,10 @@ namespace Prime.Models
         [JsonIgnore]
         public Enrollee Enrollee { get; set; }
 
+        public int AdjudicatorId { get; set; }
+
+        public Admin Adjudicator { get; set; }
+
         [Required]
         public string Note { get; set; }
 

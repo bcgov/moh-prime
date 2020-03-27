@@ -7,8 +7,6 @@ services:
         context: .
     environment:
       SUFFIX: "${SUFFIX}"
-    args:
-      SUFFIX: "${SUFFIX}"
     command: "nginx -g 'daemon off;'"
     restart: always
     ports:
