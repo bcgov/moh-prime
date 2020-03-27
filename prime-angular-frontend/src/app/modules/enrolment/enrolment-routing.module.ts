@@ -30,6 +30,7 @@ import { AccessAgreementCurrentComponent } from './pages/access-agreement-curren
 import {
   AccessAgreementHistoryEnrolmentComponent
 } from './pages/access-agreement-history-enrolment/access-agreement-history-enrolment.component';
+import { MinorUpdateConfirmationComponent } from './pages/minor-update-confirmation/minor-update-confirmation.component';
 
 const routes: Routes = [
   {
@@ -104,6 +105,11 @@ const routes: Routes = [
       //
       // Enrolment submission:
       //
+      {
+        path: EnrolmentRoutes.CHANGES_SAVED,
+        component: MinorUpdateConfirmationComponent,
+        data: { title: 'PharmaNet Enrolment' }
+      },
       {
         path: EnrolmentRoutes.SUBMISSION_CONFIRMATION,
         component: SubmissionConfirmationComponent,

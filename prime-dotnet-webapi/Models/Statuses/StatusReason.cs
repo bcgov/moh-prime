@@ -9,19 +9,6 @@ namespace Prime.Models
     [Table("StatusReasonLookup")]
     public sealed class StatusReason : BaseAuditable, ILookup<int>, IEquatable<StatusReason>
     {
-        public readonly static int AUTOMATIC_CODE = 1;
-        public readonly static int MANUAL_CODE = 2;
-        public readonly static int PHARMANET_ERROR_CODE = 3;
-        public readonly static int NOT_IN_PHARMANET_CODE = 4;
-        public readonly static int NAME_DISCREPANCY_CODE = 5;
-        public readonly static int BIRTHDATE_DISCREPANCY_CODE = 6;
-        public readonly static int PRACTICING_CODE = 7;
-        public readonly static int PUMP_PROVIDER_CODE = 8;
-        public readonly static int LICENCE_CLASS_CODE = 9;
-        public readonly static int SELF_DECLARATION_CODE = 10;
-        public readonly static int ADDRESS_CODE = 11;
-        public readonly static int ALWAYS_MANUAL_CODE = 12;
-
         [Key]
         public int Code { get; set; }
 

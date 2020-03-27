@@ -11,6 +11,9 @@ export class EnrolmentRoutes {
   public static ORGANIZATION = 'organization';
   public static SELF_DECLARATION = 'self-declaration';
   // Enrolment submission:
+  // Enrolment update was small, no auto or manual adjudication required, and
+  // is NOT included in the submission or editable status route lists
+  public static CHANGES_SAVED = 'changes-saved';
   public static SUBMISSION_CONFIRMATION = 'submission-confirmation';
   public static PENDING_ACCESS_TERM = 'pending-access-term';
   public static ACCESS_LOCKED = 'access-locked';
@@ -66,7 +69,7 @@ export class EnrolmentRoutes {
     ];
   }
 
-  public static enrolmentAcceptedToaRoutes(): string[] {
+  public static enrolmentEditableRoutes(): string[] {
     return [
       EnrolmentRoutes.CURRENT_ACCESS_TERM,
       EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY,
@@ -80,7 +83,7 @@ export class EnrolmentRoutes {
   public static enrolleeRoutes(): string[] {
     return [
       ...EnrolmentRoutes.enrolmentProfileRoutes(),
-      ...EnrolmentRoutes.enrolmentAcceptedToaRoutes()
+      ...EnrolmentRoutes.enrolmentEditableRoutes()
     ];
   }
 }

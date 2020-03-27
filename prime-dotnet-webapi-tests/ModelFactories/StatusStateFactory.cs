@@ -57,7 +57,7 @@ namespace PrimeTests.ModelFactories
             var enrolmentStatuses = new EnrolmentStatusFactory(_owner, _statuses).Generate(_statuses.Count());
 
             var approvedStatus = enrolmentStatuses.SingleOrDefault(s => s.IsType(StatusType.RequiresToa));
-            if (approvedStatus != null) { approvedStatus.AddStatusReason(_automatic ? StatusReason.AUTOMATIC_CODE : StatusReason.MANUAL_CODE); }
+            if (approvedStatus != null) { approvedStatus.AddStatusReason(_automatic ? StatusReasonType.Automatic : StatusReasonType.Manual); }
 
             return enrolmentStatuses;
         }

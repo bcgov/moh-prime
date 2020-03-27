@@ -18,12 +18,12 @@ namespace PrimeTests.ModelFactories
 
         public static StatusReason Automatic
         {
-            get { return All.Single(x => x.Code == StatusReason.AUTOMATIC_CODE); }
+            get { return All.Single(x => x.Code == (int)StatusReasonType.Automatic); }
         }
 
         public static StatusReason Manual
         {
-            get { return All.Single(x => x.Code == StatusReason.MANUAL_CODE); }
+            get { return All.Single(x => x.Code == (int)StatusReasonType.Manual); }
         }
     }
 }

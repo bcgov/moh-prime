@@ -80,5 +80,15 @@ namespace PrimeTests.Mocks
         {
             throw new NotImplementedException();
         }
+
+        public Task<bool> IsCurrentAsync(int accessTermId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> IsCurrentByEnrolleeAsync(int accessTermId)
+        {
+            return Task.FromResult(true);
+        }
     }
 }
