@@ -26,7 +26,7 @@ import { SiteRoutes } from 'app/modules/site-registration/site-registration.rout
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-  @ViewChild('sidenav', { static: false }) public sideNav: MatSidenav;
+  @ViewChild('sidenav') public sideNav: MatSidenav;
 
   public dashboardNavSections: DashboardNavSection[];
   public sideNavProps: {

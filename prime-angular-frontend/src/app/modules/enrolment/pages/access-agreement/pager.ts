@@ -1,10 +1,8 @@
-import {
-  Input, ViewChildren, QueryList, TemplateRef, EventEmitter,
-  OnChanges, SimpleChanges, AfterViewInit, Output, ChangeDetectorRef
-} from '@angular/core';
+import { Input, ViewChildren, QueryList, TemplateRef, EventEmitter, OnChanges, SimpleChanges, AfterViewInit, Output, ChangeDetectorRef, Directive } from '@angular/core';
 
 import { PageRefDirective } from './page-ref.directive';
 
+@Directive()
 export abstract class Pager implements OnChanges, AfterViewInit {
   @Input() public currentPage: number;
   @Output() public changed: EventEmitter<{ atEnd: boolean }>;
