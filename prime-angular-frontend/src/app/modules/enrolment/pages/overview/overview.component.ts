@@ -16,7 +16,6 @@ import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
-import { SubmissionAction } from '@shared/enums/submission-action.enum';
 import moment from 'moment';
 
 @Component({
@@ -61,17 +60,14 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
         .pipe(
           exhaustMap((result: boolean) =>
             (result)
-              ? this.enrolmentResource.updateEnrollee(enrolment)
+              ? this.enrolmentResource.submitApplication(enrolment)
               : EMPTY
-          ),
-          exhaustMap(() =>
-            this.enrolmentResource.submissionAction(enrolment.id, SubmissionAction.SUBMIT)
           )
         )
         .subscribe(
           () => {
             this.toastService.openSuccessToast('Enrolment has been submitted');
-            this.routeTo(EnrolmentRoutes.SUBMISSION_CONFIRMATION);
+            this.routeTo(EnrolmentRoutes.CHANGES_SAVED);
           },
           (error: any) => {
             this.toastService.openErrorToast('Enrolment could not be submitted');

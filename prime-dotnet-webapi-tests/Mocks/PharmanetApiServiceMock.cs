@@ -8,39 +8,37 @@ using Prime.Services;
 
 namespace PrimeTests.Mocks
 {
-    public class PharmanetApiServiceMock : BaseMockService, IPharmanetApiService
+    public class PharmanetApiServiceMock : IPharmanetApiService
     {
         [Flags]
         public enum OperationMode
         {
-            ERROR = 0,
-            NO_RECORD = 1,
-            MATCHING_RECORD = 2,
-            NAME_DISCREPANCY = 4,
-            DATE_DISCREPANCY = 8,
-            NOT_PRACTICING = 16
+            Error = 0,
+            NoRecord = 1,
+            MatchingRecord = 2,
+            NameDiscrepancy = 4,
+            DateDiscrepancy = 8,
+            NotPracticing = 16
         }
 
         private Enrollee _expectedEnrollee;
         private IEnumerator<OperationMode> _modeEnumerator;
 
-        public PharmanetApiServiceMock(Enrollee expectedEnrollee = null, params OperationMode[] modes) : base()
+        public PharmanetApiServiceMock(Enrollee expectedEnrollee = null, params OperationMode[] modes)
         {
             _modeEnumerator = modes.AsEnumerable().GetEnumerator();
             _expectedEnrollee = expectedEnrollee;
         }
 
-        public override void SeedData() { }
-
         public Task<PharmanetCollegeRecord> GetCollegeRecordAsync(Certification certification)
         {
             OperationMode mode = GetNextMode();
 
-            if (mode == OperationMode.ERROR)
+            if (mode == OperationMode.Error)
             {
                 throw new PharmanetApiService.PharmanetCollegeApiException("PharmaNet Mock is in error mode.");
             }
-            if (mode.HasFlag(OperationMode.NO_RECORD))
+            if (mode.HasFlag(OperationMode.NoRecord))
             {
                 return Task.FromResult<PharmanetCollegeRecord>(null);
             }
@@ -56,15 +54,15 @@ namespace PrimeTests.Mocks
                 firstName = _expectedEnrollee.FirstName,
                 lastName = _expectedEnrollee.LastName,
                 dateofBirth = _expectedEnrollee.DateOfBirth,
-                status = mode.HasFlag(OperationMode.NOT_PRACTICING) ? "N" : "P",
+                status = mode.HasFlag(OperationMode.NotPracticing) ? "N" : "P",
                 effectiveDate = DateTime.Today
             };
 
-            if (mode.HasFlag(OperationMode.NAME_DISCREPANCY))
+            if (mode.HasFlag(OperationMode.NameDiscrepancy))
             {
                 record.lastName += "extracharacters";
             }
-            if (mode.HasFlag(OperationMode.DATE_DISCREPANCY))
+            if (mode.HasFlag(OperationMode.DateDiscrepancy))
             {
                 record.dateofBirth = record.dateofBirth.AddDays(1);
             }
@@ -80,7 +78,7 @@ namespace PrimeTests.Mocks
             }
             else
             {
-                return OperationMode.ERROR;
+                return OperationMode.Error;
             }
         }
     }
