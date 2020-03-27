@@ -67,6 +67,7 @@ objects:
         type: Git
       strategy:
         dockerStrategy:
+          noCache: true
           dockerfilePath: openshift.dockerfile
         type: Docker
       triggers:
