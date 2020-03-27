@@ -54,7 +54,7 @@ RUN cat /usr/src/app/src/environments/environment.prod.ts && \
 # COPY --from=buildDeps /usr/src/app/entrypoint.sh /etc/nginx
 RUN rm -fr /usr/share/nginx/html && \
     chmod -R 777 /usr/src/app/src && \
-    ln -s /usr/src/app/src /usr/share/nginx/html 
+    ln -s /usr/src/app/dist/angular-frontend /usr/share/nginx/html 
 RUN chmod +x /entrypoint.sh && \ 
     chmod 777 /entrypoint.sh && \
     echo "Build completed." 
