@@ -1,7 +1,5 @@
 using System;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -80,6 +78,7 @@ namespace Prime
         public DbSet<LimitsConditionsClause> LimitsConditionsClauses { get; set; }
         public DbSet<BusinessEvent> BusinessEvents { get; set; }
         public DbSet<Feedback> Feedback { get; set; }
+        public DbSet<PHSA> PHSA { get; set; }
 
         public override int SaveChanges()
         {
