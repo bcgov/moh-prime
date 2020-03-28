@@ -6,7 +6,7 @@ USER 0
 ENV NODE_ROOT /usr/src/app
 ENV REDIRECT_URL $REDIRECT_URL
 RUN mkdir -p /usr/src/app
-    
+
 RUN printenv && \
     pwd && \
     ls -alh
@@ -19,11 +19,11 @@ ENV KEYCLOAK_CLIENT_ID $KEYCLOAK_CLIENT_ID
 ENV JWT_WELL_KNOWN_CONFIG $JWT_WELL_KNOWN_CONFIG
 RUN apt-get update && \
     apt-get install -y nginx gettext-base && \
-    mkdir -p /var/cache/nginx && \ 
-    mkdir -p /var/cache/nginx/client_temp && \ 
-    touch /etc/nginx/conf.d/default.conf && \ 
-    chmod -R 777 /etc/nginx && \ 
-    chmod -R 777 /var/cache/nginx && \ 
+    mkdir -p /var/cache/nginx && \
+    mkdir -p /var/cache/nginx/client_temp && \
+    touch /etc/nginx/conf.d/default.conf && \
+    chmod -R 777 /etc/nginx && \
+    chmod -R 777 /var/cache/nginx && \
     chmod -R 777 /var/run
 COPY nginx.conf /etc/nginx/
 COPY nginx.template.conf /etc/nginx/nginx.template.conf
@@ -31,14 +31,13 @@ COPY entrypoint.sh /
 RUN echo "Populating environment..." && \
     (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
 RUN cat /usr/src/app/src/environments/environment.prod.ts
-RUN npm install @angular/cli -g && \ 
-    npm install && \ 
-    npm i @angular-devkit/build-angular@0.803.24 && \ 
-    ng build --prod && \ 
+RUN npm install @angular/cli -g && \
+    npm install && \
+    npm audit fix && \
+    ng build --prod && \
     echo "NPM packages installed..."
 
-# RUN npm audit fix --only=prod && \ 
-#     npm install @angular-devkit/build-angular@0.803.24 \ 
+# RUN npm audit fix && \
 # FROM nginx:1.15-alpine
 # COPY --from=buildDeps /usr/src/app/dist/angular-frontend /usr/share/nginx/html
 # RUN rm -f /etc/nginx/conf.d/default.conf
@@ -46,10 +45,10 @@ RUN npm install @angular/cli -g && \
 # COPY --from=buildDeps /usr/src/app/nginx.template.conf /etc/nginx/nginx.template.conf
 # COPY --from=build-deps /usr/src/app/nginx${OC_APP}.conf /etc/nginx/nginx.template.conf
 # COPY --from=buildDeps /usr/src/app/entrypoint.sh /etc/nginx
- 
-RUN chmod +x /entrypoint.sh && \ 
+
+RUN chmod +x /entrypoint.sh && \
     chmod 777 /entrypoint.sh && \
-    echo "Build completed." 
+    echo "Build completed."
 
 #WORKDIR /
 
