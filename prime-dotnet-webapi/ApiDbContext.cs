@@ -166,7 +166,6 @@ namespace Prime
             modelBuilder.ApplyConfiguration(new DefaultPrivilegeConfiguration());
             modelBuilder.ApplyConfiguration(new AssignedPrivilegeConfiguration());
             modelBuilder.ApplyConfiguration(new EnrolleeProfileVersionConfiguration());
-            modelBuilder.ApplyConfiguration(new PHSAConfiguration());
 
             modelBuilder.ApplyConfiguration(new GlobalClauseConfiguration());
             modelBuilder.ApplyConfiguration(new UserClauseConfiguration());

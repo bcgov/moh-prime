@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using Prime.Models.Api;
 using Prime.Services;
 
@@ -31,15 +30,8 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<int>), StatusCodes.Status201Created)]
         public async Task<ActionResult<int>> PostPHSA(FromBodyText body)
         {
-            try
-            {
-                var result = await _phsaService.CreatePHSAAsync(body);
-                return Ok(ApiResponse.Result(result));
-            }
-            catch (JsonReaderException ex)
-            {
-                return BadRequest(ApiResponse.Message("Unable to parse Json Object."));
-            }
+            var result = await _phsaService.CreatePHSAAsync(body);
+            return Ok(ApiResponse.Result(result));
         }
 
     }

@@ -15,7 +15,7 @@ namespace Prime.Models
 
         public DateTimeOffset SubmissionTime { get; set; }
 
-        public JObject JsonBody { get; set; }
+        public string Body { get; set; }
 
     }
 }

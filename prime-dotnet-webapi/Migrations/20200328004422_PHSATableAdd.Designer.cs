@@ -11,7 +11,7 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20200328000911_PHSATableAdd")]
+    [Migration("20200328004422_PHSATableAdd")]
     partial class PHSATableAdd
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -6381,14 +6381,14 @@ namespace Prime.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<string>("Body")
+                        .HasColumnType("text");
+
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
-
-                    b.Property<string>("JsonBody")
-                        .HasColumnType("json");
 
                     b.Property<DateTimeOffset>("SubmissionTime")
                         .HasColumnType("timestamp with time zone");

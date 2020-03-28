@@ -19,7 +19,7 @@ namespace Prime.Migrations
                     UpdatedUserId = table.Column<Guid>(nullable: false),
                     UpdatedTimeStamp = table.Column<DateTimeOffset>(nullable: false),
                     SubmissionTime = table.Column<DateTimeOffset>(nullable: false),
-                    JsonBody = table.Column<string>(type: "json", nullable: true)
+                    Body = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
