@@ -168,6 +168,7 @@
   },
   "defaultProject": "angular-frontend",
   "cli": {
-    "analytics": false
+    "analytics": false,
+    "packageManager": "npm"
   }
 }
