@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -20,7 +21,11 @@ using Newtonsoft.Json.Serialization;
 using Prime.Auth;
 using Prime.Services;
 using Prime.Models.Api;
+using Prime.Models;
 using Prime.Infrastructure;
+using MongoDB.Driver;
+using Mongo.Migration.Startup.DotNetCore;
+using Mongo.Migration.Startup.Static;
 
 namespace Prime
 {
@@ -54,6 +59,7 @@ namespace Prime
             services.AddScoped<IFeedbackService, FeedbackService>();
             services.AddScoped<IBusinessEventService, BusinessEventService>();
             services.AddScoped<ISubmissionService, SubmissionService>();
+            // services.AddScoped<IMongoService, MongoService>();
 
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
@@ -94,6 +100,7 @@ namespace Prime
             services.AddHttpContextAccessor();
 
             this.ConfigureDatabase(services);
+            this.ConfigureMongoDatabase(services);
 
             AuthenticationSetup.Initialize(services, Configuration, Environment);
         }
@@ -184,6 +191,31 @@ namespace Prime
                 .AddHealthChecks()
                 .AddDbContextCheck<ApiDbContext>("DbContextHealthCheck")
                 .AddNpgSql(connectionString);
+
+        }
+
+
+        protected virtual void ConfigureMongoDatabase(IServiceCollection services)
+        {
+            // requires using Microsoft.Extensions.Options
+            services.Configure<MongoDbSettings>(
+                Configuration.GetSection(nameof(MongoDatabaseSettings)));
+
+            services.AddSingleton<IMongoDbSettings>(sp =>
+                sp.GetRequiredService<IOptions<MongoDbSettings>>().Value);
+
+            // var _settings = new MongoDbSettings();
+
+            // var _client = new MongoClient(_settings.ConnectionString);
+            // MongoMigrationClient.Initialize(_client);
+
+            // services.AddSingleton<IMongoClient>(_client);
+
+            // services.AddMigration();
+
+            // Per the official Mongo Client reuse guidelines, MongoClient should be
+            // registered in DI with a singleton service lifetime.
+            services.AddSingleton<MongoService>();
         }
     }
 }
