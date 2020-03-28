@@ -18,8 +18,8 @@ namespace Prime.Services
         {
             PHSA obj = new PHSA();
 
-            // obj.JsonBody = JObject.Parse(body);
-            // obj.SubmissionTime = DateTime.Now;
+            obj.JsonBody = JObject.Parse(body);
+            obj.SubmissionTime = DateTime.Now;
 
             _context.PHSA.Add(obj);
 

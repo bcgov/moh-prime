@@ -1,16 +1,10 @@
-using System;
-using System.Linq;
-using System.Collections.Generic;
+
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
-using Prime.Auth;
-using Prime.Models;
+using Newtonsoft.Json;
 using Prime.Models.Api;
 using Prime.Services;
-using Newtonsoft.Json.Linq;
 
 namespace Prime.Controllers
 {
@@ -30,18 +24,22 @@ namespace Prime.Controllers
 
         // POST: api/phsa
         /// <summary>
-        /// Creates a phsa object and stores it in the DB
+        /// Creates a phsa object and stores it in the DB, returns the id
         /// </summary>
-        [HttpPost]
+        [HttpPost(Name = nameof(PostPHSA))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiResultResponse<int>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<List<PHSA>>> PostPHSA(FromBodyText body)
+        public async Task<ActionResult<int>> PostPHSA(FromBodyText body)
         {
-
-            var result = await _phsaService.CreatePHSAAsync(body);
-
-            return Ok(ApiResponse.Result(result));
-
+            try
+            {
+                var result = await _phsaService.CreatePHSAAsync(body);
+                return Ok(ApiResponse.Result(result));
+            }
+            catch (JsonReaderException ex)
+            {
+                return BadRequest(ApiResponse.Message("Unable to parse Json Object."));
+            }
         }
 
     }
