@@ -3,11 +3,11 @@
 //
 // Description:
 // Used to import mixins and variables into components with
-// ViewEncapsulation.Emulated (default) or ShadowDom, and
-// avoid overwriting global applied styles.
+// ViewEncapsulation.Emulated (default) or ShadowDom to
+// avoid creating or overwriting global applied styles.
 //
-// If only needed for grid related mixins, variables, and
-// utilities @import 'bootstrap/bootstrap-grid'.
+// An example usage would be for grid breakpoints wihtin
+// components.
 // ---
 
 @import './bootstrap-variables';
@@ -15,4 +15,3 @@
 @import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/variables';
 @import '~bootstrap/scss/mixins';
-@import '~bootstrap/scss/utilities';
