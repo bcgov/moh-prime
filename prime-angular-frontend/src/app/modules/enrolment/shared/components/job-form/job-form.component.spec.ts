@@ -1,5 +1,7 @@
 import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
 
@@ -20,7 +22,9 @@ describe('JobFormComponent', () => {
     TestBed.configureTestingModule(
       {
         imports: [
+          BrowserAnimationsModule,
           HttpClientTestingModule,
+          RouterTestingModule,
           SharedModule,
           EnrolmentModule
         ],
