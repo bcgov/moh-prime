@@ -6,7 +6,6 @@ import { RouterModule } from '@angular/router';
 import { NgxMaskModule } from 'ngx-mask';
 import { ClipboardModule } from 'ngx-clipboard';
 import { NgxBusyModule } from './modules/ngx-busy/ngx-busy.module';
-import { MarkdownModule } from 'ngx-markdown';
 
 import { ConfigModule } from '@config/config.module';
 import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
@@ -52,7 +51,6 @@ import { PrimePhoneComponent } from '@shared/components/prime-phone/prime-phone.
 import { PrimeLogoComponent } from '@shared/components/prime-logo/prime-logo.component';
 import { ApproveEnrolmentComponent } from '@shared/components/dialogs/content/approve-enrolment/approve-enrolment.component';
 import { SafeHtmlPipe } from '@shared/pipes/safe-html.pipe';
-import { MarkdownComponent } from '@shared/components/dialogs/content/markdown/markdown.component';
 import { PrimeSupportEmailComponent } from '@shared/components/prime-support-email/prime-support-email.component';
 import { AccessTermsTableComponent } from './components/access-terms-table/access-terms-table.component';
 import { AccessTermComponent } from './components/access-term/access-term.component';
@@ -104,7 +102,6 @@ import { PageFooterComponent } from './components/page-footer/page-footer.compon
     PrimeLogoComponent,
     ApproveEnrolmentComponent,
     SafeHtmlPipe,
-    MarkdownComponent,
     PrimeSupportEmailComponent,
     AccessTermsTableComponent,
     AccessTermComponent,
@@ -125,8 +122,7 @@ import { PageFooterComponent } from './components/page-footer/page-footer.compon
     NgxMaskModule.forRoot(),
     NgxMaterialModule,
     NgxProgressModule,
-    ReactiveFormsModule,
-    MarkdownModule.forRoot()
+    ReactiveFormsModule
   ],
   exports: [
     CommonModule,
