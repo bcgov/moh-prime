@@ -1,46 +1,67 @@
 @import 'bootstrap/bootstrap-imports';
 
-.row {
-  height: 8rem;
-}
-
 .info {
   background-repeat: no-repeat;
+  // Position background to match grid gutter
+  background-position-x: 15px;
+  background-size: 75px 75px;
+  // Minimum height for backgrounds, and allow height to
+  // resize based on fluid content
+  min-height: 6rem;
+  // Constrain content length on larger viewports so it
+  // doesn't exceed background image length
   max-width: 48rem;
+  margin-bottom: 2rem;
+  // Prevent overlapping of the background image
+  padding-left: 5rem;
+
+  p:last-child {
+    padding-bottom: 0;
+  }
+
+  h5, p {
+    padding-left: 3rem;
+  }
 
   @include media-breakpoint-up(md) {
-    padding-top: 2rem;
-    padding-left: 8rem;
-  }
-  @include media-breakpoint-down(sm) {
-    padding-top: 0;
-    padding-left: 8rem;
+    background-size: auto;
+    height: 11rem;
+    padding-left: 9rem;
+    // Padding for content from the background image
+    padding-top: 2.5rem;
   }
 }
 
-.info-1 {
-  @include media-breakpoint-up(md) {
-    background-image: url(/assets/approval-full.svg);
-  }
-  @include media-breakpoint-down(sm) {
+.row .info {
+  &:nth-child(1) {
     background-image: url(/assets/approval.svg);
-  }
-}
 
-.info-2 {
-  @include media-breakpoint-up(md) {
-    background-image: url(/assets/notification-full.svg);
+    @include media-breakpoint-up(md) {
+      background-image: url(/assets/approval-full.svg);
+    }
   }
-  @include media-breakpoint-down(sm) {
+
+  &:nth-child(2) {
     background-image: url(/assets/notification.svg);
-  }
-}
 
-.info-3 {
-  @include media-breakpoint-up(md) {
-    background-image: url(/assets/moa-full.svg);
+    @include media-breakpoint-up(md) {
+      background-image: url(/assets/notification-full.svg);
+    }
   }
-  @include media-breakpoint-down(sm) {
+
+  &:nth-child(3) {
     background-image: url(/assets/moa.svg);
+
+    @include media-breakpoint-up(md) {
+      background-image: url(/assets/moa-full.svg);
+    }
+  }
+
+  &:last-child {
+    margin-bottom: 2rem;
+
+    @include media-breakpoint-up(md) {
+      margin-bottom: 1rem;
+    }
   }
 }
