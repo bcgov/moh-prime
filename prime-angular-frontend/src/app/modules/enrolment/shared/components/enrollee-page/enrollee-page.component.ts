@@ -56,10 +56,10 @@ export class EnrolleePageComponent implements OnInit {
       )
       .subscribe(
         (feedback: Feedback) => {
-          this.toastService.openSuccessToast('Feedback has been recieved');
+          this.toastService.openSuccessToast('Feedback has been received');
         },
         (error: any) => {
-          this.toastService.openErrorToast('Feedback could not be recieved');
+          this.toastService.openErrorToast('Feedback could not be received');
           this.logger.error('[Enrolment] Enrolments::feedback error has occurred: ', error);
         }
       );
