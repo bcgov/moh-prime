@@ -1,9 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { HelpComponent } from './help.component';
-import { UserInterfaceModule } from '@ui/user-interface.module';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { CommonModule } from '@common/common.module';
 
 describe('HelpComponent', () => {
   let component: HelpComponent;
@@ -12,7 +12,7 @@ describe('HelpComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        UserInterfaceModule,
+        CommonModule,
         HttpClientTestingModule,
       ],
       declarations: [

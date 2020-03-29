@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
-import { FormUtilsService } from '@ui/services/form-utils.service';
+import { FormUtilsService } from '@common/services/form-utils.service';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';

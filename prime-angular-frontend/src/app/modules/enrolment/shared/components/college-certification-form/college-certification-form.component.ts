@@ -7,7 +7,7 @@ import { Config, CollegeConfig, LicenseConfig, PracticeConfig } from '@config/co
 import { ConfigService } from '@config/config.service';
 import { ViewportService } from '@core/services/viewport.service';
 import { FormControlValidators } from '@shared/validators/form-control.validators';
-import { FormUtilsService } from '@ui/services/form-utils.service';
+import { FormUtilsService } from '@common/services/form-utils.service';
 
 @Component({
   selector: 'app-college-certification-form',

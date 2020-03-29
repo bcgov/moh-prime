@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
 
 import { ToastService } from '@core/services/toast.service';
 import { FormControlValidators } from '@shared/validators/form-control.validators';
-import { FormUtilsService } from '@ui/services/form-utils.service';
+import { FormUtilsService } from '@common/services/form-utils.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 

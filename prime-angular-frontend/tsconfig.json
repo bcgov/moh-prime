@@ -32,8 +32,8 @@
       "@shared/*": [
         "./app/shared/*"
       ],
-      "@ui/*": [
-        "./app/modules/user-interface/*"
+      "@common/*": [
+        "./app/modules/common/*"
       ],
       "@auth/*": [
         "./app/modules/auth/*"

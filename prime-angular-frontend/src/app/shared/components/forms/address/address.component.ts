@@ -4,7 +4,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { Config, ProvinceConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 
-import { FormUtilsService } from '@ui/services/form-utils.service';
+import { FormUtilsService } from '@common/services/form-utils.service';
 import { Country } from '@shared/enums/country.enum';
 import { pairwise, distinctUntilChanged, startWith } from 'rxjs/operators';
 

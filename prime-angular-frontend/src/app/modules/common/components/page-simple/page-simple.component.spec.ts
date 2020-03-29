@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PageSimpleComponent } from './page-simple.component';
-import { UserInterfaceModule } from '@ui/user-interface.module';
+import { CommonModule } from '@common/common.module';
 
 describe('PageSimpleComponent', () => {
   let component: PageSimpleComponent;
@@ -11,7 +11,7 @@ describe('PageSimpleComponent', () => {
     TestBed.configureTestingModule(
       {
         imports: [
-          UserInterfaceModule
+          CommonModule
         ],
         declarations: []
       }

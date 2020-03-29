@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { FormControlValidators } from '@shared/validators/form-control.validators';
-import { FormUtilsService } from '@ui/services/form-utils.service';
+import { FormUtilsService } from '@common/services/form-utils.service';
 
 @Component({
   selector: 'app-registrant-profile-form',

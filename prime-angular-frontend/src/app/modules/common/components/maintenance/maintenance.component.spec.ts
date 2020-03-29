@@ -1,19 +1,18 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PageNotFoundComponent } from './page-not-found.component';
+import { MaintenanceComponent } from './maintenance.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
-import { SharedModule } from '@shared/shared.module';
-import { UserInterfaceModule } from '@ui/user-interface.module';
+import { CommonModule } from '@common/common.module';
 
-describe('PageNotFoundComponent', () => {
-  let component: PageNotFoundComponent;
-  let fixture: ComponentFixture<PageNotFoundComponent>;
+describe('MaintenanceComponent', () => {
+  let component: MaintenanceComponent;
+  let fixture: ComponentFixture<MaintenanceComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule(
       {
         imports: [
-          UserInterfaceModule
+          CommonModule
         ],
         declarations: [],
         providers: [
@@ -27,7 +26,7 @@ describe('PageNotFoundComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PageNotFoundComponent);
+    fixture = TestBed.createComponent(MaintenanceComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

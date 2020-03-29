@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UnsupportedComponent } from './unsupported.component';
 import { SharedModule } from '@shared/shared.module';
-import { UserInterfaceModule } from '@ui/user-interface.module';
+import { CommonModule } from '@common/common.module';
 
 describe('UnsupportedComponent', () => {
   let component: UnsupportedComponent;
@@ -13,7 +13,7 @@ describe('UnsupportedComponent', () => {
       {
         imports: [
           SharedModule,
-          UserInterfaceModule
+          CommonModule
         ],
         declarations: []
       }
