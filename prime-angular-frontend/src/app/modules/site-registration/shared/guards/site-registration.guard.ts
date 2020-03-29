@@ -1,18 +1,13 @@
 import { Injectable, Inject } from '@angular/core';
-import { Observable, from, of } from 'rxjs';
-import { BaseGuard } from '@core/guards/base.guard';
-import { AuthService } from '@auth/shared/services/auth.service';
-import { LoggerService } from '@core/services/logger.service';
-import { AppConfig, APP_CONFIG } from 'app/app-config.module';
-import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { Router } from '@angular/router';
-import { exhaustMap, map } from 'rxjs/operators';
-import { Registrant } from '@shared/models/registrant';
-import { User } from '@auth/shared/models/user.model';
-import { RegistrantResource } from '../../services/registrant-resource.service';
-import { RegistrantService } from '../../services/registrant.service';
-import { SiteRoutes } from '../../site-registration.routes';
-import { Role } from '@auth/shared/enum/role.enum';
+
+import { BaseGuard } from '@core/guards/base.guard';
+import { LoggerService } from '@core/services/logger.service';
+
+import { AppConfig, APP_CONFIG } from 'app/app-config.module';
+import { AuthService } from '@auth/shared/services/auth.service';
+
+import { SiteRoutes } from '@registration/site-registration.routes';
 
 @Injectable({
   providedIn: 'root'
@@ -23,8 +18,6 @@ export class SiteRegistrationGuard extends BaseGuard {
     protected authService: AuthService,
     protected logger: LoggerService,
     @Inject(APP_CONFIG) private config: AppConfig,
-    private registrantResource: RegistrantResource,
-    private registrantService: RegistrantService,
     private router: Router
   ) {
     super(authService, logger);
