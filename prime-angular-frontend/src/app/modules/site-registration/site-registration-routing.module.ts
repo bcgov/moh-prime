@@ -5,6 +5,8 @@ import { ConfigResolver } from '@config/config-resolver';
 import { UnsupportedGuard } from '@core/guards/unsupported.guard';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 
+import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
+
 import { SiteRoutes } from './site-registration.routes';
 import { SiteCollectionNoticeComponent } from './pages/site-collection-notice/site-collection-notice.component';
 import { VendorComponent } from './pages/vendor/vendor.component';
@@ -17,12 +19,11 @@ import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer
 import { TechnicalSupportContactComponent } from './pages/technical-support-contact/technical-support-contact.component';
 import { SiteReviewComponent } from './pages/site-review/site-review.component';
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
-import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 import { SiteRegistrationGuard } from './shared/guards/site-registration.guard';
 
 const routes: Routes = [
   {
-    path: SiteRoutes.MODULE_PATH,
+    path: '',
     component: DashboardComponent,
     canActivate: [UnsupportedGuard],
     canActivateChild: [

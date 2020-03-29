@@ -8,12 +8,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppConfigModule } from './app-config.module';
 import { AppComponent } from './app.component';
 
-import { AuthModule } from '@auth/auth.module';
-import { AdjudicationModule } from '@adjudication/adjudication.module';
-import { ProvisionerAccessModule } from '@certificate/provisioner-access.module';
 import { CommonModule } from '@common/common.module';
-import { EnrolmentModule } from '@enrolment/enrolment.module';
-import { SiteRegistrationModule } from '@registration/site-registration.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -22,11 +17,6 @@ import { SiteRegistrationModule } from '@registration/site-registration.module';
     ConfigModule,
     CoreModule,
     AppConfigModule,
-    AuthModule, // TODO lazy load this module
-    EnrolmentModule, // TODO lazy load this module
-    AdjudicationModule, // TODO lazy load this module
-    ProvisionerAccessModule, // TODO lazy load this module
-    SiteRegistrationModule, // TODO lazy load this module
     CommonModule, // TODO load in specific modules
     AppRoutingModule // WARNING: MUST be the last routing module imported!!!
   ],

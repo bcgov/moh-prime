@@ -13,7 +13,7 @@ import { SiteComponent } from './pages/site/site.component';
 
 const routes: Routes = [
   {
-    path: AuthRoutes.MODULE_PATH,
+    path: '',
     component: AuthComponent,
     canActivate: [
       UnsupportedGuard,

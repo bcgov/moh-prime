@@ -23,7 +23,7 @@ import { EnrolleeReviewStatusComponent } from './pages/enrollee-review-status/en
 
 const routes: Routes = [
   {
-    path: AdjudicationRoutes.MODULE_PATH,
+    path: '',
     component: DashboardComponent,
     canActivate: [UnsupportedGuard],
     canActivateChild: [

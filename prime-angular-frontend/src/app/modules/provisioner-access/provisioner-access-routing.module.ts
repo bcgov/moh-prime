@@ -8,7 +8,7 @@ import { ProvisionerAccessComponent } from '@certificate/shared/components/provi
 
 const routes: Routes = [
   {
-    path: ProvisionerAccessRoutes.MODULE_PATH,
+    path: '',
     component: ProvisionerAccessComponent,
     canActivate: [UnsupportedGuard],
     canActivateChild: [UnsupportedGuard],

@@ -34,7 +34,7 @@ import { MinorUpdateConfirmationComponent } from './pages/minor-update-confirmat
 
 const routes: Routes = [
   {
-    path: EnrolmentRoutes.MODULE_PATH,
+    path: '',
     component: DashboardComponent,
     canActivate: [UnsupportedGuard],
     canActivateChild: [
