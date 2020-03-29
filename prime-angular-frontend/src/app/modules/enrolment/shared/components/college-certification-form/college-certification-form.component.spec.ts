@@ -50,14 +50,17 @@ describe('CollegeCertificationFormComponent', () => {
     }).compileComponents();
   }));
 
-  beforeEach(inject([EnrolmentStateService, ConfigService], (enrolmentStateService: EnrolmentStateService, configService: ConfigService) => {
-    fixture = TestBed.createComponent(CollegeCertificationFormComponent);
-    component = fixture.componentInstance;
-    // Add the bound FormGroup to the component
-    component.form = enrolmentStateService.buildCollegeCertificationForm();
-    component.selectedColleges = configService.colleges.map((college: CollegeConfig) => college.code);
-    fixture.detectChanges();
-  }));
+  beforeEach(inject(
+    [EnrolmentStateService, ConfigService],
+    (enrolmentStateService: EnrolmentStateService, configService: ConfigService
+    ) => {
+      fixture = TestBed.createComponent(CollegeCertificationFormComponent);
+      component = fixture.componentInstance;
+      // Add the bound FormGroup to the component
+      component.form = enrolmentStateService.buildCollegeCertificationForm();
+      component.selectedColleges = configService.colleges.map((college: CollegeConfig) => college.code);
+      fixture.detectChanges();
+    }));
 
   it('should create', () => {
     expect(component).toBeTruthy();
