@@ -1,11 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+
+import { KeycloakService } from 'keycloak-angular';
 
 import { ConfirmationComponent } from './confirmation.component';
-import { SiteRegistrationModule } from '../../site-registration.module';
-import { RouterTestingModule } from '@angular/router/testing';
-import { KeycloakService } from 'keycloak-angular';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { SharedModule } from '@shared/shared.module';
+import { SiteRegistrationModule } from '@registration/site-registration.module';
 
 describe('ConfirmationComponent', () => {
   let component: ConfirmationComponent;

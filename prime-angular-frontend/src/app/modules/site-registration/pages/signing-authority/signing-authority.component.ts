@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
-import { SiteRoutes } from '../../site-registration.routes';
+
+import { SiteRoutes } from '@registration/site-registration.routes';
 
 @Component({
   selector: 'app-signing-authority',
