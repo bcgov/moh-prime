@@ -40,7 +40,8 @@ export const APP_DATE_FORMATS = {
 };
 
 const matFormFieldCustomOptions: MatFormFieldDefaultOptions = {
-  hideRequiredMarker: true
+  hideRequiredMarker: true,
+  floatLabel: 'always'
 };
 
 @NgModule({
@@ -85,10 +86,6 @@ const matFormFieldCustomOptions: MatFormFieldDefaultOptions = {
         width: '500px',
         hasBackdrop: true
       }
-    },
-    {
-      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
-      useValue: { float: 'always' }
     },
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
