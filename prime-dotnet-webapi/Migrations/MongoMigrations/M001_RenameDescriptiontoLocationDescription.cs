@@ -15,7 +15,7 @@ namespace Prime.Migrations
         {
             var doors = document["Description"].ToString();
             document.Add("LocationDescription", doors);
-            document.Remove("Descritpion");
+            document.Remove("Description");
         }
 
         public override void Down(BsonDocument document)

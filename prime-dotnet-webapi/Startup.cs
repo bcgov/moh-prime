@@ -223,7 +223,7 @@ namespace Prime
             {
                 ConnectionString = Configuration.GetSection("MongoDatabaseSettings:ConnectionString").Value,
                 Database = Configuration.GetSection("MongoDatabaseSettings:DatabaseName").Value,
-                VersionFieldName = "TestVersionName" // Optional
+                // VersionFieldName = "TestVersionName" // Optional
             });
         }
     }
