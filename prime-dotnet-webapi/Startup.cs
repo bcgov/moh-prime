@@ -23,9 +23,11 @@ using Prime.Services;
 using Prime.Models.Api;
 using Prime.Models;
 using Prime.Infrastructure;
-using MongoDB.Driver;
+using Mongo.Migration.Startup;
 using Mongo.Migration.Startup.DotNetCore;
-using Mongo.Migration.Startup.Static;
+using Mongo2Go;
+using MongoDB.Bson;
+using MongoDB.Driver;
 
 namespace Prime
 {
@@ -35,6 +37,7 @@ namespace Prime
         public static IConfiguration StaticConfig { get; private set; }
         public IWebHostEnvironment Environment { get; }
         public readonly string AllowSpecificOrigins = "CorsPolicy";
+        private IMongoClient _client;
 
         public Startup(IWebHostEnvironment env, IConfiguration configuration)
         {
@@ -59,7 +62,7 @@ namespace Prime
             services.AddScoped<IFeedbackService, FeedbackService>();
             services.AddScoped<IBusinessEventService, BusinessEventService>();
             services.AddScoped<ISubmissionService, SubmissionService>();
-            // services.AddScoped<IMongoService, MongoService>();
+            services.AddScoped<IMongoService, MongoService>();
 
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
@@ -204,18 +207,24 @@ namespace Prime
             services.AddSingleton<IMongoDbSettings>(sp =>
                 sp.GetRequiredService<IOptions<MongoDbSettings>>().Value);
 
-            // var _settings = new MongoDbSettings();
 
-            // var _client = new MongoClient(_settings.ConnectionString);
-            // MongoMigrationClient.Initialize(_client);
-
-            // services.AddSingleton<IMongoClient>(_client);
-
-            // services.AddMigration();
-
-            // Per the official Mongo Client reuse guidelines, MongoClient should be
-            // registered in DI with a singleton service lifetime.
+            // // Per the official Mongo Client reuse guidelines, MongoClient should be
+            // // registered in DI with a singleton service lifetime.
             services.AddSingleton<MongoService>();
+
+
+            _client = new MongoClient(Configuration.GetSection("MongoDatabaseSettings:ConnectionString").Value);
+
+            services.AddSingleton<IMongoClient>(_client);
+
+            // CreateTestDocuments();
+
+            services.AddMigration(new MongoMigrationSettings
+            {
+                ConnectionString = Configuration.GetSection("MongoDatabaseSettings:ConnectionString").Value,
+                Database = Configuration.GetSection("MongoDatabaseSettings:DatabaseName").Value,
+                VersionFieldName = "TestVersionName" // Optional
+            });
         }
     }
 }
