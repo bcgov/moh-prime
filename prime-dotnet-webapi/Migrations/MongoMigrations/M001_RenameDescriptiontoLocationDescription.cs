@@ -7,7 +7,7 @@ namespace Prime.Migrations
     public class M001_RenameDescriptiontoLocationDescription : Migration<Locations>
     {
         public M001_RenameDescriptiontoLocationDescription()
-            : base("0.0.3")
+            : base("0.0.1")
         {
         }
 
