@@ -191,7 +191,7 @@ namespace PrimeTests.Services
         }
 
         [Fact]
-        public async void testAllowableChangesRule_SPEC()
+        public void testAllowableChangesRule_SPEC()
         {
             // Make sure there are no new types we don't know how to compare
             var knownTypes = new[]
@@ -208,7 +208,7 @@ namespace PrimeTests.Services
                 .GetProperties()
                 .Select(p => p.PropertyType)
                 .Distinct()
-                .Where(t => !knownTypes.Contains(t));
+                .Except(knownTypes);
 
             Assert.False(unknownTypes.Any(), $"At least one new type has been added to {nameof(EnrolleeProfileViewModel)}. Please update {nameof(AllowableChangesRule)} and/or {nameof(testAllowableChangesRule_SPEC)}");
         }
