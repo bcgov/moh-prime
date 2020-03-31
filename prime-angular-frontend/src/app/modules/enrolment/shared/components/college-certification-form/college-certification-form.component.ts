@@ -6,8 +6,8 @@ import * as moment from 'moment';
 import { Config, CollegeConfig, LicenseConfig, PracticeConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { ViewportService } from '@core/services/viewport.service';
-import { FormUtilsService } from '@enrolment/shared/services/form-utils.service';
 import { FormControlValidators } from '@shared/validators/form-control.validators';
+import { FormUtilsService } from '@common/services/form-utils.service';
 
 @Component({
   selector: 'app-college-certification-form',

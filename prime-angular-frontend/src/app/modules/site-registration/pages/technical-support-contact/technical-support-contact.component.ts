@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SiteRoutes } from '../../site-registration.routes';
+import { FormGroup } from '@angular/forms';
+
+import { SiteRoutes } from '@registration/site-registration.routes';
 
 @Component({
   selector: 'app-technical-support-contact',

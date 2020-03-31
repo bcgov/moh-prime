@@ -18,7 +18,7 @@ describe('HelpResource', () => {
   }));
 
   it('should be created', () => {
-    const service: HelpResource = TestBed.get(HelpResource);
+    const service: HelpResource = TestBed.inject(HelpResource);
     expect(service).toBeTruthy();
   });
 });

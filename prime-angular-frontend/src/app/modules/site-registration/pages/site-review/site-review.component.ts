@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Subscription, EMPTY } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
-import { SiteRoutes } from '../../site-registration.routes';
+
+import { Subscription } from 'rxjs';
+
+import { SiteRoutes } from '@registration/site-registration.routes';
 
 @Component({
   selector: 'app-site-review',
@@ -22,7 +23,7 @@ export class SiteReviewComponent implements OnInit {
     this.router.navigate([SiteRoutes.CONFIRMATION], { relativeTo: this.route.parent });
   }
 
-  public onRoute(routePath: EnrolmentRoutes) {
+  public onRoute(routePath: SiteRoutes) {
     this.router.navigate([routePath], { relativeTo: this.route.parent });
   }
 

@@ -5,7 +5,7 @@ import { EnrolleePrivilegesComponent } from './enrollee-privileges.component';
 import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
 import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { EnrolleePropertyComponent } from '../enrollee-property/enrollee-property.component';
-import { MatExpansionModule } from '@angular/material';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { APP_DI_CONFIG, APP_CONFIG } from 'app/app-config.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ConfigService } from '@config/config.service';

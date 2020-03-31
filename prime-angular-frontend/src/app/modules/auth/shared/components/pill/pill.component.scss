@@ -1,8 +1,8 @@
-@import 'bootstrap';
+@import 'bootstrap/bootstrap-imports';
 
 .pill-container {
   // Using the background pill asset and centering with no repeat
-  background-image: url("/assets/pill-1.svg");
+  background-image: url('/assets/pill-1.svg');
   background-repeat: no-repeat;
   background-position: center;
 
@@ -23,10 +23,9 @@
   @include media-breakpoint-up(md) {
     margin-bottom: 8rem;
   }
-
 }
 
 .yellow-blue {
   // Variant of pill-2 : yellow-blue
-  background-image: url("/assets/pill-2.svg");
+  background-image: url('/assets/pill-2.svg');
 }

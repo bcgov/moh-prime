@@ -2,8 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AccessDeniedComponent } from './access-denied.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
-import { SharedModule } from '@shared/shared.module';
-import { UserInterfaceModule } from '@ui/user-interface.module';
+import { CommonModule } from '@common/common.module';
 
 describe('AccessDeniedComponent', () => {
   let component: AccessDeniedComponent;
@@ -13,7 +12,7 @@ describe('AccessDeniedComponent', () => {
     TestBed.configureTestingModule(
       {
         imports: [
-          UserInterfaceModule
+          CommonModule
         ],
         declarations: [],
         providers: [
