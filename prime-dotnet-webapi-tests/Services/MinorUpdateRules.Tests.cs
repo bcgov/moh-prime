@@ -97,6 +97,11 @@ namespace PrimeTests.Services
             profile.PreferredFirstName = "BIG CHANGES";
             await AssertAllowableChanges(false, enrollee, profile);
 
+            // Remove child object
+            profile = enrollee.ToViewModel();
+            profile.MailingAddress = null;
+            await AssertAllowableChanges(false, enrollee, profile);
+
             // Property on child object
             profile = enrollee.ToViewModel();
             profile.MailingAddress.City = "Flavortown, USA";

@@ -129,16 +129,50 @@ namespace Prime.Services.Rules
                 config.IgnoreProperty<Enrollee>(x => x.Jobs);
             }
 
-            config.CustomComparers.Add(new CertificationComparer(RootComparerFactory.GetRootComparer()));
-            config.CustomComparers.Add(new JobComparer(RootComparerFactory.GetRootComparer()));
-            config.CustomComparers.Add(new MailingAddressComparer(RootComparerFactory.GetRootComparer()));
-            config.CustomComparers.Add(new OrganizationComparer(RootComparerFactory.GetRootComparer()));
+            // Ignored fields on models due to the frontend not sending all keys/navigation properties
+            config.IgnoreProperty<BaseAuditable>(x => x.CreatedUserId);
+            config.IgnoreProperty<BaseAuditable>(x => x.CreatedTimeStamp);
+            config.IgnoreProperty<BaseAuditable>(x => x.UpdatedUserId);
+            config.IgnoreProperty<BaseAuditable>(x => x.UpdatedTimeStamp);
+
+            config.IgnoreProperty<Certification>(x => x.Id);
+            config.IgnoreProperty<Certification>(x => x.Enrollee);
+            config.IgnoreProperty<Certification>(x => x.EnrolleeId);
+            config.IgnoreProperty<Certification>(x => x.College);
+            config.IgnoreProperty<Certification>(x => x.License);
+            config.IgnoreProperty<Certification>(x => x.Practice);
+
+            config.IgnoreProperty<Job>(x => x.Id);
+            config.IgnoreProperty<Job>(x => x.Enrollee);
+            config.IgnoreProperty<Job>(x => x.EnrolleeId);
+
+            config.IgnoreProperty<MailingAddress>(x => x.Id);
+            config.IgnoreProperty<MailingAddress>(x => x.Enrollee);
+            config.IgnoreProperty<MailingAddress>(x => x.EnrolleeId);
+            config.IgnoreProperty<MailingAddress>(x => x.Country);
+            config.IgnoreProperty<MailingAddress>(x => x.Province);
+
+            config.IgnoreProperty<Organization>(x => x.Id);
+            config.IgnoreProperty<Organization>(x => x.Enrollee);
+            config.IgnoreProperty<Organization>(x => x.EnrolleeId);
+            config.IgnoreProperty<Organization>(x => x.OrganizationType);
 
             return new CompareLogic(config);
         }
 
-        private bool CompareCollections<T>(CompareLogic comparitor, ICollection<T> coll1, ICollection<T> coll2)
+        public static bool CompareCollections<T>(CompareLogic comparitor, ICollection<T> coll1, ICollection<T> coll2)
         {
+            if (coll1 == null && coll2 == null)
+            {
+                return true;
+            }
+
+            if ((coll1 == null) ^ (coll2 == null))
+            {
+                // Exactly one is null
+                return false;
+            }
+
             if (coll1.Count != coll2.Count)
             {
                 return false;
@@ -153,100 +187,6 @@ namespace Prime.Services.Rules
             }
 
             return true;
-        }
-
-        private class CertificationComparer : BaseTypeComparer
-        {
-            public CertificationComparer(RootComparer rootComparer) : base(rootComparer) { }
-
-            public override bool IsTypeMatch(Type type1, Type type2)
-            {
-                return type1 == typeof(Certification);
-            }
-
-            public override void CompareType(CompareParms parms)
-            {
-                var cert1 = (Certification)parms.Object1;
-                var cert2 = (Certification)parms.Object2;
-
-                if (cert1.CollegeCode != cert2.CollegeCode
-                    || cert1.LicenseNumber != cert2.LicenseNumber
-                    || cert1.LicenseCode != cert2.LicenseCode
-                    || cert1.CollegeCode != cert2.CollegeCode
-                    || cert1.RenewalDate != cert2.RenewalDate
-                    || cert1.PracticeCode != cert2.PracticeCode)
-                {
-                    AddDifference(parms);
-                }
-            }
-        }
-
-        private class JobComparer : BaseTypeComparer
-        {
-            public JobComparer(RootComparer rootComparer) : base(rootComparer) { }
-
-            public override bool IsTypeMatch(Type type1, Type type2)
-            {
-                return type1 == typeof(Job);
-            }
-
-            public override void CompareType(CompareParms parms)
-            {
-                var job1 = (Job)parms.Object1;
-                var job2 = (Job)parms.Object2;
-
-                if (job1.Title != job2.Title)
-                {
-                    AddDifference(parms);
-                }
-            }
-        }
-
-        private class MailingAddressComparer : BaseTypeComparer
-        {
-            public MailingAddressComparer(RootComparer rootComparer) : base(rootComparer) { }
-
-            public override bool IsTypeMatch(Type type1, Type type2)
-            {
-                return type1 == typeof(MailingAddress);
-            }
-
-            public override void CompareType(CompareParms parms)
-            {
-                var addr1 = (MailingAddress)parms.Object1;
-                var addr2 = (MailingAddress)parms.Object2;
-
-                if (addr1.CountryCode != addr2.CountryCode
-                    || addr1.ProvinceCode != addr2.ProvinceCode
-                    || addr1.Street != addr2.Street
-                    || addr1.Street2 != addr2.Street2
-                    || addr1.City != addr2.City
-                    || addr1.Postal != addr2.Postal)
-                {
-                    AddDifference(parms);
-                }
-            }
-        }
-
-        private class OrganizationComparer : BaseTypeComparer
-        {
-            public OrganizationComparer(RootComparer rootComparer) : base(rootComparer) { }
-
-            public override bool IsTypeMatch(Type type1, Type type2)
-            {
-                return type1 == typeof(Organization);
-            }
-
-            public override void CompareType(CompareParms parms)
-            {
-                var org1 = (Organization)parms.Object1;
-                var org2 = (Organization)parms.Object2;
-
-                if (org1.OrganizationTypeCode != org2.OrganizationTypeCode)
-                {
-                    AddDifference(parms);
-                }
-            }
         }
     }
 }
