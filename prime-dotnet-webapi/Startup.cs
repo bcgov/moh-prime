@@ -219,12 +219,10 @@ namespace Prime
 
             // CreateTestDocuments();
 
-            services.AddMigration(new MongoMigrationSettings
-            {
-                ConnectionString = Configuration.GetSection("MongoDatabaseSettings:ConnectionString").Value,
-                Database = Configuration.GetSection("MongoDatabaseSettings:DatabaseName").Value,
-                // VersionFieldName = "TestVersionName" // Optional
-            });
+            var database = Configuration.GetSection("MongoDatabaseSettings:DatabaseName").Value;
+
+            services.AddMigration();
+
         }
     }
 }
