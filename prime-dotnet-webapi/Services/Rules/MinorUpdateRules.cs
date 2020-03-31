@@ -167,7 +167,7 @@ namespace Prime.Services.Rules
                 return true;
             }
 
-            if ((coll1 == null) ^ (coll2 == null))
+            if ((coll1 == null) || (coll2 == null))
             {
                 // Exactly one is null
                 return false;
