@@ -216,11 +216,6 @@ namespace Prime
             _client = new MongoClient(Configuration.GetSection("MongoDatabaseSettings:ConnectionString").Value);
 
             services.AddSingleton<IMongoClient>(_client);
-
-            // CreateTestDocuments();
-
-            var database = Configuration.GetSection("MongoDatabaseSettings:DatabaseName").Value;
-
             services.AddMigration();
 
         }
