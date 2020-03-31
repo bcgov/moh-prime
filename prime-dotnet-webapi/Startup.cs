@@ -23,10 +23,7 @@ using Prime.Services;
 using Prime.Models.Api;
 using Prime.Models;
 using Prime.Infrastructure;
-using Mongo.Migration.Startup;
 using Mongo.Migration.Startup.DotNetCore;
-using Mongo2Go;
-using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace Prime
