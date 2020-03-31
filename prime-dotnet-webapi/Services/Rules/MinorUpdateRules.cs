@@ -160,7 +160,7 @@ namespace Prime.Services.Rules
             return new CompareLogic(config);
         }
 
-        public static bool CompareCollections<T>(CompareLogic comparitor, ICollection<T> coll1, ICollection<T> coll2)
+        private static bool CompareCollections<T>(CompareLogic comparitor, ICollection<T> coll1, ICollection<T> coll2)
         {
             if (coll1 == null && coll2 == null)
             {
