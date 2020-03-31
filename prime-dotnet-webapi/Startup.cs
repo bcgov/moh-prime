@@ -62,7 +62,6 @@ namespace Prime
             services.AddScoped<IFeedbackService, FeedbackService>();
             services.AddScoped<IBusinessEventService, BusinessEventService>();
             services.AddScoped<ISubmissionService, SubmissionService>();
-            services.AddScoped<IMongoService, MongoService>();
 
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
