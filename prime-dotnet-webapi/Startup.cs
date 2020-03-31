@@ -37,7 +37,6 @@ namespace Prime
         public static IConfiguration StaticConfig { get; private set; }
         public IWebHostEnvironment Environment { get; }
         public readonly string AllowSpecificOrigins = "CorsPolicy";
-        private IMongoClient _client;
 
         public Startup(IWebHostEnvironment env, IConfiguration configuration)
         {
@@ -211,8 +210,7 @@ namespace Prime
             // // registered in DI with a singleton service lifetime.
             services.AddSingleton<MongoService>();
 
-
-            _client = new MongoClient(Configuration.GetSection("MongoDatabaseSettings:ConnectionString").Value);
+            IMongoClient _client = new MongoClient(Configuration.GetSection("MongoDatabaseSettings:ConnectionString").Value);
 
             services.AddSingleton<IMongoClient>(_client);
             services.AddMigration();
