@@ -1,5 +1,4 @@
 export enum SubmissionAction {
-  SUBMIT = 'submit',
   APPROVE = 'approve',
   ACCEPT_TOA = 'accept-toa',
   DECLINE_TOA = 'decline-toa',

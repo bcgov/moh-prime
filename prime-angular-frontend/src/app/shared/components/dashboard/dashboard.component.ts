@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MatSidenav } from '@angular/material';
+import { MatSidenav } from '@angular/material/sidenav';
 
 import { merge } from 'rxjs';
 import { map, distinctUntilChanged } from 'rxjs/operators';
@@ -26,7 +26,7 @@ import { SiteRoutes } from 'app/modules/site-registration/site-registration.rout
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-  @ViewChild('sidenav', { static: false }) public sideNav: MatSidenav;
+  @ViewChild('sidenav') public sideNav: MatSidenav;
 
   public dashboardNavSections: DashboardNavSection[];
   public sideNavProps: {
@@ -184,7 +184,7 @@ export class DashboardComponent implements OnInit {
             ].includes(currentRoute)
           },
           {
-            name: 'PharmaNet Enrolment Certificate',
+            name: 'Next Steps to get PharmaNet',
             icon: statusIcons.certificate,
             route: EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY,
             showItem: true,
@@ -248,7 +248,7 @@ export class DashboardComponent implements OnInit {
   private getEnrolmentStatusIcons(enrolmentStatus: EnrolmentStatus, hasAcceptedAtLeastOneToa: boolean) {
     let enrollee = 'assignment_ind';
     let accessAgreement = 'assignment';
-    let certificate = 'card_membership';
+    let certificate = 'mail';
 
     if (!hasAcceptedAtLeastOneToa) {
       // Default icons when performing initial enrolment

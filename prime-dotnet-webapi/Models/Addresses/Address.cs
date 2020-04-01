@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
@@ -39,6 +40,12 @@ namespace Prime.Models
         public string City { get; set; }
 
         public string Postal { get; set; }
+
+        [NotMapped]
+        public bool IsInBC
+        {
+            get => Province.BRITISH_COLUMBIA_CODE.Equals(ProvinceCode, StringComparison.OrdinalIgnoreCase);
+        }
     }
 
     public class PhysicalAddress : Address

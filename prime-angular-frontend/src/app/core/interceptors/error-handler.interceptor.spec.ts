@@ -25,7 +25,7 @@ describe('ErrorHandlerInterceptor', () => {
   }));
 
   it('should create', () => {
-    const service: ErrorHandlerInterceptor = TestBed.get(ErrorHandlerInterceptor);
+    const service: ErrorHandlerInterceptor = TestBed.inject(ErrorHandlerInterceptor);
     expect(service).toBeTruthy();
   });
 });

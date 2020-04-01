@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Bogus;
 using Prime;
+using Prime.Auth;
 using Prime.Models;
 using Prime.Services;
 using PrimeTests.Utils.Auth;
@@ -125,53 +126,6 @@ namespace PrimeTests.Utils
                 .Single();
             var identity = user.Identity as ClaimsIdentity;
             identity.RemoveClaim(claim);
-        }
-
-        public static int? CreateEnrollee(
-            ApiDbContext apiDbContext,
-            HttpContextAccessor httpContext,
-            IAutomaticAdjudicationService automaticAdjudicationService,
-            IEmailService emailService,
-            IPrivilegeService privilegeService,
-            IAccessTermService accessTermService,
-            IEnrolleeProfileVersionService enrolleeProfileVersionService,
-            IBusinessEventService businessEventService
-        )
-        {
-            return new EnrolleeService(
-                apiDbContext,
-                httpContext,
-                automaticAdjudicationService,
-                emailService,
-                privilegeService,
-                accessTermService,
-                enrolleeProfileVersionService,
-                businessEventService
-            ).CreateEnrolleeAsync(TestUtils.EnrolleeFaker.Generate()).Result;
-        }
-
-        public static Enrollee GetEnrolleeById(
-            ApiDbContext apiDbContext,
-            HttpContextAccessor httpContext,
-            IAutomaticAdjudicationService automaticAdjudicationService,
-            int enrolmentId,
-            IEmailService emailService,
-            IPrivilegeService privilegeService,
-            IAccessTermService accessTermService,
-            IEnrolleeProfileVersionService enrolleeProfileVersionService,
-            IBusinessEventService businessEventService
-        )
-        {
-            return new EnrolleeService(
-                apiDbContext,
-                httpContext,
-                automaticAdjudicationService,
-                emailService,
-                privilegeService,
-                accessTermService,
-                enrolleeProfileVersionService,
-                businessEventService
-            ).GetEnrolleeAsync(enrolmentId).Result;
         }
 
         public static void InitializeDbForTests(ApiDbContext db)

@@ -1,7 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Organization } from '@enrolment/shared/models/organization.model';
-import { ConfigCodePipe } from '@config/config-code.pipe';
+
 import { Config } from '@config/config.model';
+import { ConfigCodePipe } from '@config/config-code.pipe';
+
+import { Organization } from '@enrolment/shared/models/organization.model';
 
 @Component({
   selector: 'app-enrollee-organizations',

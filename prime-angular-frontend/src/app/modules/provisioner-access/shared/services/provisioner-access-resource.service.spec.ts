@@ -18,7 +18,7 @@ describe('ProvisionerAccessResource', () => {
   }));
 
   it('should be created', () => {
-    const service: ProvisionerAccessResource = TestBed.get(ProvisionerAccessResource);
+    const service: ProvisionerAccessResource = TestBed.inject(ProvisionerAccessResource);
     expect(service).toBeTruthy();
   });
 });

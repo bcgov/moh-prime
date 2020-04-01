@@ -1,11 +1,12 @@
 import { Enrollee } from '@shared/models/enrollee.model';
 import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
+import { Privilege } from '@shared/models/privilege.model';
 import { EnrolleeClassification } from '@shared/enums/enrollee-classification.enum';
+
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
 import { Organization } from '@enrolment/shared/models/organization.model';
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
-import { Privilege } from '@enrolment/shared/models/privilege.model';
 import { Admin } from '@auth/shared/models/admin.model';
 
 // TODO incoming transitional Enrollee model, eventually will be Enrollee

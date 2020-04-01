@@ -1,9 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { HoursOperationComponent } from './hours-operation.component';
-import { SiteRegistrationModule } from '../../site-registration.module';
-import { RouterTestingModule } from '@angular/router/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SiteRegistrationModule } from '@registration/site-registration.module';
 
 describe('HoursOperationComponent', () => {
   let component: HoursOperationComponent;
@@ -12,9 +12,9 @@ describe('HoursOperationComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        SiteRegistrationModule,
         RouterTestingModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        SiteRegistrationModule,
       ]
     })
       .compileComponents();
