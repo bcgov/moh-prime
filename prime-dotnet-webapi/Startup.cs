@@ -16,6 +16,7 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using Serilog;
 
 using Prime.Auth;
 using Prime.Services;
@@ -105,6 +106,9 @@ namespace Prime
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            // Only logs components that appear after it in the pipeline
+            app.UseSerilogRequestLogging();
 
             this.ConfigureHealthCheck(app);
 
