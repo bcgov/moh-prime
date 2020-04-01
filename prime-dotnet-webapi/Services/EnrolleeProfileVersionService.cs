@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
@@ -13,6 +14,8 @@ namespace Prime.Services
 {
     public class EnrolleeProfileVersionService : BaseService, IEnrolleeProfileVersionService
     {
+        private readonly IMongoCollection<EnrolleeProfileVersion> _profileVersions;
+
         private JsonSerializer _camelCaseSerializer = JsonSerializer.Create(
             new JsonSerializerSettings
             {
@@ -22,9 +25,15 @@ namespace Prime.Services
 
         public EnrolleeProfileVersionService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext
+            IHttpContextAccessor httpContext,
+            IMongoDbSettings settings
             ) : base(context, httpContext)
-        { }
+        {
+            var client = new MongoClient(settings.ConnectionString);
+            var database = client.GetDatabase(settings.DatabaseName);
+
+            _profileVersions = database.GetCollection<EnrolleeProfileVersion>("EnrolleeProfileVersions");
+        }
 
         public async Task<IEnumerable<EnrolleeProfileVersion>> GetEnrolleeProfileVersionsAsync(int enrolleeId)
         {
@@ -63,6 +72,9 @@ namespace Prime.Services
             _context.EnrolleeProfileVersions.Add(enrolleeProfileVersion);
 
             await _context.SaveChangesAsync();
+
+            // Insert into mongo database
+            _profileVersions.InsertOne(enrolleeProfileVersion);
         }
 
     }
