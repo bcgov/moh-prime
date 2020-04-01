@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';

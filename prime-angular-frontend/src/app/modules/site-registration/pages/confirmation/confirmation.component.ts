@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { SiteRoutes } from '../../site-registration.routes';
+
+import { SiteRoutes } from '@registration/site-registration.routes';
 
 @Component({
   selector: 'app-confirmation',

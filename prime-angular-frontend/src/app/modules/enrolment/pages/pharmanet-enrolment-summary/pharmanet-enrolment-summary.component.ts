@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormControl, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { MatDialog } from '@angular/material';
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 
 import moment from 'moment';
 
@@ -31,7 +31,6 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   public form: FormGroup;
   public enrolment: Enrolment;
   public showProgressBar: boolean;
-  public expiryDate: string;
   public accessTerm: AccessTerm;
 
   constructor(
@@ -148,12 +147,6 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
 
     this.enrolment = this.enrolmentService.enrolment;
     this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
-
-    if (this.enrolment.enrollee && this.enrolment.expiryDate) {
-      const expiryMoment = moment(this.enrolment.expiryDate);
-      this.expiryDate = expiryMoment.isAfter(moment.now())
-        ? expiryMoment.format('MMMM Do, YYYY') : null;
-    }
 
     this.enrolmentResource.getAccessTermLatest(this.enrolment.id, true)
       .subscribe(

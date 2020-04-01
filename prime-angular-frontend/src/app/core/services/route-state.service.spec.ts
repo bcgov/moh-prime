@@ -11,7 +11,7 @@ describe('RouteStateService', () => {
   }));
 
   it('should create', () => {
-    const service: RouteStateService = TestBed.get(RouteStateService);
+    const service: RouteStateService = TestBed.inject(RouteStateService);
     expect(service).toBeTruthy();
   });
 });

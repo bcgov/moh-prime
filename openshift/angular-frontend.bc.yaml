@@ -98,7 +98,8 @@ objects:
       io.kompose.service: "${NAME}${SUFFIX}"
     name: "${NAME}${SUFFIX}"
   spec:
-    dockerStrategy: 
+    dockerStrategy:
+      noCache: true
       dockerfilePath: openshift.dockerfile
       env:
       - name: SUFFIX

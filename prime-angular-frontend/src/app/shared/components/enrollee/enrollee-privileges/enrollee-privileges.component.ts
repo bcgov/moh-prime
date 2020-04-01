@@ -1,7 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
-import { Privilege } from '@enrolment/shared/models/privilege.model';
+
 import { PrivilegeGroupConfig, Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
+import { Privilege } from '@shared/models/privilege.model';
 
 @Component({
   selector: 'app-enrollee-privileges',

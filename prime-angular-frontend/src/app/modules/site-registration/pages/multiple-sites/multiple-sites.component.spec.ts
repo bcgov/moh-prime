@@ -1,8 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { MultipleSitesComponent } from './multiple-sites.component';
-import { SiteRegistrationModule } from '../../site-registration.module';
-import { RouterTestingModule } from '@angular/router/testing';
+import { SiteRegistrationModule } from '@registration/site-registration.module';
 
 describe('MultipleSitesComponent', () => {
   let component: MultipleSitesComponent;
@@ -11,8 +11,8 @@ describe('MultipleSitesComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        SiteRegistrationModule,
-        RouterTestingModule
+        RouterTestingModule,
+        SiteRegistrationModule
       ]
     })
       .compileComponents();

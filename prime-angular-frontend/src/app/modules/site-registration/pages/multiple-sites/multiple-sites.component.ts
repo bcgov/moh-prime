@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ToastService } from '@core/services/toast.service';
-import { FormUtilsService } from '@enrolment/shared/services/form-utils.service';
-import { FormControlValidators } from '@shared/validators/form-control.validators';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { SiteRoutes } from '../../site-registration.routes';
+
+import { ToastService } from '@core/services/toast.service';
+import { FormControlValidators } from '@shared/validators/form-control.validators';
+import { FormUtilsService } from '@common/services/form-utils.service';
+
+import { SiteRoutes } from '@registration/site-registration.routes';
 
 @Component({
   selector: 'app-multiple-sites',

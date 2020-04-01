@@ -8,7 +8,7 @@ import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { APP_DI_CONFIG, APP_CONFIG } from 'app/app-config.module';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 describe('ClaimEnrolleeComponent', () => {
   let component: ClaimEnrolleeComponent;

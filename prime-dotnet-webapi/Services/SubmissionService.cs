@@ -7,6 +7,7 @@ using Appccelerate.StateMachine.AsyncMachine;
 using SimpleBase;
 
 using Prime.Models;
+using Prime.ViewModels;
 using Prime.Models.Api;
 
 namespace Prime.Services
@@ -14,7 +15,7 @@ namespace Prime.Services
     public class SubmissionService : BaseService, ISubmissionService
     {
         private readonly IAccessTermService _accessTermService;
-        private readonly IAutomaticAdjudicationService _automaticAdjudicationService;
+        private readonly ISubmissionRulesService _automaticAdjudicationService;
         private readonly IBusinessEventService _businessEventService;
         private readonly IEmailService _emailService;
         private readonly IEnrolleeService _enrolleeService;
@@ -23,7 +24,7 @@ namespace Prime.Services
 
         public SubmissionService(ApiDbContext context, IHttpContextAccessor httpContext,
             IAccessTermService accessTermService,
-            IAutomaticAdjudicationService automaticAdjudicationService,
+            ISubmissionRulesService automaticAdjudicationService,
             IBusinessEventService businessEventService,
             IEmailService emailService,
             IEnrolleeService enrolleeService,
@@ -40,10 +41,58 @@ namespace Prime.Services
             _privilegeService = privilegeService;
         }
 
+        public async Task SubmitApplicationAsync(int enrolleeId, EnrolleeProfileViewModel updatedProfile)
+        {
+            var enrollee = await _context.Enrollees
+                .Include(e => e.MailingAddress)
+                .Include(e => e.Certifications)
+                .Include(e => e.Jobs)
+                .Include(e => e.Organizations)
+                .Include(e => e.AccessTerms)
+                    .ThenInclude(at => at.UserClause)
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
+            bool minorUpdate = await _automaticAdjudicationService.QualifiesAsMinorUpdateAsync(enrollee, updatedProfile);
+            await _enrolleeService.UpdateEnrolleeAsync(enrolleeId, updatedProfile);
+
+            if (minorUpdate)
+            {
+                return;
+            }
+
+            enrollee.AddEnrolmentStatus(StatusType.UnderReview);
+            await _enroleeProfileVersionService.CreateEnrolleeProfileVersionAsync(enrollee);
+            await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Submitted");
+
+            // TODO: UpdateEnrollee re-fetches the model, removing the includes we need for the adjudication rules. Fix how this model loading is done.
+            enrollee = await _context.Enrollees
+                .Include(e => e.PhysicalAddress)
+                .Include(e => e.MailingAddress)
+                .Include(e => e.EnrolmentStatuses)
+                    .ThenInclude(es => es.EnrolmentStatusReasons)
+                .Include(e => e.Certifications)
+                    .ThenInclude(cer => cer.College)
+                .Include(e => e.Certifications)
+                    .ThenInclude(c => c.License)
+                        .ThenInclude(l => l.DefaultPrivileges)
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
+            if (await _automaticAdjudicationService.QualifiesForAutomaticAdjudicationAsync(enrollee))
+            {
+                var newStatus = enrollee.AddEnrolmentStatus(StatusType.RequiresToa);
+                newStatus.AddStatusReason(StatusReasonType.Automatic);
+
+                await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee);
+                await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Automatically Approved");
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
         /// <summary>
         /// Performs a submission action on an Enrollee.
         /// </summary>
-        /// <exception cref="System.InvalidOperationException"> Thrown when the action is invalid on the given Enrollee due to current state or admin access </exception>
+        /// <exception cref="Prime.Services.SubmissionService.InvalidActionException"> Thrown when the action is invalid on the given Enrollee due to current state or admin access </exception>
         public async Task PerformSubmissionActionAsync(int enrolleeId, SubmissionAction action, bool isAdmin)
         {
             var enrollee = await _context.Enrollees
@@ -74,30 +123,10 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        private async Task SubmitApplication(Enrollee enrollee)
-        {
-            enrollee.AddEnrolmentStatus(StatusType.UnderReview);
-
-            await _enroleeProfileVersionService.CreateEnrolleeProfileVersionAsync(enrollee);
-            await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Submitted");
-
-            if (await _automaticAdjudicationService.QualifiesForAutomaticAdjudication(enrollee))
-            {
-                var newStatus = enrollee.AddEnrolmentStatus(StatusType.RequiresToa);
-                newStatus.AddStatusReason(StatusReason.AUTOMATIC_CODE);
-
-                await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee);
-
-                await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Automatically Approved");
-            }
-
-            await _context.SaveChangesAsync();
-        }
-
         private async Task ApproveApplicationAsync(Enrollee enrollee)
         {
             var newStatus = enrollee.AddEnrolmentStatus(StatusType.RequiresToa);
-            newStatus.AddStatusReason(StatusReason.MANUAL_CODE);
+            newStatus.AddStatusReason(StatusReasonType.Manual);
 
             await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee);
 
@@ -117,11 +146,16 @@ namespace Prime.Services
                 await _accessTermService.AcceptCurrentAccessTermAsync(enrollee);
                 await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrollee.Id, enrollee);
                 await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Accepted TOA");
+
                 if (enrollee.AdjudicatorId != null)
                 {
                     await _enrolleeService.UpdateEnrolleeAdjudicator(enrollee.Id);
                     await _businessEventService.CreateAdminClaimEventAsync(enrollee.Id, "Admin disclaimed after TOA accepted");
                 }
+            }
+            else
+            {
+                await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Declined TOA");
             }
             await _context.SaveChangesAsync();
         }
@@ -152,13 +186,19 @@ namespace Prime.Services
             }
         }
 
+        public class InvalidActionException : Exception
+        {
+            public InvalidActionException() : base() { }
+            public InvalidActionException(string message) : base(message) { }
+            public InvalidActionException(string message, Exception inner) : base(message, inner) { }
+        }
+
         private class SubmissionStateMachine
         {
             private readonly Enrollee _enrollee;
             private readonly AsyncPassiveStateMachine<EnrolleeState, SubmissionAction> _machine;
             private readonly SubmissionService _submissionService;
 
-            private async Task HandleSubmit() { await _submissionService.SubmitApplication(_enrollee); }
             private async Task HandleApprove() { await _submissionService.ApproveApplicationAsync(_enrollee); }
             private async Task HandleAcceptToa() { await _submissionService.ProcessToaAsync(_enrollee, true); }
             private async Task HandleDeclineToa() { await _submissionService.ProcessToaAsync(_enrollee, false); }
@@ -174,7 +214,7 @@ namespace Prime.Services
                 stateMachineBuilder.WithInitialState(FromEnrollee(enrollee));
 
                 _machine = stateMachineBuilder.Build().CreatePassiveStateMachine();
-                _machine.TransitionDeclined += (sender, e) => { throw new InvalidOperationException(); };
+                _machine.TransitionDeclined += (sender, e) => { throw new InvalidActionException(); };
 
                 _machine.Start();
             }
@@ -197,7 +237,6 @@ namespace Prime.Services
                 var builder = new StateMachineDefinitionBuilder<EnrolleeState, SubmissionAction>();
 
                 builder.In(EnrolleeState.Editable)
-                    .On(SubmissionAction.Submit).Execute(HandleSubmit)
                     .On(SubmissionAction.LockProfile).If<bool>(isAdmin => isAdmin).Execute(HandleLockProfile);
 
                 builder.In(EnrolleeState.UnderReview)
