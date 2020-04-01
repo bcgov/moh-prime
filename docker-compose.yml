@@ -98,12 +98,12 @@ services:
     build:
       context: document-manager/backend
     ports:
-      - 5001:5001
+      - 6001:5001
     volumes:
       - ./document-manager/backend/:/app/
-    env_file: ./document-manager/backend/.env
+    env_file: ./document-manager/backend/.env-prime
     networks:
-      - prime
+      - primenet
 
   document_manager_migrate:
     restart: on-failure
@@ -113,9 +113,19 @@ services:
     volumes:
       - ./document-manager/backend/:/app/
     command: flask db upgrade
-    env_file: ./document-manager/backend/.env
+    env_file: ./document-manager/backend/.env-prime
     networks:
-      - prime
+      - primenet
+
+  redis:
+    image: redis:3.2-alpine
+    container_name: prime_cache
+    restart: always
+    command: redis-server --requirepass redis-password
+    ports:
+      - "6379:6379"
+    networks:
+      - primenet
 
 volumes:
   local_postgres_data:
