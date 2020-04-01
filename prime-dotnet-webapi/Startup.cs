@@ -202,7 +202,6 @@ namespace Prime
             services.AddSingleton<IMongoDbSettings>(sp =>
                 sp.GetRequiredService<IOptions<MongoDbSettings>>().Value);
 
-
             // // Per the official Mongo Client reuse guidelines, MongoClient should be
             // // registered in DI with a singleton service lifetime.
             services.AddSingleton<MongoService>();
