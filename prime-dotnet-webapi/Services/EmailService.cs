@@ -155,7 +155,7 @@ namespace Prime.Services
         {
             var body = "To: Clinic Manager (person responsible for coordinating PharmaNet access):<br><br>";
 
-            body += $"{enrollee.FirstName} { enrollee.LastName} has been approved for Community Practice Access to PharmaNet.<br><br>";
+            body += $"{enrollee.FirstName} {enrollee.LastName} has been approved for Community Practice Access to PharmaNet.<br><br>";
 
             body += "<b>To set up their access, you must forward this PRIME Enrolment Confirmation";
             body += " and the information specified below to your <u>PharmaNet Software Vendor</u>.</b><br><br>";
