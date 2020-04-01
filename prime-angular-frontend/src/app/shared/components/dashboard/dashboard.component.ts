@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MatSidenav } from '@angular/material';
+import { MatSidenav } from '@angular/material/sidenav';
 
 import { merge } from 'rxjs';
 import { map, distinctUntilChanged } from 'rxjs/operators';
@@ -26,7 +26,7 @@ import { SiteRoutes } from 'app/modules/site-registration/site-registration.rout
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-  @ViewChild('sidenav', { static: false }) public sideNav: MatSidenav;
+  @ViewChild('sidenav') public sideNav: MatSidenav;
 
   public dashboardNavSections: DashboardNavSection[];
   public sideNavProps: {

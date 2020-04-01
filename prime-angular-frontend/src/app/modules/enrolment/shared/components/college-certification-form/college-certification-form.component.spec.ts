@@ -10,6 +10,7 @@ import { MockConfigService } from 'test/mocks/mock-config.service';
 
 import { CollegeCertificationFormComponent } from './college-certification-form.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { CollegeConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
@@ -49,13 +50,17 @@ describe('CollegeCertificationFormComponent', () => {
     }).compileComponents();
   }));
 
-  beforeEach(inject([EnrolmentStateService], (enrolmentStateService: EnrolmentStateService) => {
-    fixture = TestBed.createComponent(CollegeCertificationFormComponent);
-    component = fixture.componentInstance;
-    // Add the bound FormGroup to the component
-    component.form = enrolmentStateService.buildCollegeCertificationForm();
-    fixture.detectChanges();
-  }));
+  beforeEach(inject(
+    [EnrolmentStateService, ConfigService],
+    (enrolmentStateService: EnrolmentStateService, configService: ConfigService
+    ) => {
+      fixture = TestBed.createComponent(CollegeCertificationFormComponent);
+      component = fixture.componentInstance;
+      // Add the bound FormGroup to the component
+      component.form = enrolmentStateService.buildCollegeCertificationForm();
+      component.selectedColleges = configService.colleges.map((college: CollegeConfig) => college.code);
+      fixture.detectChanges();
+    }));
 
   it('should create', () => {
     expect(component).toBeTruthy();

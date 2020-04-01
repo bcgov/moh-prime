@@ -32,8 +32,8 @@
       "@shared/*": [
         "./app/shared/*"
       ],
-      "@ui/*": [
-        "./app/modules/user-interface/*"
+      "@common/*": [
+        "./app/modules/common/*"
       ],
       "@auth/*": [
         "./app/modules/auth/*"
@@ -46,6 +46,9 @@
       ],
       "@certificate/*": [
         "./app/modules/provisioner-access/*"
+      ],
+      "@registration/*": [
+        "./app/modules/site-registration/*"
       ]
     }
   },

@@ -1,6 +1,6 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
-import { Address } from '@enrolment/shared/models/address.model';
+import { Address } from '@shared/models/address.model';
 
 @Component({
   selector: 'app-enrollee-address',

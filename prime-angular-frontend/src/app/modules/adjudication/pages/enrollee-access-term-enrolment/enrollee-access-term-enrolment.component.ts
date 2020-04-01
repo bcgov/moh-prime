@@ -4,12 +4,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { Address } from '@shared/models/address.model';
 import { HttpEnrollee, Enrolment } from '@shared/models/enrolment.model';
 import { AbstractComponent } from '@shared/classes/abstract-component';
 import { HttpEnrolleeProfileVersion, EnrolmentProfileVersion } from '@shared/models/enrollee-profile-history.model';
 
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
-import { Address } from '@enrolment/shared/models/address.model';
 
 @Component({
   selector: 'app-enrollee-access-term-enrolment',

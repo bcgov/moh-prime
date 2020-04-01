@@ -2,11 +2,11 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { AppRoutes } from './app.routes';
-import { AccessDeniedComponent } from '@ui/components/access-denied/access-denied.component';
-import { UnsupportedComponent } from '@ui/components/unsupported/unsupported.component';
-import { MaintenanceComponent } from '@ui/components/maintenance/maintenance.component';
-import { PageNotFoundComponent } from '@ui/components/page-not-found/page-not-found.component';
-import { HelpComponent } from '@ui/components/help/help.component';
+import { AccessDeniedComponent } from '@common/components/access-denied/access-denied.component';
+import { UnsupportedComponent } from '@common/components/unsupported/unsupported.component';
+import { MaintenanceComponent } from '@common/components/maintenance/maintenance.component';
+import { PageNotFoundComponent } from '@common/components/page-not-found/page-not-found.component';
+import { HelpComponent } from '@common/components/help/help.component';
 
 const routes: Routes = [
   {

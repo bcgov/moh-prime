@@ -22,7 +22,7 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "aot": false,
+            "aot": true,
             "assets": [
               "src/favicon.ico",
               "src/assets",
@@ -52,12 +52,17 @@
               ]
             },
             "scripts": [
-              "node_modules/tinymce/tinymce.min.js",
-              "node_modules/marked/lib/marked.js"
+              "node_modules/tinymce/tinymce.min.js"
             ]
           },
           "configurations": {
             "es5": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "tsConfig": "./tsconfig.es5.json"
             },
             "production": {
@@ -72,7 +77,6 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -161,5 +165,9 @@
       }
     }
   },
-  "defaultProject": "angular-frontend"
+  "defaultProject": "angular-frontend",
+  "cli": {
+    "analytics": false,
+    "packageManager": "npm"
+  }
 }
