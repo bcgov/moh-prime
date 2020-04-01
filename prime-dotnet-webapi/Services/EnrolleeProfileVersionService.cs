@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -72,6 +73,8 @@ namespace Prime.Services
             _context.EnrolleeProfileVersions.Add(enrolleeProfileVersion);
 
             await _context.SaveChangesAsync();
+
+            enrolleeProfileVersion.ProfileSnapshotMongo = BsonDocument.Parse(enrolleeProfileVersion.ProfileSnapshot.ToString());
 
             // Insert into mongo database
             _profileVersions.InsertOne(enrolleeProfileVersion);

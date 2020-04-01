@@ -23,9 +23,16 @@ namespace Prime.Models
         public Enrollee Enrollee { get; set; }
 
         [Required]
+        [BsonIgnore]
         public JObject ProfileSnapshot { get; set; }
 
         public DateTimeOffset CreatedDate { get; set; }
+
+        // MONGO ATTRIBUTES
+
+        [NotMapped]
+        [JsonIgnore]
+        public BsonDocument ProfileSnapshotMongo { get; set; }
 
         [NotMapped]
         [JsonIgnore]
