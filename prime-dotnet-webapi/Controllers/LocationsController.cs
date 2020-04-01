@@ -10,11 +10,11 @@ namespace Prime.Controllers
     [ApiController]
     public class LocationsController : ControllerBase
     {
-        private readonly MongoService _mongoService;
+        private readonly LocationService _locationService;
 
-        public LocationsController(MongoService mongoService)
+        public LocationsController(LocationService locationService)
         {
-            _mongoService = mongoService;
+            _locationService = locationService;
         }
 
         //GET: /api/Locations
@@ -23,7 +23,7 @@ namespace Prime.Controllers
         /// </summary>
         [HttpGet(Name = nameof(Get))]
         public ActionResult<List<Locations>> Get() =>
-            _mongoService.Get();
+            _locationService.Get();
 
 
         // GET: api/Locations/5
@@ -34,7 +34,7 @@ namespace Prime.Controllers
         [HttpGet("{id:length(24)}", Name = "GetLocations")]
         public ActionResult<Locations> Get(string id)
         {
-            var location = _mongoService.Get(id);
+            var location = _locationService.Get(id);
 
             if (location == null)
             {
@@ -51,7 +51,7 @@ namespace Prime.Controllers
         [HttpPost]
         public ActionResult<Locations> Create(Locations location)
         {
-            _mongoService.Create(location);
+            _locationService.Create(location);
 
             return CreatedAtRoute("GetLocations", new { id = location.Id.ToString() }, location);
         }
@@ -59,14 +59,14 @@ namespace Prime.Controllers
         [HttpPut("{id:length(24)}")]
         public IActionResult Update(string id, Locations locationIn)
         {
-            var location = _mongoService.Get(id);
+            var location = _locationService.Get(id);
 
             if (location == null)
             {
                 return NotFound();
             }
 
-            _mongoService.Update(id, locationIn);
+            _locationService.Update(id, locationIn);
 
             return NoContent();
         }
@@ -74,14 +74,14 @@ namespace Prime.Controllers
         [HttpDelete("{id:length(24)}")]
         public IActionResult Delete(string id)
         {
-            var location = _mongoService.Get(id);
+            var location = _locationService.Get(id);
 
             if (location == null)
             {
                 return NotFound();
             }
 
-            _mongoService.Remove(location.Id);
+            _locationService.Remove(location.Id);
 
             return NoContent();
         }

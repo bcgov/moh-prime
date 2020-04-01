@@ -3,7 +3,7 @@ using Prime.Models;
 
 namespace Prime.Services
 {
-    public interface IMongoService
+    public interface ILocationService
     {
         List<Locations> Get();
         Locations Get(string id);

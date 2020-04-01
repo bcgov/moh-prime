@@ -7,11 +7,11 @@ using Prime.Services;
 
 namespace Prime.Services
 {
-    public class MongoService : IMongoService
+    public class LocationService : ILocationService
     {
         private readonly IMongoCollection<Locations> _locations;
 
-        public MongoService(IMongoDbSettings settings)
+        public LocationService(IMongoDbSettings settings)
         {
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
