@@ -6,7 +6,7 @@ describe('ApiResourceUtilsService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: ApiResourceUtilsService = TestBed.get(ApiResourceUtilsService);
+    const service: ApiResourceUtilsService = TestBed.inject(ApiResourceUtilsService);
     expect(service).toBeTruthy();
   });
 });

@@ -181,9 +181,20 @@ namespace Prime.Models
 
         public bool AlwaysManual { get; set; }
 
+        [NotMapped]
+        [JsonIgnore]
+        public bool? IsObo
+        {
+            get => AccessTerms?
+                .Where(at => at.AcceptedDate != null)
+                .OrderByDescending(at => at.AcceptedDate)
+                .FirstOrDefault()?
+                .UserClause?.EnrolleeClassification == PrimeConstants.PRIME_OBO;
+        }
+
         public EnrolmentStatus AddEnrolmentStatus(StatusType statusType)
         {
-            var newStatus = EnrolmentStatus.FromStatusType(statusType, this.Id);
+            var newStatus = EnrolmentStatus.FromType(statusType, this.Id);
 
             if (EnrolmentStatuses == null)
             {
@@ -192,6 +203,16 @@ namespace Prime.Models
             EnrolmentStatuses.Add(newStatus);
 
             return newStatus;
+        }
+
+        public void AddReasonToCurrentStatus(StatusReasonType type, string statusReasonNote = null)
+        {
+            if (CurrentStatus == null)
+            {
+                throw new InvalidOperationException($"Could not add Status Reason, Current Status is null.");
+            }
+
+            CurrentStatus.AddStatusReason(type, statusReasonNote);
         }
     }
 }

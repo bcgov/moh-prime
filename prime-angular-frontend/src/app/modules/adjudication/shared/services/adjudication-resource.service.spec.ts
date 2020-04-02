@@ -20,7 +20,7 @@ describe('AdjudicationResource', () => {
   }));
 
   it('should create', () => {
-    const service: AdjudicationResource = TestBed.get(AdjudicationResource);
+    const service: AdjudicationResource = TestBed.inject(AdjudicationResource);
     expect(service).toBeTruthy();
   });
 });

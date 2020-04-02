@@ -1,4 +1,4 @@
-import { Address } from '../../modules/enrolment/shared/models/address.model';
+import { Address } from './address.model';
 
 export interface Registrant {
   id?: number;

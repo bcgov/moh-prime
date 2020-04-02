@@ -6,7 +6,7 @@ describe('WindowRefService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should create', () => {
-    const service: WindowRefService = TestBed.get(WindowRefService);
+    const service: WindowRefService = TestBed.inject(WindowRefService);
     expect(service).toBeTruthy();
   });
 });

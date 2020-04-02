@@ -1,10 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+
+import { KeycloakService } from 'keycloak-angular';
 
 import { SiteCollectionNoticeComponent } from './site-collection-notice.component';
-import { SiteRegistrationModule } from '../../site-registration.module';
-import { RouterTestingModule } from '@angular/router/testing';
-import { KeycloakService } from 'keycloak-angular';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { SiteRegistrationModule } from '@registration/site-registration.module';
 
 describe('SiteCollectionNoticeComponent', () => {
   let component: SiteCollectionNoticeComponent;

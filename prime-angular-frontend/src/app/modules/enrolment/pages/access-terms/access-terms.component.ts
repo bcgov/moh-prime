@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource } from '@angular/material/table';
 import { AccessTerm } from '@shared/models/access-term.model';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { Subscription } from 'rxjs';

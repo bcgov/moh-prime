@@ -13,7 +13,7 @@ describe('KeycloakTokenService', () => {
   }));
 
   it('should be created', () => {
-    const service: KeycloakTokenService = TestBed.get(KeycloakTokenService);
+    const service: KeycloakTokenService = TestBed.inject(KeycloakTokenService);
     expect(service).toBeTruthy();
   });
 });

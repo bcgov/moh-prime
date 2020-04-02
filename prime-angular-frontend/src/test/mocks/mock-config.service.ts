@@ -1,4 +1,4 @@
-import { Inject } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
@@ -7,6 +7,9 @@ import { Configuration } from '@config/config.model';
 import { IConfigService, ConfigService } from '@config/config.service';
 import { ApiResource } from '@core/resources/api-resource.service';
 
+@Injectable({
+  providedIn: 'root'
+})
 export class MockConfigService extends ConfigService implements IConfigService {
   constructor(
     @Inject(APP_CONFIG) protected config: AppConfig,

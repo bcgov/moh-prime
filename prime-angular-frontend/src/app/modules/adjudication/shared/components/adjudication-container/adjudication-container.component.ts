@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, TemplateRef, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MatTableDataSource, MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
 
 import { Observable, Subscription, EMPTY, of, noop, concat } from 'rxjs';
 import { map, exhaustMap, tap } from 'rxjs/operators';
