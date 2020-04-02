@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 
 using Serilog;
 using Serilog.Formatting.Json;
+using Serilog.Sinks.SystemConsole.Themes;
 
 namespace Prime
 {
@@ -57,14 +58,9 @@ namespace Prime
                 Console.WriteLine("Creating the logging directory failed: {0}", e.ToString());
             }
 
-            // TODO could update appsettings.json to appsettings.Production.json and use:
-            // var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json
             var environment = (isDevelopment()) ? ".Development" : "";
-
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                // TODO could update appsettings.json to appsettings.Production.json and use:
-                // .AddJsonFile($"appsettings.{environment}.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"appsettings{environment}.json", optional: false, reloadOnChange: true)
                 .AddEnvironmentVariables()
                 .Build();
@@ -72,31 +68,33 @@ namespace Prime
             var name = Assembly.GetExecutingAssembly().GetName();
             var outputTemplate = "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}";
 
-            // TODO appsettings can be used to store formatters
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(configuration)
-                // TODO more enrichers can be added or created
                 .Enrich.FromLogContext()
                 .Enrich.WithMachineName()
                 .Enrich.WithProperty("Assembly", $"{name.Name}")
                 .Enrich.WithProperty("Version", $"{name.Version}")
-                // TODO segregation of logs through routing to different sinks
-                .WriteTo.Console(outputTemplate: outputTemplate)
-                .WriteTo.Debug(outputTemplate: outputTemplate)
+                .WriteTo.Console(
+                    outputTemplate: outputTemplate,
+                    theme: AnsiConsoleTheme.Code)
                 .WriteTo.Async(a => a.File(
                     $@"{path}/prime.log",
                     outputTemplate: outputTemplate,
-                    rollingInterval: RollingInterval.Day))
-                // TODO JSON output is easy to create using JsonFormatter or RenderedCompactJsonFormatter
-                // currently right now we're not using Splunk so JSON isn't as useful, but easy addition
+                    rollingInterval: RollingInterval.Day,
+                    // TODO can be configured to rollover on file size limit
+                    // fileSizeLimitBytes: 1_000_000,
+                    // rollOnFileSizeLimit: true,
+                    shared: true))
                 .WriteTo.Async(a => a.File(
                     new JsonFormatter(),
+                    // TODO performance boost (in μs) using compact, but less readable keys
+                    // new RenderedCompactJsonFormatter(),
                     $@"{path}/prime.json",
                     rollingInterval: RollingInterval.Day))
                 // TODO add ElasticSearch sink for Kibana
                 // @see https://github.com/serilog/serilog-sinks-elasticsearch
                 // TODO add sink for Splunk
-                // @see https://github.com/serilog/serilog-sinks-elasticsearch
+                // @see https://github.com/serilog/serilog-sinks-splunk
                 .CreateLogger();
         }
 
