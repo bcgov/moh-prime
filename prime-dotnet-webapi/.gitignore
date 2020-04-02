@@ -44,4 +44,4 @@ msbuild.wrn
 .sonarqube/
 
 # Logging
-/logs
+logs/
