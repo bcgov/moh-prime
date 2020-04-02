@@ -127,7 +127,6 @@ namespace Prime
             // can be used to exclude noisy handlers from logging
             app.UseSerilogRequestLogging(options =>
             {
-                // TODO can be separated out into middleware
                 options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
                 {
                     var userId = httpContext.User.GetPrimeUserId();
