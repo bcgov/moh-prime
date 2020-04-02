@@ -125,7 +125,19 @@ namespace Prime
 
             // Only logs components that appear after it in the pipeline, which
             // can be used to exclude noisy handlers from logging
-            app.UseSerilogRequestLogging();
+            app.UseSerilogRequestLogging(options =>
+            {
+                // TODO can be separated out into middleware
+                options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
+                {
+                    var userId = httpContext.User.GetPrimeUserId();
+
+                    if (!userId.Equals(Guid.Empty))
+                    {
+                        diagnosticContext.Set("User", userId);
+                    }
+                };
+            });
 
             // Matches request to an endpoint
             app.UseRouting();
