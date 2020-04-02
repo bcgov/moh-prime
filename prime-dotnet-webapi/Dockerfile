@@ -31,7 +31,7 @@ COPY --from=build /opt/app-root/app/Configuration/ /opt/app-root/app/Configurati
 COPY --from=build /opt/app-root/app/entrypoint.sh /opt/app-root/app
 
 RUN apt-get update && \
-    apt-get install -yqq gpgv gnupg2 wget && \
+    apt-get install -yqq gpgv gnupg2 wget moreutils && \
     echo 'deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main' >  /etc/apt/sources.list.d/pgdg.list && \
     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
     apt-get update && \
