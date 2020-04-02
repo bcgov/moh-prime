@@ -104,11 +104,9 @@ namespace Prime
         {
             if (env.IsDevelopment())
             {
+                // TODO should be replaced with logging and exception handler
                 app.UseDeveloperExceptionPage();
             }
-
-            // Only logs components that appear after it in the pipeline
-            app.UseSerilogRequestLogging();
 
             this.ConfigureHealthCheck(app);
 
@@ -124,6 +122,10 @@ namespace Prime
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Prime Web API V1");
             });
+
+            // Only logs components that appear after it in the pipeline, which
+            // can be used to exclude noisy handlers from logging
+            app.UseSerilogRequestLogging();
 
             // Matches request to an endpoint
             app.UseRouting();
