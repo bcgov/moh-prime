@@ -53,6 +53,7 @@ namespace Prime.Models
             {
                 string termsOfAccess = this.UserClause.Clause;
                 string limitsAndConditions = this.LimitsConditionsClause?.Clause ?? "";
+                // string licenceClassClauses = "";
 
                 if (!string.IsNullOrEmpty(limitsAndConditions))
                 {
@@ -60,6 +61,14 @@ namespace Prime.Models
                 }
 
                 termsOfAccess = termsOfAccess.Replace("{$lcPlaceholder}", limitsAndConditions);
+
+                // if (this.LicenseClassClauses.Any())
+                // {
+                //     licenceClassClauses = this.LicenseClassClauses.Aggregate("", (acc, lcc) => acc + $"<p>{lcc.Clause}</p>");
+                //     licenceClassClauses = $"<li><p class=\"bold underline\">Licence Class Clauses</p><li>{licenceClassClauses}</li>";
+
+                //     termsOfAccess = string.Concat(termsOfAccess, licenceClassClauses);
+                // }
 
                 return termsOfAccess;
             }
