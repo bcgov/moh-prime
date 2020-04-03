@@ -45,6 +45,16 @@ namespace Prime.Models
         [JsonIgnore]
         public LimitsConditionsClause LimitsConditionsClause { get; set; }
 
+        [NotMapped]
+        public string TermsOfAccess
+        {
+            get
+            {
+                // TODO update to pass completed terms of access
+                return this.UserClause.Clause;
+            }
+        }
+
         public DateTimeOffset CreatedDate { get; set; }
 
         public DateTimeOffset? AcceptedDate { get; set; }
