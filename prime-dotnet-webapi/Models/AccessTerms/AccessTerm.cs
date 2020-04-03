@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -50,8 +51,14 @@ namespace Prime.Models
         {
             get
             {
-                // TODO update to pass completed terms of access
-                return this.UserClause.Clause;
+                string licenseClassClauses = "";
+                if (this.LicenseClassClauses.Any())
+                {
+                    licenseClassClauses = this.LicenseClassClauses
+                        .Aggregate("<h2>Licence Class Clause</h2>", (acc, lcc) => acc + $"<p>{lcc.Clause}</p>");
+                }
+
+                return this.UserClause.Clause.Replace("{$lcPlaceholder}", licenseClassClauses);
             }
         }
 
