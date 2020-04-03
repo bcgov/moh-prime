@@ -25,12 +25,15 @@ namespace Prime.Models
 
         public int GlobalClauseId { get; set; }
 
+        [JsonIgnore]
         public GlobalClause GlobalClause { get; set; }
 
         public int UserClauseId { get; set; }
 
+        [JsonIgnore]
         public UserClause UserClause { get; set; }
 
+        // TODO no longer needed in the front-end
         [NotMapped]
         public List<LicenseClassClause> LicenseClassClauses { get; set; }
 
@@ -39,6 +42,7 @@ namespace Prime.Models
 
         public int? LimitsConditionsClauseId { get; set; }
 
+        [JsonIgnore]
         public LimitsConditionsClause LimitsConditionsClause { get; set; }
 
         public DateTimeOffset CreatedDate { get; set; }
