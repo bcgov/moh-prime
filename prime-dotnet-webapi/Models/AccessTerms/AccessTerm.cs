@@ -51,14 +51,8 @@ namespace Prime.Models
         {
             get
             {
-                string licenseClassClauses = "";
-                if (this.LicenseClassClauses.Any())
-                {
-                    licenseClassClauses = this.LicenseClassClauses
-                        .Aggregate("<h2>Licence Class Clause</h2>", (acc, lcc) => acc + $"<p>{lcc.Clause}</p>");
-                }
-
-                return this.UserClause.Clause.Replace("{$lcPlaceholder}", licenseClassClauses);
+                return this.UserClause.Clause
+                    .Replace("{$lcPlaceholder}", $"<li><p class=\"bold underline\">Additional Limits and Conditions</p><p>{this.LimitsConditionsClause.Clause}</p></li>");
             }
         }
 
