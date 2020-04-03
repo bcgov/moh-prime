@@ -54,7 +54,7 @@ namespace Prime.Models
                 string termsOfAccess = this.UserClause.Clause;
                 string limitsAndConditions = this.LimitsConditionsClause?.Clause ?? "";
 
-                if (string.IsNullOrEmpty(limitsAndConditions))
+                if (!string.IsNullOrEmpty(limitsAndConditions))
                 {
                     limitsAndConditions = $"<li><p class=\"bold underline\">Additional Limits and Conditions</p><p>{limitsAndConditions}</p></li>";
                 }
