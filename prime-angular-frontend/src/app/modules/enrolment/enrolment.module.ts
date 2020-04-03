@@ -14,28 +14,17 @@ import { OverviewComponent } from './pages/overview/overview.component';
 import { MinorUpdateConfirmationComponent } from './pages/minor-update-confirmation/minor-update-confirmation.component';
 import { SubmissionConfirmationComponent } from './pages/submission-confirmation/submission-confirmation.component';
 import { AccessAgreementComponent } from './pages/access-agreement/access-agreement.component';
-import { PageRefDirective } from './pages/access-agreement/page-ref.directive';
-import { AccessTermsPagerComponent } from './pages/access-agreement/components/access-terms-pager/access-terms-pager.component';
-import { GlobalClauseComponent } from './pages/access-agreement/components/global-clause/global-clause.component';
-import { LicenceClassClauseComponent } from './pages/access-agreement/components/licence-class-clause/licence-class-clause.component';
-import {
-  LimitsAndConditionsClauseComponent
-} from './pages/access-agreement/components/limits-and-conditions-clause/limits-and-conditions-clause.component';
-import { UserClauseComponent } from './pages/access-agreement/components/user-clause/user-clause.component';
 import { PharmanetEnrolmentSummaryComponent } from './pages/pharmanet-enrolment-summary/pharmanet-enrolment-summary.component';
 import { AccessLockedComponent } from './pages/access-locked/access-locked.component';
 import { AccessAgreementHistoryComponent } from './pages/access-agreement-history/access-agreement-history.component';
 import { PharmanetTransactionsComponent } from './pages/pharmanet-transactions/pharmanet-transactions.component';
 import { AccessTermsComponent } from './pages/access-terms/access-terms.component';
-
-import { CollegeCertificationFormComponent } from './shared/components/college-certification-form/college-certification-form.component';
-import { JobFormComponent } from './shared/components/job-form/job-form.component';
-import { RuAccessTermsComponent } from './pages/access-agreement/components/ru-access-terms/ru-access-terms.component';
-import { OboAccessTermsComponent } from './pages/access-agreement/components/obo-access-terms/obo-access-terms.component';
 import { AccessAgreementCurrentComponent } from './pages/access-agreement-current/access-agreement-current.component';
 import {
   AccessAgreementHistoryEnrolmentComponent
 } from './pages/access-agreement-history-enrolment/access-agreement-history-enrolment.component';
+import { CollegeCertificationFormComponent } from './shared/components/college-certification-form/college-certification-form.component';
+import { JobFormComponent } from './shared/components/job-form/job-form.component';
 import { EnrolleePageComponent } from './shared/components/enrollee-page/enrollee-page.component';
 import { NextStepsInfographicComponent } from './shared/components/next-steps-infographic/next-steps-infographic.component';
 
@@ -52,12 +41,6 @@ import { NextStepsInfographicComponent } from './shared/components/next-steps-in
     MinorUpdateConfirmationComponent,
     SubmissionConfirmationComponent,
     AccessAgreementComponent,
-    PageRefDirective,
-    AccessTermsPagerComponent,
-    GlobalClauseComponent,
-    LicenceClassClauseComponent,
-    LimitsAndConditionsClauseComponent,
-    UserClauseComponent,
     AccessLockedComponent,
     AccessAgreementHistoryComponent,
     PharmanetEnrolmentSummaryComponent,
@@ -65,8 +48,6 @@ import { NextStepsInfographicComponent } from './shared/components/next-steps-in
     AccessTermsComponent,
     CollegeCertificationFormComponent,
     JobFormComponent,
-    OboAccessTermsComponent,
-    RuAccessTermsComponent,
     AccessAgreementCurrentComponent,
     AccessAgreementHistoryEnrolmentComponent,
     EnrolleePageComponent,
