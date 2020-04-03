@@ -51,8 +51,17 @@ namespace Prime.Models
         {
             get
             {
-                return this.UserClause.Clause
-                    .Replace("{$lcPlaceholder}", $"<li><p class=\"bold underline\">Additional Limits and Conditions</p><p>{this.LimitsConditionsClause.Clause}</p></li>");
+                string termsOfAccess = this.UserClause.Clause;
+                string limitsAndConditions = this.LimitsConditionsClause?.Clause ?? "";
+
+                if (string.IsNullOrEmpty(limitsAndConditions))
+                {
+                    limitsAndConditions = $"<li><p class=\"bold underline\">Additional Limits and Conditions</p><p>{limitsAndConditions}</p></li>";
+                }
+
+                termsOfAccess = termsOfAccess.Replace("{$lcPlaceholder}", limitsAndConditions);
+
+                return termsOfAccess;
             }
         }
 
