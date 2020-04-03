@@ -88,12 +88,6 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     return this.form.get('otherRecipients') as FormControl;
   }
 
-  public get isRu(): boolean {
-    return (this.accessTerm)
-      ? this.accessTerm.userClause.enrolleeClassification === EnrolleeClassification.RU
-      : false;
-  }
-
   public getTokenUrl(tokenId: string): string {
     return `${this.config.loginRedirectUrl}/provisioner-access/${tokenId}`;
   }
