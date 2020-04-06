@@ -193,7 +193,7 @@ namespace Prime
 
         protected virtual void ConfigureMongoDatabase(IServiceCollection services)
         {
-            // requires using Microsoft.Extensions.Options
+            // Requires using Microsoft.Extensions.Options
             services.Configure<MongoDbSettings>(
                 Configuration.GetSection(nameof(MongoDatabaseSettings)));
 
