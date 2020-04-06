@@ -94,7 +94,6 @@ namespace PrimeTests.Mocks
         public Task<bool> IsCurrentByEnrolleeAsync(int accessTermId)
         {
             return Task.FromResult(true);
-
         }
     }
 }
