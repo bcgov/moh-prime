@@ -382,7 +382,7 @@ namespace Prime.Services
             }
             else
             {
-                await _businessEventService.CreateNoteEventAsync(enrolleeId, "Updated Limits and Conditions Note: " + newNote);
+                await _businessEventService.CreateNoteEventAsync(enrolleeId, "Updated Limits and Conditions Note: " + newNote.Note);
             }
 
             return newNote;
