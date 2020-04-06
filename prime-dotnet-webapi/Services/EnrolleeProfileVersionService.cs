@@ -79,6 +79,5 @@ namespace Prime.Services
             // Insert into mongo database
             _profileVersions.InsertOne(enrolleeProfileVersion);
         }
-
     }
 }
