@@ -105,12 +105,12 @@ objects:
                   valueFrom:
                     secretKeyRef:
                       key: database-user
-                      name: '${NAME}-secret'
+                      name: 'postgresql-secret'
                 - name: MONGO_INITDB_ROOT_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       key: database-password
-                      name: '${NAME}-secret'
+                      name: 'postgresql-secret'
               image: ' '
               imagePullPolicy: IfNotPresent
               livenessProbe:
