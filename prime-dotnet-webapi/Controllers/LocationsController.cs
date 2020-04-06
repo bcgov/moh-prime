@@ -5,7 +5,6 @@ using Prime.Services;
 
 namespace Prime.Controllers
 {
-
     [Route("api/[controller]")]
     [ApiController]
     public class LocationsController : ControllerBase
@@ -17,7 +16,7 @@ namespace Prime.Controllers
             _locationService = locationService;
         }
 
-        //GET: /api/Locations
+        // GET: /api/Locations
         /// <summary>
         /// Gets all the locations
         /// </summary>
