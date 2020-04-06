@@ -88,10 +88,12 @@ pipeline {
                     steps {
                         script {
                             echo "Demo (MASTER) ..."
-                            sh "./player.sh build database test -p SUFFIX='-demo'"
+                            sh "./player.sh build postgres test -p SUFFIX='-demo'"
+                            sh "./player.sh build mongo test -p SUFFIX='-demo'"
                             sh "./player.sh build api test ${API_ARGS} -p SUFFIX='-demo'"
                             sh "./player.sh build frontend test ${FRONTEND_ARGS} -p SUFFIX='-demo'"
-                            sh "./player.sh deploy database test -p SUFFIX='-demo'"
+                            sh "./player.sh deploy postgres test -p SUFFIX='-demo'"
+                            sh "./player.sh deploy mongo test -p SUFFIX='-demo'"
                             sh "./player.sh deploy api test ${API_ARGS} -p SUFFIX='-demo'"
                             sh "./player.sh deploy frontend test ${FRONTEND_ARGS} -p SUFFIX='-demo'"
                         }
@@ -102,10 +104,10 @@ pipeline {
                     steps {
                         script {
                             echo "Deploy to Production..."
-                            sh "./player.sh build database prod"
+                            sh "./player.sh build postgres prod"
                             sh "./player.sh build api prod"
                             sh "./player.sh build frontend prod"
-                            sh "./player.sh deploy database prod"
+                            sh "./player.sh deploy postgres prod"
                             sh "./player.sh deploy api prod"
                             sh "./player.sh deploy frontend prod"
                             sh "./player.sh toolbelt schemaspy prod"

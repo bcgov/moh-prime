@@ -16,7 +16,21 @@ services:
       - local_postgres_data:/var/lib/postgresql/data
     networks:
       - primenet
-######################################################### Sign-in #
+########################################################## MongoDB #
+  mongo:
+    restart: always
+    container_name: primemongodb
+    image: mongo:4.2.5-bionic
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: prime
+    ports:
+      - 8081:8081
+    volumes:
+      - local_mongodb_data:/var/lib/mongodb/data
+    networks:
+      - primenet
+############################################################## API #
   dotnet-webapi:
     container_name: primeapi
     restart: always
@@ -36,7 +50,7 @@ services:
       - primenet
     depends_on:
       - postgres
-###################################################### Web Frontend #
+##################################################### Web Frontend #
   nginx-angular:
     container_name: primeweb
     build:
@@ -53,7 +67,7 @@ services:
       - primenet
     depends_on:
       - dotnet-webapi
-################################################# Local SMTP Server #
+################################################ Local SMTP Server #
   mailhog:
     container_name: mailhog
     restart: always
@@ -64,7 +78,7 @@ services:
       - 8025:8025 # visit localhost:8025 to see the list of captured emails
     networks:
       - primenet
-######################################################### Sign-in #
+############################################## Database Inspection #
   schema-spy:
     container_name: schema-spy
     build:
@@ -77,24 +91,27 @@ services:
       - postgres
     networks:
       - primenet
-######################################################### Sign-in #
+########################################################### Backup #
   backup:
     container_name: backup
     build:
       context: prime-database-backup
     ports:
-      - "6432:5432"
+      - 6432:5432
+      - 9081:8081
     depends_on:
-      - postgres    
+      - postgres
+      - mongo
     volumes:
-      - backup_postgres_data:/opt/backup
+      - db_backup_data:/opt/backup
       - local_postgres_data:/var/lib/postgresql/data
     networks:
       - primenet
 volumes:
   local_postgres_data:
-  backup_postgres_data:
-
+  local_mongodb_data:
+  db_backup_data:
+  
 networks:
   primenet:
     driver: bridge
