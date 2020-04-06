@@ -39,6 +39,5 @@ namespace Prime.Services
 
         public void Remove(string id) =>
             _locations.DeleteOne(location => location.Id == id);
-
     }
 }
