@@ -55,6 +55,7 @@ parameters:
     value: 200m
   - name: MEMORY_REQUEST
     value: 1.5Gi
+  - name: 
 objects:
   - apiVersion: v1
     kind: PersistentVolumeClaim
