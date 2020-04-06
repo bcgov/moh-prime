@@ -189,7 +189,6 @@ namespace Prime
                 .AddHealthChecks()
                 .AddDbContextCheck<ApiDbContext>("DbContextHealthCheck")
                 .AddNpgSql(connectionString);
-
         }
 
         protected virtual void ConfigureMongoDatabase(IServiceCollection services)
@@ -209,7 +208,6 @@ namespace Prime
 
             services.AddSingleton<IMongoClient>(_client);
             services.AddMigration();
-
         }
     }
 }
