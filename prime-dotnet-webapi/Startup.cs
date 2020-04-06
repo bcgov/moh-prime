@@ -192,7 +192,6 @@ namespace Prime
 
         }
 
-
         protected virtual void ConfigureMongoDatabase(IServiceCollection services)
         {
             // requires using Microsoft.Extensions.Options
@@ -202,8 +201,8 @@ namespace Prime
             services.AddSingleton<IMongoDbSettings>(sp =>
                 sp.GetRequiredService<IOptions<MongoDbSettings>>().Value);
 
-            // // Per the official Mongo Client reuse guidelines, MongoClient should be
-            // // registered in DI with a singleton service lifetime.
+            // Per the official Mongo Client reuse guidelines, MongoClient should be
+            // registered in DI with a singleton service lifetime.
             services.AddSingleton<LocationService>();
 
             IMongoClient _client = new MongoClient(Configuration.GetSection("MongoDatabaseSettings:ConnectionString").Value);
