@@ -3,8 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import moment from 'moment';
-
 import { exhaustMap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
 
@@ -15,12 +13,10 @@ import { WindowRefService } from '@core/services/window-ref.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { Enrolment } from '@shared/models/enrolment.model';
-import { EnrolleeClassification } from '@shared/enums/enrollee-classification.enum';
 import { FormControlValidators } from '@shared/validators/form-control.validators';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
-import { AccessTerm } from '@shared/models/access-term.model';
 
 @Component({
   selector: 'app-pharmanet-enrolment-summary',
@@ -31,7 +27,6 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   public form: FormGroup;
   public enrolment: Enrolment;
   public showProgressBar: boolean;
-  public accessTerm: AccessTerm;
 
   constructor(
     protected route: ActivatedRoute,
@@ -141,15 +136,6 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
 
     this.enrolment = this.enrolmentService.enrolment;
     this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
-
-    this.enrolmentResource.getAccessTermLatest(this.enrolment.id, true)
-      .subscribe(
-        (accessTerm: AccessTerm) => this.accessTerm = accessTerm,
-        (error: any) => {
-          this.toastService.openErrorToast(`Terms of access could not be found`);
-          this.logger.error('[Enrolment] AccessAgreement::ngOnInit error has occurred: ', error);
-        }
-      );
   }
 
   private buildVendorEmailGroup(): FormGroup {
