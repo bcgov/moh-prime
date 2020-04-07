@@ -24,11 +24,13 @@ namespace Prime.Models
         [JsonIgnore]
         public Enrollee Enrollee { get; set; }
 
+        [JsonIgnore]
         public int GlobalClauseId { get; set; }
 
         [JsonIgnore]
         public GlobalClause GlobalClause { get; set; }
 
+        [JsonIgnore]
         public int UserClauseId { get; set; }
 
         [JsonIgnore]
@@ -42,6 +44,7 @@ namespace Prime.Models
         [JsonIgnore]
         public List<AccessTermLicenseClassClause> AccessTermLicenseClassClauses { get; set; }
 
+        [JsonIgnore]
         public int? LimitsConditionsClauseId { get; set; }
 
         [JsonIgnore]
