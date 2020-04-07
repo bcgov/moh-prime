@@ -4,7 +4,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { NgxMaskModule } from 'ngx-mask';
-import { ClipboardModule } from 'ngx-clipboard';
 import { NgxBusyModule } from './modules/ngx-busy/ngx-busy.module';
 
 import { ConfigModule } from '@config/config.module';
@@ -35,7 +34,6 @@ import { PageSubheaderComponent } from './components/page-subheader/page-subhead
 import { PageSubheaderTitleDirective } from '@shared/components/page-subheader/page-subheader-title.directive';
 import { PageSubheaderSummaryDirective } from '@shared/components/page-subheader/page-subheader-summary.directive';
 import { DialogContentDirective } from '@shared/components/dialogs/dialog-content.directive';
-import { ClipboardIconComponent } from '@shared/components/clipboard-icon/clipboard-icon.component';
 import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
 import { AlertComponent } from '@shared/components/alert/alert.component';
 import { ProgressIndicatorComponent } from '@shared/components/progress-indicator/progress-indicator.component';
@@ -87,7 +85,6 @@ import { PageFooterComponent } from './components/page-footer/page-footer.compon
     DialogContentDirective,
     FormIconGroupComponent,
     AlertComponent,
-    ClipboardIconComponent,
     EnrolleeReviewComponent,
     CertificatePipe,
     ProgressIndicatorComponent,
@@ -115,7 +112,6 @@ import { PageFooterComponent } from './components/page-footer/page-footer.compon
   imports: [
     CommonModule,
     RouterModule,
-    ClipboardModule,
     ConfigModule,
     NgxBusyModule,
     NgxContextualHelpModule,
@@ -156,7 +152,6 @@ import { PageFooterComponent } from './components/page-footer/page-footer.compon
     DialogContentDirective,
     FormIconGroupComponent,
     AlertComponent,
-    ClipboardIconComponent,
     EnrolleeReviewComponent,
     CertificatePipe,
     ProgressIndicatorComponent,

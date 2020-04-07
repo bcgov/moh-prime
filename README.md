@@ -33,7 +33,7 @@ Your changes will be deployed automatically next time the app starts.
 
 ## DOCUMENTATION
 
-We have further [Documentation](documentation/Readme.md.md) available.
+We have further [Documentation](documentation/Readme.md) available.
 
 ## APACHE 2.0 LICENSE
 
