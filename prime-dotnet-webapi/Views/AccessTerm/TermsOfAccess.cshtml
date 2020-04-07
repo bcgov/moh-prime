@@ -3,7 +3,7 @@
 
 @{
   var userClauseClause = Model.UserClause.Clause.Split("{$lcPlaceholder}");
-  var limitsAndConditions = Model.LimitsConditionsClause.Clause;
+  var limitsAndConditions = Model.LimitsConditionsClause?.Clause;
   @* var licenceClassClauses = Model.LicenseClassClauses.Select(lcc => lcc.Clause); *@
 }
 
