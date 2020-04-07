@@ -238,9 +238,31 @@ namespace Prime.Services
         // TODO no provided logic for how license class clauses are chosen
         private async Task<IEnumerable<AccessTermLicenseClassClause>> GetAccessTermLicenseClassClauses(Enrollee enrollee, AccessTerm accessTerms)
         {
-            var licenseClassClauses = await _context.LicenseClassClauses
-                .Take(2)
-                .ToListAsync();
+            var licenseClassClauses = new List<LicenseClassClause>();
+
+            if (enrollee.Certifications.Count > 0)
+            {
+                foreach (var org in enrollee.Organizations)
+                {
+                    foreach (var cert in enrollee.Certifications)
+                    {
+                        var mappings = await _context.LicenseClassClauseMappings
+                            .Include(m => m.LicenseClassClause)
+                            .Where(m => m.LicenseCode == cert.LicenseCode)
+                            .Where(m => m.OrganizatonTypeCode == org.OrganizationTypeCode)
+                            .ToListAsync();
+
+                        foreach (var mapping in mappings)
+                        {
+                            // Check if License Class Clause already in list
+                            if (licenseClassClauses.FindAll(lcc => lcc.Id == mapping.LicenseClassClauseId).Count == 0)
+                            {
+                                licenseClassClauses.Add(mapping.LicenseClassClause);
+                            }
+                        }
+                    }
+                }
+            }
 
             return licenseClassClauses.Select(lcc => new AccessTermLicenseClassClause { AccessTerm = accessTerms, LicenseClassClause = lcc });
         }
