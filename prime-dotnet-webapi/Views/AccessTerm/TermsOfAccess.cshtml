@@ -7,17 +7,17 @@
   @* var licenceClassClauses = Model.LicenseClassClauses.Select(lcc => lcc.Clause); *@
 }
 
-@userClauseClause[0];
+@Html.Raw(userClauseClause[0])
 
 @if(!string.IsNullOrEmpty(limitsAndConditions))
 {
   <li>
     <p class="bold underline">Additional Limits and Conditions</p>
-    <p>@limitsAndConditions</p>
+    <p>@Html.Raw(limitsAndConditions)</p>
   </li>
 }
 
-@userClauseClause[1];
+@Html.Raw(@userClauseClause[1])
 
 @* @if(licenceClassClauses.Any())
 {
@@ -25,7 +25,7 @@
     <p class="bold underline">Licence Class Clauses</p>
     @foreach(var licenceClassClause in licenceClassClauses)
     {
-      <p>@licenceClassClause</p>
+      <p>@Html.Raw(licenceClassClause)</p>
     }
   </li>
 } *@
