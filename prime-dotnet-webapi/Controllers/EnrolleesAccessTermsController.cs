@@ -22,15 +22,18 @@ namespace Prime.Controllers
         private readonly IEnrolleeService _enrolleeService;
         private readonly IAccessTermService _accessTermService;
         private readonly IEnrolleeProfileVersionService _enrolleeProfileVersionService;
+        private readonly IRazorConverterService _razorConverterService;
 
         public EnrolleesAccessTermsController(
             IEnrolleeService enrolleeService,
             IAccessTermService accessTermService,
-            IEnrolleeProfileVersionService enrolleeProfileVersionService)
+            IEnrolleeProfileVersionService enrolleeProfileVersionService,
+            IRazorConverterService razorConverterService)
         {
             _enrolleeService = enrolleeService;
             _accessTermService = accessTermService;
             _enrolleeProfileVersionService = enrolleeProfileVersionService;
+            _razorConverterService = razorConverterService;
         }
 
         // GET: api/Enrollees/access-terms
@@ -112,7 +115,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<AccessTerm>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<AccessTerm>> GetAccessTermLatest(int enrolleeId, [FromQuery] bool signed)
+        public async Task<ActionResult<string>> GetAccessTermLatest(int enrolleeId, [FromQuery] bool signed)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
@@ -136,7 +139,10 @@ namespace Prime.Controllers
             {
                 accessTerm = await _accessTermService.GetMostRecentNotAcceptedEnrolleesAccessTermAsync(enrolleeId);
             }
-            return Ok(ApiResponse.Result(accessTerm));
+
+            string termsOfAccess = await _razorConverterService.RenderViewToStringAsync("/Views/AccessTerm/TermsOfAccess.cshtml", accessTerm);
+
+            return Ok(ApiResponse.Result(termsOfAccess));
         }
 
         // GET: api/Enrollees/5/access-terms/3/enrolment
