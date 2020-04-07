@@ -79,7 +79,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<AccessTerm>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<string>> GetAccessTerm(int enrolleeId, int accessTermId)
+        public async Task<ActionResult<AccessTerm>> GetAccessTerm(int enrolleeId, int accessTermId)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
@@ -98,10 +98,10 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Access term not found with id {accessTermId} for enrollee id: {enrolleeId}"));
             }
 
-            var accessTerm = await _accessTermService.GetEnrolleesAccessTermAsync(enrolleeId, accessTermId);
-            var termsOfAccess = await _razorConverterService.RenderViewToStringAsync("/Views/AccessTerm/TermsOfAccess.cshtml", accessTerm);
+            AccessTerm accessTerm = await _accessTermService.GetEnrolleesAccessTermAsync(enrolleeId, accessTermId);
+            accessTerm.TermsOfAccess = await _razorConverterService.RenderViewToStringAsync("/Views/AccessTerm/TermsOfAccess.cshtml", accessTerm);
 
-            return Ok(ApiResponse.Result(termsOfAccess));
+            return Ok(ApiResponse.Result(accessTerm));
         }
 
         // GET: api/Enrollees/5/access-terms/latest?signed=true
@@ -116,7 +116,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<AccessTerm>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<string>> GetAccessTermLatest(int enrolleeId, [FromQuery] bool signed)
+        public async Task<ActionResult<AccessTerm>> GetAccessTermLatest(int enrolleeId, [FromQuery] bool signed)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
@@ -133,9 +133,9 @@ namespace Prime.Controllers
             AccessTerm accessTerm = (signed)
                 ? await _accessTermService.GetMostRecentAcceptedEnrolleesAccessTermAsync(enrolleeId)
                 : await _accessTermService.GetMostRecentNotAcceptedEnrolleesAccessTermAsync(enrolleeId);
-            var termsOfAccess = await _razorConverterService.RenderViewToStringAsync("/Views/AccessTerm/TermsOfAccess.cshtml", accessTerm);
+            accessTerm.TermsOfAccess = await _razorConverterService.RenderViewToStringAsync("/Views/AccessTerm/TermsOfAccess.cshtml", accessTerm);
 
-            return Ok(ApiResponse.Result(termsOfAccess));
+            return Ok(ApiResponse.Result(accessTerm));
         }
 
         // GET: api/Enrollees/5/access-terms/3/enrolment
