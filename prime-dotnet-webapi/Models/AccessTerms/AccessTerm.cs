@@ -36,7 +36,6 @@ namespace Prime.Models
         [JsonIgnore]
         public UserClause UserClause { get; set; }
 
-        // TODO no longer needed in the front-end
         [NotMapped]
         [JsonIgnore]
         public List<LicenseClassClause> LicenseClassClauses { get; set; }
