@@ -4,7 +4,7 @@
 @{
   var userClauseClause = Model.UserClause.Clause.Split("{$lcPlaceholder}");
   var limitsAndConditions = Model.LimitsConditionsClause.Clause;
-  var licenceClassClauses = Model.LicenseClassClauses.Select(lcc => lcc.Clause);
+  @* var licenceClassClauses = Model.LicenseClassClauses.Select(lcc => lcc.Clause); *@
 }
 
 @userClauseClause[0];
@@ -19,7 +19,7 @@
 
 @userClauseClause[1];
 
-@if(licenceClassClauses.Any())
+@* @if(licenceClassClauses.Any())
 {
   <li>
     <p class="bold underline">Licence Class Clauses</p>
@@ -28,4 +28,4 @@
       <p>@licenceClassClause</p>
     }
   </li>
-}
+} *@
