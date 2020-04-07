@@ -26,5 +26,8 @@ namespace Prime.Models
 
         [JsonIgnore]
         public List<AccessTermLicenseClassClause> AccessTermLicenseClassClauses { get; set; }
+
+        [JsonIgnore]
+        public ICollection<LicenseClassClauseMapping> LicenseClassClauseMappings { get; set; }
     }
 }
