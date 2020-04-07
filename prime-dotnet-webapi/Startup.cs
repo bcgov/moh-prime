@@ -97,7 +97,7 @@ namespace Prime
 
             services.AddHttpContextAccessor();
 
-            this.ConfigureDatabase(services);
+            this.ConfigurePostgresDatabase(services);
             this.ConfigureMongoDatabase(services);
 
             AuthenticationSetup.Initialize(services, Configuration, Environment);
@@ -170,7 +170,7 @@ namespace Prime
             app.UseHealthChecks("/healthcheck", healthCheckOptions);
         }
 
-        protected virtual void ConfigureDatabase(IServiceCollection services)
+        protected virtual void ConfigurePostgresDatabase(IServiceCollection services)
         {
             // Connect to database
             var connectionString = System.Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
