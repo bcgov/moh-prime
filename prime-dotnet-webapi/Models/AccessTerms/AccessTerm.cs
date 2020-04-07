@@ -36,6 +36,7 @@ namespace Prime.Models
 
         // TODO no longer needed in the front-end
         [NotMapped]
+        [JsonIgnore]
         public List<LicenseClassClause> LicenseClassClauses { get; set; }
 
         [JsonIgnore]
@@ -47,32 +48,7 @@ namespace Prime.Models
         public LimitsConditionsClause LimitsConditionsClause { get; set; }
 
         [NotMapped]
-        public string TermsOfAccess
-        {
-            get
-            {
-                string termsOfAccess = this.UserClause.Clause;
-                string limitsAndConditions = this.LimitsConditionsClause?.Clause ?? "";
-                // string licenceClassClauses = "";
-
-                if (!string.IsNullOrEmpty(limitsAndConditions))
-                {
-                    limitsAndConditions = $"<li><p class=\"bold underline\">Additional Limits and Conditions</p><p>{limitsAndConditions}</p></li>";
-                }
-
-                termsOfAccess = termsOfAccess.Replace("{$lcPlaceholder}", limitsAndConditions);
-
-                // if (this.LicenseClassClauses.Any())
-                // {
-                //     licenceClassClauses = this.LicenseClassClauses.Aggregate("", (acc, lcc) => acc + $"<p>{lcc.Clause}</p>");
-                //     licenceClassClauses = $"<li><p class=\"bold underline\">Licence Class Clauses</p>{licenceClassClauses}</li>";
-
-                //     termsOfAccess = string.Concat(termsOfAccess, licenceClassClauses);
-                // }
-
-                return termsOfAccess;
-            }
-        }
+        public string TermsOfAccess { get; set; }
 
         public DateTimeOffset CreatedDate { get; set; }
 
