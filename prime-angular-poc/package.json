@@ -30,7 +30,7 @@
     "keycloak-angular": "^7.0.1",
     "keycloak-js": "^6.0.1",
     "ng-busy": "^9.0.0",
-    "ngx-progressbar": "^2.1.1",
+    "ngx-progressbar": "^6.0.2",
     "rxjs": "~6.5.5",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"
