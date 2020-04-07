@@ -175,20 +175,34 @@ namespace Prime.Services
         /// <summary>
         /// Returns true if the enrollees' most recent accepted access term has no newer versions
         /// </summary>
-        public async Task<bool> IsCurrentByEnrolleeAsync(int enrolleeId)
+        public async Task<bool> IsCurrentByEnrolleeAsync(Enrollee enrollee)
         {
-            var accessTermId = await _context.AccessTerms
-                .Where(at => at.EnrolleeId == enrolleeId)
+            var current = true;
+
+            var accessTerm = await _context.AccessTerms
+                .Include(at => at.AccessTermLicenseClassClauses)
+                .Where(at => at.EnrolleeId == enrollee.Id)
                 .Where(at => at.AcceptedDate != null)
                 .OrderByDescending(at => at.AcceptedDate)
-                .Select(at => at.Id)
                 .FirstOrDefaultAsync();
 
-            if (accessTermId == 0)
+            var currentAccessTerm = await GenerateAccessTermAsync(enrollee);
+
+            if (accessTerm.GlobalClauseId != currentAccessTerm.GlobalClause.Id
+               || accessTerm.UserClauseId != currentAccessTerm.UserClause.Id)
             {
-                return false;
+                current = false;
             }
-            return await this.IsCurrentAsync(accessTermId);
+
+            foreach (var lcc in accessTerm.AccessTermLicenseClassClauses)
+            {
+                if (currentAccessTerm.AccessTermLicenseClassClauses.FindAll(c => c.LicenseClassClause.Id == lcc.LicenseClassClauseId).Count == 0)
+                {
+                    current = false;
+                }
+            }
+
+            return current;
         }
 
         /**

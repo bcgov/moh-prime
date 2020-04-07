@@ -7,6 +7,11 @@ namespace Prime.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<string>(
+                name: "Type",
+                table: "LicenseClassClause",
+                nullable: true);
+
             migrationBuilder.AddColumn<DateTimeOffset>(
                 name: "CreatedTimeStamp",
                 table: "AccessTermLicenseClassClause",
@@ -77,15 +82,15 @@ namespace Prime.Migrations
                 table: "LicenseClassClause",
                 keyColumn: "Id",
                 keyValue: 1,
-                column: "Clause",
-                value: "");
+                columns: new[] { "Clause", "Type" },
+                values: new object[] { "", "Dispense" });
 
             migrationBuilder.UpdateData(
                 table: "LicenseClassClause",
                 keyColumn: "Id",
                 keyValue: 2,
-                column: "Clause",
-                value: "");
+                columns: new[] { "Clause", "Type" },
+                values: new object[] { "", "Prescribe" });
 
             migrationBuilder.InsertData(
                 table: "LicenseClassClauseMapping",
@@ -113,6 +118,10 @@ namespace Prime.Migrations
         {
             migrationBuilder.DropTable(
                 name: "LicenseClassClauseMapping");
+
+            migrationBuilder.DropColumn(
+                name: "Type",
+                table: "LicenseClassClause");
 
             migrationBuilder.DropColumn(
                 name: "CreatedTimeStamp",

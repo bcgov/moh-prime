@@ -22,6 +22,8 @@ namespace Prime.Models
         [Required]
         public string Clause { get; set; }
 
+        public string Type { get; set; }
+
         public DateTimeOffset EffectiveDate { get; set; }
 
         [JsonIgnore]

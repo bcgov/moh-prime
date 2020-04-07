@@ -23,6 +23,6 @@ namespace Prime.Services
 
         Task<bool> IsCurrentAsync(int accessTermId);
 
-        Task<bool> IsCurrentByEnrolleeAsync(int enrolleeId);
+        Task<bool> IsCurrentByEnrolleeAsync(Enrollee enrollee);
     }
 }
