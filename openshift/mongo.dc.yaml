@@ -1,87 +1,37 @@
-apiVersion: v1
 kind: Template
-labels:
-  template: mongo-persisten-template
+apiVersion: v1
 metadata:
-  creationTimestamp: null
-  name: mongo-dc
+  name: mongodb
+  annotations:
+    description: "MongoDB deployment template."
+    tags: "MongoDB"
 parameters:
-  - description: The name of the OpenShift Service exposed for the database.
-    displayName: Database Service Name
-    name: NAME
+  - name: NAME
+    displayName: Name
+    description: A prefix appended to all objects
     required: true
+    value: mongodb
+  - name: SUFFIX
+    displayName: Name Suffix
+    description: A suffix appended to all objects
+    value: ''
+    required: false
   - name: VERSION
     required: true
-  - name: SOURCE_CONTEXT_DIR
-    required: true
-  - name: SOURCE_REPOSITORY_URL
-    required: true
-  - name: SOURCE_REPOSITORY_REF
-    required: true
-  - name: SUFFIX
-    required: false
   - name: OC_NAMESPACE
     required: true
+    value: dqszvc
   - name: OC_APP
     required: true
-  - description: The name of the OpenShift Service exposed for the database.
-    displayName: Database Service Name
-    name: DATABASE_SERVICE_NAME
-    required: true
-    value: mongo
-  - description: The OpenShift ImageStream name.
-    displayName: IMAGE_STREAM_NAME
-    name: IMAGE_STREAM_NAME
-    value: mongo
-  - description: The OpenShift Namespace where the ImageStream resides.
-    displayName: Namespace
-    name: IMAGE_STREAM_NAMESPACE
-    value: 'dqszvc-tools'
-  - description: 'Version of PostgreSQL image to be used (9.2, 9.4, 9.5 or latest).'
-    displayName: Version of PostgreSQL Image
-    name: IMAGE_STREAM_VERSION
-    required: true
-    value: 'latest'
+    value: dev
   - description: 'Volume space available for data, e.g. 512Mi, 2Gi.'
     displayName: Volume Capacity
     name: VOLUME_CAPACITY
     required: true
-    value: 5Gi
-  - name: CPU_LIMIT
-    value: 500m
-  - name: MEMORY_LIMIT
-    value: 2Gi
-  - name: CPU_REQUEST
-    value: 200m
-  - name: MEMORY_REQUEST
-    value: 1.5Gi
-  - name: 
+    value: 1Gi
 objects:
   - apiVersion: v1
-    kind: PersistentVolumeClaim
-    metadata:
-      name: '${NAME}${SUFFIX}'
-      annotations:
-    spec:
-      accessModes:
-        - ReadWriteOnce
-      storageClassName": netapp-block-standard
-      resources:
-        requests:
-          storage: '${VOLUME_CAPACITY}'
-  - kind: ImageStream
-    apiVersion: v1
-    metadata:
-      name: '${NAME}${SUFFIX}'
-      creationTimestamp: null
-      labels:
-        shared: 'true'
-      annotations: {}
-    spec:
-      lookupPolicy:
-        local: false
-  - kind: DeploymentConfig
-    apiVersion: v1
+    kind: DeploymentConfig
     metadata:
       annotations:
         volume.beta.kubernetes.io/storage-class: netapp-block-standard
@@ -96,67 +46,115 @@ objects:
         maxUnavailable: 0
       template:
         metadata:
+          creationTimestamp: null
           labels:
             name: '${NAME}${SUFFIX}'
         spec:
           containers:
-            - capabilities: {}
-              env:
-                - name: MONGO_INITDB_ROOT_USERNAME
+            - env:
+                - name: MONGODB_USER
                   valueFrom:
                     secretKeyRef:
                       key: database-user
-                      name: 'postgresql-secret'
-                - name: MONGO_INITDB_ROOT_PASSWORD
+                      name: postgresql-secret
+                - name: MONGODB_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       key: database-password
-                      name: 'postgresql-secret'
-              image: ' '
+                      name: postgresql-secret
+                - name: MONGODB_ADMIN_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: database-admin-password
+                      name: postgresql-secret
+                - name: MONGODB_DATABASE
+                  valueFrom:
+                    secretKeyRef:
+                      key: database-name
+                      name: postgresql-secret
+              image: >-
+                docker-registry.default.svc:5000/openshift/mongodb@sha256:fae76f90d3f00fec19a6da648f590de7c1cee63f42915cdf04416682864ce6b9
               imagePullPolicy: IfNotPresent
               livenessProbe:
+                failureThreshold: 3
                 initialDelaySeconds: 30
+                periodSeconds: 10
+                successThreshold: 1
                 tcpSocket:
-                  port: 8081
+                  port: 27017
                 timeoutSeconds: 1
-              name: mongo
+              name: ${NAME}${SUFFIX}
               ports:
-                - containerPort: 8081
+                - containerPort: 27017
                   protocol: TCP
+              readinessProbe:
+                exec:
+                  command:
+                    - /bin/sh
+                    - '-i'
+                    - '-c'
+                    - >-
+                      mongo 127.0.0.1:27017/$MONGODB_DATABASE -u $MONGODB_USER -p
+                      $MONGODB_PASSWORD --eval="quit()"
+                failureThreshold: 3
+                initialDelaySeconds: 3
+                periodSeconds: 10
+                successThreshold: 1
+                timeoutSeconds: 1
               resources:
-                requests:
-                  cpu: '${CPU_REQUEST}'
-                  memory: '${MEMORY_REQUEST}'
                 limits:
-                  cpu: '${CPU_LIMIT}'
-                  memory: '${MEMORY_LIMIT}'
+                  memory: 512Mi
               securityContext:
                 capabilities: {}
                 privileged: false
               terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
               volumeMounts:
                 - mountPath: /var/lib/mongodb/data
-                  name: '${NAME}${SUFFIX}-data'
-                - mountPath: /var/run/mongo
-                  name: '${NAME}${SUFFIX}-run'
+                  name: ${NAME}${SUFFIX}-data
           dnsPolicy: ClusterFirst
           restartPolicy: Always
+          schedulerName: default-scheduler
+          securityContext: {}
+          terminationGracePeriodSeconds: 30
           volumes:
-            - name: '${NAME}${SUFFIX}-data'
+            - name: ${NAME}${SUFFIX}-data
               persistentVolumeClaim:
-                claimName: '${NAME}${SUFFIX}'
-            - name: '${NAME}${SUFFIX}-run'
+                claimName: ${NAME}${SUFFIX}
+            - name: ${NAME}${SUFFIX}-run
               emptyDir: {}
+      test: false
       triggers:
         - imageChangeParams:
             automatic: true
             containerNames:
-              - mongo
+              - ${NAME}${SUFFIX}
             from:
               kind: ImageStreamTag
-              name: 'mongo:latest'
-              namespace: dqszvc-tools
-            lastTriggeredImage: ''
+              name: 'mongodb:3.2'
+              namespace: openshift
+            lastTriggeredImage: >-
+              docker-registry.default.svc:5000/openshift/mongodb@sha256:fae76f90d3f00fec19a6da648f590de7c1cee63f42915cdf04416682864ce6b9
           type: ImageChange
         - type: ConfigChange
-    status: {}
+      details:
+        causes:
+          - type: ConfigChange
+        message: config change
+      latestVersion: 1
+      observedGeneration: 2
+      readyReplicas: 1
+      unavailableReplicas: 0
+      updatedReplicas: 1
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: ${NAME}${SUFFIX}
+      annotations:
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      storageClassName": netapp-block-standard
+      resources:
+        requests:
+          storage: '${VOLUME_CAPACITY}'

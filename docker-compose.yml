@@ -20,7 +20,7 @@ services:
   mongo:
     restart: always
     container_name: primemongodb
-    image: mongo:4.2.5-bionic
+    image: mongo:3
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: prime

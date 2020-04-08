@@ -89,7 +89,6 @@ pipeline {
                         script {
                             echo "Demo (MASTER) ..."
                             sh "./player.sh build postgres test -p SUFFIX='-demo'"
-                            sh "./player.sh build mongo test -p SUFFIX='-demo'"
                             sh "./player.sh build api test ${API_ARGS} -p SUFFIX='-demo'"
                             sh "./player.sh build frontend test ${FRONTEND_ARGS} -p SUFFIX='-demo'"
                             sh "./player.sh deploy postgres test -p SUFFIX='-demo'"
