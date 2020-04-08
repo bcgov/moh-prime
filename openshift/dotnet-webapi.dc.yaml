@@ -239,7 +239,7 @@ objects:
           targetPort: 5001
       selector:
         io.kompose.service: "${NAME}${SUFFIX}"
-    - apiVersion: v1
+  - apiVersion: v1
     kind: PersistentVolumeClaim
     metadata:
       name: '${NAME}${SUFFIX}-logs'
