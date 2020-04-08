@@ -10,6 +10,9 @@ namespace Prime.Models
     [Table("LicenseClassClause")]
     public class LicenseClassClause : BaseAuditable, IAccessClause
     {
+        public static string Dispense = "Dispense";
+        public static string Prescribe = "Prescribe";
+
         public LicenseClassClause()
         {
             // Create lists so they don't have be instantiated when items need to be added

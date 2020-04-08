@@ -10,8 +10,8 @@ namespace Prime.Configuration
             get
             {
                 return new[] {
-                    new LicenseClassClause { Id = 1, Clause = "", Type = "Dispense", EffectiveDate = SEEDING_DATE, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new LicenseClassClause { Id = 2, Clause = "", Type = "Prescribe", EffectiveDate = SEEDING_DATE, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE }
+                    new LicenseClassClause { Id = 1, Clause = "", Type = LicenseClassClause.Dispense, EffectiveDate = SEEDING_DATE, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseClassClause { Id = 2, Clause = "", Type = LicenseClassClause.Prescribe, EffectiveDate = SEEDING_DATE, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE }
                 };
             }
         }
