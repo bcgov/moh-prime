@@ -61,3 +61,7 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
+
+// Temporary until the bug fix is pushed out in a @angular/cli update
+// @see https://github.com/angular/angular-cli/pull/17364
+window['_rollupMoment__default'] = null;
