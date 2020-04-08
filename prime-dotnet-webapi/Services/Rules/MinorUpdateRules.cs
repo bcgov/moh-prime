@@ -47,7 +47,7 @@ namespace Prime.Services.Rules
                 return false;
             }
 
-            return await _accessTermService.IsCurrentAsync(signedToa.Id);
+            return await _accessTermService.IsCurrentByEnrolleeAsync(enrollee);
         }
     }
 
