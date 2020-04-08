@@ -148,31 +148,6 @@ namespace Prime.Services
         }
 
         /// <summary>
-        /// Returns true if this access term has no newer versions
-        /// </summary>
-        public async Task<bool> IsCurrentAsync(int accessTermId)
-        {
-            // Currently, only the User Clause is versioned, and has different versions based on user class (OBO vs RU)
-            // Uses an anonymous object select to avoid fetching the user clause text, which we dont need.
-            // TODO: perhaps LINQ GroupBy to make this 1 DB call?
-
-            var userClause = await _context.AccessTerms
-                .Where(at => at.Id == accessTermId)
-                .Select(at => new
-                {
-                    EnrolleeClassification = at.UserClause.EnrolleeClassification,
-                    EffectiveDate = at.UserClause.EffectiveDate
-                })
-                .SingleAsync();
-
-            bool aNewerUserClause = await _context.UserClauses
-                .Where(uc => uc.EnrolleeClassification == userClause.EnrolleeClassification)
-                .AnyAsync(uc => uc.EffectiveDate > userClause.EffectiveDate);
-
-            return !aNewerUserClause;
-        }
-
-        /// <summary>
         /// Returns true if the enrollees' most recent accepted access term has no newer versions
         /// </summary>
         public async Task<bool> IsCurrentByEnrolleeAsync(Enrollee enrollee)
@@ -249,7 +224,6 @@ namespace Prime.Services
                 .FirstOrDefaultAsync();
         }
 
-        // TODO no provided logic for how license class clauses are chosen
         private async Task<IEnumerable<AccessTermLicenseClassClause>> GetAccessTermLicenseClassClauses(Enrollee enrollee, AccessTerm accessTerms)
         {
             var licenseClassClauses = new List<LicenseClassClause>();
