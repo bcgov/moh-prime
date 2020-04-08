@@ -161,20 +161,27 @@ namespace Prime.Services
                 .OrderByDescending(at => at.AcceptedDate)
                 .FirstOrDefaultAsync();
 
-            var currentAccessTerm = await GenerateAccessTermAsync(enrollee);
-
-            if (accessTerm.GlobalClauseId != currentAccessTerm.GlobalClause?.Id
-               || accessTerm.UserClauseId != currentAccessTerm.UserClause.Id)
+            if (accessTerm != null)
             {
-                current = false;
-            }
+                var currentAccessTerm = await GenerateAccessTermAsync(enrollee);
 
-            foreach (var lcc in accessTerm.AccessTermLicenseClassClauses)
-            {
-                if (currentAccessTerm.AccessTermLicenseClassClauses.FindAll(c => c.LicenseClassClause.Id == lcc.LicenseClassClauseId).Count == 0)
+                if (accessTerm.GlobalClauseId != currentAccessTerm.GlobalClause.Id
+                   || accessTerm.UserClauseId != currentAccessTerm.UserClause.Id)
                 {
                     current = false;
                 }
+
+                foreach (var lcc in accessTerm.AccessTermLicenseClassClauses)
+                {
+                    if (currentAccessTerm.AccessTermLicenseClassClauses.FindAll(c => c.LicenseClassClause.Id == lcc.LicenseClassClauseId).Count == 0)
+                    {
+                        current = false;
+                    }
+                }
+            }
+            else
+            {
+                return false;
             }
 
             return current;
