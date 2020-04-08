@@ -29,6 +29,12 @@ parameters:
     name: VOLUME_CAPACITY
     required: true
     value: 1Gi
+  - name: SOURCE_CONTEXT_DIR
+    required: true
+  - name: SOURCE_REPOSITORY_URL
+    required: true
+  - name: SOURCE_REPOSITORY_REF
+    required: true
 objects:
   - apiVersion: v1
     kind: DeploymentConfig
