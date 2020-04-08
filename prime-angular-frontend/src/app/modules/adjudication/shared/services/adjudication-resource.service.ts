@@ -251,7 +251,7 @@ export class AdjudicationResource {
         map((response: ApiHttpResponse<AccessTerm[]>) => response.result),
         tap((accessTerms: AccessTerm[]) => this.logger.info('ACCESS_TERMS', accessTerms)),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Access Terms could not be retrieved');
+          this.toastService.openErrorToast('Access terms could not be retrieved');
           this.logger.error('[Adjudication] AdjudicationResource::getAccessTerms error has occurred: ', error);
           throw error;
         })
