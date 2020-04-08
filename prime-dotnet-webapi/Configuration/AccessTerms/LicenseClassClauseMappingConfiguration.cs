@@ -11,7 +11,7 @@ namespace Prime.Configuration
             get
             {
                 return new[] {
-                    new LicenseClassClauseMapping { LicenseCode = 1, OrganizatonTypeCode = 2, LicenseClassClauseId = 3, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseClassClauseMapping { LicenseCode = 1, OrganizatonTypeCode = 2, LicenseClassClauseId = 1, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new LicenseClassClauseMapping { LicenseCode = 1, OrganizatonTypeCode = 2, LicenseClassClauseId = 2, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new LicenseClassClauseMapping { LicenseCode = 1, OrganizatonTypeCode = 3, LicenseClassClauseId = 1, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new LicenseClassClauseMapping { LicenseCode = 1, OrganizatonTypeCode = 3, LicenseClassClauseId = 2, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE }
