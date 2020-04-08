@@ -55,6 +55,7 @@ namespace Prime
             services.AddScoped<IFeedbackService, FeedbackService>();
             services.AddScoped<IBusinessEventService, BusinessEventService>();
             services.AddScoped<ISubmissionService, SubmissionService>();
+            services.AddScoped<IRazorConverterService, RazorConverterService>();
 
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
@@ -93,6 +94,7 @@ namespace Prime
             services.AddSwaggerGenNewtonsoftSupport();
 
             services.AddHttpContextAccessor();
+            services.AddRazorPages();
 
             this.ConfigureDatabase(services);
 

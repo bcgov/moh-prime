@@ -74,6 +74,7 @@ namespace Prime
         public DbSet<GlobalClause> GlobalClauses { get; set; }
         public DbSet<UserClause> UserClauses { get; set; }
         public DbSet<LicenseClassClause> LicenseClassClauses { get; set; }
+        public DbSet<LicenseClassClauseMapping> LicenseClassClauseMappings { get; set; }
         public DbSet<LimitsConditionsClause> LimitsConditionsClauses { get; set; }
         public DbSet<BusinessEvent> BusinessEvents { get; set; }
         public DbSet<Feedback> Feedback { get; set; }
@@ -168,6 +169,7 @@ namespace Prime
             modelBuilder.ApplyConfiguration(new GlobalClauseConfiguration());
             modelBuilder.ApplyConfiguration(new UserClauseConfiguration());
             modelBuilder.ApplyConfiguration(new LicenseClassClauseConfiguration());
+            modelBuilder.ApplyConfiguration(new LicenseClassClauseMappingConfiguration());
 
             modelBuilder.ApplyConfiguration(new BusinessEventTypeConfiguration());
 

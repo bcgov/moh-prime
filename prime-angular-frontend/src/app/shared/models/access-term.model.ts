@@ -3,12 +3,7 @@ import { EnrolleeClassification } from '@shared/enums/enrollee-classification.en
 export interface AccessTerm {
   id: number;
   enrolleeId: number;
-  globalClauseId: number;
-  globalClause: Clause;
-  userClauseId: number;
-  userClause: UserClause;
-  licenseClassClauses: Clause[];
-  limitsConditionsClause: Clause;
+  termsOfAccess: string;
   effectiveDate: string;
   createdDate: string;
   acceptedDate?: string;

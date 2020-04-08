@@ -10,6 +10,9 @@ namespace Prime.Models
     [Table("LicenseClassClause")]
     public class LicenseClassClause : BaseAuditable, IAccessClause
     {
+        public static string Dispense = "Dispense";
+        public static string Prescribe = "Prescribe";
+
         public LicenseClassClause()
         {
             // Create lists so they don't have be instantiated when items need to be added
@@ -22,9 +25,14 @@ namespace Prime.Models
         [Required]
         public string Clause { get; set; }
 
+        public string Type { get; set; }
+
         public DateTimeOffset EffectiveDate { get; set; }
 
         [JsonIgnore]
         public List<AccessTermLicenseClassClause> AccessTermLicenseClassClauses { get; set; }
+
+        [JsonIgnore]
+        public ICollection<LicenseClassClauseMapping> LicenseClassClauseMappings { get; set; }
     }
 }

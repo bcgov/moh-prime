@@ -22,15 +22,18 @@ namespace Prime.Controllers
         private readonly IEnrolleeService _enrolleeService;
         private readonly IAccessTermService _accessTermService;
         private readonly IEnrolleeProfileVersionService _enrolleeProfileVersionService;
+        private readonly IRazorConverterService _razorConverterService;
 
         public EnrolleesAccessTermsController(
             IEnrolleeService enrolleeService,
             IAccessTermService accessTermService,
-            IEnrolleeProfileVersionService enrolleeProfileVersionService)
+            IEnrolleeProfileVersionService enrolleeProfileVersionService,
+            IRazorConverterService razorConverterService)
         {
             _enrolleeService = enrolleeService;
             _accessTermService = accessTermService;
             _enrolleeProfileVersionService = enrolleeProfileVersionService;
+            _razorConverterService = razorConverterService;
         }
 
         // GET: api/Enrollees/access-terms
@@ -95,9 +98,10 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Access term not found with id {accessTermId} for enrollee id: {enrolleeId}"));
             }
 
-            var accessTerms = await _accessTermService.GetEnrolleesAccessTermAsync(enrolleeId, accessTermId);
+            AccessTerm accessTerm = await _accessTermService.GetEnrolleesAccessTermAsync(enrolleeId, accessTermId);
+            accessTerm.TermsOfAccess = await _razorConverterService.RenderViewToStringAsync("/Views/AccessTerm/TermsOfAccess.cshtml", accessTerm);
 
-            return Ok(ApiResponse.Result(accessTerms));
+            return Ok(ApiResponse.Result(accessTerm));
         }
 
         // GET: api/Enrollees/5/access-terms/latest?signed=true
@@ -126,22 +130,17 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            AccessTerm accessTerm;
+            AccessTerm accessTerm = (signed)
+                ? await _accessTermService.GetMostRecentAcceptedEnrolleesAccessTermAsync(enrolleeId)
+                : await _accessTermService.GetMostRecentNotAcceptedEnrolleesAccessTermAsync(enrolleeId);
+            accessTerm.TermsOfAccess = await _razorConverterService.RenderViewToStringAsync("/Views/AccessTerm/TermsOfAccess.cshtml", accessTerm);
 
-            if (signed)
-            {
-                accessTerm = await _accessTermService.GetMostRecentAcceptedEnrolleesAccessTermAsync(enrolleeId);
-            }
-            else
-            {
-                accessTerm = await _accessTermService.GetMostRecentNotAcceptedEnrolleesAccessTermAsync(enrolleeId);
-            }
             return Ok(ApiResponse.Result(accessTerm));
         }
 
         // GET: api/Enrollees/5/access-terms/3/enrolment
         /// <summary>
-        /// Get the enrolment used for the given access term
+        /// Get the enrolment used for the given access term.
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="accessTermId"></param>

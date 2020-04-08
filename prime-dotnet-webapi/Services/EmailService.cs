@@ -128,7 +128,7 @@ namespace Prime.Services
                     || ex is SmtpFailedRecipientException
                     || ex is SmtpFailedRecipientsException)
                 {
-                    // TODO log mail exception, perhaps in a table in the database?
+                    // TODO log mail exception
                 }
 
                 throw;
@@ -147,7 +147,7 @@ namespace Prime.Services
             body += "has been approved for <b>PharmaNet</b> access. Please see <b>PRIME enrolment information</b> in URL below.<br><br>";
             body += $"<a href=\"{token.FrontendUrl}\">{token.FrontendUrl}</a>. ";
             body += $"<b>This link will expire after {_certificateService.GetMaxViews()} views or {_certificateService.GetExpiryDays()} days</b>.<br><br>";
-            body += "Thank you.";
+            body += "Thank you. ";
             return body;
         }
 
