@@ -163,7 +163,7 @@ namespace Prime.Services
 
             var currentAccessTerm = await GenerateAccessTermAsync(enrollee);
 
-            if (accessTerm.GlobalClauseId != currentAccessTerm.GlobalClause.Id
+            if (accessTerm.GlobalClauseId != currentAccessTerm.GlobalClause?.Id
                || accessTerm.UserClauseId != currentAccessTerm.UserClause.Id)
             {
                 current = false;
