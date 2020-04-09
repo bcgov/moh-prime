@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Prime.Models.Api;
 using Prime.Services;
+using System.IO;
 
 namespace Prime.Controllers
 {
@@ -28,9 +29,11 @@ namespace Prime.Controllers
         [HttpPost(Name = nameof(PostPHSA))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiResultResponse<int>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<int>> PostPHSA(FromBodyText body)
+        public async Task<ActionResult<int>> PostPHSA()
         {
-            var result = await _phsaService.CreatePHSAAsync(body);
+            StreamReader reader = new StreamReader(Request.Body);
+            string content = await reader.ReadToEndAsync();
+            var result = await _phsaService.CreatePHSAAsync(content);
             return Ok(ApiResponse.Result(result));
         }
 
