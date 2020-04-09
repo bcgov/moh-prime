@@ -5,7 +5,8 @@ ENV PGPASSWORD "postgres"
 ENV PGDATABASE "postgres"
 ENV PGHOST "primedb"
 ENV PGUSERNAME "postgres"
-
+ENV MONGOHOST "primemongodb"
+ENV MONGODATABASE "prime"
 RUN mkdir -p /opt/backup
 
 WORKDIR /opt/backup
