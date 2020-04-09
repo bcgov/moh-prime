@@ -42,10 +42,10 @@ function databaseBackup() {
     echo "${dateinfo} - Backup compressed for postgres database: ${PGDATABASE} " >> ${logfile}
     echo "Starting backup of metabase" >> ${logfile}
     # Backup Mongo
-    mongodump --host=${MONGOHOST} --port=27017 --username=${PGUSERNAME} --password="${POSTGRES_PASSWORD}" --out=${backup_dir}/mongodump-${MONGODATABASE}-${timestamp}.backup
+    mongodump --host=${MONGO_HOST} --port=27017 --username=${PGUSERNAME} --password="${POSTGRES_PASSWORD}" --out=${backup_dir}/mongodump-${MONGO_DATABASE}-${timestamp}.backup
     echo "${dateinfo} - Backup and Vacuum complete on ${dateinfo} for mongo database: ${PGDATABASE} " >> ${logfile}
-    tar czf ${backup_dir}/mongodump-${MONGODATABASE}-${timestamp}.backup.tgz ${backup_dir}/mongodump-${MONGODATABASE}-${timestamp}.backup 
-    rm -f ${backup_dir}/mongodump-${MONGODATABASE}-${timestamp}.backup
+    tar czf ${backup_dir}/mongodump-${MONGO_DATABASE}-${timestamp}.backup.tgz ${backup_dir}/mongodump-${MONGO_DATABASE}-${timestamp}.backup 
+    rm -f ${backup_dir}/mongodump-${MONGO_DATABASE}-${timestamp}.backup
     echo "${dateinfo} - Backup compressed for mongo database: ${PGDATABASE} " >> ${logfile}
     # Backup Metabase
     PGPASSWORD=${METABASE_PASSWORD}
