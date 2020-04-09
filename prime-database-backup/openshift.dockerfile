@@ -13,12 +13,14 @@ COPY . /opt
 COPY . /opt/backup
 COPY backup.cron /etc/cron.d
 
-RUN echo "Checking opt dir..." && \
-    ls -alh /opt && \
-    echo "Checking workdir..." && \
-    ls -alh /opt/backup && \
+RUN echo "Checking workdir..." && \
     apt-get update -yqq && \ 
-    apt-get install -yqq inetutils-ping vim nano net-tools cron && \ 
+    apt-get install -y inetutils-ping nano net-tools cron gnupg wget apt-transport-https ca-certificates libcurl4-openssl-dev
+
+RUN wget -qO - http://www.mongodb.org/static/pgp/server-4.2.asc | apt-key add - && \
+    echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-4.2.list && \
+    apt-get update && \
+    apt-get install -y mongodb-org-tools && \
     ls -alh /opt
 
 RUN chmod -R 755 /opt/backup && \
@@ -31,7 +33,8 @@ RUN chmod -R 755 /opt/backup && \
     cp /opt/backup.sh /etc/cron.daily && \
     cp /opt/backup.sh /etc/cron.hourly && \
     crontab /etc/cron.d/backup.cron && \
-    crontab -l
-    
+    crontab -l && \
+    chmod 777 /var/run
+
 #CMD tail -F /dev/null
 CMD /opt/entrypoint.sh
