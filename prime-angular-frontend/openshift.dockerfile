@@ -7,7 +7,7 @@ ENV NODE_ROOT /usr/src/app
 ENV REDIRECT_URL $REDIRECT_URL
 ENV OC_APP $OC_APP
 RUN mkdir -p /usr/src/app
-    
+
 RUN printenv && \
     pwd && \
     ls -alh
@@ -20,13 +20,13 @@ ENV KEYCLOAK_CLIENT_ID $KEYCLOAK_CLIENT_ID
 ENV JWT_WELL_KNOWN_CONFIG $JWT_WELL_KNOWN_CONFIG
 RUN apt-get update && \
     apt-get install -y nginx gettext-base && \
-    mkdir -p /var/cache/nginx && \ 
+    mkdir -p /var/cache/nginx && \
     mkdir -p /var/lib/nginx && \
-    mkdir -p /var/log/nginx && \ 
-    mkdir -p /var/cache/nginx/client_temp && \ 
-    touch /etc/nginx/conf.d/default.conf && \ 
-    chmod -R 777 /etc/nginx && \ 
-    chmod -R 777 /var/cache/nginx && \ 
+    mkdir -p /var/log/nginx && \
+    mkdir -p /var/cache/nginx/client_temp && \
+    touch /etc/nginx/conf.d/default.conf && \
+    chmod -R 777 /etc/nginx && \
+    chmod -R 777 /var/cache/nginx && \
     chmod -R 777 /var/lib/nginx && \
     chmod -R 777 /var/run && \
     chmod -R 777 /var/lib && \
@@ -36,15 +36,14 @@ COPY nginx.template.conf /etc/nginx/nginx.template.conf
 COPY entrypoint.sh /
 RUN echo "Populating environment..." && \
     (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
-RUN cat /usr/src/app/src/environments/environment.prod.ts && \ 
-    npm install @angular/cli@8.3.24  -g --silent && \ 
-    npm install && \ 
-    npm audit fix --only=prod && \ 
-    ng build --prod && \ 
+RUN cat /usr/src/app/src/environments/environment.prod.ts && \
+    npm install @angular/cli  -g --silent && \
+    npm install && \
+    npm audit fix && \
+    ng build --prod && \
     echo "NPM packages installed..."
 
-# RUN npm audit fix --only=prod && \ 
-#     npm install @angular-devkit/build-angular@0.803.24 \ 
+# RUN npm audit fix --only=prod && \
 # FROM nginx:1.15-alpine
 # COPY --from=buildDeps /usr/src/app/dist/angular-frontend /usr/share/nginx/html
 # RUN rm -f /etc/nginx/conf.d/default.conf
@@ -54,10 +53,10 @@ RUN cat /usr/src/app/src/environments/environment.prod.ts && \
 # COPY --from=buildDeps /usr/src/app/entrypoint.sh /etc/nginx
 RUN rm -fr /usr/share/nginx/html && \
     chmod -R 777 /usr/src/app/src && \
-    ln -s /usr/src/app/dist/angular-frontend /usr/share/nginx/html 
-RUN chmod +x /entrypoint.sh && \ 
+    ln -s /usr/src/app/dist/angular-frontend /usr/share/nginx/html
+RUN chmod +x /entrypoint.sh && \
     chmod 777 /entrypoint.sh && \
-    echo "Build completed." 
+    echo "Build completed."
 
 #WORKDIR /
 

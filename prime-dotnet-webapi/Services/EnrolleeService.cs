@@ -96,7 +96,7 @@ namespace Prime.Services
             {
                 item.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(item);
                 // Attach to the enrollee if they have signed the most recent ToA
-                item.HasMostRecentAccessTermSigned = await _accessTermService.IsCurrentByEnrolleeAsync(item.Id);
+                item.HasMostRecentAccessTermSigned = await _accessTermService.IsCurrentByEnrolleeAsync(item);
             }
 
             return items;
@@ -382,7 +382,7 @@ namespace Prime.Services
             }
             else
             {
-                await _businessEventService.CreateNoteEventAsync(enrolleeId, "Updated Limits and Conditions Note: " + newNote);
+                await _businessEventService.CreateNoteEventAsync(enrolleeId, "Updated Limits and Conditions Note: " + newNote.Note);
             }
 
             return newNote;
@@ -421,12 +421,20 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task<string> GetGpidForHpdidAsync(string hpdid)
+        public async Task<IEnumerable<HpdidLookup>> HpdidLookupAsync(IEnumerable<string> hpdids)
         {
+            if (hpdids == null)
+            {
+                throw new ArgumentNullException(nameof(hpdids));
+            }
+
+            hpdids = hpdids.Where(h => !string.IsNullOrWhiteSpace(h));
+
             return await _context.Enrollees
-                .Where(e => e.HPDID == hpdid)
-                .Select(e => e.GPID)
-                .SingleOrDefaultAsync();
+                .Include(e => e.AccessTerms)
+                .Where(e => hpdids.Contains(e.HPDID))
+                .Select(e => HpdidLookup.FromEnrollee(e))
+                .ToListAsync();
         }
     }
 }

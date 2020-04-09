@@ -1,5 +1,9 @@
 @import 'palette';
 
+.text-green {
+  color: theme_palette(green);
+}
+
 .mat-icon {
   color: theme-palette(blue);
   cursor: pointer;

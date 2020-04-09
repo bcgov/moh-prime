@@ -18,7 +18,7 @@ describe('ConfigService', () => {
   }));
 
   it('should create', () => {
-    const service: ConfigService = TestBed.get(ConfigService);
+    const service: ConfigService = TestBed.inject(ConfigService);
     expect(service).toBeTruthy();
   });
 });

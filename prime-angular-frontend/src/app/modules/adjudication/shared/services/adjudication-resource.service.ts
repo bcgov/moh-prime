@@ -9,12 +9,12 @@ import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
+import { Address } from '@shared/models/address.model';
 import { AccessTerm } from '@shared/models/access-term.model';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { HttpEnrolleeProfileVersion } from '@shared/models/enrollee-profile-history.model';
 
 import { Admin } from '@auth/shared/models/admin.model';
-import { Address } from '@enrolment/shared/models/address.model';
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
 import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
@@ -251,7 +251,7 @@ export class AdjudicationResource {
         map((response: ApiHttpResponse<AccessTerm[]>) => response.result),
         tap((accessTerms: AccessTerm[]) => this.logger.info('ACCESS_TERMS', accessTerms)),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Access Terms could not be retrieved');
+          this.toastService.openErrorToast('Access terms could not be retrieved');
           this.logger.error('[Adjudication] AdjudicationResource::getAccessTerms error has occurred: ', error);
           throw error;
         })

@@ -44,6 +44,6 @@ namespace Prime.Services
 
         Task<IEnumerable<BusinessEvent>> GetEnrolleeBusinessEvents(int enrolleeId);
 
-        Task<string> GetGpidForHpdidAsync(string hpdid);
+        Task<IEnumerable<HpdidLookup>> HpdidLookupAsync(IEnumerable<string> hpdids);
     }
 }

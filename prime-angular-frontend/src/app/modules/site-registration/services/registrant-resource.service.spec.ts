@@ -18,7 +18,7 @@ describe('RegistrantResourceService', () => {
   }));
 
   it('should be created', () => {
-    const service: RegistrantResource = TestBed.get(RegistrantResource);
+    const service: RegistrantResource = TestBed.inject(RegistrantResource);
     expect(service).toBeTruthy();
   });
 });

@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
 
 import { exhaustMap } from 'rxjs/operators';
@@ -60,14 +60,6 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
 
   public get isMobile(): boolean {
     return this.viewportService.isMobile;
-  }
-
-  public get isObo(): boolean {
-    return (this.accessTerm.userClause.enrolleeClassification === EnrolleeClassification.OBO);
-  }
-
-  public get isRu(): boolean {
-    return (this.accessTerm.userClause.enrolleeClassification === EnrolleeClassification.RU);
   }
 
   public get hasAgreed(): boolean {

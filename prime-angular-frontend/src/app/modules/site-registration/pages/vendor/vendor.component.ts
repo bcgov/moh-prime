@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, FormArray, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormGroup, FormBuilder, FormArray, FormControl } from '@angular/forms';
+
 import { ToastService } from '@core/services/toast.service';
-import { SiteRoutes } from '../../site-registration.routes';
+
+import { SiteRoutes } from '@registration/site-registration.routes';
 
 @Component({
   selector: 'app-vendor',

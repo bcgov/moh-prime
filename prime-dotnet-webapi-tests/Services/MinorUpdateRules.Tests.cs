@@ -97,6 +97,11 @@ namespace PrimeTests.Services
             profile.PreferredFirstName = "BIG CHANGES";
             await AssertAllowableChanges(false, enrollee, profile);
 
+            // Remove child object
+            profile = enrollee.ToViewModel();
+            profile.MailingAddress = null;
+            await AssertAllowableChanges(false, enrollee, profile);
+
             // Property on child object
             profile = enrollee.ToViewModel();
             profile.MailingAddress.City = "Flavortown, USA";
@@ -186,7 +191,7 @@ namespace PrimeTests.Services
         }
 
         [Fact]
-        public async void testAllowableChangesRule_SPEC()
+        public void testAllowableChangesRule_SPEC()
         {
             // Make sure there are no new types we don't know how to compare
             var knownTypes = new[]
@@ -203,7 +208,7 @@ namespace PrimeTests.Services
                 .GetProperties()
                 .Select(p => p.PropertyType)
                 .Distinct()
-                .Where(t => !knownTypes.Contains(t));
+                .Except(knownTypes);
 
             Assert.False(unknownTypes.Any(), $"At least one new type has been added to {nameof(EnrolleeProfileViewModel)}. Please update {nameof(AllowableChangesRule)} and/or {nameof(testAllowableChangesRule_SPEC)}");
         }
