@@ -107,7 +107,7 @@ export class EnrolmentResource {
     return this.apiResource.get<AccessTerm[]>(`enrollees/${enrolleeId}/access-terms`)
       .pipe(
         map((response: ApiHttpResponse<AccessTerm[]>) => response.result),
-        tap((accessTerms: AccessTerm[]) => this.logger.info('ACCESS_TERM', accessTerms))
+        tap((accessTerms: AccessTerm[]) => this.logger.info('ACCESS_TERMS', accessTerms))
       );
   }
 
@@ -124,7 +124,7 @@ export class EnrolmentResource {
     return this.apiResource.get<AccessTerm>(`enrollees/${enrolleeId}/access-terms/latest`, params)
       .pipe(
         map((response: ApiHttpResponse<AccessTerm>) => response.result),
-        tap((accessTerm: AccessTerm) => this.logger.info('ACCESS_TERM', accessTerm))
+        tap((accessTerm: AccessTerm) => this.logger.info('ACCESS_TERM_LATEST', accessTerm))
       );
   }
 

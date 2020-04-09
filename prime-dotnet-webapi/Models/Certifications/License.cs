@@ -26,5 +26,8 @@ namespace Prime.Models
         public ICollection<CollegeLicense> CollegeLicenses { get; set; }
 
         public ICollection<DefaultPrivilege> DefaultPrivileges { get; set; }
+
+        [JsonIgnore]
+        public ICollection<LicenseClassClauseMapping> LicenseClassClauseMappings { get; set; }
     }
 }

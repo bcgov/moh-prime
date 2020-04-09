@@ -1,0 +1,28 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+CREATE OR REPLACE FUNCTION insert_enrollee(in hpdid text, in gpid text) RETURNS void	
+AS $$
+DECLARE enrollee_id integer;
+BEGIN
+	INSERT INTO "Enrollee" ("HPDID", "GPID", "FirstName", "LastName", "DateOfBirth", "UserId", "ProfileCompleted", "AlwaysManual", "CreatedTimeStamp", "CreatedUserId", "UpdatedTimeStamp", "UpdatedUserId") 
+	VALUES (hpdid, gpid, 'NODELETE', 'CareConnect', '2020-02-02', uuid_generate_v4(), true, false, current_timestamp, uuid_nil(), current_timestamp, uuid_nil())
+	RETURNING "Id" into enrollee_id;
+
+	INSERT INTO "AccessTerm" ("EnrolleeId", "GlobalClauseId", "UserClauseId", "CreatedDate", "AcceptedDate", "ExpiryDate", "CreatedTimeStamp", "CreatedUserId", "UpdatedTimeStamp", "UpdatedUserId") 
+	VALUES (enrollee_id, 1, 5, current_timestamp, current_timestamp, current_timestamp + interval '1 year', current_timestamp, uuid_nil(), current_timestamp, uuid_nil());
+   
+	INSERT INTO "EnrolmentStatus" ("EnrolleeId", "StatusCode", "StatusDate", "CreatedTimeStamp", "CreatedUserId", "UpdatedTimeStamp", "UpdatedUserId") 
+	VALUES (enrollee_id, 1, current_timestamp, current_timestamp, uuid_nil(), current_timestamp, uuid_nil()),
+		(enrollee_id, 2, current_timestamp, current_timestamp, uuid_nil(), current_timestamp, uuid_nil()),
+		(enrollee_id, 3, current_timestamp, current_timestamp, uuid_nil(), current_timestamp, uuid_nil()),
+		(enrollee_id, 1, current_timestamp, current_timestamp, uuid_nil(), current_timestamp, uuid_nil());
+END;
+$$ LANGUAGE 'plpgsql';
+
+SELECT insert_enrollee('RIB3UKCTMR2JREVSU5TPSTTKIRXZMRXY', '1[pqe-Rq>O[!`C,[/jDU');
+SELECT insert_enrollee('HBRRUHOSAVAZZJTOZQJJZ7NZ3GUWTSFJ', '2tCP_Q=l[_L%B/)gSRC3');
+SELECT insert_enrollee('VTAZKCGLUQUYFE42Z5VI6EOX2EUUIHKK', '36c("H/(2KZNQ[Xc/jqs');
+SELECT insert_enrollee('ZA6M5B6XW4RXSZQ5QVLQXJMJ3S6MB2BV', '4-H`F4H9)''R)Wl#:7a0n');
+SELECT insert_enrollee('HEUBP53H73WRFTPY3LNHVYUP5Y5WWXGK', '515_`Ckjl5SUqo8"nJmN');
+SELECT insert_enrollee('2SY27NEZZP3SBABJARWP7IWOERBBGU22', '6b=.hj8?tgMUAkKPi$"l');
+SELECT insert_enrollee('SO4AXI7QVKPEELDDS3UY5YVQLHTWJTW4', '7Y''5;JDY6;YBsi17K50R');

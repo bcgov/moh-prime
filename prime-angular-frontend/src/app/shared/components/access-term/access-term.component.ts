@@ -1,10 +1,6 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { AccessTerm } from '@shared/models/access-term.model';
 
-const PLACEHOLDER = '{$lcPlaceholder}';
-const PREFIX = '<li><p class="bold underline">Additional Limits and Conditions</p>';
-const SUFFIX = '</li>';
-
 @Component({
   selector: 'app-access-term',
   templateUrl: './access-term.component.html',
@@ -13,16 +9,13 @@ const SUFFIX = '</li>';
 export class AccessTermComponent implements OnInit, OnChanges {
   @Input() public accessTerms: AccessTerm;
 
-  public clause: string;
+  public termsOfAccess: string;
 
   constructor() { }
 
   public ngOnChanges(change: SimpleChanges) {
     if (change.accessTerms.currentValue) {
-      const tempClause: string = this.accessTerms.userClause.clause;
-      const limits: string = this.accessTerms.limitsConditionsClause.clause;
-      const content = (limits === null) ? '' : PREFIX + limits + SUFFIX;
-      this.clause = tempClause.replace(PLACEHOLDER, content);
+      this.termsOfAccess = this.accessTerms.termsOfAccess;
     }
   }
 
