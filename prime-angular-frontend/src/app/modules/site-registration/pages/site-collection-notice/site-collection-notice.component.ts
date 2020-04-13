@@ -9,7 +9,6 @@ import { SiteRoutes } from '@registration/site-registration.routes';
   styleUrls: ['./site-collection-notice.component.scss']
 })
 export class SiteCollectionNoticeComponent implements OnInit {
-
   constructor(
     private route: ActivatedRoute,
     private router: Router
