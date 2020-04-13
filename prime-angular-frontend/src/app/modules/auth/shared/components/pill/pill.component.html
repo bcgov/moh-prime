@@ -1,7 +1,7 @@
-<div class="pill-container"
-     [class]="{ 'mirror': mirror }">
+<div class="pill-container">
   <div class="content">
     <ng-content select="section"></ng-content>
   </div>
-  <div class="background"></div>
+  <div class="background"
+       [class.mirror]="mirror"></div>
 </div>

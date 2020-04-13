@@ -27,7 +27,7 @@
     bottom: 0;
     width: 100%;
 
-    .mirror {
+    &.mirror {
       // Invert the background
       transform: scaleX(-1);
     }
