@@ -15,8 +15,16 @@
   // Prevent overlapping of the background image
   padding-left: 5rem;
 
-  p:last-child {
-    padding-bottom: 0;
+  h5 {
+    margin-bottom: 1rem;
+  }
+
+  p {
+    line-height: .75rem;
+
+    &:last-child {
+      padding-bottom: 0;
+    }
   }
 
   h5, p {
