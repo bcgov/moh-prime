@@ -17,6 +17,14 @@ import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-stat
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { UtilsService } from '@core/services/utils.service';
+import { AuthService } from '@auth/shared/services/auth.service';
+
+enum OrganizationEnum {
+  COMMUNITY_PRACTICE = 2,
+  COMMUNITY_PHARMACIST = 3,
+  DEVICE_PROVIDER = 5,
+  HEALTH_AUTHORITY = 1,
+}
 
 @Component({
   selector: 'app-organization',
@@ -38,7 +46,8 @@ export class OrganizationComponent extends BaseEnrolmentProfilePage implements O
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private authService: AuthService,
   ) {
     super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger, utilService);
 
@@ -55,8 +64,13 @@ export class OrganizationComponent extends BaseEnrolmentProfilePage implements O
   }
 
   public disableOrganization(organizationTypeCode: number): boolean {
+    if (this.authService.isCommunityPharmacist()) {
+      // If feature flagged enable "Community Practice" & "Community Pharmacist"
+      return !(organizationTypeCode === OrganizationEnum.COMMUNITY_PRACTICE
+        || organizationTypeCode === OrganizationEnum.COMMUNITY_PHARMACIST);
+    }
     // Omit organizations types that are not "Community Practices" for ComPap
-    return (organizationTypeCode !== 2);
+    return (organizationTypeCode !== OrganizationEnum.COMMUNITY_PRACTICE);
   }
 
   public removeOrganization(index: number) {
