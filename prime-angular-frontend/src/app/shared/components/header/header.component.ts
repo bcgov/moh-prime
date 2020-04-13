@@ -9,10 +9,12 @@ import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, Input
 export class HeaderComponent implements OnInit {
   @Input() public username: string;
   @Input() public isMobile: boolean;
+  @Input() public hasMobileSidemenu: boolean;
   @Output() public toggle: EventEmitter<void>;
   @Output() public logout: EventEmitter<void>;
 
   constructor() {
+    this.hasMobileSidemenu = true;
     this.toggle = new EventEmitter<void>();
     this.logout = new EventEmitter<void>();
   }
