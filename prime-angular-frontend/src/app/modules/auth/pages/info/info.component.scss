@@ -48,8 +48,9 @@ a {
   background-repeat: no-repeat;
   background-position-y: 20px;
 
-  @include media-breakpoint-up(md) {
-    background-position-y: 100px;
+  .step-container {
+    display: flex;
+    flex-direction: column;
   }
 
   &.step-1 {
@@ -57,54 +58,22 @@ a {
     background-position-x: 14px;
     background-size: 36px auto;
 
-    @include media-breakpoint-up(md) {
-      background-position-x: 95%;
-    }
-
-    @include media-breakpoint-up(lg) {
-      background-image: url('/assets/step_1.svg');
-    }
-
-    @include media-breakpoint-up(xl) {
-      background-position-x: 86%;
-      background-size: 46px auto;
+    .content {
+      // Force anchor to be on separate line
+      a {
+        display: block;
+      }
     }
   }
   &.step-2 {
     background-image: url('/assets/step_2.mobile.svg');
     background-position-x: 11px;
     background-size: 50px auto;
-
-    @include media-breakpoint-up(md) {
-      background-position-x: 95%;
-    }
-
-    @include media-breakpoint-up(lg) {
-      background-image: url('/assets/step_2.svg');
-      background-size: 65px auto;
-    }
-
-    @include media-breakpoint-up(xl) {
-      background-size: 85px auto;
-    }
   }
   &.step-3 {
     background-image: url('/assets/step_3.mobile.svg');
     background-position-x: 13px;
     background-size: 45px auto;
-
-    @include media-breakpoint-up(md) {
-      background-position-x: 95%;
-    }
-
-    @include media-breakpoint-up(lg) {
-      background-image: url('/assets/step_3.svg');
-      background-size: 65px auto;
-    }
-
-    @include media-breakpoint-up(xl) {
-      background-size: 85px auto;
-    }
   }
 
   .content {
@@ -117,49 +86,96 @@ a {
       color: theme-palette(blue, light);
     }
 
-    @include media-breakpoint-only(md) {
-      h2 {
-        // Decrease slightly to reduce line wrapping
-        font-size: 1.25rem;
-      }
-    }
-
     a {
+      color: theme-palette(blue);
       font-weight: bold;
       text-decoration: underline;
       white-space: nowrap;
     }
   }
 
-  @include media-breakpoint-up(md) {
-    // TODO avoid by adding inner-div
-    .content {
-      padding-left: $grid-gutter-width / 2;
-      padding-right: $grid-gutter-width / 2;
-    }
-  }
-
-  .icon {
+  .info-graphic {
     padding-top: 1.2rem;
     padding-bottom: 2.7rem;
     text-align: center;
+  }
+}
 
-    @include media-breakpoint-only(md) {
-      padding-bottom: 4rem;
+@include media-breakpoint-up(md) {
+  .steps {
+    background-position-y: 100px;
 
-      img {
-        width: 125px;
-        height: auto;
-      }
+    .step-container {
+      flex-direction: column-reverse;
     }
 
-    @include media-breakpoint-only(lg) {
-      padding-bottom: 3rem;
+    &.step-1,
+    &.step-2,
+    &.step-3 {
+      background-position-x: 95%;
+    }
 
-      img {
-        width: 145px;
-        height: auto;
+    .content {
+      padding-left: 0;
+      padding-right: 0;
+
+      h2 {
+        // Decrease slightly to reduce line wrapping
+        font-size: 1.25rem;
       }
+    }
+  }
+}
+
+@include media-breakpoint-only(md) {
+  .steps .info-graphic {
+    padding-bottom: 4rem;
+
+    img {
+      width: 125px;
+      height: auto;
+    }
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .steps {
+    &.step-1 {
+      background-image: url('/assets/step_1.svg');
+    }
+    &.step-2,
+    &.step-3 {
+      background-size: 65px auto;
+    }
+    &.step-2 {
+      background-image: url('/assets/step_2.svg');
+    }
+    &.step-3 {
+      background-image: url('/assets/step_3.svg');
+    }
+  }
+}
+
+@include media-breakpoint-only(lg) {
+  .steps .info-graphic {
+    padding-bottom: 3rem;
+
+    img {
+      width: 145px;
+      height: auto;
+    }
+  }
+}
+
+@include media-breakpoint-up(xl) {
+  .steps {
+    &.step-1 {
+      background-position-x: 86%;
+      background-size: 46px auto;
+    }
+    &.step-2,
+    &.step-3 {
+      background-size: 85px auto;
     }
   }
 }
