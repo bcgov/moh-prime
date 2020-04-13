@@ -84,7 +84,7 @@ a {
     line-height: 1.75rem;
     // Provide space for background image of step #
     padding-left: 3.75rem;
-    padding-right: 2.5rem;
+    padding-right: 1.25rem;
 
     h2 {
       color: theme-palette(blue, light);
@@ -160,12 +160,18 @@ a {
 }
 
 @include media-breakpoint-only(lg) {
-  .steps .info-graphic {
-    padding-bottom: 3rem;
+  .steps {
+    &.step-1 {
+      background-position-x: 86%;
+    }
 
-    img {
-      width: 145px;
-      height: auto;
+    .info-graphic {
+      padding-bottom: 3rem;
+
+      img {
+        width: 145px;
+        height: auto;
+      }
     }
   }
 }
@@ -173,7 +179,6 @@ a {
 @include media-breakpoint-up(xl) {
   .steps {
     &.step-1 {
-      background-position-x: 86%;
       background-size: 46px auto;
     }
     &.step-2,
