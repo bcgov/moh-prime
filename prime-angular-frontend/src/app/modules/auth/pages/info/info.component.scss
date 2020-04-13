@@ -3,7 +3,10 @@
 
 div.container {
   margin-top: 1.5rem;
-  margin-bottom: 4rem;
+
+  @include media-breakpoint-up(md) {
+    margin-bottom: 4rem;
+  }
 }
 
 h1 {
@@ -15,14 +18,19 @@ h1 {
   @include media-breakpoint-up(md) {
     font-size: 2rem;
   }
-  @include media-breakpoint-up(lg) {
-    // font-size: 1.1rem;
-  }
+}
+
+.actions {
+  margin-bottom: 1.5rem;
 }
 
 .mat-flat-button {
   width: 100%;
   min-width: 220px;
+
+  @include media-breakpoint-up(md) {
+    width: 300px;
+  }
 
   &.large {
     height: 46px;
@@ -33,10 +41,6 @@ h1 {
   &.light {
     background-color: theme-palette(blue, light);
     color: white;
-  }
-
-  @include media-breakpoint-up(md) {
-    width: 300px;
   }
 }
 
@@ -79,7 +83,7 @@ a {
   .content {
     line-height: 1.75rem;
     // Provide space for background image of step #
-    padding-left: 4.5rem;
+    padding-left: 3.75rem;
     padding-right: 2.5rem;
 
     h2 {
@@ -87,7 +91,6 @@ a {
     }
 
     a {
-      color: theme-palette(blue);
       font-weight: bold;
       text-decoration: underline;
       white-space: nowrap;
@@ -176,6 +179,22 @@ a {
     &.step-2,
     &.step-3 {
       background-size: 85px auto;
+    }
+  }
+}
+
+.support {
+  padding-bottom: 2rem;
+
+  @include media-breakpoint-up(sm) {
+    padding-top: 1rem;
+  }
+  @include media-breakpoint-up(md) {
+    padding-top: 3rem;
+
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
     }
   }
 }
