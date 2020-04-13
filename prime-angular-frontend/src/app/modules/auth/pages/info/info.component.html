@@ -1,105 +1,126 @@
-<div>
-  <div class="container">
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12 pb-3">
 
-    <div class="row mt-4 enrolment-container">
-      <div class="col-md-3 d-none d-md-block">
+      <app-prime-logo label="right"
+                      [size]="(isMobile) ? 'small' : 'medium'"></app-prime-logo>
 
-        <img src="/assets/prime-logo-textless.svg"
-             class="logo"
-             alt="PRIME Logo">
+    </div>
+    <div class="col-sm-12">
 
-      </div>
-      <div class="col-md-7 col-sm-12">
-        <app-page-header>
-          <span class="font-weight-bolder font-size-huge">PRIME</span>
-        </app-page-header>
-        <app-page-subheader [divider]="false">
-          <ng-container appPageSubheaderTitle>Request approval to access PharmaNet</ng-container>
-        </app-page-subheader>
+      <h1 class="mb-1">Request approval to access PharmaNet</h1>
 
-        <div class="ml-2">
-          <p class="font-italic font-weight-light mb-4 accent">Before you start:</p>
+      <p class="mb-4">
+        <em>for health professionals of British Columbia</em>
+      </p>
 
-          <div class="font-weight-bold">
-            Set up your BC Services Card on your mobile device<br>
-            Have your College licence number and next renewal date ready <small class="font-italic font-weight-light">
-            if applicable</small>
-          </div>
+    </div>
+    <div class="col-sm-12">
 
-          <div class="mt-4">
-            <button mat-flat-button
-                    class="mr-4 mb-4 large"
-                    color="primary"
-                    [disabled]="isIE"
-                    (click)="loginUsingBCSC()">Log in</button>
+      <div class="row mb-4">
+        <div class="col col-md-auto">
 
-            <button mat-flat-button
-                    class="large light"
-                    (click)="scrollTo()">Learn More</button>
-          </div>
+          <button mat-flat-button
+                  color="primary"
+                  class="large"
+                  (click)="loginUsingBCSC()">Begin Enrolment</button>
+
+        </div>
+        <div class="col col-md-auto">
+
+          <button mat-flat-button
+                  color="primary"
+                  class="large light"
+                  (click)="loginUsingBCSC()">Renew or Update Information</button>
+
         </div>
       </div>
+
     </div>
+    <div class="col-sm-12 col-md-4 steps step-1">
 
-  </div>
-
-  <app-pill [variant]="1">
-    <div>
       <div class="row">
-        <div class="col-sm-12 mb-4">
-          <h1 class="font-weight-bold"
-              #learnmore>PRIME Enrolment Steps</h1>
-        </div>
-      </div>
-      <div class="row mb-4 justify-content-center">
-        <div class="col-sm-12 col-md-3 info mb-4">
-          <h3>BC Services Card</h3>
-          <p>
-            To get started you will need to set up your BC Services Card on your mobile device.
-            This is a quick process and it usually only takes a few minutes.
-          </p>
-          <a href="https://www2.gov.bc.ca/gov/content/governments/government-id/bc-services-card/login-with-card/mobile-card/set-up-mobile-card" target="_blank" rel="noopener noreferrer">
-            <small class="anchor font-weight-bold">HOW TO SET UP A MOBILE CARD</small>
-          </a>
-        </div>
-        <div class="col-sm-12 col-md-3 info mb-4">
-          <h3>PRIME Enrolment</h3>
-          <p><strong>1.</strong>
-            Confirm or update your contact information</p>
-          <p><strong>2.</strong>
-            Provide professional information where applicable</p>
-          <p><strong>3.</strong>
-            Answer a set of Self Declaration questions</p>
-          <p><strong>4.</strong>
-            Carefully read and accept the PharmaNet Terms of Access</p>
-        </div>
-        <div class="col-sm-12 col-md-3 info mb-4">
-          <h3>Enrolment Notification</h3>
-          <p>
-            Once approved, send your enrolment notification to the PharmaNet provider used
-            by your place of work, or to your system administrator.
-          </p>
-        </div>
-      </div>
-    </div>
-  </app-pill>
+        <div class="col-12 content">
+          <h2>BC Services Card</h2>
 
-  <div>
-    <div class="row">
-      <div class="col-sm-12 mb-4 text-center">
-        <h1 class="font-weight-bold">Get Support</h1>
+          <p>
+            Set up your BC Services Card on your mobile device if you haven't done so already (this is a one time
+            process). Once finished come back to PRIME and complete the enrolment.
+
+            <a href="https://www2.gov.bc.ca/gov/content/governments/government-id/bc-services-card/login-with-card/mobile-card/set-up-mobile-card"
+               target="_blank"
+               rel="noopener noreferrer">
+              How to set up a Mobile Card
+            </a>
+          </p>
+
+        </div>
+        <div class="col-12 icon order-md-first">
+
+          <img src="/assets/bc_services_card.svg"
+               alt="BC Services Card Icon">
+
+        </div>
       </div>
+
     </div>
-    <div class="row mb-4 justify-content-center">
-      <div class="col-sm-12 col-md-5 info mb-4">
-        <p class="text-center">
+    <div class="col-sm-12 col-md-4">
+
+      <div class="row">
+        <div class="col-12 content">
+          <h2>PRIME Enrolment</h2>
+
+          <p>
+            Complete the PRIME Enrolment by answering a set of questions. It usually only takes a few minutes. You
+            will need your college licence information including your licence number and next renewal date, if you
+            are
+            registered by a college.
+          </p>
+
+        </div>
+        <div class="col-12 icon order-md-first">
+
+          <img src="/assets/enrolment.svg"
+               alt="Enrolment Icon">
+
+        </div>
+      </div>
+
+    </div>
+    <div class="col-sm-12 col-md-4 steps step-3">
+
+      <div class="row">
+        <div class="col-12 content">
+          <h2>Enrolment Notification</h2>
+
+          <p>
+            Once approved by the Ministry of Health, notify your PharmaNet administrator so they can set up your
+            PharmaNet access with your vendor.
+          </p>
+
+        </div>
+        <div class="col-12 icon order-md-first">
+
+          <img src="/assets/notification.svg"
+               alt="Notification Icon">
+
+        </div>
+      </div>
+
+    </div>
+    <!-- <div class="col-sm-12">
+
+      <app-pill [variant]="1">
+        <h2>Get Support</h2>
+
+        <p>
           Questions about PRIME should be directed to:<br>
           <app-prime-phone></app-prime-phone> (<app-prime-phone mode="normal"></app-prime-phone>)
           <br>
           <app-prime-support-email></app-prime-support-email>
         </p>
-      </div>
-    </div>
+      </app-pill>
 
+    </div> -->
   </div>
 </div>

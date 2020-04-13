@@ -1,95 +1,165 @@
 @import 'palette';
 @import 'bootstrap/bootstrap-imports';
 
-// Page overides for font sizing. Info page needs more oomph
+div.container {
+  margin-top: 1.5rem;
+  margin-bottom: 4rem;
+}
+
 h1 {
-  font-size: 1.5rem * 2;
+  font-size: 1.1rem;
+
+  @include media-breakpoint-up(sm) {
+    font-size: 1.5rem;
+  }
+  @include media-breakpoint-up(md) {
+    font-size: 2rem;
+  }
+  @include media-breakpoint-up(lg) {
+    // font-size: 1.1rem;
+  }
 }
 
-h2 {
-  font-size: 1.5rem * 1.5;
-}
+.mat-flat-button {
+  width: 100%;
+  min-width: 220px;
 
-h3 {
-  font-size: 1.5rem * 1.167;
-}
+  &.large {
+    height: 46px;
+    font-size: 1rem;
+    margin-bottom: 1.2rem;
+  }
 
-p, span, div {
-  font-size: 1.5rem;
-}
+  &.light {
+    background-color: theme-palette(blue, light);
+    color: white;
+  }
 
-small {
-  font-size: 1.5rem * 0.833;
-}
-
-.font-size-huge {
-  font-size: 4.5rem;
+  @include media-breakpoint-up(md) {
+    width: 300px;
+  }
 }
 
 a {
   color: theme-palette(blue);
 }
 
-.logo {
-  max-width: 200px;
-  height: auto;
-}
+.steps {
+  background-repeat: no-repeat;
+  background-position-y: 20px;
 
-.info {
-  text-align: left;
-  padding-left: 2rem;
-  padding-right: 2rem;
-
-  .anchor {
-    border-bottom: 2px #003366 solid;
-    font-size: 1rem;
-    color: theme-palette(blue);
-  }
-
-  a:hover {
-    text-decoration: none;
-  }
-}
-
-.mb-8 {
-  margin-bottom: 3.0rem;
-}
-
-.enrolment-container {
-  @include media-breakpoint-down(sm) {
-    margin-bottom: 4rem;
-  }
   @include media-breakpoint-up(md) {
-    margin-bottom: 8rem;
+    background-position-y: 100px;
   }
 
-  > div:first-child {
-    text-align: end;
-  }
+  &.step-1 {
+    background-image: url('/assets/step_1.mobile.svg');
+    background-position-x: 14px;
+    background-size: 36px auto;
 
-  > div:nth-child(2) {
-    @include media-breakpoint-down(sm) {
-      // Remove offset for logo line-up
-      margin-top: 0;
-    }
     @include media-breakpoint-up(md) {
-      // Margin for logo line-up
-      margin-top: 3.5rem;
+      background-position-x: 95%;
+    }
+
+    @include media-breakpoint-up(lg) {
+      background-image: url('/assets/step_1.svg');
+    }
+
+    @include media-breakpoint-up(xl) {
+      background-position-x: 86%;
+      background-size: 46px auto;
     }
   }
-}
+  &.step-2 {
+    background-image: url('/assets/step_2.mobile.svg');
+    background-position-x: 11px;
+    background-size: 50px auto;
 
-.accent {
-  font-style: italic;
-}
+    @include media-breakpoint-up(md) {
+      background-position-x: 95%;
+    }
 
-.mat-flat-button.large {
-  width: 140px;
-  height: 46px;
-  font-size: 1.2rem;
+    @include media-breakpoint-up(lg) {
+      background-image: url('/assets/step_2.svg');
+      background-size: 65px auto;
+    }
 
-  &.light {
-    background-color: theme-palette(blue, light);
-    color: white;
+    @include media-breakpoint-up(xl) {
+      background-size: 85px auto;
+    }
+  }
+  &.step-3 {
+    background-image: url('/assets/step_3.mobile.svg');
+    background-position-x: 13px;
+    background-size: 45px auto;
+
+    @include media-breakpoint-up(md) {
+      background-position-x: 95%;
+    }
+
+    @include media-breakpoint-up(lg) {
+      background-image: url('/assets/step_3.svg');
+      background-size: 65px auto;
+    }
+
+    @include media-breakpoint-up(xl) {
+      background-size: 85px auto;
+    }
+  }
+
+  .content {
+    line-height: 1.75rem;
+    // Provide space for background image of step #
+    padding-left: 4.5rem;
+    padding-right: 2.5rem;
+
+    h2 {
+      color: theme-palette(blue, light);
+    }
+
+    @include media-breakpoint-only(md) {
+      h2 {
+        // Decrease slightly to reduce line wrapping
+        font-size: 1.25rem;
+      }
+    }
+
+    a {
+      font-weight: bold;
+      text-decoration: underline;
+      white-space: nowrap;
+    }
+  }
+
+  @include media-breakpoint-up(md) {
+    // TODO avoid by adding inner-div
+    .content {
+      padding-left: $grid-gutter-width / 2;
+      padding-right: $grid-gutter-width / 2;
+    }
+  }
+
+  .icon {
+    padding-top: 1.2rem;
+    padding-bottom: 2.7rem;
+    text-align: center;
+
+    @include media-breakpoint-only(md) {
+      padding-bottom: 4rem;
+
+      img {
+        width: 125px;
+        height: auto;
+      }
+    }
+
+    @include media-breakpoint-only(lg) {
+      padding-bottom: 3rem;
+
+      img {
+        width: 145px;
+        height: auto;
+      }
+    }
   }
 }
