@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { Subscription } from 'rxjs';
+
 import { SiteRoutes } from '@registration/site-registration.routes';
 
 @Component({
@@ -9,6 +11,7 @@ import { SiteRoutes } from '@registration/site-registration.routes';
   styleUrls: ['./signing-authority.component.scss']
 })
 export class SigningAuthorityComponent implements OnInit {
+  public busy: Subscription;
   public title: string;
   public SiteRoutes = SiteRoutes;
 
