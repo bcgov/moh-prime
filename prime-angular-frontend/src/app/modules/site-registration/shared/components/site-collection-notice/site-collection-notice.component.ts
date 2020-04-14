@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ICollectionNoticeAlert } from '@shared/components/collection-notice-alert/collection-notice-alert.component';
+import { ICollectionNoticeAlert } from '@shared/components/collection-notice-container/collection-notice-container.component';
 
 @Component({
   selector: 'app-site-collection-notice',

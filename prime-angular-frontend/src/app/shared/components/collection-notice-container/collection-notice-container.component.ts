@@ -14,11 +14,11 @@ export abstract class ICollectionNoticeAlert {
 }
 
 @Component({
-  selector: 'app-collection-notice-alert',
-  templateUrl: './collection-notice-alert.component.html',
-  styleUrls: ['./collection-notice-alert.component.scss']
+  selector: 'app-collection-notice-container',
+  templateUrl: './collection-notice-container.component.html',
+  styleUrls: ['./collection-notice-container.component.scss']
 })
-export class CollectionNoticeAlertComponent extends ICollectionNoticeAlert implements OnInit {
+export class CollectionNoticeContainerComponent extends ICollectionNoticeAlert implements OnInit {
   public title: string;
 
   constructor(
