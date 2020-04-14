@@ -6,14 +6,14 @@
         [formGroup]="form"
         novalidate>
 
-    <app-page-subheader>
-      <ng-container appPageSubheaderTitle>Site Address</ng-container>
-      <ng-container appPageSubheaderSummary>
-        Provide the address of your site for British Columbia only
-      </ng-container>
-    </app-page-subheader>
-
     <section class="mb-3">
+
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Site Address</ng-container>
+        <ng-container appPageSubheaderSummary>
+          Provide the address of your site for British Columbia only
+        </ng-container>
+      </app-page-subheader>
 
       <app-address [form]="form"
                    [formControlNames]="formControlNames"></app-address>
