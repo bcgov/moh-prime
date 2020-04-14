@@ -29,6 +29,12 @@ parameters:
     name: VOLUME_CAPACITY
     required: true
     value: 1Gi
+  - name: STORAGE_CLASS
+    value: netapp-block-standard
+    required: true
+  - name: STORAGE_MODE
+    value: ReadWriteOnce
+    required: true
   - name: SOURCE_CONTEXT_DIR
     required: true
   - name: SOURCE_REPOSITORY_URL
@@ -40,7 +46,7 @@ objects:
     kind: DeploymentConfig
     metadata:
       annotations:
-        volume.beta.kubernetes.io/storage-class: netapp-block-standard
+        volume.beta.kubernetes.io/storage-class: ${STORAGE_CLASS}
       name: '${NAME}${SUFFIX}'
     spec:
       replicas: 1
@@ -159,8 +165,8 @@ objects:
       annotations:
     spec:
       accessModes:
-        - ReadWriteOnce
-      storageClassName": netapp-block-standard
+        - ${STORAGE_MODE}
+      storageClassName": ${STORAGE_CLASS}
       resources:
         requests:
           storage: '${VOLUME_CAPACITY}'

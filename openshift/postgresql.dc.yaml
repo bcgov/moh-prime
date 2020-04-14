@@ -60,6 +60,12 @@ parameters:
     value: 200m
   - name: MEMORY_REQUEST
     value: 1.5Gi
+  - name: STORAGE_CLASS
+    value: netapp-block-standard
+    required: true
+  - name: STORAGE_MODE
+    value: ReadWriteOnce
+    required: true
 objects:
   - apiVersion: v1
     kind: Service
@@ -88,8 +94,8 @@ objects:
       annotations:
     spec:
       accessModes:
-        - ReadWriteOnce
-      storageClassName": netapp-block-standard
+        - ${STORAGE_MODE}
+      storageClassName": ${STORAGE_CLASS}
       resources:
         requests:
           storage: '${VOLUME_CAPACITY}'
@@ -108,7 +114,7 @@ objects:
     apiVersion: v1
     metadata:
       annotations:
-        volume.beta.kubernetes.io/storage-class: netapp-block-standard
+        volume.beta.kubernetes.io/storage-class: ${STORAGE_CLASS}
       name: '${NAME}${SUFFIX}'
     spec:
       replicas: 1
