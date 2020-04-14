@@ -45,7 +45,7 @@ export class SiteInformationComponent implements OnInit {
   public onSubmit() {
     this.toastService.openSuccessToast('Enrolment information has been saved');
     this.form.markAsPristine();
-    this.router.navigate([SiteRoutes.HOURS_OPERATION], { relativeTo: this.route.parent });
+    this.router.navigate([SiteRoutes.SITE_ADDRESS], { relativeTo: this.route.parent });
   }
 
   public onBack() {

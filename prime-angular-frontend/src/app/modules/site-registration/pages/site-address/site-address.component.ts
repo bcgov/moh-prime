@@ -43,6 +43,10 @@ export class SiteAddressComponent implements OnInit {
     this.router.navigate([SiteRoutes.HOURS_OPERATION], { relativeTo: this.route.parent });
   }
 
+  public onBack() {
+    this.router.navigate([SiteRoutes.SITE_INFORMATION], { relativeTo: this.route.parent });
+  }
+
   public ngOnInit() {
     this.createFormInstance();
   }
