@@ -1,9 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 
 import { AuthService } from '@auth/shared/services/auth.service';
-import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
-import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 @Component({
   selector: 'app-collection-notice-alert',
@@ -11,18 +8,17 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
   styleUrls: ['./collection-notice-alert.component.scss']
 })
 export class CollectionNoticeAlertComponent implements OnInit {
-  public isProfileCompleted: boolean;
-  public EnrolmentRoutes = EnrolmentRoutes;
+  @Input() public showAlert: boolean;
+  @Output() public accepted: EventEmitter<void>;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private authService: AuthService,
-    private enrolmentService: EnrolmentService
-  ) { }
+    private authService: AuthService
+  ) {
+    this.accepted = new EventEmitter<void>();
+  }
 
   public get label(): string {
-    return (!this.isProfileCompleted)
+    return (!this.showAlert)
       ? 'Next'
       : 'Ok';
   }
@@ -32,18 +28,8 @@ export class CollectionNoticeAlertComponent implements OnInit {
   }
 
   public onAccept() {
-    this.authService.hasJustLoggedIn = false;
-
-    const route = (!this.isProfileCompleted)
-      ? EnrolmentRoutes.DEMOGRAPHIC
-      : EnrolmentRoutes.OVERVIEW;
-
-    if (this.enrolmentService.isInitialEnrolment) {
-      this.router.navigate([route], { relativeTo: this.route.parent });
-    }
+    this.accepted.emit();
   }
 
-  public ngOnInit() {
-    this.isProfileCompleted = this.enrolmentService.isProfileComplete;
-  }
+  public ngOnInit() { }
 }
