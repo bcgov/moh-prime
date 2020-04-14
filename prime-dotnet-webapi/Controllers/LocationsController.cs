@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Prime.Models;
 using Prime.Services;
@@ -21,8 +22,8 @@ namespace Prime.Controllers
         /// Gets all the locations
         /// </summary>
         [HttpGet(Name = nameof(Get))]
-        public ActionResult<List<Locations>> Get() =>
-            _locationService.Get();
+        public async Task<ActionResult<List<Locations>>> Get() =>
+            await _locationService.Get();
 
 
         // GET: api/Locations/5
@@ -31,9 +32,9 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="id"></param>
         [HttpGet("{id:length(24)}", Name = "GetLocations")]
-        public ActionResult<Locations> Get(string id)
+        public async Task<ActionResult<Locations>> Get(string id)
         {
-            var location = _locationService.Get(id);
+            var location = await _locationService.Get(id);
 
             if (location == null)
             {
@@ -48,17 +49,17 @@ namespace Prime.Controllers
         /// Creates a new Location.
         /// </summary>
         [HttpPost]
-        public ActionResult<Locations> Create(Locations location)
+        public async Task<ActionResult<Locations>> Create(Locations location)
         {
-            _locationService.Create(location);
+            await _locationService.Create(location);
 
             return CreatedAtRoute("GetLocations", new { id = location.Id.ToString() }, location);
         }
 
         [HttpPut("{id:length(24)}")]
-        public IActionResult Update(string id, Locations locationIn)
+        public async Task<IActionResult> Update(string id, Locations locationIn)
         {
-            var location = _locationService.Get(id);
+            var location = await _locationService.Get(id);
 
             if (location == null)
             {
@@ -71,9 +72,9 @@ namespace Prime.Controllers
         }
 
         [HttpDelete("{id:length(24)}")]
-        public IActionResult Delete(string id)
+        public async Task<IActionResult> Delete(string id)
         {
-            var location = _locationService.Get(id);
+            var location = await _locationService.Get(id);
 
             if (location == null)
             {

@@ -19,25 +19,25 @@ namespace Prime.Services
             _locations = database.GetCollection<Locations>(settings.MongoCollectionName);
         }
 
-        public List<Locations> Get() =>
-            _locations.Find(location => true).ToList();
+        public async Task<List<Locations>> Get() =>
+            await _locations.Find(location => true).ToListAsync();
 
-        public Locations Get(string id) =>
-            _locations.Find<Locations>(location => location.Id == id).FirstOrDefault();
+        public async Task<Locations> Get(string id) =>
+            await _locations.Find<Locations>(location => location.Id == id).FirstOrDefaultAsync();
 
-        public Locations Create(Locations location)
+        public async Task<Locations> Create(Locations location)
         {
-            _locations.InsertOne(location);
+            await _locations.InsertOneAsync(location);
             return location;
         }
 
-        public void Update(string id, Locations locationIn) =>
-            _locations.ReplaceOne(location => location.Id == id, locationIn);
+        public async void Update(string id, Locations locationIn) =>
+            await _locations.ReplaceOneAsync(location => location.Id == id, locationIn);
 
-        public void Remove(Locations locationIn) =>
-            _locations.DeleteOne(location => location.Id == locationIn.Id);
+        public async void Remove(Locations locationIn) =>
+            await _locations.DeleteOneAsync(location => location.Id == locationIn.Id);
 
-        public void Remove(string id) =>
-            _locations.DeleteOne(location => location.Id == id);
+        public async void Remove(string id) =>
+            await _locations.DeleteOneAsync(location => location.Id == id);
     }
 }
