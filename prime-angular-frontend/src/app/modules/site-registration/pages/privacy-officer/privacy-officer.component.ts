@@ -9,6 +9,7 @@ import { SiteRoutes } from '@registration/site-registration.routes';
   styleUrls: ['./privacy-officer.component.scss']
 })
 export class PrivacyOfficerComponent implements OnInit {
+  public busy: Subscription;
   public title: string;
   public SiteRoutes = SiteRoutes;
 
