@@ -15,6 +15,7 @@ import { RegistrantProfileFormComponent } from './shared/components/registrant-p
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 import { RegistrantProfileReviewComponent } from './shared/components/registrant-profile-review/registrant-profile-review.component';
 import { SiteProgressIndicatorComponent } from './shared/components/site-progress-indicator/site-progress-indicator.component';
+import { SiteAddressComponent } from './pages/site-address/site-address.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { SiteProgressIndicatorComponent } from './shared/components/site-progres
     RegistrantProfileFormComponent,
     ConfirmationComponent,
     RegistrantProfileReviewComponent,
-    SiteProgressIndicatorComponent
+    SiteProgressIndicatorComponent,
+    SiteAddressComponent
   ],
   imports: [
     SharedModule,
