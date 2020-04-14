@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SiteRegistrationCollectionNoticeComponent } from './site-registration-collection-notice.component';
+import { SiteCollectionNoticeComponent } from './site-collection-notice.component';
 
 describe('SiteRegistrationCollectionNoticeComponent', () => {
-  let component: SiteRegistrationCollectionNoticeComponent;
-  let fixture: ComponentFixture<SiteRegistrationCollectionNoticeComponent>;
+  let component: SiteCollectionNoticeComponent;
+  let fixture: ComponentFixture<SiteCollectionNoticeComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SiteRegistrationCollectionNoticeComponent ]
+      declarations: [ SiteCollectionNoticeComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SiteRegistrationCollectionNoticeComponent);
+    fixture = TestBed.createComponent(SiteCollectionNoticeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
