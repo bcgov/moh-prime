@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup } from '@angular/forms';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 
@@ -10,16 +9,18 @@ import { SiteRoutes } from '@registration/site-registration.routes';
   styleUrls: ['./signing-authority.component.scss']
 })
 export class SigningAuthorityComponent implements OnInit {
-  public form: FormGroup;
-  public hasSeparateAddress: boolean;
+  public title: string;
   public SiteRoutes = SiteRoutes;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router
-  ) { }
+  ) {
+    this.title = 'Signing Authority';
+  }
 
-  public onSubmit() {
+  // TODO provide model when backend exists
+  public onSubmit(data: { [key: string]: any }) {
     this.router.navigate([SiteRoutes.ADMINISTRATOR], { relativeTo: this.route.parent });
   }
 
