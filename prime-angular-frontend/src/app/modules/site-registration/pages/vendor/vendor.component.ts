@@ -27,7 +27,7 @@ export class VendorComponent implements OnInit {
       { id: 1, name: 'iClinic Inc.' },
       { id: 2, name: 'Medinet' },
       { id: 3, name: 'Plexia Electronic Medical Systems' },
-      { id: 4, name: 'CareConnect (geographically limited access)' }
+      { id: 4, name: 'CareConnect' }
     ];
   }
 
