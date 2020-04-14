@@ -18,7 +18,7 @@ namespace PrimeTests
             : base(env, TestHelper.GetIConfigurationRoot(Directory.GetCurrentDirectory()))
         { }
 
-        protected override void ConfigureDatabase(IServiceCollection services)
+        protected override void ConfigurePostgresDatabase(IServiceCollection services)
         {
             services.AddDbContext<ApiDbContext>(options =>
             {
