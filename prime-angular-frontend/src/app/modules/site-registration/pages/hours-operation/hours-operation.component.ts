@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ToastService } from '@core/services/toast.service';
+
 import { SiteRoutes } from '@registration/site-registration.routes';
 
 @Component({
@@ -121,8 +122,17 @@ export class HoursOperationComponent implements OnInit {
     return this.form.get('sundayPM') as FormControl;
   }
 
+  public onSubmit() {
+    this.toastService.openSuccessToast('Enrolment information has been saved');
+    this.form.markAsPristine();
+    this.router.navigate([SiteRoutes.VENDOR], { relativeTo: this.route.parent });
+  }
 
-  ngOnInit() {
+  public onBack() {
+    this.router.navigate([SiteRoutes.ORGANIZATION_INFORMATION], { relativeTo: this.route.parent });
+  }
+
+  public ngOnInit() {
     this.createFormInstance();
   }
 
@@ -144,15 +154,4 @@ export class HoursOperationComponent implements OnInit {
       sundayPM: [null, []],
     });
   }
-
-  onSubmit() {
-    this.toastService.openSuccessToast('Enrolment information has been saved');
-    this.form.markAsPristine();
-    this.router.navigate([SiteRoutes.VENDOR], { relativeTo: this.route.parent });
-  }
-
-  onBack() {
-    this.router.navigate([SiteRoutes.SITE_INFORMATION], { relativeTo: this.route.parent });
-  }
-
 }
