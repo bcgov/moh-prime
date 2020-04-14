@@ -4,11 +4,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SiteRoutes } from '@registration/site-registration.routes';
 
 @Component({
-  selector: 'app-site-collection-notice',
-  templateUrl: './site-collection-notice.component.html',
-  styleUrls: ['./site-collection-notice.component.scss']
+  selector: 'app-collection-notice',
+  templateUrl: './collection-notice.component.html',
+  styleUrls: ['./collection-notice.component.scss']
 })
-export class SiteCollectionNoticeComponent implements OnInit {
+export class CollectionNoticeComponent implements OnInit {
+  public isProfileCompleted: boolean;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router
