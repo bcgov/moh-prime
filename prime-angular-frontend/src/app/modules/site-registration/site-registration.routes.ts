@@ -2,7 +2,7 @@ export class SiteRoutes {
   public static SITE_REGISTRATION = 'site-registration';
   public static COLLECTION_NOTICE = 'collection-notice';
   public static MULTIPLE_SITES = 'multiple-sites';
-  public static SITE_INFORMATION = 'site-information';
+  public static ORGANIZATION_INFORMATION = 'organization-information';
   public static HOURS_OPERATION = 'hours-operation';
   public static VENDOR = 'vendor';
   public static SIGNING_AUTHORITY = 'signing-authority';
@@ -25,7 +25,7 @@ export class SiteRoutes {
       SiteRoutes.SITE_REGISTRATION,
       SiteRoutes.COLLECTION_NOTICE,
       SiteRoutes.MULTIPLE_SITES,
-      SiteRoutes.SITE_INFORMATION,
+      SiteRoutes.ORGANIZATION_INFORMATION,
       SiteRoutes.HOURS_OPERATION,
       SiteRoutes.VENDOR,
       SiteRoutes.SIGNING_AUTHORITY,

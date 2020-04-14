@@ -9,11 +9,11 @@ import { ToastService } from '@core/services/toast.service';
 import { SiteRoutes } from '@registration/site-registration.routes';
 
 @Component({
-  selector: 'app-site-information',
-  templateUrl: './site-information.component.html',
-  styleUrls: ['./site-information.component.scss']
+  selector: 'app-organization-information',
+  templateUrl: './organization-information.component.html',
+  styleUrls: ['./organization-information.component.scss']
 })
-export class SiteInformationComponent implements OnInit {
+export class OrganizationInformationComponent implements OnInit {
   public busy: Subscription;
   public form: FormGroup;
   public SiteRoutes = SiteRoutes;
