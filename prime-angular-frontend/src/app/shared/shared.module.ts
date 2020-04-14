@@ -58,6 +58,7 @@ import { ManualFlagNoteComponent } from './components/dialogs/content/manual-fla
 import { FeedbackComponent } from './components/dialogs/content/feedback/feedback.component';
 import { CollectionNoticeAlertComponent } from './components/collection-notice-alert/collection-notice-alert.component';
 import { PageFooterComponent } from './components/page-footer/page-footer.component';
+import { AddressV2Component } from './components/forms/address-v2/address-v2.component';
 
 @NgModule({
   declarations: [
@@ -107,7 +108,8 @@ import { PageFooterComponent } from './components/page-footer/page-footer.compon
     ManualFlagNoteComponent,
     FeedbackComponent,
     CollectionNoticeAlertComponent,
-    PageFooterComponent
+    PageFooterComponent,
+    AddressV2Component
   ],
   imports: [
     CommonModule,
@@ -168,7 +170,8 @@ import { PageFooterComponent } from './components/page-footer/page-footer.compon
     AccessTermsTableComponent,
     AccessTermComponent,
     CollectionNoticeAlertComponent,
-    PageFooterComponent
+    PageFooterComponent,
+    AddressV2Component
   ]
 })
 export class SharedModule { }
