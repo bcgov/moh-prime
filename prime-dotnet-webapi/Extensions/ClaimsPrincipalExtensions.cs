@@ -40,7 +40,6 @@ namespace Prime
             return User.HasAdminView() || User.CanEdit(enrollee);
         }
 
-
         public static bool IsAdmin(this ClaimsPrincipal User)
         {
             return User.IsInRole(AuthConstants.PRIME_ADMIN_ROLE);

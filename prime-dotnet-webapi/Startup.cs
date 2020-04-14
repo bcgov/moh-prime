@@ -17,6 +17,7 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using Serilog;
 
 using Prime.Auth;
 using Prime.Services;
@@ -58,6 +59,7 @@ namespace Prime
             services.AddScoped<IFeedbackService, FeedbackService>();
             services.AddScoped<IBusinessEventService, BusinessEventService>();
             services.AddScoped<ISubmissionService, SubmissionService>();
+            services.AddScoped<IRazorConverterService, RazorConverterService>();
 
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
@@ -96,6 +98,7 @@ namespace Prime
             services.AddSwaggerGenNewtonsoftSupport();
 
             services.AddHttpContextAccessor();
+            services.AddRazorPages();
 
             this.ConfigurePostgresDatabase(services);
             this.ConfigureMongoDatabase(services);
@@ -108,6 +111,7 @@ namespace Prime
         {
             if (env.IsDevelopment())
             {
+                // TODO should be replaced with logging and exception handler
                 app.UseDeveloperExceptionPage();
             }
 
@@ -124,6 +128,21 @@ namespace Prime
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Prime Web API V1");
+            });
+
+            // Only logs components that appear after it in the pipeline, which
+            // can be used to exclude noisy handlers from logging
+            app.UseSerilogRequestLogging(options =>
+            {
+                options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
+                {
+                    var userId = httpContext.User.GetPrimeUserId();
+
+                    if (!userId.Equals(Guid.Empty))
+                    {
+                        diagnosticContext.Set("User", userId);
+                    }
+                };
             });
 
             // Matches request to an endpoint

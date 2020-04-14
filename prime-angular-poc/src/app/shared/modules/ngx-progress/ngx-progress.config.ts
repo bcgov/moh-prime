@@ -1,4 +1,4 @@
-import { NgProgressConfig } from '@ngx-progressbar/core';
+import { NgProgressConfig } from 'ngx-progressbar';
 
 // For more configuration settings:
 // @see https://github.com/MurhafSousli/ngx-progressbar

@@ -148,47 +148,43 @@ namespace Prime.Services
         }
 
         /// <summary>
-        /// Returns true if this access term has no newer versions
-        /// </summary>
-        public async Task<bool> IsCurrentAsync(int accessTermId)
-        {
-            // Currently, only the User Clause is versioned, and has different versions based on user class (OBO vs RU)
-            // Uses an anonymous object select to avoid fetching the user clause text, which we dont need.
-            // TODO: perhaps LINQ GroupBy to make this 1 DB call?
-
-            var userClause = await _context.AccessTerms
-                .Where(at => at.Id == accessTermId)
-                .Select(at => new
-                {
-                    EnrolleeClassification = at.UserClause.EnrolleeClassification,
-                    EffectiveDate = at.UserClause.EffectiveDate
-                })
-                .SingleAsync();
-
-            bool aNewerUserClause = await _context.UserClauses
-                .Where(uc => uc.EnrolleeClassification == userClause.EnrolleeClassification)
-                .AnyAsync(uc => uc.EffectiveDate > userClause.EffectiveDate);
-
-            return !aNewerUserClause;
-        }
-
-        /// <summary>
         /// Returns true if the enrollees' most recent accepted access term has no newer versions
         /// </summary>
-        public async Task<bool> IsCurrentByEnrolleeAsync(int enrolleeId)
+        public async Task<bool> IsCurrentByEnrolleeAsync(Enrollee enrollee)
         {
-            var accessTermId = await _context.AccessTerms
-                .Where(at => at.EnrolleeId == enrolleeId)
+            var current = true;
+
+            var accessTerm = await _context.AccessTerms
+                .Include(at => at.AccessTermLicenseClassClauses)
+                .Where(at => at.EnrolleeId == enrollee.Id)
                 .Where(at => at.AcceptedDate != null)
                 .OrderByDescending(at => at.AcceptedDate)
-                .Select(at => at.Id)
                 .FirstOrDefaultAsync();
 
-            if (accessTermId == 0)
+            if (accessTerm != null)
+            {
+                var currentAccessTerm = await GenerateAccessTermAsync(enrollee);
+
+                if (accessTerm.GlobalClauseId != currentAccessTerm.GlobalClause.Id
+                   || accessTerm.UserClauseId != currentAccessTerm.UserClause.Id)
+                {
+                    current = false;
+                }
+
+                foreach (var lcc in accessTerm.AccessTermLicenseClassClauses)
+                {
+                    if (currentAccessTerm.AccessTermLicenseClassClauses.FindAll(c => c.LicenseClassClause.Id == lcc.LicenseClassClauseId).Count == 0)
+                    {
+                        current = false;
+                    }
+                }
+            }
+            else
             {
                 return false;
             }
-            return await this.IsCurrentAsync(accessTermId);
+
+            return current;
         }
 
         /**
@@ -235,12 +231,33 @@ namespace Prime.Services
                 .FirstOrDefaultAsync();
         }
 
-        // TODO no provided logic for how license class clauses are chosen
         private async Task<IEnumerable<AccessTermLicenseClassClause>> GetAccessTermLicenseClassClauses(Enrollee enrollee, AccessTerm accessTerms)
         {
-            var licenseClassClauses = await _context.LicenseClassClauses
-                .Take(2)
-                .ToListAsync();
+            var licenseClassClauses = new List<LicenseClassClause>();
+
+            if (enrollee.Certifications.Count > 0)
+            {
+                foreach (var org in enrollee.Organizations)
+                {
+                    foreach (var cert in enrollee.Certifications)
+                    {
+                        var mappings = await _context.LicenseClassClauseMappings
+                            .Include(m => m.LicenseClassClause)
+                            .Where(m => m.LicenseCode == cert.LicenseCode)
+                            .Where(m => m.OrganizatonTypeCode == org.OrganizationTypeCode)
+                            .ToListAsync();
+
+                        foreach (var mapping in mappings)
+                        {
+                            // Check if License Class Clause already in list
+                            if (licenseClassClauses.FindAll(lcc => lcc.Id == mapping.LicenseClassClauseId).Count == 0)
+                            {
+                                licenseClassClauses.Add(mapping.LicenseClassClause);
+                            }
+                        }
+                    }
+                }
+            }
 
             return licenseClassClauses.Select(lcc => new AccessTermLicenseClassClause { AccessTerm = accessTerms, LicenseClassClause = lcc });
         }

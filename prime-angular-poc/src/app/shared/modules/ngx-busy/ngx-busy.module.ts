@@ -22,9 +22,6 @@ import { BusyLoadingComponent } from './busy-loading/busy-loading.component';
     NgBusyModule,
     BusyLoadingComponent,
     BusyOverlayComponent
-  ],
-  entryComponents: [
-    BusyOverlayMessageComponent
   ]
 })
 export class NgxBusyModule { }

@@ -62,14 +62,6 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
     return this.viewportService.isMobile;
   }
 
-  public get isObo(): boolean {
-    return (this.accessTerm.userClause.enrolleeClassification === EnrolleeClassification.OBO);
-  }
-
-  public get isRu(): boolean {
-    return (this.accessTerm.userClause.enrolleeClassification === EnrolleeClassification.RU);
-  }
-
   public get hasAgreed(): boolean {
     return this.agreed.value;
   }
