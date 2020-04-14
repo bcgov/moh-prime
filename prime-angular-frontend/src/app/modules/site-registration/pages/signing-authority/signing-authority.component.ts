@@ -21,6 +21,7 @@ export class SigningAuthorityComponent implements OnInit {
 
   // TODO provide model when backend exists
   public onSubmit(data: { [key: string]: any }) {
+    // TODO use ViewChild to get form value from child component when onSubmit invoked by page footer
     this.router.navigate([SiteRoutes.ADMINISTRATOR], { relativeTo: this.route.parent });
   }
 
