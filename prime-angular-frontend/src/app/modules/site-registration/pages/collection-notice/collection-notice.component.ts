@@ -10,13 +10,15 @@ import { SiteRoutes } from '@registration/site-registration.routes';
   styleUrls: ['./collection-notice.component.scss']
 })
 export class CollectionNoticeComponent implements OnInit {
-  public isRegistrationCompleted: boolean;
+  public isFull: boolean;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private authService: AuthService
-  ) { }
+  ) {
+    this.isFull = true;
+  }
 
   public onAccept() {
     this.authService.hasJustLoggedIn = false;
@@ -25,7 +27,5 @@ export class CollectionNoticeComponent implements OnInit {
 
   public ngOnInit() {
     this.authService.hasJustLoggedIn = true;
-    // TODO use to show as full page
-    // this.isRegistrationCompleted = this.registrationService.isRegistrationCompleted;
   }
 }

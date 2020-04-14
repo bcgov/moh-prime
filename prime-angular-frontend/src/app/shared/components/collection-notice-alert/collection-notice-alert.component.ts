@@ -3,13 +3,11 @@ import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 export abstract class ICollectionNoticeAlert {
-  @Input() public showAlert: boolean;
+  @Input() public isFull: boolean;
   @Output() public accepted: EventEmitter<void>;
 
   constructor() {
     this.accepted = new EventEmitter<void>();
-    // Default to use alert versus full page
-    this.showAlert = true;
   }
 
   abstract onAccept(): void;
@@ -32,9 +30,7 @@ export class CollectionNoticeAlertComponent extends ICollectionNoticeAlert imple
   }
 
   public get label(): string {
-    return (!this.showAlert)
-      ? 'Next'
-      : 'Ok';
+    return (this.isFull) ? 'Next' : 'Ok';
   }
 
   public get show(): boolean {
@@ -45,7 +41,7 @@ export class CollectionNoticeAlertComponent extends ICollectionNoticeAlert imple
     // Alerts must clear the login indicator to hide it within the view
     // after acceptance, otherwise full collection notices manage this
     // within the parent component
-    if (this.showAlert) {
+    if (!this.isFull) {
       this.authService.hasJustLoggedIn = false;
     }
 
