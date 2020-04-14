@@ -1,18 +1,15 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+
+import { ICollectionNoticeAlert } from '@shared/components/collection-notice-alert/collection-notice-alert.component';
 
 @Component({
   selector: 'app-enrolment-collection-notice',
   templateUrl: './enrolment-collection-notice.component.html',
   styleUrls: ['./enrolment-collection-notice.component.scss']
 })
-export class EnrolmentCollectionNoticeComponent implements OnInit {
-  @Input() public showAlert: boolean;
-  @Output() public accepted: EventEmitter<void>;
-
+export class EnrolmentCollectionNoticeComponent extends ICollectionNoticeAlert implements OnInit {
   constructor() {
-    this.accepted = new EventEmitter<void>();
-    // Default to use alert versus full page
-    this.showAlert = true;
+    super();
   }
 
   public onAccept() {

@@ -36,7 +36,7 @@ const routes: Routes = [
       {
         path: SiteRoutes.COLLECTION_NOTICE,
         component: CollectionNoticeComponent,
-        data: { title: 'Site Collection Notice' }
+        data: { title: 'Collection Notice' }
       },
       {
         path: SiteRoutes.MULTIPLE_SITES,

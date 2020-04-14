@@ -8,8 +8,8 @@ import { RegistrantProfileFormComponent } from './shared/components/registrant-p
 import { RegistrantProfileReviewComponent } from './shared/components/registrant-profile-review/registrant-profile-review.component';
 import { SiteProgressIndicatorComponent } from './shared/components/site-progress-indicator/site-progress-indicator.component';
 import {
-  SiteRegistrationCollectionNoticeComponent
-} from './shared/components/site-registration-collection-notice/site-registration-collection-notice.component';
+  SiteCollectionNoticeComponent
+} from './shared/components/site-collection-notice/site-collection-notice.component';
 
 import { VendorComponent } from './pages/vendor/vendor.component';
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
@@ -39,7 +39,7 @@ import { ConfirmationComponent } from './pages/confirmation/confirmation.compone
     ConfirmationComponent,
     RegistrantProfileReviewComponent,
     SiteProgressIndicatorComponent,
-    SiteRegistrationCollectionNoticeComponent
+    SiteCollectionNoticeComponent
   ],
   imports: [
     SharedModule,
