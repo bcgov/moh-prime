@@ -152,7 +152,7 @@ export class HoursOperationComponent implements OnInit {
   }
 
   onBack() {
-    this.router.navigate([SiteRoutes.SITE_INFORMATION], { relativeTo: this.route.parent });
+    this.router.navigate([SiteRoutes.SITE_ADDRESS], { relativeTo: this.route.parent });
   }
 
 }
