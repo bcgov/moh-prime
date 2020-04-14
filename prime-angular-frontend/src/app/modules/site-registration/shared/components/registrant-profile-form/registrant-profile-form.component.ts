@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { FormControlValidators } from '@shared/validators/form-control.validators';
@@ -11,14 +11,16 @@ import { FormUtilsService } from '@common/services/form-utils.service';
 })
 export class RegistrantProfileFormComponent implements OnInit {
   @Input() public title: string;
-
   public form: FormGroup;
+  public submit: EventEmitter<{ [key: string]: any }>;
   public hasSeparateAddress: boolean;
 
   constructor(
     private formUtilsService: FormUtilsService,
     private formBuilder: FormBuilder
-  ) { }
+  ) {
+    this.submit = new EventEmitter<{ [key: string]: any }>();
+  }
 
   public get name(): FormControl {
     return this.form.get('name') as FormControl;
@@ -48,6 +50,12 @@ export class RegistrantProfileFormComponent implements OnInit {
     return this.form.get('separateAddress') as FormGroup;
   }
 
+  public onSubmit() {
+    // TODO proper submission when backend payload known
+    // if (this.form.valid) { }
+    this.submit.emit(this.form.value);
+  }
+
   public onSeparateAddressChange() {
     this.hasSeparateAddress = !this.hasSeparateAddress;
     this.toggleSeparateAddressValidators(this.separateAddress, ['street2']);
@@ -59,6 +67,7 @@ export class RegistrantProfileFormComponent implements OnInit {
   }
 
   private createFormInstance() {
+    // TODO proper naming when backend payload known
     this.form = this.formBuilder.group({
       name: [null, []],
       jobRole: [null, []],
