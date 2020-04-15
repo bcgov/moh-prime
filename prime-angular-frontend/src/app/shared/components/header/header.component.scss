@@ -4,8 +4,12 @@
   height: 70px;
 
   img {
-    margin-left: 15px;
     margin-top: -15px;
+
+    &.hasMobileSidemenu {
+      // Provide space between sidemenu toggle and BC Gov. logo
+      margin-left: 15px;
+    }
   }
 
   .username {
