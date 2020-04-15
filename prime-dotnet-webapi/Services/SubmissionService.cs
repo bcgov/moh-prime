@@ -133,7 +133,7 @@ namespace Prime.Services
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Manually Approved");
             await _context.SaveChangesAsync();
             await _emailService.SendReminderEmailAsync(enrollee);
-            await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Email to Enrollee after leaving manual adjudication");
+            await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Notified Enrollee");
         }
 
         private async Task ProcessToaAsync(Enrollee enrollee, bool accept)
@@ -166,7 +166,7 @@ namespace Prime.Services
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Enabled Editing");
             await _context.SaveChangesAsync();
             await _emailService.SendReminderEmailAsync(enrollee);
-            await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Email to Enrollee after leaving manual adjudication");
+            await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Notified Enrollee");
         }
 
         private async Task LockProfileAsync(Enrollee enrollee)
@@ -175,7 +175,7 @@ namespace Prime.Services
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Locked");
             await _context.SaveChangesAsync();
             await _emailService.SendReminderEmailAsync(enrollee);
-            await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Email to Enrollee after leaving manual adjudication");
+            await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Notified Enrollee");
         }
 
         private void SetGPID(Enrollee enrollee)

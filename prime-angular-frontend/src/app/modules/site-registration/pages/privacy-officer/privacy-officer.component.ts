@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup } from '@angular/forms';
+
+import { Subscription } from 'rxjs';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 
@@ -10,16 +11,20 @@ import { SiteRoutes } from '@registration/site-registration.routes';
   styleUrls: ['./privacy-officer.component.scss']
 })
 export class PrivacyOfficerComponent implements OnInit {
-  public form: FormGroup;
-  public hasSeparateAddress: boolean;
+  public busy: Subscription;
+  public title: string;
   public SiteRoutes = SiteRoutes;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router
-  ) { }
+  ) {
+    this.title = 'Privacy Officer';
+  }
 
-  public onSubmit() {
+  // TODO provide model when backend exists
+  public onSubmit(data: { [key: string]: any }) {
+    // TODO use ViewChild to get form value from child component when onSubmit invoked by page footer
     this.router.navigate([SiteRoutes.TECHNICAL_SUPPORT_CONTACT], { relativeTo: this.route.parent });
   }
 

@@ -8,15 +8,15 @@ import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 
-import { CollectionNoticeAlertComponent } from './collection-notice-alert.component';
+import { CollectionNoticeContainerComponent } from './collection-notice-container.component';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SharedModule } from '@shared/shared.module';
 
-describe('CollectionNoticeAlertComponent', () => {
-  let component: CollectionNoticeAlertComponent;
-  let fixture: ComponentFixture<CollectionNoticeAlertComponent>;
+describe('CollectionNoticeContainerComponent', () => {
+  let component: CollectionNoticeContainerComponent;
+  let fixture: ComponentFixture<CollectionNoticeContainerComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule(
@@ -49,7 +49,7 @@ describe('CollectionNoticeAlertComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CollectionNoticeAlertComponent);
+    fixture = TestBed.createComponent(CollectionNoticeContainerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
