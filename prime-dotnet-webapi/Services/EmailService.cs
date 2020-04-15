@@ -13,8 +13,8 @@ namespace Prime.Services
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string TokenUrl { get; set; }
-        public int MaxViews { get; set; }
-        public int ExpiryDays { get; set; }
+        public int MaxViews { get => EnrolmentCertificateService.MAX_VIEWS; }
+        public int ExpiryDays { get => EnrolmentCertificateService.EXPIRY_DAYS; }
         public string ProvisionerName { get; set; }
 
         public EmailParams(EnrolmentCertificateAccessToken token, string provisionerName = null)
@@ -22,8 +22,6 @@ namespace Prime.Services
             FirstName = token.Enrollee.FirstName;
             LastName = token.Enrollee.LastName;
             TokenUrl = token.FrontendUrl;
-            MaxViews = EnrolmentCertificateService.MAX_VIEWS;
-            ExpiryDays = EnrolmentCertificateService.EXPIRY_DAYS;
             ProvisionerName = provisionerName;
         }
     }
@@ -79,6 +77,7 @@ namespace Prime.Services
         {
             if (!AreValidEmails(recipients))
             {
+                // TODO Log invalid email, cannot send
                 throw new ArgumentException("Cannot send provisioner link, supplied email address(es) are invalid.");
             }
 
