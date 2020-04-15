@@ -6,12 +6,11 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./pill.component.scss']
 })
 export class PillComponent implements OnInit {
-  @Input() public variant: number;
+  @Input() public mirror: boolean;
+
   constructor() {
-    this.variant = 1;
+    this.mirror = false;
   }
 
-  ngOnInit() {
-  }
-
+  public ngOnInit() { }
 }
