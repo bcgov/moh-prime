@@ -8,7 +8,7 @@ using Prime.Models;
 
 namespace Prime.Services
 {
-    public class EmailProps
+    public class EmailParams
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -17,7 +17,7 @@ namespace Prime.Services
         public int ExpiryDays { get; set; }
         public string ProvisionerName { get; set; }
 
-        public EmailProps(string firstName, string lastName, string tokenUrl, int maxViews, int expiryDays, string provisionerName = null)
+        public EmailParams(string firstName, string lastName, string tokenUrl, int maxViews, int expiryDays, string provisionerName = null)
         {
             FirstName = firstName;
             LastName = lastName;
@@ -165,13 +165,13 @@ namespace Prime.Services
 
         private async Task<string> GetVendorEmailBody(Enrollee enrollee, EnrolmentCertificateAccessToken token, string provisionerName)
         {
-            EmailProps emailProps = new EmailProps(enrollee.FirstName, enrollee.LastName, token.FrontendUrl, _certificateService.GetMaxViews(), _certificateService.GetExpiryDays(), provisionerName);
+            EmailParams emailProps = new EmailParams(enrollee.FirstName, enrollee.LastName, token.FrontendUrl, _certificateService.GetMaxViews(), _certificateService.GetExpiryDays(), provisionerName);
             return await _razorConverterService.RenderViewToStringAsync("/Views/Emails/VendorEmail.cshtml", emailProps);
         }
 
         private async Task<string> GetClinicManagerEmailBody(Enrollee enrollee, EnrolmentCertificateAccessToken token)
         {
-            EmailProps emailProps = new EmailProps(enrollee.FirstName, enrollee.LastName, token.FrontendUrl, _certificateService.GetMaxViews(), _certificateService.GetExpiryDays());
+            EmailParams emailProps = new EmailParams(enrollee.FirstName, enrollee.LastName, token.FrontendUrl, _certificateService.GetMaxViews(), _certificateService.GetExpiryDays());
             return await _razorConverterService.RenderViewToStringAsync("/Views/Emails/OfficeManagerEmail.cshtml", emailProps);
         }
 
