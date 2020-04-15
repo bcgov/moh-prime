@@ -1,25 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+
+import { Subscription } from 'rxjs';
 
 import { ToastService } from '@core/services/toast.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 
 @Component({
-  selector: 'app-site-information',
-  templateUrl: './site-information.component.html',
-  styleUrls: ['./site-information.component.scss']
+  selector: 'app-organization-information',
+  templateUrl: './organization-information.component.html',
+  styleUrls: ['./organization-information.component.scss']
 })
-export class SiteInformationComponent implements OnInit {
+export class OrganizationInformationComponent implements OnInit {
+  public busy: Subscription;
   public form: FormGroup;
   public SiteRoutes = SiteRoutes;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private toastService: ToastService,
-    private formBuilder: FormBuilder
+    private fb: FormBuilder,
+    private toastService: ToastService
   ) { }
 
   public get siteName(): FormControl {
@@ -30,19 +33,9 @@ export class SiteInformationComponent implements OnInit {
     return this.form.get('doingBusinessAs') as FormControl;
   }
 
-  public get street(): FormControl {
-    return this.form.get('street') as FormControl;
-  }
-
-  public get city(): FormControl {
-    return this.form.get('city') as FormControl;
-  }
-
-  public get postal(): FormControl {
-    return this.form.get('postal') as FormControl;
-  }
-
   public onSubmit() {
+    // TODO proper submission when backend payload known
+    // if (this.form.valid) { }
     this.toastService.openSuccessToast('Enrolment information has been saved');
     this.form.markAsPristine();
     this.router.navigate([SiteRoutes.HOURS_OPERATION], { relativeTo: this.route.parent });
@@ -57,12 +50,16 @@ export class SiteInformationComponent implements OnInit {
   }
 
   private createFormInstance() {
-    this.form = this.formBuilder.group({
-      siteName: [null, []],
-      doingBusinessAs: [null, []],
-      street: [{ value: null, disabled: false }, []],
-      city: [{ value: null, disabled: false }, []],
-      postal: [{ value: null, disabled: false }, []]
+    // TODO rename form fields when backend payload known
+    this.form = this.fb.group({
+      siteName: [
+        null,
+        [Validators.required]
+      ],
+      doingBusinessAs: [
+        null,
+        [Validators.required]
+      ]
     });
   }
 }

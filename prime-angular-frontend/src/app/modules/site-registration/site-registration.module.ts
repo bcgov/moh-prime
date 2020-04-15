@@ -18,7 +18,7 @@ import { AdministratorComponent } from './pages/administrator/administrator.comp
 import { MultipleSitesComponent } from './pages/multiple-sites/multiple-sites.component';
 import { TechnicalSupportContactComponent } from './pages/technical-support-contact/technical-support-contact.component';
 import { SiteReviewComponent } from './pages/site-review/site-review.component';
-import { SiteInformationComponent } from './pages/site-information/site-information.component';
+import { OrganizationInformationComponent } from './pages/organization-information/organization-information.component';
 import { HoursOperationComponent } from './pages/hours-operation/hours-operation.component';
 import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer.component';
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
@@ -32,7 +32,7 @@ import { ConfirmationComponent } from './pages/confirmation/confirmation.compone
     MultipleSitesComponent,
     TechnicalSupportContactComponent,
     SiteReviewComponent,
-    SiteInformationComponent,
+    OrganizationInformationComponent,
     HoursOperationComponent,
     PrivacyOfficerComponent,
     RegistrantProfileFormComponent,

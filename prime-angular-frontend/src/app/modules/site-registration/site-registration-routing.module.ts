@@ -10,7 +10,7 @@ import { CollectionNoticeComponent } from './pages/collection-notice/collection-
 import { VendorComponent } from './pages/vendor/vendor.component';
 import { SigningAuthorityComponent } from './pages/signing-authority/signing-authority.component';
 import { MultipleSitesComponent } from './pages/multiple-sites/multiple-sites.component';
-import { SiteInformationComponent } from './pages/site-information/site-information.component';
+import { OrganizationInformationComponent } from './pages/organization-information/organization-information.component';
 import { HoursOperationComponent } from './pages/hours-operation/hours-operation.component';
 import { AdministratorComponent } from './pages/administrator/administrator.component';
 import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer.component';
@@ -44,9 +44,9 @@ const routes: Routes = [
         data: { title: 'Multiple Sites' }
       },
       {
-        path: SiteRoutes.SITE_INFORMATION,
-        component: SiteInformationComponent,
-        data: { title: 'Site Information' }
+        path: SiteRoutes.ORGANIZATION_INFORMATION,
+        component: OrganizationInformationComponent,
+        data: { title: 'Organization Information' }
       },
       {
         path: SiteRoutes.HOURS_OPERATION,
