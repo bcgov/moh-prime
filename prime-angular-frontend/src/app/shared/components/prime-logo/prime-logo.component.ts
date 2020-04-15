@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, OnChanges } from '@angular/core';
 
 type primeLogoFill = 'light' | 'dark';
 type primeLogoLabel = 'none' | 'bottom' | 'right';
@@ -17,7 +17,7 @@ interface PrimeLogoConfig {
   templateUrl: './prime-logo.component.svg',
   styleUrls: ['./prime-logo.component.scss']
 })
-export class PrimeLogoComponent implements OnInit {
+export class PrimeLogoComponent implements OnInit, OnChanges {
   @Input() public fill: primeLogoFill;
   @Input() public label: primeLogoLabel;
   @Input() public size: primeLogoSize;
@@ -32,13 +32,23 @@ export class PrimeLogoComponent implements OnInit {
     this.size = 'medium';
 
     this.scale = {
-      small: 0.5,
+      small: 0.75,
       medium: 1,
       large: 2
     };
   }
 
+  public ngOnChanges(changes: SimpleChanges) {
+    if (changes.size.currentValue) {
+      this.getConfig();
+    }
+  }
+
   public ngOnInit() {
+    this.getConfig();
+  }
+
+  private getConfig() {
     this.config = {
       fill: this.fill,
       ...this.buildConfig(this.label, this.size)
