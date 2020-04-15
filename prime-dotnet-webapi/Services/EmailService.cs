@@ -92,8 +92,8 @@ namespace Prime.Services
 
             string subject = "New Access Request";
             string emailBody = (string.IsNullOrEmpty(provisionerName))
-                ? await this.GetClinicManagerEmailBody(token)
-                : await this.GetVendorEmailBody(token, provisionerName);
+                ? await _razorConverterService.RenderViewToStringAsync("/Views/Emails/VendorEmail.cshtml", new EmailParams(token, provisionerName))
+                : await _razorConverterService.RenderViewToStringAsync("/Views/Emails/OfficeManagerEmail.cshtml", new EmailParams(token));
 
             await Send(PRIME_EMAIL, recipients, ccEmails, subject, emailBody);
         }
@@ -159,18 +159,6 @@ namespace Prime.Services
                 smtp.Dispose();
                 mail.Dispose();
             }
-        }
-
-        private async Task<string> GetVendorEmailBody(EnrolmentCertificateAccessToken token, string provisionerName)
-        {
-            EmailParams emailParams = new EmailParams(token, provisionerName);
-            return await _razorConverterService.RenderViewToStringAsync("/Views/Emails/VendorEmail.cshtml", emailParams);
-        }
-
-        private async Task<string> GetClinicManagerEmailBody(EnrolmentCertificateAccessToken token)
-        {
-            EmailParams emailParams = new EmailParams(token);
-            return await _razorConverterService.RenderViewToStringAsync("/Views/Emails/OfficeManagerEmail.cshtml", emailParams);
         }
 
         public class EmailServiceException : Exception
