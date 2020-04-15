@@ -1,35 +1,108 @@
-<app-page>
-
+<app-page [busy]="busy">
   <app-page-header>PharmaNet Site Registration</app-page-header>
-
   <app-site-progress-indicator [currentRoute]="SiteRoutes.SITE_REVIEW"></app-site-progress-indicator>
 
-  <app-page-subheader>
-    <ng-container appPageSubheaderTitle>Site Registration Review</ng-container>
-    <ng-container appPageSubheaderSummary>
-      Review all the information to ensure it is accurate, you will not get approved if any of your information is
-      incorrect. If you need to edit your information use the pencil icon to navigate to that section of the enrolment
-      to make changes.
-    </ng-container>
-  </app-page-subheader>
+  <div class="mb-5">
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>Site Registration Review</ng-container>
+      <ng-container appPageSubheaderSummary>
+        Review all the information to ensure it is accurate, you will not get approved if any of your information is
+        incorrect. If you need to edit your information use the pencil icon to navigate to that section of the enrolment
+        to make changes.
+      </ng-container>
+    </app-page-subheader>
+  </div>
 
   <section class="mb-4">
 
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>Organization Information</ng-container>
-      <mat-icon matTooltip="Edit Organizations"
-                (click)="onRoute(SiteRoutes.MULTIPLE_SITES)">edit</mat-icon>
+      <mat-icon matTooltip="Edit Organization Information"
+                (click)="onRoute(SiteRoutes.ORGANIZATION_INFORMATION)">edit</mat-icon>
     </app-page-subheader>
 
-
-    <app-enrollee-property title="Organization Number"
-                           [makeBold]="true">
-      --
+    <app-enrollee-property title="Organization Number (Legal Entity Operating Site)">
+      {{ '' | default }}
     </app-enrollee-property>
 
-    <app-enrollee-property title="Vendor"
-                           [makeBold]="true">
-      --
+    <app-enrollee-property title="Doing Business As">
+      {{ '' | default }}
+    </app-enrollee-property>
+
+  </section>
+
+  <section class="mb-4">
+
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>Site Address</ng-container>
+      <mat-icon matTooltip="Edit Site Address"
+                (click)="onRoute(SiteRoutes.SITE_ADDRESS)">edit</mat-icon>
+    </app-page-subheader>
+
+    <app-enrollee-property title="Address">
+      {{ '' | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="City">
+      {{ '' | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="Province">
+      {{ '' | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="Postal Code">
+      {{ '' | default }}
+    </app-enrollee-property>
+
+  </section>
+
+  <section class="mb-4">
+
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>Vendors</ng-container>
+      <mat-icon matTooltip="Edit Vendors"
+                (click)="onRoute(SiteRoutes.VENDOR)">edit</mat-icon>
+    </app-page-subheader>
+
+    <ng-container *ngFor="let vendor of []">
+
+      <app-enrollee-property>
+        {{ '' | default }}
+      </app-enrollee-property>
+
+    </ng-container>
+
+    <app-enrollee-property *ngIf="!null">
+      None
+    </app-enrollee-property>
+
+  </section>
+  <section class="mb-4">
+
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>Hours of Operation</ng-container>
+      <mat-icon matTooltip="Edit Hours of Operation"
+                (click)="onRoute(SiteRoutes.HOURS_OPERATION)">edit</mat-icon>
+    </app-page-subheader>
+
+    <app-enrollee-property title="Does this site operate on weekends?">
+      {{ '' | yesNo: true }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="Does this site operate 24 hours?">
+      {{ '' | yesNo: true }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="Any special hours of operation that we should be aware of?"
+                           [makeBold]="false">
+      {{ '' | yesNo: true }}
+    </app-enrollee-property>
+
+    <app-enrollee-property *ngIf="false"
+                           title="Description"
+                           [makeBold]="false">
+      {{ '' }}
     </app-enrollee-property>
 
   </section>
@@ -73,7 +146,7 @@
   <section class="mb-4">
 
     <app-page-subheader>
-      <ng-container appPageSubheaderTitle>Technical Support Contact</ng-container>
+      <ng-container appPageSubheaderTitle>Technical Support</ng-container>
       <mat-icon matTooltip="Edit Technical Support Contact"
                 (click)="onRoute(SiteRoutes.TECHNICAL_SUPPORT_CONTACT)">edit</mat-icon>
     </app-page-subheader>
