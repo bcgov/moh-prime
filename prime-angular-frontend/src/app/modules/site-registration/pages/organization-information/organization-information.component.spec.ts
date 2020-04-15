@@ -2,12 +2,12 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { SiteInformationComponent } from './site-information.component';
+import { OrganizationInformationComponent } from './organization-information.component';
 import { SiteRegistrationModule } from '@registration/site-registration.module';
 
 describe('SiteInformationComponent', () => {
-  let component: SiteInformationComponent;
-  let fixture: ComponentFixture<SiteInformationComponent>;
+  let component: OrganizationInformationComponent;
+  let fixture: ComponentFixture<OrganizationInformationComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -21,7 +21,7 @@ describe('SiteInformationComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SiteInformationComponent);
+    fixture = TestBed.createComponent(OrganizationInformationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
