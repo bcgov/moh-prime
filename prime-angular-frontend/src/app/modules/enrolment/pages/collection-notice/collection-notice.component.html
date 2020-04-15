@@ -1,5 +1,6 @@
 <app-enrollee-page>
 
-  <app-collection-notice-alert></app-collection-notice-alert>
+  <app-enrolment-collection-notice [isFull]="true"
+                                   (accepted)="onAccept()"></app-enrolment-collection-notice>
 
 </app-enrollee-page>

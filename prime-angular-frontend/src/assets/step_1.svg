@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="55.457" height="156.084" viewBox="0 0 55.457 156.084">
+  <g id="one.horizontal" transform="translate(0 0.5)">
+    <g id="solid" transform="translate(0 6)" opacity="0.8">
+      <path id="Path" d="M30.829,19.705h-.523L4.15,33.827.227,18.4,32.922.877H50.184V150.461H30.567V19.705Z" transform="translate(-0.227 -0.877)" fill="rgba(208,227,235,0.63)" fill-rule="evenodd"/>
+    </g>
+    <g id="outline" transform="translate(5)">
+      <path id="Path-2" data-name="Path" d="M30.829,19.705h-.523L4.15,33.827.227,18.4,32.922.877H50.184V150.461H30.567V19.705Z" transform="translate(-0.227 -0.877)" fill="none" stroke="#224176" stroke-width="1" fill-rule="evenodd"/>
+    </g>
+  </g>
+</svg>

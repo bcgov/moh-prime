@@ -23,10 +23,12 @@ import { AccessAgreementCurrentComponent } from './pages/access-agreement-curren
 import {
   AccessAgreementHistoryEnrolmentComponent
 } from './pages/access-agreement-history-enrolment/access-agreement-history-enrolment.component';
+
 import { CollegeCertificationFormComponent } from './shared/components/college-certification-form/college-certification-form.component';
 import { JobFormComponent } from './shared/components/job-form/job-form.component';
 import { EnrolleePageComponent } from './shared/components/enrollee-page/enrollee-page.component';
 import { NextStepsInfographicComponent } from './shared/components/next-steps-infographic/next-steps-infographic.component';
+import { EnrolmentCollectionNoticeComponent } from './shared/components/enrolment-collection-notice/enrolment-collection-notice.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +53,8 @@ import { NextStepsInfographicComponent } from './shared/components/next-steps-in
     AccessAgreementCurrentComponent,
     AccessAgreementHistoryEnrolmentComponent,
     EnrolleePageComponent,
-    NextStepsInfographicComponent
+    NextStepsInfographicComponent,
+    EnrolmentCollectionNoticeComponent
   ],
   imports: [
     SharedModule,
