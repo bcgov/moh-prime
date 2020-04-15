@@ -56,7 +56,7 @@ import { NoteComponent } from './components/dialogs/content/note/note.component'
 import { ClaimEnrolleeComponent } from './components/dialogs/content/claim-enrollee/claim-enrollee.component';
 import { ManualFlagNoteComponent } from './components/dialogs/content/manual-flag-note/manual-flag-note.component';
 import { FeedbackComponent } from './components/dialogs/content/feedback/feedback.component';
-import { CollectionNoticeAlertComponent } from './components/collection-notice-alert/collection-notice-alert.component';
+import { CollectionNoticeContainerComponent } from './components/collection-notice-container/collection-notice-container.component';
 import { PageFooterComponent } from './components/page-footer/page-footer.component';
 
 @NgModule({
@@ -106,7 +106,7 @@ import { PageFooterComponent } from './components/page-footer/page-footer.compon
     ClaimEnrolleeComponent,
     ManualFlagNoteComponent,
     FeedbackComponent,
-    CollectionNoticeAlertComponent,
+    CollectionNoticeContainerComponent,
     PageFooterComponent
   ],
   imports: [
@@ -167,7 +167,7 @@ import { PageFooterComponent } from './components/page-footer/page-footer.compon
     PrimeSupportEmailComponent,
     AccessTermsTableComponent,
     AccessTermComponent,
-    CollectionNoticeAlertComponent,
+    CollectionNoticeContainerComponent,
     PageFooterComponent
   ]
 })

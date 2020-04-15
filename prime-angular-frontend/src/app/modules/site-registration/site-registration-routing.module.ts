@@ -6,7 +6,7 @@ import { UnsupportedGuard } from '@core/guards/unsupported.guard';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 
 import { SiteRoutes } from './site-registration.routes';
-import { SiteCollectionNoticeComponent } from './pages/site-collection-notice/site-collection-notice.component';
+import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
 import { VendorComponent } from './pages/vendor/vendor.component';
 import { SigningAuthorityComponent } from './pages/signing-authority/signing-authority.component';
 import { MultipleSitesComponent } from './pages/multiple-sites/multiple-sites.component';
@@ -35,8 +35,8 @@ const routes: Routes = [
     children: [
       {
         path: SiteRoutes.COLLECTION_NOTICE,
-        component: SiteCollectionNoticeComponent,
-        data: { title: 'Site Collection Notice' }
+        component: CollectionNoticeComponent,
+        data: { title: 'Collection Notice' }
       },
       {
         path: SiteRoutes.MULTIPLE_SITES,
