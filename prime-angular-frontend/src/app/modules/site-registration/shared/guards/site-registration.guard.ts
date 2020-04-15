@@ -35,9 +35,6 @@ export class SiteRegistrationGuard extends BaseGuard {
       const currentRoute = this.router.url.slice(1).split('/')[1];
 
       if (this.authService.isRegistrant()) {
-        if (currentRoute === '') {
-          this.router.navigate([SiteRoutes.COLLECTION_NOTICE]);
-        }
         return resolve(true);
       } else if (this.authService.isEnrollee()) {
         this.router.navigate([this.config.routes.enrolment]);
