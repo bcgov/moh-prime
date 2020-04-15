@@ -7,9 +7,7 @@ import { SiteRegistrationRoutingModule } from './site-registration-routing.modul
 import { RegistrantProfileFormComponent } from './shared/components/registrant-profile-form/registrant-profile-form.component';
 import { RegistrantProfileReviewComponent } from './shared/components/registrant-profile-review/registrant-profile-review.component';
 import { SiteProgressIndicatorComponent } from './shared/components/site-progress-indicator/site-progress-indicator.component';
-import {
-  SiteCollectionNoticeComponent
-} from './shared/components/site-collection-notice/site-collection-notice.component';
+import { SiteCollectionNoticeComponent } from './shared/components/site-collection-notice/site-collection-notice.component';
 
 import { VendorComponent } from './pages/vendor/vendor.component';
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
@@ -22,8 +20,6 @@ import { OrganizationInformationComponent } from './pages/organization-informati
 import { HoursOperationComponent } from './pages/hours-operation/hours-operation.component';
 import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer.component';
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
-import { RegistrantProfileReviewComponent } from './shared/components/registrant-profile-review/registrant-profile-review.component';
-import { SiteProgressIndicatorComponent } from './shared/components/site-progress-indicator/site-progress-indicator.component';
 import { SiteAddressComponent } from './pages/site-address/site-address.component';
 
 @NgModule({
@@ -42,7 +38,7 @@ import { SiteAddressComponent } from './pages/site-address/site-address.componen
     ConfirmationComponent,
     RegistrantProfileReviewComponent,
     SiteProgressIndicatorComponent,
-    SiteCollectionNoticeComponent
+    SiteCollectionNoticeComponent,
     SiteAddressComponent
   ],
   imports: [

@@ -44,7 +44,7 @@ export class SiteAddressComponent implements OnInit {
   }
 
   public onBack() {
-    this.router.navigate([SiteRoutes.SITE_INFORMATION], { relativeTo: this.route.parent });
+    this.router.navigate([SiteRoutes.ORGANIZATION_INFORMATION], { relativeTo: this.route.parent });
   }
 
   public ngOnInit() {

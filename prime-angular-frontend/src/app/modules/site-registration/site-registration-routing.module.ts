@@ -7,13 +7,12 @@ import { DashboardComponent } from '@shared/components/dashboard/dashboard.compo
 import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 
 import { SiteRoutes } from './site-registration.routes';
-import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
-import { SiteCollectionNoticeComponent } from './pages/site-collection-notice/site-collection-notice.component';
-
 import { SiteRegistrationGuard } from './shared/guards/site-registration.guard';
+
+import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
 import { VendorComponent } from './pages/vendor/vendor.component';
-import { SigningAuthorityComponent } from './pages/signing-authority/signing-authority.component';
 import { MultipleSitesComponent } from './pages/multiple-sites/multiple-sites.component';
+import { SigningAuthorityComponent } from './pages/signing-authority/signing-authority.component';
 import { OrganizationInformationComponent } from './pages/organization-information/organization-information.component';
 import { SiteAddressComponent } from './pages/site-address/site-address.component';
 import { HoursOperationComponent } from './pages/hours-operation/hours-operation.component';
