@@ -78,6 +78,16 @@ objects:
                     secretKeyRef:
                       key: database-name
                       name: postgresql-secret
+                - name: MONGO_INITDB_ROOT_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      key: database-user
+                      name: postgresql-secret
+                - name: MONGO_INITDB_ROOT_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: database-admin-password
+                      name: postgresql-secret
               image: >-
                 docker-registry.default.svc:5000/openshift/mongodb@sha256:fae76f90d3f00fec19a6da648f590de7c1cee63f42915cdf04416682864ce6b9
               imagePullPolicy: IfNotPresent
@@ -96,12 +106,7 @@ objects:
               readinessProbe:
                 exec:
                   command:
-                    - /bin/sh
-                    - '-i'
-                    - '-c'
-                    - >-
-                      mongo 127.0.0.1:27017/$MONGODB_DATABASE -u $MONGODB_USER -p
-                      $MONGODB_PASSWORD --eval="quit()"
+                    - '/bin/sh -i -c mongo 127.0.0.1:27017/$MONGODB_DATABASE -u $MONGODB_USER -p $MONGODB_PASSWORD --eval="quit()"'
                 failureThreshold: 3
                 initialDelaySeconds: 3
                 periodSeconds: 10
@@ -116,7 +121,7 @@ objects:
               terminationMessagePath: /dev/termination-log
               terminationMessagePolicy: File
               volumeMounts:
-                - mountPath: /var/lib/mongodb/data
+                - mountPath: /var/lib/mongodb/data/db
                   name: ${NAME}${SUFFIX}-data
           dnsPolicy: ClusterFirst
           restartPolicy: Always
@@ -127,8 +132,6 @@ objects:
             - name: ${NAME}${SUFFIX}-data
               persistentVolumeClaim:
                 claimName: ${NAME}${SUFFIX}
-            - name: ${NAME}${SUFFIX}-run
-              emptyDir: {}
       test: false
       triggers:
         - imageChangeParams:
