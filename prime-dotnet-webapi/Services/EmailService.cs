@@ -10,12 +10,12 @@ namespace Prime.Services
 {
     public class EmailProps
     {
-        public string FirstName;
-        public string LastName;
-        public string TokenUrl;
-        public int MaxViews;
-        public int ExpiryDays;
-        public string ProvisionerName;
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string TokenUrl { get; set; }
+        public int MaxViews { get; set; }
+        public int ExpiryDays { get; set; }
+        public string ProvisionerName { get; set; }
 
         public EmailProps(string firstName, string lastName, string tokenUrl, int maxViews, int expiryDays, string provisionerName = null)
         {
