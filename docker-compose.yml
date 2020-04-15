@@ -107,6 +107,42 @@ services:
       - local_postgres_data:/var/lib/postgresql/data
     networks:
       - primenet
+####################### DOCUMENT_MANAGER_BACKEND Definition #######################
+  document_manager_backend:
+    restart: always
+    container_name: document_manager_backend
+    build:
+      context: document-manager/backend
+    ports:
+      - 6001:5001
+    volumes:
+      - ./document-manager/backend/:/app/
+    env_file: ./document-manager/backend/.env-prime
+    networks:
+      - primenet
+
+  document_manager_migrate:
+    restart: on-failure
+    container_name: document_manager_migrate
+    build:
+      context: document-manager/backend
+    volumes:
+      - ./document-manager/backend/:/app/
+    command: flask db upgrade
+    env_file: ./document-manager/backend/.env-prime
+    networks:
+      - primenet
+
+  redis:
+    image: redis:3.2-alpine
+    container_name: prime_cache
+    restart: always
+    command: redis-server --requirepass redis-password
+    ports:
+      - "6379:6379"
+    networks:
+      - primenet
+
 volumes:
   local_postgres_data:
   local_mongodb_data:
