@@ -91,7 +91,7 @@ objects:
               image: >-
                 docker-registry.default.svc:5000/openshift/mongodb@sha256:fae76f90d3f00fec19a6da648f590de7c1cee63f42915cdf04416682864ce6b9
               imagePullPolicy: IfNotPresent
-              livenessProbe:
+              readinessProbe:
                 failureThreshold: 3
                 initialDelaySeconds: 30
                 periodSeconds: 10
@@ -103,15 +103,6 @@ objects:
               ports:
                 - containerPort: 27017
                   protocol: TCP
-              readinessProbe:
-                exec:
-                  command:
-                    - '/bin/sh -i -c mongo 127.0.0.1:27017/$MONGODB_DATABASE -u $MONGODB_USER -p $MONGODB_PASSWORD --eval="quit()"'
-                failureThreshold: 3
-                initialDelaySeconds: 3
-                periodSeconds: 10
-                successThreshold: 1
-                timeoutSeconds: 1
               resources:
                 limits:
                   memory: 512Mi
