@@ -17,13 +17,13 @@ namespace Prime.Services
         public int ExpiryDays { get; set; }
         public string ProvisionerName { get; set; }
 
-        public EmailParams(EnrolmentCertificateAccessToken token, int maxViews, int expiryDays, string provisionerName = null)
+        public EmailParams(EnrolmentCertificateAccessToken token, string provisionerName = null)
         {
             FirstName = token.Enrollee.FirstName;
             LastName = token.Enrollee.LastName;
             TokenUrl = token.FrontendUrl;
-            MaxViews = maxViews;
-            ExpiryDays = expiryDays;
+            MaxViews = EnrolmentCertificateService.MAX_VIEWS;
+            ExpiryDays = EnrolmentCertificateService.EXPIRY_DAYS;
             ProvisionerName = provisionerName;
         }
     }
@@ -163,13 +163,13 @@ namespace Prime.Services
 
         private async Task<string> GetVendorEmailBody(EnrolmentCertificateAccessToken token, string provisionerName)
         {
-            EmailParams emailParams = new EmailParams(token, EnrolmentCertificateService.MAX_VIEWS, EnrolmentCertificateService.EXPIRY_DAYS, provisionerName);
+            EmailParams emailParams = new EmailParams(token, provisionerName);
             return await _razorConverterService.RenderViewToStringAsync("/Views/Emails/VendorEmail.cshtml", emailParams);
         }
 
         private async Task<string> GetClinicManagerEmailBody(EnrolmentCertificateAccessToken token)
         {
-            EmailParams emailParams = new EmailParams(token, EnrolmentCertificateService.MAX_VIEWS, EnrolmentCertificateService.EXPIRY_DAYS);
+            EmailParams emailParams = new EmailParams(token);
             return await _razorConverterService.RenderViewToStringAsync("/Views/Emails/OfficeManagerEmail.cshtml", emailParams);
         }
 
