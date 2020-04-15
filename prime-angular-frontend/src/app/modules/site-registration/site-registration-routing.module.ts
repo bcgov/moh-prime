@@ -7,13 +7,14 @@ import { DashboardComponent } from '@shared/components/dashboard/dashboard.compo
 import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 
 import { SiteRoutes } from './site-registration.routes';
-import { SiteRegistrationGuard } from './shared/guards/site-registration.guard';
-
+import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
 import { SiteCollectionNoticeComponent } from './pages/site-collection-notice/site-collection-notice.component';
+
+import { SiteRegistrationGuard } from './shared/guards/site-registration.guard';
 import { VendorComponent } from './pages/vendor/vendor.component';
 import { SigningAuthorityComponent } from './pages/signing-authority/signing-authority.component';
 import { MultipleSitesComponent } from './pages/multiple-sites/multiple-sites.component';
-import { SiteInformationComponent } from './pages/site-information/site-information.component';
+import { OrganizationInformationComponent } from './pages/organization-information/organization-information.component';
 import { SiteAddressComponent } from './pages/site-address/site-address.component';
 import { HoursOperationComponent } from './pages/hours-operation/hours-operation.component';
 import { AdministratorComponent } from './pages/administrator/administrator.component';
@@ -37,8 +38,8 @@ const routes: Routes = [
     children: [
       {
         path: SiteRoutes.COLLECTION_NOTICE,
-        component: SiteCollectionNoticeComponent,
-        data: { title: 'Site Collection Notice' }
+        component: CollectionNoticeComponent,
+        data: { title: 'Collection Notice' }
       },
       {
         path: SiteRoutes.MULTIPLE_SITES,
@@ -46,9 +47,9 @@ const routes: Routes = [
         data: { title: 'Multiple Sites' }
       },
       {
-        path: SiteRoutes.SITE_INFORMATION,
-        component: SiteInformationComponent,
-        data: { title: 'Site Information' }
+        path: SiteRoutes.ORGANIZATION_INFORMATION,
+        component: OrganizationInformationComponent,
+        data: { title: 'Organization Information' }
       },
       {
         path: SiteRoutes.SITE_ADDRESS,

@@ -11,7 +11,6 @@ import { SiteRoutes } from 'app/modules/site-registration/site-registration.rout
   styleUrls: ['./site.component.scss']
 })
 export class SiteComponent implements OnInit {
-
   public isIE: boolean;
 
   constructor(
@@ -31,7 +30,5 @@ export class SiteComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
-  }
-
+  public ngOnInit() { }
 }
