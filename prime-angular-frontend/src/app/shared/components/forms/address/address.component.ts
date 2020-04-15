@@ -14,10 +14,16 @@ import { pairwise, distinctUntilChanged, startWith } from 'rxjs/operators';
   styleUrls: ['./address.component.scss']
 })
 export class AddressComponent implements OnInit {
+  // Country must be included in the FormGroup, but
+  // does not have to be displayed
   @Input() public form: FormGroup;
+  // List of controls that should be displayed
+  @Input() public formControlNames: string[];
 
   public countries: Config<string>[];
+  // Includes provinces and states
   public provinces: ProvinceConfig[];
+  // Filtered based on country
   public filteredProvinces: ProvinceConfig[];
   public provinceLabel: string;
   public postalLabel: string;
@@ -27,6 +33,14 @@ export class AddressComponent implements OnInit {
     private configService: ConfigService,
     private formUtilsService: FormUtilsService
   ) {
+    this.formControlNames = [
+      'countryCode',
+      'provinceCode',
+      'street',
+      'street2',
+      'city',
+      'postal'
+    ];
     this.countries = this.configService.countries;
     this.provinces = this.configService.provinces;
     this.setAddressLabels();
@@ -42,6 +56,15 @@ export class AddressComponent implements OnInit {
 
   public get postal(): FormControl {
     return this.form.get('postal') as FormControl;
+  }
+
+  public showFormControl(formControlName: string): boolean {
+    return this.formControlNames.includes(formControlName);
+  }
+
+  public getFormControlOrder(formControlName: string): string {
+    const index = this.formControlNames.indexOf(formControlName) + 1;
+    return `order-${index}`;
   }
 
   public isRequired(path: string): boolean {
