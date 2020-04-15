@@ -4,21 +4,23 @@ import { Routes, RouterModule } from '@angular/router';
 import { ConfigResolver } from '@config/config-resolver';
 import { UnsupportedGuard } from '@core/guards/unsupported.guard';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
+import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 
 import { SiteRoutes } from './site-registration.routes';
+import { SiteRegistrationGuard } from './shared/guards/site-registration.guard';
+
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
 import { VendorComponent } from './pages/vendor/vendor.component';
-import { SigningAuthorityComponent } from './pages/signing-authority/signing-authority.component';
 import { MultipleSitesComponent } from './pages/multiple-sites/multiple-sites.component';
+import { SigningAuthorityComponent } from './pages/signing-authority/signing-authority.component';
 import { OrganizationInformationComponent } from './pages/organization-information/organization-information.component';
+import { SiteAddressComponent } from './pages/site-address/site-address.component';
 import { HoursOperationComponent } from './pages/hours-operation/hours-operation.component';
 import { AdministratorComponent } from './pages/administrator/administrator.component';
 import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer.component';
 import { TechnicalSupportContactComponent } from './pages/technical-support-contact/technical-support-contact.component';
 import { SiteReviewComponent } from './pages/site-review/site-review.component';
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
-import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
-import { SiteRegistrationGuard } from './shared/guards/site-registration.guard';
 
 const routes: Routes = [
   {
@@ -47,6 +49,11 @@ const routes: Routes = [
         path: SiteRoutes.ORGANIZATION_INFORMATION,
         component: OrganizationInformationComponent,
         data: { title: 'Organization Information' }
+      },
+      {
+        path: SiteRoutes.SITE_ADDRESS,
+        component: SiteAddressComponent,
+        data: { title: 'Site Address' }
       },
       {
         path: SiteRoutes.HOURS_OPERATION,
