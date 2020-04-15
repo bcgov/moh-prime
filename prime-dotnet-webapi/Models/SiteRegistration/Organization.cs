@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Prime.Models
 {
-    [Table("Location")]
-    public class Location : BaseAuditable
+    [Table("Organization")]
+    public class Organization : BaseAuditable
     {
         [Key]
         public int Id { get; set; }
