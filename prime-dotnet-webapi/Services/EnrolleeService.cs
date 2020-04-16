@@ -142,7 +142,7 @@ namespace Prime.Services
                 .Include(e => e.MailingAddress)
                 .Include(e => e.Certifications)
                 .Include(e => e.Jobs)
-                .Include(e => e.Organizations)
+                .Include(e => e.EnrolleeOrganizationTypes)
                 .SingleAsync(e => e.Id == enrolleeId);
 
             _context.Entry(enrollee).CurrentValues.SetValues(enrolleeProfile);
@@ -150,7 +150,7 @@ namespace Prime.Services
             UpdateMailingAddress(enrollee.MailingAddress, enrolleeProfile.MailingAddress, enrolleeId);
             ReplaceExistingItems(enrollee.Certifications, enrolleeProfile.Certifications, enrolleeId);
             ReplaceExistingItems(enrollee.Jobs, enrolleeProfile.Jobs, enrolleeId);
-            ReplaceExistingItems(enrollee.Organizations, enrolleeProfile.Organizations, enrolleeId);
+            ReplaceExistingItems(enrollee.EnrolleeOrganizationTypes, enrolleeProfile.EnrolleeOrganizationTypes, enrolleeId);
 
             // If profileCompleted is true, this is the first time the enrollee
             // has completed their profile by traversing the wizard, and indicates
@@ -258,7 +258,7 @@ namespace Prime.Services
                     .ThenInclude(c => c.License)
                         .ThenInclude(l => l.DefaultPrivileges)
                 .Include(e => e.Jobs)
-                .Include(e => e.Organizations)
+                .Include(e => e.EnrolleeOrganizationTypes)
                 .Include(e => e.EnrolmentStatuses)
                     .ThenInclude(es => es.Status)
                 .Include(e => e.EnrolmentStatuses)

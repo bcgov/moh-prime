@@ -166,8 +166,8 @@ export class EnrolmentResource {
       enrollee.jobs = [];
     }
 
-    if (!enrollee.organizations) {
-      enrollee.organizations = [];
+    if (!enrollee.enrolleeOrganizationTypes) {
+      enrollee.enrolleeOrganizationTypes = [];
     }
 
     // Reorganize the shape of the enrollee into an enrolment
@@ -217,6 +217,7 @@ export class EnrolmentResource {
       },
       // Provide the default and allow it to be overridden
       collectionNoticeAccepted: false,
+      organizations: enrollee.enrolleeOrganizationTypes,
       ...remainder
     };
   }
@@ -243,6 +244,7 @@ export class EnrolmentResource {
 
     return {
       ...enrollee,
+      enrolleeOrganizationTypes: enrolment.organizations,
       ...remainder
     };
   }

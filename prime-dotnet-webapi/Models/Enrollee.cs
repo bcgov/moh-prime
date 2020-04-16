@@ -64,7 +64,7 @@ namespace Prime.Models
 
         public ICollection<Job> Jobs { get; set; }
 
-        public ICollection<Organization> Organizations { get; set; }
+        public ICollection<EnrolleeOrganizationType> EnrolleeOrganizationTypes { get; set; }
 
         public string DeviceProviderNumber { get; set; }
 

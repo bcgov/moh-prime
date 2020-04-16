@@ -70,8 +70,8 @@ export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent impl
       enrollee.jobs = [];
     }
 
-    if (!enrollee.organizations) {
-      enrollee.organizations = [];
+    if (!enrollee.enrolleeOrganizationTypes) {
+      enrollee.enrolleeOrganizationTypes = [];
     }
 
     return this.enrolmentAdapter(enrollee);
@@ -95,6 +95,7 @@ export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent impl
       contactPhone,
       voicePhone,
       voiceExtension,
+      enrolleeOrganizationTypes,
       ...remainder
     } = enrollee;
 
@@ -119,6 +120,7 @@ export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent impl
       },
       // Provide the default and allow it to be overridden
       collectionNoticeAccepted: false,
+      organizations: enrollee.enrolleeOrganizationTypes,
       ...remainder
     };
   }
