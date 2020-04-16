@@ -175,5 +175,10 @@ namespace PrimeTests.Mocks
         {
             throw new NotImplementedException();
         }
+
+        public Task<bool> EnrolleeGpidExistsAsync(string gpid)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
