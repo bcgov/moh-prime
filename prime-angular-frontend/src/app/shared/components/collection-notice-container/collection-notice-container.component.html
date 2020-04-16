@@ -1,0 +1,37 @@
+<ng-container *ngIf="show">
+  <ng-container *ngIf="isFull; then fullPage else alert"></ng-container>
+</ng-container>
+
+<ng-template #alert>
+  <app-alert type="info">
+    <ng-container #alertTitle
+                  class="alert-title">{{ title }}</ng-container>
+    <ng-container #alertContent
+                  class="alert-content">
+      <ng-container *ngTemplateOutlet="collectionNotice"></ng-container>
+    </ng-container>
+
+  </app-alert>
+</ng-template>
+
+<ng-template #fullPage>
+  <app-page-header>{{ title }}</app-page-header>
+
+  <ng-container *ngTemplateOutlet="collectionNotice"></ng-container>
+</ng-template>
+
+<ng-template #collectionNotice>
+
+  <ng-content></ng-content>
+
+  <div class="col text-right">
+
+    <button mat-flat-button
+            type="button"
+            color="primary"
+            (click)="onAccept()">
+      {{ label }}
+    </button>
+
+  </div>
+</ng-template>

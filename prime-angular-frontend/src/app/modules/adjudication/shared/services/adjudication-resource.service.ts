@@ -334,8 +334,8 @@ export class AdjudicationResource {
       enrollee.jobs = [];
     }
 
-    if (!enrollee.organizations) {
-      enrollee.organizations = [];
+    if (!enrollee.enrolleeOrganizationTypes) {
+      enrollee.enrolleeOrganizationTypes = [];
     }
 
     return enrollee;

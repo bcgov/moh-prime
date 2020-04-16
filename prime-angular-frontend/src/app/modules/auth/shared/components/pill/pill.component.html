@@ -1,4 +1,7 @@
-<div class="pill-container"
-     [ngClass]="{ 'yellow-blue': variant == 2 }">
-  <ng-content></ng-content>
+<div class="pill-container">
+  <div class="content">
+    <ng-content select="section"></ng-content>
+  </div>
+  <div class="background"
+       [class.mirror]="mirror"></div>
 </div>

@@ -42,7 +42,7 @@ export class MultipleSitesComponent implements OnInit {
   public onSubmit() {
     this.toastService.openSuccessToast('Enrolment information has been saved');
     this.form.markAsPristine();
-    this.router.navigate([SiteRoutes.SITE_INFORMATION], { relativeTo: this.route.parent });
+    this.router.navigate([SiteRoutes.ORGANIZATION_INFORMATION], { relativeTo: this.route.parent });
   }
 
   public ngOnInit() {
