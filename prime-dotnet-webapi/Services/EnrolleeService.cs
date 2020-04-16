@@ -50,6 +50,12 @@ namespace Prime.Services
                 .AnyAsync(e => e.UserId == userId);
         }
 
+        public async Task<bool> EnrolleeGpidExistsAsync(string gpid)
+        {
+            return await _context.Enrollees
+                .AnyAsync(e => e.GPID == gpid);
+        }
+
         public async Task<Enrollee> GetEnrolleeAsync(Guid userId)
         {
             var entity = await this.GetBaseEnrolleeQuery()
@@ -285,6 +291,8 @@ namespace Prime.Services
             if (entity != null)
             {
                 entity.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(entity);
+                // Attach to the enrollee if they have signed the most recent ToA
+                entity.HasMostRecentAccessTermSigned = await _accessTermService.IsCurrentByEnrolleeAsync(entity);
             }
 
             return entity;
