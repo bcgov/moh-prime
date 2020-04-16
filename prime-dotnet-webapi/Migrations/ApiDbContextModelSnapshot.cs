@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
-using Prime.Models;
 
 namespace Prime.Migrations
 {
@@ -6499,7 +6498,7 @@ namespace Prime.Migrations
 
                     b.HasIndex("SigningAuthorityId");
 
-                    b.ToTable("Organization");
+                    b.ToTable("EnrolleeOrganizationType");
                 });
 
             modelBuilder.Entity("Prime.Models.OrganizationType", b =>
@@ -10483,8 +10482,6 @@ namespace Prime.Migrations
                         .HasName("IX_Address_EnrolleeId");
 
                     b.ToTable("Address");
-
-                    b.HasDiscriminator().HasValue(2);
                 });
 
             modelBuilder.Entity("Prime.Models.PhysicalAddress", b =>
