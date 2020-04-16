@@ -90,8 +90,8 @@ namespace Prime.Services
 
             string subject = "New Access Request";
             string viewName = (string.IsNullOrEmpty(provisionerName))
-                ? "/Views/Emails/VendorEmail.cshtml"
-                : "/Views/Emails/OfficeManagerEmail.cshtml";
+                ? "/Views/Emails/OfficeManagerEmail.cshtml"
+                : "/Views/Emails/VendorEmail.cshtml";
             string emailBody = await _razorConverterService.RenderViewToStringAsync(viewName, new EmailParams(token, provisionerName));
             await Send(PRIME_EMAIL, recipients, ccEmails, subject, emailBody);
         }
