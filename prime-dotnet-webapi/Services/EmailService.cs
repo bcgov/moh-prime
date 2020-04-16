@@ -8,18 +8,36 @@ using Prime.Models;
 
 namespace Prime.Services
 {
+    public class EmailParams
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string TokenUrl { get; set; }
+        public int MaxViews { get => EnrolmentCertificateService.MAX_VIEWS; }
+        public int ExpiryDays { get => EnrolmentCertificateService.EXPIRY_DAYS; }
+        public string ProvisionerName { get; set; }
+
+        public EmailParams(EnrolmentCertificateAccessToken token, string provisionerName = null)
+        {
+            FirstName = token.Enrollee.FirstName;
+            LastName = token.Enrollee.LastName;
+            TokenUrl = token.FrontendUrl;
+            ProvisionerName = provisionerName;
+        }
+    }
+
     public class EmailService : BaseService, IEmailService
     {
         private const string PRIME_EMAIL = "no-reply-prime@gov.bc.ca";
-        private readonly IEnrolmentCertificateService _certificateService;
+        private readonly IRazorConverterService _razorConverterService;
 
         public EmailService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
-            IEnrolmentCertificateService enrolmentCertificateService)
+            IRazorConverterService razorConverterService)
             : base(context, httpContext)
         {
-            _certificateService = enrolmentCertificateService;
+            _razorConverterService = razorConverterService;
         }
 
         public static bool IsValidEmail(string email)
@@ -58,6 +76,7 @@ namespace Prime.Services
         {
             if (!AreValidEmails(recipients))
             {
+                // TODO Log invalid email, cannot send
                 throw new ArgumentException("Cannot send provisioner link, supplied email address(es) are invalid.");
             }
 
@@ -70,10 +89,10 @@ namespace Prime.Services
             var ccEmails = new List<string>() { token.Enrollee.ContactEmail };
 
             string subject = "New Access Request";
-            string emailBody = (string.IsNullOrEmpty(provisionerName))
-                ? this.GetClinicManagerEmailBody(token.Enrollee, token)
-                : this.GetVendorEmailBody(token.Enrollee, token, provisionerName);
-
+            string viewName = (string.IsNullOrEmpty(provisionerName))
+                ? "/Views/Emails/OfficeManagerEmail.cshtml"
+                : "/Views/Emails/VendorEmail.cshtml";
+            string emailBody = await _razorConverterService.RenderViewToStringAsync(viewName, new EmailParams(token, provisionerName));
             await Send(PRIME_EMAIL, recipients, ccEmails, subject, emailBody);
         }
 
@@ -138,69 +157,6 @@ namespace Prime.Services
                 smtp.Dispose();
                 mail.Dispose();
             }
-        }
-
-        private string GetVendorEmailBody(Enrollee enrollee, EnrolmentCertificateAccessToken token, string provisionerName)
-        {
-            var body = $"To: {provisionerName}<br><br>";
-            body += $"{enrollee.FirstName} { enrollee.LastName} ";
-            body += "has been approved for <b>PharmaNet</b> access. Please see <b>PRIME enrolment information</b> in URL below.<br><br>";
-            body += $"<a href=\"{token.FrontendUrl}\">{token.FrontendUrl}</a>. ";
-            body += $"<b>This link will expire after {_certificateService.GetMaxViews()} views or {_certificateService.GetExpiryDays()} days</b>.<br><br>";
-            body += "Thank you. ";
-            return body;
-        }
-
-        private string GetClinicManagerEmailBody(Enrollee enrollee, EnrolmentCertificateAccessToken token)
-        {
-            var body = "To: Clinic Manager (person responsible for coordinating PharmaNet access):<br><br>";
-
-            body += $"{enrollee.FirstName} {enrollee.LastName} has been approved for Community Practice Access to PharmaNet.<br><br>";
-
-            body += "<b>To set up their access, you must forward this PRIME Enrolment Confirmation";
-            body += " and the information specified below to your <u>PharmaNet Software Vendor</u>.</b><br><br>";
-
-            body += "<ol>";
-
-            body += "<li style='margin-bottom:0.75rem;'>";
-            body += "Name of Medical Clinic:";
-            body += "</li>";
-
-            body += "<li style='margin-bottom:0.75rem;'>";
-            body += "Clinic Address:";
-            body += "</li>";
-
-            body += "<li style='margin-bottom:0.75rem;'>";
-            body += "Pharmacy Equivalency Code (PEC): <i>(this is your PharmaNet site ID - ask your Vendor, if you are unsure)</i>";
-            body += "</li>";
-
-            body += "<li style='margin-bottom:0.75rem;'>";
-            body += "For <b>Physicians, Pharmacists, and Nurse Practitioners:</b><br><br>";
-            body += "College Name and College ID of this user: ";
-            body += "<i>(leave this blank if this user is not a Physician, Pharmacist or Nurse Practitioner)</i>";
-            body += "</li>";
-
-            body += "<li style='margin-bottom:0.75rem;'>";
-            body += "For users who work <b>On Behalf Of</b> a Physician, Pharmacist, or Nurse Practitioner:<br><br>";
-            body += "College Name(s) and College ID(s) of the Physicians, Pharmacists or Nurse Practitioners ";
-            body += "who this user will access PharmaNet on behalf of: ";
-            body += "<i>(leave this blank if this user is a Pharmacist, Nurse Practitioner or Physician)</i>";
-            body += "</li>";
-
-            body += "</ol>";
-
-            body += $"<a href=\"{token.FrontendUrl}\">{token.FrontendUrl}</a>. ";
-            body += $"<b>This link will expire after {_certificateService.GetMaxViews()} views or {_certificateService.GetExpiryDays()} days.</b><br><br>";
-
-            body += "Thank you,<br><br>";
-
-            body += "PRIME<br><br>";
-            //TODO: Is this stored as an attribute in the backend?
-            body += "1-844-39PRIME<br><br>";
-            //TODO: Is this stored as an attribute in the backend?
-            body += "<a href='mailto:PRIMEsupport@gov.bc.ca' target='_top'>PRIMEsupport@gov.bc.ca</a>";
-
-            return body;
         }
 
         public class EmailServiceException : Exception
