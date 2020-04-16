@@ -237,7 +237,7 @@ namespace Prime.Services
 
             if (enrollee.Certifications.Count > 0)
             {
-                foreach (var org in enrollee.Organizations)
+                foreach (var org in enrollee.EnrolleeOrganizationTypes)
                 {
                     foreach (var cert in enrollee.Certifications)
                     {

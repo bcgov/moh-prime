@@ -3,11 +3,11 @@ using Prime.Models;
 
 namespace PrimeTests.ModelFactories
 {
-    public class OrganizationFactory : Faker<Organization>
+    public class EnrolleeOrganizationTypeFactory : Faker<EnrolleeOrganizationType>
     {
         private static int IdCounter = 1;
 
-        public OrganizationFactory(Enrollee owner)
+        public EnrolleeOrganizationTypeFactory(Enrollee owner)
         {
             this.SetBaseRules();
 
