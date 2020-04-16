@@ -34,7 +34,6 @@ namespace Prime.Services
         public EmailService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
-            IEnrolmentCertificateService enrolmentCertificateService,
             IRazorConverterService razorConverterService)
             : base(context, httpContext)
         {
