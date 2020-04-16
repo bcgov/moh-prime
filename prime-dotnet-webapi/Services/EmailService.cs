@@ -89,10 +89,10 @@ namespace Prime.Services
             var ccEmails = new List<string>() { token.Enrollee.ContactEmail };
 
             string subject = "New Access Request";
-            string emailBody = (string.IsNullOrEmpty(provisionerName))
-                ? await _razorConverterService.RenderViewToStringAsync("/Views/Emails/VendorEmail.cshtml", new EmailParams(token, provisionerName))
-                : await _razorConverterService.RenderViewToStringAsync("/Views/Emails/OfficeManagerEmail.cshtml", new EmailParams(token));
-
+            string viewName = (string.IsNullOrEmpty(provisionerName))
+                ? "/Views/Emails/VendorEmail.cshtml"
+                : "/Views/Emails/OfficeManagerEmail.cshtml";
+            string emailBody = await _razorConverterService.RenderViewToStringAsync(viewName, new EmailParams(token, provisionerName));
             await Send(PRIME_EMAIL, recipients, ccEmails, subject, emailBody);
         }
 
