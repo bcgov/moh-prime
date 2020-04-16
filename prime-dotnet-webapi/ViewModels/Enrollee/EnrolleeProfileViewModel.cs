@@ -28,7 +28,7 @@ namespace Prime.ViewModels
 
         public ICollection<Job> Jobs { get; set; }
 
-        public ICollection<Organization> Organizations { get; set; }
+        public ICollection<EnrolleeOrganizationType> EnrolleeOrganizationTypes { get; set; }
 
         [JsonConverter(typeof(EmptyStringToNullJsonConverter))]
         public string DeviceProviderNumber { get; set; }

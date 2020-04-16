@@ -15,7 +15,7 @@ namespace Prime.Models
         public string Name { get; set; }
 
         [JsonIgnore]
-        public ICollection<Organization> Organizations { get; set; }
+        public ICollection<EnrolleeOrganizationType> EnrolleeOrganizationTypes { get; set; }
 
         [JsonIgnore]
         public ICollection<LicenseClassClauseMapping> LicenseClassClauseMappings { get; set; }
