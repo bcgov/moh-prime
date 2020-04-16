@@ -19,7 +19,7 @@ export class AdministratorComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router
   ) {
-    this.title = 'Privacy Officer';
+    this.title = 'Administrator of PharmaNet Onboarding';
   }
 
   // TODO provide model when backend exists
