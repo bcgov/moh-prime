@@ -27,6 +27,7 @@ namespace Prime.Models
         public string JobRoleTitle { get; set; }
 
         public int AddressId { get; set; }
+
         [Required]
         public Address Address { get; set; }
 

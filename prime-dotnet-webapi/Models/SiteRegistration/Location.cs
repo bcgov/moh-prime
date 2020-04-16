@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Prime.Models
 {
@@ -15,18 +17,31 @@ namespace Prime.Models
 
         public string HoursSpecial { get; set; }
 
-        public Party AdministratorPharmaNet { get; set; }
+        public string DoingBusinessAs { get; set; }
+
+        public int AddressId { get; set; }
+
+        [Required]
+        public Address Address { get; set; }
 
         public int AdministratorPharmaNetId { get; set; }
 
-        public Party PrivacyOfficer { get; set; }
+        public Party AdministratorPharmaNet { get; set; }
 
         public int PrivacyOfficerId { get; set; }
 
-        public Party TechnicalSupport { get; set; }
+        public Party PrivacyOfficer { get; set; }
 
         public int TechnicalSupportId { get; set; }
 
-        public string DoingBusinessAs { get; set; }
+        public Party TechnicalSupport { get; set; }
+
+        public int OrganizationId { get; set; }
+
+        public Organization Organization { get; set; }
+
+        [JsonIgnore]
+        public IEnumerable<Site> Sites { get; set; }
+
     }
 }
