@@ -57,7 +57,7 @@ namespace PrimeTests.Utils
         public static Faker<Job> JobFaker = new Faker<Job>()
             .RuleFor(j => j.Title, f => f.Random.Word());
 
-        public static Faker<Organization> OrganizationFaker = new Faker<Organization>()
+        public static Faker<EnrolleeOrganizationType> EnrolleeOrganizationTypeFaker = new Faker<EnrolleeOrganizationType>()
             .RuleFor(o => o.OrganizationTypeCode, f => f.Random.Int(1, 2));
 
         public static Faker<EnrolmentStatus> EnrolmentStatusFaker = new Faker<EnrolmentStatus>()
@@ -85,7 +85,7 @@ namespace PrimeTests.Utils
             .RuleFor(e => e.HasDisciplinaryActionDetails, f => f.Lorem.Paragraphs(2))
             .RuleFor(e => e.HasPharmaNetSuspended, f => f.Random.Bool())
             .RuleFor(e => e.HasPharmaNetSuspendedDetails, f => f.Lorem.Paragraphs(2))
-            .RuleFor(e => e.Organizations, f => OrganizationFaker.Generate(2))
+            .RuleFor(e => e.EnrolleeOrganizationTypes, f => EnrolleeOrganizationTypeFaker.Generate(2))
             .RuleFor(e => e.EnrolmentStatuses, f => EnrolmentStatusFaker.Generate(1));
 
         public static Faker<AccessTerm> AccessTermFaker = new Faker<AccessTerm>()

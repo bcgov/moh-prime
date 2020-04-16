@@ -48,7 +48,7 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.MailingAddress, (f, x) => new MailingAddressFactory(x).Generate().OrNull(f));
             RuleFor(x => x.Certifications, (f, x) => new CertificationFactory(x).GenerateBetween(1, 2).OrNull(f, .75f));
             RuleFor(x => x.Jobs, (f, x) => x.Certifications == null ? new JobFactory(x).Generate(1) : null);
-            RuleFor(x => x.Organizations, (f, x) => new OrganizationFactory(x).Generate(1));
+            RuleFor(x => x.EnrolleeOrganizationTypes, (f, x) => new EnrolleeOrganizationTypeFactory(x).Generate(1));
             RuleFor(x => x.AccessAgreementNote, (f, x) => new AccessAgreementNoteFactory(x).Generate().OrNull(f));
             RuleFor(x => x.AdjudicatorNotes, (f, x) => new AdjudicatorNoteFactory(x).GenerateBetween(1, 4).OrNull(f));
             RuleFor(x => x.AssignedPrivileges, f => null);
