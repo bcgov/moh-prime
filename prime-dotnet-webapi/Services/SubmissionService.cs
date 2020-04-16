@@ -1,10 +1,11 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Appccelerate.StateMachine;
 using Appccelerate.StateMachine.AsyncMachine;
-using SimpleBase;
 
 using Prime.Models;
 using Prime.ViewModels;
@@ -142,7 +143,7 @@ namespace Prime.Services
 
             if (accept)
             {
-                SetGPID(enrollee);
+                await SetGpid(enrollee);
                 await _accessTermService.AcceptCurrentAccessTermAsync(enrollee);
                 await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrollee.Id, enrollee);
                 await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Accepted TOA");
@@ -178,12 +179,27 @@ namespace Prime.Services
             await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Notified Enrollee");
         }
 
-        private void SetGPID(Enrollee enrollee)
+        private async Task SetGpid(Enrollee enrollee)
         {
             if (string.IsNullOrWhiteSpace(enrollee.GPID))
             {
-                enrollee.GPID = Base85.Ascii85.Encode(Guid.NewGuid().ToByteArray());
+                do
+                {
+                    enrollee.GPID = GenerateGpid();
+                }
+                while (await _enrolleeService.EnrolleeGpidExistsAsync(enrollee.GPID));
             }
+        }
+
+        private static string GenerateGpid()
+        {
+            Random r = new Random();
+            int length = 20;
+            string characterSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,?!@#$%*";
+
+            IEnumerable<char> chars = Enumerable.Repeat(characterSet, length).Select(s => s[r.Next(s.Length)]);
+
+            return new string(chars.ToArray());
         }
 
         public class InvalidActionException : Exception

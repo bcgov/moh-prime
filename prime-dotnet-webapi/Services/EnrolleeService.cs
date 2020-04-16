@@ -50,6 +50,12 @@ namespace Prime.Services
                 .AnyAsync(e => e.UserId == userId);
         }
 
+        public async Task<bool> EnrolleeGpidExistsAsync(string gpid)
+        {
+            return await _context.Enrollees
+                .AnyAsync(e => e.GPID == gpid);
+        }
+
         public async Task<Enrollee> GetEnrolleeAsync(Guid userId)
         {
             var entity = await this.GetBaseEnrolleeQuery()
