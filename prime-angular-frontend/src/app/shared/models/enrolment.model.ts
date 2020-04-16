@@ -29,7 +29,7 @@ export interface HttpEnrollee extends Enrollee {
   hasDisciplinaryActionDetails: string;
   hasPharmaNetSuspended: boolean;
   hasPharmaNetSuspendedDetails: string;
-  organizations: Organization[];
+  enrolleeOrganizationTypes: Organization[];
   privileges: Privilege[];
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;

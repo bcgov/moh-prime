@@ -197,15 +197,10 @@ objects:
                 - name: cert-volume
                   mountPath: /opt/app-root/etc/certs
                   readOnly: true
-                - mountPath: /var/log
-                  name: '${NAME}${SUFFIX}-logs'
           volumes:
             - name: cert-volume
               secret:
                 secretName: ssl-certs
-            - name: '${NAME}${SUFFIX}-logs'
-              persistentVolumeClaim:
-                claimName: '${NAME}${SUFFIX}-logs'
           restartPolicy: Always
       test: false
       triggers:
@@ -239,15 +234,3 @@ objects:
           targetPort: 5001
       selector:
         io.kompose.service: "${NAME}${SUFFIX}"
-  - apiVersion: v1
-    kind: PersistentVolumeClaim
-    metadata:
-      name: '${NAME}${SUFFIX}-logs'
-      annotations:
-    spec:
-      accessModes:
-        - ReadWriteMany
-      storageClassName": netapp-block-standard
-      resources:
-        requests:
-          storage: '1Gi'
