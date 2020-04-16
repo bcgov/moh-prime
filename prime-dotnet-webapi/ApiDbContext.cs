@@ -78,6 +78,12 @@ namespace Prime
         public DbSet<LimitsConditionsClause> LimitsConditionsClauses { get; set; }
         public DbSet<BusinessEvent> BusinessEvents { get; set; }
         public DbSet<Feedback> Feedback { get; set; }
+        // Site Registration
+        public DbSet<Location> Locations { get; set; }
+        public DbSet<Organization> Organizations { get; set; }
+        public DbSet<Party> Parties { get; set; }
+        public DbSet<Site> Sites { get; set; }
+        public DbSet<Vendor> Vendors { get; set; }
 
         public override int SaveChanges()
         {
@@ -238,6 +244,23 @@ namespace Prime
                 .HasOne(be => be.BusinessEventType)
                 .WithMany(t => t.BusinessEvents)
                 .HasForeignKey(be => be.BusinessEventTypeCode);
+
+            // Site Registration
+            modelBuilder.Entity<Location>()
+                .HasOne(l => l.Organization)
+                .WithMany(t => t.Locations)
+                .HasForeignKey(be => be.OrganizationId);
+
+            modelBuilder.Entity<Site>()
+                .HasOne(l => l.Location)
+                .WithMany(t => t.Sites)
+                .HasForeignKey(be => be.LocationId);
+
+            modelBuilder.Entity<Site>()
+                .HasOne(l => l.Vendor)
+                .WithMany(t => t.Sites)
+                .HasForeignKey(be => be.VendorId);
+
             #endregion
         }
 
