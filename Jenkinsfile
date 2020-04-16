@@ -18,6 +18,7 @@ pipeline {
             options {
                 timeout(time: 90, unit: 'MINUTES')   // timeout on this stage
             }
+            when { expression { ( GIT_BRANCH == 'develop' ) } }
             agent { label 'master' }
             steps {
                 script {
@@ -45,15 +46,23 @@ pipeline {
                     sh "./player.sh deploy frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
                 }
             }
+        }
+        stage('Deploy Develop') {
+            options {
+                timeout(time: 10, unit: 'MINUTES')   // timeout on this stage
+            }
             when { expression { ( GIT_BRANCH != 'develop' ) } }
-            script {
-                checkout scm
-                echo "Deploy to dev..."
-                sh "printenv"
-                sh "./player.sh deploy postgres-ephemeral dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=256Mi"
-                sh "./player.sh deploy mongo-ephemeral dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=256Mi"
-                sh "./player.sh deploy api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
-                sh "./player.sh deploy frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
+            agent { label 'master' }
+            steps {
+                script {
+                    checkout scm
+                    echo "Deploy to dev..."
+                    sh "printenv"
+                    sh "./player.sh deploy postgres-ephemeral dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=256Mi"
+                    sh "./player.sh deploy mongo-ephemeral dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=256Mi"
+                    sh "./player.sh deploy api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
+                    sh "./player.sh deploy frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
+                }
             }
         }
         stage('Quality Check') {
