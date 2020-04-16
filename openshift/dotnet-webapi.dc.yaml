@@ -197,8 +197,6 @@ objects:
                 - name: cert-volume
                   mountPath: /opt/app-root/etc/certs
                   readOnly: true
-                - mountPath: /var/log
-                  name: '${NAME}${SUFFIX}-logs'
           volumes:
             - name: cert-volume
               secret:
