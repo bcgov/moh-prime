@@ -18,13 +18,11 @@ pipeline {
             options {
                 timeout(time: 90, unit: 'MINUTES')   // timeout on this stage
             }
-            when { expression { ( GIT_BRANCH != 'master' ) } }
             agent { label 'master' }
             steps {
                 script {
                     checkout scm
                     echo "Building ..."
-                    sh "./player.sh build postgres dev -p SUFFIX=${SUFFIX}"
                     sh "./player.sh build api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh build frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
                 }
@@ -34,15 +32,33 @@ pipeline {
             options {
                 timeout(time: 10, unit: 'MINUTES')   // timeout on this stage
             }
-            when { expression { ( GIT_BRANCH != 'master' ) } }
+            when { expression { ( GIT_BRANCH == 'develop' ) } }
             agent { label 'master' }
             steps {
                 script {
                     checkout scm
                     echo "Deploy to dev..."
                     sh "printenv"
-                    sh "./player.sh deploy postgres dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
-                    sh "./player.sh deploy mongo dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
+                    sh "./player.sh deploy postgres dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=256Mi"
+                    sh "./player.sh deploy mongo dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=256Mi"
+                    sh "./player.sh deploy api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
+                    sh "./player.sh deploy frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
+                }
+            }
+        }
+        stage('Deploy Develop') {
+            options {
+                timeout(time: 10, unit: 'MINUTES')   // timeout on this stage
+            }
+            when { expression { ( GIT_BRANCH != 'develop' ) } }
+            agent { label 'master' }
+            steps {
+                script {
+                    checkout scm
+                    echo "Deploy to dev..."
+                    sh "printenv"
+                    sh "./player.sh deploy postgres-ephemeral dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=256Mi"
+                    sh "./player.sh deploy mongo-ephemeral dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=256Mi"
                     sh "./player.sh deploy api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh deploy frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
                 }
