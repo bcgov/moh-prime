@@ -42,7 +42,7 @@ namespace Prime.Services
             var token = await _context.EnrolmentCertificateAccessTokens
                 .Where(t => t.Id == accessTokenId)
                 .Include(t => t.Enrollee)
-                    .ThenInclude(e => e.Organizations)
+                    .ThenInclude(e => e.EnrolleeOrganizationTypes)
                         .ThenInclude(org => org.OrganizationType)
                 .SingleOrDefaultAsync();
 
@@ -68,7 +68,7 @@ namespace Prime.Services
                         var enrolleeHistory = enrolleeProfileHistory.ProfileSnapshot.ToObject<Enrollee>();
 
                         // Add the organization type to each organization from JSON profile history
-                        foreach (var org in enrolleeHistory.Organizations)
+                        foreach (var org in enrolleeHistory.EnrolleeOrganizationTypes)
                         {
                             org.OrganizationType = await _context.OrganizationTypes.SingleAsync(o => o.Code == org.OrganizationTypeCode);
                         }
