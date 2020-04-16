@@ -7,14 +7,6 @@ using Newtonsoft.Json;
 
 namespace Prime.Models
 {
-    public enum ProgressStatusType
-    {
-        STARTED,
-        SUBMITTED,
-        FINISHED,
-        EDITING
-    }
-
     [Table("Enrollee")]
     public class Enrollee : BaseAuditable, IValidatableObject
     {
@@ -101,6 +93,20 @@ namespace Prime.Models
 
         public Admin Adjudicator { get; set; }
 
+        public bool ProfileCompleted { get; set; }
+
+        public ICollection<AdjudicatorNote> AdjudicatorNotes { get; set; }
+
+        public AccessAgreementNote AccessAgreementNote { get; set; }
+
+        [JsonIgnore]
+        public ICollection<AccessTerm> AccessTerms { get; set; }
+
+        [JsonIgnore]
+        public ICollection<EnrolleeProfileVersion> EnrolleeProfileVersions { get; set; }
+
+        public bool AlwaysManual { get; set; }
+
         [NotMapped]
         public EnrolmentStatus CurrentStatus
         {
@@ -119,8 +125,6 @@ namespace Prime.Models
                 .Skip(1)
                 .FirstOrDefault();
         }
-
-        public bool ProfileCompleted { get; set; }
 
         [NotMapped]
         public DateTimeOffset? AppliedDate
@@ -161,26 +165,6 @@ namespace Prime.Models
             get => Id + DISPLAY_OFFSET;
         }
 
-        public ICollection<AdjudicatorNote> AdjudicatorNotes { get; set; }
-
-        public AccessAgreementNote AccessAgreementNote { get; set; }
-
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            if (Guid.Empty.Equals(this.UserId))
-            {
-                yield return new ValidationResult($"UserId cannot be the empty value: {this.UserId.ToString()}");
-            }
-        }
-
-        [JsonIgnore]
-        public ICollection<AccessTerm> AccessTerms { get; set; }
-
-        [JsonIgnore]
-        public ICollection<EnrolleeProfileVersion> EnrolleeProfileVersions { get; set; }
-
-        public bool AlwaysManual { get; set; }
-
         [NotMapped]
         [JsonIgnore]
         public bool? IsObo
@@ -213,6 +197,14 @@ namespace Prime.Models
             }
 
             CurrentStatus.AddStatusReason(type, statusReasonNote);
+        }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (Guid.Empty.Equals(this.UserId))
+            {
+                yield return new ValidationResult($"UserId cannot be the empty value: {this.UserId.ToString()}");
+            }
         }
     }
 }
