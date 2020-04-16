@@ -285,6 +285,8 @@ namespace Prime.Services
             if (entity != null)
             {
                 entity.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(entity);
+                // Attach to the enrollee if they have signed the most recent ToA
+                entity.HasMostRecentAccessTermSigned = await _accessTermService.IsCurrentByEnrolleeAsync(entity);
             }
 
             return entity;
