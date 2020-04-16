@@ -38,6 +38,10 @@ namespace PrimeTests
         {
             // Noop, since health checks aren't needed in tests
         }
-    }
 
+        protected override void ConfigureLogging(IApplicationBuilder app)
+        {
+            // Noop, since logging isn't needed in tests
+        }
+    }
 }

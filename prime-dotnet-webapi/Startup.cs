@@ -130,20 +130,7 @@ namespace Prime
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Prime Web API V1");
             });
 
-            // Only logs components that appear after it in the pipeline, which
-            // can be used to exclude noisy handlers from logging
-            app.UseSerilogRequestLogging(options =>
-            {
-                options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
-                {
-                    var userId = httpContext.User.GetPrimeUserId();
-
-                    if (!userId.Equals(Guid.Empty))
-                    {
-                        diagnosticContext.Set("User", userId);
-                    }
-                };
-            });
+            this.ConfigureLogging(app);
 
             // Matches request to an endpoint
             app.UseRouting();
@@ -227,6 +214,24 @@ namespace Prime
 
             services.AddSingleton<IMongoClient>(_client);
             services.AddMigration();
+        }
+
+        protected virtual void ConfigureLogging(IApplicationBuilder app)
+        {
+            // Only logs components that appear after it in the pipeline, which
+            // can be used to exclude noisy handlers from logging
+            app.UseSerilogRequestLogging(options =>
+            {
+                options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
+                {
+                    var userId = httpContext.User.GetPrimeUserId();
+
+                    if (!userId.Equals(Guid.Empty))
+                    {
+                        diagnosticContext.Set("User", userId);
+                    }
+                };
+            });
         }
     }
 }
