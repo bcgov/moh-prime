@@ -11,7 +11,7 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20200416042720_SiteRegistration")]
+    [Migration("20200416183522_SiteRegistration")]
     partial class SiteRegistration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -5121,6 +5121,12 @@ namespace Prime.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AdjudicatorId");
+
+                    b.HasIndex("GPID")
+                        .IsUnique();
+
+                    b.HasIndex("HPDID")
+                        .IsUnique();
 
                     b.HasIndex("UserId")
                         .IsUnique();

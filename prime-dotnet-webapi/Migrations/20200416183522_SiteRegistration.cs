@@ -246,6 +246,7 @@ namespace Prime.Migrations
 
             migrationBuilder.DropTable(
                 name: "Party");
+
         }
     }
 }
