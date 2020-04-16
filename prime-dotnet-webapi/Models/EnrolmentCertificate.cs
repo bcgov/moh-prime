@@ -34,7 +34,7 @@ namespace Prime.Models
                 PreferredLastName = enrolleeHistory.PreferredLastName,
                 GPID = enrollee.GPID,
                 ExpiryDate = enrollee.ExpiryDate,
-                OrganizationTypes = enrolleeHistory.Organizations.Select(org => org.OrganizationType)
+                OrganizationTypes = enrolleeHistory.EnrolleeOrganizationTypes.Select(org => org.OrganizationType)
             };
         }
     }

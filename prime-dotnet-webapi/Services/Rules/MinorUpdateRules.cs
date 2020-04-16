@@ -103,7 +103,7 @@ namespace Prime.Services.Rules
                 return Task.FromResult(false);
             }
 
-            if (!CompareCollections(comparitor, enrollee.Organizations, _updatedProfile.Organizations))
+            if (!CompareCollections(comparitor, enrollee.EnrolleeOrganizationTypes, _updatedProfile.EnrolleeOrganizationTypes))
             {
                 return Task.FromResult(false);
             }
@@ -152,10 +152,10 @@ namespace Prime.Services.Rules
             config.IgnoreProperty<MailingAddress>(x => x.Country);
             config.IgnoreProperty<MailingAddress>(x => x.Province);
 
-            config.IgnoreProperty<Organization>(x => x.Id);
-            config.IgnoreProperty<Organization>(x => x.Enrollee);
-            config.IgnoreProperty<Organization>(x => x.EnrolleeId);
-            config.IgnoreProperty<Organization>(x => x.OrganizationType);
+            config.IgnoreProperty<EnrolleeOrganizationType>(x => x.Id);
+            config.IgnoreProperty<EnrolleeOrganizationType>(x => x.Enrollee);
+            config.IgnoreProperty<EnrolleeOrganizationType>(x => x.EnrolleeId);
+            config.IgnoreProperty<EnrolleeOrganizationType>(x => x.OrganizationType);
 
             return new CompareLogic(config);
         }
