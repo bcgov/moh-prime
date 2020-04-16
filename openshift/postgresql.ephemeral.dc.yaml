@@ -87,18 +87,6 @@ objects:
       type: ClusterIP
     status:
       loadBalancer: {}
-  - apiVersion: v1
-    kind: PersistentVolumeClaim
-    metadata:
-      name: '${NAME}${SUFFIX}'
-      annotations:
-    spec:
-      accessModes:
-        - ${STORAGE_MODE}
-      storageClassName": ${STORAGE_CLASS}
-      resources:
-        requests:
-          storage: '${VOLUME_CAPACITY}'
   - kind: ImageStream
     apiVersion: v1
     metadata:
@@ -207,8 +195,7 @@ objects:
           restartPolicy: Always
           volumes:
             - name: '${NAME}${SUFFIX}-data'
-              persistentVolumeClaim:
-                claimName: '${NAME}${SUFFIX}'
+              emptyDir: {}
             - name: '${NAME}${SUFFIX}-run'
               emptyDir: {}
       triggers:
