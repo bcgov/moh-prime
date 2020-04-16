@@ -24,7 +24,6 @@ pipeline {
                 script {
                     checkout scm
                     echo "Building ..."
-                    sh "./player.sh build postgres dev -p SUFFIX=${SUFFIX}"
                     sh "./player.sh build api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh build frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
                 }

@@ -29,12 +29,6 @@ parameters:
     name: VOLUME_CAPACITY
     required: true
     value: 1Gi
-  - name: STORAGE_CLASS
-    value: netapp-block-standard
-    required: true
-  - name: STORAGE_MODE
-    value: ReadWriteOnce
-    required: true
   - name: SOURCE_CONTEXT_DIR
     required: true
   - name: SOURCE_REPOSITORY_URL
@@ -46,7 +40,7 @@ objects:
     kind: DeploymentConfig
     metadata:
       annotations:
-        volume.beta.kubernetes.io/storage-class: ${STORAGE_CLASS}
+        volume.beta.kubernetes.io/storage-class: netapp-block-standard
       name: '${NAME}${SUFFIX}'
     spec:
       replicas: 1
@@ -84,10 +78,20 @@ objects:
                     secretKeyRef:
                       key: database-name
                       name: postgresql-secret
+                - name: MONGO_INITDB_ROOT_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      key: database-user
+                      name: postgresql-secret
+                - name: MONGO_INITDB_ROOT_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: database-admin-password
+                      name: postgresql-secret
               image: >-
                 docker-registry.default.svc:5000/openshift/mongodb@sha256:fae76f90d3f00fec19a6da648f590de7c1cee63f42915cdf04416682864ce6b9
               imagePullPolicy: IfNotPresent
-              livenessProbe:
+              readinessProbe:
                 failureThreshold: 3
                 initialDelaySeconds: 30
                 periodSeconds: 10
@@ -99,20 +103,6 @@ objects:
               ports:
                 - containerPort: 27017
                   protocol: TCP
-              readinessProbe:
-                exec:
-                  command:
-                    - /bin/sh
-                    - '-i'
-                    - '-c'
-                    - >-
-                      mongo 127.0.0.1:27017/$MONGODB_DATABASE -u $MONGODB_USER -p
-                      $MONGODB_PASSWORD --eval="quit()"
-                failureThreshold: 3
-                initialDelaySeconds: 3
-                periodSeconds: 10
-                successThreshold: 1
-                timeoutSeconds: 1
               resources:
                 limits:
                   memory: 512Mi
@@ -122,7 +112,7 @@ objects:
               terminationMessagePath: /dev/termination-log
               terminationMessagePolicy: File
               volumeMounts:
-                - mountPath: /var/lib/mongodb/data
+                - mountPath: /var/lib/mongodb/data/db
                   name: ${NAME}${SUFFIX}-data
           dnsPolicy: ClusterFirst
           restartPolicy: Always
@@ -133,8 +123,6 @@ objects:
             - name: ${NAME}${SUFFIX}-data
               persistentVolumeClaim:
                 claimName: ${NAME}${SUFFIX}
-            - name: ${NAME}${SUFFIX}-run
-              emptyDir: {}
       test: false
       triggers:
         - imageChangeParams:
@@ -165,8 +153,8 @@ objects:
       annotations:
     spec:
       accessModes:
-        - ${STORAGE_MODE}
-      storageClassName": ${STORAGE_CLASS}
+        - ReadWriteOnce
+      storageClassName": netapp-block-standard
       resources:
         requests:
           storage: '${VOLUME_CAPACITY}'
