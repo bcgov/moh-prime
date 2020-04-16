@@ -174,21 +174,6 @@ namespace Prime
             modelBuilder.ApplyConfiguration(new BusinessEventTypeConfiguration());
 
             #region Indexes
-            modelBuilder.Entity<MailingAddress>()
-                .HasIndex(a => a.EnrolleeId)
-                .HasName("IX_Address_EnrolleeId")
-                .IsUnique(false);
-
-            modelBuilder.Entity<PhysicalAddress>()
-                .HasIndex(a => a.EnrolleeId)
-                .HasName("IX_Address_EnrolleeId")
-                .IsUnique(false);
-
-            modelBuilder.Entity<Address>()
-                .HasIndex("EnrolleeId", "AddressType")
-                .HasName("IX_EnrolleeId_AddressType")
-                .IsUnique();
-
             modelBuilder.Entity<Admin>()
                 .HasIndex("UserId")
                 .IsUnique();
