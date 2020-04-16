@@ -1,0 +1,69 @@
+@using Prime.Services
+@model EmailParams
+
+@{
+  var enrolleeName = $"{Model.FirstName} {Model.LastName}";
+  var tokenUrl = Model.TokenUrl;
+  var maxViews = Model.MaxViews;
+  var expiryDays = Model.ExpiryDays;
+}
+
+<style>
+  .underline {
+    text-decoration: underline;
+  }
+  .list-item-mb {
+    margin-bottom: 0.75rem;
+  }
+</style>
+
+To: Clinic Manager (person responsible for coordinating PharmaNet access):
+<br><br>
+
+@enrolleeName has been approved for Community Practice Access to PharmaNet.<br><br>
+
+<strong>
+  To set up their access, you must forward this PRIME Enrolment Confirmation and the information
+  specified below to your <span class="underline">PharmaNet Software Vendor</span>.
+</strong>
+<br><br>
+
+<ol>
+  <li class="list-item-mb">
+    Name of Medical Clinic:
+  </li>
+  <li class="list-item-mb">
+    Clinic Address:
+  </li>
+  <li class="list-item-mb">
+    Pharmacy Equivalency Code (PEC): <i>(this is your PharmaNet site ID - ask your Vendor, if you are unsure)</i>
+  </li>
+  <li class="list-item-mb">
+    For <strong>Physicians, Pharmacists, and Nurse Practitioners:</strong>
+    <br><br>
+
+    College Name and College ID of this user:
+
+    <em>(leave this blank if this user is not a Physician, Pharmacist or Nurse Practitioner)</em>
+  </li>
+  <li class="list-item-mb">
+    For users who work <strong>On Behalf Of</strong> a Physician, Pharmacist, or Nurse Practitioner:
+    <br><br>
+
+    College Name(s) and College ID(s) of the Physicians, Pharmacists or Nurse Practitioners
+    who this user will access PharmaNet on behalf of:
+
+    <em>(leave this blank if this user is a Pharmacist, Nurse Practitioner or Physician)</em>
+  </li>
+</ol>
+
+<a href="@tokenUrl">@tokenUrl</a>.
+<strong>This link will expire after @maxViews views or @expiryDays days.</strong>
+<br><br>
+
+Thank you,<br><br>
+
+PRIME<br><br>
+1-844-39PRIME<br><br>
+
+<a href='mailto:PRIMEsupport@gov.bc.ca' target='_top'>PRIMEsupport@gov.bc.ca</a>
