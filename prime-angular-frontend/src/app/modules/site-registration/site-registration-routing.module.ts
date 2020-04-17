@@ -21,6 +21,7 @@ import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer
 import { TechnicalSupportContactComponent } from './pages/technical-support-contact/technical-support-contact.component';
 import { SiteReviewComponent } from './pages/site-review/site-review.component';
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
+import { AccessAgreementComponent } from './pages/access-agreement/access-agreement.component';
 
 const routes: Routes = [
   {
@@ -54,6 +55,11 @@ const routes: Routes = [
         path: SiteRoutes.SITE_ADDRESS,
         component: SiteAddressComponent,
         data: { title: 'Site Address' }
+      },
+      {
+        path: SiteRoutes.ACCESS_AGREEMENT,
+        component: AccessAgreementComponent,
+        data: { title: 'Access Agreement' }
       },
       {
         path: SiteRoutes.HOURS_OPERATION,
