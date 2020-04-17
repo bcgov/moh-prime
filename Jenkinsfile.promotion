@@ -19,10 +19,10 @@ pipeline {
             steps {
                 script {
                     echo "Test (MASTER) ..."
-                    sh "./player.sh build database test -p SUFFIX=${SUFFIX}"
                     sh "./player.sh build api test ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh build frontend test ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
-                    sh "./player.sh deploy database test -p SUFFIX=${SUFFIX}"
+                    sh "./player.sh deploy postgres test -p SUFFIX=${SUFFIX}"
+                    sh "./player.sh deploy mongo test -p SUFFIX=${SUFFIX}"
                     sh "./player.sh deploy api test ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh deploy frontend test ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh toolbelt schemaspy test"
@@ -88,7 +88,6 @@ pipeline {
                     steps {
                         script {
                             echo "Demo (MASTER) ..."
-                            sh "./player.sh build postgres test -p SUFFIX='-demo'"
                             sh "./player.sh build api test ${API_ARGS} -p SUFFIX='-demo'"
                             sh "./player.sh build frontend test ${FRONTEND_ARGS} -p SUFFIX='-demo'"
                             sh "./player.sh deploy postgres test -p SUFFIX='-demo'"
@@ -103,7 +102,6 @@ pipeline {
                     steps {
                         script {
                             echo "Deploy to Production..."
-                            sh "./player.sh build postgres prod"
                             sh "./player.sh build api prod"
                             sh "./player.sh build frontend prod"
                             sh "./player.sh deploy postgres prod"

@@ -3,7 +3,38 @@
   <app-site-progress-indicator [currentRoute]="SiteRoutes.TECHNICAL_SUPPORT_CONTACT"></app-site-progress-indicator>
 
   <app-registrant-profile-form [title]="title"
-                               (submit)="onSubmit($event)"></app-registrant-profile-form>
+                               (submit)="onSubmit($event)">
+    <ng-container appPageSubheaderSummary>
+      This individual may be either a staff person at the site or an independent IT contractor. They will be contacted
+      in the event of a technology-related issue (e.g. malware, problematic network traffic).
+
+      <br>
+      <br>
+
+      The Technical Support Contact should be familiar with:
+
+      <ul>
+        <li>
+          details of the practice's network structure;
+        </li>
+        <li>
+          internet connections in use at the site;
+        </li>
+        <li>
+          the application(s) used to access PharmaNet at the site; and
+        </li>
+        <li>
+          security mechanisms such as firewalls and anti-virus measures (both generally and those in use at the site.)
+        </li>
+      </ul>
+
+      This individual should be able to quickly provide a network diagram of the site, including peripherals, wireless
+      access points, connected devices, and all applications using the internet router(s). This individual may be the
+      same as the Signing Authority, the Administrator of PharmaNet Onboarding, or the Privacy Officer; however, they
+      must also possess the technical skill and understanding to answer complex network- and application-related
+      questions.
+    </ng-container>
+  </app-registrant-profile-form>
 
   <app-page-footer [isInitialEnrolment]="true"
                    [hasSecondaryAction]="true"

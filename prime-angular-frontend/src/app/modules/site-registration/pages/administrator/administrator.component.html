@@ -3,7 +3,14 @@
   <app-site-progress-indicator [currentRoute]="SiteRoutes.ADMINISTRATOR"></app-site-progress-indicator>
 
   <app-registrant-profile-form [title]="title"
-                               (submit)="onSubmit($event)"></app-registrant-profile-form>
+                               (submit)="onSubmit($event)">
+    <ng-container appPageSubheaderSummary>
+      This is the individual who either directly sets up individual PharmaNet access accounts at a site, or has the
+      authority to request individual access accounts from the site's contracted software vendor. This may, for example,
+      be the site's office administrator, HR lead, or operational manager, medical office assistant (MOA), or
+      practitioner. This individual may also be the same as the Signing Authority.
+    </ng-container>
+  </app-registrant-profile-form>
 
   <app-page-footer [isInitialEnrolment]="true"
                    [hasSecondaryAction]="true"

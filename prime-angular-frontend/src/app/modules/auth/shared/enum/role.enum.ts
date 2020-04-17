@@ -6,4 +6,5 @@ export enum Role {
 
   // Feature Flags
   FEATURE_SITE_REGISTRATION = 'feature_site_registration',
+  FEATURE_COMMUNITY_PHARMACIST = 'feature_community_pharmacist',
 }

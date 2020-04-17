@@ -9,10 +9,13 @@ namespace Prime.Configuration
         public void Configure(EntityTypeBuilder<Enrollee> builder)
         {
             builder
-                .HasKey(a => new { a.Id });
-
+                .HasIndex(e => e.UserId)
+                .IsUnique();
             builder
-                .HasIndex("UserId")
+                .HasIndex(e => e.GPID)
+                .IsUnique();
+            builder
+                .HasIndex(e => e.HPDID)
                 .IsUnique();
 
             builder
