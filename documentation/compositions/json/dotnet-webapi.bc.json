@@ -79,10 +79,6 @@
                     "value": "host=postgresql${SUFFIX};port=5432;database=postgres;username=postgres;password=postgres"
                   },
                   {
-                    "name": "MONGO_CONNECTION_STRING",
-                    "value": "host=mongo${SUFFIX};port=27017;database=db;username=root;password=prime"
-                  },
-                  {
                     "name": "JWT_SIGNING_KEY",
                     "value": "SdqlA0Y5e6HMAK1wm6iHHHz2u37XGtlo"
                   }

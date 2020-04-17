@@ -14,13 +14,13 @@ spec:
   selector:
     io.kompose.service: dotnet-webapi
   strategy:
-  resources:
+  resources: 
     requests:
       cpu: "300m"
       memory: "512Mi"
     limits:
-      cpu: "1"
-      memory: "1024Mi"
+      cpu: "1" 
+      memory: "1024Mi" 
   template:
     metadata:
       creationTimestamp: null
@@ -37,9 +37,6 @@ spec:
           value: http://+:8080
         - name: DB_CONNECTION_STRING
           value: host=postgres;port=5432;database=postgres;username=postgres;password=postgres
-        - name": MONGO_CONNECTION_STRING,
-          value: "host=mongo;port=27017;database=db;username=root;password=prime"
-
         - name: JWT_SIGNING_KEY
           value: SdqlA0Y5e6HMAK1wm6iHHHz2u37XGtlo
         image: ' '
