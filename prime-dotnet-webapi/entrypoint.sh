@@ -4,9 +4,6 @@ echo "Running the migrations..."
 if [ -z "${DB_CONNECTION_STRING}" ]
 then
 export DB_CONNECTION_STRING="host=${DB_HOST};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"
-if [ -z "${MONGO_CONNECTION_STRING}" ]
-then
-export MONGO_CONNECTION_STRING="host=mongo;port=27017;database=db;username=root;password=prime"
 fi
 export AUTH=$(printf $PHARMANET_API_USERNAME:$PHARMANET_API_PASSWORD|base64)
 export logfile=prime.logfile.out
