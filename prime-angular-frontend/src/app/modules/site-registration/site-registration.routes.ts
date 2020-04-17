@@ -24,8 +24,6 @@ export class SiteRoutes {
   // of the registration process
   public static routeOrder(): string[] {
     return [
-      SiteRoutes.SITE_REGISTRATION,
-      SiteRoutes.COLLECTION_NOTICE,
       SiteRoutes.MULTIPLE_SITES,
       SiteRoutes.ORGANIZATION_INFORMATION,
       SiteRoutes.SITE_ADDRESS,
