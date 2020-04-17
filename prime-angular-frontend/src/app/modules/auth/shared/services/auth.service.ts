@@ -89,4 +89,8 @@ export class AuthService implements IAuthService {
   public isRegistrant(): boolean {
     return this.keycloakTokenService.isUserInRole(Role.FEATURE_SITE_REGISTRATION);
   }
+
+  public isCommunityPharmacist(): boolean {
+    return this.keycloakTokenService.isUserInRole(Role.FEATURE_COMMUNITY_PHARMACIST);
+  }
 }
