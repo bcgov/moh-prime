@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AccessAgreementComponent } from './access-agreement.component';
+import { OrganizationAgreementComponent } from './organization-agreement.component';
 
 describe('AccessAgreementComponent', () => {
-  let component: AccessAgreementComponent;
-  let fixture: ComponentFixture<AccessAgreementComponent>;
+  let component: OrganizationAgreementComponent;
+  let fixture: ComponentFixture<OrganizationAgreementComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AccessAgreementComponent ]
+      declarations: [OrganizationAgreementComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AccessAgreementComponent);
+    fixture = TestBed.createComponent(OrganizationAgreementComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

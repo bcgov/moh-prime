@@ -21,7 +21,7 @@ import { HoursOperationComponent } from './pages/hours-operation/hours-operation
 import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer.component';
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 import { SiteAddressComponent } from './pages/site-address/site-address.component';
-import { AccessAgreementComponent } from './pages/access-agreement/access-agreement.component';
+import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +41,7 @@ import { AccessAgreementComponent } from './pages/access-agreement/access-agreem
     SiteProgressIndicatorComponent,
     SiteCollectionNoticeComponent,
     SiteAddressComponent,
-    AccessAgreementComponent
+    OrganizationAgreementComponent
   ],
   imports: [
     SharedModule,
