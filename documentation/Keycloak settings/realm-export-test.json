@@ -96,6 +96,7 @@
       {
         "id": "c818a30d-79c1-4ba1-aab8-d7908f30fdf6",
         "name": "feature_site_registration",
+        "description": "Site Registration feature flag",
         "composite": false,
         "clientRole": false,
         "containerId": "v4mbqqas",
@@ -105,6 +106,15 @@
         "id": "360afc11-1938-484d-a69d-d1faed48c222",
         "name": "prime_user",
         "description": "BCSC authenticated primary application user",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
+        "id": "9967f54a-09a9-4063-bcee-641ef4b183cd",
+        "name": "feature_community_pharmacist",
+        "description": "Community Pharmacist feature flag",
         "composite": false,
         "clientRole": false,
         "containerId": "v4mbqqas",
