@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { FormControlValidators } from '@shared/validators/form-control.validators';
@@ -10,13 +10,17 @@ import { FormUtilsService } from '@common/services/form-utils.service';
   styleUrls: ['./registrant-profile-form.component.scss']
 })
 export class RegistrantProfileFormComponent implements OnInit {
+  @Input() public title: string;
   public form: FormGroup;
+  public submit: EventEmitter<{ [key: string]: any }>;
   public hasSeparateAddress: boolean;
 
   constructor(
     private formUtilsService: FormUtilsService,
     private formBuilder: FormBuilder
-  ) { }
+  ) {
+    this.submit = new EventEmitter<{ [key: string]: any }>();
+  }
 
   public get name(): FormControl {
     return this.form.get('name') as FormControl;
@@ -24,14 +28,6 @@ export class RegistrantProfileFormComponent implements OnInit {
 
   public get jobRole(): FormControl {
     return this.form.get('jobRole') as FormControl;
-  }
-
-  public get collegeName(): FormControl {
-    return this.form.get('collegeName') as FormControl;
-  }
-
-  public get collegeId(): FormControl {
-    return this.form.get('collegeId') as FormControl;
   }
 
   public get phone(): FormControl {
@@ -54,11 +50,16 @@ export class RegistrantProfileFormComponent implements OnInit {
     return this.form.get('separateAddress') as FormGroup;
   }
 
+  public onSubmit() {
+    // TODO proper submission when backend payload known
+    // if (this.form.valid) { }
+    this.submit.emit(this.form.value);
+  }
+
   public onSeparateAddressChange() {
     this.hasSeparateAddress = !this.hasSeparateAddress;
     this.toggleSeparateAddressValidators(this.separateAddress, ['street2']);
   }
-
 
   public ngOnInit() {
     this.createFormInstance();
@@ -66,11 +67,10 @@ export class RegistrantProfileFormComponent implements OnInit {
   }
 
   private createFormInstance() {
+    // TODO proper naming when backend payload known
     this.form = this.formBuilder.group({
       name: [null, []],
       jobRole: [null, []],
-      collegeName: [null, []],
-      collegeId: [null, []],
       phone: [null, [
         Validators.required,
         FormControlValidators.phone
@@ -83,7 +83,10 @@ export class RegistrantProfileFormComponent implements OnInit {
         Validators.required,
         FormControlValidators.phone
       ]],
-      email: [null, [Validators.required, FormControlValidators.email]],
+      email: [null, [
+        Validators.required,
+        FormControlValidators.email
+      ]],
       separateAddress: this.formBuilder.group({
         countryCode: [{ value: null, disabled: false }, []],
         provinceCode: [{ value: null, disabled: false }, []],

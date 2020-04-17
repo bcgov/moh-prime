@@ -1,163 +1,103 @@
 <form [formGroup]="form"
       novalidate>
+
   <section class="mb-3">
+    <app-page-subheader [summaryAsInfo]="true">
+      <ng-container appPageSubheaderTitle>{{ title }}</ng-container>
+      <!-- Work around for ngProjectAs not passing directive reference to subheader when applied to ng-content -->
+      <ng-container appPageSubheaderSummary>
+        <ng-content select="[appPageSubheaderSummary]"></ng-content>
+      </ng-container>
+    </app-page-subheader>
 
-    <div class="mb-3">
+    <div class="row">
+      <div class="col-12">
 
-      <div class="row">
-        <div class="col">
+        <mat-form-field class="w-100">
+          <input matInput
+                 placeholder="Name"
+                 formControlName="name">
+          <mat-error>Required</mat-error>
+        </mat-form-field>
 
-          <mat-form-field class="w-50">
-            <input matInput
-                   placeholder="Name"
-                   formControlName="name">
-            <mat-error>Required</mat-error>
-          </mat-form-field>
-
-        </div>
       </div>
+      <div class="col-12">
 
-      <div class="row">
-        <div class="col">
+        <mat-form-field class="w-100">
+          <input matInput
+                 placeholder="Job or Role Title"
+                 formControlName="jobRole">
+          <mat-error>Required</mat-error>
+        </mat-form-field>
 
-          <mat-form-field class="w-50">
-            <input matInput
-                   placeholder="Job or Role Title"
-                   formControlName="jobRole">
-            <mat-error>Required</mat-error>
-          </mat-form-field>
-
-        </div>
       </div>
-
     </div>
   </section>
 
   <section class="mb-3">
-
     <app-page-subheader>
-      <ng-container appPageSubheaderTitle>College Information</ng-container>
-      <ng-container appPageSubheaderSummary>
-        Complete if a registrant of a health care college in BC
-      </ng-container>
+      <ng-container appPageSubheaderTitle>{{ title }} Contact Information</ng-container>
     </app-page-subheader>
 
-    <div class="mb-3">
+    <div class="row">
+      <div class="col-12">
 
-      <div class="row">
-        <div class="col">
+        <mat-form-field class="w-100">
+          <input matInput
+                 placeholder="Phone"
+                 formControlName="phone">
+          <mat-error>Required</mat-error>
+        </mat-form-field>
 
-          <mat-form-field class="w-50">
-            <input matInput
-                   placeholder="College Name"
-                   formControlName="collegeName">
-            <mat-error>Required</mat-error>
-          </mat-form-field>
-
-        </div>
       </div>
+      <div class="col-12">
 
-      <div class="row">
-        <div class="col">
+        <mat-form-field class="w-100">
+          <input matInput
+                 placeholder="Fax"
+                 formControlName="fax">
+          <mat-error>Required</mat-error>
+        </mat-form-field>
 
-          <mat-form-field class="w-50">
-            <input matInput
-                   placeholder="College Registration/ID"
-                   formControlName="collegeId">
-            <mat-error>Required</mat-error>
-          </mat-form-field>
-
-        </div>
       </div>
+      <div class="col-12">
 
-    </div>
+        <mat-form-field class="w-100">
+          <input matInput
+                 placeholder="SMS Phone"
+                 formControlName="smsPhone">
+          <mat-error>Required</mat-error>
+        </mat-form-field>
 
-  </section>
-
-  <section class="mb-3">
-
-    <app-page-subheader>
-      <ng-container appPageSubheaderTitle>Signing Authority Contact Information</ng-container>
-      <ng-container appPageSubheaderSummary>
-        Provide the Signing Authority's Contact Information
-      </ng-container>
-    </app-page-subheader>
-
-    <div class="mb-3">
-
-      <div class="row">
-        <div class="col">
-
-          <mat-form-field class="w-50">
-            <input matInput
-                   placeholder="Phone"
-                   formControlName="phone">
-            <mat-error>Required</mat-error>
-          </mat-form-field>
-
-        </div>
       </div>
+      <div class="col-12">
 
-      <div class="row">
-        <div class="col">
+        <mat-form-field class="w-100">
+          <input matInput
+                 placeholder="Email"
+                 formControlName="email">
+          <mat-error>Required</mat-error>
+        </mat-form-field>
 
-          <mat-form-field class="w-50">
-            <input matInput
-                   placeholder="Fax"
-                   formControlName="fax">
-            <mat-error>Required</mat-error>
-          </mat-form-field>
-
-        </div>
       </div>
-
-      <div class="row">
-        <div class="col">
-
-          <mat-form-field class="w-50">
-            <input matInput
-                   placeholder="SMS Phone"
-                   formControlName="smsPhone">
-            <mat-error>Required</mat-error>
-          </mat-form-field>
-
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col">
-
-          <mat-form-field class="w-50">
-            <input matInput
-                   placeholder="Email"
-                   formControlName="email">
-            <mat-error>Required</mat-error>
-          </mat-form-field>
-
-        </div>
-      </div>
-
     </div>
 
     <mat-slide-toggle class="mb-3"
                       color="primary"
-                      (change)="onSeparateAddressChange()"
-                      [checked]="hasSeparateAddress">
-      Provide Address if different from Site Address
+                      [checked]="hasSeparateAddress"
+                      (change)="onSeparateAddressChange()">
+      My Address if different from Site Address
     </mat-slide-toggle>
-
   </section>
 
   <ng-container *ngIf="hasSeparateAddress">
 
     <section class="mb-3">
-
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Separate Address</ng-container>
       </app-page-subheader>
 
       <app-address [form]="separateAddress"></app-address>
-
     </section>
 
   </ng-container>

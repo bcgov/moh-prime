@@ -1,14 +1,19 @@
 <app-enrollee-page [busy]="busy">
 
-  <app-collection-notice-alert></app-collection-notice-alert>
+  <app-enrolment-collection-notice></app-enrolment-collection-notice>
 
   <app-page-header>PharmaNet Enrolment</app-page-header>
 
   <div class="mb-4">
-    <app-alert type="success">
+    <app-alert type="success"
+               icon="check_circle_outline">
       <ng-container #alertTitle
                     class="alert-title">
-        Your changes have been saved
+        Profile Updated
+      </ng-container>
+      <ng-container #alertContent
+                    class="alert-content">
+        Your profile changes have been successfully saved.
       </ng-container>
     </app-alert>
   </div>

@@ -170,5 +170,15 @@ namespace PrimeTests.Mocks
         {
             throw new NotImplementedException();
         }
+
+        public Task<IEnumerable<HpdidLookup>> HpdidLookupAsync(IEnumerable<string> hpdids)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> EnrolleeGpidExistsAsync(string gpid)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

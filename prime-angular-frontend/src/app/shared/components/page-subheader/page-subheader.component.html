@@ -17,15 +17,28 @@
         </app-contextual-help>
       </div>
     </h2>
-    <p *ngIf="hasPageSubheaderSummary"
+    <p *ngIf="hasPageSubheaderSummary && showSummary"
        class="description">
       <ng-content #summary
                   select="[appPageSubheaderSummary]"></ng-content>
     </p>
   </div>
-  <div *ngIf="!hasContextualContent"
+  <div *ngIf="!hasContextualContent || (hasPageSubheaderSummary && summaryAsInfo)"
        class="flex-shrink-1">
-    <!-- Optional icon for actions at the end of a subheading -->
-    <ng-content select="mat-icon"></ng-content>
+    <ng-container *ngIf="hasPageSubheaderSummary && summaryAsInfo; then more else optional"></ng-container>
+
+    <ng-template #more>
+      <a mat-icon-button
+        color="primary"
+        aria-label="More Info"
+        (click)="toggleSummary()">
+        <mat-icon>info</mat-icon>
+      </a>
+    </ng-template>
+
+    <ng-template #optional>
+      <!-- Optional icon for actions at the end of a subheading -->
+      <ng-content select="mat-icon"></ng-content>
+    </ng-template>
   </div>
 </div>

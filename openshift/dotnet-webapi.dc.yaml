@@ -234,5 +234,3 @@ objects:
           targetPort: 5001
       selector:
         io.kompose.service: "${NAME}${SUFFIX}"
-    status:
-      loadBalancer: {}

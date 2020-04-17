@@ -40,7 +40,7 @@ namespace PrimeTests.Integration
                         .Include(e => e.MailingAddress)
                         .Include(e => e.Certifications)
                         .Include(e => e.Jobs)
-                        .Include(e => e.Organizations)
+                        .Include(e => e.EnrolleeOrganizationTypes)
                         .Include(e => e.EnrolmentStatuses)
                         .AsNoTracking().Single(e => e.Id == enrolleeId);
         }

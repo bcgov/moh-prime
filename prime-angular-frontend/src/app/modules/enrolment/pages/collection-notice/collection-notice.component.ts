@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+
 import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
@@ -12,12 +13,28 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
   styleUrls: ['./collection-notice.component.scss']
 })
 export class CollectionNoticeComponent implements OnInit {
+  public isFull: boolean;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
     private enrolmentService: EnrolmentService
-  ) { }
+  ) {
+    this.isFull = true;
+  }
+
+  public onAccept() {
+    this.authService.hasJustLoggedIn = false;
+
+    const route = (!this.enrolmentService.isProfileComplete)
+      ? EnrolmentRoutes.DEMOGRAPHIC
+      : EnrolmentRoutes.OVERVIEW;
+
+    if (this.enrolmentService.isInitialEnrolment) {
+      this.router.navigate([route], { relativeTo: this.route.parent });
+    }
+  }
 
   public ngOnInit() {
     this.authService.hasJustLoggedIn = true;
@@ -32,6 +49,7 @@ export class CollectionNoticeComponent implements OnInit {
         this.router.navigate([EnrolmentRoutes.PENDING_ACCESS_TERM], { relativeTo: this.route.parent });
         break;
       default: {
+        // Default redirect when completed, otherwise allow the view render
         if (this.enrolmentService.isProfileComplete) {
           this.router.navigate([EnrolmentRoutes.OVERVIEW], { relativeTo: this.route.parent });
         }

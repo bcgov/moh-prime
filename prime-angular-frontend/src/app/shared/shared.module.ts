@@ -41,9 +41,6 @@ import { EnrolleePropertyComponent } from '@shared/components/enrollee/enrollee-
 import { EnrolleePropertyErrorComponent } from '@shared/components/enrollee/enrollee-property-error/enrollee-property-error.component';
 import { EnrolleeReviewComponent } from '@shared/components/enrollee/enrollee-review/enrollee-review.component';
 import { EnrolleeProfileComponent } from '@shared/components/enrollee/enrollee-profile/enrollee-profile.component';
-import { EnrolleeAddressComponent } from '@shared/components/enrollee/enrollee-address/enrollee-address.component';
-import { EnrolleePrivilegesComponent } from '@shared/components/enrollee/enrollee-privileges/enrollee-privileges.component';
-import { EnrolleeOrganizationsComponent } from '@shared/components/enrollee/enrollee-organizations/enrollee-organizations.component';
 import { PrimeEmailComponent } from '@shared/components/prime-email/prime-email.component';
 import { PrimePhoneComponent } from '@shared/components/prime-phone/prime-phone.component';
 import { PrimeLogoComponent } from '@shared/components/prime-logo/prime-logo.component';
@@ -56,7 +53,7 @@ import { NoteComponent } from './components/dialogs/content/note/note.component'
 import { ClaimEnrolleeComponent } from './components/dialogs/content/claim-enrollee/claim-enrollee.component';
 import { ManualFlagNoteComponent } from './components/dialogs/content/manual-flag-note/manual-flag-note.component';
 import { FeedbackComponent } from './components/dialogs/content/feedback/feedback.component';
-import { CollectionNoticeAlertComponent } from './components/collection-notice-alert/collection-notice-alert.component';
+import { CollectionNoticeContainerComponent } from './components/collection-notice-container/collection-notice-container.component';
 import { PageFooterComponent } from './components/page-footer/page-footer.component';
 
 @NgModule({
@@ -89,9 +86,6 @@ import { PageFooterComponent } from './components/page-footer/page-footer.compon
     CertificatePipe,
     ProgressIndicatorComponent,
     EnrolleeProfileComponent,
-    EnrolleeAddressComponent,
-    EnrolleePrivilegesComponent,
-    EnrolleeOrganizationsComponent,
     EnrolleePropertyComponent,
     EnrolleePropertyErrorComponent,
     PrimeEmailComponent,
@@ -106,7 +100,7 @@ import { PageFooterComponent } from './components/page-footer/page-footer.compon
     ClaimEnrolleeComponent,
     ManualFlagNoteComponent,
     FeedbackComponent,
-    CollectionNoticeAlertComponent,
+    CollectionNoticeContainerComponent,
     PageFooterComponent
   ],
   imports: [
@@ -156,9 +150,6 @@ import { PageFooterComponent } from './components/page-footer/page-footer.compon
     CertificatePipe,
     ProgressIndicatorComponent,
     EnrolleeProfileComponent,
-    EnrolleeAddressComponent,
-    EnrolleePrivilegesComponent,
-    EnrolleeOrganizationsComponent,
     EnrolleePropertyComponent,
     PrimeEmailComponent,
     PrimePhoneComponent,
@@ -167,7 +158,7 @@ import { PageFooterComponent } from './components/page-footer/page-footer.compon
     PrimeSupportEmailComponent,
     AccessTermsTableComponent,
     AccessTermComponent,
-    CollectionNoticeAlertComponent,
+    CollectionNoticeContainerComponent,
     PageFooterComponent
   ]
 })
