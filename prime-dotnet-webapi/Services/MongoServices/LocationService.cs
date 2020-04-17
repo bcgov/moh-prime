@@ -13,7 +13,13 @@ namespace Prime.Services
 
         public LocationService(IMongoDbSettings settings)
         {
-            var client = new MongoClient(settings.ConnectionString);
+            var connectionString = System.Environment.GetEnvironmentVariable("MONGO_CONNECTION_STRING");
+            if (connectionString == null)
+            {
+                connectionString = settings.ConnectionString;
+            }
+
+            var client = new MongoClient(connectionString);
             var database = client.GetDatabase(settings.DatabaseName);
 
             _locations = database.GetCollection<Locations>(settings.MongoCollectionName);

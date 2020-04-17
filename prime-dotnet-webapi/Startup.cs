@@ -210,7 +210,13 @@ namespace Prime
             // registered in DI with a singleton service lifetime.
             services.AddSingleton<LocationService>();
 
-            IMongoClient _client = new MongoClient(Configuration.GetSection("MongoDatabaseSettings:ConnectionString").Value);
+            var connectionString = System.Environment.GetEnvironmentVariable("MONGO_CONNECTION_STRING");
+            if (connectionString == null)
+            {
+                connectionString = Configuration.GetSection("MongoDatabaseSettings:ConnectionString").Value;
+            }
+
+            IMongoClient _client = new MongoClient(connectionString);
 
             services.AddSingleton<IMongoClient>(_client);
             services.AddMigration();
