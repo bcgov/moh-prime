@@ -2,8 +2,12 @@
       novalidate>
 
   <section class="mb-3">
-    <app-page-subheader>
+    <app-page-subheader [summaryAsInfo]="true">
       <ng-container appPageSubheaderTitle>{{ title }}</ng-container>
+      <!-- Work around for ngProjectAs not passing directive reference to subheader when applied to ng-content -->
+      <ng-container appPageSubheaderSummary>
+        <ng-content select="[appPageSubheaderSummary]"></ng-content>
+      </ng-container>
     </app-page-subheader>
 
     <div class="row">
