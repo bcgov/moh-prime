@@ -147,8 +147,6 @@ namespace Prime.Services.Rules
             config.IgnoreProperty<Job>(x => x.EnrolleeId);
 
             config.IgnoreProperty<MailingAddress>(x => x.Id);
-            config.IgnoreProperty<MailingAddress>(x => x.Enrollee);
-            config.IgnoreProperty<MailingAddress>(x => x.EnrolleeId);
             config.IgnoreProperty<MailingAddress>(x => x.Country);
             config.IgnoreProperty<MailingAddress>(x => x.Province);
 
