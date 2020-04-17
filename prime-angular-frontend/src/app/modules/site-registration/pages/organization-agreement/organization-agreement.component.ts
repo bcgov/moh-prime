@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { Subscription } from 'rxjs';
+
 import { ToastService } from '@core/services/toast.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
@@ -11,6 +13,8 @@ import { SiteRoutes } from '@registration/site-registration.routes';
   styleUrls: ['./organization-agreement.component.scss']
 })
 export class OrganizationAgreementComponent implements OnInit {
+  public busy: Subscription;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,

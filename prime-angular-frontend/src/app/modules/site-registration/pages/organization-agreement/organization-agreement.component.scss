@@ -25,18 +25,42 @@ li {
   margin-bottom: 1rem;
 }
 
-// TODO make a couple different counters for agreements
-// ol.decimal { counter-reset: item }
-// li{ display: block }
-// li:before { content: counters(item, ".") " "; counter-increment: item }
+ol[type="1"].decimal {
+  // Remove list defaults
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
 
-// ol.decimal {
-//   counter-reset: item;
+  // Allow [start] attribute to dictate the initial counter value
+  @for $i from 1 through 10 {
+    &[start="#{$i}"] {
+      counter-reset: section $i - 1;
+    }
+  }
 
-//   li {
-//     display: block
-//   }
-//   li:before {
+  & > li,
+  ol[type="1"] > li {
+    // Increment for each in parent and children
+    counter-increment: section;
 
-//   }
-// }
+    // Allow the first element to be a paragraph without line wrapping the
+    // content, and avoid display: inline issues with spacing
+    & > p:first-child {
+      margin-top: -1.5rem;
+    }
+  }
+
+  ol[type="1"] {
+    // Reset decimal counts
+    counter-reset: section;
+    // Remove list defaults
+    list-style-type: none;
+
+    & > li::before {
+      // Only display list counts in children
+      content: counters(section,".") " ";
+      // Re-align with default list counters
+      margin-left: -26px;
+    }
+  }
+}
