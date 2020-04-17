@@ -3,7 +3,21 @@
   <app-site-progress-indicator [currentRoute]="SiteRoutes.SIGNING_AUTHORITY"></app-site-progress-indicator>
 
   <app-registrant-profile-form [title]="title"
-                               (submit)="onSubmit($event)"></app-registrant-profile-form>
+                               (submit)="onSubmit($event)">
+    <ng-container appPageSubheaderSummary>
+      The Signing Authority must be a duly authorized representative of the organization with authority to submit the
+      site request on the organization’s behalf. This is the individual who will be designated as responsible for
+      PharmaNet activities at the location being set up for PharmaNet access (site). This person must be the same
+      individual who signs the Organization Agreement for PharmaNet Use. If the site is owned/leased and operated by a
+      corporation, the Signing Authority must be legally able to bind the corporation to the terms of this document
+      and the Organization Agreement for PharmaNet Use. The Signing Authority must be the same individual for all
+      PharmaNet access sites operating under the same organization. The Signing Authority does not need to be a
+      PharmaNet user, a member of a regulated health profession, or providing direct patient care at the site. The
+      Signing Authority must sign Section 5 (Certification) of the PharmaNet Access Community Practice Site Request
+      for new PharmaNet access sites, updates to existing information for a PharmaNet access sites, discontinuing
+      current software vendors, or discontinuations of PharmaNet access at a site.
+    </ng-container>
+  </app-registrant-profile-form>
 
   <app-page-footer [isInitialEnrolment]="true"
                    [hasSecondaryAction]="true"

@@ -41,9 +41,6 @@ import { EnrolleePropertyComponent } from '@shared/components/enrollee/enrollee-
 import { EnrolleePropertyErrorComponent } from '@shared/components/enrollee/enrollee-property-error/enrollee-property-error.component';
 import { EnrolleeReviewComponent } from '@shared/components/enrollee/enrollee-review/enrollee-review.component';
 import { EnrolleeProfileComponent } from '@shared/components/enrollee/enrollee-profile/enrollee-profile.component';
-import { EnrolleeAddressComponent } from '@shared/components/enrollee/enrollee-address/enrollee-address.component';
-import { EnrolleePrivilegesComponent } from '@shared/components/enrollee/enrollee-privileges/enrollee-privileges.component';
-import { EnrolleeOrganizationsComponent } from '@shared/components/enrollee/enrollee-organizations/enrollee-organizations.component';
 import { PrimeEmailComponent } from '@shared/components/prime-email/prime-email.component';
 import { PrimePhoneComponent } from '@shared/components/prime-phone/prime-phone.component';
 import { PrimeLogoComponent } from '@shared/components/prime-logo/prime-logo.component';
@@ -89,9 +86,6 @@ import { PageFooterComponent } from './components/page-footer/page-footer.compon
     CertificatePipe,
     ProgressIndicatorComponent,
     EnrolleeProfileComponent,
-    EnrolleeAddressComponent,
-    EnrolleePrivilegesComponent,
-    EnrolleeOrganizationsComponent,
     EnrolleePropertyComponent,
     EnrolleePropertyErrorComponent,
     PrimeEmailComponent,
@@ -156,9 +150,6 @@ import { PageFooterComponent } from './components/page-footer/page-footer.compon
     CertificatePipe,
     ProgressIndicatorComponent,
     EnrolleeProfileComponent,
-    EnrolleeAddressComponent,
-    EnrolleePrivilegesComponent,
-    EnrolleeOrganizationsComponent,
     EnrolleePropertyComponent,
     PrimeEmailComponent,
     PrimePhoneComponent,
