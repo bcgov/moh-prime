@@ -17,12 +17,6 @@ namespace Prime.Models
         [Key]
         public int Id { get; set; }
 
-        [JsonIgnore]
-        public int EnrolleeId { get; set; }
-
-        [JsonIgnore]
-        public Enrollee Enrollee { get; set; }
-
         public string CountryCode { get; set; }
 
         [JsonIgnore]
