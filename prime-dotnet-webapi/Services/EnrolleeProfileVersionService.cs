@@ -30,7 +30,12 @@ namespace Prime.Services
             IMongoDbSettings settings
             ) : base(context, httpContext)
         {
-            var client = new MongoClient(settings.ConnectionString);
+            var connectionString = System.Environment.GetEnvironmentVariable("MONGO_CONNECTION_STRING");
+            if (connectionString == null)
+            {
+                connectionString = settings.ConnectionString;
+            }
+            var client = new MongoClient(connectionString);
             var database = client.GetDatabase(settings.DatabaseName);
 
             _profileVersions = database.GetCollection<EnrolleeProfileVersion>("EnrolleeProfileVersions");
