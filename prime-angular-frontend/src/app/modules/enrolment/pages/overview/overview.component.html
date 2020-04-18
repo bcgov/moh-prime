@@ -4,9 +4,9 @@
 
   <app-page-header>PharmaNet Enrolment</app-page-header>
 
-  <app-progress-indicator *ngIf="isInitialEnrolment"
-                          [inProgress]="isInitialEnrolment"
-                          [currentRoute]="EnrolmentRoutes.OVERVIEW"></app-progress-indicator>
+  <app-enrolment-progress-indicator *ngIf="isInitialEnrolment"
+                                    [inProgress]="isInitialEnrolment"
+                                    [currentRoute]="EnrolmentRoutes.OVERVIEW"></app-enrolment-progress-indicator>
 
   <div class="mb-5">
     <app-page-subheader>
