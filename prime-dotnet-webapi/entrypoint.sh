@@ -29,7 +29,7 @@ psql -h $DB_HOST -U ${POSTGRESQL_USER} -d ${POSTGRESQL_DATABASE} -a -f databaseM
 
 echo "Resting 5 seconds to let things settle down..."
 echo "Running .NET..."
-dotnet prime.dll -v 2>&1 | ts > $logfile & 
+dotnet prime.dll -v 2>&1 | ts > $logfile &
 echo "Launched, waiting for connection to API internally..."
 
 function waitForIt() {
@@ -66,7 +66,7 @@ function pharmanetVerboseCheck() {
     --data "@/tmp/data.out"
 }
 
-waitForIt localhost:${API_PORT}/api/enrollees 401 2>&1 | logger & 
+waitForIt localhost:${API_PORT}/api/enrollees 401 2>&1 | logger &
 waitForIt localhost:${API_PORT}/api/lookups 401 2>&1 | logger
 
 echo -e "\nThe system is up."
