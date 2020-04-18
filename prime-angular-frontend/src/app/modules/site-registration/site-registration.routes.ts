@@ -10,7 +10,7 @@ export class SiteRoutes {
   public static SIGNING_AUTHORITY = 'signing-authority';
   public static ADMINISTRATOR = 'administrator';
   public static PRIVACY_OFFICER = 'privacy-officer';
-  public static TECHNICAL_SUPPORT_CONTACT = 'technical-support-contact';
+  public static TECHNICAL_SUPPORT = 'technical-support-contact';
   public static SITE_REVIEW = 'site-review';
   public static CONFIRMATION = 'confirmation';
 
@@ -33,7 +33,7 @@ export class SiteRoutes {
       SiteRoutes.SIGNING_AUTHORITY,
       SiteRoutes.ADMINISTRATOR,
       SiteRoutes.PRIVACY_OFFICER,
-      SiteRoutes.TECHNICAL_SUPPORT_CONTACT,
+      SiteRoutes.TECHNICAL_SUPPORT,
       SiteRoutes.SITE_REVIEW,
       SiteRoutes.CONFIRMATION
     ];

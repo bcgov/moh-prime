@@ -2,12 +2,12 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { TechnicalSupportContactComponent } from './technical-support-contact.component';
+import { TechnicalSupportComponent } from './technical-support.component';
 import { SiteRegistrationModule } from '@registration/site-registration.module';
 
-describe('TechnicalSupportContactComponent', () => {
-  let component: TechnicalSupportContactComponent;
-  let fixture: ComponentFixture<TechnicalSupportContactComponent>;
+describe('TechnicalSupportComponent', () => {
+  let component: TechnicalSupportComponent;
+  let fixture: ComponentFixture<TechnicalSupportComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -21,7 +21,7 @@ describe('TechnicalSupportContactComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TechnicalSupportContactComponent);
+    fixture = TestBed.createComponent(TechnicalSupportComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

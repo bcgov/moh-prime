@@ -29,7 +29,7 @@ export class SigningAuthorityComponent implements OnInit {
   }
 
   public onBack() {
-    this.router.navigate([SiteRoutes.VENDORS], { relativeTo: this.route.parent });
+    this.router.navigate([SiteRoutes.HOURS_OPERATION], { relativeTo: this.route.parent });
   }
 
   public ngOnInit() { }

@@ -14,7 +14,7 @@ import { CollectionNoticeComponent } from './pages/collection-notice/collection-
 import { SigningAuthorityComponent } from './pages/signing-authority/signing-authority.component';
 import { AdministratorComponent } from './pages/administrator/administrator.component';
 import { MultipleSitesComponent } from './pages/multiple-sites/multiple-sites.component';
-import { TechnicalSupportContactComponent } from './pages/technical-support-contact/technical-support-contact.component';
+import { TechnicalSupportComponent } from './pages/technical-support/technical-support.component';
 import { SiteReviewComponent } from './pages/site-review/site-review.component';
 import { OrganizationInformationComponent } from './pages/organization-information/organization-information.component';
 import { HoursOperationComponent } from './pages/hours-operation/hours-operation.component';
@@ -30,7 +30,7 @@ import { OrganizationAgreementComponent } from './pages/organization-agreement/o
     SigningAuthorityComponent,
     AdministratorComponent,
     MultipleSitesComponent,
-    TechnicalSupportContactComponent,
+    TechnicalSupportComponent,
     SiteReviewComponent,
     OrganizationInformationComponent,
     HoursOperationComponent,
