@@ -40,7 +40,7 @@ export class SiteAddressComponent implements OnInit {
     // if (this.form.valid) { }
     this.toastService.openSuccessToast('Enrolment information has been saved');
     this.form.markAsPristine();
-    this.router.navigate([SiteRoutes.ACCESS_AGREEMENT], { relativeTo: this.route.parent });
+    this.router.navigate([SiteRoutes.ORGANIZATION_AGREEMENT], { relativeTo: this.route.parent });
   }
 
   public onBack() {

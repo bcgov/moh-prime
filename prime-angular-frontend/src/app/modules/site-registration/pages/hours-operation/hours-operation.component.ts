@@ -46,7 +46,7 @@ export class HoursOperationComponent implements OnInit {
   }
 
   public onBack() {
-    this.router.navigate([SiteRoutes.ACCESS_AGREEMENT], { relativeTo: this.route.parent });
+    this.router.navigate([SiteRoutes.ORGANIZATION_AGREEMENT], { relativeTo: this.route.parent });
   }
 
   public ngOnInit() {

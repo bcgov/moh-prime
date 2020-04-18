@@ -4,7 +4,7 @@ export class SiteRoutes {
   public static MULTIPLE_SITES = 'multiple-sites';
   public static ORGANIZATION_INFORMATION = 'organization-information';
   public static SITE_ADDRESS = 'site-address';
-  public static ACCESS_AGREEMENT = 'access-agreement';
+  public static ORGANIZATION_AGREEMENT = 'access-agreement';
   public static HOURS_OPERATION = 'hours-operation';
   public static VENDOR = 'vendor';
   public static SIGNING_AUTHORITY = 'signing-authority';
@@ -22,12 +22,12 @@ export class SiteRoutes {
 
   // Use by the progress indicator to calculate percent completion
   // of the registration process
-  public static routeOrder(): string[] {
+  public static initialRegistrationRouteOrder(): string[] {
     return [
       SiteRoutes.MULTIPLE_SITES,
       SiteRoutes.ORGANIZATION_INFORMATION,
       SiteRoutes.SITE_ADDRESS,
-      SiteRoutes.ACCESS_AGREEMENT,
+      SiteRoutes.ORGANIZATION_AGREEMENT,
       SiteRoutes.HOURS_OPERATION,
       SiteRoutes.VENDOR,
       SiteRoutes.SIGNING_AUTHORITY,

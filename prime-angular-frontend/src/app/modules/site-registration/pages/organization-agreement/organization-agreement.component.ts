@@ -15,6 +15,8 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 export class OrganizationAgreementComponent implements OnInit {
   public busy: Subscription;
 
+  public SiteRoutes = SiteRoutes;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,

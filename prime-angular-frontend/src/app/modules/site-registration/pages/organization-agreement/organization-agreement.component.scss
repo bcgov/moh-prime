@@ -1,3 +1,5 @@
+@import 'palette';
+
 h1 {
   font-size: 1.2rem;
   text-align: center;
@@ -63,4 +65,13 @@ ol[type="1"].decimal {
       margin-left: -26px;
     }
   }
+}
+
+.footer {
+  border-top: 2px solid theme-palette(grey, lighter);
+  padding-top: 1rem;
+}
+
+.mat-checkbox-inner-container {
+  margin-right: 1.5rem !important;
 }

@@ -57,7 +57,7 @@ const routes: Routes = [
         data: { title: 'Site Address' }
       },
       {
-        path: SiteRoutes.ACCESS_AGREEMENT,
+        path: SiteRoutes.ORGANIZATION_AGREEMENT,
         component: OrganizationAgreementComponent,
         data: { title: 'Access Agreement' }
       },

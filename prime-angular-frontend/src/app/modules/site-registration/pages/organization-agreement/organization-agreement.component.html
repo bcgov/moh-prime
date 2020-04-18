@@ -1,4 +1,6 @@
 <app-page [busy]="busy">
+  <app-page-header>PharmaNet Site Registration</app-page-header>
+  <app-site-progress-indicator [currentRoute]="SiteRoutes.ORGANIZATION_AGREEMENT"></app-site-progress-indicator>
 
   <h1>ORGANIZATION AGREEMENT FOR PHARMANET USE BETWEEN:</h1>
 
@@ -657,8 +659,30 @@
     </li>
   </ol>
 
-  <app-page-footer [isInitialEnrolment]="true"
-                   [hasSecondaryAction]="true"
-                   (save)="onSubmit()"
-                   (back)="onBack()"></app-page-footer>
+  <div class="footer mb-3">
+    <mat-checkbox #accept>
+      <div class="pl-3">
+        I have read and accept the Organization Agreement.
+      </div>
+    </mat-checkbox>
+  </div>
+
+  <div class="row justify-content-end">
+    <div class="col">
+
+      <button mat-stroked-button
+              color="primary"
+              (click)="onBack()">Back</button>
+
+    </div>
+    <div class="col text-right">
+
+      <button mat-flat-button
+              color="primary"
+              [disabled]="!accept.checked"
+              (click)="onSubmit()">Accept Agreement</button>
+
+    </div>
+  </div>
+
 </app-page>
