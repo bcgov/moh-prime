@@ -27,7 +27,7 @@ export class OrganizationAgreementComponent implements OnInit {
     // TODO proper submission when backend payload known
     // if (this.form.valid) { }
     this.toastService.openSuccessToast('Enrolment information has been saved');
-    this.router.navigate([SiteRoutes.HOURS_OPERATION], { relativeTo: this.route.parent });
+    this.router.navigate([SiteRoutes.VENDORS], { relativeTo: this.route.parent });
   }
 
   public onBack() {

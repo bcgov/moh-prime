@@ -67,7 +67,7 @@ const routes: Routes = [
         data: { title: 'Hours of Operation' }
       },
       {
-        path: SiteRoutes.VENDOR,
+        path: SiteRoutes.VENDORS,
         component: VendorComponent,
         data: { title: 'Vendor' }
       },

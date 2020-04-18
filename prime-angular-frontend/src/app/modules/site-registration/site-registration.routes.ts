@@ -6,7 +6,7 @@ export class SiteRoutes {
   public static SITE_ADDRESS = 'site-address';
   public static ORGANIZATION_AGREEMENT = 'access-agreement';
   public static HOURS_OPERATION = 'hours-operation';
-  public static VENDOR = 'vendor';
+  public static VENDORS = 'vendor';
   public static SIGNING_AUTHORITY = 'signing-authority';
   public static ADMINISTRATOR = 'administrator';
   public static PRIVACY_OFFICER = 'privacy-officer';
@@ -29,7 +29,7 @@ export class SiteRoutes {
       SiteRoutes.SITE_ADDRESS,
       SiteRoutes.ORGANIZATION_AGREEMENT,
       SiteRoutes.HOURS_OPERATION,
-      SiteRoutes.VENDOR,
+      SiteRoutes.VENDORS,
       SiteRoutes.SIGNING_AUTHORITY,
       SiteRoutes.ADMINISTRATOR,
       SiteRoutes.PRIVACY_OFFICER,
