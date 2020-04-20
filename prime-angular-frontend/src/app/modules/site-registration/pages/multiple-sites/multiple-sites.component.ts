@@ -52,7 +52,10 @@ export class MultipleSitesComponent implements OnInit {
 
   private createFormInstance() {
     this.form = this.formBuilder.group({
-      hasMultipleSites: [null, [FormControlValidators.requiredBoolean]],
+      hasMultipleSites: [
+        { value: false, disabled: true },
+        [FormControlValidators.requiredBoolean]
+      ],
       organizationNumber: [null, []],
     });
   }
