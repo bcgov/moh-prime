@@ -44,8 +44,8 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.HasPharmaNetSuspendedDetails, f => null);
 
             RuleFor(x => x.EnrolmentStatuses, (f, x) => new EnrolmentStatusFactory(x).Generate(1, "default,inProgress"));
-            RuleFor(x => x.PhysicalAddress, (f, x) => new PhysicalAddressFactory(x).Generate());
-            RuleFor(x => x.MailingAddress, (f, x) => new MailingAddressFactory(x).Generate().OrNull(f));
+            RuleFor(x => x.PhysicalAddress, f => new PhysicalAddressFactory().Generate());
+            RuleFor(x => x.MailingAddress, f => new MailingAddressFactory().Generate().OrNull(f));
             RuleFor(x => x.Certifications, (f, x) => new CertificationFactory(x).GenerateBetween(1, 2).OrNull(f, .75f));
             RuleFor(x => x.Jobs, (f, x) => x.Certifications == null ? new JobFactory(x).Generate(1) : null);
             RuleFor(x => x.EnrolleeOrganizationTypes, (f, x) => new EnrolleeOrganizationTypeFactory(x).Generate(1));

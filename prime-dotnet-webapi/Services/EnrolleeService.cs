@@ -153,7 +153,7 @@ namespace Prime.Services
 
             _context.Entry(enrollee).CurrentValues.SetValues(enrolleeProfile);
 
-            UpdateMailingAddress(enrollee.MailingAddress, enrolleeProfile.MailingAddress, enrolleeId);
+            UpdateMailingAddress(enrollee, enrolleeProfile.MailingAddress);
             ReplaceExistingItems(enrollee.Certifications, enrolleeProfile.Certifications, enrolleeId);
             ReplaceExistingItems(enrollee.Jobs, enrolleeProfile.Jobs, enrolleeId);
             ReplaceExistingItems(enrollee.EnrolleeOrganizationTypes, enrolleeProfile.EnrolleeOrganizationTypes, enrolleeId);
@@ -176,21 +176,14 @@ namespace Prime.Services
             }
         }
 
-        private void UpdateMailingAddress(MailingAddress dbAddress, MailingAddress newAddress, int enrolleeId)
+        private void UpdateMailingAddress(Enrollee dbEnrollee, MailingAddress newAddress)
         {
-            // Remove existing addresses
-            if (dbAddress != null)
+            if (dbEnrollee.MailingAddress != null)
             {
-                _context.Addresses.Remove(dbAddress);
+                _context.Addresses.Remove(dbEnrollee.MailingAddress);
             }
 
-            // Create the new addresses, if they exist
-            if (newAddress != null)
-            {
-                // Prevent the ID from being changed by the incoming changes
-                newAddress.EnrolleeId = enrolleeId;
-                _context.Entry(newAddress).State = EntityState.Added;
-            }
+            dbEnrollee.MailingAddress = newAddress;
         }
 
         private void ReplaceExistingItems<T>(ICollection<T> dbCollection, ICollection<T> newCollection, int enrolleeId) where T : class, IEnrolleeNavigationProperty
