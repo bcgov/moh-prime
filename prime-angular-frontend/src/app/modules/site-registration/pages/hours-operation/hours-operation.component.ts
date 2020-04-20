@@ -42,11 +42,11 @@ export class HoursOperationComponent implements OnInit {
     // if (this.form.valid) { }
     this.toastService.openSuccessToast('Enrolment information has been saved');
     this.form.markAsPristine();
-    this.router.navigate([SiteRoutes.VENDOR], { relativeTo: this.route.parent });
+    this.router.navigate([SiteRoutes.SIGNING_AUTHORITY], { relativeTo: this.route.parent });
   }
 
   public onBack() {
-    this.router.navigate([SiteRoutes.SITE_ADDRESS], { relativeTo: this.route.parent });
+    this.router.navigate([SiteRoutes.VENDORS], { relativeTo: this.route.parent });
   }
 
   public ngOnInit() {

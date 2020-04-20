@@ -4,10 +4,11 @@
 
   <app-page-header>PharmaNet Enrolment</app-page-header>
 
-  <app-progress-indicator *ngIf="isInitialEnrolment"
-                          message="Enrolment Paused"
-                          [inProgress]="isInitialEnrolment"
-                          [currentRoute]="EnrolmentRoutes.SUBMISSION_CONFIRMATION"></app-progress-indicator>
+  <app-enrolment-progress-indicator *ngIf="isInitialEnrolment"
+                                    message="Enrolment Paused"
+                                    [inProgress]="isInitialEnrolment"
+                                    [currentRoute]="EnrolmentRoutes.SUBMISSION_CONFIRMATION">
+  </app-enrolment-progress-indicator>
 
   <div class="mb-4">
     <app-alert type="info"

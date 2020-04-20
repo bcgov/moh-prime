@@ -18,9 +18,10 @@ import { SiteAddressComponent } from './pages/site-address/site-address.componen
 import { HoursOperationComponent } from './pages/hours-operation/hours-operation.component';
 import { AdministratorComponent } from './pages/administrator/administrator.component';
 import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer.component';
-import { TechnicalSupportContactComponent } from './pages/technical-support-contact/technical-support-contact.component';
+import { TechnicalSupportComponent } from './pages/technical-support/technical-support.component';
 import { SiteReviewComponent } from './pages/site-review/site-review.component';
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
+import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
 
 const routes: Routes = [
   {
@@ -56,12 +57,17 @@ const routes: Routes = [
         data: { title: 'Site Address' }
       },
       {
+        path: SiteRoutes.ORGANIZATION_AGREEMENT,
+        component: OrganizationAgreementComponent,
+        data: { title: 'Access Agreement' }
+      },
+      {
         path: SiteRoutes.HOURS_OPERATION,
         component: HoursOperationComponent,
         data: { title: 'Hours of Operation' }
       },
       {
-        path: SiteRoutes.VENDOR,
+        path: SiteRoutes.VENDORS,
         component: VendorComponent,
         data: { title: 'Vendor' }
       },
@@ -81,8 +87,8 @@ const routes: Routes = [
         data: { title: 'Privacy Officer' }
       },
       {
-        path: SiteRoutes.TECHNICAL_SUPPORT_CONTACT,
-        component: TechnicalSupportContactComponent,
+        path: SiteRoutes.TECHNICAL_SUPPORT,
+        component: TechnicalSupportComponent,
         data: { title: 'Technical Support Contact' }
       },
       {
