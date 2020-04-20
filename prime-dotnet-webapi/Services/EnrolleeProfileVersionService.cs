@@ -15,7 +15,7 @@ namespace Prime.Services
 {
     public class EnrolleeProfileVersionService : BaseService, IEnrolleeProfileVersionService
     {
-        private readonly IMongoCollection<EnrolleeProfileVersion> _profileVersions;
+        private readonly MongoDbContext _mongoContext;
 
         private JsonSerializer _camelCaseSerializer = JsonSerializer.Create(
             new JsonSerializerSettings
@@ -27,18 +27,11 @@ namespace Prime.Services
         public EnrolleeProfileVersionService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
-            IMongoDbSettings settings
+            IMongoDbSettings settings,
+            MongoDbContext mongoContext
             ) : base(context, httpContext)
         {
-            var connectionString = System.Environment.GetEnvironmentVariable("MONGO_CONNECTION_STRING");
-            if (connectionString == null)
-            {
-                connectionString = settings.ConnectionString;
-            }
-            var client = new MongoClient(connectionString);
-            var database = client.GetDatabase(settings.DatabaseName);
-
-            _profileVersions = database.GetCollection<EnrolleeProfileVersion>("EnrolleeProfileVersions");
+            _mongoContext = mongoContext;
         }
 
         public async Task<IEnumerable<EnrolleeProfileVersion>> GetEnrolleeProfileVersionsAsync(int enrolleeId)
@@ -82,7 +75,7 @@ namespace Prime.Services
             enrolleeProfileVersion.ProfileSnapshotMongo = BsonDocument.Parse(enrolleeProfileVersion.ProfileSnapshot.ToString());
 
             // Insert into mongo database
-            _profileVersions.InsertOne(enrolleeProfileVersion);
+            _mongoContext.profileVersions.InsertOne(enrolleeProfileVersion);
         }
     }
 }
