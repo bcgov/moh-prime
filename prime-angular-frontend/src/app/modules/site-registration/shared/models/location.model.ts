@@ -4,6 +4,7 @@ import { Party } from './party.model';
 import { Organization } from './organization.model';
 
 export interface Location {
+  id: number;
   administratorPharmaNetId: number;
   administratorPharmaNet: Party;
   privacyOfficerId: number;

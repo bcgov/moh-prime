@@ -10,6 +10,8 @@ import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ToastService } from '@core/services/toast.service';
 import { NoContent } from '@core/resources/abstract-resource';
 
+import { Site } from '../models/site.model';
+
 @Injectable({
   providedIn: 'root'
 })
