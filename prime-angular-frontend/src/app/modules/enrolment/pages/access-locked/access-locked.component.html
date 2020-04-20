@@ -2,9 +2,9 @@
 
   <app-page-header>Enrolment Summary</app-page-header>
 
-  <app-progress-indicator *ngIf="isInitialEnrolment"
-                          message="Enrolment Locked"
-                          [currentRoute]="EnrolmentRoutes.ACCESS_LOCKED"></app-progress-indicator>
+  <app-enrolment-progress-indicator *ngIf="isInitialEnrolment"
+                                    message="Enrolment Locked"
+                                    [currentRoute]="EnrolmentRoutes.ACCESS_LOCKED"></app-enrolment-progress-indicator>
 
   <div class="mb-4">
     <app-alert type="danger">
