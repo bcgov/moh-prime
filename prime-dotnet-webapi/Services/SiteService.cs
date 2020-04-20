@@ -20,7 +20,7 @@ namespace Prime.Services
 
         public async Task<IEnumerable<Site>> GetSitesAsync()
         {
-            // TODO only provide locations for a specific signing authority
+            // TODO only provide locations for the authenticated signing authority
             return await this.GetBaseSiteQuery()
                 .ToListAsync();
         }
@@ -81,7 +81,6 @@ namespace Prime.Services
             _context.Sites.Remove(site);
             await _context.SaveChangesAsync();
         }
-
         public async Task<Site> GetSiteNoTrackingAsync(int siteId)
         {
             return await this.GetBaseSiteQuery()
