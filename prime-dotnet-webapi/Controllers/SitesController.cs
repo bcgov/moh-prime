@@ -156,7 +156,7 @@ namespace Prime.Controllers
         /// <summary>
         /// Get the Site's organization agreement.
         /// </summary>
-        [HttpGet("organization-agreement", Name = nameof(GetOrganizationAgreement))]
+        [HttpGet(Name = nameof(GetOrganizationAgreement))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -164,33 +164,6 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<string>>> GetOrganizationAgreement()
         {
-            var agreement = await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistration.cshtml", new Site());
-
-            return Ok(ApiResponse.Result(agreement));
-        }
-
-        // GET: api/Sites/organization-agreement
-        /// <summary>
-        /// Get the Site's organization agreement.
-        /// </summary>
-        /// <param name="siteId"></param>
-        [HttpGet("{siteId}/organization-agreement", Name = nameof(GetOrganizationAgreement))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<string>>> GetOrganizationAgreement(int siteId)
-        {
-            var site = await _siteService.GetSiteAsync(siteId);
-
-            if (site == null)
-            {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
-            }
-
-            // TODO add claims to forbid access
-
             var agreement = await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistration.cshtml", new Site());
 
             return Ok(ApiResponse.Result(agreement));
