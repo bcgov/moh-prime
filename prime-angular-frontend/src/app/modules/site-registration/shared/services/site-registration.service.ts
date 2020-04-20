@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Registrant } from '@shared/models/registrant';
 import { BehaviorSubject } from 'rxjs';
 
-export interface IRegistrantService {
+export interface ISiteRegistrationService {
   registrant$: BehaviorSubject<Registrant>;
   registrant: Registrant;
 }
@@ -10,7 +10,7 @@ export interface IRegistrantService {
 @Injectable({
   providedIn: 'root'
 })
-export class RegistrantService implements IRegistrantService {
+export class SiteRegisrationService implements ISiteRegistrationService {
   // tslint:disable-next-line: variable-name
   private _registrant: BehaviorSubject<Registrant>;
 
