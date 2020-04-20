@@ -209,7 +209,6 @@ namespace Prime
 
             // Per the official Mongo Client reuse guidelines, MongoClient should be
             // registered in DI with a singleton service lifetime.
-            // services.AddSingleton<LocationService>();
             services.AddSingleton<MongoDbContext>();
 
             var connectionString = System.Environment.GetEnvironmentVariable("MONGO_CONNECTION_STRING");
