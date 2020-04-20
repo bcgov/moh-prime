@@ -27,7 +27,6 @@ namespace Prime.Services
         public EnrolleeProfileVersionService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
-            IMongoDbSettings settings,
             MongoDbContext mongoContext
             ) : base(context, httpContext)
         {

@@ -9,7 +9,6 @@ namespace Prime.Services
 {
     public class LocationService : ILocationService
     {
-
         private readonly MongoDbContext _mongoContext;
 
         public LocationService(MongoDbContext mongoContext)
