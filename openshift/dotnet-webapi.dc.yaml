@@ -209,9 +209,9 @@ objects:
                 - name: MONGO_HOST
                   value: "mongodb${SUFFIX}"
                 - name: DB_CONNECTION_STRING
-                  value: "host=${DB_HOST};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"
+                  value: "host=$DB_HOST;port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"
                 - name: MONGO_CONNECTION_STRING
-                  value: "host=${MONGO_HOST};port=27017;database=db;username=${MONGO_USER};password=${MONGO_ADMIN_PASSWORD}"
+                  value: "host=$MONGO_HOST;port=27017;database=db;username=${MONGO_USER};password=${MONGO_ADMIN_PASSWORD}"
               image: " "
               name: primeapi
               ports:
