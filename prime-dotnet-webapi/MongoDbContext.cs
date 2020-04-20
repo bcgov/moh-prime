@@ -28,6 +28,7 @@ namespace Prime
             _settings = settings;
             // Connect to database
             var connectionString = System.Environment.GetEnvironmentVariable("MONGO_CONNECTION_STRING");
+            System.Console.WriteLine("MONGO_CONNECTION_STRING: ", System.Environment.GetEnvironmentVariable("MONGO_CONNECTION_STRING"));
             if (connectionString == null)
             {
                 connectionString = settings.ConnectionString;
