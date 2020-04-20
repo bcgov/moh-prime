@@ -1,0 +1,147 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+using Prime.Auth;
+using Prime.Models;
+using Prime.Models.Api;
+using Prime.Services;
+
+namespace Prime.Controllers
+{
+    [Produces("application/json")]
+    [Route("api/[controller]")]
+    [ApiController]
+    [Authorize(Policy = AuthConstants.USER_POLICY)]
+    public class SitesController : ControllerBase
+    {
+        private readonly ISiteService _siteService;
+
+        public SitesController(
+            ISiteService siteService)
+        {
+            _siteService = siteService;
+        }
+
+        // GET: api/Sites
+        /// <summary>
+        /// Gets all of the Sites for a user.
+        /// </summary>
+        [HttpGet(Name = nameof(GetSites))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Site>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<Site>>> GetSites()
+        {
+            var sites = await _siteService.GetSitesAsync();
+
+            // TODO add claims to forbid access
+
+            return Ok(ApiResponse.Result(sites));
+        }
+
+        // GET: api/Sites/5
+        /// <summary>
+        /// Gets a specific Site.
+        /// </summary>
+        /// <param name="siteId"></param>
+        [HttpGet("{siteId}", Name = nameof(GetSiteById))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<Site>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<Site>> GetSiteById(int siteId)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+
+            // TODO add claims to forbid access
+
+            return Ok(ApiResponse.Result(site));
+        }
+
+        // POST: api/Sites
+        /// <summary>
+        /// Creates a new Site.
+        /// </summary>
+        [HttpPost(Name = nameof(CreateSite))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<Site>), StatusCodes.Status201Created)]
+        public async Task<ActionResult<Site>> CreateSite(Site site)
+        {
+            if (site == null)
+            {
+                this.ModelState.AddModelError("Site", "Could not create an site, the passed in Site cannot be null.");
+                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+            }
+
+            // TODO add claims to forbid access
+
+            var createdSiteId = await _siteService.CreateSiteAsync(site);
+
+            return CreatedAtAction(
+                nameof(GetSiteById),
+                new { siteId = createdSiteId },
+                ApiResponse.Result(site)
+            );
+        }
+
+        // PUT: api/Sites/5
+        /// <summary>
+        /// Updates a specific Site.
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="updatedSite"></param>
+        /// <param name="isComplete"></param>
+        [HttpPut("{siteId}", Name = nameof(UpdateSite))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> UpdateSite(int siteId, Site updatedSite, [FromQuery]bool isComplete)
+        {
+            var site = await _siteService.GetSiteNoTrackingAsync(siteId);
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+            }
+
+            // TODO add claims to forbid access
+
+            await _siteService.UpdateSiteAsync(siteId, updatedSite, isComplete);
+
+            return NoContent();
+        }
+
+        // DELETE: api/Sites/5
+        /// <summary>
+        /// Deletes a specific Site.
+        /// </summary>
+        /// <param name="siteId"></param>
+        [HttpDelete("{siteId}", Name = nameof(DeleteSite))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<Site>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<Site>> DeleteSite(int siteId)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+            }
+
+            // TODO add claims to forbid access
+
+            await _siteService.DeleteSiteAsync(siteId);
+
+            return Ok(ApiResponse.Result(site));
+        }
+    }
+}

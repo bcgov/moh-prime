@@ -1,0 +1,102 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Prime.Models;
+
+// TODO add business events
+// TODO add logging
+namespace Prime.Services
+{
+    public class SiteService : BaseService, ISiteService
+    {
+        public SiteService(
+            ApiDbContext context,
+            IHttpContextAccessor httpContext)
+            : base(context, httpContext)
+        { }
+
+        public async Task<IEnumerable<Site>> GetSitesAsync()
+        {
+            // TODO only provide locations for a specific signing authority
+            return await this.GetBaseSiteQuery()
+                .ToListAsync();
+        }
+
+        public async Task<Site> GetSiteAsync(int siteId)
+        {
+            return await this.GetBaseSiteQuery()
+                .SingleOrDefaultAsync(s => s.Id == siteId);
+        }
+
+        public async Task<int> CreateSiteAsync(Site site)
+        {
+            if (site == null)
+            {
+                throw new ArgumentNullException(nameof(site), "Could not create a site, the passed in Site cannot be null.");
+            }
+
+            _context.Sites.Add(site);
+
+            var created = await _context.SaveChangesAsync();
+            if (created < 1)
+            {
+                throw new InvalidOperationException("Could not create Site.");
+            }
+
+            return site.Id;
+        }
+
+        public async Task<int> UpdateSiteAsync(int siteId, Site updatedSite, bool isCompleted = false)
+        {
+            // TODO wholesale change or based use view model
+
+            var site = await this.GetBaseSiteQuery()
+                .SingleAsync();
+
+            _context.Entry(site).CurrentValues.SetValues(updatedSite);
+
+            try
+            {
+                return await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return 0;
+            }
+        }
+
+        public async Task DeleteSiteAsync(int siteId)
+        {
+            var site = await _context.Sites
+                .SingleOrDefaultAsync(s => s.Id == siteId);
+
+            if (site == null)
+            {
+                return;
+            }
+
+            _context.Sites.Remove(site);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<Site> GetSiteNoTrackingAsync(int siteId)
+        {
+            return await this.GetBaseSiteQuery()
+                .AsNoTracking()
+                .SingleOrDefaultAsync(s => s.Id == siteId);
+        }
+
+        private IQueryable<Site> GetBaseSiteQuery()
+        {
+            return _context.Sites
+                .Include(s => s.Location)
+                    .ThenInclude(l => l.Organization)
+                .Include(s => s.Location)
+                    .ThenInclude(l => l.Address)
+                .Include(s => s.Vendor);
+        }
+    }
+}
