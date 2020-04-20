@@ -92,13 +92,25 @@ export class SiteRegistrationResource {
       );
   }
 
-  public getOrganizationAgreement(siteId: number): Observable<string> {
-    return this.apiResource.get<string>(`sites/${siteId}/organization-agreement`)
+  public getOrganizationAgreement(): Observable<string> {
+    return this.apiResource.get<string>(`sites/organization-agreement`)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization agreement could not be retrieved');
           this.logger.error('[SiteRegistration] SiteRegistrationResource::getOrganizationAgreement error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getCurrentOrganizationAgreement(siteId: number): Observable<string> {
+    return this.apiResource.get<string>(`sites/${siteId}/organization-agreement`)
+      .pipe(
+        map((response: ApiHttpResponse<string>) => response.result),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization agreement could not be retrieved');
+          this.logger.error('[SiteRegistration] SiteRegistrationResource::getCurrentOrganizationAgreement error has occurred: ', error);
           throw error;
         })
       );

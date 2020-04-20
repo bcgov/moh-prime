@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { ToastService } from '@core/services/toast.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
+import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
 
 @Component({
   selector: 'app-organization-agreement',
@@ -20,6 +21,7 @@ export class OrganizationAgreementComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private siteRegistrationResource: SiteRegistrationResource,
     private toastService: ToastService
   ) { }
 
@@ -34,5 +36,8 @@ export class OrganizationAgreementComponent implements OnInit {
     this.router.navigate([SiteRoutes.SITE_ADDRESS], { relativeTo: this.route.parent });
   }
 
-  public ngOnInit(): void { }
+  public ngOnInit(): void {
+    // TODO change the footer if already signed
+    this.siteRegistrationResource.getOrganizationAgreement()
+  }
 }
