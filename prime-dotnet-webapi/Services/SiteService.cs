@@ -91,11 +91,18 @@ namespace Prime.Services
         private IQueryable<Site> GetBaseSiteQuery()
         {
             return _context.Sites
+                .Include(s => s.Vendor)
                 .Include(s => s.Location)
                     .ThenInclude(l => l.Organization)
+                        .ThenInclude(o => o.SigningAuthority)
                 .Include(s => s.Location)
                     .ThenInclude(l => l.Address)
-                .Include(s => s.Vendor);
+                .Include(s => s.Location)
+                    .ThenInclude(l => l.PrivacyOfficer)
+                .Include(s => s.Location)
+                    .ThenInclude(l => l.AdministratorPharmaNet)
+                .Include(s => s.Location)
+                    .ThenInclude(l => l.TechnicalSupport);
         }
     }
 }
