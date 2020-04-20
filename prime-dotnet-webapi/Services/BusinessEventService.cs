@@ -86,6 +86,20 @@ namespace Prime.Services
             return businessEvent;
         }
 
+        public async Task<BusinessEvent> CreateSiteEventAsync(int siteId, string description)
+        {
+            var businessEvent = await this.CreateBusinessEvent(BusinessEventType.SITE_CODE, siteId, description);
+            _context.BusinessEvents.Add(businessEvent);
+            var created = await _context.SaveChangesAsync();
+
+            if (created < 1)
+            {
+                throw new InvalidOperationException("Could not create site business event.");
+            };
+
+            return businessEvent;
+        }
+
         private async Task<BusinessEvent> CreateBusinessEvent(int BusinessEventTypeCode, int enrolleeId, string description)
         {
             var userId = _httpContext.HttpContext.User.GetPrimeUserId();

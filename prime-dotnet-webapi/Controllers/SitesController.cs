@@ -84,6 +84,10 @@ namespace Prime.Controllers
             }
 
             // TODO add claims to forbid access
+            if (!User.HasSiteRegistrationFeature())
+            {
+                return Forbid();
+            }
 
             var createdSiteId = await _siteService.CreateSiteAsync(site);
 
@@ -100,14 +104,14 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="siteId"></param>
         /// <param name="updatedSite"></param>
-        /// <param name="isComplete"></param>
+        /// <param name="isCompleted"></param>
         [HttpPut("{siteId}", Name = nameof(UpdateSite))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateSite(int siteId, Site updatedSite, [FromQuery]bool isComplete)
+        public async Task<IActionResult> UpdateSite(int siteId, Site updatedSite, [FromQuery]bool isCompleted)
         {
             var site = await _siteService.GetSiteNoTrackingAsync(siteId);
             if (site == null)
@@ -117,7 +121,7 @@ namespace Prime.Controllers
 
             // TODO add claims to forbid access
 
-            await _siteService.UpdateSiteAsync(siteId, updatedSite, isComplete);
+            await _siteService.UpdateSiteAsync(siteId, updatedSite, isCompleted);
 
             return NoContent();
         }
@@ -146,6 +150,23 @@ namespace Prime.Controllers
             await _siteService.DeleteSiteAsync(siteId);
 
             return Ok(ApiResponse.Result(site));
+        }
+
+        // GET: api/Sites/organization-agreement
+        /// <summary>
+        /// Get the Site's organization agreement.
+        /// </summary>
+        [HttpGet("organization-agreement", Name = nameof(GetOrganizationAgreement))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<string>>> GetOrganizationAgreement()
+        {
+            var agreement = await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistration.cshtml", new Site());
+
+            return Ok(ApiResponse.Result(agreement));
         }
 
         // GET: api/Sites/organization-agreement

@@ -20,6 +20,9 @@ namespace Prime.Auth
         public const string PRIME_READONLY_ADMIN = "prime_readonly_admin";
         public const string EXTERNAL_HPDID_ACCESS_ROLE = "external_hpdid_access";
 
+        // Features
+        public const string FEATURE_SITE_REGISTRATION = "feature_site_registration";
+
         // Policies
         public const string SUPER_ADMIN_POLICY = "super-admin-policy";
         public const string READONLY_ADMIN_POLICY = "readonly-admin-policy";

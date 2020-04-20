@@ -12,11 +12,16 @@ namespace Prime.Services
 {
     public class SiteService : BaseService, ISiteService
     {
+        private readonly IBusinessEventService _businessEventService;
+
         public SiteService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext)
+            IHttpContextAccessor httpContext,
+            IBusinessEventService businessEventService)
             : base(context, httpContext)
-        { }
+        {
+            _businessEventService = businessEventService;
+        }
 
         public async Task<IEnumerable<Site>> GetSitesAsync()
         {
@@ -46,6 +51,8 @@ namespace Prime.Services
                 throw new InvalidOperationException("Could not create Site.");
             }
 
+            await _businessEventService.CreateSiteEventAsync(site.Id, "Site Created");
+
             return site.Id;
         }
 
@@ -57,6 +64,8 @@ namespace Prime.Services
                 .SingleAsync();
 
             _context.Entry(site).CurrentValues.SetValues(updatedSite);
+
+            await _businessEventService.CreateSiteEventAsync(site.Id, "Site Updated");
 
             try
             {
@@ -79,6 +88,9 @@ namespace Prime.Services
             }
 
             _context.Sites.Remove(site);
+
+            await _businessEventService.CreateSiteEventAsync(site.Id, "Site Deleted");
+
             await _context.SaveChangesAsync();
         }
         public async Task<Site> GetSiteNoTrackingAsync(int siteId)
@@ -86,6 +98,14 @@ namespace Prime.Services
             return await this.GetBaseSiteQuery()
                 .AsNoTracking()
                 .SingleOrDefaultAsync(s => s.Id == siteId);
+        }
+
+        public async Task<IEnumerable<BusinessEvent>> GetSiteBusinessEvents(int siteId)
+        {
+            return await _context.BusinessEvents
+                .Where(e => e.SiteId == siteId)
+                .OrderByDescending(e => e.EventDate)
+                .ToListAsync();
         }
 
         private IQueryable<Site> GetBaseSiteQuery()
