@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { ConfigResolver } from '@config/config-resolver';
 import { UnsupportedGuard } from '@core/guards/unsupported.guard';
+import { CanDeactivateFormGuard } from '@core/guards/can-deactivate-form.guard';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 
@@ -44,51 +45,61 @@ const routes: Routes = [
       {
         path: SiteRoutes.MULTIPLE_SITES,
         component: MultipleSitesComponent,
+        canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'Multiple Sites' }
       },
       {
         path: SiteRoutes.ORGANIZATION_INFORMATION,
         component: OrganizationInformationComponent,
+        canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'Organization Information' }
       },
       {
         path: SiteRoutes.SITE_ADDRESS,
         component: SiteAddressComponent,
+        canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'Site Address' }
       },
       {
         path: SiteRoutes.ORGANIZATION_AGREEMENT,
         component: OrganizationAgreementComponent,
+        canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'Access Agreement' }
-      },
-      {
-        path: SiteRoutes.HOURS_OPERATION,
-        component: HoursOperationComponent,
-        data: { title: 'Hours of Operation' }
       },
       {
         path: SiteRoutes.VENDORS,
         component: VendorComponent,
+        canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'Vendor' }
+      },
+      {
+        path: SiteRoutes.HOURS_OPERATION,
+        component: HoursOperationComponent,
+        canDeactivate: [CanDeactivateFormGuard],
+        data: { title: 'Hours of Operation' }
       },
       {
         path: SiteRoutes.SIGNING_AUTHORITY,
         component: SigningAuthorityComponent,
+        canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'Signing Authority' }
       },
       {
         path: SiteRoutes.ADMINISTRATOR,
         component: AdministratorComponent,
+        canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'Administrator of PharmaNet' }
       },
       {
         path: SiteRoutes.PRIVACY_OFFICER,
         component: PrivacyOfficerComponent,
+        canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'Privacy Officer' }
       },
       {
         path: SiteRoutes.TECHNICAL_SUPPORT,
         component: TechnicalSupportComponent,
+        canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'Technical Support Contact' }
       },
       {

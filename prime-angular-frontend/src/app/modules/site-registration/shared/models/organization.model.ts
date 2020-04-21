@@ -1,7 +1,7 @@
 import { Party } from './party.model';
 
 export interface Organization {
-  id: number;
+  id?: number;
   signingAuthorityId: number;
   signingAuthority: Party;
   name: string;

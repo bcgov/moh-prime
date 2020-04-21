@@ -7,6 +7,19 @@ import { AbstractControl, FormGroup, FormControl, ValidatorFn } from '@angular/f
 export class FormUtilsService {
   /**
    * @description
+   * Checks the validity of a form, and triggers validation messages when invalid.
+   */
+  public checkValidity(form: FormGroup): boolean {
+    if (form.valid) {
+      return true;
+    } else {
+      form.markAllAsTouched();
+      return false;
+    }
+  }
+
+  /**
+   * @description
    * Sets FormControl validators.
    */
   public setValidators(control: FormControl | FormGroup, validators: ValidatorFn | ValidatorFn[], blacklist: string[] = []): void {

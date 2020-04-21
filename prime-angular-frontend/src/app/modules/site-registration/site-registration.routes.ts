@@ -1,16 +1,17 @@
 export class SiteRoutes {
+  // TODO add titles for routes for routing module and views
   public static SITE_REGISTRATION = 'site-registration';
   public static COLLECTION_NOTICE = 'collection-notice';
   public static MULTIPLE_SITES = 'multiple-sites';
   public static ORGANIZATION_INFORMATION = 'organization-information';
   public static SITE_ADDRESS = 'site-address';
   public static ORGANIZATION_AGREEMENT = 'access-agreement';
-  public static HOURS_OPERATION = 'hours-operation';
   public static VENDORS = 'vendor';
+  public static HOURS_OPERATION = 'hours-operation';
   public static SIGNING_AUTHORITY = 'signing-authority';
   public static ADMINISTRATOR = 'administrator';
   public static PRIVACY_OFFICER = 'privacy-officer';
-  public static TECHNICAL_SUPPORT = 'technical-support-contact';
+  public static TECHNICAL_SUPPORT = 'technical-support';
   public static SITE_REVIEW = 'site-review';
   public static CONFIRMATION = 'confirmation';
 

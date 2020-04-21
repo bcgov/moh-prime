@@ -1,30 +1,59 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 
-import { Subscription } from 'rxjs';
+import { Subscription, EMPTY } from 'rxjs';
+import { exhaustMap } from 'rxjs/operators';
+
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
+import { RouteUtils } from '@registration/shared/classes/route-utils.class';
+import { IPage } from '@registration/shared/interfaces/page.interface';
+import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
+import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 
 @Component({
   selector: 'app-site-review',
   templateUrl: './site-review.component.html',
   styleUrls: ['./site-review.component.scss']
 })
-export class SiteReviewComponent implements OnInit {
+export class SiteReviewComponent implements OnInit, IPage {
   public busy: Subscription;
+  public routeUtils: RouteUtils;
   public SiteRoutes = SiteRoutes;
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router
-  ) { }
-
-  public onSubmit() {
-    this.router.navigate([SiteRoutes.CONFIRMATION], { relativeTo: this.route.parent });
+    private router: Router,
+    private siteRegistrationResource: SiteRegistrationResource,
+    private dialog: MatDialog
+  ) {
+    this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
-  public onRoute(routePath: SiteRoutes) {
-    this.router.navigate([routePath], { relativeTo: this.route.parent });
+  public onSubmit() {
+    // const data: DialogOptions = {
+    //   title: 'Submit Site Registration',
+    //   message: 'When your registration is submitted it can no longer be updated. Are you ready to submit your registration?',
+    //   actionText: 'Submit Registration'
+    // };
+    // this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+    //   .afterClosed()
+    //   .pipe(
+    //     exhaustMap((result: boolean) =>
+    //       // TODO pass the site that is being registered
+    //       (result)
+    //         ? this.siteRegistrationResource.submitSiteRegistration({})
+    //         : EMPTY
+    //     )
+    //   )
+    //   .subscribe(() => this.routeUtils.routeRelativeTo(SiteRoutes.CONFIRMATION));
+    this.routeUtils.routeRelativeTo(SiteRoutes.CONFIRMATION)
+  }
+
+  public onRoute(routePath: string) {
+    this.routeUtils.routeRelativeTo(routePath);
   }
 
   public ngOnInit() { }

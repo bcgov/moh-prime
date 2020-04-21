@@ -1,64 +1,98 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 
-import { ToastService } from '@core/services/toast.service';
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { FormUtilsService } from '@common/services/form-utils.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
+import { RouteUtils } from '@registration/shared/classes/route-utils.class';
+import { IPage } from '@registration/shared/interfaces/page.interface';
+import { IForm } from '@registration/shared/interfaces/form.interface';
+import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
 
 @Component({
   selector: 'app-hours-operation',
   templateUrl: './hours-operation.component.html',
   styleUrls: ['./hours-operation.component.scss']
 })
-export class HoursOperationComponent implements OnInit {
+export class HoursOperationComponent implements OnInit, IPage, IForm {
   public busy: Subscription;
   public form: FormGroup;
+  public routeUtils: RouteUtils;
   public SiteRoutes = SiteRoutes;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private toastService: ToastService,
-    private formBuilder: FormBuilder
-  ) { }
-
-  public get weekends(): FormControl {
-    return this.form.get('weekends') as FormControl;
+    private fb: FormBuilder,
+    private siteRegistrationResource: SiteRegistrationResource,
+    private formUtilsService: FormUtilsService,
+    private dialog: MatDialog
+  ) {
+    this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
-  public get allDay(): FormControl {
-    return this.form.get('allDay') as FormControl;
+  public get hoursWeekend(): FormControl {
+    return this.form.get('hoursWeekend') as FormControl;
   }
 
-  public get specialHours(): FormControl {
-    return this.form.get('specialHours') as FormControl;
+  public get hours24(): FormControl {
+    return this.form.get('hours24') as FormControl;
+  }
+
+  public get hoursSpecial(): FormControl {
+    return this.form.get('hoursSpecial') as FormControl;
   }
 
   public onSubmit() {
-    // TODO proper submission when backend payload known
-    // if (this.form.valid) { }
-    this.toastService.openSuccessToast('Enrolment information has been saved');
-    this.form.markAsPristine();
-    this.router.navigate([SiteRoutes.SIGNING_AUTHORITY], { relativeTo: this.route.parent });
+    if (this.formUtilsService.checkValidity(this.form)) {
+      // this.siteRegistrationResource
+      //   .updateSite(this.form.value)
+      //   .subscribe(() => {
+      this.form.markAsPristine();
+      this.routeUtils.routeRelativeTo(SiteRoutes.SIGNING_AUTHORITY);
+      // });
+    }
   }
 
   public onBack() {
-    this.router.navigate([SiteRoutes.VENDORS], { relativeTo: this.route.parent });
+    this.routeUtils.routeRelativeTo(SiteRoutes.VENDORS);
+  }
+
+  public canDeactivate(): Observable<boolean> | boolean {
+    const data = 'unsaved';
+    return (this.form.dirty)
+      ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
+      : true;
   }
 
   public ngOnInit() {
     this.createFormInstance();
+    this.initForm();
   }
 
   private createFormInstance() {
-    // TODO proper naming when backend payload known
-    this.form = this.formBuilder.group({
-      weekends: [null, []],
-      allDay: [null, []],
-      specialHours: [null, []]
+    this.form = this.fb.group({
+      hoursWeekend: [
+        null,
+        []
+      ],
+      hours24: [
+        null,
+        []
+      ],
+      hoursSpecial: [
+        null,
+        []
+      ]
     });
+  }
+
+  private initForm() {
+    // TODO populate and pull from separate service with form models
   }
 }
