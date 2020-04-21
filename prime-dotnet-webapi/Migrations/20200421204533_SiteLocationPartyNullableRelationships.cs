@@ -2,10 +2,14 @@
 
 namespace Prime.Migrations
 {
-    public partial class SiteLocationNullableRelationships : Migration
+    public partial class SiteLocationPartyNullableRelationships : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Location_Address_AddressId",
+                table: "Location");
+
             migrationBuilder.DropForeignKey(
                 name: "FK_Location_Party_AdministratorPharmaNetId",
                 table: "Location");
@@ -23,6 +27,10 @@ namespace Prime.Migrations
                 table: "Location");
 
             migrationBuilder.DropForeignKey(
+                name: "FK_Party_Address_AddressId",
+                table: "Party");
+
+            migrationBuilder.DropForeignKey(
                 name: "FK_Site_Location_LocationId",
                 table: "Site");
 
@@ -33,6 +41,22 @@ namespace Prime.Migrations
             migrationBuilder.DropForeignKey(
                 name: "FK_Site_Vendor_VendorId",
                 table: "Site");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Party_AddressId",
+                table: "Party");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Location_AddressId",
+                table: "Location");
+
+            migrationBuilder.DropColumn(
+                name: "AddressId",
+                table: "Party");
+
+            migrationBuilder.DropColumn(
+                name: "AddressId",
+                table: "Location");
 
             migrationBuilder.AlterColumn<int>(
                 name: "VendorId",
@@ -54,6 +78,12 @@ namespace Prime.Migrations
                 nullable: true,
                 oldClrType: typeof(int),
                 oldType: "integer");
+
+            migrationBuilder.AddColumn<int>(
+                name: "PhysicalAddressId",
+                table: "Party",
+                nullable: false,
+                defaultValue: 0);
 
             migrationBuilder.AlterColumn<int>(
                 name: "TechnicalSupportId",
@@ -83,6 +113,21 @@ namespace Prime.Migrations
                 oldClrType: typeof(int),
                 oldType: "integer");
 
+            migrationBuilder.AddColumn<int>(
+                name: "PhysicalAddressId",
+                table: "Location",
+                nullable: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Party_PhysicalAddressId",
+                table: "Party",
+                column: "PhysicalAddressId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Location_PhysicalAddressId",
+                table: "Location",
+                column: "PhysicalAddressId");
+
             migrationBuilder.AddForeignKey(
                 name: "FK_Location_Party_AdministratorPharmaNetId",
                 table: "Location",
@@ -96,6 +141,14 @@ namespace Prime.Migrations
                 table: "Location",
                 column: "OrganizationId",
                 principalTable: "Organization",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Location_Address_PhysicalAddressId",
+                table: "Location",
+                column: "PhysicalAddressId",
+                principalTable: "Address",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
 
@@ -114,6 +167,14 @@ namespace Prime.Migrations
                 principalTable: "Party",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Party_Address_PhysicalAddressId",
+                table: "Party",
+                column: "PhysicalAddressId",
+                principalTable: "Address",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Site_Location_LocationId",
@@ -151,12 +212,20 @@ namespace Prime.Migrations
                 table: "Location");
 
             migrationBuilder.DropForeignKey(
+                name: "FK_Location_Address_PhysicalAddressId",
+                table: "Location");
+
+            migrationBuilder.DropForeignKey(
                 name: "FK_Location_Party_PrivacyOfficerId",
                 table: "Location");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_Location_Party_TechnicalSupportId",
                 table: "Location");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Party_Address_PhysicalAddressId",
+                table: "Party");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_Site_Location_LocationId",
@@ -169,6 +238,22 @@ namespace Prime.Migrations
             migrationBuilder.DropForeignKey(
                 name: "FK_Site_Vendor_VendorId",
                 table: "Site");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Party_PhysicalAddressId",
+                table: "Party");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Location_PhysicalAddressId",
+                table: "Location");
+
+            migrationBuilder.DropColumn(
+                name: "PhysicalAddressId",
+                table: "Party");
+
+            migrationBuilder.DropColumn(
+                name: "PhysicalAddressId",
+                table: "Location");
 
             migrationBuilder.AlterColumn<int>(
                 name: "VendorId",
@@ -193,6 +278,13 @@ namespace Prime.Migrations
                 nullable: false,
                 oldClrType: typeof(int),
                 oldNullable: true);
+
+            migrationBuilder.AddColumn<int>(
+                name: "AddressId",
+                table: "Party",
+                type: "integer",
+                nullable: false,
+                defaultValue: 0);
 
             migrationBuilder.AlterColumn<int>(
                 name: "TechnicalSupportId",
@@ -226,6 +318,31 @@ namespace Prime.Migrations
                 oldClrType: typeof(int),
                 oldNullable: true);
 
+            migrationBuilder.AddColumn<int>(
+                name: "AddressId",
+                table: "Location",
+                type: "integer",
+                nullable: false,
+                defaultValue: 0);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Party_AddressId",
+                table: "Party",
+                column: "AddressId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Location_AddressId",
+                table: "Location",
+                column: "AddressId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Location_Address_AddressId",
+                table: "Location",
+                column: "AddressId",
+                principalTable: "Address",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
             migrationBuilder.AddForeignKey(
                 name: "FK_Location_Party_AdministratorPharmaNetId",
                 table: "Location",
@@ -255,6 +372,14 @@ namespace Prime.Migrations
                 table: "Location",
                 column: "TechnicalSupportId",
                 principalTable: "Party",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Party_Address_AddressId",
+                table: "Party",
+                column: "AddressId",
+                principalTable: "Address",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
 

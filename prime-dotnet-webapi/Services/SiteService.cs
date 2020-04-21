@@ -53,9 +53,13 @@ namespace Prime.Services
             {
                 organization = new Organization
                 { SigningAuthorityId = provsionerId };
+
+                _context.Organizations.Add(organization);
+
+                await _context.SaveChangesAsync();
             }
 
-            var location = new Location { Organization = organization };
+            var location = new Location { OrganizationId = organization.Id };
 
             var site = new Site
             {
@@ -71,7 +75,7 @@ namespace Prime.Services
                 throw new InvalidOperationException("Could not create Site.");
             }
 
-            await _businessEventService.CreateSiteEventAsync(site.Id, "Site Created");
+            // await _businessEventService.CreateSiteEventAsync(site.Id, "Site Created");
 
             return site.Id;
         }
@@ -148,18 +152,18 @@ namespace Prime.Services
         private IQueryable<Site> GetBaseSiteQuery()
         {
             return _context.Sites
-                .Include(s => s.Vendor)
-                .Include(s => s.Location)
-                    .ThenInclude(l => l.Organization)
-                        .ThenInclude(o => o.SigningAuthority)
-                .Include(s => s.Location)
-                    .ThenInclude(l => l.Address)
-                .Include(s => s.Location)
-                    .ThenInclude(l => l.PrivacyOfficer)
-                .Include(s => s.Location)
-                    .ThenInclude(l => l.AdministratorPharmaNet)
-                .Include(s => s.Location)
-                    .ThenInclude(l => l.TechnicalSupport);
+            .Include(s => s.Vendor)
+            .Include(s => s.Location)
+                .ThenInclude(l => l.Organization)
+                    .ThenInclude(o => o.SigningAuthority)
+            .Include(s => s.Location)
+                .ThenInclude(l => l.PhysicalAddress)
+            .Include(s => s.Location)
+                .ThenInclude(l => l.PrivacyOfficer)
+            .Include(s => s.Location)
+                .ThenInclude(l => l.AdministratorPharmaNet)
+            .Include(s => s.Location)
+                .ThenInclude(l => l.TechnicalSupport);
         }
     }
 }

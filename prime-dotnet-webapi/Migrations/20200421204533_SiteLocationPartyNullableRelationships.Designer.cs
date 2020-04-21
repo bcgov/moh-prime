@@ -11,8 +11,8 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20200421183538_SiteLocationNullableRelationships")]
-    partial class SiteLocationNullableRelationships
+    [Migration("20200421204533_SiteLocationPartyNullableRelationships")]
+    partial class SiteLocationPartyNullableRelationships
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -6425,10 +6425,6 @@ namespace Prime.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int?>("AddressId")
-                        .IsRequired()
-                        .HasColumnType("integer");
-
                     b.Property<int?>("AdministratorPharmaNetId")
                         .HasColumnType("integer");
 
@@ -6453,6 +6449,9 @@ namespace Prime.Migrations
                     b.Property<int?>("OrganizationId")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("PhysicalAddressId")
+                        .HasColumnType("integer");
+
                     b.Property<int?>("PrivacyOfficerId")
                         .HasColumnType("integer");
 
@@ -6467,11 +6466,11 @@ namespace Prime.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressId");
-
                     b.HasIndex("AdministratorPharmaNetId");
 
                     b.HasIndex("OrganizationId");
+
+                    b.HasIndex("PhysicalAddressId");
 
                     b.HasIndex("PrivacyOfficerId");
 
@@ -6591,9 +6590,6 @@ namespace Prime.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int>("AddressId")
-                        .HasColumnType("integer");
-
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
@@ -6627,6 +6623,10 @@ namespace Prime.Migrations
                     b.Property<string>("Phone")
                         .HasColumnType("text");
 
+                    b.Property<int?>("PhysicalAddressId")
+                        .IsRequired()
+                        .HasColumnType("integer");
+
                     b.Property<string>("SMSPhone")
                         .HasColumnType("text");
 
@@ -6641,7 +6641,7 @@ namespace Prime.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressId");
+                    b.HasIndex("PhysicalAddressId");
 
                     b.ToTable("Party");
                 });
@@ -10815,12 +10815,6 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.Location", b =>
                 {
-                    b.HasOne("Prime.Models.Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Prime.Models.Party", "AdministratorPharmaNet")
                         .WithMany()
                         .HasForeignKey("AdministratorPharmaNetId");
@@ -10828,6 +10822,10 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Organization", "Organization")
                         .WithMany("Locations")
                         .HasForeignKey("OrganizationId");
+
+                    b.HasOne("Prime.Models.PhysicalAddress", "PhysicalAddress")
+                        .WithMany()
+                        .HasForeignKey("PhysicalAddressId");
 
                     b.HasOne("Prime.Models.Party", "PrivacyOfficer")
                         .WithMany()
@@ -10849,9 +10847,9 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.Party", b =>
                 {
-                    b.HasOne("Prime.Models.Address", "Address")
+                    b.HasOne("Prime.Models.PhysicalAddress", "PhysicalAddress")
                         .WithMany()
-                        .HasForeignKey("AddressId")
+                        .HasForeignKey("PhysicalAddressId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
