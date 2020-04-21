@@ -62,7 +62,7 @@ RUN apt-get update && \
     echo 'deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main' >  /etc/apt/sources.list.d/pgdg.list && \
     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
     apt-get update && \
-    apt-get install -yqq --no-install-recommends postgresql-client-10 inetutils-ping nano net-tools moreutils && \
+    apt-get install -yqq --no-install-recommends postgresql-client-10 inetutils-ping nano net-tools inetutils-telnet moreutils && \
     chmod +x entrypoint.sh && \
     chmod 777 entrypoint.sh && \
     chmod -R 777 /var/run/ && \
