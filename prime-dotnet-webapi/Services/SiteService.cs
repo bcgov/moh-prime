@@ -13,14 +13,17 @@ namespace Prime.Services
     public class SiteService : BaseService, ISiteService
     {
         private readonly IBusinessEventService _businessEventService;
+        private readonly IPartyService _partyService;
 
         public SiteService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
-            IBusinessEventService businessEventService)
+            IBusinessEventService businessEventService,
+            IPartyService partyService)
             : base(context, httpContext)
         {
             _businessEventService = businessEventService;
+            _partyService = partyService;
         }
 
         public async Task<IEnumerable<Site>> GetSitesAsync()
@@ -42,6 +45,15 @@ namespace Prime.Services
             {
                 throw new ArgumentNullException(nameof(site), "Could not create a site, the passed in Site cannot be null.");
             }
+
+            var user = _httpContext.HttpContext.User;
+
+            site.Location.Organization.SigningAuthorityId = await _partyService.CreatePartyAsync(
+                new Party
+                {
+                    UserId = user.GetPrimeUserId()
+                }
+            );
 
             _context.Sites.Add(site);
 
