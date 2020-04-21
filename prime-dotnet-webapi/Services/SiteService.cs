@@ -38,16 +38,30 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(s => s.Id == siteId);
         }
 
-        public async Task<int> CreateSiteAsync(Site site)
+        public async Task<int> CreateSiteAsync(Party provisioner)
         {
-            if (site == null)
+            if (provisioner == null)
             {
-                throw new ArgumentNullException(nameof(site), "Could not create a site, the passed in Site cannot be null.");
+                throw new ArgumentNullException(nameof(provisioner), "Could not create a site, the passed in Party cannot be null.");
             }
 
-            var user = _httpContext.HttpContext.User;
+            var provsionerId = await _partyService.CreatePartyAsync(provisioner);
 
-            site.Location.Organization.SigningAuthorityId = await _partyService.CreatePartyAsync(site.Location.Organization.SigningAuthority);
+            var organization = await this.GetOrganizationByPartyIdAsync(provsionerId);
+
+            if (organization == null)
+            {
+                organization = new Organization
+                { SigningAuthorityId = provsionerId };
+            }
+
+            var location = new Location { Organization = organization };
+
+            var site = new Site
+            {
+                ProvisionerId = provsionerId,
+                Location = location
+            };
 
             _context.Sites.Add(site);
 
@@ -123,6 +137,12 @@ namespace Prime.Services
             organization.AcceptedAgreementDate = DateTimeOffset.Now;
 
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<Organization> GetOrganizationByPartyIdAsync(int partyId)
+        {
+            return await _context.Organizations
+                .SingleOrDefaultAsync(o => o.SigningAuthorityId == partyId);
         }
 
         private IQueryable<Site> GetBaseSiteQuery()
