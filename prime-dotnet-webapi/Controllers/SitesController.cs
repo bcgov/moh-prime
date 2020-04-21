@@ -18,14 +18,17 @@ namespace Prime.Controllers
     public class SitesController : ControllerBase
     {
         private readonly ISiteService _siteService;
+        private readonly IPartyService _partyService;
         private readonly IRazorConverterService _razorConverterService;
 
 
         public SitesController(
             ISiteService siteService,
+            IPartyService partyService,
             IRazorConverterService razorConverterService)
         {
             _siteService = siteService;
+            _partyService = partyService;
             _razorConverterService = razorConverterService;
         }
 
@@ -39,9 +42,13 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Site>>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Site>>> GetSites()
         {
-            var sites = await _siteService.GetSitesAsync();
+            if (!User.HasSiteRegistrationFeature())
+            {
+                return Forbid();
+            }
 
-            // TODO add claims to forbid access
+            var party = await _partyService.GetPartyForUserIdAsync(User.GetPrimeUserId());
+            var sites = await _siteService.GetSitesAsync(party.Id);
 
             return Ok(ApiResponse.Result(sites));
         }
@@ -61,7 +68,10 @@ namespace Prime.Controllers
         {
             var site = await _siteService.GetSiteAsync(siteId);
 
-            // TODO add claims to forbid access
+            if (!User.HasSiteRegistrationFeature() || !User.PartyCanEdit(site.Location.Organization.SigningAuthority))
+            {
+                return Forbid();
+            }
 
             return Ok(ApiResponse.Result(site));
         }
@@ -83,7 +93,6 @@ namespace Prime.Controllers
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 
-            // TODO add claims to forbid access
             if (!User.HasSiteRegistrationFeature())
             {
                 return Forbid();
@@ -119,7 +128,10 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            // TODO add claims to forbid access
+            if (!User.HasSiteRegistrationFeature() || !User.PartyCanEdit(site.Location.Organization.SigningAuthority))
+            {
+                return Forbid();
+            }
 
             await _siteService.UpdateSiteAsync(siteId, updatedSite, isCompleted);
 
@@ -145,7 +157,10 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            // TODO add claims to forbid access
+            if (!User.HasSiteRegistrationFeature() || !User.PartyCanEdit(site.Location.Organization.SigningAuthority))
+            {
+                return Forbid();
+            }
 
             await _siteService.DeleteSiteAsync(siteId);
 
@@ -154,7 +169,7 @@ namespace Prime.Controllers
 
         // GET: api/Sites/organization-agreement
         /// <summary>
-        /// Get the Site's organization agreement.
+        /// Get the organization agreement.
         /// </summary>
         [HttpGet("organization-agreement", Name = nameof(GetOrganizationAgreement))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]

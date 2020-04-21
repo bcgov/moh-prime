@@ -33,6 +33,20 @@ namespace Prime
         }
 
         /// <summary>
+        /// Returns true if the logged in user is an admin, or if the user has the same UserId as the record
+        /// </summary>
+        public static bool PartyCanEdit(this ClaimsPrincipal User, Party party)
+        {
+            if (User.IsAdmin())
+            {
+                return true;
+            }
+
+            Guid PrimeUserId = User.GetPrimeUserId();
+            return !PrimeUserId.Equals(Guid.Empty) && PrimeUserId.Equals(party.UserId);
+        }
+
+        /// <summary>
         /// Returns true if the logged in user is an RO_admin, admin, or if the user has the same UserId as the record
         /// </summary>
         public static bool CanView(this ClaimsPrincipal User, Enrollee enrollee)

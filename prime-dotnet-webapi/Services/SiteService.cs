@@ -6,27 +6,29 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Prime.Models;
 
-// TODO add business events
 // TODO add logging
 namespace Prime.Services
 {
     public class SiteService : BaseService, ISiteService
     {
         private readonly IBusinessEventService _businessEventService;
+        private readonly IPartyService _partyService;
 
         public SiteService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
-            IBusinessEventService businessEventService)
+            IBusinessEventService businessEventService,
+            IPartyService partyService)
             : base(context, httpContext)
         {
             _businessEventService = businessEventService;
+            _partyService = partyService;
         }
 
-        public async Task<IEnumerable<Site>> GetSitesAsync()
+        public async Task<IEnumerable<Site>> GetSitesAsync(int partyId)
         {
-            // TODO only provide locations for the authenticated signing authority
             return await this.GetBaseSiteQuery()
+                .Where(s => s.Location.Organization.SigningAuthorityId == partyId)
                 .ToListAsync();
         }
 
@@ -42,6 +44,15 @@ namespace Prime.Services
             {
                 throw new ArgumentNullException(nameof(site), "Could not create a site, the passed in Site cannot be null.");
             }
+
+            var user = _httpContext.HttpContext.User;
+
+            site.Location.Organization.SigningAuthorityId = await _partyService.CreatePartyAsync(
+                new Party
+                {
+                    UserId = user.GetPrimeUserId()
+                }
+            );
 
             _context.Sites.Add(site);
 
