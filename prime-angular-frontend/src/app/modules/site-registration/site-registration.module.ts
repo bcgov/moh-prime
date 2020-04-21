@@ -14,13 +14,14 @@ import { CollectionNoticeComponent } from './pages/collection-notice/collection-
 import { SigningAuthorityComponent } from './pages/signing-authority/signing-authority.component';
 import { AdministratorComponent } from './pages/administrator/administrator.component';
 import { MultipleSitesComponent } from './pages/multiple-sites/multiple-sites.component';
-import { TechnicalSupportContactComponent } from './pages/technical-support-contact/technical-support-contact.component';
+import { TechnicalSupportComponent } from './pages/technical-support/technical-support.component';
 import { SiteReviewComponent } from './pages/site-review/site-review.component';
 import { OrganizationInformationComponent } from './pages/organization-information/organization-information.component';
 import { HoursOperationComponent } from './pages/hours-operation/hours-operation.component';
 import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer.component';
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 import { SiteAddressComponent } from './pages/site-address/site-address.component';
+import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,7 @@ import { SiteAddressComponent } from './pages/site-address/site-address.componen
     SigningAuthorityComponent,
     AdministratorComponent,
     MultipleSitesComponent,
-    TechnicalSupportContactComponent,
+    TechnicalSupportComponent,
     SiteReviewComponent,
     OrganizationInformationComponent,
     HoursOperationComponent,
@@ -39,7 +40,8 @@ import { SiteAddressComponent } from './pages/site-address/site-address.componen
     RegistrantProfileReviewComponent,
     SiteProgressIndicatorComponent,
     SiteCollectionNoticeComponent,
-    SiteAddressComponent
+    SiteAddressComponent,
+    OrganizationAgreementComponent
   ],
   imports: [
     SharedModule,
