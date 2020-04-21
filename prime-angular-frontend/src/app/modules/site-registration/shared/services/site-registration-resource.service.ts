@@ -10,8 +10,10 @@ import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ToastService } from '@core/services/toast.service';
 import { NoContent } from '@core/resources/abstract-resource';
 
-import { Site } from '../models/site.model';
+import { Site } from '@registration/shared/models/site.model';
 
+// TODO use ApiResourceUtils to build URLs
+// TODO split out log messages for reuse into ErrorHandler
 @Injectable({
   providedIn: 'root'
 })
@@ -123,7 +125,7 @@ export class SiteRegistrationResource {
   }
 
   public submitSiteRegistration(site: Site): Observable<string> {
-    return this.apiResource.post<string>(`sites/${siteId}/submission`)
+    return this.apiResource.post<string>(`sites/${site.id}/submission`)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
         tap(() => this.toastService.openSuccessToast('Site registration has been submitted')),

@@ -61,16 +61,7 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
   }
 
   private createFormInstance() {
-    this.form = this.fb.group({
-      name: [
-        null,
-        [Validators.required]
-      ],
-      doingBusinessAs: [
-        null,
-        []
-      ]
-    });
+    this.form = this.fb.group({});
   }
 
   private initForm() {
