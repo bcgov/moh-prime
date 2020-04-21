@@ -18,11 +18,11 @@ import { Party } from '@registration/shared/models/party.model';
 import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
 import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
 
-// TODO duplication with enrolment guard should be split out
+// TODO duplication with enrolment.guard should be split out for reuse
 @Injectable({
   providedIn: 'root'
 })
-export class SiteRegistrationGuard extends BaseGuard {
+export class RegistrationGuard extends BaseGuard {
 
   constructor(
     protected authService: AuthService,

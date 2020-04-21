@@ -15,7 +15,8 @@ import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { IForm } from '@registration/shared/interfaces/form.interface';
 import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
-
+import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
+import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
 
 @Component({
   selector: 'app-site-address',
@@ -34,6 +35,8 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
     private router: Router,
     private fb: FormBuilder,
     private siteRegistrationResource: SiteRegistrationResource,
+    private siteRegistrationService: SiteRegistrationService,
+    private siteRegistrationStateService: SiteRegistrationStateService,
     private formUtilsService: FormUtilsService,
     private dialog: MatDialog
   ) {
@@ -49,12 +52,12 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
 
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
-      // this.siteRegistrationResource
-      //   .updateSite(this.form.value)
-      //   .subscribe(() => {
-      this.form.markAsPristine();
-      this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_AGREEMENT);
-      // });
+      this.siteRegistrationResource
+        .updateSite(this.form.value)
+        .subscribe(() => {
+          this.form.markAsPristine();
+          this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_AGREEMENT);
+        });
     }
   }
 
@@ -75,28 +78,7 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
   }
 
   private createFormInstance() {
-    this.form = this.fb.group({
-      street: [
-        { value: null, disabled: false },
-        [Validators.required]
-      ],
-      city: [
-        { value: null, disabled: false },
-        [Validators.required]
-      ],
-      provinceCode: [
-        { value: Province.BRITISH_COLUMBIA, disabled: true },
-        [Validators.required]
-      ],
-      postal: [
-        { value: null, disabled: false },
-        [Validators.required]
-      ],
-      countryCode: [
-        { value: Country.CANADA, disabled: true },
-        [Validators.required]
-      ],
-    });
+    this.form = this.siteRegistrationStateService.siteAddressForm;
   }
 
   private initForm() {

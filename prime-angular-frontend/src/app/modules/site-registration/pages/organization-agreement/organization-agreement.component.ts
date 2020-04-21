@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 import { Subscription } from 'rxjs';
 
@@ -7,7 +8,8 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
-import { MatCheckbox } from '@angular/material/checkbox';
+import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
+import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
 
 @Component({
   selector: 'app-organization-agreement',
@@ -26,6 +28,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
     private route: ActivatedRoute,
     private router: Router,
     private siteRegistrationResource: SiteRegistrationResource,
+    private siteRegistrationService: SiteRegistrationService
   ) {
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
@@ -47,6 +50,8 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
 
   public ngOnInit(): void {
     // TODO change the footer if already signed
+    // TODO use service to get check access agreement on organization
+    // this.form = this.siteRegistrationService.;
     this.siteRegistrationResource
       .getOrganizationAgreement()
       .subscribe((organizationAgreement: string) => this.organizationAgreement = organizationAgreement);

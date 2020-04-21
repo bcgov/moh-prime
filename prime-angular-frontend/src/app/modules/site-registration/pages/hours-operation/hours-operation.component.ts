@@ -13,6 +13,8 @@ import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { IForm } from '@registration/shared/interfaces/form.interface';
 import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
+import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
+import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
 
 @Component({
   selector: 'app-hours-operation',
@@ -30,6 +32,8 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
     private router: Router,
     private fb: FormBuilder,
     private siteRegistrationResource: SiteRegistrationResource,
+    private siteRegistrationService: SiteRegistrationService,
+    private siteRegistrationStateService: SiteRegistrationStateService,
     private formUtilsService: FormUtilsService,
     private dialog: MatDialog
   ) {
@@ -76,20 +80,7 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   }
 
   private createFormInstance() {
-    this.form = this.fb.group({
-      hoursWeekend: [
-        null,
-        []
-      ],
-      hours24: [
-        null,
-        []
-      ],
-      hoursSpecial: [
-        null,
-        []
-      ]
-    });
+    this.form = this.siteRegistrationStateService.hoursOperationForm;
   }
 
   private initForm() {

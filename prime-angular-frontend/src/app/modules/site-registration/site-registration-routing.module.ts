@@ -8,7 +8,7 @@ import { DashboardComponent } from '@shared/components/dashboard/dashboard.compo
 import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 
 import { SiteRoutes } from './site-registration.routes';
-import { SiteRegistrationGuard } from './shared/guards/site-registration.guard';
+import { RegistrationGuard } from './shared/guards/registration.guard';
 import { RegistrantGuard } from './shared/guards/registrant.guard';
 
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
@@ -33,7 +33,7 @@ const routes: Routes = [
     canActivateChild: [
       AuthenticationGuard,
       RegistrantGuard,
-      SiteRegistrationGuard
+      RegistrationGuard
     ],
     // Ensure that the configuration is loaded, otherwise
     // if it already exists NOOP
