@@ -16,15 +16,15 @@ namespace Prime.Models
 
         public DateTimeOffset? ApprovedDate { get; set; }
 
-        public int ProvisionerId { get; set; }
+        public int? ProvisionerId { get; set; }
 
         public Party Provisioner { get; set; }
 
-        public int LocationId { get; set; }
+        public int? LocationId { get; set; }
 
         public Location Location { get; set; }
 
-        public int VendorId { get; set; }
+        public int? VendorId { get; set; }
 
         public Vendor Vendor { get; set; }
 
