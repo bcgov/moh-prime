@@ -11,8 +11,8 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20200421031037_SiteNullableRelationships")]
-    partial class SiteNullableRelationships
+    [Migration("20200421183538_SiteLocationNullableRelationships")]
+    partial class SiteLocationNullableRelationships
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -6425,10 +6425,11 @@ namespace Prime.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int>("AddressId")
+                    b.Property<int?>("AddressId")
+                        .IsRequired()
                         .HasColumnType("integer");
 
-                    b.Property<int>("AdministratorPharmaNetId")
+                    b.Property<int?>("AdministratorPharmaNetId")
                         .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
@@ -6449,13 +6450,13 @@ namespace Prime.Migrations
                     b.Property<bool>("HoursWeekend")
                         .HasColumnType("boolean");
 
-                    b.Property<int>("OrganizationId")
+                    b.Property<int?>("OrganizationId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("PrivacyOfficerId")
+                    b.Property<int?>("PrivacyOfficerId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("TechnicalSupportId")
+                    b.Property<int?>("TechnicalSupportId")
                         .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
@@ -10822,27 +10823,19 @@ namespace Prime.Migrations
 
                     b.HasOne("Prime.Models.Party", "AdministratorPharmaNet")
                         .WithMany()
-                        .HasForeignKey("AdministratorPharmaNetId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AdministratorPharmaNetId");
 
                     b.HasOne("Prime.Models.Organization", "Organization")
                         .WithMany("Locations")
-                        .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OrganizationId");
 
                     b.HasOne("Prime.Models.Party", "PrivacyOfficer")
                         .WithMany()
-                        .HasForeignKey("PrivacyOfficerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PrivacyOfficerId");
 
                     b.HasOne("Prime.Models.Party", "TechnicalSupport")
                         .WithMany()
-                        .HasForeignKey("TechnicalSupportId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TechnicalSupportId");
                 });
 
             modelBuilder.Entity("Prime.Models.Organization", b =>
