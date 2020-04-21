@@ -434,8 +434,19 @@ namespace Prime.Services
             return await _context.Enrollees
                 .Include(e => e.AccessTerms)
                 .Where(e => hpdids.Contains(e.HPDID))
+                .Where(e => e.CurrentStatus.StatusCode != (int)StatusType.Declined)
                 .Select(e => HpdidLookup.FromEnrollee(e))
                 .ToListAsync();
+        }
+
+        public async Task<Enrollee> GetEnrolleeForUserIdNotDeclinedAsync(Guid userId)
+        {
+            var enrollee = await GetEnrolleeForUserIdAsync(userId);
+            if (enrollee.CurrentStatus.StatusCode == (int)StatusType.Declined)
+            {
+                return null;
+            }
+            return enrollee;
         }
     }
 }

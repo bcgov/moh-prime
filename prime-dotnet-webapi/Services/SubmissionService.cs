@@ -184,6 +184,7 @@ namespace Prime.Services
             enrollee.AddEnrolmentStatus(StatusType.Declined);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Declined");
             await _context.SaveChangesAsync();
+            await _accessTermService.ExpireCurrentAccessTermAsync(enrollee);
         }
 
         private async Task EnableProfileAsync(Enrollee enrollee)

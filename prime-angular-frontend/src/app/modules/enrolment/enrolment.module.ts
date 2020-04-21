@@ -56,7 +56,7 @@ import { EnrolmentProgressIndicatorComponent } from './shared/components/enrolme
     EnrolleePageComponent,
     NextStepsInfographicComponent,
     EnrolmentCollectionNoticeComponent,
-    EnrolmentProgressIndicatorComponent
+    EnrolmentProgressIndicatorComponent,
   ],
   imports: [
     SharedModule,

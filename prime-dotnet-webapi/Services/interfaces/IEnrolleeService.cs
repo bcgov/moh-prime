@@ -12,6 +12,7 @@ namespace Prime.Services
     {
         Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId);
 
+
         Task<bool> EnrolleeExistsAsync(int enrolleeId);
 
         Task<bool> EnrolleeUserIdExistsAsync(Guid userId);
@@ -47,5 +48,6 @@ namespace Prime.Services
         Task<IEnumerable<BusinessEvent>> GetEnrolleeBusinessEvents(int enrolleeId);
 
         Task<IEnumerable<HpdidLookup>> HpdidLookupAsync(IEnumerable<string> hpdids);
+        Task<Enrollee> GetEnrolleeForUserIdNotDeclinedAsync(Guid userId);
     }
 }
