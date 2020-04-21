@@ -28,7 +28,7 @@ namespace Prime.Services
         public async Task<IEnumerable<Site>> GetSitesAsync(int partyId)
         {
             return await this.GetBaseSiteQuery()
-                .Where(s => s.Location.Organization.SigningAuthorityId == partyId)
+                .Where(s => s.ProvisionerId == partyId)
                 .ToListAsync();
         }
 

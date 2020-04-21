@@ -36,8 +36,8 @@ namespace Prime.Services
 
         public async Task<Party> GetPartyForUserIdAsync(Guid userId)
         {
-            var entity = await this.GetBasePartyQuery()
-                .SingleOrDefaultAsync(e => e.UserId == userId);
+            var entity = await _context.Parties
+                .FirstOrDefaultAsync(e => e.UserId == userId);
 
             return entity;
         }
