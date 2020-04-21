@@ -5,7 +5,7 @@ export class Party {
   id?: number;
   userId: string;
   addressId?: number;
-  address: Address;
+  physicalAddress: Address;
   hpdid: string;
   firstName: string;
   lastName: string;
@@ -18,7 +18,7 @@ export class Party {
 
   constructor(user: User) {
     this.userId = user.userId;
-    this.address = user.physicalAddress;
+    this.physicalAddress = user.physicalAddress;
     this.hpdid = user.hpdid;
     this.firstName = user.firstName;
     this.lastName = user.lastName;
