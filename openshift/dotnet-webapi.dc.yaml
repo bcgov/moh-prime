@@ -207,7 +207,7 @@ objects:
                       key: database-admin-password
                       name: postgresql-secret
                 - name: MONGO_HOST
-                  value: "mongodb${SUFFIX}"
+                  value: "mongo${SUFFIX}"
               image: " "
               name: primeapi
               ports:
