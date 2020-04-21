@@ -3,6 +3,7 @@ echo "Running the migrations..."
 #psql -d postgres -f databaseMigration.sql
 if [ -z "${DB_CONNECTION_STRING}" ]
 then
+export MONGO_CONNECTION_STRING="host=${MONGO_HOST};port=27017;database=db;username=${MONGO_USER};password=${MONGO_ADMIN_PASSWORD}"
 export DB_CONNECTION_STRING="host=${DB_HOST};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"
 fi
 export AUTH=$(printf $PHARMANET_API_USERNAME:$PHARMANET_API_PASSWORD|base64)
