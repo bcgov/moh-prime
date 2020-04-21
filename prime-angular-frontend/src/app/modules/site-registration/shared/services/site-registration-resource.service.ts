@@ -104,7 +104,7 @@ export class SiteRegistrationResource {
       );
   }
 
-  public getCurrentOrganizationAgreement(siteId: number): Observable<string> {
+  public getSignedOrganizationAgreement(siteId: number): Observable<string> {
     return this.apiResource.get<string>(`sites/${siteId}/organization-agreement`)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
