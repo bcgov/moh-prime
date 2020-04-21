@@ -9,6 +9,7 @@ import { FormControlValidators } from '@shared/validators/form-control.validator
 import { FormUtilsService } from '@common/services/form-utils.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
+import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
 
 @Component({
   selector: 'app-multiple-sites',
@@ -24,9 +25,10 @@ export class MultipleSitesComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private fb: FormBuilder,
+    private siteRegistrationResource: SiteRegistrationResource,
     private toastService: ToastService,
-    private formUtilsService: FormUtilsService,
-    private formBuilder: FormBuilder
+    private formUtilsService: FormUtilsService
   ) {
     this.decisions = [
       { code: false, name: 'No' },
@@ -49,12 +51,15 @@ export class MultipleSitesComponent implements OnInit {
   }
 
   public ngOnInit() {
+    // TODO only added for testing token claim
+    this.siteRegistrationResource.getSites().subscribe();
+
     this.createFormInstance();
     this.initForm();
   }
 
   private createFormInstance() {
-    this.form = this.formBuilder.group({
+    this.form = this.fb.group({
       hasMultipleSites: [
         { value: false, disabled: true },
         [FormControlValidators.requiredBoolean]
