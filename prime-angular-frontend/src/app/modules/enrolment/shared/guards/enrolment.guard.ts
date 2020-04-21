@@ -97,6 +97,7 @@ export class EnrolmentGuard extends BaseGuard {
     }
 
     // Otherwise, routes are directed based on enrolment status
+    //  TODO would never happen and should redirect to an error if it does
     if (!enrolment) {
       return this.navigate(routePath, EnrolmentRoutes.DEMOGRAPHIC);
     } else if (enrolment) {

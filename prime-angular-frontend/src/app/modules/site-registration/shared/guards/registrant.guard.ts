@@ -9,7 +9,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 @Injectable({
   providedIn: 'root'
 })
-export class EnrolleeGuard extends BaseGuard {
+export class RegistrantGuard extends BaseGuard {
   constructor(
     protected authService: AuthService,
     protected logger: LoggerService,
@@ -25,16 +25,16 @@ export class EnrolleeGuard extends BaseGuard {
    * them to an appropriate destination.
    */
   protected canAccess(authenticated: boolean, routePath: string): Promise<boolean> {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       let destinationRoute = this.config.routes.denied;
 
       if (!authenticated) {
         destinationRoute = this.config.routes.auth;
-      } else if (this.authService.hasEnrollee()) {
+      } else if (this.authService.isRegistrant()) {
         // Allow route to resolve
         return resolve(true);
-      } else if (this.authService.isAdmin()) {
-        destinationRoute = this.config.routes.adjudication;
+      } else if (this.authService.hasEnrollee()) {
+        destinationRoute = this.config.routes.enrolment;
       }
 
       // Otherwise, redirect to an appropriate destination

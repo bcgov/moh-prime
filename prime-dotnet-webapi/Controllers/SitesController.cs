@@ -21,7 +21,6 @@ namespace Prime.Controllers
         private readonly IPartyService _partyService;
         private readonly IRazorConverterService _razorConverterService;
 
-
         public SitesController(
             ISiteService siteService,
             IPartyService partyService,

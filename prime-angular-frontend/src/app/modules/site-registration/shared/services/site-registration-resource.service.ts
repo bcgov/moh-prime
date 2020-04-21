@@ -11,6 +11,7 @@ import { ToastService } from '@core/services/toast.service';
 import { NoContent } from '@core/resources/abstract-resource';
 
 import { Site } from '@registration/shared/models/site.model';
+import { Party } from '@registration/shared/models/party.model';
 
 // TODO use ApiResourceUtils to build URLs
 // TODO split out log messages for reuse into ErrorHandler
@@ -51,8 +52,8 @@ export class SiteRegistrationResource {
       );
   }
 
-  public createSite(site: Site) {
-    return this.apiResource.post<Site>('sites', site)
+  public createSite(party: Party) {
+    return this.apiResource.post<Site>('sites', party)
       .pipe(
         map((response: ApiHttpResponse<Site>) => response.result),
         tap((newSite: Site) => {

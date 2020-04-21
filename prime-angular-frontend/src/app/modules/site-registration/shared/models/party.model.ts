@@ -1,17 +1,27 @@
 import { Address } from '@shared/models/address.model';
+import { User } from '@auth/shared/models/user.model';
 
-export interface Party {
+export class Party {
   id?: number;
-  userId: number;
-  addressId: number;
+  userId: string;
+  addressId?: number;
   address: Address;
-  HPDID: string;
+  hpdid: string;
   firstName: string;
   lastName: string;
   dateOfBirth: string;
-  jobRoleTitle: string;
-  email: string;
-  phone: string;
-  fax?: string;
-  SMSPhone?: string;
+  jobRoleTitle: string = null;
+  email: string = null;
+  phone: string = null;
+  fax?: string = null;
+  SMSPhone?: string = null;
+
+  constructor(user: User) {
+    this.userId = user.userId;
+    this.address = user.physicalAddress;
+    this.hpdid = user.hpdid;
+    this.firstName = user.firstName;
+    this.lastName = user.lastName;
+    this.dateOfBirth = user.dateOfBirth;
+  }
 }
