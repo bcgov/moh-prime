@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { SiteRegisrationService } from './site-registration.service';
+import { SiteRegistrationService } from './site-registration.service';
 
-describe('SiteRegisrationService', () => {
+describe('SiteRegistrationService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: SiteRegisrationService = TestBed.inject(SiteRegisrationService);
+    const service: SiteRegistrationService = TestBed.inject(SiteRegistrationService);
     expect(service).toBeTruthy();
   });
 });

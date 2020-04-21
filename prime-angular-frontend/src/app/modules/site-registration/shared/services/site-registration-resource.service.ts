@@ -53,21 +53,27 @@ export class SiteRegistrationResource {
     return this.apiResource.post<Site>('sites', site)
       .pipe(
         map((response: ApiHttpResponse<Site>) => response.result),
-        tap((newSite: Site) => this.logger.info('NEW_SITE', newSite)),
+        tap((newSite: Site) => {
+          this.toastService.openSuccessToast('Site has been created');
+          this.logger.info('NEW_SITE', newSite);
+        }),
         catchError((error: any) => {
+          this.toastService.openErrorToast('Site could not be created');
           this.logger.error('[SiteRegistration] SiteRegistrationResource::createSite error has occurred: ', error);
           throw error;
         })
       );
   }
 
-  public updateSite(site: Site, isComplete: boolean): NoContent {
+  public updateSite(site: Site, isComplete?: boolean): NoContent {
     const { id } = site;
     const params = this.apiResourceUtilsService.makeHttpParams({ isComplete });
     return this.apiResource.put<NoContent>(`sites/${id}`, site, params)
       // TODO remove pipe when ApiResource handles NoContent
       .pipe(
-        map(() => { }),
+        map(() => {
+          this.toastService.openSuccessToast('Site has been updated');
+        }),
         catchError((error: any) => {
           this.toastService.openErrorToast('Site could not be updated');
           this.logger.error('[SiteRegistration] SiteRegistrationResource::updateSite error has occurred: ', error);
@@ -111,6 +117,19 @@ export class SiteRegistrationResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization agreement could not be retrieved');
           this.logger.error('[SiteRegistration] SiteRegistrationResource::getCurrentOrganizationAgreement error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public submitSiteRegistration(site: Site): Observable<string> {
+    return this.apiResource.post<string>(`sites/${siteId}/submission`)
+      .pipe(
+        map((response: ApiHttpResponse<string>) => response.result),
+        tap(() => this.toastService.openSuccessToast('Site registration has been submitted')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Site registration could not be submitted');
+          this.logger.error('[SiteRegistration] SiteRegistrationResource::submitSiteRegistration error has occurred: ', error);
           throw error;
         })
       );

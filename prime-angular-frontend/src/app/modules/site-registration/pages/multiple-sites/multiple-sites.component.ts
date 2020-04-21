@@ -9,8 +9,8 @@ import { FormControlValidators } from '@shared/validators/form-control.validator
 import { FormUtilsService } from '@common/services/form-utils.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
 
+// TODO who knows what this page is supposed to contribute... so for now it does nothing
 @Component({
   selector: 'app-multiple-sites',
   templateUrl: './multiple-sites.component.html',
@@ -25,10 +25,9 @@ export class MultipleSitesComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private fb: FormBuilder,
-    private siteRegistrationResource: SiteRegistrationResource,
     private toastService: ToastService,
-    private formUtilsService: FormUtilsService
+    private formUtilsService: FormUtilsService,
+    private formBuilder: FormBuilder
   ) {
     this.decisions = [
       { code: false, name: 'No' },
@@ -45,21 +44,18 @@ export class MultipleSitesComponent implements OnInit {
   }
 
   public onSubmit() {
-    this.toastService.openSuccessToast('Enrolment information has been saved');
+    this.toastService.openSuccessToast('Site has been updated');
     this.form.markAsPristine();
     this.router.navigate([SiteRoutes.ORGANIZATION_INFORMATION], { relativeTo: this.route.parent });
   }
 
   public ngOnInit() {
-    // TODO only added for testing token claim
-    this.siteRegistrationResource.getSites().subscribe();
-
     this.createFormInstance();
     this.initForm();
   }
 
   private createFormInstance() {
-    this.form = this.fb.group({
+    this.form = this.formBuilder.group({
       hasMultipleSites: [
         { value: false, disabled: true },
         [FormControlValidators.requiredBoolean]

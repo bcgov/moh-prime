@@ -1,17 +1,19 @@
-import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
+import { Router, NavigationExtras, ActivatedRoute } from '@angular/router';
 
-export interface IAbstractPage {
-  routeTo(routePath: string | string[], navigationExtras: NavigationExtras): void;
-}
-
-// TODO remove and update views to use FormUtils
-export abstract class AbstractComponent implements IAbstractPage {
-  protected baseRoutePath: (string | number)[];
+export class RouteUtils {
+  private route: ActivatedRoute;
+  private router: Router;
+  private baseRoutePath: string;
 
   constructor(
-    protected route: ActivatedRoute,
-    protected router: Router
-  ) { }
+    route: ActivatedRoute,
+    router: Router,
+    baseRoutePath: string
+  ) {
+    this.route = route;
+    this.router = router;
+    this.baseRoutePath = baseRoutePath;
+  }
 
   /**
    * @description
@@ -37,7 +39,7 @@ export abstract class AbstractComponent implements IAbstractPage {
 
   /**
    * @description
-   * Route within a specified base path, for example within a module.
+   * Route within a specified base path, for example within a module, otherwise uses root.
    */
   public routeWithin(routePath: string | (string | number)[], navigationExtras: NavigationExtras = {}) {
     let commands = (Array.isArray(routePath)) ? routePath : [routePath];

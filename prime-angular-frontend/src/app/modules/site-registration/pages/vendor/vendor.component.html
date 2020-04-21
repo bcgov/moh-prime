@@ -14,10 +14,10 @@
     </app-page-subheader>
 
     <div class="mb-4">
-      <div *ngFor="let vendor of vendorsData"
+      <div *ngFor="let vendor of vendorConfig"
            class="mb-2">
         <mat-checkbox class="mr-4"
-                      (change)="onChangeEventFunc(vendor.name, $event)">
+                      (change)="onChange(vendor.name, $event)">
           {{ vendor.name }}
         </mat-checkbox>
       </div>

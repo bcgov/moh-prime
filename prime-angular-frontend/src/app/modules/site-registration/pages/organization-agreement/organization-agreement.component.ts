@@ -1,44 +1,54 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Subscription, Observable } from 'rxjs';
-
-import { ToastService } from '@core/services/toast.service';
+import { Subscription } from 'rxjs';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
+import { RouteUtils } from '@registration/shared/classes/route-utils.class';
+import { IPage } from '@registration/shared/interfaces/page.interface';
 import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-organization-agreement',
   templateUrl: './organization-agreement.component.html',
   styleUrls: ['./organization-agreement.component.scss']
 })
-export class OrganizationAgreementComponent implements OnInit {
+export class OrganizationAgreementComponent implements OnInit, IPage {
   public busy: Subscription;
-  public organizationAgreement$: Observable<string>;
-
+  public routeUtils: RouteUtils;
+  public organizationAgreement: string;
   public SiteRoutes = SiteRoutes;
+
+  @ViewChild('accept') accepted: MatCheckbox;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private siteRegistrationResource: SiteRegistrationResource,
-    private toastService: ToastService
-  ) { }
+  ) {
+    this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
+  }
 
   public onSubmit() {
-    // TODO proper submission when backend payload known
-    // if (this.form.valid) { }
-    this.toastService.openSuccessToast('Enrolment information has been saved');
-    this.router.navigate([SiteRoutes.VENDORS], { relativeTo: this.route.parent });
+    if (this.accepted.checked) {
+      // TODO should be a different endpoint than update
+      // this.siteRegistrationResource
+      //   .updateSite()
+      //   .subscribe(() => {
+      this.routeUtils.routeRelativeTo(SiteRoutes.VENDORS);
+      // });
+    }
   }
 
   public onBack() {
-    this.router.navigate([SiteRoutes.SITE_ADDRESS], { relativeTo: this.route.parent });
+    this.routeUtils.routeRelativeTo(SiteRoutes.SITE_ADDRESS);
   }
 
   public ngOnInit(): void {
     // TODO change the footer if already signed
-    this.organizationAgreement$ = this.siteRegistrationResource.getOrganizationAgreement();
+    this.siteRegistrationResource
+      .getOrganizationAgreement()
+      .subscribe((organizationAgreement: string) => this.organizationAgreement = organizationAgreement);
   }
 }

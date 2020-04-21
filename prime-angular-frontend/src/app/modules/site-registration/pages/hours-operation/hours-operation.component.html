@@ -13,13 +13,15 @@
       </app-page-subheader>
 
       <div class="mb-2">
-        <mat-checkbox class="mr-4">
+        <mat-checkbox class="mr-4"
+                      formControlName="hoursWeekend">
           Does this site operate on weekends?
         </mat-checkbox>
       </div>
 
       <div class="mb-3">
-        <mat-checkbox class="mr-4">
+        <mat-checkbox class="mr-4"
+                      formControlName="hours24">
           Does this site operate 24 hours?
         </mat-checkbox>
       </div>
@@ -29,7 +31,7 @@
           <textarea matInput
                     placeholder="Any special hours of operations that we should be aware of?"
                     rows="10"
-                    formControlName="specialHours"></textarea>
+                    formControlName="hoursSpecial"></textarea>
         </mat-form-field>
       </div>
 

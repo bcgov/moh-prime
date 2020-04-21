@@ -1,28 +1,29 @@
 import { Injectable } from '@angular/core';
-import { Registrant } from '@shared/models/registrant';
 import { BehaviorSubject } from 'rxjs';
 
+import { Site } from '../models/site.model';
+
 export interface ISiteRegistrationService {
-  registrant$: BehaviorSubject<Registrant>;
-  registrant: Registrant;
+  site$: BehaviorSubject<Site>;
+  site: Site;
 }
 
 @Injectable({
   providedIn: 'root'
 })
-export class SiteRegisrationService implements ISiteRegistrationService {
+export class SiteRegistrationService implements ISiteRegistrationService {
   // tslint:disable-next-line: variable-name
-  private _registrant: BehaviorSubject<Registrant>;
+  private _site: BehaviorSubject<Site>;
 
   constructor() {
-    this._registrant = new BehaviorSubject<Registrant>(null);
+    this._site = new BehaviorSubject<Site>(null);
   }
 
-  public get registrant$(): BehaviorSubject<Registrant> {
-    return this._registrant;
+  public get site$(): BehaviorSubject<Site> {
+    return this._site;
   }
 
-  public get registrant(): Registrant {
-    return this._registrant.value;
+  public get site(): Site {
+    return this._site.value;
   }
 }

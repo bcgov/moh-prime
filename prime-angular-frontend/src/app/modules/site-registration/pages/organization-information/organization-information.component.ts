@@ -1,32 +1,43 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 
-import { ToastService } from '@core/services/toast.service';
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { FormUtilsService } from '@common/services/form-utils.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
+import { RouteUtils } from '@registration/shared/classes/route-utils.class';
+import { IPage } from '@registration/shared/interfaces/page.interface';
+import { IForm } from '@registration/shared/interfaces/form.interface';
+import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
 
 @Component({
   selector: 'app-organization-information',
   templateUrl: './organization-information.component.html',
   styleUrls: ['./organization-information.component.scss']
 })
-export class OrganizationInformationComponent implements OnInit {
+export class OrganizationInformationComponent implements OnInit, IPage, IForm {
   public busy: Subscription;
   public form: FormGroup;
+  public routeUtils: RouteUtils;
   public SiteRoutes = SiteRoutes;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
-    private toastService: ToastService
-  ) { }
+    private siteRegistrationResource: SiteRegistrationResource,
+    private formUtilsService: FormUtilsService,
+    private dialog: MatDialog
+  ) {
+    this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
+  }
 
-  public get siteName(): FormControl {
-    return this.form.get('siteName') as FormControl;
+  public get name(): FormControl {
+    return this.form.get('name') as FormControl;
   }
 
   public get doingBusinessAs(): FormControl {
@@ -34,32 +45,46 @@ export class OrganizationInformationComponent implements OnInit {
   }
 
   public onSubmit() {
-    // TODO proper submission when backend payload known
-    // if (this.form.valid) { }
-    this.toastService.openSuccessToast('Enrolment information has been saved');
-    this.form.markAsPristine();
-    this.router.navigate([SiteRoutes.SITE_ADDRESS], { relativeTo: this.route.parent });
+    if (this.formUtilsService.checkValidity(this.form)) {
+      // this.siteRegistrationResource
+      //   .updateSite(this.form.value)
+      //   .subscribe(() => {
+      this.form.markAsPristine();
+      this.routeUtils.routeRelativeTo(SiteRoutes.SITE_ADDRESS);
+      // });
+    }
   }
 
   public onBack() {
-    this.router.navigate([SiteRoutes.MULTIPLE_SITES], { relativeTo: this.route.parent });
+    this.routeUtils.routeRelativeTo(SiteRoutes.MULTIPLE_SITES);
+  }
+
+  public canDeactivate(): Observable<boolean> | boolean {
+    const data = 'unsaved';
+    return (this.form.dirty)
+      ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
+      : true;
   }
 
   public ngOnInit() {
     this.createFormInstance();
+    this.initForm();
   }
 
   private createFormInstance() {
-    // TODO rename form fields when backend payload known
     this.form = this.fb.group({
-      siteName: [
+      name: [
         null,
         [Validators.required]
       ],
       doingBusinessAs: [
         null,
-        [Validators.required]
+        []
       ]
     });
+  }
+
+  private initForm() {
+    // TODO populate and pull from separate service with form models
   }
 }

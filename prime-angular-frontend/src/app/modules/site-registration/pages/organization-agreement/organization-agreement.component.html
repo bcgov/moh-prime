@@ -3,7 +3,7 @@
   <app-site-progress-indicator [currentRoute]="SiteRoutes.ORGANIZATION_AGREEMENT"></app-site-progress-indicator>
 
   <div class="organization-agreement"
-       [innerHTML]="organizationAgreement$ | async | safeHtml"></div>
+       [innerHTML]="organizationAgreement | safeHtml"></div>
 
   <div class=" footer mb-4">
     <mat-checkbox #accept>
