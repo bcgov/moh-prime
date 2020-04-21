@@ -47,12 +47,7 @@ namespace Prime.Services
 
             var user = _httpContext.HttpContext.User;
 
-            site.Location.Organization.SigningAuthorityId = await _partyService.CreatePartyAsync(
-                new Party
-                {
-                    UserId = user.GetPrimeUserId()
-                }
-            );
+            site.Location.Organization.SigningAuthorityId = await _partyService.CreatePartyAsync(site.Location.Organization.SigningAuthority);
 
             _context.Sites.Add(site);
 
