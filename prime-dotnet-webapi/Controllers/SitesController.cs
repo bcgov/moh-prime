@@ -18,14 +18,17 @@ namespace Prime.Controllers
     public class SitesController : ControllerBase
     {
         private readonly ISiteService _siteService;
+        private readonly IPartyService _partyService;
         private readonly IRazorConverterService _razorConverterService;
 
 
         public SitesController(
             ISiteService siteService,
+            IPartyService partyService,
             IRazorConverterService razorConverterService)
         {
             _siteService = siteService;
+            _partyService = partyService;
             _razorConverterService = razorConverterService;
         }
 
@@ -39,9 +42,13 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Site>>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Site>>> GetSites()
         {
-            var sites = await _siteService.GetSitesAsync();
+            if (!User.HasSiteRegistrationFeature())
+            {
+                return Forbid();
+            }
 
-            // TODO add claims to forbid access
+            var party = await _partyService.GetPartyForUserIdAsync(User.GetPrimeUserId());
+            var sites = await _siteService.GetSitesAsync(party.Id);
 
             return Ok(ApiResponse.Result(sites));
         }

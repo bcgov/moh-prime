@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Prime.Models;
 
-// TODO add business events
 // TODO add logging
 namespace Prime.Services
 {
@@ -26,10 +25,10 @@ namespace Prime.Services
             _partyService = partyService;
         }
 
-        public async Task<IEnumerable<Site>> GetSitesAsync()
+        public async Task<IEnumerable<Site>> GetSitesAsync(int partyId)
         {
-            // TODO only provide locations for the authenticated signing authority
             return await this.GetBaseSiteQuery()
+                .Where(s => s.Location.Organization.SigningAuthorityId == partyId)
                 .ToListAsync();
         }
 
