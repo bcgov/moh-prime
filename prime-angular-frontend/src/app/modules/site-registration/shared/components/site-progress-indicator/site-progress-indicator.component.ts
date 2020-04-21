@@ -18,6 +18,7 @@ export class SiteProgressIndicatorComponent implements OnInit, IProgressIndicato
 
   constructor() {
     this.routes = SiteRoutes.initialRegistrationRouteOrder();
+    this.inProgress = true;
   }
 
   public ngOnInit() { }

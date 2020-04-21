@@ -84,11 +84,11 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<Site>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<Site>> CreateSite(Site site)
+        public async Task<ActionResult<Site>> CreateSite(Party party)
         {
-            if (site == null)
+            if (party == null)
             {
-                this.ModelState.AddModelError("Site", "Could not create an site, the passed in Site cannot be null.");
+                this.ModelState.AddModelError("Party", "Could not create an site, the passed in Party cannot be null.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 
@@ -97,12 +97,14 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            var createdSiteId = await _siteService.CreateSiteAsync(site);
+            var createdSiteId = await _siteService.CreateSiteAsync(party);
+
+            var createdSite = await _siteService.GetSiteAsync(createdSiteId);
 
             return CreatedAtAction(
                 nameof(GetSiteById),
-                new { siteId = createdSiteId },
-                ApiResponse.Result(site)
+                createdSite,
+                ApiResponse.Result(createdSite)
             );
         }
 

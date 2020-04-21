@@ -19,24 +19,24 @@ namespace Prime.Models
 
         public string DoingBusinessAs { get; set; }
 
-        public int AddressId { get; set; }
+        public int? AddressId { get; set; }
 
         [Required]
         public Address Address { get; set; }
 
-        public int AdministratorPharmaNetId { get; set; }
+        public int? AdministratorPharmaNetId { get; set; }
 
         public Party AdministratorPharmaNet { get; set; }
 
-        public int PrivacyOfficerId { get; set; }
+        public int? PrivacyOfficerId { get; set; }
 
         public Party PrivacyOfficer { get; set; }
 
-        public int TechnicalSupportId { get; set; }
+        public int? TechnicalSupportId { get; set; }
 
         public Party TechnicalSupport { get; set; }
 
-        public int OrganizationId { get; set; }
+        public int? OrganizationId { get; set; }
 
         public Organization Organization { get; set; }
 
