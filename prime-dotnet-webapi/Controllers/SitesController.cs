@@ -103,7 +103,7 @@ namespace Prime.Controllers
 
             return CreatedAtAction(
                 nameof(GetSiteById),
-                createdSite,
+                new { siteId = createdSiteId },
                 ApiResponse.Result(createdSite)
             );
         }

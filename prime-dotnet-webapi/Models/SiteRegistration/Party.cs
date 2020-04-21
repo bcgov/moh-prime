@@ -26,10 +26,10 @@ namespace Prime.Models
 
         public string JobRoleTitle { get; set; }
 
-        public int AddressId { get; set; }
+        public int? PhysicalAddressId { get; set; }
 
         [Required]
-        public Address Address { get; set; }
+        public PhysicalAddress PhysicalAddress { get; set; }
 
         public string Email { get; set; }
 
