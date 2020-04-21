@@ -61,7 +61,10 @@ namespace Prime.Controllers
         {
             var site = await _siteService.GetSiteAsync(siteId);
 
-            // TODO add claims to forbid access
+            if (!User.HasSiteRegistrationFeature() || !User.PartyCanEdit(site.Location.Organization.SigningAuthority))
+            {
+                return Forbid();
+            }
 
             return Ok(ApiResponse.Result(site));
         }
@@ -83,7 +86,6 @@ namespace Prime.Controllers
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 
-            // TODO add claims to forbid access
             if (!User.HasSiteRegistrationFeature())
             {
                 return Forbid();
@@ -119,7 +121,10 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            // TODO add claims to forbid access
+            if (!User.HasSiteRegistrationFeature() || !User.PartyCanEdit(site.Location.Organization.SigningAuthority))
+            {
+                return Forbid();
+            }
 
             await _siteService.UpdateSiteAsync(siteId, updatedSite, isCompleted);
 
@@ -145,7 +150,10 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            // TODO add claims to forbid access
+            if (!User.HasSiteRegistrationFeature() || !User.PartyCanEdit(site.Location.Organization.SigningAuthority))
+            {
+                return Forbid();
+            }
 
             await _siteService.DeleteSiteAsync(siteId);
 
@@ -154,7 +162,7 @@ namespace Prime.Controllers
 
         // GET: api/Sites/organization-agreement
         /// <summary>
-        /// Get the Site's organization agreement.
+        /// Get the organization agreement.
         /// </summary>
         [HttpGet(Name = nameof(GetOrganizationAgreement))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
