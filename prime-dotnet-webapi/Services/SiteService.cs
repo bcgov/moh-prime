@@ -119,6 +119,17 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
+        public async Task AcceptCurrentOrganizationAgreementAsync(int signingAuthorityId)
+        {
+            var organization = await _context.Organizations
+                .Where(e => e.SigningAuthorityId == signingAuthorityId)
+                .FirstOrDefaultAsync();
+
+            organization.AcceptedAgreementDate = DateTimeOffset.Now;
+
+            await _context.SaveChangesAsync();
+        }
+
         private IQueryable<Site> GetBaseSiteQuery()
         {
             return _context.Sites

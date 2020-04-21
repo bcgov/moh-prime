@@ -14,5 +14,6 @@ namespace Prime.Services
         Task DeleteSiteAsync(int siteId);
         Task<Site> GetSiteNoTrackingAsync(int siteId);
         Task<IEnumerable<BusinessEvent>> GetSiteBusinessEvents(int siteId);
+        Task AcceptCurrentOrganizationAgreementAsync(int signingAuthorityId);
     }
 }
