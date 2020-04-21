@@ -2,9 +2,10 @@
   <app-page-header>PharmaNet Site Registration</app-page-header>
   <app-site-progress-indicator [currentRoute]="SiteRoutes.ORGANIZATION_AGREEMENT"></app-site-progress-indicator>
 
-  {{ '' | safeHtml }}
+  <div class="organization-agreement"
+       [innerHTML]="organizationAgreement$ | async | safeHtml"></div>
 
-  <div class="footer mb-4">
+  <div class=" footer mb-4">
     <mat-checkbox #accept>
       <div class="pl-3">
         I have read and accept the Organization Agreement.

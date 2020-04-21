@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 
 import { ToastService } from '@core/services/toast.service';
 
@@ -15,6 +15,7 @@ import { SiteRegistrationResource } from '@registration/shared/services/site-reg
 })
 export class OrganizationAgreementComponent implements OnInit {
   public busy: Subscription;
+  public organizationAgreement$: Observable<string>;
 
   public SiteRoutes = SiteRoutes;
 
@@ -38,6 +39,6 @@ export class OrganizationAgreementComponent implements OnInit {
 
   public ngOnInit(): void {
     // TODO change the footer if already signed
-    this.siteRegistrationResource.getOrganizationAgreement()
+    this.organizationAgreement$ = this.siteRegistrationResource.getOrganizationAgreement();
   }
 }
