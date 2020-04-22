@@ -100,15 +100,20 @@ export class RegistrationGuard extends BaseGuard {
     // Allow access to a set of routes
     let whiteListedRoutes = SiteRoutes.registrationRoutes();
 
+    console.log('SITE', site.location.organization);
+
+
     if (!site.location.organization.acceptedAgreementDate) {
       // No routing beyond the organization agreement without accepting
       whiteListedRoutes = whiteListedRoutes
         .filter((route: string) => SiteRoutes.noOrganizationAgreementRoutes().includes(route));
-    } else if (!site.completed) {
-      // No reviewing without completing the registration
-      whiteListedRoutes = whiteListedRoutes
-        .filter((route: string) => route !== SiteRoutes.SITE_REVIEW);
     }
+    // TODO add back in when isCompleted is on TechnicalSupport not review view
+    // else if (!site.completed) {
+    //   // No reviewing without completing the registration
+    //   whiteListedRoutes = whiteListedRoutes
+    //     .filter((route: string) => route !== SiteRoutes.SITE_REVIEW);
+    // }
 
     // Redirect to an appropriate default route
     if (!whiteListedRoutes.includes(currentRoute)) {
