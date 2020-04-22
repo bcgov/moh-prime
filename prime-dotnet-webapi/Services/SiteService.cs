@@ -84,8 +84,7 @@ namespace Prime.Services
         {
             // TODO wholesale change or based use view model
 
-            var site = await this.GetBaseSiteQuery()
-                .SingleAsync();
+            var site = await this.GetSiteAsync(siteId);
 
             _context.Entry(site).CurrentValues.SetValues(updatedSite);
 
