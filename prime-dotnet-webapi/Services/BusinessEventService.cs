@@ -86,9 +86,9 @@ namespace Prime.Services
             return businessEvent;
         }
 
-        public async Task<BusinessEvent> CreateSiteEventAsync(int siteId, string description)
+        public async Task<BusinessEvent> CreateSiteEventAsync(int siteId, int partyId, string description)
         {
-            var businessEvent = await this.CreateBusinessEvent(BusinessEventType.SITE_CODE, siteId, description);
+            var businessEvent = await this.CreateSiteBusinessEvent(BusinessEventType.SITE_CODE, siteId, partyId, description);
             _context.BusinessEvents.Add(businessEvent);
             var created = await _context.SaveChangesAsync();
 
@@ -109,6 +109,25 @@ namespace Prime.Services
             var businessEvent = new BusinessEvent
             {
                 EnrolleeId = enrolleeId,
+                AdminId = adminId,
+                BusinessEventTypeCode = BusinessEventTypeCode,
+                Description = description,
+                EventDate = DateTimeOffset.Now
+            };
+
+            return businessEvent;
+        }
+
+        private async Task<BusinessEvent> CreateSiteBusinessEvent(int BusinessEventTypeCode, int siteId, int partyId, string description)
+        {
+            var userId = _httpContext.HttpContext.User.GetPrimeUserId();
+            Admin admin = await _adminService.GetAdminForUserIdAsync(userId);
+            int? adminId = admin?.Id;
+
+            var businessEvent = new BusinessEvent
+            {
+                PartyId = partyId,
+                SiteId = siteId,
                 AdminId = adminId,
                 BusinessEventTypeCode = BusinessEventTypeCode,
                 Description = description,

@@ -75,7 +75,7 @@ namespace Prime.Services
                 throw new InvalidOperationException("Could not create Site.");
             }
 
-            // await _businessEventService.CreateSiteEventAsync(site.Id, "Site Created");
+            await _businessEventService.CreateSiteEventAsync(site.Id, provsionerId, "Site Created");
 
             return site.Id;
         }
@@ -89,7 +89,7 @@ namespace Prime.Services
 
             _context.Entry(site).CurrentValues.SetValues(updatedSite);
 
-            await _businessEventService.CreateSiteEventAsync(site.Id, "Site Updated");
+            await _businessEventService.CreateSiteEventAsync(site.Id, (int)site.ProvisionerId, "Site Updated");
 
             try
             {
@@ -113,7 +113,7 @@ namespace Prime.Services
 
             _context.Sites.Remove(site);
 
-            await _businessEventService.CreateSiteEventAsync(site.Id, "Site Deleted");
+            await _businessEventService.CreateSiteEventAsync(site.Id, (int)site.ProvisionerId, "Site Deleted");
 
             await _context.SaveChangesAsync();
         }
