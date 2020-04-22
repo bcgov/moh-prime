@@ -115,6 +115,7 @@ export class SiteRegistrationStateService {
       id,
       locationId: this.locationId,
       location: {
+        id: this.locationId,
         // TODO allow submission without getting validation errors
         privacyOfficer: (privacyOfficer.firstName) ? privacyOfficer : null,
         administratorPharmaNet: (administratorPharmaNet.firstName) ? administratorPharmaNet : null,
