@@ -84,11 +84,18 @@ namespace Prime.Services
         {
             // TODO wholesale change or based use view model
 
-            var site = await this.GetSiteAsync(siteId);
+            var site = await this.GetSiteNoTrackingAsync(siteId);
 
             _context.Entry(site).CurrentValues.SetValues(updatedSite);
 
-            await _businessEventService.CreateSiteEventAsync(site.Id, (int)site.ProvisionerId, "Site Updated");
+            site.Provisioner = updatedSite.Provisioner;
+            site.Provisioner.PhysicalAddress = updatedSite.Provisioner.PhysicalAddress;
+            site.Location = updatedSite.Location;
+            site.Location.PhysicalAddress = updatedSite.Location.PhysicalAddress;
+            site.Location.Organization = updatedSite.Location.Organization;
+            site.Location.Organization.SigningAuthority = updatedSite.Location.Organization.SigningAuthority;
+
+            await _businessEventService.CreateSiteEventAsync(site.Id, (int)updatedSite.ProvisionerId, "Site Updated");
 
             try
             {
