@@ -207,15 +207,15 @@ export class SiteRegistrationStateService {
         const { physicalAddress, ...remainder } = site.location.organization.signingAuthority;
         this.signingAuthorityForm.patchValue(remainder);
       }
-      if (site.location.privacyOfficer) {
-        // TODO ignore physical address for now
-        const { physicalAddress, ...remainder } = site.location.privacyOfficer;
-        this.privacyOfficerForm.patchValue(remainder);
-      }
       if (site.location.administratorPharmaNet) {
         // TODO ignore physical address for now
         const { physicalAddress, ...remainder } = site.location.administratorPharmaNet;
         this.administratorPharmaNetForm.patchValue(remainder);
+      }
+      if (site.location.privacyOfficer) {
+        // TODO ignore physical address for now
+        const { physicalAddress, ...remainder } = site.location.privacyOfficer;
+        this.privacyOfficerForm.patchValue(remainder);
       }
       if (site.location.technicalSupport) {
         // TODO ignore physical address for now
