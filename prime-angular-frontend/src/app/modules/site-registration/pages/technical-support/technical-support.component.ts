@@ -6,11 +6,11 @@ import { Subscription } from 'rxjs';
 import { SiteRoutes } from '@registration/site-registration.routes';
 
 @Component({
-  selector: 'app-technical-support-contact',
-  templateUrl: './technical-support-contact.component.html',
-  styleUrls: ['./technical-support-contact.component.scss']
+  selector: 'app-technical-support',
+  templateUrl: './technical-support.component.html',
+  styleUrls: ['./technical-support.component.scss']
 })
-export class TechnicalSupportContactComponent implements OnInit {
+export class TechnicalSupportComponent implements OnInit {
   public busy: Subscription;
   public title: string;
   public SiteRoutes = SiteRoutes;

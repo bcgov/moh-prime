@@ -1,8 +1,8 @@
 <app-enrollee-page [busy]="busy">
   <app-page-header>PharmaNet Enrolment</app-page-header>
-  <app-progress-indicator *ngIf="isInitialEnrolment"
-                          [inProgress]="isInitialEnrolment"
-                          [currentRoute]="EnrolmentRoutes.DEMOGRAPHIC"></app-progress-indicator>
+  <app-enrolment-progress-indicator *ngIf="isInitialEnrolment"
+                                    [inProgress]="isInitialEnrolment"
+                                    [currentRoute]="EnrolmentRoutes.DEMOGRAPHIC"></app-enrolment-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
         [formGroup]="form"
