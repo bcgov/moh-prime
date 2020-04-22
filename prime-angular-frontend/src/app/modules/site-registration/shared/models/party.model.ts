@@ -10,7 +10,7 @@ export class Party {
   hpdid: string;
   firstName: string;
   lastName: string;
-  dateOfBirth: string;
+  dateOfBirth: string; // TODO why are we storing this?
   jobRoleTitle: string = null;
   email: string = null;
   phone: string = null;

@@ -16,8 +16,8 @@ export class RegistrantProfileFormComponent implements OnInit {
   public hasSeparateAddress: boolean;
 
   constructor(
-    private formUtilsService: FormUtilsService,
-    private formBuilder: FormBuilder
+    private fb: FormBuilder,
+    private formUtilsService: FormUtilsService
   ) {
     this.submit = new EventEmitter<{ [key: string]: any }>();
   }
@@ -68,13 +68,29 @@ export class RegistrantProfileFormComponent implements OnInit {
 
   private createFormInstance() {
     // TODO proper naming when backend payload known
-    this.form = this.formBuilder.group({
-      name: [null, []],
-      jobRole: [null, []],
-      phone: [null, [
+    this.form = this.fb.group({
+      firstName: [
+        null,
+        [Validators.required]
+      ],
+      lastName: [
+        null,
+        [Validators.required]
+      ],
+      jobRoleTitle: [
+        null,
+        [Validators.required]
+      ],
+      email: [null, [
         Validators.required,
-        FormControlValidators.phone
+        FormControlValidators.email
       ]],
+      phone: [
+        null, [
+          Validators.required,
+          FormControlValidators.phone
+        ]
+      ],
       fax: [null, [
         Validators.required,
         FormControlValidators.phone
@@ -83,18 +99,14 @@ export class RegistrantProfileFormComponent implements OnInit {
         Validators.required,
         FormControlValidators.phone
       ]],
-      email: [null, [
-        Validators.required,
-        FormControlValidators.email
-      ]],
-      separateAddress: this.formBuilder.group({
+      separateAddress: this.fb.group({
         countryCode: [{ value: null, disabled: false }, []],
         provinceCode: [{ value: null, disabled: false }, []],
         street: [{ value: null, disabled: false }, []],
         street2: [{ value: null, disabled: false }, []],
         city: [{ value: null, disabled: false }, []],
         postal: [{ value: null, disabled: false }, []]
-      }),
+      })
     });
   }
 

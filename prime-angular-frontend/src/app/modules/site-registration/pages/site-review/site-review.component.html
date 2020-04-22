@@ -7,8 +7,8 @@
       <ng-container appPageSubheaderTitle>Site Registration Review</ng-container>
       <ng-container appPageSubheaderSummary>
         Review all the information to ensure it is accurate, you will not get approved if any of your information is
-        incorrect. If you need to edit your information use the pencil icon to navigate to that section of the enrolment
-        to make changes.
+        incorrect. If you need to edit your information use the pencil icon to navigate to that section of the
+        registration to make changes.
       </ng-container>
     </app-page-subheader>
   </div>
@@ -22,11 +22,11 @@
     </app-page-subheader>
 
     <app-enrollee-property title="Organization Number (Legal Entity Operating Site)">
-      {{ '' | default }}
+      {{ site.location.organization.name | default }}
     </app-enrollee-property>
 
     <app-enrollee-property title="Doing Business As">
-      {{ '' | default }}
+      {{ site.location.organization.doingBusinessAs | default }}
     </app-enrollee-property>
 
   </section>
@@ -40,19 +40,19 @@
     </app-page-subheader>
 
     <app-enrollee-property title="Address">
-      {{ '' | default }}
+      {{ site.location.physicalAddress.street | default }}
     </app-enrollee-property>
 
     <app-enrollee-property title="City">
-      {{ '' | default }}
+      {{ site.location.physicalAddress.city | default }}
     </app-enrollee-property>
 
     <app-enrollee-property title="Province">
-      {{ '' | default }}
+      {{ site.location.physicalAddress.province | default }}
     </app-enrollee-property>
 
     <app-enrollee-property title="Postal Code">
-      {{ '' | default }}
+      {{ site.location.physicalAddress.postal | default }}
     </app-enrollee-property>
 
   </section>
@@ -68,7 +68,7 @@
     <ng-container *ngFor="let vendor of []">
 
       <app-enrollee-property>
-        {{ '' | default }}
+        {{ site.vendor.name | default }}
       </app-enrollee-property>
 
     </ng-container>
@@ -87,22 +87,22 @@
     </app-page-subheader>
 
     <app-enrollee-property title="Does this site operate on weekends?">
-      {{ '' | yesNo: true }}
+      {{ site.location.hoursWeekend | yesNo: true }}
     </app-enrollee-property>
 
     <app-enrollee-property title="Does this site operate 24 hours?">
-      {{ '' | yesNo: true }}
+      {{ site.location.hours24 | yesNo: true }}
     </app-enrollee-property>
 
     <app-enrollee-property title="Any special hours of operation that we should be aware of?"
                            [makeBold]="false">
-      {{ '' | yesNo: true }}
+      {{ site.location.hoursSpecial | yesNo: true }}
     </app-enrollee-property>
 
     <app-enrollee-property *ngIf="false"
                            title="Description"
                            [makeBold]="false">
-      {{ '' }}
+      {{ site.location.hoursSpecial }}
     </app-enrollee-property>
 
   </section>
@@ -172,7 +172,7 @@
       <button mat-flat-button
               color="primary"
               [disabled]="!accept.checked"
-              (click)="onSubmit()">Submit Enrolment</button>
+              (click)="onSubmit()">Submit Registration</button>
 
     </div>
   </div>

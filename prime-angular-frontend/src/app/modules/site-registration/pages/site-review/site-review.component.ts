@@ -11,6 +11,7 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
+import { Site } from '@registration/shared/models/site.model';
 import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
 import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
 import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
@@ -23,6 +24,7 @@ import { SiteRegistrationStateService } from '@registration/shared/services/site
 export class SiteReviewComponent implements OnInit, IPage {
   public busy: Subscription;
   public routeUtils: RouteUtils;
+  public site: Site;
   public SiteRoutes = SiteRoutes;
 
   constructor(
@@ -47,14 +49,12 @@ export class SiteReviewComponent implements OnInit, IPage {
       .afterClosed()
       .pipe(
         exhaustMap((result: boolean) =>
-          // TODO pass the site that is being registered
           (result)
             ? this.siteRegistrationResource.updateSite(payload, true)
             : EMPTY
         )
       )
       .subscribe(() => this.routeUtils.routeRelativeTo(SiteRoutes.CONFIRMATION));
-    // this.routeUtils.routeRelativeTo(SiteRoutes.CONFIRMATION);
   }
 
   public onRoute(routePath: string) {
@@ -62,7 +62,6 @@ export class SiteReviewComponent implements OnInit, IPage {
   }
 
   public ngOnInit() {
-    // TODO get the site for review
-    // this.form = this.siteRegistrationService.;
+    this.site = this.siteRegistrationService.site;
   }
 }
