@@ -32,7 +32,7 @@ const routes: Routes = [
     canActivate: [UnsupportedGuard],
     canActivateChild: [
       AuthenticationGuard,
-      // RegistrantGuard,
+      RegistrantGuard,
       RegistrationGuard
     ],
     // Ensure that the configuration is loaded, otherwise
@@ -113,6 +113,11 @@ const routes: Routes = [
         path: SiteRoutes.CONFIRMATION,
         component: ConfirmationComponent,
         data: { title: 'Submission Confirmation' }
+      },
+      {
+        path: '', // Equivalent to `/` and alias for `site-review`
+        redirectTo: SiteRoutes.SITE_REVIEW,
+        pathMatch: 'full'
       }
     ]
   }
