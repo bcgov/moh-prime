@@ -82,8 +82,6 @@ namespace Prime.Services
 
         public async Task<int> UpdateSiteAsync(int siteId, Site updatedSite, bool isCompleted = false)
         {
-            // TODO wholesale change or based use view model
-
             var site = await this.GetSiteNoTrackingAsync(siteId);
 
             var acceptedAgreementDate = site.Location.Organization.AcceptedAgreementDate;
