@@ -41,13 +41,13 @@ export class VendorComponent implements OnInit, IPage, IForm {
   ) {
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
 
-    // TODO supply through config
+    // TODO supply through config using lookups
     this.vendorConfig = [
-      { id: 0, name: 'Excelleris' },
-      { id: 1, name: 'iClinic Inc.' },
-      { id: 2, name: 'Medinet' },
-      { id: 3, name: 'Plexia Electronic Medical Systems' },
-      { id: 4, name: 'CareConnect' }
+      { id: 1, name: 'Care Connect' },
+      { id: 2, name: 'Excelleris' },
+      { id: 3, name: 'iClinic' },
+      { id: 4, name: 'MediNet' },
+      { id: 5, name: 'Plexia' }
     ];
   }
 

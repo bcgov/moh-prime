@@ -127,7 +127,7 @@ export class SiteRegistrationStateService {
         physicalAddress: siteAddress,
         ...hoursOperation
       },
-      vendorId: this.vendorId,
+      vendorId: vendor.id,
       vendor,
       provisionerId: this.provisionerId,
       // pec
