@@ -100,10 +100,8 @@ export class SiteRegistrationStateService {
    */
   // TODO use Partial<Site>
   public get site(): Site {
-    const id = this.siteId;
-
     const organizationInformation = this.organizationInformationForm.getRawValue();
-    const siteAddress = this.siteAddressForm.getRawValue();
+    const physicalAddress = this.siteAddressForm.getRawValue();
     const hoursOperation = this.hoursOperationForm.getRawValue();
     const vendor = this.vendorForm.getRawValue();
     const signingAuthority = this.signingAuthorityForm.getRawValue();
@@ -112,7 +110,7 @@ export class SiteRegistrationStateService {
     const technicalSupport = this.technicalSupportForm.getRawValue();
 
     return {
-      id,
+      id: this.siteId,
       locationId: this.locationId,
       location: {
         id: this.locationId,
@@ -120,22 +118,18 @@ export class SiteRegistrationStateService {
         privacyOfficer: (privacyOfficer.firstName) ? privacyOfficer : null,
         administratorPharmaNet: (administratorPharmaNet.firstName) ? administratorPharmaNet : null,
         technicalSupport: (technicalSupport.firstName) ? technicalSupport : null,
-        organizationId: this.organizationId,
+        organizationId: organizationInformation.id,
         organization: {
-          id: this.organizationId,
-          signingAuthorityId: this.signingAuthorityId,
-          signingAuthority: {
-            id: this.signingAuthorityId,
-            ...signingAuthority
-          },
+          signingAuthorityId: signingAuthority.id,
+          signingAuthority,
           ...organizationInformation
         },
-        physicalAddressId: (this.physicalAddressId) ? this.physicalAddressId : null,
-        physicalAddress: (this.physicalAddressId) ? siteAddress : null,
+        physicalAddressId: physicalAddress.id,
+        physicalAddress,
         ...hoursOperation
       },
       vendorId: vendor.id,
-      vendor: (vendor.id) ? vendor : null,
+      vendor,
       provisionerId: this.provisionerId,
       // TODO where is PEC coming from?
       // pec
@@ -245,6 +239,10 @@ export class SiteRegistrationStateService {
 
   private buildOrganizationInformationForm(): FormGroup {
     return this.fb.group({
+      id: [
+        null,
+        []
+      ],
       name: [
         null,
         [Validators.required]
@@ -258,6 +256,10 @@ export class SiteRegistrationStateService {
 
   private buildSiteAddressForm(): FormGroup {
     return this.fb.group({
+      id: [
+        null,
+        []
+      ],
       street: [
         { value: null, disabled: false },
         [Validators.required]
@@ -325,6 +327,10 @@ export class SiteRegistrationStateService {
 
   private partyFormGroup(disabled: boolean = false): FormGroup {
     return this.fb.group({
+      id: [
+        null,
+        []
+      ],
       firstName: [
         { value: null, disabled },
         [Validators.required]
@@ -366,6 +372,10 @@ export class SiteRegistrationStateService {
         ]
       ],
       physicalAddress: this.fb.group({
+        id: [
+          null,
+          []
+        ],
         countryCode: [
           { value: null, disabled: false },
           []
