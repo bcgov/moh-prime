@@ -51,7 +51,7 @@ const routes: Routes = [
     data: {
       title: 'Page Not Found'
     }
-  },
+  }
 ];
 
 @NgModule({
