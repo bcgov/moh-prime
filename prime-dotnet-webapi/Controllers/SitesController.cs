@@ -70,7 +70,7 @@ namespace Prime.Controllers
         {
             var site = await _siteService.GetSiteAsync(siteId);
 
-            if (!User.HasSiteRegistrationFeature() || !User.PartyCanEdit(site.Location.Organization.SigningAuthority))
+            if (!User.HasSiteRegistrationFeature() || !User.PartyCanEdit(site.Provisioner))
             {
                 return Forbid();
             }
@@ -132,7 +132,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            if (!User.HasSiteRegistrationFeature() || !User.PartyCanEdit(site.Location.Organization.SigningAuthority))
+            if (!User.HasSiteRegistrationFeature() || !User.PartyCanEdit(site.Provisioner))
             {
                 return Forbid();
             }
@@ -161,7 +161,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            if (!User.HasSiteRegistrationFeature() || !User.PartyCanEdit(site.Location.Organization.SigningAuthority))
+            if (!User.HasSiteRegistrationFeature() || !User.PartyCanEdit(site.Provisioner))
             {
                 return Forbid();
             }
@@ -209,7 +209,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            if (!User.HasSiteRegistrationFeature() || !User.PartyCanEdit(site.Location.Organization.SigningAuthority))
+            if (!User.HasSiteRegistrationFeature() || !User.PartyCanEdit(site.Provisioner))
             {
                 return Forbid();
             }

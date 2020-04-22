@@ -158,6 +158,7 @@ namespace Prime.Services
         private IQueryable<Site> GetBaseSiteQuery()
         {
             return _context.Sites
+            .Include(s => s.Provisioner)
             .Include(s => s.Vendor)
             .Include(s => s.Location)
                 .ThenInclude(l => l.Organization)
