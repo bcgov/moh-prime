@@ -7,7 +7,6 @@ import { UnsupportedComponent } from '@common/components/unsupported/unsupported
 import { MaintenanceComponent } from '@common/components/maintenance/maintenance.component';
 import { PageNotFoundComponent } from '@common/components/page-not-found/page-not-found.component';
 import { HelpComponent } from '@common/components/help/help.component';
-import { AccessDeclinedComponent } from '@common/components/access-declined/access-declined.component';
 
 const routes: Routes = [
   {
@@ -53,11 +52,6 @@ const routes: Routes = [
       title: 'Page Not Found'
     }
   },
-  {
-    path: AppRoutes.ACCESS_DECLINED,
-    component: AccessDeclinedComponent,
-    data: { title: 'Access Declined' }
-  }
 ];
 
 @NgModule({

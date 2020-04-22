@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AccessDeclinedComponent } from './access-declined.component';
-import { CommonModule } from '@angular/common';
+import { EnrolmentModule } from '@enrolment/enrolment.module';
 
 describe('AccessDeclinedComponent', () => {
   let component: AccessDeclinedComponent;
@@ -9,7 +9,7 @@ describe('AccessDeclinedComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [CommonModule],
+      imports: [EnrolmentModule],
       declarations: []
     })
       .compileComponents();

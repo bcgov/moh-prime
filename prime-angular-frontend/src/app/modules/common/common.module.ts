@@ -8,7 +8,6 @@ import { UnsupportedComponent } from '@common/components/unsupported/unsupported
 import { PageNotFoundComponent } from '@common/components/page-not-found/page-not-found.component';
 import { MaintenanceComponent } from '@common/components/maintenance/maintenance.component';
 import { HelpComponent } from '@common/components/help/help.component';
-import { AccessDeclinedComponent } from './components/access-declined/access-declined.component';
 
 @NgModule({
   imports: [
@@ -21,7 +20,6 @@ import { AccessDeclinedComponent } from './components/access-declined/access-dec
     PageSimpleComponent,
     UnsupportedComponent,
     HelpComponent,
-    AccessDeclinedComponent
   ],
   exports: [
     PageNotFoundComponent,
@@ -29,7 +27,6 @@ import { AccessDeclinedComponent } from './components/access-declined/access-dec
     MaintenanceComponent,
     HelpComponent,
     PageSimpleComponent,
-    AccessDeclinedComponent
   ]
 })
 export class CommonModule { }

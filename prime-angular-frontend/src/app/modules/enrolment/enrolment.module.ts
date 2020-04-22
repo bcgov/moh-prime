@@ -30,6 +30,7 @@ import { EnrolleePageComponent } from './shared/components/enrollee-page/enrolle
 import { NextStepsInfographicComponent } from './shared/components/next-steps-infographic/next-steps-infographic.component';
 import { EnrolmentCollectionNoticeComponent } from './shared/components/enrolment-collection-notice/enrolment-collection-notice.component';
 import { EnrolmentProgressIndicatorComponent } from './shared/components/enrolment-progress-indicator/enrolment-progress-indicator.component';
+import { AccessDeclinedComponent } from './pages/access-declined/access-declined.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { EnrolmentProgressIndicatorComponent } from './shared/components/enrolme
     NextStepsInfographicComponent,
     EnrolmentCollectionNoticeComponent,
     EnrolmentProgressIndicatorComponent,
+    AccessDeclinedComponent,
   ],
   imports: [
     SharedModule,
