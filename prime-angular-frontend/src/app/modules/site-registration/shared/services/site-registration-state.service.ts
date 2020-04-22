@@ -124,7 +124,10 @@ export class SiteRegistrationStateService {
         organization: {
           id: this.organizationId,
           signingAuthorityId: this.signingAuthorityId,
-          signingAuthority,
+          signingAuthority: {
+            id: this.signingAuthorityId,
+            ...signingAuthority
+          },
           ...organizationInformation
         },
         physicalAddressId: this.physicalAddressId,
