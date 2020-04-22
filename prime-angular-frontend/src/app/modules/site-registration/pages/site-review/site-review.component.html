@@ -167,7 +167,8 @@
   </section>
 
   <div class="footer mb-4">
-    <app-alert type="success"
+    <app-alert *ngIf="site.completed"
+               type="success"
                icon="check_circle_outline">
       <ng-container #alertTitle
                     class="alert-title">
@@ -180,7 +181,9 @@
       </ng-container>
     </app-alert>
 
-    <mat-checkbox #accept>
+    <mat-checkbox #accept
+                  [checked]="site.completed"
+                  [disabled]="site.completed">
       <div class="pl-3">
         By submitting this form, I hereby certify that all information provided on this form is true and I understand
         that the Ministry of Health and/or Health Insurance BC (HIBC) may verify this information with my regulatory
