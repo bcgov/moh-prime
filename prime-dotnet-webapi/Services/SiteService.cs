@@ -88,6 +88,9 @@ namespace Prime.Services
 
             _context.Entry(site).CurrentValues.SetValues(updatedSite);
 
+            _context.Organizations.Remove(site.Location.Organization);
+            _context.Locations.Remove(site.Location);
+
             site.Location = updatedSite.Location;
             site.Location.Organization = updatedSite.Location.Organization;
             site.Location.Organization.SigningAuthority = updatedSite.Location.Organization.SigningAuthority;
