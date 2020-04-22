@@ -34,6 +34,19 @@
   </ng-container>
 
   <ng-template #footer>
+
+    <app-alert type="success"
+               icon="check_circle_outline">
+      <ng-container #alertTitle
+                    class="alert-title">
+        Organization Agreement Accepted
+      </ng-container>
+      <ng-container #alertContent
+                    class="alert-content">
+        The organization agreement has already been accepted.
+      </ng-container>
+    </app-alert>
+
     <!-- TODO update footer so doesn't use the word enrolment -->
     <!-- TODO footer is too strigent for generic use, and needs to be updated and wrapped -->
     <app-page-footer [isInitialEnrolment]="true"
