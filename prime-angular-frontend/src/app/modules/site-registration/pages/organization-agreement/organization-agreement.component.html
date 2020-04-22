@@ -5,30 +5,41 @@
   <div class="organization-agreement"
        [innerHTML]="organizationAgreement | safeHtml"></div>
 
-  <div class=" footer mb-4">
-    <mat-checkbox #accept>
-      <div class="pl-3">
-        I have read and accept the Organization Agreement.
+  <ng-container *ngIf="!hasAcceptedAgreement; else footer">
+    <div class=" footer mb-4">
+      <mat-checkbox #accept>
+        <div class="pl-3">
+          I have read and accept the Organization Agreement.
+        </div>
+      </mat-checkbox>
+    </div>
+
+    <div class="row justify-content-end">
+      <div class="col">
+
+        <button mat-stroked-button
+                color="primary"
+                (click)="onBack()">Back</button>
+
       </div>
-    </mat-checkbox>
-  </div>
+      <div class="col text-right">
 
-  <div class="row justify-content-end">
-    <div class="col">
+        <button mat-flat-button
+                color="primary"
+                [disabled]="!accept.checked"
+                (click)="onSubmit()">Accept Agreement</button>
 
-      <button mat-stroked-button
-              color="primary"
-              (click)="onBack()">Back</button>
-
+      </div>
     </div>
-    <div class="col text-right">
+  </ng-container>
 
-      <button mat-flat-button
-              color="primary"
-              [disabled]="!accept.checked"
-              (click)="onSubmit()">Accept Agreement</button>
-
-    </div>
-  </div>
+  <ng-template #footer>
+    <!-- TODO update footer so doesn't use the word enrolment -->
+    <!-- TODO footer is too strigent for generic use, and needs to be updated and wrapped -->
+    <app-page-footer [isInitialEnrolment]="true"
+                     [hasSecondaryAction]="true"
+                     (save)="nextRoute()"
+                     (back)="onBack()"></app-page-footer>
+  </ng-template>
 
 </app-page>
