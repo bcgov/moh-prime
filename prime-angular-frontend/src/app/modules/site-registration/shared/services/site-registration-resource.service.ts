@@ -124,7 +124,7 @@ export class SiteRegistrationResource {
       );
   }
 
-  public acceptOrganizationAgreement(siteId: number): NoContent {
+  public acceptCurrentOrganizationAgreement(siteId: number): NoContent {
     return this.apiResource.put<NoContent>(`sites/${siteId}/organization-agreement`)
       .pipe(
         map(() => {

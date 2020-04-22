@@ -35,12 +35,11 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
 
   public onSubmit() {
     if (this.accepted.checked) {
+      // TODO put in a dialog at some point
       const siteId = this.siteRegistrationService.site.id;
       this.siteRegistrationResource
-        .acceptOrganizationAgreement(siteId)
-        .subscribe(() => {
-          this.routeUtils.routeRelativeTo(SiteRoutes.VENDORS);
-        });
+        .acceptCurrentOrganizationAgreement(siteId)
+        .subscribe(() => this.routeUtils.routeRelativeTo(SiteRoutes.VENDORS));
     }
   }
 

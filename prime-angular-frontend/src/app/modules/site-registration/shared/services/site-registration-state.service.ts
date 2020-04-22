@@ -267,9 +267,9 @@ export class SiteRegistrationStateService {
     return this.fb.group({
       // TODO choose multiples, but schema doesn't allow for it
       // vendors: this.fb.array([])
-      // TODO should send the vendor ID not name now that vendors are in the DB
-      name: [
-        null,
+      // TODO don't hardcode this into the form
+      id: [
+        1,
         [Validators.required]
       ]
     });
