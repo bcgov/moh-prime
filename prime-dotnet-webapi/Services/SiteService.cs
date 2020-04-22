@@ -92,19 +92,14 @@ namespace Prime.Services
             _context.Organizations.Remove(site.Location.Organization);
             _context.Locations.Remove(site.Location);
 
-            if (site.Vendor != null)
-            {
-                _context.Vendors.Remove(site.Vendor);
-            }
-            else
-            {
-                _context.Vendors.Add(updatedSite.Vendor);
-            }
-
             site.Location = updatedSite.Location;
             site.Location.Organization = updatedSite.Location.Organization;
             site.Location.Organization.SigningAuthority = updatedSite.Location.Organization.SigningAuthority;
-            site.Vendor = updatedSite.Vendor;
+
+            if (isCompleted)
+            {
+                site.Completed = isCompleted;
+            }
 
             //Never update
             site.Location.Organization.AcceptedAgreementDate = acceptedAgreementDate;
