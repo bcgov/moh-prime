@@ -6,6 +6,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { RouteStateService } from '@core/services/route-state.service';
 import { Province } from '@shared/enums/province.enum';
 import { Country } from '@shared/enums/country.enum';
+import { Address } from '@shared/models/address.model';
 
 import { Site } from '@registration/shared/models/site.model';
 import { Party } from '@registration/shared/models/party.model';
@@ -27,12 +28,12 @@ export class SiteRegistrationStateService {
   private patched: boolean;
   private siteId: number;
   private provisionerId: number;
-  private provisioner: Party;
   private locationId: number;
   private organizationId: number;
-  private vendorId: number;
   private signingAuthorityId: number;
   private physicalAddressId: number;
+  private physicalAddress: Address;
+  private vendorId: number;
 
   constructor(
     private fb: FormBuilder,
@@ -81,11 +82,11 @@ export class SiteRegistrationStateService {
 
       this.siteId = site.id;
       this.provisionerId = site.provisionerId;
-      this.provisioner = site.provisioner;
       this.locationId = site.locationId;
       this.organizationId = site.location?.organizationId;
       this.signingAuthorityId = site.location?.organization.signingAuthorityId;
       this.physicalAddressId = site.location?.physicalAddressId;
+      this.physicalAddress = site.location?.physicalAddress;
       this.vendorId = site.vendorId;
 
       this.patchSite(site);
@@ -129,7 +130,6 @@ export class SiteRegistrationStateService {
       vendorId: this.vendorId,
       vendor,
       provisionerId: this.provisionerId,
-      provisioner: this.provisioner
       // pec
       // completed
       // approvedDate
