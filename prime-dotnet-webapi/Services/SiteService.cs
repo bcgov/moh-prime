@@ -96,6 +96,11 @@ namespace Prime.Services
             site.Location.Organization = updatedSite.Location.Organization;
             site.Location.Organization.SigningAuthority = updatedSite.Location.Organization.SigningAuthority;
 
+            if (isCompleted)
+            {
+                site.Completed = isCompleted;
+            }
+
             //Never update
             site.Location.Organization.AcceptedAgreementDate = acceptedAgreementDate;
 
