@@ -111,15 +111,10 @@ namespace Prime.Services
                 site.Provisioner.PhysicalAddress = updatedSite.Provisioner.PhysicalAddress;
             }
 
-            // _context.Parties.Remove(site.Provisioner);
-
             site.Location = updatedSite.Location;
             site.Location.Organization = updatedSite.Location.Organization;
-            site.Provisioner = updatedSite.Provisioner;
 
             // site.Location.Organization.SigningAuthority = updatedSite.Location.Organization.SigningAuthority;
-
-
 
             //Never update
             site.Location.Organization.AcceptedAgreementDate = acceptedAgreementDate;
