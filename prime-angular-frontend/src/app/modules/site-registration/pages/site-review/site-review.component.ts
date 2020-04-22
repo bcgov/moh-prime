@@ -29,6 +29,7 @@ export class SiteReviewComponent implements OnInit, IPage {
     private route: ActivatedRoute,
     private router: Router,
     private siteRegistrationResource: SiteRegistrationResource,
+    private siteRegistrationService: SiteRegistrationService,
     private siteRegistrationStateService: SiteRegistrationStateService,
     private dialog: MatDialog
   ) {
@@ -36,7 +37,7 @@ export class SiteReviewComponent implements OnInit, IPage {
   }
 
   public onSubmit() {
-    const payload = this.siteRegistrationStateService.site;
+    const payload = this.siteRegistrationService.site;
     const data: DialogOptions = {
       title: 'Submit Site Registration',
       message: 'When your registration is submitted it can no longer be updated. Are you ready to submit your registration?',
