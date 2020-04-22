@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Prime.Models
 {
@@ -26,6 +27,7 @@ namespace Prime.Models
 
         public int? VendorId { get; set; }
 
+        [JsonIgnore]
         public Vendor Vendor { get; set; }
 
     }
