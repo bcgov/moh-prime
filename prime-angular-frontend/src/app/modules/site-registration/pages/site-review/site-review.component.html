@@ -167,6 +167,18 @@
   </section>
 
   <div class="footer mb-4">
+    <app-alert type="success"
+               icon="check_circle_outline">
+      <ng-container #alertTitle
+                    class="alert-title">
+        Site Registration Submitted
+      </ng-container>
+      <ng-container #alertContent
+                    class="alert-content">
+        Your registration has already been submitted. If you have questions please
+        contact us at <app-prime-phone></app-prime-phone> or <app-prime-support-email></app-prime-support-email>.
+      </ng-container>
+    </app-alert>
 
     <mat-checkbox #accept>
       <div class="pl-3">
@@ -182,7 +194,7 @@
 
       <button mat-flat-button
               color="primary"
-              [disabled]="!accept.checked"
+              [disabled]="!accept.checked || site.completed"
               (click)="onSubmit()">Submit Registration</button>
 
     </div>
