@@ -91,7 +91,7 @@ namespace Prime.Services
             site.Provisioner = updatedSite.Provisioner;
             // site.Provisioner.PhysicalAddress = updatedSite.Provisioner.PhysicalAddress;
             site.Location = updatedSite.Location;
-            site.Location.PhysicalAddress = updatedSite.Location.PhysicalAddress;
+            // site.Location.PhysicalAddress = updatedSite.Location.PhysicalAddress;
             site.Location.Organization = updatedSite.Location.Organization;
             site.Location.Organization.SigningAuthority = updatedSite.Location.Organization.SigningAuthority;
 
