@@ -48,12 +48,9 @@ namespace Prime.Controllers
 
             var party = await _partyService.GetPartyForUserIdAsync(User.GetPrimeUserId());
 
-            IEnumerable<Site> sites = new List<Site>();
-
-            if (party != null)
-            {
-                sites = await _siteService.GetSitesAsync(party.Id);
-            }
+            IEnumerable<Site> sites = (party != null)
+                ? await _siteService.GetSitesAsync(party.Id)
+                : new List<Site>();
 
             return Ok(ApiResponse.Result(sites));
         }

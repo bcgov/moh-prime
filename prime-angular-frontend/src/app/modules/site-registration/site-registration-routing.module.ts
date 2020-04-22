@@ -32,7 +32,7 @@ const routes: Routes = [
     canActivate: [UnsupportedGuard],
     canActivateChild: [
       AuthenticationGuard,
-      RegistrantGuard,
+      // RegistrantGuard,
       RegistrationGuard
     ],
     // Ensure that the configuration is loaded, otherwise
