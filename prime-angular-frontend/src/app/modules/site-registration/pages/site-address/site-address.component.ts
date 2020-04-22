@@ -54,7 +54,7 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
     if (this.formUtilsService.checkValidity(this.form)) {
       const payload = this.siteRegistrationStateService.site;
       this.siteRegistrationResource
-        .updateSite(this.form.value)
+        .updateSite(payload)
         .subscribe(() => {
           this.form.markAsPristine();
           this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_AGREEMENT);
