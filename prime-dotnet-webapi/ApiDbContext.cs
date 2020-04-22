@@ -179,6 +179,8 @@ namespace Prime
 
             modelBuilder.ApplyConfiguration(new BusinessEventTypeConfiguration());
 
+            modelBuilder.ApplyConfiguration(new VendorConfiguration());
+
             #region Indexes
             modelBuilder.Entity<Admin>()
                 .HasIndex("UserId")
