@@ -22,9 +22,15 @@ export class SiteRegistrationStateService {
   public administratorForm: FormGroup;
   public technicalSupportForm: FormGroup;
 
+  // TODO move the IDs into the forms so don't need to be tracked separately
   private patched: boolean;
   private siteId: number;
   private provisionerId: number;
+  private locationId: number;
+  private organizationId: number;
+  private vendorId: number;
+  private signingAuthorityId: number;
+  private physicalAddressId: number;
 
   constructor(
     private fb: FormBuilder,
@@ -73,6 +79,11 @@ export class SiteRegistrationStateService {
 
       this.siteId = site.id;
       this.provisionerId = site.provisionerId;
+      this.locationId = site.locationId;
+      this.organizationId = site.location?.organizationId;
+      this.signingAuthorityId = site.location?.organization.signingAuthorityId;
+      this.physicalAddressId = site.location?.physicalAddressId;
+      this.vendorId = site.vendorId;
 
       this.patchSite(site);
     }
@@ -97,22 +108,22 @@ export class SiteRegistrationStateService {
 
     return {
       id,
-      // locationId
+      locationId: this.locationId,
       location: {
         ...privacyOfficer,
         ...administrator,
         ...technicalSupport,
-        // organizationId
+        organizationId: this.organizationId,
         organization: {
-          // signingAuthorityId
+          signingAuthorityId: this.signingAuthorityId,
           ...signingAuthority,
           ...organizationInformation
         },
-        // physicalAddressId
+        physicalAddressId: this.physicalAddressId,
         physicalAddress: siteAddress,
         ...hoursOperation
       },
-      // vendorId
+      vendorId: this.vendorId,
       vendor,
       provisionerId: this.provisionerId,
       // provisioner
