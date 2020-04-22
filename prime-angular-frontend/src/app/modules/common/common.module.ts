@@ -19,14 +19,14 @@ import { HelpComponent } from '@common/components/help/help.component';
     MaintenanceComponent,
     PageSimpleComponent,
     UnsupportedComponent,
-    HelpComponent,
+    HelpComponent
   ],
   exports: [
     PageNotFoundComponent,
     AccessDeniedComponent,
     MaintenanceComponent,
     HelpComponent,
-    PageSimpleComponent,
+    PageSimpleComponent
   ]
 })
 export class CommonModule { }
