@@ -57,12 +57,13 @@ export class VendorComponent implements OnInit, IPage, IForm {
 
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
-      // this.siteRegistrationResource
-      //   .updateSite(this.form.value)
-      //   .subscribe(() => {
-      this.form.markAsPristine();
-      this.routeUtils.routeRelativeTo(SiteRoutes.HOURS_OPERATION);
-      // });
+      const payload = this.siteRegistrationStateService.site;
+      this.siteRegistrationResource
+        .updateSite(payload)
+        .subscribe(() => {
+          this.form.markAsPristine();
+          this.routeUtils.routeRelativeTo(SiteRoutes.HOURS_OPERATION);
+        });
     }
   }
 
@@ -93,6 +94,7 @@ export class VendorComponent implements OnInit, IPage, IForm {
   }
 
   private initForm() {
-    // TODO populate and pull from separate service with form models
+    const site = this.siteRegistrationService.site;
+    this.siteRegistrationStateService.setSite(site);
   }
 }
