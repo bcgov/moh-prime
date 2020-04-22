@@ -5,7 +5,36 @@
   <div class="organization-agreement"
        [innerHTML]="organizationAgreement | safeHtml"></div>
 
-  <ng-container *ngIf="hasAcceptedAgreement">
+  <!-- TODO refactor later -->
+  <ng-container *ngIf="!hasAcceptedAgreement; else continue">
+    <div class="footer mb-4">
+      <mat-checkbox #accept>
+        <div class="pl-3">
+          I have read and accept the Organization Agreement.
+        </div>
+      </mat-checkbox>
+    </div>
+
+    <div class="row justify-content-end">
+      <div class="col">
+
+        <button mat-stroked-button
+                color="primary"
+                (click)="onBack()">Back</button>
+
+      </div>
+      <div class="col text-right">
+
+        <button mat-flat-button
+                color="primary"
+                [disabled]="!accept?.checked"
+                (click)="onSubmit()">Accept Agreement</button>
+
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #continue>
     <div class="my-2">
       <app-alert type="success"
                  icon="check_circle_outline">
@@ -19,41 +48,23 @@
         </ng-container>
       </app-alert>
     </div>
-  </ng-container>
 
-  <div *ngIf="!hasAcceptedAgreement"
-       class="footer mb-4">
-    <mat-checkbox #accept>
-      <div class="pl-3">
-        I have read and accept the Organization Agreement.
-      </div>
-    </mat-checkbox>
-  </div>
+    <div class="row justify-content-end">
+      <div class="col">
 
-  <div class="row justify-content-end">
-    <div class="col">
-
-      <button mat-stroked-button
-              color="primary"
-              (click)="onBack()">Back</button>
-
-    </div>
-    <div class="col text-right">
-
-      <ng-container *ngIf="!hasAcceptedAgreement; else continue">
-        <button mat-flat-button
+        <button mat-stroked-button
                 color="primary"
-                [disabled]="!accept.checked"
-                (click)="onSubmit()">Accept Agreement</button>
-      </ng-container>
+                (click)="onBack()">Back</button>
 
-      <ng-template #continue>
+      </div>
+      <div class="col text-right">
+
         <button mat-flat-button
                 color="primary"
                 (click)="nextRoute()">Continue</button>
-      </ng-template>
 
+      </div>
     </div>
-  </div>
+  </ng-template>
 
 </app-page>
