@@ -98,6 +98,9 @@ namespace Prime.Services
                 }
             }
 
+            // TODO vendor needs to be stored
+            // TODO parties first and last name through validation errors on every update
+
             var currentSite = await this.GetSiteNoTrackingAsync(siteId);
             var acceptedAgreementDate = currentSite.Location.Organization.AcceptedAgreementDate;
 
