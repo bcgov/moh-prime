@@ -86,14 +86,28 @@ namespace Prime.Services
 
             var site = await this.GetSiteNoTrackingAsync(siteId);
 
-            _context.Entry(site).CurrentValues.SetValues(updatedSite);
+            var acceptedAgreementDate = site.Location.Organization.AcceptedAgreementDate;
 
+            _context.Entry(site).CurrentValues.SetValues(updatedSite);
             _context.Organizations.Remove(site.Location.Organization);
             _context.Locations.Remove(site.Location);
+
+            if (site.Vendor != null)
+            {
+                _context.Vendors.Remove(site.Vendor);
+            }
+            else
+            {
+                _context.Vendors.Add(updatedSite.Vendor);
+            }
 
             site.Location = updatedSite.Location;
             site.Location.Organization = updatedSite.Location.Organization;
             site.Location.Organization.SigningAuthority = updatedSite.Location.Organization.SigningAuthority;
+            site.Vendor = updatedSite.Vendor;
+
+            //Never update
+            site.Location.Organization.AcceptedAgreementDate = acceptedAgreementDate;
 
             await _businessEventService.CreateSiteEventAsync(site.Id, (int)updatedSite.ProvisionerId, "Site Updated");
 
