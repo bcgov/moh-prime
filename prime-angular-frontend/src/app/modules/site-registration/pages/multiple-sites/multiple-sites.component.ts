@@ -44,6 +44,7 @@ export class MultipleSitesComponent implements OnInit {
   }
 
   public onSubmit() {
+    // TODO do nothing since this view makes no sense in the workflow
     this.toastService.openSuccessToast('Site has been updated');
     this.form.markAsPristine();
     this.router.navigate([SiteRoutes.ORGANIZATION_INFORMATION], { relativeTo: this.route.parent });
@@ -66,9 +67,7 @@ export class MultipleSitesComponent implements OnInit {
 
   private initForm() {
     this.hasMultipleSites.valueChanges
-      .subscribe((value: boolean) => {
-        this.toggleOrganizationValidators(value, this.organizationNumber);
-      });
+      .subscribe((value: boolean) => this.toggleOrganizationValidators(value, this.organizationNumber));
   }
 
   private toggleOrganizationValidators(value: boolean, control: FormControl) {

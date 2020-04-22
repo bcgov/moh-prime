@@ -25,6 +25,15 @@ export class SiteRoutes {
   // of the registration process
   public static initialRegistrationRouteOrder(): string[] {
     return [
+      ...SiteRoutes.registrationRoutes(),
+    ];
+  }
+
+  // Registration routes are ordered from the perspective of an
+  // "initial" registration. The order is important for directing the
+  // user incrementally through creating their registration
+  public static registrationRoutes(): string[] {
+    return [
       SiteRoutes.MULTIPLE_SITES,
       SiteRoutes.ORGANIZATION_INFORMATION,
       SiteRoutes.SITE_ADDRESS,

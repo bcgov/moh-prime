@@ -97,8 +97,10 @@ export class RegistrationGuard extends BaseGuard {
 
   private manageRouting(routePath: string, defaultRoute: string, site: Site): boolean {
     const route = this.route(routePath);
-    // Allow access to an extend set of routes
-    const whiteListedRoutes = [];
+    // Allow access to an extended set of routes
+    const whiteListedRoutes = [
+      ...SiteRoutes.registrationRoutes()
+    ];
 
     if (!whiteListedRoutes.includes(route)) {
       return this.navigate(routePath, defaultRoute);

@@ -98,7 +98,7 @@ export class EnrolmentGuard extends BaseGuard {
     }
 
     // Otherwise, routes are directed based on enrolment status
-    //  TODO would never happen and should redirect to an error if it does
+    //  TODO should never happen and should redirect to an error if it does
     if (!enrolment) {
       return this.navigate(routePath, EnrolmentRoutes.DEMOGRAPHIC);
     } else if (enrolment) {
@@ -157,7 +157,7 @@ export class EnrolmentGuard extends BaseGuard {
 
   private manageRouting(routePath: string, defaultRoute: string, enrolment: Enrolment): boolean {
     const route = this.route(routePath);
-    // Allow access to an extend set of routes if the enrollee
+    // Allow access to an extended set of routes if the enrollee
     // has accepted at least one TOA
     const whiteListedRoutes = (!!enrolment.expiryDate)
       ? [
