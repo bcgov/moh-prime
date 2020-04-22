@@ -1,6 +1,7 @@
 <app-page>
 
-  <app-site-collection-notice [isFull]="isFull"
+  <app-site-collection-notice *ngIf="!isCompleted"
+                              [isFull]="isFull"
                               (accepted)="onAccept()"></app-site-collection-notice>
 
 </app-page>
