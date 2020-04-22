@@ -138,6 +138,11 @@ namespace Prime.Services
                 }
             }
 
+            if (updatedSite.Location?.AdministratorPharmaNet != null)
+            {
+                currentSite.Location.AdministratorPharmaNet = updatedSite.Location.AdministratorPharmaNet;
+            }
+
             // currentSite.Location = updatedSite.Location;
 
             // currentSite.Location.Organization = updatedSite.Location.Organization;
