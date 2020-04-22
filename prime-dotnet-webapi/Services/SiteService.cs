@@ -89,7 +89,7 @@ namespace Prime.Services
             _context.Entry(site).CurrentValues.SetValues(updatedSite);
 
             site.Provisioner = updatedSite.Provisioner;
-            site.Provisioner.PhysicalAddress = updatedSite.Provisioner.PhysicalAddress;
+            // site.Provisioner.PhysicalAddress = updatedSite.Provisioner.PhysicalAddress;
             site.Location = updatedSite.Location;
             site.Location.PhysicalAddress = updatedSite.Location.PhysicalAddress;
             site.Location.Organization = updatedSite.Location.Organization;
