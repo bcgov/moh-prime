@@ -82,7 +82,7 @@ export class SiteRegistrationStateService {
    * @description
    * Get the site as JSON for submission.
    */
-  public get site() {
+  public get site(): Site {
     const id = this.siteId;
 
     const organizationInformation = this.organizationInformationForm.getRawValue();
@@ -95,8 +95,30 @@ export class SiteRegistrationStateService {
     const technicalSupport = this.technicalSupportForm.getRawValue();
 
     return {
-
-    };
+      id,
+      // locationId
+      location: {
+        ...privacyOfficer,
+        ...administrator,
+        ...technicalSupport,
+        ...siteAddress,
+        // organizationId
+        organization: {
+          // signingAuthorityId
+          ...signingAuthority,
+          ...organizationInformation
+        },
+        ...siteAddress,
+        ...hoursOperation
+      },
+      // vendorId
+      vendor,
+      provisionerId: this.provisionerId,
+      // provisioner
+      // pec
+      // completed
+      // approvedDate
+    } as Site;
   }
 
   public get isDirty(): boolean {
@@ -212,15 +234,15 @@ export class SiteRegistrationStateService {
   private buildHoursOperationForm(): FormGroup {
     return this.fb.group({
       hoursWeekend: [
-        null,
+        false,
         []
       ],
       hours24: [
-        null,
+        false,
         []
       ],
       hoursSpecial: [
-        null,
+        false,
         []
       ]
     });

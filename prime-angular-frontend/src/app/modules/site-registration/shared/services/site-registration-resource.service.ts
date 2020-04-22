@@ -69,9 +69,8 @@ export class SiteRegistrationResource {
   }
 
   public updateSite(site: Site, isComplete?: boolean): NoContent {
-    const { id } = site;
     const params = this.apiResourceUtilsService.makeHttpParams({ isComplete });
-    return this.apiResource.put<NoContent>(`sites/${id}`, site, params)
+    return this.apiResource.put<NoContent>(`sites/${site.id}`, site, params)
       // TODO remove pipe when ApiResource handles NoContent
       .pipe(
         map(() => {
