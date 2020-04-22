@@ -124,6 +124,20 @@ export class SiteRegistrationResource {
       );
   }
 
+  public acceptOrganizationAgreement(siteId: number): NoContent {
+    return this.apiResource.put<NoContent>(`sites/${siteId}/organization-agreement`)
+      .pipe(
+        map(() => {
+          this.toastService.openSuccessToast('Organization agreement has been accepted');
+        }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization agreement could not be accepted');
+          this.logger.error('[SiteRegistration] SiteRegistrationResource::acceptOrganizationAgreement error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public submitSiteRegistration(site: Site): Observable<string> {
     return this.apiResource.post<string>(`sites/${site.id}/submission`)
       .pipe(

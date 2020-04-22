@@ -192,7 +192,7 @@ export class SiteRegistrationStateService {
   }
 
   private patchSite(site: Site) {
-
+    // TODO might want to patch the form
   }
 
   private get forms(): FormGroup[] {

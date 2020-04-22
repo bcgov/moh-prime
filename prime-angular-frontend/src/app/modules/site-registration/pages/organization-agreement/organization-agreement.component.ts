@@ -35,12 +35,12 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
 
   public onSubmit() {
     if (this.accepted.checked) {
-      // TODO should be a different endpoint than update
-      // this.siteRegistrationResource
-      //   .updateSite()
-      //   .subscribe(() => {
-      this.routeUtils.routeRelativeTo(SiteRoutes.VENDORS);
-      // });
+      const siteId = this.siteRegistrationService.site.id;
+      this.siteRegistrationResource
+        .acceptOrganizationAgreement(siteId)
+        .subscribe(() => {
+          this.routeUtils.routeRelativeTo(SiteRoutes.VENDORS);
+        });
     }
   }
 
@@ -50,8 +50,6 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
 
   public ngOnInit(): void {
     // TODO change the footer if already signed
-    // TODO use service to get check access agreement on organization
-    // this.form = this.siteRegistrationService.;
     this.siteRegistrationResource
       .getOrganizationAgreement()
       .subscribe((organizationAgreement: string) => this.organizationAgreement = organizationAgreement);
