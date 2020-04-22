@@ -16,8 +16,10 @@ namespace Prime.Models
         [StringLength(255)]
         public string HPDID { get; set; }
 
+        [Required]
         public string FirstName { get; set; }
 
+        [Required]
         public string LastName { get; set; }
 
         public DateTime DateOfBirth { get; set; }

@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
-using Prime.Models;
 
 namespace Prime.Migrations
 {
@@ -6604,6 +6603,7 @@ namespace Prime.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("HPDID")
@@ -6614,6 +6614,7 @@ namespace Prime.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Phone")
@@ -10495,7 +10496,7 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Email = "CareConnect@phsa.ca",
-                            Name = "CareConnect",
+                            Name = "Care Connect",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -10546,8 +10547,6 @@ namespace Prime.Migrations
                     b.HasBaseType("Prime.Models.Address");
 
                     b.ToTable("Address");
-
-                    b.HasDiscriminator().HasValue(2);
                 });
 
             modelBuilder.Entity("Prime.Models.PhysicalAddress", b =>
