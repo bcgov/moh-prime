@@ -20,6 +20,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   public busy: Subscription;
   public routeUtils: RouteUtils;
   public organizationAgreement: string;
+  public hasAcceptedAgreement: boolean;
   public SiteRoutes = SiteRoutes;
 
   @ViewChild('accept') accepted: MatCheckbox;
@@ -39,8 +40,12 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
       const siteId = this.siteRegistrationService.site.id;
       this.siteRegistrationResource
         .acceptCurrentOrganizationAgreement(siteId)
-        .subscribe(() => this.routeUtils.routeRelativeTo(SiteRoutes.VENDORS));
+        .subscribe(() => this.nextRoute());
     }
+  }
+
+  public nextRoute() {
+    this.routeUtils.routeRelativeTo(SiteRoutes.VENDORS);
   }
 
   public onBack() {
@@ -48,7 +53,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   }
 
   public ngOnInit(): void {
-    // TODO change the footer if already signed
+    this.hasAcceptedAgreement = !!this.siteRegistrationService.site.location.organization.acceptedAgreementDate;
     this.siteRegistrationResource
       .getOrganizationAgreement()
       .subscribe((organizationAgreement: string) => this.organizationAgreement = organizationAgreement);
