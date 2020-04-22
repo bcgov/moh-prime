@@ -55,7 +55,7 @@ export class RegistrationGuard extends BaseGuard {
         ),
         map(([site, isNewSite]: [Site, boolean]) => {
           // Store the site for access throughout registration, which
-          // will allows be the most up-to-date enrolment
+          // will allows be the most up-to-date site
           this.siteRegistrationService.site$.next(site);
           return this.routeDestination(routePath, site, isNewSite);
         })
@@ -73,34 +73,25 @@ export class RegistrationGuard extends BaseGuard {
    * Determine the route destination based on the site status.
    */
   private routeDestination(routePath: string, site: Site, isNewSite: boolean = false) {
-    console.log('TEST', routePath, site, isNewSite);
-
     // On login the user will always be redirected to
     // the collection notice
     if (routePath.includes(SiteRoutes.COLLECTION_NOTICE)) {
-      console.log('COLLECTION_NOTICE');
       return true;
-    } else if (isNewSite) {
-      console.log('MULTIPLE_SITES');
-      this.navigate(routePath, SiteRoutes.MULTIPLE_SITES);
+    } else if (site) {
+      return (site.completed)
+        ? this.manageCompleteSiteRouting(routePath, site)
+        : this.manageIncompleteSiteRouting(routePath, site);
     }
-
-    // Otherwise, routes are directed based on enrolment status
-    (site.completed)
-      ? this.manageCompleteSiteRouting(routePath, site)
-      : this.manageIncompleteSiteRouting(routePath, site);
 
     // Otherwise, prevent the route from resolving
     return false;
   }
 
   private manageCompleteSiteRouting(routePath: string, site: Site) {
-    console.log('COMPLETE');
     return this.manageRouting(routePath, SiteRoutes.SITE_REVIEW, site);
   }
 
   private manageIncompleteSiteRouting(routePath: string, site: Site) {
-    console.log('INCOMPLETE');
     return this.manageRouting(routePath, SiteRoutes.MULTIPLE_SITES, site);
   }
 
@@ -122,12 +113,12 @@ export class RegistrationGuard extends BaseGuard {
    * when the current route path is not the destination path.
    */
   private navigate(routePath: string, destinationPath: string): boolean {
-    const enrolmentRoutePath = this.config.routes.enrolment;
+    const modulePath = this.config.routes.site;
 
-    if (routePath === `/${enrolmentRoutePath}/${destinationPath}`) {
+    if (routePath === `/${modulePath}/${destinationPath}`) {
       return true;
     } else {
-      this.router.navigate([enrolmentRoutePath, destinationPath]);
+      this.router.navigate([modulePath, destinationPath]);
       return false;
     }
   }

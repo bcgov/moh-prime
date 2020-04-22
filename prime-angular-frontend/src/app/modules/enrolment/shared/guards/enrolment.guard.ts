@@ -64,9 +64,9 @@ export class EnrolmentGuard extends BaseGuard {
     return this.enrolmentResource.enrollee()
       .pipe(
         exhaustMap((enrolment: Enrolment) =>
-          (!enrolment)
-            ? createEnrollee$
-            : of([enrolment, false])
+          (enrolment)
+            ? of([enrolment, false])
+            : createEnrollee$
         ),
         map(([enrolment, isNewEnrolment]: [Enrolment, boolean]) => {
           // Store the enrolment for access throughout enrolment, which
@@ -93,6 +93,7 @@ export class EnrolmentGuard extends BaseGuard {
     if (routePath.includes(EnrolmentRoutes.COLLECTION_NOTICE)) {
       return true;
     } else if (isNewEnrolment) {
+      // TODO needs to be refactored, why would a new enrolment go to OVERVIEW?
       this.navigate(routePath, EnrolmentRoutes.OVERVIEW);
     }
 
