@@ -132,7 +132,7 @@ export class SiteRegistrationStateService {
         ...hoursOperation
       },
       vendorId: vendor.id,
-      vendor,
+      vendor: (vendor.id) ? vendor : null,
       provisionerId: this.provisionerId,
       // pec
       // completed
@@ -299,7 +299,7 @@ export class SiteRegistrationStateService {
   private buildVendorForm(): FormGroup {
     return this.fb.group({
       id: [
-        0,
+        null,
         [Validators.required]
       ]
     });
