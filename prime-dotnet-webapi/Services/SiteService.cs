@@ -118,6 +118,14 @@ namespace Prime.Services
 
             currentSite.Location = updatedSite.Location;
             currentSite.Location.Organization = updatedSite.Location.Organization;
+
+            // Update foreign key only if not null
+            if (updatedSite.VendorId != 0)
+            {
+                currentSite.VendorId = updatedSite.VendorId;
+                _context.Entry(currentSite).Property("VendorId").IsModified = true;
+            }
+
             // site.Location.Organization.SigningAuthority = updatedSite.Location.Organization.SigningAuthority;
 
             // Managed through separate API endpoint, and should never be updated
@@ -181,6 +189,12 @@ namespace Prime.Services
         {
             return await _context.Organizations
                 .SingleOrDefaultAsync(o => o.SigningAuthorityId == partyId);
+        }
+
+        public async Task<Vendor> GetVendorAsync(int vendorId)
+        {
+            return await _context.Vendors
+                .SingleOrDefaultAsync(s => s.Id == vendorId);
         }
 
         private IQueryable<Site> GetBaseSiteQuery()
