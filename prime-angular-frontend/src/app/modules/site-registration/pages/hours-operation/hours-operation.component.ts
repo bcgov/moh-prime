@@ -25,6 +25,7 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   public busy: Subscription;
   public form: FormGroup;
   public routeUtils: RouteUtils;
+  public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
 
   constructor(
@@ -59,13 +60,21 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
         .updateSite(payload)
         .subscribe(() => {
           this.form.markAsPristine();
-          this.routeUtils.routeRelativeTo(SiteRoutes.SIGNING_AUTHORITY);
+          this.nextRoute();
         });
     }
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.VENDORS);
+    this.routeUtils.routeRelativeTo(SiteRoutes.VENDOR);
+  }
+
+  public nextRoute() {
+    if (this.isCompleted) {
+      this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
+    } else {
+      this.routeUtils.routeRelativeTo(SiteRoutes.SIGNING_AUTHORITY);
+    }
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
@@ -86,6 +95,7 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
 
   private initForm() {
     const site = this.siteRegistrationService.site;
+    this.isCompleted = site.completed;
     this.siteRegistrationStateService.setSite(site);
   }
 }

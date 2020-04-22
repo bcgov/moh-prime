@@ -69,7 +69,7 @@ const routes: Routes = [
         data: { title: 'Access Agreement' }
       },
       {
-        path: SiteRoutes.VENDORS,
+        path: SiteRoutes.VENDOR,
         component: VendorComponent,
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'Vendor' }

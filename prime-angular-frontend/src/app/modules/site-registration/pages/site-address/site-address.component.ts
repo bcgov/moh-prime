@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription, Observable } from 'rxjs';
 
-import { Country } from '@shared/enums/country.enum';
-import { Province } from '@shared/enums/province.enum';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { FormUtilsService } from '@common/services/form-utils.service';
 
@@ -28,12 +26,12 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
   public form: FormGroup;
   public routeUtils: RouteUtils;
   public formControlNames: string[];
+  public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private fb: FormBuilder,
     private siteRegistrationResource: SiteRegistrationResource,
     private siteRegistrationService: SiteRegistrationService,
     private siteRegistrationStateService: SiteRegistrationStateService,
@@ -57,13 +55,21 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
         .updateSite(payload)
         .subscribe(() => {
           this.form.markAsPristine();
-          this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_AGREEMENT);
+          this.nextRoute();
         });
     }
   }
 
   public onBack() {
     this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_INFORMATION);
+  }
+
+  public nextRoute() {
+    if (this.isCompleted) {
+      this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
+    } else {
+      this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_AGREEMENT);
+    }
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
@@ -84,6 +90,7 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
 
   private initForm() {
     const site = this.siteRegistrationService.site;
+    this.isCompleted = site.completed;
     this.siteRegistrationStateService.setSite(site);
   }
 }

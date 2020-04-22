@@ -6,7 +6,7 @@ export class SiteRoutes {
   public static ORGANIZATION_INFORMATION = 'organization-information';
   public static SITE_ADDRESS = 'site-address';
   public static ORGANIZATION_AGREEMENT = 'access-agreement';
-  public static VENDORS = 'vendor';
+  public static VENDOR = 'vendor';
   public static HOURS_OPERATION = 'hours-operation';
   public static SIGNING_AUTHORITY = 'signing-authority';
   public static ADMINISTRATOR = 'administrator';
@@ -36,7 +36,7 @@ export class SiteRoutes {
     return [
       ...SiteRoutes.noOrganizationAgreementRoutes(),
       SiteRoutes.HOURS_OPERATION,
-      SiteRoutes.VENDORS,
+      SiteRoutes.VENDOR,
       SiteRoutes.SIGNING_AUTHORITY,
       SiteRoutes.ADMINISTRATOR,
       SiteRoutes.PRIVACY_OFFICER,

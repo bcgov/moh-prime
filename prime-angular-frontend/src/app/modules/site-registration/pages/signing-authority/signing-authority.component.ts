@@ -27,6 +27,7 @@ export class SigningAuthorityComponent implements OnInit, IPage, IForm {
   public form: FormGroup;
   public title: string;
   public routeUtils: RouteUtils;
+  public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
 
   constructor(
@@ -49,13 +50,21 @@ export class SigningAuthorityComponent implements OnInit, IPage, IForm {
         .updateSite(payload)
         .subscribe(() => {
           this.form.markAsPristine();
-          this.routeUtils.routeRelativeTo(SiteRoutes.ADMINISTRATOR);
+          this.nextRoute();
         });
     }
   }
 
   public onBack() {
     this.routeUtils.routeRelativeTo(SiteRoutes.HOURS_OPERATION);
+  }
+
+  public nextRoute() {
+    if (this.isCompleted) {
+      this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
+    } else {
+      this.routeUtils.routeRelativeTo(SiteRoutes.ADMINISTRATOR);
+    }
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
@@ -76,6 +85,7 @@ export class SigningAuthorityComponent implements OnInit, IPage, IForm {
 
   private initForm() {
     const site = this.siteRegistrationService.site;
+    this.isCompleted = site.completed;
     this.siteRegistrationStateService.setSite(site);
   }
 }

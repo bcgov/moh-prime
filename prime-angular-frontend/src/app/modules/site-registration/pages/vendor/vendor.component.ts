@@ -27,6 +27,7 @@ export class VendorComponent implements OnInit, IPage, IForm {
   public routeUtils: RouteUtils;
   // TODO supply through config
   public vendorConfig: { id: number, name: string }[];
+  public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
 
   constructor(
@@ -62,13 +63,21 @@ export class VendorComponent implements OnInit, IPage, IForm {
         .updateSite(payload)
         .subscribe(() => {
           this.form.markAsPristine();
-          this.routeUtils.routeRelativeTo(SiteRoutes.HOURS_OPERATION);
+          this.nextRoute();
         });
     }
   }
 
   public onBack() {
-    this.router.navigate([SiteRoutes.ORGANIZATION_AGREEMENT], { relativeTo: this.route.parent });
+    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_AGREEMENT);
+  }
+
+  public nextRoute() {
+    if (this.isCompleted) {
+      this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
+    } else {
+      this.routeUtils.routeRelativeTo(SiteRoutes.HOURS_OPERATION);
+    }
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
@@ -89,6 +98,7 @@ export class VendorComponent implements OnInit, IPage, IForm {
 
   private initForm() {
     const site = this.siteRegistrationService.site;
+    this.isCompleted = site.completed;
     this.siteRegistrationStateService.setSite(site);
   }
 }

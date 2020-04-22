@@ -39,7 +39,7 @@
 
   </form>
 
-  <app-page-footer [isInitialEnrolment]="true"
+  <app-page-footer [isInitialEnrolment]="!isCompleted"
                    [hasSecondaryAction]="true"
                    (save)="onSubmit()"
                    (back)="onBack()"></app-page-footer>

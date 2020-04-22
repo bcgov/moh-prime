@@ -14,7 +14,6 @@ import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
 import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
-import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
 
 @Component({
   selector: 'app-organization-agreement',
@@ -66,7 +65,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   }
 
   public nextRoute() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.VENDORS);
+    this.routeUtils.routeRelativeTo(SiteRoutes.VENDOR);
   }
 
   public ngOnInit(): void {
