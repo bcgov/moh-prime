@@ -195,7 +195,9 @@ export class SiteRegistrationStateService {
   private patchSite(site: Site) {
     if (site) {
       this.organizationInformationForm.patchValue(site.location.organization);
-      this.siteAddressForm.patchValue(site.location.physicalAddress);
+      if (site.location.physicalAddress) {
+        this.siteAddressForm.patchValue(site.location.physicalAddress);
+      }
       if (site.vendor) {
         this.vendorForm.patchValue(site.vendor);
       }
