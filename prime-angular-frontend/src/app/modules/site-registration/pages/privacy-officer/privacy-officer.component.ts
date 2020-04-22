@@ -75,6 +75,7 @@ export class PrivacyOfficerComponent implements OnInit, IPage, IForm {
   }
 
   private initForm() {
-    // TODO populate and pull from separate service with form models
+    const site = this.siteRegistrationService.site;
+    this.siteRegistrationStateService.setSite(site);
   }
 }
