@@ -28,7 +28,6 @@ namespace Prime.Models
 
         public int? PhysicalAddressId { get; set; }
 
-        [Required]
         public PhysicalAddress PhysicalAddress { get; set; }
 
         public string Email { get; set; }
