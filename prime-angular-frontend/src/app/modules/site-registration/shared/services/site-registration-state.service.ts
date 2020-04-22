@@ -95,7 +95,7 @@ export class SiteRegistrationStateService {
     const technicalSupport = this.technicalSupportForm.getRawValue();
 
     return {
-      // TODO fill in site structure using form data
+
     };
   }
 

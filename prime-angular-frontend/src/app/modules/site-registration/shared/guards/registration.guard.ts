@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Observable, of, from } from 'rxjs';
+import { Observable, from, of } from 'rxjs';
 import { map, exhaustMap } from 'rxjs/operators';
 
 
@@ -40,7 +40,8 @@ export class RegistrationGuard extends BaseGuard {
     const createSite$ = user$
       .pipe(
         map((user: User) => new Party(user)),
-        exhaustMap((party: Party) => [this.siteRegistrationResource.createSite(party), true])
+        exhaustMap((party: Party) => this.siteRegistrationResource.createSite(party)),
+        map((site: Site) => [site, true])
       );
 
     return this.siteRegistrationResource.getSites()
@@ -48,9 +49,9 @@ export class RegistrationGuard extends BaseGuard {
         // TODO based on single site per user
         map((sites: Site[]) => (sites.length) ? sites.shift() : null),
         exhaustMap((site: Site) =>
-          (!site)
-            ? createSite$
-            : of([site, false])
+          (site)
+            ? of([site, false])
+            : createSite$
         ),
         map(([site, isNewSite]: [Site, boolean]) => {
           // Store the site for access throughout registration, which
@@ -72,11 +73,15 @@ export class RegistrationGuard extends BaseGuard {
    * Determine the route destination based on the site status.
    */
   private routeDestination(routePath: string, site: Site, isNewSite: boolean = false) {
+    console.log('TEST', routePath, site, isNewSite);
+
     // On login the user will always be redirected to
     // the collection notice
     if (routePath.includes(SiteRoutes.COLLECTION_NOTICE)) {
+      console.log('COLLECTION_NOTICE');
       return true;
     } else if (isNewSite) {
+      console.log('MULTIPLE_SITES');
       this.navigate(routePath, SiteRoutes.MULTIPLE_SITES);
     }
 
@@ -90,10 +95,12 @@ export class RegistrationGuard extends BaseGuard {
   }
 
   private manageCompleteSiteRouting(routePath: string, site: Site) {
+    console.log('COMPLETE');
     return this.manageRouting(routePath, SiteRoutes.SITE_REVIEW, site);
   }
 
   private manageIncompleteSiteRouting(routePath: string, site: Site) {
+    console.log('INCOMPLETE');
     return this.manageRouting(routePath, SiteRoutes.MULTIPLE_SITES, site);
   }
 
