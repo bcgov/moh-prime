@@ -192,7 +192,18 @@ export class SiteRegistrationStateService {
   }
 
   private patchSite(site: Site) {
-    // TODO might want to patch the form
+    if (site) {
+      console.log('TEST', site);
+
+      this.organizationInformationForm.patchValue(site.location.organization);
+      this.siteAddressForm.patchValue(site.location.physicalAddress);
+      // this.vendorsForm.patchValue();
+      this.hoursOperationForm.patchValue(site.location);
+      // this.signingAuthorityForm.patchValue();
+      // this.privacyOfficerForm.patchValue();
+      // this.administratorForm.patchValue();
+      // this.technicalSupportForm.patchValue();
+    }
   }
 
   private get forms(): FormGroup[] {
