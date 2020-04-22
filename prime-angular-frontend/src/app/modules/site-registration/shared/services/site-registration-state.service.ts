@@ -130,16 +130,15 @@ export class SiteRegistrationStateService {
           },
           ...organizationInformation
         },
-        physicalAddressId: this.physicalAddressId,
-        physicalAddress: siteAddress,
+        physicalAddressId: (this.physicalAddressId) ? this.physicalAddressId : null,
+        physicalAddress: (this.physicalAddressId) ? siteAddress : null,
         ...hoursOperation
       },
       vendorId: vendor.id,
       vendor: (vendor.id) ? vendor : null,
       provisionerId: this.provisionerId,
+      // TODO where is PEC coming from?
       // pec
-      // completed
-      // approvedDate
     } as Site; // Force type definition
   }
 
