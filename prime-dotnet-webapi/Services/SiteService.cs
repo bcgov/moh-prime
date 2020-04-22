@@ -138,6 +138,16 @@ namespace Prime.Services
                 }
             }
 
+            if (updatedSite.Location?.AdministratorPharmaNet != null)
+            {
+                currentSite.Location.AdministratorPharmaNet = updatedSite.Location.AdministratorPharmaNet;
+            }
+
+            if (updatedSite.Location?.PrivacyOfficer != null)
+            {
+                currentSite.Location.PrivacyOfficer = updatedSite.Location.PrivacyOfficer;
+            }
+
             // currentSite.Location = updatedSite.Location;
 
             // currentSite.Location.Organization = updatedSite.Location.Organization;
