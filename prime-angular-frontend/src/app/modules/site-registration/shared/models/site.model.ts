@@ -10,7 +10,7 @@ export interface Site {
   vendor: Vendor;
   provisionerId: number;
   provisioner: Party;
-  PEC: string;
+  pec: string;
   completed: boolean;
   approvedDate: string;
 }

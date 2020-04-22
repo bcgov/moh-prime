@@ -50,8 +50,12 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
 
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
+      const payload = this.siteRegistrationStateService.site;
+
+      console.log('PAYLOAD', payload);
+
       this.siteRegistrationResource
-        .updateSite(this.form.value)
+        .updateSite(payload)
         .subscribe(() => {
           this.form.markAsPristine();
           this.routeUtils.routeRelativeTo(SiteRoutes.SITE_ADDRESS);
@@ -80,6 +84,7 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
   }
 
   private initForm() {
-    // TODO populate and pull from separate service with form models
+    const site = this.siteRegistrationService.site;
+    this.siteRegistrationStateService.setSite(site);
   }
 }
