@@ -243,7 +243,7 @@ export class SiteRegistrationStateService {
         []
       ],
       hoursSpecial: [
-        false,
+        null,
         []
       ]
     });
