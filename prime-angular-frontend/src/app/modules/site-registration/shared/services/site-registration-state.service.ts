@@ -121,6 +121,7 @@ export class SiteRegistrationStateService {
         technicalSupport: (technicalSupport.firstName) ? technicalSupport : null,
         organizationId: this.organizationId,
         organization: {
+          id: this.organizationId,
           signingAuthorityId: this.signingAuthorityId,
           signingAuthority,
           ...organizationInformation
