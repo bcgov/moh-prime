@@ -22,7 +22,7 @@ export class SiteRegistrationStateService {
   public vendorForm: FormGroup;
   public signingAuthorityForm: FormGroup;
   public privacyOfficerForm: FormGroup;
-  public administratorForm: FormGroup;
+  public administratorPharmaNetForm: FormGroup;
   public technicalSupportForm: FormGroup;
 
   // TODO move the IDs into the forms so don't need to be tracked separately
@@ -47,7 +47,7 @@ export class SiteRegistrationStateService {
     this.vendorForm = this.buildVendorForm();
     this.signingAuthorityForm = this.buildSigningAuthorityForm();
     this.privacyOfficerForm = this.buildPrivacyOfficerForm();
-    this.administratorForm = this.buildAdministratorForm();
+    this.administratorPharmaNetForm = this.buildAdministratorPharmaNetForm();
     this.technicalSupportForm = this.buildTechnicalSupportForm();
 
     // Initial state of the form is unpatched and ready for
@@ -108,16 +108,16 @@ export class SiteRegistrationStateService {
     const vendor = this.vendorForm.getRawValue();
     const signingAuthority = this.signingAuthorityForm.getRawValue();
     const privacyOfficer = this.privacyOfficerForm.getRawValue();
-    const administrator = this.administratorForm.getRawValue();
+    const administratorPharmaNet = this.administratorPharmaNetForm.getRawValue();
     const technicalSupport = this.technicalSupportForm.getRawValue();
 
     return {
       id,
       locationId: this.locationId,
       location: {
-        ...privacyOfficer,
-        ...administrator,
-        ...technicalSupport,
+        privacyOfficer,
+        administratorPharmaNet,
+        technicalSupport,
         organizationId: this.organizationId,
         organization: {
           signingAuthorityId: this.signingAuthorityId,
@@ -185,7 +185,7 @@ export class SiteRegistrationStateService {
   }
 
   public isAdministratorValid(): boolean {
-    return this.administratorForm.valid;
+    return this.administratorPharmaNetForm.valid;
   }
 
   public isTechnicalSupportValid(): boolean {
@@ -213,7 +213,7 @@ export class SiteRegistrationStateService {
       if (site.location.administratorPharmaNet) {
         // TODO ignore physical address for now
         const { physicalAddress, ...remainder } = site.location.administratorPharmaNet;
-        this.administratorForm.patchValue(site.location.administratorPharmaNet);
+        this.administratorPharmaNetForm.patchValue(site.location.administratorPharmaNet);
       }
       if (site.location.technicalSupport) {
         // TODO ignore physical address for now
@@ -231,7 +231,7 @@ export class SiteRegistrationStateService {
       this.vendorForm,
       this.signingAuthorityForm,
       this.privacyOfficerForm,
-      this.administratorForm,
+      this.administratorPharmaNetForm,
       this.technicalSupportForm
     ];
   }
@@ -308,7 +308,7 @@ export class SiteRegistrationStateService {
     return this.partyFormGroup();
   }
 
-  private buildAdministratorForm(): FormGroup {
+  private buildAdministratorPharmaNetForm(): FormGroup {
     return this.partyFormGroup();
   }
 

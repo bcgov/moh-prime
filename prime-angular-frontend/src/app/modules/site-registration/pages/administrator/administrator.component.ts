@@ -71,7 +71,7 @@ export class AdministratorComponent implements OnInit, IPage, IForm {
   }
 
   private createFormInstance() {
-    this.form = this.siteRegistrationStateService.administratorForm;
+    this.form = this.siteRegistrationStateService.administratorPharmaNetForm;
   }
 
   private initForm() {
