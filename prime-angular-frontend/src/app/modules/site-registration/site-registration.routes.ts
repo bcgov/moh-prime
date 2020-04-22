@@ -25,7 +25,7 @@ export class SiteRoutes {
   // of the registration process
   public static initialRegistrationRouteOrder(): string[] {
     return [
-      ...SiteRoutes.registrationRoutes(),
+      ...SiteRoutes.registrationRoutes()
     ];
   }
 
@@ -34,10 +34,7 @@ export class SiteRoutes {
   // user incrementally through creating their registration
   public static registrationRoutes(): string[] {
     return [
-      SiteRoutes.MULTIPLE_SITES,
-      SiteRoutes.ORGANIZATION_INFORMATION,
-      SiteRoutes.SITE_ADDRESS,
-      SiteRoutes.ORGANIZATION_AGREEMENT,
+      ...SiteRoutes.noOrganizationAgreementRoutes(),
       SiteRoutes.HOURS_OPERATION,
       SiteRoutes.VENDORS,
       SiteRoutes.SIGNING_AUTHORITY,
@@ -45,6 +42,21 @@ export class SiteRoutes {
       SiteRoutes.PRIVACY_OFFICER,
       SiteRoutes.TECHNICAL_SUPPORT,
       SiteRoutes.SITE_REVIEW,
+      ...SiteRoutes.siteRegistrationSubmissionRoutes()
+    ];
+  }
+
+  public static noOrganizationAgreementRoutes(): string[] {
+    return [
+      SiteRoutes.MULTIPLE_SITES,
+      SiteRoutes.ORGANIZATION_INFORMATION,
+      SiteRoutes.SITE_ADDRESS,
+      SiteRoutes.ORGANIZATION_AGREEMENT,
+    ];
+  }
+
+  public static siteRegistrationSubmissionRoutes(): string[] {
+    return [
       SiteRoutes.CONFIRMATION
     ];
   }
