@@ -434,7 +434,7 @@ namespace Prime.Services
             return await _context.Enrollees
                 .Include(e => e.AccessTerms)
                 .Where(e => hpdids.Contains(e.HPDID))
-                .Where(e => e.CurrentStatus.StatusCode != (int)StatusType.Declined)
+                .Where(e => !e.CurrentStatus.IsType(StatusType.Declined))
                 .Select(e => HpdidLookup.FromEnrollee(e))
                 .ToListAsync();
         }
