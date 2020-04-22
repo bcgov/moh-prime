@@ -5,5 +5,4 @@ export class AppRoutes {
   public static PAGE_NOT_FOUND = 'page-not-found';
   public static HELP = 'help';
   public static DEFAULT = '**';
-  public static ACCESS_DECLINED = 'access-declined';
 }
