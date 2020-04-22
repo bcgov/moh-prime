@@ -15,7 +15,7 @@ export class Party {
   email: string = null;
   phone: string = null;
   fax?: string = null;
-  SMSPhone?: string = null;
+  smsPhone?: string = null;
 
   constructor(user: User) {
     this.userId = user.userId;

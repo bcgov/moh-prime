@@ -1,23 +1,27 @@
-<app-enrollee-property title="Name">
-  {{ '' | default }}
+<app-enrollee-property title="First Name">
+  {{ party.firstName | default }}
+</app-enrollee-property>
+
+<app-enrollee-property title="Last Name">
+  {{ party.lastName | default }}
 </app-enrollee-property>
 
 <app-enrollee-property title="Job or Role Title">
-  {{ '' | default }}
+  {{ party.jobRoleTitle | default }}
 </app-enrollee-property>
 
 <app-enrollee-property title="Phone">
-  {{ '' | default }}
+  {{ party.phone | phone | default }}
 </app-enrollee-property>
 
 <app-enrollee-property title="Fax">
-  {{ '' | default }}
+  {{ party.fax | default }}
 </app-enrollee-property>
 
 <app-enrollee-property title="SMS Phone">
-  {{ '' | default }}
+  {{ party.smsPhone | phone | default }}
 </app-enrollee-property>
 
 <app-enrollee-property title="Email">
-  {{ '' | default }}
+  {{ party.email | default }}
 </app-enrollee-property>

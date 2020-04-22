@@ -7,6 +7,7 @@ import { RouteStateService } from '@core/services/route-state.service';
 import { Province } from '@shared/enums/province.enum';
 import { Country } from '@shared/enums/country.enum';
 import { Address } from '@shared/models/address.model';
+import { FormControlValidators } from '@shared/validators/form-control.validators';
 
 import { Site } from '@registration/shared/models/site.model';
 import { Party } from '@registration/shared/models/party.model';
@@ -195,18 +196,28 @@ export class SiteRegistrationStateService {
     if (site) {
       this.organizationInformationForm.patchValue(site.location.organization);
       this.siteAddressForm.patchValue(site.location.physicalAddress);
-      if (site.vendorId) {
-        this.vendorForm.patchValue(site.vendorId);
+      if (site.vendor) {
+        this.vendorForm.patchValue(site.vendor);
       }
       this.hoursOperationForm.patchValue(site.location);
-      this.signingAuthorityForm.patchValue(site.location.organization.signingAuthority);
+      if (site.location.organization.signingAuthority) {
+        // TODO ignore physical address for now
+        const { physicalAddress, ...remainder } = site.location.organization.signingAuthority;
+        this.signingAuthorityForm.patchValue(remainder);
+      }
       if (site.location.privacyOfficer) {
+        // TODO ignore physical address for now
+        const { physicalAddress, ...remainder } = site.location.privacyOfficer;
         this.privacyOfficerForm.patchValue(site.location.privacyOfficer);
       }
       if (site.location.administratorPharmaNet) {
+        // TODO ignore physical address for now
+        const { physicalAddress, ...remainder } = site.location.administratorPharmaNet;
         this.administratorForm.patchValue(site.location.administratorPharmaNet);
       }
       if (site.location.technicalSupport) {
+        // TODO ignore physical address for now
+        const { physicalAddress, ...remainder } = site.location.technicalSupport;
         this.technicalSupportForm.patchValue(site.location.technicalSupport);
       }
     }
@@ -290,18 +301,89 @@ export class SiteRegistrationStateService {
   }
 
   private buildSigningAuthorityForm(): FormGroup {
-    return this.fb.group({});
+    return this.partyFormGroup(true);
   }
 
   private buildPrivacyOfficerForm(): FormGroup {
-    return this.fb.group({});
+    return this.partyFormGroup();
   }
 
   private buildAdministratorForm(): FormGroup {
-    return this.fb.group({});
+    return this.partyFormGroup();
   }
 
   private buildTechnicalSupportForm(): FormGroup {
-    return this.fb.group({});
+    return this.partyFormGroup();
+  }
+
+  private partyFormGroup(disabled: boolean = false): FormGroup {
+    return this.fb.group({
+      firstName: [
+        { value: null, disabled },
+        [Validators.required]
+      ],
+      lastName: [
+        { value: null, disabled },
+        [Validators.required]
+      ],
+      jobRoleTitle: [
+        null,
+        [Validators.required]
+      ],
+      phone: [
+        null,
+        [
+          Validators.required,
+          FormControlValidators.phone
+        ]
+      ],
+      fax: [
+        null,
+        [
+          Validators.required,
+          FormControlValidators.phone
+        ]
+      ],
+      smsPhone: [
+        null,
+        [
+          Validators.required,
+          FormControlValidators.phone
+        ]
+      ],
+      email: [
+        null,
+        [
+          Validators.required,
+          FormControlValidators.email
+        ]
+      ],
+      physicalAddress: this.fb.group({
+        countryCode: [
+          { value: null, disabled: false },
+          []
+        ],
+        provinceCode: [
+          { value: null, disabled: false },
+          []
+        ],
+        street: [
+          { value: null, disabled: false },
+          []
+        ],
+        street2: [
+          { value: null, disabled: false },
+          []
+        ],
+        city: [
+          { value: null, disabled: false },
+          []
+        ],
+        postal: [
+          { value: null, disabled: false },
+          []
+        ]
+      })
+    });
   }
 }

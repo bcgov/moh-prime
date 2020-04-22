@@ -40,19 +40,23 @@
     </app-page-subheader>
 
     <app-enrollee-property title="Address">
-      {{ site.location.physicalAddress.street | default }}
+      {{ site.location?.physicalAddress.street | default }}
     </app-enrollee-property>
 
     <app-enrollee-property title="City">
-      {{ site.location.physicalAddress.city | default }}
+      {{ site.location?.physicalAddress.city | default }}
     </app-enrollee-property>
 
     <app-enrollee-property title="Province">
-      {{ site.location.physicalAddress.province | default }}
+      {{ site.location?.physicalAddress.provinceCode | configCode: 'provinces' | default }}
     </app-enrollee-property>
 
     <app-enrollee-property title="Postal Code">
-      {{ site.location.physicalAddress.postal | default }}
+      {{ site.location?.physicalAddress.postal | postal | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="Country">
+      {{ site.location?.physicalAddress.countryCode | configCode: 'countries' | default }}
     </app-enrollee-property>
 
   </section>
@@ -115,7 +119,8 @@
                 (click)="onRoute(SiteRoutes.SIGNING_AUTHORITY)">edit</mat-icon>
     </app-page-subheader>
 
-    <app-registrant-profile-review></app-registrant-profile-review>
+    <app-registrant-profile-review [party]="site.location.organization.signingAuthority">
+    </app-registrant-profile-review>
 
   </section>
 
@@ -127,7 +132,8 @@
                 (click)="onRoute(SiteRoutes.ADMINISTRATOR)">edit</mat-icon>
     </app-page-subheader>
 
-    <app-registrant-profile-review></app-registrant-profile-review>
+    <app-registrant-profile-review [party]="site.location.administratorPharmaNet">
+    </app-registrant-profile-review>
 
   </section>
 
@@ -139,7 +145,8 @@
                 (click)="onRoute(SiteRoutes.PRIVACY_OFFICER)">edit</mat-icon>
     </app-page-subheader>
 
-    <app-registrant-profile-review></app-registrant-profile-review>
+    <app-registrant-profile-review [party]="site.location.privacyOfficer">
+    </app-registrant-profile-review>
 
   </section>
 
@@ -151,7 +158,8 @@
                 (click)="onRoute(SiteRoutes.TECHNICAL_SUPPORT)">edit</mat-icon>
     </app-page-subheader>
 
-    <app-registrant-profile-review></app-registrant-profile-review>
+    <app-registrant-profile-review [party]="site.location.technicalSupport">
+    </app-registrant-profile-review>
 
   </section>
 

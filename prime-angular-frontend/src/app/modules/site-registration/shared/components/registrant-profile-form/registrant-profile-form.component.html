@@ -55,8 +55,11 @@
         <mat-form-field class="w-100">
           <input matInput
                  placeholder="Phone"
-                 formControlName="phone">
-          <mat-error>Required</mat-error>
+                 formControlName="phone"
+                 mask="(000) 000-0000"
+                 [showMaskTyped]="false">
+          <mat-error *ngIf="phone.hasError('required')">Required</mat-error>
+          <mat-error *ngIf="phone.hasError('phone')">Must be a valid phone number</mat-error>
         </mat-form-field>
 
       </div>
@@ -65,8 +68,11 @@
         <mat-form-field class="w-100">
           <input matInput
                  placeholder="Fax"
-                 formControlName="fax">
-          <mat-error>Required</mat-error>
+                 formControlName="fax"
+                 mask="(000) 000-0000"
+                 [showMaskTyped]="false">
+          <mat-error *ngIf="fax.hasError('required')">Required</mat-error>
+          <mat-error *ngIf="fax.hasError('phone')">Must be a valid phone number</mat-error>
         </mat-form-field>
 
       </div>
@@ -75,8 +81,11 @@
         <mat-form-field class="w-100">
           <input matInput
                  placeholder="SMS Phone"
-                 formControlName="smsPhone">
-          <mat-error>Required</mat-error>
+                 formControlName="smsPhone"
+                 mask="(000) 000-0000"
+                 [showMaskTyped]="false">
+          <mat-error *ngIf="smsPhone.hasError('required')">Required</mat-error>
+          <mat-error *ngIf="smsPhone.hasError('phone')">Must be a valid phone number</mat-error>
         </mat-form-field>
 
       </div>
@@ -86,7 +95,8 @@
           <input matInput
                  placeholder="Email"
                  formControlName="email">
-          <mat-error>Required</mat-error>
+          <mat-error *ngIf="email.hasError('required')">Required</mat-error>
+          <mat-error *ngIf="email.hasError('email')">Must be a valid email address</mat-error>
         </mat-form-field>
 
       </div>
@@ -94,20 +104,20 @@
 
     <mat-slide-toggle class="mb-3"
                       color="primary"
-                      [checked]="hasSeparateAddress"
-                      (change)="onSeparateAddressChange()">
+                      [checked]="hasPhysicalAddress"
+                      (change)="onPhysicalAddressChange()">
       My Address if different from Site Address
     </mat-slide-toggle>
   </section>
 
-  <ng-container *ngIf="hasSeparateAddress">
+  <ng-container *ngIf="hasPhysicalAddress">
 
     <section class="mb-3">
       <app-page-subheader>
-        <ng-container appPageSubheaderTitle>Separate Address</ng-container>
+        <ng-container appPageSubheaderTitle>My Address</ng-container>
       </app-page-subheader>
 
-      <app-address [form]="separateAddress"></app-address>
+      <app-address [form]="physicalAddress"></app-address>
     </section>
 
   </ng-container>

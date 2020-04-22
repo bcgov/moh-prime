@@ -3,6 +3,7 @@
   <app-site-progress-indicator [currentRoute]="SiteRoutes.SIGNING_AUTHORITY"></app-site-progress-indicator>
 
   <app-registrant-profile-form [title]="title"
+                               [form]="form"
                                (submit)="onSubmit($event)">
     <ng-container appPageSubheaderSummary>
       The Signing Authority must be a duly authorized representative of the organization with authority to submit the

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription, Observable } from 'rxjs';
@@ -12,6 +12,7 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { IForm } from '@registration/shared/interfaces/form.interface';
+import { Party } from '@registration/shared/models/party.model';
 import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
 import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
 import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
@@ -31,7 +32,6 @@ export class PrivacyOfficerComponent implements OnInit, IPage, IForm {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private fb: FormBuilder,
     private siteRegistrationResource: SiteRegistrationResource,
     private siteRegistrationService: SiteRegistrationService,
     private siteRegistrationStateService: SiteRegistrationStateService,
@@ -42,10 +42,16 @@ export class PrivacyOfficerComponent implements OnInit, IPage, IForm {
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
-  // TODO provide model when backend exists
-  public onSubmit(data: any) {
-    // TODO use ViewChild to get form value from child component when onSubmit invoked by page footer
-    this.routeUtils.routeRelativeTo(SiteRoutes.TECHNICAL_SUPPORT);
+  public onSubmit(data: Party) {
+    if (this.formUtilsService.checkValidity(this.form)) {
+      const payload = this.siteRegistrationStateService.site;
+      this.siteRegistrationResource
+        .updateSite(payload)
+        .subscribe(() => {
+          this.form.markAsPristine();
+          this.routeUtils.routeRelativeTo(SiteRoutes.TECHNICAL_SUPPORT);
+        });
+    }
   }
 
   public onBack() {
