@@ -283,7 +283,7 @@ export class SiteRegistrationStateService {
   private buildVendorForm(): FormGroup {
     return this.fb.group({
       id: [
-        null,
+        0,
         [Validators.required]
       ]
     });
