@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-
+// TODO footer is too stringent make it more generic and wrap to apply logic
 @Component({
   selector: 'app-page-footer',
   templateUrl: './page-footer.component.html',

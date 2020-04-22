@@ -44,12 +44,12 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
     }
   }
 
-  public nextRoute() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.VENDORS);
-  }
-
   public onBack() {
     this.routeUtils.routeRelativeTo(SiteRoutes.SITE_ADDRESS);
+  }
+
+  public nextRoute() {
+    this.routeUtils.routeRelativeTo(SiteRoutes.VENDORS);
   }
 
   public ngOnInit(): void {

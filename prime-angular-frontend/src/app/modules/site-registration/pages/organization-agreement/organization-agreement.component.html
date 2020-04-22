@@ -5,36 +5,7 @@
   <div class="organization-agreement"
        [innerHTML]="organizationAgreement | safeHtml"></div>
 
-  <ng-container *ngIf="!hasAcceptedAgreement; else footer">
-    <div class=" footer mb-4">
-      <mat-checkbox #accept>
-        <div class="pl-3">
-          I have read and accept the Organization Agreement.
-        </div>
-      </mat-checkbox>
-    </div>
-
-    <div class="row justify-content-end">
-      <div class="col">
-
-        <button mat-stroked-button
-                color="primary"
-                (click)="onBack()">Back</button>
-
-      </div>
-      <div class="col text-right">
-
-        <button mat-flat-button
-                color="primary"
-                [disabled]="!accept.checked"
-                (click)="onSubmit()">Accept Agreement</button>
-
-      </div>
-    </div>
-  </ng-container>
-
-  <ng-template #footer>
-
+  <ng-container *ngIf="hasAcceptedAgreement">
     <app-alert type="success"
                icon="check_circle_outline">
       <ng-container #alertTitle
@@ -46,13 +17,41 @@
         The organization agreement has already been accepted.
       </ng-container>
     </app-alert>
+  </ng-container>
 
-    <!-- TODO update footer so doesn't use the word enrolment -->
-    <!-- TODO footer is too strigent for generic use, and needs to be updated and wrapped -->
-    <app-page-footer [isInitialEnrolment]="true"
-                     [hasSecondaryAction]="true"
-                     (save)="nextRoute()"
-                     (back)="onBack()"></app-page-footer>
-  </ng-template>
+  <div *ngIf="hasAcceptedAgreement"
+       class="footer mb-4">
+    <mat-checkbox #accept>
+      <div class="pl-3">
+        I have read and accept the Organization Agreement.
+      </div>
+    </mat-checkbox>
+  </div>
+
+  <div class="row justify-content-end">
+    <div class="col">
+
+      <button mat-stroked-button
+              color="primary"
+              (click)="onBack()">Back</button>
+
+    </div>
+    <div class="col text-right">
+
+      <ng-container *ngIf="!hasAcceptedAgreement; else continue">
+        <button mat-flat-button
+                color="primary"
+                [disabled]="!accept.checked"
+                (click)="onSubmit()">Accept Agreement</button>
+      </ng-container>
+
+      <ng-template #continue>
+        <button mat-flat-button
+                color="primary"
+                (click)="nextRoute()">Continue</button>
+      </ng-template>
+
+    </div>
+  </div>
 
 </app-page>
