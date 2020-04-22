@@ -13,6 +13,7 @@ import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
 import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
+import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
 
 @Component({
   selector: 'app-site-review',
@@ -28,29 +29,31 @@ export class SiteReviewComponent implements OnInit, IPage {
     private route: ActivatedRoute,
     private router: Router,
     private siteRegistrationResource: SiteRegistrationResource,
+    private siteRegistrationStateService: SiteRegistrationStateService,
     private dialog: MatDialog
   ) {
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
   public onSubmit() {
-    // const data: DialogOptions = {
-    //   title: 'Submit Site Registration',
-    //   message: 'When your registration is submitted it can no longer be updated. Are you ready to submit your registration?',
-    //   actionText: 'Submit Registration'
-    // };
-    // this.busy = this.dialog.open(ConfirmDialogComponent, { data })
-    //   .afterClosed()
-    //   .pipe(
-    //     exhaustMap((result: boolean) =>
-    //       // TODO pass the site that is being registered
-    //       (result)
-    //         ? this.siteRegistrationResource.submitSiteRegistration({})
-    //         : EMPTY
-    //     )
-    //   )
-    //   .subscribe(() => this.routeUtils.routeRelativeTo(SiteRoutes.CONFIRMATION));
-    this.routeUtils.routeRelativeTo(SiteRoutes.CONFIRMATION)
+    const payload = this.siteRegistrationStateService.site;
+    const data: DialogOptions = {
+      title: 'Submit Site Registration',
+      message: 'When your registration is submitted it can no longer be updated. Are you ready to submit your registration?',
+      actionText: 'Submit Registration'
+    };
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result: boolean) =>
+          // TODO pass the site that is being registered
+          (result)
+            ? this.siteRegistrationResource.updateSite(payload, true)
+            : EMPTY
+        )
+      )
+      .subscribe(() => this.routeUtils.routeRelativeTo(SiteRoutes.CONFIRMATION));
+    // this.routeUtils.routeRelativeTo(SiteRoutes.CONFIRMATION);
   }
 
   public onRoute(routePath: string) {
