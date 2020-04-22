@@ -189,19 +189,18 @@ namespace Prime.Controllers
         }
 
 
-        // PUT: api/Sites/organization-agreement
+        // PUT: api/Sites/5/organization-agreement
         /// <summary>
         /// Accept an organization agreement
         /// </summary>
-        /// <param name="signingAuthorityId"></param>
         /// <param name="siteId"></param>
-        [HttpPut(Name = nameof(AcceptCurrentOrganizationAgreement))]
+        [HttpPut("{siteId}/organization-agreement", Name = nameof(AcceptCurrentOrganizationAgreement))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> AcceptCurrentOrganizationAgreement(int signingAuthorityId, int siteId)
+        public async Task<IActionResult> AcceptCurrentOrganizationAgreement(int siteId)
         {
             var site = await _siteService.GetSiteNoTrackingAsync(siteId);
             if (site == null)
@@ -214,7 +213,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            await _siteService.AcceptCurrentOrganizationAgreementAsync(signingAuthorityId);
+            await _siteService.AcceptCurrentOrganizationAgreementAsync(site.Location.Organization.SigningAuthorityId);
 
             return NoContent();
         }
