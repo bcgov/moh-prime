@@ -58,7 +58,7 @@ import { AccessDeclinedComponent } from './pages/access-declined/access-declined
     NextStepsInfographicComponent,
     EnrolmentCollectionNoticeComponent,
     EnrolmentProgressIndicatorComponent,
-    AccessDeclinedComponent,
+    AccessDeclinedComponent
   ],
   imports: [
     SharedModule,
