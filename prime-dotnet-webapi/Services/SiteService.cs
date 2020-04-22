@@ -98,26 +98,54 @@ namespace Prime.Services
                 }
             }
 
-            // TODO vendor needs to be stored
-            // TODO parties first and last name through validation errors on every update, which
-            // is currently be handled by the frontend
             // TODO signing authority needs a partial update to non-BCSC fields
 
-            var currentSite = await this.GetSiteNoTrackingAsync(siteId);
+            var currentSite = await this.GetSiteAsync(siteId);
             var acceptedAgreementDate = currentSite.Location.Organization.AcceptedAgreementDate;
+            var userId = currentSite.Location.Organization.SigningAuthority.UserId;
+
+            // // Update signing authority
+            // var currentSigningAuthority = currentSite.Location.Organization.SigningAuthority;
+            // var updatedSigningAuthority = updatedSite.Location.Organization.SigningAuthority;
+            // if (updatedSigningAuthority != null)
+            // {
+            //     // _context.Parties.Attach(currentSigningAuthority);
+            //     currentSigningAuthority.JobRoleTitle = updatedSigningAuthority.JobRoleTitle;
+            // }
 
             _context.Entry(currentSite).CurrentValues.SetValues(updatedSite);
-            _context.Organizations.Remove(currentSite.Location.Organization);
-            _context.Locations.Remove(currentSite.Location);
+            // _context.Organizations.Remove(currentSite.Location.Organization);
+            // _context.Locations.Remove(currentSite.Location);
 
-            if (currentSite.Provisioner.PhysicalAddress != null)
+            if (updatedSite.Provisioner?.PhysicalAddress != null)
             {
-                _context.Addresses.Remove(currentSite.Provisioner.PhysicalAddress);
-                currentSite.Provisioner.PhysicalAddress = updatedSite.Provisioner.PhysicalAddress;
+                // _context.Addresses.Remove(currentSite.Provisioner.PhysicalAddress);
+                // currentSite.Provisioner.PhysicalAddress = updatedSite.Provisioner.PhysicalAddress;
+                this._context.Entry(currentSite.Provisioner.PhysicalAddress).CurrentValues.SetValues(updatedSite.Provisioner.PhysicalAddress);
             }
 
-            currentSite.Location = updatedSite.Location;
-            currentSite.Location.Organization = updatedSite.Location.Organization;
+            this._context.Entry(currentSite.Location).CurrentValues.SetValues(updatedSite.Location);
+
+            if (updatedSite.Location?.PhysicalAddress != null)
+            {
+                if (currentSite.Location.PhysicalAddress == null)
+                {
+                    currentSite.Location.PhysicalAddress = updatedSite.Location.PhysicalAddress;
+                }
+                else
+                {
+                    this._context.Entry(currentSite.Location.PhysicalAddress).CurrentValues.SetValues(updatedSite.Location.PhysicalAddress);
+                }
+            }
+
+            // currentSite.Location = updatedSite.Location;
+
+            // currentSite.Location.Organization = updatedSite.Location.Organization;
+            this._context.Entry(currentSite.Location.Organization).CurrentValues.SetValues(updatedSite.Location.Organization);
+
+            this._context.Entry(currentSite.Location.Organization.SigningAuthority).CurrentValues.SetValues(updatedSite.Location.Organization.SigningAuthority);
+            // Keep userId the same
+            currentSite.Location.Organization.SigningAuthority.UserId = userId;
 
             // Update foreign key only if not null
             if (updatedSite.VendorId != 0)
