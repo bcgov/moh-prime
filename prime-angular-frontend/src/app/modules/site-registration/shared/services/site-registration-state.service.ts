@@ -8,6 +8,7 @@ import { Province } from '@shared/enums/province.enum';
 import { Country } from '@shared/enums/country.enum';
 
 import { Site } from '@registration/shared/models/site.model';
+import { Party } from '@registration/shared/models/party.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,7 @@ export class SiteRegistrationStateService {
   private patched: boolean;
   private siteId: number;
   private provisionerId: number;
+  private provisioner: Party;
   private locationId: number;
   private organizationId: number;
   private vendorId: number;
@@ -79,6 +81,7 @@ export class SiteRegistrationStateService {
 
       this.siteId = site.id;
       this.provisionerId = site.provisionerId;
+      this.provisioner = site.provisioner;
       this.locationId = site.locationId;
       this.organizationId = site.location?.organizationId;
       this.signingAuthorityId = site.location?.organization.signingAuthorityId;
@@ -126,7 +129,7 @@ export class SiteRegistrationStateService {
       vendorId: this.vendorId,
       vendor,
       provisionerId: this.provisionerId,
-      // provisioner
+      provisioner: this.provisioner
       // pec
       // completed
       // approvedDate
