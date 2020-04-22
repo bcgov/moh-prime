@@ -82,6 +82,21 @@ namespace Prime.Services
 
         public async Task<int> UpdateSiteAsync(int siteId, Site updatedSite, bool isCompleted = false)
         {
+            if (isCompleted)
+            {
+                var siteTracked = await this.GetSiteAsync(siteId);
+                siteTracked.Completed = isCompleted;
+
+                try
+                {
+                    return await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    return 0;
+                }
+            }
+
             var site = await this.GetSiteNoTrackingAsync(siteId);
 
             var acceptedAgreementDate = site.Location.Organization.AcceptedAgreementDate;
@@ -90,19 +105,26 @@ namespace Prime.Services
             _context.Organizations.Remove(site.Location.Organization);
             _context.Locations.Remove(site.Location);
 
+            if (site.Provisioner.PhysicalAddress != null)
+            {
+                _context.Addresses.Remove(site.Provisioner.PhysicalAddress);
+                site.Provisioner.PhysicalAddress = updatedSite.Provisioner.PhysicalAddress;
+            }
+
+            // _context.Parties.Remove(site.Provisioner);
+
             site.Location = updatedSite.Location;
             site.Location.Organization = updatedSite.Location.Organization;
-            site.Location.Organization.SigningAuthority = updatedSite.Location.Organization.SigningAuthority;
+            site.Provisioner = updatedSite.Provisioner;
 
-            if (isCompleted)
-            {
-                site.Completed = isCompleted;
-            }
+            // site.Location.Organization.SigningAuthority = updatedSite.Location.Organization.SigningAuthority;
+
+
 
             //Never update
             site.Location.Organization.AcceptedAgreementDate = acceptedAgreementDate;
 
-            await _businessEventService.CreateSiteEventAsync(site.Id, (int)updatedSite.ProvisionerId, "Site Updated");
+            // await _businessEventService.CreateSiteEventAsync(site.Id, (int)updatedSite.ProvisionerId, "Site Updated");
 
             try
             {

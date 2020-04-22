@@ -132,7 +132,9 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            if (!User.HasSiteRegistrationFeature() || !User.PartyCanEdit(site.Provisioner))
+            var party = await _partyService.GetPartyForUserIdAsync(User.GetPrimeUserId());
+
+            if (!User.HasSiteRegistrationFeature() || !User.PartyCanEdit(party))
             {
                 return Forbid();
             }
