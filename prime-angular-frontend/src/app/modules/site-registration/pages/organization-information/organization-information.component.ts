@@ -51,9 +51,6 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
       const payload = this.siteRegistrationStateService.site;
-
-      console.log('PAYLOAD', payload);
-
       this.siteRegistrationResource
         .updateSite(payload)
         .subscribe(() => {
