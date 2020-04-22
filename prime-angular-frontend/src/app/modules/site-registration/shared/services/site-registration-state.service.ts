@@ -193,14 +193,14 @@ export class SiteRegistrationStateService {
 
   private patchSite(site: Site) {
     if (site) {
-      // this.organizationInformationForm.patchValue(site.location.organization);
-      // this.siteAddressForm.patchValue(site.location.physicalAddress);
+      this.organizationInformationForm.patchValue(site.location.organization);
+      this.siteAddressForm.patchValue(site.location.physicalAddress);
       // this.vendorsForm.patchValue();
-      // this.hoursOperationForm.patchValue(site.location);
-      // this.signingAuthorityForm.patchValue();
-      // this.privacyOfficerForm.patchValue();
-      // this.administratorForm.patchValue();
-      // this.technicalSupportForm.patchValue();
+      this.hoursOperationForm.patchValue(site.location);
+      this.signingAuthorityForm.patchValue(site.location.organization.signingAuthority);
+      this.privacyOfficerForm.patchValue(site.location.privacyOfficer);
+      this.administratorForm.patchValue(site.location.administratorPharmaNet);
+      this.technicalSupportForm.patchValue(site.location.technicalSupport);
     }
   }
 
