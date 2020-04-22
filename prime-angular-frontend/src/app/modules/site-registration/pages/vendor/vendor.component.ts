@@ -51,8 +51,8 @@ export class VendorComponent implements OnInit, IPage, IForm {
     ];
   }
 
-  public get vendors(): FormArray {
-    return this.form.get('vendors') as FormArray;
+  public get vendorId(): FormControl {
+    return this.form.get('id') as FormControl;
   }
 
   public onSubmit() {
@@ -72,9 +72,16 @@ export class VendorComponent implements OnInit, IPage, IForm {
   }
 
   public onChange(name: string, isChecked: boolean) {
-    (isChecked)
-      ? this.vendors.push(new FormControl(name))
-      : this.vendors.removeAt(this.vendors.controls.findIndex(c => c.value === name));
+    // TODO only single for now
+    // (isChecked)
+    //   ? this.vendors.push(new FormControl(name))
+    //   : this.vendors.removeAt(this.vendors.controls.findIndex(c => c.value === name));
+    if (isChecked) {
+      const vendorId = this.vendorConfig.find(v => v.name === name).id;
+      this.vendorId.patchValue(vendorId);
+    } else {
+      this.vendorId.reset();
+    }
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
