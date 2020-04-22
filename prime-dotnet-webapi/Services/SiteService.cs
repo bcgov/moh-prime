@@ -82,6 +82,7 @@ namespace Prime.Services
 
         public async Task<int> UpdateSiteAsync(int siteId, Site updatedSite, bool isCompleted = false)
         {
+            // Don't perform any updates on final submission
             if (isCompleted)
             {
                 var siteTracked = await this.GetSiteAsync(siteId);
@@ -97,27 +98,25 @@ namespace Prime.Services
                 }
             }
 
-            var site = await this.GetSiteNoTrackingAsync(siteId);
+            var currentSite = await this.GetSiteNoTrackingAsync(siteId);
+            var acceptedAgreementDate = currentSite.Location.Organization.AcceptedAgreementDate;
 
-            var acceptedAgreementDate = site.Location.Organization.AcceptedAgreementDate;
+            _context.Entry(currentSite).CurrentValues.SetValues(updatedSite);
+            _context.Organizations.Remove(currentSite.Location.Organization);
+            _context.Locations.Remove(currentSite.Location);
 
-            _context.Entry(site).CurrentValues.SetValues(updatedSite);
-            _context.Organizations.Remove(site.Location.Organization);
-            _context.Locations.Remove(site.Location);
-
-            if (site.Provisioner.PhysicalAddress != null)
+            if (currentSite.Provisioner.PhysicalAddress != null)
             {
-                _context.Addresses.Remove(site.Provisioner.PhysicalAddress);
-                site.Provisioner.PhysicalAddress = updatedSite.Provisioner.PhysicalAddress;
+                _context.Addresses.Remove(currentSite.Provisioner.PhysicalAddress);
+                currentSite.Provisioner.PhysicalAddress = updatedSite.Provisioner.PhysicalAddress;
             }
 
-            site.Location = updatedSite.Location;
-            site.Location.Organization = updatedSite.Location.Organization;
-
+            currentSite.Location = updatedSite.Location;
+            currentSite.Location.Organization = updatedSite.Location.Organization;
             // site.Location.Organization.SigningAuthority = updatedSite.Location.Organization.SigningAuthority;
 
-            //Never update
-            site.Location.Organization.AcceptedAgreementDate = acceptedAgreementDate;
+            // Managed through separate API endpoint, and should never be updated
+            currentSite.Location.Organization.AcceptedAgreementDate = acceptedAgreementDate;
 
             // await _businessEventService.CreateSiteEventAsync(site.Id, (int)updatedSite.ProvisionerId, "Site Updated");
 

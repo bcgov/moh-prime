@@ -71,19 +71,6 @@ export class VendorComponent implements OnInit, IPage, IForm {
     this.router.navigate([SiteRoutes.ORGANIZATION_AGREEMENT], { relativeTo: this.route.parent });
   }
 
-  public onChange(name: string, isChecked: boolean) {
-    // TODO only single for now
-    // (isChecked)
-    //   ? this.vendors.push(new FormControl(name))
-    //   : this.vendors.removeAt(this.vendors.controls.findIndex(c => c.value === name));
-    if (isChecked) {
-      const vendorId = this.vendorConfig.find(v => v.name === name).id;
-      this.vendorId.patchValue(vendorId);
-    } else {
-      this.vendorId.reset();
-    }
-  }
-
   public canDeactivate(): Observable<boolean> | boolean {
     const data = 'unsaved';
     return (this.form.dirty)
@@ -97,7 +84,7 @@ export class VendorComponent implements OnInit, IPage, IForm {
   }
 
   private createFormInstance() {
-    this.form = this.siteRegistrationStateService.vendorsForm;
+    this.form = this.siteRegistrationStateService.vendorForm;
   }
 
   private initForm() {

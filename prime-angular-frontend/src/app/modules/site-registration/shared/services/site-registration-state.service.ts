@@ -18,7 +18,7 @@ export class SiteRegistrationStateService {
   public organizationInformationForm: FormGroup;
   public siteAddressForm: FormGroup;
   public hoursOperationForm: FormGroup;
-  public vendorsForm: FormGroup;
+  public vendorForm: FormGroup;
   public signingAuthorityForm: FormGroup;
   public privacyOfficerForm: FormGroup;
   public administratorForm: FormGroup;
@@ -43,7 +43,7 @@ export class SiteRegistrationStateService {
     this.organizationInformationForm = this.buildOrganizationInformationForm();
     this.siteAddressForm = this.buildSiteAddressForm();
     this.hoursOperationForm = this.buildHoursOperationForm();
-    this.vendorsForm = this.buildVendorsForm();
+    this.vendorForm = this.buildVendorForm();
     this.signingAuthorityForm = this.buildSigningAuthorityForm();
     this.privacyOfficerForm = this.buildPrivacyOfficerForm();
     this.administratorForm = this.buildAdministratorForm();
@@ -104,7 +104,7 @@ export class SiteRegistrationStateService {
     const organizationInformation = this.organizationInformationForm.getRawValue();
     const siteAddress = this.siteAddressForm.getRawValue();
     const hoursOperation = this.hoursOperationForm.getRawValue();
-    const vendor = this.vendorsForm.getRawValue();
+    const vendor = this.vendorForm.getRawValue();
     const signingAuthority = this.signingAuthorityForm.getRawValue();
     const privacyOfficer = this.privacyOfficerForm.getRawValue();
     const administrator = this.administratorForm.getRawValue();
@@ -172,7 +172,7 @@ export class SiteRegistrationStateService {
   }
 
   public isVendorValid(): boolean {
-    return this.vendorsForm.valid;
+    return this.vendorForm.valid;
   }
 
   public isSigningAuthorityValid(): boolean {
@@ -195,12 +195,20 @@ export class SiteRegistrationStateService {
     if (site) {
       this.organizationInformationForm.patchValue(site.location.organization);
       this.siteAddressForm.patchValue(site.location.physicalAddress);
-      // this.vendorsForm.patchValue();
+      if (site.vendorId) {
+        this.vendorForm.patchValue(site.vendorId);
+      }
       this.hoursOperationForm.patchValue(site.location);
       this.signingAuthorityForm.patchValue(site.location.organization.signingAuthority);
-      this.privacyOfficerForm.patchValue(site.location.privacyOfficer);
-      this.administratorForm.patchValue(site.location.administratorPharmaNet);
-      this.technicalSupportForm.patchValue(site.location.technicalSupport);
+      if (site.location.privacyOfficer) {
+        this.privacyOfficerForm.patchValue(site.location.privacyOfficer);
+      }
+      if (site.location.administratorPharmaNet) {
+        this.administratorForm.patchValue(site.location.administratorPharmaNet);
+      }
+      if (site.location.technicalSupport) {
+        this.technicalSupportForm.patchValue(site.location.technicalSupport);
+      }
     }
   }
 
@@ -209,7 +217,7 @@ export class SiteRegistrationStateService {
       this.organizationInformationForm,
       this.siteAddressForm,
       this.hoursOperationForm,
-      this.vendorsForm,
+      this.vendorForm,
       this.signingAuthorityForm,
       this.privacyOfficerForm,
       this.administratorForm,
@@ -272,13 +280,10 @@ export class SiteRegistrationStateService {
     });
   }
 
-  private buildVendorsForm(): FormGroup {
+  private buildVendorForm(): FormGroup {
     return this.fb.group({
-      // TODO choose multiples, but schema doesn't allow for it
-      // vendors: this.fb.array([])
-      // TODO don't hardcode this into the form
       id: [
-        1,
+        null,
         [Validators.required]
       ]
     });

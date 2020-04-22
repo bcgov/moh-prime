@@ -14,13 +14,14 @@
     </app-page-subheader>
 
     <div class="mb-4">
-      <div *ngFor="let vendor of vendorConfig"
-           class="mb-2">
-        <mat-checkbox class="mr-4"
-                      (change)="onChange(vendor.name, $event)">
+      <mat-radio-group class="radio-group"
+                       formControlName="id">
+        <mat-radio-button *ngFor="let vendor of vendorConfig"
+                          class="radio-button"
+                          [value]="vendor.id">
           {{ vendor.name }}
-        </mat-checkbox>
-      </div>
+        </mat-radio-button>
+      </mat-radio-group>
     </div>
   </form>
 
