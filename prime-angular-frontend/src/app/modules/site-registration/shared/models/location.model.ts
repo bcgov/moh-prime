@@ -5,16 +5,16 @@ import { Organization } from './organization.model';
 
 export interface Location {
   id?: number;
-  administratorPharmaNetId: number;
+  administratorPharmaNetId?: number;
   administratorPharmaNet: Party;
-  privacyOfficerId: number;
+  privacyOfficerId?: number;
   privacyOfficer: Party;
-  technicalSupportId: number;
+  technicalSupportId?: number;
   technicalSupport: Party;
-  organizationId: number;
+  organizationId?: number;
   organization: Organization;
-  addressId: number;
-  address: Address;
+  physicalAddressId?: number;
+  physicalAddress: Address;
   hoursWeekend: boolean;
   hours24: boolean;
   hoursSpecial: boolean;

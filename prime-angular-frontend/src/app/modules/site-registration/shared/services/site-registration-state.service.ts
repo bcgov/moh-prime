@@ -82,6 +82,7 @@ export class SiteRegistrationStateService {
    * @description
    * Get the site as JSON for submission.
    */
+  // TODO use Partial<Site>
   public get site(): Site {
     const id = this.siteId;
 
@@ -101,14 +102,14 @@ export class SiteRegistrationStateService {
         ...privacyOfficer,
         ...administrator,
         ...technicalSupport,
-        ...siteAddress,
         // organizationId
         organization: {
           // signingAuthorityId
           ...signingAuthority,
           ...organizationInformation
         },
-        ...siteAddress,
+        // physicalAddressId
+        physicalAddress: siteAddress,
         ...hoursOperation
       },
       // vendorId
@@ -118,7 +119,7 @@ export class SiteRegistrationStateService {
       // pec
       // completed
       // approvedDate
-    } as Site;
+    } as Site; // Force type definition
   }
 
   public get isDirty(): boolean {
@@ -250,7 +251,12 @@ export class SiteRegistrationStateService {
 
   private buildVendorsForm(): FormGroup {
     return this.fb.group({
-      vendors: this.fb.array([])
+      // TODO choose multiples, but schema doesn't allow for it
+      // vendors: this.fb.array([])
+      name: [
+        null,
+        [Validators.required]
+      ]
     });
   }
 

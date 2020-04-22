@@ -5,6 +5,7 @@ export class Party {
   id?: number;
   userId: string;
   addressId?: number;
+  physicalAddressId?: number;
   physicalAddress: Address;
   hpdid: string;
   firstName: string;
