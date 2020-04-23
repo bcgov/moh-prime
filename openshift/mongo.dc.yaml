@@ -177,7 +177,7 @@ objects:
       ports:
         - name: mongodb
           nodePort: 0
-          port: 227017
+          port: 27017
           protocol: TCP
           targetPort: 27017
       selector:
