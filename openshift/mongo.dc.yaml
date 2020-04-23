@@ -169,3 +169,20 @@ objects:
       resources:
         requests:
           storage: '${VOLUME_CAPACITY}'
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: '${NAME}${SUFFIX}'
+    spec:
+      ports:
+        - name: mongodb
+          nodePort: 0
+          port: 227017
+          protocol: TCP
+          targetPort: 27017
+      selector:
+        name: '${NAME}${SUFFIX}'
+      sessionAffinity: None
+      type: ClusterIP
+    status:
+      loadBalancer: {}
