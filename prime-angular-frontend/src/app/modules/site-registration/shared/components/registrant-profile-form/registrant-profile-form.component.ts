@@ -40,7 +40,7 @@ export class RegistrantProfileFormComponent implements OnInit {
 
   public onPhysicalAddressChange() {
     this.hasPhysicalAddress = !this.hasPhysicalAddress;
-    this.togglePhysicalAddressValidators(this.physicalAddress, ['street2']);
+    this.togglePhysicalAddressValidators(this.physicalAddress, ['id', 'street2']);
   }
 
   public ngOnInit() {
@@ -53,7 +53,7 @@ export class RegistrantProfileFormComponent implements OnInit {
       this.physicalAddress.get('postal').value
     );
 
-    this.togglePhysicalAddressValidators(this.physicalAddress, ['street2']);
+    this.togglePhysicalAddressValidators(this.physicalAddress, ['id', 'street2']);
   }
 
   private togglePhysicalAddressValidators(separateAddress: FormGroup, blacklist: string[] = []) {
