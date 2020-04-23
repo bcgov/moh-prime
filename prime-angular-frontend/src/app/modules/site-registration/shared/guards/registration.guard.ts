@@ -100,9 +100,6 @@ export class RegistrationGuard extends BaseGuard {
     // Allow access to a set of routes
     let whiteListedRoutes = SiteRoutes.registrationRoutes();
 
-    console.log('SITE', site.location.organization);
-
-
     if (!site.location.organization.acceptedAgreementDate) {
       // No routing beyond the organization agreement without accepting
       whiteListedRoutes = whiteListedRoutes
