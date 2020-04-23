@@ -13,4 +13,5 @@ export interface Site {
   pec: string;
   completed: boolean;
   approvedDate: string;
+  submittedDate: string;
 }

@@ -170,7 +170,7 @@
   </section>
 
   <div class="footer mb-4">
-    <app-alert *ngIf="site.completed"
+    <app-alert *ngIf="!!site.submittedDate"
                type="success"
                icon="check_circle_outline">
       <ng-container #alertTitle
@@ -185,8 +185,8 @@
     </app-alert>
 
     <mat-checkbox #accept
-                  [checked]="site.completed"
-                  [disabled]="site.completed">
+                  [checked]="!!site.submittedDate"
+                  [disabled]="!!site.submittedDate">
       <div class="pl-3">
         By submitting this form, I hereby certify that all information provided on this form is true and I understand
         that the Ministry of Health and/or Health Insurance BC (HIBC) may verify this information with my regulatory
@@ -200,7 +200,7 @@
 
       <button mat-flat-button
               color="primary"
-              [disabled]="!accept.checked || site.completed"
+              [disabled]="!accept.checked || !!site.submittedDate"
               (click)="onSubmit()">Submit Registration</button>
 
     </div>
