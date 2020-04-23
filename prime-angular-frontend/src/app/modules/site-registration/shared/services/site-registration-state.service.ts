@@ -119,21 +119,29 @@ export class SiteRegistrationStateService {
 
     if (!signingAuthority.physicalAddress.street) {
       signingAuthority.physicalAddress = null;
+    } else if (!signingAuthority.physicalAddress.id) {
+      administratorPharmaNet.physicalAddress.id = 0;
     }
     if (!administratorPharmaNet.firstName) {
       administratorPharmaNet = null;
     } else if (!administratorPharmaNet.physicalAddress.street) {
       administratorPharmaNet.physicalAddress = null;
+    } else if (!technicalSupport.physicalAddress.id) {
+      administratorPharmaNet.physicalAddress.id = 0;
     }
     if (!privacyOfficer.firstName) {
       privacyOfficer = null;
     } else if (!privacyOfficer.physicalAddress.street) {
       privacyOfficer.physicalAddress = null;
+    } else if (!technicalSupport.physicalAddress.id) {
+      privacyOfficer.physicalAddress.id = 0;
     }
     if (!technicalSupport.firstName) {
       technicalSupport = null;
     } else if (!technicalSupport.physicalAddress.street) {
       technicalSupport.physicalAddress = null;
+    } else if (!technicalSupport.physicalAddress.id) {
+      technicalSupport.physicalAddress.id = 0;
     }
 
     return {
