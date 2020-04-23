@@ -25,3 +25,32 @@
 <app-enrollee-property title="Email">
   {{ party.email | default }}
 </app-enrollee-property>
+
+<div class="my-3">
+  <strong>Address</strong>
+</div>
+
+<app-enrollee-property title="Country">
+  {{ party.physicalAddress?.countryCode | configCode: 'countries' | default }}
+</app-enrollee-property>
+
+<app-enrollee-property title="Province">
+  {{ party.physicalAddress?.provinceCode | configCode: 'provinces' | default }}
+</app-enrollee-property>
+
+<app-enrollee-property title="Street Address">
+  {{ party.physicalAddress?.street | default }}
+</app-enrollee-property>
+
+<app-enrollee-property *ngIf="party.physicalAddress?.street2"
+                       title="Street Address 2">
+  {{ party.physicalAddress?.street2 | default }}
+</app-enrollee-property>
+
+<app-enrollee-property title="City">
+  {{ party.physicalAddress?.city | default }}
+</app-enrollee-property>
+
+<app-enrollee-property title="Postal Code">
+  {{ party.physicalAddress?.postal | postal | default }}
+</app-enrollee-property>
