@@ -141,13 +141,12 @@ export class SiteRegistrationStateService {
       locationId: this.locationId,
       location: {
         id: this.locationId,
-        // TODO allow submission without getting validation errors
-        privacyOfficerId: (privacyOfficer.id) ? privacyOfficer.id : null,
-        privacyOfficer: (privacyOfficer.firstName) ? privacyOfficer : null,
-        administratorPharmaNetId: (administratorPharmaNet.id) ? administratorPharmaNet.id : null,
-        administratorPharmaNet: (administratorPharmaNet.firstName) ? administratorPharmaNet : null,
-        technicalSupportId: (technicalSupport.id) ? technicalSupport.id : null,
-        technicalSupport: (technicalSupport.firstName) ? technicalSupport : null,
+        privateOfficerId: privacyOfficer.id,
+        privacyOfficer,
+        administratorPharmaNetId: administratorPharmaNet.id,
+        administratorPharmaNet,
+        technicalSupportId: technicalSupport.id,
+        technicalSupport,
         organizationId: organizationInformation.id,
         organization: {
           signingAuthorityId: signingAuthority.id,
