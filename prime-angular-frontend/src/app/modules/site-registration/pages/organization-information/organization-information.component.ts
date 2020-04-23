@@ -91,6 +91,6 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
   private initForm() {
     const site = this.siteRegistrationService.site;
     this.isCompleted = site.completed;
-    this.siteRegistrationStateService.setSite(site);
+    this.siteRegistrationStateService.setSite(site, true);
   }
 }

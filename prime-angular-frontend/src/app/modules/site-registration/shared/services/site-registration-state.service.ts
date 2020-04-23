@@ -101,6 +101,8 @@ export class SiteRegistrationStateService {
     if (!organizationInformation.id) {
       organizationInformation.id = 0;
     }
+    console.log(physicalAddress);
+
     if (!physicalAddress.id) {
       physicalAddress.id = 0;
     }

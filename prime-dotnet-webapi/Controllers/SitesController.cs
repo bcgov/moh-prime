@@ -229,8 +229,8 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<Enrollee>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Site>> SubmitSiteRegistration(int siteId, Site updatedSite)
+        [ProducesResponseType(typeof(ApiResultResponse<Site>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<Site>> SubmitSiteRegistration(int siteId)
         {
             var site = await _siteService.GetSiteAsync(siteId);
 
@@ -244,13 +244,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            if (updatedSite == null)
-            {
-                this.ModelState.AddModelError("Site", "Updated site cannot be null.");
-                return BadRequest(ApiResponse.BadRequest(this.ModelState));
-            }
-
-            site = await _siteService.SubmitRegistrationAsync(siteId, updatedSite);
+            site = await _siteService.SubmitRegistrationAsync(siteId);
             return Ok(ApiResponse.Result(site));
         }
     }

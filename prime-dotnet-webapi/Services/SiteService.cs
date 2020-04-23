@@ -197,23 +197,16 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Site> SubmitRegistrationAsync(int siteId, Site updatedSite)
+        public async Task<Site> SubmitRegistrationAsync(int siteId)
         {
-            var updated = await UpdateSiteAsync(siteId, updatedSite);
-            if (updated < 1)
-            {
-                throw new InvalidOperationException($"Could not update the site.");
-            }
-
             var site = await GetSiteAsync(siteId);
             site.SubmittedDate = DateTimeOffset.Now;
-
             _context.Update(site);
 
-            updated = await _context.SaveChangesAsync();
+            var updated = await _context.SaveChangesAsync();
             if (updated < 1)
             {
-                throw new InvalidOperationException($"Could not update the submitted date.");
+                throw new InvalidOperationException($"Could not submit the site.");
             }
 
             return site;
