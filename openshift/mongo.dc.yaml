@@ -90,10 +90,7 @@ objects:
                       key: database-name
                       name: postgresql-secret
                 - name: MONGO_INITDB_ROOT_USERNAME
-                  valueFrom:
-                    secretKeyRef:
-                      key: database-user
-                      name: postgresql-secret
+                  value: root
                 - name: MONGO_INITDB_ROOT_PASSWORD
                   valueFrom:
                     secretKeyRef:
