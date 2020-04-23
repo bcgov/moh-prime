@@ -62,12 +62,17 @@ RUN apt-get update && \
     echo 'deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main' >  /etc/apt/sources.list.d/pgdg.list && \
     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
     apt-get update && \
-    apt-get install -yqq --no-install-recommends postgresql-client-10 net-tools moreutils && \
+    apt-get install -yqq --no-install-recommends postgresql-client-10 inetutils-ping nano net-tools inetutils-telnet moreutils && \
     chmod +x entrypoint.sh && \
     chmod 777 entrypoint.sh && \
     chmod -R 777 /var/run/ && \
     chmod -R 777 /opt/app-root && \
-    chmod -R 777 /opt/app-root/.* 
+    chmod -R 777 /opt/app-root/.*
+
+RUN wget -qO - http://www.mongodb.org/static/pgp/server-4.2.asc | apt-key add - && \
+    echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-4.2.list && \
+    apt-get update && \
+    apt-get install -y mongodb-org-tools 
 
 EXPOSE 8080 5001 1025
 ENTRYPOINT [ "./entrypoint.sh" ]
