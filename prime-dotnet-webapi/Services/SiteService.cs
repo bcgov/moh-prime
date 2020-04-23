@@ -87,6 +87,7 @@ namespace Prime.Services
 
             var currentSite = await this.GetSiteAsync(siteId);
             var acceptedAgreementDate = currentSite.Location.Organization.AcceptedAgreementDate;
+            var submittedDate = currentSite.SubmittedDate;
             var currentIsCompleted = currentSite.Completed;
             // BCSC Fields
             var userId = currentSite.Location.Organization.SigningAuthority.UserId;
@@ -98,110 +99,11 @@ namespace Prime.Services
                 this._context.Entry(currentSite.Provisioner.PhysicalAddress).CurrentValues.SetValues(updatedSite.Provisioner.PhysicalAddress);
             }
 
-            this._context.Entry(currentSite.Location).CurrentValues.SetValues(updatedSite.Location);
+            UpdateLocation(currentSite.Location, updatedSite.Location);
 
-            if (updatedSite.Location?.PhysicalAddress != null)
-            {
-                if (currentSite.Location.PhysicalAddress == null)
-                {
-                    currentSite.Location.PhysicalAddress = updatedSite.Location.PhysicalAddress;
-                }
-                else
-                {
-                    this._context.Entry(currentSite.Location.PhysicalAddress).CurrentValues.SetValues(updatedSite.Location.PhysicalAddress);
-                }
-            }
+            UpdateOrganization(currentSite.Location.Organization, updatedSite.Location.Organization);
 
-            if (updatedSite.Location?.AdministratorPharmaNet != null)
-            {
-                if (currentSite.Location.AdministratorPharmaNet == null)
-                {
-                    currentSite.Location.AdministratorPharmaNet = updatedSite.Location.AdministratorPharmaNet;
-                }
-                else
-                {
-                    this._context.Entry(currentSite.Location.AdministratorPharmaNet).CurrentValues.SetValues(updatedSite.Location.AdministratorPharmaNet);
-                }
-            }
-
-            if (updatedSite.Location?.AdministratorPharmaNet?.PhysicalAddress != null)
-            {
-                if (currentSite.Location.AdministratorPharmaNet.PhysicalAddress == null)
-                {
-                    currentSite.Location.AdministratorPharmaNet.PhysicalAddress = updatedSite.Location?.AdministratorPharmaNet.PhysicalAddress;
-                }
-                else
-                {
-                    this._context.Entry(currentSite.Location.AdministratorPharmaNet.PhysicalAddress).CurrentValues.SetValues(updatedSite.Location?.AdministratorPharmaNet.PhysicalAddress);
-                }
-            }
-
-            if (updatedSite.Location?.PrivacyOfficer != null)
-            {
-                if (currentSite.Location.PrivacyOfficer == null)
-                {
-                    currentSite.Location.PrivacyOfficer = updatedSite.Location.PrivacyOfficer;
-                }
-                else
-                {
-                    this._context.Entry(currentSite.Location.PrivacyOfficer).CurrentValues.SetValues(updatedSite.Location.PrivacyOfficer);
-                }
-            }
-
-            if (updatedSite.Location?.PrivacyOfficer?.PhysicalAddress != null)
-            {
-                if (currentSite.Location.PrivacyOfficer.PhysicalAddress == null)
-                {
-                    currentSite.Location.PrivacyOfficer.PhysicalAddress = updatedSite.Location.PrivacyOfficer.PhysicalAddress;
-                }
-                else
-                {
-                    this._context.Entry(currentSite.Location.PrivacyOfficer.PhysicalAddress).CurrentValues.SetValues(updatedSite.Location.PrivacyOfficer.PhysicalAddress);
-                }
-            }
-
-            if (updatedSite.Location?.TechnicalSupport != null)
-            {
-                if (currentSite.Location.TechnicalSupport == null)
-                {
-                    currentSite.Location.TechnicalSupport = updatedSite.Location.TechnicalSupport;
-                }
-                else
-                {
-                    this._context.Entry(currentSite.Location.TechnicalSupport).CurrentValues.SetValues(updatedSite.Location.TechnicalSupport);
-                }
-            }
-
-            if (updatedSite.Location?.TechnicalSupport?.PhysicalAddress != null)
-            {
-                if (currentSite.Location.TechnicalSupport.PhysicalAddress == null)
-                {
-                    currentSite.Location.TechnicalSupport.PhysicalAddress = updatedSite.Location.TechnicalSupport.PhysicalAddress;
-                }
-                else
-                {
-                    this._context.Entry(currentSite.Location.TechnicalSupport.PhysicalAddress).CurrentValues.SetValues(updatedSite.Location.TechnicalSupport.PhysicalAddress);
-                }
-            }
-
-            this._context.Entry(currentSite.Location.Organization).CurrentValues.SetValues(updatedSite.Location.Organization);
-
-
-            this._context.Entry(currentSite.Location.Organization.SigningAuthority).CurrentValues.SetValues(updatedSite.Location.Organization.SigningAuthority);
-
-            if (updatedSite.Location?.Organization?.SigningAuthority?.PhysicalAddress != null)
-            {
-                if (currentSite.Location.Organization?.SigningAuthority?.PhysicalAddress == null)
-                {
-                    currentSite.Location.Organization.SigningAuthority.PhysicalAddress = updatedSite.Location?.Organization.SigningAuthority.PhysicalAddress;
-                }
-                else
-                {
-                    this._context.Entry(currentSite.Location.Organization.SigningAuthority.PhysicalAddress).CurrentValues.SetValues(updatedSite.Location?.Organization.SigningAuthority.PhysicalAddress);
-                }
-            }
-
-            // Keep userId the same
+            // Keep userId the same from BCSC card, do not update
             currentSite.Location.Organization.SigningAuthority.UserId = userId;
 
             // Update foreign key only if not null
@@ -211,6 +113,7 @@ namespace Prime.Services
 
             // Managed through separate API endpoint, and should never be updated
             currentSite.Location.Organization.AcceptedAgreementDate = acceptedAgreementDate;
+            currentSite.SubmittedDate = submittedDate;
 
             // Registration has been completed
             currentSite.Completed = (isCompleted == true)
@@ -229,19 +132,112 @@ namespace Prime.Services
             }
         }
 
-        private void AddOrUpdate()
+        private void UpdateOrganization(Organization current, Organization updated)
         {
-            // if (updatedSite.Location?.AdministratorPharmaNet != null)
-            // {
-            //     if (currentSite.Location.AdministratorPharmaNet == null)
-            //     {
-            //         currentSite.Location.AdministratorPharmaNet = updatedSite.Location.AdministratorPharmaNet;
-            //     }
-            //     else
-            //     {
-            //         this._context.Entry(currentSite.Location.AdministratorPharmaNet).CurrentValues.SetValues(updatedSite.Location.AdministratorPharmaNet);
-            //     }
-            // }
+            this._context.Entry(current).CurrentValues.SetValues(updated);
+
+            this._context.Entry(current.SigningAuthority).CurrentValues.SetValues(updated.SigningAuthority);
+
+            if (updated.SigningAuthority?.PhysicalAddress != null)
+            {
+                if (current.SigningAuthority?.PhysicalAddress == null)
+                {
+                    current.SigningAuthority.PhysicalAddress = updated.SigningAuthority.PhysicalAddress;
+                }
+                else
+                {
+                    this._context.Entry(current.SigningAuthority.PhysicalAddress).CurrentValues.SetValues(updated.SigningAuthority.PhysicalAddress);
+                }
+            }
+        }
+
+        private void UpdateLocation(Location current, Location updated)
+        {
+            this._context.Entry(current).CurrentValues.SetValues(updated);
+
+            if (updated?.PhysicalAddress != null)
+            {
+                if (current.PhysicalAddress == null)
+                {
+                    current.PhysicalAddress = updated.PhysicalAddress;
+                }
+                else
+                {
+                    this._context.Entry(current.PhysicalAddress).CurrentValues.SetValues(updated.PhysicalAddress);
+                }
+            }
+
+            if (updated?.AdministratorPharmaNet != null)
+            {
+                if (current.AdministratorPharmaNet == null)
+                {
+                    current.AdministratorPharmaNet = updated.AdministratorPharmaNet;
+                }
+                else
+                {
+                    this._context.Entry(current.AdministratorPharmaNet).CurrentValues.SetValues(updated.AdministratorPharmaNet);
+                }
+            }
+
+            if (updated?.AdministratorPharmaNet?.PhysicalAddress != null)
+            {
+                if (current.AdministratorPharmaNet.PhysicalAddress == null)
+                {
+                    current.AdministratorPharmaNet.PhysicalAddress = updated?.AdministratorPharmaNet.PhysicalAddress;
+                }
+                else
+                {
+                    this._context.Entry(current.AdministratorPharmaNet.PhysicalAddress).CurrentValues.SetValues(updated?.AdministratorPharmaNet.PhysicalAddress);
+                }
+            }
+
+            if (updated?.PrivacyOfficer != null)
+            {
+                if (current.PrivacyOfficer == null)
+                {
+                    current.PrivacyOfficer = updated.PrivacyOfficer;
+                }
+                else
+                {
+                    this._context.Entry(current.PrivacyOfficer).CurrentValues.SetValues(updated.PrivacyOfficer);
+                }
+            }
+
+            if (updated?.PrivacyOfficer?.PhysicalAddress != null)
+            {
+                if (current.PrivacyOfficer.PhysicalAddress == null)
+                {
+                    current.PrivacyOfficer.PhysicalAddress = updated.PrivacyOfficer.PhysicalAddress;
+                }
+                else
+                {
+                    this._context.Entry(current.PrivacyOfficer.PhysicalAddress).CurrentValues.SetValues(updated.PrivacyOfficer.PhysicalAddress);
+                }
+            }
+
+            if (updated?.TechnicalSupport != null)
+            {
+                if (current.TechnicalSupport == null)
+                {
+                    current.TechnicalSupport = updated.TechnicalSupport;
+                }
+                else
+                {
+                    this._context.Entry(current.TechnicalSupport).CurrentValues.SetValues(updated.TechnicalSupport);
+                }
+            }
+
+            if (updated?.TechnicalSupport?.PhysicalAddress != null)
+            {
+                if (current.TechnicalSupport.PhysicalAddress == null)
+                {
+                    current.TechnicalSupport.PhysicalAddress = updated.TechnicalSupport.PhysicalAddress;
+                }
+                else
+                {
+                    this._context.Entry(current.TechnicalSupport.PhysicalAddress).CurrentValues.SetValues(updated.TechnicalSupport.PhysicalAddress);
+                }
+            }
         }
 
         public async Task DeleteSiteAsync(int siteId)
