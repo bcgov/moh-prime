@@ -82,27 +82,12 @@ namespace Prime.Services
 
         public async Task<int> UpdateSiteAsync(int siteId, Site updatedSite, bool isCompleted = false)
         {
-            // Don't perform any updates on final submission
-            if (isCompleted)
-            {
-                var siteTracked = await this.GetSiteAsync(siteId);
-                siteTracked.Completed = isCompleted;
-
-                try
-                {
-                    return await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    return 0;
-                }
-            }
-
             // TODO signing authority needs a partial update to non-BCSC fields
             // TODO clean up and simplify update function
 
             var currentSite = await this.GetSiteAsync(siteId);
             var acceptedAgreementDate = currentSite.Location.Organization.AcceptedAgreementDate;
+            var currentIsCompleted = currentSite.Completed;
             // BCSC Fields
             var userId = currentSite.Location.Organization.SigningAuthority.UserId;
 
@@ -168,6 +153,16 @@ namespace Prime.Services
 
             // Managed through separate API endpoint, and should never be updated
             currentSite.Location.Organization.AcceptedAgreementDate = acceptedAgreementDate;
+
+            // Registration has been completed
+            if (isCompleted)
+            {
+                currentSite.Completed = isCompleted;
+            }
+            else
+            {
+                currentSite.Completed = currentIsCompleted;
+            }
 
             // await _businessEventService.CreateSiteEventAsync(site.Id, (int)updatedSite.ProvisionerId, "Site Updated");
 
