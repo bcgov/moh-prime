@@ -14,6 +14,7 @@ import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
 import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
+import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
 
 @Component({
   selector: 'app-organization-agreement',
@@ -25,6 +26,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   public routeUtils: RouteUtils;
   public organizationAgreement: string;
   public hasAcceptedAgreement: boolean;
+  public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
 
   @ViewChild('accept') accepted: MatCheckbox;
