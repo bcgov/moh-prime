@@ -177,18 +177,8 @@ namespace Prime.Services
                 {
                     this._context.Entry(current.AdministratorPharmaNet).CurrentValues.SetValues(updated.AdministratorPharmaNet);
                 }
-            }
 
-            if (updated?.AdministratorPharmaNet?.PhysicalAddress != null)
-            {
-                if (current.AdministratorPharmaNet.PhysicalAddress == null)
-                {
-                    current.AdministratorPharmaNet.PhysicalAddress = updated?.AdministratorPharmaNet.PhysicalAddress;
-                }
-                else
-                {
-                    this._context.Entry(current.AdministratorPharmaNet.PhysicalAddress).CurrentValues.SetValues(updated?.AdministratorPharmaNet.PhysicalAddress);
-                }
+                UpdatePartyAddress(current.AdministratorPharmaNet, updated.AdministratorPharmaNet);
             }
 
             if (updated?.PrivacyOfficer != null)
@@ -201,18 +191,8 @@ namespace Prime.Services
                 {
                     this._context.Entry(current.PrivacyOfficer).CurrentValues.SetValues(updated.PrivacyOfficer);
                 }
-            }
 
-            if (updated?.PrivacyOfficer?.PhysicalAddress != null)
-            {
-                if (current.PrivacyOfficer.PhysicalAddress == null)
-                {
-                    current.PrivacyOfficer.PhysicalAddress = updated.PrivacyOfficer.PhysicalAddress;
-                }
-                else
-                {
-                    this._context.Entry(current.PrivacyOfficer.PhysicalAddress).CurrentValues.SetValues(updated.PrivacyOfficer.PhysicalAddress);
-                }
+                UpdatePartyAddress(current.PrivacyOfficer, updated.PrivacyOfficer);
             }
 
             if (updated?.TechnicalSupport != null)
@@ -225,17 +205,24 @@ namespace Prime.Services
                 {
                     this._context.Entry(current.TechnicalSupport).CurrentValues.SetValues(updated.TechnicalSupport);
                 }
+
+                UpdatePartyAddress(current.TechnicalSupport, updated.TechnicalSupport);
             }
 
-            if (updated?.TechnicalSupport?.PhysicalAddress != null)
+
+        }
+
+        private void UpdatePartyAddress(Party current, Party updated)
+        {
+            if (updated.PhysicalAddress != null)
             {
-                if (current.TechnicalSupport.PhysicalAddress == null)
+                if (current.PhysicalAddress == null)
                 {
-                    current.TechnicalSupport.PhysicalAddress = updated.TechnicalSupport.PhysicalAddress;
+                    current.PhysicalAddress = updated.PhysicalAddress;
                 }
                 else
                 {
-                    this._context.Entry(current.TechnicalSupport.PhysicalAddress).CurrentValues.SetValues(updated.TechnicalSupport.PhysicalAddress);
+                    this._context.Entry(current.PhysicalAddress).CurrentValues.SetValues(updated.PhysicalAddress);
                 }
             }
         }
