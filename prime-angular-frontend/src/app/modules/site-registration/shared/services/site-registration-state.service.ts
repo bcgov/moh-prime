@@ -30,11 +30,6 @@ export class SiteRegistrationStateService {
   private siteId: number;
   private provisionerId: number;
   private locationId: number;
-  private organizationId: number;
-  private signingAuthorityId: number;
-  private physicalAddressId: number;
-  private physicalAddress: Address;
-  private vendorId: number;
 
   constructor(
     private fb: FormBuilder,
@@ -84,11 +79,6 @@ export class SiteRegistrationStateService {
       this.siteId = site.id;
       this.provisionerId = site.provisionerId;
       this.locationId = site.locationId;
-      this.organizationId = site.location?.organizationId;
-      this.signingAuthorityId = site.location?.organization.signingAuthorityId;
-      this.physicalAddressId = site.location?.physicalAddressId;
-      this.physicalAddress = site.location?.physicalAddress;
-      this.vendorId = site.vendorId;
 
       this.patchSite(site);
     }
@@ -239,6 +229,7 @@ export class SiteRegistrationStateService {
 
   private buildOrganizationInformationForm(): FormGroup {
     return this.fb.group({
+      // TODO should this be null or 0?
       id: [
         null,
         []
@@ -256,8 +247,9 @@ export class SiteRegistrationStateService {
 
   private buildSiteAddressForm(): FormGroup {
     return this.fb.group({
+      // TODO should this be null or 0?
       id: [
-        null,
+        0,
         []
       ],
       street: [
@@ -302,6 +294,7 @@ export class SiteRegistrationStateService {
 
   private buildVendorForm(): FormGroup {
     return this.fb.group({
+      // TODO should this be null or 0?
       id: [
         null,
         [Validators.required]
@@ -327,6 +320,7 @@ export class SiteRegistrationStateService {
 
   private partyFormGroup(disabled: boolean = false): FormGroup {
     return this.fb.group({
+      // TODO should this be null or 0?
       id: [
         null,
         []
@@ -372,8 +366,9 @@ export class SiteRegistrationStateService {
         ]
       ],
       physicalAddress: this.fb.group({
+        // TODO should this be null or 0?
         id: [
-          null,
+          0,
           []
         ],
         countryCode: [
