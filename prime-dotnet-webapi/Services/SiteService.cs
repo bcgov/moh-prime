@@ -124,6 +124,18 @@ namespace Prime.Services
                 }
             }
 
+            if (updatedSite.Location?.AdministratorPharmaNet?.PhysicalAddress != null)
+            {
+                if (currentSite.Location.AdministratorPharmaNet.PhysicalAddress == null)
+                {
+                    currentSite.Location.AdministratorPharmaNet.PhysicalAddress = updatedSite.Location?.AdministratorPharmaNet.PhysicalAddress;
+                }
+                else
+                {
+                    this._context.Entry(currentSite.Location.AdministratorPharmaNet.PhysicalAddress).CurrentValues.SetValues(updatedSite.Location?.AdministratorPharmaNet.PhysicalAddress);
+                }
+            }
+
             if (updatedSite.Location?.PrivacyOfficer != null)
             {
                 if (currentSite.Location.PrivacyOfficer == null)
@@ -133,6 +145,18 @@ namespace Prime.Services
                 else
                 {
                     this._context.Entry(currentSite.Location.PrivacyOfficer).CurrentValues.SetValues(updatedSite.Location.PrivacyOfficer);
+                }
+            }
+
+            if (updatedSite.Location?.PrivacyOfficer?.PhysicalAddress != null)
+            {
+                if (currentSite.Location.PrivacyOfficer.PhysicalAddress == null)
+                {
+                    currentSite.Location.PrivacyOfficer.PhysicalAddress = updatedSite.Location.PrivacyOfficer.PhysicalAddress;
+                }
+                else
+                {
+                    this._context.Entry(currentSite.Location.PrivacyOfficer.PhysicalAddress).CurrentValues.SetValues(updatedSite.Location.PrivacyOfficer.PhysicalAddress);
                 }
             }
 
@@ -148,9 +172,34 @@ namespace Prime.Services
                 }
             }
 
+            if (updatedSite.Location?.TechnicalSupport?.PhysicalAddress != null)
+            {
+                if (currentSite.Location.TechnicalSupport.PhysicalAddress == null)
+                {
+                    currentSite.Location.TechnicalSupport.PhysicalAddress = updatedSite.Location.TechnicalSupport.PhysicalAddress;
+                }
+                else
+                {
+                    this._context.Entry(currentSite.Location.TechnicalSupport.PhysicalAddress).CurrentValues.SetValues(updatedSite.Location.TechnicalSupport.PhysicalAddress);
+                }
+            }
+
             this._context.Entry(currentSite.Location.Organization).CurrentValues.SetValues(updatedSite.Location.Organization);
 
+
             this._context.Entry(currentSite.Location.Organization.SigningAuthority).CurrentValues.SetValues(updatedSite.Location.Organization.SigningAuthority);
+
+            if (updatedSite.Location?.Organization?.SigningAuthority?.PhysicalAddress != null)
+            {
+                if (currentSite.Location.Organization?.SigningAuthority?.PhysicalAddress == null)
+                {
+                    currentSite.Location.Organization.SigningAuthority.PhysicalAddress = updatedSite.Location?.Organization.SigningAuthority.PhysicalAddress;
+                }
+                else
+                {
+                    this._context.Entry(currentSite.Location.Organization.SigningAuthority.PhysicalAddress).CurrentValues.SetValues(updatedSite.Location?.Organization.SigningAuthority.PhysicalAddress);
+                }
+            }
 
             // Keep userId the same
             currentSite.Location.Organization.SigningAuthority.UserId = userId;
@@ -178,6 +227,21 @@ namespace Prime.Services
             {
                 return 0;
             }
+        }
+
+        private void AddOrUpdate()
+        {
+            // if (updatedSite.Location?.AdministratorPharmaNet != null)
+            // {
+            //     if (currentSite.Location.AdministratorPharmaNet == null)
+            //     {
+            //         currentSite.Location.AdministratorPharmaNet = updatedSite.Location.AdministratorPharmaNet;
+            //     }
+            //     else
+            //     {
+            //         this._context.Entry(currentSite.Location.AdministratorPharmaNet).CurrentValues.SetValues(updatedSite.Location.AdministratorPharmaNet);
+            //     }
+            // }
         }
 
         public async Task DeleteSiteAsync(int siteId)
@@ -279,18 +343,18 @@ namespace Prime.Services
                 .Include(s => s.Location)
                     .ThenInclude(l => l.Organization)
                         .ThenInclude(o => o.SigningAuthority)
-                // .ThenInclude(p => p.PhysicalAddress)
+                .ThenInclude(p => p.PhysicalAddress)
                 .Include(s => s.Location)
                     .ThenInclude(l => l.PhysicalAddress)
                 .Include(s => s.Location)
                     .ThenInclude(l => l.PrivacyOfficer)
-                // .ThenInclude(p => p.PhysicalAddress)
+                .ThenInclude(p => p.PhysicalAddress)
                 .Include(s => s.Location)
                     .ThenInclude(l => l.AdministratorPharmaNet)
-                // .ThenInclude(p => p.PhysicalAddress)
+                .ThenInclude(p => p.PhysicalAddress)
                 .Include(s => s.Location)
-                    .ThenInclude(l => l.TechnicalSupport);
-            // .ThenInclude(p => p.PhysicalAddress);
+                    .ThenInclude(l => l.TechnicalSupport)
+                        .ThenInclude(p => p.PhysicalAddress);
         }
     }
 }
