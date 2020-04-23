@@ -11,6 +11,7 @@ import { FormControlValidators } from '@shared/validators/form-control.validator
 
 import { Site } from '@registration/shared/models/site.model';
 import { Party } from '@registration/shared/models/party.model';
+import { SiteRoutes } from '@registration/site-registration.routes';
 
 @Injectable({
   providedIn: 'root'
@@ -48,13 +49,14 @@ export class SiteRegistrationStateService {
     // site information
     this.patched = false;
 
-    // Listen for a route end that is outside of site overview, and
+    // TODO not needed until site review expands outwards from a single site
+    // Listen for a route end that is outside of site review, and
     // reset the form model
     // this.routeStateService.onNavigationEnd()
     //   .subscribe((event: RouterEvent) => {
     //     const route = event.url.slice(event.url.lastIndexOf('/') + 1);
-    //     if (!EnrolmentRoutes.enrolmentProfileRoutes().includes(route)) {
-    //       this.logger.info('RESET ENROLLEE FORM');
+    //     if (!SiteRoutes.registrationRoutes().includes(route)) {
+    //       this.logger.info('RESET SITE FORM');
     //       this.forms.forEach((form: FormGroup) => form.reset());
     //       this.patched = false;
     //     }
