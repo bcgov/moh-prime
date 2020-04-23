@@ -101,8 +101,6 @@ export class SiteRegistrationStateService {
     if (!organizationInformation.id) {
       organizationInformation.id = 0;
     }
-    console.log(physicalAddress);
-
     if (!physicalAddress.id) {
       physicalAddress.id = 0;
     }
@@ -143,7 +141,7 @@ export class SiteRegistrationStateService {
       locationId: this.locationId,
       location: {
         id: this.locationId,
-        privateOfficerId: privacyOfficer?.id,
+        privacyOfficerId: privacyOfficer?.id,
         privacyOfficer,
         administratorPharmaNetId: administratorPharmaNet?.id,
         administratorPharmaNet,
