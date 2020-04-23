@@ -17,7 +17,7 @@ COPY backup.cron /etc/cron.d
 
 RUN echo "Checking workdir..." && \
     apt-get update -yqq && \ 
-    apt-get install -y inetutils-ping nano net-tools cron gnupg wget apt-transport-https ca-certificates libcurl4-openssl-dev
+    apt-get install -y inetutils-ping nano net-tools cron gnupg wget apt-transport-https ca-certificates libcurl4-openssl-dev libcurl4
 
 RUN wget -qO - http://www.mongodb.org/static/pgp/server-4.2.asc | apt-key add - && \
     echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-4.2.list && \
