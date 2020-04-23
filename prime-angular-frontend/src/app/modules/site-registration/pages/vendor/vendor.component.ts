@@ -45,11 +45,11 @@ export class VendorComponent implements OnInit {
   public onSubmit() {
     this.toastService.openSuccessToast('Enrolment information has been saved');
     this.form.markAsPristine();
-    this.router.navigate([SiteRoutes.SIGNING_AUTHORITY], { relativeTo: this.route.parent });
+    this.router.navigate([SiteRoutes.HOURS_OPERATION], { relativeTo: this.route.parent });
   }
 
   public onBack() {
-    this.router.navigate([SiteRoutes.HOURS_OPERATION], { relativeTo: this.route.parent });
+    this.router.navigate([SiteRoutes.ORGANIZATION_AGREEMENT], { relativeTo: this.route.parent });
   }
 
   public ngOnInit() {

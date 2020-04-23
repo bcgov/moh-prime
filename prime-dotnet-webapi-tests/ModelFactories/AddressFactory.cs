@@ -6,22 +6,20 @@ namespace PrimeTests.ModelFactories
 {
     public class PhysicalAddressFactory : AddressFactory<PhysicalAddress>
     {
-        public PhysicalAddressFactory(Enrollee owner) : base(owner) { }
+        public PhysicalAddressFactory() : base() { }
     }
     public class MailingAddressFactory : AddressFactory<MailingAddress>
     {
-        public MailingAddressFactory(Enrollee owner) : base(owner) { }
+        public MailingAddressFactory() : base() { }
     }
 
     public abstract class AddressFactory<T> : Faker<T> where T : Address
     {
-        protected AddressFactory(Enrollee owner)
+        protected AddressFactory()
         {
             this.SetBaseRules();
 
             RuleFor(x => x.Id, f => IdCounter.Id++);
-            RuleFor(x => x.Enrollee, f => owner);
-            RuleFor(x => x.EnrolleeId, f => owner.Id);
             RuleFor(x => x.Province, f => null);
             RuleFor(x => x.ProvinceCode, f => ProvinceLookup.BC.Code);
             RuleFor(x => x.CountryCode, f => CountryLookup.Canada.Code);

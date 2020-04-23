@@ -106,6 +106,11 @@ namespace PrimeTests.Services
             profile = enrollee.ToViewModel();
             profile.MailingAddress.City = "Flavortown, USA";
             await AssertAllowableChanges(false, enrollee, profile);
+
+            // Add child object
+            profile = enrollee.ToViewModel();
+            enrollee.MailingAddress = null;
+            await AssertAllowableChanges(false, enrollee, profile);
         }
 
         [Fact]
