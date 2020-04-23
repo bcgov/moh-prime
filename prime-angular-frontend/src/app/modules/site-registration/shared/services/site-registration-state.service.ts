@@ -122,7 +122,7 @@ export class SiteRegistrationStateService {
     if (!signingAuthority.physicalAddress.street) {
       signingAuthority.physicalAddress = null;
     } else if (!signingAuthority.physicalAddress.id) {
-      administratorPharmaNet.physicalAddress.id = 0;
+      signingAuthority.physicalAddress.id = 0;
     }
     if (!administratorPharmaNet.firstName) {
       administratorPharmaNet = null;
