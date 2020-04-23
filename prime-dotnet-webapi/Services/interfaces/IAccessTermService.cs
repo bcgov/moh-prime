@@ -18,6 +18,7 @@ namespace Prime.Services
         Task CreateEnrolleeAccessTermAsync(Enrollee enrollee);
 
         Task AcceptCurrentAccessTermAsync(Enrollee enrollee);
+        Task ExpireCurrentAccessTermAsync(Enrollee enrollee);
 
         Task<bool> AccessTermExistsOnEnrolleeAsync(int accessTermId, int enrolleeId);
 

@@ -19,6 +19,7 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { SiteRoutes } from 'app/modules/site-registration/site-registration.routes';
+import { EnrolmentStatusReason } from '@shared/enums/enrolment-status-reason.enum';
 
 @Component({
   selector: 'app-dashboard',
@@ -162,7 +163,8 @@ export class DashboardComponent implements OnInit {
             disabled: (
               !hasAcceptedAtLeastOneToa ||
               [
-                EnrolmentStatus.LOCKED
+                EnrolmentStatus.LOCKED,
+                EnrolmentStatus.DECLINED
               ].includes(enrolmentStatus)
             ),
             forceActive: EnrolmentRoutes.enrolmentProfileRoutes().includes(currentRoute)
@@ -175,7 +177,8 @@ export class DashboardComponent implements OnInit {
             disabled: (
               !hasAcceptedAtLeastOneToa ||
               [
-                EnrolmentStatus.LOCKED
+                EnrolmentStatus.LOCKED,
+                EnrolmentStatus.DECLINED
               ].includes(enrolmentStatus)
             ),
             forceActive: [
@@ -191,7 +194,8 @@ export class DashboardComponent implements OnInit {
             disabled: (
               !hasAcceptedAtLeastOneToa ||
               [
-                EnrolmentStatus.LOCKED
+                EnrolmentStatus.LOCKED,
+                EnrolmentStatus.DECLINED
               ].includes(enrolmentStatus)
             )
           }
@@ -205,7 +209,8 @@ export class DashboardComponent implements OnInit {
           //   icon: (
           //     !hasAcceptedAtLeastOneToa ||
           //     [
-          //       EnrolmentStatus.LOCKED
+          //       EnrolmentStatus.LOCKED,
+          //       EnrolmentStatus.DECLINED
           //     ].includes(enrolmentStatus)
           //   )
           //     ? 'lock'
@@ -215,7 +220,8 @@ export class DashboardComponent implements OnInit {
           //   disabled: (
           //     !hasAcceptedAtLeastOneToa ||
           //     [
-          //       EnrolmentStatus.LOCKED
+          //       EnrolmentStatus.LOCKED,
+          //       EnrolmentStatus.DECLINED
           //     ].includes(enrolmentStatus)
           //   ),
           //   deemphasize: this.enrolmentService.isInitialEnrolment
@@ -225,7 +231,8 @@ export class DashboardComponent implements OnInit {
             icon: (
               !hasAcceptedAtLeastOneToa ||
               [
-                EnrolmentStatus.LOCKED
+                EnrolmentStatus.LOCKED,
+                EnrolmentStatus.DECLINED
               ].includes(enrolmentStatus)
             )
               ? 'lock'
@@ -235,7 +242,8 @@ export class DashboardComponent implements OnInit {
             disabled: (
               !hasAcceptedAtLeastOneToa ||
               [
-                EnrolmentStatus.LOCKED
+                EnrolmentStatus.LOCKED,
+                EnrolmentStatus.DECLINED
               ].includes(enrolmentStatus)
             ),
             deemphasize: this.enrolmentService.isInitialEnrolment
@@ -265,6 +273,11 @@ export class DashboardComponent implements OnInit {
         case EnrolmentStatus.LOCKED:
           enrollee = 'lock';
           break;
+        case EnrolmentStatus.DECLINED:
+          enrollee = 'lock';
+          accessAgreement = 'lock';
+          certificate = 'lock';
+          break;
       }
     } else {
       switch (enrolmentStatus) {
@@ -279,7 +292,13 @@ export class DashboardComponent implements OnInit {
           accessAgreement = 'lock';
           certificate = 'lock';
           break;
+        case EnrolmentStatus.DECLINED:
+          enrollee = 'lock';
+          accessAgreement = 'lock';
+          certificate = 'lock';
+          break;
       }
+
     }
 
     return { enrollee, accessAgreement, certificate };

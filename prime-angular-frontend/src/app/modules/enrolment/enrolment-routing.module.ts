@@ -31,6 +31,7 @@ import {
   AccessAgreementHistoryEnrolmentComponent
 } from './pages/access-agreement-history-enrolment/access-agreement-history-enrolment.component';
 import { MinorUpdateConfirmationComponent } from './pages/minor-update-confirmation/minor-update-confirmation.component';
+import { AccessDeclinedComponent } from './pages/access-declined/access-declined.component';
 
 const routes: Routes = [
   {
@@ -118,6 +119,11 @@ const routes: Routes = [
       {
         path: EnrolmentRoutes.ACCESS_LOCKED,
         component: AccessLockedComponent,
+        data: { title: 'Enrolment Summary' }
+      },
+      {
+        path: EnrolmentRoutes.ACCESS_DECLINED,
+        component: AccessDeclinedComponent,
         data: { title: 'Enrolment Summary' }
       },
       {

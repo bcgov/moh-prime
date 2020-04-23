@@ -231,6 +231,65 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
       });
   }
 
+  public onDeclineEnrollee(enrolleeId: number) {
+    const data: DialogOptions = {
+      title: 'Decline Enrollee',
+      message: `When declined the enrollee will not have access to PRIME and their Terms of Access will be revoked,
+         Are you sure you want to lock this enrollee ?`,
+      actionType: 'warn',
+      actionText: 'Decline Enrollee',
+      component: NoteComponent,
+    };
+
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result: { output: string }) => {
+          if (result) {
+            return (result.output)
+              ? this.adjudicationResource.createAdjudicatorNote(enrolleeId, result.output)
+              : of(noop);
+          }
+          return EMPTY;
+        }),
+        exhaustMap(() => this.adjudicationResource.submissionAction(enrolleeId, SubmissionAction.DECLINE_PROFILE)),
+        exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrolleeId))
+      )
+      .subscribe((declinedEnrollee: HttpEnrollee) => {
+        this.updateEnrollee(declinedEnrollee);
+        this.action.emit();
+      });
+  }
+
+  public onEnableEnrollee(enrolleeId: number) {
+    const data: DialogOptions = {
+      title: 'Enable Enrollee',
+      message: 'When enabled the enrollee will be able to access PRIME. Are you sure you want to unlock this enrollee?',
+      actionType: 'warn',
+      actionText: 'Enable Enrollee',
+      component: NoteComponent,
+    };
+
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result: { output: string }) => {
+          if (result) {
+            return (result.output)
+              ? this.adjudicationResource.createAdjudicatorNote(enrolleeId, result.output)
+              : of(noop);
+          }
+          return EMPTY;
+        }),
+        exhaustMap(() => this.adjudicationResource.submissionAction(enrolleeId, SubmissionAction.ENABLE_PROFILE)),
+        exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrolleeId))
+      )
+      .subscribe((enableEnrollee: HttpEnrollee) => {
+        this.updateEnrollee(enableEnrollee);
+        this.action.emit();
+      });
+  }
+
   public onDelete(enrolleeId: number) {
     const data: DialogOptions = {
       title: 'Delete Enrolment',

@@ -6,5 +6,6 @@ namespace Prime.Models
         UnderReview = 2,
         RequiresToa = 3,
         Locked = 4,
+        Declined = 5,
     }
 }
