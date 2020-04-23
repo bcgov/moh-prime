@@ -95,9 +95,22 @@ export class SiteRegistrationStateService {
     const hoursOperation = this.hoursOperationForm.getRawValue();
     const vendor = this.vendorForm.getRawValue();
     const signingAuthority = this.signingAuthorityForm.getRawValue();
-    const privacyOfficer = this.privacyOfficerForm.getRawValue();
     const administratorPharmaNet = this.administratorPharmaNetForm.getRawValue();
+    const privacyOfficer = this.privacyOfficerForm.getRawValue();
     const technicalSupport = this.technicalSupportForm.getRawValue();
+
+    if (!signingAuthority.physicalAddress.street) {
+      signingAuthority.physicalAddress = null;
+    }
+    if (!administratorPharmaNet.physicalAddress.street) {
+      administratorPharmaNet.physicalAddress = null;
+    }
+    if (!privacyOfficer.physicalAddress.street) {
+      privacyOfficer.physicalAddress = null;
+    }
+    if (!technicalSupport.physicalAddress.street) {
+      technicalSupport.physicalAddress = null;
+    }
 
     return {
       id: this.siteId,
