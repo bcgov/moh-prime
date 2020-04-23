@@ -141,7 +141,7 @@ objects:
               - ${NAME}${SUFFIX}
             from:
               kind: ImageStreamTag
-              name: 'mongodb:3.2'
+              name: 'mongodb:3.6'
               namespace: openshift
             lastTriggeredImage: >-
               docker-registry.default.svc:5000/openshift/mongodb@sha256:fae76f90d3f00fec19a6da648f590de7c1cee63f42915cdf04416682864ce6b9
@@ -156,4 +156,20 @@ objects:
       readyReplicas: 1
       unavailableReplicas: 0
       updatedReplicas: 1
-
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: '${NAME}${SUFFIX}'
+    spec:
+      ports:
+        - name: mongodb
+          nodePort: 0
+          port: 27017
+          protocol: TCP
+          targetPort: 27017
+      selector:
+        name: '${NAME}${SUFFIX}'
+      sessionAffinity: None
+      type: ClusterIP
+    status:
+      loadBalancer: {}

@@ -85,9 +85,15 @@ objects:
                       key: database-admin-password
                       name: postgresql-secret
                 - name: MONGODB_DATABASE
-                  value: prime
+                  valueFrom:
+                    secretKeyRef:
+                      key: database-name
+                      name: postgresql-secret
                 - name: MONGO_INITDB_ROOT_USERNAME
-                  value: root
+                  valueFrom:
+                    secretKeyRef:
+                      key: database-user
+                      name: postgresql-secret
                 - name: MONGO_INITDB_ROOT_PASSWORD
                   valueFrom:
                     secretKeyRef:

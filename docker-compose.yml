@@ -20,13 +20,15 @@ services:
   mongo:
     restart: always
     container_name: primemongodb
-    image: mongo:3
+    image: mongo:3.6.17-xenial
     environment:
+      MONGO_INITDB_DATABASE: prime
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: prime
     ports:
       - 27017:27017
     volumes:
+      - ./prime-mongo/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
       - local_mongodb_data:/var/lib/mongodb/data
     networks:
       - primenet
