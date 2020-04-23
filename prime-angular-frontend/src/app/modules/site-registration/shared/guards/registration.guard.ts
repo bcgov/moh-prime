@@ -105,12 +105,11 @@ export class RegistrationGuard extends BaseGuard {
       whiteListedRoutes = whiteListedRoutes
         .filter((route: string) => SiteRoutes.noOrganizationAgreementRoutes().includes(route));
     }
-    // TODO add back in when isCompleted is on TechnicalSupport not review view
-    // else if (!site.completed) {
-    //   // No reviewing without completing the registration
-    //   whiteListedRoutes = whiteListedRoutes
-    //     .filter((route: string) => route !== SiteRoutes.SITE_REVIEW);
-    // }
+    else if (!site.completed) {
+      // No reviewing without completing the registration
+      whiteListedRoutes = whiteListedRoutes
+        .filter((route: string) => route !== SiteRoutes.SITE_REVIEW);
+    }
 
     // Redirect to an appropriate default route
     if (!whiteListedRoutes.includes(currentRoute)) {
