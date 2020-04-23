@@ -309,7 +309,7 @@ export class SiteRegistrationStateService {
     return this.fb.group({
       // TODO should this be null or 0?
       id: [
-        null, // TODO if using 0 considered valid
+        0, // TODO if using 0 considered valid
         [Validators.required]
       ]
     });
