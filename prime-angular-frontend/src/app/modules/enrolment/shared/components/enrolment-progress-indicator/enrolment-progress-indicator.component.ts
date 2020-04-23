@@ -13,11 +13,13 @@ export class EnrolmentProgressIndicatorComponent implements OnInit, IProgressInd
   @Input() public currentRoute: string;
   @Input() public inProgress: boolean;
   public routes: string[];
+  public prefix: string;
 
   public EnrolmentRoutes = EnrolmentRoutes;
 
   constructor() {
     this.routes = EnrolmentRoutes.initialEnrolmentRouteOrder();
+    this.prefix = 'Enrolment';
   }
 
   public ngOnInit(): void { }
