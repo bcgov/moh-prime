@@ -231,7 +231,7 @@ export class SiteRegistrationStateService {
     return this.fb.group({
       // TODO should this be null or 0?
       id: [
-        null,
+        0,
         []
       ],
       name: [
@@ -296,7 +296,7 @@ export class SiteRegistrationStateService {
     return this.fb.group({
       // TODO should this be null or 0?
       id: [
-        null,
+        0,
         [Validators.required]
       ]
     });
@@ -322,7 +322,7 @@ export class SiteRegistrationStateService {
     return this.fb.group({
       // TODO should this be null or 0?
       id: [
-        null,
+        0,
         []
       ],
       firstName: [
