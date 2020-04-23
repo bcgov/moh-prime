@@ -33,6 +33,10 @@ namespace Prime.Controllers
         {
             StreamReader reader = new StreamReader(Request.Body);
             string content = await reader.ReadToEndAsync();
+            if (content.Contains("error"))
+            {
+                return BadRequest();
+            }
             var result = await _phsaService.CreatePHSAAsync(content);
             return Ok(ApiResponse.Result(result));
         }
