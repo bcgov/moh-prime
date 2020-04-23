@@ -57,10 +57,8 @@ export class RegistrantProfileFormComponent implements OnInit {
   }
 
   private togglePhysicalAddressValidators(separateAddress: FormGroup, blacklist: string[] = []) {
-    if (!this.hasPhysicalAddress) {
-      this.formUtilsService.resetAndClearValidators(separateAddress);
-    } else {
-      this.formUtilsService.setValidators(separateAddress, [Validators.required], blacklist);
-    }
+    (!this.hasPhysicalAddress)
+      ? this.formUtilsService.resetAndClearValidators(separateAddress)
+      : this.formUtilsService.setValidators(separateAddress, [Validators.required], blacklist);
   }
 }

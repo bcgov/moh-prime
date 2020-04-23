@@ -43,7 +43,7 @@ export class AdministratorComponent implements OnInit, IPage, IForm {
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
-  public onSubmit(data: Party) {
+  public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
       const payload = this.siteRegistrationStateService.site;
       this.siteRegistrationResource

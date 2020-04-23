@@ -4,6 +4,6 @@ import { Observable } from 'rxjs';
 
 export interface IForm {
   form: FormGroup;
-  onSubmit(data?: any): void;
+  onSubmit(): void;
   canDeactivate(): Observable<boolean> | boolean;
 }
