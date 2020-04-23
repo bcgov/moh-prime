@@ -104,8 +104,7 @@ export class RegistrationGuard extends BaseGuard {
       // No routing beyond the organization agreement without accepting
       whiteListedRoutes = whiteListedRoutes
         .filter((route: string) => SiteRoutes.noOrganizationAgreementRoutes().includes(route));
-    }
-    else if (!site.completed) {
+    } else if (!site.completed) {
       // No reviewing without completing the registration
       whiteListedRoutes = whiteListedRoutes
         .filter((route: string) => route !== SiteRoutes.SITE_REVIEW);
