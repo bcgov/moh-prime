@@ -25,7 +25,6 @@ export class SiteRegistrationStateService {
   public administratorPharmaNetForm: FormGroup;
   public technicalSupportForm: FormGroup;
 
-  // TODO move the IDs into the forms so don't need to be tracked separately
   private patched: boolean;
   private siteId: number;
   private provisionerId: number;
@@ -95,20 +94,45 @@ export class SiteRegistrationStateService {
     const hoursOperation = this.hoursOperationForm.getRawValue();
     const vendor = this.vendorForm.getRawValue();
     const signingAuthority = this.signingAuthorityForm.getRawValue();
-    const administratorPharmaNet = this.administratorPharmaNetForm.getRawValue();
-    const privacyOfficer = this.privacyOfficerForm.getRawValue();
-    const technicalSupport = this.technicalSupportForm.getRawValue();
+    let administratorPharmaNet = this.administratorPharmaNetForm.getRawValue();
+    let privacyOfficer = this.privacyOfficerForm.getRawValue();
+    let technicalSupport = this.technicalSupportForm.getRawValue();
+
+    if (!organizationInformation.id) {
+      organizationInformation.id = 0;
+    }
+    if (!physicalAddress.id) {
+      physicalAddress.id = 0;
+    }
+    if (!vendor.id) {
+      vendor.id = 0;
+    }
+    if (!administratorPharmaNet.id) {
+      administratorPharmaNet.id = 0;
+    }
+    if (!privacyOfficer.id) {
+      privacyOfficer.id = 0;
+    }
+    if (!technicalSupport.id) {
+      technicalSupport.id = 0;
+    }
 
     if (!signingAuthority.physicalAddress.street) {
       signingAuthority.physicalAddress = null;
     }
-    if (!administratorPharmaNet.physicalAddress.street) {
+    if (!administratorPharmaNet.firstName) {
+      administratorPharmaNet = null;
+    } else if (!administratorPharmaNet.physicalAddress.street) {
       administratorPharmaNet.physicalAddress = null;
     }
-    if (!privacyOfficer.physicalAddress.street) {
+    if (!privacyOfficer.firstName) {
+      privacyOfficer = null;
+    } else if (!privacyOfficer.physicalAddress.street) {
       privacyOfficer.physicalAddress = null;
     }
-    if (!technicalSupport.physicalAddress.street) {
+    if (!technicalSupport.firstName) {
+      technicalSupport = null;
+    } else if (!technicalSupport.physicalAddress.street) {
       technicalSupport.physicalAddress = null;
     }
 
@@ -117,10 +141,9 @@ export class SiteRegistrationStateService {
       locationId: this.locationId,
       location: {
         id: this.locationId,
-        // TODO allow submission without getting validation errors
-        privacyOfficer: (privacyOfficer.firstName) ? privacyOfficer : null,
-        administratorPharmaNet: (administratorPharmaNet.firstName) ? administratorPharmaNet : null,
-        technicalSupport: (technicalSupport.firstName) ? technicalSupport : null,
+        privacyOfficer,
+        administratorPharmaNet,
+        technicalSupport,
         organizationId: organizationInformation.id,
         organization: {
           signingAuthorityId: signingAuthority.id,
@@ -242,9 +265,8 @@ export class SiteRegistrationStateService {
 
   private buildOrganizationInformationForm(): FormGroup {
     return this.fb.group({
-      // TODO should this be null or 0?
       id: [
-        0,
+        null,
         []
       ],
       name: [
@@ -260,9 +282,8 @@ export class SiteRegistrationStateService {
 
   private buildSiteAddressForm(): FormGroup {
     return this.fb.group({
-      // TODO should this be null or 0?
       id: [
-        0,
+        null,
         []
       ],
       street: [
@@ -307,9 +328,8 @@ export class SiteRegistrationStateService {
 
   private buildVendorForm(): FormGroup {
     return this.fb.group({
-      // TODO should this be null or 0?
       id: [
-        0, // TODO if using 0 considered valid
+        null,
         [Validators.required]
       ]
     });
@@ -333,9 +353,8 @@ export class SiteRegistrationStateService {
 
   private partyFormGroup(disabled: boolean = false): FormGroup {
     return this.fb.group({
-      // TODO should this be null or 0?
       id: [
-        0,
+        null,
         []
       ],
       firstName: [
