@@ -77,6 +77,10 @@ export class VendorComponent implements OnInit, IPage, IForm {
     this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_AGREEMENT);
   }
 
+  public onChange() {
+    this.hasNoVendorError = false;
+  }
+
   public nextRoute() {
     if (this.isCompleted) {
       this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);

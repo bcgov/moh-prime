@@ -25,7 +25,8 @@
 
     <div class="mb-4">
       <mat-radio-group class="radio-group"
-                       formControlName="id">
+                       formControlName="id"
+                       (change)="onChange()">
         <mat-radio-button *ngFor="let vendor of vendorConfig"
                           class="radio-button"
                           [value]="vendor.id">
