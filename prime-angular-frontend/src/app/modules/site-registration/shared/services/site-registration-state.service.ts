@@ -141,23 +141,23 @@ export class SiteRegistrationStateService {
       locationId: this.locationId,
       location: {
         id: this.locationId,
-        privateOfficerId: privacyOfficer.id,
+        privateOfficerId: privacyOfficer?.id,
         privacyOfficer,
-        administratorPharmaNetId: administratorPharmaNet.id,
+        administratorPharmaNetId: administratorPharmaNet?.id,
         administratorPharmaNet,
-        technicalSupportId: technicalSupport.id,
+        technicalSupportId: technicalSupport?.id,
         technicalSupport,
-        organizationId: organizationInformation.id,
+        organizationId: organizationInformation?.id,
         organization: {
-          signingAuthorityId: signingAuthority.id,
+          signingAuthorityId: signingAuthority?.id,
           signingAuthority,
           ...organizationInformation
         },
-        physicalAddressId: physicalAddress.id,
+        physicalAddressId: physicalAddress?.id,
         physicalAddress,
         ...hoursOperation
       },
-      vendorId: vendor.id,
+      vendorId: vendor?.id,
       vendor,
       provisionerId: this.provisionerId,
       // TODO where is PEC coming from?
