@@ -28,6 +28,7 @@ export class VendorComponent implements OnInit, IPage, IForm {
   // TODO supply through config
   public vendorConfig: { id: number, name: string }[];
   public isCompleted: boolean;
+  public hasNoVendorError: boolean;
   public SiteRoutes = SiteRoutes;
 
   constructor(
@@ -50,6 +51,8 @@ export class VendorComponent implements OnInit, IPage, IForm {
       { id: 4, name: 'MediNet' },
       { id: 5, name: 'Plexia' }
     ];
+    // TODO should be a autocomplete instead of radio buttons to scale
+    this.hasNoVendorError = false;
   }
 
   public get vendorId(): FormControl {
@@ -65,6 +68,8 @@ export class VendorComponent implements OnInit, IPage, IForm {
           this.form.markAsPristine();
           this.nextRoute();
         });
+    } else {
+      this.hasNoVendorError = true;
     }
   }
 
