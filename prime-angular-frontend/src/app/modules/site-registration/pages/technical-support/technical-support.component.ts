@@ -47,7 +47,8 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
     if (this.formUtilsService.checkValidity(this.form)) {
       const payload = this.siteRegistrationStateService.site;
       this.siteRegistrationResource
-        .updateSite(payload)
+        // Update and mark the registration as completed
+        .updateSite(payload, true)
         .subscribe(() => {
           this.form.markAsPristine();
           this.nextRoute();
