@@ -95,8 +95,6 @@ namespace Prime.Services
 
             if (updatedSite.Provisioner?.PhysicalAddress != null)
             {
-                // _context.Addresses.Remove(currentSite.Provisioner.PhysicalAddress);
-                // currentSite.Provisioner.PhysicalAddress = updatedSite.Provisioner.PhysicalAddress;
                 this._context.Entry(currentSite.Provisioner.PhysicalAddress).CurrentValues.SetValues(updatedSite.Provisioner.PhysicalAddress);
             }
 
@@ -116,55 +114,61 @@ namespace Prime.Services
 
             if (updatedSite.Location?.AdministratorPharmaNet != null)
             {
-                currentSite.Location.AdministratorPharmaNet = updatedSite.Location.AdministratorPharmaNet;
+                if (currentSite.Location.AdministratorPharmaNet == null)
+                {
+                    currentSite.Location.AdministratorPharmaNet = updatedSite.Location.AdministratorPharmaNet;
+                }
+                else
+                {
+                    this._context.Entry(currentSite.Location.AdministratorPharmaNet).CurrentValues.SetValues(updatedSite.Location.AdministratorPharmaNet);
+                }
             }
 
             if (updatedSite.Location?.PrivacyOfficer != null)
             {
-                currentSite.Location.PrivacyOfficer = updatedSite.Location.PrivacyOfficer;
+                if (currentSite.Location.PrivacyOfficer == null)
+                {
+                    currentSite.Location.PrivacyOfficer = updatedSite.Location.PrivacyOfficer;
+                }
+                else
+                {
+                    this._context.Entry(currentSite.Location.PrivacyOfficer).CurrentValues.SetValues(updatedSite.Location.PrivacyOfficer);
+                }
             }
 
             if (updatedSite.Location?.TechnicalSupport != null)
             {
-                currentSite.Location.TechnicalSupport = updatedSite.Location.TechnicalSupport;
+                if (currentSite.Location.TechnicalSupport == null)
+                {
+                    currentSite.Location.TechnicalSupport = updatedSite.Location.TechnicalSupport;
+                }
+                else
+                {
+                    this._context.Entry(currentSite.Location.TechnicalSupport).CurrentValues.SetValues(updatedSite.Location.TechnicalSupport);
+                }
             }
 
-            // currentSite.Location = updatedSite.Location;
-
-            // currentSite.Location.Organization = updatedSite.Location.Organization;
             this._context.Entry(currentSite.Location.Organization).CurrentValues.SetValues(updatedSite.Location.Organization);
 
             this._context.Entry(currentSite.Location.Organization.SigningAuthority).CurrentValues.SetValues(updatedSite.Location.Organization.SigningAuthority);
+
             // Keep userId the same
             currentSite.Location.Organization.SigningAuthority.UserId = userId;
 
             // Update foreign key only if not null
-            if (updatedSite.VendorId != 0)
-            {
-                currentSite.VendorId = updatedSite.VendorId;
-                _context.Entry(currentSite).Property("VendorId").IsModified = true;
-            }
-            else
-            {
-                currentSite.VendorId = null;
-            }
-
-            // site.Location.Organization.SigningAuthority = updatedSite.Location.Organization.SigningAuthority;
+            currentSite.VendorId = (updatedSite.VendorId != 0)
+                ? updatedSite.VendorId
+                : null;
 
             // Managed through separate API endpoint, and should never be updated
             currentSite.Location.Organization.AcceptedAgreementDate = acceptedAgreementDate;
 
             // Registration has been completed
-            if (isCompleted)
-            {
-                currentSite.Completed = isCompleted;
-            }
-            else
-            {
-                currentSite.Completed = currentIsCompleted;
-            }
+            currentSite.Completed = (isCompleted == true)
+                ? isCompleted
+                : currentIsCompleted;
 
-            // await _businessEventService.CreateSiteEventAsync(site.Id, (int)updatedSite.ProvisionerId, "Site Updated");
+            await _businessEventService.CreateSiteEventAsync(currentSite.Id, (int)currentSite.Provisioner.Id, "Site Updated");
 
             try
             {
