@@ -15,6 +15,8 @@ namespace Prime.Models
 
         public bool Completed { get; set; }
 
+        public DateTimeOffset? SubmittedDate { get; set; }
+
         public DateTimeOffset? ApprovedDate { get; set; }
 
         public int? ProvisionerId { get; set; }
@@ -29,6 +31,5 @@ namespace Prime.Models
 
         [JsonIgnore]
         public Vendor Vendor { get; set; }
-
     }
 }

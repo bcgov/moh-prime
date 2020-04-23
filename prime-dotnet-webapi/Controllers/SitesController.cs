@@ -190,7 +190,6 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(agreement));
         }
 
-
         // PUT: api/Sites/5/organization-agreement
         /// <summary>
         /// Accept an organization agreement
@@ -205,6 +204,7 @@ namespace Prime.Controllers
         public async Task<IActionResult> AcceptCurrentOrganizationAgreement(int siteId)
         {
             var site = await _siteService.GetSiteNoTrackingAsync(siteId);
+
             if (site == null)
             {
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
@@ -218,6 +218,40 @@ namespace Prime.Controllers
             await _siteService.AcceptCurrentOrganizationAgreementAsync(site.Location.Organization.SigningAuthorityId);
 
             return NoContent();
+        }
+
+        // POST: api/sites/5/submission
+        /// <summary>
+        /// Submits the given site for adjudication.
+        /// </summary>
+        [HttpPost("{siteId}/submission", Name = nameof(SubmitSiteRegistration))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<Enrollee>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<Site>> SubmitSiteRegistration(int siteId, Site updatedSite)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+            }
+
+            if (!User.HasSiteRegistrationFeature() || !User.PartyCanEdit(site.Provisioner))
+            {
+                return Forbid();
+            }
+
+            if (updatedSite == null)
+            {
+                this.ModelState.AddModelError("Site", "Updated site cannot be null.");
+                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+            }
+
+            site = await _siteService.SubmitRegistrationAsync(siteId, updatedSite);
+            return Ok(ApiResponse.Result(site));
         }
     }
 }

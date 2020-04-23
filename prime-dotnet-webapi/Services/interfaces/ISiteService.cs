@@ -12,6 +12,7 @@ namespace Prime.Services
         Task<int> CreateSiteAsync(Party party);
         Task<int> UpdateSiteAsync(int siteId, Site site, bool isCompleted = false);
         Task DeleteSiteAsync(int siteId);
+        Task<Site> SubmitRegistrationAsync(int siteId, Site site);
         Task<Site> GetSiteNoTrackingAsync(int siteId);
         Task<IEnumerable<BusinessEvent>> GetSiteBusinessEvents(int siteId);
         Task AcceptCurrentOrganizationAgreementAsync(int signingAuthorityId);
