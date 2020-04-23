@@ -10,7 +10,7 @@ namespace Prime.Services
 {
     public interface IEnrolleeService
     {
-        Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId);
+        Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId, Boolean excludeDecline = false);
 
 
         Task<bool> EnrolleeExistsAsync(int enrolleeId);
@@ -48,6 +48,6 @@ namespace Prime.Services
         Task<IEnumerable<BusinessEvent>> GetEnrolleeBusinessEvents(int enrolleeId);
 
         Task<IEnumerable<HpdidLookup>> HpdidLookupAsync(IEnumerable<string> hpdids);
-        Task<Enrollee> GetEnrolleeForUserIdNotDeclinedAsync(Guid userId);
+
     }
 }

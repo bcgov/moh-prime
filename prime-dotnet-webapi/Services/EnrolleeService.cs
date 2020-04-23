@@ -108,7 +108,7 @@ namespace Prime.Services
             return items;
         }
 
-        public async Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId)
+        public async Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId, Boolean excludeDecline = false)
         {
             Enrollee enrollee = await this.GetBaseEnrolleeQuery()
                 .SingleOrDefaultAsync(e => e.UserId == userId);
@@ -116,6 +116,11 @@ namespace Prime.Services
             if (enrollee != null)
             {
                 enrollee.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(enrollee);
+
+                if (excludeDecline && enrollee.CurrentStatus.IsType(StatusType.Declined))
+                {
+                    return null;
+                }
             }
 
             return enrollee;
@@ -437,16 +442,6 @@ namespace Prime.Services
                 .Where(e => !e.CurrentStatus.IsType(StatusType.Declined))
                 .Select(e => HpdidLookup.FromEnrollee(e))
                 .ToListAsync();
-        }
-
-        public async Task<Enrollee> GetEnrolleeForUserIdNotDeclinedAsync(Guid userId)
-        {
-            var enrollee = await GetEnrolleeForUserIdAsync(userId);
-            if (enrollee.CurrentStatus.StatusCode == (int)StatusType.Declined)
-            {
-                return null;
-            }
-            return enrollee;
         }
     }
 }
