@@ -50,7 +50,7 @@ export class SiteReviewComponent implements OnInit, IPage {
       .pipe(
         exhaustMap((result: boolean) =>
           (result)
-            ? this.siteRegistrationResource.updateSite(payload, true)
+            ? this.siteRegistrationResource.submitSiteRegistration(payload)
             : EMPTY
         )
       )
