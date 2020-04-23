@@ -99,23 +99,14 @@ namespace Prime.Services
             }
 
             // TODO signing authority needs a partial update to non-BCSC fields
+            // TODO clean up and simplify update function
 
             var currentSite = await this.GetSiteAsync(siteId);
             var acceptedAgreementDate = currentSite.Location.Organization.AcceptedAgreementDate;
+            // BCSC Fields
             var userId = currentSite.Location.Organization.SigningAuthority.UserId;
 
-            // // Update signing authority
-            // var currentSigningAuthority = currentSite.Location.Organization.SigningAuthority;
-            // var updatedSigningAuthority = updatedSite.Location.Organization.SigningAuthority;
-            // if (updatedSigningAuthority != null)
-            // {
-            //     // _context.Parties.Attach(currentSigningAuthority);
-            //     currentSigningAuthority.JobRoleTitle = updatedSigningAuthority.JobRoleTitle;
-            // }
-
             _context.Entry(currentSite).CurrentValues.SetValues(updatedSite);
-            // _context.Organizations.Remove(currentSite.Location.Organization);
-            // _context.Locations.Remove(currentSite.Location);
 
             if (updatedSite.Provisioner?.PhysicalAddress != null)
             {
@@ -148,6 +139,11 @@ namespace Prime.Services
                 currentSite.Location.PrivacyOfficer = updatedSite.Location.PrivacyOfficer;
             }
 
+            if (updatedSite.Location?.TechnicalSupport != null)
+            {
+                currentSite.Location.TechnicalSupport = updatedSite.Location.TechnicalSupport;
+            }
+
             // currentSite.Location = updatedSite.Location;
 
             // currentSite.Location.Organization = updatedSite.Location.Organization;
@@ -162,6 +158,10 @@ namespace Prime.Services
             {
                 currentSite.VendorId = updatedSite.VendorId;
                 _context.Entry(currentSite).Property("VendorId").IsModified = true;
+            }
+            else
+            {
+                currentSite.VendorId = null;
             }
 
             // site.Location.Organization.SigningAuthority = updatedSite.Location.Organization.SigningAuthority;
@@ -235,22 +235,47 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(s => s.Id == vendorId);
         }
 
+        private void ReplaceExistingItems<T>(ICollection<T> dbCollection, ICollection<T> newCollection, int enrolleeId) where T : class, IEnrolleeNavigationProperty
+        {
+            // Remove existing items
+            foreach (var item in dbCollection)
+            {
+                _context.Remove(item);
+            }
+
+            // Create new items
+            if (newCollection != null)
+            {
+                foreach (var item in newCollection)
+                {
+                    // Prevent the ID from being changed by the incoming changes
+                    item.EnrolleeId = enrolleeId;
+                    _context.Entry(item).State = EntityState.Added;
+                }
+            }
+        }
+
         private IQueryable<Site> GetBaseSiteQuery()
         {
             return _context.Sites
                 .Include(s => s.Provisioner)
+                // .ThenInclude(p => p.PhysicalAddress)
                 .Include(s => s.Vendor)
                 .Include(s => s.Location)
                     .ThenInclude(l => l.Organization)
                         .ThenInclude(o => o.SigningAuthority)
+                // .ThenInclude(p => p.PhysicalAddress)
                 .Include(s => s.Location)
                     .ThenInclude(l => l.PhysicalAddress)
                 .Include(s => s.Location)
                     .ThenInclude(l => l.PrivacyOfficer)
+                // .ThenInclude(p => p.PhysicalAddress)
                 .Include(s => s.Location)
                     .ThenInclude(l => l.AdministratorPharmaNet)
+                // .ThenInclude(p => p.PhysicalAddress)
                 .Include(s => s.Location)
                     .ThenInclude(l => l.TechnicalSupport);
+            // .ThenInclude(p => p.PhysicalAddress);
         }
     }
 }
